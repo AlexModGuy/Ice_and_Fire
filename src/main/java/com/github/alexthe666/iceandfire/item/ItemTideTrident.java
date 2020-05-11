@@ -6,29 +6,25 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemTideTrident extends Item {
 
     public ItemTideTrident() {
-        super();
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.setTranslationKey("iceandfire.tide_trident");
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1).maxDamage(400));
         this.setRegistryName(IceAndFire.MODID, "tide_trident");
-        this.maxStackSize = 1;
-        this.setMaxDamage(400);
     }
 
     public static float getArrowVelocity(int i) {
@@ -43,25 +39,25 @@ public class ItemTideTrident extends Item {
     }
 
     @Override
-    public int getMaxItemUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack) {
         return 72000;
     }
 
     @Override
-    public EnumAction getItemUseAction(ItemStack stack) {
-        return EnumAction.BOW;
+    public UseAction getUseAction(ItemStack stack) {
+        return UseAction.BOW;
     }
 
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entity, int timeLeft) {
-        int i = this.getMaxItemUseDuration(stack) - timeLeft;
+        int i = this.getUseDuration(stack) - timeLeft;
         if (i < 0) return;
         float f = getArrowVelocity(i) * 3.0F;
         entity.playSound(SoundEvents.ENTITY_EGG_THROW, 1, 1);
         EntityTideTrident feather = new EntityTideTrident(worldIn, entity, stack);
         feather.shoot(entity, entity.rotationPitch, entity.rotationYaw, 0.0F, f, 1.0F);
         if (!worldIn.isRemote) {
-            worldIn.spawnEntity(feather);
+            worldIn.addEntity(feather);
         }
         if (!(entity instanceof PlayerEntity && ((PlayerEntity) entity).isCreative())) {
             stack.shrink(1);
@@ -72,15 +68,15 @@ public class ItemTideTrident extends Item {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, Hand hand) {
         ItemStack itemStackIn = player.getHeldItem(hand);
         player.setActiveHand(hand);
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, itemStackIn);
     }
 
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 
-        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc"));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.tide_trident.desc_0"));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.tide_trident.desc_1"));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").applyTextStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.tide_trident.desc_0").applyTextStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.tide_trident.desc_1").applyTextStyle(TextFormatting.GRAY));
     }
 }

@@ -8,31 +8,24 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.SwordItem;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemStymphalianDagger extends ItemSword {
+public class ItemStymphalianDagger extends SwordItem {
 
     public ItemStymphalianDagger() {
-        super(IafItemRegistry.STYMHALIAN_SWORD_TOOL_MATERIAL);
-        this.setTranslationKey("iceandfire.stymphalian_bird_dagger");
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
+        super(IafItemRegistry.STYMHALIAN_SWORD_TOOL_MATERIAL, 3, -1.0F, new Item.Properties().group(IceAndFire.TAB_ITEMS));
         this.setRegistryName(IceAndFire.MODID, "stymphalian_bird_dagger");
     }
 
-    public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {
-        Multimap<String, AttributeModifier> multimap = HashMultimap.create();
-        if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
-            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 5D, 0));
-            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -1D, 0));
-        }
-        return multimap;
-    }
 
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity targetEntity, LivingEntity attacker) {
@@ -40,8 +33,8 @@ public class ItemStymphalianDagger extends ItemSword {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc"));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.stymphalian_bird_dagger.desc_0"));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").applyTextStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.stymphalian_bird_dagger.desc_0").applyTextStyle(TextFormatting.GRAY));
     }
 }

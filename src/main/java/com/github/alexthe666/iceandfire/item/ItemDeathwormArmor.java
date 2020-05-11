@@ -5,10 +5,7 @@ import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -16,7 +13,7 @@ import javax.annotation.Nullable;
 
 public class ItemDeathwormArmor extends ArmorItem {
 
-    public ItemDeathwormArmor(ArmorMaterial material, EquipmentSlotType slot, String name) {
+    public ItemDeathwormArmor(IArmorMaterial material, EquipmentSlotType slot, String name) {
         super(material, slot, new Item.Properties().group(IceAndFire.TAB_ITEMS));
         this.setRegistryName(IceAndFire.MODID, name);
     }

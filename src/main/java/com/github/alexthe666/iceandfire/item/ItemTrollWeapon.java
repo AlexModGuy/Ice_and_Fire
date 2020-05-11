@@ -11,33 +11,25 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.SwordItem;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemTrollWeapon extends ItemSword implements ICustomRendered {
+public class ItemTrollWeapon extends SwordItem implements ICustomRendered {
 
     public EnumTroll.Weapon weapon = EnumTroll.Weapon.AXE;
 
     public ItemTrollWeapon(EnumTroll.Weapon weapon) {
-        super(IafItemRegistry.TROLL_WEAPON_TOOL_MATERIAL);
-        this.setTranslationKey("iceandfire.troll_weapon." + weapon.name().toLowerCase());
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
+        super(IafItemRegistry.TROLL_WEAPON_TOOL_MATERIAL, 15, -3.5F, new Item.Properties().group(IceAndFire.TAB_ITEMS));
         this.setRegistryName(IceAndFire.MODID, "troll_weapon." + weapon.name().toLowerCase());
         this.weapon = weapon;
-    }
-
-    public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {
-        Multimap<String, AttributeModifier> multimap = HashMultimap.create();
-        if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
-            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 15D, 0));
-            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -3.5D, 0));
-        }
-        return multimap;
     }
 
     public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
@@ -66,8 +58,8 @@ public class ItemTrollWeapon extends ItemSword implements ICustomRendered {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc"));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").applyTextStyle(TextFormatting.GRAY));
     }
 
 }

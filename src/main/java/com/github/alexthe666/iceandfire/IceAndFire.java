@@ -30,7 +30,7 @@ public class IceAndFire {
     public static ItemGroup TAB_ITEMS = new ItemGroup(MODID) {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(IafItemRegistry.DRAGON_SKULL);
+            return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE);
         }
     };
     public static ItemGroup TAB_BLOCKS = new ItemGroup("iceandfire.blocks") {

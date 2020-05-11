@@ -25,6 +25,12 @@ public class ItemGeneric extends Item {
         this.description = textLength;
     }
 
+    public ItemGeneric(String name, int textLength, int stacksize) {
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
+        this.setRegistryName(IceAndFire.MODID, name);
+        this.description = textLength;
+    }
+
     public boolean hasEffect(ItemStack stack) {
         if (this == IafItemRegistry.CREATIVE_DRAGON_MEAL) {
             return true;

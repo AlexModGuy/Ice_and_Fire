@@ -3,39 +3,37 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
-import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.*;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemTrollArmor extends ItemArmor {
+public class ItemTrollArmor extends ArmorItem {
 
     public EnumTroll troll;
 
-    public ItemTrollArmor(EnumTroll troll, ArmorMaterial material, int renderIndex, EntityEquipmentSlot slot) {
-        super(material, renderIndex, slot);
+    public ItemTrollArmor(EnumTroll troll, ArmorMaterial material, EquipmentSlotType slot) {
+        super(material, slot, new Item.Properties().group(IceAndFire.TAB_ITEMS));
         this.troll = troll;
-        this.setCreativeTab(IceAndFire.TAB_ITEMS);
-        this.setTranslationKey("iceandfire." + troll.name().toLowerCase() + "_troll_leather_" + getArmorPart(slot));
         this.setRegistryName(troll.name().toLowerCase() + "_troll_leather_" + getArmorPart(slot));
     }
 
-    public ItemArmor.ArmorMaterial getArmorMaterial() {
+    public IArmorMaterial getArmorMaterial() {
         return troll.material;
     }
 
 
-    private String getArmorPart(EntityEquipmentSlot slot) {
+    private String getArmorPart(EquipmentSlotType slot) {
         switch (slot) {
             case HEAD:
                 return "helmet";
@@ -50,17 +48,17 @@ public class ItemTrollArmor extends ItemArmor {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public net.minecraft.client.model.ModelBiped getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EntityEquipmentSlot armorSlot, net.minecraft.client.model.ModelBiped _default) {
-        return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 7 : 6);
+    @Nullable
+    public <A extends BipedModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
+        return (A) IceAndFire.PROXY.getArmorModel(slot == EquipmentSlotType.LEGS ? 7 : 6);
     }
 
-    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-        return "iceandfire:textures/models/armor/armor_troll_" + troll.name().toLowerCase() + (renderIndex == 2 ? "_legs.png" : ".png");
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+        return "iceandfire:textures/models/armor/armor_troll_" + troll.name().toLowerCase() + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(TextFormatting.GREEN + new TranslationTextComponent("item.iceandfire.troll_leather_armor_" + getArmorPart(this.armorType) + ".desc"));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.iceandfire.troll_leather_armor_" + getArmorPart(slot) + ".desc").applyTextStyle(TextFormatting.GREEN));
     }
 }

@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.EggEntity;
 import net.minecraft.entity.projectile.EntityEgg;
 import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
@@ -12,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityCockatriceEgg extends EntityEgg {
+public class EntityCockatriceEgg extends EggEntity {
 
     public EntityCockatriceEgg(World worldIn) {
         super(worldIn);

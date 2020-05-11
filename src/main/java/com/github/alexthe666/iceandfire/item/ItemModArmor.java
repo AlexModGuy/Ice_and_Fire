@@ -4,10 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -20,7 +17,7 @@ import java.util.List;
 
 public class ItemModArmor extends ArmorItem {
 
-    public ItemModArmor(ArmorMaterial material, EquipmentSlotType slot, String name) {
+    public ItemModArmor(IArmorMaterial material, EquipmentSlotType slot, String name) {
         super(material, slot, new Item.Properties().group(IceAndFire.TAB_ITEMS));
         this.setRegistryName(IceAndFire.MODID, name);
     }

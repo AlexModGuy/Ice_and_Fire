@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
 import com.github.alexthe666.iceandfire.item.ItemTrollLeather;
 import com.github.alexthe666.iceandfire.item.ItemTrollWeapon;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.util.ResourceLocation;
@@ -27,7 +28,7 @@ public enum EnumTroll {
     public ResourceLocation TEXTURE_STONE;
     public ResourceLocation TEXTURE_EYES;
     public BiomeDictionary.Type spawnBiome;
-    public ItemArmor.ArmorMaterial material;
+    public IArmorMaterial material;
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_leather")
     public Item leather;
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_helmet")

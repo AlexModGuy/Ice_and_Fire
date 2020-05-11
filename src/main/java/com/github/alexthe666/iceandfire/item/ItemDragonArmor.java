@@ -23,8 +23,8 @@ public class ItemDragonArmor extends Item implements ICustomRendered {
         super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
         this.type = type;
         this.dragonSlot = dragonSlot;
-        this.name = name;
-        this.setRegistryName(IceAndFire.MODID, name);
+        this.name = name + "_" + dragonSlot;
+        this.setRegistryName(IceAndFire.MODID, this.name);
 
     }
 
