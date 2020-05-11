@@ -1,43 +1,29 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.block.BlockFalling;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 
 public class BlockFallingGeneric extends FallingBlock {
     public Item itemBlock;
 
     public BlockFallingGeneric(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound) {
-        super(materialIn);
-        this.setTranslationKey(name);
-        this.setHarvestLevel(toolUsed, toolStrength);
-        this.setHardness(hardness);
-        this.setResistance(resistance);
-        this.setSoundType(sound);
-        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
-        setRegistryName(IceAndFire.MODID, gameName);
+        super(Block.Properties.create(materialIn).sound(sound).hardnessAndResistance(hardness, resistance).harvestTool(ToolType.get(toolUsed)).harvestLevel(toolStrength));
+        setRegistryName(IceAndFire.MODID, name);
 
     }
 
     @SuppressWarnings("deprecation")
     public BlockFallingGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery) {
-        super(materialIn);
-        this.setTranslationKey(name);
-        this.setHardness(hardness);
-        this.setResistance(resistance);
-        this.setHarvestLevel(toolUsed, toolStrength);
-        this.setSoundType(sound);
-        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
-        setRegistryName(IceAndFire.MODID, gameName);
-        if (slippery) {
-            this.slipperiness = 0.98F;
-        }
+        super(Block.Properties.create(materialIn).sound(sound).hardnessAndResistance(hardness, resistance).harvestTool(ToolType.get(toolUsed)).harvestLevel(toolStrength).slipperiness(0.98F));
+        setRegistryName(IceAndFire.MODID, name);
     }
 
     @OnlyIn(Dist.CLIENT)

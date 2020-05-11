@@ -1,18 +1,12 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BushBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Optional;
-import thaumcraft.api.crafting.IInfusionStabiliser;
 
 import java.util.Random;
 
@@ -20,16 +14,13 @@ public class BlockElementalFlower extends BushBlock {
     public Item itemBlock;
 
     public BlockElementalFlower(boolean isFire) {
-        this.setTickRandomly(true);
-        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
-        this.setTranslationKey(isFire ? "iceandfire.fire_lily" : "iceandfire.frost_lily");
+    super(Properties.create(Material.PLANTS).tickRandomly().sound(SoundType.PLANT));
         setRegistryName(IceAndFire.MODID, isFire ? "fire_lily" : "frost_lily");
-        this.setSoundType(SoundType.PLANT);
-        this.setTickRandomly(true);
     }
 
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        return worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) && canStay(worldIn, pos);
+    protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
+        Block block = state.getBlock();
+        return true;
     }
 
     public boolean canStay(World worldIn, BlockPos pos) {
@@ -39,11 +30,6 @@ public class BlockElementalFlower extends BushBlock {
         } else {
             return soil.getMaterial() == Material.PACKED_ICE || soil.getMaterial() == Material.ICE;
         }
-    }
-
-    @Deprecated
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        worldIn.scheduleUpdate(pos, this, 1);
     }
 
     public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {

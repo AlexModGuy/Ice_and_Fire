@@ -38,7 +38,7 @@ public class BlockDragonforgeInput extends ContainerBlock implements IDragonProo
         return PushReaction.BLOCK;
     }
 
-    public ActionResultType onBlockActivated(World worldIn, PlayerEntity player, Hand handIn, BlockRayTraceResult resultIn) {
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult resultIn) {
         if (this.getConnectedTileEntity(worldIn, resultIn.getPos()) != null) {
             TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, resultIn.getPos());
             if (forge.isFire == isFire) {

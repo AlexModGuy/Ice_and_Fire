@@ -5,102 +5,56 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
-import net.minecraft.block.Block;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 public class BlockJar extends ContainerBlock implements ICustomRendered {
-    private static AxisAlignedBB AABB = new AxisAlignedBB(0.1875F, 0, 0.1875F, 0.8125F, 1F, 0.8125F);
+    protected static final VoxelShape AABB = Block.makeCuboidShape(4, 0, 4, 12, 1, 12);
     public Item itemBlock;
     private boolean empty;
+    private int pixieType;
 
-    public BlockJar(boolean empty) {
-        super(Material.GLASS);
-        this.setHardness(1.0F);
-        this.setResistance(2.0F);
-        this.setSoundType(SoundType.GLASS);
-        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
-        this.setTranslationKey("iceandfire.jar" + (empty ? "_empty" : "_pixie"));
-        this.setRegistryName(IceAndFire.MODID, "jar" + (empty ? "_empty" : "_pixie"));
-        if (!empty) {
-            this.setLightLevel(0.75F);
-            GameRegistry.registerTileEntity(TileEntityJar.class, "jar");
+    public BlockJar(int pixieType) {
+        super(Properties.create(Material.GLASS).hardnessAndResistance(1, 2).sound(SoundType.GLASS).lightValue(pixieType == -1 ? 0 : 10));
+        this.empty = pixieType == -1;
+        this.pixieType = pixieType;
+        if(empty){
+            this.setRegistryName("iceandfire:pixie_jar_empty");
+        }else{
+            this.setRegistryName("iceandfire:pixie_jar_" + pixieType);
         }
-        this.empty = empty;
     }
 
-    @Deprecated
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, BlockState state, BlockPos pos, Direction face) {
-        return BlockFaceShape.MIDDLE_POLE;
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return AABB;
     }
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public boolean isOpaqueCube(BlockState blockstate) {
-        return false;
+    public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return AABB;
     }
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public boolean isFullCube(BlockState blockstate) {
-        return false;
-    }
 
-    @Override
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        BlockState BlockState = worldIn.getBlockState(pos.down());
-        return BlockState.isSideSolid(worldIn, pos, Direction.UP) || BlockState.getBlock().canPlaceTorchOnTop(BlockState, worldIn, pos);
-    }
-
-    public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         dropPixie(worldIn, pos);
-        super.breakBlock(worldIn, pos, state);
-    }
-
-    @SuppressWarnings("deprecation")
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
-    }
-
-    public void updateTick(World world, BlockPos pos, BlockState state, Random rand) {
-        //this.checkFall(world, pos);
-    }
-
-    private boolean checkFall(World worldIn, BlockPos pos) {
-        if (!this.canPlaceBlockAt(worldIn, pos)) {
-            worldIn.destroyBlock(pos, true);
-            dropPixie(worldIn, pos);
-            return false;
-        } else {
-            return true;
-        }
+        super.onReplaced(state, worldIn, pos, newState, isMoving);
     }
 
     public void dropPixie(World world, BlockPos pos) {
@@ -117,66 +71,38 @@ public class BlockJar extends ContainerBlock implements ICustomRendered {
         return new ItemStack(IafBlockRegistry.JAR_EMPTY);
     }
 
-    public boolean onBlockActivated(World world, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult resultIn) {
         if (!empty && world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar && ((TileEntityJar) world.getTileEntity(pos)).hasPixie && ((TileEntityJar) world.getTileEntity(pos)).hasProduced) {
             ((TileEntityJar) world.getTileEntity(pos)).hasProduced = false;
-            EntityItem item = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(IafItemRegistry.PIXIE_DUST));
+            ItemEntity item = new ItemEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(IafItemRegistry.PIXIE_DUST));
             if (!world.isRemote) {
-                world.spawnEntity(item);
+                world.addEntity(item);
             }
             world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, IafSoundRegistry.PIXIE_HURT, SoundCategory.NEUTRAL, 1, 1, false);
-
+            return ActionResultType.SUCCESS;
         }
-        return false;
+        return ActionResultType.PASS;
     }
 
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.TRANSLUCENT;
-    }
-
-    @Override
-    public EnumBlockRenderType getRenderType(BlockState state) {
-        return EnumBlockRenderType.MODEL;
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar) {
             if (!empty) {
                 ((TileEntityJar) world.getTileEntity(pos)).hasPixie = true;
-                ((TileEntityJar) world.getTileEntity(pos)).pixieType = stack.getMetadata();
+                ((TileEntityJar) world.getTileEntity(pos)).pixieType = pixieType;
             } else {
                 ((TileEntityJar) world.getTileEntity(pos)).hasPixie = false;
             }
         }
     }
 
+    @Nullable
     @Override
-    public TileEntity createNewTileEntity(World world, int meta) {
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TileEntityJar(empty);
-    }
-
-    public class ItemBlockJar extends ItemBlock {
-        public ItemBlockJar(Block block) {
-            super(block);
-            this.maxStackSize = 1;
-            this.setHasSubtypes(true);
-        }
-
-        public String getUnlocalizedName(ItemStack stack) {
-            int i = stack.getMetadata();
-            return "tile.iceandfire.jar_" + i;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-            if (this.isInCreativeTab(tab)) {
-                for (int i = 0; i < 5; i++) {
-                    subItems.add(new ItemStack(this, 1, i));
-                }
-            }
-        }
     }
 }

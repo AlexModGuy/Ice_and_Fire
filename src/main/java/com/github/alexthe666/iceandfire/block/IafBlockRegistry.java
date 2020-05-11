@@ -4,8 +4,10 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.SlabBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 
 public class IafBlockRegistry {
 
@@ -70,8 +72,13 @@ public class IafBlockRegistry {
     public static final Block PIXIE_HOUSE_BIRCH = new BlockPixieHouse("birch");
     public static final Block PIXIE_HOUSE_SPRUCE = new BlockPixieHouse("spruce");
     public static final Block PIXIE_HOUSE_DARK_OAK = new BlockPixieHouse("dark_oak");
-    public static final Block JAR_EMPTY = new BlockJar(true);
-    public static final Block JAR_PIXIE = new BlockJar(false);
+    public static final Block JAR_EMPTY = new BlockJar(-1);
+    public static final Block JAR_PIXIE_0 = new BlockJar(0);
+    public static final Block JAR_PIXIE_1 = new BlockJar(1);
+    public static final Block JAR_PIXIE_2 = new BlockJar(2);
+    public static final Block JAR_PIXIE_3 = new BlockJar(3);
+    public static final Block JAR_PIXIE_4 = new BlockJar(4);
+    public static final Block JAR_PIXIE_5 = new BlockJar(5);
     public static final Block MYRMEX_RESIN = new BlockMyrmexResin(false);
     public static final Block MYRMEX_RESIN_STICKY = new BlockMyrmexResin(true);
     public static final Block DESERT_MYRMEX_COCOON = new BlockMyrmexCocoon(false);
@@ -93,8 +100,7 @@ public class IafBlockRegistry {
     public static final Block DREAD_STONE_FACE = new BlockDreadStoneFace();
     public static final Block DREAD_TORCH = new BlockDreadTorch();
     public static final Block DREAD_STONE_BRICKS_STAIRS = new BlockGenericStairs(DREAD_STONE_BRICKS.getDefaultState(), "dread_stone_stairs");
-    public static final BlockGenericSlab DREAD_STONE_BRICKS_DOUBLE_SLAB = new BlockDreadStoneBrickSlab.Double("dread_stone_slab", 10.0F, 10000F, SoundType.STONE);
-    public static final BlockGenericSlab DREAD_STONE_BRICKS_SLAB = new BlockDreadStoneBrickSlab.Half("dread_stone_slab", 10.0F, 10000F, SoundType.STONE);
+    public static final Block DREAD_STONE_BRICKS_SLAB = new SlabBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(10F, 10000F)).setRegistryName("iceandfire:dread_stone_slab");
     public static final Block DREADWOOD_LOG = new BlockDreadWoodLog();
     public static final BlockDreadBase DREADWOOD_PLANKS = new BlockDreadBase(Material.WOOD, "dreadwood_planks", "axe", 3, 20.0F, 100000.0F, SoundType.WOOD);
     public static final Block DREADWOOD_PLANKS_LOCK = new BlockDreadWoodLock();

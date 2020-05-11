@@ -3,52 +3,80 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.world.gen.WorldUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathType;
+import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.*;
+import javax.annotation.Nullable;
 import java.util.Random;
 
+import static com.github.alexthe666.iceandfire.block.BlockSilverPile.SNOW_AABB;
+
 public class BlockGoldPile extends Block {
-    public static final PropertyInteger LAYERS = PropertyInteger.create("layers", 1, 8);
-    protected static final AxisAlignedBB[] SNOW_AABB = new AxisAlignedBB[]{new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
+    public static final IntegerProperty LAYERS = IntegerProperty.create("layers", 1, 8);
+    protected static final VoxelShape[] SHAPES = new VoxelShape[]{VoxelShapes.empty(), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
     public Item itemBlock;
 
     public BlockGoldPile() {
-        super(Material.GROUND);
-        this.setDefaultState(this.blockState.getBaseState().with(LAYERS, 1));
-        this.setTickRandomly(true);
-        this.setCreativeTab(IceAndFire.TAB_BLOCKS);
-        this.setTranslationKey("iceandfire.goldpile");
-        this.setHardness(0.3F);
-        this.setSoundType(IafBlockRegistry.SOUND_TYPE_GOLD);
+        super(Properties.create(Material.EARTH).hardnessAndResistance(0.3F, 1).tickRandomly().sound(IafBlockRegistry.SOUND_TYPE_GOLD));
+        this.setDefaultState(this.stateContainer.getBaseState().with(LAYERS, Integer.valueOf(1)));
         setRegistryName(IceAndFire.MODID, "goldpile");
     }
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
-        return SNOW_AABB[state.get(LAYERS)];
+    public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
+        switch(type) {
+            case LAND:
+                return state.get(LAYERS) < 5;
+            case WATER:
+                return false;
+            case AIR:
+                return false;
+            default:
+                return false;
+        }
     }
 
-    @Override
-    public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
-        return worldIn.getBlockState(pos).get(LAYERS) < 5;
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return SHAPES[state.get(LAYERS)];
+    }
+
+    public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return SHAPES[state.get(LAYERS) - 1];
+    }
+
+    public boolean isTransparent(BlockState state) {
+        return true;
+    }
+
+    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+        BlockState blockstate = worldIn.getBlockState(pos.down());
+        Block block = blockstate.getBlock();
+        if (block != Blocks.ICE && block != Blocks.PACKED_ICE && block != Blocks.BARRIER) {
+            if (block != Blocks.HONEY_BLOCK && block != Blocks.SOUL_SAND) {
+                return Block.doesSideFillSquare(blockstate.getCollisionShape(worldIn, pos.down()), Direction.UP) || block == this && blockstate.get(LAYERS) == 8;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
     }
 
     @Deprecated
@@ -56,38 +84,36 @@ public class BlockGoldPile extends Block {
         return false;
     }
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public boolean isTopSolid(BlockState state) {
-        return state.get(LAYERS) == 7;
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        return !stateIn.isValidPosition(worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+    }
+
+
+    @Nullable
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        BlockState blockstate = context.getWorld().getBlockState(context.getPos());
+        if (blockstate.getBlock() == this) {
+            int i = blockstate.get(LAYERS);
+            return blockstate.with(LAYERS, Integer.valueOf(Math.min(8, i + 1)));
+        } else {
+            return super.getStateForPlacement(context);
+        }
+    }
+
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(LAYERS);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public AxisAlignedBB getSelectedBoundingBox(BlockState blockState, World worldIn, BlockPos pos) {
-        int i = blockState.get(LAYERS) - 1;
-        float f = 0.125F;
-        AxisAlignedBB axisalignedbb = blockState.getBoundingBox(worldIn, pos);
-        return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.maxX, i * f, axisalignedbb.maxZ);
-    }
-
-    @Override
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        BlockState BlockState = worldIn.getBlockState(pos.down());
-        Block block = BlockState.getBlock();
-        return (block != Blocks.ICE && block != Blocks.PACKED_ICE) && (BlockState.getBlock().isLeaves(BlockState, worldIn, pos.down()) || (block == this && BlockState.get(LAYERS) >= 7 || BlockState.isOpaqueCube() && BlockState.getMaterial().blocksMovement()));
-    }
-
-    @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction side, float hitX, float hitY, float hitZ) {
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand handIn, BlockRayTraceResult resultIn) {
         ItemStack item = playerIn.inventory.getCurrentItem();
 
         if (!item.isEmpty()) {
             if (item.getItem() != null) {
                 if (item.getItem() == Item.getItemFromBlock(IafBlockRegistry.GOLD_PILE)) {
                     if (!item.isEmpty()) {
-                        if (this.getMetaFromState(state) < 7) {
-                            WorldUtils.setBlock(worldIn, pos.getX(), pos.getY(), pos.getZ(), IafBlockRegistry.GOLD_PILE, this.getMetaFromState(state) + 1, 3);
+                        if (state.get(LAYERS) < 7) {
+                            WorldUtils.setBlock(worldIn, pos.getX(), pos.getY(), pos.getZ(), IafBlockRegistry.GOLD_PILE, state.get(LAYERS) + 1, 3);
                             if (!playerIn.isCreative()) {
                                 item.shrink(1);
 
@@ -97,78 +123,12 @@ public class BlockGoldPile extends Block {
                                     playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, item);
                                 }
                             }
-                            return true;
+                            return ActionResultType.SUCCESS;
                         }
                     }
                 }
             }
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public boolean isOpaqueCube(BlockState blockstate) {
-        return false;
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public boolean isFullCube(BlockState blockstate) {
-        return false;
-    }
-
-    @Override
-    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-        if (world instanceof World) {
-            this.checkAndDropBlock((World) world, pos, world.getBlockState(neighbor));
-        }
-    }
-
-    private boolean checkAndDropBlock(World worldIn, BlockPos pos, BlockState state) {
-        if (!this.canPlaceBlockAt(worldIn, pos)) {
-            worldIn.destroyBlock(pos, true);
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    @Override
-    public Item getItemDropped(BlockState state, Random rand, int fortune) {
-        return Items.GOLD_NUGGET;
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    @SuppressWarnings("deprecation")
-    public boolean shouldSideBeRendered(BlockState blockState, IBlockAccess blockAccess, BlockPos pos, Direction side) {
-        return side == Direction.UP || super.shouldSideBeRendered(blockState, blockAccess, pos, side);
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().with(LAYERS, (meta & 7) + 1);
-    }
-
-    @Override
-    public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
-        return worldIn.getBlockState(pos).get(LAYERS) == 1;
-    }
-
-    @Override
-    public int getMetaFromState(BlockState state) {
-        return state.get(LAYERS) - 1;
-    }
-
-    @Override
-    public int quantityDropped(BlockState state, int fortune, Random random) {
-        return (state.get(LAYERS)) + 1;
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, LAYERS);
+        return ActionResultType.PASS;
     }
 }
