@@ -22,7 +22,7 @@ import net.minecraft.pathfinding.PathNavigateClimber;
 import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -88,11 +88,11 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
     protected void switchNavigator(boolean onLand) {
         if (onLand) {
-            this.moveHelper = new EntityMoveHelper(this);
+            this.moveController = new EntityMoveHelper(this);
             this.navigator = new PathNavigateClimber(this, world);
             this.isLandNavigator = true;
         } else {
-            this.moveHelper = new EntityMyrmexRoyal.FlyMoveHelper(this);
+            this.moveController = new EntityMyrmexRoyal.FlyMoveHelper(this);
             this.navigator = new PathNavigateFlying(this, world);
             this.isLandNavigator = false;
         }
@@ -164,13 +164,13 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playStingSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2));
                 this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 70, 1));
             }
         }
@@ -267,10 +267,10 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength * 2D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50);
-        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(9.0D);
+        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength * 2D);
+        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50);
+        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(9.0D);
     }
 
     @Override
@@ -329,13 +329,13 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     protected void playEffect(int hearts) {
-        EnumParticleTypes enumparticletypes = EnumParticleTypes.HEART;
+        ParticleTypes enumparticletypes = ParticleTypes.HEART;
 
         for (int i = 0; i < hearts; ++i) {
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
-            this.world.spawnParticle(enumparticletypes, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getPosY() + 0.5D + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
+            this.world.spawnParticle(enumparticletypes, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + 0.5D + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d0, d1, d2);
         }
     }
 
@@ -441,9 +441,9 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
                 }
             }
             if (EntityMyrmexRoyal.this.world.isAirBlock(target)) {
-                EntityMyrmexRoyal.this.moveHelper.setMoveTo((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 0.25D);
+                EntityMyrmexRoyal.this.moveController.setMoveTo((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 0.25D);
                 if (EntityMyrmexRoyal.this.getAttackTarget() == null) {
-                    EntityMyrmexRoyal.this.getLookHelper().setLookPosition((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 180.0F, 20.0F);
+                    EntityMyrmexRoyal.this.getLookController().setLookPosition((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 180.0F, 20.0F);
 
                 }
             }
@@ -470,7 +470,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         public void startExecuting() {
             LivingEntity LivingEntity = EntityMyrmexRoyal.this.getAttackTarget();
             Vec3d vec3d = LivingEntity.getPositionEyes(1.0F);
-            EntityMyrmexRoyal.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
+            EntityMyrmexRoyal.this.moveController.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
         }
 
         public void resetTask() {
@@ -487,7 +487,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
                     if (d0 < 9.0D) {
                         Vec3d vec3d = LivingEntity.getPositionEyes(1.0F);
-                        EntityMyrmexRoyal.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
+                        EntityMyrmexRoyal.this.moveController.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
                     }
                 }
             }

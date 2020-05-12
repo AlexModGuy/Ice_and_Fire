@@ -35,8 +35,8 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
+        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0D);
+        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
     }
 
     @Override
@@ -217,7 +217,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    protected boolean canDespawn() {
+    public boolean canDespawn(double distanceToClosestPlayer) {
         return false;
     }
 }

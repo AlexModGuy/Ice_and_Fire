@@ -8,7 +8,7 @@ import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -106,8 +106,8 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
         return true;
     }
 
-    protected EnumParticleTypes getParticleType() {
-        return EnumParticleTypes.WATER_SPLASH;
+    protected ParticleTypes getParticleType() {
+        return ParticleTypes.WATER_SPLASH;
     }
 
 
@@ -120,8 +120,8 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
         }
     }
 
-    public void setSizes(float width, float height) {
-        this.setSize(width, height);
+    public void setSizes(float getWidth(), float height) {
+        this.setSize(getWidth(), height);
     }
 
 }

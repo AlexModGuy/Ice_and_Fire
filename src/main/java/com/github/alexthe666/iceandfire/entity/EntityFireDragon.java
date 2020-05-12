@@ -13,7 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -112,7 +112,7 @@ public class EntityFireDragon extends EntityDragonBase {
 
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
-        this.getLookHelper().setLookPositionWithEntity(entityIn, 30.0F, 30.0F);
+        this.getLookController().setLookPositionWithEntity(entityIn, 30.0F, 30.0F);
         if(!this.isPlayingAttackAnimation()){
             switch (groundAttack) {
                 case BITE:
@@ -124,7 +124,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 case SHAKE_PREY:
                     boolean flag = false;
                     if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector().add(0, this.height/2, 0), entityIn.getPositionVector().add(0, entityIn.height/2, 0)) &&
-                            entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
+                            entityIn.getWidth() < this.getWidth() * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
                         this.setAnimation(ANIMATION_SHAKEPREY);
                         flag = true;
                         entityIn.startRiding(this);
@@ -400,7 +400,7 @@ public class EntityFireDragon extends EntityDragonBase {
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             if (world.isRemote) {
-                this.world.spawnParticle(EnumParticleTypes.FLAME, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+                this.world.spawnParticle(ParticleTypes.FLAME, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d2, d0, d1);
             }
         }
     }
@@ -411,7 +411,7 @@ public class EntityFireDragon extends EntityDragonBase {
             float headPosX = (float) (posX + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.cos((rotationYaw + 90) * Math.PI / 180));
             float headPosZ = (float) (posZ + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.sin((rotationYaw + 90) * Math.PI / 180));
             float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-            world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, headPosX, headPosY, headPosZ, 0, 0, 0);
+            world.spawnParticle(ParticleTypes.SMOKE_LARGE, headPosX, headPosY, headPosZ, 0, 0, 0);
         }
     }
 

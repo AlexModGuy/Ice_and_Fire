@@ -32,7 +32,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 
     public EntityMyrmexSwarmer(World worldIn) {
         super(worldIn);
-        this.moveHelper = new EntityMyrmexRoyal.FlyMoveHelper(this);
+        this.moveController = new EntityMyrmexRoyal.FlyMoveHelper(this);
         this.navigator = new PathNavigateFlying(this, world);
         switchNavigator(false);
     }
@@ -46,10 +46,10 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength - 1.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5);
-        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(0D);
+        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
+        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength - 1.0D);
+        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5);
+        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(0D);
     }
 
 
@@ -164,7 +164,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         setTicksAlive(getTicksAlive() + 1);
         if (flying) {
             this.motionY -= 0.08D;
-            if (this.moveHelper.getY() > this.getPosY()) {
+            if (this.moveController.getY() > this.getPosY()) {
                 this.motionY += 0.08D;
             }
         }
@@ -173,12 +173,12 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
             this.motionY += 0.2F;
         }
         if (this.getAttackTarget() != null) {
-            this.moveHelper.setMoveTo(this.getAttackTarget().getPosX(), this.getAttackTarget().getEntityBoundingBox().minY, this.getAttackTarget().getPosZ(), 1.0F);
+            this.moveController.setMoveTo(this.getAttackTarget().getPosX(), this.getAttackTarget().getEntityBoundingBox().minY, this.getAttackTarget().getPosZ(), 1.0F);
             if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
                 this.setAnimation(rand.nextBoolean() ? ANIMATION_BITE : ANIMATION_STING);
             }
             if (this.getAttackTarget().isDead) {
-                this.moveHelper.action = EntityMoveHelper.Action.WAIT;
+                this.moveController.action = EntityMoveHelper.Action.WAIT;
             }
         }
         if (this.getTicksAlive() > 1800) {
@@ -188,14 +188,14 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
             this.playBiteSound();
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < attackDistance()) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playStingSound();
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < attackDistance()) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2));
                 this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 70, 1));
             }
         }

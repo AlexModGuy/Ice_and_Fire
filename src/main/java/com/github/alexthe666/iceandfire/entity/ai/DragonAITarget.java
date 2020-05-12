@@ -27,8 +27,8 @@ public class DragonAITarget<T extends LivingEntity> extends NearestAttackableTar
             return false;
         }
         if (super.shouldExecute() && this.targetEntity != null && !this.targetEntity.getClass().equals(this.dragon.getClass())) {
-            float dragonSize = Math.max(this.dragon.width, this.dragon.width * (dragon.getRenderSize() / 3));
-            if (dragonSize >= this.targetEntity.width) {
+            float dragonSize = Math.max(this.dragon.getWidth(), this.dragon.getWidth() * (dragon.getRenderSize() / 3));
+            if (dragonSize >= this.targetEntity.getWidth()) {
                 if (this.targetEntity instanceof PlayerEntity && !dragon.isTamed()) {
                     return true;
                 }
@@ -60,7 +60,7 @@ public class DragonAITarget<T extends LivingEntity> extends NearestAttackableTar
     }
 
     protected double getTargetDistance() {
-        IAttributeInstance iattributeinstance = this.taskOwner.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
-        return iattributeinstance == null ? 64.0D : iattributeinstance.getAttributeValue();
+        IAttributeInstance iattributeinstance = this.taskOwner.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
+        return iattributeinstance == null ? 64.0D : iattributeinstance.getValue();
     }
 }

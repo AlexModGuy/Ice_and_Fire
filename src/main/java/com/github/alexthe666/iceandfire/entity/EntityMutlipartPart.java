@@ -34,8 +34,8 @@ public class EntityMutlipartPart extends PartEntity {
         return this.parent;
     }
 
-    public void resize(float width, float height) {
-        this.setSize(width, height);
+    public void resize(float getWidth(), float height) {
+        this.setSize(getWidth(), height);
     }
 
     @Override

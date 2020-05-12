@@ -1,13 +1,14 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.pathfinding.PathNavigateFlying;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class PathNavigateFlyingCreature extends PathNavigateFlying {
+public class PathNavigateFlyingCreature extends FlyingPathNavigator {
 
-    public PathNavigateFlyingCreature(LivingEntity entity, World world) {
+    public PathNavigateFlyingCreature(MobEntity entity, World world) {
         super(entity, world);
     }
 

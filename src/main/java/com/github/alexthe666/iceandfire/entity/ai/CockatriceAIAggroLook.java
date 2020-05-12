@@ -3,12 +3,14 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.google.common.base.Predicate;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.EntityPredicate;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.player.PlayerEntity;
 
 import javax.annotation.Nullable;
 
-public class CockatriceAIAggroLook extends EntityAINearestAttackableTarget<PlayerEntity> {
+public class CockatriceAIAggroLook extends NearestAttackableTargetGoal<PlayerEntity> {
     private final EntityCockatrice cockatrice;
     private PlayerEntity player;
     private int aggroTime;
@@ -27,11 +29,11 @@ public class CockatriceAIAggroLook extends EntityAINearestAttackableTarget<Playe
             return false;
         }
         double d0 = this.getTargetDistance();
-        this.player = this.cockatrice.world.getNearestAttackablePlayer(this.cockatrice.getPosX(), this.cockatrice.getPosY(), this.cockatrice.getPosZ(), d0, d0, null, new Predicate<PlayerEntity>() {
-            public boolean apply(@Nullable PlayerEntity p_apply_1_) {
-                return p_apply_1_ != null && EntityGorgon.isEntityLookingAt(p_apply_1_, CockatriceAIAggroLook.this.cockatrice, EntityCockatrice.VIEW_RADIUS);
+        this.player = this.cockatrice.world.getClosestPlayer(new EntityPredicate() {
+            public boolean canTarget(@Nullable LivingEntity attacker, LivingEntity target) {
+                return target != null && EntityGorgon.isEntityLookingAt(target, CockatriceAIAggroLook.this.cockatrice, EntityCockatrice.VIEW_RADIUS) && CockatriceAIAggroLook.this.cockatrice.getDistance(target) < d0;
             }
-        });
+        }, this.cockatrice.getPosX(), this.cockatrice.getPosY(), this.cockatrice.getPosZ());
         return this.player != null;
     }
 
@@ -67,7 +69,7 @@ public class CockatriceAIAggroLook extends EntityAINearestAttackableTarget<Playe
                 return true;
             }
         } else {
-            return this.targetEntity != null && this.targetEntity.isEntityAlive() || super.shouldContinueExecuting();
+            return this.target != null && this.target.isAlive() || super.shouldContinueExecuting();
         }
     }
 }

@@ -44,7 +44,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
@@ -112,14 +112,14 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     protected void switchNavigator(){
         if(this.isBeingRidden() && this.isOverAir()){
             if(navigatorType != 1){
-                this.moveHelper = new IafDragonFlightManager.PlayerFlightMoveHelper(this);
+                this.moveController = new IafDragonFlightManager.PlayerFlightMoveHelper(this);
                 this.navigator = new PathNavigateFlyingCreature(this, world);
                 navigatorType = 1;
             }
         }
         if(!this.isBeingRidden() || !this.isOverAir()){
             if(navigatorType != 0){
-                this.moveHelper = new EntityMoveHelper(this);
+                this.moveController = new EntityMoveHelper(this);
                 this.navigator = new PathNavigateGround(this, world);
                 navigatorType = 0;
             }
@@ -265,7 +265,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 }
                 this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
                 for (int i = 0; i < 20; i++) {
-                    this.world.spawnParticle(EnumParticleTypes.REDSTONE, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0);
+                    this.world.spawnParticle(ParticleTypes.REDSTONE, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0);
                 }
                 return true;
             }
@@ -276,7 +276,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 }
                 this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
                 for (int i = 0; i < 20; i++) {
-                    this.world.spawnParticle(EnumParticleTypes.CLOUD, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0);
+                    this.world.spawnParticle(ParticleTypes.CLOUD, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0);
                 }
                 return true;
             }
@@ -292,13 +292,13 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 if (player.isSneaking()) {
                     if (this.hasHomePosition) {
                         this.hasHomePosition = false;
-                        player.sendStatusMessage(new TextComponentTranslation("hippogryph.command.remove_home"), true);
+                        player.sendStatusMessage(new TranslationTextComponent("hippogryph.command.remove_home"), true);
                         return true;
                     } else {
                         BlockPos pos = new BlockPos(this);
                         this.homePos = pos;
                         this.hasHomePosition = true;
-                        player.sendStatusMessage(new TextComponentTranslation("hippogryph.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
+                        player.sendStatusMessage(new TranslationTextComponent("hippogryph.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
                         return true;
                     }
                 } else {
@@ -306,7 +306,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                     if (this.getCommand() > 1) {
                         this.setCommand(0);
                     }
-                    player.sendStatusMessage(new TextComponentTranslation("hippogryph.command." + (this.getCommand() == 1 ? "sit" : "stand")), true);
+                    player.sendStatusMessage(new TranslationTextComponent("hippogryph.command." + (this.getCommand() == 1 ? "sit" : "stand")), true);
 
                 }
                 return true;
@@ -318,7 +318,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 }
                 this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
                 for (int i = 0; i < 20; i++) {
-                    this.world.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0);
+                    this.world.spawnParticle(ParticleTypes.ENCHANTMENT_TABLE, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0);
                 }
                 return true;
             }
@@ -326,7 +326,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 this.heal(5);
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
                 for (int i = 0; i < 3; i++) {
-                    this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, Item.getIdFromItem(itemstack.getItem()));
+                    this.world.spawnParticle(ParticleTypes.ITEM_CRACK, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0, Item.getIdFromItem(itemstack.getItem()));
                 }
                 if (!player.isCreative()) {
                     itemstack.shrink(1);
@@ -610,17 +610,17 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             case 3:
                 armorValue = 30;
         }
-        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(armorValue);
+        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(armorValue);
     }
 
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
+        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
+        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
+        this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
     }
 
     public boolean canMove() {
@@ -673,11 +673,11 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         currentAnimation = animation;
     }
 
-    public void playLivingSound() {
+    public void playAmbientSound() {
         if (this.getAnimation() == this.NO_ANIMATION) {
             this.setAnimation(ANIMATION_SPEAK);
         }
-        super.playLivingSound();
+        super.playAmbientSound();
     }
 
     protected void playHurtSound(DamageSource source) {
@@ -797,13 +797,13 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 8) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_SCRATCH && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 8) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
                 this.getAttackTarget().isAirBorne = true;
                 float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
                 this.getAttackTarget().motionX /= 2.0D;
@@ -982,7 +982,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 this.setAnimation(this.getRNG().nextBoolean() ? ANIMATION_SCRATCH : ANIMATION_BITE);
             }
             if (target != null && this.getAnimationTick() >= 10 && this.getAnimationTick() < 13) {
-                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getControllingPassenger() != null && this.getControllingPassenger().isSneaking()) {
@@ -1139,7 +1139,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
-    protected boolean canDespawn() {
+    public boolean canDespawn(double distanceToClosestPlayer) {
         return false;
     }
 

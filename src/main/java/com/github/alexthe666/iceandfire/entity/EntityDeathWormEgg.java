@@ -6,7 +6,7 @@ import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -43,7 +43,7 @@ public class EntityDeathWormEgg extends ThrowableEntity {
         if (id == 3) {
             double d0 = 0.08D;
             for (int i = 0; i < 8; ++i) {
-                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.getPosX(), this.getPosY(), this.getPosZ(), ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, Item.getIdFromItem(IafItemRegistry.DEATHWORM_EGG));
+                this.world.spawnParticle(ParticleTypes.ITEM_CRACK, this.getPosX(), this.getPosY(), this.getPosZ(), ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, Item.getIdFromItem(IafItemRegistry.DEATHWORM_EGG));
             }
         }
     }

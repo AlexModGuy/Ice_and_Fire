@@ -33,8 +33,8 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0);
-        getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10);
+        getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0);
+        getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10);
     }
 
     @Override
@@ -157,7 +157,7 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
     }
 
     @Override
-    protected boolean canDespawn() {
+    public boolean canDespawn(double distanceToClosestPlayer) {
         return false;
     }
 }

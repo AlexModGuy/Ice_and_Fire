@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDreadQueen;
-import com.github.alexthe666.iceandfire.entity.EntityBlackFrostDragon;
 import net.minecraft.entity.ai.goal.Goal;
 
 import java.util.List;
@@ -50,7 +49,7 @@ public class DreadAIDragonFindQueen extends Goal {
     }
 
     public void updateTask() {
-        this.dragon.getLookHelper().setLookPositionWithEntity(this.queen, 30.0F, 30.0F);
+        this.dragon.getLookController().setLookPositionWithEntity(this.queen, 30.0F, 30.0F);
         if(this.dragon.isFlying() || this.dragon.isHovering()){
             dragon.getMoveHelper().setMoveTo(this.queen.getPosX(), this.queen.getPosY() + 1, this.queen.getPosZ(), 1.2D);
         }else{

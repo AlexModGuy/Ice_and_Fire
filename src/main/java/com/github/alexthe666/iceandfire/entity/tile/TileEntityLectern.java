@@ -19,7 +19,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -314,7 +314,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
 
     @Override
     public ITextComponent getDisplayName() {
-        return this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName());
+        return this.hasCustomName() ? new TextComponentString(this.getName()) : new TranslationTextComponent(this.getName());
     }
 
     @Override

@@ -8,8 +8,8 @@ public class EntityHydraHead extends EntityMutlipartPart {
     public EntityHydra hydra;
     private boolean neck;
 
-    public EntityHydraHead(EntityHydra entity, float radius, float angle, float y, float width, float height, float damageMulti, int headIndex, boolean neck) {
-        super(entity, radius, angle, y, width, height, damageMulti);
+    public EntityHydraHead(EntityHydra entity, float radius, float angle, float y, float getWidth(), float height, float damageMulti, int headIndex, boolean neck) {
+        super(entity, radius, angle, y, getWidth(), height, damageMulti);
         this.headIndex = headIndex;
         this.neck = neck;
         this.hydra = entity;
@@ -25,7 +25,7 @@ public class EntityHydraHead extends EntityMutlipartPart {
                         double d2 = 0.4;
                         double d0 = 0.1;
                         double d1 = 0.1;
-                        IceAndFire.PROXY.spawnParticle("blood", this.getPosX() + (double) (this.rand.nextFloat() * this.width) - (double) this.width * 0.5F, this.getPosY() - 0.5D, this.getPosZ() + (double) (this.rand.nextFloat() * this.width) - (double) this.width * 0.5F, d2, d0, d1);
+                        IceAndFire.PROXY.spawnParticle("blood", this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth()) - (double) this.getWidth() * 0.5F, this.getPosY() - 0.5D, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth()) - (double) this.getWidth() * 0.5F, d2, d0, d1);
                     }
                 }
             }

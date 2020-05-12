@@ -8,7 +8,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public class HippogryphAIMate extends Goal {
     }
 
     public void updateTask() {
-        this.hippo.getLookHelper().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.hippo.getVerticalFaceSpeed());
+        this.hippo.getLookController().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.hippo.getVerticalFaceSpeed());
         this.hippo.getNavigator().tryMoveToLivingEntity(this.targetMate, this.moveSpeed);
         ++this.spawnBabyDelay;
 
@@ -105,10 +105,10 @@ public class HippogryphAIMate extends Goal {
                 double d0 = random.nextGaussian() * 0.02D;
                 double d1 = random.nextGaussian() * 0.02D;
                 double d2 = random.nextGaussian() * 0.02D;
-                double d3 = random.nextDouble() * (double) this.hippo.width * 2.0D - (double) this.hippo.width;
+                double d3 = random.nextDouble() * (double) this.hippo.getWidth() * 2.0D - (double) this.hippo.getWidth();
                 double d4 = 0.5D + random.nextDouble() * (double) this.hippo.height;
-                double d5 = random.nextDouble() * (double) this.hippo.width * 2.0D - (double) this.hippo.width;
-                this.world.spawnParticle(EnumParticleTypes.HEART, this.hippo.getPosX() + d3, this.hippo.getPosY() + d4, this.hippo.getPosZ() + d5, d0, d1, d2);
+                double d5 = random.nextDouble() * (double) this.hippo.getWidth() * 2.0D - (double) this.hippo.getWidth();
+                this.world.spawnParticle(ParticleTypes.HEART, this.hippo.getPosX() + d3, this.hippo.getPosY() + d4, this.hippo.getPosZ() + d5, d0, d1, d2);
             }
 
             if (this.world.getGameRules().getBoolean("doMobLoot")) {

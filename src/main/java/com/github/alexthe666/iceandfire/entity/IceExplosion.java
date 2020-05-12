@@ -15,7 +15,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -202,9 +202,9 @@ public class IceExplosion extends Explosion {
                     d3 = d3 * d7;
                     d4 = d4 * d7;
                     d5 = d5 * d7;
-                    this.worldObj.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, d3, d4, d5);
-                    this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
-                    this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
+                    this.worldObj.spawnParticle(ParticleTypes.FLAME, d0, d1, d2, d3, d4, d5);
+                    this.worldObj.spawnParticle(ParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
+                    this.worldObj.spawnParticle(ParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
                 }
                 if (state.getMaterial() != Material.AIR && !state.getBlock().getTranslationKey().contains("grave") && DragonUtils.canDragonBreak(state.getBlock()) && mobGreifing) {
                     if (block == Blocks.GRASS_PATH) {

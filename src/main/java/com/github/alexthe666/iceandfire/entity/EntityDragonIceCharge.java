@@ -10,7 +10,7 @@ import net.minecraft.entity.projectile.AbstractFireballEntity;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -41,8 +41,8 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
         this.accelerationZ = accelZ / d0 * 0.07D;
     }
 
-    public void setSizes(float width, float height) {
-        this.setSize(width, height);
+    public void setSizes(float getWidth(), float height) {
+        this.setSize(getWidth(), height);
     }
 
     protected boolean isFireballFiery() {
@@ -83,7 +83,7 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
                     float f1 = 0.25F;
-                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.getPosX() - this.motionX * 0.25D, this.getPosY() - this.motionY * 0.25D, this.getPosZ() - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
+                    this.world.spawnParticle(ParticleTypes.WATER_BUBBLE, this.getPosX() - this.motionX * 0.25D, this.getPosY() - this.motionY * 0.25D, this.getPosZ() - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
                 }
 
                 f = 0.8F;

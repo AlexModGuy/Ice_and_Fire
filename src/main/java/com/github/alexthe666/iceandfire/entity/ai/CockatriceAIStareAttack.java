@@ -99,7 +99,7 @@ public class CockatriceAIStareAttack extends Goal {
                 }
 
             }
-            this.entity.getLookHelper().setLookPosition(LivingEntity.getPosX(), LivingEntity.getPosY() + (double) LivingEntity.getEyeHeight(), LivingEntity.getPosZ(), (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
+            this.entity.getLookController().setLookPosition(LivingEntity.getPosX(), LivingEntity.getPosY() + (double) LivingEntity.getEyeHeight(), LivingEntity.getPosZ(), (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
         }
     }
 

@@ -10,7 +10,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -60,7 +60,7 @@ public class DragonAIMate extends Goal {
      * Updates the task
      */
     public void updateTask() {
-        this.dragon.getLookHelper().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.dragon.getVerticalFaceSpeed());
+        this.dragon.getLookController().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.dragon.getVerticalFaceSpeed());
         this.dragon.getNavigator().tryMoveToXYZ(targetMate.getPosX(), targetMate.getPosY(), targetMate.getPosZ(), this.moveSpeed);
         this.dragon.setFlying(false);
         this.dragon.setHovering(false);
@@ -125,10 +125,10 @@ public class DragonAIMate extends Goal {
                 double d0 = random.nextGaussian() * 0.02D;
                 double d1 = random.nextGaussian() * 0.02D;
                 double d2 = random.nextGaussian() * 0.02D;
-                double d3 = random.nextDouble() * (double) this.dragon.width * 2.0D - (double) this.dragon.width;
+                double d3 = random.nextDouble() * (double) this.dragon.getWidth() * 2.0D - (double) this.dragon.getWidth();
                 double d4 = 0.5D + random.nextDouble() * (double) this.dragon.height;
-                double d5 = random.nextDouble() * (double) this.dragon.width * 2.0D - (double) this.dragon.width;
-                this.theWorld.spawnParticle(EnumParticleTypes.HEART, this.dragon.getPosX() + d3, this.dragon.getPosY() + d4, this.dragon.getPosZ() + d5, d0, d1, d2);
+                double d5 = random.nextDouble() * (double) this.dragon.getWidth() * 2.0D - (double) this.dragon.getWidth();
+                this.theWorld.spawnParticle(ParticleTypes.HEART, this.dragon.getPosX() + d3, this.dragon.getPosY() + d4, this.dragon.getPosZ() + d5, d0, d1, d2);
             }
             BlockPos eggPos = new BlockPos(nestX - 2, nestY, nestZ - 2);
             BlockPos dirtPos = eggPos.add(1, 0, 1);

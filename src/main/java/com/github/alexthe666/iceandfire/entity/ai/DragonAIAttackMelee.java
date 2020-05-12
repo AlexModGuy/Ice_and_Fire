@@ -83,7 +83,7 @@ public class DragonAIAttackMelee extends Goal {
         LivingEntity entity = this.dragon.getAttackTarget();
         if (entity != null) {
             if (!dragon.isPassenger(entity)) {
-                this.dragon.getLookHelper().setLookPositionWithEntity(entity, 30.0F, 30.0F);
+                this.dragon.getLookController().setLookPositionWithEntity(entity, 30.0F, 30.0F);
             }
             if (dragon.getAnimation() == EntityDragonBase.ANIMATION_SHAKEPREY) {
                 this.resetTask();
@@ -132,6 +132,6 @@ public class DragonAIAttackMelee extends Goal {
     }
 
     protected double getAttackReachSqr(LivingEntity attackTarget) {
-        return this.dragon.width * 2.0F * this.dragon.width * 2.0F + attackTarget.width;
+        return this.dragon.getWidth() * 2.0F * this.dragon.getWidth() * 2.0F + attackTarget.getWidth();
     }
 }

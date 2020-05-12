@@ -7,7 +7,7 @@ import net.minecraft.entity.projectile.EntityEgg;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -36,7 +36,7 @@ public class EntityHippogryphEgg extends EggEntity {
     public void handleStatusUpdate(byte id) {
         if (id == 3) {
             for (int i = 0; i < 8; ++i) {
-                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.getPosX(), this.getPosY(), this.getPosZ(), ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, Item.getIdFromItem(IafItemRegistry.HIPPOGRYPH_EGG));
+                this.world.spawnParticle(ParticleTypes.ITEM_CRACK, this.getPosX(), this.getPosY(), this.getPosZ(), ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, Item.getIdFromItem(IafItemRegistry.HIPPOGRYPH_EGG));
             }
         }
     }

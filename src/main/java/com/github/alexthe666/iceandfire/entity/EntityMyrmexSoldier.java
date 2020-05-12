@@ -51,7 +51,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAnimationTick() == 0) {
@@ -59,7 +59,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2));
                 this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 200, 2));
             }
         }
@@ -104,10 +104,10 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength * 2);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40);
-        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(6.0D);
+        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
+        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength * 2);
+        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40);
+        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(6.0D);
     }
 
     @Override

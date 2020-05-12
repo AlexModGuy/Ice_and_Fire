@@ -98,12 +98,12 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(24.0D);
+        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(24.0D);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.stymphalianBirdTargetSearchLength));
-        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0D);
+        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
+        this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.stymphalianBirdTargetSearchLength));
+        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0D);
     }
 
     @Override
@@ -308,7 +308,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (this.getAnimation() == ANIMATION_PECK && this.getAnimationTick() == 7) {
                 if (dist < 1.5F) {
-                    this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                    this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
                 }
                 if (onGround) {
                     this.setFlying(false);
@@ -463,11 +463,11 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     public void fall(float distance, float damageMultiplier) {
     }
 
-    public void playLivingSound() {
+    public void playAmbientSound() {
         if (this.getAnimation() == this.NO_ANIMATION) {
             this.setAnimation(ANIMATION_SPEAK);
         }
-        super.playLivingSound();
+        super.playAmbientSound();
     }
 
     protected void playHurtSound(DamageSource source) {
@@ -559,7 +559,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     }
 
     @Override
-    protected boolean canDespawn() {
+    public boolean canDespawn(double distanceToClosestPlayer) {
         return false;
     }
 }

@@ -35,7 +35,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -572,7 +572,7 @@ public class ServerEvents {
                     event.getLivingEntity().playSound(SoundEvents.BLOCK_GLASS_PLACE, 1, 1);
                 } else {
                     for (int i = 0; i < 15; i++) {
-                        event.getLivingEntity().world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, event.getLivingEntity().getPosX() + ((rand.nextDouble() - 0.5D) * event.getLivingEntity().width), event.getLivingEntity().getPosY() + ((rand.nextDouble()) * event.getLivingEntity().height), event.getLivingEntity().getPosZ() + ((rand.nextDouble() - 0.5D) * event.getLivingEntity().width), 0, 0, 0, Block.getIdFromBlock(IafBlockRegistry.DRAGON_ICE));
+                        event.getLivingEntity().world.spawnParticle(ParticleTypes.BLOCK_CRACK, event.getLivingEntity().getPosX() + ((rand.nextDouble() - 0.5D) * event.getLivingEntity().width), event.getLivingEntity().getPosY() + ((rand.nextDouble()) * event.getLivingEntity().height), event.getLivingEntity().getPosZ() + ((rand.nextDouble() - 0.5D) * event.getLivingEntity().width), 0, 0, 0, Block.getIdFromBlock(IafBlockRegistry.DRAGON_ICE));
                     }
                     event.getLivingEntity().playSound(SoundEvents.BLOCK_GLASS_BREAK, 3, 1);
                 }
@@ -594,7 +594,7 @@ public class ServerEvents {
                         sirenProps.singTime++;
                         if (rand.nextInt(7) == 0) {
                             for (int i = 0; i < 5; i++) {
-                                event.getLivingEntity().world.spawnParticle(EnumParticleTypes.HEART, event.getLivingEntity().getPosX() + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().getPosY() + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().getPosZ() + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
+                                event.getLivingEntity().world.spawnParticle(ParticleTypes.HEART, event.getLivingEntity().getPosX() + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().getPosY() + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().getPosZ() + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
                             }
                         }
                         LivingEntity entity = event.getLivingEntity();
@@ -694,7 +694,7 @@ public class ServerEvents {
                 double d4 = this.rand.nextDouble();
                 while (d4 < d3) {
                     d4 += 1.0D;
-                    event.getLivingEntity().world.spawnParticle(EnumParticleTypes.SPELL_MOB, event.getLivingEntity().getPosX() + d0 * d4, event.getLivingEntity().getPosY() + d1 * d4 + (double) event.getLivingEntity().getEyeHeight() * 0.5D, event.getLivingEntity().getPosZ() + d2 * d4, 0.0D, 0.0D, 0.0D, 3484199);
+                    event.getLivingEntity().world.spawnParticle(ParticleTypes.SPELL_MOB, event.getLivingEntity().getPosX() + d0 * d4, event.getLivingEntity().getPosY() + d1 * d4 + (double) event.getLivingEntity().getEyeHeight() * 0.5D, event.getLivingEntity().getPosZ() + d2 * d4, 0.0D, 0.0D, 0.0D, 3484199);
                 }
                 ((LivingEntity) next).addPotionEffect(new PotionEffect(MobEffects.WITHER, 40, 2));
                 if (event.getLivingEntity().ticksExisted % 20 == 0) {
@@ -725,7 +725,7 @@ public class ServerEvents {
             }
             if (rand.nextInt(7) == 0) {
                 for (int i = 0; i < 5; i++) {
-                    event.getLivingEntity().world.spawnParticle(EnumParticleTypes.HEART, event.getLivingEntity().getPosX() + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().getPosY() + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().getPosZ() + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
+                    event.getLivingEntity().world.spawnParticle(ParticleTypes.HEART, event.getLivingEntity().getPosX() + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().getPosY() + ((rand.nextDouble() - 0.5D) * 3), event.getLivingEntity().getPosZ() + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
                 }
             }
         }

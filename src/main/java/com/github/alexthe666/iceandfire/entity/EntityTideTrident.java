@@ -238,7 +238,7 @@ public class EntityTideTrident extends TridentEntity implements IProjectile {
 
             if (this.getIsCritical()) {
                 for (int k = 0; k < 4; ++k) {
-                    this.world.spawnParticle(EnumParticleTypes.CRIT, this.getPosX() + this.motionX * (double) k / 4.0D, this.getPosY() + this.motionY * (double) k / 4.0D, this.getPosZ() + this.motionZ * (double) k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
+                    this.world.spawnParticle(ParticleTypes.CRIT, this.getPosX() + this.motionX * (double) k / 4.0D, this.getPosY() + this.motionY * (double) k / 4.0D, this.getPosZ() + this.motionZ * (double) k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
                 }
             }
 
@@ -271,7 +271,7 @@ public class EntityTideTrident extends TridentEntity implements IProjectile {
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
                     float f3 = 0.25F;
-                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.getPosX() - this.motionX * 0.25D, this.getPosY() - this.motionY * 0.25D, this.getPosZ() - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
+                    this.world.spawnParticle(ParticleTypes.WATER_BUBBLE, this.getPosX() - this.motionX * 0.25D, this.getPosY() - this.motionY * 0.25D, this.getPosZ() - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
                 }
 
                 f1 = 0.99F;

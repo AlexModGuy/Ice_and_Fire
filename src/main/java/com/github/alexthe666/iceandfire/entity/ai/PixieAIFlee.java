@@ -61,7 +61,7 @@ public class PixieAIFlee<T extends Entity> extends Goal {
                 } else {
                     vec3d = vec3d.add(0, 3, 0);
                     this.pixie.getMoveHelper().setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1D);
-                    this.pixie.getLookHelper().setLookPosition(vec3d.x, vec3d.y, vec3d.z, 180.0F, 20.0F);
+                    this.pixie.getLookController().setLookPosition(vec3d.x, vec3d.y, vec3d.z, 180.0F, 20.0F);
                     hidePlace = vec3d;
                     pixie.slowSpeed = true;
                     return true;
@@ -77,7 +77,7 @@ public class PixieAIFlee<T extends Entity> extends Goal {
 
     public void startExecuting() {
         this.pixie.getMoveHelper().setMoveTo(hidePlace.x, hidePlace.y, hidePlace.z, 1D);
-        this.pixie.getLookHelper().setLookPosition(hidePlace.x, hidePlace.y, hidePlace.z, 180.0F, 20.0F);
+        this.pixie.getLookController().setLookPosition(hidePlace.x, hidePlace.y, hidePlace.z, 180.0F, 20.0F);
     }
 
     public void resetTask() {

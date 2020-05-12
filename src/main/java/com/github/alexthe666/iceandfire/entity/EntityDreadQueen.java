@@ -52,11 +52,11 @@ public class EntityDreadQueen extends EntityDreadMob implements IAnimatedEntity,
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.dreadQueenMaxHealth);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(256.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(30.0D);
+        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.dreadQueenMaxHealth);
+        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
+        this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(256.0D);
+        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(30.0D);
     }
 
 
@@ -148,7 +148,7 @@ public class EntityDreadQueen extends EntityDreadMob implements IAnimatedEntity,
     }
 
     @Override
-    protected boolean canDespawn() {
+    public boolean canDespawn(double distanceToClosestPlayer) {
         return false;
     }
 }

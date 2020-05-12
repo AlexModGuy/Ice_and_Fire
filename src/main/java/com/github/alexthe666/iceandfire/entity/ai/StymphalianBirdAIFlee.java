@@ -54,7 +54,7 @@ public class StymphalianBirdAIFlee extends Goal {
                 } else {
                     vec3d = vec3d.add(0, 3, 0);
                     this.stymphalianBird.getMoveHelper().setMoveTo(vec3d.x, vec3d.y, vec3d.z, 3D);
-                    this.stymphalianBird.getLookHelper().setLookPosition(vec3d.x, vec3d.y, vec3d.z, 180.0F, 20.0F);
+                    this.stymphalianBird.getLookController().setLookPosition(vec3d.x, vec3d.y, vec3d.z, 180.0F, 20.0F);
                     hidePlace = vec3d;
                     return true;
                 }
@@ -69,7 +69,7 @@ public class StymphalianBirdAIFlee extends Goal {
 
     public void startExecuting() {
         this.stymphalianBird.getMoveHelper().setMoveTo(hidePlace.x, hidePlace.y, hidePlace.z, 3D);
-        this.stymphalianBird.getLookHelper().setLookPosition(hidePlace.x, hidePlace.y, hidePlace.z, 180.0F, 20.0F);
+        this.stymphalianBird.getLookController().setLookPosition(hidePlace.x, hidePlace.y, hidePlace.z, 180.0F, 20.0F);
     }
 
     public void resetTask() {

@@ -137,14 +137,14 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
         Entity lichSummoned = null;
         if(entity.getCreatureAttribute() == EnumCreatureAttribute.ARTHROPOD){
             lichSummoned = new EntityDreadScuttler(entity.world);
-            float readInScale = (entity.width / 1.5F);
+            float readInScale = (entity.getWidth() / 1.5F);
             ((EntityDreadScuttler)lichSummoned).onInitialSpawn(entity.world.getDifficultyForLocation(new BlockPos(entity)), null);
             ((EntityDreadScuttler)lichSummoned).setScale(readInScale);
             return lichSummoned;
         }
         if(entity instanceof EntityZombie || entity instanceof IHumanoid) {
             lichSummoned = new EntityDreadGhoul(entity.world);
-            float readInScale = (entity.width / 0.6F);
+            float readInScale = (entity.getWidth() / 0.6F);
             ((EntityDreadGhoul)lichSummoned).onInitialSpawn(entity.world.getDifficultyForLocation(new BlockPos(entity)), null);
             ((EntityDreadGhoul)lichSummoned).setScale(readInScale);
             return lichSummoned;
@@ -168,7 +168,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
         }
         if(entity instanceof EntityAnimal) {
             lichSummoned = new EntityDreadBeast(entity.world);
-            float readInScale = (entity.width / 1.2F);
+            float readInScale = (entity.getWidth() / 1.2F);
             ((EntityDreadBeast)lichSummoned).onInitialSpawn(entity.world.getDifficultyForLocation(new BlockPos(entity)), null);
             ((EntityDreadBeast)lichSummoned).setScale(readInScale);
             return lichSummoned;

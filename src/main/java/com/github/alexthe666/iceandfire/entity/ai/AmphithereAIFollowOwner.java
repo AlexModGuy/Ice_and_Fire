@@ -77,7 +77,7 @@ public class AmphithereAIFollowOwner extends Goal {
     }
 
     public void updateTask() {
-        this.ampithere.getLookHelper().setLookPositionWithEntity(this.owner, 10.0F, (float) this.ampithere.getVerticalFaceSpeed());
+        this.ampithere.getLookController().setLookPositionWithEntity(this.owner, 10.0F, (float) this.ampithere.getVerticalFaceSpeed());
 
         if (!this.ampithere.isSitting()) {
             if (--this.timeToRecalcPath <= 0) {

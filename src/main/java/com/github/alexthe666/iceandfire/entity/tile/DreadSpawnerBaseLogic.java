@@ -64,7 +64,7 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
                 double d3 = (double) ((float) blockpos.getX() + this.getSpawnerWorld().rand.nextFloat());
                 double d4 = (double) ((float) blockpos.getY() + this.getSpawnerWorld().rand.nextFloat());
                 double d5 = (double) ((float) blockpos.getZ() + this.getSpawnerWorld().rand.nextFloat());
-                this.getSpawnerWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d3, d4, d5, 0.0D, 0.0D, 0.0D);
+                this.getSpawnerWorld().spawnParticle(ParticleTypes.SMOKE_NORMAL, d3, d4, d5, 0.0D, 0.0D, 0.0D);
                 IceAndFire.PROXY.spawnParticle("dread_torch", d3, d4, d5, 0.0D, 0.0D, 0.0D);
                 if (this.spawnDelay > 0) {
                     --this.spawnDelay;

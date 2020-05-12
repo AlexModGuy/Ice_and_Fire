@@ -155,11 +155,11 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
 
     private void switchNavigator(boolean onLand) {
         if (onLand) {
-            this.moveHelper = new EntityMoveHelper(this);
+            this.moveController = new EntityMoveHelper(this);
             this.navigator = new PathNavigateAmphibious(this, world);
             this.isLandNavigator = true;
         } else {
-            this.moveHelper = new EntitySiren.SwimmingMoveHelper();
+            this.moveController = new EntitySiren.SwimmingMoveHelper();
             this.navigator = new PathNavigateSwimmer(this, world);
             this.isLandNavigator = false;
         }
@@ -195,10 +195,10 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
             this.setSinging(true);
         }
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 4D && this.getAnimationTick() == 5) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
         }
         if (this.getAnimation() == ANIMATION_PULL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 12D && this.getAnimationTick() == 5) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
             this.getAttackTarget().motionX += (Math.signum(this.getPosX() - this.getAttackTarget().getPosX()) * 0.5D - this.getAttackTarget().motionX) * 0.100000000372529 * 5;
             this.getAttackTarget().motionY += (Math.signum(this.getPosY() - this.getAttackTarget().getPosY() + 1) * 0.5D - this.getAttackTarget().motionY) * 0.100000000372529 * 5;
             this.getAttackTarget().motionZ += (Math.signum(this.getPosZ() - this.getAttackTarget().getPosZ()) * 0.5D - this.getAttackTarget().motionZ) * 0.100000000372529 * 5;
@@ -426,9 +426,9 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.sirenMaxHealth);
+        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
+        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
+        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.sirenMaxHealth);
     }
 
     @Override
@@ -538,7 +538,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     @Override
-    protected boolean canDespawn() {
+    public boolean canDespawn(double distanceToClosestPlayer) {
         return false;
     }
 
@@ -567,13 +567,13 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
                 this.siren.rotationYaw = this.limitAngle(this.siren.rotationYaw, angle, 30.0F);
                 this.siren.setAIMoveSpeed(1F);
                 this.siren.motionY += (double) this.siren.getAIMoveSpeed() * distanceY * 0.1D;
-                if (distance < (double) Math.max(1.0F, this.entity.width)) {
+                if (distance < (double) Math.max(1.0F, this.entity.getWidth())) {
                     float f = this.siren.rotationYaw * 0.017453292F;
                     this.siren.motionX -= MathHelper.sin(f) * 0.35F;
                     this.siren.motionZ += MathHelper.cos(f) * 0.35F;
                 }
             } else if (this.action == EntityMoveHelper.Action.JUMPING) {
-                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
+                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
                 if (this.entity.onGround) {
                     this.action = EntityMoveHelper.Action.WAIT;
                 }

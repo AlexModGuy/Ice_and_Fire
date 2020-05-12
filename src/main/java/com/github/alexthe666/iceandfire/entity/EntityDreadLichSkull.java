@@ -14,7 +14,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.Hand;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
@@ -107,10 +107,10 @@ public class EntityDreadLichSkull extends AbstractArrowEntity {
         double d0 = 0;
         double d1 = 0.01D;
         double d2 = 0D;
-        double x = this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width;
+        double x = this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth();
         double y = this.getPosY() + (double) (this.rand.nextFloat() * this.height) - (double) this.height;
-        double z = this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width;
-        float f = (this.width + this.height + this.width) * 0.333F + 0.5F;
+        double z = this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth();
+        float f = (this.getWidth() + this.height + this.getWidth()) * 0.333F + 0.5F;
         if (particleDistSq(x, y, z) < f * f) {
             IceAndFire.PROXY.spawnParticle("dread_torch", x, y + 0.5D, z, d0, d1, d2);
         }

@@ -42,8 +42,8 @@ public class EntityHydraArrow  extends AbstractArrowEntity {
             double d3 = 10.0D;
             double xRatio = motionX * height;
             double zRatio = motionZ * height;
-            IceAndFire.PROXY.spawnParticle("hydra", this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, 0.1D, 1.0D, 0.1D);
-            IceAndFire.PROXY.spawnParticle("hydra", this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, 0.1D, 1.0D, 0.1D);
+            IceAndFire.PROXY.spawnParticle("hydra", this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d2 * 10.0D, 0.1D, 1.0D, 0.1D);
+            IceAndFire.PROXY.spawnParticle("hydra", this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d2 * 10.0D, 0.1D, 1.0D, 0.1D);
 
         }
     }

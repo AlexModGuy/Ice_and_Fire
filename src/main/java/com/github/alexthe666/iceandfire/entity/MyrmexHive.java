@@ -14,7 +14,7 @@ import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.VillageDoorInfo;
 import net.minecraft.world.World;
 
@@ -215,25 +215,25 @@ public class MyrmexHive {
         }
         if (player != null) {
             if (j - i != 0) {
-                player.sendStatusMessage(new TextComponentTranslation(j - i >= 0 ? "myrmex.message.raised_reputation" : "myrmex.message.lowered_reputation", Math.abs(j - i), j), true);
+                player.sendStatusMessage(new TranslationTextComponent(j - i >= 0 ? "myrmex.message.raised_reputation" : "myrmex.message.lowered_reputation", Math.abs(j - i), j), true);
             }
             if (i < 25 && j >= 25) {
-                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.peaceful"), false);
+                player.sendStatusMessage(new TranslationTextComponent("myrmex.message.peaceful"), false);
             }
             if (i >= 25 && j < 25) {
-                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.hostile"), false);
+                player.sendStatusMessage(new TranslationTextComponent("myrmex.message.hostile"), false);
             }
             if (i < 50 && j >= 50) {
-                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.trade"), false);
+                player.sendStatusMessage(new TranslationTextComponent("myrmex.message.trade"), false);
             }
             if (i >= 50 && j < 50) {
-                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.no_trade"), false);
+                player.sendStatusMessage(new TranslationTextComponent("myrmex.message.no_trade"), false);
             }
             if (i < 75 && j >= 75) {
-                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.can_use_staff"), false);
+                player.sendStatusMessage(new TranslationTextComponent("myrmex.message.can_use_staff"), false);
             }
             if (i >= 75 && j < 75) {
-                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.cant_use_staff"), false);
+                player.sendStatusMessage(new TranslationTextComponent("myrmex.message.cant_use_staff"), false);
             }
         }
 
@@ -450,23 +450,23 @@ public class MyrmexHive {
         if (roomType == WorldGenMyrmexHive.RoomType.FOOD) {
             if (!this.foodRooms.contains(center) && !allCurrentRooms.contains(center)) {
                 this.foodRooms.add(center);
-                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.added_food_room", center.getX(), center.getY(), center.getZ()), false);
+                player.sendStatusMessage(new TranslationTextComponent("myrmex.message.added_food_room", center.getX(), center.getY(), center.getZ()), false);
             } else {
-                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.dupe_room", center.getX(), center.getY(), center.getZ()), false);
+                player.sendStatusMessage(new TranslationTextComponent("myrmex.message.dupe_room", center.getX(), center.getY(), center.getZ()), false);
 
             }
         } else if (roomType == WorldGenMyrmexHive.RoomType.NURSERY) {
             if (!this.babyRooms.contains(center) && !allCurrentRooms.contains(center)) {
                 this.babyRooms.add(center);
-                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.added_nursery_room", center.getX(), center.getY(), center.getZ()), false);
+                player.sendStatusMessage(new TranslationTextComponent("myrmex.message.added_nursery_room", center.getX(), center.getY(), center.getZ()), false);
             } else {
-                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.dupe_room", center.getX(), center.getY(), center.getZ()), false);
+                player.sendStatusMessage(new TranslationTextComponent("myrmex.message.dupe_room", center.getX(), center.getY(), center.getZ()), false);
             }
         } else if (!this.miscRooms.contains(center) && !allCurrentRooms.contains(center)) {
             this.miscRooms.add(center);
-            player.sendStatusMessage(new TextComponentTranslation("myrmex.message.added_misc_room", center.getX(), center.getY(), center.getZ()), false);
+            player.sendStatusMessage(new TranslationTextComponent("myrmex.message.added_misc_room", center.getX(), center.getY(), center.getZ()), false);
         } else {
-            player.sendStatusMessage(new TextComponentTranslation("myrmex.message.dupe_room", center.getX(), center.getY(), center.getZ()), false);
+            player.sendStatusMessage(new TranslationTextComponent("myrmex.message.dupe_room", center.getX(), center.getY(), center.getZ()), false);
         }
     }
 
@@ -476,17 +476,17 @@ public class MyrmexHive {
         allCurrentRooms.addAll(this.getEntranceBottoms().keySet());
         if (bottom) {
             if (allCurrentRooms.contains(center)) {
-                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.dupe_room", center.getX(), center.getY(), center.getZ()), false);
+                player.sendStatusMessage(new TranslationTextComponent("myrmex.message.dupe_room", center.getX(), center.getY(), center.getZ()), false);
             } else {
                 this.getEntranceBottoms().put(center, facing);
-                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.added_enterance_bottom", center.getX(), center.getY(), center.getZ()), false);
+                player.sendStatusMessage(new TranslationTextComponent("myrmex.message.added_enterance_bottom", center.getX(), center.getY(), center.getZ()), false);
             }
         } else {
             if (allCurrentRooms.contains(center)) {
-                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.dupe_room", center.getX(), center.getY(), center.getZ()), false);
+                player.sendStatusMessage(new TranslationTextComponent("myrmex.message.dupe_room", center.getX(), center.getY(), center.getZ()), false);
             } else {
                 this.getEntrances().put(center, facing);
-                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.added_enterance_surface", center.getX(), center.getY(), center.getZ()), false);
+                player.sendStatusMessage(new TranslationTextComponent("myrmex.message.added_enterance_surface", center.getX(), center.getY(), center.getZ()), false);
             }
         }
     }

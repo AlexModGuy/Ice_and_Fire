@@ -38,6 +38,6 @@ public class DragonAILookIdle extends Goal {
     @Override
     public void updateTask() {
         --this.idleTime;
-        this.dragon.getLookHelper().setLookPosition(this.dragon.getPosX() + this.lookX, this.dragon.getPosY() + this.dragon.getEyeHeight(), this.dragon.getPosZ() + this.lookZ, this.dragon.getHorizontalFaceSpeed(), this.dragon.getVerticalFaceSpeed());
+        this.dragon.getLookController().setLookPosition(this.dragon.getPosX() + this.lookX, this.dragon.getPosY() + this.dragon.getEyeHeight(), this.dragon.getPosZ() + this.lookZ, this.dragon.getHorizontalFaceSpeed(), this.dragon.getVerticalFaceSpeed());
     }
 }

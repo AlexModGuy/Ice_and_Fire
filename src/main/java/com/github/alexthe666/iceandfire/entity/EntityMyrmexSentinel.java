@@ -95,20 +95,20 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
             this.setAnimation(ANIMATION_NIBBLE);
             if (this.getAnimationTick() == 5) {
                 this.playBiteSound();
-                this.getHeldEntity().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() / 6));
+                this.getHeldEntity().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() / 6));
             }
         }
         if (this.getAnimation() == ANIMATION_GRAB && this.getAttackTarget() != null && this.getAnimationTick() == 7) {
             this.playStingSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() / 2));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() / 2));
                 this.getAttackTarget().startRiding(this);
             }
         }
         if (this.getAnimation() == ANIMATION_SLASH && this.getAttackTarget() != null && this.getAnimationTick() % 5 == 0 && this.getAnimationTick() <= 20) {
             this.playBiteSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()) / 4);
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()) / 4);
             }
         }
         if (this.getAnimation() == ANIMATION_STING && (this.getAnimationTick() == 0 || this.getAnimationTick() == 10)) {
@@ -117,7 +117,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && (this.getAnimationTick() == 6 || this.getAnimationTick() == 16)) {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 18) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
                 this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 3));
             }
         }
@@ -154,10 +154,10 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength * 3D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60);
-        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(12.0D);
+        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
+        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength * 3D);
+        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60);
+        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(12.0D);
     }
 
     @Override
@@ -241,7 +241,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
             return false;
         }
         if (this.getAnimation() != ANIMATION_STING && this.getAnimation() != ANIMATION_SLASH && this.getAnimation() != ANIMATION_GRAB && this.getHeldEntity() == null) {
-            if (this.getRNG().nextInt(2) == 0 && entityIn.width < 2F) {
+            if (this.getRNG().nextInt(2) == 0 && entityIn.getWidth() < 2F) {
                 this.setAnimation(ANIMATION_GRAB);
             } else {
                 this.setAnimation(this.getRNG().nextBoolean() ? ANIMATION_STING : ANIMATION_SLASH);

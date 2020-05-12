@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.pathfinding.*;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -77,12 +77,12 @@ public class PathNavigateMyrmex extends PathNavigateGround {
             try{
                 for(int i = 0; i < currentPath.getCurrentPathLength(); i++){
                     PathPoint point = currentPath.getPathPointFromIndex(i);
-                    int particle = EnumParticleTypes.HEART.getParticleID();
+                    int particle = ParticleTypes.HEART.getParticleID();
                     IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageSpawnParticleAt(point.x, point.y, point.z, particle));
                 }
                 if(currentPath.getCurrentPos() != null){
                     Vec3d point = currentPath.getCurrentPos();
-                    int particle = EnumParticleTypes.CLOUD.getParticleID();
+                    int particle = ParticleTypes.CLOUD.getParticleID();
                     IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageSpawnParticleAt(point.x, point.y, point.z, particle));
 
                 }

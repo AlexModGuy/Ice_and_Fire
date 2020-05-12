@@ -136,7 +136,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
-        this.getLookHelper().setLookPositionWithEntity(entityIn, 30.0F, 30.0F);
+        this.getLookController().setLookPositionWithEntity(entityIn, 30.0F, 30.0F);
         if(!this.isPlayingAttackAnimation()){
             switch (groundAttack) {
                 case BITE:
@@ -148,7 +148,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 case SHAKE_PREY:
                     boolean flag = false;
                     if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector().add(0, this.height/2, 0), entityIn.getPositionVector().add(0, entityIn.height/2, 0)) &&
-                            entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
+                            entityIn.getWidth() < this.getWidth() * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
                         this.setAnimation(ANIMATION_SHAKEPREY);
                         flag = true;
                         entityIn.startRiding(this);
@@ -505,7 +505,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 double d2 = this.rand.nextGaussian() * 0.02D;
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
-                IceAndFire.PROXY.spawnParticle("snowflake", this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+                IceAndFire.PROXY.spawnParticle("snowflake", this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d2, d0, d1);
             }
         }
     }

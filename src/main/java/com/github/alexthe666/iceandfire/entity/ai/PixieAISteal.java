@@ -69,7 +69,7 @@ public class PixieAISteal extends Goal {
     }
 
     public void updateTask() {
-        this.temptedEntity.getLookHelper().setLookPositionWithEntity(this.temptingPlayer, (float) (this.temptedEntity.getHorizontalFaceSpeed() + 20), (float) this.temptedEntity.getVerticalFaceSpeed());
+        this.temptedEntity.getLookController().setLookPositionWithEntity(this.temptingPlayer, (float) (this.temptedEntity.getHorizontalFaceSpeed() + 20), (float) this.temptedEntity.getVerticalFaceSpeed());
         ArrayList<Integer> slotlist = new ArrayList<Integer>();
         if (this.temptedEntity.getDistanceSq(this.temptingPlayer) < 6.25D && !this.temptingPlayer.inventory.isEmpty()) {
             for (int i = 0; i < this.temptingPlayer.inventory.getSizeInventory(); i++) {

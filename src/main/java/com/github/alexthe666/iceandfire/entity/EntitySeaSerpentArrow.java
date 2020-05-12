@@ -9,7 +9,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -40,8 +40,8 @@ public class EntitySeaSerpentArrow extends AbstractArrowEntity {
             double d3 = 10.0D;
             double xRatio = motionX * height;
             double zRatio = motionZ * height;
-            this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
-            this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
+            this.world.spawnParticle(ParticleTypes.WATER_BUBBLE, this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d2 * 10.0D, d0, d1, d2);
+            this.world.spawnParticle(ParticleTypes.WATER_SPLASH, this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d2 * 10.0D, d0, d1, d2);
 
         }
     }

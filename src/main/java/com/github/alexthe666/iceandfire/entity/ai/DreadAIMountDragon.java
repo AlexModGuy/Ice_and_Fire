@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.github.alexthe666.iceandfire.entity.EntityBlackFrostDragon;
 import com.github.alexthe666.iceandfire.entity.EntityDreadQueen;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.AbstractHorse;
@@ -51,7 +50,7 @@ public class DreadAIMountDragon extends Goal {
     }
 
     public void updateTask() {
-        this.knight.getLookHelper().setLookPositionWithEntity(this.horse, 30.0F, 30.0F);
+        this.knight.getLookController().setLookPositionWithEntity(this.horse, 30.0F, 30.0F);
 
         this.knight.getNavigator().tryMoveToLivingEntity(this.horse, 1.2D);
         if (this.knight.getDistanceSq(this.horse) < this.horse.getRenderSize() * 0.66D) {

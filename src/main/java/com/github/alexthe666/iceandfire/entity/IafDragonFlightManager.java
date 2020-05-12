@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityMoveHelper;
+import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNodeType;
@@ -120,7 +121,7 @@ public class IafDragonFlightManager {
         prevAttackTarget = LivingEntityIn;
     }
 
-    protected static class GroundMoveHelper extends EntityMoveHelper {
+    protected static class GroundMoveHelper extends MovementController {
         public GroundMoveHelper(LivingEntity LivingEntityIn) {
             super(LivingEntityIn);
         }
@@ -131,7 +132,7 @@ public class IafDragonFlightManager {
 
         public void onUpdateMoveHelper() {
             if (this.action == EntityMoveHelper.Action.STRAFE) {
-                float f = (float) this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
+                float f = (float) this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue();
                 float f1 = (float) this.speed * f;
                 float f2 = this.moveForward;
                 float f3 = this.moveStrafe;
@@ -175,18 +176,18 @@ public class IafDragonFlightManager {
                 }
                 float targetDegree = (float) (MathHelper.atan2(d1, d0) * (180D / Math.PI)) - 90.0F;
                 float changeRange = 70F;
-                if (dragonBase.width > 2F) {
+                if (dragonBase.getWidth() > 2F) {
                     float ageMod = 1F - Math.min(dragonBase.getAgeInDays(), 125) / 125F;
                     changeRange = 5 + ageMod * 10;
                 }
                 this.entity.rotationYaw = this.limitAngle(this.entity.rotationYaw, targetDegree, changeRange);
-                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
-                if (d2 > (double) this.entity.stepHeight && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.entity.width)) {
+                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
+                if (d2 > (double) this.entity.stepHeight && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.entity.getWidth())) {
                     this.entity.getJumpHelper().setJumping();
                     this.action = EntityMoveHelper.Action.JUMPING;
                 }
             } else if (this.action == EntityMoveHelper.Action.JUMPING) {
-                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
+                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
 
                 if (this.entity.onGround) {
                     this.action = EntityMoveHelper.Action.WAIT;
@@ -198,7 +199,7 @@ public class IafDragonFlightManager {
 
     }
 
-    protected static class FlightMoveHelper extends EntityMoveHelper {
+    protected static class FlightMoveHelper extends MovementController {
 
         private EntityDragonBase dragon;
 
@@ -254,7 +255,7 @@ public class IafDragonFlightManager {
 
     }
 
-    protected static class PlayerFlightMoveHelper<T extends MobEntity & IFlyingMount> extends EntityMoveHelper {
+    protected static class PlayerFlightMoveHelper<T extends MobEntity & IFlyingMount> extends MovementController {
 
         private T dragon;
 

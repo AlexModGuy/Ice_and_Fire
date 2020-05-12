@@ -2,41 +2,49 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.IPacket;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Hand;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityAmphithereArrow extends AbstractArrowEntity {
 
-    public EntityAmphithereArrow(World worldIn) {
-        super(worldIn);
+    public EntityAmphithereArrow(EntityType type, World worldIn) {
+        super(type, worldIn);
         this.setDamage(2.5F);
     }
 
-    public EntityAmphithereArrow(World worldIn, double x, double y, double z) {
-        this(worldIn);
+    public EntityAmphithereArrow(EntityType type, World worldIn, double x, double y, double z) {
+        this(type, worldIn);
         this.setPosition(x, y, z);
         this.setDamage(2.5F);
     }
 
-    public EntityAmphithereArrow(World worldIn, LivingEntity shooter) {
-        super(worldIn, shooter);
+    public EntityAmphithereArrow(EntityType type, LivingEntity shooter, World worldIn) {
+        super(type, shooter, worldIn);
         this.setDamage(2.5F);
     }
 
-    public void onUpdate() {
-        super.onUpdate();
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
+
+    public void tick() {
+        super.tick();
         if ((ticksExisted == 1 || this.ticksExisted % 70 == 0) && !this.inGround && !this.onGround) {
             this.playSound(IafSoundRegistry.AMPHITHERE_GUST, 1, 1);
         }
@@ -45,9 +53,9 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
             double d3 = 10.0D;
-            double xRatio = motionX * height;
-            double zRatio = motionZ * height;
-            this.world.spawnParticle(EnumParticleTypes.CLOUD, this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
+            double xRatio = this.getMotion().x * this.getWidth();
+            double zRatio = this.getMotion().z * this.getWidth();
+            this.world.addParticle(ParticleTypes.CLOUD, this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d2 * 10.0D, d0, d1, d2);
 
         }
     }
@@ -57,15 +65,11 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
             this.damageShield((PlayerEntity) living, (float) this.getDamage());
         }
         living.isAirBorne = true;
-        double xRatio = motionX;
-        double zRatio = motionZ;
+        double xRatio = this.getMotion().x;
+        double zRatio = this.getMotion().z;
         float strength = -1.4F;
         float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
-        living.motionX /= 2.0D;
-        living.motionZ /= 2.0D;
-        living.motionX -= xRatio / (double) f * (double) strength;
-        living.motionZ -= zRatio / (double) f * (double) strength;
-        living.motionY = 0.6D;
+        living.setMotion(living.getMotion().mul(0.5D, 1, 0.5D).subtract(xRatio / (double) f * (double) strength, 0, zRatio / (double) f * (double) strength).add(0, 0.6,0));
         spawnExplosionParticle();
     }
 
@@ -77,9 +81,9 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
                     double d1 = this.rand.nextGaussian() * 0.02D;
                     double d2 = this.rand.nextGaussian() * 0.02D;
                     double d3 = 10.0D;
-                    double xRatio = motionX * height;
-                    double zRatio = motionZ * height;
-                    this.world.spawnParticle(EnumParticleTypes.CLOUD, this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.width * 5.0F) - (double) this.width - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D + height, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.width * 5.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
+                    double xRatio = this.getMotion().x * this.getWidth();
+                    double zRatio = this.getMotion().z * this.getWidth();
+                    this.world.addParticle(ParticleTypes.CLOUD, this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d2 * 10.0D, d0, d1, d2);
                 }
             }
         } else {
@@ -103,16 +107,18 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
         if (damage >= 3.0F && player.getActiveItemStack().getItem().isShield(player.getActiveItemStack(), player)) {
             ItemStack copyBeforeUse = player.getActiveItemStack().copy();
             int i = 1 + MathHelper.floor(damage);
-            player.getActiveItemStack().damageItem(i, player);
+            player.getActiveItemStack().damageItem(i, player, (p_220040_1_) -> {
+                p_220040_1_.sendBreakAnimation(player.getActiveHand());
+            });
 
             if (player.getActiveItemStack().isEmpty()) {
                 Hand Hand = player.getActiveHand();
                 net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, Hand);
 
                 if (Hand == Hand.MAIN_HAND) {
-                    this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                    this.setItemStackToSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
                 } else {
-                    this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
+                    this.setItemStackToSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
                 }
                 player.resetActiveHand();
                 this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);

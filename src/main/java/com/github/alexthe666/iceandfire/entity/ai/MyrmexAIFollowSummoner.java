@@ -74,7 +74,7 @@ public class MyrmexAIFollowSummoner extends Goal {
         if (this.tameable.getAttackTarget() != null) {
             return;
         }
-        this.tameable.getLookHelper().setLookPositionWithEntity(this.owner, 10.0F, (float) this.tameable.getVerticalFaceSpeed());
+        this.tameable.getLookController().setLookPositionWithEntity(this.owner, 10.0F, (float) this.tameable.getVerticalFaceSpeed());
         if (--this.timeToRecalcPath <= 0) {
             this.timeToRecalcPath = 10;
             this.tameable.getMoveHelper().setMoveTo(this.owner.getPosX(), this.owner.getPosY() + this.owner.getEyeHeight(), this.owner.getPosZ(), 0.25D);

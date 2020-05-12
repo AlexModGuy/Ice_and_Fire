@@ -103,7 +103,7 @@ public class DreadLichAIStrife extends Goal {
                 this.entity.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
                 this.entity.faceEntity(LivingEntity, 30.0F, 30.0F);
             } else {
-                this.entity.getLookHelper().setLookPositionWithEntity(LivingEntity, 30.0F, 30.0F);
+                this.entity.getLookController().setLookPositionWithEntity(LivingEntity, 30.0F, 30.0F);
             }
 
             if (!flag && this.seeTime < -60) {

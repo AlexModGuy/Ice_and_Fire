@@ -6,7 +6,7 @@ import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class MessageSpawnParticleAt extends AbstractMessage<MessageSpawnParticleAt> {
@@ -27,7 +27,7 @@ public class MessageSpawnParticleAt extends AbstractMessage<MessageSpawnParticle
     @Override
     public void onClientReceived(Minecraft client, MessageSpawnParticleAt message, PlayerEntity player, MessageContext messageContext) {
         if(!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() == IafItemRegistry.DRAGON_DEBUG_STICK){
-            client.world.spawnParticle(EnumParticleTypes.getParticleFromId(particleType), message.x, message.y, message.z, 0, 0, 0);
+            client.world.spawnParticle(ParticleTypes.getParticleFromId(particleType), message.x, message.y, message.z, 0, 0, 0);
         }
     }
 

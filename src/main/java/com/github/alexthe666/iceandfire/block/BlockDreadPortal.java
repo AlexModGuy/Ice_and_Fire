@@ -96,7 +96,7 @@ public class BlockDreadPortal extends ContainerBlock implements IDreadBlock {
                 double d5 = ((double) rand.nextFloat() - 0.5D) * 0.25D;
                 int k = rand.nextInt(2) * 2 - 1;
                 IceAndFire.PROXY.spawnParticle("dread_portal", d0, d1, d2, d3, d4, d5);
-                //worldIn.spawnParticle(EnumParticleTypes.END_ROD, d0, d1, d2, d3, d4, d5);
+                //worldIn.spawnParticle(ParticleTypes.END_ROD, d0, d1, d2, d3, d4, d5);
             }
         }
     }

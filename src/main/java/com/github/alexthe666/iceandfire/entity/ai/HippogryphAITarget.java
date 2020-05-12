@@ -23,7 +23,7 @@ public class HippogryphAITarget<T extends LivingEntity> extends NearestAttackabl
             return false;
         }
         if (super.shouldExecute() && this.targetEntity != null && !this.targetEntity.getClass().equals(this.hippogryph.getClass())) {
-            if (this.hippogryph.width >= this.targetEntity.width) {
+            if (this.hippogryph.getWidth() >= this.targetEntity.getWidth()) {
                 if (this.targetEntity instanceof PlayerEntity) {
                     return !hippogryph.isTamed();
                 } else {

@@ -126,7 +126,7 @@ public class AmphithereAIAttackMelee extends Goal {
         if (attacker.isFlying()) {
             this.attacker.getMoveHelper().setMoveTo(LivingEntity.getPosX(), LivingEntity.getPosY() + LivingEntity.getEyeHeight(), LivingEntity.getPosZ(), 0.1D);
         }
-        this.attacker.getLookHelper().setLookPositionWithEntity(LivingEntity, 30.0F, 30.0F);
+        this.attacker.getLookController().setLookPositionWithEntity(LivingEntity, 30.0F, 30.0F);
         double d0 = this.attacker.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getEntityBoundingBox().minY, LivingEntity.getPosZ());
         --this.delayCounter;
 
@@ -173,6 +173,6 @@ public class AmphithereAIAttackMelee extends Goal {
     }
 
     protected double getAttackReachSqr(LivingEntity attackTarget) {
-        return (double) (this.attacker.width * 2.0F * this.attacker.width * 2.0F + attackTarget.width);
+        return (double) (this.attacker.getWidth() * 2.0F * this.attacker.getWidth() * 2.0F + attackTarget.getWidth());
     }
 }

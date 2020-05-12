@@ -1,46 +1,48 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
-import net.minecraft.block.BlockWall;
+import net.minecraft.block.WallBlock;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityHanging;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.HangingEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class EntityChainTie extends HangingEntity {
 
-    public EntityChainTie(World worldIn) {
-        super(worldIn);
+    public EntityChainTie(EntityType type, World worldIn) {
+        super(type, worldIn);
         this.facingDirection = Direction.NORTH;
     }
 
-    public EntityChainTie(World worldIn, BlockPos hangingPositionIn) {
-        super(worldIn, hangingPositionIn);
+    public EntityChainTie(EntityType type, World worldIn, BlockPos hangingPositionIn) {
+        super(type, worldIn, hangingPositionIn);
         this.setPosition((double) hangingPositionIn.getX() + 0.5D, (double) hangingPositionIn.getY(), (double) hangingPositionIn.getZ() + 0.5D);
-        this.setSize(0.8F, 0.9F);
         this.forceSpawn = true;
     }
 
     public static EntityChainTie createKnot(World worldIn, BlockPos fence) {
-        EntityChainTie entityleashknot = new EntityChainTie(worldIn, fence);
-        worldIn.spawnEntity(entityleashknot);
+        EntityChainTie entityleashknot = new EntityChainTie(IafEntityRegistry.CHAIN_TIE, worldIn, fence);
+        worldIn.addEntity(entityleashknot);
         entityleashknot.playPlaceSound();
         return entityleashknot;
     }
@@ -61,14 +63,12 @@ public class EntityChainTie extends HangingEntity {
     }
 
     public void setPosition(double x, double y, double z) {
-        this.getPosX() = x;
-        this.getPosY() = y;
-        this.getPosZ() = z;
-        if (this.isAddedToWorld() && !this.world.isRemote)
-            this.world.updateEntityWithOptionalForce(this, false); // Forge - Process chunk registration after moving.
-        float f = this.width / 2.0F;
-        float f1 = this.height;
-        this.setEntityBoundingBox(new AxisAlignedBB(x - (double) f, y, z - (double) f, x + (double) f, y + (double) f1, z + (double) f));
+        super.setPosition((double) MathHelper.floor(x) + 0.5D, (double)MathHelper.floor(y) + 0.5D, (double)MathHelper.floor(z) + 0.5D);
+    }
+
+    protected void updateBoundingBox() {
+        this.setRawPosition((double)this.hangingPosition.getX() + 0.5D, (double)this.hangingPosition.getY() + 0.5D, (double)this.hangingPosition.getZ() + 0.5D);
+        if (this.isAddedToWorld() && this.world instanceof net.minecraft.world.server.ServerWorld) ((net.minecraft.world.server.ServerWorld)this.world).chunkCheck(this); // Forge - Process chunk registration after moving.
     }
 
     public boolean attackEntityFrom(DamageSource source, float amount) {
@@ -88,17 +88,13 @@ public class EntityChainTie extends HangingEntity {
 
     public void writeEntityToNBT(CompoundNBT compound) {
         BlockPos blockpos = this.getHangingPosition();
-        compound.setInteger("TileX", blockpos.getX());
-        compound.setInteger("TileY", blockpos.getY());
-        compound.setInteger("TileZ", blockpos.getZ());
+        compound.putInt("TileX", blockpos.getX());
+        compound.putInt("TileY", blockpos.getY());
+        compound.putInt("TileZ", blockpos.getZ());
     }
 
     public void readEntityFromNBT(CompoundNBT compound) {
-        this.hangingPosition = new BlockPos(compound.getInteger("TileX"), compound.getInteger("TileY"), compound.getInteger("TileZ"));
-    }
-
-    public float getEyeHeight() {
-        return 0F;
+        this.hangingPosition = new BlockPos(compound.getInt("TileX"), compound.getInt("TileY"), compound.getInt("TileZ"));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -110,17 +106,17 @@ public class EntityChainTie extends HangingEntity {
         this.playSound(SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 1.0F, 1.0F);
     }
 
-    public void setDead() {
-        this.isDead = true;
+    public void remove(boolean keepData) {
+        this.removed = true;
         double d0 = 30D;
         List<LivingEntity> list = this.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(this.getPosX() - d0, this.getPosY() - d0, this.getPosZ() - d0, this.getPosX() + d0, this.getPosY() + d0, this.getPosZ() + d0));
         for (LivingEntity LivingEntity : list) {
             ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntity, ChainEntityProperties.class);
             if (chainProperties != null && chainProperties.isChained() && chainProperties.isConnectedToEntity(LivingEntity, this)) {
                 chainProperties.removeChain(LivingEntity, this);
-                EntityItem entityitem = new EntityItem(this.world, this.getPosX(), this.getPosY() + (double) 1, this.getPosZ(), new ItemStack(IafItemRegistry.CHAIN));
+                ItemEntity entityitem = new ItemEntity(this.world, this.getPosX(), this.getPosY() + (double) 1, this.getPosZ(), new ItemStack(IafItemRegistry.CHAIN));
                 entityitem.setDefaultPickupDelay();
-                this.world.spawnEntity(entityitem);
+                this.world.addEntity(entityitem);
             }
         }
     }
@@ -143,16 +139,16 @@ public class EntityChainTie extends HangingEntity {
             }
 
             if (!flag) {
-                this.setDead();
+                this.remove();
 
-                if (player.capabilities.isCreativeMode) {
+                if (player.isCreative()) {
                     for (LivingEntity LivingEntity1 : list) {
                         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntity1, ChainEntityProperties.class);
                         if (chainProperties.isChained() && chainProperties.isConnectedToEntity(LivingEntity1, this)) {
                             chainProperties.removeChain(LivingEntity1, this);
-                            EntityItem entityitem = new EntityItem(this.world, this.getPosX(), this.getPosY() + (double) 1, this.getPosZ(), new ItemStack(IafItemRegistry.CHAIN));
+                            ItemEntity entityitem = new ItemEntity(this.world, this.getPosX(), this.getPosY() + (double) 1, this.getPosZ(), new ItemStack(IafItemRegistry.CHAIN));
                             entityitem.setDefaultPickupDelay();
-                            this.world.spawnEntity(entityitem);
+                            this.world.addEntity(entityitem);
                         }
                     }
                 }
@@ -162,8 +158,14 @@ public class EntityChainTie extends HangingEntity {
         }
     }
 
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
+
     public boolean onValidSurface() {
-        return this.world.getBlockState(this.hangingPosition).getBlock() instanceof BlockWall;
+        return this.world.getBlockState(this.hangingPosition).getBlock() instanceof WallBlock;
     }
 
     public void playPlaceSound() {

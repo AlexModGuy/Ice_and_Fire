@@ -108,7 +108,7 @@ public class HippogryphAIAttackMelee extends Goal {
     public void updateTask() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
         if (LivingEntity != null) {
-            this.attacker.getLookHelper().setLookPositionWithEntity(LivingEntity, 30.0F, 30.0F);
+            this.attacker.getLookController().setLookPositionWithEntity(LivingEntity, 30.0F, 30.0F);
             double d0 = this.attacker.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getEntityBoundingBox().minY, LivingEntity.getPosZ());
             --this.delayCounter;
 
@@ -158,6 +158,6 @@ public class HippogryphAIAttackMelee extends Goal {
     }
 
     protected double getAttackReachSqr(LivingEntity attackTarget) {
-        return (double) (this.attacker.width * 4.0F * this.attacker.width * 4.0F + attackTarget.width);
+        return (double) (this.attacker.getWidth() * 4.0F * this.attacker.getWidth() * 4.0F + attackTarget.getWidth());
     }
 }

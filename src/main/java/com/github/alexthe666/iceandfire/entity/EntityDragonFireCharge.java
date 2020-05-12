@@ -8,7 +8,7 @@ import net.minecraft.entity.projectile.AbstractFireballEntity;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -39,8 +39,8 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
         this.accelerationZ = accelZ / d0 * 0.07D;
     }
 
-    public void setSizes(float width, float height) {
-        this.setSize(width, height);
+    public void setSizes(float getWidth(), float height) {
+        this.setSize(getWidth(), height);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
 
     public void onUpdate() {
         for (int i = 0; i < 4; ++i) {
-            this.world.spawnParticle(EnumParticleTypes.FLAME, this.getPosX() + ((this.rand.nextDouble() - 0.5D) * width), this.getPosY() + ((this.rand.nextDouble() - 0.5D) * width), this.getPosZ() + ((this.rand.nextDouble() - 0.5D) * width), 0.0D, 0.0D, 0.0D);
+            this.world.spawnParticle(ParticleTypes.FLAME, this.getPosX() + ((this.rand.nextDouble() - 0.5D) * getWidth()), this.getPosY() + ((this.rand.nextDouble() - 0.5D) * getWidth()), this.getPosZ() + ((this.rand.nextDouble() - 0.5D) * getWidth()), 0.0D, 0.0D, 0.0D);
         }
         if (this.isInWater()) {
             setDead();
@@ -79,7 +79,7 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
                     float f1 = 0.25F;
-                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.getPosX() - this.motionX * 0.25D, this.getPosY() - this.motionY * 0.25D, this.getPosZ() - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
+                    this.world.spawnParticle(ParticleTypes.WATER_BUBBLE, this.getPosX() - this.motionX * 0.25D, this.getPosY() - this.motionY * 0.25D, this.getPosZ() - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
                 }
 
                 f = 0.8F;

@@ -39,7 +39,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -123,7 +123,7 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
             this.setAnimation(ANIMATION_STOMP);
             return true;
         } else if (attackDescision == 1) {
-            if (!entityIn.isPassenger(this) && entityIn.width < 1.95F && !(entityIn instanceof EntityDragonBase)) {
+            if (!entityIn.isPassenger(this) && entityIn.getWidth() < 1.95F && !(entityIn instanceof EntityDragonBase)) {
                 this.setAnimation(ANIMATION_EATPLAYER);
                 entityIn.dismountRidingEntity();
                 entityIn.startRiding(this, true);
@@ -139,12 +139,12 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.cyclopsAttackStrength);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.cyclopsMaxHealth);
-        this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1D);
-        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(20.0D);
+        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
+        this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32D);
+        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.cyclopsAttackStrength);
+        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.cyclopsMaxHealth);
+        this.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1D);
+        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(20.0D);
 
     }
 
@@ -202,7 +202,7 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
             double extraY = raiseUp;
             passenger.setPosition(this.getPosX() + extraX, this.getPosY() + extraY, this.getPosZ() + extraZ);
             if (this.getAnimationTick() == 32) {
-                passenger.attackEntityFrom(DamageSource.causeMobDamage(this), passenger instanceof PlayerEntity ? (float) IafConfig.cyclopsBiteStrength : passenger instanceof LivingEntity ? ((LivingEntity) passenger).getMaxHealth() * 2F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2F);
+                passenger.attackEntityFrom(DamageSource.causeMobDamage(this), passenger instanceof PlayerEntity ? (float) IafConfig.cyclopsBiteStrength : passenger instanceof LivingEntity ? ((LivingEntity) passenger).getMaxHealth() * 2F : (float) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2F);
                 passenger.dismountRidingEntity();
             }
         }
@@ -249,10 +249,10 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
             this.playSound(IafSoundRegistry.CYCLOPS_BITE, 1, 1);
         }
         if (this.getAnimation() == ANIMATION_STOMP && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 12D && this.getAnimationTick() == 14) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
         }
         if (this.getAnimation() == ANIMATION_KICK && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 14D && this.getAnimationTick() == 12) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
             this.getAttackTarget().knockBack(this, 2, 1, 1);
 
         }
@@ -276,7 +276,7 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
                 BlockState BlockState = this.world.getBlockState(new BlockPos(MathHelper.floor(this.getPosX() + extraX), MathHelper.floor(this.getPosY() + extraY) - 1, MathHelper.floor(this.getPosZ() + extraZ)));
                 if (BlockState.getMaterial() != Material.AIR) {
                     if (world.isRemote) {
-                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.getPosX() + extraX, this.getPosY() + extraY, this.getPosZ() + extraZ, motionX, motionY, motionZ, Block.getStateId(BlockState));
+                        world.spawnParticle(ParticleTypes.BLOCK_CRACK, true, this.getPosX() + extraX, this.getPosY() + extraY, this.getPosZ() + extraZ, motionX, motionY, motionZ, Block.getStateId(BlockState));
                     }
                 }
             }
@@ -358,8 +358,8 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
     public void onHitEye(DamageSource source, float damage) {
         if (!this.isBlinded()) {
             this.setBlinded(true);
-            this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(6F);
-            this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
+            this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(6F);
+            this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
             this.setAnimation(ANIMATION_ROAR);
             this.attackEntityFrom(source, damage * 3);
         }
@@ -396,7 +396,7 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
     }
 
     @Override
-    protected boolean canDespawn() {
+    public boolean canDespawn(double distanceToClosestPlayer) {
         return false;
     }
 

@@ -135,7 +135,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
             if (striking && strikingProgress[i] > 9) {
                 isStriking[i] = false;
                 if (this.getAttackTarget() != null && this.getDistance(this.getAttackTarget()) < 6) {
-                    this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+                    this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
                     this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 3, false, false));
                     this.getAttackTarget().knockBack(this.getAttackTarget(), 0.25F, this.getPosX() - this.getAttackTarget().getPosX(), this.getPosZ() - this.getAttackTarget().getPosZ());
                 }
@@ -290,9 +290,9 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         super.playHurtSound(source);
     }
 
-    public void playLivingSound() {
+    public void playAmbientSound() {
         speakingProgress[rand.nextInt(getHeadCount())] = 1F;
-        super.playLivingSound();
+        super.playAmbientSound();
     }
 
     public int getTalkInterval() {
@@ -336,11 +336,11 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.generateHydraChance);
-        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
-        this.getEntityAttribute(LivingEntity.SWIM_SPEED).setBaseValue(2.0D);
+        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
+        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.generateHydraChance);
+        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
+        this.getAttribute(LivingEntity.SWIM_SPEED).setBaseValue(2.0D);
     }
 
     @Override
@@ -407,7 +407,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
     }
 
     @Override
-    protected boolean canDespawn() {
+    public boolean canDespawn(double distanceToClosestPlayer) {
         return false;
     }
 

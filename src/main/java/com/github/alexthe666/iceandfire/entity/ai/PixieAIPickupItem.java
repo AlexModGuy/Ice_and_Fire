@@ -64,7 +64,7 @@ public class PixieAIPickupItem<T extends EntityItem> extends TargetGoal {
     public void startExecuting() {
         this.taskOwner.getMoveHelper().setMoveTo(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 0.25D);
         if (this.taskOwner.getAttackTarget() == null) {
-            this.taskOwner.getLookHelper().setLookPosition(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 180.0F, 20.0F);
+            this.taskOwner.getLookController().setLookPosition(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 180.0F, 20.0F);
         }
         super.startExecuting();
     }

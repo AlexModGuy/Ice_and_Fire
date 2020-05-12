@@ -47,7 +47,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.DifficultyInstance;
@@ -93,7 +93,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     public EntityMyrmexBase(World worldIn) {
         super(worldIn);
         this.stepHeight = 2;
-        //this.moveHelper = new GroundMoveHelper(this);
+        //this.moveController = new GroundMoveHelper(this);
     }
 
     private static boolean isJungleBiome(World world, BlockPos position) {
@@ -218,7 +218,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
+        this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
     }
 
     public float getBlockPathWeight(BlockPos pos) {
@@ -589,19 +589,19 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
             }
         }
         if (this.getHive() == null) {
-            player.sendStatusMessage(new TextComponentTranslation("myrmex.message.null_hive"), true);
+            player.sendStatusMessage(new TranslationTextComponent("myrmex.message.null_hive"), true);
 
         } else {
             if (staffUUID != null && staffUUID.equals(this.getHive().hiveUUID)) {
-                player.sendStatusMessage(new TextComponentTranslation("myrmex.message.staff_already_set"), true);
+                player.sendStatusMessage(new TranslationTextComponent("myrmex.message.staff_already_set"), true);
             } else {
                 this.getHive().setWorld(this.world);
                 EntityMyrmexQueen queen = this.getHive().getQueen();
                 BlockPos center = this.getHive().getCenterGround();
                 if (queen.hasCustomName()) {
-                    player.sendStatusMessage(new TextComponentTranslation("myrmex.message.staff_set_named", queen.getCustomNameTag(), center.getX(), center.getY(), center.getZ()), true);
+                    player.sendStatusMessage(new TranslationTextComponent("myrmex.message.staff_set_named", queen.getCustomNameTag(), center.getX(), center.getY(), center.getZ()), true);
                 } else {
-                    player.sendStatusMessage(new TextComponentTranslation("myrmex.message.staff_set_unnamed", center.getX(), center.getY(), center.getZ()), true);
+                    player.sendStatusMessage(new TranslationTextComponent("myrmex.message.staff_set_unnamed", center.getX(), center.getY(), center.getZ()), true);
                 }
                 itemstack.getTagCompound().setUniqueId("HiveUUID", this.getHive().hiveUUID);
             }
@@ -763,17 +763,17 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     protected void playVillagerEffect() {
-        EnumParticleTypes enumparticletypes = EnumParticleTypes.VILLAGER_HAPPY;
+        ParticleTypes enumparticletypes = ParticleTypes.VILLAGER_HAPPY;
         for (int i = 0; i < 7; ++i) {
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
-            this.world.spawnParticle(enumparticletypes, this.getPosX() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getPosY() + 0.5D + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
+            this.world.spawnParticle(enumparticletypes, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + 0.5D + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d0, d1, d2);
         }
     }
 
     public float getMyrmexPitch() {
-        return width;
+        return getWidth();
     }
 
     public boolean shouldHaveNormalAI() {
@@ -786,7 +786,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     @Override
-    protected boolean canDespawn() {
+    public boolean canDespawn(double distanceToClosestPlayer) {
         return false;
     }
 
@@ -826,7 +826,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
         public void onUpdateMoveHelper() {
             if (this.action == EntityMoveHelper.Action.STRAFE) {
-                float f = (float) this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
+                float f = (float) this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue();
                 float f1 = (float) this.speed * f;
                 float f2 = this.moveForward;
                 float f3 = this.moveStrafe;
@@ -870,14 +870,14 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                 float maxChange = 90F;
                 float distance = (float) Math.toDegrees(distance((float) Math.toRadians(this.entity.rotationYaw), (float) Math.toRadians(f9)));
                 this.entity.rotationYaw = this.entity.rotationYaw + MathHelper.clamp(distance, -maxChange / 2, maxChange / 2);
-                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
+                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
 
-                if (d2 > (double) this.entity.stepHeight && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.entity.width)) {
+                if (d2 > (double) this.entity.stepHeight && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.entity.getWidth())) {
                     this.entity.getJumpHelper().setJumping();
                     this.action = EntityMoveHelper.Action.JUMPING;
                 }
             } else if (this.action == EntityMoveHelper.Action.JUMPING) {
-                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
+                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
 
                 if (this.entity.onGround) {
                     this.action = EntityMoveHelper.Action.WAIT;

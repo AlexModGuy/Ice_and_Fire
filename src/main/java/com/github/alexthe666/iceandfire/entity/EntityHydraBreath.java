@@ -11,7 +11,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -66,7 +66,7 @@ public class EntityHydraBreath extends FireballEntity implements IDragonProjecti
             float f = this.getMotionFactor();
             if (this.world.isRemote) {
                 for (int i = 0; i < 15; ++i) {
-                    IceAndFire.PROXY.spawnParticle("hydra", this.getPosX() + (double) (this.rand.nextFloat() * this.width) - (double) this.width * 0.5F, this.getPosY() - 0.5D, this.getPosZ() + (double) (this.rand.nextFloat() * this.width) - (double) this.width * 0.5F, 0.1D, 1.0D, 0.1D);
+                    IceAndFire.PROXY.spawnParticle("hydra", this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth()) - (double) this.getWidth() * 0.5F, this.getPosY() - 0.5D, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth()) - (double) this.getWidth() * 0.5F, 0.1D, 1.0D, 0.1D);
                 }
             }
             this.motionX += this.accelerationX;
@@ -94,8 +94,8 @@ public class EntityHydraBreath extends FireballEntity implements IDragonProjecti
         return true;
     }
 
-    protected EnumParticleTypes getParticleType() {
-        return EnumParticleTypes.WATER_SPLASH;
+    protected ParticleTypes getParticleType() {
+        return ParticleTypes.WATER_SPLASH;
     }
 
 

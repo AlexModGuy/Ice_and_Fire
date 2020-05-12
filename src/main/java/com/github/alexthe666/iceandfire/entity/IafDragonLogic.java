@@ -10,7 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -57,7 +57,7 @@ public class IafDragonLogic {
                 dragon.setAnimation(EntityDragonBase.ANIMATION_BITE);
             }
             if (target != null && !DragonUtils.hasSameOwner(dragon, target)) {
-                target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (dragon.getControllingPassenger() != null && dragon.getControllingPassenger().isSneaking()) {
@@ -446,14 +446,14 @@ public class IafDragonLogic {
             if(dist < dragon.getRenderSize() * 0.2574 * 2 + 2){
                 if (dragon.getAnimation() == EntityDragonBase.ANIMATION_BITE) {
                     if (dragon.getAnimationTick() > 15 && dragon.getAnimationTick() < 25) {
-                        target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                        target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
                         dragon.usingGroundAttack = dragon.getRNG().nextBoolean();
                         dragon.randomizeAttacks();
                     }
                 }
                 if (dragon.getAnimation() == EntityDragonBase.ANIMATION_TAILWHACK) {
                     if (dragon.getAnimationTick() > 20 && dragon.getAnimationTick() < 30) {
-                        target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                        target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
                         target.knockBack(dragon, dragon.getDragonStage() * 0.6F, MathHelper.sin(dragon.rotationYaw * 0.017453292F), -MathHelper.cos(dragon.rotationYaw * 0.017453292F));
                         dragon.usingGroundAttack = dragon.getRNG().nextBoolean();
                         dragon.randomizeAttacks();
@@ -461,7 +461,7 @@ public class IafDragonLogic {
                 }
                 if (dragon.getAnimation() == EntityDragonBase.ANIMATION_WINGBLAST) {
                     if ((dragon.getAnimationTick() == 15 || dragon.getAnimationTick() == 25 || dragon.getAnimationTick() == 35)) {
-                        target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                        target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
                         target.knockBack(dragon, dragon.getDragonStage() * 0.6F, MathHelper.sin(dragon.rotationYaw * 0.017453292F), -MathHelper.cos(dragon.rotationYaw * 0.017453292F));
                         dragon.usingGroundAttack = dragon.getRNG().nextBoolean();
                         dragon.randomizeAttacks();
@@ -483,7 +483,7 @@ public class IafDragonLogic {
                 + "\nAttack Target: " + attackTarget
                 + "\nFlying: " + dragon.isFlying()
                 + "\nHovering: " + dragon.isHovering()
-                + "\nWidth: " + dragon.width
+                + "\nWidth: " + dragon.getWidth()
 
         );
     }
@@ -493,12 +493,12 @@ public class IafDragonLogic {
             try {
                 for (int i = 0; i < currentPath.getCurrentPathLength(); i++) {
                     PathPoint point = currentPath.getPathPointFromIndex(i);
-                    int particle = EnumParticleTypes.HEART.getParticleID();
+                    int particle = ParticleTypes.HEART.getParticleID();
                     IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageSpawnParticleAt(point.x, point.y, point.z, particle));
                 }
                 if (currentPath.getCurrentPos() != null) {
                     Vec3d point = currentPath.getCurrentPos();
-                    int particle = EnumParticleTypes.CLOUD.getParticleID();
+                    int particle = ParticleTypes.CLOUD.getParticleID();
                     IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageSpawnParticleAt(point.x, point.y, point.z, particle));
 
                 }
