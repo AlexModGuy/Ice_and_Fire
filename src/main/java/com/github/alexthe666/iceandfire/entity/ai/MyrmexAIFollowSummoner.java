@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.PathNodeType;
@@ -12,7 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class MyrmexAIFollowSummoner extends EntityAIBase {
+public class MyrmexAIFollowSummoner extends Goal {
     private final EntityMyrmexSwarmer tameable;
     private final double followSpeed;
     World world;

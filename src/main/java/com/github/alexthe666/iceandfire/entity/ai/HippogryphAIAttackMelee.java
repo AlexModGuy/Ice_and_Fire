@@ -1,17 +1,17 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class HippogryphAIAttackMelee extends EntityAIBase {
+public class HippogryphAIAttackMelee extends Goal {
     protected final int attackInterval = 20;
-    protected EntityCreature attacker;
+    protected MobEntity attacker;
     protected int attackTick;
     World world;
     double speedTowardsTarget;
@@ -24,7 +24,7 @@ public class HippogryphAIAttackMelee extends EntityAIBase {
     private int failedPathFindingPenalty = 0;
     private boolean canPenalize = false;
 
-    public HippogryphAIAttackMelee(EntityCreature creature, double speedIn, boolean useLongMemory) {
+    public HippogryphAIAttackMelee(MobEntity creature, double speedIn, boolean useLongMemory) {
         this.attacker = creature;
         this.world = creature.world;
         this.speedTowardsTarget = speedIn;
@@ -33,7 +33,7 @@ public class HippogryphAIAttackMelee extends EntityAIBase {
     }
 
     /**
-     * Returns whether the EntityAIBase should begin execution.
+     * Returns whether the Goal should begin execution.
      */
     public boolean shouldExecute() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
@@ -63,7 +63,7 @@ public class HippogryphAIAttackMelee extends EntityAIBase {
     }
 
     /**
-     * Returns whether an in-progress EntityAIBase should continue executing
+     * Returns whether an in-progress Goal should continue executing
      */
     public boolean shouldContinueExecuting() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();

@@ -20,6 +20,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -47,7 +48,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillagerFear {
+public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVillagerFear {
 
     public static final int SEARCH_RANGE = 32;
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "siren"));
@@ -81,21 +82,21 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         super(worldIn);
         this.switchNavigator(true);
         this.stepHeight = 2;
-        this.tasks.addTask(0, new SirenAIFindWaterTarget(this));
-        this.tasks.addTask(1, new AquaticAIGetInWater(this, 1.0D));
-        this.tasks.addTask(1, new AquaticAIGetOutOfWater(this, 1.0D));
-        this.tasks.addTask(2, new SirenAIWander(this, 1));
-        this.tasks.addTask(3, new EntityAILookIdle(this));
-        this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.0D, false));
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, PlayerEntity.class, 8.0F, 1.0F));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, PlayerEntity.class, 0, true, false, new Predicate<PlayerEntity>() {
+        this.goalSelector.addGoal(0, new SirenAIFindWaterTarget(this));
+        this.goalSelector.addGoal(1, new AquaticAIGetInWater(this, 1.0D));
+        this.goalSelector.addGoal(1, new AquaticAIGetOutOfWater(this, 1.0D));
+        this.goalSelector.addGoal(2, new SirenAIWander(this, 1));
+        this.goalSelector.addGoal(3, new EntityAILookIdle(this));
+        this.goalSelector.addGoal(3, new EntityAIAttackMelee(this, 1.0D, false));
+        this.goalSelector.addGoal(6, new EntityAIWatchClosest(this, PlayerEntity.class, 8.0F, 1.0F));
+        this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this, false));
+        this.targetSelector.addGoal(4, new EntityAINearestAttackableTarget(this, PlayerEntity.class, 0, true, false, new Predicate<PlayerEntity>() {
             @Override
             public boolean apply(@Nullable PlayerEntity entity) {
                 return EntitySiren.this.isAgressive() && !(entity.isCreative() || entity.isSpectator());
             }
         }));
-        this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityVillager.class, 0, true, false, new Predicate<EntityVillager>() {
+        this.targetSelector.addGoal(4, new EntityAINearestAttackableTarget(this, EntityVillager.class, 0, true, false, new Predicate<EntityVillager>() {
             @Override
             public boolean apply(@Nullable EntityVillager entity) {
                 return EntitySiren.this.isAgressive();

@@ -23,7 +23,7 @@ import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
@@ -267,7 +267,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
             this.setAttackTarget(null);
         }
         if (this.getAttackTarget() != null && (haveSameHive(this, this.getAttackTarget()) ||
-                this.getAttackTarget() instanceof EntityTameable && !canAttackTamable((EntityTameable) this.getAttackTarget()) ||
+                this.getAttackTarget() instanceof TameableEntity && !canAttackTamable((TameableEntity) this.getAttackTarget()) ||
                 this.getAttackTarget() instanceof PlayerEntity && this.getHive() != null && !this.getHive().isPlayerReputationTooLowToFight(this.getAttackTarget().getUniqueID()))) {
             this.setAttackTarget(null);
         }
@@ -395,7 +395,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         }
     }
 
-    public boolean canAttackTamable(EntityTameable tameable) {
+    public boolean canAttackTamable(TameableEntity tameable) {
         if (tameable.getOwner() != null && this.getHive() != null) {
             return this.getHive().isPlayerReputationTooLowToFight(tameable.getOwnerId());
         }

@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 
-public class DragonAILookIdle extends EntityAIBase {
+public class DragonAILookIdle extends Goal {
     private EntityDragonBase dragon;
     private double lookX;
     private double lookZ;

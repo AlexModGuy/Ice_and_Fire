@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.ai.EntityAITarget;
+import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -13,7 +14,7 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class DeathwormAITargetItems<T extends EntityItem> extends EntityAITarget {
+public class DeathwormAITargetItems<T extends EntityItem> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super EntityItem> targetEntitySelector;
     private final int targetChance;

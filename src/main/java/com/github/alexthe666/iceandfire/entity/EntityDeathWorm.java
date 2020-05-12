@@ -25,7 +25,7 @@ import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
@@ -88,17 +88,17 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         }
         this.spawnableBlock = Blocks.SAND;
         this.switchNavigator(false);
-        this.tasks.addTask(0, new EntityGroundAIRide<>(this));
-        this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.5D, true));
-        this.tasks.addTask(3, new DeathWormAIFindSandTarget(this, 10));
-        this.tasks.addTask(4, new DeathWormAIGetInSand(this, 1.0D));
-        this.tasks.addTask(5, new DeathWormAIWander(this, 1));
-        this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
-        this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
-        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(3, new DeathwormAITargetItems(this, false, false));
-        this.targetTasks.addTask(5, new DeathWormAITarget(this, LivingEntity.class, false, new Predicate<LivingEntity>() {
+        this.goalSelector.addGoal(0, new EntityGroundAIRide<>(this));
+        this.goalSelector.addGoal(1, new EntityAISwimming(this));
+        this.goalSelector.addGoal(2, new EntityAIAttackMelee(this, 1.5D, true));
+        this.goalSelector.addGoal(3, new DeathWormAIFindSandTarget(this, 10));
+        this.goalSelector.addGoal(4, new DeathWormAIGetInSand(this, 1.0D));
+        this.goalSelector.addGoal(5, new DeathWormAIWander(this, 1));
+        this.targetSelector.addGoal(1, new EntityAIOwnerHurtByTarget(this));
+        this.targetSelector.addGoal(2, new EntityAIOwnerHurtTarget(this));
+        this.targetSelector.addGoal(3, new EntityAIHurtByTarget(this, false));
+        this.targetSelector.addGoal(3, new DeathwormAITargetItems(this, false, false));
+        this.targetSelector.addGoal(5, new DeathWormAITarget(this, LivingEntity.class, false, new Predicate<LivingEntity>() {
             @Override
             public boolean apply(@Nullable LivingEntity input) {
                 if (EntityDeathWorm.this.isTamed()) {

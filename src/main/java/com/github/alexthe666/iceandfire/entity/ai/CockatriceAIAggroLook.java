@@ -20,7 +20,7 @@ public class CockatriceAIAggroLook extends EntityAINearestAttackableTarget<Playe
     }
 
     /**
-     * Returns whether the EntityAIBase should begin execution.
+     * Returns whether the Goal should begin execution.
      */
     public boolean shouldExecute() {
         if (cockatrice.isTamed()) {
@@ -52,7 +52,7 @@ public class CockatriceAIAggroLook extends EntityAINearestAttackableTarget<Playe
     }
 
     /**
-     * Returns whether an in-progress EntityAIBase should continue executing
+     * Returns whether an in-progress Goal should continue executing
      */
     public boolean shouldContinueExecuting() {
         if (this.player != null) {

@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.api.event;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.fml.common.eventhandler.Cancelable;
+import net.minecraftforge.eventbus.api.Cancelable;
 
 /**
  * DragonFireEvent is fired right before a Dragon breathes fire or ice. <br>

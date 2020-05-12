@@ -1,11 +1,11 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.util.math.Vec3d;
 
-public class DragonAIWander extends EntityAIBase {
+public class DragonAIWander extends Goal {
     private EntityDragonBase dragon;
     private double xPosition;
     private double yPosition;

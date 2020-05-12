@@ -2,9 +2,10 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -12,15 +13,15 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class AquaticAIGetInWater extends EntityAIBase {
-    private final EntityCreature creature;
+public class AquaticAIGetInWater extends Goal {
+    private final MobEntity creature;
     private final double movementSpeed;
     private final World world;
     private double shelterX;
     private double shelterY;
     private double shelterZ;
 
-    public AquaticAIGetInWater(EntityCreature theCreatureIn, double movementSpeedIn) {
+    public AquaticAIGetInWater(MobEntity theCreatureIn, double movementSpeedIn) {
         this.creature = theCreatureIn;
         this.movementSpeed = movementSpeedIn;
         this.world = theCreatureIn.world;
@@ -32,7 +33,7 @@ public class AquaticAIGetInWater extends EntityAIBase {
     }
 
     public boolean shouldExecute() {
-        if (creature.isBeingRidden() || creature instanceof EntityTameable && ((EntityTameable) creature).isTamed() || creature.isInWater() || isAttackerInWater() || creature instanceof EntitySiren && (((EntitySiren) creature).isSinging() || ((EntitySiren) creature).wantsToSing())) {
+        if (creature.isBeingRidden() || creature instanceof TameableEntity && ((TameableEntity) creature).isTamed() || creature.isInWater() || isAttackerInWater() || creature instanceof EntitySiren && (((EntitySiren) creature).isSinging() || ((EntitySiren) creature).wantsToSing())) {
             return false;
         } else {
             Vec3d vec3d = this.findPossibleShelter();
@@ -49,7 +50,7 @@ public class AquaticAIGetInWater extends EntityAIBase {
     }
 
     /**
-     * Returns whether an in-progress EntityAIBase should continue executing
+     * Returns whether an in-progress Goal should continue executing
      */
     public boolean shouldContinueExecuting() {
         return !this.creature.getNavigator().noPath();

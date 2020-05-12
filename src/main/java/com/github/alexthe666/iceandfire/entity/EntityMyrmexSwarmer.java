@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.CompoundNBT;
@@ -58,17 +58,17 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     }
 
     protected void initEntityAI() {
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new MyrmexAIFollowSummoner(this, 1.0D, 10.0F, 5.0F));
-        this.tasks.addTask(2, new AIFlyAtTarget());
-        this.tasks.addTask(3, new AIFlyRandom());
-        this.tasks.addTask(4, new EntityAIAttackMeleeNoCooldown(this, 1.0D, true));
-        this.tasks.addTask(5, new MyrmexAIWander(this, 1D));
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
-        this.tasks.addTask(7, new EntityAILookIdle(this));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(2, new MyrmexAISummonerHurtByTarget(this));
-        this.targetTasks.addTask(3, new MyrmexAISummonerHurtTarget(this));
+        this.goalSelector.addGoal(0, new EntityAISwimming(this));
+        this.goalSelector.addGoal(1, new MyrmexAIFollowSummoner(this, 1.0D, 10.0F, 5.0F));
+        this.goalSelector.addGoal(2, new AIFlyAtTarget());
+        this.goalSelector.addGoal(3, new AIFlyRandom());
+        this.goalSelector.addGoal(4, new EntityAIAttackMeleeNoCooldown(this, 1.0D, true));
+        this.goalSelector.addGoal(5, new MyrmexAIWander(this, 1D));
+        this.goalSelector.addGoal(6, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.addGoal(7, new EntityAILookIdle(this));
+        this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this, false));
+        this.targetSelector.addGoal(2, new MyrmexAISummonerHurtByTarget(this));
+        this.targetSelector.addGoal(3, new MyrmexAISummonerHurtTarget(this));
     }
 
     protected void collideWithEntity(Entity entityIn) {
@@ -103,8 +103,8 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         if (this.getSummonerUUID() == null || entityIn instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID() == null) {
             return false;
         }
-        if(entityIn instanceof EntityTameable){
-            UUID ownerID = ((EntityTameable) entityIn).getOwnerId();
+        if(entityIn instanceof TameableEntity){
+            UUID ownerID = ((TameableEntity) entityIn).getOwnerId();
             return ownerID != null && ownerID.equals(this.getSummonerUUID());
         }
         return entityIn.getUniqueID().equals(this.getSummonerUUID()) || entityIn instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID() != null && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID().equals(this.getSummonerUUID());

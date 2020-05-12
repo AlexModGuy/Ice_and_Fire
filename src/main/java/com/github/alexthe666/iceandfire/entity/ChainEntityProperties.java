@@ -4,12 +4,12 @@ import com.github.alexthe666.citadel.server.entity.EntityProperties;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.message.MessageAddChainedEntity;
 import com.github.alexthe666.iceandfire.message.MessageRemoveChainedEntity;
-import net.ilexiconn.llibrary.server.entity.EntityProperties;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -31,22 +31,25 @@ public class ChainEntityProperties extends EntityProperties<LivingEntity> {
 
     @Override
     public void saveNBTData(CompoundNBT compound) {
-        NBTTagList nbttaglist = new NBTTagList();
+        ListNBT nbttaglist = new ListNBT();
         for (UUID uuid : connectedEntityUUID) {
             CompoundNBT CompoundNBT = new CompoundNBT();
-            CompoundNBT.setUniqueId("UUID", uuid);
-            nbttaglist.appendTag(CompoundNBT);
+            CompoundNBT.putUniqueId("UUID", uuid);
+            nbttaglist.add(CompoundNBT);
         }
-        compound.setTag("ConnectedEntities", nbttaglist);
+        compound.put("ConnectedEntities", nbttaglist);
     }
 
     @Override
     public void loadNBTData(CompoundNBT compound) {
-        NBTTagList nbttaglist = compound.getTagList("ConnectedEntities", Constants.NBT.TAG_COMPOUND);
+        ListNBT nbttaglist = compound.getList("ConnectedEntities", Constants.NBT.TAG_COMPOUND);
         this.connectedEntityUUID = new ArrayList<UUID>();
-        for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-            CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
-            connectedEntityUUID.add(CompoundNBT.getUniqueId("UUID"));
+        for (int i = 0; i < nbttaglist.size(); ++i) {
+            INBT cNbt = nbttaglist.get(i);
+            if(cNbt instanceof CompoundNBT){
+                connectedEntityUUID.add(((CompoundNBT) cNbt).getUniqueId("UUID"));
+
+            }
         }
         updateConnectedEntities(getEntity());
     }
@@ -79,7 +82,7 @@ public class ChainEntityProperties extends EntityProperties<LivingEntity> {
         connectedEntityUUID.remove(entity.getUniqueID());
         connectedEntities.remove(entity);
         if (entity != null && !entity.world.isRemote) {
-            IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageRemoveChainedEntity(us.getEntityId(), entity.getEntityId()));
+            IceAndFire.sendMSGToAll(new MessageRemoveChainedEntity(us.getEntityId(), entity.getEntityId()));
         }
         wasJustDisconnected = true;
     }
@@ -116,12 +119,12 @@ public class ChainEntityProperties extends EntityProperties<LivingEntity> {
             if (!connectedEntityUUID.isEmpty() && world != null && !world.isRemote) {
                 minimizeLists();
                 for (UUID uuid : connectedEntityUUID) {
-                    if (world.getMinecraftServer() != null) {
-                        Entity entity = world.getMinecraftServer().getEntityFromUuid(uuid);
+                    if (world.getServer() != null) {
+                        Entity entity = world.getServer().getWorld(world.getDimension().getType()).getEntityByUuid(uuid);
                         if (entity != null) {
                             if (!addedUUIDs.contains(entity.getUniqueID())) {
                                 addedUUIDs.add(entity.getUniqueID());
-                                IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageAddChainedEntity(toUpdate.getEntityId(), entity.getEntityId()));
+                                IceAndFire.sendMSGToAll(new MessageAddChainedEntity(toUpdate.getEntityId(), entity.getEntityId()));
                                 connectedEntities.add(entity);
                             }
                         }

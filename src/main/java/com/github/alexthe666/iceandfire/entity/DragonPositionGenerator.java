@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -12,19 +12,19 @@ import java.util.Random;
 
 public class DragonPositionGenerator {
 
-    public static Vec3d findRandomTargetBlock(EntityCreature entitycreatureIn, int xz, int y, @Nullable Vec3d targetVec3) {
-        Vec3d vec = generateRandomPos(entitycreatureIn, xz, y, targetVec3, false);
-        return vec == null ? entitycreatureIn.getPositionVector() : vec;
+    public static Vec3d findRandomTargetBlock(MobEntity MobEntityIn, int xz, int y, @Nullable Vec3d targetVec3) {
+        Vec3d vec = generateRandomPos(MobEntityIn, xz, y, targetVec3, false);
+        return vec == null ? MobEntityIn.getPositionVector() : vec;
     }
 
     @Nullable
-    public static Vec3d generateRandomPos(EntityCreature mob, int xz, int y, @Nullable Vec3d vec, boolean skipWater) {
-        PathNavigate pathnavigate = mob.getNavigator();
+    public static Vec3d generateRandomPos(MobEntity mob, int xz, int y, @Nullable Vec3d vec, boolean skipWater) {
+        PathNavigator pathnavigate = mob.getNavigator();
         Random random = mob.getRNG();
         boolean flag;
 
-        if (mob.hasHome()) {
-            double d0 = mob.getHomePosition().distanceSq((double) MathHelper.floor(mob.getPosX()), (double) MathHelper.floor(mob.getPosY()), (double) MathHelper.floor(mob.getPosZ())) + 4.0D;
+        if (mob.detachHome()) {
+            double d0 = mob.getHomePosition().distanceSq((double) MathHelper.floor(mob.getPosX()), (double) MathHelper.floor(mob.getPosY()), (double) MathHelper.floor(mob.getPosZ()), true) + 4.0D;
             double d1 = (double) (mob.getMaximumHomeDistance() + (float) xz);
             flag = d0 < d1 * d1;
         } else {
@@ -43,7 +43,7 @@ public class DragonPositionGenerator {
             int j1 = random.nextInt(2 * xz + 1) - xz;
 
             if (vec == null || (double) l * vec.x + (double) j1 * vec.z >= 0.0D) {
-                if (mob.hasHome() && xz > 1) {
+                if (mob.detachHome() && xz > 1) {
                     BlockPos blockpos = mob.getHomePosition();
 
                     if (mob.getPosX() > (double) blockpos.getX()) {
@@ -69,7 +69,7 @@ public class DragonPositionGenerator {
                         }
                     }
 
-                    float f1 = mob.getBlockPathWeight(blockpos1);
+                    float f1 = 0.0F;
 
                     if (f1 > f) {
                         f = f1;
@@ -89,7 +89,7 @@ public class DragonPositionGenerator {
         }
     }
 
-    private static BlockPos moveAboveSolid(BlockPos pos, EntityCreature mob) {
+    private static BlockPos moveAboveSolid(BlockPos pos, MobEntity mob) {
         if (!mob.world.getBlockState(pos).getMaterial().isSolid()) {
             return pos;
         } else {
@@ -102,7 +102,7 @@ public class DragonPositionGenerator {
         }
     }
 
-    private static boolean isWaterDestination(BlockPos pos, EntityCreature mob) {
+    private static boolean isWaterDestination(BlockPos pos, MobEntity mob) {
         return mob.world.getBlockState(pos).getMaterial() == Material.WATER;
     }
 }

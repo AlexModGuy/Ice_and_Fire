@@ -4,9 +4,9 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityDreadLich;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 
-public class DreadLichAIStrife extends EntityAIBase {
+public class DreadLichAIStrife extends Goal {
 
     private final EntityDreadLich entity;
     private final double moveSpeedAmp;

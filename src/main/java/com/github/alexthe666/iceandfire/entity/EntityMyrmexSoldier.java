@@ -75,22 +75,22 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     }
 
     protected void initEntityAI() {
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(0, new MyrmexAITradePlayer(this));
-        this.tasks.addTask(0, new MyrmexAILookAtTradePlayer(this));
-        this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
-        this.tasks.addTask(2, new MyrmexAIEscortEntity(this, 1.0D));
-        this.tasks.addTask(2, new MyrmexAIReEnterHive(this, 1.0D));
-        this.tasks.addTask(4, new MyrmexAILeaveHive(this, 1.0D));
-        this.tasks.addTask(5, new MyrmexAIMoveThroughHive(this, 1.0D));
-        this.tasks.addTask(6, new MyrmexAIWander(this, 1D));
-        this.tasks.addTask(7, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
-        this.tasks.addTask(8, new EntityAILookIdle(this));
-        this.targetTasks.addTask(1, new MyrmexAIDefendHive(this));
-        this.targetTasks.addTask(2, new MyrmexAIFindGaurdingEntity(this));
-        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(4, new MyrmexAIAttackPlayers(this));
-        this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, LivingEntity.class, 10, true, true, new Predicate<LivingEntity>() {
+        this.goalSelector.addGoal(0, new EntityAISwimming(this));
+        this.goalSelector.addGoal(0, new MyrmexAITradePlayer(this));
+        this.goalSelector.addGoal(0, new MyrmexAILookAtTradePlayer(this));
+        this.goalSelector.addGoal(1, new EntityAIAttackMelee(this, 1.0D, true));
+        this.goalSelector.addGoal(2, new MyrmexAIEscortEntity(this, 1.0D));
+        this.goalSelector.addGoal(2, new MyrmexAIReEnterHive(this, 1.0D));
+        this.goalSelector.addGoal(4, new MyrmexAILeaveHive(this, 1.0D));
+        this.goalSelector.addGoal(5, new MyrmexAIMoveThroughHive(this, 1.0D));
+        this.goalSelector.addGoal(6, new MyrmexAIWander(this, 1D));
+        this.goalSelector.addGoal(7, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.addGoal(8, new EntityAILookIdle(this));
+        this.targetSelector.addGoal(1, new MyrmexAIDefendHive(this));
+        this.targetSelector.addGoal(2, new MyrmexAIFindGaurdingEntity(this));
+        this.targetSelector.addGoal(3, new EntityAIHurtByTarget(this, false));
+        this.targetSelector.addGoal(4, new MyrmexAIAttackPlayers(this));
+        this.targetSelector.addGoal(4, new EntityAINearestAttackableTarget(this, LivingEntity.class, 10, true, true, new Predicate<LivingEntity>() {
             public boolean apply(@Nullable LivingEntity entity) {
                 return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexSoldier.this, entity) && DragonUtils.isAlive(entity);
             }

@@ -17,7 +17,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIMate;
 import net.minecraft.entity.ai.EntityMoveHelper;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -48,7 +48,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityHippocampus extends EntityTameable implements ISyncMount, IAnimatedEntity, IDropArmor {
+public class EntityHippocampus extends TameableEntity implements ISyncMount, IAnimatedEntity, IDropArmor {
 
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "hippocampus"));
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityHippocampus.class, DataSerializers.VARINT);
@@ -75,13 +75,13 @@ public class EntityHippocampus extends EntityTameable implements ISyncMount, IAn
         this.spawnableBlock = Blocks.WATER;
         ANIMATION_SPEAK = Animation.create(15);
         this.switchNavigator(true);
-        this.tasks.addTask(0, new HippocampusAIRide(this));
-        this.tasks.addTask(0, new AquaticAITempt(this, 1.0D, Item.getItemFromBlock(Blocks.SPONGE), false));
-        this.tasks.addTask(0, new AquaticAITempt(this, 1.0D, Items.PRISMARINE_CRYSTALS, false));
-        this.tasks.addTask(1, new AquaticAIFindWaterTarget(this, 10, true));
-        this.tasks.addTask(2, new AquaticAIGetInWater(this, 1.0D));
-        this.tasks.addTask(3, new HippocampusAIWander(this, 1));
-        this.tasks.addTask(4, new EntityAIMate(this, 1.0D));
+        this.goalSelector.addGoal(0, new HippocampusAIRide(this));
+        this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, Item.getItemFromBlock(Blocks.SPONGE), false));
+        this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, Items.PRISMARINE_CRYSTALS, false));
+        this.goalSelector.addGoal(1, new AquaticAIFindWaterTarget(this, 10, true));
+        this.goalSelector.addGoal(2, new AquaticAIGetInWater(this, 1.0D));
+        this.goalSelector.addGoal(3, new HippocampusAIWander(this, 1));
+        this.goalSelector.addGoal(4, new EntityAIMate(this, 1.0D));
         if (FMLCommonHandler.instance().getSide().isClient()) {
             tail_buffer = new ChainBuffer();
         }

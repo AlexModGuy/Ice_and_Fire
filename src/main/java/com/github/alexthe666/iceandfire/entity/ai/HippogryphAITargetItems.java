@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,15 +22,15 @@ public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarge
     private final int targetChance;
     protected EntityItem targetEntity;
 
-    public HippogryphAITargetItems(EntityCreature creature, boolean checkSight) {
+    public HippogryphAITargetItems(MobEntity creature, boolean checkSight) {
         this(creature, checkSight, false);
     }
 
-    public HippogryphAITargetItems(EntityCreature creature, boolean checkSight, boolean onlyNearby) {
+    public HippogryphAITargetItems(MobEntity creature, boolean checkSight, boolean onlyNearby) {
         this(creature, 20, checkSight, onlyNearby, null);
     }
 
-    public HippogryphAITargetItems(EntityCreature creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
+    public HippogryphAITargetItems(MobEntity creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
         super(creature, checkSight, onlyNearby);
         this.targetChance = chance;
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);

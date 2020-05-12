@@ -1,11 +1,11 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.util.math.Vec3d;
 
-public class HippogryphAIWander extends EntityAIBase {
+public class HippogryphAIWander extends Goal {
     private EntityHippogryph hippo;
     private double xPosition;
     private double yPosition;

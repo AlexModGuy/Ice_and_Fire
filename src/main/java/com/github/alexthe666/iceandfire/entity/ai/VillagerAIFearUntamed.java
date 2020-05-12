@@ -3,11 +3,11 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.IVillagerFear;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.EntitySelectors;
@@ -22,7 +22,7 @@ public class VillagerAIFearUntamed extends EntityAIAvoidEntity<LivingEntity> {
     private Path path;
     private final PathNavigate navigation;
 
-    public VillagerAIFearUntamed(EntityCreature entityIn, Class<LivingEntity> classToAvoidIn, Predicate<LivingEntity> avoidTargetSelectorIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
+    public VillagerAIFearUntamed(MobEntity entityIn, Class<LivingEntity> classToAvoidIn, Predicate<LivingEntity> avoidTargetSelectorIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
         super(entityIn, classToAvoidIn, avoidTargetSelectorIn, avoidDistanceIn, farSpeedIn, nearSpeedIn);
         avoidTargetSelector = avoidTargetSelectorIn;
         this.navigation = entityIn.getNavigator();
@@ -65,7 +65,7 @@ public class VillagerAIFearUntamed extends EntityAIAvoidEntity<LivingEntity> {
     public boolean shouldExecute() {
         boolean should = shouldExecuteVanilla();
         if (should && this.closestLivingEntity != null) {
-            if (closestLivingEntity instanceof EntityTameable && ((EntityTameable) closestLivingEntity).isTamed()) {
+            if (closestLivingEntity instanceof TameableEntity && ((TameableEntity) closestLivingEntity).isTamed()) {
                 return false;
             }
             if (closestLivingEntity instanceof IVillagerFear && !((IVillagerFear) closestLivingEntity).shouldFear()) {

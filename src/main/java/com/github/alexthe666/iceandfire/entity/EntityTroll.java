@@ -18,6 +18,7 @@ import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
@@ -45,7 +46,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 
-public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillagerFear, IHumanoid {
+public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVillagerFear, IHumanoid {
 
     public static final Animation ANIMATION_STRIKE_HORIZONTAL = Animation.create(20);
     public static final Animation ANIMATION_STRIKE_VERTICAL = Animation.create(20);
@@ -88,15 +89,15 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
     }
 
     protected void initEntityAI() {
-        this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(2, new TrollAIFleeSun(this, 1.0D));
-        this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.0D, true));
-        this.tasks.addTask(4, new EntityAIWanderAvoidWater(this, 1.0D));
-        this.tasks.addTask(5, new EntityAIWatchClosest(this, PlayerEntity.class, 8.0F, 1.0F));
-        this.tasks.addTask(5, new EntityAILookIdle(this));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, PlayerEntity.class, false));
+        this.goalSelector.addGoal(1, new EntityAISwimming(this));
+        this.goalSelector.addGoal(2, new TrollAIFleeSun(this, 1.0D));
+        this.goalSelector.addGoal(3, new EntityAIAttackMelee(this, 1.0D, true));
+        this.goalSelector.addGoal(4, new EntityAIWanderAvoidWater(this, 1.0D));
+        this.goalSelector.addGoal(5, new EntityAIWatchClosest(this, PlayerEntity.class, 8.0F, 1.0F));
+        this.goalSelector.addGoal(5, new EntityAILookIdle(this));
+        this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this, false));
+        this.targetSelector.addGoal(2, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
+        this.targetSelector.addGoal(2, new EntityAINearestAttackableTarget(this, PlayerEntity.class, false));
         setAvoidSun(true);
     }
 

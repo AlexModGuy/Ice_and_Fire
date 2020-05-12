@@ -1,8 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntitySelectors;
@@ -10,7 +11,7 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
 
-public class AmphithereAIFleePlayer extends EntityAIBase {
+public class AmphithereAIFleePlayer extends Goal {
     private final double farSpeed;
     private final double nearSpeed;
     private final float avoidDistance;

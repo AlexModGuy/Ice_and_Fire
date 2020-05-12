@@ -2,8 +2,9 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -11,13 +12,13 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.Comparator;
 
-public class AquaticAIFindWaterTarget extends EntityAIBase {
+public class AquaticAIFindWaterTarget extends Goal {
     protected AquaticAIFindWaterTarget.Sorter fleePosSorter;
-    private EntityCreature mob;
+    private MobEntity mob;
     private int range;
     private boolean avoidAttacker;
 
-    public AquaticAIFindWaterTarget(EntityCreature mob, int range, boolean avoidAttacker) {
+    public AquaticAIFindWaterTarget(MobEntity mob, int range, boolean avoidAttacker) {
         this.mob = mob;
         this.range = range;
         this.avoidAttacker = avoidAttacker;

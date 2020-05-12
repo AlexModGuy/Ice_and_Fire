@@ -3,8 +3,9 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAITarget;
+import net.minecraft.entity.ai.goal.TargetGoal;
 
-public class MyrmexAISummonerHurtTarget extends EntityAITarget {
+public class MyrmexAISummonerHurtTarget extends TargetGoal {
     EntityMyrmexSwarmer tameable;
     LivingEntity attacker;
     private int timestamp;

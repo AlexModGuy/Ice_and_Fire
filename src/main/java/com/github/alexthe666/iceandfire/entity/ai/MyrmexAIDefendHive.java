@@ -4,8 +4,9 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAITarget;
+import net.minecraft.entity.ai.goal.TargetGoal;
 
-public class MyrmexAIDefendHive extends EntityAITarget {
+public class MyrmexAIDefendHive extends TargetGoal {
     EntityMyrmexBase myrmex;
     LivingEntity villageAgressorTarget;
 

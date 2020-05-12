@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityVillager;
@@ -14,7 +15,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nullable;
 
-public class StymphalianBirdAITarget<T extends LivingEntity> extends EntityAINearestAttackableTarget<T> {
+public class StymphalianBirdAITarget<T extends LivingEntity> extends TargetGoal<T> {
     private EntityStymphalianBird bird;
 
     public StymphalianBirdAITarget(EntityStymphalianBird entityIn, Class<T> classTarget, boolean checkSight) {

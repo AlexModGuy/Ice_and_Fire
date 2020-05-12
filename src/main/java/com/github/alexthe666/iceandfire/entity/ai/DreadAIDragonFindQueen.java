@@ -2,11 +2,11 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDreadQueen;
 import com.github.alexthe666.iceandfire.entity.EntityBlackFrostDragon;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 
 import java.util.List;
 
-public class DreadAIDragonFindQueen extends EntityAIBase {
+public class DreadAIDragonFindQueen extends Goal {
     private final EntityBlackFrostDragon dragon;
     private EntityDreadQueen queen;
 

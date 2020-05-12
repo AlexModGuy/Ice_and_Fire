@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.citadel.animation.Animation;
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
@@ -8,46 +10,36 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
-import net.ilexiconn.llibrary.server.animation.Animation;
-import net.ilexiconn.llibrary.server.animation.AnimationHandler;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.ai.controller.MovementController;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNavigateClimber;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class EntityAmphithere extends EntityTameable implements ISyncMount, IAnimatedEntity, IPhasesThroughBlock, IFlapable, IDragonFlute, IFlyingMount {
+public class EntityAmphithere extends TameableEntity implements ISyncMount, IAnimatedEntity, IPhasesThroughBlock, IFlapable, IDragonFlute, IFlyingMount {
 
-    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "amphithere"));
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityAmphithere.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> FLYING = EntityDataManager.createKey(EntityAmphithere.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> FLAP_TICKS = EntityDataManager.createKey(EntityAmphithere.class, DataSerializers.VARINT);
@@ -93,10 +85,10 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
        */
     private int navigatorType = 0;
 
-    public EntityAmphithere(World worldIn) {
-        super(worldIn);
+    public EntityAmphithere(EntityType type, World worldIn) {
+        super(type, worldIn);
         this.stepHeight = 1;
-        if (FMLCommonHandler.instance().getSide().isClient()) {
+        if (worldIn.isRemote) {
             roll_buffer = new IFChainBuffer();
             pitch_buffer = new IFChainBuffer();
             tail_buffer = new IFChainBuffer();
@@ -167,7 +159,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
             }
             return true;
         }
-        if (itemstack != null && itemstack.getItem() == Items.DYE && itemstack.getItemDamage() == EnumDyeColor.BROWN.getDyeDamage() && this.getHealth() < this.getMaxHealth()) {
+        if (itemstack != null && itemstack.getItem() == Items.COCOA_BEANS && this.getHealth() < this.getMaxHealth()) {
             this.heal(5);
             this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
             if (!player.isCreative()) {
@@ -177,22 +169,22 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         }
         if (!super.processInteract(player, hand)) {
             if (itemstack != null && itemstack.getItem() == IafItemRegistry.DRAGON_STAFF && this.isOwner(player)) {
-                if (player.isSneaking()) {
+                if (player.isShiftKeyDown()) {
                     BlockPos pos = new BlockPos(this);
                     this.homePos = pos;
                     this.hasHomePosition = true;
-                    player.sendStatusMessage(new TextComponentTranslation("amphithere.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
+                    player.sendStatusMessage(new TranslationTextComponent("amphithere.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
                     return true;
                 }
                 return true;
             }
-            if (player.isSneaking() && this.isOwner(player)) {
+            if (player.isShiftKeyDown() && this.isOwner(player)) {
                 if (player.getHeldItem(hand).isEmpty()) {
                     this.setCommand(this.getCommand() + 1);
                     if (this.getCommand() > 2) {
                         this.setCommand(0);
                     }
-                    player.sendStatusMessage(new TextComponentTranslation("amphithere.command." + this.getCommand()), true);
+                    player.sendStatusMessage(new TranslationTextComponent("amphithere.command." + this.getCommand()), true);
                     this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
                     return true;
                 }
@@ -206,27 +198,22 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         return true;
     }
 
-    @Nullable
-    protected ResourceLocation getLootTable() {
-        return LOOT;
-    }
-
     protected void initEntityAI() {
-        this.tasks.addTask(0, new DragonAIRide(this));
-        this.tasks.addTask(0, this.aiSit = new EntityAISit(this));
-        this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(1, new AmphithereAIAttackMelee(this, 1.0D, true));
-        this.tasks.addTask(2, new AmphithereAIFollowOwner(this, 1.0D, 10.0F, 2.0F));
-        this.tasks.addTask(3, new AmphithereAIFleePlayer(this, 32.0F, 0.8D, 1.8D));
-        this.tasks.addTask(3, new AIFlyWander());
-        this.tasks.addTask(3, new AIFlyCircle());
-        this.tasks.addTask(3, new AILandWander(this, 1.0D));
-        this.tasks.addTask(4, new EntityAIWatchClosestIgnoreRider(this, LivingEntity.class, 6.0F));
-        this.tasks.addTask(4, new EntityAIMate(this, 1.0D));
-        this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
-        this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
-        this.targetTasks.addTask(3, new AmphithereAIHurtByTarget(this, false, new Class[0]));
-        this.targetTasks.addTask(3, new AmphithereAITargetItems(this, false));
+        this.goalSelector.addGoal(0, new DragonAIRide(this));
+        this.goalSelector.addGoal(0, this.aiSit = new EntityAISit(this));
+        this.goalSelector.addGoal(1, new EntityAISwimming(this));
+        this.goalSelector.addGoal(1, new AmphithereAIAttackMelee(this, 1.0D, true));
+        this.goalSelector.addGoal(2, new AmphithereAIFollowOwner(this, 1.0D, 10.0F, 2.0F));
+        this.goalSelector.addGoal(3, new AmphithereAIFleePlayer(this, 32.0F, 0.8D, 1.8D));
+        this.goalSelector.addGoal(3, new AIFlyWander());
+        this.goalSelector.addGoal(3, new AIFlyCircle());
+        this.goalSelector.addGoal(3, new AILandWander(this, 1.0D));
+        this.goalSelector.addGoal(4, new EntityAIWatchClosestIgnoreRider(this, LivingEntity.class, 6.0F));
+        this.goalSelector.addGoal(4, new EntityAIMate(this, 1.0D));
+        this.targetSelector.addGoal(1, new EntityAIOwnerHurtByTarget(this));
+        this.targetSelector.addGoal(2, new EntityAIOwnerHurtTarget(this));
+        this.targetSelector.addGoal(3, new AmphithereAIHurtByTarget(this, false, new Class[0]));
+        this.targetSelector.addGoal(3, new AmphithereAITargetItems(this, false));
     }
 
     public boolean isStill() {
@@ -235,7 +222,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
 
     protected void switchNavigator(int navigatorType) {
         if (navigatorType == 0) {
-            this.moveHelper = new EntityMoveHelper(this);
+            this.moveController = new MovementController(this);
             this.navigator = new PathNavigateClimber(this, world);
             this.navigatorType = 0;
         } else if(navigatorType == 1) {
@@ -297,8 +284,8 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     }
 
     @Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
         if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }
@@ -977,7 +964,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
     }
 
     class AILandWander extends EntityAIWander {
-        public AILandWander(EntityCreature creature, double speed) {
+        public AILandWander(MobEntity creature, double speed) {
             super(creature, speed, 10);
         }
 
@@ -986,7 +973,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         }
     }
 
-    class AIFlyWander extends EntityAIBase {
+    class AIFlyWander extends Goal {
         BlockPos target;
 
         public AIFlyWander() {
@@ -1038,7 +1025,7 @@ public class EntityAmphithere extends EntityTameable implements ISyncMount, IAni
         }
     }
 
-    class AIFlyCircle extends EntityAIBase {
+    class AIFlyCircle extends Goal {
         BlockPos target;
 
         public AIFlyCircle() {

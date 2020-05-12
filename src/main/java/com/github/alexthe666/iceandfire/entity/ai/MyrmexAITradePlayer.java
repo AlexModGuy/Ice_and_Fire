@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 
-public class MyrmexAITradePlayer extends EntityAIBase {
+public class MyrmexAITradePlayer extends Goal {
     private final EntityMyrmexBase myrmex;
 
     public MyrmexAITradePlayer(EntityMyrmexBase myrmex) {
@@ -13,7 +13,7 @@ public class MyrmexAITradePlayer extends EntityAIBase {
     }
 
     /**
-     * Returns whether the EntityAIBase should begin execution.
+     * Returns whether the Goal should begin execution.
      */
     public boolean shouldExecute() {
         if (!this.myrmex.isEntityAlive()) {

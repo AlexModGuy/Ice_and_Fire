@@ -15,7 +15,7 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -41,7 +41,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class EntityCockatrice extends EntityTameable implements IAnimatedEntity, IBlacklistedFromStatues, IVillagerFear {
+public class EntityCockatrice extends TameableEntity implements IAnimatedEntity, IBlacklistedFromStatues, IVillagerFear {
 
     public static final Animation ANIMATION_JUMPAT = Animation.create(30);
     public static final Animation ANIMATION_WATTLESHAKE = Animation.create(20);
@@ -85,26 +85,26 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     }
 
     protected void initEntityAI() {
-        this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(2, aiStare = new CockatriceAIStareAttack(this, 1.0D, 0, 15.0F));
-        this.tasks.addTask(2, aiMelee = new EntityAIAttackMeleeNoCooldown(this, 1.5D, false));
-        this.tasks.addTask(3, new CockatriceAIFollowOwner(this, 1.0D, 7.0F, 2.0F));
-        this.tasks.addTask(3, this.aiSit = new EntityAISit(this));
-        this.tasks.addTask(4, new CockatriceAIWander(this, 1.0D));
-        this.tasks.addTask(5, new CockatriceAIAggroLook(this));
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, LivingEntity.class, 6.0F));
-        this.tasks.addTask(7, new EntityAILookIdle(this));
-        this.targetTasks.addTask(1, new CockatriceAITargetItems(this, false));
-        this.targetTasks.addTask(2, new EntityAIOwnerHurtByTarget(this));
-        this.targetTasks.addTask(3, new EntityAIOwnerHurtTarget(this));
-        this.targetTasks.addTask(4, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(5, new CockatriceAITarget(this, LivingEntity.class, true, new Predicate<Entity>() {
+        this.goalSelector.addGoal(1, new EntityAISwimming(this));
+        this.goalSelector.addGoal(2, aiStare = new CockatriceAIStareAttack(this, 1.0D, 0, 15.0F));
+        this.goalSelector.addGoal(2, aiMelee = new EntityAIAttackMeleeNoCooldown(this, 1.5D, false));
+        this.goalSelector.addGoal(3, new CockatriceAIFollowOwner(this, 1.0D, 7.0F, 2.0F));
+        this.goalSelector.addGoal(3, this.aiSit = new EntityAISit(this));
+        this.goalSelector.addGoal(4, new CockatriceAIWander(this, 1.0D));
+        this.goalSelector.addGoal(5, new CockatriceAIAggroLook(this));
+        this.goalSelector.addGoal(6, new EntityAIWatchClosest(this, LivingEntity.class, 6.0F));
+        this.goalSelector.addGoal(7, new EntityAILookIdle(this));
+        this.targetSelector.addGoal(1, new CockatriceAITargetItems(this, false));
+        this.targetSelector.addGoal(2, new EntityAIOwnerHurtByTarget(this));
+        this.targetSelector.addGoal(3, new EntityAIOwnerHurtTarget(this));
+        this.targetSelector.addGoal(4, new EntityAIHurtByTarget(this, false));
+        this.targetSelector.addGoal(5, new CockatriceAITarget(this, LivingEntity.class, true, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
                 return ((entity instanceof IMob) && EntityCockatrice.this.isTamed() && !(entity instanceof EntityCreeper) && !(entity instanceof EntityPigZombie) && !(entity instanceof EntityEnderman) || entity instanceof PlayerEntity || ServerEvents.isAnimaniaFerret(entity)) && !ServerEvents.isAnimaniaChicken(entity);
             }
         }));
-        this.tasks.removeTask(aiMelee);
+        this.goalSelector.removeTask(aiMelee);
     }
 
     public boolean hasHome() {
@@ -144,15 +144,15 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
 
     private void switchAI(boolean melee) {
         if (melee) {
-            this.tasks.removeTask(aiStare);
+            this.goalSelector.removeTask(aiStare);
             if (aiMelee != null) {
-                this.tasks.addTask(2, aiMelee);
+                this.goalSelector.addGoal(2, aiMelee);
             }
             this.isMeleeMode = true;
         } else {
-            this.tasks.removeTask(aiMelee);
+            this.goalSelector.removeTask(aiMelee);
             if (aiStare != null) {
-                this.tasks.addTask(2, aiStare);
+                this.goalSelector.addGoal(2, aiStare);
             }
             this.isMeleeMode = false;
         }

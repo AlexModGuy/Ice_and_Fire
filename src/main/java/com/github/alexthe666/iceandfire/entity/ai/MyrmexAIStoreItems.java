@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityMyrmexCocoon;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyrmexAIStoreItems extends EntityAIBase {
+public class MyrmexAIStoreItems extends Goal {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;
     private BlockPos nextRoom = null;

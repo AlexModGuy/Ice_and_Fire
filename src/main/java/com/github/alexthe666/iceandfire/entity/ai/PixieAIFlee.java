@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.item.ItemStack;
@@ -16,7 +16,7 @@ import net.minecraft.util.math.Vec3d;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class PixieAIFlee<T extends Entity> extends EntityAIBase {
+public class PixieAIFlee<T extends Entity> extends Goal {
     private final Predicate<Entity> canBeSeenSelector;
     private final float avoidDistance;
     private final Predicate<? super T> avoidTargetSelector;

@@ -1,16 +1,16 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.google.common.collect.Sets;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.Set;
 
-public class AquaticAITempt extends EntityAIBase {
-    private final EntityCreature temptedEntity;
+public class AquaticAITempt extends Goal {
+    private final MobEntity temptedEntity;
     private final double speed;
     private final Set<Item> temptItem;
     private final boolean scaredByPlayerMovement;
@@ -23,11 +23,11 @@ public class AquaticAITempt extends EntityAIBase {
     private int delayTemptCounter;
     private boolean isRunning;
 
-    public AquaticAITempt(EntityCreature temptedEntityIn, double speedIn, Item temptItemIn, boolean scaredByPlayerMovementIn) {
+    public AquaticAITempt(MobEntity temptedEntityIn, double speedIn, Item temptItemIn, boolean scaredByPlayerMovementIn) {
         this(temptedEntityIn, speedIn, scaredByPlayerMovementIn, Sets.newHashSet(temptItemIn));
     }
 
-    public AquaticAITempt(EntityCreature temptedEntityIn, double speedIn, boolean scaredByPlayerMovementIn, Set<Item> temptItemIn) {
+    public AquaticAITempt(MobEntity temptedEntityIn, double speedIn, boolean scaredByPlayerMovementIn, Set<Item> temptItemIn) {
         this.temptedEntity = temptedEntityIn;
         this.speed = speedIn;
         this.temptItem = temptItemIn;
@@ -36,7 +36,7 @@ public class AquaticAITempt extends EntityAIBase {
     }
 
     /**
-     * Returns whether the EntityAIBase should begin execution.
+     * Returns whether the Goal should begin execution.
      */
     public boolean shouldExecute() {
         if (this.delayTemptCounter > 0) {
@@ -58,7 +58,7 @@ public class AquaticAITempt extends EntityAIBase {
     }
 
     /**
-     * Returns whether an in-progress EntityAIBase should continue executing
+     * Returns whether an in-progress Goal should continue executing
      */
     public boolean shouldContinueExecuting() {
         if (this.scaredByPlayerMovement) {

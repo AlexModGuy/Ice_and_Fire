@@ -15,6 +15,7 @@ import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -33,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class EntityTideTrident extends Entity implements IProjectile {
+public class EntityTideTrident extends TridentEntity implements IProjectile {
     private static final Predicate<Entity> ARROW_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>() {
         public boolean apply(@Nullable Entity p_apply_1_) {
             return p_apply_1_.canBeCollidedWith();

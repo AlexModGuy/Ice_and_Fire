@@ -16,7 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -44,7 +44,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class EntityPixie extends EntityTameable {
+public class EntityPixie extends TameableEntity {
 
     public static final float[][] PARTICLE_RGB = new float[][]{new float[]{1F, 0.752F, 0.792F}, new float[]{0.831F, 0.662F, 1F}, new float[]{0.513F, 0.843F, 1F}, new float[]{0.654F, 0.909F, 0.615F}, new float[]{0.996F, 0.788F, 0.407F}};
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "if_pixie"));
@@ -187,11 +187,11 @@ public class EntityPixie extends EntityTameable {
 
     public void flipAI(boolean flee) {
         if (flee) {
-            this.tasks.removeTask(aiTempt);
-            this.tasks.addTask(3, aiFlee);
+            this.goalSelector.removeTask(aiTempt);
+            this.goalSelector.addGoal(3, aiFlee);
         } else {
-            this.tasks.removeTask(aiFlee);
-            this.tasks.addTask(3, aiTempt);
+            this.goalSelector.removeTask(aiFlee);
+            this.goalSelector.addGoal(3, aiTempt);
         }
     }
 
@@ -199,23 +199,23 @@ public class EntityPixie extends EntityTameable {
     }
 
     protected void initEntityAI() {
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new PixieAIFollowOwner(this, 1.0D, 2.0F, 4.0F));
-        this.tasks.addTask(1, new PixieAIPickupItem(this, false));
+        this.goalSelector.addGoal(0, new EntityAISwimming(this));
+        this.goalSelector.addGoal(1, new PixieAIFollowOwner(this, 1.0D, 2.0F, 4.0F));
+        this.goalSelector.addGoal(1, new PixieAIPickupItem(this, false));
 
-        this.tasks.addTask(2, aiTempt = new PixieAISteal(this, 1.0D));
+        this.goalSelector.addGoal(2, aiTempt = new PixieAISteal(this, 1.0D));
 
-        this.tasks.addTask(2, aiFlee = new PixieAIFlee(this, PlayerEntity.class, 10, new Predicate<PlayerEntity>() {
+        this.goalSelector.addGoal(2, aiFlee = new PixieAIFlee(this, PlayerEntity.class, 10, new Predicate<PlayerEntity>() {
             @Override
             public boolean apply(@Nullable PlayerEntity entity) {
                 return true;
             }
         }));
-        this.tasks.addTask(3, new AIMoveRandom());
-        this.tasks.addTask(4, new AIEnterHouse());
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
-        this.tasks.addTask(7, new EntityAILookIdle(this));
-        this.tasks.removeTask(aiFlee);
+        this.goalSelector.addGoal(3, new AIMoveRandom());
+        this.goalSelector.addGoal(4, new AIEnterHouse());
+        this.goalSelector.addGoal(6, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.addGoal(7, new EntityAILookIdle(this));
+        this.goalSelector.removeTask(aiFlee);
     }
 
     @Override
@@ -376,7 +376,7 @@ public class EntityPixie extends EntityTameable {
         }
     }
 
-    class AIMoveRandom extends EntityAIBase {
+    class AIMoveRandom extends Goal {
         BlockPos target;
 
         public AIMoveRandom() {
@@ -411,7 +411,7 @@ public class EntityPixie extends EntityTameable {
         }
     }
 
-    class AIEnterHouse extends EntityAIBase {
+    class AIEnterHouse extends Goal {
         public AIEnterHouse() {
             this.setMutexBits(1);
         }

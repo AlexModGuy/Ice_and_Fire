@@ -1,8 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -10,15 +11,15 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class AquaticAIGetOutOfWater extends EntityAIBase {
-    private final EntityCreature creature;
+public class AquaticAIGetOutOfWater extends Goal {
+    private final MobEntity creature;
     private final double movementSpeed;
     private final World world;
     private double shelterX;
     private double shelterY;
     private double shelterZ;
 
-    public AquaticAIGetOutOfWater(EntityCreature theCreatureIn, double movementSpeedIn) {
+    public AquaticAIGetOutOfWater(MobEntity theCreatureIn, double movementSpeedIn) {
         this.creature = theCreatureIn;
         this.movementSpeed = movementSpeedIn;
         this.world = theCreatureIn.world;

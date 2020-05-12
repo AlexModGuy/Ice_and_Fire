@@ -2,12 +2,13 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
-public class EntityDragonArrow extends EntityArrow {
+public class EntityDragonArrow extends AbstractArrowEntity {
 
     public EntityDragonArrow(World worldIn) {
         super(worldIn);

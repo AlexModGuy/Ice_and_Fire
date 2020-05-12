@@ -1,12 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.IGroundMount;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityGroundAIRide<T extends EntityCreature & IGroundMount> extends EntityAIBase {
+public class EntityGroundAIRide<T extends MobEntity & IGroundMount> extends Goal {
 
     private T dragon;
     private PlayerEntity player;

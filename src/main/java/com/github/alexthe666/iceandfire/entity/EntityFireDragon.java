@@ -59,7 +59,7 @@ public class EntityFireDragon extends EntityDragonBase {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
+        this.goalSelector.addGoal(0, new EntityAISwimming(this));
     }
 
     public String getVariantName(int variant) {

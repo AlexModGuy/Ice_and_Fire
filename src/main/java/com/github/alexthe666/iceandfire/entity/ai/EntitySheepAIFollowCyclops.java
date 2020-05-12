@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.pathfinding.Path;
@@ -11,7 +11,7 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
 
-public class EntitySheepAIFollowCyclops extends EntityAIBase {
+public class EntitySheepAIFollowCyclops extends Goal {
     EntityAnimal childAnimal;
     EntityCyclops cyclops;
     double moveSpeed;

@@ -254,7 +254,7 @@ public class IafDragonFlightManager {
 
     }
 
-    protected static class PlayerFlightMoveHelper<T extends EntityCreature & IFlyingMount> extends EntityMoveHelper {
+    protected static class PlayerFlightMoveHelper<T extends MobEntity & IFlyingMount> extends EntityMoveHelper {
 
         private T dragon;
 

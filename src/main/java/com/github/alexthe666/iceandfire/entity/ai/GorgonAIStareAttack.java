@@ -2,9 +2,9 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 
-public class GorgonAIStareAttack extends EntityAIBase {
+public class GorgonAIStareAttack extends Goal {
     private final EntityGorgon entity;
     private final double moveSpeedAmp;
     private final float maxAttackDistance;

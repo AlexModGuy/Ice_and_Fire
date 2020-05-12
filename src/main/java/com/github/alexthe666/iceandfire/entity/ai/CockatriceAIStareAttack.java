@@ -4,11 +4,11 @@ import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public class CockatriceAIStareAttack extends EntityAIBase {
+public class CockatriceAIStareAttack extends Goal {
     private final EntityCockatrice entity;
     private final double moveSpeedAmp;
     private final float maxAttackDistance;

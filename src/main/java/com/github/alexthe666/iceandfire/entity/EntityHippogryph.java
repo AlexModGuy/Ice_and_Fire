@@ -21,7 +21,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.AbstractHorse;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
@@ -140,22 +140,22 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
 
     @Override
     protected void initEntityAI() {
-        this.tasks.addTask(0, new DragonAIRide(this));
-        this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(2, this.aiSit = new EntityAISit(this));
-        this.tasks.addTask(3, new HippogryphAIAttackMelee(this, 1.5D, true));
-        this.tasks.addTask(4, new HippogryphAIMate(this, 1.0D));
-        this.tasks.addTask(5, new EntityAITempt(this, 1.0D, Items.RABBIT, false));
-        this.tasks.addTask(5, new EntityAITempt(this, 1.0D, Items.COOKED_RABBIT, false));
-        this.tasks.addTask(6, new HippogryphAIAirTarget(this));
-        this.tasks.addTask(7, new HippogryphAIWander(this, 1.0D));
-        this.tasks.addTask(8, new EntityAIWatchClosest(this, LivingEntity.class, 6.0F));
-        this.tasks.addTask(8, new EntityAILookIdle(this));
-        this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
-        this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
-        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(4, new HippogryphAITargetItems(this, false));
-        this.targetTasks.addTask(5, new HippogryphAITarget(this, LivingEntity.class, false, new Predicate<Entity>() {
+        this.goalSelector.addGoal(0, new DragonAIRide(this));
+        this.goalSelector.addGoal(1, new EntityAISwimming(this));
+        this.goalSelector.addGoal(2, this.aiSit = new EntityAISit(this));
+        this.goalSelector.addGoal(3, new HippogryphAIAttackMelee(this, 1.5D, true));
+        this.goalSelector.addGoal(4, new HippogryphAIMate(this, 1.0D));
+        this.goalSelector.addGoal(5, new EntityAITempt(this, 1.0D, Items.RABBIT, false));
+        this.goalSelector.addGoal(5, new EntityAITempt(this, 1.0D, Items.COOKED_RABBIT, false));
+        this.goalSelector.addGoal(6, new HippogryphAIAirTarget(this));
+        this.goalSelector.addGoal(7, new HippogryphAIWander(this, 1.0D));
+        this.goalSelector.addGoal(8, new EntityAIWatchClosest(this, LivingEntity.class, 6.0F));
+        this.goalSelector.addGoal(8, new EntityAILookIdle(this));
+        this.targetSelector.addGoal(1, new EntityAIOwnerHurtByTarget(this));
+        this.targetSelector.addGoal(2, new EntityAIOwnerHurtTarget(this));
+        this.targetSelector.addGoal(3, new EntityAIHurtByTarget(this, false));
+        this.targetSelector.addGoal(4, new HippogryphAITargetItems(this, false));
+        this.targetSelector.addGoal(5, new HippogryphAITarget(this, LivingEntity.class, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
                 return entity instanceof LivingEntity && !(entity instanceof AbstractHorse) && DragonUtils.isAlive((LivingEntity) entity);

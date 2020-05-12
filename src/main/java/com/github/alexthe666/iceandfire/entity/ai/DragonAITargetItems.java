@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.SoundEvents;
@@ -23,17 +23,17 @@ public class DragonAITargetItems<T extends EntityItem> extends EntityAITarget {
     protected EntityItem targetEntity;
     private boolean isIce = false;
 
-    public DragonAITargetItems(EntityCreature creature, boolean checkSight) {
+    public DragonAITargetItems(MobEntity creature, boolean checkSight) {
         this(creature, checkSight, false);
         this.setMutexBits(1);
     }
 
-    public DragonAITargetItems(EntityCreature creature, boolean checkSight, boolean onlyNearby) {
+    public DragonAITargetItems(MobEntity creature, boolean checkSight, boolean onlyNearby) {
         this(creature, 20, checkSight, onlyNearby, null);
         isIce = creature instanceof EntityIceDragon;
     }
 
-    public DragonAITargetItems(EntityCreature creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
+    public DragonAITargetItems(MobEntity creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
         super(creature, checkSight, onlyNearby);
         isIce = creature instanceof EntityIceDragon;
         this.targetChance = chance;

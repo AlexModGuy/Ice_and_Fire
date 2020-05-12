@@ -4,10 +4,11 @@ import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.EnumDifficulty;
 
-public class CockatriceAITarget<T extends LivingEntity> extends EntityAINearestAttackableTarget<T> {
+public class CockatriceAITarget<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
     private EntityCockatrice cockatrice;
 
     public CockatriceAITarget(EntityCockatrice entityIn, Class<T> classTarget, boolean checkSight, Predicate<? super T> targetSelector) {

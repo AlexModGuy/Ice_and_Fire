@@ -1,12 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDreadKnight;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.AbstractHorse;
 
 import java.util.List;
 
-public class DreadAIRideHorse extends EntityAIBase {
+public class DreadAIRideHorse extends Goal {
     private final EntityDreadKnight knight;
     private AbstractHorse horse;
 

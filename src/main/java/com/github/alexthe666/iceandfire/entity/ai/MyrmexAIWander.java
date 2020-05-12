@@ -2,8 +2,9 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 
-public class MyrmexAIWander extends EntityAIWanderAvoidWater {
+public class MyrmexAIWander extends WaterAvoidingRandomWalkingGoal {
 
     protected EntityMyrmexBase myrmex;
 

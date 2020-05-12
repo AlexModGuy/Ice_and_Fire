@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.api.event;
 import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.fml.common.eventhandler.Cancelable;
+import net.minecraftforge.eventbus.api.Cancelable;
 
 /**
  * GenericGriefEvent is fired right before a non-Dragon destroys or modifies blocks in some aspect. <br>

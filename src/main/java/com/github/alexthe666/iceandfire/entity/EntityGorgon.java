@@ -78,19 +78,19 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
     }
 
     protected void initEntityAI() {
-        this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityAIRestrictSun(this));
-        this.tasks.addTask(3, new EntityAIFleeSun(this, 1.0D));
-        this.tasks.addTask(3, aiStare = new GorgonAIStareAttack(this, 1.0D, 0, 15.0F));
-        this.tasks.addTask(3, aiMelee = new EntityAIAttackMelee(this, 1.0D, false));
-        this.tasks.addTask(4, new GorgonAIStareAttack(this, 1.0D, 0, 15.0F));
-        this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D) {
+        this.goalSelector.addGoal(1, new EntityAISwimming(this));
+        this.goalSelector.addGoal(2, new EntityAIRestrictSun(this));
+        this.goalSelector.addGoal(3, new EntityAIFleeSun(this, 1.0D));
+        this.goalSelector.addGoal(3, aiStare = new GorgonAIStareAttack(this, 1.0D, 0, 15.0F));
+        this.goalSelector.addGoal(3, aiMelee = new EntityAIAttackMelee(this, 1.0D, false));
+        this.goalSelector.addGoal(4, new GorgonAIStareAttack(this, 1.0D, 0, 15.0F));
+        this.goalSelector.addGoal(5, new EntityAIWanderAvoidWater(this, 1.0D) {
             public boolean shouldExecute() {
                 executionChance = 20;
                 return super.shouldExecute();
             }
         });
-        this.tasks.addTask(6, new EntityAIWatchClosest(this, PlayerEntity.class, 8.0F, 1.0F) {
+        this.goalSelector.addGoal(6, new EntityAIWatchClosest(this, PlayerEntity.class, 8.0F, 1.0F) {
             public boolean shouldContinueExecuting() {
                 if (this.closestEntity != null && this.closestEntity instanceof PlayerEntity && ((PlayerEntity) this.closestEntity).isCreative()) {
                     return false;
@@ -98,22 +98,22 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                 return super.shouldContinueExecuting();
             }
         });
-        this.tasks.addTask(6, new EntityAILookIdle(this));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, PlayerEntity.class, 0, true, false, new Predicate<PlayerEntity>() {
+        this.goalSelector.addGoal(6, new EntityAILookIdle(this));
+        this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this, false));
+        this.targetSelector.addGoal(2, new EntityAINearestAttackableTarget(this, PlayerEntity.class, 0, true, false, new Predicate<PlayerEntity>() {
             @Override
             public boolean apply(@Nullable PlayerEntity entity) {
                 return true;
             }
         }));
-        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, LivingEntity.class, 0, true, false, new Predicate<Entity>() {
+        this.targetSelector.addGoal(3, new EntityAINearestAttackableTarget(this, LivingEntity.class, 0, true, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
                 return entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity) && !(entity instanceof PartEntity) && (properties == null || properties != null && !properties.isStone) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
             }
         }));
-        this.tasks.removeTask(aiMelee);
+        this.goalSelector.removeTask(aiMelee);
     }
 
     public void attackEntityWithRangedAttack(LivingEntity entity) {
@@ -141,11 +141,11 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
 
             boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || LivingEntityIn.isPotionActive(MobEffects.BLINDNESS) || LivingEntityIn instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) LivingEntityIn).canBeTurnedToStone() || isBlindfolded(LivingEntityIn);
             if (blindness && this.deathTime == 0) {
-                this.tasks.removeTask(aiStare);
-                this.tasks.addTask(3, aiMelee);
+                this.goalSelector.removeTask(aiStare);
+                this.goalSelector.addGoal(3, aiMelee);
             } else {
-                this.tasks.removeTask(aiMelee);
-                this.tasks.addTask(3, aiStare);
+                this.goalSelector.removeTask(aiMelee);
+                this.goalSelector.addGoal(3, aiStare);
             }
         }
     }

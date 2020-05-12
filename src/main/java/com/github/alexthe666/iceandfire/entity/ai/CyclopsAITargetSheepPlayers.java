@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,15 +26,15 @@ public class CyclopsAITargetSheepPlayers<T extends LivingEntity> extends EntityA
     private final int targetChance;
     protected T targetEntity;
 
-    public CyclopsAITargetSheepPlayers(EntityCreature creature, Class<T> classTarget, boolean checkSight) {
+    public CyclopsAITargetSheepPlayers(MobEntity creature, Class<T> classTarget, boolean checkSight) {
         this(creature, classTarget, checkSight, true);
     }
 
-    public CyclopsAITargetSheepPlayers(EntityCreature creature, Class<T> classTarget, boolean checkSight, boolean onlyNearby) {
+    public CyclopsAITargetSheepPlayers(MobEntity creature, Class<T> classTarget, boolean checkSight, boolean onlyNearby) {
         this(creature, classTarget, 10, checkSight, onlyNearby, null);
     }
 
-    public CyclopsAITargetSheepPlayers(EntityCreature creature, Class<T> classTarget, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
+    public CyclopsAITargetSheepPlayers(MobEntity creature, Class<T> classTarget, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
         super(creature, checkSight, onlyNearby);
         this.targetClass = classTarget;
         this.targetChance = chance;
@@ -54,7 +54,7 @@ public class CyclopsAITargetSheepPlayers<T extends LivingEntity> extends EntityA
     }
 
     /**
-     * Returns whether the EntityAIBase should begin execution.
+     * Returns whether the Goal should begin execution.
      */
     public boolean shouldExecute() {
         if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(this.targetChance) != 0) {

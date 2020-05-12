@@ -14,12 +14,13 @@ import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -44,7 +45,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class EntityStymphalianBird extends EntityCreature implements IAnimatedEntity, IMob, IVillagerFear, IAnimalFear {
+public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEntity, IMob, IVillagerFear, IAnimalFear {
 
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "stymphalian_bird"));
     protected static final Predicate<Entity> STYMPHALIAN_PREDICATE = new Predicate<Entity>() {
@@ -83,15 +84,15 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     }
 
     protected void initEntityAI() {
-        this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(2, new StymphalianBirdAIFlee(this, 10));
-        this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.5D, false));
-        this.tasks.addTask(5, new EntityAIWander(this, 1.0D));
-        this.tasks.addTask(6, new StymphalianBirdAIAirTarget(this));
-        this.tasks.addTask(7, new EntityAIWatchClosest(this, LivingEntity.class, 6.0F));
-        this.tasks.addTask(8, new EntityAILookIdle(this));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
-        this.targetTasks.addTask(2, new StymphalianBirdAITarget(this, LivingEntity.class, true));
+        this.goalSelector.addGoal(1, new EntityAISwimming(this));
+        this.goalSelector.addGoal(2, new StymphalianBirdAIFlee(this, 10));
+        this.goalSelector.addGoal(3, new EntityAIAttackMelee(this, 1.5D, false));
+        this.goalSelector.addGoal(5, new EntityAIWander(this, 1.0D));
+        this.goalSelector.addGoal(6, new StymphalianBirdAIAirTarget(this));
+        this.goalSelector.addGoal(7, new EntityAIWatchClosest(this, LivingEntity.class, 6.0F));
+        this.goalSelector.addGoal(8, new EntityAILookIdle(this));
+        this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this, true));
+        this.targetSelector.addGoal(2, new StymphalianBirdAITarget(this, LivingEntity.class, true));
     }
 
     @Override

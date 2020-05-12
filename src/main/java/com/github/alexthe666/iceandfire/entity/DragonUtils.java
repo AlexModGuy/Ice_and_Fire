@@ -8,7 +8,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.INpc;
 import net.minecraft.entity.ai.RandomPositionGenerator;
@@ -180,8 +180,8 @@ public class DragonUtils {
     }
 
     private static BlockPos getStymphalianFearPos(EntityStymphalianBird bird, BlockPos fallback) {
-        if (bird.getVictor() != null && bird.getVictor() instanceof EntityCreature) {
-            Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom((EntityCreature) bird.getVictor(), 16, IafConfig.stymphalianBirdFlightHeight, new Vec3d(bird.getVictor().getPosX(), bird.getVictor().getPosY(), bird.getVictor().getPosZ()));
+        if (bird.getVictor() != null && bird.getVictor() instanceof MobEntity) {
+            Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom((MobEntity) bird.getVictor(), 16, IafConfig.stymphalianBirdFlightHeight, new Vec3d(bird.getVictor().getPosX(), bird.getVictor().getPosY(), bird.getVictor().getPosZ()));
             if (vec3d != null) {
                 BlockPos pos = new BlockPos(vec3d);
                 return new BlockPos(pos.getX(), 0, pos.getZ());
@@ -234,7 +234,7 @@ public class DragonUtils {
         return target.getPosition();
     }
 
-    public static boolean canTameDragonAttack(EntityTameable dragon, Entity entity) {
+    public static boolean canTameDragonAttack(TameableEntity dragon, Entity entity) {
         String className = entity.getClass().getSimpleName();
         if (className.contains("VillagerMCA") || className.contains("MillVillager") || className.contains("Citizen")) {
             return false;
@@ -242,8 +242,8 @@ public class DragonUtils {
         if (entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof PlayerEntity) {
             return false;
         }
-        if (entity instanceof EntityTameable) {
-            return !((EntityTameable) entity).isTamed();
+        if (entity instanceof TameableEntity) {
+            return !((TameableEntity) entity).isTamed();
         }
         return true;
     }
@@ -283,9 +283,9 @@ public class DragonUtils {
                 !isBlacklistedBlock(block);
     }
 
-    public static boolean hasSameOwner(EntityTameable cockatrice, Entity entity) {
-        if (entity instanceof EntityTameable) {
-            EntityTameable tameable = (EntityTameable) entity;
+    public static boolean hasSameOwner(TameableEntity cockatrice, Entity entity) {
+        if (entity instanceof TameableEntity) {
+            TameableEntity tameable = (TameableEntity) entity;
             return tameable.getOwnerId() != null && cockatrice.getOwnerId() != null && tameable.getOwnerId().equals(cockatrice.getOwnerId());
         }
         return false;
@@ -335,22 +335,22 @@ public class DragonUtils {
         Entity owner1 = null;
         Entity owner2 = null;
         boolean def = entity1.isOnSameTeam(entity2);
-        if (entity1 instanceof EntityTameable) {
-            owner1 = ((EntityTameable) entity1).getOwner();
+        if (entity1 instanceof TameableEntity) {
+            owner1 = ((TameableEntity) entity1).getOwner();
         }
-        if (entity2 instanceof EntityTameable) {
-            owner2 = ((EntityTameable) entity2).getOwner();
+        if (entity2 instanceof TameableEntity) {
+            owner2 = ((TameableEntity) entity2).getOwner();
         }
         if (entity1 instanceof EntityMutlipartPart) {
             Entity multipart = ((EntityMutlipartPart) entity1).getParent();
-            if (multipart != null && multipart instanceof EntityTameable) {
-                owner1 = ((EntityTameable) multipart).getOwner();
+            if (multipart != null && multipart instanceof TameableEntity) {
+                owner1 = ((TameableEntity) multipart).getOwner();
             }
         }
         if (entity2 instanceof EntityMutlipartPart) {
             Entity multipart = ((EntityMutlipartPart) entity2).getParent();
-            if (multipart != null && multipart instanceof EntityTameable) {
-                owner2 = ((EntityTameable) multipart).getOwner();
+            if (multipart != null && multipart instanceof TameableEntity) {
+                owner2 = ((TameableEntity) multipart).getOwner();
             }
         }
         if (owner1 != null && owner2 != null) {

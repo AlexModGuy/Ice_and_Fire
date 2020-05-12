@@ -1,12 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.EntityAIWander;
 
 public class SirenAIWander extends EntityAIWander {
 
-    public SirenAIWander(EntityCreature creatureIn, double speedIn) {
+    public SirenAIWander(MobEntity creatureIn, double speedIn) {
         super(creatureIn, speedIn);
     }
 

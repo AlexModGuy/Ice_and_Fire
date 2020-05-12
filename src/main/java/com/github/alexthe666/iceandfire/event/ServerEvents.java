@@ -176,7 +176,7 @@ public class ServerEvents {
                 Entity shootingEntity = ((EntityArrow) event.getEntity()).shootingEntity;
                 Entity shotEntity = event.getRayTraceResult().entityHit;
                 if (shootingEntity instanceof LivingEntity && shootingEntity.isRidingOrBeingRiddenBy(shotEntity)) {
-                    if (shotEntity instanceof EntityTameable && ((EntityTameable) shotEntity).isTamed() && shotEntity.isOnSameTeam(shootingEntity)) {
+                    if (shotEntity instanceof TameableEntity && ((TameableEntity) shotEntity).isTamed() && shotEntity.isOnSameTeam(shootingEntity)) {
                         event.setCanceled(true);
                     }
                 }
@@ -869,12 +869,12 @@ public class ServerEvents {
                 EntityAnimal animal = (EntityAnimal) event.getEntity();
                 animal.tasks.addTask(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
             }
-            if (event.getEntity() != null && isVillager(event.getEntity()) && event.getEntity() instanceof EntityCreature && IafConfig.villagersFearDragons) {
-                EntityCreature villager = (EntityCreature) event.getEntity();
+            if (event.getEntity() != null && isVillager(event.getEntity()) && event.getEntity() instanceof MobEntity && IafConfig.villagersFearDragons) {
+                MobEntity villager = (MobEntity) event.getEntity();
                 villager.tasks.addTask(1, new VillagerAIFearUntamed(villager, LivingEntity.class, VILLAGER_FEAR, 8.0F, 0.8D, 0.8D));
             }
-            if (event.getEntity() != null && isLivestock(event.getEntity()) && event.getEntity() instanceof EntityCreature && IafConfig.animalsFearDragons) {
-                EntityCreature animal = (EntityCreature) event.getEntity();
+            if (event.getEntity() != null && isLivestock(event.getEntity()) && event.getEntity() instanceof MobEntity && IafConfig.animalsFearDragons) {
+                MobEntity animal = (MobEntity) event.getEntity();
                 animal.tasks.addTask(1, new VillagerAIFearUntamed(animal, LivingEntity.class, new Predicate<LivingEntity>() {
                     public boolean apply(@Nullable LivingEntity entity) {
                         return entity != null && entity instanceof IAnimalFear && ((IAnimalFear) entity).shouldAnimalsFear(animal);

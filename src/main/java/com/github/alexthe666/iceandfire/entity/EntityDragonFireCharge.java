@@ -3,7 +3,8 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.projectile.AbstractFireballEntity;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.util.DamageSource;
@@ -13,7 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityDragonFireCharge extends EntityFireball implements IDragonProjectile {
+public class EntityDragonFireCharge extends AbstractFireballEntity implements IDragonProjectile {
 
     public int ticksInAir;
 
@@ -113,7 +114,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
             }
             if (movingObject.entityHit == null || !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity && this.shootingEntity instanceof EntityDragonBase) {
                 EntityDragonBase dragon = (EntityDragonBase) this.shootingEntity;
-                if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
+                if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (movingObject.entityHit instanceof TameableEntity && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
                     return;
                 }
                 if (this.shootingEntity != null && IafConfig.dragonGriefing != 2) {
@@ -125,7 +126,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
                 this.setDead();
             }
             if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && !movingObject.entityHit.isEntityEqual(shootingEntity)) {
-                if (this.shootingEntity != null && (movingObject.entityHit.isEntityEqual(shootingEntity) || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
+                if (this.shootingEntity != null && (movingObject.entityHit.isEntityEqual(shootingEntity) || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof TameableEntity && ((EntityDragonBase) shootingEntity).getOwner() == ((TameableEntity) movingObject.entityHit).getOwner()))) {
                     return;
                 }
                 if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {

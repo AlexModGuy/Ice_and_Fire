@@ -2,14 +2,15 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class AmphithereAIAttackMelee extends EntityAIBase {
+public class AmphithereAIAttackMelee extends Goal {
     protected final int attackInterval = 20;
     protected EntityAmphithere attacker;
     /**
@@ -45,7 +46,7 @@ public class AmphithereAIAttackMelee extends EntityAIBase {
     }
 
     /**
-     * Returns whether the EntityAIBase should begin execution.
+     * Returns whether the Goal should begin execution.
      */
     public boolean shouldExecute() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
@@ -77,7 +78,7 @@ public class AmphithereAIAttackMelee extends EntityAIBase {
     }
 
     /**
-     * Returns whether an in-progress EntityAIBase should continue executing
+     * Returns whether an in-progress Goal should continue executing
      */
     public boolean shouldContinueExecuting() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();

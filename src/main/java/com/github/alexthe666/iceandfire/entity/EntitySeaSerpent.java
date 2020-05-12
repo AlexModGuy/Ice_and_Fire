@@ -19,10 +19,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.Goal;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.item.EntityBoat;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
@@ -55,7 +56,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, IMultipartEntity, IVillagerFear, IAnimalFear {
+public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, IMultipartEntity, IVillagerFear, IAnimalFear {
 
     public static final Animation ANIMATION_BITE = Animation.create(15);
     public static final Animation ANIMATION_SPEAK = Animation.create(15);
@@ -185,14 +186,14 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     }
 
     protected void initEntityAI() {
-        this.tasks.addTask(0, new SeaSerpentAIGetInWater(this, 1.0D));
-        this.tasks.addTask(1, new EntitySeaSerpent.AISwimBite());
-        this.tasks.addTask(1, new EntitySeaSerpent.AISwimWander());
-        this.tasks.addTask(1, new EntitySeaSerpent.AISwimCircle());
-        this.tasks.addTask(2, new SeaSerpentAIAttackMelee(this, 1.0D, true));
-        this.tasks.addTask(3, new EntityAIWatchClosestIgnoreRider(this, LivingEntity.class, 6.0F));
-        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(2, new FlyingAITarget(this, LivingEntity.class, 0, true, false, NOT_SEA_SERPENT));
+        this.goalSelector.addGoal(0, new SeaSerpentAIGetInWater(this, 1.0D));
+        this.goalSelector.addGoal(1, new EntitySeaSerpent.AISwimBite());
+        this.goalSelector.addGoal(1, new EntitySeaSerpent.AISwimWander());
+        this.goalSelector.addGoal(1, new EntitySeaSerpent.AISwimCircle());
+        this.goalSelector.addGoal(2, new SeaSerpentAIAttackMelee(this, 1.0D, true));
+        this.goalSelector.addGoal(3, new EntityAIWatchClosestIgnoreRider(this, LivingEntity.class, 6.0F));
+        this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this, false));
+        this.targetSelector.addGoal(2, new FlyingAITarget(this, LivingEntity.class, 0, true, false, NOT_SEA_SERPENT));
     }
 
     protected int getExperiencePoints(PlayerEntity player) {
@@ -1018,7 +1019,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         }
     }
 
-    public class AISwimWander extends EntityAIBase {
+    public class AISwimWander extends Goal {
         BlockPos target;
 
         public AISwimWander() {
@@ -1075,7 +1076,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         }
     }
 
-    class AISwimCircle extends EntityAIBase {
+    class AISwimCircle extends Goal {
         BlockPos target;
 
         public AISwimCircle() {
@@ -1135,7 +1136,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         }
     }
 
-    class AISwimBite extends EntityAIBase {
+    class AISwimBite extends Goal {
         public int max_distance = 1000;
         BlockPos target;
         boolean secondPhase = false;

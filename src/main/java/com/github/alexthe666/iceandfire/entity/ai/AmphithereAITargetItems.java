@@ -4,9 +4,10 @@ import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.EntityAITarget;
+import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
@@ -19,21 +20,21 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class AmphithereAITargetItems<T extends EntityItem> extends EntityAITarget {
+public class AmphithereAITargetItems<T extends EntityItem> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super EntityItem> targetEntitySelector;
     private final int targetChance;
     protected EntityItem targetEntity;
 
-    public AmphithereAITargetItems(EntityCreature creature, boolean checkSight) {
+    public AmphithereAITargetItems(MobEntity creature, boolean checkSight) {
         this(creature, checkSight, false);
     }
 
-    public AmphithereAITargetItems(EntityCreature creature, boolean checkSight, boolean onlyNearby) {
+    public AmphithereAITargetItems(MobEntity creature, boolean checkSight, boolean onlyNearby) {
         this(creature, 20, checkSight, onlyNearby, null);
     }
 
-    public AmphithereAITargetItems(EntityCreature creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
+    public AmphithereAITargetItems(MobEntity creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
         super(creature, checkSight, onlyNearby);
         this.targetChance = chance;
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);

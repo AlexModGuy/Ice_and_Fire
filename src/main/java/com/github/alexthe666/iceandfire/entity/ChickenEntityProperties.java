@@ -1,14 +1,13 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.citadel.server.entity.EntityProperties;
-import net.ilexiconn.llibrary.server.entity.EntityProperties;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.nbt.CompoundNBT;
 
 import java.util.Random;
 
-public class ChickenEntityProperties extends EntityProperties<LivingEntity> {
+public class ChickenEntityProperties extends EntityProperties<AnimalEntity> {
 
     private static Random rand = new Random();
     public int timeUntilNextEgg = 1;
@@ -20,12 +19,12 @@ public class ChickenEntityProperties extends EntityProperties<LivingEntity> {
 
     @Override
     public void saveNBTData(CompoundNBT compound) {
-        compound.setInteger("TimeUntilNextEgg", timeUntilNextEgg);
+        compound.putInt("TimeUntilNextEgg", timeUntilNextEgg);
     }
 
     @Override
     public void loadNBTData(CompoundNBT compound) {
-        this.timeUntilNextEgg = compound.getInteger("TimeUntilNextEgg");
+        this.timeUntilNextEgg = compound.getInt("TimeUntilNextEgg");
     }
 
     @Override
@@ -39,8 +38,8 @@ public class ChickenEntityProperties extends EntityProperties<LivingEntity> {
     }
 
     @Override
-    public Class<EntityAnimal> getEntityClass() {
-        return EntityAnimal.class;
+    public Class<AnimalEntity> getEntityClass() {
+        return AnimalEntity.class;
     }
 
     public int generateTime() {

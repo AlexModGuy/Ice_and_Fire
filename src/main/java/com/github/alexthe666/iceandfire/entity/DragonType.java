@@ -1,17 +1,20 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.BlockEggInIce;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 
 public class DragonType {
 
     public static final DragonType FIRE = new DragonType("fire");
     public static final DragonType ICE = new DragonType("ice").setPiscivore();
+    public static final DragonType LIGHTNING = new DragonType("lightning");
 
     private String name;
     private boolean piscivore;
@@ -45,30 +48,30 @@ public class DragonType {
             }
             if (egg.getDragonAge() > IafConfig.dragonEggTime) {
                 if (egg.world.getBlockState(pos).getMaterial() == Material.FIRE) {
-                    egg.world.setBlockToAir(pos);
+                    egg.world.setBlockState(pos, Blocks.AIR.getDefaultState());
                     EntityFireDragon dragon = new EntityFireDragon(egg.world);
                     if(egg.hasCustomName()){
-                        dragon.setCustomNameTag(egg.getCustomNameTag());
+                        dragon.setCustomName(egg.getCustomName());
                     }
                     dragon.setVariant(egg.getType().ordinal());
                     dragon.setGender(egg.getRNG().nextBoolean());
                     dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                     dragon.setHunger(50);
                     if (!egg.world.isRemote) {
-                        egg.world.spawnEntity(dragon);
+                        egg.world.addEntity(dragon);
                     }
                     dragon.setTamed(true);
                     dragon.setOwnerId(egg.getOwnerId());
                     egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, egg.getSoundCategory(), 2.5F, 1.0F, false);
                     egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), IafSoundRegistry.DRAGON_HATCH, egg.getSoundCategory(), 2.5F, 1.0F, false);
-                    egg.setDead();
+                    egg.remove();
                 }
 
             }
         }
         if(this == ICE){
             if (egg.world.getBlockState(pos).getMaterial() == Material.WATER && egg.getRNG().nextInt(500) == 0) {
-                egg.setDead();
+                egg.remove();
                 egg.world.setBlockState(pos, IafBlockRegistry.EGG_IN_ICE.getDefaultState());
                 egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), SoundEvents.BLOCK_GLASS_BREAK, egg.getSoundCategory(), 2.5F, 1.0F, false);
                 if (egg.world.getBlockState(pos).getBlock() instanceof BlockEggInIce) {

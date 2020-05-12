@@ -5,13 +5,13 @@ import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.Random;
 
-public class HippogryphAIAirTarget extends EntityAIBase {
+public class HippogryphAIAirTarget extends Goal {
     private EntityHippogryph hippogryph;
 
     public HippogryphAIAirTarget(EntityHippogryph dragon) {

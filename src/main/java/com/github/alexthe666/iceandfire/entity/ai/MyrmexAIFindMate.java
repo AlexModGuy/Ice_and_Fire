@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAITarget;
+import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
@@ -15,7 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends EntityAITarget {
+public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super Entity> targetEntitySelector;
     public EntityMyrmexRoyal myrmex;

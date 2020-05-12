@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSoldier;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 
-public class MyrmexAIEscortEntity extends EntityAIBase {
+public class MyrmexAIEscortEntity extends Goal {
     private final EntityMyrmexSoldier myrmex;
     private final double movementSpeed;
     private Path path;

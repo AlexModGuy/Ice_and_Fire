@@ -5,10 +5,11 @@ import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.PlayerEntity;
 
-public class HippogryphAITarget<T extends LivingEntity> extends EntityAINearestAttackableTarget<T> {
+public class HippogryphAITarget<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
     private EntityHippogryph hippogryph;
 
     public HippogryphAITarget(EntityHippogryph entityIn, Class<T> classTarget, boolean checkSight, Predicate<? super T> targetSelector) {

@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Random;
 
-public class DragonAIMate extends EntityAIBase {
+public class DragonAIMate extends Goal {
     private static final BlockState NEST = IafBlockRegistry.NEST.getDefaultState();
     private final EntityDragonBase dragon;
     World theWorld;
@@ -42,7 +42,7 @@ public class DragonAIMate extends EntityAIBase {
     }
 
     /**
-     * Returns whether an in-progress EntityAIBase should continue executing
+     * Returns whether an in-progress Goal should continue executing
      */
     public boolean continueExecuting() {
         return this.targetMate.isEntityAlive() && this.targetMate.isInLove() && this.spawnBabyDelay < 60;

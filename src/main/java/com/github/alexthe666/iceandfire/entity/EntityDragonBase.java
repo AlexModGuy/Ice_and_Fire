@@ -33,7 +33,7 @@ import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -221,31 +221,31 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
 
     @Override
     protected void initEntityAI() {
-        this.tasks.addTask(0, new DragonAIRide<>(this));
-        this.tasks.addTask(1, this.aiSit = new EntityAISit(this));
-        this.tasks.addTask(2, new DragonAIMate(this, 1.0D));
-        this.tasks.addTask(3, new DragonAIEscort(this, 1.0D));
-        this.tasks.addTask(4, new DragonAIAttackMelee(this, 1.5D, false));
-        this.tasks.addTask(5, new AquaticAITempt(this, 1.0D, IafItemRegistry.FIRE_STEW, false));
-        this.tasks.addTask(6, new DragonAIWander(this, 1.0D));
-        this.tasks.addTask(7, new DragonAIWatchClosest(this, LivingEntity.class, 6.0F));
-        this.tasks.addTask(7, new DragonAILookIdle(this));
-        this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
-        this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
-        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(4, new DragonAITargetNonTamed<>(this, PlayerEntity.class, false, new Predicate<PlayerEntity>() {
+        this.goalSelector.addGoal(0, new DragonAIRide<>(this));
+        this.goalSelector.addGoal(1, this.aiSit = new EntityAISit(this));
+        this.goalSelector.addGoal(2, new DragonAIMate(this, 1.0D));
+        this.goalSelector.addGoal(3, new DragonAIEscort(this, 1.0D));
+        this.goalSelector.addGoal(4, new DragonAIAttackMelee(this, 1.5D, false));
+        this.goalSelector.addGoal(5, new AquaticAITempt(this, 1.0D, IafItemRegistry.FIRE_STEW, false));
+        this.goalSelector.addGoal(6, new DragonAIWander(this, 1.0D));
+        this.goalSelector.addGoal(7, new DragonAIWatchClosest(this, LivingEntity.class, 6.0F));
+        this.goalSelector.addGoal(7, new DragonAILookIdle(this));
+        this.targetSelector.addGoal(1, new EntityAIOwnerHurtByTarget(this));
+        this.targetSelector.addGoal(2, new EntityAIOwnerHurtTarget(this));
+        this.targetSelector.addGoal(3, new EntityAIHurtByTarget(this, false));
+        this.targetSelector.addGoal(4, new DragonAITargetNonTamed<>(this, PlayerEntity.class, false, new Predicate<PlayerEntity>() {
             @Override
             public boolean apply(@Nullable PlayerEntity entity) {
                 return DragonUtils.canHostilesTarget(entity) && !entity.isCreative();
             }
         }));
-        this.targetTasks.addTask(5, new DragonAITarget<>(this, LivingEntity.class, true, new Predicate<Entity>() {
+        this.targetSelector.addGoal(5, new DragonAITarget<>(this, LivingEntity.class, true, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
                 return entity instanceof LivingEntity && DragonUtils.canHostilesTarget(entity);
             }
         }));
-        this.targetTasks.addTask(6, new DragonAITargetItems(this, false));
+        this.targetSelector.addGoal(6, new DragonAITargetItems(this, false));
     }
 
     public void resetParts(float scale) {
@@ -1888,7 +1888,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     private boolean isOwnersPet(LivingEntity living) {
-        return this.isTamed() && this.getOwner() != null && living instanceof EntityTameable && ((EntityTameable) living).getOwner() != null && this.getOwner().isEntityEqual(((EntityTameable) living).getOwner());
+        return this.isTamed() && this.getOwner() != null && living instanceof TameableEntity && ((TameableEntity) living).getOwner() != null && this.getOwner().isEntityEqual(((TameableEntity) living).getOwner());
     }
 
     public boolean isDirectPathBetweenPoints(Entity entity, Vec3d vec1, Vec3d vec2) {
