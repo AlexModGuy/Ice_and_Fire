@@ -1,37 +1,37 @@
-Trading with myrmex is a lucrative
-business. Worker trades are
-usually low quality, yet they are
-willing to trade some resin for
-sediment and the occasional gem.
-Soldiers will trade for common
-mob drops, and Sentinels for
-rarer ones and poisonous items.
-Royals will trade for artifacts
-and alchemical ingredients.
-Queens trade exclusively eggs.
+与恐蚁交易是相当有利可图的。劳工们
+的的价值判断水平非常低，会用矿物甚
+至罕见的宝石来同你换取蚁脂。军士们
+的主要交易对象是常规的生物掉落物，
+而斥候们则对罕见掉落物和有毒物质兴
+趣盎然。在皇族们那里，你甚至能换得
+古代的工艺品和炼金术材料。至于女王，
+则只会出售恐蚁卵。
 
 
 
 
 
-Myrmex Staffs can be used to
-modify the structure of Myrmex
-colonies. interacting with a
 
-myrmex with one in hand will
-bind it to their colony. By
-using it, one can delete certain
-rooms of the colony and disable
-reproduction of the queen. By
-using it while sneaking, one can
-add a new room at their position.
-One can only use this staff if
-they have a reputation of 75 or
-higher.
 
-Myrmex Eggs only hatch when
-underground. A queen egg, when
-hatched near a player underground,
-will bind to them, and the following
-colony that will form will have a
-permanent opinion of 100.
+
+恐蚁权杖能用来调控蚁穴的结构。手持
+权杖右击一只恐蚁就能与该蚁穴绑定，
+此后你就能使用它来删除或增加蚁穴的
+
+房间，或者决定女皇是否继续繁衍后代。
+潜行时使用权杖，则能在此处添加新的
+房间。只有当你在该蚁穴的声誉高于75
+时，才有使用权杖决定蚁穴命运的权力。
+
+
+
+
+
+
+
+恐蚁卵只会在地下孵化。当女皇卵在地
+下孵化时，如果附近的地层中有玩家活
+动，这一女皇创造的蚁穴就会与该玩家
+绑定，而该玩家也会永远在这一恐蚁社
+群中保有100点声誉。
+
