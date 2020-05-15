@@ -96,8 +96,8 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     }
 
     @Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(24.0D);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
@@ -107,8 +107,8 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(VICTOR_ENTITY, Optional.absent());
         this.dataManager.register(FLYING, Boolean.valueOf(false));
     }
@@ -329,7 +329,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
                             float wingZ = (float) (posZ + 1.8F * 0.5F * Math.sin((rotationYaw + 180 * (i % 2)) * Math.PI / 180));
                             float wingY = (float) (posY + 1F);
                             double d0 = target.getPosX() - wingX;
-                            double d1 = target.getEntityBoundingBox().minY - wingY;
+                            double d1 = target.getBoundingBox().minY - wingY;
                             double d2 = target.getPosZ() - wingZ;
                             double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
                             EntityStymphalianFeather entityarrow = new EntityStymphalianFeather(world, this);

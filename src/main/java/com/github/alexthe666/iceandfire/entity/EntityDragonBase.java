@@ -486,8 +486,8 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(HUNGER, Integer.valueOf(0));
         this.dataManager.register(AGE_TICKS, Integer.valueOf(0));
         this.dataManager.register(GENDER, Boolean.valueOf(false));
@@ -595,17 +595,17 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     @Override
     public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
-        compound.setInteger("Hunger", this.getHunger());
-        compound.setInteger("AgeTicks", this.getAgeInTicks());
+        compound.putInt("Hunger", this.getHunger());
+        compound.putInt("AgeTicks", this.getAgeInTicks());
         compound.setBoolean("Gender", this.isMale());
-        compound.setInteger("Variant", this.getVariant());
+        compound.putInt("Variant", this.getVariant());
         compound.setBoolean("Sleeping", this.isSleeping());
         compound.setBoolean("TamedDragon", this.isTamed());
         compound.setBoolean("FireBreathing", this.isBreathingFire());
         compound.setBoolean("AttackDecision", usingGroundAttack);
         compound.setBoolean("Hovering", this.isHovering());
         compound.setBoolean("Flying", this.isFlying());
-        compound.setInteger("DeathStage", this.getDeathStage());
+        compound.putInt("DeathStage", this.getDeathStage());
         compound.setBoolean("ModelDead", this.isModelDead());
         compound.setFloat("DeadProg", this.modelDeadProgress);
         compound.setBoolean("Tackle", this.isTackling());
@@ -614,12 +614,12 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         }
         compound.setBoolean("HasHomePosition", this.hasHomePosition);
         if (homePos != null && this.hasHomePosition) {
-            compound.setInteger("HomeAreaX", homePos.getX());
-            compound.setInteger("HomeAreaY", homePos.getY());
-            compound.setInteger("HomeAreaZ", homePos.getZ());
+            compound.putInt("HomeAreaX", homePos.getX());
+            compound.putInt("HomeAreaY", homePos.getY());
+            compound.putInt("HomeAreaZ", homePos.getZ());
         }
         compound.setBoolean("AgingDisabled", this.isAgingDisabled());
-        compound.setInteger("Command", this.getCommand());
+        compound.putInt("Command", this.getCommand());
         if (dragonInventory != null) {
             NBTTagList nbttaglist = new NBTTagList();
             for (int i = 0; i < dragonInventory.getSizeInventory(); ++i) {
@@ -639,29 +639,29 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     @Override
     public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
-        this.setHunger(compound.getInteger("Hunger"));
-        this.setAgeInTicks(compound.getInteger("AgeTicks"));
+        this.setHunger(compound.getInt("Hunger"));
+        this.setAgeInTicks(compound.getInt("AgeTicks"));
         this.setGender(compound.getBoolean("Gender"));
-        this.setVariant(compound.getInteger("Variant"));
+        this.setVariant(compound.getInt("Variant"));
         this.setSleeping(compound.getBoolean("Sleeping"));
         this.setTamed(compound.getBoolean("TamedDragon"));
         this.setBreathingFire(compound.getBoolean("FireBreathing"));
         this.usingGroundAttack = compound.getBoolean("AttackDecision");
         this.setHovering(compound.getBoolean("Hovering"));
         this.setFlying(compound.getBoolean("Flying"));
-        this.setDeathStage(compound.getInteger("DeathStage"));
+        this.setDeathStage(compound.getInt("DeathStage"));
         this.setModelDead(compound.getBoolean("ModelDead"));
         this.modelDeadProgress = compound.getFloat("DeadProg");
         if (!compound.getString("CustomName").isEmpty()) {
             this.setCustomNameTag(compound.getString("CustomName"));
         }
         this.hasHomePosition = compound.getBoolean("HasHomePosition");
-        if (hasHomePosition && compound.getInteger("HomeAreaX") != 0 && compound.getInteger("HomeAreaY") != 0 && compound.getInteger("HomeAreaZ") != 0) {
-            homePos = new BlockPos(compound.getInteger("HomeAreaX"), compound.getInteger("HomeAreaY"), compound.getInteger("HomeAreaZ"));
+        if (hasHomePosition && compound.getInt("HomeAreaX") != 0 && compound.getInt("HomeAreaY") != 0 && compound.getInt("HomeAreaZ") != 0) {
+            homePos = new BlockPos(compound.getInt("HomeAreaX"), compound.getInt("HomeAreaY"), compound.getInt("HomeAreaZ"));
         }
         this.setTackling(compound.getBoolean("Tackle"));
         this.setAgingDisabled(compound.getBoolean("AgingDisabled"));
-        this.setCommand(compound.getInteger("Command"));
+        this.setCommand(compound.getInt("Command"));
         if (dragonInventory != null) {
             NBTTagList nbttaglist = compound.getTagList("Items", 10);
             this.initInventory();
@@ -723,8 +723,8 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     @Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
         getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
@@ -977,9 +977,9 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                 if (this.getDeathStage() == lastDeathStage - 1) {
                     ItemStack skull = getSkull().copy();
                     skull.setTagCompound(new CompoundNBT());
-                    skull.getTagCompound().setInteger("Stage", this.getDragonStage());
-                    skull.getTagCompound().setInteger("DragonType", 0);
-                    skull.getTagCompound().setInteger("DragonAge", this.getAgeInDays());
+                    skull.getTagCompound().putInt("Stage", this.getDragonStage());
+                    skull.getTagCompound().putInt("DragonType", 0);
+                    skull.getTagCompound().putInt("DragonAge", this.getAgeInDays());
                     this.setDeathStage(this.getDeathStage() + 1);
                     if (!world.isRemote) {
                         this.entityDropItem(skull, 1);
@@ -1206,9 +1206,9 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                 double motionX = getRNG().nextGaussian() * 0.07D;
                 double motionY = getRNG().nextGaussian() * 0.07D;
                 double motionZ = getRNG().nextGaussian() * 0.07D;
-                float f = (float) (getRNG().nextFloat() * (this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minX) + this.getEntityBoundingBox().minX);
-                float f1 = (float) (getRNG().nextFloat() * (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY) + this.getEntityBoundingBox().minY);
-                float f2 = (float) (getRNG().nextFloat() * (this.getEntityBoundingBox().maxZ - this.getEntityBoundingBox().minZ) + this.getEntityBoundingBox().minZ);
+                float f = (float) (getRNG().nextFloat() * (this.getBoundingBox().maxX - this.getBoundingBox().minX) + this.getBoundingBox().minX);
+                float f1 = (float) (getRNG().nextFloat() * (this.getBoundingBox().maxY - this.getBoundingBox().minY) + this.getBoundingBox().minY);
+                float f2 = (float) (getRNG().nextFloat() * (this.getBoundingBox().maxZ - this.getBoundingBox().minZ) + this.getBoundingBox().minZ);
                 if (world.isRemote) {
                     this.world.spawnParticle(ParticleTypes.VILLAGER_HAPPY, f, f1, f2, motionX, motionY, motionZ);
                 }
@@ -1242,7 +1242,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     private boolean isOverAirLogic() {
-        return world.isAirBlock(new BlockPos(this.getPosX(), this.getEntityBoundingBox().minY - 1, this.getPosZ()));
+        return world.isAirBlock(new BlockPos(this.getPosX(), this.getBoundingBox().minY - 1, this.getPosZ()));
     }
 
     public boolean isDiving() {
@@ -1265,9 +1265,9 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                 if (IafConfig.dragonGriefing != 2 && (!this.isTamed() || IafConfig.tamedDragonGriefing)) {
                     float hardness = IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
                     if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
-                        for (int a = (int) Math.floor(this.getEntityBoundingBox().minX) - bounds; a <= (int) Math.ceil(this.getEntityBoundingBox().maxX) + bounds; a++) {
-                            for (int b = (int) Math.floor(this.getEntityBoundingBox().minY) + flightModifier; (b <= (int) Math.ceil(this.getEntityBoundingBox().maxY) + bounds + 1) && (b <= 127); b++) {
-                                for (int c = (int) Math.floor(this.getEntityBoundingBox().minZ) - bounds; c <= (int) Math.ceil(this.getEntityBoundingBox().maxZ) + bounds; c++) {
+                        for (int a = (int) Math.floor(this.getBoundingBox().minX) - bounds; a <= (int) Math.ceil(this.getBoundingBox().maxX) + bounds; a++) {
+                            for (int b = (int) Math.floor(this.getBoundingBox().minY) + flightModifier; (b <= (int) Math.ceil(this.getBoundingBox().maxY) + bounds + 1) && (b <= 127); b++) {
+                                for (int c = (int) Math.floor(this.getBoundingBox().minZ) - bounds; c <= (int) Math.ceil(this.getBoundingBox().maxZ) + bounds; c++) {
                                     if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, a, b, c))) continue;
                                     BlockPos pos = new BlockPos(a, b, c);
                                     BlockState state = world.getBlockState(pos);
@@ -1472,7 +1472,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         isOverAir = isOverAirLogic();
         logic.updateDragonCommon();
         if (this.isModelDead()) {
-            if(!world.isRemote && world.isAirBlock(new BlockPos(this.getPosX(), this.getEntityBoundingBox().minY, this.getPosZ())) && this.getPosY() > -1){
+            if(!world.isRemote && world.isAirBlock(new BlockPos(this.getPosX(), this.getBoundingBox().minY, this.getPosZ())) && this.getPosY() > -1){
                 this.move(MoverType.SELF, 0, -0.2F, 0);
             }
             this.setBreathingFire(false);
@@ -1797,7 +1797,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     public void updateCheckPlayer() {
-        double checklength = this.getEntityBoundingBox().getAverageEdgeLength() * 3;
+        double checklength = this.getBoundingBox().getAverageEdgeLength() * 3;
         PlayerEntity player = world.getClosestPlayerToEntity(this, checklength);
         if (this.isSleeping()) {
             if (player != null && !this.isOwner(player) && !player.isCreative()) {
@@ -1849,7 +1849,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
             }
             if (this.getDragonStage() > 3) {
                 int size = (this.getDragonStage() - 3) * 30;
-                List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(size, size, size));
+                List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().expand(size, size, size));
                 for (Entity entity : entities) {
                     boolean isStrongerDragon = entity instanceof EntityDragonBase && ((EntityDragonBase) entity).getDragonStage() >= this.getDragonStage();
                     if (entity instanceof LivingEntity && !isStrongerDragon) {
@@ -1871,7 +1871,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
             }
             if (this.getDragonStage() > 3) {
                 int size = (this.getDragonStage() - 3) * 30;
-                List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(size, size, size));
+                List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().expand(size, size, size));
                 for (Entity entity : entities) {
                     boolean isStrongerDragon = entity instanceof EntityDragonBase && ((EntityDragonBase) entity).getDragonStage() >= this.getDragonStage();
                     if (entity instanceof LivingEntity && !isStrongerDragon) {
@@ -1897,7 +1897,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     public void processArrows() {
-        List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox());
+        List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, this.getBoundingBox());
         for (Entity entity : entities) {
             if (entity instanceof EntityArrow) {
 
@@ -1934,7 +1934,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     private boolean inFrustrum(ICamera camera, Entity entity) {
-        return camera != null && entity != null && camera.isBoundingBoxInFrustum(entity.getEntityBoundingBox());
+        return camera != null && entity != null && camera.isBoundingBoxInFrustum(entity.getBoundingBox());
     }
 
     public RayTraceResult rayTraceRider(Entity rider, double blockReachDistance, float partialTicks) {
@@ -2106,7 +2106,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     public boolean hasFlightClearance() {
-        BlockPos topOfBB = new BlockPos(this.getPosX(), this.getEntityBoundingBox().maxY, this.getPosZ());
+        BlockPos topOfBB = new BlockPos(this.getPosX(), this.getBoundingBox().maxY, this.getPosZ());
         for (int i = 1; i < 4; i++) {
             if (!world.isAirBlock(topOfBB.up(i))) {
                 return false;

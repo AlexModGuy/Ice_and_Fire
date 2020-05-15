@@ -27,7 +27,7 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
 
     @Nullable
     public AxisAlignedBB getCollisionBoundingBox() {
-        return this.getEntityBoundingBox();
+        return this.getBoundingBox();
     }
 
     public boolean isAIDisabled() {
@@ -37,7 +37,7 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     @Override
     public void writeEntityToNBT(CompoundNBT tag) {
         super.writeEntityToNBT(tag);
-        tag.setInteger("CrackAmount", this.crackAmount);
+        tag.putInt("CrackAmount", this.crackAmount);
         tag.setBoolean("SmallArms", this.smallArms);
     }
 

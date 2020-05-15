@@ -4,12 +4,13 @@ import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import net.minecraft.block.material.Material;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class PathNavigateDeathWormSand extends PathNavigate {
+public class PathNavigateDeathWormSand extends PathNavigator {
     private EntityDeathWorm worm;
 
     public PathNavigateDeathWormSand(EntityDeathWorm deathworm, World worldIn) {

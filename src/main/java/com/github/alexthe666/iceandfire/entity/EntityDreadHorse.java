@@ -31,8 +31,8 @@ public class EntityDreadHorse extends SkeletonHorseEntity implements IDreadMob {
     }
 
     @Override
-    protected void applyEntityAttributes(){
-        super.applyEntityAttributes();
+    protected void registerAttributes(){
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(25.0D);
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getAttribute(JUMP_STRENGTH).setBaseValue(this.getModifiedJumpStrength());
@@ -40,8 +40,8 @@ public class EntityDreadHorse extends SkeletonHorseEntity implements IDreadMob {
 
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(COMMANDER_UNIQUE_ID, Optional.absent());
     }
 

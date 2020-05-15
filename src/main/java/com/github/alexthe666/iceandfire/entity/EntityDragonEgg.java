@@ -33,8 +33,8 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0D);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
     }
@@ -42,7 +42,7 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     @Override
     public void writeEntityToNBT(CompoundNBT tag) {
         super.writeEntityToNBT(tag);
-        tag.setInteger("Color", (byte) this.getType().ordinal());
+        tag.putInt("Color", (byte) this.getType().ordinal());
         tag.setByte("DragonAge", (byte) this.getDragonAge());
         if (this.getOwnerId() == null) {
             tag.setString("OwnerUUID", "");
@@ -55,7 +55,7 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     @Override
     public void readEntityFromNBT(CompoundNBT tag) {
         super.readEntityFromNBT(tag);
-        this.setType(EnumDragonEgg.values()[tag.getInteger("Color")]);
+        this.setType(EnumDragonEgg.values()[tag.getInt("Color")]);
         this.setDragonAge(tag.getByte("DragonAge"));
         String s;
 
@@ -72,8 +72,8 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.getDataManager().register(DRAGON_TYPE, Integer.valueOf(0));
         this.getDataManager().register(DRAGON_AGE, Integer.valueOf(0));
         this.dataManager.register(OWNER_UNIQUE_ID, Optional.absent());

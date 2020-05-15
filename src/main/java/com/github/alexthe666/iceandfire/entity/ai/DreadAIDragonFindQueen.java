@@ -18,7 +18,7 @@ public class DreadAIDragonFindQueen extends Goal {
         if (this.dragon.isBeingRidden()) {
             return false;
         } else {
-            List<EntityDreadQueen> list = this.dragon.world.getEntitiesWithinAABB(EntityDreadQueen.class, this.dragon.getEntityBoundingBox().grow(128.0D, 128.0D, 128.0D));
+            List<EntityDreadQueen> list = this.dragon.world.getEntitiesWithinAABB(EntityDreadQueen.class, this.dragon.getBoundingBox().grow(128.0D, 128.0D, 128.0D));
 
             if (list.isEmpty()) {
                 return false;

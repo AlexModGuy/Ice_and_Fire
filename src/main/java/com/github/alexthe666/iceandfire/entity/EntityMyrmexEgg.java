@@ -33,8 +33,8 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0D);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
     }
@@ -43,8 +43,8 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     public void writeEntityToNBT(CompoundNBT tag) {
         super.writeEntityToNBT(tag);
         tag.setBoolean("Jungle", this.isJungle());
-        tag.setInteger("MyrmexAge", this.getMyrmexAge());
-        tag.setInteger("MyrmexCaste", this.getMyrmexCaste());
+        tag.putInt("MyrmexAge", this.getMyrmexAge());
+        tag.putInt("MyrmexCaste", this.getMyrmexCaste());
         tag.setUniqueId("HiveUUID", hiveUUID == null ? hiveUUID = UUID.randomUUID() : hiveUUID);
     }
 
@@ -52,14 +52,14 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     public void readEntityFromNBT(CompoundNBT tag) {
         super.readEntityFromNBT(tag);
         this.setJungle(tag.getBoolean("Jungle"));
-        this.setMyrmexAge(tag.getInteger("MyrmexAge"));
-        this.setMyrmexCaste(tag.getInteger("MyrmexCaste"));
+        this.setMyrmexAge(tag.getInt("MyrmexAge"));
+        this.setMyrmexCaste(tag.getInt("MyrmexCaste"));
         hiveUUID = tag.getUniqueId("hiveUUID");
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.getDataManager().register(MYRMEX_TYPE, false);
         this.getDataManager().register(MYRMEX_AGE, Integer.valueOf(0));
         this.getDataManager().register(MYRMEX_CASTE, Integer.valueOf(0));

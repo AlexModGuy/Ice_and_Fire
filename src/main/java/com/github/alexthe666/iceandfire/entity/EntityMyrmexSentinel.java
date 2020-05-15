@@ -100,14 +100,14 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         }
         if (this.getAnimation() == ANIMATION_GRAB && this.getAttackTarget() != null && this.getAnimationTick() == 7) {
             this.playStingSound();
-            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() / 2));
                 this.getAttackTarget().startRiding(this);
             }
         }
         if (this.getAnimation() == ANIMATION_SLASH && this.getAttackTarget() != null && this.getAnimationTick() % 5 == 0 && this.getAnimationTick() <= 20) {
             this.playBiteSound();
-            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()) / 4);
             }
         }
@@ -147,13 +147,13 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         return this.isJungle() ? IafVillagerRegistry.INSTANCE.jungleMyrmexSentinel : IafVillagerRegistry.INSTANCE.desertMyrmexSentinel;
     }
 
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(HIDING, Boolean.valueOf(false));
     }
 
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
         this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength * 3D);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60);
@@ -184,14 +184,14 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
     public void writeEntityToNBT(CompoundNBT tag) {
         super.writeEntityToNBT(tag);
         tag.setBoolean("Hiding", this.isHiding());
-        tag.setInteger("DaylightTicks", daylightTicks);
+        tag.putInt("DaylightTicks", daylightTicks);
     }
 
     @Override
     public void readEntityFromNBT(CompoundNBT tag) {
         super.readEntityFromNBT(tag);
         this.setHiding(tag.getBoolean("Hiding"));
-        this.daylightTicks = tag.getInteger("DaylightTicks");
+        this.daylightTicks = tag.getInt("DaylightTicks");
     }
 
     public boolean shouldLeaveHive() {

@@ -33,8 +33,8 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(COMMANDER_UNIQUE_ID, Optional.absent());
     }
 

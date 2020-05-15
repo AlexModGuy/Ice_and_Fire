@@ -36,9 +36,9 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
 
     public CompoundNBT writeToNBT(CompoundNBT compound) {
         super.writeToNBT(compound);
-        compound.setInteger("HouseType", houseType);
+        compound.putInt("HouseType", houseType);
         compound.setBoolean("HasPixie", hasPixie);
-        compound.setInteger("PixieType", pixieType);
+        compound.putInt("PixieType", pixieType);
         compound.setBoolean("TamedPixie", tamedPixie);
         if (pixieOwnerUUID != null) {
             compound.setUniqueId("PixieOwnerUUID", pixieOwnerUUID);
@@ -62,14 +62,14 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
         readFromNBT(packet.getNbtCompound());
         if (!world.isRemote) {
-            IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieHouseModel(pos.toLong(), packet.getNbtCompound().getInteger("HouseType")));
+            IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieHouseModel(pos.toLong(), packet.getNbtCompound().getInt("HouseType")));
         }
     }
 
     public void readFromNBT(CompoundNBT compound) {
-        houseType = compound.getInteger("HouseType");
+        houseType = compound.getInt("HouseType");
         hasPixie = compound.getBoolean("HasPixie");
-        pixieType = compound.getInteger("PixieType");
+        pixieType = compound.getInt("PixieType");
         tamedPixie = compound.getBoolean("TamedPixie");
         pixieOwnerUUID = compound.getUniqueId("TicksExisted");
         this.pixieItems = NonNullList.withSize(1, ItemStack.EMPTY);

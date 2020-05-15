@@ -35,19 +35,19 @@ public class MiscEntityProperties extends EntityProperties<LivingEntity> {
     @Override
     public void saveNBTData(CompoundNBT compound) {
         compound.setBoolean("DismountedDragon", hasDismountedDragon);
-        compound.setInteger("GauntletDamage", specialWeaponDmg);
-        compound.setInteger("DreadPortalX", lastEnteredDreadPortalX);
-        compound.setInteger("DreadPortalY", lastEnteredDreadPortalY);
-        compound.setInteger("DreadPortalZ", lastEnteredDreadPortalZ);
+        compound.putInt("GauntletDamage", specialWeaponDmg);
+        compound.putInt("DreadPortalX", lastEnteredDreadPortalX);
+        compound.putInt("DreadPortalY", lastEnteredDreadPortalY);
+        compound.putInt("DreadPortalZ", lastEnteredDreadPortalZ);
     }
 
     @Override
     public void loadNBTData(CompoundNBT compound) {
         this.hasDismountedDragon = compound.getBoolean("DismountedDragon");
-        this.specialWeaponDmg = compound.getInteger("GauntletDamage");
-        this.lastEnteredDreadPortalX = compound.getInteger("DreadPortalX");
-        this.lastEnteredDreadPortalY = compound.getInteger("DreadPortalY");
-        this.lastEnteredDreadPortalZ = compound.getInteger("DreadPortalZ");
+        this.specialWeaponDmg = compound.getInt("GauntletDamage");
+        this.lastEnteredDreadPortalX = compound.getInt("DreadPortalX");
+        this.lastEnteredDreadPortalY = compound.getInt("DreadPortalY");
+        this.lastEnteredDreadPortalZ = compound.getInt("DreadPortalZ");
     }
 
     @Override

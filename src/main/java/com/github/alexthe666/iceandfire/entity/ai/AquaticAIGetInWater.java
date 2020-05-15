@@ -71,7 +71,7 @@ public class AquaticAIGetInWater extends Goal {
     @Nullable
     protected Vec3d findPossibleShelter(int xz, int y) {
         Random random = this.creature.getRNG();
-        BlockPos blockpos = new BlockPos(this.creature.getPosX(), this.creature.getEntityBoundingBox().minY, this.creature.getPosZ());
+        BlockPos blockpos = new BlockPos(this.creature.getPosX(), this.creature.getBoundingBox().minY, this.creature.getPosZ());
 
         for (int i = 0; i < 10; ++i) {
             BlockPos blockpos1 = blockpos.add(random.nextInt(xz * 2) - xz, random.nextInt(y * 2) - y, random.nextInt(xz * 2) - xz);

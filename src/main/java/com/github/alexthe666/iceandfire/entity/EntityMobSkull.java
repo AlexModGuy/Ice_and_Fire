@@ -31,8 +31,8 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
     }
 
     @Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0);
         getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10);
     }
@@ -59,8 +59,8 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.getDataManager().register(SKULL_DIRECTION, Float.valueOf(0F));
         this.getDataManager().register(SKULL_ENUM, Integer.valueOf(0));
     }
@@ -115,14 +115,14 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
     @Override
     public void readEntityFromNBT(CompoundNBT compound) {
         this.setYaw(compound.getFloat("SkullYaw"));
-        this.setEnumOrdinal(compound.getInteger("SkullType"));
+        this.setEnumOrdinal(compound.getInt("SkullType"));
         super.readEntityFromNBT(compound);
     }
 
     @Override
     public void writeEntityToNBT(CompoundNBT compound) {
         compound.setFloat("SkullYaw", this.getYaw());
-        compound.setInteger("SkullType", this.getEnumOrdinal());
+        compound.putInt("SkullType", this.getEnumOrdinal());
         super.writeEntityToNBT(compound);
     }
 

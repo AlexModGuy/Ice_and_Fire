@@ -89,12 +89,12 @@ public class DragonAIAttackMelee extends Goal {
                 this.resetTask();
                 return;
             }
-            double d0 = this.dragon.getDistanceSq(entity.getPosX(), entity.getEntityBoundingBox().minY, entity.getPosZ());
+            double d0 = this.dragon.getDistanceSq(entity.getPosX(), entity.getBoundingBox().minY, entity.getPosZ());
             double d1 = this.getAttackReachSqr(entity);
             --this.delayCounter;
             if ((this.longMemory || this.dragon.getEntitySenses().canSee(entity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || entity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.dragon.getRNG().nextFloat() < 0.05F)) {
                 this.targetX = entity.getPosX();
-                this.targetY = entity.getEntityBoundingBox().minY;
+                this.targetY = entity.getBoundingBox().minY;
                 this.targetZ = entity.getPosZ();
                 this.delayCounter = 4 + this.dragon.getRNG().nextInt(7);
 

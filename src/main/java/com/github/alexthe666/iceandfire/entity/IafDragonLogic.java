@@ -52,7 +52,7 @@ public class IafDragonLogic {
             dragon.fireStopTicks = 10;
         }
         if (dragon.strike() && dragon.getControllingPassenger() != null && dragon.getControllingPassenger() instanceof PlayerEntity) {
-            LivingEntity target = DragonUtils.riderLookingAtEntity(dragon, (PlayerEntity) dragon.getControllingPassenger(), dragon.getDragonStage() + (dragon.getEntityBoundingBox().maxX - dragon.getEntityBoundingBox().minX));
+            LivingEntity target = DragonUtils.riderLookingAtEntity(dragon, (PlayerEntity) dragon.getControllingPassenger(), dragon.getDragonStage() + (dragon.getBoundingBox().maxX - dragon.getBoundingBox().minX));
             if (dragon.getAnimation() != EntityDragonBase.ANIMATION_BITE) {
                 dragon.setAnimation(EntityDragonBase.ANIMATION_BITE);
             }
@@ -162,7 +162,7 @@ public class IafDragonLogic {
         if (dragon.isFlying() && dragon.getAttackTarget() != null && dragon.airAttack == IafDragonAttacks.Air.TACKLE) {
             dragon.setTackling(true);
         }
-        if (dragon.isFlying() && dragon.getAttackTarget() != null && dragon.isTackling() && dragon.getEntityBoundingBox().expand(2.0D, 2.0D, 2.0D).intersects(dragon.getAttackTarget().getEntityBoundingBox())) {
+        if (dragon.isFlying() && dragon.getAttackTarget() != null && dragon.isTackling() && dragon.getBoundingBox().expand(2.0D, 2.0D, 2.0D).intersects(dragon.getAttackTarget().getBoundingBox())) {
             dragon.usingGroundAttack = true;
             dragon.randomizeAttacks();
             dragon.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(dragon), dragon.getDragonStage() * 3);
@@ -301,7 +301,7 @@ public class IafDragonLogic {
                 dragon.fireStopTicks--;
             }
         }
-        if (dragon.isFlying() && dragon.getAttackTarget() != null && dragon.getEntityBoundingBox().expand(3.0F, 3.0F, 3.0F).intersects(dragon.getAttackTarget().getEntityBoundingBox())) {
+        if (dragon.isFlying() && dragon.getAttackTarget() != null && dragon.getBoundingBox().expand(3.0F, 3.0F, 3.0F).intersects(dragon.getAttackTarget().getBoundingBox())) {
             dragon.attackEntityAsMob(dragon.getAttackTarget());
         }
         if (dragon.isFlying() && dragon.airAttack == IafDragonAttacks.Air.TACKLE && (dragon.collided || dragon.onGround)) {

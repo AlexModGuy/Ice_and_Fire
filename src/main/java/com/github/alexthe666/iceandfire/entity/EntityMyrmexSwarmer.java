@@ -44,8 +44,8 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     protected void switchNavigator(boolean onLand) {
     }
 
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
         this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength - 1.0D);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5);
@@ -80,8 +80,8 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(SUMMONER_ID, Optional.absent());
         this.dataManager.register(TICKS_ALIVE, 0);
     }
@@ -121,7 +121,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         } else {
             compound.setString("SummonerUUID", this.getSummonerUUID().toString());
         }
-        compound.setInteger("SummonTicks", this.getTicksAlive());
+        compound.putInt("SummonTicks", this.getTicksAlive());
 
     }
 
@@ -137,7 +137,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
             } catch (Throwable var4) {
             }
         }
-        this.setTicksAlive(compound.getInteger("SummonTicks"));
+        this.setTicksAlive(compound.getInt("SummonTicks"));
     }
 
     public void setSummonedBy(PlayerEntity player) {
@@ -173,8 +173,8 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
             this.motionY += 0.2F;
         }
         if (this.getAttackTarget() != null) {
-            this.moveController.setMoveTo(this.getAttackTarget().getPosX(), this.getAttackTarget().getEntityBoundingBox().minY, this.getAttackTarget().getPosZ(), 1.0F);
-            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
+            this.moveController.setMoveTo(this.getAttackTarget().getPosX(), this.getAttackTarget().getBoundingBox().minY, this.getAttackTarget().getPosZ(), 1.0F);
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 this.setAnimation(rand.nextBoolean() ? ANIMATION_BITE : ANIMATION_STING);
             }
             if (this.getAttackTarget().isDead) {

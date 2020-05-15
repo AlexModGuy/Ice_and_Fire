@@ -307,9 +307,9 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
     @Override
     public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
-        compound.setInteger("Variant", this.getVariant());
-        compound.setInteger("HeadCount", this.getHeadCount());
-        compound.setInteger("SeveredHead", this.getSeveredHead());
+        compound.putInt("Variant", this.getVariant());
+        compound.putInt("HeadCount", this.getHeadCount());
+        compound.putInt("SeveredHead", this.getSeveredHead());
         for(int i = 0; i < HEADS; i++){
             compound.setFloat("HeadDamage" + i, headDamageTracker[i]);
         }
@@ -318,24 +318,24 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
     @Override
     public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
-        this.setVariant(compound.getInteger("Variant"));
-        this.setHeadCount(compound.getInteger("HeadCount"));
-        this.setSeveredHead(compound.getInteger("SeveredHead"));
+        this.setVariant(compound.getInt("Variant"));
+        this.setHeadCount(compound.getInt("HeadCount"));
+        this.setSeveredHead(compound.getInt("SeveredHead"));
         for(int i = 0; i < HEADS; i++){
             headDamageTracker[i] = compound.getFloat("HeadDamage" + i);
         }
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(VARIANT, Integer.valueOf(0));
         this.dataManager.register(HEAD_COUNT, Integer.valueOf(3));
         this.dataManager.register(SEVERED_HEAD, Integer.valueOf(-1));
     }
 
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.generateHydraChance);

@@ -63,8 +63,8 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
         }));
     }
 
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50.0D);
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
@@ -73,8 +73,8 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(VARIANT, Integer.valueOf(0));
         this.dataManager.register(MINION_COUNT, Integer.valueOf(0));
     }
@@ -85,7 +85,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
             Block belowBlock = world.getBlockState(this.getPosition().down()).getBlock();
             if (belowBlock != Blocks.AIR) {
                 for (int i = 0; i < 5; i++) {
-                    this.world.spawnParticle(ParticleTypes.BLOCK_CRACK, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getEntityBoundingBox().minY, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(belowBlock));
+                    this.world.spawnParticle(ParticleTypes.BLOCK_CRACK, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getBoundingBox().minY, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(belowBlock));
                 }
             }
         }
@@ -136,15 +136,15 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     @Override
     public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
-        compound.setInteger("Variant", this.getVariant());
-        compound.setInteger("MinionCount", this.getMinionCount());
+        compound.putInt("Variant", this.getVariant());
+        compound.putInt("MinionCount", this.getMinionCount());
     }
 
     @Override
     public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
-        this.setVariant(compound.getInteger("Variant"));
-        this.setMinionCount(compound.getInteger("MinionCount"));
+        this.setVariant(compound.getInt("Variant"));
+        this.setMinionCount(compound.getInt("MinionCount"));
         this.setCombatTask();
     }
 
@@ -245,7 +245,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
             this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
             EntityDreadLichSkull skull = new EntityDreadLichSkull(world, this, 6);
             double d0 = target.getPosX() - this.getPosX();
-            double d1 = target.getEntityBoundingBox().minY + (double) (target.height * 2) - skull.getPosY();
+            double d1 = target.getBoundingBox().minY + (double) (target.height * 2) - skull.getPosY();
             double d2 = target.getPosZ() - this.getPosZ();
             double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
             skull.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 0.0F, (float) (14 - this.world.getDifficulty().getId() * 4));

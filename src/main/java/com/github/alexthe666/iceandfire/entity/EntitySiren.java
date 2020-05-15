@@ -304,7 +304,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     public void triggerOtherSirens(LivingEntity aggressor) {
-        List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(12, 12, 12));
+        List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().grow(12, 12, 12));
         for (Entity entity : entities) {
             if (entity instanceof EntitySiren) {
                 ((EntitySiren) entity).setAttackTarget(aggressor);
@@ -317,7 +317,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
 
     public void updateLure() {
         if (this.ticksExisted % 20 == 0) {
-            List<LivingEntity> entities = world.getEntitiesWithinAABB(LivingEntity.class, this.getEntityBoundingBox().grow(50, 12, 50), SIREN_PREY);
+            List<LivingEntity> entities = world.getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(50, 12, 50), SIREN_PREY);
             for (LivingEntity entity : entities) {
                 SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, SirenEntityProperties.class);
                 if (!isWearingEarplugs(entity) && sirenProps != null && (!sirenProps.isCharmed || sirenProps.getSiren(world) == null)) {
@@ -331,9 +331,9 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     @Override
     public void writeEntityToNBT(CompoundNBT tag) {
         super.writeEntityToNBT(tag);
-        tag.setInteger("HairColor", this.getHairColor());
+        tag.putInt("HairColor", this.getHairColor());
         tag.setBoolean("Aggressive", this.isAgressive());
-        tag.setInteger("SingingPose", this.getSingingPose());
+        tag.putInt("SingingPose", this.getSingingPose());
         tag.setBoolean("Singing", this.isSinging());
         tag.setBoolean("Swimming", this.isSwimming());
         tag.setBoolean("Passive", this.isCharmed());
@@ -343,9 +343,9 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     @Override
     public void readEntityFromNBT(CompoundNBT tag) {
         super.readEntityFromNBT(tag);
-        this.setHairColor(tag.getInteger("HairColor"));
+        this.setHairColor(tag.getInt("HairColor"));
         this.setAggressive(tag.getBoolean("Aggressive"));
-        this.setSingingPose(tag.getInteger("SingingPose"));
+        this.setSingingPose(tag.getInt("SingingPose"));
         this.setSinging(tag.getBoolean("Singing"));
         this.setSwimming(tag.getBoolean("Swimming"));
         this.setCharmed(tag.getBoolean("Passive"));
@@ -424,16 +424,16 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
         this.dataManager.set(SING_POSE, MathHelper.clamp(pose, 0, 2));
     }
 
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
         this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.sirenMaxHealth);
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(HAIR_COLOR, Integer.valueOf(0));
         this.dataManager.register(SING_POSE, Integer.valueOf(0));
         this.dataManager.register(AGGRESSIVE, Boolean.valueOf(false));

@@ -39,6 +39,6 @@ public class DeathWormAITarget<T extends LivingEntity> extends NearestAttackable
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.deathworm.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
+        return this.deathworm.getBoundingBox().grow(targetDistance, targetDistance, targetDistance);
     }
 }

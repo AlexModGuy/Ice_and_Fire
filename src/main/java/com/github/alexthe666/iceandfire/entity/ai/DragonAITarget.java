@@ -56,7 +56,7 @@ public class DragonAITarget<T extends LivingEntity> extends NearestAttackableTar
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.dragon.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
+        return this.dragon.getBoundingBox().grow(targetDistance, targetDistance, targetDistance);
     }
 
     protected double getTargetDistance() {

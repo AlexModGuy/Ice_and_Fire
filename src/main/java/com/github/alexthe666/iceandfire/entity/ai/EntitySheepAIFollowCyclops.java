@@ -23,7 +23,7 @@ public class EntitySheepAIFollowCyclops extends Goal {
     }
 
     public boolean shouldExecute() {
-        List<EntityCyclops> list = this.childAnimal.world.getEntitiesWithinAABB(EntityCyclops.class, this.childAnimal.getEntityBoundingBox().grow(16.0D, 8.0D, 16.0D));
+        List<EntityCyclops> list = this.childAnimal.world.getEntitiesWithinAABB(EntityCyclops.class, this.childAnimal.getBoundingBox().grow(16.0D, 8.0D, 16.0D));
         EntityCyclops cyclops = null;
         double d0 = Double.MAX_VALUE;
 

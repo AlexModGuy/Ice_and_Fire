@@ -215,8 +215,8 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         net.minecraftforge.common.ForgeHooks.onLivingJump(this);
     }
 
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
     }
@@ -229,8 +229,8 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         return new PathNavigateMyrmex(this, worldIn);
     }
 
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(CLIMBING, Byte.valueOf((byte) 0));
         this.dataManager.register(GROWTH_STAGE, Integer.valueOf(2));
         this.dataManager.register(VARIANT, Boolean.valueOf(false));
@@ -282,15 +282,15 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     @Override
     public void writeEntityToNBT(CompoundNBT tag) {
         super.writeEntityToNBT(tag);
-        tag.setInteger("GrowthStage", this.getGrowthStage());
-        tag.setInteger("GrowthTicks", growthTicks);
+        tag.putInt("GrowthStage", this.getGrowthStage());
+        tag.putInt("GrowthTicks", growthTicks);
         tag.setBoolean("Variant", this.isJungle());
         if (this.getHive() != null) {
             tag.setUniqueId("HiveUUID", this.getHive().hiveUUID);
         }
-        tag.setInteger("Career", this.careerId);
-        tag.setInteger("CareerLevel", this.careerLevel);
-        tag.setInteger("Riches", this.wealth);
+        tag.putInt("Career", this.careerId);
+        tag.putInt("CareerLevel", this.careerLevel);
+        tag.putInt("Riches", this.wealth);
         if (this.buyingList != null) {
             tag.setTag("Offers", this.buyingList.getRecipiesAsTags());
         }
@@ -299,17 +299,17 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     @Override
     public void readEntityFromNBT(CompoundNBT tag) {
         super.readEntityFromNBT(tag);
-        this.setGrowthStage(tag.getInteger("GrowthStage"));
-        this.growthTicks = tag.getInteger("GrowthTicks");
+        this.setGrowthStage(tag.getInt("GrowthStage"));
+        this.growthTicks = tag.getInt("GrowthTicks");
         this.setJungleVariant(tag.getBoolean("Variant"));
         this.setHive(MyrmexWorldData.get(world).getHiveFromUUID(tag.getUniqueId("HiveUUID")));
-        this.careerId = tag.getInteger("Career");
-        this.careerLevel = tag.getInteger("CareerLevel");
+        this.careerId = tag.getInt("Career");
+        this.careerLevel = tag.getInt("CareerLevel");
         if (tag.hasKey("Offers", 10)) {
             CompoundNBT CompoundNBT = tag.getCompoundTag("Offers");
             this.buyingList = new MerchantRecipeList(CompoundNBT);
         }
-        this.wealth = tag.getInteger("Riches");
+        this.wealth = tag.getInt("Riches");
     }
 
     @Nullable
@@ -792,7 +792,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     public AxisAlignedBB getAttackBounds() {
         float size = this.getRenderSizeModifier() * 0.25F;
-        return this.getEntityBoundingBox().grow(1.0F + size, 1.0F + size, 1.0F + size);
+        return this.getBoundingBox().grow(1.0F + size, 1.0F + size, 1.0F + size);
     }
 
     public static class BasicTrade implements EntityVillager.ITradeList {

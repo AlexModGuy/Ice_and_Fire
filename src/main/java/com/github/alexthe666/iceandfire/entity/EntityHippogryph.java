@@ -131,7 +131,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     private boolean isOverAirLogic() {
-        return world.isAirBlock(new BlockPos(this.getPosX(), this.getEntityBoundingBox().minY - 1, this.getPosZ()));
+        return world.isAirBlock(new BlockPos(this.getPosX(), this.getBoundingBox().minY - 1, this.getPosZ()));
     }
 
     protected int getExperiencePoints(PlayerEntity player) {
@@ -165,8 +165,8 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(VARIANT, Integer.valueOf(0));
         this.dataManager.register(ARMOR, Integer.valueOf(0));
         this.dataManager.register(SADDLE, Boolean.valueOf(false));
@@ -418,13 +418,13 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     @Override
     public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
-        compound.setInteger("Variant", this.getVariant());
+        compound.putInt("Variant", this.getVariant());
         compound.setBoolean("Chested", this.isChested());
         compound.setBoolean("Saddled", this.isSaddled());
         compound.setBoolean("Hovering", this.isHovering());
         compound.setBoolean("Flying", this.isFlying());
-        compound.setInteger("Armor", this.getArmor());
-        compound.setInteger("Feedings", feedings);
+        compound.putInt("Armor", this.getArmor());
+        compound.putInt("Feedings", feedings);
         if (hippogryphInventory != null) {
             NBTTagList nbttaglist = new NBTTagList();
             for (int i = 0; i < this.hippogryphInventory.getSizeInventory(); ++i) {
@@ -443,23 +443,23 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         }
         compound.setBoolean("HasHomePosition", this.hasHomePosition);
         if (homePos != null && this.hasHomePosition) {
-            compound.setInteger("HomeAreaX", homePos.getX());
-            compound.setInteger("HomeAreaY", homePos.getY());
-            compound.setInteger("HomeAreaZ", homePos.getZ());
+            compound.putInt("HomeAreaX", homePos.getX());
+            compound.putInt("HomeAreaY", homePos.getY());
+            compound.putInt("HomeAreaZ", homePos.getZ());
         }
-        compound.setInteger("Command", this.getCommand());
+        compound.putInt("Command", this.getCommand());
     }
 
     @Override
     public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
-        this.setVariant(compound.getInteger("Variant"));
+        this.setVariant(compound.getInt("Variant"));
         this.setChested(compound.getBoolean("Chested"));
         this.setSaddled(compound.getBoolean("Saddled"));
         this.setHovering(compound.getBoolean("Hovering"));
         this.setFlying(compound.getBoolean("Flying"));
-        this.setArmor(compound.getInteger("Armor"));
-        feedings = compound.getInteger("Feedings");
+        this.setArmor(compound.getInt("Armor"));
+        feedings = compound.getInt("Feedings");
         if (hippogryphInventory != null) {
             NBTTagList nbttaglist = compound.getTagList("Items", 10);
             this.initHippogryphInv();
@@ -487,10 +487,10 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             }
         }
         this.hasHomePosition = compound.getBoolean("HasHomePosition");
-        if (hasHomePosition && compound.getInteger("HomeAreaX") != 0 && compound.getInteger("HomeAreaY") != 0 && compound.getInteger("HomeAreaZ") != 0) {
-            homePos = new BlockPos(compound.getInteger("HomeAreaX"), compound.getInteger("HomeAreaY"), compound.getInteger("HomeAreaZ"));
+        if (hasHomePosition && compound.getInt("HomeAreaX") != 0 && compound.getInt("HomeAreaY") != 0 && compound.getInt("HomeAreaZ") != 0) {
+            homePos = new BlockPos(compound.getInt("HomeAreaX"), compound.getInt("HomeAreaY"), compound.getInt("HomeAreaZ"));
         }
-        this.setCommand(compound.getInteger("Command"));
+        this.setCommand(compound.getInt("Command"));
     }
 
     public int getVariant() {
@@ -614,8 +614,8 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);

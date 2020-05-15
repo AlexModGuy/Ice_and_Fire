@@ -19,13 +19,13 @@ public class StoneEntityProperties extends EntityProperties<LivingEntity> {
     @Override
     public void saveNBTData(CompoundNBT compound) {
         compound.setBoolean("TurnedToStone", isStone);
-        compound.setInteger("StoneBreakLvl", breakLvl);
+        compound.putInt("StoneBreakLvl", breakLvl);
     }
 
     @Override
     public void loadNBTData(CompoundNBT compound) {
         this.isStone = compound.getBoolean("TurnedToStone");
-        this.breakLvl = compound.getInteger("StoneBreakLvl");
+        this.breakLvl = compound.getInt("StoneBreakLvl");
     }
 
     @Override

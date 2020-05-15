@@ -81,8 +81,8 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(FLYING, Boolean.valueOf(false));
     }
 
@@ -115,16 +115,16 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     @Override
     public void writeEntityToNBT(CompoundNBT tag) {
         super.writeEntityToNBT(tag);
-        tag.setInteger("HiveTicks", hiveTicks);
-        tag.setInteger("ReleaseTicks", releaseTicks);
+        tag.putInt("HiveTicks", hiveTicks);
+        tag.putInt("ReleaseTicks", releaseTicks);
         tag.setBoolean("Flying", this.isFlying());
     }
 
     @Override
     public void readEntityFromNBT(CompoundNBT tag) {
         super.readEntityFromNBT(tag);
-        this.hiveTicks = tag.getInteger("HiveTicks");
-        this.releaseTicks = tag.getInteger("ReleaseTicks");
+        this.hiveTicks = tag.getInt("HiveTicks");
+        this.releaseTicks = tag.getInt("ReleaseTicks");
         this.setFlying(tag.getBoolean("Flying"));
     }
 
@@ -163,13 +163,13 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         }
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
-            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playStingSound();
-            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2));
                 this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 70, 1));
             }
@@ -265,8 +265,8 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         return false;
     }
 
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength * 2D);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50);
@@ -377,7 +377,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
                 d3 = (double) MathHelper.sqrt(d3);
 
-                if (d3 < EntityMyrmexRoyal.this.getEntityBoundingBox().getAverageEdgeLength()) {
+                if (d3 < EntityMyrmexRoyal.this.getBoundingBox().getAverageEdgeLength()) {
                     this.action = EntityMoveHelper.Action.WAIT;
                     EntityMyrmexRoyal.this.motionX *= 0.5D;
                     EntityMyrmexRoyal.this.motionY *= 0.5D;
@@ -480,7 +480,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         public void updateTask() {
             LivingEntity LivingEntity = EntityMyrmexRoyal.this.getAttackTarget();
             if(LivingEntity != null){
-                if (EntityMyrmexRoyal.this.getEntityBoundingBox().intersects(LivingEntity.getEntityBoundingBox())) {
+                if (EntityMyrmexRoyal.this.getBoundingBox().intersects(LivingEntity.getBoundingBox())) {
                     EntityMyrmexRoyal.this.attackEntityAsMob(LivingEntity);
                 } else {
                     double d0 = EntityMyrmexRoyal.this.getDistanceSq(LivingEntity);

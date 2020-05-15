@@ -56,7 +56,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         super.onLivingUpdate();
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
-            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
             }
         }
@@ -64,7 +64,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
             this.playStingSound();
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
-            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2));
                 this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 60, 1));
             }
@@ -124,8 +124,8 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         return super.shouldWander() && this.canSeeSky();
     }
 
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20);

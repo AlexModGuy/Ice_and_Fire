@@ -134,7 +134,7 @@ public class FireChargeExplosion extends Explosion {
                         d5 = d5 / d13;
                         d7 = d7 / d13;
                         d9 = d9 / d13;
-                        double d14 = (double) this.worldObj.getBlockDensity(vec3d, entity.getEntityBoundingBox());
+                        double d14 = (double) this.worldObj.getBlockDensity(vec3d, entity.getBoundingBox());
                         double d10 = (1.0D - d12) * d14;
 
                         if (exploder != null && exploder instanceof EntityDragonBase) {

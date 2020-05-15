@@ -101,8 +101,8 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
         setAvoidSun(true);
     }
 
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
         this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.trollAttackStrength);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.trollMaxHealth);
@@ -122,8 +122,8 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(VARIANT, Integer.valueOf(0));
         this.dataManager.register(WEAPON, Integer.valueOf(0));
     }
@@ -163,16 +163,16 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
     @Override
     public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
-        compound.setInteger("Variant", this.getVariant());
-        compound.setInteger("Weapon", this.getWeapon());
+        compound.putInt("Variant", this.getVariant());
+        compound.putInt("Weapon", this.getWeapon());
         compound.setFloat("StoneProgress", stoneProgress);
     }
 
     @Override
     public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
-        this.setVariant(compound.getInteger("Variant"));
-        this.setWeapon(compound.getInteger("Weapon"));
+        this.setVariant(compound.getInt("Variant"));
+        this.setWeapon(compound.getInt("Weapon"));
         this.stoneProgress = compound.getFloat("StoneProgress");
     }
 

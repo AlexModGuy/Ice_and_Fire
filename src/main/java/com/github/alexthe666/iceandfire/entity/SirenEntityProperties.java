@@ -22,13 +22,13 @@ public class SirenEntityProperties extends EntityProperties<LivingEntity> {
     @Override
     public void saveNBTData(CompoundNBT compound) {
         compound.setBoolean("CharmedBySiren", isCharmed);
-        compound.setInteger("SirenID", sirenID);
+        compound.putInt("SirenID", sirenID);
     }
 
     @Override
     public void loadNBTData(CompoundNBT compound) {
         this.isCharmed = compound.getBoolean("CharmedBySiren");
-        this.sirenID = compound.getInteger("SirenID");
+        this.sirenID = compound.getInt("SirenID");
     }
 
     public EntitySiren getSiren(World world) {

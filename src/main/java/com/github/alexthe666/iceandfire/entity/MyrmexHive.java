@@ -257,21 +257,21 @@ public class MyrmexHive {
      * Read this village's data from NBT.
      */
     public void readVillageDataFromNBT(CompoundNBT compound) {
-        this.numMyrmex = compound.getInteger("PopSize");
+        this.numMyrmex = compound.getInt("PopSize");
         this.reproduces = compound.getBoolean("Reproduces");
         this.hasOwner = compound.getBoolean("HasOwner");
         this.ownerUUID = compound.getUniqueId("OwnerUUID");
         this.colonyName = compound.getString("ColonyName");
-        this.villageRadius = compound.getInteger("Radius");
-        this.lastAddDoorTimestamp = compound.getInteger("Stable");
-        this.tickCounter = compound.getInteger("Tick");
-        this.noBreedTicks = compound.getInteger("MTick");
-        this.center = new BlockPos(compound.getInteger("CX"), compound.getInteger("CY"), compound.getInteger("CZ"));
-        this.centerHelper = new BlockPos(compound.getInteger("ACX"), compound.getInteger("ACY"), compound.getInteger("ACZ"));
+        this.villageRadius = compound.getInt("Radius");
+        this.lastAddDoorTimestamp = compound.getInt("Stable");
+        this.tickCounter = compound.getInt("Tick");
+        this.noBreedTicks = compound.getInt("MTick");
+        this.center = new BlockPos(compound.getInt("CX"), compound.getInt("CY"), compound.getInt("CZ"));
+        this.centerHelper = new BlockPos(compound.getInt("ACX"), compound.getInt("ACY"), compound.getInt("ACZ"));
         NBTTagList nbttaglist = compound.getTagList("Doors", 10);
         for (int i = 0; i < nbttaglist.tagCount(); ++i) {
             CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
-            VillageDoorInfo villagedoorinfo = new VillageDoorInfo(new BlockPos(CompoundNBT.getInteger("X"), CompoundNBT.getInteger("Y"), CompoundNBT.getInteger("Z")), CompoundNBT.getInteger("IDX"), CompoundNBT.getInteger("IDZ"), CompoundNBT.getInteger("TS"));
+            VillageDoorInfo villagedoorinfo = new VillageDoorInfo(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")), CompoundNBT.getInt("IDX"), CompoundNBT.getInt("IDZ"), CompoundNBT.getInt("TS"));
             this.villageDoorInfoList.add(villagedoorinfo);
         }
         NBTTagList hiveMembers = compound.getTagList("HiveMembers", 10);
@@ -284,32 +284,32 @@ public class MyrmexHive {
         this.foodRooms.clear();
         for (int i = 0; i < foodRoomList.tagCount(); ++i) {
             CompoundNBT CompoundNBT = foodRoomList.getCompoundTagAt(i);
-            this.foodRooms.add(new BlockPos(CompoundNBT.getInteger("X"), CompoundNBT.getInteger("Y"), CompoundNBT.getInteger("Z")));
+            this.foodRooms.add(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")));
         }
         NBTTagList babyRoomList = compound.getTagList("BabyRooms", 10);
         this.babyRooms.clear();
         for (int i = 0; i < babyRoomList.tagCount(); ++i) {
             CompoundNBT CompoundNBT = babyRoomList.getCompoundTagAt(i);
-            this.babyRooms.add(new BlockPos(CompoundNBT.getInteger("X"), CompoundNBT.getInteger("Y"), CompoundNBT.getInteger("Z")));
+            this.babyRooms.add(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")));
         }
         NBTTagList miscRoomList = compound.getTagList("MiscRooms", 10);
         this.miscRooms.clear();
         for (int i = 0; i < miscRoomList.tagCount(); ++i) {
             CompoundNBT CompoundNBT = miscRoomList.getCompoundTagAt(i);
-            this.miscRooms.add(new BlockPos(CompoundNBT.getInteger("X"), CompoundNBT.getInteger("Y"), CompoundNBT.getInteger("Z")));
+            this.miscRooms.add(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")));
         }
         NBTTagList entrancesList = compound.getTagList("Entrances", 10);
         this.entrances.clear();
         for (int i = 0; i < entrancesList.tagCount(); ++i) {
             CompoundNBT CompoundNBT = entrancesList.getCompoundTagAt(i);
-            this.entrances.put(new BlockPos(CompoundNBT.getInteger("X"), CompoundNBT.getInteger("Y"), CompoundNBT.getInteger("Z")), Direction.byHorizontalIndex(CompoundNBT.getInteger("Facing")));
+            this.entrances.put(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")), Direction.byHorizontalIndex(CompoundNBT.getInt("Facing")));
         }
 
         NBTTagList entranceBottomsList = compound.getTagList("EntranceBottoms", 10);
         this.entranceBottoms.clear();
         for (int i = 0; i < entranceBottomsList.tagCount(); ++i) {
             CompoundNBT CompoundNBT = entranceBottomsList.getCompoundTagAt(i);
-            this.entranceBottoms.put(new BlockPos(CompoundNBT.getInteger("X"), CompoundNBT.getInteger("Y"), CompoundNBT.getInteger("Z")), Direction.byHorizontalIndex(CompoundNBT.getInteger("Facing")));
+            this.entranceBottoms.put(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")), Direction.byHorizontalIndex(CompoundNBT.getInt("Facing")));
         }
         hiveUUID = compound.getUniqueId("HiveUUID");
         NBTTagList nbttaglist1 = compound.getTagList("Players", 10);
@@ -317,10 +317,10 @@ public class MyrmexHive {
             CompoundNBT CompoundNBT1 = nbttaglist1.getCompoundTagAt(j);
 
             if (CompoundNBT1.hasKey("UUID")) {
-                this.playerReputation.put(UUID.fromString(CompoundNBT1.getString("UUID")), Integer.valueOf(CompoundNBT1.getInteger("S")));
+                this.playerReputation.put(UUID.fromString(CompoundNBT1.getString("UUID")), Integer.valueOf(CompoundNBT1.getInt("S")));
             } else {
                 //World is never set here, so this will always be offline UUIDs, sadly there is no way to convert this.
-                this.playerReputation.put(findUUID(CompoundNBT1.getString("Name")), Integer.valueOf(CompoundNBT1.getInteger("S")));
+                this.playerReputation.put(findUUID(CompoundNBT1.getString("Name")), Integer.valueOf(CompoundNBT1.getInt("S")));
             }
         }
     }
@@ -329,32 +329,32 @@ public class MyrmexHive {
      * Write this village's data to NBT.
      */
     public void writeVillageDataToNBT(CompoundNBT compound) {
-        compound.setInteger("PopSize", this.numMyrmex);
+        compound.putInt("PopSize", this.numMyrmex);
         compound.setBoolean("Reproduces", this.reproduces);
         compound.setBoolean("HasOwner", this.hasOwner);
         if (this.ownerUUID != null) {
             compound.setUniqueId("OwnerUUID", this.ownerUUID);
         }
         compound.setString("ColonyName", this.colonyName);
-        compound.setInteger("Radius", this.villageRadius);
-        compound.setInteger("Stable", this.lastAddDoorTimestamp);
-        compound.setInteger("Tick", this.tickCounter);
-        compound.setInteger("MTick", this.noBreedTicks);
-        compound.setInteger("CX", this.center.getX());
-        compound.setInteger("CY", this.center.getY());
-        compound.setInteger("CZ", this.center.getZ());
-        compound.setInteger("ACX", this.centerHelper.getX());
-        compound.setInteger("ACY", this.centerHelper.getY());
-        compound.setInteger("ACZ", this.centerHelper.getZ());
+        compound.putInt("Radius", this.villageRadius);
+        compound.putInt("Stable", this.lastAddDoorTimestamp);
+        compound.putInt("Tick", this.tickCounter);
+        compound.putInt("MTick", this.noBreedTicks);
+        compound.putInt("CX", this.center.getX());
+        compound.putInt("CY", this.center.getY());
+        compound.putInt("CZ", this.center.getZ());
+        compound.putInt("ACX", this.centerHelper.getX());
+        compound.putInt("ACY", this.centerHelper.getY());
+        compound.putInt("ACZ", this.centerHelper.getZ());
         NBTTagList nbttaglist = new NBTTagList();
         for (VillageDoorInfo villagedoorinfo : this.villageDoorInfoList) {
             CompoundNBT CompoundNBT = new CompoundNBT();
-            CompoundNBT.setInteger("X", villagedoorinfo.getDoorBlockPos().getX());
-            CompoundNBT.setInteger("Y", villagedoorinfo.getDoorBlockPos().getY());
-            CompoundNBT.setInteger("Z", villagedoorinfo.getDoorBlockPos().getZ());
-            CompoundNBT.setInteger("IDX", villagedoorinfo.getInsideOffsetX());
-            CompoundNBT.setInteger("IDZ", villagedoorinfo.getInsideOffsetZ());
-            CompoundNBT.setInteger("TS", villagedoorinfo.getLastActivityTimestamp());
+            CompoundNBT.putInt("X", villagedoorinfo.getDoorBlockPos().getX());
+            CompoundNBT.putInt("Y", villagedoorinfo.getDoorBlockPos().getY());
+            CompoundNBT.putInt("Z", villagedoorinfo.getDoorBlockPos().getZ());
+            CompoundNBT.putInt("IDX", villagedoorinfo.getInsideOffsetX());
+            CompoundNBT.putInt("IDZ", villagedoorinfo.getInsideOffsetZ());
+            CompoundNBT.putInt("TS", villagedoorinfo.getLastActivityTimestamp());
             nbttaglist.appendTag(CompoundNBT);
         }
         NBTTagList hiveMembers = new NBTTagList();
@@ -367,37 +367,37 @@ public class MyrmexHive {
         NBTTagList foodRoomList = new NBTTagList();
         for (BlockPos pos : this.foodRooms) {
             CompoundNBT CompoundNBT = new CompoundNBT();
-            CompoundNBT.setInteger("X", pos.getX());
-            CompoundNBT.setInteger("Y", pos.getY());
-            CompoundNBT.setInteger("Z", pos.getZ());
+            CompoundNBT.putInt("X", pos.getX());
+            CompoundNBT.putInt("Y", pos.getY());
+            CompoundNBT.putInt("Z", pos.getZ());
             foodRoomList.appendTag(CompoundNBT);
         }
         compound.setTag("FoodRooms", foodRoomList);
         NBTTagList babyRoomList = new NBTTagList();
         for (BlockPos pos : this.babyRooms) {
             CompoundNBT CompoundNBT = new CompoundNBT();
-            CompoundNBT.setInteger("X", pos.getX());
-            CompoundNBT.setInteger("Y", pos.getY());
-            CompoundNBT.setInteger("Z", pos.getZ());
+            CompoundNBT.putInt("X", pos.getX());
+            CompoundNBT.putInt("Y", pos.getY());
+            CompoundNBT.putInt("Z", pos.getZ());
             babyRoomList.appendTag(CompoundNBT);
         }
         compound.setTag("BabyRooms", babyRoomList);
         NBTTagList miscRoomList = new NBTTagList();
         for (BlockPos pos : this.miscRooms) {
             CompoundNBT CompoundNBT = new CompoundNBT();
-            CompoundNBT.setInteger("X", pos.getX());
-            CompoundNBT.setInteger("Y", pos.getY());
-            CompoundNBT.setInteger("Z", pos.getZ());
+            CompoundNBT.putInt("X", pos.getX());
+            CompoundNBT.putInt("Y", pos.getY());
+            CompoundNBT.putInt("Z", pos.getZ());
             miscRoomList.appendTag(CompoundNBT);
         }
         compound.setTag("MiscRooms", miscRoomList);
         NBTTagList entrancesList = new NBTTagList();
         for (Map.Entry<BlockPos, Direction> entry : this.entrances.entrySet()) {
             CompoundNBT CompoundNBT = new CompoundNBT();
-            CompoundNBT.setInteger("X", entry.getKey().getX());
-            CompoundNBT.setInteger("Y", entry.getKey().getY());
-            CompoundNBT.setInteger("Z", entry.getKey().getZ());
-            CompoundNBT.setInteger("Facing", entry.get().getHorizontalIndex());
+            CompoundNBT.putInt("X", entry.getKey().getX());
+            CompoundNBT.putInt("Y", entry.getKey().getY());
+            CompoundNBT.putInt("Z", entry.getKey().getZ());
+            CompoundNBT.putInt("Facing", entry.get().getHorizontalIndex());
             entrancesList.appendTag(CompoundNBT);
         }
         compound.setTag("Entrances", entrancesList);
@@ -405,10 +405,10 @@ public class MyrmexHive {
         NBTTagList entranceBottomsList = new NBTTagList();
         for (Map.Entry<BlockPos, Direction> entry : this.entranceBottoms.entrySet()) {
             CompoundNBT CompoundNBT = new CompoundNBT();
-            CompoundNBT.setInteger("X", entry.getKey().getX());
-            CompoundNBT.setInteger("Y", entry.getKey().getY());
-            CompoundNBT.setInteger("Z", entry.getKey().getZ());
-            CompoundNBT.setInteger("Facing", entry.get().getHorizontalIndex());
+            CompoundNBT.putInt("X", entry.getKey().getX());
+            CompoundNBT.putInt("Y", entry.getKey().getY());
+            CompoundNBT.putInt("Z", entry.getKey().getZ());
+            CompoundNBT.putInt("Facing", entry.get().getHorizontalIndex());
             entranceBottomsList.appendTag(CompoundNBT);
         }
         compound.setTag("EntranceBottoms", entranceBottomsList);
@@ -422,7 +422,7 @@ public class MyrmexHive {
             try {
                 {
                     CompoundNBT1.setString("UUID", s.toString());
-                    CompoundNBT1.setInteger("S", this.playerReputation.get(s).intValue());
+                    CompoundNBT1.putInt("S", this.playerReputation.get(s).intValue());
                     nbttaglist1.appendTag(CompoundNBT1);
                 }
             } catch (RuntimeException var9) {

@@ -67,7 +67,7 @@ public class SeaSerpentAIGetInWater extends Goal {
     @Nullable
     protected Vec3d findPossibleShelter(int xz, int y) {
         Random random = this.serpent.getRNG();
-        BlockPos blockpos = new BlockPos(this.serpent.getPosX(), this.serpent.getEntityBoundingBox().minY, this.serpent.getPosZ());
+        BlockPos blockpos = new BlockPos(this.serpent.getPosX(), this.serpent.getBoundingBox().minY, this.serpent.getPosZ());
 
         for (int i = 0; i < 10; ++i) {
             BlockPos blockpos1 = blockpos.add(random.nextInt(xz * 2) - xz, random.nextInt(y) + 2, random.nextInt(xz * 2) - xz);

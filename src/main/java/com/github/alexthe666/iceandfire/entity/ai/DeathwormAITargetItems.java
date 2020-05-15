@@ -53,7 +53,7 @@ public class DeathwormAITargetItems<T extends EntityItem> extends TargetGoal {
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.taskOwner.getEntityBoundingBox().grow(targetDistance, 4.0D, targetDistance);
+        return this.taskOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
     }
 
     @Override

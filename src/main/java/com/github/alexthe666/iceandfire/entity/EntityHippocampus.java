@@ -97,7 +97,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     public boolean isNotColliding() {
-        return this.world.checkNoEntityCollision(this.getEntityBoundingBox(), this);
+        return this.world.checkNoEntityCollision(this.getBoundingBox(), this);
     }
 
     public boolean isPushedByWater() {
@@ -117,8 +117,8 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(VARIANT, Integer.valueOf(0));
         this.dataManager.register(ARMOR, Integer.valueOf(0));
         this.dataManager.register(SADDLE, Boolean.valueOf(false));
@@ -214,8 +214,8 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     @Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
@@ -324,10 +324,10 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     @Override
     public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
-        compound.setInteger("Variant", this.getVariant());
+        compound.putInt("Variant", this.getVariant());
         compound.setBoolean("Chested", this.isChested());
         compound.setBoolean("Saddled", this.isSaddled());
-        compound.setInteger("Armor", this.getArmor());
+        compound.putInt("Armor", this.getArmor());
         if (hippocampusInventory != null) {
             NBTTagList nbttaglist = new NBTTagList();
             for (int i = 0; i < this.hippocampusInventory.getSizeInventory(); ++i) {
@@ -350,10 +350,10 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     @Override
     public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
-        this.setVariant(compound.getInteger("Variant"));
+        this.setVariant(compound.getInt("Variant"));
         this.setChested(compound.getBoolean("Chested"));
         this.setSaddled(compound.getBoolean("Saddled"));
-        this.setArmor(compound.getInteger("Armor"));
+        this.setArmor(compound.getInt("Armor"));
         if (hippocampusInventory != null) {
             NBTTagList nbttaglist = compound.getTagList("Items", 10);
             this.initHippocampusInv();

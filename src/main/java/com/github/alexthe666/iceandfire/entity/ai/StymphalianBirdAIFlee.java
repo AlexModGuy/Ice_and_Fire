@@ -39,7 +39,7 @@ public class StymphalianBirdAIFlee extends Goal {
         if (this.stymphalianBird.getVictor() == null) {
             return false;
         }
-        List<LivingEntity> list = this.stymphalianBird.world.getEntitiesWithinAABB(LivingEntity.class, this.stymphalianBird.getEntityBoundingBox().grow((double) this.avoidDistance, 3.0D, (double) this.avoidDistance),
+        List<LivingEntity> list = this.stymphalianBird.world.getEntitiesWithinAABB(LivingEntity.class, this.stymphalianBird.getBoundingBox().grow((double) this.avoidDistance, 3.0D, (double) this.avoidDistance),
                 Predicates.and(new Predicate[]{EntitySelectors.NOT_SPECTATING, this.canBeSeenSelector}));
 
         if (list.isEmpty()) {

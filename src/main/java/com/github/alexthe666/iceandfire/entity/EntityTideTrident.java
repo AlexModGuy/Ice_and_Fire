@@ -91,7 +91,7 @@ public class EntityTideTrident extends TridentEntity implements IProjectile {
 
     @OnlyIn(Dist.CLIENT)
     public boolean isInRangeToRenderDist(double distance) {
-        double d0 = this.getEntityBoundingBox().getAverageEdgeLength() * 10.0D;
+        double d0 = this.getBoundingBox().getAverageEdgeLength() * 10.0D;
 
         if (Double.isNaN(d0)) {
             d0 = 1.0D;
@@ -101,7 +101,7 @@ public class EntityTideTrident extends TridentEntity implements IProjectile {
         return distance < d0 * d0;
     }
 
-    protected void entityInit() {
+    protected void registerData() {
         this.dataManager.register(CRITICAL, Byte.valueOf((byte) 0));
     }
 
@@ -196,7 +196,7 @@ public class EntityTideTrident extends TridentEntity implements IProjectile {
 
         if (this.inGround) {
             int j = block.getMetaFromState(BlockState);
-            if ((block != this.inTile || j != this.inData) && !this.world.collidesWithAnyBlock(this.getEntityBoundingBox().grow(0.05D))) {
+            if ((block != this.inTile || j != this.inData) && !this.world.collidesWithAnyBlock(this.getBoundingBox().grow(0.05D))) {
                 this.inGround = false;
                 this.motionX *= (double) (this.rand.nextFloat() * 0.2F);
                 this.motionY *= (double) (this.rand.nextFloat() * 0.2F);
@@ -403,14 +403,14 @@ public class EntityTideTrident extends TridentEntity implements IProjectile {
     @Nullable
     protected Entity findEntityOnPath(Vec3d start, Vec3d end) {
         Entity entity = null;
-        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D), ARROW_TARGETS);
+        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D), ARROW_TARGETS);
         double d0 = 0.0D;
 
         for (int i = 0; i < list.size(); ++i) {
             Entity entity1 = list.get(i);
 
             if (entity1 != this.shootingEntity || this.ticksInAir >= 5) {
-                AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow(0.30000001192092896D);
+                AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow(0.30000001192092896D);
                 RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(start, end);
 
                 if (raytraceresult != null) {
@@ -431,9 +431,9 @@ public class EntityTideTrident extends TridentEntity implements IProjectile {
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
     public void writeEntityToNBT(CompoundNBT compound) {
-        compound.setInteger("xTile", this.xTile);
-        compound.setInteger("yTile", this.yTile);
-        compound.setInteger("zTile", this.zTile);
+        compound.putInt("xTile", this.xTile);
+        compound.putInt("yTile", this.yTile);
+        compound.putInt("zTile", this.zTile);
         compound.setShort("life", (short) this.ticksInGround);
         ResourceLocation resourcelocation = Block.REGISTRY.getNameForObject(this.inTile);
         compound.setString("inTile", resourcelocation == null ? "" : resourcelocation.toString());
@@ -449,9 +449,9 @@ public class EntityTideTrident extends TridentEntity implements IProjectile {
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
     public void readEntityFromNBT(CompoundNBT compound) {
-        this.xTile = compound.getInteger("xTile");
-        this.yTile = compound.getInteger("yTile");
-        this.zTile = compound.getInteger("zTile");
+        this.xTile = compound.getInt("xTile");
+        this.yTile = compound.getInt("yTile");
+        this.zTile = compound.getInt("zTile");
         this.ticksInGround = compound.getShort("life");
 
         if (compound.hasKey("inTile", 8)) {

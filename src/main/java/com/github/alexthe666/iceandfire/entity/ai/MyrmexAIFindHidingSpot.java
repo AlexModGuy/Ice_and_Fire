@@ -65,7 +65,7 @@ public class MyrmexAIFindHidingSpot extends Goal {
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.myrmex.getEntityBoundingBox().grow(targetDistance, 14.0D, targetDistance);
+        return this.myrmex.getBoundingBox().grow(targetDistance, 14.0D, targetDistance);
     }
 
     public BlockPos getTargetPosition(int radius) {

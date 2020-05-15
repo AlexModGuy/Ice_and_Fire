@@ -63,7 +63,7 @@ public class HippogryphAIMate extends Goal {
     }
 
     private EntityHippogryph getNearbyMate() {
-        List<EntityHippogryph> list = this.world.getEntitiesWithinAABB(EntityHippogryph.class, this.hippo.getEntityBoundingBox().grow(8.0D));
+        List<EntityHippogryph> list = this.world.getEntitiesWithinAABB(EntityHippogryph.class, this.hippo.getBoundingBox().grow(8.0D));
         double d0 = Double.MAX_VALUE;
         EntityHippogryph entityanimal = null;
 

@@ -32,7 +32,7 @@ public class CockatriceAIStareAttack extends Goal {
 
     public static boolean isEntityLookingAt(LivingEntity looker, LivingEntity seen, double degree) {
         Vec3d vec3d = looker.getLook(1.0F).normalize();
-        Vec3d vec3d1 = new Vec3d(seen.getPosX() - looker.getPosX(), seen.getEntityBoundingBox().minY + (double) seen.getEyeHeight() - (looker.getPosY() + (double) looker.getEyeHeight()), seen.getPosZ() - looker.getPosZ());
+        Vec3d vec3d1 = new Vec3d(seen.getPosX() - looker.getPosX(), seen.getBoundingBox().minY + (double) seen.getEyeHeight() - (looker.getPosY() + (double) looker.getEyeHeight()), seen.getPosZ() - looker.getPosZ());
         double d0 = vec3d1.length();
         vec3d1 = vec3d1.normalize();
         double d1 = vec3d.dotProduct(vec3d1);
@@ -80,7 +80,7 @@ public class CockatriceAIStareAttack extends Goal {
             }
             this.entity.setTargetedEntity(LivingEntity.getEntityId());
 
-            double d0 = this.entity.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getEntityBoundingBox().minY, LivingEntity.getPosZ());
+            double d0 = this.entity.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getBoundingBox().minY, LivingEntity.getPosZ());
             boolean flag = this.entity.getEntitySenses().canSee(LivingEntity);
             boolean flag1 = this.seeTime > 0;
 

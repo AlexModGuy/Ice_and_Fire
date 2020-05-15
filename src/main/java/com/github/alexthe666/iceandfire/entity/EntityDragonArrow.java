@@ -1,39 +1,39 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
 public class EntityDragonArrow extends AbstractArrowEntity {
 
-    public EntityDragonArrow(World worldIn) {
-        super(worldIn);
+    public EntityDragonArrow(EntityType typeIn, World worldIn) {
+        super(typeIn, worldIn);
         this.setDamage(10);
     }
 
-    public EntityDragonArrow(World worldIn, double x, double y, double z) {
-        super(worldIn, x, y, z);
+    public EntityDragonArrow(EntityType typeIn, double x, double y, double z, World world) {
+        super(typeIn, x, y, z, world);
         this.setDamage(10);
     }
 
-    public EntityDragonArrow(World worldIn, LivingEntity shooter) {
-        super(worldIn, shooter);
+    public EntityDragonArrow(EntityType typeIn, LivingEntity shooter, World worldIn) {
+        super(typeIn, shooter, worldIn);
     }
 
     @Override
-    public void writeEntityToNBT(CompoundNBT tagCompound) {
-        super.writeEntityToNBT(tagCompound);
-        tagCompound.setDouble("damage", 10);
+    public void writeAdditional(CompoundNBT tagCompound) {
+        super.writeAdditional(tagCompound);
+        tagCompound.putDouble("damage", 10);
     }
 
     @Override
-    public void readEntityFromNBT(CompoundNBT tagCompund) {
-        super.readEntityFromNBT(tagCompund);
-        tagCompund.setDouble("damage", 10);
+    public void readAdditional(CompoundNBT tagCompund) {
+        super.readAdditional(tagCompund);
+        this.setDamage(tagCompund.getDouble("damage"));
     }
 
     @Override

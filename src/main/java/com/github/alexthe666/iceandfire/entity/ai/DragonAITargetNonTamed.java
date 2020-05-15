@@ -24,7 +24,7 @@ public class DragonAITargetNonTamed<T extends LivingEntity> extends NearestAttac
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.dragon.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
+        return this.dragon.getBoundingBox().grow(targetDistance, targetDistance, targetDistance);
     }
 
     protected double getTargetDistance() {

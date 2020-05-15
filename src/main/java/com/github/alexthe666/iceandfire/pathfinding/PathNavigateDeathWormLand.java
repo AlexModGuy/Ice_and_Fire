@@ -11,7 +11,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class PathNavigateDeathWormLand extends PathNavigate {
+public class PathNavigateDeathWormLand extends PathNavigator {
     private boolean shouldAvoidSun;
     private EntityDeathWorm worm;
 

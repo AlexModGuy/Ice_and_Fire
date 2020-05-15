@@ -39,6 +39,6 @@ public class StymphalianBirdAITarget<T extends LivingEntity> extends TargetGoal<
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.bird.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
+        return this.bird.getBoundingBox().grow(targetDistance, targetDistance, targetDistance);
     }
 }

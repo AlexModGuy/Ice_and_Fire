@@ -75,7 +75,7 @@ public class DragonAIMate extends Goal {
      * valid mate found.
      */
     private EntityDragonBase getNearbyMate() {
-        List<EntityDragonBase> list = this.theWorld.getEntitiesWithinAABB(this.dragon.getClass(), this.dragon.getEntityBoundingBox().grow(180.0D, 180.0D, 180.0D));
+        List<EntityDragonBase> list = this.theWorld.getEntitiesWithinAABB(this.dragon.getClass(), this.dragon.getBoundingBox().grow(180.0D, 180.0D, 180.0D));
         double d0 = Double.MAX_VALUE;
         EntityDragonBase mate = null;
         for (EntityDragonBase partner : list) {

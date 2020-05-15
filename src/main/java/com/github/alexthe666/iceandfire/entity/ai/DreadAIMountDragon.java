@@ -19,7 +19,7 @@ public class DreadAIMountDragon extends Goal {
         if (this.knight.isRiding()) {
             return false;
         } else {
-            List<EntityBlackFrostDragon> list = this.knight.world.getEntitiesWithinAABB(EntityBlackFrostDragon.class, this.knight.getEntityBoundingBox().grow(32.0D, 7.0D, 32.0D));
+            List<EntityBlackFrostDragon> list = this.knight.world.getEntitiesWithinAABB(EntityBlackFrostDragon.class, this.knight.getBoundingBox().grow(32.0D, 7.0D, 32.0D));
 
             if (list.isEmpty()) {
                 return false;

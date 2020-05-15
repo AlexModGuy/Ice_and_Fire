@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAITarget;
+import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -19,7 +20,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class CyclopsAITargetSheepPlayers<T extends LivingEntity> extends EntityAITarget {
+public class CyclopsAITargetSheepPlayers<T extends LivingEntity> extends TargetGoal {
     protected final Class<T> targetClass;
     protected final CyclopsAITargetSheepPlayers.Sorter sorter;
     protected final Predicate<? super T> targetEntitySelector;
@@ -90,7 +91,7 @@ public class CyclopsAITargetSheepPlayers<T extends LivingEntity> extends EntityA
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.taskOwner.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
+        return this.taskOwner.getBoundingBox().grow(targetDistance, targetDistance, targetDistance);
     }
 
     /**

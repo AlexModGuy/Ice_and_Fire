@@ -46,7 +46,7 @@ public class PixieAIFlee<T extends Entity> extends Goal {
         if (this.pixie.isTamed()) {
             return false;
         }
-        List<T> list = this.pixie.world.getEntitiesWithinAABB(this.classToAvoid, this.pixie.getEntityBoundingBox().grow((double) this.avoidDistance, 3.0D, (double) this.avoidDistance),
+        List<T> list = this.pixie.world.getEntitiesWithinAABB(this.classToAvoid, this.pixie.getBoundingBox().grow((double) this.avoidDistance, 3.0D, (double) this.avoidDistance),
                 Predicates.and(new Predicate[]{EntitySelectors.NOT_SPECTATING, this.canBeSeenSelector, this.avoidTargetSelector}));
 
         if (list.isEmpty()) {

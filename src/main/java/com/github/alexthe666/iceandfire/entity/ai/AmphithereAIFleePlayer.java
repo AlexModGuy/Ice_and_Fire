@@ -30,7 +30,7 @@ public class AmphithereAIFleePlayer extends Goal {
 
     public boolean shouldExecute() {
         if (!this.entity.isFlying() && !this.entity.isTamed()) {
-            List<PlayerEntity> list = this.entity.world.getEntitiesWithinAABB(PlayerEntity.class, this.entity.getEntityBoundingBox().grow((double) this.avoidDistance, 6D, (double) this.avoidDistance), EntitySelectors.CAN_AI_TARGET);
+            List<PlayerEntity> list = this.entity.world.getEntitiesWithinAABB(PlayerEntity.class, this.entity.getBoundingBox().grow((double) this.avoidDistance, 6D, (double) this.avoidDistance), EntitySelectors.CAN_AI_TARGET);
             if (list.isEmpty()) {
                 return false;
             } else {

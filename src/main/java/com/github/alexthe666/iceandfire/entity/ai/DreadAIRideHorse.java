@@ -19,7 +19,7 @@ public class DreadAIRideHorse extends Goal {
         if (this.knight.isRiding()) {
             return false;
         } else {
-            List<AbstractHorse> list = this.knight.world.getEntitiesWithinAABB(AbstractHorse.class, this.knight.getEntityBoundingBox().grow(16.0D, 7.0D, 16.0D));
+            List<AbstractHorse> list = this.knight.world.getEntitiesWithinAABB(AbstractHorse.class, this.knight.getBoundingBox().grow(16.0D, 7.0D, 16.0D));
 
             if (list.isEmpty()) {
                 return false;

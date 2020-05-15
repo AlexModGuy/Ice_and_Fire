@@ -95,7 +95,7 @@ public class DragonUtils {
         Vec3d vec3d2 = vec3d.add(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
         double d1 = dist;
         Entity pointedEntity = null;
-        List<Entity> list = rider.world.getEntitiesInAABBexcluding(rider, rider.getEntityBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
+        List<Entity> list = rider.world.getEntitiesInAABBexcluding(rider, rider.getBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
             public boolean apply(@Nullable Entity entity) {
                 if (onSameTeam(dragon, entity)) {
                     return false;
@@ -106,7 +106,7 @@ public class DragonUtils {
         double d2 = d1;
         for (int j = 0; j < list.size(); ++j) {
             Entity entity1 = list.get(j);
-            AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow((double) entity1.getCollisionBorderSize() + 2F);
+            AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow((double) entity1.getCollisionBorderSize() + 2F);
             RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(vec3d, vec3d2);
 
             if (axisalignedbb.contains(vec3d)) {

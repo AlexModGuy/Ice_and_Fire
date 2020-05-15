@@ -19,13 +19,13 @@ public class FrozenEntityProperties extends EntityProperties<LivingEntity> {
     @Override
     public void saveNBTData(CompoundNBT compound) {
         compound.setBoolean("IsFrozen", isFrozen);
-        compound.setInteger("TicksUntilUnfrozen", ticksUntilUnfrozen);
+        compound.putInt("TicksUntilUnfrozen", ticksUntilUnfrozen);
     }
 
     @Override
     public void loadNBTData(CompoundNBT compound) {
         this.isFrozen = compound.getBoolean("IsFrozen");
-        this.ticksUntilUnfrozen = compound.getInteger("TicksUntilUnfrozen");
+        this.ticksUntilUnfrozen = compound.getInt("TicksUntilUnfrozen");
     }
 
     @Override

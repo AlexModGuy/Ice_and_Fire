@@ -35,8 +35,8 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
     }
 
     @Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0);
         getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10);
     }
@@ -63,8 +63,8 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.getDataManager().register(DRAGON_TYPE, Integer.valueOf(0));
         this.getDataManager().register(DRAGON_AGE, Integer.valueOf(0));
         this.getDataManager().register(DRAGON_STAGE, Integer.valueOf(0));
@@ -120,8 +120,8 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
         this.setDead();
         ItemStack stack = new ItemStack(IafItemRegistry.DRAGON_SKULL, 1, getType());
         stack.setTagCompound(new CompoundNBT());
-        stack.getTagCompound().setInteger("Stage", this.getStage());
-        stack.getTagCompound().setInteger("DragonAge", this.getDragonAge());
+        stack.getTagCompound().putInt("Stage", this.getStage());
+        stack.getTagCompound().putInt("DragonAge", this.getDragonAge());
         if (!this.world.isRemote)
             this.entityDropItem(stack, 0.0F);
 
@@ -137,18 +137,18 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
 
     @Override
     public void readEntityFromNBT(CompoundNBT compound) {
-        this.setType(compound.getInteger("Type"));
-        this.setStage(compound.getInteger("Stage"));
-        this.setDragonAge(compound.getInteger("DragonAge"));
+        this.setType(compound.getInt("Type"));
+        this.setStage(compound.getInt("Stage"));
+        this.setDragonAge(compound.getInt("DragonAge"));
         this.setYaw(compound.getFloat("DragonYaw"));
         super.readEntityFromNBT(compound);
     }
 
     @Override
     public void writeEntityToNBT(CompoundNBT compound) {
-        compound.setInteger("Type", this.getType());
-        compound.setInteger("Stage", this.getStage());
-        compound.setInteger("DragonAge", this.getDragonAge());
+        compound.putInt("Type", this.getType());
+        compound.putInt("Stage", this.getStage());
+        compound.putInt("DragonAge", this.getDragonAge());
         compound.setFloat("DragonYaw", this.getYaw());
         super.writeEntityToNBT(compound);
     }

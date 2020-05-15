@@ -61,8 +61,8 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         return 20;
     }
 
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(HASMADEHOME, Boolean.valueOf(true));
     }
 
@@ -78,7 +78,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     @Override
     public void writeEntityToNBT(CompoundNBT tag) {
         super.writeEntityToNBT(tag);
-        tag.setInteger("EggTicks", eggTicks);
+        tag.putInt("EggTicks", eggTicks);
         tag.setBoolean("MadeHome", this.hasMadeHome());
 
     }
@@ -86,7 +86,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     @Override
     public void readEntityFromNBT(CompoundNBT tag) {
         super.readEntityFromNBT(tag);
-        this.eggTicks = tag.getInteger("EggTicks");
+        this.eggTicks = tag.getInt("EggTicks");
         this.setMadeHome(tag.getBoolean("MadeHome"));
     }
 
@@ -167,7 +167,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         }
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
-            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
             }
         }
@@ -175,7 +175,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
             this.playStingSound();
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
-            if (this.getAttackBounds().intersects(this.getAttackTarget().getEntityBoundingBox())) {
+            if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2));
                 this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 200, 2));
                 this.getAttackTarget().isAirBorne = true;
@@ -230,8 +230,8 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         return false;
     }
 
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
         this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength * 3.5D);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(120);

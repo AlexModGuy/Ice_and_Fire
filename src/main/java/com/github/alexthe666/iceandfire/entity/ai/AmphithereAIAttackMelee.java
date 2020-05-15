@@ -72,7 +72,7 @@ public class AmphithereAIAttackMelee extends Goal {
             if (this.path != null) {
                 return true;
             } else {
-                return this.getAttackReachSqr(LivingEntity) >= this.attacker.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getEntityBoundingBox().minY, LivingEntity.getPosZ());
+                return this.getAttackReachSqr(LivingEntity) >= this.attacker.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getBoundingBox().minY, LivingEntity.getPosZ());
             }
         }
     }
@@ -127,12 +127,12 @@ public class AmphithereAIAttackMelee extends Goal {
             this.attacker.getMoveHelper().setMoveTo(LivingEntity.getPosX(), LivingEntity.getPosY() + LivingEntity.getEyeHeight(), LivingEntity.getPosZ(), 0.1D);
         }
         this.attacker.getLookController().setLookPositionWithEntity(LivingEntity, 30.0F, 30.0F);
-        double d0 = this.attacker.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getEntityBoundingBox().minY, LivingEntity.getPosZ());
+        double d0 = this.attacker.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getBoundingBox().minY, LivingEntity.getPosZ());
         --this.delayCounter;
 
         if ((this.longMemory || this.attacker.getEntitySenses().canSee(LivingEntity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || LivingEntity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.attacker.getRNG().nextFloat() < 0.05F)) {
             this.targetX = LivingEntity.getPosX();
-            this.targetY = LivingEntity.getEntityBoundingBox().minY;
+            this.targetY = LivingEntity.getBoundingBox().minY;
             this.targetZ = LivingEntity.getPosZ();
             this.delayCounter = 4 + this.attacker.getRNG().nextInt(7);
 

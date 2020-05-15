@@ -218,8 +218,8 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         return movingobjectposition == null || movingobjectposition.typeOfHit != RayTraceResult.Type.BLOCK;
     }
 
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.15D);
         this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(3.0D);
@@ -324,8 +324,8 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(VARIANT, Integer.valueOf(0));
         this.dataManager.register(SCALE, Float.valueOf(0F));
         this.dataManager.register(JUMPING, false);
@@ -336,8 +336,8 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     @Override
     public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
-        compound.setInteger("Variant", this.getVariant());
-        compound.setInteger("TicksSinceRoar", ticksSinceRoar);
+        compound.putInt("Variant", this.getVariant());
+        compound.putInt("TicksSinceRoar", ticksSinceRoar);
         compound.setFloat("Scale", this.getSeaSerpentScale());
         compound.setBoolean("JumpingOutOfWater", this.isJumpingOutOfWater());
         compound.setBoolean("AttackDecision", attackDecision);
@@ -348,8 +348,8 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     @Override
     public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
-        this.setVariant(compound.getInteger("Variant"));
-        ticksSinceRoar = compound.getInteger("TicksSinceRoar");
+        this.setVariant(compound.getInt("Variant"));
+        ticksSinceRoar = compound.getInt("TicksSinceRoar");
         this.setSeaSerpentScale(compound.getFloat("Scale"));
         this.setJumpingOutOfWater(compound.getBoolean("JumpingOutOfWater"));
         attackDecision = compound.getBoolean("AttackDecision");
@@ -595,7 +595,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
 
     private void doSplashDamage() {
         double getWidth() = 2D * this.getSeaSerpentScale();
-        List<Entity> list = world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(getWidth(), getWidth() * 0.5D, getWidth()), NOT_SEA_SERPENT);
+        List<Entity> list = world.getEntitiesInAABBexcluding(this, this.getBoundingBox().grow(getWidth(), getWidth() * 0.5D, getWidth()), NOT_SEA_SERPENT);
         for (Entity entity : list) {
             if (entity instanceof LivingEntity) {
                 entity.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
@@ -667,11 +667,11 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     }
 
     private boolean isTouchingMob(Entity entity) {
-        if (this.getEntityBoundingBox().expand(this.getSeaSerpentScale() * 3, this.getSeaSerpentScale() * 3, this.getSeaSerpentScale() * 3).intersects(entity.getEntityBoundingBox())) {
+        if (this.getBoundingBox().expand(this.getSeaSerpentScale() * 3, this.getSeaSerpentScale() * 3, this.getSeaSerpentScale() * 3).intersects(entity.getBoundingBox())) {
             return true;
         }
         for (Entity segment : segments) {
-            if (segment.getEntityBoundingBox().expand(this.getSeaSerpentScale() * 2, this.getSeaSerpentScale() * 2, this.getSeaSerpentScale() * 2).intersects(entity.getEntityBoundingBox())) {
+            if (segment.getBoundingBox().expand(this.getSeaSerpentScale() * 2, this.getSeaSerpentScale() * 2, this.getSeaSerpentScale() * 2).intersects(entity.getBoundingBox())) {
                 return true;
             }
         }
@@ -690,9 +690,9 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
 
     public void breakBlock() {
         if (IafConfig.seaSerpentGriefing) {
-            for (int a = (int) Math.round(this.getEntityBoundingBox().minX) - 2; a <= (int) Math.round(this.getEntityBoundingBox().maxX) + 2; a++) {
-                for (int b = (int) Math.round(this.getEntityBoundingBox().minY) - 1; (b <= (int) Math.round(this.getEntityBoundingBox().maxY) + 2) && (b <= 127); b++) {
-                    for (int c = (int) Math.round(this.getEntityBoundingBox().minZ) - 2; c <= (int) Math.round(this.getEntityBoundingBox().maxZ) + 2; c++) {
+            for (int a = (int) Math.round(this.getBoundingBox().minX) - 2; a <= (int) Math.round(this.getBoundingBox().maxX) + 2; a++) {
+                for (int b = (int) Math.round(this.getBoundingBox().minY) - 1; (b <= (int) Math.round(this.getBoundingBox().maxY) + 2) && (b <= 127); b++) {
+                    for (int c = (int) Math.round(this.getBoundingBox().minZ) - 2; c <= (int) Math.round(this.getBoundingBox().maxZ) + 2; c++) {
                         BlockPos pos = new BlockPos(a, b, c);
                         BlockState state = world.getBlockState(pos);
                         Block block = state.getBlock();

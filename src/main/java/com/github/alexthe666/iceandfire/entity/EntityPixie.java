@@ -95,8 +95,8 @@ public class EntityPixie extends TameableEntity {
     }
 
     @Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25);
         getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10);
     }
@@ -127,8 +127,8 @@ public class EntityPixie extends TameableEntity {
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.getDataManager().register(COLOR, Integer.valueOf(0));
     }
 
@@ -283,13 +283,13 @@ public class EntityPixie extends TameableEntity {
 
     @Override
     public void readEntityFromNBT(CompoundNBT compound) {
-        this.setColor(compound.getInteger("Color"));
+        this.setColor(compound.getInt("Color"));
         super.readEntityFromNBT(compound);
     }
 
     @Override
     public void writeEntityToNBT(CompoundNBT compound) {
-        compound.setInteger("Color", this.getColor());
+        compound.putInt("Color", this.getColor());
         super.writeEntityToNBT(compound);
     }
 
@@ -352,7 +352,7 @@ public class EntityPixie extends TameableEntity {
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
                 d3 = (double) MathHelper.sqrt(d3);
 
-                if (d3 < EntityPixie.this.getEntityBoundingBox().getAverageEdgeLength()) {
+                if (d3 < EntityPixie.this.getBoundingBox().getAverageEdgeLength()) {
                     this.action = EntityMoveHelper.Action.WAIT;
                     EntityPixie.this.motionX *= 0.5D;
                     EntityPixie.this.motionY *= 0.5D;

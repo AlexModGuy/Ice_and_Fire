@@ -48,7 +48,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         NBTTagList patterns = new NBTTagList();
         CompoundNBT currentPattern = new CompoundNBT();
         currentPattern.setString("Pattern", "iceandfire.dread");
-        currentPattern.setInteger("Color", EnumDyeColor.WHITE.getDyeDamage());
+        currentPattern.putInt("Color", EnumDyeColor.WHITE.getDyeDamage());
         patterns.appendTag(currentPattern);
         ItemStack banner = ItemBanner.makeBanner(EnumDyeColor.CYAN, patterns);
         ItemStack shield = new ItemStack(Items.SHIELD, 1);
@@ -73,8 +73,8 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         }));
     }
 
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
         this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
@@ -83,8 +83,8 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(VARIANT, Integer.valueOf(0));
     }
 
@@ -94,7 +94,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
             Block belowBlock = world.getBlockState(this.getPosition().down()).getBlock();
             if (belowBlock != Blocks.AIR) {
                 for (int i = 0; i < 5; i++){
-                    this.world.spawnParticle(ParticleTypes.BLOCK_CRACK, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getEntityBoundingBox().minY, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(belowBlock));
+                    this.world.spawnParticle(ParticleTypes.BLOCK_CRACK, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getBoundingBox().minY, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(belowBlock));
                 }
             }
         }
@@ -130,13 +130,13 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
 
     public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
-        compound.setInteger("ArmorVariant", getArmorVariant());
+        compound.putInt("ArmorVariant", getArmorVariant());
     }
 
     @Override
     public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
-        setArmorVariant(compound.getInteger("ArmorVariant"));
+        setArmorVariant(compound.getInt("ArmorVariant"));
     }
 
     @Override

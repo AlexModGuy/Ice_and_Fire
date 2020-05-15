@@ -10,7 +10,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class PathNavigateCyclops extends PathNavigateGround {
+public class PathNavigateCyclops extends GroundPathNavigator {
     public BlockPos targetPosition;
     private EntityCyclops cyclops;
 

@@ -24,7 +24,7 @@ public class FlyingAITarget extends EntityAINearestAttackableTarget {
 
     @Override
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.taskOwner.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
+        return this.taskOwner.getBoundingBox().grow(targetDistance, targetDistance, targetDistance);
     }
 
     public boolean shouldExecute() {

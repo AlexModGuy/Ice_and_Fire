@@ -63,8 +63,8 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(SWIMMING, Boolean.valueOf(false));
     }
 
@@ -120,14 +120,14 @@ public class EntityIceDragon extends EntityDragonBase {
     public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         compound.setBoolean("Swimming", this.isSwimming());
-        compound.setInteger("SwimmingTicks", this.ticksSwiming);
+        compound.putInt("SwimmingTicks", this.ticksSwiming);
     }
 
     @Override
     public void readEntityFromNBT(CompoundNBT compound) {
         super.readEntityFromNBT(compound);
         this.setSwimming(compound.getBoolean("Swimming"));
-        this.ticksSwiming = compound.getInteger("SwimmingTicks");
+        this.ticksSwiming = compound.getInt("SwimmingTicks");
     }
 
     public boolean canBeSteered() {
@@ -181,7 +181,7 @@ public class EntityIceDragon extends EntityDragonBase {
         }
         if (!world.isRemote && this.getAttackTarget() != null) {
             float growSize = this.isInMaterialWater() ? 1.0F : 0.5F;
-            if (this.getEntityBoundingBox().grow(2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
+            if (this.getBoundingBox().grow(2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F).intersects(this.getAttackTarget().getBoundingBox())) {
                 attackEntityAsMob(this.getAttackTarget());
             }
             if (this.groundAttack == IafDragonAttacks.Ground.FIRE && (usingGroundAttack || this.onGround)) {
@@ -194,7 +194,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 this.motionX += difX * 0.1D;
                 this.motionY += difY * 0.1D;
                 this.motionZ += difZ * 0.1D;
-                if (this.getEntityBoundingBox().grow(1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F).intersects(this.getAttackTarget().getEntityBoundingBox())) {
+                if (this.getBoundingBox().grow(1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F).intersects(this.getAttackTarget().getBoundingBox())) {
                     attackEntityAsMob(this.getAttackTarget());
                     usingGroundAttack = true;
                     randomizeAttacks();
@@ -299,7 +299,7 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     public boolean isInMaterialWater() {
-        return this.world.isMaterialInBB(this.getEntityBoundingBox().grow(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D), Material.WATER);
+        return this.world.isMaterialInBB(this.getBoundingBox().grow(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D), Material.WATER);
     }
 
     private void shootIceAtMob(LivingEntity entity) {
