@@ -1,7 +1,6 @@
-These terrifying metal birds stalk
-the swamps of the overworld and
-threaten to destroy any explorer
-of their territory.
+这些通体由金属构成的骇人怪鸟游走于世界
+上的沼泽中，威胁着所有误入它们领地的冒
+险家们。
 
 
 
@@ -9,32 +8,33 @@ of their territory.
 
 
 
-Travelling in flocks ranging from
-three to twenty, these birds can
-rain down hellfire on their prey
-with a volley of sharpened
-feathers.
 
-In close combat, the birds can
-peck prey with their sharpened
-metallic beaks. When further
-
-from their prey they launch
-four sharpened feathers at
-their target.
+铜羽泽鹗以三到二十只为一群行动，并会凌
+空射出势如地狱烈火的锋利羽毛。
 
 
 
 
+与敌人近距离接触时，铜羽泽鹗会用尖锐的
+金属喙猛啄目标。
 
 
-These feathers can deal a great
-amount of damage, and can be
-retrieved from shed feathers or
-once the bird is fell.
+在与敌人距离较远时，这些猛禽就会向目标
+倾泻出自己的锋利羽毛。
 
 
 
 
-These feathers can be used to
-craft extremely powerful arrows.
+
+
+
+这些羽毛在命中目标后会造成严重的伤害，
+通过收集被射出而没能命中目标的羽毛或者
+猎杀铜羽泽鹗，就能获取这种锋利的羽毛。
+
+
+
+
+
+这种羽毛能制成一种非常强劲的箭矢。
+

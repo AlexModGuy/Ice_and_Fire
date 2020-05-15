@@ -1,40 +1,40 @@
-All Myrmex Chitin weapons are
-weak against arthropods, but
-do extra damage to non-arthropods
-and death worms.
+所有蚁甲武器对节肢动物的效果都不怎
+么样，但它们能对任何非节肢的生物和
+死亡蠕虫造成额外伤害。
 
 
 
 
-Myrmex Stingers are used to create
-poisonous swords that are more
-poweful than normal myrmex weapons.
+
+恐蚁螫针用于制作蕴含毒素的蚁甲剑，
+这种武器比常规的恐蚁武器更为强力。
 
 
 
-Myrmex Resin Chunks are dropped by
-myrmex of all castes. Myrmex
-produce this strange material
-by themselves, yet they still
-will seek out any of it, if
 
-they can find it. By throwing
-resin chunks on the ground near
-Myrmex Workers, one can raise
-their reputation with the hive.
+任何阶层的恐蚁都有概率掉落蚁脂。这
+种奇特的材料由恐蚁自身产出，但任何
+恐蚁都会在有条件时寻找并收集这种物
+质。通过向恐蚁劳工们丢出蚁脂，你就
+能提升你在该蚁穴中的声誉。
 
-Reputation is an important
-concept to consider when dealing
-with Myrmex colonies. Reputation
-can be raised by gifting and
-trading, and can be lowered by
-attacking or killing any colony
-members.
 
-The default reputation towards
-humans for every colony is 0.
-At 25, Myrmex will become neutral.
-At 50, they will open up to trade.
-At 75, they will allow one to use
-myrmex staffs on the colony as a
-whole.
+
+
+
+
+在与恐蚁打交道时，声誉是你应当仔细
+了解和注重的一个特殊概念。通过赠与
+和交易能提升你的声誉，而攻击乃至杀
+死蚁穴成员则会降低你的声誉。
+
+
+
+
+任意玩家在野生蚁穴中的默认声誉都是
+0点。
+声誉达到25后，蚁穴成员会对你中立。
+到50时，它们就会向你开放交易。
+若能达到75，你就拥有了使用恐蚁权杖
+来控制整个蚁穴的权力。
+
