@@ -1,41 +1,41 @@
-Long ago, before the trolls dwelled
-in the caves and before the gorgons
-entered their temples, there was a
-woman who stole from the gods a
-plough, and claimed it for her own
-invention. For this crime, she was
-metamorphosed into an terrifying
-insect: the first Myrmex Queen.
+在很久以前，那时食人妖们还没定居在地下
+深处的洞穴里，蛇发女妖也还没被监禁在神
+庙中，有个女人偷走了神灵们的犁，并到处
+宣称这是她的发明。为惩戒这一罪行，震怒
+的神灵把她变成了一只丑陋可怕的昆虫，这
+就是第一只恐蚁女皇。
 
-Although she was the first of her
-kind, she was not alone for long
-as her insectoid fecundity resulted
-in massive Myrmex colonies all
-across the deserts and jungles.
 
-The myrmex visage is a hideous one,
-a large insect with a powerful stinger
-and mandibles. Their society is
-separated into castes like eusocial
-insects.
+
+虽然那时她是那个物种仅有的个体，但昆虫
+共有的强大繁殖能力却让她没有孤单太久。
+很快，沙漠和丛林中就遍布了恐蚁的巢穴。
+
+
+
+恐蚁，是长着尖利螫针和有力巨颚的丑陋昆
+虫，体型硕大。作为一种社会性昆虫，它们
+的生态同样建立在等级分化的基础上。
 
 
 
 
-§nWorkers
-Workers are the smallest of all
-caste members. They are the
-laborers of the colony, and leave
-it frequently to gather food and
-other resources. These items are
-deposited in the Food Rooms of
-the colony. Workers are also
-responsible for moving young
-myrmex eggs, larva and pupae to
-the Nursery Rooms. They are the
-most frequently encountered
-Myrmex Caste outside the colony
-and as such are frequently preyed
-upon by death worms. They are
-usually escorted by Soldiers.
+
+
+§n劳工
+恐蚁劳工是个体体型最小的一个恐蚁阶层，
+也是蚁穴的基础劳力。它们常常进出蚁穴，
+从外界获取食物等资源，并将其运回食品室
+储藏。同时，它们也负责把卵、幼虫和蛹送
+到保育室抚养。作为最常离开蚁穴的阶层，
+它们是死亡蠕虫的主要猎食对象，也是恐蚁
+军士们的主要护送对象。
+
+
+
+
+
+
+
+
 

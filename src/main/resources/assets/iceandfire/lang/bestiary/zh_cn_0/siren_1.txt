@@ -1,15 +1,11 @@
-Behold the §nnaga§r. The
-beautiful mermaid gives way
-to this terrifying and primal
-beast, which, once its prey has
-been distracted by its former
-beauty, jumps into the water
-and begins to attack. Since
-sirens often come in groups
-of two or more, these beasts
-can spell certain death for
-many sailors. But there is a
-way to protect yourself.
+你眼中的美人鱼将在下一刻变成§n娜迦§r。
+美丽的人鱼，将会趁着它们的目标陷
+入对它们先前美貌的爱慕和混乱中时，
+变为凶残原始的可怕野兽，跃入水中
+开始攻击。由于塞壬礁上常常居住着
+不止一条塞壬，航海者们大多难以从
+这首死亡之歌中逃生。但还是有办法
+保护你自己的。
 
 
 
@@ -23,14 +19,18 @@ way to protect yourself.
 
 
 
-By crafting and equipping
-special earplugs made from
-wooden buttons, one can safely
-ignore the siren's call whilst
-at sea. But the mermaids will
-become nagas if approached.
 
-If one manages to slay a siren,
-they can obtain prismarine shards
-and crystals, along with §nShiny
-§nScales.§r
+
+
+
+用木质按钮合成特制耳塞，就能让你
+免受塞壬歌声的侵扰，安然地航行于
+有塞壬出没的海域。但如果你离塞壬
+太近，它们还是会变成娜迦并发起攻
+击。
+
+
+如果你经过艰苦的战斗击杀了塞壬，
+就能获得海晶碎片、海晶砂粒，还有
+§n闪光鳞片§r。
+

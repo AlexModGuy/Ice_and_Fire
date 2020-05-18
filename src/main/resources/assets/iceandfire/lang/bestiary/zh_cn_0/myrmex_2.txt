@@ -5,30 +5,30 @@
 
 
 
-§nQueen
-The queen is the sole reproductive
-member of the entire colony. In
-rare cases, there may be more
-than one, but most colonies are
-run by one single queen. This
-results in her being the colony's
-weakness: kill the queen, and you
-kill the colony. Without a
-constant stream of eggs and pupae,
-the colony will quickly be
-depleted and attacked. She is
-
-armoured with an extremely
-powerful stinger that can launch
-attackers ten blocks away, and
-bone-crushing mandibles.
-
-Myrmex drop an assortment of
-unique items that are important
-crafting materials.
+§n女皇
+恐蚁女皇是蚁穴中仅有的一个具备生殖能
+力的阶层。在绝大部分蚁穴中都只有一个
+女皇，但少部分蚁穴可能有不止一个女皇。
+这种独一无二的特征使得女皇成为了整个
+蚁穴的弱点：杀掉女皇，就意味着灭绝了
+整个蚁穴。失去了女皇持续产出的卵和蛹，
+蚁穴的个体会很快损耗殆尽，直到整个蚁
+穴都在外来的攻击中绝灭。但女皇也是最
+难对付的阶层，它巨大有力的螫针能把玩
+家击退到十米开外，而它的巨颚则有着轻
+易夹碎骨骼的怪力。
 
 
 
-Myrmex chitin can be used to
-craft extremely strong weapons
-and armor.
+
+
+
+死掉的恐蚁会掉落多种多样的独特物品，
+这些物品是十分重要的合成材料。
+
+
+
+
+恐蚁甲壳能用来合成非常强悍的武器和护
+甲。
+
