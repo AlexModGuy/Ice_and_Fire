@@ -2,36 +2,36 @@
 
 
 
-§nSoldiers
-Soldiers are the first line of
-defense of the colony. They follow
-around individuals of other castes
-to protect them from other threats.
-
-
-
-
-§nRoyals
-Royals are the colonies' means of
-reproduction, and the only members
-capable of flight. Royals only fly
-after a long period of mostly
-idling within the colony. When two
-
-royals mate, the male dies and the
-female becomes a queen.
+§n军士
+恐蚁军士是整个蚁穴的第一道防线。它们会跟
+在其他阶层的恐蚁身边，保护它们免遭敌害的
+威胁。
 
 
 
 
 
+§n皇族
+恐蚁皇族是蚁穴的繁殖体，也是唯一一种有飞
+行能力的阶层。只有在蚁穴中无所事事很久以
+后，皇族才会起飞去寻找配偶。当两只恐蚁皇
+族交配后，雄性皇族会死去，而雌性皇族会成
+为新的恐蚁女皇，建立新的蚁穴。
 
 
-§nSentinels
-Sentinels are the covert operations
-caste of the colony. They scout out
-nearby foraging routes and hide in
-wait, to ambush possible prey and
-predators of the hive. They are the
-most deadly caste, other than the
-queen.
+
+
+
+
+
+
+
+
+§n斥候
+斥候是在暗中行动的恐蚁阶层。它们会在本穴
+恐蚁的觅食路线上侦查，伏击任何可能的敌人
+或是掠食者。除了女皇之外，它们是蚁穴中个
+体战斗力最强的阶层。
+
+
+

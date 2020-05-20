@@ -2,37 +2,37 @@
 
 
 
-These weapons can sometimes be
-dropped by the troll on death.
-Although they pack quite a punch,
-they are extremely hefty and have
-a large cooldown between attacks.
+有时，死去的食人妖会掉落这些巨大、沉
+重的原始武器。虽然足够强大有力，但这
+种武器在人类的手中实在是太过沉重，每
+次挥出后你都需要很长时间来准备下一次
+攻击。
 
-When wielding these weapons, trolls
-are capable of breaking blocks that
-stand in their way by crushing them.
+持有这种武器时，食人妖甚至能砸碎阻挡它们前
+进的方块。
 
-Trolls also drop a multitude of other
-items on death. If a weapon is not
-dropped, they will drop the materials
-they created it from. Mountain trolls
-also have a chance to drop an emerald
 
-on death. Frost trolls also have the
-possibility to drop a single
-sapphire. Forest trolls can drop
-mushrooms. But the most valuable
-things they drop are their tusks and
-leathery hides.
+死亡时，食人妖还会掉落许多的物品。如果武器
+没有直接掉落，那它们一定是碎成了构成它们的
+材料。山地食人妖有几率掉落一枚绿宝石，雪地
+食人妖则可能掉落一枚蓝宝石，而森林食人妖则
+会掉落蘑菇。
+
+不过，食人妖最为珍贵的产物，是它们的长牙和
+覆满绒毛的皮。
 
 
 
 
 
-These can be crafted into armor that
-has a very special advantage. Just
-like the troll it was crafted from,
-it is very resistant to projectile
-damage. A full set of troll armor
-has a 75% reduction of projectile
-damage.
+
+
+
+
+这些材料能制成一种拥有独特能力的护甲。就像
+产出这些材料的食人妖那样，这种护甲对于弹射
+物如流矢之类，有着绝佳的防御力。全套的食人
+妖皮甲能减免75%的弹射物伤害。
+
+
+
