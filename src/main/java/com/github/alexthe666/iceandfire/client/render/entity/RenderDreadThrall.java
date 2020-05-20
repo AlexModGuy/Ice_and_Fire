@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerArmorBase;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
@@ -50,7 +50,7 @@ public class RenderDreadThrall extends RenderLiving<EntityDreadThrall> {
                 this.modelArmor = new ModelDreadThrall(1.0F, true);
             }
 
-            public ModelDreadThrall getModelFromSlot(EntityEquipmentSlot slotIn) {
+            public ModelDreadThrall getModelFromSlot(EquipmentSlotType slotIn) {
                 switch (slotIn) {
                     case HEAD:
                         return modelHead;
@@ -65,7 +65,7 @@ public class RenderDreadThrall extends RenderLiving<EntityDreadThrall> {
             }
 
             @Override
-            protected void setModelSlotVisible(ModelDreadThrall model, EntityEquipmentSlot slotIn) {
+            protected void setModelSlotVisible(ModelDreadThrall model, EquipmentSlotType slotIn) {
                 this.setModelVisible(model);
                 switch (slotIn) {
                     case HEAD:
@@ -93,19 +93,19 @@ public class RenderDreadThrall extends RenderLiving<EntityDreadThrall> {
             }
 
             @Override
-            public ResourceLocation getArmorResource(net.minecraft.entity.Entity entity, ItemStack stack, EntityEquipmentSlot slot, String type){
+            public ResourceLocation getArmorResource(net.minecraft.entity.Entity entity, ItemStack stack, EquipmentSlotType slot, String type){
                 if(entity instanceof EntityDreadThrall){
                     EntityDreadThrall dreadThrall = (EntityDreadThrall)entity;
-                    if(dreadThrall.hasCustomArmorHead() && slot == EntityEquipmentSlot.HEAD){
+                    if(dreadThrall.hasCustomArmorHead() && slot == EquipmentSlotType.HEAD){
                         return getArmorTexture(dreadThrall.getArmorVariant());
                     }
-                    if(dreadThrall.hasCustomArmorChest() && slot == EntityEquipmentSlot.CHEST){
+                    if(dreadThrall.hasCustomArmorChest() && slot == EquipmentSlotType.CHEST){
                         return getArmorTexture(dreadThrall.getArmorVariant());
                     }
-                    if(dreadThrall.hasCustomArmorLegs() && slot == EntityEquipmentSlot.LEGS){
+                    if(dreadThrall.hasCustomArmorLegs() && slot == EquipmentSlotType.LEGS){
                         return RenderDreadThrall.TEXTURE_LEG_ARMOR;
                     }
-                    if(dreadThrall.hasCustomArmorFeet() && slot == EntityEquipmentSlot.FEET){
+                    if(dreadThrall.hasCustomArmorFeet() && slot == EquipmentSlotType.FEET){
                         return getArmorTexture(dreadThrall.getArmorVariant());
                     }
                 }

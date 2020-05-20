@@ -196,7 +196,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < attackDistance()) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2));
-                this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 70, 1));
+                this.getAttackTarget().addPotionEffect(new EffectInstance(MobEffects.POISON, 70, 1));
             }
         }
     }

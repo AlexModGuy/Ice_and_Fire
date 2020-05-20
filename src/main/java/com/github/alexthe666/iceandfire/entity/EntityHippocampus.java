@@ -29,7 +29,7 @@ import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -246,7 +246,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
         if (getControllingPassenger() != null && getControllingPassenger() instanceof LivingEntity && this.ticksExisted % 20 == 0) {
-            ((LivingEntity) getControllingPassenger()).addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 30, 0, true, false));
+            ((LivingEntity) getControllingPassenger()).addPotionEffect(new EffectInstance(MobEffects.WATER_BREATHING, 30, 0, true, false));
         }
         if (!this.onGround) {
             airBorneCounter++;
@@ -325,11 +325,11 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         compound.putInt("Variant", this.getVariant());
-        compound.setBoolean("Chested", this.isChested());
-        compound.setBoolean("Saddled", this.isSaddled());
+        compound.putBoolean("Chested", this.isChested());
+        compound.putBoolean("Saddled", this.isSaddled());
         compound.putInt("Armor", this.getArmor());
         if (hippocampusInventory != null) {
-            NBTTagList nbttaglist = new NBTTagList();
+            ListNBT nbttaglist = new ListNBT();
             for (int i = 0; i < this.hippocampusInventory.getSizeInventory(); ++i) {
                 ItemStack itemstack = this.hippocampusInventory.getStackInSlot(i);
                 if (!itemstack.isEmpty()) {
@@ -355,7 +355,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         this.setSaddled(compound.getBoolean("Saddled"));
         this.setArmor(compound.getInt("Armor"));
         if (hippocampusInventory != null) {
-            NBTTagList nbttaglist = compound.getTagList("Items", 10);
+            ListNBT nbttaglist = compound.getList("Items", 10);
             this.initHippocampusInv();
             for (int i = 0; i < nbttaglist.tagCount(); ++i) {
                 CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
@@ -363,7 +363,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
                 this.hippocampusInventory.setInventorySlotContents(j, new ItemStack(CompoundNBT));
             }
         } else {
-            NBTTagList nbttaglist = compound.getTagList("Items", 10);
+            ListNBT nbttaglist = compound.getList("Items", 10);
             this.initHippocampusInv();
             for (int i = 0; i < nbttaglist.tagCount(); ++i) {
                 CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
@@ -612,7 +612,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
             return true;
         }
         if (isOwner(player) && itemstack.isEmpty()) {
-            if (player.isSneaking()) {
+            if (player.isShiftKeyDown()) {
                 this.openGUI(player);
                 return true;
             } else if (this.isSaddled() && !this.isChild() && !player.isRiding()) {

@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 public class LayerDragonArmor implements LayerRenderer<EntityDragonBase> {
-    private static EntityEquipmentSlot[] ARMOR_SLOTS = {EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET};
+    private static EquipmentSlotType[] ARMOR_SLOTS = {EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
     private final RenderLiving render;
     private static final Map<String, ResourceLocation> LAYERED_ARMOR_CACHE = Maps.newHashMap();
 
@@ -28,17 +28,17 @@ public class LayerDragonArmor implements LayerRenderer<EntityDragonBase> {
     }
 
     public void doRenderLayer(EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        int armorHead = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
-        int armorNeck = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
-        int armorLegs = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
-        int armorFeet = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EntityEquipmentSlot.FEET));
+        int armorHead = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EquipmentSlotType.HEAD));
+        int armorNeck = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EquipmentSlotType.CHEST));
+        int armorLegs = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EquipmentSlotType.LEGS));
+        int armorFeet = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EquipmentSlotType.FEET));
         String armorTexture = dragon.dragonType.getName() + "|" + armorHead + "|" + armorNeck + "|" + armorLegs + "|" + armorFeet;
         if (!armorTexture.equals(dragon.dragonType.getName() + "|0|0|0|0")) {
             ResourceLocation resourcelocation = LAYERED_ARMOR_CACHE.get(armorTexture);
             if(resourcelocation == null){
                 resourcelocation = new ResourceLocation("iceandfire" + "dragonArmor_" + armorTexture);
                 List<String> tex = new ArrayList<String>();
-                for (EntityEquipmentSlot slot : ARMOR_SLOTS) {
+                for (EquipmentSlotType slot : ARMOR_SLOTS) {
                     if (dragon.dragonType == DragonType.FIRE) {
                         tex.add(EnumDragonTextures.Armor.getArmorForDragon(dragon, slot).FIRETEXTURE.toString());
                     } else {

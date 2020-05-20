@@ -9,7 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -268,51 +268,51 @@ public class MyrmexHive {
         this.noBreedTicks = compound.getInt("MTick");
         this.center = new BlockPos(compound.getInt("CX"), compound.getInt("CY"), compound.getInt("CZ"));
         this.centerHelper = new BlockPos(compound.getInt("ACX"), compound.getInt("ACY"), compound.getInt("ACZ"));
-        NBTTagList nbttaglist = compound.getTagList("Doors", 10);
+        ListNBT nbttaglist = compound.getList("Doors", 10);
         for (int i = 0; i < nbttaglist.tagCount(); ++i) {
             CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
             VillageDoorInfo villagedoorinfo = new VillageDoorInfo(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")), CompoundNBT.getInt("IDX"), CompoundNBT.getInt("IDZ"), CompoundNBT.getInt("TS"));
             this.villageDoorInfoList.add(villagedoorinfo);
         }
-        NBTTagList hiveMembers = compound.getTagList("HiveMembers", 10);
+        ListNBT hiveMembers = compound.getList("HiveMembers", 10);
         this.myrmexList.clear();
         for (int i = 0; i < hiveMembers.tagCount(); ++i) {
             CompoundNBT CompoundNBT = hiveMembers.getCompoundTagAt(i);
             this.myrmexList.add(CompoundNBT.getUniqueId("MyrmexUUID"));
         }
-        NBTTagList foodRoomList = compound.getTagList("FoodRooms", 10);
+        ListNBT foodRoomList = compound.getList("FoodRooms", 10);
         this.foodRooms.clear();
         for (int i = 0; i < foodRoomList.tagCount(); ++i) {
             CompoundNBT CompoundNBT = foodRoomList.getCompoundTagAt(i);
             this.foodRooms.add(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")));
         }
-        NBTTagList babyRoomList = compound.getTagList("BabyRooms", 10);
+        ListNBT babyRoomList = compound.getList("BabyRooms", 10);
         this.babyRooms.clear();
         for (int i = 0; i < babyRoomList.tagCount(); ++i) {
             CompoundNBT CompoundNBT = babyRoomList.getCompoundTagAt(i);
             this.babyRooms.add(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")));
         }
-        NBTTagList miscRoomList = compound.getTagList("MiscRooms", 10);
+        ListNBT miscRoomList = compound.getList("MiscRooms", 10);
         this.miscRooms.clear();
         for (int i = 0; i < miscRoomList.tagCount(); ++i) {
             CompoundNBT CompoundNBT = miscRoomList.getCompoundTagAt(i);
             this.miscRooms.add(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")));
         }
-        NBTTagList entrancesList = compound.getTagList("Entrances", 10);
+        ListNBT entrancesList = compound.getList("Entrances", 10);
         this.entrances.clear();
         for (int i = 0; i < entrancesList.tagCount(); ++i) {
             CompoundNBT CompoundNBT = entrancesList.getCompoundTagAt(i);
             this.entrances.put(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")), Direction.byHorizontalIndex(CompoundNBT.getInt("Facing")));
         }
 
-        NBTTagList entranceBottomsList = compound.getTagList("EntranceBottoms", 10);
+        ListNBT entranceBottomsList = compound.getList("EntranceBottoms", 10);
         this.entranceBottoms.clear();
         for (int i = 0; i < entranceBottomsList.tagCount(); ++i) {
             CompoundNBT CompoundNBT = entranceBottomsList.getCompoundTagAt(i);
             this.entranceBottoms.put(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")), Direction.byHorizontalIndex(CompoundNBT.getInt("Facing")));
         }
         hiveUUID = compound.getUniqueId("HiveUUID");
-        NBTTagList nbttaglist1 = compound.getTagList("Players", 10);
+        ListNBT nbttaglist1 = compound.getList("Players", 10);
         for (int j = 0; j < nbttaglist1.tagCount(); ++j) {
             CompoundNBT CompoundNBT1 = nbttaglist1.getCompoundTagAt(j);
 
@@ -330,8 +330,8 @@ public class MyrmexHive {
      */
     public void writeVillageDataToNBT(CompoundNBT compound) {
         compound.putInt("PopSize", this.numMyrmex);
-        compound.setBoolean("Reproduces", this.reproduces);
-        compound.setBoolean("HasOwner", this.hasOwner);
+        compound.putBoolean("Reproduces", this.reproduces);
+        compound.putBoolean("HasOwner", this.hasOwner);
         if (this.ownerUUID != null) {
             compound.setUniqueId("OwnerUUID", this.ownerUUID);
         }
@@ -346,7 +346,7 @@ public class MyrmexHive {
         compound.putInt("ACX", this.centerHelper.getX());
         compound.putInt("ACY", this.centerHelper.getY());
         compound.putInt("ACZ", this.centerHelper.getZ());
-        NBTTagList nbttaglist = new NBTTagList();
+        ListNBT nbttaglist = new ListNBT();
         for (VillageDoorInfo villagedoorinfo : this.villageDoorInfoList) {
             CompoundNBT CompoundNBT = new CompoundNBT();
             CompoundNBT.putInt("X", villagedoorinfo.getDoorBlockPos().getX());
@@ -357,14 +357,14 @@ public class MyrmexHive {
             CompoundNBT.putInt("TS", villagedoorinfo.getLastActivityTimestamp());
             nbttaglist.appendTag(CompoundNBT);
         }
-        NBTTagList hiveMembers = new NBTTagList();
+        ListNBT hiveMembers = new ListNBT();
         for (UUID memberUUID : this.myrmexList) {
             CompoundNBT CompoundNBT = new CompoundNBT();
             CompoundNBT.setUniqueId("MyrmexUUID", memberUUID);
             hiveMembers.appendTag(CompoundNBT);
         }
         compound.setTag("HiveMembers", hiveMembers);
-        NBTTagList foodRoomList = new NBTTagList();
+        ListNBT foodRoomList = new ListNBT();
         for (BlockPos pos : this.foodRooms) {
             CompoundNBT CompoundNBT = new CompoundNBT();
             CompoundNBT.putInt("X", pos.getX());
@@ -373,7 +373,7 @@ public class MyrmexHive {
             foodRoomList.appendTag(CompoundNBT);
         }
         compound.setTag("FoodRooms", foodRoomList);
-        NBTTagList babyRoomList = new NBTTagList();
+        ListNBT babyRoomList = new ListNBT();
         for (BlockPos pos : this.babyRooms) {
             CompoundNBT CompoundNBT = new CompoundNBT();
             CompoundNBT.putInt("X", pos.getX());
@@ -382,7 +382,7 @@ public class MyrmexHive {
             babyRoomList.appendTag(CompoundNBT);
         }
         compound.setTag("BabyRooms", babyRoomList);
-        NBTTagList miscRoomList = new NBTTagList();
+        ListNBT miscRoomList = new ListNBT();
         for (BlockPos pos : this.miscRooms) {
             CompoundNBT CompoundNBT = new CompoundNBT();
             CompoundNBT.putInt("X", pos.getX());
@@ -391,7 +391,7 @@ public class MyrmexHive {
             miscRoomList.appendTag(CompoundNBT);
         }
         compound.setTag("MiscRooms", miscRoomList);
-        NBTTagList entrancesList = new NBTTagList();
+        ListNBT entrancesList = new ListNBT();
         for (Map.Entry<BlockPos, Direction> entry : this.entrances.entrySet()) {
             CompoundNBT CompoundNBT = new CompoundNBT();
             CompoundNBT.putInt("X", entry.getKey().getX());
@@ -402,7 +402,7 @@ public class MyrmexHive {
         }
         compound.setTag("Entrances", entrancesList);
 
-        NBTTagList entranceBottomsList = new NBTTagList();
+        ListNBT entranceBottomsList = new ListNBT();
         for (Map.Entry<BlockPos, Direction> entry : this.entranceBottoms.entrySet()) {
             CompoundNBT CompoundNBT = new CompoundNBT();
             CompoundNBT.putInt("X", entry.getKey().getX());
@@ -414,7 +414,7 @@ public class MyrmexHive {
         compound.setTag("EntranceBottoms", entranceBottomsList);
         compound.setUniqueId("HiveUUID", this.hiveUUID);
         compound.setTag("Doors", nbttaglist);
-        NBTTagList nbttaglist1 = new NBTTagList();
+        ListNBT nbttaglist1 = new ListNBT();
 
         for (UUID s : this.playerReputation.keySet()) {
             CompoundNBT CompoundNBT1 = new CompoundNBT();

@@ -17,7 +17,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ParticleTypes;
@@ -69,7 +69,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
     }
 
     public static boolean isBlindfolded(LivingEntity attackTarget) {
-        return attackTarget != null && attackTarget.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() == IafItemRegistry.BLINDFOLD;
+        return attackTarget != null && attackTarget.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == IafItemRegistry.BLINDFOLD;
     }
 
     @Nullable
@@ -129,7 +129,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                 this.setAnimation(ANIMATION_HIT);
             }
             if (entityIn instanceof LivingEntity) {
-                ((LivingEntity) entityIn).addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 2, false, true));
+                ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(MobEffects.POISON, 100, 2, false, true));
             }
         }
         return super.attackEntityAsMob(entityIn);

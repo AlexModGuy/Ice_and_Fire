@@ -90,8 +90,8 @@ public class EntityPixieCharge extends AbstractFireballEntity {
     protected void onImpact(RayTraceResult movingObject) {
         if (!this.world.isRemote) {
             if (movingObject.entityHit instanceof LivingEntity) {
-                ((LivingEntity) movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.LEVITATION, 100, 0));
-                ((LivingEntity) movingObject.entityHit).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 100, 0));
+                ((LivingEntity) movingObject.entityHit).addPotionEffect(new EffectInstance(MobEffects.LEVITATION, 100, 0));
+                ((LivingEntity) movingObject.entityHit).addPotionEffect(new EffectInstance(MobEffects.GLOWING, 100, 0));
                 movingObject.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(shootingEntity, null), 5.0F);
             }
             if (this.world.isRemote) {

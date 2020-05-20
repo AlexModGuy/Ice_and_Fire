@@ -13,12 +13,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemBanner;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -45,7 +45,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     }
 
     private static ItemStack generateShield() {
-        NBTTagList patterns = new NBTTagList();
+        ListNBT patterns = new ListNBT();
         CompoundNBT currentPattern = new CompoundNBT();
         currentPattern.setString("Pattern", "iceandfire.dread");
         currentPattern.putInt("Color", EnumDyeColor.WHITE.getDyeDamage());
@@ -103,9 +103,9 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
 
     protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
         super.setEquipmentBasedOnDifficulty(difficulty);
-        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DREAD_KNIGHT_SWORD));
+        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(IafItemRegistry.DREAD_KNIGHT_SWORD));
         if(rand.nextBoolean()){
-            this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, SHIELD.copy());
+            this.setItemStackToSlot(EquipmentSlotType.OFFHAND, SHIELD.copy());
         }
         setArmorVariant(rand.nextInt(3));
     }

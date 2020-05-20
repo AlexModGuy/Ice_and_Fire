@@ -118,7 +118,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 18) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
-                this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 3));
+                this.getAttackTarget().addPotionEffect(new EffectInstance(MobEffects.POISON, 100, 3));
             }
         }
     }

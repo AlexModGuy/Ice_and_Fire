@@ -15,7 +15,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -101,32 +101,32 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
         if (rand.nextFloat() < 0.75F) {
             double chance = rand.nextFloat();
             if (chance < 0.0025F) {
-                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DRAGONSTEEL_ICE_SWORD));
+                this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(IafItemRegistry.DRAGONSTEEL_ICE_SWORD));
             }
             if (chance < 0.01F) {
-                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
+                this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
             }
             if (chance < 0.1F) {
-                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+                this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
             }
             if (chance < 0.75F) {
-                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DREAD_SWORD));
+                this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(IafItemRegistry.DREAD_SWORD));
             }
         }
         if (rand.nextFloat() < 0.75F) {
-            this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
+            this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
             setCustomArmorHead(rand.nextInt(8) != 0);
         }
         if (rand.nextFloat() < 0.75F) {
-            this.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+            this.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
             setCustomArmorChest(rand.nextInt(8) != 0);
         }
         if (rand.nextFloat() < 0.75F) {
-            this.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
+            this.setItemStackToSlot(EquipmentSlotType.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
             setCustomArmorLegs(rand.nextInt(8) != 0);
         }
         if (rand.nextFloat() < 0.75F) {
-            this.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
+            this.setItemStackToSlot(EquipmentSlotType.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
             setCustomArmorFeet(rand.nextInt(8) != 0);
         }
         setArmorVariant(rand.nextInt(8));
@@ -153,10 +153,10 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
     public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         compound.putInt("ArmorVariant", getArmorVariant());
-        compound.setBoolean("HasCustomHelmet", hasCustomArmorHead());
-        compound.setBoolean("HasCustomChestplate", hasCustomArmorChest());
-        compound.setBoolean("HasCustomLeggings", hasCustomArmorLegs());
-        compound.setBoolean("HasCustomBoots", hasCustomArmorFeet());
+        compound.putBoolean("HasCustomHelmet", hasCustomArmorHead());
+        compound.putBoolean("HasCustomChestplate", hasCustomArmorChest());
+        compound.putBoolean("HasCustomLeggings", hasCustomArmorLegs());
+        compound.putBoolean("HasCustomBoots", hasCustomArmorFeet());
     }
 
     @Override

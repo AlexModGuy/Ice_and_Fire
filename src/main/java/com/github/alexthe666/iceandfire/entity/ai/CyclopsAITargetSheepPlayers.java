@@ -10,7 +10,7 @@ import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerEntityMP;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -74,15 +74,15 @@ public class CyclopsAITargetSheepPlayers<T extends LivingEntity> extends TargetG
             this.targetEntity = (T) this.taskOwner.world.getNearestAttackablePlayer(this.taskOwner.getPosX(), this.taskOwner.getPosY() + (double) this.taskOwner.getEyeHeight(), this.taskOwner.getPosZ(), this.getTargetDistance(), this.getTargetDistance(), new Function<PlayerEntity, Double>() {
                 @Nullable
                 public Double apply(@Nullable PlayerEntity player) {
-                    ItemStack helmet = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-                    ItemStack chestplate = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-                    ItemStack leggings = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-                    ItemStack boots = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
+                    ItemStack helmet = player.getItemStackFromSlot(EquipmentSlotType.HEAD);
+                    ItemStack chestplate = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
+                    ItemStack leggings = player.getItemStackFromSlot(EquipmentSlotType.LEGS);
+                    ItemStack boots = player.getItemStackFromSlot(EquipmentSlotType.FEET);
                     double subHelm = helmet != null && helmet.getItem() != null && helmet.getItem() == IafItemRegistry.SHEEP_HELMET ? 0.2D : 0;
                     double subChest = chestplate != null && chestplate.getItem() != null && chestplate.getItem() == IafItemRegistry.SHEEP_CHESTPLATE ? 0.2D : 0;
                     double subLegs = leggings != null && leggings.getItem() != null && leggings.getItem() == IafItemRegistry.SHEEP_LEGGINGS ? 0.2D : 0;
                     double subBoots = boots != null && boots.getItem() != null && boots.getItem() == IafItemRegistry.SHEEP_BOOTS ? 0.2D : 0;
-                    double subSneaking = player.isSneaking() ? 0.2D : 0;
+                    double subSneaking = player.isShiftKeyDown() ? 0.2D : 0;
                     return 1.0D - subHelm - subChest - subLegs - subBoots - subSneaking;
                 }
             }, (Predicate<PlayerEntity>) this.targetEntitySelector);

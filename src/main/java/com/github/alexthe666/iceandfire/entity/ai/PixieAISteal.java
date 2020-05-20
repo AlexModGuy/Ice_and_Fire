@@ -85,7 +85,7 @@ public class PixieAISteal extends Goal {
             this.temptedEntity.playSound(IafSoundRegistry.PIXIE_TAUNT, 1F, 1F);
             this.temptedEntity.getMoveHelper().action = EntityMoveHelper.Action.WAIT;
             if (temptingPlayer != null) {
-                this.temptingPlayer.addPotionEffect(new PotionEffect(this.temptedEntity.negativePotions[this.temptedEntity.getColor()], 100));
+                this.temptingPlayer.addPotionEffect(new EffectInstance(this.temptedEntity.negativePotions[this.temptedEntity.getColor()], 100));
             }
 
         } else {

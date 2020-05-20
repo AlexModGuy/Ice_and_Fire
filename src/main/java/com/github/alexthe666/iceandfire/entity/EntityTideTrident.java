@@ -442,7 +442,7 @@ public class EntityTideTrident extends TridentEntity implements IProjectile {
         compound.setByte("inGround", (byte) (this.inGround ? 1 : 0));
         compound.setByte("pickup", (byte) this.pickupStatus.ordinal());
         compound.setDouble("damage", this.damage);
-        compound.setBoolean("crit", this.getIsCritical());
+        compound.putBoolean("crit", this.getIsCritical());
     }
 
     /**

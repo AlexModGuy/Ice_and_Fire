@@ -20,7 +20,7 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -61,7 +61,7 @@ public class EntityPixie extends TameableEntity {
         super(worldIn);
         this.moveController = new EntityPixie.AIMoveControl(this);
         this.experienceValue = 3;
-        this.setDropChance(EntityEquipmentSlot.MAINHAND, 0F);
+        this.setDropChance(EquipmentSlotType.MAINHAND, 0F);
     }
 
     public static BlockPos getPositionRelativetoGround(Entity entity, World world, double x, double z, Random rand) {
@@ -265,7 +265,7 @@ public class EntityPixie extends TameableEntity {
             }
         }
         if (this.getOwner() != null && this.isOwnerClose() && this.ticksExisted % 80 == 0) {
-            this.getOwner().addPotionEffect(new PotionEffect(positivePotions[this.getColor()], 100, 0, false, false));
+            this.getOwner().addPotionEffect(new EffectInstance(positivePotions[this.getColor()], 100, 0, false, false));
         }
         //PlayerEntity player = world.getClosestPlayerToEntity(this, 25);
         //if (player != null) {

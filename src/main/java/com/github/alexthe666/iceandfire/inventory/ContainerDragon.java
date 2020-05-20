@@ -3,9 +3,11 @@ package com.github.alexthe666.iceandfire.inventory;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemBanner;
 import net.minecraft.item.ItemStack;
 
@@ -13,7 +15,7 @@ public class ContainerDragon extends Container {
     private IInventory dragonInventory;
     private EntityDragonBase dragon;
 
-    public ContainerDragon(final EntityDragonBase dragon, PlayerEntity player) {
+    public ContainerDragon(int id, IInventory ratInventory, PlayerInventory playerInventory, EntityDragonBase dragonBase) {
 
         this.dragonInventory = dragon.dragonInventory;
         this.dragon = dragon;

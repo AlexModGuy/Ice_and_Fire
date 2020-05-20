@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.enums;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 
 public enum EnumDragonTextures {
@@ -368,7 +368,7 @@ public enum EnumDragonTextures {
             }
         }
 
-        public static Armor getArmorForDragon(EntityDragonBase dragon, EntityEquipmentSlot slot) {
+        public static Armor getArmorForDragon(EntityDragonBase dragon, EquipmentSlotType slot) {
             int armor = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(slot));
             switch (slot) {
                 case CHEST:

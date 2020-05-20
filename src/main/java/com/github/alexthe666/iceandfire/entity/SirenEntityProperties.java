@@ -21,7 +21,7 @@ public class SirenEntityProperties extends EntityProperties<LivingEntity> {
 
     @Override
     public void saveNBTData(CompoundNBT compound) {
-        compound.setBoolean("CharmedBySiren", isCharmed);
+        compound.putBoolean("CharmedBySiren", isCharmed);
         compound.putInt("SirenID", sirenID);
     }
 

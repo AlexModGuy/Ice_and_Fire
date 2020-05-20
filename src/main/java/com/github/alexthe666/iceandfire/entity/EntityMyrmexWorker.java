@@ -66,7 +66,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2));
-                this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 60, 1));
+                this.getAttackTarget().addPotionEffect(new EffectInstance(MobEffects.POISON, 60, 1));
             }
         }
         if (!this.getHeldItem(Hand.MAIN_HAND).isEmpty()) {

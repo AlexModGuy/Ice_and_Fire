@@ -48,10 +48,10 @@ public class TileEntityJar extends TileEntity implements ITickable {
 
     public CompoundNBT writeToNBT(CompoundNBT compound) {
         super.writeToNBT(compound);
-        compound.setBoolean("HasPixie", hasPixie);
+        compound.putBoolean("HasPixie", hasPixie);
         compound.putInt("PixieType", pixieType);
-        compound.setBoolean("HasProduced", hasProduced);
-        compound.setBoolean("TamedPixie", tamedPixie);
+        compound.putBoolean("HasProduced", hasProduced);
+        compound.putBoolean("TamedPixie", tamedPixie);
         if (pixieOwnerUUID != null) {
             compound.setUniqueId("PixieOwnerUUID", pixieOwnerUUID);
         }

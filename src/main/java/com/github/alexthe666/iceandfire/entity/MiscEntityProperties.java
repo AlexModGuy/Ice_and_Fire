@@ -34,7 +34,7 @@ public class MiscEntityProperties extends EntityProperties<LivingEntity> {
 
     @Override
     public void saveNBTData(CompoundNBT compound) {
-        compound.setBoolean("DismountedDragon", hasDismountedDragon);
+        compound.putBoolean("DismountedDragon", hasDismountedDragon);
         compound.putInt("GauntletDamage", specialWeaponDmg);
         compound.putInt("DreadPortalX", lastEnteredDreadPortalX);
         compound.putInt("DreadPortalY", lastEnteredDreadPortalY);

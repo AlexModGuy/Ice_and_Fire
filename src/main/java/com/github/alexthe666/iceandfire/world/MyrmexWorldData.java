@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import com.google.common.collect.Lists;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.MapStorage;
@@ -119,7 +119,7 @@ public class MyrmexWorldData extends WorldSavedData {
 
     public void readFromNBT(CompoundNBT nbt) {
         this.tickCounter = nbt.getInteger("Tick");
-        NBTTagList nbttaglist = nbt.getTagList("Hives", 10);
+        ListNBT nbttaglist = nbt.getList("Hives", 10);
 
         for (int i = 0; i < nbttaglist.tagCount(); ++i) {
             CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
@@ -131,7 +131,7 @@ public class MyrmexWorldData extends WorldSavedData {
 
     public CompoundNBT writeToNBT(CompoundNBT compound) {
         compound.setInteger("Tick", this.tickCounter);
-        NBTTagList nbttaglist = new NBTTagList();
+        ListNBT nbttaglist = new ListNBT();
 
         for (MyrmexHive village : this.hiveList) {
             CompoundNBT CompoundNBT = new CompoundNBT();

@@ -23,7 +23,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -108,7 +108,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     public static boolean isWearingEarplugs(LivingEntity entity) {
-        ItemStack helmet = entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+        ItemStack helmet = entity.getItemStackFromSlot(EquipmentSlotType.HEAD);
         return helmet.getItem() == IafItemRegistry.EARPLUGS || helmet != ItemStack.EMPTY && helmet.getItem().getTranslationKey().contains("earmuff");
     }
 

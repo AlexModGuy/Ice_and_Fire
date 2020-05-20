@@ -14,7 +14,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -110,7 +110,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
 
     protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
         super.setEquipmentBasedOnDifficulty(difficulty);
-        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.LICH_STAFF));
+        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(IafItemRegistry.LICH_STAFF));
     }
 
     @Nullable
@@ -194,10 +194,10 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
         return null;
     }
 
-    public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {
+    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
         super.setItemStackToSlot(slotIn, stack);
 
-        if (!this.world.isRemote && slotIn == EntityEquipmentSlot.MAINHAND) {
+        if (!this.world.isRemote && slotIn == EquipmentSlotType.MAINHAND) {
             this.setCombatTask();
         }
     }

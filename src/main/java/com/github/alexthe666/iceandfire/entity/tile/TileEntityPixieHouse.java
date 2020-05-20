@@ -37,9 +37,9 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
     public CompoundNBT writeToNBT(CompoundNBT compound) {
         super.writeToNBT(compound);
         compound.putInt("HouseType", houseType);
-        compound.setBoolean("HasPixie", hasPixie);
+        compound.putBoolean("HasPixie", hasPixie);
         compound.putInt("PixieType", pixieType);
-        compound.setBoolean("TamedPixie", tamedPixie);
+        compound.putBoolean("TamedPixie", tamedPixie);
         if (pixieOwnerUUID != null) {
             compound.setUniqueId("PixieOwnerUUID", pixieOwnerUUID);
         }

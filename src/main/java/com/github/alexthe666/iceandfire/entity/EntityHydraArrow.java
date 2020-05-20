@@ -8,7 +8,7 @@ import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.Hand;
@@ -59,9 +59,9 @@ public class EntityHydraArrow  extends AbstractArrowEntity {
                 net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, Hand);
 
                 if (Hand == Hand.MAIN_HAND) {
-                    this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                    this.setItemStackToSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
                 } else {
-                    this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
+                    this.setItemStackToSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
                 }
                 player.resetActiveHand();
                 this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
@@ -73,7 +73,7 @@ public class EntityHydraArrow  extends AbstractArrowEntity {
         if (living instanceof PlayerEntity) {
             this.damageShield((PlayerEntity) living, (float) this.getDamage());
         }
-        living.addPotionEffect(new PotionEffect(MobEffects.POISON, 300, 0));
+        living.addPotionEffect(new EffectInstance(MobEffects.POISON, 300, 0));
         if(this.shootingEntity instanceof LivingEntity){
             ((LivingEntity)this.shootingEntity).heal((float)this.getDamage());
         }

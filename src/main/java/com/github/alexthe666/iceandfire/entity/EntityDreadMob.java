@@ -12,7 +12,7 @@ import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -157,7 +157,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
             thrall.setCustomArmorChest(false);
             thrall.setCustomArmorLegs(false);
             thrall.setCustomArmorFeet(false);
-            for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()){
+            for(EquipmentSlotType slot : EquipmentSlotType.values()){
                 thrall.setItemStackToSlot(slot, entity.getItemStackFromSlot(slot));
             }
             return thrall;

@@ -119,7 +119,7 @@ public class EntityIceDragon extends EntityDragonBase {
     @Override
     public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
-        compound.setBoolean("Swimming", this.isSwimming());
+        compound.putBoolean("Swimming", this.isSwimming());
         compound.putInt("SwimmingTicks", this.ticksSwiming);
     }
 

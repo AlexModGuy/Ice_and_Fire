@@ -339,10 +339,10 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         compound.putInt("Variant", this.getVariant());
         compound.putInt("TicksSinceRoar", ticksSinceRoar);
         compound.setFloat("Scale", this.getSeaSerpentScale());
-        compound.setBoolean("JumpingOutOfWater", this.isJumpingOutOfWater());
-        compound.setBoolean("AttackDecision", attackDecision);
-        compound.setBoolean("Breathing", this.isBreathing());
-        compound.setBoolean("Ancient", this.isAncient());
+        compound.putBoolean("JumpingOutOfWater", this.isJumpingOutOfWater());
+        compound.putBoolean("AttackDecision", attackDecision);
+        compound.putBoolean("Breathing", this.isBreathing());
+        compound.putBoolean("Ancient", this.isAncient());
     }
 
     @Override

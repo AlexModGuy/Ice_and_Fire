@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity.tile;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;

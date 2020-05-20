@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -86,7 +86,7 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
 
                 for (int i = 0; i < this.spawnCount; ++i) {
                     CompoundNBT CompoundNBT = this.spawnData.getNbt();
-                    NBTTagList nbttaglist = CompoundNBT.getTagList("Pos", 6);
+                    ListNBT nbttaglist = CompoundNBT.getList("Pos", 6);
                     World world = this.getSpawnerWorld();
                     int j = nbttaglist.tagCount();
                     double d0 = j >= 1 ? nbttaglist.getDoubleAt(0) : (double) blockpos.getX() + (world.rand.nextDouble() - world.rand.nextDouble()) * (double) this.spawnRange + 0.5D;
@@ -152,7 +152,7 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
         this.potentialSpawns.clear();
 
         if (nbt.hasKey("SpawnPotentials", 9)) {
-            NBTTagList nbttaglist = nbt.getTagList("SpawnPotentials", 10);
+            ListNBT nbttaglist = nbt.getList("SpawnPotentials", 10);
 
             for (int i = 0; i < nbttaglist.tagCount(); ++i) {
                 this.potentialSpawns.add(new WeightedSpawnerEntity(nbttaglist.getCompoundTagAt(i)));
@@ -199,7 +199,7 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
             p_189530_1_.setShort("RequiredPlayerRange", (short) this.activatingRangeFromPlayer);
             p_189530_1_.setShort("SpawnRange", (short) this.spawnRange);
             p_189530_1_.setTag("SpawnData", this.spawnData.getNbt().copy());
-            NBTTagList nbttaglist = new NBTTagList();
+            ListNBT nbttaglist = new ListNBT();
 
             if (this.potentialSpawns.isEmpty()) {
                 nbttaglist.appendTag(this.spawnData.toCompoundTag());

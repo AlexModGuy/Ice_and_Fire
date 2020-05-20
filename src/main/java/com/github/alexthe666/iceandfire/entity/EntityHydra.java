@@ -136,7 +136,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
                 isStriking[i] = false;
                 if (this.getAttackTarget() != null && this.getDistance(this.getAttackTarget()) < 6) {
                     this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
-                    this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 3, false, false));
+                    this.getAttackTarget().addPotionEffect(new EffectInstance(MobEffects.POISON, 100, 3, false, false));
                     this.getAttackTarget().knockBack(this.getAttackTarget(), 0.25F, this.getPosX() - this.getAttackTarget().getPosX(), this.getPosZ() - this.getAttackTarget().getPosZ());
                 }
             }
@@ -253,7 +253,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
                 if (this.getSeveredHead() != -1) {
                     level--;
                 }
-                this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 30, level, false, false));
+                this.addPotionEffect(new EffectInstance(MobEffects.REGENERATION, 30, level, false, false));
             }
         }
         if (isBurning()) {

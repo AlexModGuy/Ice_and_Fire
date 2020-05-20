@@ -290,7 +290,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
             this.playSound(IafSoundRegistry.TROLL_ROAR, 1, 1);
         }
         if (!stone && this.getHealth() < this.getMaxHealth() && this.ticksExisted % 30 == 0) {
-            this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 30, 1, false, false));
+            this.addPotionEffect(new EffectInstance(MobEffects.REGENERATION, 30, 1, false, false));
         }
         setAvoidSun(this.world.isDaytime());
         if (this.world.isDaytime() && !this.world.isRemote) {

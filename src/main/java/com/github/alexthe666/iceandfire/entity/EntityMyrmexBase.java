@@ -177,7 +177,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                     }
                 }
 
-                this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, 0));
+                this.addPotionEffect(new EffectInstance(MobEffects.REGENERATION, 200, 0));
             }
         }
 
@@ -556,7 +556,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         if (flag) {
             itemstack.interactWithEntity(player, this, hand);
             return true;
-        } else if (!this.holdingSpawnEggOfClass(itemstack, this.getClass()) && this.getGrowthStage() >= 2 && this.isEntityAlive() && !this.isTrading() && !this.isChild() && !player.isSneaking()) {
+        } else if (!this.holdingSpawnEggOfClass(itemstack, this.getClass()) && this.getGrowthStage() >= 2 && this.isEntityAlive() && !this.isTrading() && !this.isChild() && !player.isShiftKeyDown()) {
             if (this.buyingList == null) {
                 this.populateBuyingList();
             }

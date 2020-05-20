@@ -104,7 +104,7 @@ public class EntityHydraBreath extends FireballEntity implements IDragonProjecti
         if (result.entityHit != null && !result.entityHit.isEntityEqual(this.shootingEntity) && !(result.entityHit instanceof EntityHydraHead) && !(result.entityHit instanceof EntityHydraBreath)) {
             result.entityHit.attackEntityFrom(DamageSource.causeMobDamage(this.shootingEntity), 1F);
             if(result.entityHit instanceof LivingEntity){
-                ((LivingEntity) result.entityHit).addPotionEffect(new PotionEffect(MobEffects.POISON, 60, 0));
+                ((LivingEntity) result.entityHit).addPotionEffect(new EffectInstance(MobEffects.POISON, 60, 0));
             }
             this.setDead();
         }

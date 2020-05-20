@@ -35,7 +35,7 @@ public class LayerMyrmexItem implements LayerRenderer<EntityMyrmexBase> {
         if (!stack.isEmpty()) {
             GlStateManager.pushMatrix();
 
-            if (myrmex.isSneaking()) {
+            if (myrmex.isShiftKeyDown()) {
                 GlStateManager.translate(0.0F, 0.2F, 0.0F);
             }
             this.translateToHand(handSide);

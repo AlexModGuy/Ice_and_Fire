@@ -12,7 +12,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class PathNavigateDragon extends PathNavigateGround {
+public class PathNavigateDragon extends GroundPathNavigator {
     public BlockPos targetPosition;
     private EntityDragonBase dragon;
 

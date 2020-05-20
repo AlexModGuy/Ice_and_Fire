@@ -171,7 +171,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
             this.playStingSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2));
-                this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 70, 1));
+                this.getAttackTarget().addPotionEffect(new EffectInstance(MobEffects.POISON, 70, 1));
             }
         }
         if (this.mate != null) {

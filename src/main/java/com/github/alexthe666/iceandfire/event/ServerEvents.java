@@ -28,7 +28,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -264,32 +264,32 @@ public class ServerEvents {
     public void onEntityDamage(LivingHurtEvent event) {
         if (event.getSource().isProjectile()) {
             float multi = 1;
-            if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemTrollArmor) {
+            if (event.getLivingEntity().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemTrollArmor) {
                 multi -= 0.1;
             }
-            if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemTrollArmor) {
+            if (event.getLivingEntity().getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() instanceof ItemTrollArmor) {
                 multi -= 0.3;
             }
-            if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemTrollArmor) {
+            if (event.getLivingEntity().getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() instanceof ItemTrollArmor) {
                 multi -= 0.2;
             }
-            if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemTrollArmor) {
+            if (event.getLivingEntity().getItemStackFromSlot(EquipmentSlotType.FEET).getItem() instanceof ItemTrollArmor) {
                 multi -= 0.1;
             }
             event.setAmount(event.getAmount() * multi);
         }
         if (event.getSource() == IceAndFire.dragonFire || event.getSource() == IceAndFire.dragonIce) {
             float multi = 1;
-            if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemScaleArmor) {
+            if (event.getLivingEntity().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemScaleArmor) {
                 multi -= 0.1;
             }
-            if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemScaleArmor) {
+            if (event.getLivingEntity().getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() instanceof ItemScaleArmor) {
                 multi -= 0.3;
             }
-            if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemScaleArmor) {
+            if (event.getLivingEntity().getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() instanceof ItemScaleArmor) {
                 multi -= 0.2;
             }
-            if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemScaleArmor) {
+            if (event.getLivingEntity().getItemStackFromSlot(EquipmentSlotType.FEET).getItem() instanceof ItemScaleArmor) {
                 multi -= 0.1;
             }
             event.setAmount(event.getAmount() * multi);
@@ -508,14 +508,14 @@ public class ServerEvents {
                 }
             }
         }
-        if (event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemSeaSerpentArmor || event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemSeaSerpentArmor || event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemSeaSerpentArmor || event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemSeaSerpentArmor) {
-            event.getLivingEntity().addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 50, 0, false, false));
+        if (event.getLivingEntity().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemSeaSerpentArmor || event.getLivingEntity().getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() instanceof ItemSeaSerpentArmor || event.getLivingEntity().getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() instanceof ItemSeaSerpentArmor || event.getLivingEntity().getItemStackFromSlot(EquipmentSlotType.FEET).getItem() instanceof ItemSeaSerpentArmor) {
+            event.getLivingEntity().addPotionEffect(new EffectInstance(MobEffects.WATER_BREATHING, 50, 0, false, false));
             if (event.getLivingEntity().isWet()) {
-                int headMod = event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-                int chestMod = event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-                int legMod = event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-                int footMod = event.getLivingEntity().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-                event.getLivingEntity().addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 50, headMod + chestMod + legMod + footMod - 1, false, false));
+                int headMod = event.getLivingEntity().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
+                int chestMod = event.getLivingEntity().getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
+                int legMod = event.getLivingEntity().getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
+                int footMod = event.getLivingEntity().getItemStackFromSlot(EquipmentSlotType.FEET).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
+                event.getLivingEntity().addPotionEffect(new EffectInstance(MobEffects.STRENGTH, 50, headMod + chestMod + legMod + footMod - 1, false, false));
 
 
             }
@@ -696,7 +696,7 @@ public class ServerEvents {
                     d4 += 1.0D;
                     event.getLivingEntity().world.spawnParticle(ParticleTypes.SPELL_MOB, event.getLivingEntity().getPosX() + d0 * d4, event.getLivingEntity().getPosY() + d1 * d4 + (double) event.getLivingEntity().getEyeHeight() * 0.5D, event.getLivingEntity().getPosZ() + d2 * d4, 0.0D, 0.0D, 0.0D, 3484199);
                 }
-                ((LivingEntity) next).addPotionEffect(new PotionEffect(MobEffects.WITHER, 40, 2));
+                ((LivingEntity) next).addPotionEffect(new EffectInstance(MobEffects.WITHER, 40, 2));
                 if (event.getLivingEntity().ticksExisted % 20 == 0) {
                     properties.specialWeaponDmg++;
                     next.attackEntityFrom(DamageSource.WITHER, 2);

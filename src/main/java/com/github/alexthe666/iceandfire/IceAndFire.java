@@ -26,6 +26,7 @@ public class IceAndFire {
     public static final Logger LOGGER = (Logger)LogManager.getLogger();
     public static final String MODID = "iceandfire";
     public static final SimpleChannel NETWORK_WRAPPER;
+    public static final boolean DEBUG = false;
     private static final String PROTOCOL_VERSION = Integer.toString(1);
     public static ItemGroup TAB_ITEMS = new ItemGroup(MODID) {
         @Override

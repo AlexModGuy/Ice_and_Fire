@@ -34,7 +34,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -289,7 +289,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 return true;
             }
             if (itemstack != null && itemstack.getItem() == Items.STICK) {
-                if (player.isSneaking()) {
+                if (player.isShiftKeyDown()) {
                     if (this.hasHomePosition) {
                         this.hasHomePosition = false;
                         player.sendStatusMessage(new TranslationTextComponent("hippogryph.command.remove_home"), true);
@@ -334,7 +334,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 return true;
             }
             if (itemstack.isEmpty()) {
-                if (player.isSneaking()) {
+                if (player.isShiftKeyDown()) {
                     this.openGUI(player);
                     return true;
                 } else if (this.isSaddled() && !this.isChild() && !player.isRiding()) {
@@ -419,14 +419,14 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     public void writeEntityToNBT(CompoundNBT compound) {
         super.writeEntityToNBT(compound);
         compound.putInt("Variant", this.getVariant());
-        compound.setBoolean("Chested", this.isChested());
-        compound.setBoolean("Saddled", this.isSaddled());
-        compound.setBoolean("Hovering", this.isHovering());
-        compound.setBoolean("Flying", this.isFlying());
+        compound.putBoolean("Chested", this.isChested());
+        compound.putBoolean("Saddled", this.isSaddled());
+        compound.putBoolean("Hovering", this.isHovering());
+        compound.putBoolean("Flying", this.isFlying());
         compound.putInt("Armor", this.getArmor());
         compound.putInt("Feedings", feedings);
         if (hippogryphInventory != null) {
-            NBTTagList nbttaglist = new NBTTagList();
+            ListNBT nbttaglist = new ListNBT();
             for (int i = 0; i < this.hippogryphInventory.getSizeInventory(); ++i) {
                 ItemStack itemstack = this.hippogryphInventory.getStackInSlot(i);
                 if (!itemstack.isEmpty()) {
@@ -441,7 +441,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         if (this.getCustomNameTag() != null && !this.getCustomNameTag().isEmpty()) {
             compound.setString("CustomName", this.getCustomNameTag());
         }
-        compound.setBoolean("HasHomePosition", this.hasHomePosition);
+        compound.putBoolean("HasHomePosition", this.hasHomePosition);
         if (homePos != null && this.hasHomePosition) {
             compound.putInt("HomeAreaX", homePos.getX());
             compound.putInt("HomeAreaY", homePos.getY());
@@ -461,7 +461,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         this.setArmor(compound.getInt("Armor"));
         feedings = compound.getInt("Feedings");
         if (hippogryphInventory != null) {
-            NBTTagList nbttaglist = compound.getTagList("Items", 10);
+            ListNBT nbttaglist = compound.getList("Items", 10);
             this.initHippogryphInv();
             for (int i = 0; i < nbttaglist.tagCount(); ++i) {
                 CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
@@ -469,7 +469,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 this.hippogryphInventory.setInventorySlotContents(j, new ItemStack(CompoundNBT));
             }
         } else {
-            NBTTagList nbttaglist = compound.getTagList("Items", 10);
+            ListNBT nbttaglist = compound.getList("Items", 10);
             this.initHippogryphInv();
             for (int i = 0; i < nbttaglist.tagCount(); ++i) {
                 CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
@@ -985,7 +985,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
             }
         }
-        if (this.getControllingPassenger() != null && this.getControllingPassenger().isSneaking()) {
+        if (this.getControllingPassenger() != null && this.getControllingPassenger().isShiftKeyDown()) {
             this.getControllingPassenger().dismountRidingEntity();
         }
         if (this.isFlying() && !this.isHovering() && this.getControllingPassenger() != null && this.isOverAir() && Math.max(Math.abs(motionZ), Math.abs(motionX)) < 0.1F) {

@@ -22,7 +22,7 @@ public class ModelCape extends ModelBiped {
     @Override
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
         super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        if (entity.isSneaking()) {
+        if (entity.isShiftKeyDown()) {
             this.cape.rotationPointY = 2.0F;
         } else {
             this.cape.rotationPointY = 0.0F;

@@ -12,7 +12,7 @@ import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerEntityMP;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.BossInfo;
@@ -98,8 +98,8 @@ public class EntityDreadQueen extends EntityDreadMob implements IAnimatedEntity,
 
     protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
         super.setEquipmentBasedOnDifficulty(difficulty);
-        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DREAD_QUEEN_SWORD));
-        this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(IafItemRegistry.DREAD_QUEEN_STAFF));
+        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(IafItemRegistry.DREAD_QUEEN_SWORD));
+        this.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(IafItemRegistry.DREAD_QUEEN_STAFF));
     }
 
     @Override

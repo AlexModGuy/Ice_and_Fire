@@ -106,7 +106,7 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
 
     @Override
     public boolean processInteract(PlayerEntity player, Hand hand) {
-        if (player.isSneaking()) {
+        if (player.isShiftKeyDown()) {
             this.setYaw(player.rotationYaw);
         }
         return super.processInteract(player, hand);

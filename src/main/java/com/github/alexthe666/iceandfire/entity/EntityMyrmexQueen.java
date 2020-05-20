@@ -123,7 +123,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                     hiveGen.generate(world, this.getRNG(), genPos);
                     this.setMadeHome(true);
                     this.setLocationAndAngles(genPos.getX(), down, genPos.getZ(), 0, 0);
-                    this.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, 30));
+                    this.addPotionEffect(new EffectInstance(MobEffects.INVISIBILITY, 30));
                     this.setHive(hiveGen.hive);
                     for (int i = 0; i < 3; i++) {
                         EntityMyrmexWorker worker = new EntityMyrmexWorker(world);
@@ -177,7 +177,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2));
-                this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 200, 2));
+                this.getAttackTarget().addPotionEffect(new EffectInstance(MobEffects.POISON, 200, 2));
                 this.getAttackTarget().isAirBorne = true;
                 float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
                 this.getAttackTarget().motionX /= 2.0D;
