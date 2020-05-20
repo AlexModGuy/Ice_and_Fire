@@ -41,8 +41,8 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
         this.accelerationZ = accelZ / d0 * 0.07D;
     }
 
-    public void setSizes(float getWidth(), float height) {
-        this.setSize(getWidth(), height);
+    public void setSizes(float getWidth, float height) {
+        this.setSize(getWidth, height);
     }
 
     protected boolean isFireballFiery() {

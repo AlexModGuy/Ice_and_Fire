@@ -1,12 +1,12 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.pathfinding.NodeProcessor;
-import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -42,7 +42,7 @@ public class IafDragonFlightManager {
     }
 
     public void update() {
-        if (dragon.getAttackTarget() != null && !dragon.getAttackTarget().isDead) {
+        if (dragon.getAttackTarget() != null && dragon.getAttackTarget().isAlive()) {
             if (dragon instanceof EntityIceDragon && dragon.isInWater()) {
                 if (dragon.getAttackTarget() == null) {
                     dragon.airAttack = IafDragonAttacks.Air.SCORCH_STREAM;
@@ -52,12 +52,12 @@ public class IafDragonFlightManager {
             }
             LivingEntity entity = dragon.getAttackTarget();
             if (dragon.airAttack == IafDragonAttacks.Air.TACKLE) {
-                target = new Vec3d(entity.getPosX(), entity.getPosY() + entity.height, entity.getPosZ());
+                target = new Vec3d(entity.getPosX(), entity.getPosY() + entity.getHeight(), entity.getPosZ());
             }
             if (dragon.airAttack == IafDragonAttacks.Air.HOVER_BLAST) {
                 float distY = 5 + dragon.getDragonStage() * 2;
                 int randomDist = 20;
-                if (dragon.getDistance(entity.getPosX(), dragon.getPosY(), entity.getPosZ()) < 4 || dragon.getDistance(entity.getPosX(), dragon.getPosY(), entity.getPosZ()) > 30) {
+                if (dragon.getDistanceSq(entity.getPosX(), dragon.getPosY(), entity.getPosZ()) < 16 || dragon.getDistanceSq(entity.getPosX(), dragon.getPosY(), entity.getPosZ()) > 900) {
                     target = new Vec3d(entity.getPosX() + dragon.getRNG().nextInt(randomDist) - randomDist / 2, entity.getPosY() + distY, entity.getPosZ() + dragon.getRNG().nextInt(randomDist) - randomDist / 2);
                 }
                 dragon.stimulateFire(entity.getPosX(), entity.getPosY(), entity.getPosZ(), 3);
@@ -69,12 +69,12 @@ public class IafDragonFlightManager {
                 target = new Vec3d(entity.getPosX() + distX, entity.getPosY() + distY, entity.getPosZ() + distZ);
                 dragon.tryScorchTarget();
                 hasStartedToScorch = true;
-                if (target != null && dragon.getDistance(target.x, target.y, target.z) < 10) {
+                if (target != null && dragon.getDistanceSq(target.x, target.y, target.z) < 100) {
                     target = new Vec3d(entity.getPosX() - distX, entity.getPosY() + distY, entity.getPosZ() - distZ);
                 }
             }
 
-        } else if (target == null || dragon.getDistance(target.x, target.y, target.z) < 2 || !dragon.world.isAirBlock(new BlockPos(target)) && (dragon.isHovering() || dragon.isFlying()) || dragon.getCommand() == 2 && dragon.shouldTPtoOwner()) {
+        } else if (target == null || dragon.getDistanceSq(target.x, target.y, target.z) < 4 || !dragon.world.isAirBlock(new BlockPos(target)) && (dragon.isHovering() || dragon.isFlying()) || dragon.getCommand() == 2 && dragon.shouldTPtoOwner()) {
             BlockPos viewBlock = DragonUtils.getBlockInView(dragon);
             if (dragon instanceof EntityIceDragon && !(dragon.isHovering() || dragon.isFlying())) {
                 viewBlock = DragonUtils.getWaterBlockInView(dragon);
@@ -91,7 +91,7 @@ public class IafDragonFlightManager {
                 target = new Vec3d(target.x, IafConfig.maxDragonFlight, target.z);
             }
             if (target.y >= dragon.getPosY() && !dragon.isModelDead()) {
-                dragon.motionY += 0.1D;
+                dragon.setMotion(dragon.getMotion().add(0, 0.1D, 0));
 
             }
         }
@@ -122,7 +122,7 @@ public class IafDragonFlightManager {
     }
 
     protected static class GroundMoveHelper extends MovementController {
-        public GroundMoveHelper(LivingEntity LivingEntityIn) {
+        public GroundMoveHelper(MobEntity LivingEntityIn) {
             super(LivingEntityIn);
         }
 
@@ -130,9 +130,9 @@ public class IafDragonFlightManager {
             return (float) IAFMath.atan2_accurate(MathHelper.sin(rotateAngleTo - rotateAngleFrom), MathHelper.cos(rotateAngleTo - rotateAngleFrom));
         }
 
-        public void onUpdateMoveHelper() {
-            if (this.action == EntityMoveHelper.Action.STRAFE) {
-                float f = (float) this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue();
+        public void tick() {
+            if (this.action == Action.STRAFE) {
+                float f = (float) this.mob.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue();
                 float f1 = (float) this.speed * f;
                 float f2 = this.moveForward;
                 float f3 = this.moveStrafe;
@@ -145,33 +145,33 @@ public class IafDragonFlightManager {
                 f4 = f1 / f4;
                 f2 = f2 * f4;
                 f3 = f3 * f4;
-                float f5 = MathHelper.sin(this.entity.rotationYaw * 0.017453292F);
-                float f6 = MathHelper.cos(this.entity.rotationYaw * 0.017453292F);
+                float f5 = MathHelper.sin(this.mob.rotationYaw * 0.017453292F);
+                float f6 = MathHelper.cos(this.mob.rotationYaw * 0.017453292F);
                 float f7 = f2 * f6 - f3 * f5;
                 float f8 = f3 * f6 + f2 * f5;
-                PathNavigate pathnavigate = this.entity.getNavigator();
+                PathNavigator pathnavigate = this.mob.getNavigator();
                 if (pathnavigate != null) {
                     NodeProcessor nodeprocessor = pathnavigate.getNodeProcessor();
-                    if (nodeprocessor != null && nodeprocessor.getPathNodeType(this.entity.world, MathHelper.floor(this.entity.getPosX() + (double) f7), MathHelper.floor(this.entity.getPosY()), MathHelper.floor(this.entity.getPosZ() + (double) f8)) != PathNodeType.WALKABLE) {
+                    if (nodeprocessor != null && nodeprocessor.getPathNodeType(this.mob.world, MathHelper.floor(this.mob.getPosX() + (double) f7), MathHelper.floor(this.mob.getPosY()), MathHelper.floor(this.mob.getPosZ() + (double) f8)) != PathNodeType.WALKABLE) {
                         this.moveForward = 1.0F;
                         this.moveStrafe = 0.0F;
                         f1 = f;
                     }
                 }
-                this.entity.setAIMoveSpeed(f1);
-                this.entity.setMoveForward(this.moveForward);
-                this.entity.setMoveStrafing(this.moveStrafe);
-                this.action = EntityMoveHelper.Action.WAIT;
-            } else if (this.action == EntityMoveHelper.Action.MOVE_TO) {
-                this.action = EntityMoveHelper.Action.WAIT;
-                EntityDragonBase dragonBase = (EntityDragonBase) entity;
-                double d0 = this.getPosX() - this.entity.getPosX();
-                double d1 = this.getPosZ() - this.entity.getPosZ();
-                double d2 = this.getPosY() - this.entity.getPosY();
+                this.mob.setAIMoveSpeed(f1);
+                this.mob.setMoveForward(this.moveForward);
+                this.mob.setMoveStrafing(this.moveStrafe);
+                this.action = Action.WAIT;
+            } else if (this.action == Action.MOVE_TO) {
+                this.action = Action.WAIT;
+                EntityDragonBase dragonBase = (EntityDragonBase) mob;
+                double d0 = this.getX() - this.mob.getPosX();
+                double d1 = this.getZ() - this.mob.getPosZ();
+                double d2 = this.getY() - this.mob.getPosY();
                 double d3 = d0 * d0 + d2 * d2 + d1 * d1;
 
                 if (d3 < 2.500000277905201E-7D) {
-                    this.entity.setMoveForward(0.0F);
+                    this.mob.setMoveForward(0.0F);
                     return;
                 }
                 float targetDegree = (float) (MathHelper.atan2(d1, d0) * (180D / Math.PI)) - 90.0F;
@@ -180,20 +180,20 @@ public class IafDragonFlightManager {
                     float ageMod = 1F - Math.min(dragonBase.getAgeInDays(), 125) / 125F;
                     changeRange = 5 + ageMod * 10;
                 }
-                this.entity.rotationYaw = this.limitAngle(this.entity.rotationYaw, targetDegree, changeRange);
-                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
-                if (d2 > (double) this.entity.stepHeight && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.entity.getWidth())) {
-                    this.entity.getJumpHelper().setJumping();
-                    this.action = EntityMoveHelper.Action.JUMPING;
+                this.mob.rotationYaw = this.limitAngle(this.mob.rotationYaw, targetDegree, changeRange);
+                this.mob.setAIMoveSpeed((float) (this.speed * this.mob.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
+                if (d2 > (double) this.mob.stepHeight && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.mob.getWidth())) {
+                    this.mob.getJumpController().setJumping();
+                    this.action = Action.JUMPING;
                 }
-            } else if (this.action == EntityMoveHelper.Action.JUMPING) {
-                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
+            } else if (this.action == Action.JUMPING) {
+                this.mob.setAIMoveSpeed((float) (this.speed * this.mob.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
 
-                if (this.entity.onGround) {
-                    this.action = EntityMoveHelper.Action.WAIT;
+                if (this.mob.onGround) {
+                    this.action = Action.WAIT;
                 }
             } else {
-                this.entity.setMoveForward(0.0F);
+                this.mob.setMoveForward(0.0F);
             }
         }
 
@@ -246,9 +246,7 @@ public class IafDragonFlightManager {
                 double lvt_16_1_ = speed * MathHelper.cos(yawTurnHead * 0.017453292F) * Math.abs((double) distX / dist);
                 double lvt_18_1_ = speed * MathHelper.sin(yawTurnHead * 0.017453292F) * Math.abs((double) distZ / dist);
                 double lvt_20_1_ = speed * MathHelper.sin(finPitch * 0.017453292F) * Math.abs((double) distY / dist);
-                dragon.motionX += lvt_16_1_ * 0.2D;
-                dragon.motionY += lvt_20_1_ * 0.2D;
-                dragon.motionZ += lvt_18_1_ * 0.2D;
+                dragon.setMotion(dragon.getMotion().add(lvt_16_1_ * 0.2D, lvt_20_1_ * 0.2D, lvt_18_1_ * 0.2D));
             }
         }
 
@@ -265,21 +263,19 @@ public class IafDragonFlightManager {
         }
 
         @Override
-        public void onUpdateMoveHelper() {
+        public void tick() {
             double flySpeed = speed * speedMod();
             Vec3d dragonVec = dragon.getPositionVector();
             Vec3d moveVec = new Vec3d(posX, posY, posZ);
             Vec3d normalized = moveVec.subtract(dragonVec).normalize();
             double dist = dragonVec.distanceTo(moveVec);
-            dragon.motionX = normalized.x * flySpeed;
-            dragon.motionY = normalized.y * flySpeed;
-            dragon.motionZ = normalized.z * flySpeed;
+            dragon.setMotion(normalized.x * flySpeed, normalized.y * flySpeed,  normalized.z * flySpeed);
             if (dist > 2.5E-7) {
                 float yaw = (float) Math.toDegrees(Math.PI * 2 - Math.atan2(normalized.x, normalized.y));
                 dragon.rotationYaw = limitAngle(dragon.rotationYaw, yaw, 5);
-                entity.setAIMoveSpeed((float)(speed));
+                dragon.setAIMoveSpeed((float)(speed));
             }
-            dragon.move(MoverType.SELF, dragon.motionX, dragon.motionY, dragon.motionZ);
+            dragon.move(MoverType.SELF, dragon.getMotion());
         }
 
         public double speedMod(){

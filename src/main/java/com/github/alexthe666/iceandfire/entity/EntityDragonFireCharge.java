@@ -39,7 +39,7 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
         this.accelerationZ = accelZ / d0 * 0.07D;
     }
 
-    public void setSizes(float getWidth(), float height) {
+    public void setSizes(float getWidth, float height) {
         this.setSize(getWidth(), height);
     }
 

@@ -175,7 +175,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     public String prevArmorResLoc = "0|0|0|0";
     public String armorResLoc = "0|0|0|0";
     protected int flyHovering;
-    protected IafDragonFlightManager flightManager;
+    public IafDragonFlightManager flightManager;
     protected boolean hasHadHornUse = false;
     protected int fireTicks;
     protected int blockBreakCounter;
