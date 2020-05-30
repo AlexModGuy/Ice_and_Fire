@@ -12,7 +12,6 @@ import slimeknights.tconstruct.library.client.MaterialRenderInfo;
 public class TinkersCompatClient {
 
     public static void preInit() {
-        TinkerBook.INSTANCE.addTransformer(new IceAndFireBookTranformer());
         TinkerBook.INSTANCE.addRepository(new FileRepository("iceandfire:tinkers/book"));
         MaterialRenderInfo boneInfo = new MaterialRenderInfo.Default(0XB2AD98);
         boneInfo.setTextureSuffix("bone_base");
