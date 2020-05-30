@@ -361,7 +361,6 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(Math.min(0.25D, 0.15D * this.getSeaSerpentScale() * this.getAncientModifier()));
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.max(4, IceAndFire.CONFIG.seaSerpentAttackStrength * this.getSeaSerpentScale() * this.getAncientModifier()));
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.max(10, IceAndFire.CONFIG.seaSerpentBaseHealth * this.getSeaSerpentScale() * this.getAncientModifier()));
-        this.heal(30F * this.getSeaSerpentScale());
     }
 
     private float getAncientModifier() {
@@ -722,6 +721,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         } else {
             this.setSeaSerpentScale(1.5F + this.getRNG().nextFloat() * 4.0F);
         }
+        this.heal(this.getMaxHealth());
         return livingdata;
     }
 
