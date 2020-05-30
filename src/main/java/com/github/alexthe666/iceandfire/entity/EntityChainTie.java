@@ -88,9 +88,12 @@ public class EntityChainTie extends EntityHanging {
 
     public void writeEntityToNBT(NBTTagCompound compound) {
         BlockPos blockpos = this.getHangingPosition();
-        compound.setInteger("TileX", blockpos.getX());
-        compound.setInteger("TileY", blockpos.getY());
-        compound.setInteger("TileZ", blockpos.getZ());
+        if(blockpos != null){
+            compound.setInteger("TileX", blockpos.getX());
+            compound.setInteger("TileY", blockpos.getY());
+            compound.setInteger("TileZ", blockpos.getZ());
+        }
+
     }
 
     public void readEntityFromNBT(NBTTagCompound compound) {
