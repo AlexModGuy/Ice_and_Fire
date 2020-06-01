@@ -47,7 +47,7 @@ public class LayerStoneEntityCrack implements LayerRenderer {
                 GlStateManager.loadIdentity();
                 GlStateManager.scale(x, y, 1);
                 GlStateManager.matrixMode(5888);
-
+                GlStateManager.color(1.0F, 1.0F, 1.0F, 0.75F);
                 if (this.renderer.getMainModel() instanceof ModelTroll) {
                     this.renderer.getMainModel().render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
                 } else if (this.renderer.getMainModel() instanceof ICustomStatueModel) {
