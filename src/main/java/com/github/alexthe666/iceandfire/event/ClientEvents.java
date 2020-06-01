@@ -272,6 +272,13 @@ public class ClientEvents {
                 net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post(event.getEntity(), event.getRenderer(), event.getPartialRenderTick(), event.getX(), event.getY(), event.getZ()));
             }
         }
+
+        if (event.getEntity() instanceof EntityLiving && !event.getEntity().isInvisible()) {
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), StoneEntityProperties.class);
+            if (properties != null && properties.isStone) {
+                event.getEntity().setInvisible(true);
+            }
+        }
     }
 
     @SubscribeEvent
@@ -446,6 +453,12 @@ public class ClientEvents {
             GlStateManager.disableBlend();
             GlStateManager.enableCull();
             GlStateManager.popMatrix();
+        }
+        if (event.getEntity() instanceof EntityLiving) {
+            StoneEntityProperties stoneProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), StoneEntityProperties.class);
+            if (stoneProps != null && stoneProps.isStone) {
+                event.getEntity().setInvisible(false);
+            }
         }
     }
 

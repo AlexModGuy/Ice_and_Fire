@@ -658,7 +658,6 @@ public class ServerEvents {
                 living.motionY -= 0.1D;
                 living.swingProgress = 0;
                 living.limbSwing = 0;
-                living.setInvisible(!stonePlayer);
                 living.livingSoundTime = 0;
                 living.hurtTime = 0;
                 living.hurtResistantTime = living.maxHurtResistantTime - 1;
