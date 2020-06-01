@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
-import com.github.alexthe666.iceandfire.item.*;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -170,12 +169,12 @@ public class IafItemRegistry {
     public static Item ice_dragon_blood = new ItemGeneric("ice_dragon_blood", "iceandfire.ice_dragon_blood");
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_stick")
     public static Item dragon_stick = new ItemDragonStaff();
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_horn")
-    public static Item dragon_horn = new ItemDragonHornStatic();
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_horn_fire")
-    public static Item dragon_horn_fire = new ItemDragonHornActive("dragon_horn_fire");
+    public static Item dragon_horn_fire_legacy = new ItemDragonHornLegacy("fire");
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_horn_ice")
-    public static Item dragon_horn_ice = new ItemDragonHornActive("dragon_horn_ice");
+    public static Item dragon_horn_ice_legacy = new ItemDragonHornLegacy("ice");
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_horn")
+    public static Item dragon_horn = new ItemDragonHorn();
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":dragon_flute")
     public static Item dragon_flute = new ItemDragonFlute();
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":summoning_crystal_fire")

@@ -535,10 +535,6 @@ public class EntityIceDragon extends EntityDragonBase {
         return new ItemStack(IafItemRegistry.dragon_skull, 1, 1);
     }
 
-    public ItemStack getHorn() {
-        return new ItemStack(IafItemRegistry.dragon_horn_ice);
-    }
-
     public boolean useFlyingPathFinder() {
         return this.isFlying() || this.isInMaterialWater();
     }

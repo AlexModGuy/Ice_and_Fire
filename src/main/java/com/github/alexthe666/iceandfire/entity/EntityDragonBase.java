@@ -960,6 +960,9 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
+        if (stack.getItem() == IafItemRegistry.dragon_horn) {
+            return false;
+        }
         int lastDeathStage = this.getAgeInDays() / 5;
         if (stack.getItem() == IafItemRegistry.dragon_debug_stick) {
             logic.debug();
@@ -1044,9 +1047,6 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
                 }
                 this.setTamedBy(player);
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-                if (stack.getItem() == IafItemRegistry.dragon_horn && (properties == null || !properties.isStone)) {
-                    return super.processInteract(player, hand);
-                }
                 if (stack.isEmpty() && !player.isSneaking()) {
                     if (this.getDragonStage() < 2) {
                         this.startRiding(player, true);
@@ -1147,10 +1147,6 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
     }
 
     protected ItemStack getSkull() {
-        return ItemStack.EMPTY;
-    }
-
-    public ItemStack getHorn() {
         return ItemStack.EMPTY;
     }
 

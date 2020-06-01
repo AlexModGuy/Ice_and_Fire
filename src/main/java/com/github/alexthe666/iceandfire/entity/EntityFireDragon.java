@@ -420,8 +420,4 @@ public class EntityFireDragon extends EntityDragonBase {
         return new ItemStack(IafItemRegistry.dragon_skull);
     }
 
-    public ItemStack getHorn() {
-        return new ItemStack(IafItemRegistry.dragon_horn_fire);
-    }
-
 }

@@ -125,7 +125,6 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
         RenderManager manager = Minecraft.getMinecraft().getRenderManager();
         try {
             render = manager.getEntityRenderObject(entityIn);
-
             if (render != null && manager.renderEngine != null) {
                 try {
                     render.doRender(entityIn, x, y, z, yaw, partialTicks);
