@@ -51,7 +51,7 @@ public class MessageDragonSyncFire extends AbstractMessage<MessageDragonSyncFire
     @Override
     @SideOnly(Side.CLIENT)
     public void onClientReceived(Minecraft client, MessageDragonSyncFire message, EntityPlayer player, MessageContext messageContext) {
-        if (player.world != null) {
+        if (player != null && player.world != null) {
             Entity entity = player.world.getEntityByID(message.dragonId);
             if (entity != null && entity instanceof EntityDragonBase) {
                 EntityDragonBase dragon = (EntityDragonBase) entity;

@@ -1584,8 +1584,11 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
             this.rotationYawHead = ((EntityPlayer) riding).rotationYawHead;
             this.prevRotationYaw = ((EntityPlayer) riding).rotationYawHead;
             this.setPositionAndRotation(riding.posX + extraX, riding.posY + extraY, riding.posZ + extraZ, ((EntityPlayer) riding).rotationYawHead, 0);
-            if ((this.getControlState() == 1 << 4 || ((EntityPlayer) riding).isElytraFlying()) && !riding.isRiding()) {
+            if ((riding.isSneaking() || ((EntityPlayer) riding).isElytraFlying()) && !riding.isRiding()) {
                 this.dismountRidingEntity();
+                if(world.isRemote){
+                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), this.getControlState(), posX, posY, posZ));
+                }
             }
 
         }
