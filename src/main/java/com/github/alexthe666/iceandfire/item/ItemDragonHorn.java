@@ -93,9 +93,8 @@ public class ItemDragonHorn extends Item {
             trueStack.setTagCompound(newTag);
             playerIn.swingArm(hand);
             playerIn.world.playSound(playerIn, playerIn.getPosition(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3, 0.75F);
-            if(!target.world.isRemote){
-                target.setDead();
-            }
+            target.setDead();
+            playerIn.world.removeEntity(target);
             return true;
         }
        return false;
