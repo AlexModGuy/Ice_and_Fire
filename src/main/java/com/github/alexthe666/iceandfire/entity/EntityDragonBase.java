@@ -1663,7 +1663,7 @@ public abstract class EntityDragonBase extends EntityTameable implements ISyncMo
         int k = MathHelper.floor(this.posZ);
         BlockPos pos = new BlockPos(i, j, k);
         EntityDragonEgg dragon = new EntityDragonEgg(this.world);
-        dragon.setType(EnumDragonEgg.byMetadata(new Random().nextInt(3) + getStartMetaForType()));
+        dragon.setType(EnumDragonEgg.byMetadata(MathHelper.clamp(getRNG().nextInt(4), 0, 3) + getStartMetaForType()));
         dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
         return dragon;
     }
