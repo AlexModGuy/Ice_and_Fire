@@ -20,6 +20,8 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafEntityRegistry {
 
+    public static final EntityType<EntityDragonPart> DRAGON_MULTIPART = registerEntity(EntityType.Builder.create(EntityDragonPart::new, EntityClassification.MISC).size(0.5F, 0.5F).immuneToFire(), "dragon_multipart");
+    public static final EntityType<EntityMutlipartPart> MULTIPART = registerEntity(EntityType.Builder.create(EntityMutlipartPart::new, EntityClassification.MISC).size(0.5F, 0.5F).immuneToFire(), "multipart");
     public static final EntityType<EntityDragonEgg> DRAGON_EGG = registerEntity(EntityType.Builder.create(EntityDragonEgg::new, EntityClassification.MISC).size(0.45F, 0.55F).immuneToFire(), "dragon_egg");
     public static final EntityType<EntityDragonArrow> DRAGON_ARROW = registerEntity(EntityType.Builder.create(EntityDragonArrow::new, EntityClassification.MISC).size(0.5F, 0.5F), "dragon_arrow");
     public static final EntityType<EntityDragonSkull> DRAGON_ARROW = registerEntity(EntityType.Builder.create(EntityDragonSkull::new, EntityClassification.MISC).size(0.9F, 0.65F), "dragon_skull");

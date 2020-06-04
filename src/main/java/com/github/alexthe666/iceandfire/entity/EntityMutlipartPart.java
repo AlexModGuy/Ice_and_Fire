@@ -2,17 +2,25 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
-import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.world.World;
 
 public class EntityMutlipartPart extends PartEntity {
 
+    public EntityMutlipartPart(EntityType t, World world) {
+        super(t, world);
+    }
+
+    public EntityMutlipartPart(EntityType type, LivingEntity parent, float radius, float angleYaw, float offsetY, float sizeX, float sizeY, float damageMultiplier) {
+        super(type, parent, radius, angleYaw, offsetY, sizeX, sizeY, damageMultiplier);
+    }
+
     public EntityMutlipartPart(LivingEntity parent, float radius, float angleYaw, float offsetY, float sizeX, float sizeY, float damageMultiplier) {
-        super(parent, radius, angleYaw, offsetY, sizeX, sizeY, damageMultiplier);
+        super(IafEntityRegistry.MULTIPART, parent, radius, angleYaw, offsetY, sizeX, sizeY, damageMultiplier);
     }
 
     public boolean processInitialInteract(PlayerEntity player, Hand hand) {
@@ -34,19 +42,16 @@ public class EntityMutlipartPart extends PartEntity {
         return this.parent;
     }
 
-    public void resize(float getWidth(), float height) {
-        this.setSize(getWidth(), height);
-    }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    public void tick() {
+        super.tick();
         if (this.parent == null || shouldNotExist()) {
-            this.world.removeEntityDangerously(this);
+            this.remove();
         }
     }
 
     public boolean shouldNotExist() {
-        return !this.parent.isEntityAlive();
+        return !this.parent.isAlive();
     }
 }

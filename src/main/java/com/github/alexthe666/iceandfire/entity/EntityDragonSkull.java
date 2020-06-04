@@ -1,12 +1,13 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -16,6 +17,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromStatues, IDeadMob {
 
@@ -27,9 +30,8 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
     public final float minSize = 0.3F;
     public final float maxSize = 8.58F;
 
-    public EntityDragonSkull(World worldIn) {
-        super(worldIn);
-        this.setSize(0.9F, 0.65F);
+    public EntityDragonSkull(EntityType type, World worldIn) {
+        super(type, worldIn);
         this.ignoreFrustumCheck = true;
         // setScale(this.getDragonAge());
     }
@@ -42,8 +44,8 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
     }
 
     @Override
-    public boolean isEntityInvulnerable(DamageSource i) {
-        return i.getTrueSource() != null;
+    public boolean isInvulnerableTo(DamageSource i) {
+        return i.getTrueSource() != null && super.isInvulnerableTo(i);
     }
 
     @Override
@@ -79,11 +81,11 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
         this.getDataManager().set(DRAGON_DIRECTION, var1);
     }
 
-    public int getType() {
+    public int getDragonType() {
         return this.getDataManager().get(DRAGON_TYPE).intValue();
     }
 
-    public void setType(int var1) {
+    public void setDragonType(int var1) {
         this.getDataManager().set(DRAGON_TYPE, var1);
     }
 
@@ -115,16 +117,33 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
     }
 
     public void turnIntoItem() {
-        if (isDead)
+        if (removed)
             return;
-        this.setDead();
-        ItemStack stack = new ItemStack(IafItemRegistry.DRAGON_SKULL, 1, getType());
-        stack.setTagCompound(new CompoundNBT());
-        stack.getTagCompound().putInt("Stage", this.getStage());
-        stack.getTagCompound().putInt("DragonAge", this.getDragonAge());
+        this.remove();
+        ItemStack stack = new ItemStack(getDragonSkullItem());
+        stack.setTag(new CompoundNBT());
+        stack.getTag().putInt("Stage", this.getStage());
+        stack.getTag().putInt("DragonAge", this.getDragonAge());
         if (!this.world.isRemote)
             this.entityDropItem(stack, 0.0F);
 
+    }
+
+    public Item getDragonSkullItem(){
+        switch(getDragonType()){
+            case 0:
+                return IafItemRegistry.DRAGON_SKULL_FIRE;
+            case 1:
+                return IafItemRegistry.DRAGON_SKULL_ICE;
+            default:
+                return IafItemRegistry.DRAGON_SKULL_FIRE;
+        }
+    }
+
+    @Nullable
+    @Override
+    public AgeableEntity createChild(AgeableEntity ageable) {
+        return null;
     }
 
     @Override
@@ -136,21 +155,21 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
     }
 
     @Override
-    public void readEntityFromNBT(CompoundNBT compound) {
-        this.setType(compound.getInt("Type"));
+    public void readAdditional(CompoundNBT compound) {
+        this.setDragonType(compound.getInt("Type"));
         this.setStage(compound.getInt("Stage"));
         this.setDragonAge(compound.getInt("DragonAge"));
         this.setYaw(compound.getFloat("DragonYaw"));
-        super.readEntityFromNBT(compound);
+        super.readAdditional(compound);
     }
 
     @Override
-    public void writeEntityToNBT(CompoundNBT compound) {
-        compound.putInt("Type", this.getType());
+    public void writeAdditional(CompoundNBT compound) {
+        compound.putInt("Type", this.getDragonType());
         compound.putInt("Stage", this.getStage());
         compound.putInt("DragonAge", this.getDragonAge());
-        compound.setFloat("DragonYaw", this.getYaw());
-        super.writeEntityToNBT(compound);
+        compound.putFloat("DragonYaw", this.getYaw());
+        super.writeAdditional(compound);
     }
 
     public float getDragonSize() {
@@ -171,11 +190,6 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
 
     @Override
     protected void collideWithEntity(Entity entity) {
-    }
-
-    @Override
-    public EntityAgeable createChild(EntityAgeable ageable) {
-        return null;
     }
 
     @Override

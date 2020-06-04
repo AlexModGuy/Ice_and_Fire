@@ -1,11 +1,10 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -19,18 +18,27 @@ public class PartEntity extends Entity {
     protected float offsetY;
 
     protected float damageMultiplier;
+    public EntitySize multipartSize;
+
+    public PartEntity(EntityType t, World world) {
+        super(t, world);
+        multipartSize = t.getSize();
+    }
 
     public PartEntity(EntityType t, LivingEntity parent, float radius, float angleYaw, float offsetY, float sizeX, float sizeY, float damageMultiplier) {
         super(t, parent.world);
-        //TODO
-       // this.recalculateSize(sizeX, sizeY);
         this.parent = parent;
-
+        this.multipartSize = new EntitySize(sizeX, sizeY, false);
         this.radius = radius;
         this.angleYaw = (angleYaw + 90.0F) * ((float) Math.PI / 180.0F);
         this.offsetY = offsetY;
 
         this.damageMultiplier = damageMultiplier;
+    }
+
+    @Override
+    public EntitySize getSize(Pose poseIn) {
+        return multipartSize;
     }
 
     @Override
