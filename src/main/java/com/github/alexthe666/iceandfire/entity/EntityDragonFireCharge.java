@@ -2,11 +2,13 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.projectile.AbstractFireballEntity;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -18,29 +20,25 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
 
     public int ticksInAir;
 
-    public EntityDragonFireCharge(World worldIn) {
-        super(worldIn);
+    public EntityDragonFireCharge(EntityType type, World worldIn) {
+        super(type, worldIn);
 
     }
 
-    public EntityDragonFireCharge(World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
-        super(worldIn, posX, posY, posZ, accelX, accelY, accelZ);
+    public EntityDragonFireCharge(EntityType type, World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
+        super(type, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
         double d0 = (double) MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.07D;
         this.accelerationY = accelY / d0 * 0.07D;
         this.accelerationZ = accelZ / d0 * 0.07D;
     }
 
-    public EntityDragonFireCharge(World worldIn, EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
-        super(worldIn, shooter, accelX, accelY, accelZ);
+    public EntityDragonFireCharge(EntityType type, World worldIn, EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
+        super(type, shooter, accelX, accelY, accelZ, worldIn);
         double d0 = (double) MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.07D;
         this.accelerationY = accelY / d0 * 0.07D;
         this.accelerationZ = accelZ / d0 * 0.07D;
-    }
-
-    public void setSizes(float getWidth, float height) {
-        this.setSize(getWidth(), height);
     }
 
     @Override
@@ -48,23 +46,23 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
         return false;
     }
 
-    public void onUpdate() {
+    public void tick() {
         for (int i = 0; i < 4; ++i) {
-            this.world.spawnParticle(ParticleTypes.FLAME, this.getPosX() + ((this.rand.nextDouble() - 0.5D) * getWidth()), this.getPosY() + ((this.rand.nextDouble() - 0.5D) * getWidth()), this.getPosZ() + ((this.rand.nextDouble() - 0.5D) * getWidth()), 0.0D, 0.0D, 0.0D);
+            this.world.addParticle(ParticleTypes.FLAME, this.getPosX() + ((this.rand.nextDouble() - 0.5D) * getWidth()), this.getPosY() + ((this.rand.nextDouble() - 0.5D) * getWidth()), this.getPosZ() + ((this.rand.nextDouble() - 0.5D) * getWidth()), 0.0D, 0.0D, 0.0D);
         }
         if (this.isInWater()) {
-            setDead();
+            remove();
         }
 
         if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this))) {
-            super.onUpdate();
+            super.tick();
 
             if (this.isFireballFiery()) {
                 this.setFire(1);
             }
 
             ++this.ticksInAir;
-            RayTraceResult raytraceresult = ProjectileHelper.forwardsRaycast(this, false, this.ticksInAir >= 25, this.shootingEntity);
+            RayTraceResult raytraceresult = ProjectileHelper.rayTrace(this, false, this.ticksInAir >= 25, this.shootingEntity);
 
             if (raytraceresult != null) {
                 this.onImpact(raytraceresult);

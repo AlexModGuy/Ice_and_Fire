@@ -1,13 +1,14 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.google.common.base.Optional;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -15,6 +16,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
@@ -23,13 +25,12 @@ import java.util.UUID;
 
 public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromStatues, IDeadMob {
 
-    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.createKey(EntityDragonEgg.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    protected static final DataParameter<java.util.Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.createKey(EntityDragonEgg.class, DataSerializers.OPTIONAL_UNIQUE_ID);
     private static final DataParameter<Integer> DRAGON_TYPE = EntityDataManager.createKey(EntityDragonEgg.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> DRAGON_AGE = EntityDataManager.createKey(EntityDragonEgg.class, DataSerializers.VARINT);
 
-    public EntityDragonEgg(World worldIn) {
-        super(worldIn);
-        this.isImmuneToFire = true;
+    public EntityDragonEgg(EntityType type, World worldIn) {
+        super(type, worldIn);
     }
 
     @Override
@@ -40,26 +41,26 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public void writeEntityToNBT(CompoundNBT tag) {
-        super.writeEntityToNBT(tag);
-        tag.putInt("Color", (byte) this.getType().ordinal());
-        tag.setByte("DragonAge", (byte) this.getDragonAge());
+    public void writeAdditional(CompoundNBT tag) {
+        super.writeAdditional(tag);
+        tag.putInt("Color", (byte) this.getEggType().ordinal());
+        tag.putByte("DragonAge", (byte) this.getDragonAge());
         if (this.getOwnerId() == null) {
-            tag.setString("OwnerUUID", "");
+            tag.putString("OwnerUUID", "");
         } else {
-            tag.setString("OwnerUUID", this.getOwnerId().toString());
+            tag.putString("OwnerUUID", this.getOwnerId().toString());
         }
 
     }
 
     @Override
-    public void readEntityFromNBT(CompoundNBT tag) {
-        super.readEntityFromNBT(tag);
-        this.setType(EnumDragonEgg.values()[tag.getInt("Color")]);
+    public void readAdditional(CompoundNBT tag) {
+        super.readAdditional(tag);
+        this.setEggType(EnumDragonEgg.values()[tag.getInt("Color")]);
         this.setDragonAge(tag.getByte("DragonAge"));
         String s;
 
-        if (tag.hasKey("OwnerUUID", 8)) {
+        if (tag.contains("OwnerUUID", 8)) {
             s = tag.getString("OwnerUUID");
         } else {
             String s1 = tag.getString("Owner");
@@ -76,29 +77,29 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
         super.registerData();
         this.getDataManager().register(DRAGON_TYPE, Integer.valueOf(0));
         this.getDataManager().register(DRAGON_AGE, Integer.valueOf(0));
-        this.dataManager.register(OWNER_UNIQUE_ID, Optional.absent());
+        this.dataManager.register(OWNER_UNIQUE_ID, null);
     }
 
     @Nullable
     public UUID getOwnerId() {
-        return (UUID) ((Optional) this.dataManager.get(OWNER_UNIQUE_ID)).orNull();
+        return (UUID) ((java.util.Optional) this.dataManager.get(OWNER_UNIQUE_ID)).orElse(null);
     }
 
     public void setOwnerId(@Nullable UUID p_184754_1_) {
-        this.dataManager.set(OWNER_UNIQUE_ID, Optional.fromNullable(p_184754_1_));
+        this.dataManager.set(OWNER_UNIQUE_ID, java.util.Optional.ofNullable(p_184754_1_));
     }
 
-    public EnumDragonEgg getType() {
+    public EnumDragonEgg getEggType() {
         return EnumDragonEgg.values()[this.getDataManager().get(DRAGON_TYPE).intValue()];
     }
 
-    public void setType(EnumDragonEgg newtype) {
+    public void setEggType(EnumDragonEgg newtype) {
         this.getDataManager().set(DRAGON_TYPE, newtype.ordinal());
     }
 
     @Override
-    public boolean isEntityInvulnerable(DamageSource i) {
-        return i.getTrueSource() != null;
+    public boolean isInvulnerableTo(DamageSource i) {
+        return i.getTrueSource() != null && super.isInvulnerableTo(i);
     }
 
     public int getDragonAge() {
@@ -110,15 +111,10 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    public void tick() {
+        super.tick();
         this.setAir(200);
-        getType().dragonType.updateEggCondition(this);
-    }
-
-    @Override
-    public boolean isAIDisabled() {
-        return false;
+        getEggType().dragonType.updateEggCondition(this);
     }
 
     @Override
@@ -127,16 +123,31 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
+    public Iterable<ItemStack> getArmorInventoryList() {
+        return null;
+    }
+
+    @Override
+    public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
+        return null;
+    }
+
+    @Override
+    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
+
+    }
+
+    @Override
     public boolean attackEntityFrom(DamageSource var1, float var2) {
-        if (!world.isRemote && !var1.canHarmInCreative() && !isDead) {
-            this.dropItem(this.getItem().getItem(), 1);
+        if (!world.isRemote && !var1.canHarmInCreative() && !removed) {
+            this.entityDropItem(this.getItem().getItem(), 1);
         }
-        this.setDead();
+        this.remove();
         return super.attackEntityFrom(var1, var2);
     }
 
     private ItemStack getItem() {
-        switch (getType().ordinal()) {
+        switch (getEggType().ordinal()) {
             default:
                 return new ItemStack(IafItemRegistry.DRAGONEGG_RED);
             case 1:
@@ -163,6 +174,11 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
+    public HandSide getPrimaryHand() {
+        return null;
+    }
+
+    @Override
     protected void collideWithEntity(Entity entity) {
     }
 
@@ -178,15 +194,5 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     @Override
     public boolean isMobDead() {
         return true;
-    }
-
-    @Override
-    public boolean isNoDespawnRequired() {
-        return true;
-    }
-
-    @Override
-    public boolean canDespawn(double distanceToClosestPlayer) {
-        return false;
     }
 }
