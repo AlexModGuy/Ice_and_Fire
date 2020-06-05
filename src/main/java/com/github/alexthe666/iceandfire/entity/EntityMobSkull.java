@@ -1,11 +1,11 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
+import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -24,9 +24,8 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
     private static final DataParameter<Float> SKULL_DIRECTION = EntityDataManager.createKey(EntityMobSkull.class, DataSerializers.FLOAT);
     private static final DataParameter<Integer> SKULL_ENUM = EntityDataManager.createKey(EntityMobSkull.class, DataSerializers.VARINT);
 
-    public EntityMobSkull(World worldIn) {
-        super(worldIn);
-        this.setSize(0.9F, 0.65F);
+    public EntityMobSkull(EntityType t, World worldIn) {
+        super(t, worldIn);
         this.ignoreFrustumCheck = true;
     }
 
@@ -38,7 +37,7 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
     }
 
     @Override
-    public boolean isEntityInvulnerable(DamageSource i) {
+    public boolean isInvulnerableTo(DamageSource i) {
         return i.getTrueSource() != null;
     }
 
@@ -96,10 +95,10 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
     }
 
     public void turnIntoItem() {
-        if (isDead)
+        if (removed)
             return;
-        this.setDead();
-        ItemStack stack = new ItemStack(getSkullType().skull_item, 1, 0);
+        this.remove();
+        ItemStack stack = new ItemStack(getSkullType().skull_item, 1);
         if (!this.world.isRemote)
             this.entityDropItem(stack, 0.0F);
     }
@@ -121,7 +120,7 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
 
     @Override
     public void writeAdditional(CompoundNBT compound) {
-        compound.setFloat("SkullYaw", this.getYaw());
+        compound.putFloat("SkullYaw", this.getYaw());
         compound.putInt("SkullType", this.getEnumOrdinal());
         super.writeAdditional(compound);
     }
@@ -147,7 +146,7 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
 
     @Nullable
     @Override
-    public EntityAgeable createChild(EntityAgeable ageable) {
+    public AgeableEntity createChild(AgeableEntity ageable) {
         return null;
     }
 

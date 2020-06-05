@@ -23,7 +23,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.init.MobEffects;
+import net.minecraft.init.Effects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -88,7 +88,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
         return this.getRNG().nextInt(IafConfig.trollSpawnCheckChance) == 0 && !this.world.canSeeSky(pos.up()) && super.getCanSpawnHere();
     }
 
-    protected void initEntityAI() {
+    protected void registerGoals() {
         this.goalSelector.addGoal(1, new EntityAISwimming(this));
         this.goalSelector.addGoal(2, new TrollAIFleeSun(this, 1.0D));
         this.goalSelector.addGoal(3, new EntityAIAttackMelee(this, 1.0D, true));
@@ -290,7 +290,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
             this.playSound(IafSoundRegistry.TROLL_ROAR, 1, 1);
         }
         if (!stone && this.getHealth() < this.getMaxHealth() && this.ticksExisted % 30 == 0) {
-            this.addPotionEffect(new EffectInstance(MobEffects.REGENERATION, 30, 1, false, false));
+            this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 30, 1, false, false));
         }
         setAvoidSun(this.world.isDaytime());
         if (this.world.isDaytime() && !this.world.isRemote) {

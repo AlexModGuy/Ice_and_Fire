@@ -7,7 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractFireballEntity;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.init.MobEffects;
+import net.minecraft.init.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -90,8 +90,8 @@ public class EntityPixieCharge extends AbstractFireballEntity {
     protected void onImpact(RayTraceResult movingObject) {
         if (!this.world.isRemote) {
             if (movingObject.entityHit instanceof LivingEntity) {
-                ((LivingEntity) movingObject.entityHit).addPotionEffect(new EffectInstance(MobEffects.LEVITATION, 100, 0));
-                ((LivingEntity) movingObject.entityHit).addPotionEffect(new EffectInstance(MobEffects.GLOWING, 100, 0));
+                ((LivingEntity) movingObject.entityHit).addPotionEffect(new EffectInstance(Effects.LEVITATION, 100, 0));
+                ((LivingEntity) movingObject.entityHit).addPotionEffect(new EffectInstance(Effects.GLOWING, 100, 0));
                 movingObject.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(shootingEntity, null), 5.0F);
             }
             if (this.world.isRemote) {

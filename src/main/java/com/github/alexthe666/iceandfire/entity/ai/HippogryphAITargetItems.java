@@ -5,7 +5,9 @@ import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.EntityAITarget;
+import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -16,11 +18,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class HippogryphAITargetItems<T extends EntityItem> extends EntityAITarget {
+public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
-    protected final Predicate<? super EntityItem> targetEntitySelector;
+    protected final Predicate<? super ItemEntity> targetEntitySelector;
     private final int targetChance;
-    protected EntityItem targetEntity;
+    protected ItemEntity targetEntity;
 
     public HippogryphAITargetItems(MobEntity creature, boolean checkSight) {
         this(creature, checkSight, false);

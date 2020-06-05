@@ -1,7 +1,14 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.citadel.animation.Animation;
+import com.github.alexthe666.citadel.animation.AnimationHandler;
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
+import com.github.alexthe666.iceandfire.inventory.ContainerHippocampus;
+import com.github.alexthe666.iceandfire.inventory.ContainerHippogryph;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -11,54 +18,54 @@ import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
 import com.google.common.base.Predicate;
-import net.ilexiconn.llibrary.server.animation.Animation;
-import net.ilexiconn.llibrary.server.animation.AnimationHandler;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.passive.AbstractHorse;
+import net.minecraft.entity.ai.controller.MovementController;
+import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.passive.horse.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
-import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.particles.ItemParticleData;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
 public class EntityHippogryph extends TameableEntity implements ISyncMount, IAnimatedEntity, IDragonFlute, IVillagerFear, IAnimalFear, IDropArmor, IFlyingMount {
 
-    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "hippogryph"));
     private static final int FLIGHT_CHANCE_PER_TICK = 1200;
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityHippogryph.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> SADDLE = EntityDataManager.createKey(EntityHippogryph.class, DataSerializers.BOOLEAN);
@@ -72,7 +79,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     public static Animation ANIMATION_SPEAK;
     public static Animation ANIMATION_SCRATCH;
     public static Animation ANIMATION_BITE;
-    public HippogryphInventory hippogryphInventory;
+    public Inventory hippogryphInventory;
     @OnlyIn(Dist.CLIENT)
     public IFChainBuffer roll_buffer;
     public float sitProgress;
@@ -95,17 +102,16 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     private boolean isOverAir;
     public int feedings = 0;
 
-    public EntityHippogryph(World worldIn) {
-        super(worldIn);
+    public EntityHippogryph(EntityType type, World worldIn) {
+        super(type, worldIn);
         ANIMATION_EAT = Animation.create(25);
         ANIMATION_SPEAK = Animation.create(15);
         ANIMATION_SCRATCH = Animation.create(25);
         ANIMATION_BITE = Animation.create(20);
         initHippogryphInv();
-        if (FMLCommonHandler.instance().getSide().isClient()) {
+        if (worldIn.isRemote) {
             roll_buffer = new IFChainBuffer();
         }
-        this.setSize(1.7F, 1.6F);
         this.stepHeight = 1;
     }
 
@@ -119,8 +125,8 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         }
         if(!this.isBeingRidden() || !this.isOverAir()){
             if(navigatorType != 0){
-                this.moveController = new EntityMoveHelper(this);
-                this.navigator = new PathNavigateGround(this, world);
+                this.moveController = new MovementController(this);
+                this.navigator = new GroundPathNavigator(this, world);
                 navigatorType = 0;
             }
         }
@@ -139,26 +145,25 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
-    protected void initEntityAI() {
+    protected void registerGoals() {
         this.goalSelector.addGoal(0, new DragonAIRide(this));
-        this.goalSelector.addGoal(1, new EntityAISwimming(this));
-        this.goalSelector.addGoal(2, this.aiSit = new EntityAISit(this));
+        this.goalSelector.addGoal(1, new SwimGoal(this));
+        this.goalSelector.addGoal(2, this.sitGoal = new SitGoal(this));
         this.goalSelector.addGoal(3, new HippogryphAIAttackMelee(this, 1.5D, true));
         this.goalSelector.addGoal(4, new HippogryphAIMate(this, 1.0D));
-        this.goalSelector.addGoal(5, new EntityAITempt(this, 1.0D, Items.RABBIT, false));
-        this.goalSelector.addGoal(5, new EntityAITempt(this, 1.0D, Items.COOKED_RABBIT, false));
+        this.goalSelector.addGoal(5, new TemptGoal(this, 1.0D, Ingredient.fromItems(Items.RABBIT, Items.COOKED_RABBIT), false));
         this.goalSelector.addGoal(6, new HippogryphAIAirTarget(this));
         this.goalSelector.addGoal(7, new HippogryphAIWander(this, 1.0D));
-        this.goalSelector.addGoal(8, new EntityAIWatchClosest(this, LivingEntity.class, 6.0F));
+        this.goalSelector.addGoal(8, new LookAtGoal(this, LivingEntity.class, 6.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(1, new EntityAIOwnerHurtByTarget(this));
-        this.targetSelector.addGoal(2, new EntityAIOwnerHurtTarget(this));
-        this.targetSelector.addGoal(3, new EntityAIHurtByTarget(this, false));
+        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(4, new HippogryphAITargetItems(this, false));
         this.targetSelector.addGoal(5, new HippogryphAITarget(this, LivingEntity.class, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                return entity instanceof LivingEntity && !(entity instanceof AbstractHorse) && DragonUtils.isAlive((LivingEntity) entity);
+                return entity instanceof LivingEntity && !(entity instanceof AbstractHorseEntity) && DragonUtils.isAlive((LivingEntity) entity);
             }
         }));
 
@@ -201,9 +206,8 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     private void initHippogryphInv() {
-        HippogryphInventory animalchest = this.hippogryphInventory;
-        this.hippogryphInventory = new HippogryphInventory("hippogryphInventory", 18, this);
-        this.hippogryphInventory.setCustomName(this.getName());
+        Inventory animalchest = this.hippogryphInventory;
+        this.hippogryphInventory = new Inventory(18);
         if (animalchest != null) {
             int i = Math.min(animalchest.getSizeInventory(), this.hippogryphInventory.getSizeInventory());
             for (int j = 0; j < i; ++j) {
@@ -255,28 +259,28 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
 
     public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
-        String s = TextFormatting.getTextWithoutFormattingCodes(player.getName());
+        String s = TextFormatting.getTextWithoutFormattingCodes(player.getName().getUnformattedComponentText());
         boolean isDev = s.equals("Alexthe666") || s.equals("Raptorfarian");
         if (this.isTamed() && this.isOwner(player)) {
-            if (itemstack != null && itemstack.getItem() == Items.DYE && itemstack.getMetadata() == 1 && this.getEnumVariant() != EnumHippogryphTypes.ALEX && isDev) {
+            if (itemstack != null && itemstack.getItem() == Items.RED_DYE && this.getEnumVariant() != EnumHippogryphTypes.ALEX && isDev) {
                 this.setEnumVariant(EnumHippogryphTypes.ALEX);
                 if (!player.isCreative()) {
                     itemstack.shrink(1);
                 }
                 this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
                 for (int i = 0; i < 20; i++) {
-                    this.world.spawnParticle(ParticleTypes.REDSTONE, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0);
+                    this.world.addParticle(ParticleTypes.CLOUD, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0);
                 }
                 return true;
             }
-            if (itemstack != null && itemstack.getItem() == Items.DYE && itemstack.getMetadata() == 7 && this.getEnumVariant() != EnumHippogryphTypes.RAPTOR && isDev) {
+            if (itemstack != null && itemstack.getItem() == Items.LIGHT_GRAY_DYE && this.getEnumVariant() != EnumHippogryphTypes.RAPTOR && isDev) {
                 this.setEnumVariant(EnumHippogryphTypes.RAPTOR);
                 if (!player.isCreative()) {
                     itemstack.shrink(1);
                 }
                 this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
                 for (int i = 0; i < 20; i++) {
-                    this.world.spawnParticle(ParticleTypes.CLOUD, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0);
+                    this.world.addParticle(ParticleTypes.CLOUD, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0);
                 }
                 return true;
             }
@@ -311,22 +315,22 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 }
                 return true;
             }
-            if (itemstack != null && itemstack.getItem() == Items.SPECKLED_MELON && this.getEnumVariant() != EnumHippogryphTypes.DODO) {
+            if (itemstack != null && itemstack.getItem() == Items.GLISTERING_MELON_SLICE && this.getEnumVariant() != EnumHippogryphTypes.DODO) {
                 this.setEnumVariant(EnumHippogryphTypes.DODO);
                 if (!player.isCreative()) {
                     itemstack.shrink(1);
                 }
                 this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
                 for (int i = 0; i < 20; i++) {
-                    this.world.spawnParticle(ParticleTypes.ENCHANTMENT_TABLE, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0);
+                    this.world.addParticle(ParticleTypes.ENCHANT, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0);
                 }
                 return true;
             }
-            if (itemstack != null && itemstack.getItem() instanceof ItemFood && ((ItemFood) itemstack.getItem()).isWolfsFavoriteMeat() && this.getHealth() < this.getMaxHealth()) {
+            if (itemstack != null && itemstack.getItem().isFood() && itemstack.getItem().getFood() != null && itemstack.getItem().getFood().isMeat() && this.getHealth() < this.getMaxHealth()) {
                 this.heal(5);
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
                 for (int i = 0; i < 3; i++) {
-                    this.world.spawnParticle(ParticleTypes.ITEM_CRACK, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0, Item.getIdFromItem(itemstack.getItem()));
+                    this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, itemstack), this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0);
                 }
                 if (!player.isCreative()) {
                     itemstack.shrink(1);
@@ -337,7 +341,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 if (player.isShiftKeyDown()) {
                     this.openGUI(player);
                     return true;
-                } else if (this.isSaddled() && !this.isChild() && !player.isRiding()) {
+                } else if (this.isSaddled() && !this.isChild() && !player.isPassenger()) {
                     player.startRiding(this, true);
                     return true;
                 }
@@ -349,8 +353,19 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
 
     public void openGUI(PlayerEntity playerEntity) {
         if (!this.world.isRemote && (!this.isBeingRidden() || this.isPassenger(playerEntity))) {
-            playerEntity.openGui(IceAndFire.INSTANCE, 4, this.world, this.getEntityId(), 0, 0);
+            NetworkHooks.openGui((ServerPlayerEntity) playerEntity, new INamedContainerProvider() {
+                @Override
+                public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
+                    return new ContainerHippogryph(p_createMenu_1_, hippogryphInventory, p_createMenu_2_, EntityHippogryph.this);
+                }
+
+                @Override
+                public ITextComponent getDisplayName() {
+                    return new TranslationTextComponent("entity.rats.rat");
+                }
+            });
         }
+        IceAndFire.PROXY.setReferencedMob(this);
     }
 
     public boolean up() {
@@ -431,15 +446,12 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 ItemStack itemstack = this.hippogryphInventory.getStackInSlot(i);
                 if (!itemstack.isEmpty()) {
                     CompoundNBT CompoundNBT = new CompoundNBT();
-                    CompoundNBT.setByte("Slot", (byte) i);
-                    itemstack.writeToNBT(CompoundNBT);
-                    nbttaglist.appendTag(CompoundNBT);
+                    CompoundNBT.putByte("Slot", (byte) i);
+                    itemstack.write(CompoundNBT);
+                    nbttaglist.add(CompoundNBT);
                 }
             }
-            compound.setTag("Items", nbttaglist);
-        }
-        if (this.getCustomNameTag() != null && !this.getCustomNameTag().isEmpty()) {
-            compound.setString("CustomName", this.getCustomNameTag());
+            compound.put("Items", nbttaglist);
         }
         compound.putBoolean("HasHomePosition", this.hasHomePosition);
         if (homePos != null && this.hasHomePosition) {
@@ -463,19 +475,19 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         if (hippogryphInventory != null) {
             ListNBT nbttaglist = compound.getList("Items", 10);
             this.initHippogryphInv();
-            for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
+            for (int i = 0; i < nbttaglist.size(); ++i) {
+                CompoundNBT CompoundNBT = nbttaglist.getCompound(i);
                 int j = CompoundNBT.getByte("Slot") & 255;
-                this.hippogryphInventory.setInventorySlotContents(j, new ItemStack(CompoundNBT));
+                this.hippogryphInventory.setInventorySlotContents(j, ItemStack.read(CompoundNBT));
             }
         } else {
             ListNBT nbttaglist = compound.getList("Items", 10);
             this.initHippogryphInv();
-            for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
+            for (int i = 0; i < nbttaglist.size(); ++i) {
+                CompoundNBT CompoundNBT = nbttaglist.getCompound(i);
                 int j = CompoundNBT.getByte("Slot") & 255;
                 this.initHippogryphInv();
-                this.hippogryphInventory.setInventorySlotContents(j, new ItemStack(CompoundNBT));
+                this.hippogryphInventory.setInventorySlotContents(j, ItemStack.read(CompoundNBT));
                 //this.setArmorInSlot(j, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(CompoundNBT)));
                 ItemStack saddle = hippogryphInventory.getStackInSlot(0);
                 ItemStack chest = hippogryphInventory.getStackInSlot(1);
@@ -618,7 +630,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
-        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+        this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
         this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
     }
@@ -631,12 +643,11 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         return !this.isSitting() && this.getControllingPassenger() == null && sitProgress == 0;
     }
 
-    @Override
     @Nullable
-    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
-        livingdata = super.onInitialSpawn(difficulty, livingdata);
+    public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+        ILivingEntityData data = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setEnumVariant(EnumHippogryphTypes.getBiomeType(world.getBiome(this.getPosition())));
-        return livingdata;
+        return data;
     }
 
     @Override
@@ -649,7 +660,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
 
     @Nullable
     @Override
-    public EntityAgeable createChild(EntityAgeable ageable) {
+    public AgeableEntity createChild(AgeableEntity ageable) {
         return null;
     }
 
@@ -712,8 +723,9 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     public boolean isDirectPathBetweenPoints(Vec3d vec1, Vec3d vec2) {
-        RayTraceResult movingobjectposition = this.world.rayTraceBlocks(vec1, new Vec3d(vec2.x, vec2.y + (double) this.height * 0.5D, vec2.z), false, true, false);
-        return movingobjectposition == null || movingobjectposition.typeOfHit != RayTraceResult.Type.BLOCK;
+        RayTraceResult movingobjectposition = this.world.rayTraceBlocks(new RayTraceContext(vec1, new Vec3d(vec2.x, vec2.y + (double) this.getHeight() * 0.5D, vec2.z), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+
+        return movingobjectposition == null || movingobjectposition.getType() != RayTraceResult.Type.BLOCK;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -727,7 +739,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             dismount(mc.gameSettings.keyBindSneak.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, posX, posY, posZ));
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, getPosX(), getPosY(), getPosZ()));
             }
         }
         if (this.getRidingEntity() != null && this.getRidingEntity() == mc.player) {
@@ -735,20 +747,18 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             dismount(mc.gameSettings.keyBindSneak.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, posX, posY, posZ));
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, getPosX(), getPosY(), getPosZ()));
             }
         }
     }
 
     @Override
-    public void travel(float strafe, float forward, float vertical) {
+    public void travel(Vec3d move) {
         if (!this.canMove() && !this.isBeingRidden()) {
-            strafe = 0;
-            forward = 0;
-            super.travel(strafe, forward, vertical);
+            super.travel(Vec3d.ZERO);
             return;
         }
-        super.travel(strafe, forward, vertical);
+        super.travel(move);
     }
 
     @Override
@@ -761,12 +771,12 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         return false;
     }
 
-    public EntityItem createEgg(EntityHippogryph partner) {
+    public ItemEntity createEgg(EntityHippogryph partner) {
         int i = MathHelper.floor(this.getPosX());
         int j = MathHelper.floor(this.getPosY());
         int k = MathHelper.floor(this.getPosZ());
         ItemStack stack = new ItemStack(IafItemRegistry.HIPPOGRYPH_EGG);
-        EntityItem egg = new EntityItem(this.world, i, j, k, stack);
+        ItemEntity egg = new ItemEntity(this.world, i, j, k, stack);
         return egg;
     }
 
@@ -774,10 +784,10 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
         switchNavigator();
-        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity){
+        if(world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity){
             this.setAttackTarget(null);
         }
         if (!this.world.isRemote) {
@@ -800,24 +810,19 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
             }
         }
-        if (this.getAnimation() == ANIMATION_SCRATCH && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
+        LivingEntity attackTarget = this.getAttackTarget();
+        if (this.getAnimation() == ANIMATION_SCRATCH && attackTarget != null && this.getAnimationTick() == 6) {
             double dist = this.getDistanceSq(this.getAttackTarget());
+
             if (dist < 8) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
                 this.getAttackTarget().isAirBorne = true;
                 float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
-                this.getAttackTarget().motionX /= 2.0D;
-                this.getAttackTarget().motionZ /= 2.0D;
-                this.getAttackTarget().motionX -= 0.5 / (double) f * 4;
-                this.getAttackTarget().motionZ -= 0.5 / (double) f * 4;
+                attackTarget.setMotion(attackTarget.getMotion().mul(0.5D, 1, 0.5D));
+                attackTarget.setMotion(attackTarget.getMotion().add(-0.5 / (double) f * 4, 1, -0.5 / (double) f * 4));
 
                 if (this.getAttackTarget().onGround) {
-                    this.getAttackTarget().motionY /= 2.0D;
-                    this.getAttackTarget().motionY += 4;
-
-                    if (this.getAttackTarget().motionY > 0.4000000059604645D) {
-                        this.getAttackTarget().motionY = 0.4000000059604645D;
-                    }
+                    attackTarget.setMotion(attackTarget.getMotion().add(0, 0.4, 0));
                 }
             }
         }
@@ -881,7 +886,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             flyProgress -= 0.5F;
         }
         if ((flying || hovering) && ticksExisted % 20 == 0 && this.isOverAir()) {
-            this.playSound(SoundEvents.ENTITY_ENDERDRAGON_FLAP, this.getSoundVolume() * (IafConfig.dragonFlapNoiseDistance / 2), 0.6F + this.rand.nextFloat() * 0.6F * this.getSoundPitch());
+            this.playSound(SoundEvents.ENTITY_ENDER_DRAGON_FLAP, this.getSoundVolume() * (IafConfig.dragonFlapNoiseDistance / 2), 0.6F + this.rand.nextFloat() * 0.6F * this.getSoundPitch());
         }
         if (!this.isOverAir() && this.doesWantToLand() && (this.isFlying() || this.isHovering())) {
             this.setFlying(false);
@@ -893,10 +898,10 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             }
             this.hoverTicks++;
             if (this.doesWantToLand()) {
-                this.motionY -= 0.25D;
+                this.setMotion(this.getMotion().add(0, -0.25D, 0));
             } else {
                 if (this.getControllingPassenger() == null) {
-                    this.motionY += 0.08;
+                    this.setMotion(this.getMotion().add(0, 0.08D, 0));
                 }
                 if (this.hoverTicks > 40) {
                     if (!this.isChild()) {
@@ -956,15 +961,15 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    public void tick() {
+        super.tick();
         isOverAir = this.isOverAirLogic();
         if (world.isRemote) {
             this.updateClientControls();
         }
         if (this.up()) {
             if (this.airBorneCounter == 0) {
-                this.motionY += 1;
+                this.setMotion(this.getMotion().add(0, 1D, 0));
             }
             if (!this.isFlying() && !this.isHovering()) {
                 this.spacebarTicks += 2;
@@ -986,13 +991,13 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             }
         }
         if (this.getControllingPassenger() != null && this.getControllingPassenger().isShiftKeyDown()) {
-            this.getControllingPassenger().dismountRidingEntity();
+            this.getControllingPassenger().stopRiding();
         }
-        if (this.isFlying() && !this.isHovering() && this.getControllingPassenger() != null && this.isOverAir() && Math.max(Math.abs(motionZ), Math.abs(motionX)) < 0.1F) {
+        if (this.isFlying() && !this.isHovering() && this.getControllingPassenger() != null && this.isOverAir() && Math.max(Math.abs(this.getMotion().x), Math.abs(this.getMotion().z)) < 0.1F) {
             this.setHovering(true);
             this.setFlying(false);
         }
-        if (this.isHovering() && !this.isFlying() && this.getControllingPassenger() != null && this.isOverAir() && Math.max(Math.abs(motionZ), Math.abs(motionX)) > 0.1F) {
+        if (this.isHovering() && !this.isFlying() && this.getControllingPassenger() != null && this.isOverAir() && Math.max(Math.abs(this.getMotion().x), Math.abs(this.getMotion().z)) > 0.1F) {
             this.setFlying(true);
             this.setHovering(false);
         }
@@ -1005,7 +1010,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         if (world.isRemote) {
             roll_buffer.calculateChainFlapBuffer(35, 8, 6, this);
         }
-        if (this.getAttackTarget() != null && this.getRidingEntity() == null && this.getAttackTarget().isDead || this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityDragonBase && ((EntityDragonBase) this.getAttackTarget()).isDead) {
+        if (this.getAttackTarget() != null && this.getRidingEntity() == null && !this.getAttackTarget().isAlive() || this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityDragonBase && !((EntityDragonBase) this.getAttackTarget()).isAlive()) {
             this.setAttackTarget(null);
         }
     }
@@ -1021,9 +1026,10 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
 
     public boolean isTargetBlocked(Vec3d target) {
         if (target != null) {
-            RayTraceResult rayTrace = world.rayTraceBlocks(new Vec3d(this.getPosition()), target, false);
-            if (rayTrace != null && rayTrace.hitVec != null) {
-                BlockPos pos = new BlockPos(rayTrace.hitVec);
+            RayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(this.getPositionVec(), target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+
+            if (rayTrace != null && rayTrace.getHitVec() != null) {
+                BlockPos pos = new BlockPos(rayTrace.getHitVec());
                 return !world.isAirBlock(pos);
             }
         }
@@ -1032,13 +1038,14 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
 
     public void flyTowardsTarget() {
         if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.getPosY(), airTarget.getZ())) > 3) {
-            double targetX = airTarget.getX() + 0.5D - posX;
-            double targetY = Math.min(airTarget.getY(), 256) + 1D - posY;
-            double targetZ = airTarget.getZ() + 0.5D - posZ;
-            motionX += (Math.signum(targetX) * 0.5D - motionX) * 0.100000000372529 * 2;
-            motionY += (Math.signum(targetY) * 0.5D - motionY) * 0.100000000372529 * 2;
-            motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * 0.100000000372529 * 2;
-            float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
+            double targetX = airTarget.getX() + 0.5D - this.getPosX();
+            double targetY = Math.min(airTarget.getY(), 256) + 1D - this.getPosY();
+            double targetZ = airTarget.getZ() + 0.5D - this.getPosZ();
+            double motionX = (Math.signum(targetX) * 0.5D - this.getMotion().x) * 0.100000000372529 * 2;
+            double motionY = (Math.signum(targetY) * 0.5D - this.getMotion().y) * 0.100000000372529 * 2;
+            double motionZ = (Math.signum(targetZ) * 0.5D - this.getMotion().z) * 0.100000000372529 * 2;
+            this.setMotion(this.getMotion().add(motionX, motionY, motionZ));
+            float angle = (float) (Math.atan2(this.getMotion().x, this.getMotion().z) * 180.0D / Math.PI) - 90.0F;
             float rotation = MathHelper.wrapDegrees(angle - rotationYaw);
             moveForward = 0.5F;
             prevRotationYaw = rotationYaw;
@@ -1112,11 +1119,6 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         }
     }
 
-    @Nullable
-    protected ResourceLocation getLootTable() {
-        return LOOT;
-    }
-
     @Override
     public boolean shouldAnimalsFear(Entity entity) {
         return DragonUtils.canTameDragonAttack(this, entity);
@@ -1141,29 +1143,5 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     @Override
     public boolean canDespawn(double distanceToClosestPlayer) {
         return false;
-    }
-
-    public class HippogryphInventory extends InventoryBasic {
-
-        public HippogryphInventory(String inventoryTitle, int slotCount, EntityHippogryph hippogryph) {
-            super(inventoryTitle, false, slotCount);
-            this.addInventoryChangeListener(new HippogryphInventoryListener(hippogryph));
-        }
-
-
-    }
-
-    class HippogryphInventoryListener implements IInventoryChangedListener {
-
-        EntityHippogryph hippogryph;
-
-        public HippogryphInventoryListener(EntityHippogryph hippogryph) {
-            this.hippogryph = hippogryph;
-        }
-
-        @Override
-        public void onInventoryChanged(IInventory invBasic) {
-            hippogryph.refreshInventory();
-        }
     }
 }

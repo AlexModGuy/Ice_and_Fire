@@ -81,7 +81,7 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
         return 40;
     }
 
-    protected void initEntityAI() {
+    protected void registerGoals() {
         this.goalSelector.addGoal(1, new SwimGoal(this));
         this.goalSelector.addGoal(2, new RestrictSunGoal(this));
         this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0D));

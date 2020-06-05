@@ -13,7 +13,7 @@ import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
+import net.minecraft.init.Effects;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -171,7 +171,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
             this.playStingSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2));
-                this.getAttackTarget().addPotionEffect(new EffectInstance(MobEffects.POISON, 70, 1));
+                this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 70, 1));
             }
         }
         if (this.mate != null) {
@@ -210,7 +210,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         return 8;
     }
 
-    protected void initEntityAI() {
+    protected void registerGoals() {
         this.goalSelector.addGoal(0, new EntityAISwimming(this));
         this.goalSelector.addGoal(0, new MyrmexAITradePlayer(this));
         this.goalSelector.addGoal(0, new MyrmexAILookAtTradePlayer(this));

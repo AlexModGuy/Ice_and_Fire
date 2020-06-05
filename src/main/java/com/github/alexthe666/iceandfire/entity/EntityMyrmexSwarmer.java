@@ -10,7 +10,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
+import net.minecraft.init.Effects;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -57,7 +57,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         return 13;
     }
 
-    protected void initEntityAI() {
+    protected void registerGoals() {
         this.goalSelector.addGoal(0, new EntityAISwimming(this));
         this.goalSelector.addGoal(1, new MyrmexAIFollowSummoner(this, 1.0D, 10.0F, 5.0F));
         this.goalSelector.addGoal(2, new AIFlyAtTarget());
@@ -196,7 +196,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < attackDistance()) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2));
-                this.getAttackTarget().addPotionEffect(new EffectInstance(MobEffects.POISON, 70, 1));
+                this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 70, 1));
             }
         }
     }

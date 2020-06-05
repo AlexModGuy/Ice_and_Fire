@@ -185,7 +185,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         return world.getBlockState(pos).getMaterial() == Material.WATER;
     }
 
-    protected void initEntityAI() {
+    protected void registerGoals() {
         this.goalSelector.addGoal(0, new SeaSerpentAIGetInWater(this, 1.0D));
         this.goalSelector.addGoal(1, new EntitySeaSerpent.AISwimBite());
         this.goalSelector.addGoal(1, new EntitySeaSerpent.AISwimWander());

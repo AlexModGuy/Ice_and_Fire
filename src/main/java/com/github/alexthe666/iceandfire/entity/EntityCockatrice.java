@@ -83,7 +83,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
         return this.getRNG().nextInt(IafConfig.cockatriceSpawnCheckChance + 1) == 0;
     }
 
-    protected void initEntityAI() {
+    protected void registerGoals() {
         this.goalSelector.addGoal(1, new SwimGoal(this));
         this.goalSelector.addGoal(2, aiStare = new CockatriceAIStareAttack(this, 1.0D, 0, 15.0F));
         this.goalSelector.addGoal(2, aiMelee = new EntityAIAttackMeleeNoCooldown(this, 1.5D, false));

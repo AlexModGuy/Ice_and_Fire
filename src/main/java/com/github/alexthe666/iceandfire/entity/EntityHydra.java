@@ -1,41 +1,40 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.citadel.animation.Animation;
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
-import net.ilexiconn.llibrary.server.animation.Animation;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
-import net.ilexiconn.llibrary.server.entity.multipart.IMultipartEntity;
-import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
-import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipartEntity, IVillagerFear, IAnimalFear {
+public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMultipartEntity, IVillagerFear, IAnimalFear {
 
-    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "hydra"));
     public static final int HEADS = 9;
     public static final double HEAD_HEALTH_THRESHOLD = 20;
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityHydra.class, DataSerializers.VARINT);
@@ -73,26 +72,26 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
     private boolean onlyRegrowOneHeadNotTwo = false;
     private float headDamageThreshold = 20;
 
-    public EntityHydra(World worldIn) {
-        super(worldIn);
+    public EntityHydra(EntityType type, World worldIn) {
+        super(type, worldIn);
         resetParts();
-        headDamageThreshold = Math.max(5, (float)IafConfig.hydraMaxHealth * 0.08F);
+        headDamageThreshold = Math.max(5, (float) IafConfig.hydraMaxHealth * 0.08F);
     }
 
-    protected void initEntityAI() {
-        this.goalSelector.addGoal(1, new EntityAISwimming(this));
-        this.goalSelector.addGoal(2, new EntityAIAttackMelee(this, 1.0D, true));
-        this.goalSelector.addGoal(5, new EntityAIWanderAvoidWater(this, 1.0D));
-        this.goalSelector.addGoal(6, new EntityAIWatchClosest(this, PlayerEntity.class, 8.0F));
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new SwimGoal(this));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this, false));
-        this.targetSelector.addGoal(3, new EntityAINearestAttackableTarget(this, PlayerEntity.class, 0, true, false, new Predicate<Entity>() {
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, PlayerEntity.class, 0, true, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                return entity.isEntityAlive();
+                return entity.isAlive();
             }
         }));
-        this.targetSelector.addGoal(3, new EntityAINearestAttackableTarget(this, LivingEntity.class, 0, true, false, new Predicate<Entity>() {
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, LivingEntity.class, 0, true, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
@@ -106,8 +105,8 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
     }
 
     @Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
         if (this.getAttackTarget() != null && this.canEntityBeSeen(this.getAttackTarget())) {
             int index = rand.nextInt(getHeadCount());
             if (!isBreathing[index] && !isStriking[index]) {
@@ -135,8 +134,8 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
             if (striking && strikingProgress[i] > 9) {
                 isStriking[i] = false;
                 if (this.getAttackTarget() != null && this.getDistance(this.getAttackTarget()) < 6) {
-                    this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
-                    this.getAttackTarget().addPotionEffect(new EffectInstance(MobEffects.POISON, 100, 3, false, false));
+                    this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributes().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
+                    this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 100, 3, false, false));
                     this.getAttackTarget().knockBack(this.getAttackTarget(), 0.25F, this.getPosX() - this.getAttackTarget().getPosX(), this.getPosZ() - this.getAttackTarget().getPosZ());
                 }
             }
@@ -153,14 +152,14 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
                     double d2 = entity.getPosX() - headPosX + this.rand.nextGaussian() * 0.4D;
                     double d3 = entity.getPosY() + entity.getEyeHeight() - headPosY + this.rand.nextGaussian() * 0.4D;
                     double d4 = entity.getPosZ() - headPosZ + this.rand.nextGaussian() * 0.4D;
-                    EntityHydraBreath entitylargefireball = new EntityHydraBreath(world, this, d2, d3, d4);
+                    EntityHydraBreath entitylargefireball = new EntityHydraBreath(IafEntityRegistry.HYDRA_BREATH, world, this, d2, d3, d4);
                     entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-                    if (!world.isRemote && !entity.isDead) {
-                        world.spawnEntity(entitylargefireball);
+                    if (!world.isRemote && entity.isAlive()) {
+                        world.addEntity(entitylargefireball);
                     }
                     entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
                 }
-                if (isBreathing[i] && (entity == null || entity.isDead || breathTicks[i] > 60) && !world.isRemote) {
+                if (isBreathing[i] && (entity == null || !entity.isAlive() || breathTicks[i] > 60) && !world.isRemote) {
                     isBreathing[i] = false;
                     breathTicks[i] = 0;
                     breathCooldown = 15;
@@ -236,8 +235,8 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
 
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    public void tick() {
+        super.tick();
         if (prevHeadCount != this.getHeadCount()) {
             resetParts();
         }
@@ -253,11 +252,11 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
                 if (this.getSeveredHead() != -1) {
                     level--;
                 }
-                this.addPotionEffect(new EffectInstance(MobEffects.REGENERATION, 30, level, false, false));
+                this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 30, level, false, false));
             }
         }
         if (isBurning()) {
-            this.removePotionEffect(MobEffects.REGENERATION);
+            this.removePotionEffect(Effects.REGENERATION);
         }
 
         prevHeadCount = this.getHeadCount();
@@ -266,7 +265,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
     public void onUpdateParts() {
         for (Entity entity : headBoxes) {
             if (entity != null) {
-                entity.onUpdate();
+                entity.tick();
             }
         }
     }
@@ -274,15 +273,14 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
     private void clearParts() {
         for (Entity entity : headBoxes) {
             if (entity != null) {
-                entity.setDead();
-                world.removeEntityDangerously(entity);
+                entity.remove();
             }
         }
     }
 
-    public void setDead() {
+    public void remove() {
         clearParts();
-        super.setDead();
+        super.remove();
     }
 
     protected void playHurtSound(DamageSource source) {
@@ -299,11 +297,6 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         return 100 / getHeadCount();
     }
 
-    @Nullable
-    protected ResourceLocation getLootTable() {
-        return LOOT;
-    }
-
     @Override
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
@@ -311,7 +304,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         compound.putInt("HeadCount", this.getHeadCount());
         compound.putInt("SeveredHead", this.getSeveredHead());
         for(int i = 0; i < HEADS; i++){
-            compound.setFloat("HeadDamage" + i, headDamageTracker[i]);
+            compound.putFloat("HeadDamage" + i, headDamageTracker[i]);
         }
     }
 
@@ -363,12 +356,11 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         return super.attackEntityFrom(source, amount);
     }
 
-    @Override
     @Nullable
-    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
-        livingdata = super.onInitialSpawn(difficulty, livingdata);
+    public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+        ILivingEntityData data = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setVariant(rand.nextInt(3));
-        return livingdata;
+        return data;
     }
 
     @Override
@@ -451,8 +443,8 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         }
     }
 
-    public boolean isPotionApplicable(PotionEffect potioneffectIn) {
-        return potioneffectIn.getPotion() != MobEffects.POISON && super.isPotionApplicable(potioneffectIn);
+    public boolean isPotionApplicable(EffectInstance potioneffectIn) {
+        return potioneffectIn.getPotion() != Effects.POISON && super.isPotionApplicable(potioneffectIn);
     }
 
     public void onHitHead(float damage, int headIndex) {

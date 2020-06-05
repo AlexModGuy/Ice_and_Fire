@@ -34,7 +34,7 @@ public class EntityDreadQueen extends EntityDreadMob implements IAnimatedEntity,
         super(t, worldIn);
     }
 
-    protected void initEntityAI() {
+    protected void registerGoals() {
         this.goalSelector.addGoal(0, new DreadAIMountDragon(this));
         this.goalSelector.addGoal(1, new SwimGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));

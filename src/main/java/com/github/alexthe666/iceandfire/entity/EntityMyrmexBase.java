@@ -28,7 +28,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.init.MobEffects;
+import net.minecraft.init.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -177,7 +177,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                     }
                 }
 
-                this.addPotionEffect(new EffectInstance(MobEffects.REGENERATION, 200, 0));
+                this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 200, 0));
             }
         }
 
@@ -205,8 +205,8 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     protected void jump() {
         this.motionY = (double) this.getJumpUpwardsMotion();
-        if (this.isPotionActive(MobEffects.JUMP_BOOST)) {
-            this.motionY += (double) ((float) (this.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
+        if (this.isPotionActive(Effects.JUMP_BOOST)) {
+            this.motionY += (double) ((float) (this.getActivePotionEffect(Effects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
         }
         float f = this.rotationYaw * 0.017453292F;
         this.motionX -= (double) (MathHelper.sin(f) * 0.2F);

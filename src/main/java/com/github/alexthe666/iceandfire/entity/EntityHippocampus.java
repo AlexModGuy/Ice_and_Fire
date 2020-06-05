@@ -83,6 +83,13 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         this.stepHeight = 1;
         ANIMATION_SPEAK = Animation.create(15);
         this.switchNavigator(true);
+        if (worldIn.isRemote) {
+            tail_buffer = new ChainBuffer();
+        }
+        initHippocampusInv();
+    }
+
+    protected void registerGoals() {
         this.goalSelector.addGoal(0, new HippocampusAIRide(this));
         this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, Item.getItemFromBlock(Blocks.SPONGE), false));
         this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, Items.PRISMARINE_CRYSTALS, false));
@@ -90,10 +97,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         this.goalSelector.addGoal(2, new AquaticAIGetInWater(this, 1.0D));
         this.goalSelector.addGoal(3, new HippocampusAIWander(this, 1));
         this.goalSelector.addGoal(4, new BreedGoal(this, 1.0D));
-        if (worldIn.isRemote) {
-            tail_buffer = new ChainBuffer();
-        }
-        initHippocampusInv();
+
     }
 
     protected int getExperiencePoints(PlayerEntity player) {

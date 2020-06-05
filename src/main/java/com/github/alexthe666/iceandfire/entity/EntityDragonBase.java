@@ -320,34 +320,34 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
 
     public void updateParts() {
         if (headPart != null) {
-            headPart.onUpdate();
+            headPart.tick();
         }
         if (neckPart != null) {
-            neckPart.onUpdate();
+            neckPart.tick();
         }
         if (rightWingUpperPart != null) {
-            rightWingUpperPart.onUpdate();
+            rightWingUpperPart.tick();
         }
         if (rightWingLowerPart != null) {
-            rightWingLowerPart.onUpdate();
+            rightWingLowerPart.tick();
         }
         if (leftWingUpperPart != null) {
-            leftWingUpperPart.onUpdate();
+            leftWingUpperPart.tick();
         }
         if (leftWingLowerPart != null) {
-            leftWingLowerPart.onUpdate();
+            leftWingLowerPart.tick();
         }
         if (tail1Part != null) {
-            tail1Part.onUpdate();
+            tail1Part.tick();
         }
         if (tail2Part != null) {
-            tail2Part.onUpdate();
+            tail2Part.tick();
         }
         if (tail3Part != null) {
-            tail3Part.onUpdate();
+            tail3Part.tick();
         }
         if (tail4Part != null) {
-            tail4Part.onUpdate();
+            tail4Part.tick();
         }
     }
 
@@ -1661,8 +1661,8 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         int j = MathHelper.floor(this.getPosY());
         int k = MathHelper.floor(this.getPosZ());
         BlockPos pos = new BlockPos(i, j, k);
-        EntityDragonEgg dragon = new EntityDragonEgg(this.world);
-        dragon.setType(EnumDragonEgg.byMetadata(new Random().nextInt(3) + getStartMetaForType()));
+        EntityDragonEgg dragon = new EntityDragonEgg(IafEntityRegistry.DRAGON_EGG, this.world);
+        dragon.setEggType(EnumDragonEgg.byMetadata(new Random().nextInt(3) + getStartMetaForType()));
         dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
         return dragon;
     }

@@ -1,23 +1,20 @@
 package com.github.alexthe666.iceandfire.inventory;
-
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import java.awt.*;
 
-public class ContainerHippogryph extends SyncedFieldContainer {
+public class ContainerHippogryph extends Container {
     private final IInventory hippogryphInventory;
     private final EntityHippogryph hippogryph;
     private final PlayerEntity player;
 
-    public ContainerHippogryph(final EntityHippogryph hippogryph, PlayerEntity player) {
-        super(hippogryph.hippogryphInventory);
+    public ContainerHippogryph(int id, IInventory ratInventory, PlayerInventory playerInventory, EntityHippogryph dragonBase) {
+        super();
         this.hippogryphInventory = hippogryph.hippogryphInventory;
         this.hippogryph = hippogryph;
         this.player = player;

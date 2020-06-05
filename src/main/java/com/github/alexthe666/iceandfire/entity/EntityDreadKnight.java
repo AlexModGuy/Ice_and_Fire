@@ -55,7 +55,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         return shield;
     }
 
-    protected void initEntityAI() {
+    protected void registerGoals() {
         this.goalSelector.addGoal(0, new DreadAIRideHorse(this));
         this.goalSelector.addGoal(1, new SwimGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));

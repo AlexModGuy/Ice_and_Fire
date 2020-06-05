@@ -205,7 +205,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         return true;
     }
 
-    protected void initEntityAI() {
+    protected void registerGoals() {
         this.goalSelector.addGoal(0, new DragonAIRide(this));
         this.goalSelector.addGoal(0, this.sitGoal = new SitGoal(this));
         this.goalSelector.addGoal(1, new SwimGoal(this));

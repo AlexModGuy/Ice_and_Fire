@@ -1,23 +1,29 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 
 public class EntityHydraHead extends EntityMutlipartPart {
     public int headIndex;
     public EntityHydra hydra;
     private boolean neck;
 
-    public EntityHydraHead(EntityHydra entity, float radius, float angle, float y, float getWidth(), float height, float damageMulti, int headIndex, boolean neck) {
-        super(entity, radius, angle, y, getWidth(), height, damageMulti);
+    public EntityHydraHead(EntityType t, World world) {
+        super(t, world);
+    }
+
+    public EntityHydraHead(EntityHydra entity, float radius, float angle, float y, float width, float height, float damageMulti, int headIndex, boolean neck) {
+        super(IafEntityRegistry.HYDRA_MULTIPART, entity, radius, angle, y, width, height, damageMulti);
         this.headIndex = headIndex;
         this.neck = neck;
         this.hydra = entity;
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    public void tick() {
+        super.tick();
         if(hydra != null && hydra.getSeveredHead() != -1 && this.neck && !EntityGorgon.isStoneMob(hydra)){
             if(hydra.getSeveredHead() == headIndex){
                 if (this.world.isRemote) {

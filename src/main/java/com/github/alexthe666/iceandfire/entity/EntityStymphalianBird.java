@@ -83,7 +83,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         return LOOT;
     }
 
-    protected void initEntityAI() {
+    protected void registerGoals() {
         this.goalSelector.addGoal(1, new EntityAISwimming(this));
         this.goalSelector.addGoal(2, new StymphalianBirdAIFlee(this, 10));
         this.goalSelector.addGoal(3, new EntityAIAttackMelee(this, 1.5D, false));

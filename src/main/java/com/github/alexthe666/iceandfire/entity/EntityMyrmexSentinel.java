@@ -11,7 +11,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
+import net.minecraft.init.Effects;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -118,12 +118,12 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 18) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
-                this.getAttackTarget().addPotionEffect(new EffectInstance(MobEffects.POISON, 100, 3));
+                this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 100, 3));
             }
         }
     }
 
-    protected void initEntityAI() {
+    protected void registerGoals() {
         this.goalSelector.addGoal(0, new EntityAISwimming(this));
         this.goalSelector.addGoal(0, new MyrmexAIFindHidingSpot(this));
         this.goalSelector.addGoal(0, new MyrmexAITradePlayer(this));
