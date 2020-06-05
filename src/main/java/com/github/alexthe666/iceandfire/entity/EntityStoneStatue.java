@@ -35,15 +35,15 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     }
 
     @Override
-    public void writeEntityToNBT(CompoundNBT tag) {
-        super.writeEntityToNBT(tag);
+    public void writeAdditional(CompoundNBT tag) {
+        super.writeAdditional(tag);
         tag.putInt("CrackAmount", this.crackAmount);
         tag.setBoolean("SmallArms", this.smallArms);
     }
 
     @Override
-    public void readEntityFromNBT(CompoundNBT tag) {
-        super.readEntityFromNBT(tag);
+    public void readAdditional(CompoundNBT tag) {
+        super.readAdditional(tag);
         this.setCrackAmount(tag.getByte("CrackAmount"));
         this.smallArms = tag.getBoolean("SmallArms");
     }

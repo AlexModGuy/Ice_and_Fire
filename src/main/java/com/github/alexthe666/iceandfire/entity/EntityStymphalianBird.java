@@ -90,7 +90,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         this.goalSelector.addGoal(5, new EntityAIWander(this, 1.0D));
         this.goalSelector.addGoal(6, new StymphalianBirdAIAirTarget(this));
         this.goalSelector.addGoal(7, new EntityAIWatchClosest(this, LivingEntity.class, 6.0F));
-        this.goalSelector.addGoal(8, new EntityAILookIdle(this));
+        this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this, true));
         this.targetSelector.addGoal(2, new StymphalianBirdAITarget(this, LivingEntity.class, true));
     }
@@ -125,8 +125,8 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     }
 
     @Override
-    public void writeEntityToNBT(CompoundNBT tag) {
-        super.writeEntityToNBT(tag);
+    public void writeAdditional(CompoundNBT tag) {
+        super.writeAdditional(tag);
         if (this.getVictorId() == null) {
             tag.setString("VictorUUID", "");
         } else {
@@ -136,8 +136,8 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     }
 
     @Override
-    public void readEntityFromNBT(CompoundNBT tag) {
-        super.readEntityFromNBT(tag);
+    public void readAdditional(CompoundNBT tag) {
+        super.readAdditional(tag);
         String s;
 
         if (tag.hasKey("VictorUUID", 8)) {

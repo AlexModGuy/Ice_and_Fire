@@ -84,7 +84,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         this.goalSelector.addGoal(2, new EntityAIAttackMelee(this, 1.0D, true));
         this.goalSelector.addGoal(5, new EntityAIWanderAvoidWater(this, 1.0D));
         this.goalSelector.addGoal(6, new EntityAIWatchClosest(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(7, new EntityAILookIdle(this));
+        this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this, false));
         this.targetSelector.addGoal(3, new EntityAINearestAttackableTarget(this, PlayerEntity.class, 0, true, false, new Predicate<Entity>() {
             @Override
@@ -305,8 +305,8 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
     }
 
     @Override
-    public void writeEntityToNBT(CompoundNBT compound) {
-        super.writeEntityToNBT(compound);
+    public void writeAdditional(CompoundNBT compound) {
+        super.writeAdditional(compound);
         compound.putInt("Variant", this.getVariant());
         compound.putInt("HeadCount", this.getHeadCount());
         compound.putInt("SeveredHead", this.getSeveredHead());
@@ -316,8 +316,8 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
     }
 
     @Override
-    public void readEntityFromNBT(CompoundNBT compound) {
-        super.readEntityFromNBT(compound);
+    public void readAdditional(CompoundNBT compound) {
+        super.readAdditional(compound);
         this.setVariant(compound.getInt("Variant"));
         this.setHeadCount(compound.getInt("HeadCount"));
         this.setSeveredHead(compound.getInt("SeveredHead"));

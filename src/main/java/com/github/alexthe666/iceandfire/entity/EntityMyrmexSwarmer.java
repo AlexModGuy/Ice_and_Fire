@@ -65,7 +65,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         this.goalSelector.addGoal(4, new EntityAIAttackMeleeNoCooldown(this, 1.0D, true));
         this.goalSelector.addGoal(5, new MyrmexAIWander(this, 1D));
         this.goalSelector.addGoal(6, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
-        this.goalSelector.addGoal(7, new EntityAILookIdle(this));
+        this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this, false));
         this.targetSelector.addGoal(2, new MyrmexAISummonerHurtByTarget(this));
         this.targetSelector.addGoal(3, new MyrmexAISummonerHurtTarget(this));
@@ -114,8 +114,8 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         this.dataManager.set(SUMMONER_ID, Optional.fromNullable(uuid));
     }
 
-    public void writeEntityToNBT(CompoundNBT compound) {
-        super.writeEntityToNBT(compound);
+    public void writeAdditional(CompoundNBT compound) {
+        super.writeAdditional(compound);
         if (this.getSummonerUUID() == null) {
             compound.setString("SummonerUUID", "");
         } else {
@@ -125,8 +125,8 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 
     }
 
-    public void readEntityFromNBT(CompoundNBT compound) {
-        super.readEntityFromNBT(compound);
+    public void readAdditional(CompoundNBT compound) {
+        super.readAdditional(compound);
         String s = "";
         if (compound.hasKey("SummonerUUID", 8)) {
             s = compound.getString("SummonerUUID");

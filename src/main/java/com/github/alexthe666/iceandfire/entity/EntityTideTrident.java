@@ -430,7 +430,7 @@ public class EntityTideTrident extends TridentEntity implements IProjectile {
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(CompoundNBT compound) {
+    public void writeAdditional(CompoundNBT compound) {
         compound.putInt("xTile", this.xTile);
         compound.putInt("yTile", this.yTile);
         compound.putInt("zTile", this.zTile);
@@ -448,7 +448,7 @@ public class EntityTideTrident extends TridentEntity implements IProjectile {
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(CompoundNBT compound) {
+    public void readAdditional(CompoundNBT compound) {
         this.xTile = compound.getInt("xTile");
         this.yTile = compound.getInt("yTile");
         this.zTile = compound.getInt("zTile");

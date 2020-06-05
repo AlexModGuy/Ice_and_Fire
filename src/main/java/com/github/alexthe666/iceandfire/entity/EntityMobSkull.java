@@ -113,17 +113,17 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
     }
 
     @Override
-    public void readEntityFromNBT(CompoundNBT compound) {
+    public void readAdditional(CompoundNBT compound) {
         this.setYaw(compound.getFloat("SkullYaw"));
         this.setEnumOrdinal(compound.getInt("SkullType"));
-        super.readEntityFromNBT(compound);
+        super.readAdditional(compound);
     }
 
     @Override
-    public void writeEntityToNBT(CompoundNBT compound) {
+    public void writeAdditional(CompoundNBT compound) {
         compound.setFloat("SkullYaw", this.getYaw());
         compound.putInt("SkullType", this.getEnumOrdinal());
-        super.writeEntityToNBT(compound);
+        super.writeAdditional(compound);
     }
 
     @Override

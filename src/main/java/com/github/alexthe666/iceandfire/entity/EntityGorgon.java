@@ -98,7 +98,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                 return super.shouldContinueExecuting();
             }
         });
-        this.goalSelector.addGoal(6, new EntityAILookIdle(this));
+        this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this, false));
         this.targetSelector.addGoal(2, new EntityAINearestAttackableTarget(this, PlayerEntity.class, 0, true, false, new Predicate<PlayerEntity>() {
             @Override

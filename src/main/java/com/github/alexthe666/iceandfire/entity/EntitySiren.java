@@ -86,7 +86,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
         this.goalSelector.addGoal(1, new AquaticAIGetInWater(this, 1.0D));
         this.goalSelector.addGoal(1, new AquaticAIGetOutOfWater(this, 1.0D));
         this.goalSelector.addGoal(2, new SirenAIWander(this, 1));
-        this.goalSelector.addGoal(3, new EntityAILookIdle(this));
+        this.goalSelector.addGoal(3, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(3, new EntityAIAttackMelee(this, 1.0D, false));
         this.goalSelector.addGoal(6, new EntityAIWatchClosest(this, PlayerEntity.class, 8.0F, 1.0F));
         this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this, false));
@@ -329,8 +329,8 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     @Override
-    public void writeEntityToNBT(CompoundNBT tag) {
-        super.writeEntityToNBT(tag);
+    public void writeAdditional(CompoundNBT tag) {
+        super.writeAdditional(tag);
         tag.putInt("HairColor", this.getHairColor());
         tag.setBoolean("Aggressive", this.isAgressive());
         tag.putInt("SingingPose", this.getSingingPose());
@@ -341,8 +341,8 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     @Override
-    public void readEntityFromNBT(CompoundNBT tag) {
-        super.readEntityFromNBT(tag);
+    public void readAdditional(CompoundNBT tag) {
+        super.readAdditional(tag);
         this.setHairColor(tag.getInt("HairColor"));
         this.setAggressive(tag.getBoolean("Aggressive"));
         this.setSingingPose(tag.getInt("SingingPose"));

@@ -94,7 +94,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
         this.goalSelector.addGoal(3, new EntityAIAttackMelee(this, 1.0D, true));
         this.goalSelector.addGoal(4, new EntityAIWanderAvoidWater(this, 1.0D));
         this.goalSelector.addGoal(5, new EntityAIWatchClosest(this, PlayerEntity.class, 8.0F, 1.0F));
-        this.goalSelector.addGoal(5, new EntityAILookIdle(this));
+        this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this, false));
         this.targetSelector.addGoal(2, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
         this.targetSelector.addGoal(2, new EntityAINearestAttackableTarget(this, PlayerEntity.class, false));
@@ -161,16 +161,16 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     @Override
-    public void writeEntityToNBT(CompoundNBT compound) {
-        super.writeEntityToNBT(compound);
+    public void writeAdditional(CompoundNBT compound) {
+        super.writeAdditional(compound);
         compound.putInt("Variant", this.getVariant());
         compound.putInt("Weapon", this.getWeapon());
         compound.setFloat("StoneProgress", stoneProgress);
     }
 
     @Override
-    public void readEntityFromNBT(CompoundNBT compound) {
-        super.readEntityFromNBT(compound);
+    public void readAdditional(CompoundNBT compound) {
+        super.readAdditional(compound);
         this.setVariant(compound.getInt("Variant"));
         this.setWeapon(compound.getInt("Weapon"));
         this.stoneProgress = compound.getFloat("StoneProgress");

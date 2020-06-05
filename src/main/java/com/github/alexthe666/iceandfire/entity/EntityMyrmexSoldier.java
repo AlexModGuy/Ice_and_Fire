@@ -85,7 +85,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         this.goalSelector.addGoal(5, new MyrmexAIMoveThroughHive(this, 1.0D));
         this.goalSelector.addGoal(6, new MyrmexAIWander(this, 1D));
         this.goalSelector.addGoal(7, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
-        this.goalSelector.addGoal(8, new EntityAILookIdle(this));
+        this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new MyrmexAIDefendHive(this));
         this.targetSelector.addGoal(2, new MyrmexAIFindGaurdingEntity(this));
         this.targetSelector.addGoal(3, new EntityAIHurtByTarget(this, false));

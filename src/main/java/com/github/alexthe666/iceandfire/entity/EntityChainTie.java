@@ -86,14 +86,14 @@ public class EntityChainTie extends HangingEntity {
         return 0;
     }
 
-    public void writeEntityToNBT(CompoundNBT compound) {
+    public void writeAdditional(CompoundNBT compound) {
         BlockPos blockpos = this.getHangingPosition();
         compound.putInt("TileX", blockpos.getX());
         compound.putInt("TileY", blockpos.getY());
         compound.putInt("TileZ", blockpos.getZ());
     }
 
-    public void readEntityFromNBT(CompoundNBT compound) {
+    public void readAdditional(CompoundNBT compound) {
         this.hangingPosition = new BlockPos(compound.getInt("TileX"), compound.getInt("TileY"), compound.getInt("TileZ"));
     }
 

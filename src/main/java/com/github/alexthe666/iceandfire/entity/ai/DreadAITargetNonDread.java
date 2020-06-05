@@ -10,12 +10,13 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetExpiringGoal;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.util.EntitySelectors;
 
 import javax.annotation.Nullable;
 
-public class DreadAITargetNonDread extends EntityAINearestAttackableTarget {
+public class DreadAITargetNonDread extends NearestAttackableTargetExpiringGoal {
 
     public DreadAITargetNonDread(MobEntity entityIn, Class<LivingEntity> classTarget, boolean checkSight, Predicate<? super LivingEntity> targetSelector) {
         super(entityIn, classTarget, 0, checkSight, false, targetSelector);

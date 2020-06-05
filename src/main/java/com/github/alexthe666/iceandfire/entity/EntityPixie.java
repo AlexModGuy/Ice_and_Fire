@@ -214,7 +214,7 @@ public class EntityPixie extends TameableEntity {
         this.goalSelector.addGoal(3, new AIMoveRandom());
         this.goalSelector.addGoal(4, new AIEnterHouse());
         this.goalSelector.addGoal(6, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
-        this.goalSelector.addGoal(7, new EntityAILookIdle(this));
+        this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
         this.goalSelector.removeTask(aiFlee);
     }
 
@@ -282,15 +282,15 @@ public class EntityPixie extends TameableEntity {
     }
 
     @Override
-    public void readEntityFromNBT(CompoundNBT compound) {
+    public void readAdditional(CompoundNBT compound) {
         this.setColor(compound.getInt("Color"));
-        super.readEntityFromNBT(compound);
+        super.readAdditional(compound);
     }
 
     @Override
-    public void writeEntityToNBT(CompoundNBT compound) {
+    public void writeAdditional(CompoundNBT compound) {
         compound.putInt("Color", this.getColor());
-        super.writeEntityToNBT(compound);
+        super.writeAdditional(compound);
     }
 
     @Nullable

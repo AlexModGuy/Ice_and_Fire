@@ -113,16 +113,16 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     @Override
-    public void writeEntityToNBT(CompoundNBT tag) {
-        super.writeEntityToNBT(tag);
+    public void writeAdditional(CompoundNBT tag) {
+        super.writeAdditional(tag);
         tag.putInt("HiveTicks", hiveTicks);
         tag.putInt("ReleaseTicks", releaseTicks);
         tag.setBoolean("Flying", this.isFlying());
     }
 
     @Override
-    public void readEntityFromNBT(CompoundNBT tag) {
-        super.readEntityFromNBT(tag);
+    public void readAdditional(CompoundNBT tag) {
+        super.readAdditional(tag);
         this.hiveTicks = tag.getInt("HiveTicks");
         this.releaseTicks = tag.getInt("ReleaseTicks");
         this.setFlying(tag.getBoolean("Flying"));
@@ -224,7 +224,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         this.goalSelector.addGoal(5, new MyrmexAIWanderHiveCenter(this, 1.0D));
         this.goalSelector.addGoal(6, new MyrmexAIWander(this, 1D));
         this.goalSelector.addGoal(7, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
-        this.goalSelector.addGoal(7, new EntityAILookIdle(this));
+        this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new MyrmexAIDefendHive(this));
         this.targetSelector.addGoal(2, new MyrmexAIFindMate(this));
         this.targetSelector.addGoal(3, new EntityAIHurtByTarget(this, false));

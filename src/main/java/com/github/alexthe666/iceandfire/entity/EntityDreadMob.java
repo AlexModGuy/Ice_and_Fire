@@ -1,9 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.ZombieEntity;
@@ -135,23 +132,23 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
     public static Entity necromancyEntity(LivingEntity entity) {
         Entity lichSummoned = null;
         if(entity.getCreatureAttribute() == CreatureAttribute.ARTHROPOD){
-            lichSummoned = new EntityDreadScuttler(entity.world);
+            lichSummoned = new EntityDreadScuttler(IafEntityRegistry.DREAD_SCUTTLER, entity.world);
             float readInScale = (entity.getWidth() / 1.5F);
-            ((EntityDreadScuttler)lichSummoned).onInitialSpawn(entity.world.getDifficultyForLocation(new BlockPos(entity)), null);
+            ((EntityDreadScuttler)lichSummoned).onInitialSpawn(entity.world, entity.world.getDifficultyForLocation(new BlockPos(entity)), SpawnReason.MOB_SUMMONED, null, null);
             ((EntityDreadScuttler)lichSummoned).setScale(readInScale);
             return lichSummoned;
         }
         if(entity instanceof ZombieEntity || entity instanceof IHumanoid) {
-            lichSummoned = new EntityDreadGhoul(entity.world);
+            lichSummoned = new EntityDreadGhoul(IafEntityRegistry.DREAD_GHOUL, entity.world);
             float readInScale = (entity.getWidth() / 0.6F);
-            ((EntityDreadGhoul)lichSummoned).onInitialSpawn(entity.world.getDifficultyForLocation(new BlockPos(entity)), null);
+            ((EntityDreadGhoul)lichSummoned).onInitialSpawn(entity.world, entity.world.getDifficultyForLocation(new BlockPos(entity)), SpawnReason.MOB_SUMMONED, null, null);
             ((EntityDreadGhoul)lichSummoned).setScale(readInScale);
             return lichSummoned;
         }
         if(entity.getCreatureAttribute() == CreatureAttribute.UNDEAD || entity instanceof AbstractSkeletonEntity || entity instanceof PlayerEntity) {
-            lichSummoned = new EntityDreadThrall(entity.world);
+            lichSummoned = new EntityDreadThrall(IafEntityRegistry.DREAD_THRALL, entity.world);
             EntityDreadThrall thrall = (EntityDreadThrall)lichSummoned;
-            thrall.onInitialSpawn(entity.world.getDifficultyForLocation(new BlockPos(entity)), null);
+            thrall.onInitialSpawn(entity.world, entity.world.getDifficultyForLocation(new BlockPos(entity)), SpawnReason.MOB_SUMMONED, null, null);
             thrall.setCustomArmorHead(false);
             thrall.setCustomArmorChest(false);
             thrall.setCustomArmorLegs(false);
@@ -162,13 +159,13 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
             return thrall;
         }
         if(entity instanceof AbstractHorseEntity) {
-            lichSummoned = new EntityDreadHorse(entity.world);
+            lichSummoned = new EntityDreadHorse(IafEntityRegistry.DREAD_HORSE, entity.world);
             return lichSummoned;
         }
         if(entity instanceof AnimalEntity) {
-            lichSummoned = new EntityDreadBeast(entity.world);
+            lichSummoned = new EntityDreadBeast(IafEntityRegistry.DREAD_BEAST, entity.world);
             float readInScale = (entity.getWidth() / 1.2F);
-            ((EntityDreadBeast)lichSummoned).onInitialSpawn(entity.world.getDifficultyForLocation(new BlockPos(entity)), null);
+            ((EntityDreadBeast)lichSummoned).onInitialSpawn(entity.world, entity.world.getDifficultyForLocation(new BlockPos(entity)), SpawnReason.MOB_SUMMONED, null, null);
             ((EntityDreadBeast)lichSummoned).setScale(readInScale);
             return lichSummoned;
         }
