@@ -253,6 +253,6 @@ public class CommonProxy {
     public void setRefrencedTE(TileEntity tileEntity) {
     }
 
-    public void setReferencedMob(EntityDragonBase dragonBase) {
+    public void setReferencedMob(Entity dragonBase) {
     }
 }

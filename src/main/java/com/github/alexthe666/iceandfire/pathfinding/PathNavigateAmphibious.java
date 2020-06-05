@@ -11,7 +11,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class PathNavigateAmphibious extends PathNavigate {
+public class PathNavigateAmphibious extends PathNavigator {
     private boolean shouldAvoidSun;
 
     public PathNavigateAmphibious(LivingEntity LivingEntityIn, World worldIn) {
