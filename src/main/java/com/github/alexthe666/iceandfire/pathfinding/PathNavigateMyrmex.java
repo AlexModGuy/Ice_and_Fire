@@ -10,7 +10,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class PathNavigateMyrmex extends PathNavigateGround {
+public class PathNavigateMyrmex extends GroundPathNavigator {
     public BlockPos targetPosition;
 
     public PathNavigateMyrmex(LivingEntity LivingEntityIn, World worldIn) {

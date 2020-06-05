@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexEgg;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -82,7 +83,7 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
     public ActionResultType onItemUse(ItemUseContext context) {
         ItemStack itemstack = context.getPlayer().getHeldItem(context.getHand());
         BlockPos offset = context.getPos().offset(context.getFace());
-        EntityMyrmexEgg egg = new EntityMyrmexEgg(context.getWorld());
+        EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG, context.getWorld());
         CompoundNBT tag = itemstack.getTag();
         int eggOrdinal = 0;
         if(tag != null){

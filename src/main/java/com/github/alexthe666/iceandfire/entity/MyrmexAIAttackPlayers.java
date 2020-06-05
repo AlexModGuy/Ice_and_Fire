@@ -1,12 +1,12 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.google.common.base.Predicate;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.player.PlayerEntity;
 
 import javax.annotation.Nullable;
 
-public class MyrmexAIAttackPlayers extends EntityAINearestAttackableTarget {
+public class MyrmexAIAttackPlayers extends NearestAttackableTargetGoal {
     private EntityMyrmexBase myrmex;
 
     public MyrmexAIAttackPlayers(EntityMyrmexBase myrmex) {

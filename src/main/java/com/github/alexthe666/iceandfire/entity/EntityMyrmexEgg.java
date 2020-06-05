@@ -1,19 +1,24 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,9 +32,8 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     private static final DataParameter<Integer> MYRMEX_CASTE = EntityDataManager.createKey(EntityMyrmexEgg.class, DataSerializers.VARINT);
     public UUID hiveUUID;
 
-    public EntityMyrmexEgg(World worldIn) {
-        super(worldIn);
-        this.isImmuneToFire = true;
+    public EntityMyrmexEgg(EntityType t, World worldIn) {
+        super(t, worldIn);
     }
 
     @Override
@@ -42,10 +46,10 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     @Override
     public void writeAdditional(CompoundNBT tag) {
         super.writeAdditional(tag);
-        tag.setBoolean("Jungle", this.isJungle());
+        tag.putBoolean("Jungle", this.isJungle());
         tag.putInt("MyrmexAge", this.getMyrmexAge());
         tag.putInt("MyrmexCaste", this.getMyrmexCaste());
-        tag.setUniqueId("HiveUUID", hiveUUID == null ? hiveUUID = UUID.randomUUID() : hiveUUID);
+        tag.putUniqueId("HiveUUID", hiveUUID == null ? hiveUUID = UUID.randomUUID() : hiveUUID);
     }
 
     @Override
@@ -95,29 +99,29 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    public void tick() {
+        super.tick();
         if (!canSeeSky()) {
             this.setMyrmexAge(this.getMyrmexAge() + 1);
         }
         if (this.getMyrmexAge() > IafConfig.myrmexEggTicks) {
-            this.setDead();
+            this.remove();
             EntityMyrmexBase myrmex;
             switch (this.getMyrmexCaste()) {
                 default:
-                    myrmex = new EntityMyrmexWorker(world);
+                    myrmex = new EntityMyrmexWorker(IafEntityRegistry.MYRMEX_WORKER, world);
                     break;
                 case 1:
-                    myrmex = new EntityMyrmexSoldier(world);
+                    myrmex = new EntityMyrmexSoldier(IafEntityRegistry.MYRMEX_SOLDIER, world);
                     break;
                 case 2:
-                    myrmex = new EntityMyrmexRoyal(world);
+                    myrmex = new EntityMyrmexRoyal(IafEntityRegistry.MYRMEX_ROYAL, world);
                     break;
                 case 3:
-                    myrmex = new EntityMyrmexSentinel(world);
+                    myrmex = new EntityMyrmexSentinel(IafEntityRegistry.MYRMEX_SENTINEL, world);
                     break;
                 case 4:
-                    myrmex = new EntityMyrmexQueen(world);
+                    myrmex = new EntityMyrmexQueen(IafEntityRegistry.MYRMEX_QUEEN, world);
                     break;
             }
             myrmex.setJungleVariant(this.isJungle());
@@ -125,7 +129,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
             myrmex.setPositionAndRotation(this.getPosX(), this.getPosY(), this.getPosZ(), 0, 0);
             if (myrmex instanceof EntityMyrmexQueen) {
                 MyrmexHive hive = new MyrmexHive(world, this.getPosition(), 100);
-                PlayerEntity player = world.getClosestPlayerToEntity(this, 30);
+                PlayerEntity player = world.getClosestPlayer(this, 30);
                 if (player != null) {
                     hive.hasOwner = true;
                     hive.ownerUUID = player.getUniqueID();
@@ -139,26 +143,36 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
 
             } else {
                 MyrmexHive hive = MyrmexWorldData.get(world).getHiveFromUUID(hiveUUID);
-                if (!world.isRemote && hive != null && this.getDistanceSq(hive.getCenter()) < 2000) {
+                if (!world.isRemote && hive != null && Math.sqrt(this.getDistanceSq(hive.getCenter().getX(), hive.getCenter().getY(), hive.getCenter().getZ())) < 2000) {
                     myrmex.setHive(hive);
                 }
             }
 
             if (!world.isRemote) {
-                world.spawnEntity(myrmex);
+                world.addEntity(myrmex);
             }
             this.world.playSound(this.getPosX(), this.getPosY() + this.getEyeHeight(), this.getPosZ(), IafSoundRegistry.DRAGON_HATCH, this.getSoundCategory(), 2.5F, 1.0F, false);
         }
     }
 
     @Override
-    public boolean isAIDisabled() {
-        return false;
+    public SoundEvent getHurtSound(DamageSource p_184601_1_) {
+        return null;
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return null;
+    public Iterable<ItemStack> getArmorInventoryList() {
+        return ImmutableList.of();
+    }
+
+    @Override
+    public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
+
     }
 
     @Override
@@ -169,17 +183,26 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
         if (!world.isRemote && !dmg.canHarmInCreative()) {
             this.entityDropItem(this.getItem(), 0);
         }
-        this.setDead();
+        this.remove();
         return super.attackEntityFrom(dmg, var2);
     }
 
     private ItemStack getItem() {
-        return new ItemStack(this.isJungle() ? IafItemRegistry.MYRMEX_JUNGLE_EGG : IafItemRegistry.MYRMEX_DESERT_EGG, 1, this.getMyrmexCaste());
+        ItemStack egg = new ItemStack(this.isJungle() ? IafItemRegistry.MYRMEX_JUNGLE_EGG : IafItemRegistry.MYRMEX_DESERT_EGG, 1);
+        CompoundNBT newTag = new CompoundNBT();
+        newTag.putInt("EggOrdinal", this.getMyrmexCaste());
+        egg.setTag(newTag);
+        return egg;
     }
 
     @Override
     public boolean canBePushed() {
         return false;
+    }
+
+    @Override
+    public HandSide getPrimaryHand() {
+        return null;
     }
 
     @Override
@@ -206,18 +229,8 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
         }
         if (hive != null) {
             BlockPos nursery = hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition());
-            return this.getDistanceSqToCenter(nursery) < 45;
+            return this.getDistanceSq(nursery.getX(), nursery.getY(), nursery.getZ()) < 2025;
         }
-        return false;
-    }
-
-    @Override
-    public boolean isNoDespawnRequired() {
-        return true;
-    }
-
-    @Override
-    public boolean canDespawn(double distanceToClosestPlayer) {
         return false;
     }
 }

@@ -8,6 +8,7 @@ import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
@@ -39,8 +40,8 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     private static final ResourceLocation TEXTURE_JUNGLE = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_worker.png");
     public boolean keepSearching = true;
 
-    public EntityMyrmexWorker(World worldIn) {
-        super(worldIn);
+    public EntityMyrmexWorker(EntityType t, World worldIn) {
+        super(t, worldIn);
     }
 
     @Nullable

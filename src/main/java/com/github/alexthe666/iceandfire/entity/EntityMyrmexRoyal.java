@@ -1,38 +1,24 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Predicate;
-import net.ilexiconn.llibrary.server.animation.Animation;
-import net.minecraft.block.state.BlockState;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Effects;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNavigateClimber;
-import net.minecraft.pathfinding.PathNavigateFlying;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -41,8 +27,8 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
     public static final Animation ANIMATION_BITE = Animation.create(15);
     public static final Animation ANIMATION_STING = Animation.create(15);
-    public static final ResourceLocation DESERT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_royal_desert"));
-    public static final ResourceLocation JUNGLE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_royal_jungle"));
+    public static final ResourceLocation DESERT_LOOT = new ResourceLocation("iceandfire", "myrmex_royal_desert"));
+    public static final ResourceLocation JUNGLE_LOOT = new ResourceLocation("iceandfire", "myrmex_royal_jungle"));
     private static final ResourceLocation TEXTURE_DESERT = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_royal.png");
     private static final ResourceLocation TEXTURE_JUNGLE = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_royal.png");
     private static final DataParameter<Boolean> FLYING = EntityDataManager.createKey(EntityMyrmexRoyal.class, DataSerializers.BOOLEAN);
@@ -56,8 +42,8 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     private boolean isLandNavigator;
     private boolean isMating = false;
 
-    public EntityMyrmexRoyal(World worldIn) {
-        super(worldIn);
+    public EntityMyrmexRoyal(EntityType t,  World worldIn) {
+        super(t, worldIn);
         this.switchNavigator(true);
     }
 

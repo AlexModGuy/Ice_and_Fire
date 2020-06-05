@@ -6,6 +6,7 @@ import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
@@ -44,7 +45,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
     public int visibleTicks = 0;
     public int daylightTicks = 0;
 
-    public EntityMyrmexSentinel(World worldIn) {
+    public EntityMyrmexSentinel(EntityType t, World worldIn) {
         super(worldIn);
     }
 

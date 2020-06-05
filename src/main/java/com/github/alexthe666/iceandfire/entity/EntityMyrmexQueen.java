@@ -1,38 +1,40 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.citadel.animation.Animation;
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.google.common.base.Predicate;
-import net.ilexiconn.llibrary.server.animation.Animation;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.particles.BlockParticleData;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
-
 import javax.annotation.Nullable;
 
 public class EntityMyrmexQueen extends EntityMyrmexBase {
@@ -41,15 +43,15 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     public static final Animation ANIMATION_STING = Animation.create(15);
     public static final Animation ANIMATION_EGG = Animation.create(20);
     public static final Animation ANIMATION_DIGNEST = Animation.create(45);
-    public static final ResourceLocation DESERT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_queen_desert"));
-    public static final ResourceLocation JUNGLE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_queen_jungle"));
+    public static final ResourceLocation DESERT_LOOT = new ResourceLocation("iceandfire", "myrmex_queen_desert");
+    public static final ResourceLocation JUNGLE_LOOT = new ResourceLocation("iceandfire", "myrmex_queen_jungle");
     private static final ResourceLocation TEXTURE_DESERT = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_queen.png");
     private static final ResourceLocation TEXTURE_JUNGLE = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_queen.png");
     private static final DataParameter<Boolean> HASMADEHOME = EntityDataManager.createKey(EntityMyrmexQueen.class, DataSerializers.BOOLEAN);
     private int eggTicks = 0;
 
-    public EntityMyrmexQueen(World worldIn) {
-        super(worldIn);
+    public EntityMyrmexQueen(EntityType t, World worldIn) {
+        super(t, worldIn);
     }
 
     @Nullable
@@ -66,20 +68,20 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         this.dataManager.register(HASMADEHOME, Boolean.valueOf(true));
     }
 
-    public void setCustomNameTag(String name) {
-        if (!this.getCustomNameTag().equals(name)) {
+    public void setCustomName(ITextComponent name) {
+        if (!this.getHive().equals(name)) {
             if (this.getHive() != null) {
-                this.getHive().colonyName = name;
+                this.getHive().colonyName = name.getFormattedText();
             }
         }
-        super.setCustomNameTag(name);
+        super.setCustomName(name);
     }
 
     @Override
     public void writeAdditional(CompoundNBT tag) {
         super.writeAdditional(tag);
         tag.putInt("EggTicks", eggTicks);
-        tag.setBoolean("MadeHome", this.hasMadeHome());
+        tag.putBoolean("MadeHome", this.hasMadeHome());
 
     }
 
@@ -98,12 +100,8 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         this.dataManager.set(HASMADEHOME, madeHome);
     }
 
-    public VillagerRegistry.VillagerProfession getProfessionForge() {
-        return this.isJungle() ? IafVillagerRegistry.INSTANCE.jungleMyrmexQueen : IafVillagerRegistry.INSTANCE.desertMyrmexQueen;
-    }
-
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
         if (this.getAnimation() == ANIMATION_DIGNEST) {
             spawnGroundEffects(3);
         }
@@ -126,12 +124,12 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                     this.addPotionEffect(new EffectInstance(Effects.INVISIBILITY, 30));
                     this.setHive(hiveGen.hive);
                     for (int i = 0; i < 3; i++) {
-                        EntityMyrmexWorker worker = new EntityMyrmexWorker(world);
+                        EntityMyrmexWorker worker = new EntityMyrmexWorker(IafEntityRegistry.MYRMEX_WORKER, world);
                         worker.copyLocationAndAnglesFrom(this);
                         worker.setHive(this.getHive());
                         worker.setJungleVariant(this.isJungle());
                         if (!world.isRemote) {
-                            world.spawnEntity(worker);
+                            world.addEntity(worker);
                         }
                     }
                     return;
@@ -147,7 +145,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
             if (world.isAirBlock(eggPos)) {
                 this.setAnimation(ANIMATION_EGG);
                 if (this.getAnimationTick() == 10) {
-                    EntityMyrmexEgg egg = new EntityMyrmexEgg(this.world);
+                    EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG, this.world);
                     egg.setJungle(this.isJungle());
                     int caste = getRandomCaste(world, this.getRNG(), getHive() == null || getHive().reproduces);
                     egg.setMyrmexCaste(caste);
@@ -156,7 +154,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                         egg.hiveUUID = this.getHive().hiveUUID;
                     }
                     if (!world.isRemote) {
-                        world.spawnEntity(egg);
+                        world.addEntity(egg);
                     }
                     eggTicks = 0;
                 }
@@ -176,48 +174,43 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
+                LivingEntity attackTarget = this.getAttackTarget();
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2));
                 this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 200, 2));
                 this.getAttackTarget().isAirBorne = true;
                 float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
-                this.getAttackTarget().motionX /= 2.0D;
-                this.getAttackTarget().motionZ /= 2.0D;
-                this.getAttackTarget().motionX -= 0.5 / (double) f * 4;
-                this.getAttackTarget().motionZ -= 0.5 / (double) f * 4;
+                this.getAttackTarget().isAirBorne = true;
+                attackTarget.setMotion(attackTarget.getMotion().mul(0.5D, 1, 0.5D));
+                attackTarget.setMotion(attackTarget.getMotion().add(-0.5 / (double) f * 4, 1, -0.5 / (double) f * 4));
 
                 if (this.getAttackTarget().onGround) {
-                    this.getAttackTarget().motionY /= 2.0D;
-                    this.getAttackTarget().motionY += 4;
-
-                    if (this.getAttackTarget().motionY > 0.4000000059604645D) {
-                        this.getAttackTarget().motionY = 0.4000000059604645D;
-                    }
+                    attackTarget.setMotion(attackTarget.getMotion().add(0, 0.4, 0));
                 }
             }
         }
 
     }
 
-    public boolean isEntityInvulnerable(DamageSource source) {
-        return super.isEntityInvulnerable(source) || this.getAnimation() == ANIMATION_DIGNEST;
+    public boolean isInvulnerableTo(DamageSource source) {
+        return super.isInvulnerableTo(source) || this.getAnimation() == ANIMATION_DIGNEST;
     }
 
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new EntityAISwimming(this));
+        this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(0, new MyrmexAITradePlayer(this));
         this.goalSelector.addGoal(0, new MyrmexAILookAtTradePlayer(this));
-        this.goalSelector.addGoal(1, new EntityAIAttackMelee(this, 1.0D, true));
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.addGoal(3, new MyrmexAIReEnterHive(this, 1.0D));
         this.goalSelector.addGoal(4, new MyrmexAIWanderHiveCenter(this, 1.0D));
         this.goalSelector.addGoal(5, new MyrmexQueenAIWander(this, 1D));
-        this.goalSelector.addGoal(6, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new MyrmexAIDefendHive(this));
-        this.targetSelector.addGoal(2, new EntityAIHurtByTarget(this, false));
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new MyrmexAIAttackPlayers(this));
-        this.targetSelector.addGoal(3, new EntityAINearestAttackableTarget(this, LivingEntity.class, 10, true, true, new Predicate<LivingEntity>() {
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, true, new Predicate<LivingEntity>() {
             public boolean apply(@Nullable LivingEntity entity) {
-                return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexQueen.this, entity) && DragonUtils.isAlive(entity);
+                return entity != null && !EntityMyrmexBase.haveSameHive(EntityMyrmexQueen.this, entity) && DragonUtils.isAlive(entity);
             }
         }));
 
@@ -274,7 +267,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
             }
             if (!this.getPassengers().isEmpty()) {
                 for (Entity entity : this.getPassengers()) {
-                    entity.dismountRidingEntity();
+                    entity.stopRiding();
                 }
             }
             return true;
@@ -301,7 +294,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 BlockState BlockState = this.world.getBlockState(new BlockPos(MathHelper.floor(this.getPosX() + extraX), MathHelper.floor(this.getPosY() + extraY) - 1, MathHelper.floor(this.getPosZ() + extraZ)));
                 if (BlockState.getMaterial() != Material.AIR) {
                     if (world.isRemote) {
-                        world.spawnParticle(ParticleTypes.BLOCK_CRACK, true, this.getPosX() + extraX, this.getPosY() + extraY, this.getPosZ() + extraZ, motionX, motionY, motionZ, Block.getStateId(BlockState));
+                        world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, BlockState), true, this.getPosX() + extraX, this.getPosY() + extraY, this.getPosZ() + extraZ, motionX, motionY, motionZ);
                     }
                 }
             }
@@ -311,5 +304,15 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     @Override
     public Animation[] getAnimations() {
         return new Animation[]{ANIMATION_PUPA_WIGGLE, ANIMATION_BITE, ANIMATION_STING, ANIMATION_EGG, ANIMATION_DIGNEST};
+    }
+
+    @Override
+    public int getXp() {
+        return 0;
+    }
+
+    @Override
+    public boolean func_213705_dZ() {
+        return false;
     }
 }

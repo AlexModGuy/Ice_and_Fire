@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
@@ -32,7 +33,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     private static final ResourceLocation TEXTURE_JUNGLE = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_soldier.png");
     public EntityMyrmexBase guardingEntity = null;
 
-    public EntityMyrmexSoldier(World worldIn) {
+    public EntityMyrmexSoldier(EntityType t,  World worldIn) {
         super(worldIn);
         this.setSize(0.99F, 0.95F);
     }

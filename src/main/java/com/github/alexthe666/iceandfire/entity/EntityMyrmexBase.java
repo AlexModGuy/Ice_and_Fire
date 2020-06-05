@@ -1,5 +1,9 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.citadel.animation.Animation;
+import com.github.alexthe666.citadel.animation.AnimationHandler;
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexBiolight;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexConnectedResin;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
@@ -9,58 +13,58 @@ import com.github.alexthe666.iceandfire.pathfinding.PathNavigateMyrmex;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
-import net.ilexiconn.llibrary.server.animation.Animation;
-import net.ilexiconn.llibrary.server.animation.AnimationHandler;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockCactus;
-import net.minecraft.block.BlockLeaves;
+import com.google.common.collect.Sets;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.EntityMoveHelper;
-import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.entity.merchant.IMerchant;
+import net.minecraft.entity.merchant.villager.VillagerData;
+import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.init.Effects;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.MerchantOffer;
+import net.minecraft.item.MerchantOffers;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.NodeProcessor;
-import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Team;
-import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.village.MerchantRecipe;
-import net.minecraft.village.MerchantRecipeList;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.builder.Diff;
 
 import javax.annotation.Nullable;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimatedEntity, IMerchant {
@@ -79,26 +83,25 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     private int animationTick;
     private Animation currentAnimation;
     private MyrmexHive hive;
-    @Nullable
-    private PlayerEntity buyingPlayer;
-    @Nullable
-    private MerchantRecipeList buyingList;
-    private java.util.UUID lastBuyingPlayer;
-    private int careerId;
-    private int careerLevel;
-    private boolean needsInitilization;
     private int timeUntilReset;
-    private int wealth;
+    private boolean leveledUp;
 
-    public EntityMyrmexBase(World worldIn) {
-        super(worldIn);
+    @Nullable
+    private PlayerEntity customer;
+    @Nullable
+    protected MerchantOffers offers;
+    private final Inventory villagerInventory = new Inventory(8);
+
+
+    public EntityMyrmexBase(EntityType t, World worldIn) {
+        super(t, worldIn);
         this.stepHeight = 2;
         //this.moveController = new GroundMoveHelper(this);
     }
 
     private static boolean isJungleBiome(World world, BlockPos position) {
         Biome biome = world.getBiome(position);
-        return biome.topBlock != Blocks.SAND && biome.fillerBlock != Blocks.SAND && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY);
+        return biome.getSurfaceBuilderConfig().getTop().getBlock() != Blocks.SAND && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY);
     }
 
     public static boolean haveSameHive(EntityMyrmexBase myrmex, Entity entity) {
@@ -121,7 +124,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         if (block instanceof BlockMyrmexBiolight) {
             return false;
         }
-        return blockState.getMaterial() == Material.LEAVES || blockState.getMaterial() == Material.PLANTS || blockState.getMaterial() == Material.VINE || blockState.getMaterial() == Material.CACTUS || block instanceof BlockBush || block instanceof BlockCactus || block instanceof BlockLeaves;
+        return blockState.getMaterial() == Material.LEAVES || blockState.getMaterial() == Material.PLANTS || blockState.getMaterial() == Material.CACTUS || block instanceof BushBlock || block instanceof CactusBlock || block instanceof LeavesBlock;
     }
 
     public static int getRandomCaste(World world, Random random, boolean royal) {
@@ -148,7 +151,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public boolean canMove() {
-        return this.getGrowthStage() > 1 && !this.isTrading();
+        return this.getGrowthStage() > 1;
     }
 
     public boolean isChild() {
@@ -156,31 +159,22 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     protected void updateAITasks() {
-        if (!this.isTrading() && this.timeUntilReset > 0) {
+        if (!this.hasCustomer() && this.timeUntilReset > 0) {
             --this.timeUntilReset;
-
             if (this.timeUntilReset <= 0) {
-                if (this.needsInitilization) {
-                    for (MerchantRecipe merchantrecipe : this.buyingList) {
-                        if (merchantrecipe.isRecipeDisabled()) {
-                            merchantrecipe.increaseMaxTradeUses(this.rand.nextInt(6) + this.rand.nextInt(6) + 2);
-                        }
-                    }
-
-                    this.populateBuyingList();
-                    this.needsInitilization = false;
-
-                    if (this.getHive() != null && this.lastBuyingPlayer != null) {
-                        this.world.setEntityState(this, (byte) 14);
-                        this.getHive().setWorld(this.world);
-                        this.getHive().modifyPlayerReputation(this.lastBuyingPlayer, 1);
-                    }
+                if (this.leveledUp) {
+                    this.levelUp();
+                    this.leveledUp = false;
                 }
 
                 this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 200, 0));
             }
         }
-
+        if (this.getHive() != null && this.getCustomer() != null) {
+            this.world.setEntityState(this, (byte) 14);
+            this.getHive().setWorld(this.world);
+            this.getHive().modifyPlayerReputation(this.getCustomer().getUniqueID(), 1);
+        }
         super.updateAITasks();
     }
 
@@ -203,29 +197,17 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         return 0.52F;
     }
 
-    protected void jump() {
-        this.motionY = (double) this.getJumpUpwardsMotion();
-        if (this.isPotionActive(Effects.JUMP_BOOST)) {
-            this.motionY += (double) ((float) (this.getActivePotionEffect(Effects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
-        }
-        float f = this.rotationYaw * 0.017453292F;
-        this.motionX -= (double) (MathHelper.sin(f) * 0.2F);
-        this.motionZ += (double) (MathHelper.cos(f) * 0.2F);
-        this.isAirBorne = true;
-        net.minecraftforge.common.ForgeHooks.onLivingJump(this);
-    }
-
     protected void registerAttributes() {
         super.registerAttributes();
-        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+        this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
     }
 
     public float getBlockPathWeight(BlockPos pos) {
-        return this.world.getBlockState(pos.down()).getBlock() instanceof BlockMyrmexResin ? 10.0F : this.world.getLightBrightness(pos) - 0.5F;
+        return this.world.getBlockState(pos.down()).getBlock() instanceof BlockMyrmexResin ? 10.0F : this.world.getLight(pos) - 0.5F;
     }
 
-    protected PathNavigate createNavigator(World worldIn) {
+    protected PathNavigator createNavigator(World worldIn) {
         return new PathNavigateMyrmex(this, worldIn);
     }
 
@@ -236,9 +218,9 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         this.dataManager.register(VARIANT, Boolean.valueOf(false));
     }
 
-    public void onUpdate() {
-        super.onUpdate();
-        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity){
+    public void tick() {
+        super.tick();
+        if(world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity){
             this.setAttackTarget(null);
         }
         if (this.getGrowthStage() < 2 && this.getRidingEntity() != null && this.getRidingEntity() instanceof EntityMyrmexBase) {
@@ -248,7 +230,6 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
             this.renderYawOffset = 0;
             this.prevRenderYawOffset = 0;
         }
-        this.setScaleForAge(false);
         if (!this.world.isRemote) {
             this.setBesideClimbableBlock(this.collidedHorizontally && (this.onGround || !this.collidedVertically));
         }
@@ -284,16 +265,25 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         super.writeAdditional(tag);
         tag.putInt("GrowthStage", this.getGrowthStage());
         tag.putInt("GrowthTicks", growthTicks);
-        tag.setBoolean("Variant", this.isJungle());
+        tag.putBoolean("Variant", this.isJungle());
         if (this.getHive() != null) {
-            tag.setUniqueId("HiveUUID", this.getHive().hiveUUID);
+            tag.putUniqueId("HiveUUID", this.getHive().hiveUUID);
         }
-        tag.putInt("Career", this.careerId);
-        tag.putInt("CareerLevel", this.careerLevel);
-        tag.putInt("Riches", this.wealth);
-        if (this.buyingList != null) {
-            tag.setTag("Offers", this.buyingList.getRecipiesAsTags());
+        MerchantOffers merchantoffers = this.getOffers();
+        if (!merchantoffers.isEmpty()) {
+            tag.put("Offers", merchantoffers.write());
         }
+
+        ListNBT listnbt = new ListNBT();
+
+        for(int i = 0; i < this.villagerInventory.getSizeInventory(); ++i) {
+            ItemStack itemstack = this.villagerInventory.getStackInSlot(i);
+            if (!itemstack.isEmpty()) {
+                listnbt.add(itemstack.write(new CompoundNBT()));
+            }
+        }
+
+        tag.put("Inventory", listnbt);
     }
 
     @Override
@@ -303,96 +293,19 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         this.growthTicks = tag.getInt("GrowthTicks");
         this.setJungleVariant(tag.getBoolean("Variant"));
         this.setHive(MyrmexWorldData.get(world).getHiveFromUUID(tag.getUniqueId("HiveUUID")));
-        this.careerId = tag.getInt("Career");
-        this.careerLevel = tag.getInt("CareerLevel");
-        if (tag.hasKey("Offers", 10)) {
-            CompoundNBT CompoundNBT = tag.getCompoundTag("Offers");
-            this.buyingList = new MerchantRecipeList(CompoundNBT);
-        }
-        this.wealth = tag.getInt("Riches");
-    }
-
-    @Nullable
-    public PlayerEntity getCustomer() {
-        return this.buyingPlayer;
-    }
-
-    public void setCustomer(@Nullable PlayerEntity player) {
-        this.buyingPlayer = player;
-    }
-
-    public boolean isTrading() {
-        return this.buyingPlayer != null;
-    }
-
-    @Nullable
-    public MerchantRecipeList getRecipes(PlayerEntity player) {
-        if (this.buyingList == null) {
-            this.populateBuyingList();
+        if (tag.contains("Offers", 10)) {
+            this.offers = new MerchantOffers(tag.getCompound("Offers"));
         }
 
-        return this.buyingList;
-    }
+        ListNBT listnbt = tag.getList("Inventory", 10);
 
-    public void verifySellingItem(ItemStack stack) {
-        if (!this.world.isRemote && this.livingSoundTime > -this.getTalkInterval() + 20) {
-            this.livingSoundTime = -this.getTalkInterval();
-            this.playSound(stack.isEmpty() ? IafSoundRegistry.MYRMEX_HURT : IafSoundRegistry.MYRMEX_IDLE, this.getSoundVolume(), this.getSoundPitch());
-        }
-    }
-
-    public void useRecipe(MerchantRecipe recipe) {
-        recipe.incrementToolUses();
-        this.livingSoundTime = -this.getTalkInterval();
-        if (this.getHive() != null && this.getCustomer() != null) {
-            this.getHive().setWorld(this.world);
-            this.getHive().modifyPlayerReputation(this.getCustomer().getUniqueID(), 2);
-        }
-        this.playSound(IafSoundRegistry.MYRMEX_IDLE, this.getSoundVolume(), this.getSoundPitch());
-        int i = 3 + this.rand.nextInt(4);
-
-        if (recipe.getToolUses() == 1 || this.rand.nextInt(5) == 0) {
-            this.timeUntilReset = 40;
-            this.needsInitilization = true;
-            if (this.buyingPlayer != null) {
-                this.lastBuyingPlayer = this.buyingPlayer.getUniqueID();
-            } else {
-                this.lastBuyingPlayer = null;
-            }
-
-            i += 5;
-        }
-
-        if (recipe.getItemToBuy().getItem() == IafItemRegistry.MYRMEX_DESERT_RESIN || recipe.getItemToBuy().getItem() == IafItemRegistry.MYRMEX_JUNGLE_RESIN) {
-            this.wealth += recipe.getItemToBuy().getCount();
-        }
-
-        if (recipe.getRewardsExp()) {
-            this.world.spawnEntity(new EntityXPOrb(this.world, this.getPosX(), this.getPosY() + 0.5D, this.getPosZ(), i));
-        }
-    }
-
-    private void populateBuyingList() {
-        if (this.careerId != 0 && this.careerLevel != 0) {
-            ++this.careerLevel;
-        } else {
-            this.careerId = this.getProfessionForge().getRandomCareer(this.rand) + 1;
-            this.careerLevel = 1;
-        }
-
-        if (this.buyingList == null) {
-            this.buyingList = new MerchantRecipeList();
-        }
-
-        int i = this.careerId - 1;
-        int j = this.careerLevel - 1;
-        java.util.List<EntityVillager.ITradeList> trades = this.getProfessionForge().getCareer(i).getTrades(j);
-
-        if (trades != null) {
-            for (EntityVillager.ITradeList entityvillager$itradelist : trades) {
-                entityvillager$itradelist.addMerchantRecipe(this, this.buyingList, this.rand);
+        for(int i = 0; i < listnbt.size(); ++i) {
+            ItemStack itemstack = ItemStack.read(listnbt.getCompound(i));
+            if (!itemstack.isEmpty()) {
+                this.villagerInventory.addItem(itemstack);
             }
         }
+
     }
 
     public boolean canAttackTamable(TameableEntity tameable) {
@@ -400,35 +313,6 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
             return this.getHive().isPlayerReputationTooLowToFight(tameable.getOwnerId());
         }
         return true;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public void setRecipes(@Nullable MerchantRecipeList recipeList) {
-    }
-
-    public ITextComponent getDisplayName() {
-        Team team = this.getTeam();
-        String s = this.getCustomNameTag();
-
-        if (s != null && !s.isEmpty()) {
-            TextComponentString textcomponentstring = new TextComponentString(ScorePlayerTeam.formatPlayerName(team, s));
-            textcomponentstring.getStyle().setHoverEvent(this.getHoverEvent());
-            textcomponentstring.getStyle().setInsertion(this.getCachedUniqueIdString());
-            return textcomponentstring;
-        } else {
-            if (this.buyingList == null) {
-                this.populateBuyingList();
-            }
-            TextComponentString itextcomponent = new TextComponentString(this.getName());
-            itextcomponent.getStyle().setHoverEvent(this.getHoverEvent());
-            itextcomponent.getStyle().setInsertion(this.getCachedUniqueIdString());
-
-            if (team != null) {
-                itextcomponent.getStyle().setColor(team.getColor());
-            }
-
-            return itextcomponent;
-        }
     }
 
     public World getWorld() {
@@ -455,8 +339,8 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         this.dataManager.set(VARIANT, isJungle);
     }
 
-    public EnumCreatureAttribute getCreatureAttribute() {
-        return EnumCreatureAttribute.ARTHROPOD;
+    public CreatureAttribute getCreatureAttribute() {
+        return CreatureAttribute.ARTHROPOD;
     }
 
     public boolean isBesideClimbableBlock() {
@@ -481,7 +365,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     @Nullable
     @Override
-    public EntityAgeable createChild(EntityAgeable ageable) {
+    public AgeableEntity createChild(AgeableEntity ageable) {
         return null;
     }
 
@@ -522,7 +406,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                 int i = -5 * this.getCasteImportance();
                 this.getHive().setWorld(this.world);
                 this.getHive().modifyPlayerReputation(livingBase.getUniqueID(), i);
-                if (this.isEntityAlive()) {
+                if (this.isAlive()) {
                     this.world.setEntityState(this, (byte) 13);
                 }
             }
@@ -537,6 +421,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                 this.getHive().modifyPlayerReputation(entity.getUniqueID(), -15);
             }
         }
+        this.resetCustomer();
         super.onDeath(cause);
     }
 
@@ -556,30 +441,24 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         if (flag) {
             itemstack.interactWithEntity(player, this, hand);
             return true;
-        } else if (!this.holdingSpawnEggOfClass(itemstack, this.getClass()) && this.getGrowthStage() >= 2 && this.isEntityAlive() && !this.isTrading() && !this.isChild() && !player.isShiftKeyDown()) {
-            if (this.buyingList == null) {
-                this.populateBuyingList();
-            }
-
-            if (hand == Hand.MAIN_HAND) {
-                player.addStat(StatList.TALKED_TO_VILLAGER);
-            }
-
-            if (!this.world.isRemote && !this.buyingList.isEmpty() && (this.getHive() == null || !this.getHive().isPlayerReputationTooLowToTrade(player.getUniqueID()))) {
-                this.setCustomer(player);
-                player.displayVillagerTradeGui(this);
-            } else if (this.buyingList.isEmpty()) {
+        } else if (!super.processInteract(player, hand) && this.getGrowthStage() >= 2 && this.isAlive() && !this.isChild() && !player.isShiftKeyDown()) {
+            if (this.getOffers().isEmpty()) {
                 return super.processInteract(player, hand);
-            }
+            } else {
+                if (!this.world.isRemote) {
+                    this.setCustomer(player);
+                    this.openMerchantContainer(player, this.getDisplayName(), 1);
+                }
 
-            return true;
+                return true;
+            }
         } else {
             return super.processInteract(player, hand);
         }
     }
 
     public void onStaffInteract(PlayerEntity player, ItemStack itemstack) {
-        UUID staffUUID = itemstack.getTagCompound().getUniqueId("HiveUUID");
+        UUID staffUUID = itemstack.getTag().getUniqueId("HiveUUID");
         if (world.isRemote) {
             return;
         }
@@ -599,11 +478,11 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                 EntityMyrmexQueen queen = this.getHive().getQueen();
                 BlockPos center = this.getHive().getCenterGround();
                 if (queen.hasCustomName()) {
-                    player.sendStatusMessage(new TranslationTextComponent("myrmex.message.staff_set_named", queen.getCustomNameTag(), center.getX(), center.getY(), center.getZ()), true);
+                    player.sendStatusMessage(new TranslationTextComponent("myrmex.message.staff_set_named", queen.getName(), center.getX(), center.getY(), center.getZ()), true);
                 } else {
                     player.sendStatusMessage(new TranslationTextComponent("myrmex.message.staff_set_unnamed", center.getX(), center.getY(), center.getZ()), true);
                 }
-                itemstack.getTagCompound().setUniqueId("HiveUUID", this.getHive().hiveUUID);
+                itemstack.getTag().putUniqueId("HiveUUID", this.getHive().hiveUUID);
             }
 
         }
@@ -612,16 +491,15 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     @Override
     @Nullable
-    public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, @Nullable ILivingEntityData livingdata) {
-        livingdata = super.onInitialSpawn(difficulty, livingdata);
+    public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+        spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setHive(MyrmexWorldData.get(world).getNearestHive(this.getPosition(), 400));
         if (this.getHive() != null) {
             this.setJungleVariant(isJungleBiome(world, this.getHive().getCenter()));
         } else {
             this.setJungleVariant(rand.nextBoolean());
         }
-        this.populateBuyingList();
-        return livingdata;
+        return spawnDataIn;
     }
 
     public abstract boolean shouldLeaveHive();
@@ -629,8 +507,8 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     public abstract boolean shouldEnterHive();
 
     @Override
-    public void setScaleForAge(boolean baby) {
-        this.setScale(this.getGrowthStage() == 0 ? 0.5F : this.getGrowthStage() == 1 ? 0.75F : 1F);
+    public float getRenderScale() {
+       return this.getGrowthStage() == 0 ? 0.5F : this.getGrowthStage() == 1 ? 0.75F : 1F;
     }
 
     public abstract ResourceLocation getAdultTexture();
@@ -684,21 +562,18 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         }
         if (getHive() != null) {
             BlockPos nursery = getHive().getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition());
-            return this.getDistanceSqToCenter(nursery) < 45;
+            return MathHelper.sqrt(this.getDistanceSq(nursery.getX(), nursery.getY(), nursery.getZ())) < 45;
         }
         return false;
     }
 
     @Override
-    public void travel(float strafe, float forward, float vertical) {
+    public void travel(Vec3d motion) {
         if (!this.canMove()) {
-            strafe = 0;
-            forward = 0;
-            vertical = 0;
-            super.travel(strafe, forward, vertical);
+            super.travel(Vec3d.ZERO);
             return;
         }
-        super.travel(strafe, forward, vertical);
+        super.travel(motion);
     }
 
     public int getImportance() {
@@ -720,10 +595,6 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     public boolean shouldWander() {
         return this.getHive() == null;
-    }
-
-    public VillagerRegistry.VillagerProfession getProfessionForge() {
-        return null;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -763,12 +634,11 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     protected void playVillagerEffect() {
-        ParticleTypes enumparticletypes = ParticleTypes.VILLAGER_HAPPY;
         for (int i = 0; i < 7; ++i) {
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
-            this.world.spawnParticle(enumparticletypes, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + 0.5D + (double) (this.rand.nextFloat() * this.height), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d0, d1, d2);
+            this.world.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + 0.5D + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d0, d1, d2);
         }
     }
 
@@ -791,102 +661,141 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public AxisAlignedBB getAttackBounds() {
-        float size = this.getRenderSizeModifier() * 0.25F;
+        float size = this.getRenderScale() * 0.25F;
         return this.getBoundingBox().grow(1.0F + size, 1.0F + size, 1.0F + size);
     }
 
-    public static class BasicTrade implements EntityVillager.ITradeList {
-        public ItemStack first;
-        public ItemStack second;
-        public EntityVillager.PriceInfo firstPrice;
-        public EntityVillager.PriceInfo secondPrice;
+    public void setCustomer(@Nullable PlayerEntity player) {
+        this.customer = player;
+    }
 
-        public BasicTrade(ItemStack first, ItemStack second, EntityVillager.PriceInfo firstPrice, EntityVillager.PriceInfo secondPrice) {
-            this.first = first;
-            this.second = second;
-            this.firstPrice = firstPrice;
-            this.secondPrice = secondPrice;
+    @Nullable
+    public PlayerEntity getCustomer() {
+        return this.customer;
+    }
+
+    public boolean hasCustomer() {
+        return this.customer != null;
+    }
+
+    public MerchantOffers getOffers() {
+        if (this.offers == null) {
+            this.offers = new MerchantOffers();
+            this.populateTradeData();
         }
 
-        public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
-            int i = firstPrice.getPrice(random);
-            int j = secondPrice.getPrice(random);
-            recipeList.add(new MerchantRecipe(new ItemStack(first.getItem(), i, first.getItemDamage()), new ItemStack(second.getItem(), j, second.getItemDamage())));
+        return this.offers;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void setClientSideOffers(@Nullable MerchantOffers offers) {
+    }
+
+    public void setXP(int xpIn) {
+    }
+
+    public void onTrade(MerchantOffer offer) {
+        offer.increaseUses();
+        this.livingSoundTime = -this.getTalkInterval();
+        this.onVillagerTrade(offer);
+    }
+
+    protected void onVillagerTrade(MerchantOffer offer) {
+        if (offer.getDoesRewardExp()) {
+            int i = 3 + this.rand.nextInt(4);
+            this.world.addEntity(new ExperienceOrbEntity(this.world, this.getPosX(), this.getPosY() + 0.5D, this.getPosZ(), i));
         }
     }
 
-    protected static class GroundMoveHelper extends EntityMoveHelper {
-        public GroundMoveHelper(LivingEntity LivingEntityIn) {
-            super(LivingEntityIn);
+    public void verifySellingItem(ItemStack stack) {
+        if (!this.world.isRemote && this.livingSoundTime > -this.getTalkInterval() + 20) {
+            this.livingSoundTime = -this.getTalkInterval();
+            this.playSound(this.getVillagerYesNoSound(!stack.isEmpty()), this.getSoundVolume(), this.getSoundPitch());
         }
 
-        public float distance(float rotateAngleFrom, float rotateAngleTo) {
-            return (float) IAFMath.atan2_accurate(MathHelper.sin(rotateAngleTo - rotateAngleFrom), MathHelper.cos(rotateAngleTo - rotateAngleFrom));
-        }
+    }
+    public SoundEvent getYesSound() {
+        return SoundEvents.ENTITY_VILLAGER_YES;
+    }
 
-        public void onUpdateMoveHelper() {
-            if (this.action == EntityMoveHelper.Action.STRAFE) {
-                float f = (float) this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue();
-                float f1 = (float) this.speed * f;
-                float f2 = this.moveForward;
-                float f3 = this.moveStrafe;
-                float f4 = MathHelper.sqrt(f2 * f2 + f3 * f3);
+    protected SoundEvent getVillagerYesNoSound(boolean getYesSound) {
+        return getYesSound ? SoundEvents.ENTITY_VILLAGER_YES : SoundEvents.ENTITY_VILLAGER_NO;
+    }
 
-                if (f4 < 1.0F) {
-                    f4 = 1.0F;
-                }
+    public void playCelebrateSound() {
+        this.playSound(SoundEvents.ENTITY_VILLAGER_CELEBRATE, this.getSoundVolume(), this.getSoundPitch());
+    }
 
-                f4 = f1 / f4;
-                f2 = f2 * f4;
-                f3 = f3 * f4;
-                float f5 = MathHelper.sin(this.entity.rotationYaw * 0.017453292F);
-                float f6 = MathHelper.cos(this.entity.rotationYaw * 0.017453292F);
-                float f7 = f2 * f6 - f3 * f5;
-                float f8 = f3 * f6 + f2 * f5;
-                PathNavigate pathnavigate = this.entity.getNavigator();
-                if (pathnavigate != null) {
-                    NodeProcessor nodeprocessor = pathnavigate.getNodeProcessor();
-                    if (nodeprocessor != null && nodeprocessor.getPathNodeType(this.entity.world, MathHelper.floor(this.entity.getPosX() + (double) f7), MathHelper.floor(this.entity.getPosY()), MathHelper.floor(this.entity.getPosZ() + (double) f8)) != PathNodeType.WALKABLE) {
-                        this.moveForward = 1.0F;
-                        this.moveStrafe = 0.0F;
-                        f1 = f;
-                    }
-                }
-                this.entity.setAIMoveSpeed(f1);
-                this.entity.setMoveForward(this.moveForward);
-                this.entity.setMoveStrafing(this.moveStrafe);
-                this.action = EntityMoveHelper.Action.WAIT;
-            } else if (this.action == EntityMoveHelper.Action.MOVE_TO) {
-                this.action = EntityMoveHelper.Action.WAIT;
-                double d0 = this.getPosX() - this.entity.getPosX();
-                double d1 = this.getPosZ() - this.entity.getPosZ();
-                double d2 = this.getPosY() - this.entity.getPosY();
-                double d3 = d0 * d0 + d2 * d2 + d1 * d1;
-                if (d3 < 2.500000277905201E-7D) {
-                    this.entity.setMoveForward(0.0F);
-                    return;
-                }
-                float f9 = (float) (MathHelper.atan2(d1, d0) * (180D / Math.PI)) - 90.0F;
-                float maxChange = 90F;
-                float distance = (float) Math.toDegrees(distance((float) Math.toRadians(this.entity.rotationYaw), (float) Math.toRadians(f9)));
-                this.entity.rotationYaw = this.entity.rotationYaw + MathHelper.clamp(distance, -maxChange / 2, maxChange / 2);
-                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
+    protected void resetCustomer() {
+        this.setCustomer((PlayerEntity)null);
+    }
 
-                if (d2 > (double) this.entity.stepHeight && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.entity.getWidth())) {
-                    this.entity.getJumpHelper().setJumping();
-                    this.action = EntityMoveHelper.Action.JUMPING;
-                }
-            } else if (this.action == EntityMoveHelper.Action.JUMPING) {
-                this.entity.setAIMoveSpeed((float) (this.speed * this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
+    @Nullable
+    public Entity changeDimension(DimensionType destination, net.minecraftforge.common.util.ITeleporter teleporter) {
+        this.resetCustomer();
+        return super.changeDimension(destination, teleporter);
+    }
+    public Inventory getVillagerInventory() {
+        return this.villagerInventory;
+    }
 
-                if (this.entity.onGround) {
-                    this.action = EntityMoveHelper.Action.WAIT;
-                }
+    public boolean replaceItemInInventory(int inventorySlot, ItemStack itemStackIn) {
+        if (super.replaceItemInInventory(inventorySlot, itemStackIn)) {
+            return true;
+        } else {
+            int i = inventorySlot - 300;
+            if (i >= 0 && i < this.villagerInventory.getSizeInventory()) {
+                this.villagerInventory.setInventorySlotContents(i, itemStackIn);
+                return true;
             } else {
-                this.entity.setMoveForward(0.0F);
+                return false;
+            }
+        }
+    }
+
+    protected void addTrades(MerchantOffers givenMerchantOffers, VillagerTrades.ITrade[] newTrades, int maxNumbers) {
+        Set<Integer> set = Sets.newHashSet();
+        if (newTrades.length > maxNumbers) {
+            while(set.size() < maxNumbers) {
+                set.add(this.rand.nextInt(newTrades.length));
+            }
+        } else {
+            for(int i = 0; i < newTrades.length; ++i) {
+                set.add(i);
+            }
+        }
+
+        for(Integer integer : set) {
+            VillagerTrades.ITrade villagertrades$itrade = newTrades[integer];
+            MerchantOffer merchantoffer = villagertrades$itrade.getOffer(this, this.rand);
+            if (merchantoffer != null) {
+                givenMerchantOffers.add(merchantoffer);
             }
         }
 
     }
 
+    private boolean canLevelUp() {
+        return true;
+    }
+
+    private void levelUp() {
+        this.populateTradeData();
+    }
+
+
+    protected void populateTradeData() {
+        VillagerTrades.ITrade[] avillagertrades$itrade = VillagerTrades.field_221240_b.get(1); //TODO update myrmex trade data
+        VillagerTrades.ITrade[] avillagertrades$itrade1 = VillagerTrades.field_221240_b.get(2);
+        if (avillagertrades$itrade != null && avillagertrades$itrade1 != null) {
+            MerchantOffers merchantoffers = this.getOffers();
+            this.addTrades(merchantoffers, avillagertrades$itrade, 5);
+            int i = this.rand.nextInt(avillagertrades$itrade1.length);
+            VillagerTrades.ITrade villagertrades$itrade = avillagertrades$itrade1[i];
+            MerchantOffer merchantoffer = villagertrades$itrade.getOffer(this, this.rand);
+            if (merchantoffer != null) {
+                merchantoffers.add(merchantoffer);
+            }
+        }
+    }
 }
