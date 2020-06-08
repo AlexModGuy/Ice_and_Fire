@@ -59,7 +59,7 @@ public class DragonAIMate extends Goal {
     /**
      * Updates the task
      */
-    public void updateTask() {
+    public void tick() {
         this.dragon.getLookController().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.dragon.getVerticalFaceSpeed());
         this.dragon.getNavigator().tryMoveToXYZ(targetMate.getPosX(), targetMate.getPosY(), targetMate.getPosZ(), this.moveSpeed);
         this.dragon.setFlying(false);

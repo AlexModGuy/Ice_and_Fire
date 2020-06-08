@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import java.util.EnumSet;
 import java.util.Set;
 
 public class AquaticAITempt extends Goal {
@@ -32,7 +33,7 @@ public class AquaticAITempt extends Goal {
         this.speed = speedIn;
         this.temptItem = temptItemIn;
         this.scaredByPlayerMovement = scaredByPlayerMovementIn;
-        this.setMutexBits(3);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     /**
@@ -43,7 +44,7 @@ public class AquaticAITempt extends Goal {
             --this.delayTemptCounter;
             return false;
         } else {
-            this.temptingPlayer = this.temptedEntity.world.getClosestPlayerToEntity(this.temptedEntity, 10.0D);
+            this.temptingPlayer = this.temptedEntity.world.getClosestPlayer(this.temptedEntity, 10.0D);
 
             if (this.temptingPlayer == null) {
                 return false;
@@ -106,13 +107,13 @@ public class AquaticAITempt extends Goal {
     /**
      * Keep ticking a continuous task that has already been started
      */
-    public void updateTask() {
+    public void tick() {
         this.temptedEntity.getLookController().setLookPositionWithEntity(this.temptingPlayer, (float) (this.temptedEntity.getHorizontalFaceSpeed() + 20), (float) this.temptedEntity.getVerticalFaceSpeed());
 
         if (this.temptedEntity.getDistanceSq(this.temptingPlayer) < 6.25D) {
             this.temptedEntity.getNavigator().clearPath();
         } else {
-            this.temptedEntity.getNavigator().tryMoveToLivingEntity(this.temptingPlayer, this.speed);
+            this.temptedEntity.getNavigator().tryMoveToEntityLiving(this.temptingPlayer, this.speed);
         }
     }
 

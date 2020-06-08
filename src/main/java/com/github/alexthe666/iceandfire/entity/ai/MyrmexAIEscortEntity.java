@@ -19,7 +19,7 @@ public class MyrmexAIEscortEntity extends Goal {
         return this.myrmex.canMove() && this.myrmex.getAttackTarget() == null && this.myrmex.guardingEntity != null && (this.myrmex.guardingEntity.canSeeSky() || !this.myrmex.canSeeSky()) && !this.myrmex.isEnteringHive;
     }
 
-    public void updateTask() {
+    public void tick() {
         if (this.myrmex.guardingEntity != null && (this.myrmex.getDistance(this.myrmex.guardingEntity) > 30 || this.myrmex.getNavigator().noPath())) {
             this.myrmex.getNavigator().tryMoveToLivingEntity(this.myrmex.guardingEntity, movementSpeed);
         }

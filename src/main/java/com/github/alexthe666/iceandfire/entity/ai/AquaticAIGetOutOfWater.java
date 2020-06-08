@@ -9,6 +9,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 import java.util.Random;
 
 public class AquaticAIGetOutOfWater extends Goal {
@@ -23,7 +24,7 @@ public class AquaticAIGetOutOfWater extends Goal {
         this.creature = theCreatureIn;
         this.movementSpeed = movementSpeedIn;
         this.world = theCreatureIn.world;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
@@ -58,7 +59,7 @@ public class AquaticAIGetOutOfWater extends Goal {
 
         for (int i = 0; i < 10; ++i) {
             BlockPos blockpos1 = blockpos.add(random.nextInt(20) - 10, random.nextInt(6) - 3, random.nextInt(20) - 10);
-            if (this.world.getBlockState(blockpos1).isOpaqueCube()) {
+            if (this.world.getBlockState(blockpos1).isOpaqueCube(world, blockpos1)) {
                 return new Vec3d((double) blockpos1.getX(), (double) blockpos1.getY(), (double) blockpos1.getZ());
             }
         }

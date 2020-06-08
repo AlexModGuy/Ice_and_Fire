@@ -50,7 +50,7 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
         if (village != null) {
             return false;
         }
-        List<Entity> list = this.taskOwner.world.getEntitiesInAABBexcluding(myrmex, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        List<Entity> list = this.goalOwner.world.getEntitiesInAABBexcluding(myrmex, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
         if (list.isEmpty()) {
             return false;
         } else {
@@ -67,7 +67,7 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.taskOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
+        return this.goalOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
     }
 
     @Override

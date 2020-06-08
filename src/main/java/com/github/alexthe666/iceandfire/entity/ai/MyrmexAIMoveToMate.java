@@ -19,7 +19,7 @@ public class MyrmexAIMoveToMate extends Goal {
         return this.myrmex.canMove() && this.myrmex.getAttackTarget() == null && this.myrmex.mate != null && this.myrmex.canSeeSky();
     }
 
-    public void updateTask() {
+    public void tick() {
         if (this.myrmex.mate != null && (this.myrmex.getDistance(this.myrmex.mate) > 30 || this.myrmex.getNavigator().noPath())) {
             this.myrmex.getMoveHelper().setMoveTo(this.myrmex.mate.getPosX(), this.myrmex.getPosY(), this.myrmex.mate.getPosZ(), movementSpeed);
         }

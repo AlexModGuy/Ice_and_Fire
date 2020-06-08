@@ -41,7 +41,7 @@ public class MyrmexAIStoreBabies extends Goal {
     }
 
     @Override
-    public void updateTask() {
+    public void tick() {
         this.myrmex.getNavigator().tryMoveToXYZ(this.nextRoom.getX(), this.nextRoom.getY(), this.nextRoom.getZ(), 1.5F);
         if (nextRoom != null && this.myrmex.getDistanceSq(nextRoom) < 4 && this.myrmex.holdingBaby()) {
             if (!this.myrmex.getPassengers().isEmpty()) {

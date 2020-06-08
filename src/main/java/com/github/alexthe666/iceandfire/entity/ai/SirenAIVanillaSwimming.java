@@ -19,7 +19,7 @@ public class SirenAIVanillaSwimming extends Goal {
         return (this.entity.isInWater() || this.entity.isInLava()) && this.entity.wantsToSing();
     }
 
-    public void updateTask() {
+    public void tick() {
         if (this.entity.getRNG().nextFloat() < 0.8F) {
             this.entity.getJumpHelper().setJumping();
         }

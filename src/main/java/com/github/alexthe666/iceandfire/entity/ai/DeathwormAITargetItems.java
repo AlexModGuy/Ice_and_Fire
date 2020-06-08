@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -14,11 +14,11 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class DeathwormAITargetItems<T extends EntityItem> extends TargetGoal {
+public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
-    protected final Predicate<? super EntityItem> targetEntitySelector;
+    protected final Predicate<? super ItemEntity> targetEntitySelector;
     private final int targetChance;
-    protected EntityItem targetEntity;
+    protected ItemEntity targetEntity;
 
     public DeathwormAITargetItems(EntityDeathWorm creature, boolean checkSight) {
         this(creature, checkSight, false);
@@ -32,17 +32,17 @@ public class DeathwormAITargetItems<T extends EntityItem> extends TargetGoal {
         super(creature, checkSight, onlyNearby);
         this.targetChance = chance;
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
-        this.targetEntitySelector = new Predicate<EntityItem>() {
+        this.targetEntitySelector = new Predicate<ItemEntity>() {
             @Override
-            public boolean apply(@Nullable EntityItem item) {
-                return item instanceof EntityItem && !item.getItem().isEmpty() && item.getItem().getItem() == Item.getItemFromBlock(Blocks.TNT);
+            public boolean apply(@Nullable ItemEntity item) {
+                return item instanceof ItemEntity && !item.getItem().isEmpty() && item.getItem().getItem() == Item.getItemFromBlock(Blocks.TNT);
             }
         };
     }
 
     @Override
     public boolean shouldExecute() {
-        List<EntityItem> list = this.taskOwner.world.getEntitiesWithinAABB(EntityItem.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        List<ItemEntity> list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
         if (list.isEmpty()) {
             return false;
         } else {
@@ -53,25 +53,25 @@ public class DeathwormAITargetItems<T extends EntityItem> extends TargetGoal {
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.taskOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
+        return this.goalOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
     }
 
     @Override
     public void startExecuting() {
-        this.taskOwner.getNavigator().tryMoveToXYZ(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 1);
+        this.goalOwner.getNavigator().tryMoveToXYZ(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 1);
         super.startExecuting();
     }
 
     @Override
-    public void updateTask() {
-        super.updateTask();
+    public void tick() {
+        super.tick();
         if (this.targetEntity == null || this.targetEntity != null && this.targetEntity.isDead) {
             this.resetTask();
         }
-        if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSq(this.targetEntity) < 1) {
-            EntityDeathWorm deathWorm = (EntityDeathWorm) this.taskOwner;
+        if (this.targetEntity != null && !this.targetEntity.isDead && this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
+            EntityDeathWorm deathWorm = (EntityDeathWorm) this.goalOwner;
             this.targetEntity.getItem().shrink(1);
-            this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+            this.goalOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
             deathWorm.setAnimation(EntityDeathWorm.ANIMATION_BITE);
             deathWorm.setExplosive(true);
             resetTask();
@@ -80,7 +80,7 @@ public class DeathwormAITargetItems<T extends EntityItem> extends TargetGoal {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !this.taskOwner.getNavigator().noPath();
+        return !this.goalOwner.getNavigator().noPath();
     }
 
 

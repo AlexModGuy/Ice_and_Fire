@@ -60,7 +60,7 @@ public class CockatriceAIStareAttack extends Goal {
         target = null;
     }
 
-    public void updateTask() {
+    public void tick() {
         LivingEntity LivingEntity = this.entity.getAttackTarget();
         if (LivingEntity != null) {
 

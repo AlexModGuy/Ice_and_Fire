@@ -7,7 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -17,10 +17,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class PixieAIPickupItem<T extends EntityItem> extends TargetGoal {
+public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
-    protected final Predicate<? super EntityItem> targetEntitySelector;
-    protected EntityItem targetEntity;
+    protected final Predicate<? super ItemEntity> targetEntitySelector;
+    protected ItemEntity targetEntity;
 
     public PixieAIPickupItem(EntityPixie creature, boolean checkSight) {
         this(creature, checkSight, false);
@@ -33,10 +33,10 @@ public class PixieAIPickupItem<T extends EntityItem> extends TargetGoal {
     public PixieAIPickupItem(EntityPixie creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
         super(creature, checkSight, onlyNearby);
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
-        this.targetEntitySelector = new Predicate<EntityItem>() {
+        this.targetEntitySelector = new Predicate<ItemEntity>() {
             @Override
-            public boolean apply(@Nullable EntityItem item) {
-                return item instanceof EntityItem && !item.getItem().isEmpty() && (item.getItem().getItem() == Items.CAKE && !creature.isTamed() || item.getItem().getItem() == Items.SUGAR && creature.isTamed() && creature.getHealth() < creature.getMaxHealth());
+            public boolean apply(@Nullable ItemEntity item) {
+                return item instanceof ItemEntity && !item.getItem().isEmpty() && (item.getItem().getItem() == Items.CAKE && !creature.isTamed() || item.getItem().getItem() == Items.SUGAR && creature.isTamed() && creature.getHealth() < creature.getMaxHealth());
             }
         };
         this.setMutexBits(3);
@@ -45,7 +45,7 @@ public class PixieAIPickupItem<T extends EntityItem> extends TargetGoal {
 
     @Override
     public boolean shouldExecute() {
-        List<EntityItem> list = this.taskOwner.world.getEntitiesWithinAABB(EntityItem.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        List<ItemEntity> list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
         if (list.isEmpty()) {
             return false;
@@ -57,32 +57,32 @@ public class PixieAIPickupItem<T extends EntityItem> extends TargetGoal {
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.taskOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
+        return this.goalOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
     }
 
     @Override
     public void startExecuting() {
-        this.taskOwner.getMoveHelper().setMoveTo(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 0.25D);
-        if (this.taskOwner.getAttackTarget() == null) {
-            this.taskOwner.getLookController().setLookPosition(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 180.0F, 20.0F);
+        this.goalOwner.getMoveHelper().setMoveTo(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 0.25D);
+        if (this.goalOwner.getAttackTarget() == null) {
+            this.goalOwner.getLookController().setLookPosition(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 180.0F, 20.0F);
         }
         super.startExecuting();
     }
 
     @Override
-    public void updateTask() {
-        super.updateTask();
+    public void tick() {
+        super.tick();
         if (this.targetEntity == null || this.targetEntity != null && this.targetEntity.isDead) {
             this.resetTask();
         }
-        if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSq(this.targetEntity) < 1) {
-            EntityPixie pixie = (EntityPixie) this.taskOwner;
+        if (this.targetEntity != null && !this.targetEntity.isDead && this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
+            EntityPixie pixie = (EntityPixie) this.goalOwner;
             if (this.targetEntity.getItem() != null && this.targetEntity.getItem().getItem() != null && this.targetEntity.getItem().getItem() == Items.SUGAR) {
                 pixie.heal(5);
             }
             if (this.targetEntity.getItem() != null && this.targetEntity.getItem().getItem() != null && this.targetEntity.getItem().getItem() == Items.CAKE) {
-                if (!pixie.isTamed() && this.targetEntity.getThrower() != null && !this.targetEntity.getThrower().isEmpty() && this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower()) != null) {
-                    PlayerEntity owner = this.taskOwner.world.getPlayerEntityByName(this.targetEntity.getThrower());
+                if (!pixie.isTamed() && this.targetEntity.getThrower() != null && !this.targetEntity.getThrower().isEmpty() && this.goalOwner.world.getPlayerEntityByName(this.targetEntity.getThrower()) != null) {
+                    PlayerEntity owner = this.goalOwner.world.getPlayerEntityByName(this.targetEntity.getThrower());
                     pixie.setTamed(true);
                     pixie.setOwnerId(owner.getUniqueID());
                     pixie.setSitting(true);
@@ -96,7 +96,7 @@ public class PixieAIPickupItem<T extends EntityItem> extends TargetGoal {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return taskOwner.getMoveHelper().action != EntityMoveHelper.Action.WAIT;
+        return goalOwner.getMoveHelper().action != EntityMoveHelper.Action.WAIT;
     }
 
     public static class Sorter implements Comparator<Entity> {

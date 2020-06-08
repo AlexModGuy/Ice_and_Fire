@@ -50,7 +50,7 @@ public class MyrmexAIStoreItems extends Goal {
     }
 
     @Override
-    public void updateTask() {
+    public void tick() {
         if (first && mainRoom != null) {
             if(this.myrmex.getNavigator().noPath()){
                 this.myrmex.getNavigator().tryMoveToXYZ(mainRoom.getX() + 0.5D, mainRoom.getY() + 0.5D, mainRoom.getZ() + 0.5D, this.movementSpeed);

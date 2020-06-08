@@ -43,7 +43,7 @@ public class MyrmexAIFindHidingSpot extends Goal {
     }
 
     @Override
-    public void updateTask() {
+    public void tick() {
         if (areMyrmexNear(RADIUS) || this.myrmex.isOnResin()) {
             this.myrmex.getNavigator().tryMoveToXYZ(this.targetBlock.getX() + 0.5D, this.targetBlock.getY(), this.targetBlock.getZ() + 0.5D, 1D);
             if (this.myrmex.getDistanceSqToCenter(this.targetBlock) < 2) {

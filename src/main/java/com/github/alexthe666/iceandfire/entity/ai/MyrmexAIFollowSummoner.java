@@ -70,7 +70,7 @@ public class MyrmexAIFollowSummoner extends Goal {
     }
 
     @SuppressWarnings("deprecation")
-    public void updateTask() {
+    public void tick() {
         if (this.tameable.getAttackTarget() != null) {
             return;
         }

@@ -6,13 +6,11 @@ import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.Items;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nullable;
@@ -20,11 +18,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class AmphithereAITargetItems<T extends EntityItem> extends TargetGoal {
+public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
-    protected final Predicate<? super EntityItem> targetEntitySelector;
+    protected final Predicate<? super ItemEntity> targetEntitySelector;
     private final int targetChance;
-    protected EntityItem targetEntity;
+    protected ItemEntity targetEntity;
 
     public AmphithereAITargetItems(MobEntity creature, boolean checkSight) {
         this(creature, checkSight, false);
@@ -38,20 +36,20 @@ public class AmphithereAITargetItems<T extends EntityItem> extends TargetGoal {
         super(creature, checkSight, onlyNearby);
         this.targetChance = chance;
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
-        this.targetEntitySelector = new Predicate<EntityItem>() {
+        this.targetEntitySelector = new Predicate<ItemEntity>() {
             @Override
-            public boolean apply(@Nullable EntityItem item) {
-                return item instanceof EntityItem && !item.getItem().isEmpty() && item.getItem().getItem() == Items.DYE && item.getItem().getItemDamage() == EnumDyeColor.BROWN.getDyeDamage();
+            public boolean apply(@Nullable ItemEntity item) {
+                return item instanceof ItemEntity && !item.getItem().isEmpty() && item.getItem().getItem() == Items.COCOA_BEANS;
             }
         };
     }
 
     @Override
     public boolean shouldExecute() {
-        if (!((EntityAmphithere) this.taskOwner).canMove()) {
+        if (!((EntityAmphithere) this.goalOwner).canMove()) {
             return false;
         }
-        List<EntityItem> list = this.taskOwner.world.getEntitiesWithinAABB(EntityItem.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        List<ItemEntity> list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
         if (list.isEmpty()) {
             return false;
@@ -63,25 +61,25 @@ public class AmphithereAITargetItems<T extends EntityItem> extends TargetGoal {
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.taskOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
+        return this.goalOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
     }
 
     @Override
     public void startExecuting() {
-        this.taskOwner.getNavigator().tryMoveToXYZ(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 1);
+        this.goalOwner.getNavigator().tryMoveToXYZ(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 1);
         super.startExecuting();
     }
 
     @Override
-    public void updateTask() {
-        super.updateTask();
-        if (this.targetEntity == null || this.targetEntity != null && this.targetEntity.isDead) {
+    public void tick() {
+        super.tick();
+        if (this.targetEntity == null || this.targetEntity != null && !this.targetEntity.isAlive()) {
             this.resetTask();
         }
-        if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSq(this.targetEntity) < 1) {
-            EntityAmphithere hippo = (EntityAmphithere) this.taskOwner;
+        if (this.targetEntity != null && this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
+            EntityAmphithere hippo = (EntityAmphithere) this.goalOwner;
             this.targetEntity.getItem().shrink(1);
-            this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+            this.goalOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
             hippo.heal(5);
             resetTask();
         }
@@ -89,7 +87,7 @@ public class AmphithereAITargetItems<T extends EntityItem> extends TargetGoal {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !this.taskOwner.getNavigator().noPath();
+        return !this.goalOwner.getNavigator().noPath();
     }
 
     public static class Sorter implements Comparator<Entity> {

@@ -37,7 +37,7 @@ public class MyrmexAIFindGaurdingEntity<T extends EntityMyrmexBase> extends Targ
         if (!this.myrmex.canMove() || this.myrmex.getAttackTarget() != null || this.myrmex.guardingEntity != null) {
             return false;
         }
-        List<EntityMyrmexBase> list = this.taskOwner.world.getEntitiesWithinAABB(EntityMyrmexBase.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        List<EntityMyrmexBase> list = this.goalOwner.world.getEntitiesWithinAABB(EntityMyrmexBase.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
         if (list.isEmpty()) {
             return false;
         } else {
@@ -48,7 +48,7 @@ public class MyrmexAIFindGaurdingEntity<T extends EntityMyrmexBase> extends Targ
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.taskOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
+        return this.goalOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
     }
 
     @Override

@@ -29,7 +29,7 @@ public class MyrmexAISummonerHurtTarget extends TargetGoal {
     }
 
     public void startExecuting() {
-        this.taskOwner.setAttackTarget(this.attacker);
+        this.goalOwner.setAttackTarget(this.attacker);
         LivingEntity LivingEntity = this.tameable.getSummoner();
 
         if (LivingEntity != null) {

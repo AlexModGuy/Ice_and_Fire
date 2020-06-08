@@ -29,7 +29,7 @@ public class EntityGroundAIRide<T extends MobEntity & IGroundMount> extends Goal
     }
 
     @Override
-    public void updateTask() {
+    public void tick() {
         dragon.getNavigator().clearPath();
         dragon.setAttackTarget(null);
         double x = dragon.getPosX();

@@ -3,21 +3,21 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
 
 public class EntitySheepAIFollowCyclops extends Goal {
-    EntityAnimal childAnimal;
+    AnimalEntity childAnimal;
     EntityCyclops cyclops;
     double moveSpeed;
     private int delayCounter;
 
-    public EntitySheepAIFollowCyclops(EntityAnimal animal, double speed) {
+    public EntitySheepAIFollowCyclops(AnimalEntity animal, double speed) {
         this.childAnimal = animal;
         this.moveSpeed = speed;
     }
@@ -48,7 +48,7 @@ public class EntitySheepAIFollowCyclops extends Goal {
 
 
     public boolean shouldContinueExecuting() {
-        if (!this.cyclops.isEntityAlive()) {
+        if (this.cyclops.isAlive()) {
             return false;
         } else {
             double d0 = this.childAnimal.getDistanceSq(this.cyclops);
@@ -65,7 +65,7 @@ public class EntitySheepAIFollowCyclops extends Goal {
         this.cyclops = null;
     }
 
-    public void updateTask() {
+    public void tick() {
         if (--this.delayCounter <= 0) {
             this.delayCounter = 10;
             Path path = getPathToLivingEntity(this.childAnimal, this.cyclops);
@@ -76,12 +76,12 @@ public class EntitySheepAIFollowCyclops extends Goal {
         }
     }
 
-    public Path getPathToLivingEntity(EntityAnimal entityIn, EntityCyclops cyclops) {
-        PathNavigate navi = entityIn.getNavigator();
+    public Path getPathToLivingEntity(AnimalEntity entityIn, EntityCyclops cyclops) {
+        PathNavigator navi = entityIn.getNavigator();
         Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockTowards(entityIn, 2, 7, new Vec3d(cyclops.getPosX(), cyclops.getPosY(), cyclops.getPosZ()));
         if (vec3d != null) {
             BlockPos blockpos = new BlockPos(vec3d);
-            return navi.getPathToPos(blockpos);
+            return navi.getPathToPos(blockpos, 0);
         }
         return null;
     }

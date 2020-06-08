@@ -3,12 +3,11 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.google.common.base.Predicate;
-import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.item.Items;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nullable;
@@ -17,9 +16,9 @@ import java.util.List;
 
 public class CockatriceAITargetItems<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
-    protected final Predicate<? super EntityItem> targetEntitySelector;
+    protected final Predicate<? super ItemEntity> targetEntitySelector;
     private final int targetChance;
-    protected EntityItem targetEntity;
+    protected ItemEntity targetEntity;
 
     public CockatriceAITargetItems(EntityCockatrice creature, boolean checkSight) {
         this(creature, checkSight, false);
@@ -33,10 +32,10 @@ public class CockatriceAITargetItems<T extends ItemEntity> extends TargetGoal {
         super(creature, checkSight, onlyNearby);
         this.targetChance = chance;
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
-        this.targetEntitySelector = new Predicate<EntityItem>() {
+        this.targetEntitySelector = new Predicate<ItemEntity>() {
             @Override
-            public boolean apply(@Nullable EntityItem item) {
-                return item instanceof EntityItem && !item.getItem().isEmpty() && (item.getItem().getItem() == Items.ROTTEN_FLESH || FoodUtils.isSeeds(item.getItem()));
+            public boolean apply(@Nullable ItemEntity item) {
+                return item instanceof ItemEntity && !item.getItem().isEmpty() && (item.getItem().getItem() == Items.ROTTEN_FLESH || FoodUtils.isSeeds(item.getItem()));
             }
         };
     }
@@ -44,13 +43,13 @@ public class CockatriceAITargetItems<T extends ItemEntity> extends TargetGoal {
     @Override
     public boolean shouldExecute() {
 
-        if (!((EntityCockatrice) this.taskOwner).canMove()) {
+        if (!((EntityCockatrice) this.goalOwner).canMove()) {
             return false;
         }
-        if (this.taskOwner.getHealth() >= this.taskOwner.getMaxHealth()) {
+        if (this.goalOwner.getHealth() >= this.goalOwner.getMaxHealth()) {
             return false;
         }
-        List<EntityItem> list = this.taskOwner.world.getEntitiesWithinAABB(EntityItem.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        List<ItemEntity> list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
         if (list.isEmpty()) {
             return false;
@@ -62,25 +61,25 @@ public class CockatriceAITargetItems<T extends ItemEntity> extends TargetGoal {
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.taskOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
+        return this.goalOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
     }
 
     @Override
     public void startExecuting() {
-        this.taskOwner.getNavigator().tryMoveToXYZ(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 1);
+        this.goalOwner.getNavigator().tryMoveToXYZ(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 1);
         super.startExecuting();
     }
 
     @Override
-    public void updateTask() {
-        super.updateTask();
-        if (this.targetEntity == null || this.targetEntity != null && this.targetEntity.isDead) {
+    public void tick() {
+        super.tick();
+        if (this.targetEntity == null || this.targetEntity != null && !this.targetEntity.isAlive()) {
             this.resetTask();
         }
-        if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSq(this.targetEntity) < 1) {
-            EntityCockatrice cockatrice = (EntityCockatrice) this.taskOwner;
+        if (this.targetEntity != null && this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
+            EntityCockatrice cockatrice = (EntityCockatrice) this.goalOwner;
             this.targetEntity.getItem().shrink(1);
-            this.taskOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+            this.goalOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
             cockatrice.heal(8);
             cockatrice.setAnimation(EntityCockatrice.ANIMATION_EAT);
             resetTask();
@@ -89,7 +88,7 @@ public class CockatriceAITargetItems<T extends ItemEntity> extends TargetGoal {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !this.taskOwner.getNavigator().noPath();
+        return !this.goalOwner.getNavigator().noPath();
     }
 
 

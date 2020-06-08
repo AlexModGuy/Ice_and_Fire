@@ -6,9 +6,10 @@ import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.EnumSet;
 import java.util.List;
 
 public class AmphithereAIFleePlayer extends Goal {
@@ -24,13 +25,13 @@ public class AmphithereAIFleePlayer extends Goal {
         this.avoidDistance = avoidDistanceIn;
         this.farSpeed = farSpeedIn;
         this.nearSpeed = nearSpeedIn;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
 
     public boolean shouldExecute() {
         if (!this.entity.isFlying() && !this.entity.isTamed()) {
-            List<PlayerEntity> list = this.entity.world.getEntitiesWithinAABB(PlayerEntity.class, this.entity.getBoundingBox().grow((double) this.avoidDistance, 6D, (double) this.avoidDistance), EntitySelectors.CAN_AI_TARGET);
+            List<PlayerEntity> list = this.entity.world.getEntitiesWithinAABB(PlayerEntity.class, this.entity.getBoundingBox().grow((double) this.avoidDistance, 6D, (double) this.avoidDistance), EntityPredicates.CAN_AI_TARGET);
             if (list.isEmpty()) {
                 return false;
             } else {
@@ -42,7 +43,7 @@ public class AmphithereAIFleePlayer extends Goal {
                 } else if (this.closestLivingEntity.getDistanceSq(vec3d.x, vec3d.y, vec3d.z) < this.closestLivingEntity.getDistanceSq(this.entity)) {
                     return false;
                 } else {
-                    this.path = this.entity.getNavigator().getPathToXYZ(vec3d.x, vec3d.y, vec3d.z);
+                    this.path = this.entity.getNavigator().getPathToPos(vec3d.x, vec3d.y, vec3d.z, 0);
                     return this.path != null;
                 }
             }
@@ -63,7 +64,7 @@ public class AmphithereAIFleePlayer extends Goal {
         this.closestLivingEntity = null;
     }
 
-    public void updateTask() {
+    public void tick() {
         if (this.entity.getDistanceSq(this.closestLivingEntity) < 49.0D) {
             this.entity.getNavigator().setSpeed(this.nearSpeed);
         } else {

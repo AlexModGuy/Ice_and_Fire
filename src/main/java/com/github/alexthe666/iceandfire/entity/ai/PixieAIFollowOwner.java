@@ -71,7 +71,7 @@ public class PixieAIFollowOwner extends Goal {
     }
 
     @SuppressWarnings("deprecation")
-    public void updateTask() {
+    public void tick() {
         this.tameable.getLookController().setLookPositionWithEntity(this.owner, 10.0F, (float) this.tameable.getVerticalFaceSpeed());
 
         if (!this.tameable.isSitting()) {

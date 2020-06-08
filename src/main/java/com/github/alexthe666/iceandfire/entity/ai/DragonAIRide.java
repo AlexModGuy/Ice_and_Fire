@@ -33,7 +33,7 @@ public class DragonAIRide<T extends MobEntity & IFlyingMount> extends Goal {
     }
 
     @Override
-    public void updateTask() {
+    public void tick() {
         dragon.getNavigator().clearPath();
         dragon.setAttackTarget(null);
         double x = dragon.getPosX();

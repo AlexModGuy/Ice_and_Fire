@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -74,7 +74,7 @@ public class MyrmexAIForage extends Goal {
     }
 
     @Override
-    public void updateTask() {
+    public void tick() {
         if (this.myrmex.keepSearching) {
             if(this.myrmex.getNavigator().noPath()) {
                 this.myrmex.getNavigator().tryMoveToXYZ(this.targetBlock.getX() + 0.5D, this.targetBlock.getY(), this.targetBlock.getZ() + 0.5D, 1D);
@@ -97,7 +97,7 @@ public class MyrmexAIForage extends Goal {
                         drops.get(0).shrink(1);
                         this.myrmex.setHeldItem(Hand.MAIN_HAND, heldStack);
                         for (ItemStack stack : drops) {
-                            EntityItem itemEntity = new EntityItem(this.myrmex.world, this.targetBlock.getX() + this.myrmex.getRNG().nextDouble(), this.targetBlock.getY() + this.myrmex.getRNG().nextDouble(), this.targetBlock.getZ() + this.myrmex.getRNG().nextDouble(), stack);
+                            ItemEntity itemEntity = new ItemEntity(this.myrmex.world, this.targetBlock.getX() + this.myrmex.getRNG().nextDouble(), this.targetBlock.getY() + this.myrmex.getRNG().nextDouble(), this.targetBlock.getZ() + this.myrmex.getRNG().nextDouble(), stack);
                             itemEntity.setDefaultPickupDelay();
                             if (!this.myrmex.world.isRemote) {
                                 this.myrmex.world.spawnEntity(itemEntity);

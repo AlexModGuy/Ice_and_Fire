@@ -79,7 +79,7 @@ public class DragonAIAttackMelee extends Goal {
     }
 
     @Override
-    public void updateTask() {
+    public void tick() {
         LivingEntity entity = this.dragon.getAttackTarget();
         if (entity != null) {
             if (!dragon.isPassenger(entity)) {

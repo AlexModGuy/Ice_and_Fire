@@ -4,6 +4,8 @@ import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 
+import java.util.EnumSet;
+
 public class GorgonAIStareAttack extends Goal {
     private final EntityGorgon entity;
     private final double moveSpeedAmp;
@@ -20,7 +22,7 @@ public class GorgonAIStareAttack extends Goal {
         this.moveSpeedAmp = speedAmplifier;
         this.attackCooldown = delay;
         this.maxAttackDistance = maxDistance * maxDistance;
-        this.setMutexBits(3);
+        this.setMutexFlags(EnumSet.of(Flag.TARGET, Flag.MOVE));
     }
 
     public void setAttackCooldown(int cooldown) {
@@ -42,7 +44,7 @@ public class GorgonAIStareAttack extends Goal {
         this.entity.resetActiveHand();
     }
 
-    public void updateTask() {
+    public void tick() {
         LivingEntity LivingEntity = this.entity.getAttackTarget();
 
         if (LivingEntity != null) {
@@ -71,7 +73,7 @@ public class GorgonAIStareAttack extends Goal {
                 this.entity.getNavigator().clearPath();
                 ++this.strafingTime;
             } else {
-                this.entity.getNavigator().tryMoveToLivingEntity(LivingEntity, this.moveSpeedAmp);
+                this.entity.getNavigator().tryMoveToEntityLiving(LivingEntity, this.moveSpeedAmp);
                 this.strafingTime = -1;
             }
 

@@ -40,7 +40,7 @@ public class MyrmexAIReEnterHive extends Goal {
         }
     }
 
-    public void updateTask() {
+    public void tick() {
         if (first) {
             hive.setWorld(this.myrmex.world);
             nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, hive.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), false));

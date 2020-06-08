@@ -55,7 +55,7 @@ public class DreadLichAIStrife extends Goal {
         this.entity.resetActiveHand();
     }
 
-    public void updateTask() {
+    public void tick() {
         LivingEntity LivingEntity = this.entity.getAttackTarget();
 
         if (LivingEntity != null) {

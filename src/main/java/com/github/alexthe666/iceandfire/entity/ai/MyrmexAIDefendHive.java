@@ -2,9 +2,11 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
+import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.ai.goal.TargetGoal;
+
+import java.util.EnumSet;
 
 public class MyrmexAIDefendHive extends TargetGoal {
     EntityMyrmexBase myrmex;
@@ -13,7 +15,7 @@ public class MyrmexAIDefendHive extends TargetGoal {
     public MyrmexAIDefendHive(EntityMyrmexBase myrmex) {
         super(myrmex, false, true);
         this.myrmex = myrmex;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
@@ -23,11 +25,11 @@ public class MyrmexAIDefendHive extends TargetGoal {
             return false;
         } else {
             this.villageAgressorTarget = village.findNearestVillageAggressor(this.myrmex);
-            if (this.isSuitableTarget(this.villageAgressorTarget, false)) {
+            if (this.isSuitableTarget(this.villageAgressorTarget, EntityPredicate.DEFAULT)) {
                 return true;
-            } else if (this.taskOwner.getRNG().nextInt(20) == 0) {
+            } else if (this.goalOwner.getRNG().nextInt(20) == 0) {
                 this.villageAgressorTarget = village.getNearestTargetPlayer(this.myrmex, this.myrmex.world);
-                return this.isSuitableTarget(this.villageAgressorTarget, false);
+                return this.isSuitableTarget(this.villageAgressorTarget, EntityPredicate.DEFAULT);
             } else {
                 return false;
             }

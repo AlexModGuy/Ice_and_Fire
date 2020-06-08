@@ -30,7 +30,7 @@ public class HippocampusAIRide extends Goal {
     }
 
     @Override
-    public void updateTask() {
+    public void tick() {
         dragon.getNavigator().clearPath();
         dragon.setAttackTarget(null);
         double x = dragon.getPosX();

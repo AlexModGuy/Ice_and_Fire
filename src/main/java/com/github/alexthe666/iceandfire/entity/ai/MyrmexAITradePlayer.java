@@ -37,7 +37,7 @@ public class MyrmexAITradePlayer extends Goal {
         }
     }
 
-    public void updateTask() {
+    public void tick() {
         this.myrmex.getNavigator().clearPath();
     }
 

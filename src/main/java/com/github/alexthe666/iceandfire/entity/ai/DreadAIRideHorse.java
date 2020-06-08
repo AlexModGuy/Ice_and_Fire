@@ -49,7 +49,7 @@ public class DreadAIRideHorse extends Goal {
         this.knight.getNavigator().clearPath();
     }
 
-    public void updateTask() {
+    public void tick() {
         this.knight.getLookController().setLookPositionWithEntity(this.horse, 30.0F, 30.0F);
 
         this.knight.getNavigator().tryMoveToLivingEntity(this.horse, 1.2D);

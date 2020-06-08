@@ -7,10 +7,12 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.Comparator;
+import java.util.EnumSet;
 
 public class AquaticAIFindWaterTarget extends Goal {
     protected AquaticAIFindWaterTarget.Sorter fleePosSorter;
@@ -22,13 +24,13 @@ public class AquaticAIFindWaterTarget extends Goal {
         this.mob = mob;
         this.range = range;
         this.avoidAttacker = avoidAttacker;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
         fleePosSorter = new Sorter(mob);
     }
 
     @Override
     public boolean shouldExecute() {
-        if (!this.mob.isInWater() || this.mob.isRiding() || this.mob.isBeingRidden()) {
+        if (!this.mob.isInWater() || this.mob.isPassenger() || this.mob.isBeingRidden()) {
             return false;
         }
         Path path = this.mob.getNavigator().getPath();
@@ -54,7 +56,7 @@ public class AquaticAIFindWaterTarget extends Goal {
 
     public BlockPos findWaterTarget() {
         BlockPos blockpos = new BlockPos(this.mob.getPosX(), this.mob.getBoundingBox().minY, mob.getPosZ());
-        if (this.mob.getAttackTarget() == null || this.mob.getAttackTarget().isDead) {
+        if (this.mob.getAttackTarget() == null || !this.mob.getAttackTarget().isAlive()) {
             for (int i = 0; i < 10; ++i) {
                 BlockPos blockpos1 = blockpos.add(mob.getRNG().nextInt(20) - 10, mob.getRNG().nextInt(6) - 3, mob.getRNG().nextInt(20) - 10);
                 if (mob.world.getBlockState(blockpos1).getMaterial() == Material.WATER) {
@@ -68,8 +70,8 @@ public class AquaticAIFindWaterTarget extends Goal {
     }
 
     public boolean isDirectPathBetweenPoints(Entity entity, Vec3d vec1, Vec3d vec2) {
-        RayTraceResult movingobjectposition = entity.world.rayTraceBlocks(vec1, new Vec3d(vec2.x, vec2.y + (double) entity.height * 0.5D, vec2.z), false, true, false);
-        return movingobjectposition == null || movingobjectposition.typeOfHit != RayTraceResult.Type.BLOCK;
+        return mob.world.rayTraceBlocks(new RayTraceContext(vec1, vec2, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity)).getType() == RayTraceResult.Type.MISS;
+
     }
 
     public class Sorter implements Comparator<BlockPos> {

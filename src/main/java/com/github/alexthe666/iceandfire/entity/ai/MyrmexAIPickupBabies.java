@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nullable;
@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class MyrmexAIPickupBabies<T extends EntityItem> extends TargetGoal {
+public class MyrmexAIPickupBabies<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super LivingEntity> targetEntitySelector;
     public EntityMyrmexWorker myrmex;
@@ -40,7 +40,7 @@ public class MyrmexAIPickupBabies<T extends EntityItem> extends TargetGoal {
         if (!this.myrmex.canMove() || this.myrmex.holdingSomething() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching || this.myrmex.holdingBaby()) {
             return false;
         }
-        List<LivingEntity> listBabies = this.taskOwner.world.getEntitiesWithinAABB(LivingEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        List<LivingEntity> listBabies = this.goalOwner.world.getEntitiesWithinAABB(LivingEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
         if (listBabies.isEmpty()) {
             return false;
         } else {
@@ -51,22 +51,22 @@ public class MyrmexAIPickupBabies<T extends EntityItem> extends TargetGoal {
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.taskOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
+        return this.goalOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
     }
 
     @Override
     public void startExecuting() {
-        this.taskOwner.getNavigator().tryMoveToXYZ(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 1);
+        this.goalOwner.getNavigator().tryMoveToXYZ(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 1);
         super.startExecuting();
     }
 
     @Override
-    public void updateTask() {
-        super.updateTask();
+    public void tick() {
+        super.tick();
         if (this.targetEntity == null || this.targetEntity != null && this.targetEntity.isDead) {
             this.resetTask();
         }
-        if (this.targetEntity != null && !this.targetEntity.isDead && this.taskOwner.getDistanceSq(this.targetEntity) < 2) {
+        if (this.targetEntity != null && !this.targetEntity.isDead && this.goalOwner.getDistanceSq(this.targetEntity) < 2) {
             this.targetEntity.startRiding(this.myrmex);
             resetTask();
         }
@@ -74,7 +74,7 @@ public class MyrmexAIPickupBabies<T extends EntityItem> extends TargetGoal {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !this.taskOwner.getNavigator().noPath();
+        return !this.goalOwner.getNavigator().noPath();
     }
 
     public static class Sorter implements Comparator<Entity> {

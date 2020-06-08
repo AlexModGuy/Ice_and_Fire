@@ -1,18 +1,20 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.pathfinding.WalkNodeProcessor;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import java.util.EnumSet;
 
 public class AmphithereAIFollowOwner extends Goal {
     private final EntityAmphithere ampithere;
@@ -30,7 +32,7 @@ public class AmphithereAIFollowOwner extends Goal {
         this.followSpeed = followSpeedIn;
         this.minDist = minDistIn;
         this.maxDist = maxDistIn;
-        this.setMutexBits(3);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
@@ -60,7 +62,7 @@ public class AmphithereAIFollowOwner extends Goal {
         if (!ampithere.isFlying()) {
             return this.ampithere.getNavigator().noPath();
         } else {
-            return this.ampithere.getMoveHelper().action != EntityMoveHelper.Action.WAIT;
+            return false;
         }
     }
 
@@ -76,14 +78,14 @@ public class AmphithereAIFollowOwner extends Goal {
         this.ampithere.setPathPriority(PathNodeType.WATER, this.oldWaterCost);
     }
 
-    public void updateTask() {
+    public void tick() {
         this.ampithere.getLookController().setLookPositionWithEntity(this.owner, 10.0F, (float) this.ampithere.getVerticalFaceSpeed());
 
         if (!this.ampithere.isSitting()) {
             if (--this.timeToRecalcPath <= 0) {
                 this.timeToRecalcPath = 10;
                 tryMoveTo();
-                if (!this.ampithere.getLeashed() && !this.ampithere.isRiding()) {
+                if (!this.ampithere.getLeashed() && !this.ampithere.isPassenger()) {
                     if (this.ampithere.getDistanceSq(this.owner) >= 144.0D) {
                         int i = MathHelper.floor(this.owner.getPosX()) - 2;
                         int j = MathHelper.floor(this.owner.getPosZ()) - 2;
@@ -91,7 +93,7 @@ public class AmphithereAIFollowOwner extends Goal {
 
                         for (int l = 0; l <= 4; ++l) {
                             for (int i1 = 0; i1 <= 4; ++i1) {
-                                if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.isTeleportFriendlyBlock(i, j, k, l, i1)) {
+                                if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.canTeleportToBlock(new BlockPos(i, j, k))) {
                                     this.ampithere.setLocationAndAngles((double) ((float) (i + l) + 0.5F), (double) k, (double) ((float) (j + i1) + 0.5F), this.ampithere.rotationYaw, this.ampithere.rotationPitch);
                                     ampithere.getNavigator().clearPath();
                                     return;
@@ -104,15 +106,14 @@ public class AmphithereAIFollowOwner extends Goal {
         }
     }
 
-    protected boolean isTeleportFriendlyBlock(int x, int z, int y, int xOffset, int zOffset) {
-        BlockPos blockpos = new BlockPos(x + xOffset, y - 1, z + zOffset);
-        BlockState BlockState = this.world.getBlockState(blockpos);
-        return BlockState.getBlockFaceShape(this.world, blockpos, Direction.DOWN) == BlockFaceShape.SOLID && BlockState.canEntitySpawn(this.ampithere) && this.world.isAirBlock(blockpos.up()) && this.world.isAirBlock(blockpos.up(2));
+    protected boolean canTeleportToBlock(BlockPos pos) {
+        BlockState blockstate = this.world.getBlockState(pos);
+        return blockstate.canEntitySpawn(this.world, pos, this.ampithere.getType()) && this.world.isAirBlock(pos.up()) && this.world.isAirBlock(pos.up(2));
     }
 
     private boolean tryMoveTo() {
         if (!ampithere.isFlying()) {
-            return ampithere.getNavigator().tryMoveToLivingEntity(this.owner, this.followSpeed);
+            return ampithere.getNavigator().tryMoveToEntityLiving(this.owner, this.followSpeed);
         } else {
             this.ampithere.getMoveHelper().setMoveTo(this.owner.getPosX(), this.owner.getPosY() + this.owner.getEyeHeight() + 5 + this.ampithere.getRNG().nextInt(8), this.owner.getPosZ(), 0.25D);
             return true;

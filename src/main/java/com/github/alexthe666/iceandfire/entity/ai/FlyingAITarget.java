@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -25,11 +24,11 @@ public class FlyingAITarget extends NearestAttackableTargetGoal {
 
     @Override
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.taskOwner.getBoundingBox().grow(targetDistance, targetDistance, targetDistance);
+        return this.goalOwner.getBoundingBox().grow(targetDistance, targetDistance, targetDistance);
     }
 
     public boolean shouldExecute() {
-        if (taskOwner instanceof EntitySeaSerpent && (((EntitySeaSerpent) taskOwner).isJumpingOutOfWater() || !taskOwner.isInWater())) {
+        if (goalOwner instanceof EntitySeaSerpent && (((EntitySeaSerpent) goalOwner).isJumpingOutOfWater() || !goalOwner.isInWater())) {
             return false;
         }
         return super.shouldExecute();

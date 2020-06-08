@@ -118,7 +118,7 @@ public class SeaSerpentAIAttackMelee extends Goal {
         this.attacker.getNavigator().clearPath();
     }
 
-    public void updateTask() {
+    public void tick() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
         if (LivingEntity != null) {
             if (attacker.isInWater()) {

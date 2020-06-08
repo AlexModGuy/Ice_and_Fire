@@ -48,7 +48,7 @@ public class DreadAIDragonFindQueen extends Goal {
         this.dragon.getNavigator().clearPath();
     }
 
-    public void updateTask() {
+    public void tick() {
         this.dragon.getLookController().setLookPositionWithEntity(this.queen, 30.0F, 30.0F);
         if(this.dragon.isFlying() || this.dragon.isHovering()){
             dragon.getMoveHelper().setMoveTo(this.queen.getPosX(), this.queen.getPosY() + 1, this.queen.getPosZ(), 1.2D);
