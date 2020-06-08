@@ -27,7 +27,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
     }
 
     @Override
-    public CompoundNBT writeToNBT(CompoundNBT tag) {
+    public CompoundNBT write(CompoundNBT tag) {
         if (type != null) {
             tag.setByte("Color", (byte) type.ordinal());
         } else {
@@ -40,12 +40,12 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
             tag.setString("OwnerUUID", ownerUUID.toString());
         }
 
-        return super.writeToNBT(tag);
+        return super.write(tag);
     }
 
     @Override
-    public void readFromNBT(CompoundNBT tag) {
-        super.readFromNBT(tag);
+    public void read(CompoundNBT tag) {
+        super.read(tag);
         type = EnumDragonEgg.values()[tag.getByte("Color")];
         age = tag.getByte("Age");
         String s;
@@ -64,13 +64,13 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
         CompoundNBT tag = new CompoundNBT();
-        this.writeToNBT(tag);
+        this.write(tag);
         return new SPacketUpdateTileEntity(pos, 1, tag);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        readFromNBT(packet.getNbtCompound());
+        read(packet.getNbtCompound());
     }
 
     public void spawnEgg() {

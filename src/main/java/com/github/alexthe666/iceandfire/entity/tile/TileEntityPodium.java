@@ -96,15 +96,15 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
     }
 
     @Override
-    public void readFromNBT(CompoundNBT compound) {
-        super.readFromNBT(compound);
+    public void read(CompoundNBT compound) {
+        super.read(compound);
         this.stacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, this.stacks);
     }
 
     @Override
-    public CompoundNBT writeToNBT(CompoundNBT compound) {
-        super.writeToNBT(compound);
+    public CompoundNBT write(CompoundNBT compound) {
+        super.write(compound);
         ItemStackHelper.saveAllItems(compound, this.stacks);
         return compound;
     }
@@ -179,17 +179,17 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
         CompoundNBT tag = new CompoundNBT();
-        this.writeToNBT(tag);
+        this.write(tag);
         return new SPacketUpdateTileEntity(pos, 1, tag);
     }
 
     public CompoundNBT getUpdateTag() {
-        return this.writeToNBT(new CompoundNBT());
+        return this.write(new CompoundNBT());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        readFromNBT(packet.getNbtCompound());
+        read(packet.getNbtCompound());
         if (!world.isRemote) {
             IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePodium(pos.toLong(), this.getStackInSlot(0)));
         }

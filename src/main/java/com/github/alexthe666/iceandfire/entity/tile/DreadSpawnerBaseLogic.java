@@ -147,7 +147,7 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
         this.broadcastEvent(1);
     }
 
-    public void readFromNBT(CompoundNBT nbt) {
+    public void read(CompoundNBT nbt) {
         this.spawnDelay = nbt.getShort("Delay");
         this.potentialSpawns.clear();
 
@@ -185,7 +185,7 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
         }
     }
 
-    public CompoundNBT writeToNBT(CompoundNBT p_189530_1_) {
+    public CompoundNBT write(CompoundNBT p_189530_1_) {
         ResourceLocation resourcelocation = this.getEntityId();
 
         if (resourcelocation == null) {

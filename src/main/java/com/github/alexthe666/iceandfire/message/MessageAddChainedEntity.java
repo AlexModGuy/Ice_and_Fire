@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.message;
 
-import com.github.alexthe666.iceandfire.entity.ChainEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;

@@ -1,16 +1,11 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntityDreadThrall;
-import com.github.alexthe666.iceandfire.entity.IDreadMob;
+import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
+import com.github.alexthe666.iceandfire.entity.util.IDreadMob;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetExpiringGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 
 import javax.annotation.Nullable;

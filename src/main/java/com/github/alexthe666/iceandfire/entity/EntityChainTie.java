@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.block.WallBlock;
 import net.minecraft.entity.Entity;

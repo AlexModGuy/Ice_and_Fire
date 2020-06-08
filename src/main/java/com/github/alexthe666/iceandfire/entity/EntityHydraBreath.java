@@ -1,12 +1,11 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.block.material.Material;
+import com.github.alexthe666.iceandfire.entity.util.IDragonProjectile;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractFireballEntity;
-import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;

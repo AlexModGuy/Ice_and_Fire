@@ -6,14 +6,18 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeSnow;
+import net.minecraft.world.biome.SnowyTundraBiome;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 
 import java.util.Random;
 
-public class BiomeGlacier extends BiomeSnow {
+public class BiomeGlacier extends Biome {
 
     public BiomeGlacier() {
+        super((new Biome.Builder()).surfaceBuilder(SurfaceBuilder.DEFAULT, SurfaceBuilder.GRASS_DIRT_GRAVEL_CONFIG).precipitation(Biome.RainType.SNOW).category(Biome.Category.ICY).depth(0.125F).scale(0.05F).temperature(0.0F).downfall(0.5F).waterColor(4159204).waterFogColor(329011).parent((String)null));
         super(false, new BiomeProperties("Glacier").setBaseHeight(2.125F).setHeightVariation(0.025F).setTemperature(0.0F).setRainfall(0.5F).setSnowEnabled());
         this.topBlock = Blocks.SNOW.getDefaultState();
         this.fillerBlock = Blocks.PACKED_ICE.getDefaultState();

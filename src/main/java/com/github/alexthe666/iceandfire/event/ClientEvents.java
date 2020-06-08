@@ -10,6 +10,10 @@ import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEnt
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntityCrack;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.SirenEntityProperties;
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
@@ -22,7 +26,6 @@ import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.player.PlayerEntity;

@@ -19,6 +19,7 @@ import com.github.alexthe666.iceandfire.client.render.entity.*;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonArmor;
 import com.github.alexthe666.iceandfire.client.render.tile.*;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderHydra;
+import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.event.ClientEvents;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
@@ -33,8 +34,10 @@ import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.util.InputMappings;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -364,5 +367,24 @@ public class ClientProxy extends CommonProxy {
 
     public boolean shouldSeeBestiaryContents() {
         return InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 340) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 344);
+    }
+
+    private Entity referencedMob = null;
+    private TileEntity referencedTE = null;
+
+    public void setReferencedMob(Entity dragonBase) {
+        referencedMob = dragonBase;
+    }
+
+    public Entity getReferencedMob() {
+        return referencedMob;
+    }
+
+    public void setRefrencedTE(TileEntity tileEntity) {
+        referencedTE = tileEntity;
+    }
+
+    public TileEntity getRefrencedTE() {
+        return referencedTE;
     }
 }

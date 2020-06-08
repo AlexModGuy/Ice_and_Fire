@@ -3,22 +3,24 @@ package com.github.alexthe666.iceandfire.entity.tile;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
+import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ITickable;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
@@ -27,7 +29,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityLectern extends TileEntity implements ITickable, ISidedInventory {
+public class TileEntityLectern extends LockableTileEntity implements ITickable, ISidedInventory {
     private static final int[] slotsTop = new int[]{0};
     private static final int[] slotsSides = new int[]{1};
     private static final int[] slotsBottom = new int[]{0};
@@ -43,8 +45,12 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     private Random localRand = new Random();
     private NonNullList<ItemStack> stacks = NonNullList.withSize(3, ItemStack.EMPTY);
 
+    public TileEntityLectern() {
+        super(IafTileEntityRegistry.IAF_LECTERN);
+    }
+
     @Override
-    public void update() {
+    public void tick() {
         float f1 = this.pageHelp1;
         do {
             this.pageHelp1 += RANDOM.nextInt(4) - RANDOM.nextInt(4);
@@ -112,7 +118,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
                 this.stacks.set(index, ItemStack.EMPTY);
                 return itemstack;
             } else {
-                itemstack = this.stacks.get(index).splitStack(count);
+                itemstack = this.stacks.get(index).split(count);
 
                 if (this.stacks.get(index).getCount() == 0) {
                     this.stacks.set(index, ItemStack.EMPTY);
@@ -152,7 +158,7 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     public EnumBestiaryPages[] randomizePages() {
         if (stacks.get(0).getItem() == IafItemRegistry.BESTIARY) {
             List<EnumBestiaryPages> possibleList = getPossiblePages();
-            localRand.setSeed(this.world.getWorldTime());
+            localRand.setSeed(this.world.getGameTime());
             Collections.shuffle(possibleList, localRand);
             boolean flag = false;
             if (possibleList.size() > 0) {
@@ -176,15 +182,15 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     }
 
     @Override
-    public void readFromNBT(CompoundNBT compound) {
-        super.readFromNBT(compound);
+    public void read(CompoundNBT compound) {
+        super.read(compound);
         this.stacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, this.stacks);
     }
 
     @Override
-    public CompoundNBT writeToNBT(CompoundNBT compound) {
-        super.writeToNBT(compound);
+    public CompoundNBT write(CompoundNBT compound) {
+        super.write(compound);
         ItemStackHelper.saveAllItems(compound, this.stacks);
 
         return compound;
@@ -204,45 +210,6 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
     }
 
     @Override
-    public int getField(int id) {
-        if (id == 0) {
-            return selectedPages[0] == null ? -1 : selectedPages[0].ordinal();
-        }
-        if (id == 1) {
-            return selectedPages[1] == null ? -1 : selectedPages[1].ordinal();
-        }
-        if (id == 2) {
-            return selectedPages[2] == null ? -1 : selectedPages[2].ordinal();
-        }
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-        if (id == 0) {
-            if (value < 0) {
-                selectedPages[0] = null;
-            } else {
-                selectedPages[0] = EnumBestiaryPages.values()[Math.min(EnumBestiaryPages.values().length - 1, value)];
-            }
-        }
-        if (id == 1) {
-            if (value < 0) {
-                selectedPages[1] = null;
-            } else {
-                selectedPages[1] = EnumBestiaryPages.values()[Math.min(EnumBestiaryPages.values().length - 1, value)];
-            }
-        }
-        if (id == 2) {
-            if (value < 0) {
-                selectedPages[2] = null;
-            } else {
-                selectedPages[2] = EnumBestiaryPages.values()[Math.min(EnumBestiaryPages.values().length - 1, value)];
-            }
-        }
-    }
-
-    @Override
     public int getInventoryStackLimit() {
         return 64;
     }
@@ -252,19 +219,14 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
         return true;
     }
 
-    @Override
-    public int getFieldCount() {
-        return 3;
-    }
 
     @Override
     public void clear() {
         this.stacks.clear();
     }
 
-    @Override
-    public String getName() {
-        return "tile.iceandfire.lectern.name";
+    public ITextComponent getName() {
+        return new TranslationTextComponent("tile.iceandfire.lectern.name");
     }
 
     @Override
@@ -291,30 +253,33 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
         return "iceandfire:lectern";
     }
 
-    public Container createContainer(InventoryPlayer playerInventory, PlayerEntity playerIn) {
-        return new ContainerLectern(playerInventory, this);
-    }
-
     @Override
     public ItemStack removeStackFromSlot(int index) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        CompoundNBT tag = new CompoundNBT();
-        this.writeToNBT(tag);
-        return new SPacketUpdateTileEntity(pos, 1, tag);
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        readFromNBT(packet.getNbtCompound());
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+        read(packet.getNbtCompound());
+    }
+
+    public CompoundNBT getUpdateTag() {
+        return this.write(new CompoundNBT());
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return this.hasCustomName() ? new TextComponentString(this.getName()) : new TranslationTextComponent(this.getName());
+    protected ITextComponent getDefaultName() {
+        return getName();
+    }
+
+    @Override
+    protected Container createMenu(int id, PlayerInventory player) {
+        return null;
     }
 
     @Override
@@ -327,21 +292,42 @@ public class TileEntityLectern extends TileEntity implements ITickable, ISidedIn
         return true;
     }
 
-    @SuppressWarnings("unchecked")
+    net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
+            net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN);
+
     @Override
-    @javax.annotation.Nullable
-    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @javax.annotation.Nullable net.minecraft.util.Direction facing) {
-        if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
+        if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (facing == Direction.DOWN)
-                return (T) handlerDown;
+                return handlers[1].cast();
             else
-                return (T) handlerUp;
+                return handlers[0].cast();
+        }
         return super.getCapability(capability, facing);
     }
 
+    public final IIntArray furnaceData = new IIntArray() {
+        @Override
+        public int get(int index) {
+            return 0;
+        }
+
+        @Override
+        public void set(int index, int value) {
+
+        }
+
+        @Override
+        public int size() {
+            return 0;
+        }
+    };
+
+    @Nullable
     @Override
-    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.Direction facing) {
-        return getCapability(capability, facing) != null;
+    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
+        return new ContainerLectern(id, this, playerInventory, furnaceData);
     }
+
 
 }

@@ -1,7 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
+import com.github.alexthe666.iceandfire.entity.util.IFlyingMount;
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.controller.MovementController;

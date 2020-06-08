@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.DragonUtils;
+import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.world.gen.processor.DreadRuinProcessor;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLiquid;

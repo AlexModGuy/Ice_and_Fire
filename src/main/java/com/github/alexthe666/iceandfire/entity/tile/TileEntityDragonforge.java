@@ -108,15 +108,15 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         }
     }
 
-    public void readFromNBT(CompoundNBT compound) {
-        super.readFromNBT(compound);
+    public void read(CompoundNBT compound) {
+        super.read(compound);
         this.forgeItemStacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, this.forgeItemStacks);
         this.cookTime = compound.getInt("CookTime");
     }
 
-    public CompoundNBT writeToNBT(CompoundNBT compound) {
-        super.writeToNBT(compound);
+    public CompoundNBT write(CompoundNBT compound) {
+        super.write(compound);
         compound.putInt("CookTime", (short) this.cookTime);
         ItemStackHelper.saveAllItems(compound, this.forgeItemStacks);
         return compound;

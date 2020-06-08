@@ -1,35 +1,42 @@
 package com.github.alexthe666.iceandfire.inventory;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.item.ItemBestiary;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIntArray;
+import net.minecraft.util.IntArray;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ContainerLectern extends SyncedFieldContainer {
-    private final IInventory tileFurnace;
+public class ContainerLectern extends Container {
+    private IInventory tileFurnace;
     private int[] possiblePagesInt = new int[3];
 
-    public ContainerLectern(InventoryPlayer playerInv, IInventory furnaceInventory) {
-        super(furnaceInventory);
+    public ContainerLectern(int i, PlayerInventory playerInventory) {
+        this(i, new Inventory(2), playerInventory, new IntArray(0));
+    }
+
+
+    public ContainerLectern(int id, IInventory furnaceInventory, PlayerInventory playerInventory, IIntArray vars) {
+        super(IafContainerRegistry.IAF_LECTERN_CONTAINER, id);
         this.tileFurnace = furnaceInventory;
-        this.addSlotToContainer(new Slot(furnaceInventory, 0, 15, 47){
+        this.addSlot(new Slot(furnaceInventory, 0, 15, 47){
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() instanceof ItemBestiary;
             }
         });
-        this.addSlotToContainer(new Slot(furnaceInventory, 1, 35, 47){
+        this.addSlot(new Slot(furnaceInventory, 1, 35, 47){
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() == IafItemRegistry.MANUSCRIPT;
@@ -37,35 +44,22 @@ public class ContainerLectern extends SyncedFieldContainer {
         });
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlotToContainer(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
         for (int k = 0; k < 9; ++k) {
-            this.addSlotToContainer(new Slot(playerInv, k, 8 + k * 18, 142));
+            this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
     }
-
-    @Override
-    public void addListener(IContainerListener listener) {
-        super.addListener(listener);
-        listener.sendAllWindowProperties(this, this.tileFurnace);
-    }
-
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void updateProgressBar(int id, int data) {
-        this.tileFurnace.setField(id, data);
-    }
-
     public void onUpdate() {
-        possiblePagesInt[0] = this.tileFurnace.getField(0);
-        possiblePagesInt[1] = this.tileFurnace.getField(1);
-        possiblePagesInt[2] = this.tileFurnace.getField(2);
+        possiblePagesInt[0] = getPageField(0);
+        possiblePagesInt[1] = getPageField(1);
+        possiblePagesInt[2] = getPageField(2);
     }
 
     @Override
@@ -111,9 +105,9 @@ public class ContainerLectern extends SyncedFieldContainer {
     }
 
     public EnumBestiaryPages[] getPossiblePages() {
-        possiblePagesInt[0] = this.tileFurnace.getField(0);
-        possiblePagesInt[1] = this.tileFurnace.getField(1);
-        possiblePagesInt[2] = this.tileFurnace.getField(2);
+        possiblePagesInt[0] = getPageField(0);
+        possiblePagesInt[1] = getPageField(1);
+        possiblePagesInt[2] = getPageField(2);
         EnumBestiaryPages[] pages = new EnumBestiaryPages[3];
         if (this.tileFurnace.getStackInSlot(0).getItem() == IafItemRegistry.BESTIARY) {
             if (possiblePagesInt[0] < 0) {
@@ -135,10 +129,15 @@ public class ContainerLectern extends SyncedFieldContainer {
         return pages;
     }
 
+    private int getPageField(int i) {
+        TileEntityLectern lectern = (TileEntityLectern)tileFurnace;
+        return lectern.selectedPages[i].ordinal();
+    }
+
     public boolean enchantItem(PlayerEntity playerIn, int id) {
-        possiblePagesInt[0] = this.tileFurnace.getField(0);
-        possiblePagesInt[1] = this.tileFurnace.getField(1);
-        possiblePagesInt[2] = this.tileFurnace.getField(2);
+        possiblePagesInt[0] = getPageField(0);
+        possiblePagesInt[1] = getPageField(1);
+        possiblePagesInt[2] = getPageField(2);
         ItemStack itemstack = this.tileFurnace.getStackInSlot(0);
         ItemStack itemstack1 = this.tileFurnace.getStackInSlot(1);
         int i = 3;

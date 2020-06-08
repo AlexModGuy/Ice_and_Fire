@@ -1,12 +1,8 @@
 package com.github.alexthe666.iceandfire.world;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.world.BiomeDreadLands;
-import com.github.alexthe666.iceandfire.world.BiomeGlacier;
 import com.github.alexthe666.iceandfire.world.dimension.WorldProviderDreadLands;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.DimensionManager;
 
 public class IafWorldRegistry {
 

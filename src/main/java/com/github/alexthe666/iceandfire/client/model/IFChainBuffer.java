@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import com.github.alexthe666.iceandfire.entity.IFlapable;
+import com.github.alexthe666.iceandfire.entity.util.IFlapable;
 import net.ilexiconn.llibrary.LLibrary;
 import net.ilexiconn.llibrary.client.util.ClientUtils;
 import net.minecraft.client.model.ModelRenderer;

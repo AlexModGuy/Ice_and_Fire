@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import com.github.alexthe666.iceandfire.entity.MiscEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.Minecraft;

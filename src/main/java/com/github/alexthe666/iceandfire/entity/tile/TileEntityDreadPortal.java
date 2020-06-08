@@ -16,8 +16,8 @@ public class TileEntityDreadPortal extends TileEntity {
     private BlockPos exitPortal;
     private boolean exactTeleport;
 
-    public CompoundNBT writeToNBT(CompoundNBT compound) {
-        super.writeToNBT(compound);
+    public CompoundNBT write(CompoundNBT compound) {
+        super.write(compound);
         compound.setLong("Age", this.age);
 
         if (this.exitPortal != null) {
@@ -31,8 +31,8 @@ public class TileEntityDreadPortal extends TileEntity {
         return compound;
     }
 
-    public void readFromNBT(CompoundNBT compound) {
-        super.readFromNBT(compound);
+    public void read(CompoundNBT compound) {
+        super.read(compound);
         this.age = compound.getLong("Age");
 
         if (compound.hasKey("ExitPortal", 10)) {
@@ -57,7 +57,7 @@ public class TileEntityDreadPortal extends TileEntity {
     }
 
     public CompoundNBT getUpdateTag() {
-        return this.writeToNBT(new CompoundNBT());
+        return this.write(new CompoundNBT());
     }
 
     @OnlyIn(Dist.CLIENT)

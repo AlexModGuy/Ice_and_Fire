@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.entity.MyrmexHive;
+import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import net.minecraft.block.*;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;

@@ -43,14 +43,14 @@ public class TileEntityDreadSpawner extends TileEntity implements ITickable {
         }
     };
 
-    public void readFromNBT(CompoundNBT compound) {
-        super.readFromNBT(compound);
-        this.spawnerLogic.readFromNBT(compound);
+    public void read(CompoundNBT compound) {
+        super.read(compound);
+        this.spawnerLogic.read(compound);
     }
 
-    public CompoundNBT writeToNBT(CompoundNBT compound) {
-        super.writeToNBT(compound);
-        this.spawnerLogic.writeToNBT(compound);
+    public CompoundNBT write(CompoundNBT compound) {
+        super.write(compound);
+        this.spawnerLogic.write(compound);
         return compound;
     }
 
@@ -71,7 +71,7 @@ public class TileEntityDreadSpawner extends TileEntity implements ITickable {
     }
 
     public CompoundNBT getUpdateTag() {
-        CompoundNBT CompoundNBT = this.writeToNBT(new CompoundNBT());
+        CompoundNBT CompoundNBT = this.write(new CompoundNBT());
         CompoundNBT.removeTag("SpawnPotentials");
         return CompoundNBT;
     }

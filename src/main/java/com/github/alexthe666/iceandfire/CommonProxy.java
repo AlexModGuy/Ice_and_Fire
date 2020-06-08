@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.block.*;
 import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
@@ -250,9 +251,19 @@ public class CommonProxy {
         return true;
     }
 
+
+
+    public void setReferencedMob(Entity dragonBase) {
+    }
+
+    public Entity getReferencedMob() {
+        return null;
+    }
+
     public void setRefrencedTE(TileEntity tileEntity) {
     }
 
-    public void setReferencedMob(Entity dragonBase) {
+    public TileEntityLectern getRefrencedTE() {
+        return null;
     }
 }

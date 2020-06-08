@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import com.github.alexthe666.iceandfire.entity.MiscEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

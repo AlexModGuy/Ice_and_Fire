@@ -46,8 +46,8 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
         return this.hasCustomName() ? this.customName : block.getTranslationKey() + ".name";
     }
 
-    public void readFromNBT(CompoundNBT compound) {
-        super.readFromNBT(compound);
+    public void read(CompoundNBT compound) {
+        super.read(compound);
         this.chestContents = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
 
         if (!this.checkLootAndRead(compound)) {
@@ -59,8 +59,8 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
         }
     }
 
-    public CompoundNBT writeToNBT(CompoundNBT compound) {
-        super.writeToNBT(compound);
+    public CompoundNBT write(CompoundNBT compound) {
+        super.write(compound);
         if (!this.checkLootAndWrite(compound)) {
             ItemStackHelper.saveAllItems(compound, this.chestContents);
         }
@@ -103,13 +103,13 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
         CompoundNBT tag = new CompoundNBT();
-        this.writeToNBT(tag);
+        this.write(tag);
         return new SPacketUpdateTileEntity(this.pos, 0, tag);
     }
 
     @Override
     public CompoundNBT getUpdateTag() {
-        return this.writeToNBT(new CompoundNBT());
+        return this.write(new CompoundNBT());
     }
 
     public void fillWithLoot(@Nullable PlayerEntity player) {
@@ -136,7 +136,7 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
     @Override
     public void onDataPacket(NetworkManager netManager, SPacketUpdateTileEntity packet) {
-        this.readFromNBT(packet.getNbtCompound());
+        this.read(packet.getNbtCompound());
     }
 
     public boolean isFull(ItemStack heldStack) {

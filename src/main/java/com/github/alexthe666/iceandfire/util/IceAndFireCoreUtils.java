@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.util;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.ISyncMount;
+import com.github.alexthe666.iceandfire.entity.util.ISyncMount;
 import net.minecraft.network.NetHandlerPlayServer;
 
 public class IceAndFireCoreUtils {

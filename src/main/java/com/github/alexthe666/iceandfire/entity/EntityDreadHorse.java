@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.entity.util.IDreadMob;
 import net.minecraft.entity.*;
 import net.minecraft.entity.passive.horse.SkeletonHorseEntity;
 import net.minecraft.nbt.CompoundNBT;
