@@ -1,31 +1,40 @@
 package com.github.alexthe666.iceandfire.inventory;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIntArray;
+import net.minecraft.util.IntArray;
 
 public class ContainerPodium extends Container {
     private final IInventory podium;
 
-    public ContainerPodium(InventoryPlayer playerInventory, IInventory podiumIn, PlayerEntity player) {
-        this.podium = podiumIn;
-        podiumIn.openInventory(player);
+    public ContainerPodium(int i, PlayerInventory playerInventory) {
+        this(i, new Inventory(1), playerInventory, new IntArray(0));
+    }
+
+
+    public ContainerPodium(int id, IInventory furnaceInventory, PlayerInventory playerInventory, IIntArray vars) {
+        super(IafContainerRegistry.PODIUM_CONTAINER, id);
+        this.podium = furnaceInventory;
+        furnaceInventory.openInventory(playerInventory.player);
         byte b0 = 51;
         int i;
 
-        this.addSlotToContainer(new Slot(podiumIn, 0, 80, 20));
+        this.addSlot(new Slot(furnaceInventory, 0, 80, 20));
 
         for (i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlotToContainer(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, i * 18 + b0));
+                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, i * 18 + b0));
             }
         }
 
         for (i = 0; i < 9; ++i) {
-            this.addSlotToContainer(new Slot(playerInventory, i, 8 + i * 18, 58 + b0));
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 58 + b0));
         }
     }
 

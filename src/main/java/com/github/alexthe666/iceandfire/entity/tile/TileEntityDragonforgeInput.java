@@ -4,14 +4,11 @@ import com.github.alexthe666.iceandfire.block.BlockDragonforgeInput;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 
 import javax.annotation.Nullable;
 
@@ -19,6 +16,11 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
     private static final int LURE_DISTANCE = 50;
     private int ticksSinceDragonFire;
     private TileEntityDragonforge core = null;
+    private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+
+    public TileEntityDragonforgeInput() {
+        super(IafTileEntityRegistry.DRAGONFORGE_INPUT);
+    }
 
     public void onHitWithFlame() {
         TileEntityDragonforge forge = getConnectedTileEntity();
@@ -28,7 +30,7 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
     }
 
     @Override
-    public void update() {
+    public void tick() {
         if (core == null) {
             core = getConnectedTileEntity();
         }
@@ -69,11 +71,10 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
 
     private boolean canSeeInput(EntityDragonBase dragon, Vec3d target) {
         if (target != null) {
-            RayTraceResult rayTrace = world.rayTraceBlocks(new Vec3d(dragon.getPosition().up((int) dragon.height)), target, false);
-            if (rayTrace != null && rayTrace.hitVec != null) {
-                BlockPos sidePos = rayTrace.getBlockPos();
-                BlockPos pos = new BlockPos(rayTrace.hitVec);
-                return world.getBlockState(pos).getBlock() instanceof BlockDragonforgeInput || world.getBlockState(sidePos).getBlock() instanceof BlockDragonforgeInput;
+            RayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(dragon.getHeadPosition(), target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, dragon));
+            if (rayTrace != null && rayTrace.getHitVec() != null) {
+                BlockPos pos = new BlockPos(rayTrace.getHitVec());
+                return world.getBlockState(pos).getBlock() instanceof BlockDragonforgeInput;
             }
         }
         return false;
@@ -102,7 +103,7 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
 
 
     private TileEntityDragonforge getConnectedTileEntity() {
-        for (Direction facing : Direction.HORIZONTALS) {
+        for (Direction facing : HORIZONTALS) {
             if (world.getTileEntity(pos.offset(facing)) != null && world.getTileEntity(pos.offset(facing)) instanceof TileEntityDragonforge) {
                 return (TileEntityDragonforge) world.getTileEntity(pos.offset(facing));
             }
@@ -110,15 +111,11 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickable 
         return null;
     }
 
-    @Override
-    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.Direction facing) {
-        return getConnectedTileEntity() != null && getConnectedTileEntity().hasCapability(capability, facing);
-    }
 
     @SuppressWarnings("unchecked")
     @Override
     @javax.annotation.Nullable
-    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @javax.annotation.Nullable net.minecraft.util.Direction facing) {
+    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
         if (getConnectedTileEntity() != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return getConnectedTileEntity().getCapability(capability, facing);
         }

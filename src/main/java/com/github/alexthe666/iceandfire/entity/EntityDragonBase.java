@@ -244,13 +244,13 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         this.targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(4, new DragonAITargetNonTamed<>(this, PlayerEntity.class, false, new Predicate<PlayerEntity>() {
+        this.targetSelector.addGoal(4, new DragonAITargetNonTamed(this, PlayerEntity.class, false, new Predicate<PlayerEntity>() {
             @Override
             public boolean apply(@Nullable PlayerEntity entity) {
                 return DragonUtils.canHostilesTarget(entity) && !entity.isCreative();
             }
         }));
-        this.targetSelector.addGoal(5, new DragonAITarget<>(this, LivingEntity.class, true, new Predicate<Entity>() {
+        this.targetSelector.addGoal(5, new DragonAITarget(this, LivingEntity.class, true, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
                 return entity instanceof LivingEntity && DragonUtils.canHostilesTarget(entity);

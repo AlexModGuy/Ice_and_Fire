@@ -1,31 +1,29 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import net.minecraft.block.state.BlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ITickable;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedSpawnerEntity;
-import net.minecraft.util.datafix.DataFixer;
-import net.minecraft.util.datafix.FixTypes;
-import net.minecraft.util.datafix.IDataFixer;
-import net.minecraft.util.datafix.IDataWalker;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.spawner.AbstractSpawner;
 
 import javax.annotation.Nullable;
 
 public class TileEntityDreadSpawner extends TileEntity implements ITickable {
     private final DreadSpawnerBaseLogic spawnerLogic = new DreadSpawnerBaseLogic() {
         public void broadcastEvent(int id) {
-            TileEntityDreadSpawner.this.world.addBlockEvent(TileEntityDreadSpawner.this.pos, Blocks.MOB_SPAWNER, id, 0);
+            TileEntityDreadSpawner.this.world.addBlockEvent(TileEntityDreadSpawner.this.pos, Blocks.SPAWNER, id, 0);
         }
 
-        public World getSpawnerWorld() {
+        public World getWorld() {
             return TileEntityDreadSpawner.this.world;
         }
 
@@ -36,12 +34,16 @@ public class TileEntityDreadSpawner extends TileEntity implements ITickable {
         public void setNextSpawnData(WeightedSpawnerEntity p_184993_1_) {
             super.setNextSpawnData(p_184993_1_);
 
-            if (this.getSpawnerWorld() != null) {
-                BlockState BlockState = this.getSpawnerWorld().getBlockState(this.getSpawnerPosition());
-                this.getSpawnerWorld().notifyBlockUpdate(TileEntityDreadSpawner.this.pos, BlockState, BlockState, 4);
+            if (this.getWorld() != null) {
+                BlockState BlockState = this.getWorld().getBlockState(this.getSpawnerPosition());
+                this.getWorld().notifyBlockUpdate(TileEntityDreadSpawner.this.pos, BlockState, BlockState, 4);
             }
         }
     };
+
+    public TileEntityDreadSpawner() {
+        super(IafTileEntityRegistry.DREAD_SPAWNER);
+    }
 
     public void read(CompoundNBT compound) {
         super.read(compound);
@@ -57,7 +59,7 @@ public class TileEntityDreadSpawner extends TileEntity implements ITickable {
     /**
      * Like the old updateEntity(), except more generic.
      */
-    public void update() {
+    public void tick() {
         this.spawnerLogic.updateSpawner();
     }
 
@@ -65,16 +67,20 @@ public class TileEntityDreadSpawner extends TileEntity implements ITickable {
      * Retrieves packet to send to the client whenever this Tile Entity is resynced via World.notifyBlockUpdate. For
      * modded TE's, this packet comes back to you clientside in {@link #onDataPacket}
      */
-    @Nullable
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        return new SPacketUpdateTileEntity(this.pos, 1, this.getUpdateTag());
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+        read(packet.getNbtCompound());
     }
 
     public CompoundNBT getUpdateTag() {
-        CompoundNBT CompoundNBT = this.write(new CompoundNBT());
-        CompoundNBT.removeTag("SpawnPotentials");
-        return CompoundNBT;
+        return this.write(new CompoundNBT());
     }
+
 
     public boolean receiveClientEvent(int id, int type) {
         return this.spawnerLogic.setDelayToMin(id) || super.receiveClientEvent(id, type);
@@ -84,7 +90,7 @@ public class TileEntityDreadSpawner extends TileEntity implements ITickable {
         return true;
     }
 
-    public MobSpawnerBaseLogic getSpawnerBaseLogic() {
+    public AbstractSpawner getSpawnerBaseLogic() {
         return this.spawnerLogic;
     }
 }

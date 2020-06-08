@@ -7,25 +7,23 @@ import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -33,6 +31,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     private static final int[] SLOTS_TOP = new int[]{0, 1};
     private static final int[] SLOTS_BOTTOM = new int[]{2};
     private static final int[] SLOTS_SIDES = new int[]{0, 1};
+    private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     public boolean isFire;
     net.minecraftforge.items.IItemHandler handlerTop = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.Direction.UP);
     net.minecraftforge.items.IItemHandler handlerBottom = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.Direction.DOWN);
@@ -44,15 +43,12 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     private boolean canAddFlameAgain = true;
 
     public TileEntityDragonforge() {
+        super(IafTileEntityRegistry.DRAGONFORGE_CORE);
     }
 
     public TileEntityDragonforge(boolean isFire) {
+        super(IafTileEntityRegistry.DRAGONFORGE_CORE);
         this.isFire = isFire;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static boolean isBurning(IInventory inventory) {
-        return inventory.getField(0) > 0;
     }
 
     public int getSizeInventory() {
@@ -70,7 +66,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
     }
 
     private void updateGrills(boolean grill) {
-        for (Direction facing : Direction.HORIZONTALS) {
+        for (Direction facing : HORIZONTALS) {
             BlockPos grillPos = this.getPos().offset(facing);
             if (isFire && world.getBlockState(grillPos).getBlock() == IafBlockRegistry.DRAGONFORGE_FIRE_BRICK || !isFire && world.getBlockState(grillPos).getBlock() == IafBlockRegistry.DRAGONFORGE_ICE_BRICK) {
                 BlockState grillState = isFire ? IafBlockRegistry.DRAGONFORGE_FIRE_BRICK.getDefaultState().with(BlockDragonforgeBricks.GRILL, grill) : IafBlockRegistry.DRAGONFORGE_ICE_BRICK.getDefaultState().with(BlockDragonforgeBricks.GRILL, grill);
@@ -130,10 +126,10 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         return this.cookTime > 0;
     }
 
-    public void update() {
+    public void tick() {
         boolean flag = this.isBurning();
         boolean flag1 = false;
-        isFire = this.getBlockType().getTranslationKey().equals(IafBlockRegistry.DRAGONFORGE_FIRE_CORE.getTranslationKey());
+        isFire = this.getBlockState().getBlock().getTranslationKey().equals(IafBlockRegistry.DRAGONFORGE_FIRE_CORE.getTranslationKey());
         if (lastDragonFlameTimer > 0) {
             lastDragonFlameTimer--;
         }
@@ -306,10 +302,6 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         return true;
     }
 
-    public Container createContainer(InventoryPlayer playerInventory, PlayerEntity playerIn) {
-        return new ContainerDragonForge(playerInventory, this);
-    }
-
     public int getField(int id) {
         return cookTime;
     }
@@ -326,29 +318,26 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         this.forgeItemStacks.clear();
     }
 
-    @SuppressWarnings("unchecked")
+
+    net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
+            net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN);
+
     @Override
-    @javax.annotation.Nullable
-    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @javax.annotation.Nullable net.minecraft.util.Direction facing) {
-        if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
+        if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            if (facing == Direction.UP)
+                return handlers[0].cast();
             if (facing == Direction.DOWN)
-                return (T) handlerBottom;
-            else if (facing == Direction.UP)
-                return (T) handlerTop;
+                return handlers[1].cast();
             else
-                return (T) handlerSide;
+                return handlers[2].cast();
+        }
         return super.getCapability(capability, facing);
     }
 
     public String getName() {
         return isFire ? "container.dragonforge_fire" : "container.dragonforge_ice";
     }
-
-    @Override
-    public boolean hasCustomName() {
-        return false;
-    }
-
 
     public void transferPower(int i) {
         if (this.canSmelt()) {
@@ -389,11 +378,6 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
                 checkBoneCorners(pos.up()) && checkBrickSlots(pos.up());
     }
 
-    @Override
-    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.Direction facing) {
-        return getCapability(capability, facing) != null;
-    }
-
     private Block getBrick() {
         return isFire ? IafBlockRegistry.DRAGONFORGE_FIRE_BRICK : IafBlockRegistry.DRAGONFORGE_ICE_BRICK;
     }
@@ -404,7 +388,7 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
 
     private boolean atleastThreeAreBricks(BlockPos pos) {
         int count = 0;
-        for (Direction facing : Direction.HORIZONTALS) {
+        for (Direction facing : HORIZONTALS) {
             if (world.getBlockState(pos.offset(facing)).getBlock() == getBrick()) {
                 count++;
             }

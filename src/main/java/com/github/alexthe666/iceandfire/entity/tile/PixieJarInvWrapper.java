@@ -3,6 +3,8 @@ package com.github.alexthe666.iceandfire.entity.tile;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
@@ -11,6 +13,10 @@ public class PixieJarInvWrapper implements IItemHandlerModifiable {
 
     private TileEntityJar tile;
     private Direction side;
+
+    public static LazyOptional<IItemHandler> create(TileEntityJar trashCan, Direction sides) {
+        return LazyOptional.of(() -> new PixieJarInvWrapper(trashCan, sides));
+    }
 
     public PixieJarInvWrapper(TileEntityJar tile, Direction side) {
         this.tile = tile;
@@ -53,5 +59,10 @@ public class PixieJarInvWrapper implements IItemHandlerModifiable {
     @Override
     public int getSlotLimit(int slot) {
         return 1;
+    }
+
+    @Override
+    public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+        return false;
     }
 }

@@ -1,19 +1,23 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieJar;
+import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -33,15 +37,16 @@ public class TileEntityJar extends TileEntity implements ITickable {
     public NonNullList<ItemStack> pixieItems = NonNullList.withSize(1, ItemStack.EMPTY);
     public float rotationYaw;
     public float prevRotationYaw;
-    net.minecraftforge.items.IItemHandler handlerBottom = new PixieJarInvWrapper(this, net.minecraft.util.Direction.DOWN);
     private Random rand;
 
     public TileEntityJar() {
+        super(IafTileEntityRegistry.PIXIE_JAR);
         this.rand = new Random();
         this.hasPixie = true;
     }
 
     public TileEntityJar(boolean empty) {
+        super(IafTileEntityRegistry.PIXIE_JAR);
         this.rand = new Random();
         this.hasPixie = !empty;
     }
@@ -53,31 +58,31 @@ public class TileEntityJar extends TileEntity implements ITickable {
         compound.putBoolean("HasProduced", hasProduced);
         compound.putBoolean("TamedPixie", tamedPixie);
         if (pixieOwnerUUID != null) {
-            compound.setUniqueId("PixieOwnerUUID", pixieOwnerUUID);
+            compound.putUniqueId("PixieOwnerUUID", pixieOwnerUUID);
         }
         compound.putInt("TicksExisted", ticksExisted);
         ItemStackHelper.saveAllItems(compound, this.pixieItems);
         return compound;
     }
 
+
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        CompoundNBT tag = new CompoundNBT();
-        this.write(tag);
-        return new SPacketUpdateTileEntity(pos, 1, tag);
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+        read(packet.getNbtCompound());
+        if (!world.isRemote) {
+            IceAndFire.sendMSGToAll(new MessageUpdatePixieHouseModel(pos.toLong(), packet.getNbtCompound().getInt("PixieType")));
+        }
     }
 
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
     }
 
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        read(packet.getNbtCompound());
-        if (!world.isRemote) {
-            IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieHouseModel(pos.toLong(), packet.getNbtCompound().getInt("PixieType")));
-        }
-    }
 
     public void read(CompoundNBT compound) {
         hasPixie = compound.getBoolean("HasPixie");
@@ -92,7 +97,7 @@ public class TileEntityJar extends TileEntity implements ITickable {
     }
 
     @Override
-    public void update() {
+    public void tick() {
         ticksExisted++;
         if (this.world.isRemote && this.hasPixie) {
             IceAndFire.PROXY.spawnParticle("if_pixie", this.pos.getX() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, this.pos.getY() + (double) (this.rand.nextFloat() * PARTICLE_HEIGHT), this.pos.getZ() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, EntityPixie.PARTICLE_RGB[this.pixieType][0], EntityPixie.PARTICLE_RGB[this.pixieType][1], EntityPixie.PARTICLE_RGB[this.pixieType][2]);
@@ -100,12 +105,12 @@ public class TileEntityJar extends TileEntity implements ITickable {
         if (ticksExisted % 24000 == 0 && !this.hasProduced && this.hasPixie) {
             this.hasProduced = true;
             if (!this.getWorld().isRemote) {
-                IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieJar(pos.toLong(), hasProduced));
+                IceAndFire.sendMSGToAll(new MessageUpdatePixieJar(pos.toLong(), hasProduced));
             }
         }
         if (this.hasPixie && hasProduced != prevHasProduced && ticksExisted > 5) {
             if (!this.getWorld().isRemote) {
-                IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieJar(pos.toLong(), hasProduced));
+                IceAndFire.sendMSGToAll(new MessageUpdatePixieJar(pos.toLong(), hasProduced));
             }
             world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, IafSoundRegistry.PIXIE_HURT, SoundCategory.NEUTRAL, 1, 1, false);
         }
@@ -120,12 +125,12 @@ public class TileEntityJar extends TileEntity implements ITickable {
     }
 
     public void releasePixie() {
-        EntityPixie pixie = new EntityPixie(this.world);
+        EntityPixie pixie = new EntityPixie(IafEntityRegistry.PIXIE, this.world);
         pixie.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 1F, this.pos.getZ() + 0.5F, new Random().nextInt(360), 0);
         pixie.setHeldItem(Hand.MAIN_HAND, pixieItems.get(0));
         pixie.setColor(this.pixieType);
         if (!world.isRemote) {
-            world.spawnEntity(pixie);
+            world.addEntity(pixie);
         }
         this.hasPixie = false;
         this.pixieType = 0;
@@ -134,21 +139,16 @@ public class TileEntityJar extends TileEntity implements ITickable {
         pixie.setOwnerId(this.pixieOwnerUUID);
 
         if (!world.isRemote) {
-            IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieHouse(pos.toLong(), false, 0));
+            IceAndFire.sendMSGToAll(new MessageUpdatePixieHouse(pos.toLong(), false, 0));
         }
     }
+    net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler> downHandler = PixieJarInvWrapper.create(this, Direction.DOWN);
 
     @Override
-    @javax.annotation.Nullable
-    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @javax.annotation.Nullable net.minecraft.util.Direction facing) {
+    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
         if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-            return (T) handlerBottom;
+            return downHandler.cast();
         return null;
-    }
-
-    @Override
-    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.Direction facing) {
-        return capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && this.hasPixie;
     }
 
     private float updateRotation(float float1, float float2, float float3) {

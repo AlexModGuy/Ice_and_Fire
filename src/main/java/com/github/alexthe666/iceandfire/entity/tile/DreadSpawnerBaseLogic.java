@@ -2,24 +2,24 @@ package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.google.common.collect.Lists;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.storage.AnvilChunkLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraft.world.spawner.AbstractSpawner;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
-public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
+public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
 
     private final List<WeightedSpawnerEntity> potentialSpawns = Lists.newArrayList();
     private int spawnDelay = 20;
@@ -42,7 +42,7 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
 
     public void setEntityId(@Nullable ResourceLocation id) {
         if (id != null) {
-            this.spawnData.getNbt().setString("id", id.toString());
+            this.spawnData.getNbt().putString("id", id.toString());
         }
     }
 
@@ -51,20 +51,21 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
      */
     private boolean isActivated() {
         BlockPos blockpos = this.getSpawnerPosition();
-        return this.getSpawnerWorld().isAnyPlayerWithinRangeAt((double) blockpos.getX() + 0.5D, (double) blockpos.getY() + 0.5D, (double) blockpos.getZ() + 0.5D, (double) this.activatingRangeFromPlayer);
+        return this.getWorld().isPlayerWithin((double)blockpos.getX() + 0.5D, (double)blockpos.getY() + 0.5D, (double)blockpos.getZ() + 0.5D, (double)this.activatingRangeFromPlayer);
     }
 
     public void updateSpawner() {
         if (!this.isActivated()) {
             this.prevMobRotation = this.mobRotation;
         } else {
+            World world = this.getWorld();
             BlockPos blockpos = this.getSpawnerPosition();
 
-            if (this.getSpawnerWorld().isRemote) {
-                double d3 = (double) ((float) blockpos.getX() + this.getSpawnerWorld().rand.nextFloat());
-                double d4 = (double) ((float) blockpos.getY() + this.getSpawnerWorld().rand.nextFloat());
-                double d5 = (double) ((float) blockpos.getZ() + this.getSpawnerWorld().rand.nextFloat());
-                this.getSpawnerWorld().spawnParticle(ParticleTypes.SMOKE_NORMAL, d3, d4, d5, 0.0D, 0.0D, 0.0D);
+            if (this.getWorld().isRemote) {
+                double d3 = (double) ((float) blockpos.getX() + this.getWorld().rand.nextFloat());
+                double d4 = (double) ((float) blockpos.getY() + this.getWorld().rand.nextFloat());
+                double d5 = (double) ((float) blockpos.getZ() + this.getWorld().rand.nextFloat());
+                this.getWorld().addParticle(ParticleTypes.SMOKE, d3, d4, d5, 0.0D, 0.0D, 0.0D);
                 IceAndFire.PROXY.spawnParticle("dread_torch", d3, d4, d5, 0.0D, 0.0D, 0.0D);
                 if (this.spawnDelay > 0) {
                     --this.spawnDelay;
@@ -85,40 +86,50 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
                 boolean flag = false;
 
                 for (int i = 0; i < this.spawnCount; ++i) {
-                    CompoundNBT CompoundNBT = this.spawnData.getNbt();
-                    ListNBT nbttaglist = CompoundNBT.getList("Pos", 6);
-                    World world = this.getSpawnerWorld();
-                    int j = nbttaglist.tagCount();
-                    double d0 = j >= 1 ? nbttaglist.getDoubleAt(0) : (double) blockpos.getX() + (world.rand.nextDouble() - world.rand.nextDouble()) * (double) this.spawnRange + 0.5D;
-                    double d1 = j >= 2 ? nbttaglist.getDoubleAt(1) : (double) (blockpos.getY() + world.rand.nextInt(3) - 1);
-                    double d2 = j >= 3 ? nbttaglist.getDoubleAt(2) : (double) blockpos.getZ() + (world.rand.nextDouble() - world.rand.nextDouble()) * (double) this.spawnRange + 0.5D;
-                    Entity entity = AnvilChunkLoader.readWorldEntityPos(CompoundNBT, world, d0, d1, d2, false);
-
-                    if (entity == null) {
-                        return;
-                    }
-
-                    int k = world.getEntitiesWithinAABB(entity.getClass(), (new AxisAlignedBB((double) blockpos.getX(), (double) blockpos.getY(), (double) blockpos.getZ(), (double) (blockpos.getX() + 1), (double) (blockpos.getY() + 1), (double) (blockpos.getZ() + 1))).grow((double) this.spawnRange)).size();
-
-                    if (k >= this.maxNearbyEntities) {
+                    CompoundNBT compoundnbt = this.spawnData.getNbt();
+                    Optional<EntityType<?>> optional = EntityType.readEntityType(compoundnbt);
+                    if (!optional.isPresent()) {
                         this.resetTimer();
                         return;
                     }
 
-                    LivingEntity LivingEntity = entity instanceof LivingEntity ? (LivingEntity) entity : null;
-                    entity.setLocationAndAngles(entity.getPosX(), entity.getPosY(), entity.getPosZ(), world.rand.nextFloat() * 360.0F, 0.0F);
-
-                    if (LivingEntity == null || net.minecraftforge.event.ForgeEventFactory.canEntitySpawnSpawner(LivingEntity, getSpawnerWorld(), (float) entity.getPosX(), (float) entity.getPosY(), (float) entity.getPosZ(), this)) {
-                        if (this.spawnData.getNbt().getSize() == 1 && this.spawnData.getNbt().hasKey("id", 8) && entity instanceof LivingEntity) {
-                            if (!net.minecraftforge.event.ForgeEventFactory.doSpecialSpawn(LivingEntity, this.getSpawnerWorld(), (float) entity.getPosX(), (float) entity.getPosY(), (float) entity.getPosZ(), this))
-                                ((LivingEntity) entity).onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entity)), null);
+                    ListNBT listnbt = compoundnbt.getList("Pos", 6);
+                    int j = listnbt.size();
+                    double d0 = j >= 1 ? listnbt.getDouble(0) : (double)blockpos.getX() + (world.rand.nextDouble() - world.rand.nextDouble()) * (double)this.spawnRange + 0.5D;
+                    double d1 = j >= 2 ? listnbt.getDouble(1) : (double)(blockpos.getY() + world.rand.nextInt(3) - 1);
+                    double d2 = j >= 3 ? listnbt.getDouble(2) : (double)blockpos.getZ() + (world.rand.nextDouble() - world.rand.nextDouble()) * (double)this.spawnRange + 0.5D;
+                    if (world.func_226664_a_(optional.get().func_220328_a(d0, d1, d2)) && EntitySpawnPlacementRegistry.func_223515_a(optional.get(), world.getWorld(), SpawnReason.SPAWNER, new BlockPos(d0, d1, d2), world.getRandom())) {
+                        Entity entity = EntityType.func_220335_a(compoundnbt, world, (p_221408_6_) -> {
+                            p_221408_6_.setLocationAndAngles(d0, d1, d2, p_221408_6_.rotationYaw, p_221408_6_.rotationPitch);
+                            return p_221408_6_;
+                        });
+                        if (entity == null) {
+                            this.resetTimer();
+                            return;
                         }
 
-                        AnvilChunkLoader.spawnEntity(entity, world);
-                        world.playEvent(2004, blockpos, 0);
+                        int k = world.getEntitiesWithinAABB(entity.getClass(), (new AxisAlignedBB((double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ(), (double)(blockpos.getX() + 1), (double)(blockpos.getY() + 1), (double)(blockpos.getZ() + 1))).grow((double)this.spawnRange)).size();
+                        if (k >= this.maxNearbyEntities) {
+                            this.resetTimer();
+                            return;
+                        }
 
-                        if (LivingEntity != null) {
-                            LivingEntity.spawnExplosionParticle();
+                        entity.setLocationAndAngles(entity.getPosX(), entity.getPosY(), entity.getPosZ(), world.rand.nextFloat() * 360.0F, 0.0F);
+                        if (entity instanceof MobEntity) {
+                            MobEntity mobentity = (MobEntity)entity;
+                            if (!net.minecraftforge.event.ForgeEventFactory.canEntitySpawnSpawner(mobentity, world, (float)entity.getPosX(), (float)entity.getPosY(), (float)entity.getPosZ(), this)) {
+                                continue;
+                            }
+
+                            if (this.spawnData.getNbt().size() == 1 && this.spawnData.getNbt().contains("id", 8)) {
+                                ((MobEntity)entity).onInitialSpawn(world, world.getDifficultyForLocation(new BlockPos(entity)), SpawnReason.SPAWNER, (ILivingEntityData)null, (CompoundNBT)null);
+                            }
+                        }
+
+                        this.func_221409_a(entity);
+                        world.playEvent(2004, blockpos, 0);
+                        if (entity instanceof MobEntity) {
+                            ((MobEntity)entity).spawnExplosionParticle();
                         }
 
                         flag = true;
@@ -132,12 +143,21 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
         }
     }
 
+    private void func_221409_a(Entity entityIn) {
+        if (this.getWorld().addEntity(entityIn)) {
+            for(Entity entity : entityIn.getPassengers()) {
+                this.func_221409_a(entity);
+            }
+
+        }
+    }
+
     private void resetTimer() {
         if (this.maxSpawnDelay <= this.minSpawnDelay) {
             this.spawnDelay = this.minSpawnDelay;
         } else {
             int i = this.maxSpawnDelay - this.minSpawnDelay;
-            this.spawnDelay = this.minSpawnDelay + this.getSpawnerWorld().rand.nextInt(i);
+            this.spawnDelay = this.minSpawnDelay + this.getWorld().rand.nextInt(i);
         }
 
         if (!this.potentialSpawns.isEmpty()) {
@@ -150,67 +170,65 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
     public void read(CompoundNBT nbt) {
         this.spawnDelay = nbt.getShort("Delay");
         this.potentialSpawns.clear();
+        if (nbt.contains("SpawnPotentials", 9)) {
+            ListNBT listnbt = nbt.getList("SpawnPotentials", 10);
 
-        if (nbt.hasKey("SpawnPotentials", 9)) {
-            ListNBT nbttaglist = nbt.getList("SpawnPotentials", 10);
-
-            for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                this.potentialSpawns.add(new WeightedSpawnerEntity(nbttaglist.getCompoundTagAt(i)));
+            for(int i = 0; i < listnbt.size(); ++i) {
+                this.potentialSpawns.add(new WeightedSpawnerEntity(listnbt.getCompound(i)));
             }
         }
 
-        if (nbt.hasKey("SpawnData", 10)) {
-            this.setNextSpawnData(new WeightedSpawnerEntity(1, nbt.getCompoundTag("SpawnData")));
+        if (nbt.contains("SpawnData", 10)) {
+            this.setNextSpawnData(new WeightedSpawnerEntity(1, nbt.getCompound("SpawnData")));
         } else if (!this.potentialSpawns.isEmpty()) {
-            this.setNextSpawnData(WeightedRandom.getRandomItem(this.getSpawnerWorld().rand, this.potentialSpawns));
+            this.setNextSpawnData(WeightedRandom.getRandomItem(this.getWorld().rand, this.potentialSpawns));
         }
 
-        if (nbt.hasKey("MinSpawnDelay", 99)) {
+        if (nbt.contains("MinSpawnDelay", 99)) {
             this.minSpawnDelay = nbt.getShort("MinSpawnDelay");
             this.maxSpawnDelay = nbt.getShort("MaxSpawnDelay");
             this.spawnCount = nbt.getShort("SpawnCount");
         }
 
-        if (nbt.hasKey("MaxNearbyEntities", 99)) {
+        if (nbt.contains("MaxNearbyEntities", 99)) {
             this.maxNearbyEntities = nbt.getShort("MaxNearbyEntities");
             this.activatingRangeFromPlayer = nbt.getShort("RequiredPlayerRange");
         }
 
-        if (nbt.hasKey("SpawnRange", 99)) {
+        if (nbt.contains("SpawnRange", 99)) {
             this.spawnRange = nbt.getShort("SpawnRange");
         }
 
-        if (this.getSpawnerWorld() != null) {
+        if (this.getWorld() != null) {
             this.cachedEntity = null;
         }
+
     }
 
-    public CompoundNBT write(CompoundNBT p_189530_1_) {
+    public CompoundNBT write(CompoundNBT compound) {
         ResourceLocation resourcelocation = this.getEntityId();
-
         if (resourcelocation == null) {
-            return p_189530_1_;
+            return compound;
         } else {
-            p_189530_1_.setShort("Delay", (short) this.spawnDelay);
-            p_189530_1_.setShort("MinSpawnDelay", (short) this.minSpawnDelay);
-            p_189530_1_.setShort("MaxSpawnDelay", (short) this.maxSpawnDelay);
-            p_189530_1_.setShort("SpawnCount", (short) this.spawnCount);
-            p_189530_1_.setShort("MaxNearbyEntities", (short) this.maxNearbyEntities);
-            p_189530_1_.setShort("RequiredPlayerRange", (short) this.activatingRangeFromPlayer);
-            p_189530_1_.setShort("SpawnRange", (short) this.spawnRange);
-            p_189530_1_.setTag("SpawnData", this.spawnData.getNbt().copy());
-            ListNBT nbttaglist = new ListNBT();
-
+            compound.putShort("Delay", (short)this.spawnDelay);
+            compound.putShort("MinSpawnDelay", (short)this.minSpawnDelay);
+            compound.putShort("MaxSpawnDelay", (short)this.maxSpawnDelay);
+            compound.putShort("SpawnCount", (short)this.spawnCount);
+            compound.putShort("MaxNearbyEntities", (short)this.maxNearbyEntities);
+            compound.putShort("RequiredPlayerRange", (short)this.activatingRangeFromPlayer);
+            compound.putShort("SpawnRange", (short)this.spawnRange);
+            compound.put("SpawnData", this.spawnData.getNbt().copy());
+            ListNBT listnbt = new ListNBT();
             if (this.potentialSpawns.isEmpty()) {
-                nbttaglist.appendTag(this.spawnData.toCompoundTag());
+                listnbt.add(this.spawnData.toCompoundTag());
             } else {
-                for (WeightedSpawnerEntity weightedspawnerentity : this.potentialSpawns) {
-                    nbttaglist.appendTag(weightedspawnerentity.toCompoundTag());
+                for(WeightedSpawnerEntity weightedspawnerentity : this.potentialSpawns) {
+                    listnbt.add(weightedspawnerentity.toCompoundTag());
                 }
             }
 
-            p_189530_1_.setTag("SpawnPotentials", nbttaglist);
-            return p_189530_1_;
+            compound.put("SpawnPotentials", listnbt);
+            return compound;
         }
     }
 
@@ -218,7 +236,7 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
      * Sets the delay to minDelay if parameter given is 1, else return false.
      */
     public boolean setDelayToMin(int delay) {
-        if (delay == 1 && this.getSpawnerWorld().isRemote) {
+        if (delay == 1 && this.getWorld().isRemote) {
             this.spawnDelay = this.minSpawnDelay;
             return true;
         } else {
@@ -229,10 +247,9 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
     @OnlyIn(Dist.CLIENT)
     public Entity getCachedEntity() {
         if (this.cachedEntity == null) {
-            this.cachedEntity = AnvilChunkLoader.readWorldEntity(this.spawnData.getNbt(), this.getSpawnerWorld(), false);
-
-            if (this.spawnData.getNbt().getSize() == 1 && this.spawnData.getNbt().hasKey("id", 8) && this.cachedEntity instanceof LivingEntity) {
-                ((LivingEntity) this.cachedEntity).onInitialSpawn(this.getSpawnerWorld().getDifficultyForLocation(new BlockPos(this.cachedEntity)), null);
+            this.cachedEntity = EntityType.func_220335_a(this.spawnData.getNbt(), this.getWorld(), Function.identity());
+            if (this.spawnData.getNbt().size() == 1 && this.spawnData.getNbt().contains("id", 8) && this.cachedEntity instanceof MobEntity) {
+                ((MobEntity)this.cachedEntity).onInitialSpawn(this.getWorld(), this.getWorld().getDifficultyForLocation(new BlockPos(this.cachedEntity)), SpawnReason.SPAWNER, (ILivingEntityData)null, (CompoundNBT)null);
             }
         }
 
@@ -244,8 +261,6 @@ public abstract class DreadSpawnerBaseLogic extends MobSpawnerBaseLogic {
     }
 
     public abstract void broadcastEvent(int id);
-
-    public abstract World getSpawnerWorld();
 
     public abstract BlockPos getSpawnerPosition();
 

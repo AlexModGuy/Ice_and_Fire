@@ -2,12 +2,14 @@ package com.github.alexthe666.iceandfire.entity.tile;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -16,12 +18,16 @@ public class TileEntityDreadPortal extends TileEntity {
     private BlockPos exitPortal;
     private boolean exactTeleport;
 
+    public TileEntityDreadPortal() {
+        super(IafTileEntityRegistry.DREAD_PORTAL);
+    }
+
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
-        compound.setLong("Age", this.age);
+        compound.putLong("Age", this.age);
 
         if (this.exitPortal != null) {
-            compound.setTag("ExitPortal", NBTUtil.createPosTag(this.exitPortal));
+         //   compound.setTag("ExitPortal", NBTUtil.createPosTag(this.exitPortal));
         }
 
         if (this.exactTeleport) {
@@ -35,8 +41,8 @@ public class TileEntityDreadPortal extends TileEntity {
         super.read(compound);
         this.age = compound.getLong("Age");
 
-        if (compound.hasKey("ExitPortal", 10)) {
-            this.exitPortal = NBTUtil.getPosFromTag(compound.getCompoundTag("ExitPortal"));
+        if (compound.contains("ExitPortal", 10)) {
+            this.exitPortal = BlockPos.ZERO;
         }
 
         this.exactTeleport = compound.getBoolean("ExactTeleport");
@@ -51,9 +57,14 @@ public class TileEntityDreadPortal extends TileEntity {
         ++this.age;
     }
 
-    @Nullable
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        return new SPacketUpdateTileEntity(this.pos, 8, this.getUpdateTag());
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+        read(packet.getNbtCompound());
     }
 
     public CompoundNBT getUpdateTag() {
@@ -62,6 +73,6 @@ public class TileEntityDreadPortal extends TileEntity {
 
     @OnlyIn(Dist.CLIENT)
     public boolean shouldRenderFace(Direction p_184313_1_) {
-        return this.getBlockType().getDefaultState().shouldSideBeRendered(this.world, this.getPos(), p_184313_1_);
+        return true;
     }
 }

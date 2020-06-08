@@ -1,29 +1,37 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
+import com.github.alexthe666.iceandfire.inventory.ContainerPodium;
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
 import com.github.alexthe666.iceandfire.item.ItemMyrmexEgg;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePodium;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.IntData;
+import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ITickable;
+import net.minecraft.util.IntArray;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-public class TileEntityPodium extends TileEntity implements ITickable, ISidedInventory {
+public class TileEntityPodium extends LockableTileEntity implements ITickable, ISidedInventory {
     private static final int[] slotsTop = new int[]{0};
     public int ticksExisted;
     public int prevTicksExisted;
@@ -31,8 +39,12 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
     net.minecraftforge.items.IItemHandler handlerDown = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, Direction.DOWN);
     private NonNullList<ItemStack> stacks = NonNullList.withSize(1, ItemStack.EMPTY);
 
+    public TileEntityPodium() {
+        super(IafTileEntityRegistry.PODIUM);
+    }
+
     @Override
-    public void update() {
+    public void tick() {
         prevTicksExisted = ticksExisted;
         ticksExisted++;
     }
@@ -62,7 +74,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
                 this.stacks.set(index, ItemStack.EMPTY);
                 return itemstack;
             } else {
-                itemstack = this.stacks.get(index).splitStack(count);
+                itemstack = this.stacks.get(index).split(count);
 
                 if (this.stacks.get(index).isEmpty()) {
                     this.stacks.set(index, ItemStack.EMPTY);
@@ -133,27 +145,8 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
     }
 
     @Override
-    public int getField(int id) {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 4;
-    }
-
-    @Override
     public void clear() {
         this.stacks.clear();
-    }
-
-    @Override
-    public String getName() {
-        return "tile.iceandfire.podium.name";
     }
 
     @Override
@@ -177,22 +170,17 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
     }
 
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        CompoundNBT tag = new CompoundNBT();
-        this.write(tag);
-        return new SPacketUpdateTileEntity(pos, 1, tag);
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+        read(packet.getNbtCompound());
     }
 
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        read(packet.getNbtCompound());
-        if (!world.isRemote) {
-            IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePodium(pos.toLong(), this.getStackInSlot(0)));
-        }
     }
 
     @Override
@@ -202,7 +190,17 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
     @Override
     public ITextComponent getDisplayName() {
-        return this.hasCustomName() ? new TextComponentString(this.getName()) : new TranslationTextComponent(this.getName());
+        return getDefaultName();
+    }
+
+    @Override
+    protected ITextComponent getDefaultName() {
+        return new TranslationTextComponent("tile.iceandfire.podium.name");
+    }
+
+    @Override
+    protected Container createMenu(int id, PlayerInventory player) {
+        return null;
     }
 
     @Override
@@ -215,20 +213,23 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
         return true;
     }
 
-    @SuppressWarnings("unchecked")
+    net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
+            net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN);
+
     @Override
-    @javax.annotation.Nullable
-    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @javax.annotation.Nullable net.minecraft.util.Direction facing) {
-        if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
+        if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (facing == Direction.DOWN)
-                return (T) handlerDown;
+                return handlers[1].cast();
             else
-                return (T) handlerUp;
+                return handlers[0].cast();
+        }
         return super.getCapability(capability, facing);
     }
 
+    @Nullable
     @Override
-    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.Direction facing) {
-        return getCapability(capability, facing) != null;
+    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
+        return new ContainerPodium(id, this, playerInventory, new IntArray(0));
     }
 }

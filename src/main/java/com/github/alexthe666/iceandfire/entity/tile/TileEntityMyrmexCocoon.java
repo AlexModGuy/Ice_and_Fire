@@ -1,21 +1,20 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import com.github.alexthe666.iceandfire.inventory.ContainerMyrmexCocoon;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.inventory.container.ChestContainer;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.LockableLootTileEntity;
-import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.world.WorldServer;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 
@@ -27,6 +26,10 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
     private NonNullList<ItemStack> chestContents = NonNullList.withSize(18, ItemStack.EMPTY);
 
+    protected TileEntityMyrmexCocoon() {
+        super(IafTileEntityRegistry.MYRMEX_COCOON);
+    }
+
     public int getSizeInventory() {
         return 18;
     }
@@ -37,14 +40,9 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
                 return false;
             }
         }
-
         return true;
     }
 
-    public String getName() {
-        Block block = world.getBlockState(this.pos).getBlock();
-        return this.hasCustomName() ? this.customName : block.getTranslationKey() + ".name";
-    }
 
     public void read(CompoundNBT compound) {
         super.read(compound);
@@ -52,10 +50,6 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
         if (!this.checkLootAndRead(compound)) {
             ItemStackHelper.loadAllItems(compound, this.chestContents);
-        }
-
-        if (compound.hasKey("CustomName", 8)) {
-            this.customName = compound.getString("CustomName");
         }
     }
 
@@ -65,29 +59,32 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
             ItemStackHelper.saveAllItems(compound, this.chestContents);
         }
 
-        if (this.hasCustomName()) {
-            compound.setString("CustomName", this.customName);
-        }
-
         return compound;
+    }
+
+    @Override
+    protected ITextComponent getDefaultName() {
+        return null;
+    }
+
+    @Override
+    protected Container createMenu(int id, PlayerInventory player) {
+        return ChestContainer.createGeneric9X2(id, player);
     }
 
     public int getInventoryStackLimit() {
         return 64;
     }
 
-    public Container createContainer(InventoryPlayer playerInventory, PlayerEntity playerIn) {
-        this.fillWithLoot(playerIn);
-        return new ContainerMyrmexCocoon(playerInventory, this, playerIn);
-    }
 
-    @Override
-    public String getGuiID() {
-        return "iceandfire:storage";
-    }
 
     protected NonNullList<ItemStack> getItems() {
         return this.chestContents;
+    }
+
+    @Override
+    protected void setItems(NonNullList<ItemStack> itemsIn) {
+
     }
 
     public void openInventory(PlayerEntity player) {
@@ -101,42 +98,17 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
     }
 
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        CompoundNBT tag = new CompoundNBT();
-        this.write(tag);
-        return new SPacketUpdateTileEntity(this.pos, 0, tag);
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
     }
 
     @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+        read(packet.getNbtCompound());
+    }
+
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
-    }
-
-    public void fillWithLoot(@Nullable PlayerEntity player) {
-        if (this.lootTable != null && this.world != null && this.world.getLootTableManager() != null) {
-            LootTable loottable = this.world.getLootTableManager().getLootTableFromLocation(this.lootTable);
-            this.lootTable = null;
-            Random random;
-
-            if (this.lootTableSeed == 0L) {
-                random = new Random();
-            } else {
-                random = new Random(this.lootTableSeed);
-            }
-
-            LootContext.Builder lootcontext$builder = new LootContext.Builder((WorldServer) this.world);
-
-            if (player != null) {
-                lootcontext$builder.withLuck(player.getLuck()).withPlayer(player); // Forge: add player to LootContext
-            }
-
-            loottable.fillInventory(this, random, lootcontext$builder.build());
-        }
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager netManager, SPacketUpdateTileEntity packet) {
-        this.read(packet.getNbtCompound());
     }
 
     public boolean isFull(ItemStack heldStack) {

@@ -2,16 +2,17 @@ package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
+import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 
 import java.util.Random;
@@ -31,6 +32,7 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
     private Random rand;
 
     public TileEntityPixieHouse() {
+        super(IafTileEntityRegistry.PIXIE_HOUSE);
         this.rand = new Random();
     }
 
@@ -41,29 +43,27 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
         compound.putInt("PixieType", pixieType);
         compound.putBoolean("TamedPixie", tamedPixie);
         if (pixieOwnerUUID != null) {
-            compound.setUniqueId("PixieOwnerUUID", pixieOwnerUUID);
+            compound.putUniqueId("PixieOwnerUUID", pixieOwnerUUID);
         }
         ItemStackHelper.saveAllItems(compound, this.pixieItems);
         return compound;
     }
 
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        CompoundNBT tag = new CompoundNBT();
-        this.write(tag);
-        return new SPacketUpdateTileEntity(pos, 1, tag);
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+        read(packet.getNbtCompound());
+        if (!world.isRemote) {
+            IceAndFire.sendMSGToAll(new MessageUpdatePixieHouseModel(pos.toLong(), packet.getNbtCompound().getInt("HouseType")));
+        }
     }
 
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        read(packet.getNbtCompound());
-        if (!world.isRemote) {
-            IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieHouseModel(pos.toLong(), packet.getNbtCompound().getInt("HouseType")));
-        }
     }
 
     public void read(CompoundNBT compound) {
@@ -78,7 +78,7 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
     }
 
     @Override
-    public void update() {
+    public void tick() {
         ticksExisted++;
         if (!world.isRemote && this.hasPixie && new Random().nextInt(100) == 0) {
             releasePixie();
@@ -89,12 +89,12 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
     }
 
     public void releasePixie() {
-        EntityPixie pixie = new EntityPixie(this.world);
+        EntityPixie pixie = new EntityPixie(IafEntityRegistry.PIXIE, this.world);
         pixie.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 1F, this.pos.getZ() + 0.5F, new Random().nextInt(360), 0);
         pixie.setHeldItem(Hand.MAIN_HAND, pixieItems.get(0));
         pixie.setColor(this.pixieType);
         if (!world.isRemote) {
-            world.spawnEntity(pixie);
+            world.addEntity(pixie);
         }
         this.hasPixie = false;
         this.pixieType = 0;
@@ -102,7 +102,7 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
         pixie.setTamed(this.tamedPixie);
         pixie.setOwnerId(this.pixieOwnerUUID);
         if (!world.isRemote) {
-            IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieHouse(pos.toLong(), false, 0));
+            IceAndFire.sendMSGToAll(new MessageUpdatePixieHouse(pos.toLong(), false, 0));
         }
     }
 }
