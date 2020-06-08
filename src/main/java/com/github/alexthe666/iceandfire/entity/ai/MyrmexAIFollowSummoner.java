@@ -1,16 +1,17 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import java.util.EnumSet;
 
 public class MyrmexAIFollowSummoner extends Goal {
     private final EntityMyrmexSwarmer tameable;
@@ -28,7 +29,7 @@ public class MyrmexAIFollowSummoner extends Goal {
         this.followSpeed = followSpeedIn;
         this.minDist = minDistIn;
         this.maxDist = maxDistIn;
-        this.setMutexBits(3);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
@@ -49,7 +50,7 @@ public class MyrmexAIFollowSummoner extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return this.tameable.getAttackTarget() == null && this.tameable.getMoveHelper().action != EntityMoveHelper.Action.WAIT && this.tameable.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist);
+        return this.tameable.getAttackTarget() == null && this.tameable.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist);
     }
 
     public void startExecuting() {
@@ -61,12 +62,11 @@ public class MyrmexAIFollowSummoner extends Goal {
     public void resetTask() {
         this.owner = null;
         this.tameable.setPathPriority(PathNodeType.WATER, this.oldWaterCost);
-        this.tameable.getMoveHelper().action = EntityMoveHelper.Action.WAIT;
     }
 
     private boolean isEmptyBlock(BlockPos pos) {
         BlockState BlockState = this.world.getBlockState(pos);
-        return BlockState.getMaterial() == Material.AIR || !BlockState.isFullCube();
+        return BlockState.getMaterial() == Material.AIR || !BlockState.isSolid();
     }
 
     @SuppressWarnings("deprecation")

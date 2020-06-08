@@ -8,16 +8,18 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.EnumSet;
+
 public class MyrmexAIStoreBabies extends Goal {
     private final EntityMyrmexWorker myrmex;
     private final double movementSpeed;
     private Path path;
-    private BlockPos nextRoom = BlockPos.ORIGIN;
+    private BlockPos nextRoom = BlockPos.ZERO;
 
     public MyrmexAIStoreBabies(EntityMyrmexWorker entityIn, double movementSpeedIn) {
         this.myrmex = entityIn;
         this.movementSpeed = movementSpeedIn;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
@@ -34,7 +36,7 @@ public class MyrmexAIStoreBabies extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return this.myrmex.holdingBaby() && !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(nextRoom) > 3 && this.myrmex.shouldEnterHive();
+        return this.myrmex.holdingBaby() && !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(nextRoom.getX() + 0.5D, nextRoom.getY() + 0.5D, nextRoom.getZ() + 0.5D) > 3 && this.myrmex.shouldEnterHive();
     }
 
     public void startExecuting() {
@@ -43,10 +45,10 @@ public class MyrmexAIStoreBabies extends Goal {
     @Override
     public void tick() {
         this.myrmex.getNavigator().tryMoveToXYZ(this.nextRoom.getX(), this.nextRoom.getY(), this.nextRoom.getZ(), 1.5F);
-        if (nextRoom != null && this.myrmex.getDistanceSq(nextRoom) < 4 && this.myrmex.holdingBaby()) {
+        if (nextRoom != null && this.myrmex.getDistanceSq(nextRoom.getX() + 0.5D, nextRoom.getY() + 0.5D, nextRoom.getZ() + 0.5D) < 4 && this.myrmex.holdingBaby()) {
             if (!this.myrmex.getPassengers().isEmpty()) {
                 for (Entity entity : this.myrmex.getPassengers()) {
-                    entity.dismountRidingEntity();
+                    entity.stopRiding();
                     resetTask();
                     entity.copyLocationAndAnglesFrom(this.myrmex);
                 }
@@ -55,7 +57,7 @@ public class MyrmexAIStoreBabies extends Goal {
     }
 
     public void resetTask() {
-        nextRoom = BlockPos.ORIGIN;
+        nextRoom = BlockPos.ZERO;
         this.myrmex.getNavigator().setPath(null, this.movementSpeed);
     }
 

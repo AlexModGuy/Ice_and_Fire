@@ -6,9 +6,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.gen.Heightmap;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 public class MyrmexAIFindHidingSpot extends Goal {
@@ -16,7 +19,7 @@ public class MyrmexAIFindHidingSpot extends Goal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super Entity> targetEntitySelector;
     private final EntityMyrmexSentinel myrmex;
-    private BlockPos targetBlock = BlockPos.ORIGIN;
+    private BlockPos targetBlock = BlockPos.ZERO;
     private int wanderRadius = RADIUS;
 
     public MyrmexAIFindHidingSpot(EntityMyrmexSentinel myrmex) {
@@ -29,6 +32,7 @@ public class MyrmexAIFindHidingSpot extends Goal {
             }
         };
         this.myrmex = myrmex;
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
@@ -46,7 +50,7 @@ public class MyrmexAIFindHidingSpot extends Goal {
     public void tick() {
         if (areMyrmexNear(RADIUS) || this.myrmex.isOnResin()) {
             this.myrmex.getNavigator().tryMoveToXYZ(this.targetBlock.getX() + 0.5D, this.targetBlock.getY(), this.targetBlock.getZ() + 0.5D, 1D);
-            if (this.myrmex.getDistanceSqToCenter(this.targetBlock) < 2) {
+            if (this.myrmex.getDistanceSq(new Vec3d(this.targetBlock)) < 2) {
                 this.wanderRadius += RADIUS;
                 this.targetBlock = getTargetPosition(wanderRadius);
             }
@@ -60,7 +64,7 @@ public class MyrmexAIFindHidingSpot extends Goal {
     }
 
     public void resetTask() {
-        this.targetBlock = BlockPos.ORIGIN;
+        this.targetBlock = BlockPos.ZERO;
         wanderRadius = RADIUS;
     }
 
@@ -71,7 +75,7 @@ public class MyrmexAIFindHidingSpot extends Goal {
     public BlockPos getTargetPosition(int radius) {
         int x = (int) myrmex.getPosX() + myrmex.getRNG().nextInt(radius * 2) - radius;
         int z = (int) myrmex.getPosZ() + myrmex.getRNG().nextInt(radius * 2) - radius;
-        return myrmex.world.getHeight(new BlockPos(x, 0, z));
+        return myrmex.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, new BlockPos(x, 0, z));
     }
 
     private boolean areMyrmexNear(double distance) {

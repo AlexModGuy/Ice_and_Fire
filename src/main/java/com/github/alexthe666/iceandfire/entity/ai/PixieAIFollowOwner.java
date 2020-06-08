@@ -1,16 +1,17 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import java.util.EnumSet;
 
 public class PixieAIFollowOwner extends Goal {
     private final EntityPixie tameable;
@@ -28,7 +29,7 @@ public class PixieAIFollowOwner extends Goal {
         this.followSpeed = followSpeedIn;
         this.minDist = minDistIn;
         this.maxDist = maxDistIn;
-        this.setMutexBits(3);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
@@ -49,7 +50,7 @@ public class PixieAIFollowOwner extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return this.tameable.getMoveHelper().action != EntityMoveHelper.Action.WAIT || this.tameable.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist) && !this.tameable.isSitting();
+        return this.tameable.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist) && !this.tameable.isSitting();
     }
 
     public void startExecuting() {
@@ -61,13 +62,12 @@ public class PixieAIFollowOwner extends Goal {
     public void resetTask() {
         this.owner = null;
         this.tameable.setPathPriority(PathNodeType.WATER, this.oldWaterCost);
-        this.tameable.getMoveHelper().action = EntityMoveHelper.Action.WAIT;
         this.tameable.slowSpeed = false;
     }
 
     private boolean isEmptyBlock(BlockPos pos) {
         BlockState BlockState = this.world.getBlockState(pos);
-        return BlockState.getMaterial() == Material.AIR || !BlockState.isFullCube();
+        return BlockState.getMaterial() == Material.AIR || !BlockState.isSolid();
     }
 
     @SuppressWarnings("deprecation")
@@ -90,7 +90,6 @@ public class PixieAIFollowOwner extends Goal {
                             for (int i1 = 0; i1 <= 4; ++i1) {
                                 if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.isEmptyBlock(new BlockPos(i + l, k, j + i1)) && this.isEmptyBlock(new BlockPos(i + l, k + 1, j + i1))) {
                                     this.tameable.setLocationAndAngles((double) ((float) (i + l) + 0.5F), (double) k + 1.5, (double) ((float) (j + i1) + 0.5F), this.tameable.rotationYaw, this.tameable.rotationPitch);
-                                    this.tameable.getMoveHelper().action = EntityMoveHelper.Action.WAIT;
                                     return;
                                 }
                             }

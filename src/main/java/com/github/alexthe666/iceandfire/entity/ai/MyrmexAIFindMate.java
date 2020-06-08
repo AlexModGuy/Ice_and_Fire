@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.entity.MyrmexHive;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -14,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
 
 public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
@@ -32,7 +32,7 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
             }
         };
         this.myrmex = myrmex;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override

@@ -10,16 +10,18 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.EnumSet;
+
 public class MyrmexAILeaveHive extends Goal {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;
     private Path path;
-    private BlockPos nextEntrance = BlockPos.ORIGIN;
+    private BlockPos nextEntrance = BlockPos.ZERO;
 
     public MyrmexAILeaveHive(EntityMyrmexBase entityIn, double movementSpeedIn) {
         this.myrmex = entityIn;
         this.movementSpeed = movementSpeedIn;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
@@ -38,17 +40,17 @@ public class MyrmexAILeaveHive extends Goal {
             return false;
         } else {
             nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, village.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), true));
-            this.path = this.myrmex.getNavigator().getPathToPos(nextEntrance);
+            this.path = this.myrmex.getNavigator().getPathToPos(nextEntrance, 0);
             return this.path != null;
         }
     }
 
     public boolean shouldContinueExecuting() {
 
-        if (this.myrmex.getDistanceSq(nextEntrance) <= 3 || this.myrmex.shouldEnterHive()) {
+        if (this.myrmex.getDistanceSq(nextEntrance.getX() + 0.5D, nextEntrance.getY() + 0.5D, nextEntrance.getZ() + 0.5D) <= 3 || this.myrmex.shouldEnterHive()) {
             return false;
         }
-        return !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(nextEntrance) > 3 && this.myrmex.shouldLeaveHive();
+        return !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(nextEntrance.getX() + 0.5D, nextEntrance.getY() + 0.5D, nextEntrance.getZ() + 0.5D) > 3 && this.myrmex.shouldLeaveHive();
     }
 
     public void startExecuting() {
@@ -56,7 +58,7 @@ public class MyrmexAILeaveHive extends Goal {
     }
 
     public void resetTask() {
-        nextEntrance = BlockPos.ORIGIN;
+        nextEntrance = BlockPos.ZERO;
         this.myrmex.getNavigator().setPath(null, this.movementSpeed);
     }
 }

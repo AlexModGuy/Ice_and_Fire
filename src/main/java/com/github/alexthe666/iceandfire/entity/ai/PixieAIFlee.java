@@ -5,15 +5,15 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 import java.util.List;
 
 public class PixieAIFlee<T extends Entity> extends Goal {
@@ -30,12 +30,12 @@ public class PixieAIFlee<T extends Entity> extends Goal {
         this.classToAvoid = classToAvoidIn;
         this.canBeSeenSelector = new Predicate<Entity>() {
             public boolean apply(@Nullable Entity entity) {
-                return entity.isEntityAlive() && PixieAIFlee.this.pixie.getEntitySenses().canSee(entity) && !PixieAIFlee.this.pixie.isOnSameTeam(entity);
+                return entity.isAlive() && PixieAIFlee.this.pixie.getEntitySenses().canSee(entity) && !PixieAIFlee.this.pixie.isOnSameTeam(entity);
             }
         };
         this.avoidTargetSelector = avoidTargetSelectorIn;
         this.avoidDistance = avoidDistanceIn;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
 
@@ -47,7 +47,7 @@ public class PixieAIFlee<T extends Entity> extends Goal {
             return false;
         }
         List<T> list = this.pixie.world.getEntitiesWithinAABB(this.classToAvoid, this.pixie.getBoundingBox().grow((double) this.avoidDistance, 3.0D, (double) this.avoidDistance),
-                Predicates.and(new Predicate[]{EntitySelectors.NOT_SPECTATING, this.canBeSeenSelector, this.avoidTargetSelector}));
+                EntityPredicates.NOT_SPECTATING);
 
         if (list.isEmpty()) {
             return false;
@@ -72,7 +72,7 @@ public class PixieAIFlee<T extends Entity> extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return hidePlace != null && this.pixie.getDistanceSqToCenter(new BlockPos(hidePlace)) < 2;
+        return hidePlace != null && this.pixie.getDistanceSq(hidePlace.add(0.5, 0.5, 0.5)) < 2;
     }
 
     public void startExecuting() {
@@ -81,7 +81,6 @@ public class PixieAIFlee<T extends Entity> extends Goal {
     }
 
     public void resetTask() {
-        this.pixie.getMoveHelper().action = EntityMoveHelper.Action.WAIT;
         this.closestLivingEntity = null;
         pixie.slowSpeed = false;
     }

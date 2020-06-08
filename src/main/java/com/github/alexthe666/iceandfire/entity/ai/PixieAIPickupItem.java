@@ -4,17 +4,16 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.EntityAITarget;
-import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Items;
+import net.minecraft.item.Items;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
 
 public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
@@ -39,8 +38,6 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
                 return item instanceof ItemEntity && !item.getItem().isEmpty() && (item.getItem().getItem() == Items.CAKE && !creature.isTamed() || item.getItem().getItem() == Items.SUGAR && creature.isTamed() && creature.getHealth() < creature.getMaxHealth());
             }
         };
-        this.setMutexBits(3);
-
     }
 
     @Override
@@ -72,17 +69,17 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
     @Override
     public void tick() {
         super.tick();
-        if (this.targetEntity == null || this.targetEntity != null && this.targetEntity.isDead) {
+        if (this.targetEntity == null || this.targetEntity != null && this.targetEntity.isAlive()) {
             this.resetTask();
         }
-        if (this.targetEntity != null && !this.targetEntity.isDead && this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
+        if (this.targetEntity != null && !this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
             EntityPixie pixie = (EntityPixie) this.goalOwner;
             if (this.targetEntity.getItem() != null && this.targetEntity.getItem().getItem() != null && this.targetEntity.getItem().getItem() == Items.SUGAR) {
                 pixie.heal(5);
             }
             if (this.targetEntity.getItem() != null && this.targetEntity.getItem().getItem() != null && this.targetEntity.getItem().getItem() == Items.CAKE) {
-                if (!pixie.isTamed() && this.targetEntity.getThrower() != null && !this.targetEntity.getThrower().isEmpty() && this.goalOwner.world.getPlayerEntityByName(this.targetEntity.getThrower()) != null) {
-                    PlayerEntity owner = this.goalOwner.world.getPlayerEntityByName(this.targetEntity.getThrower());
+                if (!pixie.isTamed() && this.targetEntity.getThrowerId() != null && this.goalOwner.world.getPlayerByUuid(this.targetEntity.getThrowerId()) != null) {
+                    PlayerEntity owner = this.goalOwner.world.getPlayerByUuid(this.targetEntity.getThrowerId());
                     pixie.setTamed(true);
                     pixie.setOwnerId(owner.getUniqueID());
                     pixie.setSitting(true);
@@ -96,7 +93,7 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return goalOwner.getMoveHelper().action != EntityMoveHelper.Action.WAIT;
+        return true;
     }
 
     public static class Sorter implements Comparator<Entity> {

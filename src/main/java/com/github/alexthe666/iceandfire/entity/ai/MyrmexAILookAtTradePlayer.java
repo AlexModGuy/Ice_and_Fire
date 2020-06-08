@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -14,7 +13,7 @@ public class MyrmexAILookAtTradePlayer extends LookAtGoal {
     }
 
     public boolean shouldExecute() {
-        if (this.myrmex.isTrading()) {
+        if (this.myrmex.hasCustomer()) {
             this.closestEntity = this.myrmex.getCustomer();
             return true;
         } else {

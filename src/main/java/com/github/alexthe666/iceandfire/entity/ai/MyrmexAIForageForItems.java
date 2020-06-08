@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.util.Hand;
@@ -12,6 +11,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
 
 public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
@@ -30,7 +30,7 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
             }
         };
         this.myrmex = myrmex;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
@@ -61,13 +61,13 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
     @Override
     public void tick() {
         super.tick();
-        if (this.targetEntity == null || this.targetEntity != null && (this.targetEntity.isDead || this.targetEntity.isInWater())) {
+        if (this.targetEntity == null || this.targetEntity != null && (!this.targetEntity.isAlive() || this.targetEntity.isInWater())) {
             this.resetTask();
         }
-        if (this.targetEntity != null && !this.targetEntity.isDead && this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
+        if (this.targetEntity != null && !this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
             this.myrmex.onPickupItem(targetEntity);
             this.myrmex.setHeldItem(Hand.MAIN_HAND, this.targetEntity.getItem());
-            this.targetEntity.setDead();
+            this.targetEntity.remove();
             resetTask();
         }
     }

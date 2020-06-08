@@ -13,7 +13,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MyrmexAIStoreItems extends Goal {
     private final EntityMyrmexBase myrmex;
@@ -26,7 +28,7 @@ public class MyrmexAIStoreItems extends Goal {
     public MyrmexAIStoreItems(EntityMyrmexBase entityIn, double movementSpeedIn) {
         this.myrmex = entityIn;
         this.movementSpeed = movementSpeedIn;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
@@ -46,7 +48,7 @@ public class MyrmexAIStoreItems extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && nextCocoon != null && isUseableCocoon(nextCocoon) && this.myrmex.getDistanceSq(nextCocoon) > 3 && this.myrmex.shouldEnterHive();
+        return !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && nextCocoon != null && isUseableCocoon(nextCocoon) && this.myrmex.getDistanceSq(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D) > 3 && this.myrmex.shouldEnterHive();
     }
 
     @Override
@@ -56,7 +58,7 @@ public class MyrmexAIStoreItems extends Goal {
                 this.myrmex.getNavigator().tryMoveToXYZ(mainRoom.getX() + 0.5D, mainRoom.getY() + 0.5D, mainRoom.getZ() + 0.5D, this.movementSpeed);
 
             }
-            if (this.myrmex.getDistanceSq(mainRoom) < 10D) {
+            if (this.myrmex.getDistanceSq(mainRoom.getX() + 0.5D, mainRoom.getY() + 0.5D, mainRoom.getZ() + 0.5D) < 10D) {
                 first = false;
                 return;
             }
@@ -65,7 +67,7 @@ public class MyrmexAIStoreItems extends Goal {
             if(this.myrmex.getNavigator().noPath()) {
                 this.myrmex.getNavigator().tryMoveToXYZ(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D, this.movementSpeed);
             }
-            if (this.myrmex.getDistanceSq(nextCocoon) < 5.5D && !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
+            if (this.myrmex.getDistanceSq(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D) < 5.5D && !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
                 TileEntityMyrmexCocoon cocoon = (TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(nextCocoon);
                 ItemStack itemstack = this.myrmex.getHeldItem(Hand.MAIN_HAND);
                 if (!itemstack.isEmpty()) {
@@ -112,7 +114,7 @@ public class MyrmexAIStoreItems extends Goal {
         int RADIUS_XZ = 15;
         int RADIUS_Y = 7;
         List<BlockPos> closeCocoons = new ArrayList<BlockPos>();
-        for (BlockPos blockpos : BlockPos.getAllInBox(roomCenter.add(-RADIUS_XZ, -RADIUS_Y, -RADIUS_XZ), roomCenter.add(RADIUS_XZ, RADIUS_Y, RADIUS_XZ))) {
+        for (BlockPos blockpos : BlockPos.getAllInBox(roomCenter.add(-RADIUS_XZ, -RADIUS_Y, -RADIUS_XZ), roomCenter.add(RADIUS_XZ, RADIUS_Y, RADIUS_XZ)).collect(Collectors.toList())) {
             TileEntity te = this.myrmex.world.getTileEntity(blockpos);
             if (te != null && te instanceof TileEntityMyrmexCocoon) {
                 if (!((TileEntityMyrmexCocoon) te).isFull(this.myrmex.getHeldItem(Hand.MAIN_HAND))) {

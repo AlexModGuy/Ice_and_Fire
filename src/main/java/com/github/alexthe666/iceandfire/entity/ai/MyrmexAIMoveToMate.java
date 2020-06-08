@@ -4,6 +4,8 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexRoyal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 
+import java.util.EnumSet;
+
 public class MyrmexAIMoveToMate extends Goal {
     private final EntityMyrmexRoyal myrmex;
     private final double movementSpeed;
@@ -12,7 +14,7 @@ public class MyrmexAIMoveToMate extends Goal {
     public MyrmexAIMoveToMate(EntityMyrmexRoyal entityIn, double movementSpeedIn) {
         this.myrmex = entityIn;
         this.movementSpeed = movementSpeedIn;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
@@ -26,7 +28,7 @@ public class MyrmexAIMoveToMate extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return this.myrmex.canMove() && this.myrmex.getAttackTarget() == null && this.myrmex.mate != null && this.myrmex.mate.isEntityAlive() && (this.myrmex.getDistance(this.myrmex.mate) < 15 || !this.myrmex.getNavigator().noPath());
+        return this.myrmex.canMove() && this.myrmex.getAttackTarget() == null && this.myrmex.mate != null && this.myrmex.mate.isAlive() && (this.myrmex.getDistance(this.myrmex.mate) < 15 || !this.myrmex.getNavigator().noPath());
     }
 
 }

@@ -4,19 +4,21 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 
+import java.util.EnumSet;
+
 public class MyrmexAITradePlayer extends Goal {
     private final EntityMyrmexBase myrmex;
 
     public MyrmexAITradePlayer(EntityMyrmexBase myrmex) {
         this.myrmex = myrmex;
-        this.setMutexBits(5);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     /**
      * Returns whether the Goal should begin execution.
      */
     public boolean shouldExecute() {
-        if (!this.myrmex.isEntityAlive()) {
+        if (!this.myrmex.isAlive()) {
             return false;
         } else if (this.myrmex.isInWater()) {
             return false;

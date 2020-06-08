@@ -1,9 +1,11 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
+import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.ai.goal.TargetGoal;
+
+import java.util.EnumSet;
 
 public class MyrmexAISummonerHurtTarget extends TargetGoal {
     EntityMyrmexSwarmer tameable;
@@ -13,7 +15,7 @@ public class MyrmexAISummonerHurtTarget extends TargetGoal {
     public MyrmexAISummonerHurtTarget(EntityMyrmexSwarmer theEntityMyrmexSwarmerIn) {
         super(theEntityMyrmexSwarmerIn, false);
         this.tameable = theEntityMyrmexSwarmerIn;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
@@ -24,7 +26,7 @@ public class MyrmexAISummonerHurtTarget extends TargetGoal {
         } else {
             this.attacker = LivingEntity.getLastAttackedEntity();
             int i = LivingEntity.getLastAttackedEntityTime();
-            return i != this.timestamp && this.isSuitableTarget(this.attacker, false) && this.tameable.shouldAttackEntity(this.attacker, LivingEntity);
+            return i != this.timestamp && this.isSuitableTarget(this.attacker, EntityPredicate.DEFAULT) && this.tameable.shouldAttackEntity(this.attacker, LivingEntity);
         }
     }
 

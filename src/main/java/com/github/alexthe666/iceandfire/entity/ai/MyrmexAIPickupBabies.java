@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -14,6 +13,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
 
 public class MyrmexAIPickupBabies<T extends ItemEntity> extends TargetGoal {
@@ -32,7 +32,7 @@ public class MyrmexAIPickupBabies<T extends ItemEntity> extends TargetGoal {
             }
         };
         this.myrmex = myrmex;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
@@ -63,10 +63,10 @@ public class MyrmexAIPickupBabies<T extends ItemEntity> extends TargetGoal {
     @Override
     public void tick() {
         super.tick();
-        if (this.targetEntity == null || this.targetEntity != null && this.targetEntity.isDead) {
+        if (this.targetEntity == null || this.targetEntity != null && !this.targetEntity.isAlive()) {
             this.resetTask();
         }
-        if (this.targetEntity != null && !this.targetEntity.isDead && this.goalOwner.getDistanceSq(this.targetEntity) < 2) {
+        if (this.targetEntity != null && this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 2) {
             this.targetEntity.startRiding(this.myrmex);
             resetTask();
         }

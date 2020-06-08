@@ -7,16 +7,18 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.EnumSet;
+
 public class MyrmexAIWanderHiveCenter extends Goal {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;
     private Path path;
-    private BlockPos target = BlockPos.ORIGIN;
+    private BlockPos target = BlockPos.ZERO;
 
     public MyrmexAIWanderHiveCenter(EntityMyrmexBase entityIn, double movementSpeedIn) {
         this.myrmex = entityIn;
         this.movementSpeed = movementSpeedIn;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
@@ -32,13 +34,13 @@ public class MyrmexAIWanderHiveCenter extends Goal {
         } else {
             target = getNearPos(MyrmexHive.getGroundedPos(this.myrmex.world, village.getCenter()));
 
-            this.path = this.myrmex.getNavigator().getPathToPos(target);
+            this.path = this.myrmex.getNavigator().getPathToPos(target, 0);
             return this.path != null;
         }
     }
 
     public boolean shouldContinueExecuting() {
-        return !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(target) > 3 && this.myrmex.shouldEnterHive();
+        return !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D) > 3 && this.myrmex.shouldEnterHive();
     }
 
     public void startExecuting() {
@@ -46,7 +48,7 @@ public class MyrmexAIWanderHiveCenter extends Goal {
     }
 
     public void resetTask() {
-        target = BlockPos.ORIGIN;
+        target = BlockPos.ZERO;
         this.myrmex.getNavigator().setPath(null, this.movementSpeed);
 
     }

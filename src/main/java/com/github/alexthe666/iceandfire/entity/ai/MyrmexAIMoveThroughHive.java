@@ -8,16 +8,18 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.EnumSet;
+
 public class MyrmexAIMoveThroughHive extends Goal {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;
     private Path path;
-    private BlockPos nextRoom = BlockPos.ORIGIN;
+    private BlockPos nextRoom = BlockPos.ZERO;
 
     public MyrmexAIMoveThroughHive(EntityMyrmexBase entityIn, double movementSpeedIn) {
         this.myrmex = entityIn;
         this.movementSpeed = movementSpeedIn;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
@@ -32,13 +34,13 @@ public class MyrmexAIMoveThroughHive extends Goal {
             return false;
         } else {
             nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(this.myrmex.getRNG(), this.myrmex.getPosition()));
-            this.path = this.myrmex.getNavigator().getPathToPos(nextRoom);
+            this.path = this.myrmex.getNavigator().getPathToPos(nextRoom, 0);
             return this.path != null;
         }
     }
 
     public boolean shouldContinueExecuting() {
-        return !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(nextRoom) > 3 && this.myrmex.shouldEnterHive() && !(this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby());
+        return !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(nextRoom.getX() + 0.5D, nextRoom.getY() + 0.5D, nextRoom.getZ() + 0.5D) > 3 && this.myrmex.shouldEnterHive() && !(this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby());
     }
 
     public void startExecuting() {
@@ -46,7 +48,7 @@ public class MyrmexAIMoveThroughHive extends Goal {
     }
 
     public void resetTask() {
-        nextRoom = BlockPos.ORIGIN;
+        nextRoom = BlockPos.ZERO;
         this.myrmex.getNavigator().setPath(null, this.movementSpeed);
 
     }

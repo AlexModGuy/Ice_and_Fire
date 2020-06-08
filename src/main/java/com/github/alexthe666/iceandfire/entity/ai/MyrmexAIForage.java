@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.item.ItemEntity;
@@ -11,25 +11,28 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MyrmexAIForage extends Goal {
     private static final int RADIUS = 8;
 
     private final EntityMyrmexWorker myrmex;
     private final BlockSorter targetSorter;
-    private BlockPos targetBlock = BlockPos.ORIGIN;
+    private BlockPos targetBlock = BlockPos.ZERO;
     private int wanderRadius = RADIUS * 2;
 
     public MyrmexAIForage(EntityMyrmexWorker myrmex) {
         super();
         this.myrmex = myrmex;
         this.targetSorter = new BlockSorter();
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
@@ -38,7 +41,7 @@ public class MyrmexAIForage extends Goal {
             return false;
         }
         List<BlockPos> allBlocks = new ArrayList<BlockPos>();
-        for (BlockPos pos : BlockPos.getAllInBox(this.myrmex.getPosition().add(-RADIUS, -RADIUS, -RADIUS), this.myrmex.getPosition().add(RADIUS, RADIUS, RADIUS))) {
+        for (BlockPos pos : BlockPos.getAllInBox(this.myrmex.getPosition().add(-RADIUS, -RADIUS, -RADIUS), this.myrmex.getPosition().add(RADIUS, RADIUS, RADIUS)).collect(Collectors.toList())) {
             if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this.myrmex, pos.getX(), pos.getY(), pos.getZ()))) continue;
             if (EntityMyrmexBase.isEdibleBlock(this.myrmex.world.getBlockState(pos))) {
                 allBlocks.add(pos);
@@ -79,7 +82,7 @@ public class MyrmexAIForage extends Goal {
             if(this.myrmex.getNavigator().noPath()) {
                 this.myrmex.getNavigator().tryMoveToXYZ(this.targetBlock.getX() + 0.5D, this.targetBlock.getY(), this.targetBlock.getZ() + 0.5D, 1D);
             }
-            if (this.myrmex.getDistanceSqToCenter(this.targetBlock) < 4) {
+            if (this.myrmex.getDistanceSq(this.targetBlock.getX() + 0.5D, this.targetBlock.getY() + 0.5D, this.targetBlock.getZ() + 0.5D) < 4) {
                 this.resetTask();
             }
         } else if (this.targetBlock != null) {
@@ -89,7 +92,7 @@ public class MyrmexAIForage extends Goal {
             if (EntityMyrmexBase.isEdibleBlock(block)) {
                 double distance = this.getDistance(this.targetBlock);
                 if (distance <= 6) {
-                    List<ItemStack> drops = block.getBlock().getDrops(this.myrmex.world, this.targetBlock, block, 0); // use the old method until it gets removed, for backward compatibility
+                    List<ItemStack> drops = block.getBlock().getDrops(block, (ServerWorld) this.myrmex.world, this.targetBlock, this.myrmex.world.getTileEntity(targetBlock)); // use the old method until it gets removed, for backward compatibility
                     if (!drops.isEmpty()) {
                         this.myrmex.world.destroyBlock(this.targetBlock, false);
                         ItemStack heldStack = drops.get(0).copy();
@@ -100,7 +103,7 @@ public class MyrmexAIForage extends Goal {
                             ItemEntity itemEntity = new ItemEntity(this.myrmex.world, this.targetBlock.getX() + this.myrmex.getRNG().nextDouble(), this.targetBlock.getY() + this.myrmex.getRNG().nextDouble(), this.targetBlock.getZ() + this.myrmex.getRNG().nextDouble(), stack);
                             itemEntity.setDefaultPickupDelay();
                             if (!this.myrmex.world.isRemote) {
-                                this.myrmex.world.spawnEntity(itemEntity);
+                                this.myrmex.world.addEntity(itemEntity);
                             }
                         }
                         this.targetBlock = null;
@@ -116,7 +119,7 @@ public class MyrmexAIForage extends Goal {
     }
 
     public void resetTask() {
-        this.targetBlock = BlockPos.ORIGIN;
+        this.targetBlock = BlockPos.ZERO;
         this.myrmex.keepSearching = true;
     }
 
