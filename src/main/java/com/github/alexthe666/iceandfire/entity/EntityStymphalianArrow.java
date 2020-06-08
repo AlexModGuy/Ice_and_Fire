@@ -1,57 +1,54 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class EntityStymphalianArrow extends AbstractArrowEntity {
 
-    public EntityStymphalianArrow(World worldIn) {
-        super(worldIn);
+    public EntityStymphalianArrow(EntityType t, World worldIn) {
+        super(t, worldIn);
         this.setDamage(3.5F);
     }
 
-    public EntityStymphalianArrow(World worldIn, double x, double y, double z) {
-        this(worldIn);
+    public EntityStymphalianArrow(EntityType t, World worldIn, double x, double y, double z) {
+        this(t, worldIn);
         this.setPosition(x, y, z);
         this.setDamage(3.5F);
     }
 
-    public EntityStymphalianArrow(World worldIn, LivingEntity shooter) {
-        super(worldIn, shooter);
+    public EntityStymphalianArrow(EntityType t, World worldIn, LivingEntity shooter) {
+        super(t, shooter, worldIn);
         this.setDamage(3.5F);
     }
 
-    public void onUpdate() {
-        super.onUpdate();
-        float sqrt = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
+    public void tick() {
+        super.tick();
+        float sqrt = MathHelper.sqrt(this.getMotion().x * this.getMotion().x + this.getMotion().z * this.getMotion().z);
         if (sqrt < 0.1F) {
-            this.motionY -= 0.01F;
+            this.setMotion(this.getMotion().add(0, -0.01F, 0));
         }
-    }
-
-    protected void onHit(RayTraceResult raytraceResultIn) {
-        if (raytraceResultIn.entityHit != null && raytraceResultIn.entityHit instanceof PlayerEntity) {
-            this.damageShield((PlayerEntity) raytraceResultIn.entityHit, (float) this.getDamage());
-        }
-        super.onHit(raytraceResultIn);
     }
 
     protected void damageShield(PlayerEntity player, float damage) {
         if (damage >= 3.0F && player.getActiveItemStack().getItem().isShield(player.getActiveItemStack(), player)) {
             ItemStack copyBeforeUse = player.getActiveItemStack().copy();
             int i = 1 + MathHelper.floor(damage);
-            player.getActiveItemStack().damageItem(i, player);
-
+            player.getActiveItemStack().damageItem(i, player, (p_220038_0_) -> {
+                p_220038_0_.sendBreakAnimation(EquipmentSlotType.MAINHAND);
+            });
             if (player.getActiveItemStack().isEmpty()) {
                 Hand Hand = player.getActiveHand();
                 net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, Hand);

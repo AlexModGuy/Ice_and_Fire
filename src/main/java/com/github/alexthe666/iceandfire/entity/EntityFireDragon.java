@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.item.Item;
@@ -38,7 +39,11 @@ public class EntityFireDragon extends EntityDragonBase {
     public static Animation ANIMATION_FIRECHARGE;
 
     public EntityFireDragon(World worldIn) {
-        super(IafEntityRegistry.FIRE_DRAGON, worldIn, DragonType.FIRE, 1, 1 + IafConfig.dragonAttackDamage, IafConfig.dragonHealth * 0.04, IafConfig.dragonHealth, 0.15F, 0.4F);
+        this(IafEntityRegistry.FIRE_DRAGON, worldIn);
+    }
+
+    public EntityFireDragon(EntityType t, World worldIn) {
+        super(t, worldIn, DragonType.FIRE, 1, 1 + IafConfig.dragonAttackDamage, IafConfig.dragonHealth * 0.04, IafConfig.dragonHealth, 0.15F, 0.4F);
         this.setPathPriority(PathNodeType.DANGER_FIRE, 0.0F);
         this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);
         this.setPathPriority(PathNodeType.LAVA, 8.0F);

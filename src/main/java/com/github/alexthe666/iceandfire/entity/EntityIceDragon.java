@@ -10,6 +10,7 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -46,7 +47,11 @@ public class EntityIceDragon extends EntityDragonBase {
     public int swimCycle;
 
     public EntityIceDragon(World worldIn) {
-        super(IafEntityRegistry.ICE_DRAGON, worldIn, DragonType.ICE, 1, 1 + IafConfig.dragonAttackDamage, IafConfig.dragonHealth * 0.04, IafConfig.dragonHealth, 0.15F, 0.4F);
+        this(IafEntityRegistry.ICE_DRAGON, worldIn);
+    }
+
+    public EntityIceDragon(EntityType t, World worldIn) {
+        super(t, worldIn, DragonType.ICE, 1, 1 + IafConfig.dragonAttackDamage, IafConfig.dragonHealth * 0.04, IafConfig.dragonHealth, 0.15F, 0.4F);
         ANIMATION_SPEAK = Animation.create(20);
         ANIMATION_BITE = Animation.create(35);
         ANIMATION_SHAKEPREY = Animation.create(65);

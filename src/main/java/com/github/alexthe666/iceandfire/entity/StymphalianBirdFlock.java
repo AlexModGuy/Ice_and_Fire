@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIAirTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
@@ -36,7 +36,6 @@ public class StymphalianBirdFlock {
     public static StymphalianBirdFlock getNearbyFlock(EntityStymphalianBird bird) {
         float d0 = IafConfig.stymphalianBirdFlockLength;
         List<Entity> list = bird.world.getEntitiesInAABBexcluding(bird, (new AxisAlignedBB(bird.getPosX(), bird.getPosY(), bird.getPosZ(), bird.getPosX() + 1.0D, bird.getPosY() + 1.0D, bird.getPosZ() + 1.0D)).grow(d0, 10.0D, d0), EntityStymphalianBird.STYMPHALIAN_PREDICATE);
-        Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(bird));
         if (!list.isEmpty()) {
             Iterator<Entity> itr = list.iterator();
             while (itr.hasNext()) {
@@ -62,10 +61,10 @@ public class StymphalianBirdFlock {
     }
 
     public void update() {
-        if (!this.members.isEmpty() && (this.leader == null || this.leader.isDead)) {
+        if (!this.members.isEmpty() && (this.leader == null || !this.leader.isAlive())) {
             this.leader = members.get(random.nextInt(members.size()));
         }
-        if (leader != null && !leader.isDead) {
+        if (leader != null && leader.isAlive()) {
             this.prevLeaderTarget = this.leaderTarget;
             this.leaderTarget = leader.airTarget;
         }

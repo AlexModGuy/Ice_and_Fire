@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.citadel.server.entity.EntityProperties;
-import net.ilexiconn.llibrary.server.entity.EntityProperties;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;

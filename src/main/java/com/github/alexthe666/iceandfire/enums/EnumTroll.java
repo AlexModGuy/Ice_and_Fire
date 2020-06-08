@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.enums;
 
+import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
@@ -29,19 +30,14 @@ public enum EnumTroll {
     public ResourceLocation TEXTURE_EYES;
     public BiomeDictionary.Type spawnBiome;
     public IArmorMaterial material;
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_leather")
     public Item leather;
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_helmet")
     public Item helmet;
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_chestplate")
     public Item chestplate;
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_leggings")
     public Item leggings;
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_boots")
     public Item boots;
     private Weapon[] weapons;
 
-    EnumTroll(BiomeDictionary.Type biome, ItemArmor.ArmorMaterial material, Weapon... weapons) {
+    EnumTroll(BiomeDictionary.Type biome, CustomArmorMaterial material, Weapon... weapons) {
         spawnBiome = biome;
         this.weapons = weapons;
         this.material = material;
@@ -49,10 +45,10 @@ public enum EnumTroll {
         TEXTURE_STONE = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase() + "_stone.png");
         TEXTURE_EYES = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase() + "_eyes.png");
         leather = new ItemTrollLeather(this);
-        helmet = new ItemTrollArmor(this, material, 0, EquipmentSlotType.HEAD);
-        chestplate = new ItemTrollArmor(this, material, 1, EquipmentSlotType.CHEST);
-        leggings = new ItemTrollArmor(this, material, 2, EquipmentSlotType.LEGS);
-        boots = new ItemTrollArmor(this, material, 3, EquipmentSlotType.FEET);
+        helmet = new ItemTrollArmor(this, material, EquipmentSlotType.HEAD);
+        chestplate = new ItemTrollArmor(this, material, EquipmentSlotType.CHEST);
+        leggings = new ItemTrollArmor(this, material, EquipmentSlotType.LEGS);
+        boots = new ItemTrollArmor(this, material, EquipmentSlotType.FEET);
 
     }
 

@@ -1,31 +1,34 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class EntityStymphalianFeather extends AbstractArrowEntity {
 
-    public EntityStymphalianFeather(World worldIn) {
-        super(worldIn);
+    public EntityStymphalianFeather(EntityType t, World worldIn) {
+        super(t, worldIn);
     }
 
-    public EntityStymphalianFeather(World worldIn, LivingEntity shooter) {
-        super(worldIn, shooter);
+    public EntityStymphalianFeather(EntityType t, World worldIn, LivingEntity shooter) {
+        super(t, shooter, worldIn);
         this.setDamage(IafConfig.stymphalianBirdFeatherAttackStength);
     }
 
-    public void setDead() {
-        super.setDead();
+    public void remove() {
+        super.remove();
         if (IafConfig.stymphalianBirdFeatherDropChance > 0) {
             if (!world.isRemote && this.rand.nextInt(IafConfig.stymphalianBirdFeatherDropChance) == 0) {
                 this.entityDropItem(getArrowStack(), 0.1F);
@@ -34,20 +37,21 @@ public class EntityStymphalianFeather extends AbstractArrowEntity {
 
     }
 
-    public void onUpdate() {
-        super.onUpdate();
+    public void tick() {
+        super.tick();
         if (this.ticksExisted > 100) {
-            this.setDead();
+            this.remove();
         }
     }
 
-    protected void onHit(RayTraceResult raytraceResultIn) {
-        if (this.shootingEntity instanceof EntityStymphalianBird && raytraceResultIn.entityHit != null && raytraceResultIn.entityHit instanceof EntityStymphalianBird) {
+    protected void onEntityHit(EntityRayTraceResult entityHit) {
+        Entity shootingEntity = this.getShooter();
+        if (shootingEntity instanceof EntityStymphalianBird && entityHit.getEntity() != null && entityHit.getEntity() instanceof EntityStymphalianBird) {
             return;
         } else {
-            super.onHit(raytraceResultIn);
-            if (raytraceResultIn.entityHit != null && raytraceResultIn.entityHit instanceof LivingEntity) {
-                LivingEntity LivingEntity = (LivingEntity) raytraceResultIn.entityHit;
+            super.onEntityHit(entityHit);
+            if (entityHit.getEntity() != null && entityHit.getEntity() instanceof EntityStymphalianBird) {
+                LivingEntity LivingEntity = (LivingEntity) entityHit.getEntity();
                 LivingEntity.setArrowCountInEntity(LivingEntity.getArrowCountInEntity() - 1);
                 ItemStack itemstack1 = LivingEntity.isHandActive() ? LivingEntity.getActiveItemStack() : ItemStack.EMPTY;
                 if (itemstack1.getItem().isShield(itemstack1, LivingEntity)) {
@@ -62,10 +66,11 @@ public class EntityStymphalianFeather extends AbstractArrowEntity {
         if (damage >= 3.0F && entity.getActiveItemStack().getItem().isShield(entity.getActiveItemStack(), entity)) {
             ItemStack copyBeforeUse = entity.getActiveItemStack().copy();
             int i = 1 + MathHelper.floor(damage);
-            entity.getActiveItemStack().damageItem(i, entity);
-
+            Hand Hand = entity.getActiveHand();
+            copyBeforeUse.damageItem(i, entity, (p_220287_1_) -> {
+                p_220287_1_.sendBreakAnimation(Hand);
+            });
             if (entity.getActiveItemStack().isEmpty()) {
-                Hand Hand = entity.getActiveHand();
                 if (entity instanceof PlayerEntity) {
                     net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem((PlayerEntity) entity, copyBeforeUse, Hand);
                 }

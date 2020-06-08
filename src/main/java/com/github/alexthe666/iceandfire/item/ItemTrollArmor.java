@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
@@ -22,7 +23,7 @@ public class ItemTrollArmor extends ArmorItem {
 
     public EnumTroll troll;
 
-    public ItemTrollArmor(EnumTroll troll, ArmorMaterial material, EquipmentSlotType slot) {
+    public ItemTrollArmor(EnumTroll troll, CustomArmorMaterial material, EquipmentSlotType slot) {
         super(material, slot, new Item.Properties().group(IceAndFire.TAB_ITEMS));
         this.troll = troll;
         this.setRegistryName(troll.name().toLowerCase() + "_troll_leather_" + getArmorPart(slot));

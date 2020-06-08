@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.google.common.collect.Lists;
@@ -10,19 +11,19 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.village.VillageDoorInfo;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
 public class MyrmexHive {
-    private final List<VillageDoorInfo> villageDoorInfoList = Lists.newArrayList();
     private final List<BlockPos> foodRooms = Lists.newArrayList();
     private final List<BlockPos> babyRooms = Lists.newArrayList();
     private final List<BlockPos> miscRooms = Lists.newArrayList();
@@ -38,8 +39,8 @@ public class MyrmexHive {
     public boolean hasOwner = false;
     public UUID ownerUUID = null;
     private World world;
-    private BlockPos centerHelper = BlockPos.ORIGIN;
-    private BlockPos center = BlockPos.ORIGIN;
+    private BlockPos centerHelper = BlockPos.ZERO;
+    private BlockPos center = BlockPos.ZERO;
     private int villageRadius;
     private int lastAddDoorTimestamp;
     private int tickCounter;
@@ -89,14 +90,19 @@ public class MyrmexHive {
         }
     }
 
+    @Nullable
     public EntityMyrmexQueen getQueen() {
-        List<EntityMyrmexQueen> allQueens = world.getEntities(EntityMyrmexQueen.class, EntitySelectors.NOT_SPECTATING);
         List<EntityMyrmexQueen> ourQueens = new ArrayList<>();
-        for (EntityMyrmexQueen queen : allQueens) {
-            if (queen.getHive().equals(this)) {
-                ourQueens.add(queen);
+        if(world.isRemote){
+            ServerWorld serverWorld = world.getServer().getWorld(DimensionType.OVERWORLD);
+            List<Entity> allQueens = serverWorld.getEntities(IafEntityRegistry.MYRMEX_QUEEN, EntityPredicates.NOT_SPECTATING);
+            for (Entity queen : allQueens) {
+                if (queen instanceof EntityMyrmexQueen && ((EntityMyrmexQueen)queen).getHive().equals(this)) {
+                    ourQueens.add(((EntityMyrmexQueen)queen));
+                }
             }
         }
+
         return ourQueens.isEmpty() ? null : ourQueens.get(0);
     }
 
@@ -161,7 +167,7 @@ public class MyrmexHive {
 
         for (UUID s : this.playerReputation.keySet()) {
             if (this.isPlayerReputationTooLowToFight(s)) {
-                PlayerEntity PlayerEntity1 = world.getPlayerEntityByUUID(s);
+                PlayerEntity PlayerEntity1 = world.getPlayerByUuid(s);
 
                 if (PlayerEntity1 != null) {
                     double d1 = PlayerEntity1.getDistanceSq(villageDefender);
@@ -183,7 +189,7 @@ public class MyrmexHive {
         while (iterator.hasNext()) {
             HiveAggressor hive$villageaggressor = iterator.next();
 
-            if (!hive$villageaggressor.agressor.isEntityAlive() || Math.abs(this.tickCounter - hive$villageaggressor.agressionTime) > 300) {
+            if (!hive$villageaggressor.agressor.isAlive() || Math.abs(this.tickCounter - hive$villageaggressor.agressionTime) > 300) {
                 iterator.remove();
             }
         }
@@ -195,9 +201,9 @@ public class MyrmexHive {
     }
 
     private UUID findUUID(String name) {
-        if (this.world == null || this.world.getMinecraftServer() == null)
+        if (this.world == null || this.world.getServer() == null)
             return PlayerEntity.getOfflineUUID(name);
-        GameProfile profile = this.world.getMinecraftServer().getPlayerProfileCache().getGameProfileForUsername(name);
+        GameProfile profile = this.world.getServer().getPlayerProfileCache().getGameProfileForUsername(name);
         return profile == null ? PlayerEntity.getOfflineUUID(name) : profile.getId();
     }
 
@@ -209,9 +215,9 @@ public class MyrmexHive {
         }
         PlayerEntity player = null;
         try {
-            player = world.getPlayerEntityByUUID(playerName);
+            player = world.getPlayerByUuid(playerName);
         } catch (Exception e) {
-            IceAndFire.logger.warn("Myrmex Hive could not find player with associated UUID");
+            IceAndFire.LOGGER.warning("Myrmex Hive could not find player with associated UUID");
         }
         if (player != null) {
             if (j - i != 0) {
@@ -268,55 +274,49 @@ public class MyrmexHive {
         this.noBreedTicks = compound.getInt("MTick");
         this.center = new BlockPos(compound.getInt("CX"), compound.getInt("CY"), compound.getInt("CZ"));
         this.centerHelper = new BlockPos(compound.getInt("ACX"), compound.getInt("ACY"), compound.getInt("ACZ"));
-        ListNBT nbttaglist = compound.getList("Doors", 10);
-        for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-            CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
-            VillageDoorInfo villagedoorinfo = new VillageDoorInfo(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")), CompoundNBT.getInt("IDX"), CompoundNBT.getInt("IDZ"), CompoundNBT.getInt("TS"));
-            this.villageDoorInfoList.add(villagedoorinfo);
-        }
         ListNBT hiveMembers = compound.getList("HiveMembers", 10);
         this.myrmexList.clear();
-        for (int i = 0; i < hiveMembers.tagCount(); ++i) {
-            CompoundNBT CompoundNBT = hiveMembers.getCompoundTagAt(i);
+        for (int i = 0; i < hiveMembers.size(); ++i) {
+            CompoundNBT CompoundNBT = hiveMembers.getCompound(i);
             this.myrmexList.add(CompoundNBT.getUniqueId("MyrmexUUID"));
         }
         ListNBT foodRoomList = compound.getList("FoodRooms", 10);
         this.foodRooms.clear();
-        for (int i = 0; i < foodRoomList.tagCount(); ++i) {
-            CompoundNBT CompoundNBT = foodRoomList.getCompoundTagAt(i);
+        for (int i = 0; i < foodRoomList.size(); ++i) {
+            CompoundNBT CompoundNBT = foodRoomList.getCompound(i);
             this.foodRooms.add(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")));
         }
         ListNBT babyRoomList = compound.getList("BabyRooms", 10);
         this.babyRooms.clear();
-        for (int i = 0; i < babyRoomList.tagCount(); ++i) {
-            CompoundNBT CompoundNBT = babyRoomList.getCompoundTagAt(i);
+        for (int i = 0; i < babyRoomList.size(); ++i) {
+            CompoundNBT CompoundNBT = babyRoomList.getCompound(i);
             this.babyRooms.add(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")));
         }
         ListNBT miscRoomList = compound.getList("MiscRooms", 10);
         this.miscRooms.clear();
-        for (int i = 0; i < miscRoomList.tagCount(); ++i) {
-            CompoundNBT CompoundNBT = miscRoomList.getCompoundTagAt(i);
+        for (int i = 0; i < miscRoomList.size(); ++i) {
+            CompoundNBT CompoundNBT = miscRoomList.getCompound(i);
             this.miscRooms.add(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")));
         }
         ListNBT entrancesList = compound.getList("Entrances", 10);
         this.entrances.clear();
-        for (int i = 0; i < entrancesList.tagCount(); ++i) {
-            CompoundNBT CompoundNBT = entrancesList.getCompoundTagAt(i);
+        for (int i = 0; i < entrancesList.size(); ++i) {
+            CompoundNBT CompoundNBT = entrancesList.getCompound(i);
             this.entrances.put(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")), Direction.byHorizontalIndex(CompoundNBT.getInt("Facing")));
         }
 
         ListNBT entranceBottomsList = compound.getList("EntranceBottoms", 10);
         this.entranceBottoms.clear();
-        for (int i = 0; i < entranceBottomsList.tagCount(); ++i) {
-            CompoundNBT CompoundNBT = entranceBottomsList.getCompoundTagAt(i);
+        for (int i = 0; i < entranceBottomsList.size(); ++i) {
+            CompoundNBT CompoundNBT = entranceBottomsList.getCompound(i);
             this.entranceBottoms.put(new BlockPos(CompoundNBT.getInt("X"), CompoundNBT.getInt("Y"), CompoundNBT.getInt("Z")), Direction.byHorizontalIndex(CompoundNBT.getInt("Facing")));
         }
         hiveUUID = compound.getUniqueId("HiveUUID");
         ListNBT nbttaglist1 = compound.getList("Players", 10);
-        for (int j = 0; j < nbttaglist1.tagCount(); ++j) {
-            CompoundNBT CompoundNBT1 = nbttaglist1.getCompoundTagAt(j);
+        for (int j = 0; j < nbttaglist1.size(); ++j) {
+            CompoundNBT CompoundNBT1 = nbttaglist1.getCompound(j);
 
-            if (CompoundNBT1.hasKey("UUID")) {
+            if (CompoundNBT1.hasUniqueId("UUID")) {
                 this.playerReputation.put(UUID.fromString(CompoundNBT1.getString("UUID")), Integer.valueOf(CompoundNBT1.getInt("S")));
             } else {
                 //World is never set here, so this will always be offline UUIDs, sadly there is no way to convert this.
@@ -333,9 +333,9 @@ public class MyrmexHive {
         compound.putBoolean("Reproduces", this.reproduces);
         compound.putBoolean("HasOwner", this.hasOwner);
         if (this.ownerUUID != null) {
-            compound.setUniqueId("OwnerUUID", this.ownerUUID);
+            compound.putUniqueId("OwnerUUID", this.ownerUUID);
         }
-        compound.setString("ColonyName", this.colonyName);
+        compound.putString("ColonyName", this.colonyName);
         compound.putInt("Radius", this.villageRadius);
         compound.putInt("Stable", this.lastAddDoorTimestamp);
         compound.putInt("Tick", this.tickCounter);
@@ -346,61 +346,50 @@ public class MyrmexHive {
         compound.putInt("ACX", this.centerHelper.getX());
         compound.putInt("ACY", this.centerHelper.getY());
         compound.putInt("ACZ", this.centerHelper.getZ());
-        ListNBT nbttaglist = new ListNBT();
-        for (VillageDoorInfo villagedoorinfo : this.villageDoorInfoList) {
-            CompoundNBT CompoundNBT = new CompoundNBT();
-            CompoundNBT.putInt("X", villagedoorinfo.getDoorBlockPos().getX());
-            CompoundNBT.putInt("Y", villagedoorinfo.getDoorBlockPos().getY());
-            CompoundNBT.putInt("Z", villagedoorinfo.getDoorBlockPos().getZ());
-            CompoundNBT.putInt("IDX", villagedoorinfo.getInsideOffsetX());
-            CompoundNBT.putInt("IDZ", villagedoorinfo.getInsideOffsetZ());
-            CompoundNBT.putInt("TS", villagedoorinfo.getLastActivityTimestamp());
-            nbttaglist.appendTag(CompoundNBT);
-        }
         ListNBT hiveMembers = new ListNBT();
         for (UUID memberUUID : this.myrmexList) {
             CompoundNBT CompoundNBT = new CompoundNBT();
-            CompoundNBT.setUniqueId("MyrmexUUID", memberUUID);
-            hiveMembers.appendTag(CompoundNBT);
+            CompoundNBT.putUniqueId("MyrmexUUID", memberUUID);
+            hiveMembers.add(CompoundNBT);
         }
-        compound.setTag("HiveMembers", hiveMembers);
+        compound.put("HiveMembers", hiveMembers);
         ListNBT foodRoomList = new ListNBT();
         for (BlockPos pos : this.foodRooms) {
             CompoundNBT CompoundNBT = new CompoundNBT();
             CompoundNBT.putInt("X", pos.getX());
             CompoundNBT.putInt("Y", pos.getY());
             CompoundNBT.putInt("Z", pos.getZ());
-            foodRoomList.appendTag(CompoundNBT);
+            foodRoomList.add(CompoundNBT);
         }
-        compound.setTag("FoodRooms", foodRoomList);
+        compound.put("FoodRooms", foodRoomList);
         ListNBT babyRoomList = new ListNBT();
         for (BlockPos pos : this.babyRooms) {
             CompoundNBT CompoundNBT = new CompoundNBT();
             CompoundNBT.putInt("X", pos.getX());
             CompoundNBT.putInt("Y", pos.getY());
             CompoundNBT.putInt("Z", pos.getZ());
-            babyRoomList.appendTag(CompoundNBT);
+            babyRoomList.add(CompoundNBT);
         }
-        compound.setTag("BabyRooms", babyRoomList);
+        compound.put("BabyRooms", babyRoomList);
         ListNBT miscRoomList = new ListNBT();
         for (BlockPos pos : this.miscRooms) {
             CompoundNBT CompoundNBT = new CompoundNBT();
             CompoundNBT.putInt("X", pos.getX());
             CompoundNBT.putInt("Y", pos.getY());
             CompoundNBT.putInt("Z", pos.getZ());
-            miscRoomList.appendTag(CompoundNBT);
+            miscRoomList.add(CompoundNBT);
         }
-        compound.setTag("MiscRooms", miscRoomList);
+        compound.put("MiscRooms", miscRoomList);
         ListNBT entrancesList = new ListNBT();
         for (Map.Entry<BlockPos, Direction> entry : this.entrances.entrySet()) {
             CompoundNBT CompoundNBT = new CompoundNBT();
             CompoundNBT.putInt("X", entry.getKey().getX());
             CompoundNBT.putInt("Y", entry.getKey().getY());
             CompoundNBT.putInt("Z", entry.getKey().getZ());
-            CompoundNBT.putInt("Facing", entry.get().getHorizontalIndex());
-            entrancesList.appendTag(CompoundNBT);
+            CompoundNBT.putInt("Facing", entry.getValue().getHorizontalIndex());
+            entrancesList.add(CompoundNBT);
         }
-        compound.setTag("Entrances", entrancesList);
+        compound.put("Entrances", entrancesList);
 
         ListNBT entranceBottomsList = new ListNBT();
         for (Map.Entry<BlockPos, Direction> entry : this.entranceBottoms.entrySet()) {
@@ -408,12 +397,11 @@ public class MyrmexHive {
             CompoundNBT.putInt("X", entry.getKey().getX());
             CompoundNBT.putInt("Y", entry.getKey().getY());
             CompoundNBT.putInt("Z", entry.getKey().getZ());
-            CompoundNBT.putInt("Facing", entry.get().getHorizontalIndex());
-            entranceBottomsList.appendTag(CompoundNBT);
+            CompoundNBT.putInt("Facing", entry.getValue().getHorizontalIndex());
+            entranceBottomsList.add(CompoundNBT);
         }
-        compound.setTag("EntranceBottoms", entranceBottomsList);
-        compound.setUniqueId("HiveUUID", this.hiveUUID);
-        compound.setTag("Doors", nbttaglist);
+        compound.put("EntranceBottoms", entranceBottomsList);
+        compound.putUniqueId("HiveUUID", this.hiveUUID);
         ListNBT nbttaglist1 = new ListNBT();
 
         for (UUID s : this.playerReputation.keySet()) {
@@ -421,15 +409,15 @@ public class MyrmexHive {
 
             try {
                 {
-                    CompoundNBT1.setString("UUID", s.toString());
+                    CompoundNBT1.putString("UUID", s.toString());
                     CompoundNBT1.putInt("S", this.playerReputation.get(s).intValue());
-                    nbttaglist1.appendTag(CompoundNBT1);
+                    nbttaglist1.add(CompoundNBT1);
                 }
             } catch (RuntimeException var9) {
             }
         }
 
-        compound.setTag("Players", nbttaglist1);
+        compound.put("Players", nbttaglist1);
     }
 
     public void addRoom(BlockPos center, WorldGenMyrmexHive.RoomType roomType) {
@@ -524,10 +512,10 @@ public class MyrmexHive {
         Map.Entry<BlockPos, Direction> closest = getClosestEntrance(entity);
         if (closest != null) {
             if (randomize) {
-                BlockPos pos = closest.getKey().offset(closest.get(), random.nextInt(7) + 7).up(4);
+                BlockPos pos = closest.getKey().offset(closest.getValue(), random.nextInt(7) + 7).up(4);
                 return pos.add(10 - random.nextInt(20), 0, 10 - random.nextInt(20));
             } else {
-                return closest.getKey().offset(closest.get(), 3);
+                return closest.getKey().offset(closest.getValue(), 3);
             }
         }
         return entity.getPosition();
@@ -536,7 +524,7 @@ public class MyrmexHive {
     public BlockPos getClosestEntranceBottomToEntity(Entity entity, Random random) {
         Map.Entry<BlockPos, Direction> closest = null;
         for (Map.Entry<BlockPos, Direction> entry : this.entranceBottoms.entrySet()) {
-            if (closest == null || closest.getKey().distanceSq(entity.getPosX(), entity.getPosY(), entity.getPosZ()) > entry.getKey().distanceSq(entity.getPosX(), entity.getPosY(), entity.getPosZ())) {
+            if (closest == null || closest.getKey().distanceSq(entity.getPosX(), entity.getPosY(), entity.getPosZ(), false) > entry.getKey().distanceSq(entity.getPosX(), entity.getPosY(), entity.getPosZ(), false)) {
                 closest = entry;
             }
         }
@@ -545,7 +533,7 @@ public class MyrmexHive {
 
     public PlayerEntity getOwner(World world) {
         if (hasOwner) {
-            return world.getPlayerEntityByUUID(ownerUUID);
+            return world.getPlayerByUuid(ownerUUID);
         }
         return null;
     }
@@ -561,7 +549,7 @@ public class MyrmexHive {
     private Map.Entry<BlockPos, Direction> getClosestEntrance(Entity entity) {
         Map.Entry<BlockPos, Direction> closest = null;
         for (Map.Entry<BlockPos, Direction> entry : this.entrances.entrySet()) {
-            if (closest == null || closest.getKey().distanceSq(entity.getPosX(), entity.getPosY(), entity.getPosZ()) > entry.getKey().distanceSq(entity.getPosX(), entity.getPosY(), entity.getPosZ())) {
+            if (closest == null || closest.getKey().distanceSq(entity.getPosX(), entity.getPosY(), entity.getPosZ(), false) > entry.getKey().distanceSq(entity.getPosX(), entity.getPosY(), entity.getPosZ(), false)) {
                 closest = entry;
             }
         }

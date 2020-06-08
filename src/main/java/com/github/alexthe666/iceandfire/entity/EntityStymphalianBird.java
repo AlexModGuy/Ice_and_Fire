@@ -1,53 +1,40 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.citadel.animation.Animation;
+import com.github.alexthe666.citadel.animation.AnimationHandler;
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIAirTarget;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIFlee;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAITarget;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
-import net.ilexiconn.llibrary.server.animation.Animation;
-import net.ilexiconn.llibrary.server.animation.AnimationHandler;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.EnumDifficulty;
+import net.minecraft.util.*;
+import net.minecraft.util.math.*;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraftforge.oredict.OreDictionary;
-
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.UUID;
 
 public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEntity, IMob, IVillagerFear, IAnimalFear {
 
-    public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "stymphalian_bird"));
     protected static final Predicate<Entity> STYMPHALIAN_PREDICATE = new Predicate<Entity>() {
         public boolean apply(@Nullable Entity entity) {
             return entity instanceof EntityStymphalianBird;
@@ -71,27 +58,22 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     private boolean aiFlightLaunch = false;
     private int airBorneCounter;
 
-    public EntityStymphalianBird(World worldIn) {
-        super(worldIn);
+    public EntityStymphalianBird(EntityType t, World worldIn) {
+        super(t, worldIn);
     }
 
     protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
-    @Nullable
-    protected ResourceLocation getLootTable() {
-        return LOOT;
-    }
-
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new EntityAISwimming(this));
+        this.goalSelector.addGoal(1, new SwimGoal(this));
         this.goalSelector.addGoal(2, new StymphalianBirdAIFlee(this, 10));
-        this.goalSelector.addGoal(3, new EntityAIAttackMelee(this, 1.5D, false));
-        this.goalSelector.addGoal(5, new EntityAIWander(this, 1.0D));
+        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.5D, false));
+        this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new StymphalianBirdAIAirTarget(this));
-        this.goalSelector.addGoal(7, new EntityAIWatchClosest(this, LivingEntity.class, 6.0F));
+        this.goalSelector.addGoal(7, new LookAtGoal(this, LivingEntity.class, 6.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this, true));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new StymphalianBirdAITarget(this, LivingEntity.class, true));
     }
 
@@ -100,7 +82,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(24.0D);
-        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+        this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
         this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.stymphalianBirdTargetSearchLength));
         this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0D);
@@ -109,7 +91,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(VICTOR_ENTITY, Optional.absent());
+        this.dataManager.register(VICTOR_ENTITY, Optional.of(null));
         this.dataManager.register(FLYING, Boolean.valueOf(false));
     }
 
@@ -117,10 +99,10 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         return 10;
     }
 
-    public void onUpdate() {
-        super.onUpdate();
-        if (!this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-            this.setDead();
+    public void tick() {
+        super.tick();
+        if (!this.world.isRemote && this.world.getDifficulty() == Difficulty.PEACEFUL) {
+            this.remove();
         }
     }
 
@@ -128,11 +110,11 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     public void writeAdditional(CompoundNBT tag) {
         super.writeAdditional(tag);
         if (this.getVictorId() == null) {
-            tag.setString("VictorUUID", "");
+            tag.putString("VictorUUID", "");
         } else {
-            tag.setString("VictorUUID", this.getVictorId().toString());
+            tag.putString("VictorUUID", this.getVictorId().toString());
         }
-        tag.setBoolean("Flying", this.isFlying());
+        tag.putBoolean("Flying", this.isFlying());
     }
 
     @Override
@@ -140,7 +122,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         super.readAdditional(tag);
         String s;
 
-        if (tag.hasKey("VictorUUID", 8)) {
+        if (tag.hasUniqueId("VictorUUID")) {
             s = tag.getString("VictorUUID");
         } else {
             String s1 = tag.getString("Victor");
@@ -182,57 +164,22 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
 
     protected void onDeathUpdate() {
         super.onDeathUpdate();
-        if (this.deathTime == 20 && !this.world.isRemote && IafConfig.stymphalianBirdsOreDictDrops) {
-            NonNullList<ItemStack> bronzeItems = OreDictionary.getOres("ingotBronze");
-            NonNullList<ItemStack> copperItems = OreDictionary.getOres("ingotCopper");
-            if (!bronzeItems.isEmpty()) {
-                for (ItemStack bronzeIngot : bronzeItems) {
-                    if (bronzeIngot != ItemStack.EMPTY) {
-                        ItemStack stack = bronzeIngot.copy();
-                        stack.setCount(1 + this.getRNG().nextInt(3));
-                        dropItemAt(stack, this.getPosX(), this.getPosY() + 0.5F, this.getPosZ());
-                        break;
-                    }
-                }
-            }
-            if (!copperItems.isEmpty()) {
-                for (ItemStack copperIngot : copperItems) {
-                    if (copperIngot != ItemStack.EMPTY) {
-                        ItemStack stack = copperIngot.copy();
-                        stack.setCount(1 + this.getRNG().nextInt(3));
-                        dropItemAt(stack, this.getPosX(), this.getPosY() + 0.5F, this.getPosZ());
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    @Nullable
-    private EntityItem dropItemAt(ItemStack stack, double x, double y, double z) {
-        EntityItem entityitem = new EntityItem(this.world, x, y, z, stack);
-        entityitem.setDefaultPickupDelay();
-        if (captureDrops)
-            this.capturedDrops.add(entityitem);
-        else
-            this.world.spawnEntity(entityitem);
-        return entityitem;
     }
 
     @Nullable
     public UUID getVictorId() {
-        return (UUID) ((Optional) this.dataManager.get(VICTOR_ENTITY)).orNull();
+        return (UUID) ((Optional) this.dataManager.get(VICTOR_ENTITY)).orElse(null);
     }
 
     public void setVictorId(@Nullable UUID uuid) {
-        this.dataManager.set(VICTOR_ENTITY, Optional.fromNullable(uuid));
+        this.dataManager.set(VICTOR_ENTITY, Optional.ofNullable(uuid));
     }
 
     @Nullable
     public LivingEntity getVictor() {
         try {
             UUID uuid = this.getVictorId();
-            return uuid == null ? null : this.world.getPlayerEntityByUUID(uuid);
+            return uuid == null ? null : this.world.getPlayerByUuid(uuid);
         } catch (IllegalArgumentException var2) {
             return null;
         }
@@ -247,17 +194,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     }
 
     public boolean isTargetBlocked(Vec3d target) {
-        if (target != null) {
-            RayTraceResult rayTrace = world.rayTraceBlocks(new Vec3d(this.getPosition()), target, false);
-            if (rayTrace != null && rayTrace.hitVec != null) {
-                BlockPos pos = new BlockPos(rayTrace.hitVec);
-                if (!world.isAirBlock(pos)) {
-                    return true;
-                }
-                return rayTrace != null && rayTrace.typeOfHit != RayTraceResult.Type.BLOCK;
-            }
-        }
-        return false;
+        return world.rayTraceBlocks(new RayTraceContext(target, this.getPositionVec(), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
     }
 
     public boolean attackEntityAsMob(Entity entityIn) {
@@ -269,9 +206,9 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
 
 
     @Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
-        if(world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity){
+    public void livingTick() {
+        super.livingTick();
+        if(world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity){
             this.setAttackTarget(null);
         }
         if (this.getAttackTarget() != null && (this.getAttackTarget() instanceof PlayerEntity && ((PlayerEntity) this.getAttackTarget()).isCreative() || this.getVictor() != null && this.isVictor(this.getAttackTarget()))) {
@@ -304,7 +241,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
             }
             this.flock.update();
         }
-        if (!world.isRemote && this.getAttackTarget() != null && !this.getAttackTarget().isDead) {
+        if (!world.isRemote && this.getAttackTarget() != null && this.getAttackTarget().isAlive()) {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (this.getAnimation() == ANIMATION_PECK && this.getAnimationTick() == 7) {
                 if (dist < 1.5F) {
@@ -325,18 +262,18 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
                     if ((this.getAnimationTick() == 7 || this.getAnimationTick() == 14) && isDirectPathBetweenPoints(this, this.getPositionVector(), target.getPositionVector())) {
                         this.playSound(IafSoundRegistry.STYMPHALIAN_BIRD_ATTACK, 1, 1);
                         for (int i = 0; i < 4; i++) {
-                            float wingX = (float) (posX + 1.8F * 0.5F * Math.cos((rotationYaw + 180 * (i % 2)) * Math.PI / 180));
-                            float wingZ = (float) (posZ + 1.8F * 0.5F * Math.sin((rotationYaw + 180 * (i % 2)) * Math.PI / 180));
-                            float wingY = (float) (posY + 1F);
+                            float wingX = (float) (getPosX() + 1.8F * 0.5F * Math.cos((rotationYaw + 180 * (i % 2)) * Math.PI / 180));
+                            float wingZ = (float) (getPosZ() + 1.8F * 0.5F * Math.sin((rotationYaw + 180 * (i % 2)) * Math.PI / 180));
+                            float wingY = (float) (getPosY() + 1F);
                             double d0 = target.getPosX() - wingX;
                             double d1 = target.getBoundingBox().minY - wingY;
                             double d2 = target.getPosZ() - wingZ;
                             double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-                            EntityStymphalianFeather entityarrow = new EntityStymphalianFeather(world, this);
+                            EntityStymphalianFeather entityarrow = new EntityStymphalianFeather(IafEntityRegistry.STYMPHALIAN_FEATHER, world, this);
                             entityarrow.setPosition(wingX, wingY, wingZ);
                             entityarrow.shoot(d0, d1 + d3 * 0.10000000298023224D, d2, 1.6F, (float) (14 - this.world.getDifficulty().getId() * 4));
                             this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-                            this.world.spawnEntity(entityarrow);
+                            this.world.addEntity(entityarrow);
                         }
                     }
                 } else {
@@ -408,8 +345,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     }
 
     public boolean isDirectPathBetweenPoints(Entity entity, Vec3d vec1, Vec3d vec2) {
-        RayTraceResult movingobjectposition = entity.world.rayTraceBlocks(vec1, new Vec3d(vec2.x, vec2.y + (double) entity.height * 0.5D, vec2.z), false, true, false);
-        return movingobjectposition == null || movingobjectposition.typeOfHit != RayTraceResult.Type.BLOCK;
+        return world.rayTraceBlocks(new RayTraceContext(vec1, vec2, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
     }
 
     private boolean isLeaderNotFlying() {
@@ -427,13 +363,14 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
 
     public void flyTowardsTarget() {
         if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.getPosY(), airTarget.getZ())) > 3) {
-            double targetX = airTarget.getX() + 0.5D - posX;
-            double targetY = Math.min(airTarget.getY(), 256) + 1D - posY;
-            double targetZ = airTarget.getZ() + 0.5D - posZ;
-            motionX += (Math.signum(targetX) * 0.5D - motionX) * 0.100000000372529 * getFlySpeed(false);
-            motionY += (Math.signum(targetY) * 0.5D - motionY) * 0.100000000372529 * getFlySpeed(true);
-            motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * 0.100000000372529 * getFlySpeed(false);
-            float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
+            double targetX = airTarget.getX() + 0.5D - getPosX();
+            double targetY = Math.min(airTarget.getY(), 256) + 1D - getPosY();
+            double targetZ = airTarget.getZ() + 0.5D - getPosZ();
+            double motionX = (Math.signum(targetX) * 0.5D - this.getMotion().x) * 0.100000000372529 * getFlySpeed(false);
+            double motionY = (Math.signum(targetY) * 0.5D - this.getMotion().y) * 0.100000000372529 * getFlySpeed(true);
+            double motionZ = (Math.signum(targetZ) * 0.5D - this.getMotion().z) * 0.100000000372529 * getFlySpeed(false);
+            this.setMotion(this.getMotion().add(motionX, motionY, motionZ));
+            float angle = (float) (Math.atan2(this.getMotion().z, this.getMotion().x) * 180.0D / Math.PI) - 90.0F;
             float rotation = MathHelper.wrapDegrees(angle - rotationYaw);
             moveForward = 0.5F;
             prevRotationYaw = rotationYaw;
