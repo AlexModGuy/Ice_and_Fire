@@ -3,6 +3,8 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.entity.ai.goal.Goal;
 
+import java.util.EnumSet;
+
 public class DragonAILookIdle extends Goal {
     private EntityDragonBase dragon;
     private double lookX;
@@ -11,7 +13,7 @@ public class DragonAILookIdle extends Goal {
 
     public DragonAILookIdle(EntityDragonBase prehistoric) {
         this.dragon = prehistoric;
-        this.setMutexBits(3);
+        this.setMutexFlags(EnumSet.of(Flag.LOOK));
     }
 
     @Override

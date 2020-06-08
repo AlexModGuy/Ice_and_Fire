@@ -15,7 +15,6 @@ public class SirenAIFindWaterTarget extends Goal {
 
     public SirenAIFindWaterTarget(EntitySiren mob) {
         this.mob = mob;
-        this.setMutexBits(1);
     }
 
     @Override
@@ -45,7 +44,7 @@ public class SirenAIFindWaterTarget extends Goal {
     }
 
     public Vec3d findWaterTarget() {
-        if (this.mob.getAttackTarget() == null || this.mob.getAttackTarget().isDead) {
+        if (this.mob.getAttackTarget() == null || !this.mob.getAttackTarget().isAlive()) {
             List<Vec3d> water = new ArrayList<>();
             List<Vec3d> singTargets = new ArrayList<>();
             for (int x = (int) this.mob.getPosX() - 5; x < (int) this.mob.getPosX() + 5; x++) {

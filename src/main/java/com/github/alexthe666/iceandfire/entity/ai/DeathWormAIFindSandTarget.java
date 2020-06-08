@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 public class DeathWormAIFindSandTarget extends Goal {
@@ -19,12 +20,12 @@ public class DeathWormAIFindSandTarget extends Goal {
     public DeathWormAIFindSandTarget(EntityDeathWorm mob, int range) {
         this.mob = mob;
         this.range = range;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
 
     @Override
     public boolean shouldExecute() {
-        if (!this.mob.isInSand() || this.mob.isRiding() || this.mob.isBeingRidden()) {
+        if (!this.mob.isInSand() || this.mob.isPassenger() || this.mob.isBeingRidden()) {
             return false;
         }
         if (this.mob.getRNG().nextFloat() < 0.5F) {
@@ -49,7 +50,7 @@ public class DeathWormAIFindSandTarget extends Goal {
     }
 
     public BlockPos findSandTarget() {
-        if (this.mob.getAttackTarget() == null || this.mob.getAttackTarget().isDead) {
+        if (this.mob.getAttackTarget() == null || !this.mob.getAttackTarget().isAlive()) {
             List<BlockPos> sand = new ArrayList<>();
             if (this.mob.isTamed() && this.mob.getWormHome() != null) {
                 range = 25;

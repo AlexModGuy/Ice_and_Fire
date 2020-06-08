@@ -1,16 +1,17 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.Hand;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Random;
 
 public class PixieAISteal extends Goal {
@@ -28,7 +29,7 @@ public class PixieAISteal extends Goal {
     public PixieAISteal(EntityPixie temptedEntityIn, double speedIn) {
         this.temptedEntity = temptedEntityIn;
         this.speed = speedIn;
-        this.setMutexBits(3);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
@@ -45,7 +46,7 @@ public class PixieAISteal extends Goal {
             --this.delayTemptCounter;
             return false;
         } else {
-            this.temptingPlayer = this.temptedEntity.world.getClosestPlayerToEntity(this.temptedEntity, 10.0D);
+            this.temptingPlayer = this.temptedEntity.world.getClosestPlayer(this.temptedEntity, 10.0D);
             return this.temptingPlayer != null && (this.temptedEntity.getHeldItem(Hand.MAIN_HAND).isEmpty() && !this.temptingPlayer.inventory.isEmpty() && !this.temptingPlayer.isCreative());
         }
     }
@@ -63,7 +64,6 @@ public class PixieAISteal extends Goal {
 
     public void resetTask() {
         this.temptingPlayer = null;
-        this.temptedEntity.getMoveHelper().action = EntityMoveHelper.Action.WAIT;
         this.delayTemptCounter = 10;
         this.isRunning = false;
     }
@@ -83,7 +83,6 @@ public class PixieAISteal extends Goal {
             this.temptingPlayer.inventory.removeStackFromSlot(slot);
             this.temptedEntity.flipAI(true);
             this.temptedEntity.playSound(IafSoundRegistry.PIXIE_TAUNT, 1F, 1F);
-            this.temptedEntity.getMoveHelper().action = EntityMoveHelper.Action.WAIT;
             if (temptingPlayer != null) {
                 this.temptingPlayer.addPotionEffect(new EffectInstance(this.temptedEntity.negativePotions[this.temptedEntity.getColor()], 100));
             }

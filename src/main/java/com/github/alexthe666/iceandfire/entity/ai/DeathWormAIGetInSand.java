@@ -8,6 +8,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 import java.util.Random;
 
 public class DeathWormAIGetInSand extends Goal {
@@ -22,7 +23,7 @@ public class DeathWormAIGetInSand extends Goal {
         this.creature = theCreatureIn;
         this.movementSpeed = movementSpeedIn;
         this.world = theCreatureIn.world;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {

@@ -2,29 +2,30 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDreadKnight;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.AbstractHorse;
+import net.minecraft.entity.passive.horse.AbstractHorseEntity;
 
+import java.util.EnumSet;
 import java.util.List;
 
 public class DreadAIRideHorse extends Goal {
     private final EntityDreadKnight knight;
-    private AbstractHorse horse;
+    private AbstractHorseEntity horse;
 
     public DreadAIRideHorse(EntityDreadKnight knight) {
         this.knight = knight;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
-        if (this.knight.isRiding()) {
+        if (this.knight.isPassenger()) {
             return false;
         } else {
-            List<AbstractHorse> list = this.knight.world.getEntitiesWithinAABB(AbstractHorse.class, this.knight.getBoundingBox().grow(16.0D, 7.0D, 16.0D));
+            List<AbstractHorseEntity> list = this.knight.world.getEntitiesWithinAABB(AbstractHorseEntity.class, this.knight.getBoundingBox().grow(16.0D, 7.0D, 16.0D));
 
             if (list.isEmpty()) {
                 return false;
             } else {
-                for (AbstractHorse entityirongolem : list) {
+                for (AbstractHorseEntity entityirongolem : list) {
                    if(!entityirongolem.isBeingRidden()){
                        this.horse = entityirongolem;
                        break;
@@ -37,7 +38,7 @@ public class DreadAIRideHorse extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return !this.knight.isRiding() && this.horse != null && !this.horse.isBeingRidden();
+        return !this.knight.isPassenger() && this.horse != null && !this.horse.isBeingRidden();
     }
 
     public void startExecuting() {
@@ -52,7 +53,7 @@ public class DreadAIRideHorse extends Goal {
     public void tick() {
         this.knight.getLookController().setLookPositionWithEntity(this.horse, 30.0F, 30.0F);
 
-        this.knight.getNavigator().tryMoveToLivingEntity(this.horse, 1.2D);
+        this.knight.getNavigator().tryMoveToEntityLiving(this.horse, 1.2D);
 
         if (this.knight.getDistanceSq(this.horse) < 4.0D) {
             this.horse.setHorseTamed(true);

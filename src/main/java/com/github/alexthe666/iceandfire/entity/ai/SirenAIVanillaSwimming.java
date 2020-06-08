@@ -2,16 +2,17 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.pathfinding.GroundPathNavigator;
+import java.util.EnumSet;
 
 public class SirenAIVanillaSwimming extends Goal {
     private final EntitySiren entity;
 
     public SirenAIVanillaSwimming(EntitySiren entityIn) {
         this.entity = entityIn;
-        this.setMutexBits(4);
-        if (entityIn.getNavigator() instanceof PathNavigateGround) {
-            ((PathNavigateGround) entityIn.getNavigator()).setCanSwim(true);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+        if (entityIn.getNavigator() instanceof GroundPathNavigator) {
+            ((GroundPathNavigator) entityIn.getNavigator()).setCanSwim(true);
         }
     }
 
@@ -21,7 +22,7 @@ public class SirenAIVanillaSwimming extends Goal {
 
     public void tick() {
         if (this.entity.getRNG().nextFloat() < 0.8F) {
-            this.entity.getJumpHelper().setJumping();
+            this.entity.getJumpController().setJumping();
         }
     }
 }

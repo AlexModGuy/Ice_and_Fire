@@ -9,6 +9,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.EnumSet;
+
 public class SeaSerpentAIAttackMelee extends Goal {
     protected final int attackInterval = 20;
     protected EntitySeaSerpent attacker;
@@ -41,7 +43,7 @@ public class SeaSerpentAIAttackMelee extends Goal {
         this.world = amphithere.world;
         this.speedTowardsTarget = speedIn;
         this.longMemory = useLongMemory;
-        this.setMutexBits(3);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     /**
@@ -52,19 +54,19 @@ public class SeaSerpentAIAttackMelee extends Goal {
 
         if (LivingEntity == null || !this.attacker.onGround) {
             return false;
-        } else if (!LivingEntity.isEntityAlive()) {
+        } else if (!LivingEntity.isAlive()) {
             return false;
         } else {
             if (canPenalize) {
                 if (--this.delayCounter <= 0) {
-                    this.path = this.attacker.getNavigator().getPathToLivingEntity(LivingEntity);
+                    this.path = this.attacker.getNavigator().getPathToEntity(LivingEntity, 0);
                     this.delayCounter = 4 + this.attacker.getRNG().nextInt(7);
                     return this.path != null;
                 } else {
                     return true;
                 }
             }
-            this.path = this.attacker.getNavigator().getPathToLivingEntity(LivingEntity);
+            this.path = this.attacker.getNavigator().getPathToEntity(LivingEntity, 0);
 
             if (this.path != null) {
                 return true;
@@ -82,7 +84,7 @@ public class SeaSerpentAIAttackMelee extends Goal {
 
         if (LivingEntity == null) {
             return false;
-        } else if (!LivingEntity.isEntityAlive()) {
+        } else if (!LivingEntity.isAlive()) {
             return false;
         } else if (!this.longMemory) {
             return !this.attacker.getNavigator().noPath();
@@ -153,7 +155,7 @@ public class SeaSerpentAIAttackMelee extends Goal {
                     this.delayCounter += 5;
                 }
 
-                if (!this.attacker.getNavigator().tryMoveToLivingEntity(LivingEntity, this.speedTowardsTarget)) {
+                if (!this.attacker.getNavigator().tryMoveToEntityLiving(LivingEntity, this.speedTowardsTarget)) {
                     this.delayCounter += 15;
                 }
             }

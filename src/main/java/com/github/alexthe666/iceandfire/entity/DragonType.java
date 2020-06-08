@@ -53,7 +53,7 @@ public class DragonType {
                     if(egg.hasCustomName()){
                         dragon.setCustomName(egg.getCustomName());
                     }
-                    dragon.setVariant(egg.getType().ordinal());
+                    dragon.setVariant(egg.getEggType().ordinal());
                     dragon.setGender(egg.getRNG().nextBoolean());
                     dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                     dragon.setHunger(50);
@@ -75,7 +75,7 @@ public class DragonType {
                 egg.world.setBlockState(pos, IafBlockRegistry.EGG_IN_ICE.getDefaultState());
                 egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), SoundEvents.BLOCK_GLASS_BREAK, egg.getSoundCategory(), 2.5F, 1.0F, false);
                 if (egg.world.getBlockState(pos).getBlock() instanceof BlockEggInIce) {
-                    ((TileEntityEggInIce) egg.world.getTileEntity(pos)).type = egg.getType();
+                    ((TileEntityEggInIce) egg.world.getTileEntity(pos)).type = egg.getEggType();
                     ((TileEntityEggInIce) egg.world.getTileEntity(pos)).ownerUUID = egg.getOwnerId();
                 }
             }

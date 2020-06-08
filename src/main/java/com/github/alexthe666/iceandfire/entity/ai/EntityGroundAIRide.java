@@ -6,6 +6,8 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.EnumSet;
+
 public class EntityGroundAIRide<T extends MobEntity & IGroundMount> extends Goal {
 
     private T dragon;
@@ -13,7 +15,7 @@ public class EntityGroundAIRide<T extends MobEntity & IGroundMount> extends Goal
 
     public EntityGroundAIRide(T dragon) {
         this.dragon = dragon;
-        this.setMutexBits(0);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override

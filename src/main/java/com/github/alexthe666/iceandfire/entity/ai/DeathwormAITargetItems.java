@@ -2,12 +2,11 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.google.common.base.Predicate;
-import net.minecraft.entity.ai.EntityAITarget;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nullable;
@@ -65,10 +64,10 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
     @Override
     public void tick() {
         super.tick();
-        if (this.targetEntity == null || this.targetEntity != null && this.targetEntity.isDead) {
+        if (this.targetEntity == null || this.targetEntity != null && !this.targetEntity.isAlive()) {
             this.resetTask();
         }
-        if (this.targetEntity != null && !this.targetEntity.isDead && this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
+        if (this.targetEntity != null && this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
             EntityDeathWorm deathWorm = (EntityDeathWorm) this.goalOwner;
             this.targetEntity.getItem().shrink(1);
             this.goalOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);

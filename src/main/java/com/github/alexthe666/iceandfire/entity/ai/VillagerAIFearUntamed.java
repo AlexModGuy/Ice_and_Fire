@@ -1,77 +1,22 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.IVillagerFear;
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
+import java.util.function.Predicate;
 
-public class VillagerAIFearUntamed extends EntityAIAvoidEntity<LivingEntity> {
+public class VillagerAIFearUntamed extends AvoidEntityGoal<LivingEntity> {
 
-    private double avoidDistance;
-    private final Predicate <? super LivingEntity > avoidTargetSelector;
-    private Path path;
-    private final PathNavigate navigation;
-
-    public VillagerAIFearUntamed(MobEntity entityIn, Class<LivingEntity> classToAvoidIn, Predicate<LivingEntity> avoidTargetSelectorIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
-        super(entityIn, classToAvoidIn, avoidTargetSelectorIn, avoidDistanceIn, farSpeedIn, nearSpeedIn);
-        avoidTargetSelector = avoidTargetSelectorIn;
-        this.navigation = entityIn.getNavigator();
-    }
-
-    public boolean shouldExecuteVanilla() {
-        List<LivingEntity> list = this.entity.world.<LivingEntity>getEntitiesWithinAABB(LivingEntity.class, this.entity.getBoundingBox().grow((double)this.avoidDistance, 3.0D, (double)this.avoidDistance), this.avoidTargetSelector);
-
-        if (list.isEmpty())
-        {
-            return false;
-        }
-        else
-        {
-            this.closestLivingEntity = list.get(0);
-            Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.entity, 16, 7, new Vec3d(this.closestLivingEntity.getPosX(), this.closestLivingEntity.getPosY(), this.closestLivingEntity.getPosZ()));
-
-            if (vec3d == null)
-            {
-                return false;
-            }
-            else if (this.closestLivingEntity.getDistanceSq(vec3d.x, vec3d.y, vec3d.z) < this.closestLivingEntity.getDistanceSq(this.entity))
-            {
-                return false;
-            }
-            else
-            {
-                this.path = this.navigation.getPathToXYZ(vec3d.x, vec3d.y, vec3d.z);
-                return this.path != null;
-            }
-        }
-    }
-
-    public void startExecuting()
-    {
-        this.navigation.setPath(this.path, 0.8D);
-    }
-
-
-    public boolean shouldExecute() {
-        boolean should = shouldExecuteVanilla();
-        if (should && this.closestLivingEntity != null) {
-            if (closestLivingEntity instanceof TameableEntity && ((TameableEntity) closestLivingEntity).isTamed()) {
-                return false;
-            }
-            if (closestLivingEntity instanceof IVillagerFear && !((IVillagerFear) closestLivingEntity).shouldFear()) {
-                return false;
-            }
-        }
-        return should;
+    public VillagerAIFearUntamed(CreatureEntity entityIn, Class<LivingEntity> avoidClass, float distance, double nearSpeedIn, double farSpeedIn, Predicate<LivingEntity> targetPredicate) {
+        super(entityIn, avoidClass, distance, nearSpeedIn, farSpeedIn, targetPredicate);
     }
 }

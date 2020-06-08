@@ -6,6 +6,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.ai.goal.Goal;
 
+import java.util.EnumSet;
+
 public class DreadLichAIStrife extends Goal {
 
     private final EntityDreadLich entity;
@@ -23,7 +25,7 @@ public class DreadLichAIStrife extends Goal {
         this.moveSpeedAmp = moveSpeedAmpIn;
         this.attackCooldown = attackCooldownIn;
         this.maxAttackDistance = maxAttackDistanceIn * maxAttackDistanceIn;
-        this.setMutexBits(3);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public void setAttackCooldown(int p_189428_1_) {
@@ -44,12 +46,10 @@ public class DreadLichAIStrife extends Goal {
 
     public void startExecuting() {
         super.startExecuting();
-        ((IRangedAttackMob) this.entity).setSwingingArms(true);
     }
 
     public void resetTask() {
         super.resetTask();
-        ((IRangedAttackMob) this.entity).setSwingingArms(false);
         this.seeTime = 0;
         this.attackTime = -1;
         this.entity.resetActiveHand();
@@ -77,7 +77,7 @@ public class DreadLichAIStrife extends Goal {
                 this.entity.getNavigator().clearPath();
                 ++this.strafingTime;
             } else {
-                this.entity.getNavigator().tryMoveToLivingEntity(LivingEntity, this.moveSpeedAmp);
+                this.entity.getNavigator().tryMoveToEntityLiving(LivingEntity, this.moveSpeedAmp);
                 this.strafingTime = -1;
             }
 

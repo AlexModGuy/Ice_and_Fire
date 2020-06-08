@@ -4,7 +4,6 @@ import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.entity.ai.DreadAIMountDragon;
 import com.github.alexthe666.iceandfire.entity.ai.DreadAITargetNonDread;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.*;

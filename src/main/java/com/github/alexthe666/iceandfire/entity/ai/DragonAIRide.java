@@ -6,9 +6,10 @@ import com.github.alexthe666.iceandfire.entity.IFlyingMount;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.EnumSet;
 
 public class DragonAIRide<T extends MobEntity & IFlyingMount> extends Goal {
 
@@ -17,7 +18,7 @@ public class DragonAIRide<T extends MobEntity & IFlyingMount> extends Goal {
 
     public DragonAIRide(T dragon) {
         this.dragon = dragon;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override

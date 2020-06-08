@@ -1,22 +1,41 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.pathfinding.FlaggedPathPoint;
 import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 
 public class NodeProcessorDeathWorm extends NodeProcessor {
     public PathPoint getStart() {
-        return this.openPoint(MathHelper.floor(this.entity.getEntityBoundingBox().minX), MathHelper.floor(this.entity.getEntityBoundingBox().minY + 0.5D), MathHelper.floor(this.entity.getEntityBoundingBox().minZ));
+        return this.openPoint(MathHelper.floor(this.entity.getBoundingBox().minX), MathHelper.floor(this.entity.getBoundingBox().minY + 0.5D), MathHelper.floor(this.entity.getBoundingBox().minZ));
     }
 
-    public PathPoint getPathPointToCoords(double x, double y, double z) {
-        return this.openPoint(MathHelper.floor(x - 0.4), MathHelper.floor(y + 0.5D), MathHelper.floor(z - 0.4));
+    @Override
+    public FlaggedPathPoint func_224768_a(double x, double y, double z) {
+        return new FlaggedPathPoint(this.openPoint(MathHelper.floor(x - 0.4), MathHelper.floor(y + 0.5D), MathHelper.floor(z - 0.4)));
+    }
+
+    @Override
+    public int func_222859_a(PathPoint[] p_222859_1_, PathPoint p_222859_2_) {
+        return 0;
+    }
+
+    @Override
+    public PathNodeType getPathNodeType(IBlockReader blockaccessIn, int x, int y, int z, MobEntity entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
+        return null;
+    }
+
+    @Override
+    public PathNodeType getPathNodeType(IBlockReader blockaccessIn, int x, int y, int z) {
+        return null;
     }
 
     public int findPathOptions(PathPoint[] pathOptions, PathPoint currentPoint, PathPoint targetPoint, float maxDistance) {
@@ -33,13 +52,6 @@ public class NodeProcessorDeathWorm extends NodeProcessor {
         return i;
     }
 
-    public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z, LivingEntity LivingEntityIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
-        return PathNodeType.OPEN;
-    }
-
-    public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z) {
-        return PathNodeType.OPEN;
-    }
 
     @Nullable
     private PathPoint getWaterNode(int p_186328_1_, int p_186328_2_, int p_186328_3_) {

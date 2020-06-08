@@ -6,14 +6,13 @@ import com.google.common.base.Predicates;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 import java.util.List;
 
 public class StymphalianBirdAIFlee extends Goal {
@@ -27,11 +26,11 @@ public class StymphalianBirdAIFlee extends Goal {
         this.stymphalianBird = stymphalianBird;
         this.canBeSeenSelector = new Predicate<Entity>() {
             public boolean apply(@Nullable Entity entity) {
-                return entity instanceof PlayerEntity && entity.isEntityAlive() && StymphalianBirdAIFlee.this.stymphalianBird.getEntitySenses().canSee(entity) && !StymphalianBirdAIFlee.this.stymphalianBird.isOnSameTeam(entity);
+                return entity instanceof PlayerEntity && entity.isAlive() && StymphalianBirdAIFlee.this.stymphalianBird.getEntitySenses().canSee(entity) && !StymphalianBirdAIFlee.this.stymphalianBird.isOnSameTeam(entity);
             }
         };
         this.avoidDistance = avoidDistanceIn;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
 
@@ -40,7 +39,7 @@ public class StymphalianBirdAIFlee extends Goal {
             return false;
         }
         List<LivingEntity> list = this.stymphalianBird.world.getEntitiesWithinAABB(LivingEntity.class, this.stymphalianBird.getBoundingBox().grow((double) this.avoidDistance, 3.0D, (double) this.avoidDistance),
-                Predicates.and(new Predicate[]{EntitySelectors.NOT_SPECTATING, this.canBeSeenSelector}));
+                this.canBeSeenSelector);
 
         if (list.isEmpty()) {
             return false;
@@ -64,7 +63,7 @@ public class StymphalianBirdAIFlee extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return hidePlace != null && this.stymphalianBird.getDistanceSqToCenter(new BlockPos(hidePlace)) < 2;
+        return hidePlace != null && this.stymphalianBird.getDistanceSq(hidePlace.add(0.5, 0.5, 0.5)) < 2;
     }
 
     public void startExecuting() {
@@ -73,7 +72,6 @@ public class StymphalianBirdAIFlee extends Goal {
     }
 
     public void resetTask() {
-        this.stymphalianBird.getMoveHelper().action = EntityMoveHelper.Action.WAIT;
         this.closestLivingEntity = null;
     }
 }

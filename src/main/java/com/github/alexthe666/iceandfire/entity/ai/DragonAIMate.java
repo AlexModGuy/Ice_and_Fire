@@ -3,17 +3,18 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
-import net.minecraft.stats.StatList;
-import net.minecraft.util.ParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
 
@@ -29,7 +30,7 @@ public class DragonAIMate extends Goal {
         this.dragon = dragon;
         this.theWorld = dragon.world;
         this.moveSpeed = speedIn;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
@@ -45,7 +46,7 @@ public class DragonAIMate extends Goal {
      * Returns whether an in-progress Goal should continue executing
      */
     public boolean continueExecuting() {
-        return this.targetMate.isEntityAlive() && this.targetMate.isInLove() && this.spawnBabyDelay < 60;
+        return this.targetMate.isAlive() && this.targetMate.isInLove() && this.spawnBabyDelay < 60;
     }
 
     /**
@@ -104,11 +105,6 @@ public class DragonAIMate extends Goal {
                 PlayerEntity = this.targetMate.getLoveCause();
             }
 
-            if (PlayerEntity != null) {
-                PlayerEntity.addStat(StatList.ANIMALS_BRED);
-                //PlayerEntity.addStat(ModAchievements.dragonBreed);
-            }
-
             this.dragon.setGrowingAge(6000);
             this.targetMate.setGrowingAge(6000);
             this.dragon.resetInLove();
@@ -118,7 +114,7 @@ public class DragonAIMate extends Goal {
             int nestZ = (int) (this.dragon.isMale() ? this.targetMate.getPosZ() : this.dragon.getPosZ());
 
             egg.setLocationAndAngles(nestX - 0.5F, nestY + 1F, nestZ - 0.5F, 0.0F, 0.0F);
-            this.theWorld.spawnEntity(egg);
+            this.theWorld.addEntity(egg);
             Random random = this.dragon.getRNG();
 
             for (int i = 0; i < 17; ++i) {
@@ -126,9 +122,9 @@ public class DragonAIMate extends Goal {
                 double d1 = random.nextGaussian() * 0.02D;
                 double d2 = random.nextGaussian() * 0.02D;
                 double d3 = random.nextDouble() * (double) this.dragon.getWidth() * 2.0D - (double) this.dragon.getWidth();
-                double d4 = 0.5D + random.nextDouble() * (double) this.dragon.height;
+                double d4 = 0.5D + random.nextDouble() * (double) this.dragon.getHeight();
                 double d5 = random.nextDouble() * (double) this.dragon.getWidth() * 2.0D - (double) this.dragon.getWidth();
-                this.theWorld.spawnParticle(ParticleTypes.HEART, this.dragon.getPosX() + d3, this.dragon.getPosY() + d4, this.dragon.getPosZ() + d5, d0, d1, d2);
+                this.theWorld.addParticle(ParticleTypes.HEART, this.dragon.getPosX() + d3, this.dragon.getPosY() + d4, this.dragon.getPosZ() + d5, d0, d1, d2);
             }
             BlockPos eggPos = new BlockPos(nestX - 2, nestY, nestZ - 2);
             BlockPos dirtPos = eggPos.add(1, 0, 1);
@@ -136,16 +132,17 @@ public class DragonAIMate extends Goal {
             for (int x = 0; x < 3; x++) {
                 for (int z = 0; z < 3; z++) {
                     BlockPos add = eggPos.add(x, 0, z);
-                    if (theWorld.getBlockState(add).getBlock().isReplaceable(theWorld, add) || theWorld.getBlockState(add).getMaterial() == Material.GROUND || theWorld.getBlockState(add).getBlockHardness(theWorld, add) < 5F || theWorld.getBlockState(add).getBlockHardness(theWorld, add) >= 0F) {
+                    BlockState prevState = theWorld.getBlockState(add);
+                    if (prevState.getMaterial().isReplaceable() || theWorld.getBlockState(add).getMaterial() == Material.EARTH || theWorld.getBlockState(add).getBlockHardness(theWorld, add) < 5F || theWorld.getBlockState(add).getBlockHardness(theWorld, add) >= 0F) {
                         theWorld.setBlockState(add, NEST);
                     }
                 }
             }
-            if (theWorld.getBlockState(dirtPos).getBlock().isReplaceable(theWorld, dirtPos) || theWorld.getBlockState(dirtPos) == NEST) {
+            if (theWorld.getBlockState(dirtPos).getMaterial().isReplaceable() || theWorld.getBlockState(dirtPos) == NEST) {
                 theWorld.setBlockState(dirtPos, Blocks.GRASS_PATH.getDefaultState());
             }
-            if (this.theWorld.getGameRules().getBoolean("doMobLoot")) {
-                this.theWorld.spawnEntity(new EntityXPOrb(this.theWorld, this.dragon.getPosX(), this.dragon.getPosY(), this.dragon.getPosZ(), random.nextInt(15) + 10));
+            if (this.theWorld.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
+                this.theWorld.addEntity(new ExperienceOrbEntity(this.theWorld, this.dragon.getPosX(), this.dragon.getPosY(), this.dragon.getPosZ(), random.nextInt(15) + 10));
             }
         }
     }

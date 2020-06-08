@@ -6,18 +6,19 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 
+import java.util.EnumSet;
+
 public class DragonAITarget<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
     private EntityDragonBase dragon;
 
-    public DragonAITarget(EntityDragonBase entityIn, Class<T> classTarget, boolean checkSight, Predicate<? super T> targetSelector) {
+    public DragonAITarget(EntityDragonBase entityIn, Class<T> classTarget, boolean checkSight, Predicate<LivingEntity> targetSelector) {
         super(entityIn, classTarget, 0, checkSight, false, targetSelector);
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
         this.dragon = entityIn;
     }
 
@@ -26,25 +27,25 @@ public class DragonAITarget<T extends LivingEntity> extends NearestAttackableTar
         if(dragon.getCommand() == 1 || dragon.getCommand() == 2 || dragon.isSleeping()){
             return false;
         }
-        if (super.shouldExecute() && this.targetEntity != null && !this.targetEntity.getClass().equals(this.dragon.getClass())) {
+        if (super.shouldExecute() && this.target != null && !this.target.getClass().equals(this.dragon.getClass())) {
             float dragonSize = Math.max(this.dragon.getWidth(), this.dragon.getWidth() * (dragon.getRenderSize() / 3));
-            if (dragonSize >= this.targetEntity.getWidth()) {
-                if (this.targetEntity instanceof PlayerEntity && !dragon.isTamed()) {
+            if (dragonSize >= this.target.getWidth()) {
+                if (this.target instanceof PlayerEntity && !dragon.isTamed()) {
                     return true;
                 }
-                if (this.targetEntity instanceof EntityDragonBase) {
-                    EntityDragonBase dragon = (EntityDragonBase) this.targetEntity;
+                if (this.target instanceof EntityDragonBase) {
+                    EntityDragonBase dragon = (EntityDragonBase) this.target;
                     if (dragon.getOwner() != null && this.dragon.getOwner() != null && this.dragon.isOwner(dragon.getOwner())) {
                         return false;
                     }
                     return !dragon.isModelDead();
                 }
-                if (this.targetEntity instanceof PlayerEntity && dragon.isTamed()) {
+                if (this.target instanceof PlayerEntity && dragon.isTamed()) {
                     return false;
                 } else {
-                    if (!dragon.isOwner(this.targetEntity) && FoodUtils.getFoodPoints(this.targetEntity) > 0 && dragon.canMove() && (dragon.getHunger() < 90 || !dragon.isTamed() && this.targetEntity instanceof PlayerEntity)) {
+                    if (!dragon.isOwner(this.target) && FoodUtils.getFoodPoints(this.target) > 0 && dragon.canMove() && (dragon.getHunger() < 90 || !dragon.isTamed() && this.target instanceof PlayerEntity)) {
                         if (dragon.isTamed()) {
-                            return DragonUtils.canTameDragonAttack(dragon, this.targetEntity);
+                            return DragonUtils.canTameDragonAttack(dragon, this.target);
                         } else {
                             return true;
                         }

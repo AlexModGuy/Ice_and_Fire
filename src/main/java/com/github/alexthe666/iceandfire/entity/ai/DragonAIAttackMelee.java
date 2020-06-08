@@ -8,6 +8,8 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.EnumSet;
+
 public class DragonAIAttackMelee extends Goal {
     protected EntityDragonBase dragon;
     private int attackTick;
@@ -25,7 +27,7 @@ public class DragonAIAttackMelee extends Goal {
         this.dragon = dragon;
         this.speedTowardsTarget = speedIn;
         this.longMemory = useLongMemory;
-        this.setMutexBits(3);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
@@ -34,21 +36,21 @@ public class DragonAIAttackMelee extends Goal {
 
         if (LivingEntity == null) {
             return false;
-        } else if (!LivingEntity.isEntityAlive()) {
+        } else if (LivingEntity.isAlive()) {
             return false;
         } else if (!dragon.canMove() || dragon.isHovering() || dragon.isFlying()) {
             return false;
         } else {
             if (canPenalize) {
                 if (--this.delayCounter <= 0) {
-                    this.entityPathEntity = this.dragon.getNavigator().getPathToLivingEntity(LivingEntity);
+                    this.entityPathEntity = this.dragon.getNavigator().getPathToEntity(LivingEntity, 0);
                     this.delayCounter = 4 + this.dragon.getRNG().nextInt(7);
                     return this.entityPathEntity != null;
                 } else {
                     return true;
                 }
             }
-            this.entityPathEntity = this.dragon.getNavigator().getPathToLivingEntity(LivingEntity);
+            this.entityPathEntity = this.dragon.getNavigator().getPathToEntity(LivingEntity, 0);
             return this.entityPathEntity != null;
         }
     }
@@ -56,11 +58,11 @@ public class DragonAIAttackMelee extends Goal {
     @Override
     public boolean shouldContinueExecuting() {
         LivingEntity LivingEntity = this.dragon.getAttackTarget();
-        if (LivingEntity != null && LivingEntity.isDead) {
+        if (LivingEntity != null && !LivingEntity.isAlive()) {
             this.resetTask();
             return false;
         }
-        return LivingEntity != null && (LivingEntity.isEntityAlive() && (!this.longMemory ? (dragon.isFlying() || dragon.isHovering() || !this.dragon.getNavigator().noPath()) : (this.dragon.isWithinHomeDistanceFromPosition(new BlockPos(LivingEntity)) && (!(LivingEntity instanceof PlayerEntity) || !((PlayerEntity) LivingEntity).isSpectator() && !((PlayerEntity) LivingEntity).isCreative()))));
+        return LivingEntity != null && (LivingEntity.isAlive() && (!this.longMemory ? (dragon.isFlying() || dragon.isHovering() || !this.dragon.getNavigator().noPath()) : (this.dragon.isWithinHomeDistanceFromPosition(new BlockPos(LivingEntity)) && (!(LivingEntity instanceof PlayerEntity) || !((PlayerEntity) LivingEntity).isSpectator() && !((PlayerEntity) LivingEntity).isCreative()))));
     }
 
     @Override
@@ -116,7 +118,7 @@ public class DragonAIAttackMelee extends Goal {
                 } else if (d0 > 256.0D) {
                     this.delayCounter += 5;
                 }
-                if (!this.dragon.getNavigator().tryMoveToLivingEntity(entity, this.speedTowardsTarget) && this.dragon.canMove()) {
+                if (!this.dragon.getNavigator().tryMoveToEntityLiving(entity, this.speedTowardsTarget) && this.dragon.canMove()) {
                     this.delayCounter += 15;
                 }
             }

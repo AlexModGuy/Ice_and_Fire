@@ -4,6 +4,8 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 
+import java.util.EnumSet;
+
 public class DragonAIEscort extends Goal {
     private final EntityDragonBase dragon;
     private final double movementSpeed;
@@ -12,7 +14,7 @@ public class DragonAIEscort extends Goal {
     public DragonAIEscort(EntityDragonBase entityIn, double movementSpeedIn) {
         this.dragon = entityIn;
         this.movementSpeed = movementSpeedIn;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
@@ -23,7 +25,7 @@ public class DragonAIEscort extends Goal {
         if (this.dragon.getOwner() != null) {
             double dist = this.dragon.getDistance(this.dragon.getOwner());
             if (dist > this.dragon.getBoundingBox().getAverageEdgeLength() && (!this.dragon.isFlying() && !this.dragon.isHovering() || !dragon.isAllowedToTriggerFlight())) {
-                this.dragon.getNavigator().tryMoveToLivingEntity(this.dragon.getOwner(), 1.5F);
+                this.dragon.getNavigator().tryMoveToEntityLiving(this.dragon.getOwner(), 1.5F);
             }
             if ((dist > 30 || this.dragon.getOwner().getPosY() - this.dragon.getPosY() > 8) && !this.dragon.isFlying() && !this.dragon.isHovering() && dragon.isAllowedToTriggerFlight()) {
                 this.dragon.setHovering(true);
@@ -36,7 +38,7 @@ public class DragonAIEscort extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return this.dragon.canMove() && this.dragon.getAttackTarget() == null && this.dragon.getOwner() != null && this.dragon.getOwner().isEntityAlive() && (this.dragon.getDistance(this.dragon.getOwner()) > 15 || !this.dragon.getNavigator().noPath());
+        return this.dragon.canMove() && this.dragon.getAttackTarget() == null && this.dragon.getOwner() != null && this.dragon.getOwner().isAlive() && (this.dragon.getDistance(this.dragon.getOwner()) > 15 || !this.dragon.getNavigator().noPath());
     }
 
 }

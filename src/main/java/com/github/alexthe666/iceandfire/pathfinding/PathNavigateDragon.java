@@ -1,16 +1,17 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.*;
-import net.minecraft.util.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import java.util.stream.Collectors;
 
 public class PathNavigateDragon extends GroundPathNavigator {
     public BlockPos targetPosition;
@@ -21,25 +22,25 @@ public class PathNavigateDragon extends GroundPathNavigator {
         this.dragon = LivingEntityIn;
     }
 
-    protected PathFinder getPathFinder() {
+    protected PathFinder getPathFinder(int i) {
         this.nodeProcessor = new NodeProcessorDragon();
         this.nodeProcessor.setCanEnterDoors(true);
         this.nodeProcessor.setCanSwim(true);
-        return new PathFinder(this.nodeProcessor);
+        return new PathFinder(this.nodeProcessor, i);
     }
 
-    public Path getPathToPos(BlockPos pos) {
+    public Path getPathToPos(BlockPos pos, int i) {
         this.targetPosition = pos;
-        return super.getPathToPos(pos);
+        return super.getPathToPos(pos, i);
     }
 
-    public Path getPathToLivingEntity(Entity entityIn) {
+    public Path getPathToEntity(Entity entityIn, int i) {
         this.targetPosition = new BlockPos(entityIn);
-        return super.getPathToLivingEntity(entityIn);
+        return super.getPathToEntity(entityIn, i);
     }
 
-    public boolean tryMoveToLivingEntity(Entity entityIn, double speedIn) {
-        Path path = this.getPathToLivingEntity(entityIn);
+    public boolean tryMoveToEntity(Entity entityIn, double speedIn) {
+        Path path = this.getPathToEntity(entityIn, 0);
         if (path != null) {
             return this.setPath(path, speedIn);
         } else {
@@ -64,19 +65,19 @@ public class PathNavigateDragon extends GroundPathNavigator {
             }
         }
 
-        this.maxDistanceToWaypoint = this.entity.width;
+        this.maxDistanceToWaypoint = this.entity.getWidth();
         Vec3d vec3d1 = this.currentPath.getCurrentPos();
         float distX = MathHelper.abs((float)(this.entity.getPosX() - (vec3d1.x + 0.5D)));
         float distZ = MathHelper.abs((float)(this.entity.getPosZ() - (vec3d1.z + 0.5D)));
         float distY = (float)Math.abs(this.entity.getPosY() - vec3d1.y);
 
-        if (distX < this.maxDistanceToWaypoint && distZ < this.maxDistanceToWaypoint && distY < this.entity.height)
+        if (distX < this.maxDistanceToWaypoint && distZ < this.maxDistanceToWaypoint && distY < this.entity.getHeight())
         {
             this.currentPath.setCurrentPathIndex(this.currentPath.getCurrentPathIndex() + 1);
         }
 
-        int k = MathHelper.ceil(this.entity.width);
-        int l = MathHelper.ceil(this.entity.height);
+        int k = MathHelper.ceil(this.entity.getWidth());
+        int l = MathHelper.ceil(this.entity.getHeight());
         int i1 = k;
 
         for (int j1 = i - 1; j1 >= this.currentPath.getCurrentPathIndex(); --j1)
@@ -287,16 +288,14 @@ public class PathNavigateDragon extends GroundPathNavigator {
      */
     private boolean isPositionClear(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3d p_179692_7_, double p_179692_8_, double p_179692_10_)
     {
-        for (BlockPos blockpos : BlockPos.getAllInBox(new BlockPos(x, y, z), new BlockPos(x + sizeX - 1, y + sizeY - 1, z + sizeZ - 1)))
+        for (BlockPos blockpos : BlockPos.getAllInBox(new BlockPos(x, y, z), new BlockPos(x + sizeX - 1, y + sizeY - 1, z + sizeZ - 1)).collect(Collectors.toList()))
         {
             double d0 = (double)blockpos.getX() + 0.5D - p_179692_7_.x;
             double d1 = (double)blockpos.getZ() + 0.5D - p_179692_7_.z;
 
             if (d0 * p_179692_8_ + d1 * p_179692_10_ >= 0.0D)
             {
-                Block block = this.world.getBlockState(blockpos).getBlock();
-
-                if (!block.isPassable(this.world, blockpos))
+                if (this.world.getBlockState(blockpos).getMaterial().blocksMovement())
                 {
                     return false;
                 }

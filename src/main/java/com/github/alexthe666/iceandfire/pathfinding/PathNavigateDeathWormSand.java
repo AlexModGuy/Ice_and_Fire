@@ -3,9 +3,9 @@ package com.github.alexthe666.iceandfire.pathfinding;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import net.minecraft.block.material.Material;
 import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -18,8 +18,8 @@ public class PathNavigateDeathWormSand extends PathNavigator {
         worm = deathworm;
     }
 
-    protected PathFinder getPathFinder() {
-        return new PathFinder(new NodeProcessorDeathWorm());
+    protected PathFinder getPathFinder(int i) {
+        return new PathFinder(new NodeProcessorDeathWorm(), i);
     }
 
     /**
@@ -58,14 +58,14 @@ public class PathNavigateDeathWormSand extends PathNavigator {
      * Checks if the specified entity can safely walk to the specified location.
      */
     protected boolean isDirectPathBetweenPoints(Vec3d posVec31, Vec3d posVec32, int sizeX, int sizeY, int sizeZ) {
-        RayTraceResult raytraceresult = this.world.rayTraceBlocks(posVec31, new Vec3d(posVec32.x, posVec32.y + 0.5D, posVec32.z), false, true, false);
-        if (raytraceresult != null && raytraceresult.typeOfHit == RayTraceResult.Type.BLOCK) {
-            return entity.world.getBlockState(raytraceresult.getBlockPos()).getMaterial() == Material.SAND;
+        RayTraceResult raytraceresult = this.world.rayTraceBlocks(new RayTraceContext(posVec31, posVec32, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
+        if (raytraceresult != null && raytraceresult.getType() == RayTraceResult.Type.BLOCK) {
+            return entity.world.getBlockState(new BlockPos(raytraceresult.getHitVec())).getMaterial() == Material.SAND;
         }
         return false;
     }
 
     public boolean canEntityStandOnPos(BlockPos pos) {
-        return this.world.getBlockState(pos).isFullBlock();
+        return this.world.getBlockState(pos).isSolid();
     }
 }

@@ -5,6 +5,8 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.EnumSet;
+
 public class DragonAIWander extends Goal {
     private EntityDragonBase dragon;
     private double xPosition;
@@ -22,7 +24,8 @@ public class DragonAIWander extends Goal {
         this.dragon = creatureIn;
         this.speed = speedIn;
         this.executionChance = chance;
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+
     }
 
     @Override

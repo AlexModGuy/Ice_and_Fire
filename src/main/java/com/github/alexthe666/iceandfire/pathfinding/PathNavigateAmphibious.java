@@ -1,40 +1,42 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import java.util.stream.Collectors;
+
 public class PathNavigateAmphibious extends PathNavigator {
     private boolean shouldAvoidSun;
 
-    public PathNavigateAmphibious(LivingEntity LivingEntityIn, World worldIn) {
+    public PathNavigateAmphibious(CreatureEntity LivingEntityIn, World worldIn) {
         super(LivingEntityIn, worldIn);
         this.nodeProcessor.setCanSwim(true);
     }
 
-    protected PathFinder getPathFinder() {
+    protected PathFinder getPathFinder(int p_179679_1_) {
         this.nodeProcessor = new WalkNodeProcessor();
         this.nodeProcessor.setCanEnterDoors(true);
         this.nodeProcessor.setCanSwim(true);
-        return new PathFinder(this.nodeProcessor);
+        return new PathFinder(this.nodeProcessor, p_179679_1_);
     }
 
     protected boolean canNavigate() {
-        return this.entity.onGround || this.getCanSwim() && this.isInLiquid() || this.entity.isRiding();
+        return this.entity.onGround || this.getCanSwim() && this.isInLiquid() || this.entity.isPassenger();
     }
-
     protected Vec3d getEntityPosition() {
         return new Vec3d(this.entity.getPosX(), (double) this.getPathablePosY(), this.entity.getPosZ());
     }
 
-    public Path getPathToPos(BlockPos pos) {
+    public Path getPathToPos(BlockPos pos, int i) {
         if (this.world.getBlockState(pos).getMaterial() == Material.AIR) {
             BlockPos blockpos;
 
@@ -42,7 +44,7 @@ public class PathNavigateAmphibious extends PathNavigator {
             }
 
             if (blockpos.getY() > 0) {
-                return super.getPathToPos(blockpos.up());
+                return super.getPathToPos(blockpos.up(), i);
             }
 
             while (blockpos.getY() < this.world.getHeight() && this.world.getBlockState(blockpos).getMaterial() == Material.AIR) {
@@ -53,48 +55,46 @@ public class PathNavigateAmphibious extends PathNavigator {
         }
 
         if (!this.world.getBlockState(pos).getMaterial().isSolid()) {
-            return super.getPathToPos(pos);
+            return super.getPathToPos(pos, i);
         } else {
             BlockPos blockpos1;
 
             for (blockpos1 = pos.up(); blockpos1.getY() < this.world.getHeight() && this.world.getBlockState(blockpos1).getMaterial().isSolid(); blockpos1 = blockpos1.up()) {
             }
 
-            return super.getPathToPos(blockpos1);
+            return super.getPathToPos(blockpos1, i);
         }
     }
 
-    public Path getPathToLivingEntity(Entity entityIn) {
-        return this.getPathToPos(new BlockPos(entityIn));
+    public Path getPathToEntity(Entity entityIn, int i) {
+        return this.getPathToPos(new BlockPos(entityIn), i);
     }
 
     private int getPathablePosY() {
         if (this.entity.isInWater() && this.getCanSwim()) {
-            int i = (int) this.entity.getEntityBoundingBox().minY;
+            int i = (int) this.entity.getBoundingBox().minY;
             Block block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.getPosX()), i, MathHelper.floor(this.entity.getPosZ()))).getBlock();
             int j = 0;
 
-            while (block == Blocks.FLOWING_WATER || block == Blocks.WATER) {
+            while (block == Blocks.WATER) {
                 ++i;
                 block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.getPosX()), i, MathHelper.floor(this.entity.getPosZ()))).getBlock();
                 ++j;
 
                 if (j > 16) {
-                    return (int) this.entity.getEntityBoundingBox().minY;
+                    return (int) this.entity.getBoundingBox().minY;
                 }
             }
 
             return i;
         } else {
-            return (int) (this.entity.getEntityBoundingBox().minY + 0.5D);
+            return (int) (this.entity.getBoundingBox().minY + 0.5D);
         }
     }
 
     protected void removeSunnyPath() {
-        super.removeSunnyPath();
-
         if (this.shouldAvoidSun) {
-            if (this.world.canSeeSky(new BlockPos(MathHelper.floor(this.entity.getPosX()), (int) (this.entity.getEntityBoundingBox().minY + 0.5D), MathHelper.floor(this.entity.getPosZ())))) {
+            if (this.world.canSeeSky(new BlockPos(MathHelper.floor(this.entity.getPosX()), (int) (this.entity.getBoundingBox().minY + 0.5D), MathHelper.floor(this.entity.getPosZ())))) {
                 return;
             }
 
@@ -217,14 +217,14 @@ public class PathNavigateAmphibious extends PathNavigator {
      * Returns true if an entity does not collide with any solid blocks at the position.
      */
     private boolean isPositionClear(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3d p_179692_7_, double p_179692_8_, double p_179692_10_) {
-        for (BlockPos blockpos : BlockPos.getAllInBox(new BlockPos(x, y, z), new BlockPos(x + sizeX - 1, y + sizeY - 1, z + sizeZ - 1))) {
+        for (BlockPos blockpos : BlockPos.getAllInBox(new BlockPos(x, y, z), new BlockPos(x + sizeX - 1, y + sizeY - 1, z + sizeZ - 1)).collect(Collectors.toList())) {
             double d0 = (double) blockpos.getX() + 0.5D - p_179692_7_.x;
             double d1 = (double) blockpos.getZ() + 0.5D - p_179692_7_.z;
 
             if (d0 * p_179692_8_ + d1 * p_179692_10_ >= 0.0D) {
                 Block block = this.world.getBlockState(blockpos).getBlock();
 
-                if (!block.isPassable(this.world, blockpos)) {
+                if (this.world.getBlockState(blockpos).getMaterial().blocksMovement()) {
                     return false;
                 }
             }

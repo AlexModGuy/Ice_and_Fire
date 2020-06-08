@@ -23,7 +23,6 @@ public class SeaSerpentAIGetInWater extends Goal {
     private double shelterZ;
 
     public SeaSerpentAIGetInWater(EntitySeaSerpent serpent, double movementSpeedIn) {
-        this.setMutexBits(0);
         this.movementSpeed = movementSpeedIn;
         this.world = serpent.world;
         this.serpent = serpent;
