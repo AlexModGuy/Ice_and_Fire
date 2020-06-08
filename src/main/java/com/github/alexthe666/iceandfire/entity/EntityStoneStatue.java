@@ -1,9 +1,14 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
@@ -14,9 +19,8 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     public boolean smallArms;
     private int crackAmount;
 
-    public EntityStoneStatue(World worldIn) {
-        super(worldIn);
-        this.setSize(0.8F, 1.9F);
+    public EntityStoneStatue(EntityType t, World worldIn) {
+        super(t, worldIn);
     }
 
 
@@ -38,7 +42,7 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     public void writeAdditional(CompoundNBT tag) {
         super.writeAdditional(tag);
         tag.putInt("CrackAmount", this.crackAmount);
-        tag.setBoolean("SmallArms", this.smallArms);
+        tag.putBoolean("SmallArms", this.smallArms);
     }
 
     @Override
@@ -50,6 +54,26 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
 
     public boolean attackEntityFrom(DamageSource source, float amount) {
         return source == DamageSource.OUT_OF_WORLD;
+    }
+
+    @Override
+    public Iterable<ItemStack> getArmorInventoryList() {
+        return ImmutableList.of();
+    }
+
+    @Override
+    public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
+
+    }
+
+    @Override
+    public HandSide getPrimaryHand() {
+        return HandSide.RIGHT;
     }
 
     public int getCrackAmount() {

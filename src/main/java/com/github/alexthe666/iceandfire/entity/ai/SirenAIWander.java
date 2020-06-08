@@ -2,19 +2,22 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 
-public class SirenAIWander extends EntityAIWander {
+public class SirenAIWander extends RandomWalkingGoal {
 
-    public SirenAIWander(MobEntity creatureIn, double speedIn) {
+    private EntitySiren siren;
+
+    public SirenAIWander(EntitySiren creatureIn, double speedIn) {
         super(creatureIn, speedIn);
+        this.siren = creatureIn;
     }
 
     public boolean shouldExecute() {
-        return !this.entity.isInWater() && !((EntitySiren) entity).isSinging() && super.shouldExecute();
+        return !this.siren.isInWater() && !((EntitySiren) siren).isSinging() && super.shouldExecute();
     }
 
     public boolean shouldContinueExecuting() {
-        return !this.entity.isInWater() && !((EntitySiren) entity).isSinging() && super.shouldContinueExecuting();
+        return !this.siren.isInWater() && !((EntitySiren) siren).isSinging() && super.shouldContinueExecuting();
     }
 }

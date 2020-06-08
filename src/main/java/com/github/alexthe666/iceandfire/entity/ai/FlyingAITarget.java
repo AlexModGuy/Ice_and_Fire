@@ -4,11 +4,12 @@ import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nullable;
 
-public class FlyingAITarget extends EntityAINearestAttackableTarget {
+public class FlyingAITarget extends NearestAttackableTargetGoal {
 
     public FlyingAITarget(MobEntity creature, Class classTarget, boolean checkSight) {
         super(creature, classTarget, checkSight);
