@@ -76,7 +76,7 @@ public enum EnumBestiaryPages {
         for (int i = 0; i < EnumBestiaryPages.values().length; i++) {
             allPages.add(EnumBestiaryPages.values()[i]);
         }
-        List<EnumBestiaryPages> pages = containedPages(EnumBestiaryPages.toList(book.getTagCompound().getIntArray("Pages")));
+        List<EnumBestiaryPages> pages = containedPages(EnumBestiaryPages.toList(book.getTag().getIntArray("Pages")));
         for (EnumBestiaryPages page : allPages) {
             return !pages.contains(page);
         }
@@ -108,7 +108,7 @@ public enum EnumBestiaryPages {
 
     public static List<EnumBestiaryPages> possiblePages(ItemStack book) {
         if (book.getItem() instanceof ItemBestiary) {
-            CompoundNBT tag = book.getTagCompound();
+            CompoundNBT tag = book.getTag();
             List<EnumBestiaryPages> allPages = new ArrayList<EnumBestiaryPages>();
             for (EnumBestiaryPages page : EnumBestiaryPages.values()) {
                 allPages.add(page);
@@ -131,13 +131,13 @@ public enum EnumBestiaryPages {
     public static boolean addPage(EnumBestiaryPages page, ItemStack book) {
         boolean flag = false;
         if (book.getItem() instanceof ItemBestiary) {
-            CompoundNBT tag = book.getTagCompound();
+            CompoundNBT tag = book.getTag();
             List<EnumBestiaryPages> enumlist = containedPages(toList(tag.getIntArray("Pages")));
             if (!enumlist.contains(page)) {
                 enumlist.add(page);
                 flag = true;
             }
-            tag.setIntArray("Pages", fromList(enumToInt(enumlist)));
+            tag.putIntArray("Pages", fromList(enumToInt(enumlist)));
         }
         return flag;
     }

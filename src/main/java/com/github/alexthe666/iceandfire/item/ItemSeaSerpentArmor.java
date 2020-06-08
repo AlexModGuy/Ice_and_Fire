@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import net.minecraft.client.renderer.entity.model.BipedModel;
@@ -24,7 +25,7 @@ public class ItemSeaSerpentArmor extends ArmorItem {
 
     public EnumSeaSerpent armor_type;
 
-    public ItemSeaSerpentArmor(EnumSeaSerpent armorType, ArmorMaterial material, EquipmentSlotType slot) {
+    public ItemSeaSerpentArmor(EnumSeaSerpent armorType, CustomArmorMaterial material, EquipmentSlotType slot) {
         super(material, slot, new Item.Properties().group(IceAndFire.TAB_ITEMS));
         this.armor_type = armorType;
     }

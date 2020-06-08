@@ -3,31 +3,39 @@ package com.github.alexthe666.iceandfire.entity.tile;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeBricks;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeCore;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
+import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.IntData;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IntArray;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-public class TileEntityDragonforge extends TileEntity implements ITickable, ISidedInventory {
+public class TileEntityDragonforge extends LockableTileEntity implements ITickable, ISidedInventory {
     private static final int[] SLOTS_TOP = new int[]{0, 1};
     private static final int[] SLOTS_BOTTOM = new int[]{2};
     private static final int[] SLOTS_SIDES = new int[]{0, 1};
@@ -335,8 +343,9 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         return super.getCapability(capability, facing);
     }
 
-    public String getName() {
-        return isFire ? "container.dragonforge_fire" : "container.dragonforge_ice";
+    @Override
+    protected ITextComponent getDefaultName() {
+        return  new TranslationTextComponent(isFire ? "container.dragonforge_fire" : "container.dragonforge_ice");
     }
 
     public void transferPower(int i) {
@@ -394,5 +403,16 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
             }
         }
         return count > 2;
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
+        return new ContainerDragonForge(id, this, playerInventory, new IntArray(0));
+    }
+
+    @Override
+    protected Container createMenu(int id, PlayerInventory player) {
+        return new ContainerDragonForge(id, this, player, new IntArray(0));
     }
 }

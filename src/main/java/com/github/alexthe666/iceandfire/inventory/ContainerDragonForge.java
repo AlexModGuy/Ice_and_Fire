@@ -3,34 +3,43 @@ package com.github.alexthe666.iceandfire.inventory;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotFurnaceOutput;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.FurnaceResultSlot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIntArray;
+import net.minecraft.util.IntArray;
 
-public class ContainerDragonForge extends SyncedFieldContainer {
+public class ContainerDragonForge extends Container {
 
     private final IInventory tileFurnace;
     private int cookTime;
     private boolean isFire;
 
-    public ContainerDragonForge(InventoryPlayer playerInventory, IInventory furnaceInventory) {
-        super(furnaceInventory);
+    public ContainerDragonForge(int i, PlayerInventory playerInventory) {
+        this(i, new Inventory(3), playerInventory, new IntArray(0));
+    }
+
+
+    public ContainerDragonForge(int id, IInventory furnaceInventory, PlayerInventory playerInventory, IIntArray vars) {
+        super(IafContainerRegistry.DRAGON_FORGE_CONTAINER, id);
         this.tileFurnace = furnaceInventory;
         isFire = ((TileEntityDragonforge) tileFurnace).isFire;
-        this.addSlotToContainer(new Slot(furnaceInventory, 0, 68, 34));
-        this.addSlotToContainer(new Slot(furnaceInventory, 1, 86, 34));
-        this.addSlotToContainer(new SlotFurnaceOutput(playerInventory.player, furnaceInventory, 2, 148, 35));
+        this.addSlot(new Slot(furnaceInventory, 0, 68, 34));
+        this.addSlot(new Slot(furnaceInventory, 1, 86, 34));
+        this.addSlot(new FurnaceResultSlot(playerInventory.player, furnaceInventory, 2, 148, 35));
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlotToContainer(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
         for (int k = 0; k < 9; ++k) {
-            this.addSlotToContainer(new Slot(playerInventory, k, 8 + k * 18, 142));
+            this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
     }
 

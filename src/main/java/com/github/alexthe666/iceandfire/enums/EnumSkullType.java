@@ -16,7 +16,6 @@ public enum EnumSkullType {
     HYDRA;
 
     public String itemResourceName;
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":mob_skull")
     public Item skull_item;
 
     EnumSkullType() {

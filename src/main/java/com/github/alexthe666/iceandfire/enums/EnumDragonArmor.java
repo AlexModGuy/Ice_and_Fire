@@ -1,14 +1,12 @@
 package com.github.alexthe666.iceandfire.enums;
 
+import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemScaleArmor;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.util.SoundEvents;
 
 public enum EnumDragonArmor {
 
@@ -21,18 +19,14 @@ public enum EnumDragonArmor {
     armor_sapphire(14, EnumDragonEgg.SAPPHIRE),
     armor_silver(15, EnumDragonEgg.SILVER);
 
-    public ArmorMaterial material;
+    public CustomArmorMaterial material;
     public int armorId;
     public EnumDragonEgg eggType;
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":armor_dragon_helmet")
     public Item helmet;
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":armor_dragon_chestplate")
     public Item chestplate;
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":armor_dragon_leggings")
     public Item leggings;
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":armor_dragon_boots")
     public Item boots;
-    public ArmorMaterial armorMaterial;
+    public CustomArmorMaterial armorMaterial;
 
     EnumDragonArmor(int armorId, EnumDragonEgg eggType) {
         this.armorId = armorId;
@@ -41,18 +35,19 @@ public enum EnumDragonArmor {
 
     public static void initArmors() {
         for (int i = 0; i < EnumDragonArmor.values().length; i++) {
-            EnumDragonArmor.values()[i].armorMaterial = EnumHelper.addArmorMaterial("DragonScales" + (i + 1), "iceandfire:armor_dragon_scales" + (i + 1), 36, new int[]{5, 7, 9, 5}, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 2);
-            EnumDragonArmor.values()[i].helmet = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, 0, EquipmentSlotType.HEAD).setTranslationKey("iceandfire.dragonHelmet");
-            EnumDragonArmor.values()[i].chestplate = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, 1, EquipmentSlotType.CHEST).setTranslationKey("iceandfire.dragonChestplate");
-            EnumDragonArmor.values()[i].leggings = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, 2, EquipmentSlotType.LEGS).setTranslationKey("iceandfire.dragonLeggings");
-            EnumDragonArmor.values()[i].boots = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, 3, EquipmentSlotType.FEET).setTranslationKey("iceandfire.dragonBoots");
-            EnumDragonArmor.values()[i].helmet.setRegistryName(EnumDragonArmor.values()[i].name() + "_helmet");
+            EnumDragonArmor.values()[i].armorMaterial = new CustomArmorMaterial("iceandfire:armor_dragon_scales" + (i + 1), 36, new int[]{5, 7, 9, 5}, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 2);
+            String sub = "iceandfire:armor_" + EnumDragonArmor.values()[i].name();
+            EnumDragonArmor.values()[i].helmet = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, EquipmentSlotType.HEAD);
+            EnumDragonArmor.values()[i].chestplate = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, EquipmentSlotType.CHEST);
+            EnumDragonArmor.values()[i].leggings = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, EquipmentSlotType.LEGS);
+            EnumDragonArmor.values()[i].boots = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, EquipmentSlotType.FEET);
+            EnumDragonArmor.values()[i].helmet.setRegistryName(sub + "_helmet");
             //GameRegistry.register(EnumDragonArmor.values()[i].helmet);
-            EnumDragonArmor.values()[i].chestplate.setRegistryName(EnumDragonArmor.values()[i].name() + "_chestplate");
+            EnumDragonArmor.values()[i].chestplate.setRegistryName(sub + "_chestplate");
             //GameRegistry.register(EnumDragonArmor.values()[i].chestplate);
-            EnumDragonArmor.values()[i].leggings.setRegistryName(EnumDragonArmor.values()[i].name() + "_leggings");
+            EnumDragonArmor.values()[i].leggings.setRegistryName(sub + "_leggings");
             //GameRegistry.register(EnumDragonArmor.values()[i].leggings);
-            EnumDragonArmor.values()[i].boots.setRegistryName(EnumDragonArmor.values()[i].name() + "_boots");
+            EnumDragonArmor.values()[i].boots.setRegistryName(sub + "_boots");
             //GameRegistry.register(EnumDragonArmor.values()[i].boots);
         }
     }

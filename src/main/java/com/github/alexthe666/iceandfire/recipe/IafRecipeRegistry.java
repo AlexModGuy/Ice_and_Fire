@@ -8,8 +8,10 @@ import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.block.BlockDispenser;
+import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.BehaviorProjectileDispense;
 import net.minecraft.dispenser.IPosition;
+import net.minecraft.dispenser.ProjectileDispenseBehavior;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
@@ -36,7 +38,7 @@ public class IafRecipeRegistry {
     public static void preInit() {
         FIRE_FORGE_RECIPES.add(new DragonForgeRecipe(new ItemStack(Items.IRON_INGOT), new ItemStack(IafItemRegistry.FIRE_DRAGON_BLOOD), new ItemStack(IafItemRegistry.DRAGONSTEEL_FIRE_INGOT)));
         ICE_FORGE_RECIPES.add(new DragonForgeRecipe(new ItemStack(Items.IRON_INGOT), new ItemStack(IafItemRegistry.ICE_DRAGON_BLOOD), new ItemStack(IafItemRegistry.DRAGONSTEEL_ICE_INGOT)));
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(IafItemRegistry.STYMPHALIAN_ARROW, new BehaviorProjectileDispense() {
+        DispenserBlock.registerDispenseBehavior(IafItemRegistry.STYMPHALIAN_ARROW, new ProjectileDispenseBehavior() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */

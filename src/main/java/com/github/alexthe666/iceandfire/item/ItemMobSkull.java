@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMobSkull;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -28,7 +29,7 @@ public class ItemMobSkull extends Item implements ICustomRendered {
     public ActionResultType onItemUse(ItemUseContext context) {
         PlayerEntity player = context.getPlayer();
 
-        EntityMobSkull skull = new EntityMobSkull(context.getWorld());
+        EntityMobSkull skull = new EntityMobSkull(IafEntityRegistry.MOB_SKULL,context.getWorld());
         ItemStack stack = player.getHeldItem(context.getHand());
         BlockPos offset = context.getPos().offset(context.getFace(), 1);
         skull.setLocationAndAngles(offset.getX() + 0.5, offset.getY(), offset.getZ() + 0.5, 0, 0);

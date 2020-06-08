@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
@@ -27,7 +28,7 @@ public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonIt
     public EnumDragonArmor armor_type;
     public EnumDragonEgg eggType;
 
-    public ItemScaleArmor(EnumDragonEgg eggType, EnumDragonArmor armorType, ArmorMaterial material, EquipmentSlotType slot) {
+    public ItemScaleArmor(EnumDragonEgg eggType, EnumDragonArmor armorType, CustomArmorMaterial material, EquipmentSlotType slot) {
         super(material, slot, new Item.Properties().group(IceAndFire.TAB_ITEMS));
         this.armor_type = armorType;
         this.eggType = eggType;
