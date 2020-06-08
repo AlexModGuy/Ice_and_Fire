@@ -1,28 +1,34 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.ai.*;
-import com.google.common.base.Optional;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Effects;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNavigateFlying;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.pathfinding.FlyingPathNavigator;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.UUID;
 
 public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
@@ -30,10 +36,10 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     private static final DataParameter<Optional<UUID>> SUMMONER_ID = EntityDataManager.createKey(EntityMyrmexSwarmer.class, DataSerializers.OPTIONAL_UNIQUE_ID);
     private static final DataParameter<Integer> TICKS_ALIVE = EntityDataManager.createKey(EntityMyrmexSwarmer.class, DataSerializers.VARINT);
 
-    public EntityMyrmexSwarmer(World worldIn) {
-        super(worldIn);
+    public EntityMyrmexSwarmer(EntityType type, World worldIn) {
+        super(type, worldIn);
         this.moveController = new EntityMyrmexRoyal.FlyMoveHelper(this);
-        this.navigator = new PathNavigateFlying(this, world);
+        this.navigator = new FlyingPathNavigator(this, world);
         switchNavigator(false);
     }
 
@@ -58,15 +64,15 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     }
 
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new EntityAISwimming(this));
+        this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new MyrmexAIFollowSummoner(this, 1.0D, 10.0F, 5.0F));
         this.goalSelector.addGoal(2, new AIFlyAtTarget());
         this.goalSelector.addGoal(3, new AIFlyRandom());
         this.goalSelector.addGoal(4, new EntityAIAttackMeleeNoCooldown(this, 1.0D, true));
         this.goalSelector.addGoal(5, new MyrmexAIWander(this, 1D));
-        this.goalSelector.addGoal(6, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this, false));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new MyrmexAISummonerHurtByTarget(this));
         this.targetSelector.addGoal(3, new MyrmexAISummonerHurtTarget(this));
     }
@@ -82,7 +88,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(SUMMONER_ID, Optional.absent());
+        this.dataManager.register(SUMMONER_ID, Optional.of(null));
         this.dataManager.register(TICKS_ALIVE, 0);
     }
 
@@ -90,7 +96,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     public LivingEntity getSummoner() {
         try {
             UUID uuid = this.getSummonerUUID();
-            return uuid == null ? null : this.world.getPlayerEntityByUUID(uuid);
+            return uuid == null ? null : this.world.getPlayerByUuid(uuid);
         } catch (IllegalArgumentException var2) {
             return null;
         }
@@ -111,15 +117,15 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     }
 
     public void setSummonerID(@Nullable UUID uuid) {
-        this.dataManager.set(SUMMONER_ID, Optional.fromNullable(uuid));
+        this.dataManager.set(SUMMONER_ID, Optional.ofNullable(uuid));
     }
 
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
         if (this.getSummonerUUID() == null) {
-            compound.setString("SummonerUUID", "");
+            compound.putString("SummonerUUID", "");
         } else {
-            compound.setString("SummonerUUID", this.getSummonerUUID().toString());
+            compound.putString("SummonerUUID", this.getSummonerUUID().toString());
         }
         compound.putInt("SummonTicks", this.getTicksAlive());
 
@@ -128,7 +134,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
         String s = "";
-        if (compound.hasKey("SummonerUUID", 8)) {
+        if (compound.hasUniqueId("SummonerUUID")) {
             s = compound.getString("SummonerUUID");
         }
         if (!s.isEmpty()) {
@@ -146,7 +152,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 
     @Nullable
     public UUID getSummonerUUID() {
-        return (UUID) ((Optional) this.dataManager.get(SUMMONER_ID)).orNull();
+        return (UUID) ((Optional) this.dataManager.get(SUMMONER_ID)).orElse(null);
     }
 
     public int getTicksAlive() {
@@ -157,28 +163,25 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         this.dataManager.set(TICKS_ALIVE, ticks);
     }
 
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
         setFlying(true);
         boolean flying = this.isFlying() && !this.onGround;
         setTicksAlive(getTicksAlive() + 1);
         if (flying) {
-            this.motionY -= 0.08D;
+            this.setMotion(this.getMotion().add(0, -0.08D, 0));
             if (this.moveController.getY() > this.getPosY()) {
-                this.motionY += 0.08D;
+                this.setMotion(this.getMotion().add(0, 0.08D, 0));
             }
         }
         if (this.onGround) {
             this.onGround = false;
-            this.motionY += 0.2F;
+            this.setMotion(this.getMotion().add(0, 0.2D, 0));
         }
         if (this.getAttackTarget() != null) {
             this.moveController.setMoveTo(this.getAttackTarget().getPosX(), this.getAttackTarget().getBoundingBox().minY, this.getAttackTarget().getPosZ(), 1.0F);
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 this.setAnimation(rand.nextBoolean() ? ANIMATION_BITE : ANIMATION_STING);
-            }
-            if (this.getAttackTarget().isDead) {
-                this.moveController.action = EntityMoveHelper.Action.WAIT;
             }
         }
         if (this.getTicksAlive() > 1800) {

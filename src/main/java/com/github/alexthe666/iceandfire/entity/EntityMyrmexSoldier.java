@@ -1,25 +1,25 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.citadel.animation.Animation;
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.google.common.base.Predicate;
-import net.ilexiconn.llibrary.server.animation.Animation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Effects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import javax.annotation.Nullable;
 
@@ -27,15 +27,14 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
 
     public static final Animation ANIMATION_BITE = Animation.create(15);
     public static final Animation ANIMATION_STING = Animation.create(15);
-    public static final ResourceLocation DESERT_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_soldier_desert"));
-    public static final ResourceLocation JUNGLE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "myrmex_soldier_jungle"));
+    public static final ResourceLocation DESERT_LOOT = new ResourceLocation("iceandfire", "myrmex_soldier_desert");
+    public static final ResourceLocation JUNGLE_LOOT = new ResourceLocation("iceandfire", "myrmex_soldier_jungle");
     private static final ResourceLocation TEXTURE_DESERT = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_soldier.png");
     private static final ResourceLocation TEXTURE_JUNGLE = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_soldier.png");
     public EntityMyrmexBase guardingEntity = null;
 
-    public EntityMyrmexSoldier(EntityType t,  World worldIn) {
-        super(worldIn);
-        this.setSize(0.99F, 0.95F);
+    public EntityMyrmexSoldier(EntityType t, World worldIn) {
+        super(t, worldIn);
     }
 
     @Nullable
@@ -47,8 +46,8 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         return 5;
     }
 
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
@@ -67,7 +66,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         if (this.guardingEntity != null) {
             this.guardingEntity.isBeingGuarded = true;
             this.isEnteringHive = this.guardingEntity.isEnteringHive;
-            if (!this.guardingEntity.isEntityAlive()) {
+            if (!this.guardingEntity.isAlive()) {
                 this.guardingEntity.isBeingGuarded = false;
                 this.guardingEntity = null;
             }
@@ -76,31 +75,26 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     }
 
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new EntityAISwimming(this));
+        this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(0, new MyrmexAITradePlayer(this));
         this.goalSelector.addGoal(0, new MyrmexAILookAtTradePlayer(this));
-        this.goalSelector.addGoal(1, new EntityAIAttackMelee(this, 1.0D, true));
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.addGoal(2, new MyrmexAIEscortEntity(this, 1.0D));
         this.goalSelector.addGoal(2, new MyrmexAIReEnterHive(this, 1.0D));
         this.goalSelector.addGoal(4, new MyrmexAILeaveHive(this, 1.0D));
         this.goalSelector.addGoal(5, new MyrmexAIMoveThroughHive(this, 1.0D));
         this.goalSelector.addGoal(6, new MyrmexAIWander(this, 1D));
-        this.goalSelector.addGoal(7, new EntityAIWatchClosest(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new MyrmexAIDefendHive(this));
         this.targetSelector.addGoal(2, new MyrmexAIFindGaurdingEntity(this));
-        this.targetSelector.addGoal(3, new EntityAIHurtByTarget(this, false));
+        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(4, new MyrmexAIAttackPlayers(this));
-        this.targetSelector.addGoal(4, new EntityAINearestAttackableTarget(this, LivingEntity.class, 10, true, true, new Predicate<LivingEntity>() {
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, true, new Predicate<LivingEntity>() {
             public boolean apply(@Nullable LivingEntity entity) {
-                return entity != null && !IMob.VISIBLE_MOB_SELECTOR.apply(entity) && !EntityMyrmexBase.haveSameHive(EntityMyrmexSoldier.this, entity) && DragonUtils.isAlive(entity);
+                return entity != null && !EntityMyrmexBase.haveSameHive(EntityMyrmexSoldier.this, entity) && DragonUtils.isAlive(entity);
             }
         }));
-
-    }
-
-    public VillagerRegistry.VillagerProfession getProfessionForge() {
-        return this.isJungle() ? IafVillagerRegistry.INSTANCE.jungleMyrmexSoldier : IafVillagerRegistry.INSTANCE.desertMyrmexSoldier;
     }
 
     protected void registerAttributes() {
@@ -147,7 +141,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
             }
             if (!this.getPassengers().isEmpty()) {
                 for (Entity entity : this.getPassengers()) {
-                    entity.dismountRidingEntity();
+                    entity.stopRiding();
                 }
             }
             return true;
@@ -162,5 +156,15 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     @Override
     public Animation[] getAnimations() {
         return new Animation[]{ANIMATION_PUPA_WIGGLE, ANIMATION_BITE, ANIMATION_STING};
+    }
+
+    @Override
+    public int getXp() {
+        return 0;
+    }
+
+    @Override
+    public boolean func_213705_dZ() {
+        return false;
     }
 }
