@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.gui.bestiary;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.client.StatCollector;
@@ -10,22 +11,24 @@ import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.google.common.collect.Maps;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.resources.IResource;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.resources.IResource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -37,7 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiBestiary extends GuiScreen {
+public class GuiBestiary extends Screen {
     protected static final int X = 390;
     protected static final int Y = 245;
     private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/bestiary/bestiary.png");
@@ -59,11 +62,12 @@ public class GuiBestiary extends GuiScreen {
     protected FontRenderer font = getFont();
 
     public GuiBestiary(ItemStack book) {
+        super(new TranslationTextComponent("bestiary_gui"));
         this.book = book;
         int indexPageTotal = 0;
         if (!book.isEmpty() && book.getItem() != null && book.getItem() == IafItemRegistry.BESTIARY) {
-            if (book.getTagCompound() != null) {
-                List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(book.getTagCompound().getIntArray("Pages")));
+            if (book.getTag() != null) {
+                List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(book.getTag().getIntArray("Pages")));
                 allPageTypes.addAll(pages);
                 indexPagesTotal = (int) Math.ceil(pages.size() / 10D);
             }
@@ -81,61 +85,93 @@ public class GuiBestiary extends GuiScreen {
         return font;
     }
 
-    public void initGui() {
-        super.initGui();
+    public void init() {
+        super.init();
         int centerX = (this.width - X) / 2;
         int centerY = (this.height - Y) / 2;
-        this.buttonList.add(this.previousPage = new ChangePageButton(0, centerX + 15, centerY + 215, false, bookPages, 0));
-        this.buttonList.add(this.nextPage = new ChangePageButton(1, centerX + 357, centerY + 215, true, bookPages, 0));
+        this.addButton(this.previousPage = new ChangePageButton(centerX + 15, centerY + 215, false, bookPages, 0, (p_214132_1_) -> {
+            if((this.index ? this.indexPages > 0 : this.pageType != null)) {
+                if (this.index) {
+                    this.indexPages--;
+                    Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+                } else {
+                    if (this.bookPages > 0) {
+                        this.bookPages--;
+                        Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+                    } else {
+                        this.index = true;
+                    }
+                }
+            }
+        }));
+        this.addButton(this.nextPage = new ChangePageButton(centerX + 357, centerY + 215, true, bookPages, 0, (p_214132_1_) -> {
+            if((this.index ? this.indexPages < this.indexPagesTotal - 1 : this.pageType != null && this.bookPages < this.pageType.pages)) {
+                if (this.index) {
+                    this.indexPages++;
+                    Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+                } else {
+                    this.bookPages++;
+                    Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+                }
+            }
+        }));
         if (!allPageTypes.isEmpty()) {
             for (int i = 0; i < allPageTypes.size(); i++) {
                 int xIndex = i % -2;
                 int yIndex = i % 10;
-                IndexPageButton button = new IndexPageButton(2 + i, centerX + 15 + (xIndex * 200), centerY + 10 + (yIndex * 20) - (xIndex == 1 ? 20 : 0), StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[allPageTypes.get(i).ordinal()].toString().toLowerCase()));
+                int id = 2 + i;
+                IndexPageButton button = new IndexPageButton(id, centerX + 15 + (xIndex * 200), centerY + 10 + (yIndex * 20) - (xIndex == 1 ? 20 : 0), StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[allPageTypes.get(i).ordinal()].toString().toLowerCase()), (p_214132_1_) -> {
+                    if(this.indexButtons.get(id - 2) != null && allPageTypes.get(id - 2) != null) {
+                        Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+                        this.index = false;
+                        this.indexPages = 0;
+                        this.bookPages = 0;
+                        this.pageType = allPageTypes.get(id - 2);
+                    }
+                });
                 this.indexButtons.add(button);
-                this.buttonList.add(button);
+                this.addButton(button);
             }
         }
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        for (GuiButton button : this.buttonList) {
-            if (button.id >= 2) {
-                button.enabled = index;
+    public void render(int mouseX, int mouseY, float partialTicks) {
+        for (Widget button : this.buttons) {
+            if (button instanceof IndexPageButton) {
+                button.active = index;
                 button.visible = index;
             }
         }
         for (int i = 0; i < this.indexButtons.size(); i++) {
             this.indexButtons.get(i).visible = i < 10 * (this.indexPages + 1) && i >= 10 * (this.indexPages) && this.index;
         }
-        this.drawDefaultBackground();
+        this.renderBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture(TEXTURE);
+        this.minecraft.getTextureManager().bindTexture(TEXTURE);
         int cornerX = (this.width - X) / 2;
         int cornerY = (this.height - Y) / 2;
-        drawModalRectWithCustomSizedTexture(cornerX, cornerY, 0, 0, X, Y, 390F, 390F);
+        blit(cornerX, cornerY, 0, 0, X, Y, 390, 390);
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         RenderHelper.disableStandardItemLighting();
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
-        super.drawScreen(mouseX, mouseY, partialTicks);
-        RenderHelper.enableGUIStandardItemLighting();
+        super.render(mouseX, mouseY, partialTicks);
+        RenderHelper.enableStandardItemLighting();
         GL11.glPushMatrix();
         GL11.glTranslatef(cornerX, cornerY, 0.0F);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         short short1 = 240;
         short short2 = 240;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) short1 / 1.0F, (float) short2 / 1.0F);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glDisable(GL11.GL_LIGHTING);
         if (!index) {
             drawPerPage(bookPages);
             int pageLeft = bookPages * 2 + 1;
             int pageRight = pageLeft + 1;
-            font.drawString("" + pageLeft, X / 4, Y - (int) (Y * 0.13), 0X303030, false);
-            font.drawString("" + pageRight, X - (int) (X * 0.24), Y - (int) (Y * 0.13), 0X303030, false);
+            font.drawString("" + pageLeft, X / 4, Y - (int) (Y * 0.13), 0X303030);
+            font.drawString("" + pageRight, X - (int) (X * 0.24), Y - (int) (Y * 0.13), 0X303030);
         }
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glPopMatrix();
@@ -167,8 +203,8 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glScalef(1.5F, 1.5F, 1F);
                     drawImage(DRAWINGS_0, 144, 90, 389, 1, 50, 50, 512F);
                     GL11.glPopMatrix();
-                    drawItemStack(new ItemStack(Blocks.PLANKS), 161, 124, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.PLANKS), 161, 107, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.OAK_PLANKS), 161, 124, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.OAK_PLANKS), 161, 107, 1.5F);
                     drawItemStack(new ItemStack(Items.BOOK), 161, 91, 1.5F);
                     drawItemStack(new ItemStack(IafBlockRegistry.LECTERN), 151, 78, 2F);
                 }
@@ -287,7 +323,7 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glScalef(1.5F, 1.5F, 1F);
                     drawImage(DRAWINGS_0, 144, 0, 389, 1, 50, 50, 512F);
                     GL11.glPopMatrix();
-                    drawItemStack(new ItemStack(IafItemRegistry.DRAGON_SKULL), 161, 17, 1.5F);
+                    drawItemStack(new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE), 161, 17, 1.5F);
                     drawItemStack(new ItemStack(Items.STICK), 161, 32, 1.5F);
                     drawItemStack(new ItemStack(IafItemRegistry.DRAGON_STAFF), 151, 10, 2F);
                 }
@@ -323,10 +359,10 @@ public class GuiBestiary extends GuiScreen {
                 }
                 if (bookPages == 3) {
                     int j = 18;
-                    drawItemStack(new ItemStack(IafItemRegistry.DRAGONARMOR_IRON, 1, 0), j += 16, 60, 1.5F);
-                    drawItemStack(new ItemStack(IafItemRegistry.DRAGONARMOR_IRON, 1, 1), j += 16, 60, 1.5F);
-                    drawItemStack(new ItemStack(IafItemRegistry.DRAGONARMOR_IRON, 1, 2), j += 16, 60, 1.5F);
-                    drawItemStack(new ItemStack(IafItemRegistry.DRAGONARMOR_IRON, 1, 3), j += 16, 60, 1.5F);
+                    drawItemStack(new ItemStack(IafItemRegistry.DRAGONARMOR_IRON_0, 1), j += 16, 60, 1.5F);
+                    drawItemStack(new ItemStack(IafItemRegistry.DRAGONARMOR_IRON_1, 1), j += 16, 60, 1.5F);
+                    drawItemStack(new ItemStack(IafItemRegistry.DRAGONARMOR_IRON_2, 1), j += 16, 60, 1.5F);
+                    drawItemStack(new ItemStack(IafItemRegistry.DRAGONARMOR_IRON_3, 1), j += 16, 60, 1.5F);
 
                     GL11.glPushMatrix();
                     GL11.glScalef(1.5F, 1.5F, 1F);
@@ -374,7 +410,7 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glScalef(1.5F, 1.5F, 1F);
                     drawItemStack(new ItemStack(IafItemRegistry.FIRE_DRAGON_FLESH), 18, 24, 2.5F);
                     drawItemStack(new ItemStack(IafItemRegistry.FIRE_DRAGON_HEART), 70, 14, 2.5F);
-                    drawItemStack(new ItemStack(IafItemRegistry.DRAGON_SKULL), 70, 39, 2.5F);
+                    drawItemStack(new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE), 70, 39, 2.5F);
                     GL11.glPopMatrix();
                 }
                 if (bookPages == 2) {
@@ -524,7 +560,7 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glScalef(0.9F, 0.9F, 1F);
                     drawItemStack(new ItemStack(Blocks.GLASS), 160, 113, 1.5F);
                     drawItemStack(new ItemStack(Blocks.GLASS), 199, 113, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.PLANKS), 180, 113, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.OAK_PLANKS), 180, 113, 1.5F);
                     drawItemStack(new ItemStack(Blocks.GLASS), 160, 131, 1.5F);
                     drawItemStack(new ItemStack(Blocks.GLASS), 199, 131, 1.5F);
                     drawItemStack(new ItemStack(Blocks.GLASS), 180, 150, 1.5F);
@@ -550,7 +586,7 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glScalef(0.9F, 0.9F, 1F);
                     drawItemStack(new ItemStack(IafItemRegistry.PIXIE_DUST), 180, 131, 1.5F);
                     drawItemStack(new ItemStack(Items.GOLDEN_CARROT), 160, 131, 1.5F);
-                    drawItemStack(new ItemStack(Items.SPECKLED_MELON), 199, 131, 1.5F);
+                    drawItemStack(new ItemStack(Items.GLISTERING_MELON_SLICE), 199, 131, 1.5F);
                     drawItemStack(new ItemStack(Items.BOWL), 180, 150, 1.5F);
                     GL11.glPopMatrix();
                     drawItemStack(new ItemStack(IafItemRegistry.AMBROSIA), 171, 85, 2F);
@@ -579,11 +615,11 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glPushMatrix();
                     GL11.glScalef(0.9F, 0.9F, 1F);
                     drawItemStack(new ItemStack(Items.LEATHER_HELMET), 180, 76, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 160, 76, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 199, 76, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 160, 57, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 180, 57, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 199, 57, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 160, 76, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 199, 76, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 160, 57, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 180, 57, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 199, 57, 1.5F);
                     GL11.glPopMatrix();
                     drawItemStack(new ItemStack(IafItemRegistry.SHEEP_HELMET), 165, 45, 2F);
                     GL11.glPopMatrix();
@@ -596,13 +632,13 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glPushMatrix();
                     GL11.glScalef(0.9F, 0.9F, 1F);
                     drawItemStack(new ItemStack(Items.LEATHER_CHESTPLATE), 180, 126, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 160, 126, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 199, 126, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 160, 107, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 199, 107, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 160, 145, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 180, 145, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 199, 145, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 160, 126, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 199, 126, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 160, 107, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 199, 107, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 160, 145, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 180, 145, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 199, 145, 1.5F);
                     GL11.glPopMatrix();
                     drawItemStack(new ItemStack(IafItemRegistry.SHEEP_CHESTPLATE), 165, 95, 2F);
                     GL11.glPopMatrix();
@@ -621,13 +657,13 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glPushMatrix();
                     GL11.glScalef(0.9F, 0.9F, 1F);
                     drawItemStack(new ItemStack(Items.LEATHER_LEGGINGS), 34, 46, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 14, 46, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 53, 46, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 14, 27, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 34, 27, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 53, 27, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 14, 65, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 53, 65, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 14, 46, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 53, 46, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 14, 27, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 34, 27, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 53, 27, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 14, 65, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 53, 65, 1.5F);
                     GL11.glPopMatrix();
                     drawItemStack(new ItemStack(IafItemRegistry.SHEEP_LEGGINGS), 64, 27, 2F);
                     GL11.glPopMatrix();
@@ -639,10 +675,10 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glPushMatrix();
                     GL11.glScalef(0.9F, 0.9F, 1F);
                     drawItemStack(new ItemStack(Items.LEATHER_BOOTS), 34, 94, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 14, 113, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 53, 113, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 14, 94, 1.5F);
-                    drawItemStack(new ItemStack(Blocks.WOOL), 53, 94, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 14, 113, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 53, 113, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 14, 94, 1.5F);
+                    drawItemStack(new ItemStack(Blocks.WHITE_WOOL), 53, 94, 1.5F);
                     GL11.glPopMatrix();
                     drawItemStack(new ItemStack(IafItemRegistry.SHEEP_BOOTS), 64, 73, 2F);
                     GL11.glPopMatrix();
@@ -676,8 +712,8 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glPopMatrix();
                     GL11.glPushMatrix();
                     GL11.glScalef(0.9F, 0.9F, 1F);
-                    drawItemStack(new ItemStack(Item.getItemFromBlock(Blocks.WOODEN_BUTTON)), 180, 20, 1.5F);
-                    drawItemStack(new ItemStack(Item.getItemFromBlock(Blocks.WOODEN_BUTTON)), 215, 20, 1.5F);
+                    drawItemStack(new ItemStack(Item.getItemFromBlock(Blocks.OAK_BUTTON)), 180, 20, 1.5F);
+                    drawItemStack(new ItemStack(Item.getItemFromBlock(Blocks.OAK_BUTTON)), 215, 20, 1.5F);
                     GL11.glPopMatrix();
                     drawItemStack(new ItemStack(IafItemRegistry.EARPLUGS), 170, 10, 2F);
                     GL11.glPopMatrix();
@@ -733,7 +769,14 @@ public class GuiBestiary extends GuiScreen {
                     int drawType = Minecraft.getInstance().player.ticksExisted % 60 > 40 ? 2 : Minecraft.getInstance().player.ticksExisted % 60 > 20 ? 1 : 0;
                     GL11.glPushMatrix();
                     GL11.glScalef(2.5F, 2.5F, 1F);
-                    drawItemStack(new ItemStack(IafItemRegistry.DEATH_WORM_CHITIN, 1, drawType), 17, 30, 1.5F);
+                    Item chitin = IafItemRegistry.DEATH_WORM_CHITIN_YELLOW;
+                    if(drawType == 2){
+                        chitin = IafItemRegistry.DEATH_WORM_CHITIN_RED;
+                    }
+                    if(drawType == 1){
+                        chitin = IafItemRegistry.DEATH_WORM_CHITIN_WHITE;
+                    }
+                    drawItemStack(new ItemStack(chitin, 1), 17, 30, 1.5F);
                     GL11.glPopMatrix();
 
                     GL11.glPushMatrix();
@@ -748,7 +791,7 @@ public class GuiBestiary extends GuiScreen {
                 if (bookPages == 3) {
                     GL11.glPushMatrix();
                     GL11.glScalef(1.5F, 1.5F, 1F);
-                    drawItemStack(new ItemStack(IafItemRegistry.DEATHWORM_EGG, 1, 1), 125, 4, 1.5F);
+                    drawItemStack(new ItemStack(IafItemRegistry.DEATHWORM_EGG_GIGANTIC, 1), 125, 4, 1.5F);
                     drawItemStack(new ItemStack(Items.FISHING_ROD), 115, 55, 1.5F);
                     drawItemStack(new ItemStack(Items.FISHING_ROD), 135, 55, 1.5F);
 
@@ -989,24 +1032,24 @@ public class GuiBestiary extends GuiScreen {
                 if (line.contains("<item>")) {
                     line = line.substring(7, line.length() - 1);
                     String[] split = line.split(" ");
-                    RenderHelper.enableGUIStandardItemLighting();
-                    drawItemStack(new ItemStack(Item.getByNameOrId(split[0]), 1, Integer.parseInt(split[1])), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Float.parseFloat(split[4]) * 2F);
+                    RenderHelper.enableStandardItemLighting();
+                    drawItemStack(new ItemStack(getItemByRegistryName(split[0]), 1), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Float.parseFloat(split[4]) * 2F);
                 }
                 if (line.contains("<recipe>")) {
                     line = line.substring(9, line.length() - 1);
                     String[] split = line.split(" ");
-                    RenderHelper.enableGUIStandardItemLighting();
+                    RenderHelper.enableStandardItemLighting();
                     float scale = Float.parseFloat(split[split.length - 1]);
                     int x = Integer.parseInt(split[split.length - 3]);
                     int y = Integer.parseInt(split[split.length - 2]);
-                    ItemStack result = new ItemStack(Item.getByNameOrId(split[0]), 1, Integer.parseInt(split[1]));
+                    ItemStack result = new ItemStack(getItemByRegistryName(split[0]), 1);
                     ItemStack[] ingredients = new ItemStack[]{ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY};
                     int j = 8;
                     for (int i = split.length - 5; i >= 2; i -= 2) {
-                        ingredients[j] = new ItemStack(Item.getByNameOrId(split[i]), 1, Integer.parseInt(split[i + 1]));
+                        ingredients[j] = new ItemStack(getItemByRegistryName(split[i]), 1);
                         j--;
                     }
-                    RenderHelper.enableGUIStandardItemLighting();
+                    RenderHelper.enableStandardItemLighting();
                     GL11.glPushMatrix();
                     GL11.glTranslatef(x, y, 0);
                     GL11.glScalef(scale, scale, 0);
@@ -1017,6 +1060,10 @@ public class GuiBestiary extends GuiScreen {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private Item getItemByRegistryName(String registryName){
+        return ForgeRegistries.ITEMS.getValue(new ResourceLocation(registryName));
     }
 
     private void drawRecipe(ItemStack result, ItemStack[] ingredients) {
@@ -1062,9 +1109,9 @@ public class GuiBestiary extends GuiScreen {
                     GL11.glTranslatef(0, 5.5F, 0);
                 }
                 if (linenumber <= 19) {
-                    font.drawString(line, 15, 20 + linenumber * 10, 0X303030, false);
+                    font.drawString(line, 15, 20 + linenumber * 10, 0X303030);
                 } else {
-                    font.drawString(line, 220, (linenumber - 19) * 10, 0X303030, false);
+                    font.drawString(line, 220, (linenumber - 19) * 10, 0X303030);
                 }
                 linenumber++;
                 GL11.glPopMatrix();
@@ -1074,7 +1121,7 @@ public class GuiBestiary extends GuiScreen {
         }
         GL11.glPushMatrix();
         GL11.glScalef(2, 2, 2);
-        font.drawString(StatCollector.translateToLocal("bestiary." + this.pageType.toString().toLowerCase()), 10, 2, 0X7A756A, false);
+        font.drawString(StatCollector.translateToLocal("bestiary." + this.pageType.toString().toLowerCase()), 10, 2, 0X7A756A);
         GL11.glPopMatrix();
     }
 
@@ -1083,57 +1130,24 @@ public class GuiBestiary extends GuiScreen {
     }
 
     public void drawImage(ResourceLocation texture, int x, int y, int u, int v, int width, int height, float scale) {
-        this.mc.renderEngine.bindTexture(texture);
-        drawModalRectWithCustomSizedTexture(x, y, u, v, width, height, scale, scale);
+        this.minecraft.getTextureManager().bindTexture(texture);
+        GL11.glScalef(scale, scale, scale);
+        blit(x, y, u, v, width, height, 1, 1);
     }
 
     private void drawItemStack(ItemStack stack, int x, int y, float scale) {
         GL11.glPushMatrix();
-        GlStateManager.translate(0, 0, 32.0F);
-        this.zLevel = 200.0F;
-        this.itemRender.zLevel = 200.0F;
+        GlStateManager.translatef(0, 0, 32.0F);
+        float zLevel = 200.0F;
+        this.itemRenderer.zLevel = 200.0F;
         net.minecraft.client.gui.FontRenderer font = null;
         if (!stack.isEmpty()) font = stack.getItem().getFontRenderer(stack);
-        if (font == null) font = fontRenderer;
+        if (font == null) font = getFont();
         GL11.glScalef(scale, scale, scale);
-        this.itemRender.zLevel = 5;
-        this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
-        this.zLevel = 0.0F;
-        this.itemRender.zLevel = 0.0F;
+        this.itemRenderer.zLevel = 5;
+        this.itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
+        zLevel = 0.0F;
+        this.itemRenderer.zLevel = 0.0F;
         GL11.glPopMatrix();
     }
-
-    @Override
-    protected void actionPerformed(GuiButton button) {
-        if (button.id == 0 && (this.index ? this.indexPages > 0 : this.pageType != null)) {
-            if (this.index) {
-                this.indexPages--;
-                Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
-            } else {
-                if (this.bookPages > 0) {
-                    this.bookPages--;
-                    Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
-                } else {
-                    this.index = true;
-                }
-            }
-        }
-        if (button.id == 1 && (this.index ? this.indexPages < this.indexPagesTotal - 1 : this.pageType != null && this.bookPages < this.pageType.pages)) {
-            if (this.index) {
-                this.indexPages++;
-                Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
-            } else {
-                this.bookPages++;
-                Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
-            }
-        }
-        if (button.id >= 2 && this.indexButtons.get(button.id - 2) != null && allPageTypes.get(button.id - 2) != null && button instanceof IndexPageButton) {
-            Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
-            this.index = false;
-            this.indexPages = 0;
-            this.bookPages = 0;
-            this.pageType = allPageTypes.get(button.id - 2);
-        }
-    }
-
 }

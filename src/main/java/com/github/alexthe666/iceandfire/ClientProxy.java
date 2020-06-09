@@ -4,6 +4,7 @@ import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.citadel.client.model.TabulaModelHandler;
 import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexAddRoom;
 import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexStaff;
+import com.github.alexthe666.iceandfire.client.gui.IafGuiRegistry;
 import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
 import com.github.alexthe666.iceandfire.client.model.*;
 import com.github.alexthe666.iceandfire.client.model.animator.FireDragonTabulaModelAnimator;
@@ -106,6 +107,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     @SuppressWarnings("deprecation")
     public void render() {
+        IafGuiRegistry.register();
         try{
             this.bestiaryFontRenderer = new FontRenderer(Minecraft.getInstance().gameSettings, new ResourceLocation("iceandfire:textures/font/bestiary.png"), Minecraft.getInstance().renderEngine, false);
             ((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(this.bestiaryFontRenderer);

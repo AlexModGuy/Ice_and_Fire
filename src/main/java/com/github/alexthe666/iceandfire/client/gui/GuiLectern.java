@@ -3,36 +3,40 @@ package com.github.alexthe666.iceandfire.client.gui;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.model.ModelBook;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.entity.model.BookModel;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnchantmentNameParts;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.util.glu.Project;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiLectern extends GuiContainer {
+public class GuiLectern extends ContainerScreen<ContainerLectern> {
     private static final ResourceLocation ENCHANTMENT_TABLE_GUI_TEXTURE = new ResourceLocation("iceandfire:textures/gui/lectern.png");
     private static final ResourceLocation ENCHANTMENT_TABLE_BOOK_TEXTURE = new ResourceLocation("iceandfire:textures/models/lectern_book.png");
-    private static final ModelBook MODEL_BOOK = new ModelBook();
-    private final InventoryPlayer playerInventory;
+    private static final BookModel MODEL_BOOK = new BookModel();
+    private final PlayerInventory playerInventory;
     private final Random random = new Random();
     private final ContainerLectern container;
-    private final IInventory nameable;
+    private final ITextComponent nameable;
     public int ticks;
     public float flip;
     public float oFlip;
@@ -42,73 +46,79 @@ public class GuiLectern extends GuiContainer {
     public float oOpen;
     private ItemStack last = ItemStack.EMPTY;
 
-    public GuiLectern(InventoryPlayer playerInv, IInventory furnaceInv) {
-        super(new ContainerLectern(playerInv, furnaceInv));
-        this.playerInventory = playerInv;
-        this.container = (ContainerLectern) this.inventorySlots;
-        this.nameable = furnaceInv;
+    public GuiLectern(ContainerLectern container, PlayerInventory inv, ITextComponent name) {
+        super(container, inv, name);
+        this.playerInventory = inv;
+        this.container = container;
+        this.nameable = name;
     }
 
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.fontRenderer.drawString(this.nameable.getDisplayName().getUnformattedText(), 12, 5, 4210752);
-        this.fontRenderer.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
+        this.font.drawString(this.nameable.getFormattedText(), 12, 5, 4210752);
+        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8, this.ySize - 96 + 2, 4210752);
     }
 
-    public void updateScreen() {
-        super.updateScreen();
+    public void tick() {
+        super.tick();
         this.container.onUpdate();
         this.tickBook();
     }
 
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
-        int i = (this.width - this.xSize) / 2;
-        int j = (this.height - this.ySize) / 2;
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+        if (super.mouseClicked(mouseX, mouseY, mouseButton)) {
+            return true;
+        } else {
 
-        for (int k = 0; k < 3; ++k) {
-            int l = mouseX - (i + 60);
-            int i1 = mouseY - (j + 14 + 19 * k);
+            int i = (this.width - this.xSize) / 2;
+            int j = (this.height - this.ySize) / 2;
 
-            if (l >= 0 && i1 >= 0 && l < 108 && i1 < 19 && this.container.enchantItem(this.mc.player, k)) {
-                this.mc.playerController.sendEnchantPacket(this.container.windowId, k);
+            for (int k = 0; k < 3; ++k) {
+                double l = mouseX - (i + 60);
+                double i1 = mouseY - (j + 14 + 19 * k);
+
+                if (l >= 0 && i1 >= 0 && l < 108 && i1 < 19 && this.container.enchantItem(minecraft.player, k)) {
+                    this.minecraft.playerController.sendEnchantPacket(this.container.windowId, k);
+                }
             }
         }
+        return true;
     }
 
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(ENCHANTMENT_TABLE_GUI_TEXTURE);
+
+        RenderHelper.setupGuiFlatDiffuseLighting();
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        this.minecraft.getTextureManager().bindTexture(ENCHANTMENT_TABLE_GUI_TEXTURE);
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(i, j, 0, 0, this.xSize, this.ySize);
-        GlStateManager.pushMatrix();
-        GlStateManager.matrixMode(5889);
-        GlStateManager.pushMatrix();
-        GlStateManager.loadIdentity();
-        ScaledResolution scaledresolution = new ScaledResolution(this.mc);
-        GlStateManager.viewport((scaledresolution.getScaledWidth() - 320) / 2 * scaledresolution.getScaleFactor(), (scaledresolution.getScaledHeight() - 240) / 2 * scaledresolution.getScaleFactor(), 320 * scaledresolution.getScaleFactor(), 240 * scaledresolution.getScaleFactor());
-        GlStateManager.translate(-0.34F, 0.23F, 0.0F);
-        Project.gluPerspective(90.0F, 1.3333334F, 9.0F, 80.0F);
-        float f = 1.0F;
-        GlStateManager.matrixMode(5888);
-        GlStateManager.loadIdentity();
-        RenderHelper.enableStandardItemLighting();
-        GlStateManager.translate(0.0F, 3.3F, -16.0F);
-        GlStateManager.scale(1.0F, 1.0F, 1.0F);
-        float f1 = 5.0F;
-        GlStateManager.scale(5.0F, 5.0F, 5.0F);
-        GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(ENCHANTMENT_TABLE_BOOK_TEXTURE);
-        GlStateManager.rotate(20.0F, 1.0F, 0.0F, 0.0F);
-        float f2 = this.oOpen + (this.open - this.oOpen) * partialTicks;
-        GlStateManager.translate((1.0F - f2) * 0.2F, (1.0F - f2) * 0.1F, (1.0F - f2) * 0.25F);
-        GlStateManager.rotate(-(1.0F - f2) * 90.0F - 90.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
-        float f3 = this.oFlip + (this.flip - this.oFlip) * partialTicks + 0.25F;
-        float f4 = this.oFlip + (this.flip - this.oFlip) * partialTicks + 0.75F;
-        f3 = (f3 - (float) MathHelper.fastFloor((double) f3)) * 1.6F - 0.3F;
-        f4 = (f4 - (float) MathHelper.fastFloor((double) f4)) * 1.6F - 0.3F;
-
+        this.blit(i, j, 0, 0, this.xSize, this.ySize);
+        RenderSystem.matrixMode(5889);
+        RenderSystem.pushMatrix();
+        RenderSystem.loadIdentity();
+        int k = (int)this.minecraft.getMainWindow().getGuiScaleFactor();
+        RenderSystem.viewport((this.width - 320) / 2 * k, (this.height - 240) / 2 * k, 320 * k, 240 * k);
+        RenderSystem.translatef(-0.34F, 0.23F, 0.0F);
+        RenderSystem.multMatrix(Matrix4f.perspective(90.0D, 1.3333334F, 9.0F, 80.0F));
+        RenderSystem.matrixMode(5888);
+        MatrixStack matrixstack = new MatrixStack();
+        matrixstack.push();
+        MatrixStack.Entry matrixstack$entry = matrixstack.getLast();
+        matrixstack$entry.getMatrix().setIdentity();
+        matrixstack$entry.getNormal().setIdentity();
+        matrixstack.translate(0.0D, (double)3.3F, 1984.0D);
+        float f = 5.0F;
+        matrixstack.scale(5.0F, 5.0F, 5.0F);
+        matrixstack.rotate(Vector3f.ZP.rotationDegrees(180.0F));
+        matrixstack.rotate(Vector3f.XP.rotationDegrees(20.0F));
+        float f1 = MathHelper.lerp(partialTicks, this.oOpen, this.open);
+        matrixstack.translate((double)((1.0F - f1) * 0.2F), (double)((1.0F - f1) * 0.1F), (double)((1.0F - f1) * 0.25F));
+        float f2 = -(1.0F - f1) * 90.0F - 90.0F;
+        matrixstack.rotate(Vector3f.YP.rotationDegrees(f2));
+        matrixstack.rotate(Vector3f.XP.rotationDegrees(180.0F));
+        float f3 = MathHelper.lerp(partialTicks, this.oFlip, this.flip) + 0.25F;
+        float f4 = MathHelper.lerp(partialTicks, this.oFlip, this.flip) + 0.75F;
+        f3 = (f3 - (float)MathHelper.fastFloor((double)f3)) * 1.6F - 0.3F;
+        f4 = (f4 - (float)MathHelper.fastFloor((double)f4)) * 1.6F - 0.3F;
         if (f3 < 0.0F) {
             f3 = 0.0F;
         }
@@ -125,66 +135,68 @@ public class GuiLectern extends GuiContainer {
             f4 = 1.0F;
         }
 
-        GlStateManager.enableRescaleNormal();
-        MODEL_BOOK.render(null, 0.0F, f3, f4, f2, 0.0F, 0.0625F);
-        GlStateManager.disableRescaleNormal();
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.matrixMode(5889);
-        GlStateManager.viewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
-        GlStateManager.popMatrix();
-        GlStateManager.matrixMode(5888);
-        GlStateManager.popMatrix();
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        //EnchantmentNameParts.getInstance().reseedRandomGenerator((long) this.container.xpSeed);
-        int k = this.container.getManuscriptAmount();
+        RenderSystem.enableRescaleNormal();
+        MODEL_BOOK.func_228247_a_(0.0F, f3, f4, f1);
+        IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+        IVertexBuilder ivertexbuilder = irendertypebuffer$impl.getBuffer(MODEL_BOOK.getRenderType(ENCHANTMENT_TABLE_BOOK_TEXTURE));
+        MODEL_BOOK.render(matrixstack, ivertexbuilder, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        irendertypebuffer$impl.finish();
+        matrixstack.pop();
+        RenderSystem.matrixMode(5889);
+        RenderSystem.viewport(0, 0, this.minecraft.getMainWindow().getFramebufferWidth(), this.minecraft.getMainWindow().getFramebufferHeight());
+        RenderSystem.popMatrix();
+        RenderSystem.matrixMode(5888);
+        RenderHelper.setupGui3DDiffuseLighting();
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        int l = this.container.getManuscriptAmount();
 
-        for (int l = 0; l < 3; ++l) {
-            int i1 = i + 60;
-            int j1 = i1 + 20;
-            this.zLevel = 0.0F;
-            this.mc.getTextureManager().bindTexture(ENCHANTMENT_TABLE_GUI_TEXTURE);
-            int k1 = this.container.getPossiblePages()[l] == null ? -1 : this.container.getPossiblePages()[l].ordinal();//enchantment level
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-
-            if (k1 == -1) {
-                this.drawTexturedModalRect(i1, j + 14 + 19 * l, 0, 185, 108, 19);
+        for(int i1 = 0; i1 < 3; ++i1) {
+            int j1 = i + 60;
+            int k1 = j1 + 20;
+            this.setBlitOffset(0);
+            this.minecraft.getTextureManager().bindTexture(ENCHANTMENT_TABLE_GUI_TEXTURE);
+            int l1 = this.container.getPossiblePages()[l] == null ? -1 : this.container.getPossiblePages()[l].ordinal();//enchantment level
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+            if (l1 == 0) {
+                this.blit(j1, j + 14 + 19 * i1, 0, 185, 108, 19);
             } else {
-                int l1 = 86;
+                String s = "" + l1;
+                int i2 = 86 - this.font.getStringWidth(s);
                 String s1 = I18n.format("bestiary." + this.container.getPossiblePages()[l].toString().toLowerCase());//EnchantmentNameParts.getInstance().generateNewRandomName(this.fontRenderer, l1);
-                FontRenderer fontrenderer = this.mc.fontRenderer;
-                float textScale = 1.0F;
-                if (fontrenderer.getStringWidth(s1) > 80) {
-                    textScale = 1.0F - (fontrenderer.getStringWidth(s1) - 80) * 0.02F;
-                }
-                int i2 = 6839882;
-                int j2 = mouseX - (i + 60);
-                int k2 = mouseY - (j + 14 + 19 * l);
-                if (j2 >= 0 && k2 >= 0 && j2 < 108 && k2 < 19) {
-                    this.drawTexturedModalRect(i1, j + 14 + 19 * l, 0, 204, 108, 19);
-                    i2 = 16777088;
+                FontRenderer fontrenderer = this.minecraft.getFontResourceManager().getFontRenderer(Minecraft.standardGalacticFontRenderer);
+                int j2 = 6839882;
+                if (((l < i1 + 1 || this.minecraft.player.experienceLevel < l1) && !this.minecraft.player.abilities.isCreativeMode)) { // Forge: render buttons as disabled when enchantable but enchantability not met on lower levels
+                    this.blit(j1, j + 14 + 19 * i1, 0, 185, 108, 19);
+                    this.blit(j1 + 1, j + 15 + 19 * i1, 16 * i1, 239, 16, 16);
+                    fontrenderer.drawSplitString(s1, k1, j + 16 + 19 * i1, i2, (j2 & 16711422) >> 1);
+                    j2 = 4226832;
                 } else {
-                    this.drawTexturedModalRect(i1, j + 14 + 19 * l, 0, 166, 108, 19);
+                    int k2 = mouseX - (i + 60);
+                    int l2 = mouseY - (j + 14 + 19 * i1);
+                    if (k2 >= 0 && l2 >= 0 && k2 < 108 && l2 < 19) {
+                        this.blit(j1, j + 14 + 19 * i1, 0, 204, 108, 19);
+                        j2 = 16777088;
+                    } else {
+                        this.blit(j1, j + 14 + 19 * i1, 0, 166, 108, 19);
+                    }
+
+                    this.blit(j1 + 1, j + 15 + 19 * i1, 16 * i1, 223, 16, 16);
+                    fontrenderer.drawSplitString(s1, k1, j + 16 + 19 * i1, i2, j2);
+                    j2 = 8453920;
                 }
-                this.drawTexturedModalRect(i1 + 1, j + 15 + 19 * l, 16 * l, 223, 16, 16);
-                GlStateManager.pushMatrix();
-                GlStateManager.translate(width / 2 - 10, height / 2 - 83 + (1.0F - textScale) * 45, 2);
-                GlStateManager.scale(textScale, textScale, 1);
-                fontrenderer.drawString(s1, 0, 20 + 19 * l, i2);
-                GlStateManager.popMatrix();
+
+                fontrenderer = this.minecraft.fontRenderer;
+                fontrenderer.drawStringWithShadow(s, (float)(k1 + 86 - fontrenderer.getStringWidth(s)), (float)(j + 16 + 19 * i1 + 7), j2);
             }
         }
     }
 
-    /**
-     * Draws the screen and all the components in it.
-     */
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        partialTicks = this.mc.getTickLength();
-        this.drawDefaultBackground();
-        super.drawScreen(mouseX, mouseY, partialTicks);
+    public void render(int mouseX, int mouseY, float partialTicks) {
+        partialTicks = this.minecraft.getRenderPartialTicks();
+        this.renderBackground();
+        super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
-        boolean flag = this.mc.player.capabilities.isCreativeMode;
+        boolean flag = this.minecraft.player.isCreative();
         int i = this.container.getManuscriptAmount();
 
         for (int j = 0; j < 3; ++j) {
@@ -205,14 +217,14 @@ public class GuiLectern extends GuiContainer {
                     list.add(textformatting + "" + s);
                 }
 
-                this.drawHoveringText(list, mouseX, mouseY);
+                this.renderTooltip(list, mouseX, mouseY);
                 break;
             }
         }
     }
 
     public void tickBook() {
-        ItemStack itemstack = this.inventorySlots.getSlot(0).getStack();
+        ItemStack itemstack = this.container.getSlot(0).getStack();
 
         if (!ItemStack.areItemStacksEqual(itemstack, this.last)) {
             this.last = itemstack;

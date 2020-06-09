@@ -5,18 +5,19 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageGetMyrmexHive;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TranslationTextComponent;
 
-public class GuiMyrmexAddRoom extends GuiScreen {
+public class GuiMyrmexAddRoom extends Screen {
     private static final ResourceLocation JUNGLE_TEXTURE = new ResourceLocation("iceandfire:textures/gui/myrmex_staff_jungle.png");
     private static final ResourceLocation DESERT_TEXTURE = new ResourceLocation("iceandfire:textures/gui/myrmex_staff_desert.png");
     private ItemStack staff;
@@ -25,79 +26,77 @@ public class GuiMyrmexAddRoom extends GuiScreen {
     private Direction facing;
 
     public GuiMyrmexAddRoom(ItemStack staff, BlockPos interactPos, Direction facing) {
+        super(new TranslationTextComponent("myrmex_add_room"));
         this.staff = staff;
         this.jungle = staff.getItem() == IafItemRegistry.MYRMEX_JUNGLE_STAFF;
         this.interactPos = interactPos;
         this.facing = facing;
-        initGui();
+        init();
     }
 
-    public void initGui() {
-        super.initGui();
-        this.buttonList.clear();
+    public void init() {
+        super.init();
+        this.buttons.clear();
         int i = (this.width - 248) / 2;
         int j = (this.height - 166) / 2;
         if (ClientProxy.getReferedClientHive() != null) {
-            this.buttonList.add(new GuiButton(0, i + 50, j + 35, 150, 20, I18n.format("myrmex.message.establishroom_food")));
-            this.buttonList.add(new GuiButton(1, i + 50, j + 60, 150, 20, I18n.format("myrmex.message.establishroom_nursery")));
-            this.buttonList.add(new GuiButton(2, i + 50, j + 85, 150, 20, I18n.format("myrmex.message.establishroom_enterance_surface")));
-            this.buttonList.add(new GuiButton(3, i + 50, j + 110, 150, 20, I18n.format("myrmex.message.establishroom_enterance_bottom")));
-            this.buttonList.add(new GuiButton(4, i + 50, j + 135, 150, 20, I18n.format("myrmex.message.establishroom_misc")));
-        }
-
-    }
-
-    @Override
-    protected void actionPerformed(GuiButton button) {
-        if (ClientProxy.getReferedClientHive() == null) {
-            return;
-        }
-        PlayerEntity player = Minecraft.getInstance().player;
-        switch (button.id) {
-            case 0:
+            PlayerEntity player = Minecraft.getInstance().player;
+            this.addButton(new Button( i + 50, j + 35, 150, 20, I18n.format("myrmex.message.establishroom_food"), (p_214132_1_) -> {
                 ClientProxy.getReferedClientHive().addRoomWithMessage(player, interactPos, WorldGenMyrmexHive.RoomType.FOOD);
-                break;
-            case 1:
+                onGuiClosed();
+                Minecraft.getInstance().displayGuiScreen(null);
+            }));
+            this.addButton(new Button(i + 50, j + 60, 150, 20, I18n.format("myrmex.message.establishroom_nursery"), (p_214132_1_) -> {
                 ClientProxy.getReferedClientHive().addRoomWithMessage(player, interactPos, WorldGenMyrmexHive.RoomType.NURSERY);
-                break;
-            case 2:
+                onGuiClosed();
+                Minecraft.getInstance().displayGuiScreen(null);
+            }));
+            this.addButton(new Button( i + 50, j + 85, 150, 20, I18n.format("myrmex.message.establishroom_enterance_surface"), (p_214132_1_) -> {
                 ClientProxy.getReferedClientHive().addEnteranceWithMessage(player, false, interactPos, facing);
-                break;
-            case 3:
+                onGuiClosed();
+                Minecraft.getInstance().displayGuiScreen(null);
+
+            }));
+            this.addButton(new Button(i + 50, j + 110, 150, 20, I18n.format("myrmex.message.establishroom_enterance_bottom"), (p_214132_1_) -> {
                 ClientProxy.getReferedClientHive().addEnteranceWithMessage(player, true, interactPos, facing);
-                break;
-            case 4:
+                onGuiClosed();
+                Minecraft.getInstance().displayGuiScreen(null);
+
+            }));
+            this.addButton(new Button(i + 50, j + 135, 150, 20, I18n.format("myrmex.message.establishroom_misc"), (p_214132_1_) -> {
                 ClientProxy.getReferedClientHive().addRoomWithMessage(player, interactPos, WorldGenMyrmexHive.RoomType.EMPTY);
-                break;
+                onGuiClosed();
+                Minecraft.getInstance().displayGuiScreen(null);
+
+            }));
         }
-        onGuiClosed();
-        Minecraft.getInstance().displayGuiScreen(null);
+
     }
 
-    public void drawDefaultBackground() {
-        super.drawDefaultBackground();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(jungle ? JUNGLE_TEXTURE : DESERT_TEXTURE);
+    public void renderBackground() {
+        super.renderBackground();
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        this.minecraft.getTextureManager().bindTexture(jungle ? JUNGLE_TEXTURE : DESERT_TEXTURE);
         int i = (this.width - 248) / 2;
         int j = (this.height - 166) / 2;
-        this.drawTexturedModalRect(i, j, 0, 0, 248, 166);
+        this.blit(i, j, 0, 0, 248, 166);
     }
 
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        this.drawDefaultBackground();
-        initGui();
+    public void render(int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground();
+        init();
         int i = (this.width - 248) / 2 + 10;
         int j = (this.height - 166) / 2 + 8;
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        super.render(mouseX, mouseY, partialTicks);
         int color = this.jungle ? 0X35EA15 : 0XFFBF00;
         if (ClientProxy.getReferedClientHive() != null) {
             if (!ClientProxy.getReferedClientHive().colonyName.isEmpty()) {
                 String title = I18n.format("myrmex.message.colony_named", ClientProxy.getReferedClientHive().colonyName);
-                this.fontRenderer.drawString(title, i + 40 - title.length() / 2, j - 3, color, true);
+                this.font.drawString(title, i + 40 - title.length() / 2, j - 3, color);
             } else {
-                this.fontRenderer.drawString(I18n.format("myrmex.message.colony"), i + 80, j - 3, color, true);
+                this.font.drawString(I18n.format("myrmex.message.colony"), i + 80, j - 3, color);
             }
-            this.fontRenderer.drawString(I18n.format("myrmex.message.create_new_room", interactPos.getX(), interactPos.getY(), interactPos.getZ()), i + 30, j + 6, color, true);
+            this.font.drawString(I18n.format("myrmex.message.create_new_room", interactPos.getX(), interactPos.getY(), interactPos.getZ()), i + 30, j + 6, color);
 
         }
 

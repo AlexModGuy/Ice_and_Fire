@@ -1,22 +1,26 @@
 package com.github.alexthe666.iceandfire.client.texture;
 
-import net.minecraft.client.renderer.texture.AbstractTexture;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.renderer.entity.HorseRenderer;
+import net.minecraft.client.renderer.texture.NativeImage;
+import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.resources.IResource;
-import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.resources.IResource;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class ArrayLayeredTexture extends AbstractTexture {
+public class ArrayLayeredTexture extends Texture {
     private static final Logger LOGGER = LogManager.getLogger();
     public final List<String> layeredTextureNames;
 
@@ -24,36 +28,44 @@ public class ArrayLayeredTexture extends AbstractTexture {
         this.layeredTextureNames = textureNames;
     }
 
-    public void loadTexture(IResourceManager resourceManager) throws IOException {
-        this.deleteGlTexture();
-        BufferedImage bufferedimage = null;
+    public void loadTexture(IResourceManager manager) throws IOException {
+        Iterator<String> iterator = this.layeredTextureNames.iterator();
+        String s = iterator.next();
 
-        for (String s : this.layeredTextureNames) {
-            IResource iresource = null;
+        try (IResource iresource = manager.getResource(new ResourceLocation(s))) {
+            NativeImage nativeimage = net.minecraftforge.client.MinecraftForgeClient.getImageLayer(new ResourceLocation(s), manager);
 
-            try {
-                if (s != null) {
-                    iresource = resourceManager.getResource(new ResourceLocation(s));
-                    BufferedImage bufferedimage1 = TextureUtil.readBufferedImage(iresource.getInputStream());
-
-                    if (bufferedimage == null) {
-                        bufferedimage = new BufferedImage(bufferedimage1.getWidth(), bufferedimage1.getHeight(), 2);
+            while (iterator.hasNext()) {
+                String s1 = iterator.next();
+                if (s1 != null) {
+                    try (
+                            IResource iresource1 = manager.getResource(new ResourceLocation(s1));
+                            NativeImage nativeimage1 = NativeImage.read(iresource1.getInputStream());
+                    ) {
+                        for (int i = 0; i < nativeimage1.getHeight(); ++i) {
+                            for (int j = 0; j < nativeimage1.getWidth(); ++j) {
+                                nativeimage.blendPixel(j, i, nativeimage1.getPixelRGBA(j, i));
+                            }
+                        }
                     }
-
-                    bufferedimage.getGraphics().drawImage(bufferedimage1, 0, 0, null);
                 }
-
-                continue;
-            } catch (IOException ioexception) {
-                LOGGER.error("Couldn't load layered image", ioexception);
-            } finally {
-                IOUtils.closeQuietly(iresource);
             }
 
-            return;
+            if (!RenderSystem.isOnRenderThreadOrInit()) {
+                RenderSystem.recordRenderCall(() -> {
+                    this.loadImage(nativeimage);
+                });
+            } else {
+                this.loadImage(nativeimage);
+            }
+        } catch (IOException ioexception) {
+            LOGGER.error("Couldn't load layered image", (Throwable) ioexception);
         }
 
-        TextureUtil.uploadTextureImage(this.getGlTextureId(), bufferedimage);
+    }
+
+    private void loadImage(NativeImage imageIn) {
+        TextureUtil.prepareImage(this.getGlTextureId(), imageIn.getWidth(), imageIn.getHeight());
+        imageIn.uploadTextureSub(0, 0, 0, true);
     }
 }
-

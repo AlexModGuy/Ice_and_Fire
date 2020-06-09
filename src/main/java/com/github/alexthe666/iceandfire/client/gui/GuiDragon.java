@@ -1,114 +1,127 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragon;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiDragon extends GuiContainer {
+public class GuiDragon extends ContainerScreen<ContainerDragon> {
     private static final ResourceLocation texture = new ResourceLocation("iceandfire:textures/gui/dragon.png");
-    private IInventory playerInventory;
-    private IInventory dragonInv;
-    private EntityDragonBase dragon;
+    private PlayerInventory playerInventory;
+    private ContainerDragon dragonInv;
     private float mousePosx;
     private float mousePosY;
 
-    public GuiDragon(IInventory playerInv, EntityDragonBase dragon) {
-        super(new ContainerDragon(dragon, Minecraft.getInstance().player));
+    public GuiDragon(ContainerDragon dragonInv, PlayerInventory playerInv, ITextComponent name) {
+        super(dragonInv, playerInv, name);
         this.playerInventory = playerInv;
-        this.dragonInv = dragon.dragonInventory;
-        this.dragon = dragon;
-        this.allowUserInput = false;
+        this.dragonInv = dragonInv;
         this.ySize = 214;
     }
 
-    public static void drawEntityOnScreen(int posX, int posY, int scale, float mouseX, float mouseY, EntityDragonBase entity) {
-        GlStateManager.enableColorMaterial();
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(posX, posY, 50.0F);
-        GlStateManager.scale((-scale), scale, scale);
-        float dragonscale = entity.getRenderSize() / 3;
-        GlStateManager.scale(1 / dragonscale, 1 / dragonscale, 1 / dragonscale);
-        GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
+    public static void drawEntityOnScreen(int x, int y, int scale, float yaw, float pitch, LivingEntity entity) {
+        float f = (float)Math.atan((double)(yaw / 40.0F));
+        float f1 = (float)Math.atan((double)(pitch / 40.0F));
+        RenderSystem.pushMatrix();
+        RenderSystem.translatef((float)x, (float)y, 1050.0F);
+        RenderSystem.scalef(1.0F, 1.0F, -1.0F);
+        MatrixStack matrixstack = new MatrixStack();
+        matrixstack.translate(0.0D, 0.0D, 1000.0D);
+        matrixstack.scale((float)scale, (float)scale, (float)scale);
+        Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
+        Quaternion quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);
+        quaternion.multiply(quaternion1);
+        matrixstack.rotate(quaternion);
         float f2 = entity.renderYawOffset;
         float f3 = entity.rotationYaw;
         float f4 = entity.rotationPitch;
         float f5 = entity.prevRotationYawHead;
         float f6 = entity.rotationYawHead;
-        GlStateManager.rotate(135.0F, 0.0F, 1.0F, 0.0F);
-        RenderHelper.enableStandardItemLighting();
-        GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(-((float) Math.atan(mouseY / 40.0F)) * 20.0F, 1.0F, 0.0F, 0.0F);
-        entity.renderYawOffset = (float) Math.atan(mouseX / 40.0F) * 20.0F;
-        entity.rotationYaw = (float) Math.atan(mouseX / 40.0F) * 40.0F;
-        entity.rotationPitch = -((float) Math.atan(mouseY / 40.0F)) * 20.0F;
+        entity.renderYawOffset = 180.0F + f * 20.0F;
+        entity.rotationYaw = 180.0F + f * 40.0F;
+        entity.rotationPitch = -f1 * 20.0F;
         entity.rotationYawHead = entity.rotationYaw;
         entity.prevRotationYawHead = entity.rotationYaw;
-        GlStateManager.translate(0.0F, 0.0F, 0.0F);
-        RenderManager rendermanager = Minecraft.getInstance().getRenderManager();
-        rendermanager.setPlayerViewY(180.0F);
-        rendermanager.setRenderShadow(false);
-        rendermanager.renderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
-        rendermanager.setRenderShadow(true);
+        EntityRendererManager entityrenderermanager = Minecraft.getInstance().getRenderManager();
+        quaternion1.conjugate();
+        entityrenderermanager.setCameraOrientation(quaternion1);
+        entityrenderermanager.setRenderShadow(false);
+        IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+        entityrenderermanager.renderEntityStatic(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixstack, irendertypebuffer$impl, 15728880);
+        irendertypebuffer$impl.finish();
+        entityrenderermanager.setRenderShadow(true);
         entity.renderYawOffset = f2;
         entity.rotationYaw = f3;
         entity.rotationPitch = f4;
         entity.prevRotationYawHead = f5;
         entity.rotationYawHead = f6;
-        GlStateManager.popMatrix();
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.disableRescaleNormal();
-        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        GlStateManager.disableTexture2D();
-        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+        RenderSystem.popMatrix();
     }
+
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        String s1 = dragon.getName();
-        this.fontRenderer.drawString(s1, this.xSize / 2 - this.fontRenderer.getStringWidth(s1) / 2, 6, 4210752);
-        String s3 = dragon.getCustomNameTag().length() == 0 ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + dragon.getCustomNameTag();
-        this.fontRenderer.drawString(s3, this.xSize / 2 - this.fontRenderer.getStringWidth(s3) / 2, 75, 0XFFFFFF);
-        String s2 = StatCollector.translateToLocal("dragon.health") + Math.min(dragon.getHealth(), dragon.getMaxHealth()) + "/" + dragon.getMaxHealth();
-        this.fontRenderer.drawString(s2, this.xSize / 2 - this.fontRenderer.getStringWidth(s2) / 2, 84, 0XFFFFFF);
-        String s5 = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((dragon.isMale() ? "dragon.gender.male" : "dragon.gender.female"));
-        this.fontRenderer.drawString(s5, this.xSize / 2 - this.fontRenderer.getStringWidth(s5) / 2, 93, 0XFFFFFF);
-        String s6 = StatCollector.translateToLocal("dragon.hunger") + dragon.getHunger() + "/100";
-        this.fontRenderer.drawString(s6, this.xSize / 2 - this.fontRenderer.getStringWidth(s6) / 2, 102, 0XFFFFFF);
-        String s4 = StatCollector.translateToLocal("dragon.stage") + dragon.getDragonStage() + " " + StatCollector.translateToLocal("dragon.days.front") + dragon.getAgeInDays() + " " + StatCollector.translateToLocal("dragon.days.back");
-        this.fontRenderer.drawString(s4, this.xSize / 2 - this.fontRenderer.getStringWidth(s4) / 2, 111, 0XFFFFFF);
-        String s7 = dragon.getOwner() != null ? StatCollector.translateToLocal("dragon.owner") + dragon.getOwner().getName() : StatCollector.translateToLocal("dragon.untamed");
-        this.fontRenderer.drawString(s7, this.xSize / 2 - this.fontRenderer.getStringWidth(s7) / 2, 120, 0XFFFFFF);
+        Entity entity = IceAndFire.PROXY.getReferencedMob();
+        if(entity instanceof EntityDragonBase){
+            EntityDragonBase dragon = (EntityDragonBase)entity;
+            String s1 = dragon.getName().getFormattedText();
+            this.font.drawString(s1, this.xSize / 2 - this.font.getStringWidth(s1) / 2, 6, 4210752);
+            String s3 = dragon.getCustomName() == null ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + dragon.getCustomName();
+            this.font.drawString(s3, this.xSize / 2 - this.font.getStringWidth(s3) / 2, 75, 0XFFFFFF);
+            String s2 = StatCollector.translateToLocal("dragon.health") + Math.min(dragon.getHealth(), dragon.getMaxHealth()) + "/" + dragon.getMaxHealth();
+            this.font.drawString(s2, this.xSize / 2 - this.font.getStringWidth(s2) / 2, 84, 0XFFFFFF);
+            String s5 = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((dragon.isMale() ? "dragon.gender.male" : "dragon.gender.female"));
+            this.font.drawString(s5, this.xSize / 2 - this.font.getStringWidth(s5) / 2, 93, 0XFFFFFF);
+            String s6 = StatCollector.translateToLocal("dragon.hunger") + dragon.getHunger() + "/100";
+            this.font.drawString(s6, this.xSize / 2 - this.font.getStringWidth(s6) / 2, 102, 0XFFFFFF);
+            String s4 = StatCollector.translateToLocal("dragon.stage") + dragon.getDragonStage() + " " + StatCollector.translateToLocal("dragon.days.front") + dragon.getAgeInDays() + " " + StatCollector.translateToLocal("dragon.days.back");
+            this.font.drawString(s4, this.xSize / 2 - this.font.getStringWidth(s4) / 2, 111, 0XFFFFFF);
+            String s7 = dragon.getOwner() != null ? StatCollector.translateToLocal("dragon.owner") + dragon.getOwner().getName() : StatCollector.translateToLocal("dragon.untamed");
+            this.font.drawString(s7, this.xSize / 2 - this.font.getStringWidth(s7) / 2, 120, 0XFFFFFF);
+        }
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(texture);
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        this.minecraft.getTextureManager().bindTexture(texture);
         int k = (this.width - this.xSize) / 2;
         int l = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
-        drawEntityOnScreen(k + 88, l + (int) (0.5F * (dragon.flyProgress)) + 55, 23, k + 51 - this.mousePosx, l + 75 - 50 - this.mousePosY, this.dragon);
+        this.blit(k, l, 0, 0, this.xSize, this.ySize);
+        Entity entity = IceAndFire.PROXY.getReferencedMob();
+        if(entity instanceof EntityDragonBase) {
+            EntityDragonBase dragon = (EntityDragonBase) entity;
+            drawEntityOnScreen(k + 88, l + (int) (0.5F * (dragon.flyProgress)) + 55, 23, k + 51 - this.mousePosx, l + 75 - 50 - this.mousePosY, dragon);
+        }
 
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         this.mousePosx = mouseX;
         this.mousePosY = mouseY;
-        this.drawDefaultBackground();
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        this.renderBackground();
+        super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
     }
 

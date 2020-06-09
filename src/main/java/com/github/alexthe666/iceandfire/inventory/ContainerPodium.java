@@ -11,7 +11,7 @@ import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 
 public class ContainerPodium extends Container {
-    private final IInventory podium;
+    public final IInventory podium;
 
     public ContainerPodium(int i, PlayerInventory playerInventory) {
         this(i, new Inventory(1), playerInventory, new IntArray(0));

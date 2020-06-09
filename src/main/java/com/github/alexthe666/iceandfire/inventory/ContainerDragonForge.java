@@ -17,7 +17,7 @@ public class ContainerDragonForge extends Container {
 
     private final IInventory tileFurnace;
     private int cookTime;
-    private boolean isFire;
+    public boolean isFire;
 
     public ContainerDragonForge(int i, PlayerInventory playerInventory) {
         this(i, new Inventory(3), playerInventory, new IntArray(0));

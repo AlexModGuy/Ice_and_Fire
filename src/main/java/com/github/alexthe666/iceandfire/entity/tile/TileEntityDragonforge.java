@@ -45,7 +45,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     net.minecraftforge.items.IItemHandler handlerBottom = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.Direction.DOWN);
     net.minecraftforge.items.IItemHandler handlerSide = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.Direction.WEST);
     private NonNullList<ItemStack> forgeItemStacks = NonNullList.withSize(3, ItemStack.EMPTY);
-    private int cookTime;
+    public int cookTime;
     private int lastDragonFlameTimer = 0;
     private boolean prevAssembled;
     private boolean canAddFlameAgain = true;

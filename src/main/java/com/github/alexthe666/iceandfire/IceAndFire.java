@@ -27,6 +27,7 @@ public class IceAndFire {
     public static final String MODID = "iceandfire";
     public static final SimpleChannel NETWORK_WRAPPER;
     public static final boolean DEBUG = false;
+    public static final String VERSION = "2.0.0-1.15.2";
     private static final String PROTOCOL_VERSION = Integer.toString(1);
     public static ItemGroup TAB_ITEMS = new ItemGroup(MODID) {
         @Override
