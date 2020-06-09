@@ -15,7 +15,7 @@ import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.SirenEntityProperties;
 import com.github.alexthe666.iceandfire.util.IAFMath;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
+import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -219,12 +219,12 @@ public class ClientEvents {
 
     protected double translateToBody(RenderLiving renderer) {
         double roll = 0;
-        roll += postRenderRoll(((IceAndFireTabulaModel) renderer.getMainModel()).getCube("BodyUpper"), 0.0625F);
-        roll += postRenderRoll(((IceAndFireTabulaModel) renderer.getMainModel()).getCube("Neck1"), 0.0625F);
+        roll += postRenderRoll(((TabulaModel) renderer.getMainModel()).getCube("BodyUpper"), 0.0625F);
+        roll += postRenderRoll(((TabulaModel) renderer.getMainModel()).getCube("Neck1"), 0.0625F);
         return roll;
     }
 
-    public double postRenderRoll(AdvancedModelRenderer renderer, float scale) {
+    public double postRenderRoll(AdvancedModelBox renderer, float scale) {
         return renderer.rotateAngleZ * (180F / (float) Math.PI);
     }
 

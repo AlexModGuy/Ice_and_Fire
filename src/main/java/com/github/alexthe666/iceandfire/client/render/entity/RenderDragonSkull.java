@@ -20,14 +20,14 @@ public class RenderDragonSkull extends Render<EntityDragonSkull> {
     public static final float[] growth_stage_4 = new float[]{12.5F, 20F};
     public static final float[] growth_stage_5 = new float[]{20F, 30F};
     public float[][] growth_stages;
-    private IceAndFireTabulaModel fireDragonModel;
-    private IceAndFireTabulaModel iceDragonModel;
+    private TabulaModel fireDragonModel;
+    private TabulaModel iceDragonModel;
 
     public RenderDragonSkull(RenderManager renderManager, ModelBase fireDragonModel, ModelBase iceDragonModel) {
         super(renderManager);
         growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
-        this.fireDragonModel = (IceAndFireTabulaModel) fireDragonModel;
-        this.iceDragonModel = (IceAndFireTabulaModel) iceDragonModel;
+        this.fireDragonModel = (TabulaModel) fireDragonModel;
+        this.iceDragonModel = (TabulaModel) iceDragonModel;
     }
 
     private static void setRotationAngles(ModelRenderer cube, float rotX, float rotY, float rotZ) {

@@ -27,7 +27,7 @@ public class RenderMobSkull extends Render<EntityMobSkull> {
     private ModelTroll trollModel;
     private ModelAmphithere amphithereModel;
     private ModelHydraHead hydraModel;
-    private IceAndFireTabulaModel seaSerpentModel;
+    private TabulaModel seaSerpentModel;
 
     public RenderMobSkull(RenderManager renderManager, ModelBase seaSerpentModel) {
         super(renderManager);
@@ -37,7 +37,7 @@ public class RenderMobSkull extends Render<EntityMobSkull> {
         this.stymphalianBirdModel = new ModelStymphalianBird();
         this.trollModel = new ModelTroll();
         this.amphithereModel = new ModelAmphithere();
-        this.seaSerpentModel = (IceAndFireTabulaModel) seaSerpentModel;
+        this.seaSerpentModel = (TabulaModel) seaSerpentModel;
         this.hydraModel = new ModelHydraHead(0);
     }
 

@@ -1,10 +1,12 @@
 package com.github.alexthe666.iceandfire.client.model.util;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.World;
 
 /*
@@ -80,8 +82,8 @@ public class LegSolver {
 
         private float getDistance(World world, BlockPos pos) {
             BlockState state = world.getBlockState(pos);
-            AxisAlignedBB aabb = state.getCollisionBoundingBox(world, pos);
-            return aabb == null ? 1 : 1 - Math.min((float) aabb.maxY, 1);
+            VoxelShape aabb = state.getCollisionShape(world, pos);
+            return aabb == null ? 1 : 1 - Math.min((float) aabb.max(Direction.Axis.Y, 0.5D, 0.5D), 1);
         }
 
         protected float getFallSpeed() {

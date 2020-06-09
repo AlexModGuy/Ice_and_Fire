@@ -1,10 +1,11 @@
 package com.github.alexthe666.iceandfire.client.model.util;
 
+import com.github.alexthe666.citadel.client.model.TabulaModel;
+import com.github.alexthe666.citadel.client.model.TabulaModelHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.ilexiconn.llibrary.client.model.tabula.TabulaModelHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 public enum EnumSeaSerpentAnimations {
     T_POSE(""),
@@ -25,7 +26,7 @@ public enum EnumSeaSerpentAnimations {
     JUMPING2("Jumping2");
 
     @OnlyIn(Dist.CLIENT)
-    public IceAndFireTabulaModel seaserpent_model;
+    public TabulaModel seaserpent_model;
     private String fileSuffix;
 
     EnumSeaSerpentAnimations(String fileSuffix) {
@@ -34,12 +35,12 @@ public enum EnumSeaSerpentAnimations {
 
     @OnlyIn(Dist.CLIENT)
     public static void initializeSerpentModels() {
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+        if (FMLEnvironment.dist == Dist.CLIENT) {
             for (EnumSeaSerpentAnimations animation : values()) {
                 try {
-                    animation.seaserpent_model = new IceAndFireTabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent" + animation.fileSuffix));
+                    animation.seaserpent_model = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent" + animation.fileSuffix));
                 } catch (Exception e) {
-                    IceAndFire.logger.warn("sea serpent model at: seaserpent" + animation.fileSuffix + ".tbl doesn't exist!");
+                    IceAndFire.LOGGER.warning("sea serpent model at: seaserpent" + animation.fileSuffix + ".tbl doesn't exist!");
                     e.printStackTrace();
                 }
             }

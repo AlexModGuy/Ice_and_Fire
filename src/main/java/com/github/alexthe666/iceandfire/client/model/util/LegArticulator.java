@@ -1,21 +1,17 @@
 package com.github.alexthe666.iceandfire.client.model.util;
 
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.minecraft.util.math.MathHelper;
-/*
-       Code from JurassiCraft, used with permission
-       By paul101
- */
 
 public final class LegArticulator {
     public static void articulateQuadruped(
-            EntityDragonBase entity, LegSolverQuadruped legs, AdvancedModelRenderer body, AdvancedModelRenderer lowerBody, AdvancedModelRenderer neck,
-            AdvancedModelRenderer backLeftThigh, AdvancedModelRenderer backLeftCalf, AdvancedModelRenderer[] backLeftFoot,
-            AdvancedModelRenderer backRightThigh, AdvancedModelRenderer backRightCalf, AdvancedModelRenderer[] backRightFoot,
+            EntityDragonBase entity, LegSolverQuadruped legs, AdvancedModelBox body, AdvancedModelBox lowerBody, AdvancedModelBox neck,
+            AdvancedModelBox backLeftThigh, AdvancedModelBox backLeftCalf, AdvancedModelBox[] backLeftFoot,
+            AdvancedModelBox backRightThigh, AdvancedModelBox backRightCalf, AdvancedModelBox[] backRightFoot,
 
-            AdvancedModelRenderer frontLeftThigh, AdvancedModelRenderer frontLeftCalf, AdvancedModelRenderer[] frontLeftFoot,
-            AdvancedModelRenderer frontRightThigh, AdvancedModelRenderer frontRightCalf, AdvancedModelRenderer[] frontRightFoot,
+            AdvancedModelBox frontLeftThigh, AdvancedModelBox frontLeftCalf, AdvancedModelBox[] frontLeftFoot,
+            AdvancedModelBox frontRightThigh, AdvancedModelBox frontRightCalf, AdvancedModelBox[] frontRightFoot,
             float rotBackThigh, float rotBackCalf, float rotBackFoot,
             float rotFrontThigh, float rotFrontCalf, float rotFrontFoot,
             float delta) {
@@ -42,7 +38,7 @@ public final class LegArticulator {
         }
     }
 
-    private static void articulateLegPair(float sc, float heightLeft, float heightRight, float avg, float offsetY, AdvancedModelRenderer leftThigh, AdvancedModelRenderer leftCalf, AdvancedModelRenderer[] leftFoot, AdvancedModelRenderer rightThigh, AdvancedModelRenderer rightCalf, AdvancedModelRenderer[] rightFoot, float rotThigh, float rotCalf, float rotFoot) {
+    private static void articulateLegPair(float sc, float heightLeft, float heightRight, float avg, float offsetY, AdvancedModelBox leftThigh, AdvancedModelBox leftCalf, AdvancedModelBox[] leftFoot, AdvancedModelBox rightThigh, AdvancedModelBox rightCalf, AdvancedModelBox[] rightFoot, float rotThigh, float rotCalf, float rotFoot) {
         final float difLeft = Math.max(0, heightRight - heightLeft);
         final float difRight = Math.max(0, heightLeft - heightRight);
         leftThigh.rotationPointY += 16 / sc * (Math.max(heightLeft, avg) + offsetY);
@@ -51,10 +47,10 @@ public final class LegArticulator {
         leftCalf.rotateAngleX += rotCalf * difLeft;
         rightThigh.rotateAngleX -= rotThigh * difRight;
         rightCalf.rotateAngleX += rotCalf * difRight;
-        for (AdvancedModelRenderer part : rightFoot) {
+        for (AdvancedModelBox part : rightFoot) {
             part.rotateAngleX -= rotFoot * Math.min(0, heightRight - heightLeft);
         }
-        for (AdvancedModelRenderer part : leftFoot) {
+        for (AdvancedModelBox part : leftFoot) {
             part.rotateAngleX -= rotFoot * Math.min(0, heightLeft - heightRight);
 
         }

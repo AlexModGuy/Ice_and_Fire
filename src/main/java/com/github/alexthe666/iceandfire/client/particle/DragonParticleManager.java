@@ -15,11 +15,11 @@ public class DragonParticleManager {
         RenderLiving render = (RenderLiving) Minecraft.getInstance().getRenderManager().getEntityRenderObject(dragonBase);
         if (render instanceof RenderDragonBase) {
             RenderDragonBase renderDragonBase = (RenderDragonBase) render;
-            ((IceAndFireTabulaModel) renderDragonBase.getMainModel()).getCube("BodyUpper").postRender(0.0625F);
-            ((IceAndFireTabulaModel) renderDragonBase.getMainModel()).getCube("Neck1").postRender(0.0625F);
-            ((IceAndFireTabulaModel) renderDragonBase.getMainModel()).getCube("Neck2").postRender(0.0625F);
-            ((IceAndFireTabulaModel) renderDragonBase.getMainModel()).getCube("Neck3").postRender(0.0625F);
-            ((IceAndFireTabulaModel) renderDragonBase.getMainModel()).getCube("Head").postRender(0.0625F);
+            ((TabulaModel) renderDragonBase.getMainModel()).getCube("BodyUpper").postRender(0.0625F);
+            ((TabulaModel) renderDragonBase.getMainModel()).getCube("Neck1").postRender(0.0625F);
+            ((TabulaModel) renderDragonBase.getMainModel()).getCube("Neck2").postRender(0.0625F);
+            ((TabulaModel) renderDragonBase.getMainModel()).getCube("Neck3").postRender(0.0625F);
+            ((TabulaModel) renderDragonBase.getMainModel()).getCube("Head").postRender(0.0625F);
         }
     }
 }

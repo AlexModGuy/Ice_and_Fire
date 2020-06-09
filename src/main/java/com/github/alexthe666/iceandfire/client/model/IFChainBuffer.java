@@ -1,13 +1,12 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.iceandfire.entity.util.IFlapable;
-import net.ilexiconn.llibrary.LLibrary;
-import net.ilexiconn.llibrary.client.util.ClientUtils;
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * @author rafa_mv
@@ -203,7 +202,7 @@ public class IFChainBuffer {
      * @param boxes the box array
      */
     public void applyChainSwingBuffer(ModelRenderer... boxes) {
-        float rotateAmount = 0.01745329251F * ClientUtils.interpolate(this.prevYawVariation, this.yawVariation, LLibrary.PROXY.getPartialTicks()) / boxes.length;
+        float rotateAmount = 0.01745329251F * MathHelper.lerp(this.prevYawVariation, this.yawVariation, getPartialTicks()) / boxes.length;
         for (ModelRenderer box : boxes) {
             box.rotateAngleY += rotateAmount;
         }
@@ -215,7 +214,7 @@ public class IFChainBuffer {
      * @param boxes the box array
      */
     public void applyChainWaveBuffer(ModelRenderer... boxes) {
-        float rotateAmount = 0.01745329251F * ClientUtils.interpolate(this.prevPitchVariation, this.pitchVariation, LLibrary.PROXY.getPartialTicks()) / boxes.length;
+        float rotateAmount = 0.01745329251F * MathHelper.lerp(this.prevPitchVariation, this.pitchVariation, getPartialTicks()) / boxes.length;
         for (ModelRenderer box : boxes) {
             box.rotateAngleX += rotateAmount;
         }
@@ -227,7 +226,7 @@ public class IFChainBuffer {
      * @param boxes the box array
      */
     public void applyChainFlapBuffer(ModelRenderer... boxes) {
-        float rotateAmount = 0.01745329251F * ClientUtils.interpolate(this.prevYawVariation, this.yawVariation, LLibrary.PROXY.getPartialTicks()) / boxes.length;
+        float rotateAmount = 0.01745329251F * MathHelper.lerp(this.prevYawVariation, this.yawVariation, getPartialTicks()) / boxes.length;
         for (ModelRenderer box : boxes) {
             box.rotateAngleZ += rotateAmount;
         }
@@ -239,24 +238,28 @@ public class IFChainBuffer {
      * @param boxes the box array
      */
     public void applyChainFlapBufferReverse(ModelRenderer... boxes) {
-        float rotateAmount = 0.01745329251F * ClientUtils.interpolate(this.prevYawVariation, this.yawVariation, LLibrary.PROXY.getPartialTicks()) / boxes.length;
+        float rotateAmount = 0.01745329251F * MathHelper.lerp(this.prevYawVariation, this.yawVariation, getPartialTicks()) / boxes.length;
         for (ModelRenderer box : boxes) {
             box.rotateAngleZ -= rotateAmount * 0.5F;
         }
     }
 
     public void applyChainSwingBufferReverse(ModelRenderer... boxes) {
-        float rotateAmount = 0.01745329251F * ClientUtils.interpolate(this.prevYawVariation, this.yawVariation, LLibrary.PROXY.getPartialTicks()) / boxes.length;
+        float rotateAmount = 0.01745329251F * MathHelper.lerp(this.prevYawVariation, this.yawVariation, getPartialTicks()) / boxes.length;
         for (ModelRenderer box : boxes) {
             box.rotateAngleY -= rotateAmount;
         }
     }
 
     public void applyChainWaveBufferReverse(ModelRenderer... boxes) {
-        float rotateAmount = 0.01745329251F * ClientUtils.interpolate(this.prevPitchVariation, this.pitchVariation, LLibrary.PROXY.getPartialTicks()) / boxes.length;
+        float rotateAmount = 0.01745329251F * MathHelper.lerp(this.prevPitchVariation, this.pitchVariation, getPartialTicks()) / boxes.length;
         for (ModelRenderer box : boxes) {
             box.rotateAngleX -= rotateAmount;
         }
+    }
+
+    private float getPartialTicks() {
+        return Minecraft.getInstance().getRenderPartialTicks();
     }
 
 }

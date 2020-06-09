@@ -1,74 +1,76 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 
 public class ModelDeathWormGauntlet extends ModelDragonBase {
-    public AdvancedModelRenderer Head;
-    public AdvancedModelRenderer JawExtender;
-    public AdvancedModelRenderer HeadInner;
-    public AdvancedModelRenderer ToothB;
-    public AdvancedModelRenderer ToothT;
-    public AdvancedModelRenderer ToothL;
-    public AdvancedModelRenderer ToothL_1;
-    public AdvancedModelRenderer JawExtender2;
-    public AdvancedModelRenderer JawExtender3;
-    public AdvancedModelRenderer JawExtender4;
-    public AdvancedModelRenderer TopJaw;
-    public AdvancedModelRenderer BottomJaw;
-    public AdvancedModelRenderer JawHook;
+    public AdvancedModelBox Head;
+    public AdvancedModelBox JawExtender;
+    public AdvancedModelBox HeadInner;
+    public AdvancedModelBox ToothB;
+    public AdvancedModelBox ToothT;
+    public AdvancedModelBox ToothL;
+    public AdvancedModelBox ToothL_1;
+    public AdvancedModelBox JawExtender2;
+    public AdvancedModelBox JawExtender3;
+    public AdvancedModelBox JawExtender4;
+    public AdvancedModelBox TopJaw;
+    public AdvancedModelBox BottomJaw;
+    public AdvancedModelBox JawHook;
 
     public ModelDeathWormGauntlet() {
         this.textureWidth = 128;
         this.textureHeight = 64;
-        this.Head = new AdvancedModelRenderer(this, 0, 29);
+        this.Head = new AdvancedModelBox(this, 0, 29);
         this.Head.setRotationPoint(0.0F, 0.0F, 1.5F);
         this.Head.addBox(-5.0F, -5.0F, -8.0F, 10, 10, 8, 0.0F);
-        this.TopJaw = new AdvancedModelRenderer(this, 19, 7);
+        this.TopJaw = new AdvancedModelBox(this, 19, 7);
         this.TopJaw.setRotationPoint(0.0F, -0.2F, -11.4F);
         this.TopJaw.addBox(-2.0F, -1.5F, -6.4F, 4, 2, 6, 0.0F);
         this.setRotateAngle(TopJaw, 0.091106186954104F, 0.0F, 0.0F);
-        this.JawHook = new AdvancedModelRenderer(this, 0, 7);
+        this.JawHook = new AdvancedModelBox(this, 0, 7);
         this.JawHook.setRotationPoint(0.0F, -0.3F, -6.0F);
         this.JawHook.addBox(-0.5F, -0.7F, -2.0F, 1, 1, 3, 0.0F);
         this.setRotateAngle(JawHook, 1.730144887501979F, 0.0F, 0.0F);
-        this.ToothL = new AdvancedModelRenderer(this, 52, 34);
+        this.ToothL = new AdvancedModelBox(this, 52, 34);
         this.ToothL.setRotationPoint(4.5F, 0.0F, -7.5F);
         this.ToothL.addBox(-0.5F, -0.4F, 0.0F, 1, 1, 3, 0.0F);
         this.setRotateAngle(ToothL, -3.141592653589793F, 0.3490658503988659F, 0.0F);
-        this.ToothB = new AdvancedModelRenderer(this, 52, 34);
+        this.ToothB = new AdvancedModelBox(this, 52, 34);
         this.ToothB.setRotationPoint(0.0F, 4.5F, -7.5F);
         this.ToothB.addBox(-0.5F, -0.4F, 0.0F, 1, 1, 3, 0.0F);
         this.setRotateAngle(ToothB, 2.7930504019665254F, -0.0F, 0.0F);
-        this.JawExtender = new AdvancedModelRenderer(this, 0, 7);
+        this.JawExtender = new AdvancedModelBox(this, 0, 7);
         this.JawExtender.setRotationPoint(0.0F, 0.0F, 10.0F);
         this.JawExtender.addBox(-1.5F, -1.5F, -13.0F, 3, 3, 13, 0.0F);
-        this.BottomJaw = new AdvancedModelRenderer(this, 40, 7);
+        this.BottomJaw = new AdvancedModelBox(this, 40, 7);
         this.BottomJaw.setRotationPoint(0.0F, 0.8F, -12.3F);
         this.BottomJaw.addBox(-2.0F, 0.2F, -4.9F, 4, 1, 5, 0.0F);
         this.setRotateAngle(BottomJaw, -0.045553093477052F, 0.0F, 0.0F);
-        this.ToothT = new AdvancedModelRenderer(this, 52, 34);
+        this.ToothT = new AdvancedModelBox(this, 52, 34);
         this.ToothT.setRotationPoint(0.0F, -4.5F, -7.5F);
         this.ToothT.addBox(-0.5F, -0.4F, 0.0F, 1, 1, 3, 0.0F);
         this.setRotateAngle(ToothT, -2.7930504019665254F, -0.0F, 0.0F);
-        this.HeadInner = new AdvancedModelRenderer(this, 0, 48);
+        this.HeadInner = new AdvancedModelBox(this, 0, 48);
         this.HeadInner.setRotationPoint(0.0F, 0.0F, -0.3F);
         this.HeadInner.addBox(-4.0F, -4.0F, -8.0F, 8, 8, 8, 0.0F);
-        this.ToothL_1 = new AdvancedModelRenderer(this, 52, 34);
+        this.ToothL_1 = new AdvancedModelBox(this, 52, 34);
         this.ToothL_1.setRotationPoint(-4.5F, 0.0F, -7.5F);
         this.ToothL_1.addBox(-0.5F, -0.4F, 0.0F, 1, 1, 3, 0.0F);
         this.setRotateAngle(ToothL_1, -3.141592653589793F, -0.3490658503988659F, 0.0F);
-        this.JawExtender2 = new AdvancedModelRenderer(this, 0, 7);
+        this.JawExtender2 = new AdvancedModelBox(this, 0, 7);
         this.JawExtender2.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.JawExtender2.addBox(-1.5F, -1.5F, -13.0F, 3, 3, 13, 0.0F);
-        this.JawExtender3 = new AdvancedModelRenderer(this, 0, 7);
+        this.JawExtender3 = new AdvancedModelBox(this, 0, 7);
         this.JawExtender3.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.JawExtender3.addBox(-1.5F, -1.5F, -13.0F, 3, 3, 13, 0.0F);
-        this.JawExtender4 = new AdvancedModelRenderer(this, 0, 7);
+        this.JawExtender4 = new AdvancedModelBox(this, 0, 7);
         this.JawExtender4.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.JawExtender4.addBox(-1.5F, -1.5F, -13.0F, 3, 3, 13, 0.0F);
         this.TopJaw.addChild(this.JawHook);
@@ -86,15 +88,24 @@ public class ModelDeathWormGauntlet extends ModelDragonBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        Head.render(f5);
-        JawExtender.render(f5);
+    public void setRotationAngles(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+
+    }
+
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return EntityModelPartBuilder.getPartsForRenderFromClass(this.getClass(), this.getClass().getName());
+    }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
     }
 
     public void animate(ItemStack stack, float partialTick) {
         this.resetToDefaultPose();
-        if (stack.getTagCompound() != null) {
-            Entity holder = Minecraft.getInstance().world.getEntityByID(stack.getTagCompound().getInteger("HolderID"));
+        if (stack.getTag() != null) {
+            Entity holder = Minecraft.getInstance().world.getEntityByID(stack.getTag().getInt("HolderID"));
             MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(holder, MiscEntityProperties.class);
             if (properties != null) {
                 int lungeTicks = properties.deathwormLungeTicks;

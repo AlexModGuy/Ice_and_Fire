@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.client.render.entity.layer;
 import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDreadQueen;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
+import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
@@ -87,17 +87,17 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
     }
 
     protected void translateToBody() {
-        postRender(((IceAndFireTabulaModel) this.render.getMainModel()).getCube("BodyUpper"), 0.0625F);
-        postRender(((IceAndFireTabulaModel) this.render.getMainModel()).getCube("Neck1"), 0.0625F);
+        postRender(((TabulaModel) this.render.getMainModel()).getCube("BodyUpper"), 0.0625F);
+        postRender(((TabulaModel) this.render.getMainModel()).getCube("Neck1"), 0.0625F);
     }
 
     protected void translateToHead() {
-        postRender(((IceAndFireTabulaModel) this.render.getMainModel()).getCube("Neck2"), 0.0625F);
-        postRender(((IceAndFireTabulaModel) this.render.getMainModel()).getCube("Neck3"), 0.0625F);
-        postRender(((IceAndFireTabulaModel) this.render.getMainModel()).getCube("Head"), 0.0625F);
+        postRender(((TabulaModel) this.render.getMainModel()).getCube("Neck2"), 0.0625F);
+        postRender(((TabulaModel) this.render.getMainModel()).getCube("Neck3"), 0.0625F);
+        postRender(((TabulaModel) this.render.getMainModel()).getCube("Head"), 0.0625F);
     }
 
-    protected void postRender(AdvancedModelRenderer renderer, float scale) {
+    protected void postRender(AdvancedModelBox renderer, float scale) {
         if (renderer.rotateAngleX == 0.0F && renderer.rotateAngleY == 0.0F && renderer.rotateAngleZ == 0.0F) {
             if (renderer.rotationPointX != 0.0F || renderer.rotationPointY != 0.0F || renderer.rotationPointZ != 0.0F) {
                 GlStateManager.translate(renderer.rotationPointX * scale, renderer.rotationPointY * scale, renderer.rotationPointZ * scale);

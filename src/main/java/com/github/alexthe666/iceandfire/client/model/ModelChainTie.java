@@ -1,10 +1,12 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import com.github.alexthe666.iceandfire.entity.EntityChainTie;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelChainTie extends ModelBase {
+public class ModelChainTie extends SegmentedModel<EntityChainTie> {
     public ModelRenderer knotRenderer;
 
     public ModelChainTie() {
@@ -19,14 +21,13 @@ public class ModelChainTie extends ModelBase {
         this.knotRenderer.setRotationPoint(0.0F, 0.0F, 0.0F);
     }
 
-    public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
-        this.knotRenderer.render(scale);
-    }
-
-    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-        super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+    public void setRotationAngles(EntityChainTie entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.knotRenderer.rotateAngleY = netHeadYaw * 0.017453292F;
         this.knotRenderer.rotateAngleX = headPitch * 0.017453292F;
+    }
+
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(knotRenderer);
     }
 }
