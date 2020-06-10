@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import com.github.alexthe666.iceandfire.item.IUsesTEISR;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
@@ -83,12 +84,18 @@ public class CommonProxy {
                 Object obj = f.get(null);
                 if (obj instanceof Block) {
                     Item.Properties props = new Item.Properties();
+                    if (obj instanceof IUsesTEISR) {
+                        props = IceAndFire.PROXY.setupISTER(props);
+                    }
                     BlockItem itemBlock = new BlockItem((Block) obj, props);
                     itemBlock.setRegistryName(((Block) obj).getRegistryName());
                     event.getRegistry().register(itemBlock);
                 } else if (obj instanceof Block[]) {
                     for (Block block : (Block[]) obj) {
                         Item.Properties props = new Item.Properties();
+                        if (block instanceof IUsesTEISR) {
+                            props = IceAndFire.PROXY.setupISTER(props);
+                        }
                         BlockItem itemBlock = new BlockItem(block, props);
                         itemBlock.setRegistryName(block.getRegistryName());
                         event.getRegistry().register(itemBlock);
@@ -263,7 +270,11 @@ public class CommonProxy {
     public void setRefrencedTE(TileEntity tileEntity) {
     }
 
-    public TileEntityLectern getRefrencedTE() {
+    public TileEntity getRefrencedTE() {
         return null;
+    }
+
+    public Item.Properties setupISTER(Item.Properties group) {
+        return group;
     }
 }

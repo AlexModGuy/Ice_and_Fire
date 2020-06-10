@@ -1,39 +1,43 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadSpawner;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
+import net.minecraft.tileentity.MobSpawnerTileEntity;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.spawner.AbstractSpawner;
 
-public class RenderDreadSpawner extends TileEntitySpecialRenderer<TileEntityDreadSpawner> {
+public class RenderDreadSpawner<T extends TileEntityDreadSpawner> extends TileEntityRenderer<T> {
 
-    public static void renderMob(MobSpawnerBaseLogic mobSpawnerLogic, double posX, double posY, double posZ, float partialTicks) {
-        Entity entity = mobSpawnerLogic.getCachedEntity();
+    public RenderDreadSpawner(TileEntityRendererDispatcher p_i226016_1_) {
+        super(p_i226016_1_);
+    }
 
+    public void render(TileEntityDreadSpawner tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+        matrixStackIn.push();
+        matrixStackIn.translate(0.5D, 0.0D, 0.5D);
+        AbstractSpawner abstractspawner = tileEntityIn.getSpawnerBaseLogic();
+        Entity entity = abstractspawner.getCachedEntity();
         if (entity != null) {
             float f = 0.53125F;
-            float f1 = Math.max(entity.width, entity.height);
-
-            if ((double) f1 > 1.0D) {
+            float f1 = Math.max(entity.getWidth(), entity.getHeight());
+            if ((double)f1 > 1.0D) {
                 f /= f1;
             }
 
-            GlStateManager.translate(0.0F, 0.4F, 0.0F);
-            GlStateManager.rotate((float) (mobSpawnerLogic.getPrevMobRotation() + (mobSpawnerLogic.getMobRotation() - mobSpawnerLogic.getPrevMobRotation()) * (double) partialTicks) * 10.0F, 0.0F, 1.0F, 0.0F);
-            GlStateManager.translate(0.0F, -0.2F, 0.0F);
-            GlStateManager.rotate(-30.0F, 1.0F, 0.0F, 0.0F);
-            GlStateManager.scale(f, f, f);
-            entity.setLocationAndAngles(posX, posY, posZ, 0.0F, 0.0F);
-            Minecraft.getInstance().getRenderManager().renderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, false);
+            matrixStackIn.translate(0.0D, (double)0.4F, 0.0D);
+            matrixStackIn.rotate(Vector3f.YP.rotationDegrees((float) MathHelper.lerp((double)partialTicks, abstractspawner.getPrevMobRotation(), abstractspawner.getMobRotation()) * 10.0F));
+            matrixStackIn.translate(0.0D, (double)-0.2F, 0.0D);
+            matrixStackIn.rotate(Vector3f.XP.rotationDegrees(-30.0F));
+            matrixStackIn.scale(f, f, f);
+            Minecraft.getInstance().getRenderManager().renderEntityStatic(entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, matrixStackIn, bufferIn, combinedLightIn);
         }
-    }
 
-    public void render(TileEntityDreadSpawner te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        GlStateManager.pushMatrix();
-        GlStateManager.translate((float) x + 0.5F, (float) y, (float) z + 0.5F);
-        renderMob(te.getSpawnerBaseLogic(), x, y, z, partialTicks);
-        GlStateManager.popMatrix();
+        matrixStackIn.pop();
     }
 }

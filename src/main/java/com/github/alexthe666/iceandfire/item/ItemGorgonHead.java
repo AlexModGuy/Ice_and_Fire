@@ -98,7 +98,7 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
                 if (pointedEntity instanceof PlayerEntity) {
                     pointedEntity.playSound(IafSoundRegistry.GORGON_TURN_STONE, 1, 1);
                     pointedEntity.attackEntityFrom(IafDamageRegistry.GORGON_DMG, Integer.MAX_VALUE);
-                    EntityStoneStatue statue = new EntityStoneStatue(worldIn);
+                    EntityStoneStatue statue = new EntityStoneStatue(IafEntityRegistry.STONE_STATUE, worldIn);
                     statue.setPositionAndRotation(pointedEntity.getPosX(), pointedEntity.getPosY(), pointedEntity.getPosZ(), pointedEntity.rotationYaw, pointedEntity.rotationPitch);
                     statue.smallArms = true;
                     if (!worldIn.isRemote) {
@@ -136,12 +136,14 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
                 }
             }
         }
+        stack.getTag().putBoolean("Active", false);
     }
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand hand) {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
         playerIn.setActiveHand(hand);
+        itemStackIn.getTag().putBoolean("Active", true);
         return new ActionResult<ItemStack>(ActionResultType.SUCCESS, itemStackIn);
     }
 

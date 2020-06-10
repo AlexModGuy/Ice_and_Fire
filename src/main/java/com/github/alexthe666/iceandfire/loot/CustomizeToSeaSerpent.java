@@ -9,25 +9,27 @@ import com.google.gson.JsonSerializationContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.conditions.LootCondition;
-import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraft.world.storage.loot.LootFunction;
+import net.minecraft.world.storage.loot.LootParameter;
+import net.minecraft.world.storage.loot.LootParameters;
+import net.minecraft.world.storage.loot.conditions.ILootCondition;
 
 import java.util.Random;
 
 public class CustomizeToSeaSerpent extends LootFunction {
 
-    public CustomizeToSeaSerpent(LootCondition[] conditionsIn) {
+    public CustomizeToSeaSerpent(ILootCondition[] conditionsIn) {
         super(conditionsIn);
     }
 
-    public ItemStack apply(ItemStack stack, Random rand, LootContext context) {
-        if (!stack.isEmpty() && context.getLootedEntity() instanceof EntitySeaSerpent) {
+    public ItemStack doApply(ItemStack stack, LootContext context) {
+        if (!stack.isEmpty() && context.get(LootParameters.THIS_ENTITY) instanceof EntitySeaSerpent) {
             Random random = new Random();
-            EntitySeaSerpent seaSerpent = (EntitySeaSerpent) context.getLootedEntity();
+            EntitySeaSerpent seaSerpent = (EntitySeaSerpent) context.get(LootParameters.THIS_ENTITY);
             int ancientModifier = seaSerpent.isAncient() ? 2 : 1;
             if (stack.getItem() instanceof ItemSeaSerpentScales) {
                 stack.setCount(1 + random.nextInt(1 + (int) Math.ceil(seaSerpent.getSeaSerpentScale() * 3 * ancientModifier)));
-                return new ItemStack(seaSerpent.getEnum().scale, stack.getCount(), stack.getMetadata());
+                return new ItemStack(seaSerpent.getEnum().scale, stack.getCount());
             }
             if (stack.getItem() == IafItemRegistry.SERPENT_FANG) {
                 stack.setCount(1 + random.nextInt(1 + (int) Math.ceil(seaSerpent.getSeaSerpentScale() * 2 * ancientModifier)));
@@ -45,7 +47,7 @@ public class CustomizeToSeaSerpent extends LootFunction {
         public void serialize(JsonObject object, CustomizeToSeaSerpent functionClazz, JsonSerializationContext serializationContext) {
         }
 
-        public CustomizeToSeaSerpent deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootCondition[] conditionsIn) {
+        public CustomizeToSeaSerpent deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
             return new CustomizeToSeaSerpent(conditionsIn);
         }
     }

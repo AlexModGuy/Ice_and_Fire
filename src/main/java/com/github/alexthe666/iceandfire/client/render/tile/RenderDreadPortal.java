@@ -1,190 +1,90 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
+import com.github.alexthe666.iceandfire.client.render.IafRenderType;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadPortal;
+import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumSkyBlock;
-import org.lwjgl.Sys;
-
 import java.nio.FloatBuffer;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 
-public class RenderDreadPortal extends TileEntitySpecialRenderer<TileEntityDreadPortal> {
-    private static final ResourceLocation END_SKY_TEXTURE = new ResourceLocation("iceandfire:textures/environment/dread_portal_background.png");
-    private static final ResourceLocation END_PORTAL_TEXTURE = new ResourceLocation("iceandfire:textures/environment/dread_portal.png");
+public class RenderDreadPortal <T extends TileEntityDreadPortal> extends TileEntityRenderer<T> {
+    public static final ResourceLocation END_SKY_TEXTURE = new ResourceLocation("rats:textures/environment/ratlantis_sky_portal.png");
+    public static final ResourceLocation END_PORTAL_TEXTURE = new ResourceLocation("rats:textures/environment/ratlantis_portal.png");
     private static final Random RANDOM = new Random(31100L);
-    private static final FloatBuffer MODELVIEW = GLAllocation.createDirectFloatBuffer(16);
-    private static final FloatBuffer PROJECTION = GLAllocation.createDirectFloatBuffer(16);
-    private final FloatBuffer buffer = GLAllocation.createDirectFloatBuffer(16);
+    private static final List<RenderType> RENDER_TYPES = IntStream.range(0, 16).mapToObj((p_228882_0_) -> {
+        return IafRenderType.getDreadlandsRenderType(p_228882_0_ + 1);
+    }).collect(ImmutableList.toImmutableList());
 
-    public void render(TileEntityDreadPortal te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        GlStateManager.disableLighting();
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 0.0F);
+    public RenderDreadPortal(TileEntityRendererDispatcher rendererDispatcherIn) {
+        super(rendererDispatcherIn);
+    }
+
+    public void render(T tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         RANDOM.setSeed(31100L);
-        GlStateManager.pushMatrix();
-        GlStateManager.getFloat(2982, MODELVIEW);
-        GlStateManager.getFloat(2983, PROJECTION);
-        double d0 = x * x + y * y + z * z;
-        int i = te == null ? 14 : this.getPasses(d0);
+        double d0 = tileEntityIn.getPos().distanceSq(this.renderDispatcher.renderInfo.getProjectedView(), true);
+        int i = this.getPasses(d0);
         float f = this.getOffset();
-        boolean flag = false;
+        Matrix4f matrix4f = matrixStackIn.getLast().getMatrix();
+        this.renderCube(tileEntityIn, f, 0.15F, matrix4f, bufferIn.getBuffer(RENDER_TYPES.get(0)));
 
-        for (int j = 0; j < i; ++j) {
-            GlStateManager.pushMatrix();
-            float f1 = 2.0F / (float) (18 - j);
-
-            if (j == 0) {
-                Minecraft.getInstance().getTextureManager().bindTexture(END_SKY_TEXTURE);
-                f1 = 0.85F;
-                GlStateManager.enableBlend();
-                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            }
-
-            if (j >= 1) {
-                Minecraft.getInstance().getTextureManager().bindTexture(END_PORTAL_TEXTURE);
-                flag = true;
-                Minecraft.getInstance().entityRenderer.setupFogColor(true);
-            }
-
-            if (j == 1) {
-                GlStateManager.enableBlend();
-                GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-            }
-
-            GlStateManager.texGen(GlStateManager.TexGen.S, 9216);
-            GlStateManager.texGen(GlStateManager.TexGen.T, 9216);
-            GlStateManager.texGen(GlStateManager.TexGen.R, 9216);
-            GlStateManager.texGen(GlStateManager.TexGen.S, 9474, this.getBuffer(1.0F, 0.0F, 0.0F, 0.0F));
-            GlStateManager.texGen(GlStateManager.TexGen.T, 9474, this.getBuffer(0.0F, 1.0F, 0.0F, 0.0F));
-            GlStateManager.texGen(GlStateManager.TexGen.R, 9474, this.getBuffer(0.0F, 0.0F, 1.0F, 0.0F));
-            GlStateManager.enableTexGenCoord(GlStateManager.TexGen.S);
-            GlStateManager.enableTexGenCoord(GlStateManager.TexGen.T);
-            GlStateManager.enableTexGenCoord(GlStateManager.TexGen.R);
-            GlStateManager.popMatrix();
-            GlStateManager.matrixMode(5890);
-            GlStateManager.pushMatrix();
-            GlStateManager.loadIdentity();
-            GlStateManager.translate(0.5F, 0.5F, 0.0F);
-            GlStateManager.scale(0.5F, 0.5F, 1.0F);
-            float f2 = (float) (j + 1);
-            float time = (Minecraft.getInstance().player.ticksExisted - 1 + (1 * partialTicks)) % 800.0F / 800.0F;
-            if (te == null) {
-                time = (Minecraft.getInstance().frameTimer.getIndex() - 1 + (1 * partialTicks)) % 3200F / 3200F;
-            }
-            GlStateManager.translate((j == 0 ? 7 : 17.0F) / f2 * time * RANDOM.nextGaussian(), j == 0 ? 0 : (2.0F + f2 / 1.5F) * -time, 0.0F);
-            GlStateManager.rotate(180, 0.0F, 0.0F, 1.0F);
-            float scal = j == 0 ? 4 : te == null ? 2 : 0.5F ;
-            GlStateManager.scale(scal, j == 0 ? 1 : scal, 1.0F);
-            GlStateManager.multMatrix(PROJECTION);
-            GlStateManager.multMatrix(MODELVIEW);
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder bufferbuilder = tessellator.getBuffer();
-            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-            float f3 = (RANDOM.nextFloat() * 0.05F + 0.9F) * f1;
-            float f4 = (RANDOM.nextFloat() * 0.05F + 0.9F) * f1;
-            float f5 = 0.98F;
-            float alpha2 = 1.0F;
-            if (te == null || te.shouldRenderFace(Direction.SOUTH)) {
-                bufferbuilder.pos(x, y, z + 1.0D).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x + 1.0D, y, z + 1.0D).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x + 1.0D, y + 1.0D, z + 1.0D).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x, y + 1.0D, z + 1.0D).color(f3, f4, f5, alpha2).endVertex();
-            }
-
-            if (te == null || te.shouldRenderFace(Direction.NORTH)) {
-                bufferbuilder.pos(x, y + 1.0D, z).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x + 1.0D, y + 1.0D, z).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x + 1.0D, y, z).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x, y, z).color(f3, f4, f5, alpha2).endVertex();
-            }
-
-            if (te == null || te.shouldRenderFace(Direction.EAST)) {
-                bufferbuilder.pos(x + 1.0D, y + 1.0D, z).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x + 1.0D, y + 1.0D, z + 1.0D).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x + 1.0D, y, z + 1.0D).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x + 1.0D, y, z).color(f3, f4, f5, alpha2).endVertex();
-            }
-
-            if (te == null || te.shouldRenderFace(Direction.WEST)) {
-                bufferbuilder.pos(x, y, z).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x, y, z + 1.0D).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x, y + 1.0D, z + 1.0D).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x, y + 1.0D, z).color(f3, f4, f5, alpha2).endVertex();
-            }
-
-            if (te == null || te.shouldRenderFace(Direction.DOWN)) {
-                bufferbuilder.pos(x, y, z).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x + 1.0D, y, z).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x + 1.0D, y, z + 1.0D).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x, y, z + 1.0D).color(f3, f4, f5, alpha2).endVertex();
-            }
-
-            if (te == null || te.shouldRenderFace(Direction.UP)) {
-                bufferbuilder.pos(x, y + (double) f, z + 1.0D).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x + 1.0D, y + (double) f, z + 1.0D).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x + 1.0D, y + (double) f, z).color(f3, f4, f5, alpha2).endVertex();
-                bufferbuilder.pos(x, y + (double) f, z).color(f3, f4, f5, alpha2).endVertex();
-            }
-
-            tessellator.draw();
-            GlStateManager.popMatrix();
-            GlStateManager.matrixMode(5888);
-            Minecraft.getInstance().getTextureManager().bindTexture(END_SKY_TEXTURE);
+        for(int j = 1; j < i; ++j) {
+            this.renderCube(tileEntityIn, f, 2.0F / (float)(18 - j), matrix4f, bufferIn.getBuffer(RENDER_TYPES.get(j)));
         }
 
-        GlStateManager.disableBlend();
-        GlStateManager.disableTexGenCoord(GlStateManager.TexGen.S);
-        GlStateManager.disableTexGenCoord(GlStateManager.TexGen.T);
-        GlStateManager.disableTexGenCoord(GlStateManager.TexGen.R);
-        int lightI = Minecraft.getInstance().world.getCombinedLight(new BlockPos(x, y, z), Minecraft.getInstance().world.getLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z)));
-        int j = lightI % 65536;
-        int k = lightI / 65536;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
-        GlStateManager.enableLighting();
-        GlStateManager.popMatrix();
-        if (flag) {
-            Minecraft.getInstance().entityRenderer.setupFogColor(false);
+    }
+
+    private void renderCube(T tileEntityIn, float p_228883_2_, float p_228883_3_, Matrix4f p_228883_4_, IVertexBuilder p_228883_5_) {
+        float f = 1.0F;
+        float f1 = 1.0F;
+        float f2 = 1.0F;
+        this.renderFace(tileEntityIn, p_228883_4_, p_228883_5_, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, f, f1, f2, Direction.SOUTH);
+        this.renderFace(tileEntityIn, p_228883_4_, p_228883_5_, 0.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, f, f1, f2, Direction.NORTH);
+        this.renderFace(tileEntityIn, p_228883_4_, p_228883_5_, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 1.0F, 1.0F, 0.0F, f, f1, f2, Direction.EAST);
+        this.renderFace(tileEntityIn, p_228883_4_, p_228883_5_, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 0.0F, f, f1, f2, Direction.WEST);
+        this.renderFace(tileEntityIn, p_228883_4_, p_228883_5_, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f, f1, f2, Direction.DOWN);
+        this.renderFace(tileEntityIn, p_228883_4_, p_228883_5_, 0.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, f, f1, f2, Direction.UP);
+    }
+
+    private void renderFace(T tileEntityIn, Matrix4f p_228884_2_, IVertexBuilder p_228884_3_, float p_228884_4_, float p_228884_5_, float p_228884_6_, float p_228884_7_, float p_228884_8_, float p_228884_9_, float p_228884_10_, float p_228884_11_, float p_228884_12_, float p_228884_13_, float p_228884_14_, Direction p_228884_15_) {
+        if (tileEntityIn.shouldRenderFace(p_228884_15_)) {
+            p_228884_3_.pos(p_228884_2_, p_228884_4_, p_228884_6_, p_228884_8_).color(p_228884_12_, p_228884_13_, p_228884_14_, 1.0F).endVertex();
+            p_228884_3_.pos(p_228884_2_, p_228884_5_, p_228884_6_, p_228884_9_).color(p_228884_12_, p_228884_13_, p_228884_14_, 1.0F).endVertex();
+            p_228884_3_.pos(p_228884_2_, p_228884_5_, p_228884_7_, p_228884_10_).color(p_228884_12_, p_228884_13_, p_228884_14_, 1.0F).endVertex();
+            p_228884_3_.pos(p_228884_2_, p_228884_4_, p_228884_7_, p_228884_11_).color(p_228884_12_, p_228884_13_, p_228884_14_, 1.0F).endVertex();
         }
+
     }
 
     protected int getPasses(double p_191286_1_) {
-        int i;
         if (p_191286_1_ > 36864.0D) {
-            i = 1;
+            return 1;
         } else if (p_191286_1_ > 25600.0D) {
-            i = 3;
+            return 3;
         } else if (p_191286_1_ > 16384.0D) {
-            i = 5;
+            return 5;
         } else if (p_191286_1_ > 9216.0D) {
-            i = 7;
+            return 7;
         } else if (p_191286_1_ > 4096.0D) {
-            i = 9;
+            return 9;
         } else if (p_191286_1_ > 1024.0D) {
-            i = 11;
+            return 11;
         } else if (p_191286_1_ > 576.0D) {
-            i = 13;
-        } else if (p_191286_1_ > 256.0D) {
-            i = 14;
+            return 13;
         } else {
-            i = 15;
+            return p_191286_1_ > 256.0D ? 14 : 15;
         }
-
-        return i;
     }
 
     protected float getOffset() {
-        return 1.0F;
-    }
-
-    private FloatBuffer getBuffer(float p_147525_1_, float p_147525_2_, float p_147525_3_, float p_147525_4_) {
-        this.buffer.clear();
-        this.buffer.put(p_147525_1_).put(p_147525_2_).put(p_147525_3_).put(p_147525_4_);
-        this.buffer.flip();
-        return this.buffer;
+        return 0.75F;
     }
 }

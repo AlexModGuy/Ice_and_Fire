@@ -25,14 +25,11 @@ import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.tile.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.client.renderer.entity.RenderSnowball;
-import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.gui.fonts.Font;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.tileentity.TileEntity;
@@ -48,18 +45,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import static net.ilexiconn.llibrary.client.model.tabula.TabulaModelHandler.*;
-
+import java.util.concurrent.Callable;
 @Mod.EventBusSubscriber
 public class ClientProxy extends CommonProxy {
 
@@ -87,9 +77,6 @@ public class ClientProxy extends CommonProxy {
     private FontRenderer bestiaryFontRenderer;
     private int previousViewType = 0;
     private int thirdPersonViewDragon = 0;
-    private IRenderHandler dreadlandsWeatherRenderer = new RenderDreadlandsWeather();
-    private IRenderHandler dreadlandsSkyRenderer = new RenderDreadlandsSky();
-    private IRenderHandler dreadlandsAuroraRender = new RenderDreadlandsAurora();
 
     public static MyrmexHive getReferedClientHive() {
         return referedClientHive;
@@ -106,20 +93,15 @@ public class ClientProxy extends CommonProxy {
     public void render() {
         IafGuiRegistry.register();
         try{
-            this.bestiaryFontRenderer = new FontRenderer(Minecraft.getInstance().gameSettings, new ResourceLocation("iceandfire:textures/font/bestiary.png"), Minecraft.getInstance().renderEngine, false);
-            ((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(this.bestiaryFontRenderer);
+            Font font = new Font(Minecraft.getInstance().textureManager, new ResourceLocation("iceandfire:textures/font/bestiary.png"));
+            this.bestiaryFontRenderer = new FontRenderer(Minecraft.getInstance().textureManager, font);
         }catch(Exception e){
             this.bestiaryFontRenderer = Minecraft.getInstance().fontRenderer;
         }
         this.particleSpawner = new IceAndFireParticleSpawner();
-        ((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(this.bestiaryFontRenderer);
         IafKeybindRegistry.init();
         MinecraftForge.EVENT_BUS.register(new RenderModCapes());
         MinecraftForge.EVENT_BUS.register(new ClientEvents());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDummyGorgonHead.class, manager -> new RenderGorgonHead(false));
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDummyGorgonHeadActive.class, manager -> new RenderGorgonHead(true));
-        ForgeHooksClient.registerTESRItemStack(IafItemRegistry.GORGON_HEAD, 0, TileEntityDummyGorgonHead.class);
-        ForgeHooksClient.registerTESRItemStack(IafItemRegistry.GORGON_HEAD, 1, TileEntityDummyGorgonHeadActive.class);
         renderEntities();
 
 
@@ -154,7 +136,6 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityDragonSkull.class, manager -> new RenderDragonSkull(manager, firedragon_model, icedragon_model));
         RenderingRegistry.registerEntityRenderingHandler(EntityDragonFireCharge.class, manager -> new RenderDragonFireCharge(manager, true));
         RenderingRegistry.registerEntityRenderingHandler(EntityDragonIceCharge.class, manager -> new RenderDragonFireCharge(manager, false));
-        RenderingRegistry.registerEntityRenderingHandler(EntitySnowVillager.class, manager -> new RenderSnowVillager(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntityHippogryphEgg.class, manager -> new RenderSnowball(manager, IafItemRegistry.HIPPOGRYPH_EGG, Minecraft.getInstance().getRenderItem()));
         RenderingRegistry.registerEntityRenderingHandler(EntityHippogryph.class, manager -> new RenderHippogryph(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntityStoneStatue.class, manager -> new RenderStoneStatue(manager));
@@ -195,19 +176,17 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityDreadLichSkull.class, manager -> new RenderDreadLichSkull(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntityDreadKnight.class, manager -> new RenderDreadKnight(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntityDreadHorse.class, manager -> new RenderDreadHorse(manager));
-        RenderingRegistry.registerEntityRenderingHandler(EntityBlackFrostDragon.class, manager -> new RenderBlackFrostDragon(manager, icedragon_model, false));
         RenderingRegistry.registerEntityRenderingHandler(EntityDreadQueen.class, manager -> new RenderDreadQueen(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntityHydra.class, manager -> new RenderHydra(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntityHydraBreath.class, manager -> new RenderNothing(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntityHydraArrow.class, manager -> new RenderHydraArrow(manager));
-
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPodium.class,  new RenderPodium());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLectern.class,  new RenderLectern());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEggInIce.class,  new RenderEggInIce());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPixieHouse.class,  new RenderPixieHouse());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityJar.class,  new RenderJar());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDreadPortal.class,  new RenderDreadPortal());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDreadSpawner.class, new RenderDreadSpawner());
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PODIUM, manager -> new RenderPodium(manager));
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.IAF_LECTERN, manager -> new RenderLectern(manager);
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.EGG_IN_ICE, manager -> new RenderEggInIce(manager));
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PIXIE_HOUSE, manager -> new RenderPixieHouse(manager));
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PIXIE_JAR, manager -> new RenderJar(manager));
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.DREAD_PORTAL, manager -> new RenderDreadPortal(manager));
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.DREAD_SPAWNER, manager -> new RenderDreadSpawner(manager));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -340,15 +319,6 @@ public class ClientProxy extends CommonProxy {
     }
 
     public Object getDreadlandsRender(int i) {
-        if(i == 0){
-            return dreadlandsSkyRenderer;
-        }
-        if(i == 1){
-            return dreadlandsWeatherRenderer;
-        }
-        if(i == 2){
-            return dreadlandsAuroraRender;
-        }
         return null;
     }
 
@@ -385,5 +355,14 @@ public class ClientProxy extends CommonProxy {
 
     public TileEntity getRefrencedTE() {
         return referencedTE;
+    }
+
+    public Item.Properties setupISTER(Item.Properties group) {
+        return group.setISTER(ClientProxy::getTEISR);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static Callable<ItemStackTileEntityRenderer> getTEISR() {
+        return IceAndFireTEISR::new;
     }
 }
