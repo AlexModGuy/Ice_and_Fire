@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.client.model;
+package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.render.entity.ModelDreadLichSkull;
 import com.github.alexthe666.iceandfire.entity.EntityDreadLichSkull;

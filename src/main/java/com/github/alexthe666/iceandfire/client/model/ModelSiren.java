@@ -1,9 +1,15 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelSiren extends ModelDragonBase {
+public class ModelSiren extends ModelDragonBase<EntitySiren> {
     public AdvancedModelBox Tail_1;
     public AdvancedModelBox Tail_2;
     public AdvancedModelBox Body;
@@ -124,14 +130,17 @@ public class ModelSiren extends ModelDragonBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
-        this.Tail_1.render(f5);
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(Tail_1);
+    }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
-        setRotationAngles(f, f1, f2, f3, f4, f5, (EntitySiren) entity);
         animator.update(entity);
         animator.setAnimation(EntitySiren.ANIMATION_BITE);
         animator.startKeyframe(5);
@@ -153,7 +162,8 @@ public class ModelSiren extends ModelDragonBase {
         animator.endKeyframe();
     }
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntitySiren entity) {
+    public void setRotationAngles(EntitySiren entity, float f, float f1, float f2, float f3, float f4) {
+        animate(entity, f, f1, f2, f3, f4, 1);
         float speed_walk = 0.6F;
         float speed_idle = 0.05F;
         float degree_walk = 1F;
@@ -243,6 +253,5 @@ public class ModelSiren extends ModelDragonBase {
     @Override
     public void renderStatue() {
         this.resetToDefaultPose();
-        this.Tail_1.render(0.0625F);
     }
 }

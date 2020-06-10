@@ -1,10 +1,16 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelTroll extends ModelDragonBase {
+public class ModelTroll extends ModelDragonBase<EntityTroll> {
     public AdvancedModelBox body;
     public AdvancedModelBox upperBody;
     public AdvancedModelBox loin;
@@ -210,22 +216,20 @@ public class ModelTroll extends ModelDragonBase {
         this.updateDefaultPose();
     }
 
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        if (entity instanceof EntityTroll && EntityGorgon.isStoneMob((EntityTroll) entity)) {
-            animateStatue((EntityTroll) entity);
-            this.log1.showModel = false;
-        } else {
-            animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
-            this.log1.showModel = true;
-        }
-        this.body.render(f5);
 
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(body);
+    }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+        this.log1.showModel = true;
         this.resetToDefaultPose();
-        setRotationAngles(f, f1, f2, f3, f4, f5, (EntityTroll) entity);
         animator.update(entity);
         animator.setAnimation(EntityTroll.ANIMATION_SPEAK);
         animator.startKeyframe(5);
@@ -335,7 +339,14 @@ public class ModelTroll extends ModelDragonBase {
         animator.endKeyframe();
     }
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityTroll entity) {
+    public void setRotationAngles(EntityTroll entity, float f, float f1, float f2, float f3, float f4) {
+        if (entity instanceof EntityTroll && EntityGorgon.isStoneMob((EntityTroll) entity)) {
+            animateStatue((EntityTroll) entity);
+            this.log1.showModel = false;
+            return;
+        }
+        animate(entity, f, f1, f2, f3, f4, 1);
+
         this.progressRotation(head, entity.stoneProgress, (float) Math.toRadians(-31), 0.0F, 0.0F);
         this.progressRotation(jaw, entity.stoneProgress, (float) Math.toRadians(54), 0.0F, 0.0F);
         this.progressRotation(leftarm, entity.stoneProgress, (float) Math.toRadians(10), (float) Math.toRadians(-73), (float) Math.toRadians(-60));
@@ -384,6 +395,5 @@ public class ModelTroll extends ModelDragonBase {
     @Override
     public void renderStatue() {
         this.resetToDefaultPose();
-        this.body.render(0.0625F);
     }
 }

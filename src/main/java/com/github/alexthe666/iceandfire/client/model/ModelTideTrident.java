@@ -1,10 +1,11 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelTideTrident extends ModelBase {
+public class ModelTideTrident extends SegmentedModel {
     public ModelRenderer shaft;
     public ModelRenderer base;
     public ModelRenderer blade_B;
@@ -59,8 +60,13 @@ public class ModelTideTrident extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        this.shaft.render(f5);
+    public void setRotationAngles(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+
+    }
+
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(shaft);
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

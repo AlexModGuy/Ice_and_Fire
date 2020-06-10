@@ -13,9 +13,6 @@ import com.github.alexthe666.iceandfire.client.model.animator.SeaSerpentTabulaMo
 import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.EnumSeaSerpentAnimations;
 import com.github.alexthe666.iceandfire.client.particle.*;
-import com.github.alexthe666.iceandfire.client.render.RenderDreadlandsAurora;
-import com.github.alexthe666.iceandfire.client.render.RenderDreadlandsSky;
-import com.github.alexthe666.iceandfire.client.render.RenderDreadlandsWeather;
 import com.github.alexthe666.iceandfire.client.render.entity.*;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonArmor;
 import com.github.alexthe666.iceandfire.client.render.tile.*;

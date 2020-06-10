@@ -1,9 +1,15 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelStymphalianBird extends ModelDragonBase {
+public class ModelStymphalianBird extends ModelDragonBase<EntityStymphalianBird> {
     public AdvancedModelBox Body;
     public AdvancedModelBox LowerBody;
     public AdvancedModelBox Neck1;
@@ -304,15 +310,8 @@ public class ModelStymphalianBird extends ModelDragonBase {
         animator = ModelAnimator.create();
     }
 
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
-        this.Body.render(f5);
-    }
-
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
-        setRotationAngles(f, f1, f2, f3, f4, f5, (EntityStymphalianBird) entity);
         animator.update(entity);
         animator.setAnimation(EntityStymphalianBird.ANIMATION_PECK);
         animator.startKeyframe(5);
@@ -370,7 +369,8 @@ public class ModelStymphalianBird extends ModelDragonBase {
         this.rotate(animator, ToeL3, -75, 0, 0);
     }
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityStymphalianBird entity) {
+    public void setRotationAngles(EntityStymphalianBird entity, float f, float f1, float f2, float f3, float f4) {
+        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, 1);
         float speed_walk = 0.3F;
         float speed_idle = 0.05F;
         float speed_fly = 0.4F;
@@ -468,9 +468,19 @@ public class ModelStymphalianBird extends ModelDragonBase {
         }
     }
 
+
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(Body);
+    }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+    }
+
     @Override
     public void renderStatue() {
         this.resetToDefaultPose();
-        this.Body.render(0.0625F);
     }
 }

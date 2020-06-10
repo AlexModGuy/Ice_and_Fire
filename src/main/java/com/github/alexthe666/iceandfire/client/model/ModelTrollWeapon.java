@@ -1,10 +1,11 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelTrollWeapon extends ModelBase {
+public class ModelTrollWeapon extends SegmentedModel {
     public ModelRenderer log1;
     public ModelRenderer log2;
     public ModelRenderer handle;
@@ -69,13 +70,15 @@ public class ModelTrollWeapon extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        this.log1.render(f5);
+    public void setRotationAngles(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+
     }
 
-    /**
-     * This is a helper function from Tabula to set the rotation of model parts
-     */
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(log1);
+    }
+
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;

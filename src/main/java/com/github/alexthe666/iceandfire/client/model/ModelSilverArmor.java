@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.BipedModel;
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ArmorStandEntity;
 
 public class ModelSilverArmor extends BipedModel {
     public ModelRenderer faceGuard;
@@ -58,9 +58,9 @@ public class ModelSilverArmor extends BipedModel {
         modelRenderer.rotateAngleZ = z;
     }
 
-    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-        if (entityIn instanceof EntityArmorStand) {
-            EntityArmorStand entityarmorstand = (EntityArmorStand) entityIn;
+    public void setRotationAngles(LivingEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        if (entityIn instanceof ArmorStandEntity) {
+            ArmorStandEntity entityarmorstand = (ArmorStandEntity) entityIn;
             this.bipedHead.rotateAngleX = 0.017453292F * entityarmorstand.getHeadRotation().getX();
             this.bipedHead.rotateAngleY = 0.017453292F * entityarmorstand.getHeadRotation().getY();
             this.bipedHead.rotateAngleZ = 0.017453292F * entityarmorstand.getHeadRotation().getZ();
@@ -82,9 +82,9 @@ public class ModelSilverArmor extends BipedModel {
             this.bipedRightLeg.rotateAngleY = 0.017453292F * entityarmorstand.getRightLegRotation().getY();
             this.bipedRightLeg.rotateAngleZ = 0.017453292F * entityarmorstand.getRightLegRotation().getZ();
             this.bipedRightLeg.setRotationPoint(-1.9F, 11.0F, 0.0F);
-            copyModelAngles(this.bipedHead, this.bipedHeadwear);
+            this.bipedHeadwear.copyModelAngles(this.bipedHead);
         } else {
-            super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+            super.setRotationAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         }
         float f = 0;
         float f1 = 12;
@@ -97,6 +97,5 @@ public class ModelSilverArmor extends BipedModel {
         this.robeLower.rotationPointY = f1;
 
         this.robeLowerBack.rotateAngleX =  -Math.max(this.bipedLeftLeg.rotateAngleX, this.bipedRightLeg.rotateAngleX);
-
     }
 }
