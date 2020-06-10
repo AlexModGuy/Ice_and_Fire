@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDreadQueen;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.model.BipedModel;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
@@ -32,8 +32,8 @@ public class ModelDreadQueen extends ModelDragonBase {
     public HideableModelRenderer robeLowerRight;
     public HideableModelRenderer sleeveLeft;
     public HideableModelRenderer robeLowerLeft;
-    public ModelBiped.ArmPose leftArmPose;
-    public ModelBiped.ArmPose rightArmPose;
+    public BipedModel.ArmPose leftArmPose;
+    public BipedModel.ArmPose rightArmPose;
     public boolean isSneak;
     private ModelAnimator animator;
     private boolean armor = false;
@@ -42,8 +42,8 @@ public class ModelDreadQueen extends ModelDragonBase {
         this.textureWidth = 128;
         this.textureHeight = 64;
         this.armor = armorArms;
-        this.leftArmPose = ModelBiped.ArmPose.EMPTY;
-        this.rightArmPose = ModelBiped.ArmPose.EMPTY;
+        this.leftArmPose = BipedModel.ArmPose.EMPTY;
+        this.rightArmPose = BipedModel.ArmPose.EMPTY;
         this.body = new HideableModelRenderer(this, 16, 16);
         this.body.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.body.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, 0.0F);
@@ -112,8 +112,8 @@ public class ModelDreadQueen extends ModelDragonBase {
     }
 
     public void setLivingAnimations(LivingEntity LivingEntityIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
-        this.rightArmPose = ModelBiped.ArmPose.EMPTY;
-        this.leftArmPose = ModelBiped.ArmPose.EMPTY;
+        this.rightArmPose = BipedModel.ArmPose.EMPTY;
+        this.leftArmPose = BipedModel.ArmPose.EMPTY;
         ItemStack itemstack = LivingEntityIn.getHeldItem(Hand.MAIN_HAND);
         
         super.setLivingAnimations(LivingEntityIn, limbSwing, limbSwingAmount, partialTickTime);
@@ -256,8 +256,8 @@ public class ModelDreadQueen extends ModelDragonBase {
 
     public void setModelAttributes(ModelBase model) {
         super.setModelAttributes(model);
-        if (model instanceof ModelBiped) {
-            ModelBiped modelbiped = (ModelBiped) model;
+        if (model instanceof BipedModel) {
+            BipedModel modelbiped = (BipedModel) model;
             this.leftArmPose = modelbiped.leftArmPose;
             this.rightArmPose = modelbiped.rightArmPose;
             this.isSneak = modelbiped.isSneak;

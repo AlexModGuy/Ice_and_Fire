@@ -1,15 +1,14 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityDreadGhoul;
-import com.github.alexthe666.iceandfire.entity.EntityDreadThrall;
-import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import net.ilexiconn.llibrary.client.model.ModelAnimator;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
 
-public class ModelDreadGhoul extends ModelDragonBase {
+public class ModelDreadGhoul extends ModelDragonBase<EntityDreadGhoul> {
 
     public AdvancedModelBox body;
     public AdvancedModelBox head;
@@ -75,16 +74,8 @@ public class ModelDreadGhoul extends ModelDragonBase {
         this.updateDefaultPose();
     }
 
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
-        this.body.render(f5);
-
-    }
-
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
-        setRotationAngles(f, f1, f2, f3, f4, f5, (EntityDreadGhoul) entity);
         animator.update(entity);
         animator.setAnimation(EntityDreadGhoul.ANIMATION_SLASH);
         animator.startKeyframe(5);
@@ -123,7 +114,8 @@ public class ModelDreadGhoul extends ModelDragonBase {
         animator.resetKeyframe(5);
     }
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityDreadGhoul thrall) {
+    public void setRotationAngles(EntityDreadGhoul thrall, float f, float f1, float f2, float f3, float f4) {
+        animate((IAnimatedEntity) thrall, f, f1, f2, f3, f4, 0);
         float speed_walk = 0.6F;
         float speed_idle = 0.05F;
         float degree_walk = 1F;
@@ -157,8 +149,17 @@ public class ModelDreadGhoul extends ModelDragonBase {
     }
 
     @Override
+    public Iterable<ModelRenderer> getParts() {
+        return EntityModelPartBuilder.getPartsForRenderFromClass(this.getClass(), this.getClass().getName());
+    }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+    }
+
+    @Override
     public void renderStatue() {
         this.resetToDefaultPose();
-        this.body.render(0.0625F);
     }
 }

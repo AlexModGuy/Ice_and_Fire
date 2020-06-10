@@ -1,12 +1,12 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.model.BipedModel;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
 
-public class ModelSilverArmor extends ModelBiped {
+public class ModelSilverArmor extends BipedModel {
     public ModelRenderer faceGuard;
     public ModelRenderer helmWingR;
     public ModelRenderer crest;

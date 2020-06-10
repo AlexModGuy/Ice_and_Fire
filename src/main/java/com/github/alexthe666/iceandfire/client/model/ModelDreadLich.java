@@ -7,7 +7,7 @@ import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.model.BipedModel;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
@@ -33,8 +33,8 @@ public class ModelDreadLich extends ModelDragonBase {
     public HideableModelRenderer robeLowerRight;
     public HideableModelRenderer robeLowerLeft;
     public HideableModelRenderer sleeveLeft;
-    public ModelBiped.ArmPose leftArmPose;
-    public ModelBiped.ArmPose rightArmPose;
+    public BipedModel.ArmPose leftArmPose;
+    public BipedModel.ArmPose rightArmPose;
     public boolean isSneak;
     private ModelAnimator animator;
     private boolean armor = false;
@@ -43,8 +43,8 @@ public class ModelDreadLich extends ModelDragonBase {
         this.textureWidth = 128;
         this.textureHeight = 64;
         this.armor = armorArms;
-        this.leftArmPose = ModelBiped.ArmPose.EMPTY;
-        this.rightArmPose = ModelBiped.ArmPose.EMPTY;
+        this.leftArmPose = BipedModel.ArmPose.EMPTY;
+        this.rightArmPose = BipedModel.ArmPose.EMPTY;
         this.sleeveLeft = new HideableModelRenderer(this, 33, 35);
         this.sleeveLeft.mirror = true;
         this.sleeveLeft.setRotationPoint(0.0F, -0.1F, 0.0F);
@@ -107,15 +107,15 @@ public class ModelDreadLich extends ModelDragonBase {
     }
 
     public void setLivingAnimations(LivingEntity LivingEntityIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
-        this.rightArmPose = ModelBiped.ArmPose.EMPTY;
-        this.leftArmPose = ModelBiped.ArmPose.EMPTY;
+        this.rightArmPose = BipedModel.ArmPose.EMPTY;
+        this.leftArmPose = BipedModel.ArmPose.EMPTY;
         ItemStack itemstack = LivingEntityIn.getHeldItem(Hand.MAIN_HAND);
 
         if (itemstack.getItem() == Items.BOW && ((AbstractSkeleton) LivingEntityIn).isSwingingArms()) {
             if (LivingEntityIn.getPrimaryHand() == HandSide.RIGHT) {
-                this.rightArmPose = ModelBiped.ArmPose.BOW_AND_ARROW;
+                this.rightArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
             } else {
-                this.leftArmPose = ModelBiped.ArmPose.BOW_AND_ARROW;
+                this.leftArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
             }
         }
 
@@ -270,8 +270,8 @@ public class ModelDreadLich extends ModelDragonBase {
 
     public void setModelAttributes(ModelBase model) {
         super.setModelAttributes(model);
-        if (model instanceof ModelBiped) {
-            ModelBiped modelbiped = (ModelBiped) model;
+        if (model instanceof BipedModel) {
+            BipedModel modelbiped = (BipedModel) model;
             this.leftArmPose = modelbiped.leftArmPose;
             this.rightArmPose = modelbiped.rightArmPose;
             this.isSneak = modelbiped.isSneak;

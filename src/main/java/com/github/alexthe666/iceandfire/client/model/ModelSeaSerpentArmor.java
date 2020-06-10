@@ -1,11 +1,11 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.model.BipedModel;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
 
-public class ModelSeaSerpentArmor extends ModelBiped {
+public class ModelSeaSerpentArmor extends BipedModel {
     public ModelRenderer headFin;
     public ModelRenderer headFin2;
     public ModelRenderer armFinR;

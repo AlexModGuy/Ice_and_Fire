@@ -7,7 +7,7 @@ import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.model.BipedModel;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
@@ -28,8 +28,8 @@ public class ModelDreadThrall extends AdvancedModelBase {
     public HideableModelRenderer bipedLeftArm;
     public HideableModelRenderer bipedRightLeg;
     public HideableModelRenderer bipedLeftLeg;
-    public ModelBiped.ArmPose leftArmPose;
-    public ModelBiped.ArmPose rightArmPose;
+    public BipedModel.ArmPose leftArmPose;
+    public BipedModel.ArmPose rightArmPose;
     public boolean isSneak;
     private ModelAnimator animator;
     private boolean armor = false;
@@ -38,8 +38,8 @@ public class ModelDreadThrall extends AdvancedModelBase {
         this.armor = armorArms;
         this.textureHeight = 32;
         this.textureWidth = 64;
-        this.leftArmPose = ModelBiped.ArmPose.EMPTY;
-        this.rightArmPose = ModelBiped.ArmPose.EMPTY;
+        this.leftArmPose = BipedModel.ArmPose.EMPTY;
+        this.rightArmPose = BipedModel.ArmPose.EMPTY;
         this.bipedBody = new HideableModelRenderer(this, 16, 16);
         this.bipedBody.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, modelSize);
         this.bipedBody.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -108,8 +108,8 @@ public class ModelDreadThrall extends AdvancedModelBase {
     }
 
     public void setLivingAnimations(LivingEntity LivingEntityIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
-        this.rightArmPose = ModelBiped.ArmPose.EMPTY;
-        this.leftArmPose = ModelBiped.ArmPose.EMPTY;
+        this.rightArmPose = BipedModel.ArmPose.EMPTY;
+        this.leftArmPose = BipedModel.ArmPose.EMPTY;
         ItemStack itemstack = LivingEntityIn.getHeldItem(Hand.MAIN_HAND);
 
         super.setLivingAnimations(LivingEntityIn, limbSwing, limbSwingAmount, partialTickTime);
@@ -277,8 +277,8 @@ public class ModelDreadThrall extends AdvancedModelBase {
 
     public void setModelAttributes(ModelBase model) {
         super.setModelAttributes(model);
-        if (model instanceof ModelBiped) {
-            ModelBiped modelbiped = (ModelBiped) model;
+        if (model instanceof BipedModel) {
+            BipedModel modelbiped = (BipedModel) model;
             this.leftArmPose = modelbiped.leftArmPose;
             this.rightArmPose = modelbiped.rightArmPose;
             this.isSneak = modelbiped.isSneak;
