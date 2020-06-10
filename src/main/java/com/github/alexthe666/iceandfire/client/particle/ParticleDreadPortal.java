@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleFlame;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.particle.SpriteTexturedParticle;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -14,7 +14,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
-public class ParticleDreadPortal extends ParticleFlame {
+public class ParticleDreadPortal extends SpriteTexturedParticle {
     private static final ResourceLocation SNOWFLAKE = new ResourceLocation("iceandfire:textures/particles/snowflake_0.png");
     private static final ResourceLocation SNOWFLAKE_BIG = new ResourceLocation("iceandfire:textures/particles/snowflake_1.png");
 
@@ -22,61 +22,64 @@ public class ParticleDreadPortal extends ParticleFlame {
 
     public ParticleDreadPortal(World world, double x, double y, double z, double motX, double motY, double motZ, float size) {
         super(world, x, y, z, motX, motY, motZ);
-        this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
-        this.setParticleTextureIndex(rand.nextInt(8));
+        this.setPosition(x, y, z);
         big = rand.nextBoolean();
     }
 
-    public void setParticleTextureIndex(int particleTextureIndex) {
-        this.particleTextureIndexX = particleTextureIndex % 4;
-        this.particleTextureIndexY = Math.min(2, particleTextureIndex / 4);
-    }
-
-    public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-        particleScale = 0.125F * (this.particleMaxAge - (this.particleAge));
-        float f3 = (float)(this.prevPosX + (this.getPosX() - this.prevPosX) * (double)partialTicks - interpPosX);
-        float f4 = (float)(this.prevPosY + (this.getPosY() - this.prevPosY) * (double)partialTicks - interpPosY);
-        float f5 = (float)(this.prevPosZ + (this.getPosZ() - this.prevPosZ) * (double)partialTicks - interpPosZ);
+    @Override
+    public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
+        Vec3d inerp = renderInfo.getProjectedView();
+        particleScale = 0.125F * (this.maxAge - (this.age));
         float width = particleScale * 0.09F;
-        int i = this.getBrightnessForRender(partialTicks);
-        int j = i >> 16 & 65535;
-        int k = i & 65535;
-        Vec3d[] avec3d = new Vec3d[]{new Vec3d((double) (-rotationX * width - rotationXY * width), (double) (-rotationZ * width), (double) (-rotationYZ * width - rotationXZ * width)), new Vec3d((double) (-rotationX * width + rotationXY * width), (double) (rotationZ * width), (double) (-rotationYZ * width + rotationXZ * width)), new Vec3d((double) (rotationX * width + rotationXY * width), (double) (rotationZ * width), (double) (rotationYZ * width + rotationXZ * width)), new Vec3d((double) (rotationX * width - rotationXY * width), (double) (-rotationZ * width), (double) (rotationYZ * width - rotationXZ * width))};
-        GlStateManager.enableBlend();
-        GlStateManager.enableNormalize();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.depthMask(false);
-        float f8 = (float) Math.PI / 2 + this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
-        float f9 = MathHelper.cos(f8 * 0.5F);
-        float f10 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.x;
-        float f11 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.y;
-        float f12 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.z;
-        Vec3d vec3d = new Vec3d((double) f10, (double) f11, (double) f12);
+        if (age > this.getMaxAge()) {
+            this.setExpired();
+        }
 
-        for (int l = 0; l < 4; ++l) {
-            avec3d[l] = vec3d.scale(2.0D * avec3d[l].dotProduct(vec3d)).add(avec3d[l].scale((double) (f9 * f9) - vec3d.dotProduct(vec3d))).add(vec3d.crossProduct(avec3d[l]).scale((double) (2.0F * f9)));
-        }
-        if (big) {
-            Minecraft.getInstance().getTextureManager().bindTexture(SNOWFLAKE_BIG);
+        Vec3d vec3d = renderInfo.getProjectedView();
+        float f = (float) (MathHelper.lerp((double) partialTicks, this.prevPosX, this.posX) - vec3d.getX());
+        float f1 = (float) (MathHelper.lerp((double) partialTicks, this.prevPosY, this.posY) - vec3d.getY());
+        float f2 = (float) (MathHelper.lerp((double) partialTicks, this.prevPosZ, this.posZ) - vec3d.getZ());
+        Quaternion quaternion;
+        if (this.particleAngle == 0.0F) {
+            quaternion = renderInfo.getRotation();
         } else {
-            Minecraft.getInstance().getTextureManager().bindTexture(SNOWFLAKE);
+            quaternion = new Quaternion(renderInfo.getRotation());
+            float f3 = MathHelper.lerp(partialTicks, this.prevParticleAngle, this.particleAngle);
+            quaternion.multiply(Vector3f.ZP.rotation(f3));
         }
-        GlStateManager.disableLighting();
-        double currentMinU = 0.25D * particleTextureIndexX;
-        double currentMaxU = currentMinU + 0.25D;
-        double currentMinV = 0.25D * particleTextureIndexY;
-        double currentMaxV = currentMinV + 0.25D;
-        float alpha = 1;
-        GL11.glPushMatrix();
-        buffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-        buffer.pos((double) f3 + avec3d[0].x, (double) f4 + avec3d[0].y, (double) f5 + avec3d[0].z).tex(0, 1).color(1, 1, 1, alpha).lightmap(j, k).endVertex();
-        buffer.pos((double) f3 + avec3d[1].x, (double) f4 + avec3d[1].y, (double) f5 + avec3d[1].z).tex(1, 1).color(1, 1, 1, alpha).lightmap(j, k).endVertex();
-        buffer.pos((double) f3 + avec3d[2].x, (double) f4 + avec3d[2].y, (double) f5 + avec3d[2].z).tex(1, 0).color(1, 1, 1, alpha).lightmap(j, k).endVertex();
-        buffer.pos((double) f3 + avec3d[3].x, (double) f4 + avec3d[3].y, (double) f5 + avec3d[3].z).tex(0, 0).color(1, 1, 1, alpha).lightmap(j, k).endVertex();
+
+        Vector3f vector3f1 = new Vector3f(-1.0F, -1.0F, 0.0F);
+        vector3f1.transform(quaternion);
+        Vector3f[] avector3f = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
+        float f4 = this.getScale(partialTicks);
+
+        for (int i = 0; i < 4; ++i) {
+            Vector3f vector3f = avector3f[i];
+            vector3f.transform(quaternion);
+            vector3f.mul(f4);
+            vector3f.add(f, f1, f2);
+        }
+        float f7 = 0;
+        float f8 = 1;
+        float f5 = 0;
+        float f6 = 1;
+        Minecraft.getInstance().getTextureManager().bindTexture(big ? SNOWFLAKE_BIG : SNOWFLAKE);
+        int j = this.getBrightnessForRender(partialTicks);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder vertexbuffer = tessellator.getBuffer();
+        vertexbuffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+        vertexbuffer.pos((double) avector3f[0].getX(), (double) avector3f[0].getY(), (double) avector3f[0].getZ()).tex(f8, f6).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
+        vertexbuffer.pos((double) avector3f[1].getX(), (double) avector3f[1].getY(), (double) avector3f[1].getZ()).tex(f8, f5).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
+        vertexbuffer.pos((double) avector3f[2].getX(), (double) avector3f[2].getY(), (double) avector3f[2].getZ()).tex(f7, f5).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
+        vertexbuffer.pos((double) avector3f[3].getX(), (double) avector3f[3].getY(), (double) avector3f[3].getZ()).tex(f7, f6).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
         Tessellator.getInstance().draw();
-        GL11.glPopMatrix();
-        GlStateManager.disableBlend();
     }
+
+    @Override
+    public IParticleRenderType getRenderType() {
+        return IParticleRenderType.CUSTOM;
+    }
+
 
     public int getBrightnessForRender(float partialTick) {
         return 240;

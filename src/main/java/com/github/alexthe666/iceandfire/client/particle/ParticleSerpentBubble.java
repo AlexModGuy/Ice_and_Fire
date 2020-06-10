@@ -1,62 +1,85 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
-import net.minecraft.client.particle.ParticleFlame;
-import net.minecraft.client.renderer.BufferBuilder;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.particle.SpriteTexturedParticle;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class ParticleSerpentBubble extends ParticleFlame {
+public class ParticleSerpentBubble extends SpriteTexturedParticle {
+    private static final ResourceLocation BUBBLE_TEXTURE = new ResourceLocation("iceandfire:textures/particles/sea_serpent_bubble.png");
 
-    public ParticleSerpentBubble(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
-        super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
-        this.setParticleTextureIndex(32);
-        this.particleMaxAge = 1;
+    public ParticleSerpentBubble(World world, double x, double y, double z, double motX, double motY, double motZ, float size) {
+        super(world, x, y, z, motX, motY, motZ);
+        this.setPosition(x, y, z);
     }
 
-    public void renderParticle(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-        particleScale = 1.4F;
-        float f = (float) this.particleTextureIndexX / 16.0F;
-        float f1 = f + 0.0624375F;
-        float f2 = (float) this.particleTextureIndexY / 16.0F;
-        float f3 = f2 + 0.0624375F;
-        float f4 = 0.3F * this.particleScale;
-
-        if (this.particleTexture != null) {
-            f = this.particleTexture.getMinU();
-            f1 = this.particleTexture.getMaxU();
-            f2 = this.particleTexture.getMinV();
-            f3 = this.particleTexture.getMaxV();
+    @Override
+    public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
+        Vec3d inerp = renderInfo.getProjectedView();
+        if (age > this.getMaxAge()) {
+            this.setExpired();
         }
 
-        float f5 = (float) (this.prevPosX + (this.getPosX() - this.prevPosX) * (double) partialTicks - interpPosX);
-        float f6 = (float) (this.prevPosY + (this.getPosY() - this.prevPosY) * (double) partialTicks - interpPosY);
-        float f7 = (float) (this.prevPosZ + (this.getPosZ() - this.prevPosZ) * (double) partialTicks - interpPosZ);
-        int i = this.getBrightnessForRender(partialTicks);
-        int j = i >> 16 & 65535;
-        int k = i & 65535;
-        Vec3d[] avec3d = new Vec3d[]{new Vec3d((double) (-rotationX * f4 - rotationXY * f4), (double) (-rotationZ * f4), (double) (-rotationYZ * f4 - rotationXZ * f4)), new Vec3d((double) (-rotationX * f4 + rotationXY * f4), (double) (rotationZ * f4), (double) (-rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double) (rotationX * f4 + rotationXY * f4), (double) (rotationZ * f4), (double) (rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double) (rotationX * f4 - rotationXY * f4), (double) (-rotationZ * f4), (double) (rotationYZ * f4 - rotationXZ * f4))};
-
-        if (this.particleAngle != 0.0F) {
-            float f8 = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
-            float f9 = MathHelper.cos(f8 * 0.5F);
-            float f10 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.x;
-            float f11 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.y;
-            float f12 = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.z;
-            Vec3d vec3d = new Vec3d((double) f10, (double) f11, (double) f12);
-
-            for (int l = 0; l < 4; ++l) {
-                avec3d[l] = vec3d.scale(2.0D * avec3d[l].dotProduct(vec3d)).add(avec3d[l].scale((double) (f9 * f9) - vec3d.dotProduct(vec3d))).add(vec3d.crossProduct(avec3d[l]).scale((double) (2.0F * f9)));
-            }
+        Vec3d vec3d = renderInfo.getProjectedView();
+        float f = (float) (MathHelper.lerp((double) partialTicks, this.prevPosX, this.posX) - vec3d.getX());
+        float f1 = (float) (MathHelper.lerp((double) partialTicks, this.prevPosY, this.posY) - vec3d.getY());
+        float f2 = (float) (MathHelper.lerp((double) partialTicks, this.prevPosZ, this.posZ) - vec3d.getZ());
+        Quaternion quaternion;
+        if (this.particleAngle == 0.0F) {
+            quaternion = renderInfo.getRotation();
+        } else {
+            quaternion = new Quaternion(renderInfo.getRotation());
+            float f3 = MathHelper.lerp(partialTicks, this.prevParticleAngle, this.particleAngle);
+            quaternion.multiply(Vector3f.ZP.rotation(f3));
         }
-        worldRendererIn.pos((double) f5 + avec3d[0].x, (double) f6 + avec3d[0].y, (double) f7 + avec3d[0].z).tex((double) f1, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-        worldRendererIn.pos((double) f5 + avec3d[1].x, (double) f6 + avec3d[1].y, (double) f7 + avec3d[1].z).tex((double) f1, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-        worldRendererIn.pos((double) f5 + avec3d[2].x, (double) f6 + avec3d[2].y, (double) f7 + avec3d[2].z).tex((double) f, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-        worldRendererIn.pos((double) f5 + avec3d[3].x, (double) f6 + avec3d[3].y, (double) f7 + avec3d[3].z).tex((double) f, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+
+        Vector3f vector3f1 = new Vector3f(-1.0F, -1.0F, 0.0F);
+        vector3f1.transform(quaternion);
+        Vector3f[] avector3f = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
+        float f4 = this.getScale(partialTicks);
+
+        for (int i = 0; i < 4; ++i) {
+            Vector3f vector3f = avector3f[i];
+            vector3f.transform(quaternion);
+            vector3f.mul(f4);
+            vector3f.add(f, f1, f2);
+        }
+        float f7 = 0;
+        float f8 = 1;
+        float f5 = 0;
+        float f6 = 1;
+        Minecraft.getInstance().getTextureManager().bindTexture(BUBBLE_TEXTURE);
+        int j = this.getBrightnessForRender(partialTicks);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder vertexbuffer = tessellator.getBuffer();
+        vertexbuffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+        vertexbuffer.pos((double) avector3f[0].getX(), (double) avector3f[0].getY(), (double) avector3f[0].getZ()).tex(f8, f6).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
+        vertexbuffer.pos((double) avector3f[1].getX(), (double) avector3f[1].getY(), (double) avector3f[1].getZ()).tex(f8, f5).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
+        vertexbuffer.pos((double) avector3f[2].getX(), (double) avector3f[2].getY(), (double) avector3f[2].getZ()).tex(f7, f5).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
+        vertexbuffer.pos((double) avector3f[3].getX(), (double) avector3f[3].getY(), (double) avector3f[3].getZ()).tex(f7, f6).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
+        Tessellator.getInstance().draw();
     }
 
-    public void onUpdate() {
-        super.onUpdate();
+    public int getBrightnessForRender(float partialTick) {
+        BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
+        return this.world.isBlockLoaded(blockpos) ? this.world.getLight(blockpos) : 0;
     }
+
+    public int getFXLayer() {
+        return 3;
+    }
+
+    @Override
+    public IParticleRenderType getRenderType() {
+        return IParticleRenderType.CUSTOM;
+    }
+
 }

@@ -1,32 +1,83 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.particle.SpriteTexturedParticle;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class ParticleSirenMusic extends Particle {
+public class ParticleSirenMusic extends SpriteTexturedParticle {
+    private static final ResourceLocation SIREN_MUSIC = new ResourceLocation("iceandfire:textures/particles/siren_music.png");
 
     float noteParticleScale;
     float colorScale;
 
-    public ParticleSirenMusic(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double color, double motionY, double motionZ) {
-        super(worldIn, xCoordIn, yCoordIn, zCoordIn, 0, motionY, motionZ);
-        this.colorScale = (float) color;
+    public ParticleSirenMusic(World world, double x, double y, double z, double motX, double motY, double motZ, float size) {
+        super(world, x, y, z, motX, motY, motZ);
+        this.setPosition(x, y, z);
+        this.colorScale = (float) 1;
         this.particleRed = MathHelper.sin((colorScale / 24 + 0.0F) * ((float) Math.PI * 2F)) * 0.65F + 0.35F;
         this.particleGreen = MathHelper.sin((colorScale / 24 + 0.33333334F) * ((float) Math.PI * 2F)) * 0.65F + 0.35F;
         this.particleBlue = MathHelper.sin((colorScale / 24 + 0.6666667F) * ((float) Math.PI * 2F)) * 0.65F + 0.35F;
-        this.particleScale *= 1.75F;
-        this.noteParticleScale = this.particleScale;
-        this.particleMaxAge = 15;
-        this.motionX = 0.05;
-        this.motionY = motionY;
-        this.motionZ = 0.05;
-        this.setParticleTextureIndex(64);
     }
 
-    public void onUpdate() {
+    @Override
+    public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
+        Vec3d inerp = renderInfo.getProjectedView();
+        if (age > this.getMaxAge()) {
+            this.setExpired();
+        }
+
+        Vec3d vec3d = renderInfo.getProjectedView();
+        float f = (float) (MathHelper.lerp((double) partialTicks, this.prevPosX, this.posX) - vec3d.getX());
+        float f1 = (float) (MathHelper.lerp((double) partialTicks, this.prevPosY, this.posY) - vec3d.getY());
+        float f2 = (float) (MathHelper.lerp((double) partialTicks, this.prevPosZ, this.posZ) - vec3d.getZ());
+        Quaternion quaternion;
+        if (this.particleAngle == 0.0F) {
+            quaternion = renderInfo.getRotation();
+        } else {
+            quaternion = new Quaternion(renderInfo.getRotation());
+            float f3 = MathHelper.lerp(partialTicks, this.prevParticleAngle, this.particleAngle);
+            quaternion.multiply(Vector3f.ZP.rotation(f3));
+        }
+
+        Vector3f vector3f1 = new Vector3f(-1.0F, -1.0F, 0.0F);
+        vector3f1.transform(quaternion);
+        Vector3f[] avector3f = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
+        float f4 = this.getScale(partialTicks);
+
+        for (int i = 0; i < 4; ++i) {
+            Vector3f vector3f = avector3f[i];
+            vector3f.transform(quaternion);
+            vector3f.mul(f4);
+            vector3f.add(f, f1, f2);
+        }
+        float f7 = 0;
+        float f8 = 1;
+        float f5 = 0;
+        float f6 = 1;
+        Minecraft.getInstance().getTextureManager().bindTexture(SIREN_MUSIC);
+        int j = this.getBrightnessForRender(partialTicks);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder vertexbuffer = tessellator.getBuffer();
+        vertexbuffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+        vertexbuffer.pos((double) avector3f[0].getX(), (double) avector3f[0].getY(), (double) avector3f[0].getZ()).tex(f8, f6).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
+        vertexbuffer.pos((double) avector3f[1].getX(), (double) avector3f[1].getY(), (double) avector3f[1].getZ()).tex(f8, f5).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
+        vertexbuffer.pos((double) avector3f[2].getX(), (double) avector3f[2].getY(), (double) avector3f[2].getZ()).tex(f7, f5).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
+        vertexbuffer.pos((double) avector3f[3].getX(), (double) avector3f[3].getY(), (double) avector3f[3].getZ()).tex(f7, f6).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
+        Tessellator.getInstance().draw();
+    }
+
+    public void tick(){
+        super.tick();
         colorScale += 0.25;
         if (colorScale > 25) {
             colorScale = 0;
@@ -34,39 +85,20 @@ public class ParticleSirenMusic extends Particle {
         this.particleRed = MathHelper.sin((colorScale / 24 + 0.0F) * ((float) Math.PI * 2F)) * 0.5F + 0.35F;
         this.particleGreen = MathHelper.sin((colorScale / 24 + 0.33333334F) * ((float) Math.PI * 2F)) * 0.5F + 0.35F;
         this.particleBlue = MathHelper.sin((colorScale / 24 + 0.6666667F) * ((float) Math.PI * 2F)) * 0.5F + 0.35F;
-        this.prevPosX = this.getPosX();
-        this.prevPosY = this.getPosY();
-        this.prevPosZ = this.getPosZ();
-
-        if (this.particleAge++ >= this.particleMaxAge) {
-            this.setExpired();
-        }
-
-        this.motionY += 0.004D;
-        this.move(this.motionX, this.motionY, this.motionZ);
-
-        if (this.getPosY() == this.prevPosY) {
-            this.motionX *= 1.1D;
-            this.motionZ *= 1.1D;
-        }
-
-        this.motionX *= 0.9599999785423279D;
-        this.motionY *= 0.9599999785423279D;
-        this.motionZ *= 0.9599999785423279D;
-
-        if (this.onGround) {
-            this.motionX *= 0.699999988079071D;
-            this.motionZ *= 0.699999988079071D;
-        }
     }
 
-
-    public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-        float f = ((float) this.particleAge + partialTicks) / (float) this.particleMaxAge * 32.0F;
-        f = MathHelper.clamp(f, 0.0F, 1.0F);
-        this.particleScale = this.noteParticleScale * f;
-        super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
+    public int getBrightnessForRender(float partialTick) {
+        BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
+        return this.world.isBlockLoaded(blockpos) ? this.world.getLight(blockpos) : 0;
     }
 
+    public int getFXLayer() {
+        return 3;
+    }
+
+    @Override
+    public IParticleRenderType getRenderType() {
+        return IParticleRenderType.CUSTOM;
+    }
 
 }

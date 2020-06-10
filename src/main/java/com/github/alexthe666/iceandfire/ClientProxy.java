@@ -200,7 +200,7 @@ public class ClientProxy extends CommonProxy {
             particle = new ParticleDragonFrost(world, x, y, z, motX, motY, motZ, entityDragonBase, 0);
         }
         if (particle != null) {
-            particleSpawner.spawnParticle(particle, true, true, false, x, y, z);
+            Minecraft.getInstance().particles.addEffect(particle);
         }
     }
 
@@ -233,16 +233,16 @@ public class ClientProxy extends CommonProxy {
             particle = new ParticleSirenAppearance(world, x, y, z);
         }
         if (name.equals("siren_music")) {
-            particle = new ParticleSirenMusic(world, x, y, z, motX, motY, motZ);
+            particle = new ParticleSirenMusic(world, x, y, z, motX, motY, motZ, 1);
         }
         if (name.equals("serpent_bubble")) {
-            particle = new ParticleSerpentBubble(world, x, y, z, motX, motY, motZ);
+            particle = new ParticleSerpentBubble(world, x, y, z, motX, motY, motZ, 1);
         }
         if (name.equals("hydra")) {
             particle = new ParticleHydraBreath(world, x, y, z, (float) motX, (float) motY, (float) motZ);
         }
         if (particle != null) {
-            particleSpawner.spawnParticle(particle, false, false, false, x, y, z);
+            Minecraft.getInstance().particles.addEffect(particle);
         }
     }
 

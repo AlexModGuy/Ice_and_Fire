@@ -1,73 +1,53 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
+import com.github.alexthe666.iceandfire.client.model.ModelSiren;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.props.SirenEntityProperties;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.IParticleFactory;
+import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.particle.MobAppearanceParticle;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleMobAppearance;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.entity.ElderGuardianRenderer;
+import net.minecraft.client.renderer.entity.model.GuardianModel;
+import net.minecraft.client.renderer.model.Model;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.particles.BasicParticleType;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ParticleSirenAppearance extends ParticleMobAppearance {
-
-    private LivingEntity entity;
+public class ParticleSirenAppearance  extends Particle {
+    private final Model field_228342_a_ = new ModelSiren();
+    private final RenderType field_228341_A_ = RenderType.getEntityTranslucent(ElderGuardianRenderer.GUARDIAN_ELDER_TEXTURE);
 
     public ParticleSirenAppearance(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn);
-        this.particleMaxAge = 60;
-
+        this.particleGravity = 0.0F;
+        this.maxAge = 30;
     }
 
-
-    public void onUpdate() {
-        super.onUpdate();
-
-        if (this.entity == null) {
-            SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(Minecraft.getInstance().player, SirenEntityProperties.class);
-            EntitySiren siren = new EntitySiren(this.world);
-            if (sirenProps != null && sirenProps.getSiren(Minecraft.getInstance().player.world) != null) {
-                siren = sirenProps.getSiren(Minecraft.getInstance().player.world);
-            }
-            this.entity = siren;
-        }
+    public IParticleRenderType getRenderType() {
+        return IParticleRenderType.CUSTOM;
     }
 
-    public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-        if (this.entity != null) {
-            RenderManager rendermanager = Minecraft.getInstance().getRenderManager();
-            rendermanager.setRenderPosition(Particle.interpPosX, Particle.interpPosY, Particle.interpPosZ);
-            float f = 0.42553192F;
-            float f1 = ((float) this.particleAge + partialTicks) / (float) this.particleMaxAge;
-            GlStateManager.depthMask(true);
-            GlStateManager.enableBlend();
-            GlStateManager.enableDepth();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            float f2 = 240.0F;
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
-            GlStateManager.pushMatrix();
-            float f3 = 0.05F + 0.5F * MathHelper.sin(f1 * (float) Math.PI);
-            GlStateManager.color(1.0F, 1.0F, 1.0F, f3);
-            GlStateManager.translate(0.0F, 1.8F, 0.0F);
-            GlStateManager.rotate(180.0F - entityIn.rotationYaw, 0.0F, 1.0F, 0.0F);
-            GlStateManager.rotate(60.0F - 150.0F * f1 - entityIn.rotationPitch, 0.0F, 1.0F, 0.0F);
-            GlStateManager.translate(0.0F, -0.8F, -1.5F);
-            GlStateManager.scale(0.6F, 0.6F, 0.6F);
-            GlStateManager.rotate((entity.ticksExisted % 90) * 4, 0.0F, 1.0F, 0.0F);
-
-            this.entity.rotationYaw = 0.0F;
-            this.entity.rotationYawHead = 0.0F;
-            this.entity.prevRotationYaw = 0.0F;
-            this.entity.prevRotationYawHead = 0.0F;
-            rendermanager.renderEntity(this.entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, false);
-            GlStateManager.popMatrix();
-            GlStateManager.enableDepth();
-        }
+    public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
+        float f = ((float)this.age + partialTicks) / (float)this.maxAge;
+        float f1 = 0.05F + 0.5F * MathHelper.sin(f * (float)Math.PI);
+        MatrixStack matrixstack = new MatrixStack();
+        matrixstack.rotate(renderInfo.getRotation());
+        matrixstack.rotate(Vector3f.XP.rotationDegrees(150.0F * f - 60.0F));
+        matrixstack.scale(-1.0F, -1.0F, 1.0F);
+        matrixstack.translate(0.0D, (double)-1.101F, 1.5D);
+        IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+        IVertexBuilder ivertexbuilder = irendertypebuffer$impl.getBuffer(this.field_228341_A_);
+        this.field_228342_a_.render(matrixstack, ivertexbuilder, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, f1);
+        irendertypebuffer$impl.finish();
     }
 }
