@@ -1,20 +1,26 @@
 package com.github.alexthe666.iceandfire.message;
 
+import com.github.alexthe666.citadel.server.message.PacketBufferUtils;
 import com.github.alexthe666.iceandfire.ClientProxy;
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import io.netty.buffer.ByteBuf;
-import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageGetMyrmexHive extends AbstractMessage<MessageGetMyrmexHive> {
+import java.util.function.Supplier;
+
+public class MessageGetMyrmexHive {
 
     public MyrmexHive hive;
 
@@ -25,35 +31,38 @@ public class MessageGetMyrmexHive extends AbstractMessage<MessageGetMyrmexHive> 
     public MessageGetMyrmexHive() {
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        hive = new MyrmexHive();
-        hive.readVillageDataFromNBT(ByteBufUtils.readTag(buf));
+    public static MessageGetMyrmexHive read(PacketBuffer buf) {
+        MessageGetMyrmexHive mesage = new MessageGetMyrmexHive();
+        mesage.hive = new MyrmexHive();
+        mesage.hive.readVillageDataFromNBT(PacketBufferUtils.readTag(buf));
+        return mesage;
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
+    public static void write(MessageGetMyrmexHive message, PacketBuffer buf) {
         CompoundNBT tag = new CompoundNBT();
-        if (hive != null) {
-            hive.writeVillageDataToNBT(tag);
+        if (message.hive != null) {
+            message.hive.writeVillageDataToNBT(tag);
         }
-        ByteBufUtils.writeTag(buf, tag);
+        PacketBufferUtils.writeTag(buf, tag);
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageGetMyrmexHive message, PlayerEntity player, MessageContext messageContext) {
-        ClientProxy.setReferedClientHive(message.hive);
-    }
+    public static class Handler {
+        public Handler() {
+        }
 
-    @Override
-    public void onServerReceived(MinecraftServer server, MessageGetMyrmexHive message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            MyrmexHive serverHive = MyrmexWorldData.get(player.world).getHiveFromUUID(message.hive.hiveUUID);
-            if (serverHive != null) {
-                CompoundNBT tag = new CompoundNBT();
-                message.hive.writeVillageDataToNBT(tag);
-                serverHive.readVillageDataFromNBT(tag);
+        public static void handle(MessageGetMyrmexHive message, Supplier<NetworkEvent.Context> context) {
+            ((NetworkEvent.Context) context.get()).setPacketHandled(true);
+            PlayerEntity player = context.get().getSender();
+            if (player != null) {
+                IceAndFire.PROXY.setReferencedHive(message.hive);
+                if (player.world != null) {
+                    MyrmexHive serverHive = MyrmexWorldData.get(player.world).getHiveFromUUID(message.hive.hiveUUID);
+                    if (serverHive != null) {
+                        CompoundNBT tag = new CompoundNBT();
+                        message.hive.writeVillageDataToNBT(tag);
+                        serverHive.readVillageDataFromNBT(tag);
+                    }
+                }
             }
         }
     }

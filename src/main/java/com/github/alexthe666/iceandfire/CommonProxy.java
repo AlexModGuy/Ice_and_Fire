@@ -3,12 +3,15 @@ package com.github.alexthe666.iceandfire;
 import com.github.alexthe666.iceandfire.block.*;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
+import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.item.IUsesTEISR;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.loot.CustomizeToDragon;
+import com.github.alexthe666.iceandfire.loot.CustomizeToSeaSerpent;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
@@ -25,6 +28,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.event.RegistryEvent;
@@ -196,14 +200,20 @@ public class CommonProxy {
         }
     }
 
-    public void preRender() {
+    public void setReferencedHive(MyrmexHive hive) {
 
     }
 
-    public void render() {
+    public void preInit() {
+
     }
 
-    public void postRender() {
+    public void init() {
+        LootFunctionManager.registerFunction(new CustomizeToDragon.Serializer());
+        LootFunctionManager.registerFunction(new CustomizeToSeaSerpent.Serializer());
+    }
+
+    public void postInit() {
     }
 
     public void spawnParticle(String name, double x, double y, double z, double motX, double motY, double motZ) {
@@ -252,26 +262,25 @@ public class CommonProxy {
     public void setPreviousViewType(int view) {
     }
 
-    public void updateDragonArmorRender(String clear){}
+    public void updateDragonArmorRender(String clear) {
+    }
 
     public boolean shouldSeeBestiaryContents() {
         return true;
-    }
-
-
-
-    public void setReferencedMob(Entity dragonBase) {
     }
 
     public Entity getReferencedMob() {
         return null;
     }
 
-    public void setRefrencedTE(TileEntity tileEntity) {
+    public void setReferencedMob(Entity dragonBase) {
     }
 
     public TileEntity getRefrencedTE() {
         return null;
+    }
+
+    public void setRefrencedTE(TileEntity tileEntity) {
     }
 
     public Item.Properties setupISTER(Item.Properties group) {

@@ -1,17 +1,19 @@
 package com.github.alexthe666.iceandfire.message;
 
+import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
 import io.netty.buffer.ByteBuf;
-import net.ilexiconn.llibrary.server.network.AbstractMessage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageDaytime extends AbstractMessage<MessageDaytime> {
+import java.util.function.Supplier;
+
+public class MessageDaytime {
 
     public int dragonId;
     public boolean isDay;
@@ -24,30 +26,29 @@ public class MessageDaytime extends AbstractMessage<MessageDaytime> {
     public MessageDaytime() {
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        dragonId = buf.readInt();
-        isDay = buf.readBoolean();
-
+    public static MessageDaytime read(PacketBuffer buf) {
+        return new MessageDaytime(buf.readInt(), buf.readBoolean());
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(dragonId);
-        buf.writeBoolean(isDay);
+    public static void write(MessageDaytime message, PacketBuffer buf) {
+        buf.writeInt(message.dragonId);
+        buf.writeBoolean(message.isDay);
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageDaytime message, PlayerEntity player, MessageContext messageContext) {
-        Entity entity = player.world.getEntityByID(message.dragonId);
-        if (entity instanceof EntityDragonBase) {
-            EntityDragonBase dragon = (EntityDragonBase) entity;
-            dragon.isDaytime = message.isDay;
+    public static class Handler {
+        public Handler() {
         }
-    }
 
-    @Override
-    public void onServerReceived(MinecraftServer server, MessageDaytime message, PlayerEntity player, MessageContext messageContext) {
+        public static void handle(MessageDaytime message, Supplier<NetworkEvent.Context> context) {
+            ((NetworkEvent.Context)context.get()).setPacketHandled(true);
+            PlayerEntity player = context.get().getSender();
+            if(player != null) {
+                Entity entity = player.world.getEntityByID(message.dragonId);
+                if (entity instanceof EntityDragonBase) {
+                    EntityDragonBase dragon = (EntityDragonBase) entity;
+                    dragon.isDaytime = message.isDay;
+                }
+            }
+        }
     }
 }

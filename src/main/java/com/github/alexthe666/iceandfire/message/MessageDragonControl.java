@@ -1,17 +1,13 @@
 package com.github.alexthe666.iceandfire.message;
 
 import com.github.alexthe666.iceandfire.entity.*;
-import io.netty.buffer.ByteBuf;
-import net.ilexiconn.llibrary.server.network.AbstractMessage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkEvent;
+import java.util.function.Supplier;
 
-public class MessageDragonControl extends AbstractMessage<MessageDragonControl> {
+public class MessageDragonControl {
 
     public int dragonId;
     public byte controlState;
@@ -23,76 +19,81 @@ public class MessageDragonControl extends AbstractMessage<MessageDragonControl> 
     public MessageDragonControl(int dragonId, byte controlState, double posX, double posY, double posZ) {
         this.dragonId = dragonId;
         this.controlState = controlState;
-        this.getPosX() = posX;
-        this.getPosY() = posY;
-        this.getPosZ() = posZ;
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
     }
 
     public MessageDragonControl() {
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        dragonId = buf.readInt();
-        controlState = buf.readByte();
-        posX = buf.readDouble();
-        posY = buf.readDouble();
-        posZ = buf.readDouble();
-
+    public static MessageDragonControl read(PacketBuffer buf) {
+        return new MessageDragonControl(buf.readInt(), buf.readByte(), buf.readDouble(), buf.readDouble(), buf.readDouble());
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(dragonId);
-        buf.writeByte(controlState);
-        buf.writeDouble(posX);
-        buf.writeDouble(posY);
-        buf.writeDouble(posZ);
-
+    public static void write(MessageDragonControl message, PacketBuffer buf) {
+        buf.writeInt(message.dragonId);
+        buf.writeByte(message.controlState);
+        buf.writeDouble(message.posX);
+        buf.writeDouble(message.posY);
+        buf.writeDouble(message.posZ);
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageDragonControl message, PlayerEntity player, MessageContext messageContext) {
-    }
+    public static class Handler {
+        public Handler() {
+        }
 
-    @Override
-    public void onServerReceived(MinecraftServer server, MessageDragonControl message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            Entity entity = player.world.getEntityByID(message.dragonId);
-            if (entity.isRidingOrBeingRiddenBy(player)) {
-                if (entity != null && entity instanceof EntityDragonBase) {
-                    EntityDragonBase dragon = (EntityDragonBase) entity;
-                    if (dragon.isOwner(player)) {
-                        dragon.setControlState(message.controlState);
+        public static void handle(MessageDragonControl message, Supplier<NetworkEvent.Context> context) {
+            ((NetworkEvent.Context) context.get()).setPacketHandled(true);
+            PlayerEntity player = context.get().getSender();
+            if (player != null) {
+                if (player.world != null) {
+                    Entity entity = player.world.getEntityByID(message.dragonId);
+                    if (entity.isRidingOrBeingRiddenBy(player)) {
+                        if (entity != null && entity instanceof EntityDragonBase) {
+                            EntityDragonBase dragon = (EntityDragonBase) entity;
+                            if (dragon.isOwner(player)) {
+                                dragon.setControlState(message.controlState);
+                            }
+                            dragon.setPosition(message.getPosX(), message.getPosY(), message.getPosZ());
+                        } else if (entity instanceof EntityHippogryph) {
+                            EntityHippogryph hippo = (EntityHippogryph) entity;
+                            if (hippo.isOwner(player)) {
+                                hippo.setControlState(message.controlState);
+                            }
+                            hippo.setPosition(message.getPosX(), message.getPosY(), message.getPosZ());
+                        } else if (entity instanceof EntityHippocampus) {
+                            EntityHippocampus hippo = (EntityHippocampus) entity;
+                            if (hippo.isOwner(player)) {
+                                hippo.setControlState(message.controlState);
+                            }
+                            hippo.setPosition(message.getPosX(), message.getPosY(), message.getPosZ());
+                        } else if (entity instanceof EntityDeathWorm) {
+                            EntityDeathWorm deathworm = (EntityDeathWorm) entity;
+                            deathworm.setControlState(message.controlState);
+                            deathworm.setPosition(message.getPosX(), message.getPosY(), message.getPosZ());
+                        } else if (entity instanceof EntityAmphithere) {
+                            EntityAmphithere amphi = (EntityAmphithere) entity;
+                            if (amphi.isOwner(player)) {
+                                amphi.setControlState(message.controlState);
+                            }
+                            amphi.setPosition(message.getPosX(), message.getPosY(), message.getPosZ());
+                        }
                     }
-                    dragon.setPosition(message.getPosX(), message.getPosY(), message.getPosZ());
-                } else if (entity instanceof EntityHippogryph) {
-                    EntityHippogryph hippo = (EntityHippogryph) entity;
-                    if (hippo.isOwner(player)) {
-                        hippo.setControlState(message.controlState);
-                    }
-                    hippo.setPosition(message.getPosX(), message.getPosY(), message.getPosZ());
-                } else if (entity instanceof EntityHippocampus) {
-                    EntityHippocampus hippo = (EntityHippocampus) entity;
-                    if (hippo.isOwner(player)) {
-                        hippo.setControlState(message.controlState);
-                    }
-                    hippo.setPosition(message.getPosX(), message.getPosY(), message.getPosZ());
-                } else if (entity instanceof EntityDeathWorm) {
-                    EntityDeathWorm deathworm = (EntityDeathWorm) entity;
-                    deathworm.setControlState(message.controlState);
-                    deathworm.setPosition(message.getPosX(), message.getPosY(), message.getPosZ());
-                } else if (entity instanceof EntityAmphithere) {
-                    EntityAmphithere amphi = (EntityAmphithere) entity;
-                    if (amphi.isOwner(player)) {
-                        amphi.setControlState(message.controlState);
-                    }
-                    amphi.setPosition(message.getPosX(), message.getPosY(), message.getPosZ());
                 }
             }
         }
     }
 
+    private double getPosX() {
+        return posX;
+    }
 
+    private double getPosY() {
+        return posY;
+    }
+
+    private double getPosZ() {
+        return posZ;
+    }
 }

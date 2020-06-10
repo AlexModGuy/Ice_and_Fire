@@ -77,7 +77,7 @@ public class ClientProxy extends CommonProxy {
         return referedClientHive;
     }
 
-    public static void setReferedClientHive(MyrmexHive hive) {
+    public void setReferencedHive(MyrmexHive hive) {
         referedClientHive = hive;
     }
 
@@ -85,7 +85,7 @@ public class ClientProxy extends CommonProxy {
     @OnlyIn(Dist.CLIENT)
     @Override
     @SuppressWarnings("deprecation")
-    public void render() {
+    public void init() {
         IafGuiRegistry.register();
         try{
             Font font = new Font(Minecraft.getInstance().textureManager, new ResourceLocation("iceandfire:textures/font/bestiary.png"));
@@ -102,7 +102,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void postRender() {
+    public void postInit() {
         ClientEvents.initializeStoneLayer();
 
     }

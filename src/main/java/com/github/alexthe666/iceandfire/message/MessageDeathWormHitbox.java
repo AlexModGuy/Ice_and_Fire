@@ -1,17 +1,20 @@
 package com.github.alexthe666.iceandfire.message;
 
+import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
+import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
 import io.netty.buffer.ByteBuf;
-import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageDeathWormHitbox extends AbstractMessage<MessageDeathWormHitbox> {
+import java.util.function.Supplier;
+
+public class MessageDeathWormHitbox {
 
     public int deathWormId;
     public float scale;
@@ -24,38 +27,30 @@ public class MessageDeathWormHitbox extends AbstractMessage<MessageDeathWormHitb
     public MessageDeathWormHitbox() {
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        deathWormId = buf.readInt();
-        scale = buf.readFloat();
+    public static MessageDeathWormHitbox read(PacketBuffer buf) {
+        return new MessageDeathWormHitbox(buf.readInt(), buf.readFloat());
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(deathWormId);
-        buf.writeFloat(scale);
+    public static void write(MessageDeathWormHitbox message, PacketBuffer buf) {
+        buf.writeInt(message.deathWormId);
+        buf.writeFloat(message.scale);
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageDeathWormHitbox message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            Entity entity = player.world.getEntityByID(message.deathWormId);
-            if (entity != null && entity instanceof EntityDeathWorm) {
-                EntityDeathWorm worm = (EntityDeathWorm) entity;
-                worm.initSegments(message.scale);
-            }
+    public static class Handler {
+        public Handler() {
         }
 
-    }
-
-    @Override
-    public void onServerReceived(MinecraftServer server, MessageDeathWormHitbox message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            Entity entity = player.world.getEntityByID(message.deathWormId);
-            if (entity != null && entity instanceof EntityDeathWorm) {
-                EntityDeathWorm worm = (EntityDeathWorm) entity;
-                worm.initSegments(message.scale);
+        public static void handle(MessageDeathWormHitbox message, Supplier<NetworkEvent.Context> context) {
+            ((NetworkEvent.Context)context.get()).setPacketHandled(true);
+            PlayerEntity player = context.get().getSender();
+            if(player != null) {
+                if (player.world != null) {
+                    Entity entity = player.world.getEntityByID(message.deathWormId);
+                    if (entity != null && entity instanceof EntityDeathWorm) {
+                        EntityDeathWorm worm = (EntityDeathWorm) entity;
+                        worm.initSegments(message.scale);
+                    }
+                }
             }
         }
     }

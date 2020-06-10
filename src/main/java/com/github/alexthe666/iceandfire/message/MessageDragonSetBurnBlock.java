@@ -1,18 +1,16 @@
 package com.github.alexthe666.iceandfire.message;
 
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import io.netty.buffer.ByteBuf;
-import net.ilexiconn.llibrary.server.network.AbstractMessage;
-import net.minecraft.client.Minecraft;
+import com.github.alexthe666.iceandfire.entity.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageDragonSetBurnBlock extends AbstractMessage<MessageDragonSetBurnBlock> {
+import java.util.function.Supplier;
+
+public class MessageDragonSetBurnBlock {
 
     public int dragonId;
     public boolean breathingFire;
@@ -31,46 +29,37 @@ public class MessageDragonSetBurnBlock extends AbstractMessage<MessageDragonSetB
     public MessageDragonSetBurnBlock() {
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        dragonId = buf.readInt();
-        breathingFire = buf.readBoolean();
-        posX = buf.readInt();
-        posY = buf.readInt();
-        posZ = buf.readInt();
 
+    public static MessageDragonSetBurnBlock read(PacketBuffer buf) {
+        return new MessageDragonSetBurnBlock(buf.readInt(), buf.readBoolean(), new BlockPos(buf.readInt(), buf.readInt(), buf.readInt()));
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(dragonId);
-        buf.writeBoolean(breathingFire);
-        buf.writeInt(posX);
-        buf.writeInt(posY);
-        buf.writeInt(posZ);
+    public static void write(MessageDragonSetBurnBlock message, PacketBuffer buf) {
+        buf.writeInt(message.dragonId);
+        buf.writeBoolean(message.breathingFire);
+        buf.writeInt(message.posX);
+        buf.writeInt(message.posY);
+        buf.writeInt(message.posZ);
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageDragonSetBurnBlock message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            Entity entity = player.world.getEntityByID(message.dragonId);
-            if (entity != null && entity instanceof EntityDragonBase) {
-                EntityDragonBase dragon = (EntityDragonBase) entity;
-                dragon.setBreathingFire(message.breathingFire);
-                dragon.burningTarget = new BlockPos(posX, posY, posZ);
-            }
+    public static class Handler {
+        public Handler() {
         }
-    }
 
-    @Override
-    public void onServerReceived(MinecraftServer server, MessageDragonSetBurnBlock message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            Entity entity = player.world.getEntityByID(message.dragonId);
-            if (entity != null && entity instanceof EntityDragonBase) {
-                EntityDragonBase dragon = (EntityDragonBase) entity;
-                dragon.setBreathingFire(message.breathingFire);
-                dragon.burningTarget = new BlockPos(posX, posY, posZ);
+        public static void handle(MessageDragonSetBurnBlock message, Supplier<NetworkEvent.Context> context) {
+            ((NetworkEvent.Context) context.get()).setPacketHandled(true);
+            PlayerEntity player = context.get().getSender();
+            if (player != null) {
+                if (player.world != null) {
+                    if (player.world != null) {
+                        Entity entity = player.world.getEntityByID(message.dragonId);
+                        if (entity != null && entity instanceof EntityDragonBase) {
+                            EntityDragonBase dragon = (EntityDragonBase) entity;
+                            dragon.setBreathingFire(message.breathingFire);
+                            dragon.burningTarget = new BlockPos(message.posX, message.posY, message.posZ);
+                        }
+                    }
+                }
             }
         }
     }

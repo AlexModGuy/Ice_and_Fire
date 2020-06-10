@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire;
 
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.message.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -62,7 +63,7 @@ public class IceAndFire {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
         //modLoadingContext.registerConfig(ModConfig.Type.CLIENT, ConfigHolder.CLIENT_SPEC);
         //modLoadingContext.registerConfig(ModConfig.Type.SERVER, ConfigHolder.SERVER_SPEC);
-        PROXY.render();
+        PROXY.init();
     }
 
     public static <MSG> void sendMSGToServer(MSG message) {
@@ -82,6 +83,14 @@ public class IceAndFire {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
+        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageAddChainedEntity.class, MessageAddChainedEntity::write, MessageAddChainedEntity::read, MessageAddChainedEntity.Handler::handle);
+        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageDaytime.class, MessageDaytime::write, MessageDaytime::read, MessageDaytime.Handler::handle);
+        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageDeathWormHitbox.class, MessageDeathWormHitbox::write, MessageDeathWormHitbox::read, MessageDeathWormHitbox.Handler::handle);
+        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageDragonControl.class, MessageDragonControl::write, MessageDragonControl::read, MessageDragonControl.Handler::handle);
+        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageDragonSetBurnBlock.class, MessageDragonSetBurnBlock::write, MessageDragonSetBurnBlock::read, MessageDragonSetBurnBlock.Handler::handle);
+        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageDragonSyncFire.class, MessageDragonSyncFire::write, MessageDragonSyncFire::read, MessageDragonSyncFire.Handler::handle);
+        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageGetMyrmexHive.class, MessageGetMyrmexHive::write, MessageGetMyrmexHive::read, MessageGetMyrmexHive.Handler::handle);
+
     }
 
     private void setupClient(FMLClientSetupEvent event) {
