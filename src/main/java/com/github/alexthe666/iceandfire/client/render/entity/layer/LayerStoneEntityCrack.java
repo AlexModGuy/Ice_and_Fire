@@ -1,23 +1,25 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.client.model.ICustomStatueModel;
 import com.github.alexthe666.iceandfire.client.model.ModelGuardianStatue;
 import com.github.alexthe666.iceandfire.client.model.ModelHorseStatue;
 import com.github.alexthe666.iceandfire.client.model.ModelTroll;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.MobRendererBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.EntityGuardian;
-import net.minecraft.entity.passive.AbstractHorse;
-import net.minecraft.entity.passive.EntityLlama;
+import net.minecraft.entity.monster.GuardianEntity;
+import net.minecraft.entity.passive.horse.AbstractHorseEntity;
+import net.minecraft.entity.passive.horse.LlamaEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class LayerStoneEntityCrack<T extends Entity, M extends EntityModel<T>> extends LayerRenderer<T, M> {
@@ -33,55 +35,33 @@ public class LayerStoneEntityCrack<T extends Entity, M extends EntityModel<T>> e
     }
 
     @Override
-    public void render(LivingEntity LivingEntityIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
-        if (LivingEntityIn instanceof LivingEntity) {
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntityIn, StoneEntityProperties.class);
-            if (properties != null && properties.isStone && properties.breakLvl > 0) {
-                float x = Math.max(this.renderer.getMainModel().textureWidth, 1) / 16F; //default to 4
-                float y = Math.max(this.renderer.getMainModel().textureHeight, 1) / 16F; //default to 2
+    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, Entity living, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        if (living instanceof LivingEntity) {
+            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(living, StoneEntityProperties.class);
+            if (properties != null && properties.isStone) {
+                float x = Math.max(this.renderer.getEntityModel().textureWidth, 1) / 16F; //default to 4
+                float y = Math.max(this.renderer.getEntityModel().textureHeight, 1) / 16F; //default to 2
+                RenderType tex = RenderType.getEntitySolid(DESTROY_STAGES[properties.breakLvl - 1]);
 
-                GlStateManager.enableBlend();
-                GlStateManager.enableCull();
-                GlStateManager.disableAlpha();
-                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-                GlStateManager.depthMask(true);
-
-                this.renderer.bindTexture(DESTROY_STAGES[properties.breakLvl - 1]);
                 GlStateManager.matrixMode(5890);
                 GlStateManager.loadIdentity();
-                GlStateManager.scale(x, y, 1);
+                GlStateManager.scalef(x, y, 1);
                 GlStateManager.matrixMode(5888);
-
-                if (this.renderer.getMainModel() instanceof ModelTroll) {
-                    this.renderer.getMainModel().render(LivingEntityIn, f, 0, 0, f3, f4, f5);
-                } else if (this.renderer.getMainModel() instanceof ICustomStatueModel) {
-                    ((ICustomStatueModel) this.renderer.getMainModel()).renderStatue();
-                } else if (LivingEntityIn instanceof AbstractHorse && !(LivingEntityIn instanceof EntityLlama)) {
-                    HORSE_MODEL.render(LivingEntityIn, f, 0, 0, f3, f4, f5);
-                } else if (LivingEntityIn instanceof EntityGuardian) {
-                    GUARDIAN_MODEL.render(LivingEntityIn, f, 0, 0, f3, f4, f5);
+                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(tex);
+                if (this.renderer.getEntityModel() instanceof ICustomStatueModel) {
+                    ((ICustomStatueModel) this.renderer.getEntityModel()).renderStatue();
+                } else if (living instanceof AbstractHorseEntity && !(living instanceof LlamaEntity)) {
+                    HORSE_MODEL.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                } else if (living instanceof GuardianEntity) {
+                    GUARDIAN_MODEL.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
                 } else {
-                    this.renderer.getMainModel().render(LivingEntityIn, f, 0, 0, f3, f4, f5);
+                    this.renderer.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
                 }
-                GlStateManager.disableBlend();
+
                 GlStateManager.matrixMode(5890);
                 GlStateManager.loadIdentity();
                 GlStateManager.matrixMode(5888);
-
-                GlStateManager.disableBlend();
-                GlStateManager.disableCull();
-                GlStateManager.enableAlpha();
             }
         }
-    }
-
-    @Override
-    public boolean shouldCombineTextures() {
-        return false;
-    }
-
-    @Override
-    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-
     }
 }

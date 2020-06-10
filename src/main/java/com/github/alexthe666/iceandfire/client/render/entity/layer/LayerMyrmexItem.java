@@ -1,62 +1,66 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.iceandfire.client.model.ModelHydraBody;
 import com.github.alexthe666.iceandfire.client.model.ModelMyrmexBase;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderMyrmexBase;
+import com.github.alexthe666.iceandfire.entity.EntityHydra;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Quaternion;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 
-public class LayerMyrmexItem extends LayerRenderer<EntityMyrmexBase> {
+public class LayerMyrmexItem extends LayerRenderer<EntityMyrmexBase, SegmentedModel<EntityMyrmexBase>> {
 
     protected final RenderMyrmexBase livingEntityRenderer;
 
     public LayerMyrmexItem(RenderMyrmexBase livingEntityRendererIn) {
+        super(livingEntityRendererIn);
         this.livingEntityRenderer = livingEntityRendererIn;
     }
 
-    public void render(EntityMyrmexBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        if (entity instanceof EntityMyrmexWorker) {
-            ItemStack itemstack = entity.getHeldItem(Hand.MAIN_HAND);
-            if (!itemstack.isEmpty()) {
-                GlStateManager.pushMatrix();
-                this.renderHeldItem(entity, itemstack, ItemCameraTransforms.TransformType.HEAD, HandSide.RIGHT);
-                GlStateManager.popMatrix();
-            }
-        }
-    }
-
     private void renderHeldItem(EntityMyrmexBase myrmex, ItemStack stack, ItemCameraTransforms.TransformType transform, HandSide handSide) {
-        if (!stack.isEmpty()) {
-            GlStateManager.pushMatrix();
 
-            if (myrmex.isShiftKeyDown()) {
-                GlStateManager.translate(0.0F, 0.2F, 0.0F);
-            }
-            this.translateToHand(handSide);
-            if (Minecraft.getInstance().getRenderItem().shouldRenderItemIn3D(stack)) {
-                GlStateManager.translate(0F, 0.25F, -1.65F);
-            } else {
-                GlStateManager.translate(0F, 1F, -2F);
-            }
-            GlStateManager.rotate(160, 1, 0, 0);
-            GlStateManager.rotate(180, 0, 1, 0);
-            Minecraft.getInstance().getItemRenderer().renderItem(myrmex, stack, transform);
-            GlStateManager.popMatrix();
-        }
     }
 
-    protected void translateToHand(HandSide side) {
-        ((ModelMyrmexBase) this.livingEntityRenderer.getMainModel()).postRenderArm(0.0625F, side);
+    protected void translateToHand(HandSide side, MatrixStack stack) {
+        ((ModelMyrmexBase) this.livingEntityRenderer.getEntityModel()).postRenderArm(1, stack);
     }
 
     public boolean shouldCombineTextures() {
         return false;
     }
 
+    @Override
+    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityMyrmexBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        if (entitylivingbaseIn instanceof EntityMyrmexWorker) {
+            ItemStack itemstack = entitylivingbaseIn.getHeldItem(Hand.MAIN_HAND);
+            if (!itemstack.isEmpty()) {
+                matrixStackIn.push();
+                if (!itemstack.isEmpty()) {
+                    matrixStackIn.push();
+
+                    if (entitylivingbaseIn.isShiftKeyDown()) {
+                        matrixStackIn.translate(0.0F, 0.2F, 0.0F);
+                    }
+                    this.translateToHand(HandSide.RIGHT, matrixStackIn);
+                    matrixStackIn.translate(0F, 1F, -2F);
+                    matrixStackIn.rotate(new Quaternion(Vector3f.XP, 160, true));
+                    matrixStackIn.rotate(new Quaternion(Vector3f.YP, 180, true));
+                    Minecraft.getInstance().getItemRenderer().renderItem(itemstack, ItemCameraTransforms.TransformType.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn);
+                    matrixStackIn.pop();
+                }
+                matrixStackIn.pop();
+            }
+        }
+    }
 }

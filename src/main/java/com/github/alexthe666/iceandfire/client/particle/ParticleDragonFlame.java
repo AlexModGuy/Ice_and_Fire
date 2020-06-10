@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
@@ -16,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ParticleDragonFlame extends ParticleFlame {
+public class ParticleDragonFlame extends FlameParticle {
 
     private static final ResourceLocation DRAGONFLAME = new ResourceLocation("iceandfire:textures/particles/flame.png");
     private float dragonSize;

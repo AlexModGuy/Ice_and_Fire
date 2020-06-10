@@ -1,11 +1,14 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.MobRendererBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 
 public class LayerSeaSerpentAncient extends LayerRenderer<EntitySeaSerpent, SegmentedModel<EntitySeaSerpent>> {
@@ -20,24 +23,12 @@ public class LayerSeaSerpentAncient extends LayerRenderer<EntitySeaSerpent, Segm
     }
 
     @Override
-    public void render(EntitySeaSerpent serpent, float f, float f1, float i, float f2, float f3, float f4, float f5) {
-        if (serpent.isAncient()) {
-            GlStateManager.enableNormalize();
-            GlStateManager.enableBlend();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            if (serpent.isBlinking()) {
-                this.renderer.bindTexture(TEXTURE_BLINK);
-            } else {
-                this.renderer.bindTexture(TEXTURE);
-            }
-            this.renderer.getMainModel().render(serpent, f, f1, f2, f3, f4, f5);
-            GlStateManager.disableBlend();
-            GlStateManager.disableNormalize();
-        }
-    }
+    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntitySeaSerpent serpent, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        if(serpent.isAncient()){
+            RenderType tex = RenderType.getEntityNoOutline(serpent.isBlinking() ? TEXTURE_BLINK : TEXTURE);
+            IVertexBuilder ivertexbuilder = bufferIn.getBuffer(tex);
+            this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 
-    @Override
-    public boolean shouldCombineTextures() {
-        return true;
+        }
     }
 }

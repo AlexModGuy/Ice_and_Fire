@@ -1,35 +1,36 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.iceandfire.client.model.ModelTroll;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderTroll;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.LivingEntity;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerTrollWeapon extends LayerRenderer {
+public class LayerTrollWeapon extends LayerRenderer<EntityTroll, ModelTroll> {
     private final RenderTroll renderer;
 
     public LayerTrollWeapon(RenderTroll renderer) {
+        super(renderer);
         this.renderer = renderer;
     }
 
     public void render(EntityTroll entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
-        if (entity.getWeaponType() != null && !EntityGorgon.isStoneMob(entity)) {
-            this.renderer.bindTexture(entity.getWeaponType().TEXTURE);
-            this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
+
+    }
+
+    @Override
+    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityTroll troll, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        if (troll.getWeaponType() != null && !EntityGorgon.isStoneMob(troll)) {
+            RenderType tex = RenderType.getEntityCutout(troll.getWeaponType().TEXTURE);
+            this.getEntityModel().render(matrixStackIn, bufferIn.getBuffer(tex), packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         }
-    }
-
-    @Override
-    public boolean shouldCombineTextures() {
-        return false;
-    }
-
-    @Override
-    public void render(LivingEntity entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
-        this.render((EntityTroll) entity, f, f1, f2, f3, f4, f5, f6);
     }
 }

@@ -1,11 +1,8 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelStonePlayer;
-import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStonePlayerEntityCrack;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.LivingRenderer;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;

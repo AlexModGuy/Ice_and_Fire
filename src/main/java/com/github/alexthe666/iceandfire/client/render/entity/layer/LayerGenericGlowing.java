@@ -8,6 +8,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
@@ -18,11 +19,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerGenericGlowing extends LayerRenderer<LivingEntity, SegmentedModel<LivingEntity>> {
-    private final MobRenderer render;
+public class LayerGenericGlowing<T extends LivingEntity, M extends SegmentedModel<T>> extends LayerRenderer<T, M> {
+    private final LivingRenderer render;
     private ResourceLocation texture;
 
-    public LayerGenericGlowing(MobRenderer renderIn, ResourceLocation texture) {
+    public LayerGenericGlowing(LivingRenderer renderIn, ResourceLocation texture) {
         super(renderIn);
         this.render = renderIn;
         this.texture = texture;
