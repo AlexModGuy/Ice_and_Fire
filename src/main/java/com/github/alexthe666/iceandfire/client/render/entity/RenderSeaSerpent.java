@@ -1,14 +1,16 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerSeaSerpentAncient;
+import com.github.alexthe666.iceandfire.entity.EntityDreadLich;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
-import net.minecraft.client.model.ModelBase;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public class RenderSeaSerpent extends MobRenderer<EntitySeaSerpent> {
+public class RenderSeaSerpent extends MobRenderer<EntitySeaSerpent, SegmentedModel<EntitySeaSerpent>> {
 
     public static final ResourceLocation TEXTURE_BLUE = new ResourceLocation("iceandfire:textures/models/seaserpent/seaserpent_blue.png");
     public static final ResourceLocation TEXTURE_BLUE_BLINK = new ResourceLocation("iceandfire:textures/models/seaserpent/seaserpent_blue_blink.png");
@@ -25,16 +27,16 @@ public class RenderSeaSerpent extends MobRenderer<EntitySeaSerpent> {
     public static final ResourceLocation TEXTURE_TEAL = new ResourceLocation("iceandfire:textures/models/seaserpent/seaserpent_teal.png");
     public static final ResourceLocation TEXTURE_TEAL_BLINK = new ResourceLocation("iceandfire:textures/models/seaserpent/seaserpent_teal_blink.png");
 
-    public RenderSeaSerpent(EntityRendererManager renderManager, ModelBase model) {
+    public RenderSeaSerpent(EntityRendererManager renderManager, SegmentedModel model) {
         super(renderManager, model, 1.6F);
         this.layerRenderers.add(new LayerSeaSerpentAncient(this));
 
     }
 
     @Override
-    protected void preRenderCallback(EntitySeaSerpent entity, float f) {
+    protected void preRenderCallback(EntitySeaSerpent entity, MatrixStack matrixStackIn, float partialTickTime) {
         this.shadowSize = entity.getSeaSerpentScale();
-        GL11.glScalef(shadowSize, shadowSize, shadowSize);
+        matrixStackIn.scale(shadowSize, shadowSize, shadowSize);
     }
 
     @Override

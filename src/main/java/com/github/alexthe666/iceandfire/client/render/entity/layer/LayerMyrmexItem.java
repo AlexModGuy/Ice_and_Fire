@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 
-public class LayerMyrmexItem implements LayerRenderer<EntityMyrmexBase> {
+public class LayerMyrmexItem extends LayerRenderer<EntityMyrmexBase> {
 
     protected final RenderMyrmexBase livingEntityRenderer;
 
@@ -20,7 +20,7 @@ public class LayerMyrmexItem implements LayerRenderer<EntityMyrmexBase> {
         this.livingEntityRenderer = livingEntityRendererIn;
     }
 
-    public void doRenderLayer(EntityMyrmexBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void render(EntityMyrmexBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if (entity instanceof EntityMyrmexWorker) {
             ItemStack itemstack = entity.getHeldItem(Hand.MAIN_HAND);
             if (!itemstack.isEmpty()) {

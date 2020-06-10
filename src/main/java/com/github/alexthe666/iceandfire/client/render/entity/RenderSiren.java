@@ -2,15 +2,16 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelSiren;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderSiren extends MobRenderer<EntitySiren> {
+public class RenderSiren extends MobRenderer<EntitySiren, ModelSiren> {
 
     public static final ResourceLocation TEXTURE_0 = new ResourceLocation("iceandfire:textures/models/siren/siren_0.png");
     public static final ResourceLocation TEXTURE_0_AGGRESSIVE = new ResourceLocation("iceandfire:textures/models/siren/siren_0_aggressive.png");
@@ -24,8 +25,8 @@ public class RenderSiren extends MobRenderer<EntitySiren> {
     }
 
     @Override
-    public void preRenderCallback(EntitySiren LivingEntityIn, float partialTickTime) {
-        GL11.glTranslatef(0, 0, -0.5F);
+    public void preRenderCallback(EntitySiren LivingEntityIn, MatrixStack stack, float partialTickTime) {
+        stack.translate(0, 0, -0.5F);
 
     }
 

@@ -19,21 +19,19 @@ import com.github.alexthe666.iceandfire.client.render.tile.*;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderHydra;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.event.ClientEvents;
-import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.event.PlayerRenderEvents;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.tile.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.fonts.Font;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -41,8 +39,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -102,7 +98,7 @@ public class ClientProxy extends CommonProxy {
         }
         this.particleSpawner = new IceAndFireParticleSpawner();
         IafKeybindRegistry.init();
-        MinecraftForge.EVENT_BUS.register(new RenderModCapes());
+        MinecraftForge.EVENT_BUS.register(new PlayerRenderEvents());
         MinecraftForge.EVENT_BUS.register(new ClientEvents());
         renderEntities();
 
@@ -174,19 +170,24 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_BEAST, manager -> new RenderDreadBeast(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_SCUTTLER, manager -> new RenderDreadScuttler(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_LICH, manager -> new RenderDreadLich(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_LICH_SKULL, manager -> new RenderDreadLichSkull(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_LICH_SKULL, manager -> new RenderDreadLichSkull());
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_KNIGHT, manager -> new RenderDreadKnight(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_HORSE, manager -> new RenderDreadHorse(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA, manager -> new RenderHydra(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA_BREATH, manager -> new RenderNothing(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA_ARROW, manager -> new RenderHydraArrow(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MULTIPART, manager -> new RenderNothing(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_MULTIPART, manager -> new RenderNothing(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.ENTITY_MULTIPART, manager -> new RenderNothing(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA_MULTIPART, manager -> new RenderNothing(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PODIUM, manager -> new RenderPodium(manager));
-        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.IAF_LECTERN, manager -> new RenderLectern(manager);
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.IAF_LECTERN, manager -> new RenderLectern(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.EGG_IN_ICE, manager -> new RenderEggInIce(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PIXIE_HOUSE, manager -> new RenderPixieHouse(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PIXIE_JAR, manager -> new RenderJar(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.DREAD_PORTAL, manager -> new RenderDreadPortal(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.DREAD_SPAWNER, manager -> new RenderDreadSpawner(manager));
+
     }
 
     @OnlyIn(Dist.CLIENT)

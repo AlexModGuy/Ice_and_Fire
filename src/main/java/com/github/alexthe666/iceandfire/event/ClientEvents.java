@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.gui.IceAndFireMainMenu;
 import com.github.alexthe666.iceandfire.client.render.entity.ICustomStoneLayer;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderCockatrice;
-import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerChainedEntity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntityCrack;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
@@ -66,7 +65,6 @@ public class ClientEvents {
             if (render instanceof RenderLivingBase && LivingEntity.class.isAssignableFrom(entry.getKey())) {
                 ((RenderLivingBase) render).addLayer(new LayerStoneEntity((RenderLivingBase) render));
                 ((RenderLivingBase) render).addLayer(new LayerStoneEntityCrack((RenderLivingBase) render));
-                ((RenderLivingBase) render).addLayer(new LayerChainedEntity(render));
             }
         }
 

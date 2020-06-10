@@ -7,9 +7,9 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
 
 public class ModelBanner extends SegmentedModel {
-    private final ModelRenderer field_228833_a_ = func_228836_a_();
-    private final ModelRenderer field_228834_c_ = new ModelRenderer(64, 64, 44, 0);
-    private final ModelRenderer field_228835_d_;
+    public final ModelRenderer field_228833_a_ = func_228836_a_();
+    public final ModelRenderer field_228834_c_ = new ModelRenderer(64, 64, 44, 0);
+    public final ModelRenderer field_228835_d_;
 
     public ModelBanner() {
         this.textureHeight = 64;

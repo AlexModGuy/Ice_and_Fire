@@ -1,25 +1,29 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerMyrmexItem;
+import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
-import net.minecraft.client.model.ModelBase;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.Quaternion;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderMyrmexBase extends MobRenderer<EntityMyrmexBase> {
+public class RenderMyrmexBase extends MobRenderer<EntityMyrmexBase, SegmentedModel<EntityMyrmexBase>> {
 
-    public RenderMyrmexBase(EntityRendererManager renderManager, ModelBase model, float shadowSize) {
+    public RenderMyrmexBase(EntityRendererManager renderManager, SegmentedModel model, float shadowSize) {
         super(renderManager, model, shadowSize);
         this.addLayer(new LayerMyrmexItem(this));
     }
 
     @Override
-    public void preRenderCallback(EntityMyrmexBase myrmex, float partialTickTime) {
+    protected void preRenderCallback(EntityMyrmexBase myrmex, MatrixStack matrixStackIn, float partialTickTime) {
         float scale = myrmex.getModelScale();
         if (myrmex.getGrowthStage() == 0) {
             scale /= 2;
@@ -27,9 +31,9 @@ public class RenderMyrmexBase extends MobRenderer<EntityMyrmexBase> {
         if (myrmex.getGrowthStage() == 1) {
             scale /= 1.5F;
         }
-        GL11.glScalef(scale, scale, scale);
-        if (myrmex.isRiding() && myrmex.getGrowthStage() < 2) {
-            GL11.glRotatef(90, 0, 1, 0);
+        matrixStackIn.scale(scale, scale, scale);
+        if (myrmex.isPassenger() && myrmex.getGrowthStage() < 2) {
+            matrixStackIn.rotate(new Quaternion(Vector3f.YP, 90, true));
         }
     }
 

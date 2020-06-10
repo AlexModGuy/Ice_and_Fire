@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerPixieItem implements LayerRenderer<EntityPixie> {
+public class LayerPixieItem extends LayerRenderer<EntityPixie> {
 
     RenderPixie renderer;
 
@@ -22,7 +22,7 @@ public class LayerPixieItem implements LayerRenderer<EntityPixie> {
         this.renderer = renderer;
     }
 
-    public void doRenderLayer(EntityPixie entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void render(EntityPixie entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         ItemStack itemstack = entity.getHeldItem(Hand.MAIN_HAND);
         if (!itemstack.isEmpty()) {
 

@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerPixieGlow implements LayerRenderer<EntityPixie> {
+public class LayerPixieGlow extends LayerRenderer<EntityPixie> {
 
     private final RenderPixie render;
 
@@ -19,7 +19,7 @@ public class LayerPixieGlow implements LayerRenderer<EntityPixie> {
         this.render = renderIn;
     }
 
-    public void doRenderLayer(EntityPixie pixie, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void render(EntityPixie pixie, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(pixie, StoneEntityProperties.class);
         if (properties == null || !properties.isStone) {
             switch (pixie.getColor()) {

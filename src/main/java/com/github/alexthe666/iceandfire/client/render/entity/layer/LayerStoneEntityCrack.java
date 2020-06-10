@@ -5,29 +5,35 @@ import com.github.alexthe666.iceandfire.client.model.ModelGuardianStatue;
 import com.github.alexthe666.iceandfire.client.model.ModelHorseStatue;
 import com.github.alexthe666.iceandfire.client.model.ModelTroll;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRendererBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.util.ResourceLocation;
 
-public class LayerStoneEntityCrack implements LayerRenderer {
+public class LayerStoneEntityCrack<T extends Entity, M extends EntityModel<T>> extends LayerRenderer<T, M> {
 
     protected static final ResourceLocation[] DESTROY_STAGES = new ResourceLocation[]{new ResourceLocation("textures/blocks/destroy_stage_0.png"), new ResourceLocation("textures/blocks/destroy_stage_1.png"), new ResourceLocation("textures/blocks/destroy_stage_2.png"), new ResourceLocation("textures/blocks/destroy_stage_3.png"), new ResourceLocation("textures/blocks/destroy_stage_4.png"), new ResourceLocation("textures/blocks/destroy_stage_5.png"), new ResourceLocation("textures/blocks/destroy_stage_6.png"), new ResourceLocation("textures/blocks/destroy_stage_7.png"), new ResourceLocation("textures/blocks/destroy_stage_8.png"), new ResourceLocation("textures/blocks/destroy_stage_9.png")};
     private static final ModelHorseStatue HORSE_MODEL = new ModelHorseStatue();
     private static final ModelGuardianStatue GUARDIAN_MODEL = new ModelGuardianStatue();
-    private MobRendererBase renderer;
+    private IEntityRenderer<T, M> renderer;
 
-    public LayerStoneEntityCrack(MobRendererBase renderer) {
+    public LayerStoneEntityCrack(IEntityRenderer<T, M> entityRendererIn) {
+        super(entityRendererIn);
         this.renderer = renderer;
     }
 
     @Override
-    public void doRenderLayer(LivingEntity LivingEntityIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
+    public void render(LivingEntity LivingEntityIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
         if (LivingEntityIn instanceof LivingEntity) {
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntityIn, StoneEntityProperties.class);
             if (properties != null && properties.isStone && properties.breakLvl > 0) {
@@ -72,5 +78,10 @@ public class LayerStoneEntityCrack implements LayerRenderer {
     @Override
     public boolean shouldCombineTextures() {
         return false;
+    }
+
+    @Override
+    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+
     }
 }

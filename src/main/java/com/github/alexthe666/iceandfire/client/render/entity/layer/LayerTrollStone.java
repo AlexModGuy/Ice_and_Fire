@@ -1,23 +1,26 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.iceandfire.client.model.ModelTroll;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.MobRendererBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.LivingEntity;
 import org.lwjgl.opengl.GL11;
 
-public class LayerTrollStone implements LayerRenderer {
+public class LayerTrollStone extends LayerRenderer<EntityTroll, ModelTroll> {
 
-    private MobRendererBase renderer;
+    private MobRenderer<EntityTroll, ModelTroll> renderer;
 
-    public LayerTrollStone(MobRendererBase renderer) {
+    public LayerTrollStone(MobRenderer<EntityTroll, ModelTroll> renderer) {
+        super(renderer);
         this.renderer = renderer;
     }
 
     @Override
-    public void doRenderLayer(LivingEntity LivingEntityIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
+    public void render(LivingEntity LivingEntityIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
         if (LivingEntityIn instanceof EntityTroll) {
             EntityTroll troll = (EntityTroll) LivingEntityIn;
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(troll, StoneEntityProperties.class);

@@ -2,48 +2,32 @@ package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
-public class LayerDragonEyes implements LayerRenderer<EntityDragonBase> {
+public class LayerDragonEyes extends LayerRenderer<EntityDragonBase, SegmentedModel<EntityDragonBase>> {
     private final MobRenderer render;
 
     public LayerDragonEyes(MobRenderer renderIn) {
+        super(renderIn);
         this.render = renderIn;
     }
 
-    public void doRenderLayer(EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    @Override
+    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (dragon.shouldRenderEyes()) {
-            this.render.bindTexture(EnumDragonTextures.getEyeTextureFromDragon(dragon));
-            GlStateManager.enableBlend();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-
-            if (dragon.isInvisible()) {
-                GlStateManager.depthMask(false);
-            } else {
-                GlStateManager.depthMask(true);
-            }
-
-            int i = 61680;
-            int j = i % 65536;
-            int k = i / 65536;
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            Minecraft.getInstance().entityRenderer.setupFogColor(true);
-            this.render.getMainModel().render(dragon, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-            Minecraft.getInstance().entityRenderer.setupFogColor(false);
-            i = dragon.getBrightnessForRender();
-            j = i % 65536;
-            k = i / 65536;
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
-            this.render.setLightmap(dragon);
-            GlStateManager.disableBlend();
+            RenderType eyes = RenderType.getEyes(EnumDragonTextures.getEyeTextureFromDragon(dragon));
+            IVertexBuilder ivertexbuilder = bufferIn.getBuffer(eyes);
+            this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 

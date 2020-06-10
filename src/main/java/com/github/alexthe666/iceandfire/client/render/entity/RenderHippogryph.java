@@ -1,32 +1,36 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.github.alexthe666.iceandfire.client.model.ModelHippocampus;
 import com.github.alexthe666.iceandfire.client.model.ModelHippogryph;
+import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderHippogryph extends MobRenderer<EntityHippogryph> {
+public class RenderHippogryph extends MobRenderer<EntityHippogryph, ModelHippogryph> {
 
     public RenderHippogryph(EntityRendererManager renderManager) {
         super(renderManager, new ModelHippogryph(), 0.8F);
         this.layerRenderers.add(new LayerHippogriffSaddle(this));
-        this.layerRenderers.add(new LayerHippogriffBridle(this));
-        this.layerRenderers.add(new LayerHippogriffChest(this));
-        this.layerRenderers.add(new LayerHippogriffArmor(this));
 
     }
 
-    protected void preRenderCallback(EntityHippogryph entity, float partialTickTime) {
-        GL11.glScalef(1.2F, 1.2F, 1.2F);
+    protected void preRenderCallback(EntityHippogryph entity, MatrixStack matrix, float partialTickTime) {
+        matrix.scale(1.2F, 1.2F, 1.2F);
     }
 
     @Nullable
@@ -36,122 +40,52 @@ public class RenderHippogryph extends MobRenderer<EntityHippogryph> {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private class LayerHippogriffSaddle implements LayerRenderer {
+    private class LayerHippogriffSaddle extends LayerRenderer<EntityHippogryph, ModelHippogryph> {
         private final RenderHippogryph renderer;
-        private final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/hippogryph/saddle.png");
+        private final RenderType SADDLE_TEXTURE = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippogryph/saddle.png"));
+        private final RenderType BRIDLE = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippogryph/bridle.png"));
+        private final RenderType CHEST = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippogryph/chest.png"));
+        private final RenderType TEXTURE_DIAMOND = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippogryph/armor_diamond.png"));
+        private final RenderType TEXTURE_GOLD = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippogryph/armor_gold.png"));
+        private final RenderType TEXTURE_IRON = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippogryph/armor_iron.png"));
+
 
         public LayerHippogriffSaddle(RenderHippogryph renderer) {
+            super(renderer);
             this.renderer = renderer;
         }
 
-        public void doRenderLayer(EntityHippogryph entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
-            if (entity.isSaddled()) {
-                this.renderer.bindTexture(TEXTURE);
-                this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
+        public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityHippogryph hippo, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+            if (hippo.isSaddled()) {
+                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(SADDLE_TEXTURE);
+                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
-        }
-
-        @Override
-        public boolean shouldCombineTextures() {
-            return false;
-        }
-
-        @Override
-        public void doRenderLayer(LivingEntity entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
-            this.doRenderLayer((EntityHippogryph) entity, f, f1, f2, f3, f4, f5, f6);
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private class LayerHippogriffBridle implements LayerRenderer {
-        private final RenderHippogryph renderer;
-        private final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/hippogryph/bridle.png");
-
-        public LayerHippogriffBridle(RenderHippogryph renderer) {
-            this.renderer = renderer;
-        }
-
-        public void doRenderLayer(EntityHippogryph entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
-            if (entity.isSaddled() && entity.getControllingPassenger() != null) {
-                this.renderer.bindTexture(TEXTURE);
-                this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
+            if (hippo.isSaddled() && hippo.getControllingPassenger() != null) {
+                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(BRIDLE);
+                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
-        }
-
-        @Override
-        public boolean shouldCombineTextures() {
-            return false;
-        }
-
-        @Override
-        public void doRenderLayer(LivingEntity entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
-            this.doRenderLayer((EntityHippogryph) entity, f, f1, f2, f3, f4, f5, f6);
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private class LayerHippogriffChest implements LayerRenderer {
-        private final RenderHippogryph renderer;
-        private final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/hippogryph/chest.png");
-
-        public LayerHippogriffChest(RenderHippogryph renderer) {
-            this.renderer = renderer;
-        }
-
-        public void doRenderLayer(EntityHippogryph entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
-            if (entity.isChested()) {
-                this.renderer.bindTexture(TEXTURE);
-                this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
+            if (hippo.isChested()) {
+                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(CHEST);
+                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
-        }
-
-        @Override
-        public boolean shouldCombineTextures() {
-            return false;
-        }
-
-        @Override
-        public void doRenderLayer(LivingEntity entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
-            this.doRenderLayer((EntityHippogryph) entity, f, f1, f2, f3, f4, f5, f6);
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private class LayerHippogriffArmor implements LayerRenderer {
-        private final RenderHippogryph renderer;
-        private final ResourceLocation TEXTURE_DIAMOND = new ResourceLocation("iceandfire:textures/models/hippogryph/armor_diamond.png");
-        private final ResourceLocation TEXTURE_GOLD = new ResourceLocation("iceandfire:textures/models/hippogryph/armor_gold.png");
-        private final ResourceLocation TEXTURE_IRON = new ResourceLocation("iceandfire:textures/models/hippogryph/armor_iron.png");
-
-        public LayerHippogriffArmor(RenderHippogryph renderer) {
-            this.renderer = renderer;
-        }
-
-        public void doRenderLayer(EntityHippogryph entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
-            if (entity.getArmor() != 0) {
-                switch (entity.getArmor()) {
+            if (hippo.getArmor() != 0) {
+                GL11.glPushMatrix();
+                RenderType type = null;
+                switch (hippo.getArmor()) {
                     case 1:
-                        this.renderer.bindTexture(TEXTURE_IRON);
+                        type = TEXTURE_IRON;
                         break;
                     case 2:
-                        this.renderer.bindTexture(TEXTURE_GOLD);
+                        type = TEXTURE_GOLD;
                         break;
                     case 3:
-                        this.renderer.bindTexture(TEXTURE_DIAMOND);
+                        type = TEXTURE_DIAMOND;
                         break;
                 }
-                this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
+                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(type);
+                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+
             }
-        }
-
-        @Override
-        public boolean shouldCombineTextures() {
-            return false;
-        }
-
-        @Override
-        public void doRenderLayer(LivingEntity entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
-            this.doRenderLayer((EntityHippogryph) entity, f, f1, f2, f3, f4, f5, f6);
         }
     }
 }

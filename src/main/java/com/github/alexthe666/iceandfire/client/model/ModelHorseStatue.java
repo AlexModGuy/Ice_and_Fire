@@ -10,8 +10,8 @@ import net.minecraft.util.math.MathHelper;
 
 public class ModelHorseStatue extends HorseModel {
 
-    public ModelHorseStatue(float p_i51065_1_) {
-        super(p_i51065_1_);
+    public ModelHorseStatue() {
+        super(0);
     }
 
     @Override

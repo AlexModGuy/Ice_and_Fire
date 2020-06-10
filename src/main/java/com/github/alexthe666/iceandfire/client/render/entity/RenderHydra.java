@@ -4,12 +4,13 @@ import com.github.alexthe666.iceandfire.client.model.ModelHydraBody;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerHydraHead;
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public class RenderHydra extends MobRenderer<EntityHydra> {
+public class RenderHydra extends MobRenderer<EntityHydra, ModelHydraBody> {
 
     public static final ResourceLocation TEXUTURE_0 = new ResourceLocation("iceandfire:textures/models/hydra/hydra_0.png");
     public static final ResourceLocation TEXUTURE_1 = new ResourceLocation("iceandfire:textures/models/hydra/hydra_1.png");
@@ -23,8 +24,8 @@ public class RenderHydra extends MobRenderer<EntityHydra> {
     }
 
     @Override
-    public void preRenderCallback(EntityHydra LivingEntityIn, float partialTickTime) {
-        GL11.glScalef(1.75F, 1.75F, 1.75F);
+    public void preRenderCallback(EntityHydra LivingEntityIn, MatrixStack stack, float partialTickTime) {
+        stack.scale(1.75F, 1.75F, 1.75F);
     }
 
     @Override

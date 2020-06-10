@@ -15,7 +15,7 @@ import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.util.ResourceLocation;
 
-public class LayerStoneEntity implements LayerRenderer {
+public class LayerStoneEntity extends LayerRenderer {
 
     private static final ModelHorseStatue HORSE_MODEL = new ModelHorseStatue();
     private static final ModelGuardianStatue GUARDIAN_MODEL = new ModelGuardianStatue();
@@ -27,7 +27,7 @@ public class LayerStoneEntity implements LayerRenderer {
     }
 
     @Override
-    public void doRenderLayer(LivingEntity LivingEntityIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
+    public void render(LivingEntity LivingEntityIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
         if (LivingEntityIn instanceof LivingEntity) {
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntityIn, StoneEntityProperties.class);
             if (properties != null && properties.isStone) {

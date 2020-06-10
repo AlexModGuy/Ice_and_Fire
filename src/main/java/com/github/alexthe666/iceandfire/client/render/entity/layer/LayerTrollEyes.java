@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 
-public class LayerTrollEyes implements LayerRenderer<EntityTroll> {
+public class LayerTrollEyes extends LayerRenderer<EntityTroll> {
 
     private RenderTroll renderer;
 
@@ -19,7 +19,7 @@ public class LayerTrollEyes implements LayerRenderer<EntityTroll> {
     }
 
     @Override
-    public void doRenderLayer(EntityTroll troll, float f, float f1, float f6, float f2, float f3, float f4, float f5) {
+    public void render(EntityTroll troll, float f, float f1, float f6, float f2, float f3, float f4, float f5) {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(troll, StoneEntityProperties.class);
         if (!EntityGorgon.isStoneMob(troll)) {
             this.renderer.bindTexture(troll.getType().TEXTURE_EYES);

@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
-import net.minecraft.client.renderer.entity.MobRendererBase;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 
 public interface ICustomStoneLayer {
-    LayerRenderer getStoneLayer(MobRendererBase render);
+    LayerRenderer getStoneLayer(MobRenderer render);
 
-    LayerRenderer getCrackLayer(MobRendererBase render);
+    LayerRenderer getCrackLayer(MobRenderer render);
 }

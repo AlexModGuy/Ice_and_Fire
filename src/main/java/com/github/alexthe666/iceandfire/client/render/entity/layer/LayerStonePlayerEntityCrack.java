@@ -8,7 +8,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public class LayerStonePlayerEntityCrack implements LayerRenderer {
+public class LayerStonePlayerEntityCrack extends LayerRenderer {
 
     protected static final ResourceLocation[] DESTROY_STAGES = new ResourceLocation[]{new ResourceLocation("textures/blocks/destroy_stage_0.png"), new ResourceLocation("textures/blocks/destroy_stage_1.png"), new ResourceLocation("textures/blocks/destroy_stage_2.png"), new ResourceLocation("textures/blocks/destroy_stage_3.png"), new ResourceLocation("textures/blocks/destroy_stage_4.png"), new ResourceLocation("textures/blocks/destroy_stage_5.png"), new ResourceLocation("textures/blocks/destroy_stage_6.png"), new ResourceLocation("textures/blocks/destroy_stage_7.png"), new ResourceLocation("textures/blocks/destroy_stage_8.png"), new ResourceLocation("textures/blocks/destroy_stage_9.png")};
     private MobRendererBase renderer;
@@ -18,7 +18,7 @@ public class LayerStonePlayerEntityCrack implements LayerRenderer {
     }
 
     @Override
-    public void doRenderLayer(LivingEntity LivingEntityIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
+    public void render(LivingEntity LivingEntityIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
         if (LivingEntityIn instanceof EntityStoneStatue) {
             float x = Math.max(this.renderer.getMainModel().textureWidth, 1) / 16F; //default to 4
             float y = Math.max(this.renderer.getMainModel().textureHeight, 1) / 16F; //default to 2

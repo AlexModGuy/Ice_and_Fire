@@ -9,14 +9,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerTrollWeapon implements LayerRenderer {
+public class LayerTrollWeapon extends LayerRenderer {
     private final RenderTroll renderer;
 
     public LayerTrollWeapon(RenderTroll renderer) {
         this.renderer = renderer;
     }
 
-    public void doRenderLayer(EntityTroll entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
+    public void render(EntityTroll entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
         if (entity.getWeaponType() != null && !EntityGorgon.isStoneMob(entity)) {
             this.renderer.bindTexture(entity.getWeaponType().TEXTURE);
             this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
@@ -29,7 +29,7 @@ public class LayerTrollWeapon implements LayerRenderer {
     }
 
     @Override
-    public void doRenderLayer(LivingEntity entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
-        this.doRenderLayer((EntityTroll) entity, f, f1, f2, f3, f4, f5, f6);
+    public void render(LivingEntity entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
+        this.render((EntityTroll) entity, f, f1, f2, f3, f4, f5, f6);
     }
 }

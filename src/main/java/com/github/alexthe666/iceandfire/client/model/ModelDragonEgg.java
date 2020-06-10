@@ -10,9 +10,10 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 
-public class ModelDragonEgg extends AdvancedEntityModel<EntityDragonEgg> {
+public class ModelDragonEgg<T extends LivingEntity> extends AdvancedEntityModel<T> {
 
     public AdvancedModelBox Egg1;
     public AdvancedModelBox Egg2;
@@ -51,7 +52,7 @@ public class ModelDragonEgg extends AdvancedEntityModel<EntityDragonEgg> {
     }
 
     @Override
-    public void setRotationAngles(EntityDragonEgg entity, float f, float f1, float f2, float f3, float f4) {
+    public void setRotationAngles(LivingEntity entity, float f, float f1, float f2, float f3, float f4) {
         this.resetToDefaultPose();
         if (entity instanceof EntityDragonEgg) {
             EntityDragonEgg dragon = (EntityDragonEgg) entity;

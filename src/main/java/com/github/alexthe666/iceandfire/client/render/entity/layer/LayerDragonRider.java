@@ -1,38 +1,42 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDreadQueen;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.model.ModelHorse;
-import net.minecraft.client.model.ModelQuadruped;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Quaternion;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.model.*;
+import net.minecraft.client.renderer.model.Model;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.crash.ReportedException;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ReportedException;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
+public class LayerDragonRider extends LayerRenderer<EntityDragonBase, SegmentedModel<EntityDragonBase>> {
     private final MobRenderer render;
     private final boolean excludeDreadQueenMob;
 
     public LayerDragonRider(MobRenderer renderIn, boolean excludeDreadQueenMob) {
+        super(renderIn);
         this.render = renderIn;
         this.excludeDreadQueenMob = excludeDreadQueenMob;
     }
 
-    public void doRenderLayer(EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        GlStateManager.pushMatrix();
+    @Override
+    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        matrixStackIn.push();
         if (!dragon.getPassengers().isEmpty()) {
             float dragonScale = dragon.getRenderSize() / 3;
             for (Entity passenger : dragon.getPassengers()) {
@@ -47,87 +51,87 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
                     animationTicks = dragon.getAnimationTick();
                 }
                 if (animationTicks == 0 || animationTicks >= 15) {
-                    translateToBody();
+                    translateToBody(matrixStackIn);
                 }
                 if (prey) {
                     if (animationTicks == 0 || animationTicks >= 15 || dragon.isFlying()) {
-                        translateToHead();
-                        Render render = Minecraft.getInstance().getEntityRendererManager().getEntityRenderObject(passenger);
-                        ModelBase modelBase = null;
+                        translateToHead(matrixStackIn);
+                        EntityRenderer render = Minecraft.getInstance().getRenderManager().getRenderer(passenger);
+                        EntityModel modelBase = null;
                         if (render instanceof MobRenderer) {
-                            modelBase = ((MobRenderer) render).getMainModel();
+                            modelBase = ((MobRenderer) render).getEntityModel();
                         }
-                        if ((passenger.height > passenger.width || modelBase instanceof ModelBiped) && !(modelBase instanceof ModelQuadruped) && !(modelBase instanceof ModelHorse)) {
-                            GlStateManager.translate(-0.15F * passenger.height, 0.1F * dragonScale - 0.1F * passenger.height, -0.1F * dragonScale - 0.1F * passenger.width);
-                            GlStateManager.rotate(90, 0, 0, 1);
-                            GlStateManager.rotate(45, 0, 1, 0);
+                        if ((passenger.getHeight() > passenger.getWidth() || modelBase instanceof BipedModel) && !(modelBase instanceof QuadrupedModel) && !(modelBase instanceof HorseModel)) {
+                            matrixStackIn.translate(-0.15F * passenger.getHeight(), 0.1F * dragonScale - 0.1F * passenger.getHeight(), -0.1F * dragonScale - 0.1F * passenger.getWidth());
+                            matrixStackIn.rotate(new Quaternion(Vector3f.ZP, 90, true));
+                            matrixStackIn.rotate(new Quaternion(Vector3f.YP, 45, true));
                         } else {
-                            boolean horse = modelBase instanceof ModelHorse;
-                            GlStateManager.translate((horse ? -0.08F : -0.15F) * passenger.width, 0.1F * dragonScale - 0.15F * passenger.width, -0.1F * dragonScale - 0.1F * passenger.width);
-                            GlStateManager.rotate(-90, 0, 1, 0);
+                            boolean horse = modelBase instanceof HorseModel;
+                            matrixStackIn.translate((horse ? -0.08F : -0.15F) * passenger.getWidth(), 0.1F * dragonScale - 0.15F * passenger.getWidth(), -0.1F * dragonScale - 0.1F * passenger.getWidth());
+                            matrixStackIn.rotate(new Quaternion(Vector3f.XN, 90, true));
                         }
                     } else {
-                        GlStateManager.translate(0, 0.555F * dragonScale, -0.5F * dragonScale);
+                        matrixStackIn.translate(0, 0.555F * dragonScale, -0.5F * dragonScale);
                     }
 
                 }else{
-                    GlStateManager.translate(0, -0.01F * dragonScale, -0.035F * dragonScale);
+                    matrixStackIn.translate(0, -0.01F * dragonScale, -0.035F * dragonScale);
                 }
-                GlStateManager.pushMatrix();
-                GlStateManager.rotate(180, 0, 0, 1);
-                GlStateManager.rotate(riderRot + 180, 0, 1, 0);
-                GlStateManager.scale(1 / dragonScale, 1 / dragonScale, 1 / dragonScale);
-                GlStateManager.translate(0, -0.25F, 0);
-                renderEntity(passenger, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, true);
-                GlStateManager.popMatrix();
+                matrixStackIn.push();
+                matrixStackIn.rotate(new Quaternion(Vector3f.ZP, 180, true));
+                matrixStackIn.rotate(new Quaternion(Vector3f.YP, riderRot + 180, true));
+                matrixStackIn.scale(1 / dragonScale, 1 / dragonScale, 1 / dragonScale);
+                matrixStackIn.translate(0, -0.25F, 0);
+                renderEntity(passenger, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+                matrixStackIn.pop();
                 ClientProxy.currentDragonRiders.add(passenger.getUniqueID());
             }
         }
-        GlStateManager.popMatrix();
+        matrixStackIn.pop();
     }
 
-    protected void translateToBody() {
-        postRender(((TabulaModel) this.render.getMainModel()).getCube("BodyUpper"), 0.0625F);
-        postRender(((TabulaModel) this.render.getMainModel()).getCube("Neck1"), 0.0625F);
+    protected void translateToBody(MatrixStack stack) {
+        postRender(((TabulaModel) this.render.getEntityModel()).getCube("BodyUpper"), stack, 0.0625F);
+        postRender(((TabulaModel) this.render.getEntityModel()).getCube("Neck1"), stack, 00.0625F);
     }
 
-    protected void translateToHead() {
-        postRender(((TabulaModel) this.render.getMainModel()).getCube("Neck2"), 0.0625F);
-        postRender(((TabulaModel) this.render.getMainModel()).getCube("Neck3"), 0.0625F);
-        postRender(((TabulaModel) this.render.getMainModel()).getCube("Head"), 0.0625F);
+    protected void translateToHead(MatrixStack stack) {
+        postRender(((TabulaModel) this.render.getEntityModel()).getCube("Neck2"), stack, 0.0625F);
+        postRender(((TabulaModel) this.render.getEntityModel()).getCube("Neck3"), stack, 0.0625F);
+        postRender(((TabulaModel) this.render.getEntityModel()).getCube("Head"), stack, 0.0625F);
     }
 
-    protected void postRender(AdvancedModelBox renderer, float scale) {
+    protected void postRender(AdvancedModelBox renderer, MatrixStack matrixStackIn, float scale) {
         if (renderer.rotateAngleX == 0.0F && renderer.rotateAngleY == 0.0F && renderer.rotateAngleZ == 0.0F) {
             if (renderer.rotationPointX != 0.0F || renderer.rotationPointY != 0.0F || renderer.rotationPointZ != 0.0F) {
-                GlStateManager.translate(renderer.rotationPointX * scale, renderer.rotationPointY * scale, renderer.rotationPointZ * scale);
+                matrixStackIn.translate(renderer.rotationPointX * scale, renderer.rotationPointY * scale, renderer.rotationPointZ * scale);
             }
         } else {
-            GlStateManager.translate(renderer.rotationPointX * scale, renderer.rotationPointY * scale, renderer.rotationPointZ * scale);
+            matrixStackIn.translate(renderer.rotationPointX * scale, renderer.rotationPointY * scale, renderer.rotationPointZ * scale);
 
             if (renderer.rotateAngleZ != 0.0F) {
-                GlStateManager.rotate(renderer.rotateAngleZ * (180F / (float) Math.PI), 0.0F, 0.0F, 1.0F);
+                matrixStackIn.rotate(Vector3f.ZP.rotation(renderer.rotateAngleZ));
             }
 
             if (renderer.rotateAngleY != 0.0F) {
-                GlStateManager.rotate(renderer.rotateAngleY * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
+                matrixStackIn.rotate(Vector3f.YP.rotation(renderer.rotateAngleY));
             }
 
             if (renderer.rotateAngleX != 0.0F) {
-                GlStateManager.rotate(renderer.rotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
+                matrixStackIn.rotate(Vector3f.XP.rotation(renderer.rotateAngleX));
             }
         }
     }
 
-    public void renderEntity(Entity entityIn, double x, double y, double z, float yaw, float partialTicks, boolean p_188391_10_) {
-        Render<Entity> render = null;
-        EntityRendererManager manager = Minecraft.getInstance().getEntityRendererManager();
+    public <E extends Entity> void renderEntity(E entityIn, double x, double y, double z, float yaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int packedLight) {
+        EntityRenderer<? super E> render = null;
+        EntityRendererManager manager = Minecraft.getInstance().getRenderManager();
         try {
-            render = manager.getEntityRenderObject(entityIn);
+            render = manager.getRenderer(entityIn);
 
-            if (render != null && manager.renderEngine != null) {
+            if (render != null) {
                 try {
-                    render.doRender(entityIn, x, y, z, yaw, partialTicks);
+                    render.render(entityIn, yaw, partialTicks, matrixStack, bufferIn, packedLight);
                 } catch (Throwable throwable1) {
                     throw new ReportedException(CrashReport.makeCrashReport(throwable1, "Rendering entity in world"));
                 }
@@ -135,12 +139,12 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
         } catch (Throwable throwable3) {
             CrashReport crashreport = CrashReport.makeCrashReport(throwable3, "Rendering entity in world");
             CrashReportCategory crashreportcategory = crashreport.makeCategory("Entity being rendered");
-            entityIn.addEntityCrashInfo(crashreportcategory);
+            entityIn.fillCrashReport(crashreportcategory);
             CrashReportCategory crashreportcategory1 = crashreport.makeCategory("Renderer details");
-            crashreportcategory1.addCrashSection("Assigned renderer", render);
-            crashreportcategory1.addCrashSection("Location", CrashReportCategory.getCoordinateInfo(x, y, z));
-            crashreportcategory1.addCrashSection("Rotation", Float.valueOf(yaw));
-            crashreportcategory1.addCrashSection("Delta", Float.valueOf(partialTicks));
+            crashreportcategory1.addDetail("Assigned renderer", render);
+            crashreportcategory1.addDetail("Location", CrashReportCategory.getCoordinateInfo(x, y, z));
+            crashreportcategory1.addDetail("Rotation", Float.valueOf(yaw));
+            crashreportcategory1.addDetail("Delta", Float.valueOf(partialTicks));
             throw new ReportedException(crashreport);
         }
     }
@@ -148,4 +152,6 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
     public boolean shouldCombineTextures() {
         return false;
     }
-}
+
+
+    }

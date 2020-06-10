@@ -1,28 +1,29 @@
-package com.github.alexthe666.iceandfire.client.render.entity;
+package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
+import net.minecraft.client.network.play.NetworkPlayerInfo;
+import net.minecraft.client.renderer.Quaternion;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
 import java.util.UUID;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderModCapes {
+public class PlayerRenderEvents {
     public ResourceLocation redTex = new ResourceLocation("iceandfire", "textures/models/misc/cape_fire.png");
     public ResourceLocation redElytraTex = new ResourceLocation("iceandfire", "textures/models/misc/elytra_fire.png");
     public ResourceLocation blueTex = new ResourceLocation("iceandfire", "textures/models/misc/cape_ice.png");
@@ -42,45 +43,40 @@ public class RenderModCapes {
 
     @SubscribeEvent
     public void playerRender(RenderPlayerEvent.Pre event) {
-        if (event.getPlayerEntity() instanceof AbstractClientPlayer) {
-            NetworkPlayerInfo info = ((AbstractClientPlayer)event.getPlayerEntity()).getPlayerInfo();
+        //TODO
+        /*
+        if (event.getEntityLiving() instanceof AbstractClientPlayerEntity) {
+                NetworkPlayerInfo info = ((AbstractClientPlayerEntity)event.getEntityLiving()).getPlayerInfo();
             if (info != null) {
-                Map<Type, ResourceLocation> textureMap = null;
-                try {
-                    textureMap = (Map<Type, ResourceLocation>) ReflectionHelper.findField(NetworkPlayerInfo.class, new String[]{"playerTextures", "field_187107_a"}).get(info);
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+                Map<Type, ResourceLocation> textureMap = info.playerTextures;
                 if (textureMap != null) {
-                    if (hasBetaCape(event.getPlayerEntity().getUniqueID())) {
+                    if (hasBetaCape(event.getEntityLiving().getUniqueID())) {
                         textureMap.put(Type.CAPE, betaTex);
                         textureMap.put(Type.ELYTRA, betaElytraTex);
                     }
-                    if (hasRedCape(event.getPlayerEntity().getUniqueID())) {
+                    if (hasRedCape(event.getEntityLiving().getUniqueID())) {
                         textureMap.put(Type.CAPE, redTex);
                         textureMap.put(Type.ELYTRA, redElytraTex);
                     }
-                    if (hasBlueCape(event.getPlayerEntity().getUniqueID())) {
+                    if (hasBlueCape(event.getEntityLiving().getUniqueID())) {
                         textureMap.put(Type.CAPE, blueTex);
                         textureMap.put(Type.ELYTRA, blueElytraTex);
                     }
                 }
             }
-        }
-        if(event.getPlayerEntity().getUniqueID().equals(ServerEvents.ALEX_UUID)){
-            GL11.glPushMatrix();
-            float f2 = ((float) event.getPlayerEntity().ticksExisted - 1 +  event.getPartialRenderTick());
+        }*/
+        if(event.getEntityLiving().getUniqueID().equals(ServerEvents.ALEX_UUID)){
+            event.getMatrixStack().push();
+            float f2 = ((float) event.getEntityLiving().ticksExisted - 1 +  event.getPartialRenderTick());
             float f3 = MathHelper.sin(f2 / 10.0F) * 0.1F + 0.1F;
-            GL11.glTranslatef((float) 0, (float) 1.3F * event.getPlayerEntity().height, (float) 0);
+            GL11.glTranslatef((float) 0, (float) 1.3F * event.getEntityLiving().getHeight(), (float) 0);
             float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
-            GlStateManager.rotate(f4, 0.0F, 1.0F, 0.0F);
-            GL11.glPushMatrix();
+            event.getMatrixStack().rotate(new Quaternion(Vector3f.YP, f4, true));
+            event.getMatrixStack().push();
             GL11.glScalef(1.4F, 1.4F, 1.4F);
-            Minecraft.getInstance().getItemRenderer().renderItem(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM), ItemCameraTransforms.TransformType.GROUND);
-            GL11.glPopMatrix();
-            GL11.glPopMatrix();
+            Minecraft.getInstance().getItemRenderer().renderItem(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM), ItemCameraTransforms.TransformType.GROUND, false, event.getMatrixStack(), event.getBuffers(), event.getEntityLiving().world, event.getLight(), OverlayTexture.NO_OVERLAY);
+            event.getMatrixStack().pop();
+            event.getMatrixStack().pop();
 
         }
     }
