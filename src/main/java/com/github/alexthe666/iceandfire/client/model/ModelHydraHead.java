@@ -1,15 +1,18 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
-import net.ilexiconn.llibrary.LLibrary;
-import net.ilexiconn.llibrary.client.model.ModelAnimator;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelHydraHead extends ModelDragonBase {
+public class ModelHydraHead extends ModelDragonBase<EntityHydra> {
     public AdvancedModelBox Neck1;
     public AdvancedModelBox Neck2;
     public AdvancedModelBox Neck3;
@@ -70,7 +73,7 @@ public class ModelHydraHead extends ModelDragonBase {
         this.Neck4.setRotationPoint(0.0F, 0.0F, -7.4F);
         this.Neck4.addBox(-2.0F, -2.0F, -8.2F, 4, 4, 9, 0.0F);
         this.setRotateAngle(Neck4, 0.47123889803846897F, 0.0F, 0.0F);
-          this.neckSpike1 = new AdvancedModelBox(this, 40, 0);
+        this.neckSpike1 = new AdvancedModelBox(this, 40, 0);
         this.neckSpike1.setRotationPoint(0.0F, -1.2F, -6.0F);
         this.neckSpike1.addBox(-0.5F, -0.5F, 0.0F, 1, 1, 3, 0.0F);
         this.setRotateAngle(neckSpike1, 0.7740535232594852F, 0.0F, 0.0F);
@@ -81,7 +84,7 @@ public class ModelHydraHead extends ModelDragonBase {
         this.UpperJaw1 = new AdvancedModelBox(this, 6, 54);
         this.UpperJaw1.setRotationPoint(0.0F, 0.0F, -2.4F);
         this.UpperJaw1.addBox(-2.5F, -1.7F, -5.8F, 5, 3, 6, 0.0F);
-          this.setRotateAngle(UpperJaw1, 0.091106186954104F, -0.0F, 0.0F);
+        this.setRotateAngle(UpperJaw1, 0.091106186954104F, -0.0F, 0.0F);
 
         this.TeethTR1 = new AdvancedModelBox(this, 6, 44);
         this.TeethTR1.setRotationPoint(0.0F, -0.4F, -3.6F);
@@ -105,27 +108,22 @@ public class ModelHydraHead extends ModelDragonBase {
         this.updateDefaultPose();
     }
 
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-           animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
-
-        this.Neck1.render(f5);
-    }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
-        setRotationAngles(f, f1, f2, f3, f4, f5, (EntityHydra) entity);
         animator.update(entity);
     }
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityHydra entity) {
+    public void setRotationAngles(EntityHydra entity, float f, float f1, float f2, float f3, float f4) {
+        animate(entity, f, f1, f2, f3, f4, 1);
         float speed_walk = 0.6F;
         float speed_idle = 0.05F;
         float degree_walk = 0.2F;
         float degree_idle = 0.5F;
-           if(EntityGorgon.isStoneMob(entity)){
+        if (EntityGorgon.isStoneMob(entity)) {
             return;
         }
+        float partialTicks = Minecraft.getInstance().getRenderPartialTicks();
         AdvancedModelBox[] ENTIRE_HEAD = new AdvancedModelBox[]{Neck1, Neck2, Neck3, Neck4};
         this.chainFlap(ENTIRE_HEAD, speed_idle, degree_idle * 0.15F, -3 + headIndex % 4, f2, 1);
         this.chainSwing(ENTIRE_HEAD, speed_idle, degree_idle * 0.05F, -3 + headIndex % 3, f2, 1);
@@ -134,7 +132,7 @@ public class ModelHydraHead extends ModelDragonBase {
         this.walk(neckSpike1, speed_idle * 1.5F, degree_idle * 0.4F, false, 2, -0.1F, f2, 1);
         this.walk(neckSpike2, speed_idle * 1.5F, degree_idle * 0.4F, false, 3, -0.1F, f2, 1);
         this.chainSwing(ENTIRE_HEAD, speed_walk, degree_walk * 0.75F, -3, f, f1);
-        float speakProgress =  entity.prevSpeakingProgress[headIndex] + LLibrary.PROXY.getPartialTicks() * (entity.speakingProgress[headIndex] - entity.prevSpeakingProgress[headIndex]);
+        float speakProgress = entity.prevSpeakingProgress[headIndex] + partialTicks * (entity.speakingProgress[headIndex] - entity.prevSpeakingProgress[headIndex]);
         this.progressRotationInterp(LowerJaw1, (float) (Math.sin(speakProgress * Math.PI) * 10F), (float) Math.toRadians(25), 0.0F, 0.0F, 10F);
         float limbSwingProgress = f1;
         /*
@@ -143,32 +141,42 @@ public class ModelHydraHead extends ModelDragonBase {
         this.progressRotationInterp(Neck3, (float)limbSwingProgress, (float) Math.toRadians(-5), 0.0F, 0.0F, 1F);
         this.progressRotationInterp(Neck4, (float)limbSwingProgress, (float) Math.toRadians(-5), 0.0F, 0.0F, 1F);
         this.progressRotationInterp(Head1, (float)limbSwingProgress, (float) Math.toRadians(-5), 0.0F, 0.0F, 1F);*/
-        float strikeProgress = entity.prevStrikeProgress[headIndex] + LLibrary.PROXY.getPartialTicks() * (entity.strikingProgress[headIndex] - entity.prevStrikeProgress[headIndex]);
-        this.progressRotationInterp(Neck2, (float)strikeProgress, (float) Math.toRadians(5), 0.0F, 0.0F, 10F);
-        this.progressRotationInterp(Neck3, (float)strikeProgress, (float) Math.toRadians(5), 0.0F, 0.0F, 10F);
-        this.progressRotationInterp(Neck4, (float)strikeProgress, (float) Math.toRadians(5), 0.0F, 0.0F, 10F);
-        this.progressRotationInterp(Head1, (float)strikeProgress, (float) Math.toRadians(-15), 0.0F, 0.0F, 10F);
-        this.progressRotationInterp(LowerJaw1, (float)strikeProgress, (float) Math.toRadians(45), 0.0F, 0.0F, 10F);
-        this.progresPositionInterp(TeethTR1, (float)strikeProgress, 0.5F, 0.0F, 0.0F, 10F);
-        float breathProgress = entity.prevBreathProgress[headIndex] + LLibrary.PROXY.getPartialTicks() * (entity.breathProgress[headIndex] - entity.prevBreathProgress[headIndex]);
-        this.progressRotationInterp(Neck4, (float)breathProgress, (float) Math.toRadians(15), 0.0F, 0.0F, 10F);
-        this.progressRotationInterp(Neck3, (float)breathProgress, (float) Math.toRadians(15), 0.0F, 0.0F, 10F);
-        this.progresPositionInterp(TeethTR1, (float)breathProgress, 0.5F, 0.0F, 0.0F, 10F);
-        this.progressRotationInterp(Head1, (float)breathProgress, (float) Math.toRadians(15), 0.0F, 0.0F, 10F);
-        this.progressRotationInterp(UpperJaw1, (float)breathProgress, (float) Math.toRadians(-10), 0.0F, 0.0F, 10F);
-        this.progressRotationInterp(LowerJaw1, (float)breathProgress, (float) Math.toRadians(50), 0.0F, 0.0F, 10F);
+        float strikeProgress = entity.prevStrikeProgress[headIndex] + partialTicks * (entity.strikingProgress[headIndex] - entity.prevStrikeProgress[headIndex]);
+        this.progressRotationInterp(Neck2, strikeProgress, (float) Math.toRadians(5), 0.0F, 0.0F, 10F);
+        this.progressRotationInterp(Neck3, strikeProgress, (float) Math.toRadians(5), 0.0F, 0.0F, 10F);
+        this.progressRotationInterp(Neck4, strikeProgress, (float) Math.toRadians(5), 0.0F, 0.0F, 10F);
+        this.progressRotationInterp(Head1, strikeProgress, (float) Math.toRadians(-15), 0.0F, 0.0F, 10F);
+        this.progressRotationInterp(LowerJaw1, strikeProgress, (float) Math.toRadians(45), 0.0F, 0.0F, 10F);
+        this.progresPositionInterp(TeethTR1, strikeProgress, 0.5F, 0.0F, 0.0F, 10F);
+        float breathProgress = entity.prevBreathProgress[headIndex] + partialTicks * (entity.breathProgress[headIndex] - entity.prevBreathProgress[headIndex]);
+        this.progressRotationInterp(Neck4, breathProgress, (float) Math.toRadians(15), 0.0F, 0.0F, 10F);
+        this.progressRotationInterp(Neck3, breathProgress, (float) Math.toRadians(15), 0.0F, 0.0F, 10F);
+        this.progresPositionInterp(TeethTR1, breathProgress, 0.5F, 0.0F, 0.0F, 10F);
+        this.progressRotationInterp(Head1, breathProgress, (float) Math.toRadians(15), 0.0F, 0.0F, 10F);
+        this.progressRotationInterp(UpperJaw1, breathProgress, (float) Math.toRadians(-10), 0.0F, 0.0F, 10F);
+        this.progressRotationInterp(LowerJaw1, breathProgress, (float) Math.toRadians(50), 0.0F, 0.0F, 10F);
 
 
-        if(entity.getSeveredHead() == headIndex || !entity.isEntityAlive()){
-            this.Neck2.isHidden = true;
-        }else{
-            this.Neck2.isHidden = false;
+        if (entity.getSeveredHead() == headIndex || !entity.isAlive()) {
+            this.Neck2.showModel = false;
+        } else {
+            this.Neck2.showModel = true;
         }
     }
 
     @Override
     public void renderStatue() {
         this.resetToDefaultPose();
-        this.Neck1.render(0.0625F);
+    }
+
+
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(Neck1);
+    }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
     }
 }

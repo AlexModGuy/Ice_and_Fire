@@ -1,10 +1,12 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
-import net.ilexiconn.llibrary.client.model.ModelAnimator;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.minecraft.client.model.ModelRenderer;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelMyrmexWorker extends ModelMyrmexBase {
@@ -219,10 +221,13 @@ public class ModelMyrmexWorker extends ModelMyrmexBase {
     }
 
     @Override
-    public void renderAdult(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
-        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        this.Body2.render(f5);
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(Body2);
+    }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -266,7 +271,8 @@ public class ModelMyrmexWorker extends ModelMyrmexBase {
 
 
     @Override
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
+    public void setRotationAngles(Entity entity, float f, float f1, float f2, float f3, float f4) {
+        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, 1);
         AdvancedModelBox[] GASTER = new AdvancedModelBox[]{Body4, Body5, Tail1, Tail2, Stinger};
         AdvancedModelBox[] NECK = new AdvancedModelBox[]{Neck1, HeadBase};
         AdvancedModelBox[] LEGR1 = new AdvancedModelBox[]{legTopR1, legMidR1, legBottomR1};
@@ -311,6 +317,5 @@ public class ModelMyrmexWorker extends ModelMyrmexBase {
     @Override
     public void renderStatue() {
         this.resetToDefaultPose();
-        this.Body2.render(0.0625F);
     }
 }

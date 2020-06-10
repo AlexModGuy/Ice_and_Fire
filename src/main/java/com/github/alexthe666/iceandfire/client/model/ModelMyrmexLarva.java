@@ -1,9 +1,12 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
-import net.ilexiconn.llibrary.client.model.ModelAnimator;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelMyrmexLarva extends ModelDragonBase {
@@ -75,14 +78,17 @@ public class ModelMyrmexLarva extends ModelDragonBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        this.Body2.render(f5);
-        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(Body2);
+    }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
-        setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
         animator.update(entity);
         animator.setAnimation(EntityMyrmexBase.ANIMATION_PUPA_WIGGLE);
         animator.startKeyframe(5);
@@ -113,7 +119,8 @@ public class ModelMyrmexLarva extends ModelDragonBase {
     }
 
     @Override
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
+    public void setRotationAngles(Entity entity, float f, float f1, float f2, float f3, float f4) {
+        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, 1);
         this.resetToDefaultPose();
         float speed_idle = 0.025F;
         float degree_idle = 0.25F;
@@ -127,6 +134,5 @@ public class ModelMyrmexLarva extends ModelDragonBase {
     @Override
     public void renderStatue() {
         this.resetToDefaultPose();
-        this.Body2.render(0.0625F);
     }
 }

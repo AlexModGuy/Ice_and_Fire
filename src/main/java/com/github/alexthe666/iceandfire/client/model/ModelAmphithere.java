@@ -5,6 +5,7 @@ import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import org.lwjgl.opengl.GL11;
 
@@ -295,7 +296,7 @@ public class ModelAmphithere extends ModelDragonBase<EntityAmphithere> {
 
     @Override
     public Iterable<ModelRenderer> getParts() {
-        return EntityModelPartBuilder.getPartsForRenderFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(BodyUpper);
     }
 
     @Override

@@ -1,13 +1,16 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
-import net.ilexiconn.llibrary.client.model.ModelAnimator;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelHippogryph extends ModelDragonBase {
+public class ModelHippogryph extends ModelDragonBase<EntityHippogryph> {
     public AdvancedModelBox Body;
     public AdvancedModelBox Neck;
     public AdvancedModelBox HindThighR;
@@ -382,28 +385,6 @@ public class ModelHippogryph extends ModelDragonBase {
         this.updateDefaultPose();
     }
 
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
-        if (this.isChild) {
-            this.Body.setShouldScaleChildren(true);
-            this.Head.setShouldScaleChildren(false);
-            this.Body.setScale(0.5F, 0.5F, 0.5F);
-            this.Head.setScale(1.5F, 1.5F, 1.5F);
-            this.Beak.setScale(0.75F, 0.75F, 0.75F);
-            this.Quill_L.setScale(2F, 2F, 2F);
-            this.Quill_R.setScale(2F, 2F, 2F);
-            this.Body.setRotationPoint(0.0F, 18.0F, 4.0F);
-        } else {
-            this.Body.setScale(1, 1, 1);
-            this.Head.setScale(1, 1, 1);
-            this.Quill_L.setScale(1, 1, 1);
-            this.Quill_R.setScale(1, 1, 1);
-        }
-        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        this.Body.render(f5);
-    }
-
     public void renderStatue() {
         this.resetToDefaultPose();
         if (this.isChild) {
@@ -419,19 +400,18 @@ public class ModelHippogryph extends ModelDragonBase {
             this.Body.setScale(1, 1, 1);
             this.Head.setScale(1, 1, 1);
         }
-        this.Body.render(0.0625F);
-        this.NoseBand.isHidden = true;
-        this.ReinL.isHidden = true;
-        this.ReinR.isHidden = true;
-        this.ChestL.isHidden = true;
-        this.ChestR.isHidden = true;
-        this.Saddle.isHidden = true;
-        this.Saddleback.isHidden = true;
-        this.StirrupIronL.isHidden = true;
-        this.StirrupIronR.isHidden = true;
-        this.SaddleFront.isHidden = true;
-        this.StirrupL.isHidden = true;
-        this.StirrupR.isHidden = true;
+        this.NoseBand.showModel = false;
+        this.ReinL.showModel = false;
+        this.ReinR.showModel = false;
+        this.ChestL.showModel = false;
+        this.ChestR.showModel = false;
+        this.Saddle.showModel = false;
+        this.Saddleback.showModel = false;
+        this.StirrupIronL.showModel = false;
+        this.StirrupIronR.showModel = false;
+        this.SaddleFront.showModel = false;
+        this.StirrupL.showModel = false;
+        this.StirrupR.showModel = false;
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -551,9 +531,23 @@ public class ModelHippogryph extends ModelDragonBase {
     }
 
     @Override
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
+    public void setRotationAngles(EntityHippogryph entity, float f, float f1, float f2, float f3, float f4) {
         EntityHippogryph hippo = (EntityHippogryph) entity;
-
+        if (this.isChild) {
+            this.Body.setShouldScaleChildren(true);
+            this.Head.setShouldScaleChildren(false);
+            this.Body.setScale(0.5F, 0.5F, 0.5F);
+            this.Head.setScale(1.5F, 1.5F, 1.5F);
+            this.Beak.setScale(0.75F, 0.75F, 0.75F);
+            this.Quill_L.setScale(2F, 2F, 2F);
+            this.Quill_R.setScale(2F, 2F, 2F);
+            this.Body.setRotationPoint(0.0F, 18.0F, 4.0F);
+        } else {
+            this.Body.setScale(1, 1, 1);
+            this.Head.setScale(1, 1, 1);
+            this.Quill_L.setScale(1, 1, 1);
+            this.Quill_R.setScale(1, 1, 1);
+        }
         if (this.isChild) {
             this.progressPosition(Body, hippo.sitProgress, 0, 16, 0);
         } else {
@@ -745,5 +739,15 @@ public class ModelHippogryph extends ModelDragonBase {
         }
         this.Tail1.rotateAngleX = f12;
         f12 = 0.0F;
+    }
+
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(Body);
+    }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
     }
 }

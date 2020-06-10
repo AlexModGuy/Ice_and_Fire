@@ -1,9 +1,11 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.entity.Entity;
 
-public class ModelPixieHouse extends ModelBase {
+public class ModelPixieHouse extends SegmentedModel {
     public ModelRenderer stalk;
     public ModelRenderer cap1;
     public ModelRenderer grass;
@@ -44,9 +46,16 @@ public class ModelPixieHouse extends ModelBase {
         this.stalk.addChild(this.grass2);
     }
 
-    public void render(float f5) {
-        this.stalk.render(f5);
+    @Override
+    public void setRotationAngles(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+
     }
+
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(stalk);
+    }
+
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;

@@ -1,25 +1,23 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.client.model.util.HideableModelRenderer;
 import com.github.alexthe666.iceandfire.entity.EntityDreadThrall;
-import net.ilexiconn.llibrary.client.model.ModelAnimator;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.BipedModel;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.AbstractSkeleton;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelDreadThrall extends AdvancedModelBase {
+public class ModelDreadThrall extends AdvancedEntityModel<EntityDreadThrall> {
 
     public HideableModelRenderer bipedHead;
     public HideableModelRenderer bipedHeadwear;
@@ -107,7 +105,7 @@ public class ModelDreadThrall extends AdvancedModelBase {
         this.updateDefaultPose();
     }
 
-    public void setLivingAnimations(LivingEntity LivingEntityIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
+    public void setLivingAnimations(EntityDreadThrall LivingEntityIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
         this.rightArmPose = BipedModel.ArmPose.EMPTY;
         this.leftArmPose = BipedModel.ArmPose.EMPTY;
         ItemStack itemstack = LivingEntityIn.getHeldItem(Hand.MAIN_HAND);
@@ -115,10 +113,9 @@ public class ModelDreadThrall extends AdvancedModelBase {
         super.setLivingAnimations(LivingEntityIn, limbSwing, limbSwingAmount, partialTickTime);
     }
 
-    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-        super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+    public void setRotationAngles(EntityDreadThrall entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetToDefaultPose();
-        animate((IAnimatedEntity) entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+        animate((IAnimatedEntity) entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 1);
         ItemStack itemstack = ((LivingEntity) entityIn).getHeldItemMainhand();
         EntityDreadThrall thrall = (EntityDreadThrall) entityIn;
         if (false) {
@@ -147,7 +144,7 @@ public class ModelDreadThrall extends AdvancedModelBase {
         this.bipedRightLeg.rotateAngleZ = 0.0F;
         this.bipedLeftLeg.rotateAngleZ = 0.0F;
 
-        if (this.isRiding) {
+        if (entityIn.isPassenger()) {
             this.bipedRightArm.rotateAngleX += -((float) Math.PI / 5F);
             this.bipedLeftArm.rotateAngleX += -((float) Math.PI / 5F);
             this.bipedRightLeg.rotateAngleX = -1.4137167F;
@@ -224,11 +221,14 @@ public class ModelDreadThrall extends AdvancedModelBase {
 
     }
 
-    public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
-        GlStateManager.pushMatrix();
-        this.bipedBody.render(scale);
-        GlStateManager.popMatrix();
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(bipedBody);
+    }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -247,18 +247,12 @@ public class ModelDreadThrall extends AdvancedModelBase {
         animator.resetKeyframe(5);
     }
 
-    private void rotate(ModelAnimator animator, AdvancedModelBox model, float x, float y, float z) {
+    public void rotate(ModelAnimator animator, AdvancedModelBox model, float x, float y, float z) {
         animator.rotate(model, (float) Math.toRadians(x), (float) Math.toRadians(y), (float) Math.toRadians(z));
     }
 
-    private void rotateMinus(ModelAnimator animator, AdvancedModelBox model, float x, float y, float z) {
+    public void rotateMinus(ModelAnimator animator, AdvancedModelBox model, float x, float y, float z) {
         animator.rotate(model, (float) Math.toRadians(x) - model.defaultRotationX, (float) Math.toRadians(y) - model.defaultRotationY, (float) Math.toRadians(z) - model.defaultRotationZ);
-    }
-
-
-    public void postRenderArm(float scale, HandSide side) {
-        this.bipedBody.postRender(scale);
-        this.getArmForSide(side).postRender(scale);
     }
 
     protected ModelRenderer getArmForSide(HandSide side) {
@@ -272,16 +266,6 @@ public class ModelDreadThrall extends AdvancedModelBase {
             return LivingEntity.swingingHand == Hand.MAIN_HAND ? Handside : Handside.opposite();
         } else {
             return HandSide.RIGHT;
-        }
-    }
-
-    public void setModelAttributes(ModelBase model) {
-        super.setModelAttributes(model);
-        if (model instanceof BipedModel) {
-            BipedModel modelbiped = (BipedModel) model;
-            this.leftArmPose = modelbiped.leftArmPose;
-            this.rightArmPose = modelbiped.rightArmPose;
-            this.isSneak = modelbiped.isSneak;
         }
     }
 

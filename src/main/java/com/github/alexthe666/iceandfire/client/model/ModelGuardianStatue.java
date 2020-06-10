@@ -1,16 +1,17 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.EntityGuardian;
+import net.minecraft.entity.monster.GuardianEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelGuardianStatue extends ModelBase {
+public class ModelGuardianStatue extends SegmentedModel {
     private final ModelRenderer guardianBody;
     private final ModelRenderer guardianEye;
     private final ModelRenderer[] guardianSpines;
@@ -49,13 +50,14 @@ public class ModelGuardianStatue extends ModelBase {
         this.guardianTail[1].addChild(this.guardianTail[2]);
     }
 
-    public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
-        this.guardianBody.render(scale);
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(guardianBody);
     }
 
-    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-        EntityGuardian entityguardian = (EntityGuardian) entityIn;
+
+    public void setRotationAngles(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        GuardianEntity entityguardian = (GuardianEntity) entityIn;
         float f = ageInTicks - (float) entityguardian.ticksExisted;
         this.guardianBody.rotateAngleY = netHeadYaw * 0.017453292F;
         this.guardianBody.rotateAngleX = headPitch * 0.017453292F;

@@ -1,10 +1,11 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelGorgonHeadActive extends ModelBase {
+public class ModelGorgonHeadActive extends SegmentedModel {
     public ModelRenderer Head;
     public ModelRenderer Head_Details;
     public ModelRenderer SnakeBaseR1;
@@ -169,9 +170,15 @@ public class ModelGorgonHeadActive extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        this.Head.render(f5);
+    public void setRotationAngles(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+
     }
+
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(Head);
+    }
+
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;

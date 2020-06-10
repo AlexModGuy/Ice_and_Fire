@@ -1,23 +1,23 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.client.model.util.HideableModelRenderer;
 import com.github.alexthe666.iceandfire.entity.EntityDreadQueen;
-import net.ilexiconn.llibrary.client.model.ModelAnimator;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.BipedModel;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.AbstractSkeleton;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelDreadQueen extends ModelDragonBase {
+public class ModelDreadQueen extends ModelDragonBase<EntityDreadQueen> {
     public HideableModelRenderer body;
     public HideableModelRenderer chestplate;
     public HideableModelRenderer head;
@@ -111,20 +111,17 @@ public class ModelDreadQueen extends ModelDragonBase {
         animator = ModelAnimator.create();
     }
 
-    public void setLivingAnimations(LivingEntity LivingEntityIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
+    public void setLivingAnimations(EntityDreadQueen LivingEntityIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
         this.rightArmPose = BipedModel.ArmPose.EMPTY;
         this.leftArmPose = BipedModel.ArmPose.EMPTY;
         ItemStack itemstack = LivingEntityIn.getHeldItem(Hand.MAIN_HAND);
-        
         super.setLivingAnimations(LivingEntityIn, limbSwing, limbSwingAmount, partialTickTime);
     }
 
-    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-        super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+    public void setRotationAngles(EntityDreadQueen entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetToDefaultPose();
-        animate((IAnimatedEntity) entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+        animate((IAnimatedEntity) entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 1);
         ItemStack itemstack = ((LivingEntity) entityIn).getHeldItemMainhand();
-        EntityDreadQueen thrall = (EntityDreadQueen) entityIn;
         this.faceTarget(netHeadYaw, headPitch, 1.0F, head);
         float f = 1.0F;
         this.armRight.rotateAngleX += MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI) * 2.0F * limbSwingAmount * 0.5F / f;
@@ -136,7 +133,7 @@ public class ModelDreadQueen extends ModelDragonBase {
         this.legRight.rotateAngleZ = 0.0F;
         this.legLeft.rotateAngleZ = 0.0F;
 
-        if (this.isRiding) {
+        if (entityIn.isPassenger()) {
             this.armRight.rotateAngleX += -((float) Math.PI / 5F);
             this.armLeft.rotateAngleX += -((float) Math.PI / 5F);
             this.legRight.rotateAngleX = -1.4137167F;
@@ -199,25 +196,19 @@ public class ModelDreadQueen extends ModelDragonBase {
         float speed_idle = 0.05F;
         float degree_walk = 1F;
         float degree_idle = 0.5F;
-        if (thrall.getAnimation() == EntityDreadQueen.ANIMATION_SPAWN) {
+        if (entityIn.getAnimation() == EntityDreadQueen.ANIMATION_SPAWN) {
             //this.walk(armRight, 1.5F, 0.4F, false, 2, -0.3F, thrall.ticksExisted, 1);
             //this.walk(armLeft, 1.5F,  0.4F, true, 2, 0.3F, thrall.ticksExisted, 1);
-            if (thrall.getAnimationTick() < 30) {
-                this.flap(armRight, 0.5F, 0.5F, false, 2, -0.7F, thrall.ticksExisted, 1);
-                this.flap(armLeft, 0.5F, 0.5F, true, 2, -0.7F, thrall.ticksExisted, 1);
-                this.walk(armRight, 0.5F, 0.5F, true, 1, 0, thrall.ticksExisted, 1);
-                this.walk(armLeft, 0.5F, 0.5F, true, 1, 0, thrall.ticksExisted, 1);
+            if (entityIn.getAnimationTick() < 30) {
+                this.flap(armRight, 0.5F, 0.5F, false, 2, -0.7F, entityIn.ticksExisted, 1);
+                this.flap(armLeft, 0.5F, 0.5F, true, 2, -0.7F, entityIn.ticksExisted, 1);
+                this.walk(armRight, 0.5F, 0.5F, true, 1, 0, entityIn.ticksExisted, 1);
+                this.walk(armLeft, 0.5F, 0.5F, true, 1, 0, entityIn.ticksExisted, 1);
             }
         }
 
     }
 
-    public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
-        GlStateManager.pushMatrix();
-        this.body.render(scale);
-        GlStateManager.popMatrix();
-    }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         animator.update(entity);
@@ -235,11 +226,6 @@ public class ModelDreadQueen extends ModelDragonBase {
         animator.resetKeyframe(5);
     }
 
-    public void postRenderArm(float scale, HandSide side) {
-        this.body.postRender(scale);
-        this.getArmForSide(side).postRender(scale);
-    }
-
     protected ModelRenderer getArmForSide(HandSide side) {
         return side == HandSide.LEFT ? this.armLeft : this.armRight;
     }
@@ -254,16 +240,6 @@ public class ModelDreadQueen extends ModelDragonBase {
         }
     }
 
-    public void setModelAttributes(ModelBase model) {
-        super.setModelAttributes(model);
-        if (model instanceof BipedModel) {
-            BipedModel modelbiped = (BipedModel) model;
-            this.leftArmPose = modelbiped.leftArmPose;
-            this.rightArmPose = modelbiped.rightArmPose;
-            this.isSneak = modelbiped.isSneak;
-        }
-    }
-
     public void setVisible(boolean visible) {
         this.head.invisible = !visible;
         this.body.invisible = !visible;
@@ -275,6 +251,16 @@ public class ModelDreadQueen extends ModelDragonBase {
 
     @Override
     public void renderStatue() {
-        this.body.render(0.0625F);
+        this.resetToDefaultPose();
+    }
+
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(body);
+    }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
     }
 }

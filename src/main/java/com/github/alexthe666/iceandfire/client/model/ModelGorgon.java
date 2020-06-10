@@ -1,13 +1,16 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import net.ilexiconn.llibrary.client.model.ModelAnimator;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelGorgon extends ModelDragonBase {
+public class ModelGorgon extends ModelDragonBase<EntityGorgon> {
     public AdvancedModelBox Tail_1;
     public AdvancedModelBox Tail_2;
     public AdvancedModelBox Body;
@@ -243,16 +246,8 @@ public class ModelGorgon extends ModelDragonBase {
         this.updateDefaultPose();
     }
 
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
-        this.Tail_1.render(f5);
-
-    }
-
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
-        setRotationAngles(f, f1, f2, f3, f4, f5, (EntityGorgon) entity);
         animator.update(entity);
         animator.setAnimation(EntityGorgon.ANIMATION_SCARE);
         animator.startKeyframe(5);
@@ -286,7 +281,8 @@ public class ModelGorgon extends ModelDragonBase {
         animator.resetKeyframe(5);
     }
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityGorgon entity) {
+    public void setRotationAngles(EntityGorgon entity, float f, float f1, float f2, float f3, float f4 ) {
+        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, 1);
         float speed_walk = 0.6F;
         float speed_idle = 0.05F;
         float degree_walk = 1F;
@@ -354,12 +350,22 @@ public class ModelGorgon extends ModelDragonBase {
         this.progressRotation(Body, deathProg, (float) Math.toRadians(-9), (float) Math.toRadians(36), 0);
         this.progressRotation(Right_Arm, deathProg, 0, 0, (float) Math.toRadians(20));
         this.progressRotation(Left_Arm, deathProg, 0, 0, (float) Math.toRadians(-20));
-        this.Neck.isHidden = deathProg > 0;
+        this.Neck.showModel = deathProg <= 0;
     }
+
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(Tail_1);
+    }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+    }
+
 
     @Override
     public void renderStatue() {
         this.resetToDefaultPose();
-        this.Tail_1.render(0.0625F);
     }
 }

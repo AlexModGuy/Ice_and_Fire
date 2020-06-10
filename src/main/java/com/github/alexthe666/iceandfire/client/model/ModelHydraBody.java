@@ -1,14 +1,15 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import com.github.alexthe666.iceandfire.client.model.ModelDragonBase;
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
-import net.ilexiconn.llibrary.client.model.ModelAnimator;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.minecraft.client.model.ModelBase;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelHydraBody extends ModelDragonBase {
+public class ModelHydraBody extends ModelDragonBase<EntityHydra> {
     public AdvancedModelBox BodyUpper;
     public AdvancedModelBox BodyLower;
     public AdvancedModelBox BodySpike1;
@@ -92,19 +93,13 @@ public class ModelHydraBody extends ModelDragonBase {
         this.updateDefaultPose();
     }
 
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
-        this.BodyUpper.render(f5);
-    }
-
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
-        setRotationAngles(f, f1, f2, f3, f4, f5, (EntityHydra) entity);
         animator.update(entity);
     }
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityHydra entity) {
+    public void setRotationAngles(EntityHydra entity, float f, float f1, float f2, float f3, float f4) {
+        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, 1);
         float speed_walk = 0.6F;
         float speed_idle = 0.05F;
         float degree_walk = 1F;
@@ -126,7 +121,15 @@ public class ModelHydraBody extends ModelDragonBase {
     @Override
     public void renderStatue() {
         this.resetToDefaultPose();
-        this.BodyUpper.render(0.0625F);
     }
 
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(BodyUpper);
+    }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+    }
 }

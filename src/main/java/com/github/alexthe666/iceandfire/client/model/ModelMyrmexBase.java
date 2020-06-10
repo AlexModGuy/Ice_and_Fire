@@ -1,33 +1,20 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
-import net.minecraft.client.model.ModelRenderer;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.HandSide;
 
-public abstract class ModelMyrmexBase extends ModelDragonBase {
+public abstract class ModelMyrmexBase<T extends EntityMyrmexBase> extends ModelDragonBase<T> {
     private static final ModelMyrmexLarva LARVA_MODEL = new ModelMyrmexLarva();
     private static final ModelMyrmexPupa PUPA_MODEL = new ModelMyrmexPupa();
 
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        EntityMyrmexBase myrmex = (EntityMyrmexBase) entity;
-        if (myrmex.getGrowthStage() == 0) {
-            LARVA_MODEL.render(entity, f, f1, f2, f3, f4, f5);
-        } else if (myrmex.getGrowthStage() == 1) {
-            PUPA_MODEL.render(entity, f, f1, f2, f3, f4, f5);
-        } else {
-            renderAdult(entity, f, f1, f2, f3, f4, f5);
-        }
-    }
-
-    public void postRenderArm(float scale, HandSide side) {
+    public void postRenderArm(float scale, MatrixStack stackIn) {
         for (ModelRenderer renderer : this.getHeadParts()) {
-            renderer.postRender(scale);
+            renderer.translateRotate(stackIn);
         }
     }
 
     public abstract ModelRenderer[] getHeadParts();
-
-    public abstract void renderAdult(Entity entity, float f, float f1, float f2, float f3, float f4, float f5);
 }

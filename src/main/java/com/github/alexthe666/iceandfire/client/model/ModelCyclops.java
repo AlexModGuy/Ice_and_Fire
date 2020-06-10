@@ -6,6 +6,7 @@ import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
@@ -176,7 +177,7 @@ public class ModelCyclops extends ModelDragonBase<EntityCyclops> {
 
     @Override
     public Iterable<ModelRenderer> getParts() {
-        return EntityModelPartBuilder.getPartsForRenderFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(body);
     }
 
     @Override

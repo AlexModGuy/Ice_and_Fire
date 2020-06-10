@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -41,7 +42,7 @@ public class ModelDragonEgg extends AdvancedEntityModel<EntityDragonEgg> {
 
     @Override
     public Iterable<ModelRenderer> getParts() {
-        return EntityModelPartBuilder.getPartsForRenderFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(Egg1);
     }
 
     @Override

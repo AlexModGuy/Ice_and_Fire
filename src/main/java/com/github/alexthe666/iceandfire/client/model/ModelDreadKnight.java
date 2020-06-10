@@ -6,6 +6,7 @@ import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.client.model.util.HideableModelRenderer;
 import com.github.alexthe666.iceandfire.entity.EntityDreadKnight;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -268,7 +269,7 @@ public class ModelDreadKnight extends ModelDragonBase<EntityDreadKnight> {
 
     @Override
     public Iterable<ModelRenderer> getParts() {
-        return EntityModelPartBuilder.getPartsForRenderFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(body);
     }
 
     @Override

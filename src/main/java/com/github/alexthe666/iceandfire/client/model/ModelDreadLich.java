@@ -1,25 +1,24 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.client.model.util.HideableModelRenderer;
 import com.github.alexthe666.iceandfire.entity.EntityDreadLich;
-import net.ilexiconn.llibrary.client.model.ModelAnimator;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.BipedModel;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import com.github.alexthe666.iceandfire.entity.EntityDreadThrall;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.AbstractSkeleton;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelDreadLich extends ModelDragonBase {
+public class ModelDreadLich extends ModelDragonBase<EntityDreadLich> {
     public HideableModelRenderer body;
     public HideableModelRenderer head;
     public HideableModelRenderer armRight;
@@ -106,26 +105,23 @@ public class ModelDreadLich extends ModelDragonBase {
         animator = ModelAnimator.create();
     }
 
-    public void setLivingAnimations(LivingEntity LivingEntityIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
+    public void setLivingAnimations(EntityDreadThrall LivingEntityIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
         this.rightArmPose = BipedModel.ArmPose.EMPTY;
         this.leftArmPose = BipedModel.ArmPose.EMPTY;
         ItemStack itemstack = LivingEntityIn.getHeldItem(Hand.MAIN_HAND);
 
-        if (itemstack.getItem() == Items.BOW && ((AbstractSkeleton) LivingEntityIn).isSwingingArms()) {
+        if (itemstack.getItem() == Items.BOW) {
             if (LivingEntityIn.getPrimaryHand() == HandSide.RIGHT) {
                 this.rightArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
             } else {
                 this.leftArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
             }
         }
-
-        super.setLivingAnimations(LivingEntityIn, limbSwing, limbSwingAmount, partialTickTime);
     }
 
-    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-        super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+    public void setRotationAngles(EntityDreadLich entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetToDefaultPose();
-        animate((IAnimatedEntity) entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+        animate((IAnimatedEntity) entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 1);
         ItemStack itemstack = ((LivingEntity) entityIn).getHeldItemMainhand();
         EntityDreadLich thrall = (EntityDreadLich) entityIn;
         this.faceTarget(netHeadYaw, headPitch, 1.0F, head);
@@ -139,7 +135,7 @@ public class ModelDreadLich extends ModelDragonBase {
         this.legRight.rotateAngleZ = 0.0F;
         this.legLeft.rotateAngleZ = 0.0F;
 
-        if (this.isRiding) {
+        if (entityIn.isPassenger()) {
             this.armRight.rotateAngleX += -((float) Math.PI / 5F);
             this.armLeft.rotateAngleX += -((float) Math.PI / 5F);
             this.legRight.rotateAngleX = -1.4137167F;
@@ -226,12 +222,6 @@ public class ModelDreadLich extends ModelDragonBase {
         }
     }
 
-    public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
-        GlStateManager.pushMatrix();
-        this.body.render(scale);
-        GlStateManager.popMatrix();
-    }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         animator.update(entity);
@@ -249,11 +239,6 @@ public class ModelDreadLich extends ModelDragonBase {
         animator.resetKeyframe(5);
     }
 
-    public void postRenderArm(float scale, HandSide side) {
-        this.body.postRender(scale);
-        this.getArmForSide(side).postRender(scale);
-    }
-
     protected ModelRenderer getArmForSide(HandSide side) {
         return side == HandSide.LEFT ? this.armLeft : this.armRight;
     }
@@ -268,16 +253,6 @@ public class ModelDreadLich extends ModelDragonBase {
         }
     }
 
-    public void setModelAttributes(ModelBase model) {
-        super.setModelAttributes(model);
-        if (model instanceof BipedModel) {
-            BipedModel modelbiped = (BipedModel) model;
-            this.leftArmPose = modelbiped.leftArmPose;
-            this.rightArmPose = modelbiped.rightArmPose;
-            this.isSneak = modelbiped.isSneak;
-        }
-    }
-
     public void setVisible(boolean visible) {
         this.head.invisible = !visible;
         this.body.invisible = !visible;
@@ -289,6 +264,16 @@ public class ModelDreadLich extends ModelDragonBase {
 
     @Override
     public void renderStatue() {
-        this.body.render(0.0625F);
+        this.resetToDefaultPose();
+    }
+
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(body);
+    }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
     }
 }

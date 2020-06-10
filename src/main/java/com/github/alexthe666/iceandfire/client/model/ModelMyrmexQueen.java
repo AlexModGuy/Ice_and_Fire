@@ -1,9 +1,12 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexQueen;
-import net.ilexiconn.llibrary.client.model.ModelAnimator;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
@@ -244,14 +247,13 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
     }
 
     @Override
-    public void renderAdult(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
-        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        this.Body2.render(f5);
-        this.Body5.setScale(1.0F, 1.0F, 1.0F);
-        this.Tail1.setScale(1.0F, 1.0F, 1.0F);
-        this.Tail2.setScale(1.0F, 1.0F, 1.0F);
-        this.Tail3.setScale(1.0F, 1.0F, 1.0F);
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(Body2);
+    }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -342,7 +344,12 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
     }
 
     @Override
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
+    public void setRotationAngles(Entity entity, float f, float f1, float f2, float f3, float f4) {
+        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, 1);
+        this.Body5.setScale(1.0F, 1.0F, 1.0F);
+        this.Tail1.setScale(1.0F, 1.0F, 1.0F);
+        this.Tail2.setScale(1.0F, 1.0F, 1.0F);
+        this.Tail3.setScale(1.0F, 1.0F, 1.0F);
         AdvancedModelBox[] GASTER = new AdvancedModelBox[]{Body4, Body5, Tail1, Tail2, Tail3, Stinger};
         AdvancedModelBox[] NECK = new AdvancedModelBox[]{Neck1, HeadBase};
         AdvancedModelBox[] LEGR1 = new AdvancedModelBox[]{legTopR1, legMidR1, legBottomR1};
@@ -416,7 +423,6 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
         this.Tail1.setScale(1.0F, 1.0F, 1.0F);
         this.Tail2.setScale(1.0F, 1.0F, 1.0F);
         this.Tail3.setScale(1.0F, 1.0F, 1.0F);
-        this.Body2.render(0.0625F);
     }
 
     private void digPose() {

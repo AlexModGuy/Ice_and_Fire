@@ -1,12 +1,15 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
-import net.ilexiconn.llibrary.client.model.ModelAnimator;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
-import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelHippocampus extends ModelDragonBase {
+public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
     public AdvancedModelBox Body;
     public AdvancedModelBox FrontThighR;
     public AdvancedModelBox FrontThighL;
@@ -211,39 +214,30 @@ public class ModelHippocampus extends ModelDragonBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
-        if (this.isChild) {
-            this.Body.setShouldScaleChildren(true);
-            this.Body.setScale(0.5F, 0.5F, 0.5F);
-            this.Head.setScale(1.5F, 1.5F, 1.5F);
-            this.TopJaw.setRotationPoint(0.0F, -0.1F, -7.6F);
-            this.Body.setRotationPoint(0.0F, 12.5F, 4.0F);
-            this.BottomJaw.setRotationPoint(0.0F, 0.3F, -7.5F);
-
-        } else {
-            this.Body.setScale(1, 1, 1);
-            this.Head.setScale(1, 1, 1);
-        }
-        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        this.Body.render(f5);
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(Body);
     }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+    }
+
 
     public void renderStatue() {
         this.resetToDefaultPose();
-        this.Body.render(0.0625F);
-        this.NoseBand.isHidden = true;
-        this.ReinL.isHidden = true;
-        this.ReinR.isHidden = true;
-        this.ChestL.isHidden = true;
-        this.ChestR.isHidden = true;
-        this.Saddle.isHidden = true;
-        this.Saddleback.isHidden = true;
-        this.StirrupIronL.isHidden = true;
-        this.StirrupIronR.isHidden = true;
-        this.SaddleFront.isHidden = true;
-        this.StirrupL.isHidden = true;
-        this.StirrupR.isHidden = true;
+        this.NoseBand.showModel = false;
+        this.ReinL.showModel = false;
+        this.ReinR.showModel = false;
+        this.ChestL.showModel = false;
+        this.ChestR.showModel = false;
+        this.Saddle.showModel = false;
+        this.Saddleback.showModel = false;
+        this.StirrupIronL.showModel = false;
+        this.StirrupIronR.showModel = false;
+        this.SaddleFront.showModel = false;
+        this.StirrupL.showModel = false;
+        this.StirrupR.showModel = false;
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -258,7 +252,20 @@ public class ModelHippocampus extends ModelDragonBase {
     }
 
     @Override
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
+    public void setRotationAngles(EntityHippocampus entity, float f, float f1, float f2, float f3, float f4) {
+        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, 1);
+        if (this.isChild) {
+            this.Body.setShouldScaleChildren(true);
+            this.Body.setScale(0.5F, 0.5F, 0.5F);
+            this.Head.setScale(1.5F, 1.5F, 1.5F);
+            this.TopJaw.setRotationPoint(0.0F, -0.1F, -7.6F);
+            this.Body.setRotationPoint(0.0F, 12.5F, 4.0F);
+            this.BottomJaw.setRotationPoint(0.0F, 0.3F, -7.5F);
+
+        } else {
+            this.Body.setScale(1, 1, 1);
+            this.Head.setScale(1, 1, 1);
+        }
         EntityHippocampus hippo = (EntityHippocampus) entity;
         float speed_walk = 0.9F;
         float speed_idle = 0.05F;

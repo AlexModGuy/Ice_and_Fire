@@ -1,15 +1,18 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelPixie extends ModelDragonBase {
+public class ModelPixie extends ModelDragonBase<EntityPixie> {
     public AdvancedModelBox Body;
     public AdvancedModelBox Left_Arm;
     public AdvancedModelBox Head;
@@ -86,13 +89,17 @@ public class ModelPixie extends ModelDragonBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        this.resetToDefaultPose();
-        setRotationAngles(f, f1, f2, f3, f4, f5, (EntityPixie) entity);
-        this.Body.render(f5);
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(Body);
     }
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityPixie entity) {
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+    }
+
+    public void setRotationAngles(EntityPixie entity, float f, float f1, float f2, float f3, float f4) {
+        this.resetToDefaultPose();
         float speed_fly = 1.1F;
         float speed_idle = 0.05F;
         float degree_fly = 1F;
@@ -203,7 +210,6 @@ public class ModelPixie extends ModelDragonBase {
             this.Left_Arm.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.0F * f1 * 0.5F / 1;
         }
         */
-        this.Body.render(0.0625F);
     }
 
     public void animateInJar(boolean sitting, TileEntityJar jar, float headRot) {
@@ -260,12 +266,10 @@ public class ModelPixie extends ModelDragonBase {
             this.Left_Arm.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.0F * f1 * 0.5F / 1;
         }
         */
-        this.Body.render(0.0625F);
     }
 
     @Override
     public void renderStatue() {
         this.resetToDefaultPose();
-        this.Body.render(0.0625F);
     }
 }

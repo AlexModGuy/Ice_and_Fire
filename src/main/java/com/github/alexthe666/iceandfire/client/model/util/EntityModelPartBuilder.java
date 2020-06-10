@@ -16,7 +16,7 @@ public class EntityModelPartBuilder {
     private static final Map<String, Iterable<ModelRenderer>> PART_MAP = new HashMap<>();
     private static final Map<String, Iterable<AdvancedModelBox>> ALL_PART_MAP = new HashMap<>();
 
-    public static Iterable<ModelRenderer> getPartsForRenderFromClass(Class clazz, String identifier) {
+    private static Iterable<ModelRenderer> getPartsForRenderFromClass(Class clazz, String identifier) {
         Iterable<ModelRenderer> boxes = null;
         if (PART_MAP.get(identifier) == null) {
             List<ModelRenderer> rendererList = new ArrayList<>();
@@ -24,12 +24,15 @@ public class EntityModelPartBuilder {
                 for (Field f : clazz.getDeclaredFields()) {
                     Object obj = f.get(null);
                     if(obj instanceof ModelRenderer){
+
+
+
                         rendererList.add((ModelRenderer) obj);
                     }
                 }
             } catch (Exception e0) {
             }
-            PART_MAP.put(identifier, ImmutableList.copyOf(rendererList));
+            boxes = PART_MAP.put(identifier, ImmutableList.copyOf(rendererList));
         } else {
             boxes = PART_MAP.get(identifier);
         }
@@ -50,7 +53,7 @@ public class EntityModelPartBuilder {
                 }
             } catch (Exception e0) {
             }
-            ALL_PART_MAP.put(identifier, ImmutableList.copyOf(rendererList));
+            boxes = ALL_PART_MAP.put(identifier, ImmutableList.copyOf(rendererList));
         } else {
             boxes = ALL_PART_MAP.get(identifier);
         }

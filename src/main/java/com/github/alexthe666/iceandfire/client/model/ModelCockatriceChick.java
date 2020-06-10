@@ -5,6 +5,7 @@ import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
@@ -146,7 +147,7 @@ public class ModelCockatriceChick extends ModelDragonBase<EntityCockatrice> {
 
     @Override
     public Iterable<ModelRenderer> getParts() {
-        return EntityModelPartBuilder.getPartsForRenderFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(lowerBody, leftThigh, rightThigh);
     }
 
     @Override
