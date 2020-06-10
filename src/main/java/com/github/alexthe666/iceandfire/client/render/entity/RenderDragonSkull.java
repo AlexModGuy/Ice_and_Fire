@@ -1,18 +1,20 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.github.alexthe666.citadel.client.model.TabulaModel;
+import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderDragonSkull extends Render<EntityDragonSkull> {
+public class RenderDragonSkull extends MobRenderer<EntityDragonSkull, SegmentedModel<EntityDragonSkull>> {
 
     public static final float[] growth_stage_1 = new float[]{1F, 3F};
     public static final float[] growth_stage_2 = new float[]{3F, 7F};
@@ -23,60 +25,35 @@ public class RenderDragonSkull extends Render<EntityDragonSkull> {
     private TabulaModel fireDragonModel;
     private TabulaModel iceDragonModel;
 
-    public RenderDragonSkull(RenderManager renderManager, ModelBase fireDragonModel, ModelBase iceDragonModel) {
-        super(renderManager);
+    public RenderDragonSkull(EntityRendererManager renderManager, SegmentedModel fireDragonModel, SegmentedModel iceDragonModel) {
+        super(renderManager, fireDragonModel, 0.5F);
         growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
         this.fireDragonModel = (TabulaModel) fireDragonModel;
         this.iceDragonModel = (TabulaModel) iceDragonModel;
     }
 
-    private static void setRotationAngles(ModelRenderer cube, float rotX, float rotY, float rotZ) {
-        cube.rotateAngleX = rotX;
-        cube.rotateAngleY = rotY;
-        cube.rotateAngleZ = rotZ;
+    public void render(EntityDragonSkull entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        if (entityIn.getDragonType() == 1) {
+            entityModel = iceDragonModel;
+        } else {
+            entityModel = fireDragonModel;
+        }
+        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
-    public void doRender(EntityDragonSkull entity, double x, double y, double z, float entityYaw, float partialTicks) {
-        GlStateManager.pushMatrix();
-        GlStateManager.disableCull();
-        GlStateManager.translate((float) x, (float) y, (float) z);
-        GlStateManager.rotate(entity.getYaw(), 0, -1, 0);
-        float f = 0.0625F;
-        GlStateManager.enableRescaleNormal();
-        GlStateManager.scale(1.0F, -1.0F, 1.0F);
-        GlStateManager.enableAlpha();
-        this.bindEntityTexture(entity);
-        if (this.renderOutlines) {
-            GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(this.getTeamColor(entity));
-        }
-        float size = getRenderSize(entity) / 3;
-        GlStateManager.scale(size, size, size);
-        GlStateManager.translate(0, entity.isOnWall() ? -0.24F : -0.12F, 0.5F);
-        if (entity.getType() == 0) {
-            fireDragonModel.resetToDefaultPose();
-            setRotationAngles(fireDragonModel.getCube("Head"), entity.isOnWall() ? (float) Math.toRadians(50F) : 0F, 0, 0);
-            fireDragonModel.getCube("Head").render(0.0625F);
-        }
-        if (entity.getType() == 1) {
-            iceDragonModel.resetToDefaultPose();
-            setRotationAngles(iceDragonModel.getCube("Head"), entity.isOnWall() ? (float) Math.toRadians(50F) : 0F, 0, 0);
-            iceDragonModel.getCube("Head").render(0.0625F);
-        }
-        if (this.renderOutlines) {
-            GlStateManager.disableOutlineMode();
-            GlStateManager.disableColorMaterial();
-        }
-        GlStateManager.popMatrix();
-        super.doRender(entity, x, y, z, entityYaw, partialTicks);
-    }
-
-    protected ResourceLocation getEntityTexture(EntityDragonSkull entity) {
-        if (entity.getType() == 1) {
+    public ResourceLocation getEntityTexture(EntityDragonSkull entity) {
+        if (entity.getDragonType() == 1) {
             return EnumDragonTextures.getIceDragonSkullTextures(entity);
         }
         return EnumDragonTextures.getFireDragonSkullTextures(entity);
     }
+
+    @Override
+    protected void preRenderCallback(EntityDragonSkull entity, MatrixStack matrixStackIn, float partialTickTime) {
+        float scale = getRenderSize(entity);
+        matrixStackIn.scale(scale, scale, scale);
+    }
+
 
     public float getRenderSize(EntityDragonSkull skull) {
         float step = (growth_stages[skull.getDragonStage() - 1][1] - growth_stages[skull.getDragonStage() - 1][0]) / 25;

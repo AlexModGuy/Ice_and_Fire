@@ -11,8 +11,8 @@ import net.minecraft.client.model.ModelHorse;
 import net.minecraft.client.model.ModelQuadruped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
@@ -23,10 +23,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @OnlyIn(Dist.CLIENT)
 public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
-    private final RenderLiving render;
+    private final MobRenderer render;
     private final boolean excludeDreadQueenMob;
 
-    public LayerDragonRider(RenderLiving renderIn, boolean excludeDreadQueenMob) {
+    public LayerDragonRider(MobRenderer renderIn, boolean excludeDreadQueenMob) {
         this.render = renderIn;
         this.excludeDreadQueenMob = excludeDreadQueenMob;
     }
@@ -52,10 +52,10 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
                 if (prey) {
                     if (animationTicks == 0 || animationTicks >= 15 || dragon.isFlying()) {
                         translateToHead();
-                        Render render = Minecraft.getInstance().getRenderManager().getEntityRenderObject(passenger);
+                        Render render = Minecraft.getInstance().getEntityRendererManager().getEntityRenderObject(passenger);
                         ModelBase modelBase = null;
-                        if (render instanceof RenderLiving) {
-                            modelBase = ((RenderLiving) render).getMainModel();
+                        if (render instanceof MobRenderer) {
+                            modelBase = ((MobRenderer) render).getMainModel();
                         }
                         if ((passenger.height > passenger.width || modelBase instanceof ModelBiped) && !(modelBase instanceof ModelQuadruped) && !(modelBase instanceof ModelHorse)) {
                             GlStateManager.translate(-0.15F * passenger.height, 0.1F * dragonScale - 0.1F * passenger.height, -0.1F * dragonScale - 0.1F * passenger.width);
@@ -121,7 +121,7 @@ public class LayerDragonRider implements LayerRenderer<EntityDragonBase> {
 
     public void renderEntity(Entity entityIn, double x, double y, double z, float yaw, float partialTicks, boolean p_188391_10_) {
         Render<Entity> render = null;
-        RenderManager manager = Minecraft.getInstance().getRenderManager();
+        EntityRendererManager manager = Minecraft.getInstance().getEntityRendererManager();
         try {
             render = manager.getEntityRenderObject(entityIn);
 

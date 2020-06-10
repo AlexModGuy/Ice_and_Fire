@@ -75,7 +75,7 @@ public class LayerHydraHead implements LayerRenderer {
         GlStateManager.popMatrix();
     }
 
-    protected ResourceLocation getEntityTexture(EntityHydra gorgon) {
+    public ResourceLocation getEntityTexture(EntityHydra gorgon) {
         switch (gorgon.getVariant()) {
             default:
                 return RenderHydra.TEXUTURE_0;

@@ -3,17 +3,17 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerMyrmexItem;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderMyrmexBase extends RenderLiving<EntityMyrmexBase> {
+public class RenderMyrmexBase extends MobRenderer<EntityMyrmexBase> {
 
-    public RenderMyrmexBase(RenderManager renderManager, ModelBase model, float shadowSize) {
+    public RenderMyrmexBase(EntityRendererManager renderManager, ModelBase model, float shadowSize) {
         super(renderManager, model, shadowSize);
         this.addLayer(new LayerMyrmexItem(this));
     }
@@ -34,7 +34,7 @@ public class RenderMyrmexBase extends RenderLiving<EntityMyrmexBase> {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntityMyrmexBase myrmex) {
+    public ResourceLocation getEntityTexture(EntityMyrmexBase myrmex) {
         return myrmex.getTexture();
     }
 

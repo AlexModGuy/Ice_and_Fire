@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
 public class RenderSeaSerpentArrow extends Render {
     private static final ResourceLocation arrowTextures = new ResourceLocation("iceandfire:textures/models/misc/sea_serpent_arrow.png");
 
-    public RenderSeaSerpentArrow(RenderManager render) {
+    public RenderSeaSerpentArrow(EntityRendererManager render) {
         super(render);
     }
 
@@ -83,12 +83,12 @@ public class RenderSeaSerpentArrow extends Render {
         super.doRender(entity, x, y, z, yaw, partialTicks);
     }
 
-    protected ResourceLocation getEntityTexture(EntitySeaSerpentArrow arrow) {
+    public ResourceLocation getEntityTexture(EntitySeaSerpentArrow arrow) {
         return arrowTextures;
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(Entity entity) {
+    public ResourceLocation getEntityTexture(Entity entity) {
         return this.getEntityTexture((EntitySeaSerpentArrow) entity);
     }
 

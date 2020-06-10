@@ -7,7 +7,7 @@ import com.github.alexthe666.iceandfire.client.model.ModelTroll;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderLivingBase;
+import net.minecraft.client.renderer.entity.MobRendererBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.EntityGuardian;
@@ -20,9 +20,9 @@ public class LayerStoneEntityCrack implements LayerRenderer {
     protected static final ResourceLocation[] DESTROY_STAGES = new ResourceLocation[]{new ResourceLocation("textures/blocks/destroy_stage_0.png"), new ResourceLocation("textures/blocks/destroy_stage_1.png"), new ResourceLocation("textures/blocks/destroy_stage_2.png"), new ResourceLocation("textures/blocks/destroy_stage_3.png"), new ResourceLocation("textures/blocks/destroy_stage_4.png"), new ResourceLocation("textures/blocks/destroy_stage_5.png"), new ResourceLocation("textures/blocks/destroy_stage_6.png"), new ResourceLocation("textures/blocks/destroy_stage_7.png"), new ResourceLocation("textures/blocks/destroy_stage_8.png"), new ResourceLocation("textures/blocks/destroy_stage_9.png")};
     private static final ModelHorseStatue HORSE_MODEL = new ModelHorseStatue();
     private static final ModelGuardianStatue GUARDIAN_MODEL = new ModelGuardianStatue();
-    private RenderLivingBase renderer;
+    private MobRendererBase renderer;
 
-    public LayerStoneEntityCrack(RenderLivingBase renderer) {
+    public LayerStoneEntityCrack(MobRendererBase renderer) {
         this.renderer = renderer;
     }
 

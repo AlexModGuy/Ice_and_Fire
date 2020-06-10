@@ -2,8 +2,8 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelHippogryph;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
@@ -14,9 +14,9 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
+public class RenderHippogryph extends MobRenderer<EntityHippogryph> {
 
-    public RenderHippogryph(RenderManager renderManager) {
+    public RenderHippogryph(EntityRendererManager renderManager) {
         super(renderManager, new ModelHippogryph(), 0.8F);
         this.layerRenderers.add(new LayerHippogriffSaddle(this));
         this.layerRenderers.add(new LayerHippogriffBridle(this));
@@ -31,7 +31,7 @@ public class RenderHippogryph extends RenderLiving<EntityHippogryph> {
 
     @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(EntityHippogryph entity) {
+    public ResourceLocation getEntityTexture(EntityHippogryph entity) {
         return entity.isBlinking() ? entity.getEnumVariant().TEXTURE_BLINK : entity.getEnumVariant().TEXTURE;
     }
 

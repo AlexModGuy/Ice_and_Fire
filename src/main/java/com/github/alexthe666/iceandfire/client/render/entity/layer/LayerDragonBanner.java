@@ -1,16 +1,20 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.iceandfire.client.model.ModelBanner;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
 import net.minecraft.client.model.ModelBanner;
 import net.minecraft.client.renderer.BannerTextures;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.entity.RenderLivingBase;
+import net.minecraft.client.renderer.entity.IEntityRenderer;
+import net.minecraft.client.renderer.entity.MobRendererBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBanner;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.BannerTileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
@@ -20,14 +24,16 @@ import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nullable;
 
-public class LayerDragonBanner implements LayerRenderer<EntityDragonBase> {
+public class LayerDragonBanner implements LayerRenderer<EntityDragonBase, SegmentedModel<EntityDragonBase>> {
 
-    protected final RenderLivingBase render;
+    protected final MobRendererBase render;
     private final ModelBanner bannerModel = new ModelBanner();
-    private final TileEntityBanner banner = new TileEntityBanner();
+    private final BannerTileEntity banner = new BannerTileEntity();
 
-    public LayerDragonBanner(RenderLivingBase livingEntityRendererIn) {
-        this.render = livingEntityRendererIn;
+    private final IEntityRenderer<EntityDragonBase, SegmentedModel<EntityDragonBase>> renderer;
+
+    public LayerDragonBanner(IEntityRenderer<EntityDragonBase, SegmentedModel<EntityDragonBase>> renderer) {
+        this.renderer = renderer;
     }
 
     public void doRenderLayer(EntityDragonBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {

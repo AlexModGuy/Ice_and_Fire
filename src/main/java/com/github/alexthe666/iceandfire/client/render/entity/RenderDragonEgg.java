@@ -1,15 +1,18 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderDragonEgg extends RenderLiving<EntityDragonEgg> {
+public class RenderDragonEgg extends LivingRenderer<EntityDragonEgg, SegmentedModel<EntityDragonEgg>> {
 
     public static final ResourceLocation EGG_RED = new ResourceLocation("iceandfire:textures/models/firedragon/egg_red.png");
     public static final ResourceLocation EGG_GREEN = new ResourceLocation("iceandfire:textures/models/firedragon/egg_green.png");
@@ -20,13 +23,13 @@ public class RenderDragonEgg extends RenderLiving<EntityDragonEgg> {
     public static final ResourceLocation EGG_SAPPHIRE = new ResourceLocation("iceandfire:textures/models/icedragon/egg_sapphire.png");
     public static final ResourceLocation EGG_SILVER = new ResourceLocation("iceandfire:textures/models/icedragon/egg_silver.png");
 
-    public RenderDragonEgg(RenderManager renderManager) {
+    public RenderDragonEgg(EntityRendererManager renderManager) {
         super(renderManager, new ModelDragonEgg(), 0.3F);
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntityDragonEgg entity) {
-        switch (entity.getType()) {
+    public ResourceLocation getEntityTexture(EntityDragonEgg entity) {
+        switch (entity.getEggType()) {
             default:
                 return EGG_RED;
             case GREEN:

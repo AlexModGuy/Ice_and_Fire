@@ -6,8 +6,8 @@ import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -16,12 +16,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderStoneStatue extends RenderLiving<EntityStoneStatue> {
+public class RenderStoneStatue extends MobRenderer<EntityStoneStatue> {
 
     private static final ModelStonePlayer MODEL = new ModelStonePlayer(0, false);
     private static final ModelStonePlayer MODEL_SLIM = new ModelStonePlayer(0, true);
 
-    public RenderStoneStatue(RenderManager renderManager) {
+    public RenderStoneStatue(EntityRendererManager renderManager) {
         super(renderManager, MODEL, 0.5F);
         this.layerRenderers.add(new LayerStonePlayerEntityCrack(this));
         LayerBipedArmor layerbipedarmor = new LayerBipedArmor(this) {
@@ -79,7 +79,7 @@ public class RenderStoneStatue extends RenderLiving<EntityStoneStatue> {
 
     @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(EntityStoneStatue entity) {
+    public ResourceLocation getEntityTexture(EntityStoneStatue entity) {
         return new ResourceLocation(getStoneType(entity.smallArms ? MODEL : MODEL_SLIM, 1));
     }
 }

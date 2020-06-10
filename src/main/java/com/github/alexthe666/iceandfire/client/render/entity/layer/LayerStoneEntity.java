@@ -7,7 +7,7 @@ import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderLivingBase;
+import net.minecraft.client.renderer.entity.MobRendererBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.EntityGuardian;
@@ -20,9 +20,9 @@ public class LayerStoneEntity implements LayerRenderer {
     private static final ModelHorseStatue HORSE_MODEL = new ModelHorseStatue();
     private static final ModelGuardianStatue GUARDIAN_MODEL = new ModelGuardianStatue();
     private static final ResourceLocation STONE_TEXTURE = new ResourceLocation( "textures/blocks/stone.png");
-    private RenderLivingBase renderer;
+    private MobRendererBase renderer;
 
-    public LayerStoneEntity(RenderLivingBase renderer) {
+    public LayerStoneEntity(MobRendererBase renderer) {
         this.renderer = renderer;
     }
 

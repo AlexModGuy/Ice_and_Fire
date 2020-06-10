@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
 public class RenderHydraArrow extends Render {
     private static final ResourceLocation TEXTURES = new ResourceLocation("iceandfire:textures/models/misc/hydra_arrow.png");
 
-    public RenderHydraArrow(RenderManager render) {
+    public RenderHydraArrow(EntityRendererManager render) {
         super(render);
     }
 
@@ -83,12 +83,12 @@ public class RenderHydraArrow extends Render {
         super.doRender(entity, x, y, z, yaw, partialTicks);
     }
 
-    protected ResourceLocation getEntityTexture(EntityHydraArrow arrow) {
+    public ResourceLocation getEntityTexture(EntityHydraArrow arrow) {
         return TEXTURES;
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(Entity entity) {
+    public ResourceLocation getEntityTexture(Entity entity) {
         return this.getEntityTexture((EntityHydraArrow) entity);
     }
 

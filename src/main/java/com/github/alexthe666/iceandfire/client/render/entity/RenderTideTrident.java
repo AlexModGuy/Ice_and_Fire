@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.client.model.ModelTideTrident;
 import com.github.alexthe666.iceandfire.entity.EntityTideTrident;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -14,7 +14,7 @@ public class RenderTideTrident extends Render<EntityTideTrident> {
     public static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/misc/tide_trident.png");
     private final ModelTideTrident modelTideTrident = new ModelTideTrident();
 
-    public RenderTideTrident(RenderManager renderer) {
+    public RenderTideTrident(EntityRendererManager renderer) {
         super(renderer);
     }
 
@@ -35,7 +35,7 @@ public class RenderTideTrident extends Render<EntityTideTrident> {
         GlStateManager.enableCull();
     }
 
-    protected ResourceLocation getEntityTexture(EntityTideTrident entity) {
+    public ResourceLocation getEntityTexture(EntityTideTrident entity) {
         return TEXTURE;
     }
 

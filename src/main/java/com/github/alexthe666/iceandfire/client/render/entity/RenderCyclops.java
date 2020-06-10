@@ -1,16 +1,18 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelCyclops;
+import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderCyclops extends RenderLiving<EntityCyclops> {
+public class RenderCyclops extends MobRenderer<EntityCyclops, ModelCyclops> {
 
     public static final ResourceLocation TEXTURE_0 = new ResourceLocation("iceandfire:textures/models/cyclops/cyclops_0.png");
     public static final ResourceLocation BLINK_0_TEXTURE = new ResourceLocation("iceandfire:textures/models/cyclops/cyclops_0_blink.png");
@@ -25,18 +27,18 @@ public class RenderCyclops extends RenderLiving<EntityCyclops> {
     public static final ResourceLocation BLINK_3_TEXTURE = new ResourceLocation("iceandfire:textures/models/cyclops/cyclops_3_blink.png");
     public static final ResourceLocation BLINDED_3_TEXTURE = new ResourceLocation("iceandfire:textures/models/cyclops/cyclops_3_injured.png");
 
-    public RenderCyclops(RenderManager renderManager) {
+    public RenderCyclops(EntityRendererManager renderManager) {
         super(renderManager, new ModelCyclops(), 1.6F);
     }
 
     @Override
-    public void preRenderCallback(EntityCyclops LivingEntityIn, float partialTickTime) {
-        GL11.glScalef(2.25F, 2.25F, 2.25F);
+    protected void preRenderCallback(EntityCyclops entity, MatrixStack matrixStackIn, float partialTickTime) {
+        matrixStackIn.scale(2.25F, 2.25F, 2.25F);
 
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntityCyclops cyclops) {
+    public ResourceLocation getEntityTexture(EntityCyclops cyclops) {
         switch (cyclops.getVariant()) {
             case 0:
                 if (cyclops.isBlinded()) {

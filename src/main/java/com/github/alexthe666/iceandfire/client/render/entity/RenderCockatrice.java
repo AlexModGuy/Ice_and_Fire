@@ -1,35 +1,42 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelCockatrice;
+import com.github.alexthe666.iceandfire.client.model.ModelCockatriceChick;
+import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.culling.ICamera;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.culling.ClippingHelperImpl;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.init.MobEffects;
+import net.minecraft.entity.monster.GuardianEntity;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
+public class RenderCockatrice extends MobRenderer<EntityCockatrice, SegmentedModel<EntityCockatrice>> {
 
     public static final ResourceLocation TEXTURE_ROOSTER = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_0.png");
     public static final ResourceLocation TEXTURE_HEN = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_1.png");
-    public static final ResourceLocation TEXTURE_BEAM = new ResourceLocation("iceandfire:textures/models/cockatrice/beam.png");
+    public static final RenderType TEXTURE_BEAM = RenderType.getEntityCutoutNoCull(new ResourceLocation("iceandfire:textures/models/cockatrice/beam.png"));
     public static final ResourceLocation TEXTURE_ROOSTER_CHICK = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_0_chick.png");
     public static final ResourceLocation TEXTURE_HEN_CHICK = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_1_chick.png");
+    public static final ModelCockatrice ADULT_MODEL = new ModelCockatrice();
+    public static final ModelCockatriceChick BABY_MODEL = new ModelCockatriceChick();
 
-    public RenderCockatrice(RenderManager renderManager) {
+    public RenderCockatrice(EntityRendererManager renderManager) {
         super(renderManager, new ModelCockatrice(), 0.6F);
     }
 
@@ -40,15 +47,15 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
         return new Vec3d(d0, d1, d2);
     }
 
-    public boolean shouldRender(EntityCockatrice livingEntity, ICamera camera, double camX, double camY, double camZ) {
-        if (super.shouldRender(livingEntity, camera, camX, camY, camZ)) {
+    public boolean shouldRender(EntityCockatrice livingEntityIn, ClippingHelperImpl camera, double camX, double camY, double camZ) {
+        if (super.shouldRender(livingEntityIn, camera, camX, camY, camZ)) {
             return true;
         } else {
-            if (livingEntity.hasTargetedEntity()) {
-                LivingEntity LivingEntity = livingEntity.getTargetedEntity();
-                if (LivingEntity != null) {
-                    Vec3d vec3d = this.getPosition(LivingEntity, (double) LivingEntity.height * 0.5D, 1.0F);
-                    Vec3d vec3d1 = this.getPosition(livingEntity, (double) livingEntity.getEyeHeight(), 1.0F);
+            if (livingEntityIn.hasTargetedEntity()) {
+                LivingEntity livingentity = livingEntityIn.getTargetedEntity();
+                if (livingentity != null) {
+                    Vec3d vec3d = this.getPosition(livingentity, (double)livingentity.getHeight() * 0.5D, 1.0F);
+                    Vec3d vec3d1 = this.getPosition(livingEntityIn, (double)livingEntityIn.getEyeHeight(), 1.0F);
                     return camera.isBoundingBoxInFrustum(new AxisAlignedBB(vec3d1.x, vec3d1.y, vec3d1.z, vec3d.x, vec3d.y, vec3d.z));
                 }
             }
@@ -57,100 +64,100 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
         }
     }
 
-    public void doRender(EntityCockatrice entity, double x, double y, double z, float entityYaw, float partialTicks) {
-        super.doRender(entity, x, y, z, entityYaw, partialTicks);
-        LivingEntity LivingEntity = entity.getTargetedEntity();
+    public void render(EntityCockatrice entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        if (entityIn.isChild()) {
+            entityModel = BABY_MODEL;
+        } else {
+            entityModel = ADULT_MODEL;
+        }
+        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+        LivingEntity livingentity = entityIn.getTargetedEntity();
+        boolean blindness = entityIn.isPotionActive(Effects.BLINDNESS) || livingentity != null && livingentity.isPotionActive(Effects.BLINDNESS);
+        if (!blindness && livingentity != null && EntityGorgon.isEntityLookingAt(entityIn, livingentity, EntityCockatrice.VIEW_RADIUS) && EntityGorgon.isEntityLookingAt(livingentity, entityIn, EntityCockatrice.VIEW_RADIUS)) {
+            if (livingentity != null) {
+                float f = entityIn.getAttackAnimationScale(partialTicks);
+                float f1 = (float) entityIn.world.getGameTime() + partialTicks;
+                float f2 = f1 * 0.5F % 1.0F;
+                float f3 = entityIn.getEyeHeight();
+                matrixStackIn.push();
+                matrixStackIn.translate(0.0D, (double) f3, 0.0D);
+                Vec3d vec3d = this.getPosition(livingentity, (double) livingentity.getHeight() * 0.5D, partialTicks);
+                Vec3d vec3d1 = this.getPosition(entityIn, (double) f3, partialTicks);
+                Vec3d vec3d2 = vec3d.subtract(vec3d1);
+                float f4 = (float) (vec3d2.length() + 1.0D);
+                vec3d2 = vec3d2.normalize();
+                float f5 = (float) Math.acos(vec3d2.y);
+                float f6 = (float) Math.atan2(vec3d2.z, vec3d2.x);
+                matrixStackIn.rotate(Vector3f.YP.rotationDegrees((((float) Math.PI / 2F) - f6) * (180F / (float) Math.PI)));
+                matrixStackIn.rotate(Vector3f.XP.rotationDegrees(f5 * (180F / (float) Math.PI)));
+                int i = 1;
+                float f7 = f1 * 0.05F * -1.5F;
+                float f8 = f * f;
+                int j = 64 + (int) (f8 * 191.0F);
+                int k = 32 + (int) (f8 * 191.0F);
+                int l = 128 - (int) (f8 * 64.0F);
+                float f9 = 0.2F;
+                float f10 = 0.282F;
+                float f11 = MathHelper.cos(f7 + 2.3561945F) * 0.282F;
+                float f12 = MathHelper.sin(f7 + 2.3561945F) * 0.282F;
+                float f13 = MathHelper.cos(f7 + ((float) Math.PI / 4F)) * 0.282F;
+                float f14 = MathHelper.sin(f7 + ((float) Math.PI / 4F)) * 0.282F;
+                float f15 = MathHelper.cos(f7 + 3.926991F) * 0.282F;
+                float f16 = MathHelper.sin(f7 + 3.926991F) * 0.282F;
+                float f17 = MathHelper.cos(f7 + 5.4977875F) * 0.282F;
+                float f18 = MathHelper.sin(f7 + 5.4977875F) * 0.282F;
+                float f19 = MathHelper.cos(f7 + (float) Math.PI) * 0.2F;
+                float f20 = MathHelper.sin(f7 + (float) Math.PI) * 0.2F;
+                float f21 = MathHelper.cos(f7 + 0.0F) * 0.2F;
+                float f22 = MathHelper.sin(f7 + 0.0F) * 0.2F;
+                float f23 = MathHelper.cos(f7 + ((float) Math.PI / 2F)) * 0.2F;
+                float f24 = MathHelper.sin(f7 + ((float) Math.PI / 2F)) * 0.2F;
+                float f25 = MathHelper.cos(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
+                float f26 = MathHelper.sin(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
+                float f27 = 0.0F;
+                float f28 = 0.4999F;
+                float f29 = -1.0F + f2;
+                float f30 = f4 * 2.5F + f29;
+                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(TEXTURE_BEAM);
+                MatrixStack.Entry matrixstack$entry = matrixStackIn.getLast();
+                Matrix4f matrix4f = matrixstack$entry.getMatrix();
+                Matrix3f matrix3f = matrixstack$entry.getNormal();
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f19, f4, f20, j, k, l, 0.4999F, f30);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f19, 0.0F, f20, j, k, l, 0.4999F, f29);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f21, 0.0F, f22, j, k, l, 0.0F, f29);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f21, f4, f22, j, k, l, 0.0F, f30);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f23, f4, f24, j, k, l, 0.4999F, f30);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f23, 0.0F, f24, j, k, l, 0.4999F, f29);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f25, 0.0F, f26, j, k, l, 0.0F, f29);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f25, f4, f26, j, k, l, 0.0F, f30);
+                float f31 = 0.0F;
+                if (entityIn.ticksExisted % 2 == 0) {
+                    f31 = 0.5F;
+                }
 
-        boolean blindness = entity.isPotionActive(MobEffects.BLINDNESS) || LivingEntity != null && LivingEntity.isPotionActive(MobEffects.BLINDNESS);
-        if (!blindness && LivingEntity != null && EntityGorgon.isEntityLookingAt(entity, LivingEntity, EntityCockatrice.VIEW_RADIUS) && EntityGorgon.isEntityLookingAt(LivingEntity, entity, EntityCockatrice.VIEW_RADIUS)) {
-            float f = entity.getAttackAnimationScale(partialTicks);
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder bufferbuilder = tessellator.getBuffer();
-            this.bindTexture(TEXTURE_BEAM);
-            GlStateManager.glTexParameteri(3553, 10242, 10497);
-            GlStateManager.glTexParameteri(3553, 10243, 10497);
-            GlStateManager.disableCull();
-            GlStateManager.disableBlend();
-            GlStateManager.depthMask(true);
-            float f1 = 240.0F;
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-            float f2 = (float) entity.world.getTotalWorldTime() + partialTicks;
-            float f3 = f2 * 0.15F % 1.0F;
-            float f4 = entity.getEyeHeight();
-            GlStateManager.pushMatrix();
-            GlStateManager.translate((float) x, (float) y + f4, (float) z);
-            Vec3d vec3d = this.getPosition(LivingEntity, (double) LivingEntity.height * 0.5D, partialTicks);
-            Vec3d vec3d1 = this.getPosition(entity, (double) f4, partialTicks);
-            Vec3d vec3d2 = vec3d.subtract(vec3d1);
-            double d0 = vec3d2.length() + 1.0D;
-            vec3d2 = vec3d2.normalize();
-            float f5 = (float) Math.acos(vec3d2.y);
-            float f6 = (float) Math.atan2(vec3d2.z, vec3d2.x);
-            GlStateManager.rotate((((float) Math.PI / 2F) + -f6) * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
-            GlStateManager.rotate(f5 * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
-            int i = 1;
-            double d1 = (double) f2 * 0.05D * -1.5D;
-            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-            float f7 = f * f;
-            int j = 225;
-            int k = 225;
-            int l = 225;
-            double d2 = 0.2D;
-            double d3 = 0.282D;
-            double d4 = 0.0D + Math.cos(d1 + 2.356194490192345D) * 0.282D;
-            double d5 = 0.0D + Math.sin(d1 + 2.356194490192345D) * 0.282D;
-            double d6 = 0.0D + Math.cos(d1 + (Math.PI / 4D)) * 0.282D;
-            double d7 = 0.0D + Math.sin(d1 + (Math.PI / 4D)) * 0.282D;
-            double d8 = 0.0D + Math.cos(d1 + 3.9269908169872414D) * 0.282D;
-            double d9 = 0.0D + Math.sin(d1 + 3.9269908169872414D) * 0.282D;
-            double d10 = 0.0D + Math.cos(d1 + 5.497787143782138D) * 0.282D;
-            double d11 = 0.0D + Math.sin(d1 + 5.497787143782138D) * 0.282D;
-            double d12 = 0.0D + Math.cos(d1 + Math.PI) * 0.2D;
-            double d13 = 0.0D + Math.sin(d1 + Math.PI) * 0.2D;
-            double d14 = 0.0D + Math.cos(d1 + 0.0D) * 0.2D;
-            double d15 = 0.0D + Math.sin(d1 + 0.0D) * 0.2D;
-            double d16 = 0.0D + Math.cos(d1 + (Math.PI / 2D)) * 0.2D;
-            double d17 = 0.0D + Math.sin(d1 + (Math.PI / 2D)) * 0.2D;
-            double d18 = 0.0D + Math.cos(d1 + (Math.PI * 3D / 2D)) * 0.2D;
-            double d19 = 0.0D + Math.sin(d1 + (Math.PI * 3D / 2D)) * 0.2D;
-            double d20 = 0.0D;
-            double d21 = 0.4999D;
-            double d22 = (double) (-1.0F + f3);
-            double d23 = d0 * 2.5D + d22;
-            bufferbuilder.pos(d12, d0, d13).tex(0.4999D, d23).color(j, k, l, 255).endVertex();
-            bufferbuilder.pos(d12, 0.0D, d13).tex(0.4999D, d22).color(j, k, l, 255).endVertex();
-            bufferbuilder.pos(d14, 0.0D, d15).tex(0.0D, d22).color(j, k, l, 255).endVertex();
-            bufferbuilder.pos(d14, d0, d15).tex(0.0D, d23).color(j, k, l, 255).endVertex();
-            bufferbuilder.pos(d16, d0, d17).tex(0.4999D, d23).color(j, k, l, 255).endVertex();
-            bufferbuilder.pos(d16, 0.0D, d17).tex(0.4999D, d22).color(j, k, l, 255).endVertex();
-            bufferbuilder.pos(d18, 0.0D, d19).tex(0.0D, d22).color(j, k, l, 255).endVertex();
-            bufferbuilder.pos(d18, d0, d19).tex(0.0D, d23).color(j, k, l, 255).endVertex();
-            double d24 = 0.0D;
-
-            if (entity.ticksExisted % 2 == 0) {
-                d24 = 0.5D;
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f11, f4, f12, j, k, l, 0.5F, f31 + 0.5F);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f13, f4, f14, j, k, l, 1.0F, f31 + 0.5F);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f17, f4, f18, j, k, l, 1.0F, f31);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f15, f4, f16, j, k, l, 0.5F, f31);
+                matrixStackIn.pop();
             }
+        }
 
-            bufferbuilder.pos(d4, d0, d5).tex(0.5D, d24 + 0.5D).color(j, k, l, 255).endVertex();
-            bufferbuilder.pos(d6, d0, d7).tex(1.0D, d24 + 0.5D).color(j, k, l, 255).endVertex();
-            bufferbuilder.pos(d10, d0, d11).tex(1.0D, d24).color(j, k, l, 255).endVertex();
-            bufferbuilder.pos(d8, d0, d9).tex(0.5D, d24).color(j, k, l, 255).endVertex();
-            tessellator.draw();
-            GlStateManager.disableBlend();
-            GlStateManager.popMatrix();
+    }
+
+    private static void func_229108_a_(IVertexBuilder p_229108_0_, Matrix4f p_229108_1_, Matrix3f p_229108_2_, float p_229108_3_, float p_229108_4_, float p_229108_5_, int p_229108_6_, int p_229108_7_, int p_229108_8_, float p_229108_9_, float p_229108_10_) {
+        p_229108_0_.pos(p_229108_1_, p_229108_3_, p_229108_4_, p_229108_5_).color(p_229108_6_, p_229108_7_, p_229108_8_, 255).tex(p_229108_9_, p_229108_10_).overlay(OverlayTexture.NO_OVERLAY).lightmap(15728880).normal(p_229108_2_, 0.0F, 1.0F, 0.0F).endVertex();
+    }
+
+    @Override
+    protected void preRenderCallback(EntityCockatrice entity, MatrixStack matrixStackIn, float partialTickTime) {
+        if (entity.isChild()) {
+            matrixStackIn.scale(0.5F, 0.5F, 0.5F);
         }
     }
 
     @Override
-    public void preRenderCallback(EntityCockatrice cockatrice, float partialTickTime) {
-        if (cockatrice.isChild()) {
-            GL11.glScalef(0.5F, 0.5F, 0.5F);
-        }
-    }
-
-    @Override
-    protected ResourceLocation getEntityTexture(EntityCockatrice cockatrice) {
+    public ResourceLocation getEntityTexture(EntityCockatrice cockatrice) {
         if (cockatrice.isChild()) {
             return cockatrice.isHen() ? TEXTURE_HEN_CHICK : TEXTURE_ROOSTER_CHICK;
         } else {

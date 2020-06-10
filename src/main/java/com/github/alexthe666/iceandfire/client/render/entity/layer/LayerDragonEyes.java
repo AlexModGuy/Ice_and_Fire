@@ -5,16 +5,16 @@ import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @OnlyIn(Dist.CLIENT)
 public class LayerDragonEyes implements LayerRenderer<EntityDragonBase> {
-    private final RenderLiving render;
+    private final MobRenderer render;
 
-    public LayerDragonEyes(RenderLiving renderIn) {
+    public LayerDragonEyes(MobRenderer renderIn) {
         this.render = renderIn;
     }
 

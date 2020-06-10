@@ -9,7 +9,7 @@ import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
@@ -20,10 +20,10 @@ import java.util.Map;
 
 public class LayerDragonArmor implements LayerRenderer<EntityDragonBase> {
     private static EquipmentSlotType[] ARMOR_SLOTS = {EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
-    private final RenderLiving render;
+    private final MobRenderer render;
     private static final Map<String, ResourceLocation> LAYERED_ARMOR_CACHE = Maps.newHashMap();
 
-    public LayerDragonArmor(RenderLiving renderIn, boolean isFireDragon) {
+    public LayerDragonArmor(MobRenderer renderIn, boolean isFireDragon) {
         this.render = renderIn;
     }
 

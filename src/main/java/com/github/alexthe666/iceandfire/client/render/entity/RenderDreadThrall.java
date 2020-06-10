@@ -2,11 +2,14 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelDreadThrall;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
+import com.github.alexthe666.iceandfire.entity.EntityDreadScuttler;
 import com.github.alexthe666.iceandfire.entity.EntityDreadThrall;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.layers.LayerArmorBase;
-import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.layers.ArmorLayer;
+import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
+import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.HandSide;
@@ -15,7 +18,7 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
-public class RenderDreadThrall extends RenderLiving<EntityDreadThrall> {
+public class RenderDreadThrall extends MobRenderer<EntityDreadThrall, ModelDreadThrall> {
     public static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/dread/dread_thrall.png");
     public static final ResourceLocation TEXTURE_EYES = new ResourceLocation("iceandfire:textures/models/dread/dread_thrall_eyes.png");
     public static final ResourceLocation TEXTURE_LEG_ARMOR = new ResourceLocation("iceandfire:textures/models/dread/thrall_legs.png");
@@ -28,100 +31,20 @@ public class RenderDreadThrall extends RenderLiving<EntityDreadThrall> {
     public static final ResourceLocation TEXTURE_ARMOR_6 = new ResourceLocation("iceandfire:textures/models/dread/thrall_chest_7.png");
     public static final ResourceLocation TEXTURE_ARMOR_7 = new ResourceLocation("iceandfire:textures/models/dread/thrall_chest_8.png");
 
-    public RenderDreadThrall(RenderManager renderManager) {
+    public RenderDreadThrall(EntityRendererManager renderManager) {
         super(renderManager, new ModelDreadThrall(0.0F, false), 0.6F);
         this.addLayer(new LayerGenericGlowing(this, TEXTURE_EYES));
-        this.addLayer(new LayerHeldItem(this) {
-            protected void translateToHand(HandSide p_191361_1_) {
-                ((ModelDreadThrall) this.livingEntityRenderer.getMainModel()).postRenderArm(0.0625F, p_191361_1_);
-                if (p_191361_1_ == HandSide.LEFT) {
-                    GL11.glTranslatef(-0.05F, 0, 0);
-                } else {
-                    GL11.glTranslatef(0.05F, 0, 0);
-                }
-            }
-        });
-        this.addLayer(new LayerArmorBase<ModelDreadThrall>(this) {
-            ModelDreadThrall modelHead = new ModelDreadThrall(1.0F, true);
-            ModelDreadThrall modelBoots = new ModelDreadThrall(1.0F, true);
-
-            protected void initArmor() {
-                this.modelLeggings = new ModelDreadThrall(0.5F, true);
-                this.modelArmor = new ModelDreadThrall(1.0F, true);
-            }
-
-            public ModelDreadThrall getModelFromSlot(EquipmentSlotType slotIn) {
-                switch (slotIn) {
-                    case HEAD:
-                        return modelHead;
-                    case CHEST:
-                        return modelArmor;
-                    case LEGS:
-                        return modelLeggings;
-                    case FEET:
-                        return modelBoots;
-                }
-                return modelArmor;
-            }
-
-            @Override
-            protected void setModelSlotVisible(ModelDreadThrall model, EquipmentSlotType slotIn) {
-                this.setModelVisible(model);
-                switch (slotIn) {
-                    case HEAD:
-                        model.bipedHead.invisible = false;
-                        model.bipedHeadwear.invisible = false;
-                        break;
-                    case CHEST:
-                        model.bipedBody.invisible = false;
-                        model.bipedRightArm.invisible = false;
-                        model.bipedLeftArm.invisible = false;
-                        break;
-                    case LEGS:
-                        model.bipedBody.invisible = false;
-                        model.bipedRightLeg.invisible = false;
-                        model.bipedLeftLeg.invisible = false;
-                        break;
-                    case FEET:
-                        model.bipedRightLeg.invisible = false;
-                        model.bipedLeftLeg.invisible = false;
-                }
-            }
-
-            protected void setModelVisible(ModelDreadThrall model) {
-                model.setVisible(false);
-            }
-
-            @Override
-            public ResourceLocation getArmorResource(net.minecraft.entity.Entity entity, ItemStack stack, EquipmentSlotType slot, String type){
-                if(entity instanceof EntityDreadThrall){
-                    EntityDreadThrall dreadThrall = (EntityDreadThrall)entity;
-                    if(dreadThrall.hasCustomArmorHead() && slot == EquipmentSlotType.HEAD){
-                        return getArmorTexture(dreadThrall.getArmorVariant());
-                    }
-                    if(dreadThrall.hasCustomArmorChest() && slot == EquipmentSlotType.CHEST){
-                        return getArmorTexture(dreadThrall.getArmorVariant());
-                    }
-                    if(dreadThrall.hasCustomArmorLegs() && slot == EquipmentSlotType.LEGS){
-                        return RenderDreadThrall.TEXTURE_LEG_ARMOR;
-                    }
-                    if(dreadThrall.hasCustomArmorFeet() && slot == EquipmentSlotType.FEET){
-                        return getArmorTexture(dreadThrall.getArmorVariant());
-                    }
-                }
-                return super.getArmorResource(entity, stack, slot, type);
-            }
-        });
+        this.addLayer(new HeldItemLayer<EntityDreadThrall, ModelDreadThrall>(this));
     }
 
     @Override
-    protected void preRenderCallback(EntityDreadThrall entity, float f) {
-        GL11.glScalef(0.95F, 0.95F, 0.95F);
+    public void preRenderCallback(EntityDreadThrall LivingEntityIn, MatrixStack stack, float partialTickTime) {
+        stack.translate(0.95F, 0.95F, 0.95F);
     }
 
     @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(EntityDreadThrall entity) {
+    public ResourceLocation getEntityTexture(EntityDreadThrall entity) {
         return TEXTURE;
     }
 

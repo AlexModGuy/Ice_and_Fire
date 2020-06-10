@@ -4,15 +4,15 @@ import com.github.alexthe666.iceandfire.client.model.ModelPixie;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerPixieGlow;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerPixieItem;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderPixie extends RenderLiving<EntityPixie> {
+public class RenderPixie extends MobRenderer<EntityPixie> {
 
     public static final ResourceLocation TEXTURE_0 = new ResourceLocation("iceandfire:textures/models/pixie/pixie_0.png");
     public static final ResourceLocation TEXTURE_1 = new ResourceLocation("iceandfire:textures/models/pixie/pixie_1.png");
@@ -21,7 +21,7 @@ public class RenderPixie extends RenderLiving<EntityPixie> {
     public static final ResourceLocation TEXTURE_4 = new ResourceLocation("iceandfire:textures/models/pixie/pixie_4.png");
     public static final ResourceLocation TEXTURE_5 = new ResourceLocation("iceandfire:textures/models/pixie/pixie_5.png");
 
-    public RenderPixie(RenderManager renderManager) {
+    public RenderPixie(EntityRendererManager renderManager) {
         super(renderManager, new ModelPixie(), 0.2F);
         this.layerRenderers.add(new LayerPixieItem(this));
         this.layerRenderers.add(new LayerPixieGlow(this));
@@ -38,7 +38,7 @@ public class RenderPixie extends RenderLiving<EntityPixie> {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntityPixie pixie) {
+    public ResourceLocation getEntityTexture(EntityPixie pixie) {
         switch (pixie.getColor()) {
             default:
                 return TEXTURE_0;

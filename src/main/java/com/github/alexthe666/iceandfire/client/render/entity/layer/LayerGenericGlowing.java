@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
@@ -13,10 +13,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @OnlyIn(Dist.CLIENT)
 public class LayerGenericGlowing implements LayerRenderer<LivingEntity> {
-    private final RenderLiving render;
+    private final MobRenderer render;
     private ResourceLocation texture;
 
-    public LayerGenericGlowing(RenderLiving renderIn, ResourceLocation texture) {
+    public LayerGenericGlowing(MobRenderer renderIn, ResourceLocation texture) {
         this.render = renderIn;
         this.texture = texture;
     }

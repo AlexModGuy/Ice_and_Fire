@@ -2,15 +2,15 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelSiren;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderSiren extends RenderLiving<EntitySiren> {
+public class RenderSiren extends MobRenderer<EntitySiren> {
 
     public static final ResourceLocation TEXTURE_0 = new ResourceLocation("iceandfire:textures/models/siren/siren_0.png");
     public static final ResourceLocation TEXTURE_0_AGGRESSIVE = new ResourceLocation("iceandfire:textures/models/siren/siren_0_aggressive.png");
@@ -19,7 +19,7 @@ public class RenderSiren extends RenderLiving<EntitySiren> {
     public static final ResourceLocation TEXTURE_2 = new ResourceLocation("iceandfire:textures/models/siren/siren_2.png");
     public static final ResourceLocation TEXTURE_2_AGGRESSIVE = new ResourceLocation("iceandfire:textures/models/siren/siren_2_aggressive.png");
 
-    public RenderSiren(RenderManager renderManager) {
+    public RenderSiren(EntityRendererManager renderManager) {
         super(renderManager, new ModelSiren(), 0.8F);
     }
 
@@ -30,7 +30,7 @@ public class RenderSiren extends RenderLiving<EntitySiren> {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntitySiren siren) {
+    public ResourceLocation getEntityTexture(EntitySiren siren) {
         switch (siren.getHairColor()) {
             default:
                 return siren.isAgressive() ? TEXTURE_0_AGGRESSIVE : TEXTURE_0;

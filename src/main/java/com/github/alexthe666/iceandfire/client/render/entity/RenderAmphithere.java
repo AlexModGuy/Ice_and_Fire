@@ -2,15 +2,17 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelAmphithere;
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderAmphithere extends RenderLiving<EntityAmphithere> {
+public class RenderAmphithere extends MobRenderer<EntityAmphithere, ModelAmphithere> {
 
     public static final ResourceLocation TEXTURE_BLUE = new ResourceLocation("iceandfire:textures/models/amphithere/amphithere_blue.png");
     public static final ResourceLocation TEXTURE_BLUE_BLINK = new ResourceLocation("iceandfire:textures/models/amphithere/amphithere_blue_blink.png");
@@ -23,18 +25,18 @@ public class RenderAmphithere extends RenderLiving<EntityAmphithere> {
     public static final ResourceLocation TEXTURE_YELLOW = new ResourceLocation("iceandfire:textures/models/amphithere/amphithere_yellow.png");
     public static final ResourceLocation TEXTURE_YELLOW_BLINK = new ResourceLocation("iceandfire:textures/models/amphithere/amphithere_yellow_blink.png");
 
-    public RenderAmphithere(RenderManager renderManager) {
+    public RenderAmphithere(EntityRendererManager renderManager) {
         super(renderManager, new ModelAmphithere(), 1.6F);
     }
 
     @Override
-    public void preRenderCallback(EntityAmphithere LivingEntityIn, float partialTickTime) {
-        GL11.glScalef(2.0F, 2.0F, 2.0F);
+    protected void preRenderCallback(EntityAmphithere entity, MatrixStack matrixStackIn, float partialTickTime) {
+        matrixStackIn.scale(2.0F, 2.0F, 2.0F);
 
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntityAmphithere amphithere) {
+    public ResourceLocation getEntityTexture(EntityAmphithere amphithere) {
         switch (amphithere.getVariant()) {
             case 0:
                 if (amphithere.isBlinking()) {

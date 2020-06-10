@@ -3,12 +3,12 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerSeaSerpentAncient;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public class RenderSeaSerpent extends RenderLiving<EntitySeaSerpent> {
+public class RenderSeaSerpent extends MobRenderer<EntitySeaSerpent> {
 
     public static final ResourceLocation TEXTURE_BLUE = new ResourceLocation("iceandfire:textures/models/seaserpent/seaserpent_blue.png");
     public static final ResourceLocation TEXTURE_BLUE_BLINK = new ResourceLocation("iceandfire:textures/models/seaserpent/seaserpent_blue_blink.png");
@@ -25,7 +25,7 @@ public class RenderSeaSerpent extends RenderLiving<EntitySeaSerpent> {
     public static final ResourceLocation TEXTURE_TEAL = new ResourceLocation("iceandfire:textures/models/seaserpent/seaserpent_teal.png");
     public static final ResourceLocation TEXTURE_TEAL_BLINK = new ResourceLocation("iceandfire:textures/models/seaserpent/seaserpent_teal_blink.png");
 
-    public RenderSeaSerpent(RenderManager renderManager, ModelBase model) {
+    public RenderSeaSerpent(EntityRendererManager renderManager, ModelBase model) {
         super(renderManager, model, 1.6F);
         this.layerRenderers.add(new LayerSeaSerpentAncient(this));
 
@@ -38,7 +38,7 @@ public class RenderSeaSerpent extends RenderLiving<EntitySeaSerpent> {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntitySeaSerpent serpent) {
+    public ResourceLocation getEntityTexture(EntitySeaSerpent serpent) {
         switch (serpent.getVariant()) {
             case 0:
                 if (serpent.isBlinking()) {

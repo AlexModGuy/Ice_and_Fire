@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderLivingBase;
+import net.minecraft.client.renderer.entity.MobRendererBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 
@@ -10,9 +10,9 @@ public class LayerSeaSerpentAncient implements LayerRenderer<EntitySeaSerpent> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/seaserpent/ancient_overlay.png");
     private static final ResourceLocation TEXTURE_BLINK = new ResourceLocation("iceandfire:textures/models/seaserpent/ancient_overlay_blink.png");
-    private RenderLivingBase renderer;
+    private MobRendererBase renderer;
 
-    public LayerSeaSerpentAncient(RenderLivingBase renderer) {
+    public LayerSeaSerpentAncient(MobRendererBase renderer) {
         this.renderer = renderer;
     }
 

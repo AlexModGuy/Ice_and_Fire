@@ -1,18 +1,33 @@
-package com.github.alexthe666.iceandfire.client.render.entity;
+package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
+import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.iceandfire.client.model.util.HideableModelRenderer;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelDreadLichSkull extends AdvancedModelBase {
+public class ModelDreadLichSkull extends AdvancedEntityModel {
     public HideableModelRenderer bipedHead;
     public HideableModelRenderer bipedHeadwear;
 
     public ModelDreadLichSkull() {
         this(0.0F);
+    }
+
+    @Override
+    public void setRotationAngles(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.resetToDefaultPose();
+    }
+
+    @Override
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(bipedHead, bipedHeadwear);
+    }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return ImmutableList.of(bipedHead, bipedHeadwear);
     }
 
     public ModelDreadLichSkull(float modelSize) {
@@ -27,10 +42,4 @@ public class ModelDreadLichSkull extends AdvancedModelBase {
         this.updateDefaultPose();
     }
 
-    public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
-        this.resetToDefaultPose();
-        this.bipedHead.render(scale);
-        this.bipedHeadwear.render(scale);
-    }
 }

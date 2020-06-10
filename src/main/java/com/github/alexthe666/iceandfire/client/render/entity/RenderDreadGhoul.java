@@ -5,18 +5,19 @@ import com.github.alexthe666.iceandfire.client.model.ModelPixie;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerPixieGlow;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerPixieItem;
+import com.github.alexthe666.iceandfire.entity.EntityDreadBeast;
 import com.github.alexthe666.iceandfire.entity.EntityDreadGhoul;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderDreadGhoul extends RenderLiving<EntityDreadGhoul> {
+public class RenderDreadGhoul extends MobRenderer<EntityDreadGhoul, ModelDreadGhoul> {
 
     public static final ResourceLocation TEXTURE_EYES = new ResourceLocation("iceandfire:textures/models/dread/dread_ghoul_eyes.png");
 
@@ -30,18 +31,20 @@ public class RenderDreadGhoul extends RenderLiving<EntityDreadGhoul> {
     public static final ResourceLocation TEXTURE_1_OPEN = new ResourceLocation("iceandfire:textures/models/dread/dread_ghoul_open_2.png");
     public static final ResourceLocation TEXTURE_2_OPEN = new ResourceLocation("iceandfire:textures/models/dread/dread_ghoul_open_3.png");
 
-    public RenderDreadGhoul(RenderManager renderManager) {
+    public RenderDreadGhoul(EntityRendererManager renderManager) {
         super(renderManager, new ModelDreadGhoul(), 0.5F);
         this.addLayer(new LayerGenericGlowing(this, TEXTURE_EYES));
     }
 
-    @Override
-    public void preRenderCallback(EntityDreadGhoul LivingEntityIn, float partialTickTime) {
-        GlStateManager.scale(LivingEntityIn.getScale(), LivingEntityIn.getScale(), LivingEntityIn.getScale());
-    }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntityDreadGhoul ghoul) {
+    protected void preRenderCallback(EntityDreadGhoul entity, MatrixStack matrixStackIn, float partialTickTime) {
+        matrixStackIn.scale(entity.getScale(), entity.getScale(), entity.getScale());
+    }
+
+
+    @Override
+    public ResourceLocation getEntityTexture(EntityDreadGhoul ghoul) {
         if(ghoul.getScreamStage() == 2){
             switch (ghoul.getVariant()) {
                 default:

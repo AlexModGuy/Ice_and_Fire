@@ -1,13 +1,12 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelDreadLich;
-import com.github.alexthe666.iceandfire.client.model.ModelDreadThrall;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
 import com.github.alexthe666.iceandfire.entity.EntityDreadLich;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.layers.LayerArmorBase;
-import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.HandSide;
@@ -16,7 +15,7 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
-public class RenderDreadLich extends RenderLiving<EntityDreadLich> {
+public class RenderDreadLich extends MobRenderer<EntityDreadLich, ModelDreadLich> {
     public static final ResourceLocation TEXTURE_EYES = new ResourceLocation("iceandfire:textures/models/dread/dread_lich_eyes.png");
     public static final ResourceLocation TEXTURE_0 = new ResourceLocation("iceandfire:textures/models/dread/dread_lich_0.png");
     public static final ResourceLocation TEXTURE_1 = new ResourceLocation("iceandfire:textures/models/dread/dread_lich_1.png");
@@ -24,29 +23,21 @@ public class RenderDreadLich extends RenderLiving<EntityDreadLich> {
     public static final ResourceLocation TEXTURE_3 = new ResourceLocation("iceandfire:textures/models/dread/dread_lich_3.png");
     public static final ResourceLocation TEXTURE_4 = new ResourceLocation("iceandfire:textures/models/dread/dread_lich_4.png");
 
-    public RenderDreadLich(RenderManager renderManager) {
+    public RenderDreadLich(EntityRendererManager renderManager) {
         super(renderManager, new ModelDreadLich(0.0F, false), 0.6F);
         this.addLayer(new LayerGenericGlowing(this, TEXTURE_EYES));
-        this.addLayer(new LayerHeldItem(this) {
-            protected void translateToHand(HandSide p_191361_1_) {
-                ((ModelDreadLich) this.livingEntityRenderer.getMainModel()).postRenderArm(0.0625F, p_191361_1_);
-                if (p_191361_1_ == HandSide.LEFT) {
-                    GL11.glTranslatef(-0.05F, 0, 0);
-                } else {
-                    GL11.glTranslatef(0.05F, 0, 0);
-                }
-            }
-        });
+        this.addLayer(new HeldItemLayer<EntityDreadLich, ModelDreadLich>(this));
+
     }
 
     @Override
-    protected void preRenderCallback(EntityDreadLich entity, float f) {
-        GL11.glScalef(0.95F, 0.95F, 0.95F);
+    protected void preRenderCallback(EntityDreadLich entity, MatrixStack matrixStackIn, float partialTickTime) {
+        matrixStackIn.scale(0.95F, 0.95F, 0.95F);
     }
 
     @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(EntityDreadLich entity) {
+    public ResourceLocation getEntityTexture(EntityDreadLich entity) {
         switch (entity.getVariant()){
             case 1:
                 return TEXTURE_1;

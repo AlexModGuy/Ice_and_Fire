@@ -7,8 +7,10 @@ import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder
 import com.github.alexthe666.iceandfire.client.model.util.HideableModelRenderer;
 import com.github.alexthe666.iceandfire.entity.EntityDreadKnight;
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.renderer.entity.model.IHasArm;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -18,7 +20,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelDreadKnight extends ModelDragonBase<EntityDreadKnight> {
+public class ModelDreadKnight extends ModelDragonBase<EntityDreadKnight> implements IHasArm {
     public HideableModelRenderer body;
     public HideableModelRenderer chestplate;
     public HideableModelRenderer head;
@@ -275,5 +277,10 @@ public class ModelDreadKnight extends ModelDragonBase<EntityDreadKnight> {
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
         return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+    }
+
+    @Override
+    public void translateHand(HandSide sideIn, MatrixStack matrixStackIn) {
+        getArmForSide(sideIn).translateRotate(matrixStackIn);
     }
 }

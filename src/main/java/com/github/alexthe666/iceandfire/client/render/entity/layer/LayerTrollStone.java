@@ -3,16 +3,16 @@ package com.github.alexthe666.iceandfire.client.render.entity.layer;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
-import net.minecraft.client.renderer.entity.RenderLivingBase;
+import net.minecraft.client.renderer.entity.MobRendererBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.LivingEntity;
 import org.lwjgl.opengl.GL11;
 
 public class LayerTrollStone implements LayerRenderer {
 
-    private RenderLivingBase renderer;
+    private MobRendererBase renderer;
 
-    public LayerTrollStone(RenderLivingBase renderer) {
+    public LayerTrollStone(MobRendererBase renderer) {
         this.renderer = renderer;
     }
 

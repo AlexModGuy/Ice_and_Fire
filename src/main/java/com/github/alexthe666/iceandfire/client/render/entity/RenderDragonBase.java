@@ -8,14 +8,16 @@ import com.github.alexthe666.iceandfire.client.texture.ArrayLayeredTexture;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
 import com.google.common.collect.Maps;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.culling.ICamera;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.Quaternion;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -23,13 +25,13 @@ import java.util.List;
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
+public class RenderDragonBase extends MobRenderer<EntityDragonBase, SegmentedModel<EntityDragonBase>> {
 
     private Map<String, ResourceLocation> LAYERED_TEXTURE_CACHE = Maps.newHashMap();
     private boolean fire;
 
-    public RenderDragonBase(RenderManager renderManager, ModelBase model, boolean fire) {
-        super(renderManager, model, 0.8F);
+    public RenderDragonBase(EntityRendererManager manager, SegmentedModel model, boolean fire) {
+        super(manager, model, 0.15F);
         this.addLayer(new LayerDragonEyes(this));
         this.addLayer(new LayerDragonRider(this, false));
         this.addLayer(new LayerDragonBanner(this));
@@ -37,21 +39,16 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
         this.fire = fire;
     }
 
-    public boolean shouldRender(EntityDragonBase dragon, ICamera camera, double camX, double camY, double camZ) {
-        return true;
-        //return super.shouldRender(dragon, camera, camX, camY, camZ) ||  dragon.shouldRender(camera)|| Minecraft.getInstance().player.isRidingOrBeingRiddenBy(dragon);
-    }
-
     @Override
-    protected void preRenderCallback(EntityDragonBase entity, float f) {
+    protected void preRenderCallback(EntityDragonBase entity, MatrixStack matrixStackIn, float partialTickTime) {
         this.shadowSize = entity.getRenderSize() / 3;
-        GL11.glScalef(shadowSize, shadowSize, shadowSize);
-        float f7 = entity.prevDragonPitch + (entity.getDragonPitch() - entity.prevDragonPitch) * f;
-        GL11.glRotatef(f7, 1, 0, 0);
+        matrixStackIn.scale(shadowSize, shadowSize, shadowSize);
+        float f7 = entity.prevDragonPitch + (entity.getDragonPitch() - entity.prevDragonPitch) * partialTickTime;
+        matrixStackIn.rotate(new Quaternion(Vector3f.XP, f7, true));
     }
 
 
-    protected ResourceLocation getEntityTexture(EntityDragonBase entity) {
+    public ResourceLocation getEntityTexture(EntityDragonBase entity) {
         String baseTexture = entity.getVariantName(entity.getVariant()) + " " + entity.getDragonStage() + entity.isModelDead() + entity.isMale() + entity.isSkeletal() + entity.isSleeping() + entity.isBlinking();
         ResourceLocation resourcelocation = LAYERED_TEXTURE_CACHE.get(baseTexture);
         if (resourcelocation == null) {

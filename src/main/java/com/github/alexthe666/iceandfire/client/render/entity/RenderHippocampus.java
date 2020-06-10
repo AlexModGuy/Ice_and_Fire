@@ -2,22 +2,19 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelHippocampus;
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
+public class RenderHippocampus extends MobRenderer<EntityHippocampus> {
 
     private static final ResourceLocation VARIANT_0 = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_0.png");
     private static final ResourceLocation VARIANT_0_BLINK = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_0_blinking.png");
@@ -33,7 +30,7 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
     private static final ResourceLocation VARIANT_5_BLINK = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_5_blinking.png");
 
 
-    public RenderHippocampus(RenderManager renderManager) {
+    public RenderHippocampus(EntityRendererManager renderManager) {
         super(renderManager, new ModelHippocampus(), 0.8F);
         this.layerRenderers.add(new RenderHippocampus.LayerHippocampusSaddle(this));
         this.layerRenderers.add(new RenderHippocampus.LayerHippocampusBridle(this));
@@ -44,7 +41,7 @@ public class RenderHippocampus extends RenderLiving<EntityHippocampus> {
 
     @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(EntityHippocampus entity) {
+    public ResourceLocation getEntityTexture(EntityHippocampus entity) {
         switch (entity.getVariant()) {
             default:
                 return entity.isBlinking() ? VARIANT_0_BLINK : VARIANT_0;

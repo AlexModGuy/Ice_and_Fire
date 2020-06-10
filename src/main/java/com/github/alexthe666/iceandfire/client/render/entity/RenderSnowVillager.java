@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.RenderVillager;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.item.ItemStack;
@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL11;
 @OnlyIn(Dist.CLIENT)
 public class RenderSnowVillager extends RenderVillager {
 
-    public RenderSnowVillager(RenderManager renderManager) {
+    public RenderSnowVillager(EntityRendererManager renderManager) {
         super(renderManager);
     }
 

@@ -8,7 +8,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -29,7 +29,7 @@ public class RenderMobSkull extends Render<EntityMobSkull> {
     private ModelHydraHead hydraModel;
     private TabulaModel seaSerpentModel;
 
-    public RenderMobSkull(RenderManager renderManager, ModelBase seaSerpentModel) {
+    public RenderMobSkull(EntityRendererManager renderManager, ModelBase seaSerpentModel) {
         super(renderManager);
         this.hippogryphModel = new ModelHippogryph();
         this.cyclopsModel = new ModelCyclops();
@@ -139,7 +139,7 @@ public class RenderMobSkull extends Render<EntityMobSkull> {
         }
     }
 
-    protected ResourceLocation getEntityTexture(EntityMobSkull entity) {
+    public ResourceLocation getEntityTexture(EntityMobSkull entity) {
         String s = "iceandfire:textures/models/skulls/skull_" + entity.getSkullType().name().toLowerCase() + ".png";
         ResourceLocation resourcelocation = SKULL_TEXTURE_CACHE.get(s);
         if (resourcelocation == null) {
