@@ -26,8 +26,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
-    private static boolean isMale;
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+    private static boolean isMale;
 
     public WorldGenFireDragonRoosts(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
@@ -124,13 +124,13 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
             }
         }
         {
-            EntityFireDragon dragon = new EntityFireDragon(IafEntityRegistry.FIRE_DRAGON,worldIn.getWorld());
+            EntityFireDragon dragon = new EntityFireDragon(IafEntityRegistry.FIRE_DRAGON, worldIn.getWorld());
             dragon.setGender(isMale);
             dragon.growDragon(40 + radius);
             dragon.setAgingDisabled(true);
             dragon.setHealth(dragon.getMaxHealth());
             dragon.setVariant(new Random().nextInt(4));
-            dragon.setPositionAndRotation(position.getX() + 0.5, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG,position).getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
+            dragon.setPositionAndRotation(position.getX() + 0.5, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position).getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
             dragon.homePos = position;
             dragon.hasHomePosition = true;
             dragon.setHunger(50);

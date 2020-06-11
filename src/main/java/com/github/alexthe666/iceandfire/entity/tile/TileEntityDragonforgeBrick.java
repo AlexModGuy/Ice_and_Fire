@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 

@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
+
 import java.util.function.Supplier;
 
 public class MessageDragonControl {
@@ -39,12 +40,24 @@ public class MessageDragonControl {
         buf.writeDouble(message.posZ);
     }
 
+    private double getPosX() {
+        return posX;
+    }
+
+    private double getPosY() {
+        return posY;
+    }
+
+    private double getPosZ() {
+        return posZ;
+    }
+
     public static class Handler {
         public Handler() {
         }
 
         public static void handle(MessageDragonControl message, Supplier<NetworkEvent.Context> context) {
-            ((NetworkEvent.Context) context.get()).setPacketHandled(true);
+            context.get().setPacketHandled(true);
             PlayerEntity player = context.get().getSender();
             if (player != null) {
                 if (player.world != null) {
@@ -83,17 +96,5 @@ public class MessageDragonControl {
                 }
             }
         }
-    }
-
-    private double getPosX() {
-        return posX;
-    }
-
-    private double getPosY() {
-        return posY;
-    }
-
-    private double getPosZ() {
-        return posZ;
     }
 }

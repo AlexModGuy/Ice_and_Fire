@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.util.math.BlockPos;

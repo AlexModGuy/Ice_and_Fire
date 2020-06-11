@@ -11,9 +11,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
 public class ItemDragonHornStatic extends Item {
 
     public ItemDragonHornStatic() {
@@ -28,17 +25,17 @@ public class ItemDragonHornStatic extends Item {
 
     @Override
     public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
-        if(target instanceof EntityDragonBase && ((EntityDragonBase) target).isOwner(playerIn)){
-            EntityDragonBase dragon = (EntityDragonBase)target;
+        if (target instanceof EntityDragonBase && ((EntityDragonBase) target).isOwner(playerIn)) {
+            EntityDragonBase dragon = (EntityDragonBase) target;
             playerIn.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 3, 1.25F);
             ItemStack hornItem = new ItemStack(dragon.getHorn().getItem(), 1);
             hornItem.setTag(new CompoundNBT());
-            dragon.writeEntityToNBT(hornItem.getTag());
+            dragon.writeAdditional(hornItem.getTag());
             if (!playerIn.inventory.addItemStackToInventory(hornItem)) {
                 playerIn.dropItem(hornItem, false);
             }
             playerIn.swingArm(hand);
-            dragon.setDead();
+            dragon.remove();
             stack.shrink(1);
             return true;
         }

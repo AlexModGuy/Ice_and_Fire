@@ -142,7 +142,7 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
                 LivingEntity entity = this.getAttackTarget();
                 if (ticksExisted % 7 == 0 && entity != null && i < this.getHeadCount()) {
                     Vec3d vec3d = this.getLook(1.0F);
-                    if(rand.nextFloat() < 0.2F){
+                    if (rand.nextFloat() < 0.2F) {
                         this.playSound(IafSoundRegistry.HYDRA_SPIT, this.getSoundVolume(), this.getSoundPitch());
                     }
                     double headPosX = this.headBoxes[i].getPosX() + vec3d.x * 1.0D;
@@ -302,7 +302,7 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         compound.putInt("Variant", this.getVariant());
         compound.putInt("HeadCount", this.getHeadCount());
         compound.putInt("SeveredHead", this.getSeveredHead());
-        for(int i = 0; i < HEADS; i++){
+        for (int i = 0; i < HEADS; i++) {
             compound.putFloat("HeadDamage" + i, headDamageTracker[i]);
         }
     }
@@ -313,7 +313,7 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         this.setVariant(compound.getInt("Variant"));
         this.setHeadCount(compound.getInt("HeadCount"));
         this.setSeveredHead(compound.getInt("SeveredHead"));
-        for(int i = 0; i < HEADS; i++){
+        for (int i = 0; i < HEADS; i++) {
             headDamageTracker[i] = compound.getFloat("HeadDamage" + i);
         }
     }

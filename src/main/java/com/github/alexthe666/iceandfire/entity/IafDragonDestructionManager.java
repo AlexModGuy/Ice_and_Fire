@@ -3,11 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.api.event.DragonFireDamageWorldEvent;
-import com.github.alexthe666.iceandfire.block.BlockCharedPath;
-import com.github.alexthe666.iceandfire.block.BlockFallingReturningState;
-import com.github.alexthe666.iceandfire.block.BlockReturningState;
-import com.github.alexthe666.iceandfire.block.IDragonProof;
-import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
+import com.github.alexthe666.iceandfire.block.*;
 import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.entity.util.BlockLaunchExplosion;
@@ -28,7 +24,8 @@ import java.util.stream.Collectors;
 public class IafDragonDestructionManager {
 
     public static void destroyAreaFire(World world, BlockPos center, EntityDragonBase destroyer) {
-        if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ()))) return;
+        if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
+            return;
         int stage = destroyer.getDragonStage();
         double damageRadius = 3.5D;
         float dmgScale = (float) IafConfig.dragonAttackDamageFire;
@@ -86,7 +83,8 @@ public class IafDragonDestructionManager {
     }
 
     public static void destroyAreaIce(World world, BlockPos center, EntityDragonBase destroyer) {
-        if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ()))) return;
+        if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
+            return;
         int stage = destroyer.getDragonStage();
         double damageRadius = 3.5D;
         float dmgScale = (float) IafConfig.dragonAttackDamageIce;
@@ -151,7 +149,8 @@ public class IafDragonDestructionManager {
 
     public static void destroyAreaFireCharge(World world, BlockPos center, EntityDragonBase destroyer) {
         if (destroyer != null) {
-            if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ()))) return;
+            if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
+                return;
             int stage = destroyer.getDragonStage();
             if (stage <= 3) {
                 for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2)).collect(Collectors.toSet())) {
@@ -210,7 +209,7 @@ public class IafDragonDestructionManager {
                     }
                 }
             }
-            if(IafConfig.explosiveDragonBreath){
+            if (IafConfig.explosiveDragonBreath) {
                 BlockLaunchExplosion explosion = new BlockLaunchExplosion(world, destroyer, center.getX(), center.getY(), center.getZ(), Math.min(2, stage - 2));
                 explosion.doExplosionA();
                 explosion.doExplosionB(true);
@@ -220,7 +219,8 @@ public class IafDragonDestructionManager {
 
     public static void destroyAreaIceCharge(World world, BlockPos center, EntityDragonBase destroyer) {
         if (destroyer != null) {
-            if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ()))) return;
+            if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
+                return;
             int stage = destroyer.getDragonStage();
             if (stage <= 3) {
                 for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2)).collect(Collectors.toSet())) {
@@ -285,7 +285,7 @@ public class IafDragonDestructionManager {
                     }
                 }
             }
-            if(IafConfig.explosiveDragonBreath){
+            if (IafConfig.explosiveDragonBreath) {
                 BlockLaunchExplosion explosion = new BlockLaunchExplosion(world, destroyer, center.getX(), center.getY(), center.getZ(), Math.min(2, stage - 2));
                 explosion.doExplosionA();
                 explosion.doExplosionB(true);

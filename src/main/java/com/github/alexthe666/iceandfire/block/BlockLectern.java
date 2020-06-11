@@ -8,7 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -22,7 +21,6 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 public class BlockLectern extends ContainerBlock {
@@ -79,7 +77,7 @@ public class BlockLectern extends ContainerBlock {
     }
 
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return (BlockState)this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
     }
 
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
@@ -91,10 +89,10 @@ public class BlockLectern extends ContainerBlock {
     }
 
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if(!player.isShiftKeyDown()){
-            if(worldIn.isRemote){
+        if (!player.isShiftKeyDown()) {
+            if (worldIn.isRemote) {
                 IceAndFire.PROXY.setRefrencedTE(worldIn.getTileEntity(pos));
-            }else{
+            } else {
                 INamedContainerProvider inamedcontainerprovider = this.getContainer(state, worldIn, pos);
                 if (inamedcontainerprovider != null) {
                     player.openContainer(inamedcontainerprovider);

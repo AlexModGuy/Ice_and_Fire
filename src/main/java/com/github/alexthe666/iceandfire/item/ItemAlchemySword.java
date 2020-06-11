@@ -18,6 +18,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class ItemAlchemySword extends SwordItem {
 
     public ItemAlchemySword(IItemTier toolmaterial, String name) {
         super(toolmaterial, 3, -2.4F, new Item.Properties().group(IceAndFire.TAB_ITEMS));
-           this.setRegistryName(IceAndFire.MODID, name);
+        this.setRegistryName(IceAndFire.MODID, name);
     }
 
     @Override

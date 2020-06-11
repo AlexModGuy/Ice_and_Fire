@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
@@ -141,7 +142,7 @@ public class RenderMobSkull extends EntityRenderer<EntityMobSkull> {
         return getSkullTexture(entity.getSkullType());
     }
 
-    public ResourceLocation getSkullTexture(EnumSkullType skull){
+    public ResourceLocation getSkullTexture(EnumSkullType skull) {
         String s = "iceandfire:textures/models/skulls/skull_" + skull.name().toLowerCase() + ".png";
         ResourceLocation resourcelocation = SKULL_TEXTURE_CACHE.get(s);
         if (resourcelocation == null) {

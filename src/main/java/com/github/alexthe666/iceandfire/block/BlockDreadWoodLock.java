@@ -33,8 +33,8 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
 
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult resultIn) {
         ItemStack stack = player.getHeldItem(handIn);
-        if(stack.getItem() == IafItemRegistry.DREAD_KEY){
-            if(!player.isCreative()){
+        if (stack.getItem() == IafItemRegistry.DREAD_KEY) {
+            if (!player.isCreative()) {
                 stack.shrink(1);
             }
             deleteNearbyWood(worldIn, pos, pos);
@@ -45,10 +45,10 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
     }
 
     private void deleteNearbyWood(World worldIn, BlockPos pos, BlockPos startPos) {
-        if(pos.distanceSq(startPos) < 32){
-            if(worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.DREADWOOD_PLANKS || worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.DREADWOOD_PLANKS_LOCK){
+        if (pos.distanceSq(startPos) < 32) {
+            if (worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.DREADWOOD_PLANKS || worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.DREADWOOD_PLANKS_LOCK) {
                 worldIn.destroyBlock(pos, false);
-                for(Direction facing : Direction.values()){
+                for (Direction facing : Direction.values()) {
                     deleteNearbyWood(worldIn, pos.offset(facing), startPos);
                 }
             }

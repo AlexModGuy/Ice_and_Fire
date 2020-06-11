@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.message.MessageAddChainedEntity;
 import com.github.alexthe666.iceandfire.message.MessageRemoveChainedEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
@@ -46,7 +45,7 @@ public class ChainEntityProperties extends EntityProperties<LivingEntity> {
         this.connectedEntityUUID = new ArrayList<UUID>();
         for (int i = 0; i < nbttaglist.size(); ++i) {
             INBT cNbt = nbttaglist.get(i);
-            if(cNbt instanceof CompoundNBT){
+            if (cNbt instanceof CompoundNBT) {
                 connectedEntityUUID.add(((CompoundNBT) cNbt).getUniqueId("UUID"));
 
             }

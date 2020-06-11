@@ -1,13 +1,11 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.EntityAmphithereArrow;
 import com.github.alexthe666.iceandfire.entity.EntityHydraArrow;
-import net.minecraft.client.resources.I18n;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,7 +25,7 @@ public class ItemHydraArrow extends ArrowItem {
     }
 
     public AbstractArrowEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-        return new EntityHydraArrow(worldIn, shooter);
+        return new EntityHydraArrow(IafEntityRegistry.HYDRA_ARROW, worldIn, shooter);
     }
 
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {

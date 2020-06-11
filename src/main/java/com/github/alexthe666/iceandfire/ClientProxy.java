@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.citadel.client.model.TabulaModelHandler;
+import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexAddRoom;
 import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexStaff;
 import com.github.alexthe666.iceandfire.client.gui.IafGuiRegistry;
@@ -16,13 +17,12 @@ import com.github.alexthe666.iceandfire.client.particle.*;
 import com.github.alexthe666.iceandfire.client.render.entity.*;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonArmor;
 import com.github.alexthe666.iceandfire.client.render.tile.*;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderHydra;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.event.ClientEvents;
 import com.github.alexthe666.iceandfire.event.PlayerRenderEvents;
-import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
-import com.github.alexthe666.iceandfire.entity.*;
-import com.github.alexthe666.iceandfire.entity.tile.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.fonts.Font;
@@ -43,11 +43,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+
 @Mod.EventBusSubscriber
 public class ClientProxy extends CommonProxy {
 
@@ -68,29 +70,38 @@ public class ClientProxy extends CommonProxy {
     private static final ModelSilverArmor SILVER_ARMOR_MODEL = new ModelSilverArmor(0.5F);
     private static final ModelSilverArmor SILVER_ARMOR_MODEL_LEGS = new ModelSilverArmor(0.2F);
     public static List<UUID> currentDragonRiders = new ArrayList<UUID>();
+    public static TabulaModel FIRE_DRAGON_BASE_MODEL;
+    public static TabulaModel ICE_DRAGON_BASE_MODEL;
+    public static TabulaModel SEA_SERPENT_BASE_MODEL;
     private static MyrmexHive referedClientHive = null;
     private FontRenderer bestiaryFontRenderer;
     private int previousViewType = 0;
     private int thirdPersonViewDragon = 0;
+    private Entity referencedMob = null;
+    private TileEntity referencedTE = null;
 
     public static MyrmexHive getReferedClientHive() {
         return referedClientHive;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static Callable<ItemStackTileEntityRenderer> getTEISR() {
+        return IceAndFireTEISR::new;
     }
 
     public void setReferencedHive(MyrmexHive hive) {
         referedClientHive = hive;
     }
 
-
     @OnlyIn(Dist.CLIENT)
     @Override
     @SuppressWarnings("deprecation")
     public void init() {
         IafGuiRegistry.register();
-        try{
+        try {
             Font font = new Font(Minecraft.getInstance().textureManager, new ResourceLocation("iceandfire:textures/font/bestiary.png"));
             this.bestiaryFontRenderer = new FontRenderer(Minecraft.getInstance().textureManager, font);
-        }catch(Exception e){
+        } catch (Exception e) {
             this.bestiaryFontRenderer = Minecraft.getInstance().fontRenderer;
         }
         IafKeybindRegistry.init();
@@ -106,9 +117,6 @@ public class ClientProxy extends CommonProxy {
         ClientEvents.initializeStoneLayer();
 
     }
-    public static TabulaModel FIRE_DRAGON_BASE_MODEL;
-    public static TabulaModel ICE_DRAGON_BASE_MODEL;
-    public static TabulaModel SEA_SERPENT_BASE_MODEL;
 
     @SuppressWarnings("deprecation")
     @OnlyIn(Dist.CLIENT)
@@ -327,7 +335,7 @@ public class ClientProxy extends CommonProxy {
         previousViewType = view;
     }
 
-    public void updateDragonArmorRender(String clear){
+    public void updateDragonArmorRender(String clear) {
         LayerDragonArmor.clearCache(clear);
     }
 
@@ -335,31 +343,23 @@ public class ClientProxy extends CommonProxy {
         return InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 340) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 344);
     }
 
-    private Entity referencedMob = null;
-    private TileEntity referencedTE = null;
-
-    public void setReferencedMob(Entity dragonBase) {
-        referencedMob = dragonBase;
-    }
-
     public Entity getReferencedMob() {
         return referencedMob;
     }
 
-    public void setRefrencedTE(TileEntity tileEntity) {
-        referencedTE = tileEntity;
+    public void setReferencedMob(Entity dragonBase) {
+        referencedMob = dragonBase;
     }
 
     public TileEntity getRefrencedTE() {
         return referencedTE;
     }
 
-    public Item.Properties setupISTER(Item.Properties group) {
-        return group.setISTER(ClientProxy::getTEISR);
+    public void setRefrencedTE(TileEntity tileEntity) {
+        referencedTE = tileEntity;
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private static Callable<ItemStackTileEntityRenderer> getTEISR() {
-        return IceAndFireTEISR::new;
+    public Item.Properties setupISTER(Item.Properties group) {
+        return group.setISTER(ClientProxy::getTEISR);
     }
 }

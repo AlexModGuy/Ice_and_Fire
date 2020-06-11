@@ -113,7 +113,7 @@ public class ModelDreadKnight extends ModelDragonBase<EntityDreadKnight> impleme
         this.leftArmPose = BipedModel.ArmPose.EMPTY;
         ItemStack itemstack = LivingEntityIn.getHeldItem(Hand.MAIN_HAND);
 
-        if (itemstack.getItem() == Items.BOW && ((EntityDreadKnight) LivingEntityIn).isSwingInProgress) {
+        if (itemstack.getItem() == Items.BOW && LivingEntityIn.isSwingInProgress) {
             if (LivingEntityIn.getPrimaryHand() == HandSide.RIGHT) {
                 this.rightArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
             } else {
@@ -126,9 +126,9 @@ public class ModelDreadKnight extends ModelDragonBase<EntityDreadKnight> impleme
 
     public void setRotationAngles(EntityDreadKnight entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetToDefaultPose();
-        animate((IAnimatedEntity) entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0);
-        ItemStack itemstack = ((LivingEntity) entityIn).getHeldItemMainhand();
-        EntityDreadKnight thrall = (EntityDreadKnight) entityIn;
+        animate(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0);
+        ItemStack itemstack = entityIn.getHeldItemMainhand();
+        EntityDreadKnight thrall = entityIn;
         this.faceTarget(netHeadYaw, headPitch, 1.0F, head);
         float f = 1.0F;
         this.armRight.rotateAngleX += MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI) * 2.0F * limbSwingAmount * 0.5F / f;

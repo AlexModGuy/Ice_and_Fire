@@ -17,7 +17,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
@@ -33,8 +32,8 @@ public class WorldGenIceDragonCave extends Feature<NoFeatureConfig> {
     public static final ResourceLocation ICEDRAGON_CHEST = new ResourceLocation("iceandfire", "ice_dragon_female_cave");
     public static final ResourceLocation ICEDRAGON_MALE_CHEST = new ResourceLocation("iceandfire", "ice_dragon_male_cave");
     private static final WorldGenCaveStalactites CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.FROZEN_STONE);
-    private static boolean isMale;
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+    private static boolean isMale;
 
     public WorldGenIceDragonCave(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);

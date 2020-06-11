@@ -26,25 +26,22 @@ public class GenericGriefEvent extends LivingEvent {
     private double targetY;
     private double targetZ;
 
-    public GenericGriefEvent(LivingEntity griefer, double targetX, double targetY, double targetZ){
+    public GenericGriefEvent(LivingEntity griefer, double targetX, double targetY, double targetZ) {
         super(griefer);
         this.targetX = targetX;
         this.targetY = targetY;
         this.targetZ = targetZ;
     }
 
-    public double getTargetX()
-    {
+    public double getTargetX() {
         return targetX;
     }
 
-    public double getTargetY()
-    {
+    public double getTargetY() {
         return targetY;
     }
 
-    public double getTargetZ()
-    {
+    public double getTargetZ() {
         return targetZ;
     }
 

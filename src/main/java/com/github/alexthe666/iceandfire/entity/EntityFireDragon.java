@@ -7,8 +7,8 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.event.DragonFireEvent;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -116,7 +116,7 @@ public class EntityFireDragon extends EntityDragonBase {
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         this.getLookController().setLookPositionWithEntity(entityIn, 30.0F, 30.0F);
-        if(!this.isPlayingAttackAnimation()){
+        if (!this.isPlayingAttackAnimation()) {
             switch (groundAttack) {
                 case BITE:
                     this.setAnimation(ANIMATION_BITE);
@@ -126,13 +126,13 @@ public class EntityFireDragon extends EntityDragonBase {
                     break;
                 case SHAKE_PREY:
                     boolean flag = false;
-                    if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector().add(0, this.getHeight()/2, 0), entityIn.getPositionVector().add(0, entityIn.getHeight()/2, 0)) &&
+                    if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector().add(0, this.getHeight() / 2, 0), entityIn.getPositionVector().add(0, entityIn.getHeight() / 2, 0)) &&
                             entityIn.getWidth() < this.getWidth() * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
                         this.setAnimation(ANIMATION_SHAKEPREY);
                         flag = true;
                         entityIn.startRiding(this);
                     }
-                    if(!flag){
+                    if (!flag) {
                         groundAttack = IafDragonAttacks.Ground.BITE;
                         this.setAnimation(ANIMATION_BITE);
                     }

@@ -68,10 +68,10 @@ public class IafEntityRegistry {
     public static final EntityType<EntityHydra> HYDRA = registerEntity(EntityType.Builder.create(EntityHydra::new, EntityClassification.CREATURE).size(2.8F, 1.39F), "hydra");
     public static final EntityType<EntityHydraBreath> HYDRA_BREATH = registerEntity(EntityType.Builder.create(EntityHydraBreath::new, EntityClassification.MISC).size(0.9F, 0.9F), "hydra_breath");
     public static final EntityType<EntityHydraArrow> HYDRA_ARROW = registerEntity(EntityType.Builder.create(EntityHydraArrow::new, EntityClassification.MISC).size(0.5F, 0.5F), "hydra_arrow");
-    public static final EntityType<PartEntity> ENTITY_MULTIPART =  registerEntity(EntityType.Builder.create(PartEntity::new, EntityClassification.MISC).size(0.5F, 0.5F), "entity_multipart");
+    public static final EntityType<PartEntity> ENTITY_MULTIPART = registerEntity(EntityType.Builder.create(PartEntity::new, EntityClassification.MISC).size(0.5F, 0.5F), "entity_multipart");
 
 
-    private static final EntityType registerEntity(EntityType.Builder builder, String entityName){
+    private static final EntityType registerEntity(EntityType.Builder builder, String entityName) {
         ResourceLocation nameLoc = new ResourceLocation(IceAndFire.MODID, entityName);
         return (EntityType) builder.build(entityName).setRegistryName(nameLoc);
     }

@@ -1,28 +1,22 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.client.StatCollector;
-import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexEgg;
-import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -54,7 +48,7 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
         String caste;
         CompoundNBT tag = stack.getTag();
         int eggOrdinal = 0;
-        if(tag != null){
+        if (tag != null) {
             eggOrdinal = tag.getInt("EggOrdinal");
         }
         switch (eggOrdinal) {
@@ -86,7 +80,7 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
         EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG, context.getWorld());
         CompoundNBT tag = itemstack.getTag();
         int eggOrdinal = 0;
-        if(tag != null){
+        if (tag != null) {
             eggOrdinal = tag.getInt("EggOrdinal");
         }
         egg.setMyrmexCaste(eggOrdinal);
@@ -102,7 +96,7 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
     public boolean hasEffect(ItemStack stack) {
         CompoundNBT tag = stack.getTag();
         int eggOrdinal = 0;
-        if(tag != null){
+        if (tag != null) {
             eggOrdinal = tag.getInt("EggOrdinal");
         }
         return super.hasEffect(stack) || eggOrdinal == 4;

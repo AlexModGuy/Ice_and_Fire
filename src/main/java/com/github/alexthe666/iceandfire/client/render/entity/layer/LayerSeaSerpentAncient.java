@@ -24,7 +24,7 @@ public class LayerSeaSerpentAncient extends LayerRenderer<EntitySeaSerpent, Segm
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntitySeaSerpent serpent, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if(serpent.isAncient()){
+        if (serpent.isAncient()) {
             RenderType tex = RenderType.getEntityNoOutline(serpent.isBlinking() ? TEXTURE_BLINK : TEXTURE);
             IVertexBuilder ivertexbuilder = bufferIn.getBuffer(tex);
             this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);

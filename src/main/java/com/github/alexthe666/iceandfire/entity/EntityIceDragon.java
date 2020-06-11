@@ -7,8 +7,8 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.event.DragonFireEvent;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -139,7 +139,7 @@ public class EntityIceDragon extends EntityDragonBase {
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         this.getLookController().setLookPositionWithEntity(entityIn, 30.0F, 30.0F);
-        if(!this.isPlayingAttackAnimation()){
+        if (!this.isPlayingAttackAnimation()) {
             switch (groundAttack) {
                 case BITE:
                     this.setAnimation(ANIMATION_BITE);
@@ -149,13 +149,13 @@ public class EntityIceDragon extends EntityDragonBase {
                     break;
                 case SHAKE_PREY:
                     boolean flag = false;
-                    if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector().add(0, this.getHeight()/2, 0), entityIn.getPositionVector().add(0, entityIn.getHeight()/2, 0)) &&
+                    if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector().add(0, this.getHeight() / 2, 0), entityIn.getPositionVector().add(0, entityIn.getHeight() / 2, 0)) &&
                             entityIn.getWidth() < this.getWidth() * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
                         this.setAnimation(ANIMATION_SHAKEPREY);
                         flag = true;
                         entityIn.startRiding(this);
                     }
-                    if(!flag){
+                    if (!flag) {
                         groundAttack = IafDragonAttacks.Ground.BITE;
                         this.setAnimation(ANIMATION_BITE);
                     }
@@ -407,7 +407,7 @@ public class EntityIceDragon extends EntityDragonBase {
         float particleScale = MathHelper.clamp(this.getRenderSize() * 0.08F, 0.55F, 3F);
         double distance = Math.max(2.5F * this.getDistanceSq(burnX, burnY, burnZ), 0);
         double conqueredDistance = burnProgress / 40D * distance;
-        int increment = (int)Math.ceil(conqueredDistance / 100);
+        int increment = (int) Math.ceil(conqueredDistance / 100);
         for (int i = 0; i < conqueredDistance; i += increment) {
             double progressX = headPos.x + d2 * (i / (float) distance);
             double progressY = headPos.y + d3 * (i / (float) distance);
@@ -502,7 +502,7 @@ public class EntityIceDragon extends EntityDragonBase {
         return super.isAllowedToTriggerFlight() && !this.isInWater();
     }
 
-    protected void spawnDeathParticles(){
+    protected void spawnDeathParticles() {
         if (this.world.isRemote) {
             for (int k = 0; k < 10; ++k) {
                 double d2 = this.rand.nextGaussian() * 0.02D;
@@ -526,7 +526,7 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     //Required for proper egg drop
-    public int getStartMetaForType(){
+    public int getStartMetaForType() {
         return 4;
     }
 

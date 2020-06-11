@@ -1,16 +1,12 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
-import com.github.alexthe666.iceandfire.inventory.ContainerDragon;
 import com.github.alexthe666.iceandfire.inventory.ContainerHippogryph;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -33,7 +29,7 @@ public class GuiHippogryph extends ContainerScreen<ContainerHippogryph> {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         Entity entity = IceAndFire.PROXY.getReferencedMob();
-        if(entity instanceof EntityHippogryph) {
+        if (entity instanceof EntityHippogryph) {
             EntityHippogryph hippo = (EntityHippogryph) entity;
             this.font.drawString(hippo.getDisplayName().getFormattedText(), 8, 6, 4210752);
         }
@@ -47,7 +43,7 @@ public class GuiHippogryph extends ContainerScreen<ContainerHippogryph> {
         int j = (this.height - this.ySize) / 2;
         this.blit(i, j, 0, 0, this.xSize, this.ySize);
         Entity entity = IceAndFire.PROXY.getReferencedMob();
-        if(entity instanceof EntityHippogryph) {
+        if (entity instanceof EntityHippogryph) {
             EntityHippogryph hippo = (EntityHippogryph) entity;
             if (hippo.isChested()) {
                 this.blit(i + 79, j + 17, 0, this.ySize, 5 * 18, 54);

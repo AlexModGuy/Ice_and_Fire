@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -17,6 +16,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -52,7 +52,8 @@ public class ItemCyclopsEye extends Item {
                     }
                 }
                 if (stack.getTag().getInt("HurtingTicks") > 120) {
-                    stack.damageItem(1, (LivingEntity) entity, (p_220017_1_) -> {});
+                    stack.damageItem(1, (LivingEntity) entity, (p_220017_1_) -> {
+                    });
                     stack.getTag().putInt("HurtingTicks", 0);
                 }
             }

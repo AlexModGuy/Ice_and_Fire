@@ -53,16 +53,16 @@ public class GuiMyrmexStaff extends Screen {
             return;
         }
         populateRoomMap();
-        this.addButton(new Button(i + 124, j + 15, 120, 20, ClientProxy.getReferedClientHive().reproduces ? I18n.format("myrmex.message.disablebreeding") : I18n.format("myrmex.message.enablebreeding"),  (p_214132_1_) -> {
+        this.addButton(new Button(i + 124, j + 15, 120, 20, ClientProxy.getReferedClientHive().reproduces ? I18n.format("myrmex.message.disablebreeding") : I18n.format("myrmex.message.enablebreeding"), (p_214132_1_) -> {
             ClientProxy.getReferedClientHive().reproduces = !ClientProxy.getReferedClientHive().reproduces;
         }));
         this.addButton(this.previousPage = new ChangePageButton(i + 5, j + 150, false, 0, this.jungle ? 2 : 1, (p_214132_1_) -> {
-            if(this.currentPage > 0) {
+            if (this.currentPage > 0) {
                 this.currentPage--;
             }
         }));
         this.addButton(this.nextPage = new ChangePageButton(i + 225, j + 150, true, 0, this.jungle ? 2 : 1, (p_214132_1_) -> {
-            if(this.currentPage < this.allRoomButtonPos.size() / ROOMS_PER_PAGE) {
+            if (this.currentPage < this.allRoomButtonPos.size() / ROOMS_PER_PAGE) {
                 this.currentPage++;
             }
         }));
@@ -72,7 +72,7 @@ public class GuiMyrmexStaff extends Screen {
             BlockPos pos = allRoomPos.get(rooms).pos;
             //IndexPageButton button = new IndexPageButton(2 + i, centerX + 15 + (xIndex * 200), centerY + 10 + (yIndex * 20) - (xIndex == 1 ? 20 : 0), StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[allPageTypes.get(i).ordinal()].toString().toLowerCase()));
             MyrmexDeleteButton button = new MyrmexDeleteButton(i + x_translate, j + y_translate + (yIndex) * 22, pos, I18n.format("myrmex.message.delete"), (p_214132_1_) -> {
-                if(ticksSinceDeleted <= 0){
+                if (ticksSinceDeleted <= 0) {
                     ClientProxy.getReferedClientHive().removeRoom(pos);
                     ticksSinceDeleted = 5;
                 }

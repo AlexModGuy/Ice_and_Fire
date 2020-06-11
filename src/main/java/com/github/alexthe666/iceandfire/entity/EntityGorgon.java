@@ -6,13 +6,13 @@ import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.ai.GorgonAIStareAttack;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import com.github.alexthe666.iceandfire.entity.ai.GorgonAIStareAttack;
-import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
@@ -63,7 +63,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(mob, StoneEntityProperties.class);
                 return properties != null && properties.isStone;
             } catch (Exception e) {
-                IceAndFire.LOGGER.log(java.util.logging.Level.WARNING, "stone entity properties do not exist for " + mob.getName());
+                IceAndFire.LOGGER.warn("stone entity properties do not exist for " + mob.getName());
             }
         }
         return false;
@@ -203,7 +203,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                             if (!world.isRemote) {
                                 this.getAttackTarget().attackEntityFrom(IafDamageRegistry.GORGON_DMG, Integer.MAX_VALUE);
                                 if (!this.getAttackTarget().isAlive() && playerStatueCooldown == 0) {
-                                    EntityStoneStatue statue = new EntityStoneStatue(IafEntityRegistry.STONE_STATUE,world);
+                                    EntityStoneStatue statue = new EntityStoneStatue(IafEntityRegistry.STONE_STATUE, world);
                                     statue.setPositionAndRotation(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY(), this.getAttackTarget().getPosZ(), this.getAttackTarget().rotationYaw, this.getAttackTarget().rotationPitch);
                                     statue.smallArms = true;
                                     if (!world.isRemote) {
@@ -221,7 +221,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                         } else {
                             if (this.getAttackTarget() instanceof LivingEntity && !(this.getAttackTarget() instanceof IBlacklistedFromStatues) || this.getAttackTarget() instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone()) {
                                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getAttackTarget(), StoneEntityProperties.class);
-                                LivingEntity attackTarget = (LivingEntity) this.getAttackTarget();
+                                LivingEntity attackTarget = this.getAttackTarget();
                                 if (properties != null || !properties.isStone) {
                                     properties.isStone = true;
                                     if (world.isRemote) {

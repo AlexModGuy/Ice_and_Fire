@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,6 +18,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -62,8 +64,8 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
          * 0.5); if(!worldIn.isRemote){ worldIn.spawnEntityInWorld(egg); }
          */
         if (stack.getTag() != null) {
-            EntityDragonSkull skull = new EntityDragonSkull(context.getWorld());
-            skull.setType(dragonType);
+            EntityDragonSkull skull = new EntityDragonSkull(IafEntityRegistry.DRAGON_SKULL, context.getWorld());
+            skull.setDragonType(dragonType);
             skull.setStage(stack.getTag().getInt("Stage"));
             skull.setDragonAge(stack.getTag().getInt("DragonAge"));
             BlockPos offset = context.getPos().offset(context.getFace(), 1);

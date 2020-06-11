@@ -14,13 +14,13 @@ public class PixieJarInvWrapper implements IItemHandlerModifiable {
     private TileEntityJar tile;
     private Direction side;
 
-    public static LazyOptional<IItemHandler> create(TileEntityJar trashCan, Direction sides) {
-        return LazyOptional.of(() -> new PixieJarInvWrapper(trashCan, sides));
-    }
-
     public PixieJarInvWrapper(TileEntityJar tile, Direction side) {
         this.tile = tile;
         this.side = side;
+    }
+
+    public static LazyOptional<IItemHandler> create(TileEntityJar trashCan, Direction sides) {
+        return LazyOptional.of(() -> new PixieJarInvWrapper(trashCan, sides));
     }
 
     @Override

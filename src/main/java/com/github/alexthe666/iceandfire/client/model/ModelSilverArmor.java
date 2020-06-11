@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.client.model;
 
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
 
@@ -88,7 +87,7 @@ public class ModelSilverArmor extends BipedModel {
         }
         float f = 0;
         float f1 = 12;
-        if(isSneak){
+        if (isSneak) {
             f = -1;
             f1 = 10;
         }
@@ -96,6 +95,6 @@ public class ModelSilverArmor extends BipedModel {
         this.robeLower.rotationPointZ = f;
         this.robeLower.rotationPointY = f1;
 
-        this.robeLowerBack.rotateAngleX =  -Math.max(this.bipedLeftLeg.rotateAngleX, this.bipedRightLeg.rotateAngleX);
+        this.robeLowerBack.rotateAngleX = -Math.max(this.bipedLeftLeg.rotateAngleX, this.bipedRightLeg.rotateAngleX);
     }
 }

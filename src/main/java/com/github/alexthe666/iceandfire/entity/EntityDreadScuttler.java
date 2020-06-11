@@ -3,12 +3,12 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.iceandfire.entity.ai.DreadAITargetNonDread;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
 import com.github.alexthe666.iceandfire.entity.util.IDreadMob;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import com.github.alexthe666.iceandfire.entity.ai.DreadAITargetNonDread;
 import com.google.common.base.Predicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -38,12 +38,12 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
 
     private static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityDreadScuttler.class, DataSerializers.FLOAT);
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(EntityDreadScuttler.class, DataSerializers.BYTE);
+    private static final float INITIAL_WIDTH = 1.5F;
+    private static final float INITIAL_HEIGHT = 1.3F;
     public static Animation ANIMATION_SPAWN = Animation.create(40);
     public static Animation ANIMATION_BITE = Animation.create(15);
     private int animationTick;
     private Animation currentAnimation;
-    private static final float INITIAL_WIDTH = 1.5F;
-    private static final float INITIAL_HEIGHT = 1.3F;
     private float firstWidth = -1.0F;
     private float firstHeight = -1.0F;
 
@@ -57,7 +57,7 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
         this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this, new Class[] {IDreadMob.class}));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this, IDreadMob.class));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.addGoal(3, new DreadAITargetNonDread(this, LivingEntity.class, false, new Predicate<LivingEntity>() {
             @Override
@@ -112,7 +112,7 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
 
     public void livingTick() {
         super.livingTick();
-        if(Math.abs(firstWidth - INITIAL_WIDTH * getScale()) > 0.01F || Math.abs(firstHeight - INITIAL_HEIGHT * getScale()) > 0.01F){
+        if (Math.abs(firstWidth - INITIAL_WIDTH * getScale()) > 0.01F || Math.abs(firstHeight - INITIAL_HEIGHT * getScale()) > 0.01F) {
             firstWidth = INITIAL_WIDTH * getScale();
             firstHeight = INITIAL_HEIGHT * getScale();
         }
@@ -122,7 +122,7 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
             BlockState belowBlock = world.getBlockState(this.getPosition().down());
             if (belowBlock.getBlock() != Blocks.AIR) {
-                for (int i = 0; i < 5; i++){
+                for (int i = 0; i < 5; i++) {
                     this.world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, belowBlock), this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getBoundingBox().minY, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
                 }
             }
@@ -222,7 +222,7 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
     }
 
     @Override
-    public boolean isOnSameTeam(Entity entityIn){
+    public boolean isOnSameTeam(Entity entityIn) {
         return entityIn instanceof IDreadMob || super.isOnSameTeam(entityIn);
     }
 

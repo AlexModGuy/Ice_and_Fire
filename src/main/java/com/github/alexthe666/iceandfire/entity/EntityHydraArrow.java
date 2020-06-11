@@ -16,7 +16,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityHydraArrow  extends AbstractArrowEntity {
+public class EntityHydraArrow extends AbstractArrowEntity {
 
     public EntityHydraArrow(EntityType t, World worldIn) {
         super(t, worldIn);
@@ -61,7 +61,7 @@ public class EntityHydraArrow  extends AbstractArrowEntity {
                 Hand Hand = player.getActiveHand();
                 net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, Hand);
 
-                if (Hand == Hand.MAIN_HAND) {
+                if (Hand == net.minecraft.util.Hand.MAIN_HAND) {
                     this.setItemStackToSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
                 } else {
                     this.setItemStackToSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
@@ -78,8 +78,8 @@ public class EntityHydraArrow  extends AbstractArrowEntity {
         }
         living.addPotionEffect(new EffectInstance(Effects.POISON, 300, 0));
         Entity shootingEntity = this.getShooter();
-        if(shootingEntity instanceof LivingEntity){
-            ((LivingEntity)shootingEntity).heal((float)this.getDamage());
+        if (shootingEntity instanceof LivingEntity) {
+            ((LivingEntity) shootingEntity).heal((float) this.getDamage());
         }
     }
 

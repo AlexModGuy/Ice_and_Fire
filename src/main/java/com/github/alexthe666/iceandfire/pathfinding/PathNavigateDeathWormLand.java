@@ -38,7 +38,7 @@ public class PathNavigateDeathWormLand extends PathNavigator {
     }
 
     protected Vec3d getEntityPosition() {
-        return new Vec3d(this.entity.getPosX(), (double) this.getPathablePosY(), this.entity.getPosZ());
+        return new Vec3d(this.entity.getPosX(), this.getPathablePosY(), this.entity.getPosZ());
     }
 
     /**

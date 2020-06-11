@@ -2,8 +2,10 @@ package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityMyrmexCocoon;
-import net.minecraft.block.*;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -11,12 +13,12 @@ import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+
 import javax.annotation.Nullable;
 
 public class BlockMyrmexCocoon extends ContainerBlock {
@@ -43,10 +45,10 @@ public class BlockMyrmexCocoon extends ContainerBlock {
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if(!player.isShiftKeyDown()){
-            if(worldIn.isRemote){
+        if (!player.isShiftKeyDown()) {
+            if (worldIn.isRemote) {
                 IceAndFire.PROXY.setRefrencedTE(worldIn.getTileEntity(pos));
-            }else{
+            } else {
                 INamedContainerProvider inamedcontainerprovider = this.getContainer(state, worldIn, pos);
                 if (inamedcontainerprovider != null) {
                     player.openContainer(inamedcontainerprovider);

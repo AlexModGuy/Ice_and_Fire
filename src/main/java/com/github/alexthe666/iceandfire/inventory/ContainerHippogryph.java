@@ -1,5 +1,5 @@
 package com.github.alexthe666.iceandfire.inventory;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,8 +14,6 @@ import net.minecraft.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.awt.*;
-
 public class ContainerHippogryph extends Container {
     private final IInventory hippogryphInventory;
     private final EntityHippogryph hippogryph;
@@ -24,6 +22,7 @@ public class ContainerHippogryph extends Container {
     public ContainerHippogryph(int i, PlayerInventory playerInventory) {
         this(i, new Inventory(3), playerInventory, null);
     }
+
     public ContainerHippogryph(int id, IInventory ratInventory, PlayerInventory playerInventory, EntityHippogryph hippogryph) {
         super(IafContainerRegistry.HIPPOGRYPH_CONTAINER, id);
         this.hippogryphInventory = hippogryph.hippogryphInventory;

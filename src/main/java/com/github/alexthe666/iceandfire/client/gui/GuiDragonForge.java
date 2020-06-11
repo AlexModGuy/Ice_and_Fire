@@ -3,12 +3,10 @@ package com.github.alexthe666.iceandfire.client.gui;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
-import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -60,9 +58,9 @@ public class GuiDragonForge extends ContainerScreen<ContainerDragonForge> {
         TileEntity te = IceAndFire.PROXY.getRefrencedTE();
         int j = 0;
         int maxCookTime = 200;
-        if(te instanceof TileEntityDragonforge){
-            j = ((TileEntityDragonforge)te).cookTime;
-            maxCookTime = ((TileEntityDragonforge)te).getMaxCookTime();
+        if (te instanceof TileEntityDragonforge) {
+            j = ((TileEntityDragonforge) te).cookTime;
+            maxCookTime = ((TileEntityDragonforge) te).getMaxCookTime();
         }
         return j != 0 ? j * p_175381_1_ / maxCookTime : 0;
     }

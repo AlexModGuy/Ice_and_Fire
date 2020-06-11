@@ -93,15 +93,15 @@ public class IafItemRegistry {
     public static final ItemDragonArmor DRAGONARMOR_IRON_0 = new ItemDragonArmor(0, 0, "dragonarmor_iron");
     public static final ItemDragonArmor DRAGONARMOR_IRON_1 = new ItemDragonArmor(0, 1, "dragonarmor_iron");
     public static final ItemDragonArmor DRAGONARMOR_IRON_2 = new ItemDragonArmor(0, 2, "dragonarmor_iron");
-    public static final ItemDragonArmor DRAGONARMOR_IRON_3 = new ItemDragonArmor(0,3, "dragonarmor_iron");
-    public static final ItemDragonArmor DRAGONARMOR_GOLD_0 = new ItemDragonArmor(1, 0,"dragonarmor_gold");
+    public static final ItemDragonArmor DRAGONARMOR_IRON_3 = new ItemDragonArmor(0, 3, "dragonarmor_iron");
+    public static final ItemDragonArmor DRAGONARMOR_GOLD_0 = new ItemDragonArmor(1, 0, "dragonarmor_gold");
     public static final ItemDragonArmor DRAGONARMOR_GOLD_1 = new ItemDragonArmor(1, 1, "dragonarmor_gold");
     public static final ItemDragonArmor DRAGONARMOR_GOLD_2 = new ItemDragonArmor(1, 2, "dragonarmor_gold");
     public static final ItemDragonArmor DRAGONARMOR_GOLD_3 = new ItemDragonArmor(1, 3, "dragonarmor_gold");
-    public static final ItemDragonArmor DRAGONARMOR_DIAMOND_0 = new ItemDragonArmor(2, 0,"dragonarmor_diamond");
-    public static final ItemDragonArmor DRAGONARMOR_DIAMOND_1 = new ItemDragonArmor(2, 1,"dragonarmor_diamond");
-    public static final ItemDragonArmor DRAGONARMOR_DIAMOND_2 = new ItemDragonArmor(2, 2,"dragonarmor_diamond");
-    public static final ItemDragonArmor DRAGONARMOR_DIAMOND_3 = new ItemDragonArmor(2, 3,"dragonarmor_diamond");
+    public static final ItemDragonArmor DRAGONARMOR_DIAMOND_0 = new ItemDragonArmor(2, 0, "dragonarmor_diamond");
+    public static final ItemDragonArmor DRAGONARMOR_DIAMOND_1 = new ItemDragonArmor(2, 1, "dragonarmor_diamond");
+    public static final ItemDragonArmor DRAGONARMOR_DIAMOND_2 = new ItemDragonArmor(2, 2, "dragonarmor_diamond");
+    public static final ItemDragonArmor DRAGONARMOR_DIAMOND_3 = new ItemDragonArmor(2, 3, "dragonarmor_diamond");
     public static final ItemDragonArmor DRAGONARMOR_SILVER_0 = new ItemDragonArmor(3, 0, "dragonarmor_silver");
     public static final ItemDragonArmor DRAGONARMOR_SILVER_1 = new ItemDragonArmor(3, 1, "dragonarmor_silver");
     public static final ItemDragonArmor DRAGONARMOR_SILVER_2 = new ItemDragonArmor(3, 2, "dragonarmor_silver");
@@ -256,6 +256,7 @@ public class IafItemRegistry {
     public static final Item HYDRA_FANG = new ItemGeneric("hydra_fang", 0);
     public static final Item HYDRA_HEART = new ItemHydraHeart();
     public static final Item HYDRA_ARROW = new ItemHydraArrow();
+
     static {
         EnumDragonArmor.initArmors();
         EnumSeaSerpent.initArmors();

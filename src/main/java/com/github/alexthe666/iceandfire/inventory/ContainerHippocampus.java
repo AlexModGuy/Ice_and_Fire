@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.inventory;
 
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;

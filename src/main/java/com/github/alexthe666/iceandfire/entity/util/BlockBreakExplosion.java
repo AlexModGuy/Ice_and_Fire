@@ -7,11 +7,8 @@ import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -62,18 +59,36 @@ public class BlockBreakExplosion extends Explosion {
         this.position = new Vec3d(x, y, z);
     }
 
+    private static void func_229976_a_(ObjectArrayList<Pair<ItemStack, BlockPos>> p_229976_0_, ItemStack p_229976_1_, BlockPos p_229976_2_) {
+        int i = p_229976_0_.size();
+
+        for (int j = 0; j < i; ++j) {
+            Pair<ItemStack, BlockPos> pair = p_229976_0_.get(j);
+            ItemStack itemstack = pair.getFirst();
+            if (ItemEntity.func_226532_a_(itemstack, p_229976_1_)) {
+                ItemStack itemstack1 = ItemEntity.func_226533_a_(itemstack, p_229976_1_, 16);
+                p_229976_0_.set(j, Pair.of(itemstack1, pair.getSecond()));
+                if (p_229976_1_.isEmpty()) {
+                    return;
+                }
+            }
+        }
+
+        p_229976_0_.add(Pair.of(p_229976_1_, p_229976_2_));
+    }
+
     @Override
     public void doExplosionA() {
         Set<BlockPos> set = Sets.newHashSet();
         int i = 16;
 
-        for(int j = 0; j < 16; ++j) {
-            for(int k = 0; k < 16; ++k) {
-                for(int l = 0; l < 16; ++l) {
+        for (int j = 0; j < 16; ++j) {
+            for (int k = 0; k < 16; ++k) {
+                for (int l = 0; l < 16; ++l) {
                     if (j == 0 || j == 15 || k == 0 || k == 15 || l == 0 || l == 15) {
-                        double d0 = (double)((float)j / 15.0F * 2.0F - 1.0F);
-                        double d1 = (double)((float)k / 15.0F * 2.0F - 1.0F);
-                        double d2 = (double)((float)l / 15.0F * 2.0F - 1.0F);
+                        double d0 = (float) j / 15.0F * 2.0F - 1.0F;
+                        double d1 = (float) k / 15.0F * 2.0F - 1.0F;
+                        double d2 = (float) l / 15.0F * 2.0F - 1.0F;
                         double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
                         d0 = d0 / d3;
                         d1 = d1 / d3;
@@ -83,7 +98,7 @@ public class BlockBreakExplosion extends Explosion {
                         double d6 = this.y;
                         double d8 = this.z;
 
-                        for(float f1 = 0.3F; f > 0.0F; f -= 0.22500001F) {
+                        for (float f1 = 0.3F; f > 0.0F; f -= 0.22500001F) {
                             BlockPos blockpos = new BlockPos(d4, d6, d8);
                             BlockState blockstate = this.world.getBlockState(blockpos);
                             IFluidState ifluidstate = this.world.getFluidState(blockpos);
@@ -100,9 +115,9 @@ public class BlockBreakExplosion extends Explosion {
                                 set.add(blockpos);
                             }
 
-                            d4 += d0 * (double)0.3F;
-                            d6 += d1 * (double)0.3F;
-                            d8 += d2 * (double)0.3F;
+                            d4 += d0 * (double) 0.3F;
+                            d6 += d1 * (double) 0.3F;
+                            d8 += d2 * (double) 0.3F;
                         }
                     }
                 }
@@ -111,40 +126,40 @@ public class BlockBreakExplosion extends Explosion {
 
         this.affectedBlockPositions.addAll(set);
         float f3 = this.size * 2.0F;
-        int k1 = MathHelper.floor(this.x - (double)f3 - 1.0D);
-        int l1 = MathHelper.floor(this.x + (double)f3 + 1.0D);
-        int i2 = MathHelper.floor(this.y - (double)f3 - 1.0D);
-        int i1 = MathHelper.floor(this.y + (double)f3 + 1.0D);
-        int j2 = MathHelper.floor(this.z - (double)f3 - 1.0D);
-        int j1 = MathHelper.floor(this.z + (double)f3 + 1.0D);
-        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this.exploder, new AxisAlignedBB((double)k1, (double)i2, (double)j2, (double)l1, (double)i1, (double)j1));
+        int k1 = MathHelper.floor(this.x - (double) f3 - 1.0D);
+        int l1 = MathHelper.floor(this.x + (double) f3 + 1.0D);
+        int i2 = MathHelper.floor(this.y - (double) f3 - 1.0D);
+        int i1 = MathHelper.floor(this.y + (double) f3 + 1.0D);
+        int j2 = MathHelper.floor(this.z - (double) f3 - 1.0D);
+        int j1 = MathHelper.floor(this.z + (double) f3 + 1.0D);
+        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this.exploder, new AxisAlignedBB(k1, i2, j2, l1, i1, j1));
         net.minecraftforge.event.ForgeEventFactory.onExplosionDetonate(this.world, this, list, f3);
         Vec3d vec3d = new Vec3d(this.x, this.y, this.z);
 
-        for(int k2 = 0; k2 < list.size(); ++k2) {
+        for (int k2 = 0; k2 < list.size(); ++k2) {
             Entity entity = list.get(k2);
             if (!entity.isImmuneToExplosions()) {
-                double d12 = (double)(MathHelper.sqrt(entity.getDistanceSq(vec3d)) / f3);
+                double d12 = MathHelper.sqrt(entity.getDistanceSq(vec3d)) / f3;
                 if (d12 <= 1.0D) {
                     double d5 = entity.getPosX() - this.x;
                     double d7 = entity.getPosYEye() - this.y;
                     double d9 = entity.getPosZ() - this.z;
-                    double d13 = (double)MathHelper.sqrt(d5 * d5 + d7 * d7 + d9 * d9);
+                    double d13 = MathHelper.sqrt(d5 * d5 + d7 * d7 + d9 * d9);
                     if (d13 != 0.0D) {
                         d5 = d5 / d13;
                         d7 = d7 / d13;
                         d9 = d9 / d13;
-                        double d14 = (double)getBlockDensity(vec3d, entity);
+                        double d14 = getBlockDensity(vec3d, entity);
                         double d10 = (1.0D - d12) * d14;
-                        entity.attackEntityFrom(this.getDamageSource(), (float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D)));
+                        entity.attackEntityFrom(this.getDamageSource(), (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)));
                         double d11 = d10;
                         if (entity instanceof LivingEntity) {
-                            d11 = ProtectionEnchantment.getBlastDamageReduction((LivingEntity)entity, d10);
+                            d11 = ProtectionEnchantment.getBlastDamageReduction((LivingEntity) entity, d10);
                         }
 
                         entity.setMotion(entity.getMotion().add(d5 * d11, d7 * d11, d9 * d11));
                         if (entity instanceof PlayerEntity) {
-                            PlayerEntity playerentity = (PlayerEntity)entity;
+                            PlayerEntity playerentity = (PlayerEntity) entity;
                             if (!playerentity.isSpectator() && (!playerentity.isCreative() || !playerentity.abilities.isFlying)) {
                                 this.playerKnockbackMap.put(playerentity, new Vec3d(d5 * d10, d7 * d10, d9 * d10));
                             }
@@ -204,24 +219,6 @@ public class BlockBreakExplosion extends Explosion {
                 Block.spawnAsEntity(this.world, pair.getSecond(), pair.getFirst());
             }
         }
-    }
-
-    private static void func_229976_a_(ObjectArrayList<Pair<ItemStack, BlockPos>> p_229976_0_, ItemStack p_229976_1_, BlockPos p_229976_2_) {
-        int i = p_229976_0_.size();
-
-        for(int j = 0; j < i; ++j) {
-            Pair<ItemStack, BlockPos> pair = p_229976_0_.get(j);
-            ItemStack itemstack = pair.getFirst();
-            if (ItemEntity.func_226532_a_(itemstack, p_229976_1_)) {
-                ItemStack itemstack1 = ItemEntity.func_226533_a_(itemstack, p_229976_1_, 16);
-                p_229976_0_.set(j, Pair.of(itemstack1, pair.getSecond()));
-                if (p_229976_1_.isEmpty()) {
-                    return;
-                }
-            }
-        }
-
-        p_229976_0_.add(Pair.of(p_229976_1_, p_229976_2_));
     }
 
     @Override

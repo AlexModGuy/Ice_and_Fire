@@ -35,6 +35,7 @@ import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
+
 import javax.annotation.Nullable;
 
 public class EntityMyrmexQueen extends EntityMyrmexBase {
@@ -116,10 +117,10 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
             if (this.getAnimationTick() == 42) {
                 int down = Math.max(15, this.getPosition().getY() - 20 + this.getRNG().nextInt(10));
                 BlockPos genPos = new BlockPos(this.getPosX(), down, this.getPosZ());
-                if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, genPos.getX(), genPos.getY(), genPos.getZ()))){
+                if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, genPos.getX(), genPos.getY(), genPos.getZ()))) {
                     WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true, this.isJungle(), NoFeatureConfig::deserialize);
-                    if(!world.isRemote){
-                        ServerWorld serverWorld = (ServerWorld)world;
+                    if (!world.isRemote) {
+                        ServerWorld serverWorld = (ServerWorld) world;
                         hiveGen.place(world, serverWorld.getChunkProvider().getChunkGenerator(), this.getRNG(), genPos, IFeatureConfig.NO_FEATURE_CONFIG);
                     }
                     this.setMadeHome(true);
@@ -142,8 +143,8 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         if (!world.isRemote && eggTicks > IafConfig.myrmexPregnantTicks && this.getHive() == null || !world.isRemote && this.getHive() != null && this.getHive().repopulate() && eggTicks > IafConfig.myrmexPregnantTicks) {
             float radius = -5.25F;
             float angle = (0.01745329251F * this.renderYawOffset);
-            double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-            double extraZ = (double) (radius * MathHelper.cos(angle));
+            double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+            double extraZ = radius * MathHelper.cos(angle);
             BlockPos eggPos = new BlockPos(this.getPosX() + extraX, this.getPosY() + 0.75F, this.getPosZ() + extraZ);
             if (world.isAirBlock(eggPos)) {
                 this.setAnimation(ANIMATION_EGG);
@@ -290,9 +291,9 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 double motionZ = getRNG().nextGaussian() * 0.07D;
                 float radius = size * rand.nextFloat();
                 float angle = (0.01745329251F * this.renderYawOffset) * 3.14F * rand.nextFloat();
-                double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+                double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
                 double extraY = 0.8F;
-                double extraZ = (double) (radius * MathHelper.cos(angle));
+                double extraZ = radius * MathHelper.cos(angle);
 
                 BlockState BlockState = this.world.getBlockState(new BlockPos(MathHelper.floor(this.getPosX() + extraX), MathHelper.floor(this.getPosY() + extraY) - 1, MathHelper.floor(this.getPosZ() + extraZ)));
                 if (BlockState.getMaterial() != Material.AIR) {

@@ -1,11 +1,12 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.pathfinding.*;
+import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathFinder;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -16,6 +17,12 @@ import java.util.stream.Collectors;
 public class PathNavigateDragon extends GroundPathNavigator {
     public BlockPos targetPosition;
     private EntityDragonBase dragon;
+    private int ticksAtLastPos;
+    private Vec3d lastPosCheck = Vec3d.ZERO;
+    private Vec3d timeoutCachedNode = Vec3d.ZERO;
+    private long timeoutTimer;
+    private long lastTimeoutCheck;
+    private double timeoutLimit;
 
     public PathNavigateDragon(EntityDragonBase LivingEntityIn, World worldIn) {
         super(LivingEntityIn, worldIn);
@@ -53,13 +60,11 @@ public class PathNavigateDragon extends GroundPathNavigator {
     protected void pathFollow() {
         Vec3d vec3d = this.getEntityPosition();
         int i = this.currentPath.getCurrentPathLength();
-        if(dragon.logic != null){
+        if (dragon.logic != null) {
             dragon.logic.debugPathfinder(this.currentPath);
         }
-        for (int j = this.currentPath.getCurrentPathIndex(); j < this.currentPath.getCurrentPathLength(); ++j)
-        {
-            if ((double)this.currentPath.getPathPointFromIndex(j).y != Math.floor(vec3d.y))
-            {
+        for (int j = this.currentPath.getCurrentPathIndex(); j < this.currentPath.getCurrentPathLength(); ++j) {
+            if ((double) this.currentPath.getPathPointFromIndex(j).y != Math.floor(vec3d.y)) {
                 i = j;
                 break;
             }
@@ -67,12 +72,11 @@ public class PathNavigateDragon extends GroundPathNavigator {
 
         this.maxDistanceToWaypoint = this.entity.getWidth();
         Vec3d vec3d1 = this.currentPath.getCurrentPos();
-        float distX = MathHelper.abs((float)(this.entity.getPosX() - (vec3d1.x + 0.5D)));
-        float distZ = MathHelper.abs((float)(this.entity.getPosZ() - (vec3d1.z + 0.5D)));
-        float distY = (float)Math.abs(this.entity.getPosY() - vec3d1.y);
+        float distX = MathHelper.abs((float) (this.entity.getPosX() - (vec3d1.x + 0.5D)));
+        float distZ = MathHelper.abs((float) (this.entity.getPosZ() - (vec3d1.z + 0.5D)));
+        float distY = (float) Math.abs(this.entity.getPosY() - vec3d1.y);
 
-        if (distX < this.maxDistanceToWaypoint && distZ < this.maxDistanceToWaypoint && distY < this.entity.getHeight())
-        {
+        if (distX < this.maxDistanceToWaypoint && distZ < this.maxDistanceToWaypoint && distY < this.entity.getHeight()) {
             this.currentPath.setCurrentPathIndex(this.currentPath.getCurrentPathIndex() + 1);
         }
 
@@ -80,10 +84,8 @@ public class PathNavigateDragon extends GroundPathNavigator {
         int l = MathHelper.ceil(this.entity.getHeight());
         int i1 = k;
 
-        for (int j1 = i - 1; j1 >= this.currentPath.getCurrentPathIndex(); --j1)
-        {
-            if (this.isDirectPathBetweenPoints(vec3d, this.currentPath.getVectorFromIndex(this.entity, j1), k, l, i1))
-            {
+        for (int j1 = i - 1; j1 >= this.currentPath.getCurrentPathIndex(); --j1) {
+            if (this.isDirectPathBetweenPoints(vec3d, this.currentPath.getVectorFromIndex(this.entity, j1), k, l, i1)) {
                 this.currentPath.setCurrentPathIndex(j1);
                 break;
             }
@@ -92,19 +94,9 @@ public class PathNavigateDragon extends GroundPathNavigator {
         this.checkForStuck(vec3d);
     }
 
-    private int ticksAtLastPos;
-    private Vec3d lastPosCheck = Vec3d.ZERO;
-    private Vec3d timeoutCachedNode = Vec3d.ZERO;
-    private long timeoutTimer;
-    private long lastTimeoutCheck;
-    private double timeoutLimit;
-
-    protected void checkForStuck(Vec3d positionVec3)
-    {
-        if (this.totalTicks - this.ticksAtLastPos > 100)
-        {
-            if (positionVec3.squareDistanceTo(this.lastPosCheck) < 2.25D)
-            {
+    protected void checkForStuck(Vec3d positionVec3) {
+        if (this.totalTicks - this.ticksAtLastPos > 100) {
+            if (positionVec3.squareDistanceTo(this.lastPosCheck) < 2.25D) {
                 this.clearPath();
             }
 
@@ -112,23 +104,18 @@ public class PathNavigateDragon extends GroundPathNavigator {
             this.lastPosCheck = positionVec3;
         }
 
-        if (this.currentPath != null && !this.currentPath.isFinished())
-        {
+        if (this.currentPath != null && !this.currentPath.isFinished()) {
             Vec3d vec3d = this.currentPath.getCurrentPos();
 
-            if (vec3d.equals(this.timeoutCachedNode))
-            {
+            if (vec3d.equals(this.timeoutCachedNode)) {
                 this.timeoutTimer += System.currentTimeMillis() - this.lastTimeoutCheck;
-            }
-            else
-            {
+            } else {
                 this.timeoutCachedNode = vec3d;
                 double d0 = positionVec3.distanceTo(this.timeoutCachedNode);
-                this.timeoutLimit = this.entity.getAIMoveSpeed() > 0.0F ? d0 / (double)this.entity.getAIMoveSpeed() * 1000.0D : 0.0D;
+                this.timeoutLimit = this.entity.getAIMoveSpeed() > 0.0F ? d0 / (double) this.entity.getAIMoveSpeed() * 1000.0D : 0.0D;
             }
 
-            if (this.timeoutLimit > 0.0D && (double)this.timeoutTimer > this.timeoutLimit * 3.0D)
-            {
+            if (this.timeoutLimit > 0.0D && (double) this.timeoutTimer > this.timeoutLimit * 3.0D) {
                 this.timeoutCachedNode = Vec3d.ZERO;
                 this.timeoutTimer = 0L;
                 this.timeoutLimit = 0.0D;
@@ -144,50 +131,41 @@ public class PathNavigateDragon extends GroundPathNavigator {
     }
 
     @Override
-    protected boolean isDirectPathBetweenPoints(Vec3d posVec31, Vec3d posVec32, int sizeX, int sizeY, int sizeZ)
-    {
+    protected boolean isDirectPathBetweenPoints(Vec3d posVec31, Vec3d posVec32, int sizeX, int sizeY, int sizeZ) {
         int i = MathHelper.floor(posVec31.x);
         int j = MathHelper.floor(posVec31.z);
         double d0 = posVec32.x - posVec31.x;
         double d1 = posVec32.z - posVec31.z;
         double d2 = d0 * d0 + d1 * d1;
 
-        if (d2 < 1.0E-8D)
-        {
+        if (d2 < 1.0E-8D) {
             return false;
-        }
-        else
-        {
+        } else {
             double d3 = 1.0D / Math.sqrt(d2);
             d0 = d0 * d3;
             d1 = d1 * d3;
-            if(IafConfig.completeDragonPathfinding){
+            if (IafConfig.completeDragonPathfinding) {
                 sizeX = sizeX + 2;
                 sizeZ = sizeZ + 2;
-            }else{
+            } else {
                 sizeX = 1;
                 sizeZ = 1;
             }
-            if (!this.isSafeToStandAt(i, (int)posVec31.y, j, sizeX, sizeY, sizeZ, posVec31, d0, d1))
-            {
+            if (!this.isSafeToStandAt(i, (int) posVec31.y, j, sizeX, sizeY, sizeZ, posVec31, d0, d1)) {
                 return false;
-            }
-            else
-            {
+            } else {
                 sizeX = sizeX - 2;
                 sizeZ = sizeZ - 2;
                 double d4 = 1.0D / Math.abs(d0);
                 double d5 = 1.0D / Math.abs(d1);
-                double d6 = (double)i - posVec31.x;
-                double d7 = (double)j - posVec31.z;
+                double d6 = (double) i - posVec31.x;
+                double d7 = (double) j - posVec31.z;
 
-                if (d0 >= 0.0D)
-                {
+                if (d0 >= 0.0D) {
                     ++d6;
                 }
 
-                if (d1 >= 0.0D)
-                {
+                if (d1 >= 0.0D) {
                     ++d7;
                 }
 
@@ -200,23 +178,18 @@ public class PathNavigateDragon extends GroundPathNavigator {
                 int k1 = i1 - i;
                 int l1 = j1 - j;
 
-                while (k1 * k > 0 || l1 * l > 0)
-                {
-                    if (d6 < d7)
-                    {
+                while (k1 * k > 0 || l1 * l > 0) {
+                    if (d6 < d7) {
                         d6 += d4;
                         i += k;
                         k1 = i1 - i;
-                    }
-                    else
-                    {
+                    } else {
                         d7 += d5;
                         j += l;
                         l1 = j1 - j;
                     }
 
-                    if (!this.isSafeToStandAt(i, (int)posVec31.y, j, sizeX, sizeY, sizeZ, posVec31, d0, d1))
-                    {
+                    if (!this.isSafeToStandAt(i, (int) posVec31.y, j, sizeX, sizeY, sizeZ, posVec31, d0, d1)) {
                         return false;
                     }
                 }
@@ -226,53 +199,41 @@ public class PathNavigateDragon extends GroundPathNavigator {
         }
     }
 
-    private boolean isSafeToStandAt(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3d vec31, double p_179683_8_, double p_179683_10_)
-    {
+    private boolean isSafeToStandAt(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3d vec31, double p_179683_8_, double p_179683_10_) {
         int i = x - sizeX / 2;
         int j = z - sizeZ / 2;
 
-        if (!this.isPositionClear(i, y, j, sizeX, sizeY, sizeZ, vec31, p_179683_8_, p_179683_10_))
-        {
+        if (!this.isPositionClear(i, y, j, sizeX, sizeY, sizeZ, vec31, p_179683_8_, p_179683_10_)) {
             return false;
-        }
-        else
-        {
-            for (int k = i; k < i + sizeX; ++k)
-            {
-                for (int l = j; l < j + sizeZ; ++l)
-                {
-                    double d0 = (double)k + 0.5D - vec31.x;
-                    double d1 = (double)l + 0.5D - vec31.z;
+        } else {
+            for (int k = i; k < i + sizeX; ++k) {
+                for (int l = j; l < j + sizeZ; ++l) {
+                    double d0 = (double) k + 0.5D - vec31.x;
+                    double d1 = (double) l + 0.5D - vec31.z;
 
-                    if (d0 * p_179683_8_ + d1 * p_179683_10_ >= 0.0D)
-                    {
+                    if (d0 * p_179683_8_ + d1 * p_179683_10_ >= 0.0D) {
                         PathNodeType pathnodetype = this.nodeProcessor.getPathNodeType(this.world, k, y - 1, l, this.entity, sizeX, sizeY, sizeZ, true, true);
 
-                        if (pathnodetype == PathNodeType.WATER)
-                        {
+                        if (pathnodetype == PathNodeType.WATER) {
                             return false;
                         }
 
-                        if (pathnodetype == PathNodeType.LAVA)
-                        {
+                        if (pathnodetype == PathNodeType.LAVA) {
                             return false;
                         }
 
-                        if (pathnodetype == PathNodeType.OPEN)
-                        {
+                        if (pathnodetype == PathNodeType.OPEN) {
                             return false;
                         }
 
                         pathnodetype = this.nodeProcessor.getPathNodeType(this.world, k, y, l, this.entity, sizeX, sizeY, sizeZ, true, true);
                         float f = this.entity.getPathPriority(pathnodetype);
 
-                        if (f < 0.0F || f >= 8.0F)
-                        {
+                        if (f < 0.0F || f >= 8.0F) {
                             return false;
                         }
 
-                        if (pathnodetype == PathNodeType.DAMAGE_FIRE || pathnodetype == PathNodeType.DANGER_FIRE || pathnodetype == PathNodeType.DAMAGE_OTHER)
-                        {
+                        if (pathnodetype == PathNodeType.DAMAGE_FIRE || pathnodetype == PathNodeType.DANGER_FIRE || pathnodetype == PathNodeType.DAMAGE_OTHER) {
                             return false;
                         }
                     }
@@ -286,17 +247,13 @@ public class PathNavigateDragon extends GroundPathNavigator {
     /**
      * Returns true if an entity does not collide with any solid blocks at the position.
      */
-    private boolean isPositionClear(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3d p_179692_7_, double p_179692_8_, double p_179692_10_)
-    {
-        for (BlockPos blockpos : BlockPos.getAllInBox(new BlockPos(x, y, z), new BlockPos(x + sizeX - 1, y + sizeY - 1, z + sizeZ - 1)).collect(Collectors.toList()))
-        {
-            double d0 = (double)blockpos.getX() + 0.5D - p_179692_7_.x;
-            double d1 = (double)blockpos.getZ() + 0.5D - p_179692_7_.z;
+    private boolean isPositionClear(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3d p_179692_7_, double p_179692_8_, double p_179692_10_) {
+        for (BlockPos blockpos : BlockPos.getAllInBox(new BlockPos(x, y, z), new BlockPos(x + sizeX - 1, y + sizeY - 1, z + sizeZ - 1)).collect(Collectors.toList())) {
+            double d0 = (double) blockpos.getX() + 0.5D - p_179692_7_.x;
+            double d1 = (double) blockpos.getZ() + 0.5D - p_179692_7_.z;
 
-            if (d0 * p_179692_8_ + d1 * p_179692_10_ >= 0.0D)
-            {
-                if (this.world.getBlockState(blockpos).getMaterial().blocksMovement())
-                {
+            if (d0 * p_179692_8_ + d1 * p_179692_10_ >= 0.0D) {
+                if (this.world.getBlockState(blockpos).getMaterial().blocksMovement()) {
                     return false;
                 }
             }

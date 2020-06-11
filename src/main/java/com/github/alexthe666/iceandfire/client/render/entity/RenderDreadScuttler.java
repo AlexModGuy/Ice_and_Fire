@@ -1,13 +1,11 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
-import com.github.alexthe666.iceandfire.client.model.ModelDreadBeast;
 import com.github.alexthe666.iceandfire.client.model.ModelDreadScuttler;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
-import com.github.alexthe666.iceandfire.entity.EntityDreadBeast;
 import com.github.alexthe666.iceandfire.entity.EntityDreadScuttler;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderDreadScuttler extends MobRenderer<EntityDreadScuttler, ModelDreadScuttler> {

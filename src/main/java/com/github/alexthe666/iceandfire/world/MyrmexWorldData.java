@@ -40,7 +40,7 @@ public class MyrmexWorldData extends WorldSavedData {
 
             DimensionSavedDataManager storage = overworld.getSavedData();
             MyrmexWorldData data = storage.getOrCreate(MyrmexWorldData::new, IDENTIFIER);
-            if(data != null){
+            if (data != null) {
                 data.world = world;
                 data.markDirty();
             }
@@ -118,7 +118,7 @@ public class MyrmexWorldData extends WorldSavedData {
 
     public void debug() {
         for (MyrmexHive hive : this.hiveList) {
-            IceAndFire.LOGGER.warning(hive.toString());
+            IceAndFire.LOGGER.warn(hive.toString());
         }
     }
 

@@ -14,12 +14,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootTable;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
@@ -75,7 +69,6 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
     public int getInventoryStackLimit() {
         return 64;
     }
-
 
 
     protected NonNullList<ItemStack> getItems() {

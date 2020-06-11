@@ -4,5 +4,5 @@ import net.minecraft.entity.Entity;
 
 public interface IDreadMob {
 
-    public Entity getCommander();
+    Entity getCommander();
 }

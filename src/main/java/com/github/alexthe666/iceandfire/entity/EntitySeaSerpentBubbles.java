@@ -28,7 +28,7 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
 
     public EntitySeaSerpentBubbles(EntityType t, World worldIn, EntitySeaSerpent shooter, double accelX, double accelY, double accelZ) {
         super(t, shooter, accelX, accelY, accelZ, worldIn);
-        double d0 = (double) MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
+        double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.1D;
         this.accelerationY = accelY / d0 * 0.1D;
         this.accelerationZ = accelZ / d0 * 0.1D;
@@ -63,8 +63,7 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
             double d2 = this.getPosZ() + vec3d.z;
             float f = MathHelper.sqrt(horizontalMag(vec3d));
             this.rotationYaw = (float) (MathHelper.atan2(vec3d.x, vec3d.z) * (double) (180F / (float) Math.PI));
-            for (this.rotationPitch = (float) (MathHelper.atan2(vec3d.y, (double) f) * (double) (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
-                ;
+            for (this.rotationPitch = (float) (MathHelper.atan2(vec3d.y, f) * (double) (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
             }
             while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
                 this.prevRotationPitch += 360.0F;
@@ -117,7 +116,7 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
             double d2 = target.getPosX() - this.getPosX();
             double d3 = target.getPosY() - this.getPosY();
             double d4 = target.getPosZ() - this.getPosZ();
-            double d0 = (double) MathHelper.sqrt(d2 * d2 + d3 * d3 + d4 * d4);
+            double d0 = MathHelper.sqrt(d2 * d2 + d3 * d3 + d4 * d4);
             this.accelerationX = d2 / d0 * 0.1D;
             this.accelerationY = d3 / d0 * 0.1D;
             this.accelerationZ = d4 / d0 * 0.1D;

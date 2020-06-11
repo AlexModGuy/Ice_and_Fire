@@ -71,7 +71,7 @@ public class SirenAIFindWaterTarget extends Goal {
             }
         } else {
             BlockPos blockpos1 = new BlockPos(this.mob.getAttackTarget());
-            return new Vec3d((double) blockpos1.getX(), (double) blockpos1.getY(), (double) blockpos1.getZ());
+            return new Vec3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
         }
         return null;
     }

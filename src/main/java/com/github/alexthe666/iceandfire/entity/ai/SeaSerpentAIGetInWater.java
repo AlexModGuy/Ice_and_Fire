@@ -1,11 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
-import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -15,9 +12,9 @@ import java.util.Random;
 
 public class SeaSerpentAIGetInWater extends Goal {
 
-    private EntitySeaSerpent serpent;
     private final double movementSpeed;
     private final World world;
+    private EntitySeaSerpent serpent;
     private double shelterX;
     private double shelterY;
     private double shelterZ;
@@ -70,11 +67,11 @@ public class SeaSerpentAIGetInWater extends Goal {
 
         for (int i = 0; i < 10; ++i) {
             BlockPos blockpos1 = blockpos.add(random.nextInt(xz * 2) - xz, random.nextInt(y) + 2, random.nextInt(xz * 2) - xz);
-            while(this.world.isAirBlock(blockpos1) && blockpos1.getY() > 3){
+            while (this.world.isAirBlock(blockpos1) && blockpos1.getY() > 3) {
                 blockpos1 = blockpos1.down();
             }
             if (this.world.getBlockState(blockpos1).getMaterial() == Material.WATER) {
-                return new Vec3d((double) blockpos1.getX(), (double) blockpos1.getY(), (double) blockpos1.getZ());
+                return new Vec3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
             }
         }
 

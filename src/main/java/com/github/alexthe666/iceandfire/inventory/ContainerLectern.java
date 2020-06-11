@@ -1,11 +1,10 @@
 package com.github.alexthe666.iceandfire.inventory;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemBestiary;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -30,13 +29,13 @@ public class ContainerLectern extends Container {
     public ContainerLectern(int id, IInventory furnaceInventory, PlayerInventory playerInventory, IIntArray vars) {
         super(IafContainerRegistry.IAF_LECTERN_CONTAINER, id);
         this.tileFurnace = furnaceInventory;
-        this.addSlot(new Slot(furnaceInventory, 0, 15, 47){
+        this.addSlot(new Slot(furnaceInventory, 0, 15, 47) {
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() instanceof ItemBestiary;
             }
         });
-        this.addSlot(new Slot(furnaceInventory, 1, 35, 47){
+        this.addSlot(new Slot(furnaceInventory, 1, 35, 47) {
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() == IafItemRegistry.MANUSCRIPT;
@@ -51,6 +50,7 @@ public class ContainerLectern extends Container {
             this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
     }
+
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
@@ -130,7 +130,7 @@ public class ContainerLectern extends Container {
     }
 
     private int getPageField(int i) {
-        TileEntityLectern lectern = (TileEntityLectern)tileFurnace;
+        TileEntityLectern lectern = (TileEntityLectern) tileFurnace;
         return lectern.selectedPages[i].ordinal();
     }
 

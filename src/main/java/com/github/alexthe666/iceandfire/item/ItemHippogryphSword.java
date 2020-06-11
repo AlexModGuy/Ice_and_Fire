@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
@@ -36,7 +35,7 @@ public class ItemHippogryphSword extends SwordItem {
             PlayerEntity player = (PlayerEntity) attacker;
             for (LivingEntity LivingEntity : attacker.world.getEntitiesWithinAABB(LivingEntity.class, targetEntity.getBoundingBox().grow(1.0D, 0.25D, 1.0D))) {
                 if (LivingEntity != player && LivingEntity != targetEntity && !attacker.isOnSameTeam(LivingEntity) && attacker.getDistanceSq(LivingEntity) < 9.0D) {
-                    LivingEntity.knockBack(player, 0.4F, (double) MathHelper.sin(attacker.rotationYaw * 0.017453292F), (double) (-MathHelper.cos(attacker.rotationYaw * 0.017453292F)));
+                    LivingEntity.knockBack(player, 0.4F, MathHelper.sin(attacker.rotationYaw * 0.017453292F), -MathHelper.cos(attacker.rotationYaw * 0.017453292F));
                     LivingEntity.attackEntityFrom(DamageSource.causePlayerDamage(player), f3);
                 }
             }

@@ -7,7 +7,6 @@ import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
 public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
     public AdvancedModelBox Body;
@@ -253,7 +252,7 @@ public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
 
     @Override
     public void setRotationAngles(EntityHippocampus entity, float f, float f1, float f2, float f3, float f4) {
-        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, 1);
+        animate(entity, f, f1, f2, f3, f4, 1);
         if (this.isChild) {
             this.Body.setShouldScaleChildren(true);
             this.Body.setScale(0.5F, 0.5F, 0.5F);
@@ -266,7 +265,7 @@ public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
             this.Body.setScale(1, 1, 1);
             this.Head.setScale(1, 1, 1);
         }
-        EntityHippocampus hippo = (EntityHippocampus) entity;
+        EntityHippocampus hippo = entity;
         float speed_walk = 0.9F;
         float speed_idle = 0.05F;
         float speed_swim = 0.35F;

@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 
 public class SirenAIWander extends RandomWalkingGoal {
@@ -14,10 +13,10 @@ public class SirenAIWander extends RandomWalkingGoal {
     }
 
     public boolean shouldExecute() {
-        return !this.siren.isInWater() && !((EntitySiren) siren).isSinging() && super.shouldExecute();
+        return !this.siren.isInWater() && !siren.isSinging() && super.shouldExecute();
     }
 
     public boolean shouldContinueExecuting() {
-        return !this.siren.isInWater() && !((EntitySiren) siren).isSinging() && super.shouldContinueExecuting();
+        return !this.siren.isInWater() && !siren.isSinging() && super.shouldContinueExecuting();
     }
 }

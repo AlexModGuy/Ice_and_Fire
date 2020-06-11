@@ -7,7 +7,6 @@ import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelGorgon extends ModelDragonBase<EntityGorgon> {
@@ -281,8 +280,8 @@ public class ModelGorgon extends ModelDragonBase<EntityGorgon> {
         animator.resetKeyframe(5);
     }
 
-    public void setRotationAngles(EntityGorgon entity, float f, float f1, float f2, float f3, float f4 ) {
-        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, 1);
+    public void setRotationAngles(EntityGorgon entity, float f, float f1, float f2, float f3, float f4) {
+        animate(entity, f, f1, f2, f3, f4, 1);
         float speed_walk = 0.6F;
         float speed_idle = 0.05F;
         float degree_walk = 1F;

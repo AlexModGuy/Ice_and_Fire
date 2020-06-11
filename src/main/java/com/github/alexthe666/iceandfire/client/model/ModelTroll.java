@@ -8,7 +8,6 @@ import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
 public class ModelTroll extends ModelDragonBase<EntityTroll> {
     public AdvancedModelBox body;
@@ -340,8 +339,8 @@ public class ModelTroll extends ModelDragonBase<EntityTroll> {
     }
 
     public void setRotationAngles(EntityTroll entity, float f, float f1, float f2, float f3, float f4) {
-        if (entity instanceof EntityTroll && EntityGorgon.isStoneMob((EntityTroll) entity)) {
-            animateStatue((EntityTroll) entity);
+        if (entity instanceof EntityTroll && EntityGorgon.isStoneMob(entity)) {
+            animateStatue(entity);
             this.log1.showModel = false;
             return;
         }

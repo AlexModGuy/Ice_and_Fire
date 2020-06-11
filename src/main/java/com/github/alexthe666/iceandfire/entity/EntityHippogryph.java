@@ -6,17 +6,17 @@ import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
+import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.*;
+import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.github.alexthe666.iceandfire.inventory.ContainerHippogryph;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
-import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import com.github.alexthe666.iceandfire.entity.ai.*;
-import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
 import com.google.common.base.Predicate;
 import net.minecraft.block.BlockState;
@@ -47,11 +47,14 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
@@ -88,6 +91,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     public int airBorneCounter;
     public BlockPos homePos;
     public boolean hasHomePosition = false;
+    public int feedings = 0;
     private boolean isSitting;
     private boolean isHovering;
     private boolean isFlying;
@@ -98,7 +102,6 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     private boolean hasChestVarChanged = false;
     private int navigatorType = -1;
     private boolean isOverAir;
-    public int feedings = 0;
 
     public EntityHippogryph(EntityType type, World worldIn) {
         super(type, worldIn);
@@ -113,16 +116,16 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         this.stepHeight = 1;
     }
 
-    protected void switchNavigator(){
-        if(this.isBeingRidden() && this.isOverAir()){
-            if(navigatorType != 1){
+    protected void switchNavigator() {
+        if (this.isBeingRidden() && this.isOverAir()) {
+            if (navigatorType != 1) {
                 this.moveController = new IafDragonFlightManager.PlayerFlightMoveHelper(this);
                 this.navigator = new PathNavigateFlyingCreature(this, world);
                 navigatorType = 1;
             }
         }
-        if(!this.isBeingRidden() || !this.isOverAir()){
-            if(navigatorType != 0){
+        if (!this.isBeingRidden() || !this.isOverAir()) {
+            if (navigatorType != 0) {
                 this.moveController = new MovementController(this);
                 this.navigator = new GroundPathNavigator(this, world);
                 navigatorType = 0;
@@ -578,8 +581,8 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
 
     @Nullable
     public PlayerEntity getRidingPlayer() {
-        if(this.getControllingPassenger() instanceof PlayerEntity){
-            return (PlayerEntity)this.getControllingPassenger();
+        if (this.getControllingPassenger() instanceof PlayerEntity) {
+            return (PlayerEntity) this.getControllingPassenger();
         }
         return null;
     }
@@ -785,7 +788,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     public void livingTick() {
         super.livingTick();
         switchNavigator();
-        if(world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity){
+        if (world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }
         if (!this.world.isRemote) {
@@ -1008,7 +1011,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         if (world.isRemote) {
             roll_buffer.calculateChainFlapBuffer(35, 8, 6, this);
         }
-        if (this.getAttackTarget() != null && this.getRidingEntity() == null && !this.getAttackTarget().isAlive() || this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityDragonBase && !((EntityDragonBase) this.getAttackTarget()).isAlive()) {
+        if (this.getAttackTarget() != null && this.getRidingEntity() == null && !this.getAttackTarget().isAlive() || this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityDragonBase && !this.getAttackTarget().isAlive()) {
             this.setAttackTarget(null);
         }
     }

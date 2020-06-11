@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.GroundPathNavigator;
+
 import java.util.EnumSet;
 
 public class SirenAIVanillaSwimming extends Goal {
@@ -12,7 +13,7 @@ public class SirenAIVanillaSwimming extends Goal {
         this.entity = entityIn;
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
         if (entityIn.getNavigator() instanceof GroundPathNavigator) {
-            ((GroundPathNavigator) entityIn.getNavigator()).setCanSwim(true);
+            entityIn.getNavigator().setCanSwim(true);
         }
     }
 

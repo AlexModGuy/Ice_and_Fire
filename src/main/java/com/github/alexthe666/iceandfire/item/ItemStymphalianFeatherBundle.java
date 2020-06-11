@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianFeather;
-import net.minecraft.client.resources.I18n;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -15,6 +15,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class ItemStymphalianFeatherBundle extends Item {
         player.playSound(SoundEvents.ENTITY_EGG_THROW, 1, 1);
         float rotation = player.rotationYawHead;
         for (int i = 0; i < 8; i++) {
-            EntityStymphalianFeather feather = new EntityStymphalianFeather(worldIn, player);
+            EntityStymphalianFeather feather = new EntityStymphalianFeather(IafEntityRegistry.STYMPHALIAN_FEATHER, worldIn, player);
             rotation += 45;
             feather.shoot(player, 0, rotation, 0.0F, 1.5F, 1.0F);
             if (!worldIn.isRemote) {

@@ -4,12 +4,12 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.client.StatCollector;
-import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.block.Blocks;
@@ -18,7 +18,6 @@ import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -90,7 +89,7 @@ public class GuiBestiary extends Screen {
         int centerX = (this.width - X) / 2;
         int centerY = (this.height - Y) / 2;
         this.addButton(this.previousPage = new ChangePageButton(centerX + 15, centerY + 215, false, bookPages, 0, (p_214132_1_) -> {
-            if((this.index ? this.indexPages > 0 : this.pageType != null)) {
+            if ((this.index ? this.indexPages > 0 : this.pageType != null)) {
                 if (this.index) {
                     this.indexPages--;
                     Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
@@ -105,7 +104,7 @@ public class GuiBestiary extends Screen {
             }
         }));
         this.addButton(this.nextPage = new ChangePageButton(centerX + 357, centerY + 215, true, bookPages, 0, (p_214132_1_) -> {
-            if((this.index ? this.indexPages < this.indexPagesTotal - 1 : this.pageType != null && this.bookPages < this.pageType.pages)) {
+            if ((this.index ? this.indexPages < this.indexPagesTotal - 1 : this.pageType != null && this.bookPages < this.pageType.pages)) {
                 if (this.index) {
                     this.indexPages++;
                     Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
@@ -121,7 +120,7 @@ public class GuiBestiary extends Screen {
                 int yIndex = i % 10;
                 int id = 2 + i;
                 IndexPageButton button = new IndexPageButton(id, centerX + 15 + (xIndex * 200), centerY + 10 + (yIndex * 20) - (xIndex == 1 ? 20 : 0), StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[allPageTypes.get(i).ordinal()].toString().toLowerCase()), (p_214132_1_) -> {
-                    if(this.indexButtons.get(id - 2) != null && allPageTypes.get(id - 2) != null) {
+                    if (this.indexButtons.get(id - 2) != null && allPageTypes.get(id - 2) != null) {
                         Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
                         this.index = false;
                         this.indexPages = 0;
@@ -770,10 +769,10 @@ public class GuiBestiary extends Screen {
                     GL11.glPushMatrix();
                     GL11.glScalef(2.5F, 2.5F, 1F);
                     Item chitin = IafItemRegistry.DEATH_WORM_CHITIN_YELLOW;
-                    if(drawType == 2){
+                    if (drawType == 2) {
                         chitin = IafItemRegistry.DEATH_WORM_CHITIN_RED;
                     }
-                    if(drawType == 1){
+                    if (drawType == 1) {
                         chitin = IafItemRegistry.DEATH_WORM_CHITIN_WHITE;
                     }
                     drawItemStack(new ItemStack(chitin, 1), 17, 30, 1.5F);
@@ -1062,7 +1061,7 @@ public class GuiBestiary extends Screen {
         }
     }
 
-    private Item getItemByRegistryName(String registryName){
+    private Item getItemByRegistryName(String registryName) {
         return ForgeRegistries.ITEMS.getValue(new ResourceLocation(registryName));
     }
 

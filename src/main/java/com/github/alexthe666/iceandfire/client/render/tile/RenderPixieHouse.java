@@ -3,8 +3,6 @@ package com.github.alexthe666.iceandfire.client.render.tile;
 import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.client.model.ModelPixie;
 import com.github.alexthe666.iceandfire.client.model.ModelPixieHouse;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderPixie;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -12,15 +10,13 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 public class RenderPixieHouse<T extends TileEntityPixieHouse> extends TileEntityRenderer<T> {
 
     private static final ModelPixieHouse MODEL = new ModelPixieHouse();
-    private static final ModelPixie MODEL_PIXIE = new ModelPixie();
+    private static ModelPixie MODEL_PIXIE;
     private static final RenderType TEXTURE_0 = RenderType.func_230167_a_(new ResourceLocation("iceandfire:textures/models/pixie/house/pixie_house_0.png"), false);
     private static final RenderType TEXTURE_1 = RenderType.func_230167_a_(new ResourceLocation("iceandfire:textures/models/pixie/house/pixie_house_1.png"), false);
     private static final RenderType TEXTURE_2 = RenderType.func_230167_a_(new ResourceLocation("iceandfire:textures/models/pixie/house/pixie_house_2.png"), false);
@@ -36,6 +32,9 @@ public class RenderPixieHouse<T extends TileEntityPixieHouse> extends TileEntity
     public void render(T entity, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         int rotation = 0;
         int meta = 0;
+        if(MODEL_PIXIE == null){
+            MODEL_PIXIE = new ModelPixie();
+        }
         if (entity != null && entity.getWorld() != null && entity.getWorld().getBlockState(entity.getPos()).getBlock() instanceof BlockPixieHouse) {
             meta = entity.houseType;
             if (entity.getWorld().getBlockState(entity.getPos()).get(BlockPixieHouse.FACING) == Direction.NORTH) {

@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianArrow;
-import net.minecraft.client.resources.I18n;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -25,7 +25,7 @@ public class ItemStymphalianArrow extends ArrowItem {
     }
 
     public AbstractArrowEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-        return new EntityStymphalianArrow(worldIn, shooter);
+        return new EntityStymphalianArrow(IafEntityRegistry.STYMPHALIAN_ARROW, worldIn, shooter);
     }
 
     @Override

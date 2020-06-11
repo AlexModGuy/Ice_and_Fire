@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
 import net.minecraft.block.*;
@@ -9,20 +8,15 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
-import java.util.Random;
 
 public class BlockPodium extends ContainerBlock implements ICustomRendered {
 
@@ -52,10 +46,10 @@ public class BlockPodium extends ContainerBlock implements ICustomRendered {
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if(!player.isShiftKeyDown()){
-            if(worldIn.isRemote){
+        if (!player.isShiftKeyDown()) {
+            if (worldIn.isRemote) {
                 IceAndFire.PROXY.setRefrencedTE(worldIn.getTileEntity(pos));
-            }else{
+            } else {
                 INamedContainerProvider inamedcontainerprovider = this.getContainer(state, worldIn, pos);
                 if (inamedcontainerprovider != null) {
                     player.openContainer(inamedcontainerprovider);
@@ -67,11 +61,11 @@ public class BlockPodium extends ContainerBlock implements ICustomRendered {
     }
 
 
-
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
+
     @Override
     public TileEntity createNewTileEntity(IBlockReader reader) {
         return new TileEntityPodium();

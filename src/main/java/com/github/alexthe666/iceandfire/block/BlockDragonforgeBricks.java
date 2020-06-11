@@ -43,9 +43,9 @@ public class BlockDragonforgeBricks extends ContainerBlock implements IDragonPro
         if (this.getConnectedTileEntity(worldIn, resultIn.getPos()) != null) {
             TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, resultIn.getPos());
             if (forge.isFire == isFire) {
-                if(worldIn.isRemote){
+                if (worldIn.isRemote) {
                     IceAndFire.PROXY.setRefrencedTE(worldIn.getTileEntity(forge.getPos()));
-                }else{
+                } else {
                     INamedContainerProvider inamedcontainerprovider = this.getContainer(forge.getBlockState(), worldIn, forge.getPos());
                     if (inamedcontainerprovider != null) {
                         player.openContainer(inamedcontainerprovider);

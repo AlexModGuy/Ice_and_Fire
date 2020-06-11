@@ -38,11 +38,6 @@ public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof
         this.activated = activated;
     }
 
-    @Override
-    public PushReaction getPushReaction(BlockState state) {
-        return PushReaction.BLOCK;
-    }
-
     public static void setState(boolean fire, boolean active, World worldIn, BlockPos pos) {
         TileEntity tileentity = worldIn.getTileEntity(pos);
         keepInventory = true;
@@ -73,11 +68,16 @@ public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof
         }
     }
 
+    @Override
+    public PushReaction getPushReaction(BlockState state) {
+        return PushReaction.BLOCK;
+    }
+
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if(!player.isShiftKeyDown()){
-            if(worldIn.isRemote){
+        if (!player.isShiftKeyDown()) {
+            if (worldIn.isRemote) {
                 IceAndFire.PROXY.setRefrencedTE(worldIn.getTileEntity(pos));
-            }else{
+            } else {
                 INamedContainerProvider inamedcontainerprovider = this.getContainer(state, worldIn, pos);
                 if (inamedcontainerprovider != null) {
                     player.openContainer(inamedcontainerprovider);

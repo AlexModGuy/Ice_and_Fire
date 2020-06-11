@@ -37,7 +37,7 @@ public class EntityChainTie extends HangingEntity {
 
     public EntityChainTie(EntityType type, World worldIn, BlockPos hangingPositionIn) {
         super(type, worldIn, hangingPositionIn);
-        this.setPosition((double) hangingPositionIn.getX() + 0.5D, (double) hangingPositionIn.getY(), (double) hangingPositionIn.getZ() + 0.5D);
+        this.setPosition((double) hangingPositionIn.getX() + 0.5D, hangingPositionIn.getY(), (double) hangingPositionIn.getZ() + 0.5D);
         this.forceSpawn = true;
     }
 
@@ -64,12 +64,13 @@ public class EntityChainTie extends HangingEntity {
     }
 
     public void setPosition(double x, double y, double z) {
-        super.setPosition((double) MathHelper.floor(x) + 0.5D, (double)MathHelper.floor(y) + 0.5D, (double)MathHelper.floor(z) + 0.5D);
+        super.setPosition((double) MathHelper.floor(x) + 0.5D, (double) MathHelper.floor(y) + 0.5D, (double) MathHelper.floor(z) + 0.5D);
     }
 
     protected void updateBoundingBox() {
-        this.setRawPosition((double)this.hangingPosition.getX() + 0.5D, (double)this.hangingPosition.getY() + 0.5D, (double)this.hangingPosition.getZ() + 0.5D);
-        if (this.isAddedToWorld() && this.world instanceof net.minecraft.world.server.ServerWorld) ((net.minecraft.world.server.ServerWorld)this.world).chunkCheck(this); // Forge - Process chunk registration after moving.
+        this.setRawPosition((double) this.hangingPosition.getX() + 0.5D, (double) this.hangingPosition.getY() + 0.5D, (double) this.hangingPosition.getZ() + 0.5D);
+        if (this.isAddedToWorld() && this.world instanceof net.minecraft.world.server.ServerWorld)
+            ((net.minecraft.world.server.ServerWorld) this.world).chunkCheck(this); // Forge - Process chunk registration after moving.
     }
 
     public boolean attackEntityFrom(DamageSource source, float amount) {

@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
@@ -33,8 +32,8 @@ public class WorldGenFireDragonCave extends Feature<NoFeatureConfig> {
     public static final ResourceLocation FIREDRAGON_CHEST = new ResourceLocation("iceandfire", "fire_dragon_female_cave");
     public static final ResourceLocation FIREDRAGON_MALE_CHEST = new ResourceLocation("iceandfire", "fire_dragon_male_cave");
     private static final WorldGenCaveStalactites CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.CHARRED_STONE);
-    private static boolean isMale;
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+    private static boolean isMale;
 
     public WorldGenFireDragonCave(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
@@ -170,7 +169,7 @@ public class WorldGenFireDragonCave extends Feature<NoFeatureConfig> {
             }
         }
     }
-    
+
 
     private class SphereInfo {
         int radius;

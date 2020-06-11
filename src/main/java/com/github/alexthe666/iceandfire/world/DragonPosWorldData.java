@@ -10,7 +10,9 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class DragonPosWorldData extends WorldSavedData {
 
@@ -35,7 +37,7 @@ public class DragonPosWorldData extends WorldSavedData {
 
             DimensionSavedDataManager storage = overworld.getSavedData();
             DragonPosWorldData data = storage.getOrCreate(DragonPosWorldData::new, IDENTIFIER);
-            if(data != null){
+            if (data != null) {
                 data.world = world;
                 data.markDirty();
             }
@@ -43,6 +45,7 @@ public class DragonPosWorldData extends WorldSavedData {
         }
         return null;
     }
+
     public void addDragon(UUID uuid, BlockPos pos) {
         lastDragonPositions.put(uuid, pos);
         this.markDirty();
@@ -58,7 +61,7 @@ public class DragonPosWorldData extends WorldSavedData {
     }
 
     public void debug() {
-        IceAndFire.LOGGER.warning(lastDragonPositions.toString());
+        IceAndFire.LOGGER.warn(lastDragonPositions.toString());
     }
 
 

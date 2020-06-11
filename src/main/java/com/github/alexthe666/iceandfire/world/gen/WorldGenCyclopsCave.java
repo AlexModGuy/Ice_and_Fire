@@ -5,7 +5,10 @@ import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.mojang.datafixers.Dynamic;
-import net.minecraft.block.*;
+import net.minecraft.block.AbstractChestBlock;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.ChestBlock;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.item.DyeColor;
@@ -15,11 +18,11 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+
 import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -28,6 +31,7 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
 
     public static final ResourceLocation CYCLOPS_CHEST = new ResourceLocation("iceandfire", "cyclops_cave");
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+
     public WorldGenCyclopsCave(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
     }
@@ -89,7 +93,7 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
                 BlockPos rightRib = segment.offset(direction.rotateYCCW());
                 BlockPos leftRib = segment.offset(direction.rotateY());
                 if (origin.distanceSq(rightRib) <= (double) (radius * radius)) {
-                    worldIn.setBlockState(rightRib, Blocks.BONE_BLOCK.getDefaultState().with(RotatedPillarBlock.AXIS, oppositeAxis),2);
+                    worldIn.setBlockState(rightRib, Blocks.BONE_BLOCK.getDefaultState().with(RotatedPillarBlock.AXIS, oppositeAxis), 2);
                 }
                 if (origin.distanceSq(leftRib) <= (double) (radius * radius)) {
                     worldIn.setBlockState(leftRib, Blocks.BONE_BLOCK.getDefaultState().with(RotatedPillarBlock.AXIS, oppositeAxis), 2);
@@ -106,7 +110,7 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
                     worldIn.setBlockState(rightRib.up(maxRibHeight + 2), Blocks.BONE_BLOCK.getDefaultState().with(RotatedPillarBlock.AXIS, oppositeAxis), 2);
                 }
                 if (origin.distanceSq(leftRib.up(maxRibHeight + 2)) <= (double) (radius * radius)) {
-                    worldIn.setBlockState(leftRib.up(maxRibHeight + 2), Blocks.BONE_BLOCK.getDefaultState().with(RotatedPillarBlock.AXIS, oppositeAxis),2);
+                    worldIn.setBlockState(leftRib.up(maxRibHeight + 2), Blocks.BONE_BLOCK.getDefaultState().with(RotatedPillarBlock.AXIS, oppositeAxis), 2);
                 }
             }
 

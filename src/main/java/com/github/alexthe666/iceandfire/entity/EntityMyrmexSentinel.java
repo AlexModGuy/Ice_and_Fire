@@ -211,8 +211,8 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
                 extraY = modTick * 0.035F;
             }
             float angle = (0.01745329251F * this.renderYawOffset);
-            double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-            double extraZ = (double) (radius * MathHelper.cos(angle));
+            double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+            double extraZ = radius * MathHelper.cos(angle);
             if (passenger.getHeight() >= 1.75F) {
                 extraY = passenger.getHeight() - 2F;
             }

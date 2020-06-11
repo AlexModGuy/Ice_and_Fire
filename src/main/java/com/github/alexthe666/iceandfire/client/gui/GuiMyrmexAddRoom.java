@@ -41,7 +41,7 @@ public class GuiMyrmexAddRoom extends Screen {
         int j = (this.height - 166) / 2;
         if (ClientProxy.getReferedClientHive() != null) {
             PlayerEntity player = Minecraft.getInstance().player;
-            this.addButton(new Button( i + 50, j + 35, 150, 20, I18n.format("myrmex.message.establishroom_food"), (p_214132_1_) -> {
+            this.addButton(new Button(i + 50, j + 35, 150, 20, I18n.format("myrmex.message.establishroom_food"), (p_214132_1_) -> {
                 ClientProxy.getReferedClientHive().addRoomWithMessage(player, interactPos, WorldGenMyrmexHive.RoomType.FOOD);
                 onGuiClosed();
                 Minecraft.getInstance().displayGuiScreen(null);
@@ -51,7 +51,7 @@ public class GuiMyrmexAddRoom extends Screen {
                 onGuiClosed();
                 Minecraft.getInstance().displayGuiScreen(null);
             }));
-            this.addButton(new Button( i + 50, j + 85, 150, 20, I18n.format("myrmex.message.establishroom_enterance_surface"), (p_214132_1_) -> {
+            this.addButton(new Button(i + 50, j + 85, 150, 20, I18n.format("myrmex.message.establishroom_enterance_surface"), (p_214132_1_) -> {
                 ClientProxy.getReferedClientHive().addEnteranceWithMessage(player, false, interactPos, facing);
                 onGuiClosed();
                 Minecraft.getInstance().displayGuiScreen(null);

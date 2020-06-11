@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryphEgg;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
@@ -17,6 +16,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
@@ -73,11 +73,11 @@ public class ItemHippogryphEgg extends Item implements ICustomRendered {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-       CompoundNBT tag = stack.getTag();
-       int eggOrdinal = 0;
-       if(tag != null){
-           eggOrdinal = tag.getInt("EggOrdinal");
-       }
+        CompoundNBT tag = stack.getTag();
+        int eggOrdinal = 0;
+        if (tag != null) {
+            eggOrdinal = tag.getInt("EggOrdinal");
+        }
 
         String type = EnumHippogryphTypes.values()[MathHelper.clamp(eggOrdinal, 0, EnumHippogryphTypes.values().length - 1)].name().toLowerCase();
         tooltip.add(new TranslationTextComponent("entity.hippogryph." + type).applyTextStyle(TextFormatting.GRAY));

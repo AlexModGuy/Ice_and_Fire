@@ -21,7 +21,11 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.*;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
+
 import javax.annotation.Nullable;
 
 public class BlockGoldPile extends Block {
@@ -36,7 +40,7 @@ public class BlockGoldPile extends Block {
     }
 
     public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
-        switch(type) {
+        switch (type) {
             case LAND:
                 return state.get(LAYERS) < 5;
             case WATER:

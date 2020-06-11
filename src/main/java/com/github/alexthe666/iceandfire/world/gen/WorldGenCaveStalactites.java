@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.world.gen;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 
 import java.util.Random;
 

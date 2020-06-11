@@ -11,11 +11,10 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.*;
-import net.minecraft.client.renderer.model.Model;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.crash.ReportedException;
@@ -41,7 +40,7 @@ public class LayerDragonRider extends LayerRenderer<EntityDragonBase, SegmentedM
             float dragonScale = dragon.getRenderSize() / 3;
             for (Entity passenger : dragon.getPassengers()) {
                 boolean prey = dragon.getControllingPassenger() == null || dragon.getControllingPassenger().getEntityId() != passenger.getEntityId();
-                if(excludeDreadQueenMob && passenger instanceof EntityDreadQueen){
+                if (excludeDreadQueenMob && passenger instanceof EntityDreadQueen) {
                     prey = false;
                 }
                 ClientProxy.currentDragonRiders.remove(passenger.getUniqueID());
@@ -74,7 +73,7 @@ public class LayerDragonRider extends LayerRenderer<EntityDragonBase, SegmentedM
                         matrixStackIn.translate(0, 0.555F * dragonScale, -0.5F * dragonScale);
                     }
 
-                }else{
+                } else {
                     matrixStackIn.translate(0, -0.01F * dragonScale, -0.035F * dragonScale);
                 }
                 matrixStackIn.push();
@@ -154,4 +153,4 @@ public class LayerDragonRider extends LayerRenderer<EntityDragonBase, SegmentedM
     }
 
 
-    }
+}

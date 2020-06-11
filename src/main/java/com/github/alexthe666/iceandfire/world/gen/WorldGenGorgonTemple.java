@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.world.gen.processor.DreadRuinProcessor;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
@@ -76,7 +75,7 @@ public class WorldGenGorgonTemple extends Feature<NoFeatureConfig> {
         TemplateManager templateManager = server.getWorld(worldIn.getDimension().getType()).getStructureTemplateManager();
         PlacementSettings settings = new PlacementSettings().setRotation(getRotationFromFacing(facing));
         Template template = templateManager.getTemplate(STRUCTURE);
-        BlockPos genPos = position.offset(facing, template.getSize().getZ()/2).offset(facing.rotateYCCW(), template.getSize().getX()/2);
+        BlockPos genPos = position.offset(facing, template.getSize().getZ() / 2).offset(facing.rotateYCCW(), template.getSize().getX() / 2);
         if (checkIfCanGenAt(worldIn, genPos, template.getSize().getX(), template.getSize().getZ(), facing)) {
             template.addBlocksToWorld(worldIn, genPos, settings, 2);
         }

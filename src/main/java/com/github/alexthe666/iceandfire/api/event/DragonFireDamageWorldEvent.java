@@ -29,7 +29,7 @@ public class DragonFireDamageWorldEvent extends LivingEvent {
     private double targetY;
     private double targetZ;
 
-    public DragonFireDamageWorldEvent(EntityDragonBase dragonBase, double targetX, double targetY, double targetZ){
+    public DragonFireDamageWorldEvent(EntityDragonBase dragonBase, double targetX, double targetY, double targetZ) {
         super(dragonBase);
         this.dragonBase = dragonBase;
         this.targetX = targetX;
@@ -37,23 +37,19 @@ public class DragonFireDamageWorldEvent extends LivingEvent {
         this.targetZ = targetZ;
     }
 
-    public EntityDragonBase getDragon()
-    {
+    public EntityDragonBase getDragon() {
         return dragonBase;
     }
 
-    public double getTargetX()
-    {
+    public double getTargetX() {
         return targetX;
     }
 
-    public double getTargetY()
-    {
+    public double getTargetY() {
         return targetY;
     }
 
-    public double getTargetZ()
-    {
+    public double getTargetZ() {
         return targetZ;
     }
 

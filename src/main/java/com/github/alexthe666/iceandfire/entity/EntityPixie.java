@@ -3,14 +3,14 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
-import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.PixieAIFlee;
 import com.github.alexthe666.iceandfire.entity.ai.PixieAIFollowOwner;
 import com.github.alexthe666.iceandfire.entity.ai.PixieAIPickupItem;
 import com.github.alexthe666.iceandfire.entity.ai.PixieAISteal;
+import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -174,7 +174,7 @@ public class EntityPixie extends TameableEntity {
                 player.getHeldItem(hand).shrink(1);
             }
             Block jar = IafBlockRegistry.JAR_PIXIE_0;
-            switch(this.getColor()){
+            switch (this.getColor()) {
                 case 0:
                     jar = IafBlockRegistry.JAR_PIXIE_0;
                     break;
@@ -365,7 +365,7 @@ public class EntityPixie extends TameableEntity {
                 double d1 = this.posY - EntityPixie.this.getPosY();
                 double d2 = this.posZ - EntityPixie.this.getPosZ();
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-                d3 = (double) MathHelper.sqrt(d3);
+                d3 = MathHelper.sqrt(d3);
 
                 if (d3 < EntityPixie.this.getBoundingBox().getAverageEdgeLength()) {
                     this.action = MovementController.Action.WAIT;

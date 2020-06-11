@@ -41,9 +41,9 @@ public class IafRenderType extends RenderType {
                 RenderSystem.loadIdentity();
                 RenderSystem.translatef(0.5F, 0.5F, 0.0F);
                 RenderSystem.scalef(0.5F, 0.5F, 1.0F);
-                RenderSystem.translatef(17.0F / (float)p_i225986_1_, (2.0F + (float)p_i225986_1_ / 0.5F) * ((float)(Util.milliTime() % 80000L) / 80000.0F), 0.0F);
+                RenderSystem.translatef(17.0F / (float) p_i225986_1_, (2.0F + (float) p_i225986_1_ / 0.5F) * ((float) (Util.milliTime() % 80000L) / 80000.0F), 0.0F);
                 // RenderSystem.rotatef(((float)(p_i225986_1_ * p_i225986_1_) * 4321.0F + (float)p_i225986_1_ * 9.0F) * 2.0F, 0.0F, 0.0F, 1.0F);
-                RenderSystem.scalef(4.5F - (float)p_i225986_1_ / 4.0F, 4.5F - (float)p_i225986_1_ / 4.0F, 1.0F);
+                RenderSystem.scalef(4.5F - (float) p_i225986_1_ / 4.0F, 4.5F - (float) p_i225986_1_ / 4.0F, 1.0F);
                 RenderSystem.mulTextureByProjModelView();
                 RenderSystem.matrixMode(5888);
                 RenderSystem.setupEndPortalTexGen();
@@ -60,7 +60,7 @@ public class IafRenderType extends RenderType {
             if (this == p_equals_1_) {
                 return true;
             } else if (p_equals_1_ != null && this.getClass() == p_equals_1_.getClass()) {
-                DreadlandsPortalTexturingState renderstate$portaltexturingstate = (DreadlandsPortalTexturingState)p_equals_1_;
+                DreadlandsPortalTexturingState renderstate$portaltexturingstate = (DreadlandsPortalTexturingState) p_equals_1_;
                 return this.iteration == renderstate$portaltexturingstate.iteration;
             } else {
                 return false;

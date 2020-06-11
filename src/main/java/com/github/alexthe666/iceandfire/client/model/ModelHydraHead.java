@@ -9,8 +9,6 @@ import com.github.alexthe666.iceandfire.entity.EntityHydra;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
 
 public class ModelHydraHead extends ModelDragonBase<EntityHydra> {
     public AdvancedModelBox Neck1;
@@ -157,11 +155,7 @@ public class ModelHydraHead extends ModelDragonBase<EntityHydra> {
         this.progressRotationInterp(LowerJaw1, breathProgress, (float) Math.toRadians(50), 0.0F, 0.0F, 10F);
 
 
-        if (entity.getSeveredHead() == headIndex || !entity.isAlive()) {
-            this.Neck2.showModel = false;
-        } else {
-            this.Neck2.showModel = true;
-        }
+        this.Neck2.showModel = entity.getSeveredHead() != headIndex && entity.isAlive();
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -17,6 +16,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
         int legs = 11;
         int armor = 10;
-        if(material == IafItemRegistry.DRAGONSTEEL_ICE_ARMOR_MATERIAL){
+        if (material == IafItemRegistry.DRAGONSTEEL_ICE_ARMOR_MATERIAL) {
             legs = 13;
             armor = 12;
         }

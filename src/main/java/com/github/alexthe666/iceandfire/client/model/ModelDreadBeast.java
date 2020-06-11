@@ -4,13 +4,12 @@ import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
-import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import com.github.alexthe666.iceandfire.entity.EntityDreadBeast;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
 public class ModelDreadBeast extends ModelDragonBase<EntityDreadBeast> {
+    private final ModelAnimator animator;
     public AdvancedModelBox Body;
     public AdvancedModelBox LegL1;
     public AdvancedModelBox LowerBody;
@@ -39,7 +38,6 @@ public class ModelDreadBeast extends ModelDragonBase<EntityDreadBeast> {
     public AdvancedModelBox EarR2;
     public AdvancedModelBox EarL2;
     public AdvancedModelBox LegR2;
-    private final ModelAnimator animator;
 
     public ModelDreadBeast() {
         this.textureWidth = 256;
@@ -202,7 +200,7 @@ public class ModelDreadBeast extends ModelDragonBase<EntityDreadBeast> {
 
     @Override
     public void setRotationAngles(EntityDreadBeast entity, float f, float f1, float f2, float f3, float f4) {
-        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, 0);
+        animate(entity, f, f1, f2, f3, f4, 0);
         float speed_walk = 0.45F;
         float speed_idle = 0.05F;
         float degree_walk = 1F;

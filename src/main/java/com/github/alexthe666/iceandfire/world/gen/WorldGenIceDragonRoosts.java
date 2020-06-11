@@ -26,8 +26,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
-    private static boolean isMale;
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+    private static boolean isMale;
 
     public WorldGenIceDragonRoosts(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
@@ -121,11 +121,11 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
                         transformState(worldIn, blockpos, worldIn.getBlockState(blockpos));
                     }
                     if (dist > 0.5D && rand.nextInt(1000) == 0) {
-                        BlockPos height = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG,blockpos);
+                        BlockPos height = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos);
                         new WorldGenRoostBoulder(IafBlockRegistry.FROZEN_COBBLESTONE, rand.nextInt(3), true).generate(worldIn, rand, height);
                     }
                     if (rand.nextInt(1000) == 0) {
-                        BlockPos height = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG,blockpos);
+                        BlockPos height = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos);
                         new WorldGenRoostPile(IafBlockRegistry.DRAGON_ICE).generate(worldIn, rand, height);
                     }
                     if (dist < 0.3D && rand.nextInt(isMale ? 250 : 400) == 0) {
@@ -150,7 +150,7 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
             }
         }
         {
-            EntityIceDragon dragon = new EntityIceDragon(IafEntityRegistry.ICE_DRAGON,worldIn.getWorld());
+            EntityIceDragon dragon = new EntityIceDragon(IafEntityRegistry.ICE_DRAGON, worldIn.getWorld());
             dragon.setGender(isMale);
             dragon.growDragon(40 + radius);
             dragon.setAgingDisabled(true);

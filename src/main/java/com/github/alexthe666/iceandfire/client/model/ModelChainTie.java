@@ -4,7 +4,6 @@ import com.github.alexthe666.iceandfire.entity.EntityChainTie;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
 public class ModelChainTie extends SegmentedModel<EntityChainTie> {
     public ModelRenderer knotRenderer;

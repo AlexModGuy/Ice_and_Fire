@@ -14,9 +14,9 @@ import javax.annotation.Nullable;
 
 public class TileEntityDragonforgeInput extends TileEntity implements ITickable {
     private static final int LURE_DISTANCE = 50;
+    private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private int ticksSinceDragonFire;
     private TileEntityDragonforge core = null;
-    private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
     public TileEntityDragonforgeInput() {
         super(IafTileEntityRegistry.DRAGONFORGE_INPUT);

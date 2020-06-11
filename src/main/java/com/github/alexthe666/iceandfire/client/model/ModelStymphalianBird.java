@@ -7,7 +7,6 @@ import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
 public class ModelStymphalianBird extends ModelDragonBase<EntityStymphalianBird> {
     public AdvancedModelBox Body;
@@ -370,7 +369,7 @@ public class ModelStymphalianBird extends ModelDragonBase<EntityStymphalianBird>
     }
 
     public void setRotationAngles(EntityStymphalianBird entity, float f, float f1, float f2, float f3, float f4) {
-        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, 1);
+        animate(entity, f, f1, f2, f3, f4, 1);
         float speed_walk = 0.3F;
         float speed_idle = 0.05F;
         float speed_fly = 0.4F;

@@ -2,8 +2,8 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
 import com.github.alexthe666.iceandfire.entity.EntityChainTie;
+import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
 import net.minecraft.block.Block;
 import net.minecraft.block.WallBlock;
 import net.minecraft.client.util.ITooltipFlag;

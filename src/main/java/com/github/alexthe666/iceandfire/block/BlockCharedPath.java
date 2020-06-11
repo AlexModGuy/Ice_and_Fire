@@ -11,7 +11,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 public class BlockCharedPath extends GrassPathBlock {

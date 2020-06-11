@@ -11,8 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-
 public class BlockMyrmexResin extends Block implements ICustomRendered {
 
     private boolean sticky;

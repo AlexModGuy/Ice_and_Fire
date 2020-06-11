@@ -11,14 +11,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.List;
 
 public class PartEntity extends Entity {
+    public EntitySize multipartSize;
     protected LivingEntity parent;
-
     protected float radius;
     protected float angleYaw;
     protected float offsetY;
-
     protected float damageMultiplier;
-    public EntitySize multipartSize;
 
     public PartEntity(EntityType t, World world) {
         super(t, world);

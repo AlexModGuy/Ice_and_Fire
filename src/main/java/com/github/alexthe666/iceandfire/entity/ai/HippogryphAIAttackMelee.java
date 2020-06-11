@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
@@ -79,7 +79,7 @@ public class HippogryphAIAttackMelee extends Goal {
         } else if (!this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(LivingEntity))) {
             return false;
         } else {
-            return !(LivingEntity instanceof PlayerEntity) || !((PlayerEntity) LivingEntity).isSpectator() && !((PlayerEntity) LivingEntity).isCreative();
+            return !(LivingEntity instanceof PlayerEntity) || !LivingEntity.isSpectator() && !((PlayerEntity) LivingEntity).isCreative();
         }
     }
 
@@ -97,7 +97,7 @@ public class HippogryphAIAttackMelee extends Goal {
     public void resetTask() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
 
-        if (LivingEntity instanceof PlayerEntity && (((PlayerEntity) LivingEntity).isSpectator() || ((PlayerEntity) LivingEntity).isCreative())) {
+        if (LivingEntity instanceof PlayerEntity && (LivingEntity.isSpectator() || ((PlayerEntity) LivingEntity).isCreative())) {
             this.attacker.setAttackTarget(null);
         }
 
@@ -160,6 +160,6 @@ public class HippogryphAIAttackMelee extends Goal {
     }
 
     protected double getAttackReachSqr(LivingEntity attackTarget) {
-        return (double) (this.attacker.getWidth() * 4.0F * this.attacker.getWidth() * 4.0F + attackTarget.getWidth());
+        return this.attacker.getWidth() * 4.0F * this.attacker.getWidth() * 4.0F + attackTarget.getWidth();
     }
 }

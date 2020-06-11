@@ -18,6 +18,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -70,13 +71,13 @@ public class ItemBestiary extends Item {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (stack.getTag() != null) {
-            if(IceAndFire.PROXY.shouldSeeBestiaryContents()){
+            if (IceAndFire.PROXY.shouldSeeBestiaryContents()) {
                 tooltip.add(new TranslationTextComponent("bestiary.contains").applyTextStyle(TextFormatting.GRAY));
                 List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(stack.getTag().getIntArray("Pages")));
                 for (EnumBestiaryPages page : pages) {
                     tooltip.add(new StringTextComponent(TextFormatting.WHITE + "-").appendSibling(new TranslationTextComponent("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase())).applyTextStyle(TextFormatting.GRAY));
                 }
-            }else{
+            } else {
                 tooltip.add(new TranslationTextComponent("bestiary.hold_shift").applyTextStyle(TextFormatting.GRAY));
             }
 

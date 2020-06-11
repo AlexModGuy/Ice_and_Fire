@@ -17,7 +17,10 @@ import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.passive.horse.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.gen.Heightmap;
 
@@ -60,8 +63,8 @@ public class DragonUtils {
             }
         }
         float angle = (0.01745329251F * renderYawOffset) + 3.15F + (dragon.getRNG().nextFloat() * neg);
-        double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-        double extraZ = (double) (radius * MathHelper.cos(angle));
+        double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+        double extraZ = radius * MathHelper.cos(angle);
         BlockPos radialPos = new BlockPos(dragon.getPosX() + extraX, 0, dragon.getPosZ() + extraZ);
         BlockPos ground = dragon.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, radialPos);
         int distFromGround = (int) dragon.getPosY() - ground.getY();
@@ -77,8 +80,8 @@ public class DragonUtils {
         float radius = 0.75F * (0.7F * dragon.getRenderSize() / 3) * -7 - dragon.getRNG().nextInt(dragon.getDragonStage() * 6);
         float neg = dragon.getRNG().nextBoolean() ? 1 : -1;
         float angle = (0.01745329251F * dragon.renderYawOffset) + 3.15F + (dragon.getRNG().nextFloat() * neg);
-        double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-        double extraZ = (double) (radius * MathHelper.cos(angle));
+        double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+        double extraZ = radius * MathHelper.cos(angle);
         BlockPos radialPos = new BlockPos(dragon.getPosX() + extraX, 0, dragon.getPosZ() + extraZ);
         BlockPos ground = dragon.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, radialPos);
         int distFromGround = (int) dragon.getPosY() - ground.getY();
@@ -138,8 +141,8 @@ public class DragonUtils {
         float radius = 0.75F * (0.7F * 8) * -3 - hippo.getRNG().nextInt(48);
         float neg = hippo.getRNG().nextBoolean() ? 1 : -1;
         float angle = (0.01745329251F * hippo.renderYawOffset) + 3.15F + (hippo.getRNG().nextFloat() * neg);
-        double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-        double extraZ = (double) (radius * MathHelper.cos(angle));
+        double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+        double extraZ = radius * MathHelper.cos(angle);
         if (hippo.hasHomePosition && hippo.homePos != null) {
             BlockPos dragonPos = new BlockPos(hippo);
             BlockPos ground = hippo.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, dragonPos);
@@ -167,8 +170,8 @@ public class DragonUtils {
         float neg = bird.getRNG().nextBoolean() ? 1 : -1;
         float renderYawOffset = bird.flock != null && !bird.flock.isLeader(bird) ? getStymphalianFlockDirection(bird) : bird.renderYawOffset;
         float angle = (0.01745329251F * renderYawOffset) + 3.15F + (bird.getRNG().nextFloat() * neg);
-        double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-        double extraZ = (double) (radius * MathHelper.cos(angle));
+        double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+        double extraZ = radius * MathHelper.cos(angle);
         BlockPos radialPos = getStymphalianFearPos(bird, new BlockPos(bird.getPosX() + extraX, 0, bird.getPosZ() + extraZ));
         BlockPos ground = bird.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, radialPos);
         int distFromGround = (int) bird.getPosY() - ground.getY();
@@ -198,7 +201,7 @@ public class DragonUtils {
             double d0 = leader.getPosX() - bird.getPosX();
             double d2 = leader.getPosZ() - bird.getPosZ();
             double d1 = leader.getPosY() + (double) leader.getEyeHeight() - (bird.getPosY() + (double) bird.getEyeHeight());
-            double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+            double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
             float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
             float degrees = MathHelper.wrapDegrees(f - bird.rotationYaw);
 
@@ -212,8 +215,8 @@ public class DragonUtils {
         float radius = 10 + cockatrice.getRNG().nextInt(10);
         float neg = cockatrice.getRNG().nextBoolean() ? 1 : -1;
         float angle = (0.01745329251F * target.rotationYawHead);
-        double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-        double extraZ = (double) (radius * MathHelper.cos(angle));
+        double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+        double extraZ = radius * MathHelper.cos(angle);
         BlockPos radialPos = new BlockPos(target.getPosX() + extraX, 0, target.getPosZ() + extraZ);
         BlockPos ground = target.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, radialPos);
         if (!cockatrice.isTargetBlocked(new Vec3d(ground)) && cockatrice.getDistanceSq(new Vec3d(ground)) > 30) {
@@ -226,8 +229,8 @@ public class DragonUtils {
         float radius = 10 * serpent.getSeaSerpentScale() + serpent.getRNG().nextInt(10);
         float neg = serpent.getRNG().nextBoolean() ? 1 : -1;
         float angle = (0.01745329251F * target.rotationYawHead);
-        double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-        double extraZ = (double) (radius * MathHelper.cos(angle));
+        double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+        double extraZ = radius * MathHelper.cos(angle);
         BlockPos radialPos = new BlockPos(target.getPosX() + extraX, 0, target.getPosZ() + extraZ);
         BlockPos ground = target.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, radialPos);
         if (serpent.getDistanceSq(new Vec3d(ground)) > 30) {
@@ -370,7 +373,7 @@ public class DragonUtils {
         return true;
     }
 
-    public static boolean isDreadBlock(BlockState state){
+    public static boolean isDreadBlock(BlockState state) {
         Block block = state.getBlock();
         return block == IafBlockRegistry.DREAD_STONE || block == IafBlockRegistry.DREAD_STONE_BRICKS || block == IafBlockRegistry.DREAD_STONE_BRICKS_CHISELED ||
                 block == IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED || block == IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY || block == IafBlockRegistry.DREAD_STONE_TILE ||

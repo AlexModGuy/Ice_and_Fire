@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.inventory;
 
-import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
+import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -16,8 +16,8 @@ import net.minecraft.util.IntArray;
 public class ContainerDragonForge extends Container {
 
     private final IInventory tileFurnace;
-    private int cookTime;
     public boolean isFire;
+    private int cookTime;
 
     public ContainerDragonForge(int i, PlayerInventory playerInventory) {
         this(i, new Inventory(3), playerInventory, new IntArray(0));

@@ -5,7 +5,7 @@ import net.minecraft.client.gui.ScreenManager;
 
 public class IafGuiRegistry {
 
-    public static void register(){
+    public static void register() {
         ScreenManager.registerFactory(IafContainerRegistry.IAF_LECTERN_CONTAINER, GuiLectern::new);
         ScreenManager.registerFactory(IafContainerRegistry.PODIUM_CONTAINER, GuiPodium::new);
         ScreenManager.registerFactory(IafContainerRegistry.DRAGON_CONTAINER, GuiDragon::new);

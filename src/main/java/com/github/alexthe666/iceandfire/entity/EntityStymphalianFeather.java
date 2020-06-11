@@ -13,7 +13,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class EntityStymphalianFeather extends AbstractArrowEntity {
@@ -75,7 +74,7 @@ public class EntityStymphalianFeather extends AbstractArrowEntity {
                     net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem((PlayerEntity) entity, copyBeforeUse, Hand);
                 }
 
-                if (Hand == Hand.MAIN_HAND) {
+                if (Hand == net.minecraft.util.Hand.MAIN_HAND) {
                     this.setItemStackToSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
                 } else {
                     this.setItemStackToSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);

@@ -1,10 +1,9 @@
 package com.github.alexthe666.iceandfire.block;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
@@ -13,18 +12,17 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class BlockJar extends ContainerBlock implements ICustomRendered {
     protected static final VoxelShape AABB = Block.makeCuboidShape(4, 0, 4, 12, 1, 12);
@@ -36,9 +34,9 @@ public class BlockJar extends ContainerBlock implements ICustomRendered {
         super(Properties.create(Material.GLASS).hardnessAndResistance(1, 2).sound(SoundType.GLASS).lightValue(pixieType == -1 ? 0 : 10));
         this.empty = pixieType == -1;
         this.pixieType = pixieType;
-        if(empty){
+        if (empty) {
             this.setRegistryName("iceandfire:pixie_jar_empty");
-        }else{
+        } else {
             this.setRegistryName("iceandfire:pixie_jar_" + pixieType);
         }
     }

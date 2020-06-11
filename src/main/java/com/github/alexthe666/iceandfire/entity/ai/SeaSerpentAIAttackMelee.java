@@ -91,7 +91,7 @@ public class SeaSerpentAIAttackMelee extends Goal {
         } else if (!this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(LivingEntity))) {
             return false;
         } else {
-            return !(LivingEntity instanceof PlayerEntity) || !((PlayerEntity) LivingEntity).isSpectator() && !((PlayerEntity) LivingEntity).isCreative();
+            return !(LivingEntity instanceof PlayerEntity) || !LivingEntity.isSpectator() && !((PlayerEntity) LivingEntity).isCreative();
         }
     }
 
@@ -113,7 +113,7 @@ public class SeaSerpentAIAttackMelee extends Goal {
     public void resetTask() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
 
-        if (LivingEntity instanceof PlayerEntity && (((PlayerEntity) LivingEntity).isSpectator() || ((PlayerEntity) LivingEntity).isCreative())) {
+        if (LivingEntity instanceof PlayerEntity && (LivingEntity.isSpectator() || ((PlayerEntity) LivingEntity).isCreative())) {
             this.attacker.setAttackTarget(null);
         }
 
@@ -174,6 +174,6 @@ public class SeaSerpentAIAttackMelee extends Goal {
     }
 
     protected double getAttackReachSqr(LivingEntity attackTarget) {
-        return (double) (this.attacker.getWidth() * 2.0F * this.attacker.getWidth() * 2.0F + attackTarget.getWidth());
+        return this.attacker.getWidth() * 2.0F * this.attacker.getWidth() * 2.0F + attackTarget.getWidth();
     }
 }

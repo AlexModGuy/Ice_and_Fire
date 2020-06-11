@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.recipe;
 
-import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
@@ -9,7 +8,6 @@ import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
-import net.minecraft.dispenser.ProjectileDispenseBehavior;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.dispenser.ProjectileDispenseBehavior;
 import net.minecraft.entity.IProjectile;
@@ -17,19 +15,13 @@ import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.BannerPattern;
-import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class IafRecipeRegistry {
-
-    public static List<DragonForgeRecipe> FIRE_FORGE_RECIPES = new ArrayList<>();
-    public static List<DragonForgeRecipe> ICE_FORGE_RECIPES = new ArrayList<>();
-    public static List<ItemStack> BANNER_ITEMS = new ArrayList<>();
 
     public static final BannerPattern PATTERN_FIRE = addBanner("fire", new ItemStack(IafItemRegistry.FIRE_DRAGON_HEART));
     public static final BannerPattern PATTERN_ICE = addBanner("ice", new ItemStack(IafItemRegistry.ICE_DRAGON_HEART));
@@ -48,6 +40,9 @@ public class IafRecipeRegistry {
     public static final BannerPattern PATTERN_TROLL = addBanner("troll", new ItemStack(IafItemRegistry.TROLL_TUSK));
     public static final BannerPattern PATTERN_WEEZER = addBanner("weezer", new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM));
     public static final BannerPattern PATTERN_DREAD = addBanner("dread", new ItemStack(IafItemRegistry.DREAD_SHARD));
+    public static List<DragonForgeRecipe> FIRE_FORGE_RECIPES = new ArrayList<>();
+    public static List<DragonForgeRecipe> ICE_FORGE_RECIPES = new ArrayList<>();
+    public static List<ItemStack> BANNER_ITEMS = new ArrayList<>();
 
     public static void preInit() {
         FIRE_FORGE_RECIPES.add(new DragonForgeRecipe(new ItemStack(Items.IRON_INGOT), new ItemStack(IafItemRegistry.FIRE_DRAGON_BLOOD), new ItemStack(IafItemRegistry.DRAGONSTEEL_FIRE_INGOT)));

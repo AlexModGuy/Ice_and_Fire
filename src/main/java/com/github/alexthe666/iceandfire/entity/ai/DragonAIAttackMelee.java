@@ -62,7 +62,7 @@ public class DragonAIAttackMelee extends Goal {
             this.resetTask();
             return false;
         }
-        return LivingEntity != null && (LivingEntity.isAlive() && (!this.longMemory ? (dragon.isFlying() || dragon.isHovering() || !this.dragon.getNavigator().noPath()) : (this.dragon.isWithinHomeDistanceFromPosition(new BlockPos(LivingEntity)) && (!(LivingEntity instanceof PlayerEntity) || !((PlayerEntity) LivingEntity).isSpectator() && !((PlayerEntity) LivingEntity).isCreative()))));
+        return LivingEntity != null && (LivingEntity.isAlive() && (!this.longMemory ? (dragon.isFlying() || dragon.isHovering() || !this.dragon.getNavigator().noPath()) : (this.dragon.isWithinHomeDistanceFromPosition(new BlockPos(LivingEntity)) && (!(LivingEntity instanceof PlayerEntity) || !LivingEntity.isSpectator() && !((PlayerEntity) LivingEntity).isCreative()))));
     }
 
     @Override
@@ -74,7 +74,7 @@ public class DragonAIAttackMelee extends Goal {
     @Override
     public void resetTask() {
         LivingEntity LivingEntity = this.dragon.getAttackTarget();
-        if (LivingEntity instanceof PlayerEntity && (((PlayerEntity) LivingEntity).isSpectator() || ((PlayerEntity) LivingEntity).isCreative())) {
+        if (LivingEntity instanceof PlayerEntity && (LivingEntity.isSpectator() || ((PlayerEntity) LivingEntity).isCreative())) {
             this.dragon.setAttackTarget(null);
         }
         this.dragon.getNavigator().clearPath();

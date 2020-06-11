@@ -40,7 +40,7 @@ public enum EnumSeaSerpentAnimations {
                 try {
                     animation.seaserpent_model = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent" + animation.fileSuffix));
                 } catch (Exception e) {
-                    IceAndFire.LOGGER.warning("sea serpent model at: seaserpent" + animation.fileSuffix + ".tbl doesn't exist!");
+                    IceAndFire.LOGGER.warn("sea serpent model at: seaserpent" + animation.fileSuffix + ".tbl doesn't exist!");
                     e.printStackTrace();
                 }
             }

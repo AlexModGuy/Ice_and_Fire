@@ -7,9 +7,9 @@ import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder
 import com.github.alexthe666.iceandfire.entity.EntityDreadScuttler;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
 public class ModelDreadScuttler extends ModelDragonBase<EntityDreadScuttler> {
+    private final ModelAnimator animator;
     public AdvancedModelBox Body2;
     public AdvancedModelBox Body3;
     public AdvancedModelBox Body1;
@@ -43,7 +43,6 @@ public class ModelDreadScuttler extends ModelDragonBase<EntityDreadScuttler> {
     public AdvancedModelBox legBottomR2;
     public AdvancedModelBox legMidR2_1;
     public AdvancedModelBox legBottomR2_1;
-    private final ModelAnimator animator;
 
     public ModelDreadScuttler() {
         this.textureWidth = 128;
@@ -254,7 +253,7 @@ public class ModelDreadScuttler extends ModelDragonBase<EntityDreadScuttler> {
     }
 
     public void setRotationAngles(EntityDreadScuttler beast, float f, float f1, float f2, float f3, float f4) {
-        animate((IAnimatedEntity) beast, f, f1, f2, f3, f4, 1);
+        animate(beast, f, f1, f2, f3, f4, 1);
         float speed_idle = 0.05F;
         float degree_idle = 0.5F;
         float speed_walk = 0.9F;
@@ -301,7 +300,7 @@ public class ModelDreadScuttler extends ModelDragonBase<EntityDreadScuttler> {
         this.walk(models[0], speed, degree, reverse, offset, 0F, f, f1);
 
     }
-    
+
     @Override
     public void renderStatue() {
         this.resetToDefaultPose();

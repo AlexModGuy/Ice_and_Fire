@@ -7,7 +7,6 @@ import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
 public class ModelHydraBody extends ModelDragonBase<EntityHydra> {
     public AdvancedModelBox BodyUpper;
@@ -99,7 +98,7 @@ public class ModelHydraBody extends ModelDragonBase<EntityHydra> {
     }
 
     public void setRotationAngles(EntityHydra entity, float f, float f1, float f2, float f3, float f4) {
-        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, 1);
+        animate(entity, f, f1, f2, f3, f4, 1);
         float speed_walk = 0.6F;
         float speed_idle = 0.05F;
         float degree_walk = 1F;

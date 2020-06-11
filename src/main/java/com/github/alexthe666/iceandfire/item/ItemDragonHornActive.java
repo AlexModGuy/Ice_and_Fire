@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import net.minecraft.client.util.ITooltipFlag;
@@ -14,7 +13,10 @@ import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -66,7 +68,7 @@ public class ItemDragonHornActive extends Item {
                 return;
             }
             double d0 = PlayerEntity.prevPosX + (PlayerEntity.getPosX() - PlayerEntity.prevPosX) * 1.0D;
-            double d1 = PlayerEntity.prevPosY + (PlayerEntity.getPosY() -  PlayerEntity.prevPosY) * 1.0D + (double) PlayerEntity.getEyeHeight();
+            double d1 = PlayerEntity.prevPosY + (PlayerEntity.getPosY() - PlayerEntity.prevPosY) * 1.0D + (double) PlayerEntity.getEyeHeight();
             double d2 = PlayerEntity.prevPosZ + (PlayerEntity.getPosZ() - PlayerEntity.prevPosZ) * 1.0D;
             float f1 = PlayerEntity.prevRotationPitch + (PlayerEntity.rotationPitch - PlayerEntity.prevRotationPitch) * 1.0F;
             float f2 = PlayerEntity.prevRotationYaw + (PlayerEntity.rotationYaw - PlayerEntity.prevRotationYaw) * 1.0F;
@@ -110,7 +112,7 @@ public class ItemDragonHornActive extends Item {
                     EntityIceDragon dragon = new EntityIceDragon(worldIn);
                     dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                     if (stack.getTag() != null) {
-                        dragon.readEntityFromNBT(stack.getTag());
+                        dragon.read(stack.getTag());
                     }
                     dragon.setFlying(false);
                     dragon.setHovering(false);
@@ -161,9 +163,9 @@ public class ItemDragonHornActive extends Item {
             ITextComponent fire = new TranslationTextComponent("entity.firedragon.name").applyTextStyle(TextFormatting.GRAY);
             ITextComponent ice = new TranslationTextComponent("entity.icedragon.name").applyTextStyle(TextFormatting.GRAY);
             tooltip.add((this == IafItemRegistry.DRAGON_HORN_FIRE ? fire : ice));
-            String name = stack.getTag().getString("CustomName").isEmpty() ? new TranslationTextComponent("dragon.unnamed") : new TranslationTextComponent("dragon.name") + stack.getTag().getString("CustomName");
+            String name = stack.getTag().getString("CustomName").isEmpty() ? new TranslationTextComponent("dragon.unnamed").getFormattedText() : new TranslationTextComponent("dragon.name") + stack.getTag().getString("CustomName");
             tooltip.add(new StringTextComponent(name));
-            String gender = new TranslationTextComponent("dragon.gender") + new TranslationTextComponent((stack.getTag().getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female"));
+            String gender = new TranslationTextComponent("dragon.gender").getFormattedText() + new TranslationTextComponent((stack.getTag().getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female")).getFormattedText();
             tooltip.add(new StringTextComponent(gender));
             int stagenumber = stack.getTag().getInt("AgeTicks") / 24000;
             int stage1 = 0;
@@ -180,7 +182,7 @@ public class ItemDragonHornActive extends Item {
                     stage1 = 1;
                 }
             }
-            String stage = new TranslationTextComponent("dragon.stage") + stage1 + " " + new TranslationTextComponent("dragon.days.front") + stagenumber + " " + new TranslationTextComponent("dragon.days.back");
+            String stage = new TranslationTextComponent("dragon.stage").getFormattedText() + stage1 + " " + new TranslationTextComponent("dragon.days.front").getFormattedText() + stagenumber + " " + new TranslationTextComponent("dragon.days.back").getFormattedText();
             tooltip.add(new StringTextComponent(stage));
         }
     }

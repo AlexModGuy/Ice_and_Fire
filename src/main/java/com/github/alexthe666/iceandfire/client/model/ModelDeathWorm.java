@@ -7,7 +7,6 @@ import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
 public class ModelDeathWorm extends ModelDragonBase<EntityDeathWorm> {
     public AdvancedModelBox Body;
@@ -260,7 +259,7 @@ public class ModelDeathWorm extends ModelDragonBase<EntityDeathWorm> {
         float degree_idle = 0.5F;
         float speed_walk = 0.2F;
         float degree_walk = 0.15F;
-        EntityDeathWorm worm = (EntityDeathWorm) entity;
+        EntityDeathWorm worm = entity;
         animate(entity, f, f1, f2, f3, f4);
         AdvancedModelBox[] WORM = {Body, Body2, Body3, Body4, Body5, Body6, Body7, Body8, Body9, Tail1, Tail2, Tail3, Tail4};
         this.walk(ToothT, speed_idle, degree_idle * 0.15F, true, 0.1F, 0F, f2, 1);

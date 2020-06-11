@@ -77,8 +77,8 @@ public class AquaticAITempt extends Goal {
                 this.targetZ = this.temptingPlayer.getPosZ();
             }
 
-            this.pitch = (double) this.temptingPlayer.rotationPitch;
-            this.yaw = (double) this.temptingPlayer.rotationYaw;
+            this.pitch = this.temptingPlayer.rotationPitch;
+            this.yaw = this.temptingPlayer.rotationYaw;
         }
 
         return this.shouldExecute();

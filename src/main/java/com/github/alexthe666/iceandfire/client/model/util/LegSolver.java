@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.client.model.util;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;

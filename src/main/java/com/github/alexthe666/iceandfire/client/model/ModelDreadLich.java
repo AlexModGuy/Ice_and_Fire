@@ -39,7 +39,7 @@ public class ModelDreadLich extends ModelDragonBase<EntityDreadLich> implements 
     public boolean isSneak;
     private ModelAnimator animator;
     private boolean armor = false;
-    
+
     public ModelDreadLich(float modelSize, boolean armorArms) {
         this.textureWidth = 128;
         this.textureHeight = 64;
@@ -123,9 +123,9 @@ public class ModelDreadLich extends ModelDragonBase<EntityDreadLich> implements 
 
     public void setRotationAngles(EntityDreadLich entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetToDefaultPose();
-        animate((IAnimatedEntity) entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 1);
-        ItemStack itemstack = ((LivingEntity) entityIn).getHeldItemMainhand();
-        EntityDreadLich thrall = (EntityDreadLich) entityIn;
+        animate(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 1);
+        ItemStack itemstack = entityIn.getHeldItemMainhand();
+        EntityDreadLich thrall = entityIn;
         this.faceTarget(netHeadYaw, headPitch, 1.0F, head);
         float f = 1.0F;
         this.armRight.rotateAngleX += MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI) * 2.0F * limbSwingAmount * 0.5F / f;

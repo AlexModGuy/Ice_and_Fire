@@ -1,11 +1,7 @@
 package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.event.ServerEvents;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
-import net.minecraft.client.network.play.NetworkPlayerInfo;
 import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
@@ -19,7 +15,6 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Map;
 import java.util.UUID;
 
 @OnlyIn(Dist.CLIENT)
@@ -65,11 +60,11 @@ public class PlayerRenderEvents {
                 }
             }
         }*/
-        if(event.getEntityLiving().getUniqueID().equals(ServerEvents.ALEX_UUID)){
+        if (event.getEntityLiving().getUniqueID().equals(ServerEvents.ALEX_UUID)) {
             event.getMatrixStack().push();
-            float f2 = ((float) event.getEntityLiving().ticksExisted - 1 +  event.getPartialRenderTick());
+            float f2 = ((float) event.getEntityLiving().ticksExisted - 1 + event.getPartialRenderTick());
             float f3 = MathHelper.sin(f2 / 10.0F) * 0.1F + 0.1F;
-            GL11.glTranslatef((float) 0, (float) 1.3F * event.getEntityLiving().getHeight(), (float) 0);
+            GL11.glTranslatef((float) 0, 1.3F * event.getEntityLiving().getHeight(), (float) 0);
             float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
             event.getMatrixStack().rotate(new Quaternion(Vector3f.YP, f4, true));
             event.getMatrixStack().push();

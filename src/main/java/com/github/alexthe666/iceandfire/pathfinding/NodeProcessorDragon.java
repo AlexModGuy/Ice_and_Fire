@@ -1,11 +1,8 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
-import net.minecraft.block.*;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.pathfinding.WalkNodeProcessor;
 import net.minecraft.world.Region;
-
-import java.util.EnumSet;
 
 public class NodeProcessorDragon extends WalkNodeProcessor {
 

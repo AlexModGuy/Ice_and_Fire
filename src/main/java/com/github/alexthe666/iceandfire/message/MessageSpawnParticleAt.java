@@ -1,16 +1,9 @@
 package com.github.alexthe666.iceandfire.message;
 
-import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
-import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -21,7 +14,8 @@ public class MessageSpawnParticleAt {
     private double z;
     private int particleType;
 
-    public MessageSpawnParticleAt() {}
+    public MessageSpawnParticleAt() {
+    }
 
     public MessageSpawnParticleAt(double x, double y, double z, int particleType) {
         this.x = x;
@@ -46,10 +40,10 @@ public class MessageSpawnParticleAt {
         }
 
         public static void handle(MessageSpawnParticleAt message, Supplier<NetworkEvent.Context> context) {
-            ((NetworkEvent.Context) context.get()).setPacketHandled(true);
+            context.get().setPacketHandled(true);
             PlayerEntity player = context.get().getSender();
             if (player != null) {
-                if(!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() == IafItemRegistry.DRAGON_DEBUG_STICK){
+                if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() == IafItemRegistry.DRAGON_DEBUG_STICK) {
                     player.world.addParticle(ParticleTypes.SMOKE, message.x, message.y, message.z, 0, 0, 0);
                 }
             }

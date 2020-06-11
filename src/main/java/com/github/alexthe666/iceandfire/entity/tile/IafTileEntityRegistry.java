@@ -25,7 +25,7 @@ public class IafTileEntityRegistry {
     public static final TileEntityType<TileEntityDreadSpawner> DREAD_SPAWNER = registerTileEntity(TileEntityType.Builder.create(TileEntityDreadSpawner::new, IafBlockRegistry.DREAD_SPAWNER), "dread_spawner");
 
 
-    public static TileEntityType registerTileEntity(TileEntityType.Builder builder, String entityName){
+    public static TileEntityType registerTileEntity(TileEntityType.Builder builder, String entityName) {
         ResourceLocation nameLoc = new ResourceLocation(IceAndFire.MODID, entityName);
         return (TileEntityType) builder.build(null).setRegistryName(nameLoc);
     }

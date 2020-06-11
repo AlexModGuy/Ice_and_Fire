@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.client;
 
-import net.java.games.input.Keyboard;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 

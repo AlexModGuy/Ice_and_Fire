@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.client.render.tile;
 
 import com.github.alexthe666.iceandfire.client.model.ModelPixie;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderPixie;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -12,22 +11,20 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 public class RenderJar<T extends TileEntityJar> extends TileEntityRenderer<T> {
 
-    public RenderJar(TileEntityRendererDispatcher p_i226016_1_) {
-        super(p_i226016_1_);
-    }
     public static final RenderType TEXTURE_0 = RenderType.func_230167_a_(RenderPixie.TEXTURE_0, false);
     public static final RenderType TEXTURE_1 = RenderType.func_230167_a_(RenderPixie.TEXTURE_1, false);
     public static final RenderType TEXTURE_2 = RenderType.func_230167_a_(RenderPixie.TEXTURE_2, false);
     public static final RenderType TEXTURE_3 = RenderType.func_230167_a_(RenderPixie.TEXTURE_3, false);
     public static final RenderType TEXTURE_4 = RenderType.func_230167_a_(RenderPixie.TEXTURE_4, false);
     public static final RenderType TEXTURE_5 = RenderType.func_230167_a_(RenderPixie.TEXTURE_5, false);
-
     private static final ModelPixie MODEL_PIXIE = new ModelPixie();
+
+    public RenderJar(TileEntityRendererDispatcher p_i226016_1_) {
+        super(p_i226016_1_);
+    }
 
     @Override
     public void render(T entity, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
@@ -40,7 +37,7 @@ public class RenderJar<T extends TileEntityJar> extends TileEntityRenderer<T> {
         }
         if (hasPixie) {
             matrixStackIn.push();
-            matrixStackIn.translate((float) 0.5F, (float) 1.501F, (float) 0.5F);
+            matrixStackIn.translate(0.5F, 1.501F, 0.5F);
             matrixStackIn.rotate(new Quaternion(Vector3f.XP, 180, true));
             matrixStackIn.push();
             RenderType type = TEXTURE_0;

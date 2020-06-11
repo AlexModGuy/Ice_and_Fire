@@ -4,7 +4,6 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -69,7 +68,7 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
         double zRatio = this.getMotion().z;
         float strength = -1.4F;
         float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
-        living.setMotion(living.getMotion().mul(0.5D, 1, 0.5D).subtract(xRatio / (double) f * (double) strength, 0, zRatio / (double) f * (double) strength).add(0, 0.6,0));
+        living.setMotion(living.getMotion().mul(0.5D, 1, 0.5D).subtract(xRatio / (double) f * (double) strength, 0, zRatio / (double) f * (double) strength).add(0, 0.6, 0));
         spawnExplosionParticle();
     }
 
@@ -115,7 +114,7 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
                 Hand Hand = player.getActiveHand();
                 net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, Hand);
 
-                if (Hand == Hand.MAIN_HAND) {
+                if (Hand == net.minecraft.util.Hand.MAIN_HAND) {
                     this.setItemStackToSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
                 } else {
                     this.setItemStackToSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);

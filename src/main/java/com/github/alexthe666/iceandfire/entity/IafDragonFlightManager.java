@@ -4,7 +4,10 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IFlyingMount;
 import com.github.alexthe666.iceandfire.util.IAFMath;
-import net.minecraft.entity.*;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.PathNavigator;
@@ -219,15 +222,15 @@ public class IafDragonFlightManager {
             float distX = (float) (dragon.flightManager.getFlightTarget().x - dragon.getPosX());
             float distY = (float) (dragon.flightManager.getFlightTarget().y - dragon.getPosY());
             float distZ = (float) (dragon.flightManager.getFlightTarget().z - dragon.getPosZ());
-            double planeDist = (double) MathHelper.sqrt(distX * distX + distZ * distZ);
+            double planeDist = MathHelper.sqrt(distX * distX + distZ * distZ);
             double yDistMod = 1.0D - (double) MathHelper.abs(distY * 0.7F) / planeDist;
             distX = (float) ((double) distX * yDistMod);
             distZ = (float) ((double) distZ * yDistMod);
-            planeDist = (double) MathHelper.sqrt(distX * distX + distZ * distZ);
-            double dist = (double) MathHelper.sqrt(distX * distX + distZ * distZ + distY * distY);
+            planeDist = MathHelper.sqrt(distX * distX + distZ * distZ);
+            double dist = MathHelper.sqrt(distX * distX + distZ * distZ + distY * distY);
             if (dist > 1.0F) {
                 float yawCopy = dragon.rotationYaw;
-                float atan = (float) MathHelper.atan2((double) distZ, (double) distX);
+                float atan = (float) MathHelper.atan2(distZ, distX);
                 float yawTurn = MathHelper.wrapDegrees(dragon.rotationYaw + 90);
                 float yawTurnAtan = MathHelper.wrapDegrees(atan * 57.295776F);
                 dragon.rotationYaw = IafDragonFlightManager.approachDegrees(yawTurn, yawTurnAtan, dragon.airAttack == IafDragonAttacks.Air.TACKLE && dragon.getAttackTarget() != null ? 10 : 4.0F) - 90.0F;
@@ -240,7 +243,7 @@ public class IafDragonFlightManager {
                         speed = speed * (dist / 100D);
                     }
                 }
-                float finPitch = (float) (-(MathHelper.atan2((double) (-distY), planeDist) * 57.2957763671875D));
+                float finPitch = (float) (-(MathHelper.atan2(-distY, planeDist) * 57.2957763671875D));
                 dragon.rotationPitch = finPitch;
                 float yawTurnHead = dragon.rotationYaw + 90.0F;
                 speed *= dragon.getFlightSpeedModifier();
@@ -270,16 +273,16 @@ public class IafDragonFlightManager {
             Vec3d moveVec = new Vec3d(posX, posY, posZ);
             Vec3d normalized = moveVec.subtract(dragonVec).normalize();
             double dist = dragonVec.distanceTo(moveVec);
-            dragon.setMotion(normalized.x * flySpeed, normalized.y * flySpeed,  normalized.z * flySpeed);
+            dragon.setMotion(normalized.x * flySpeed, normalized.y * flySpeed, normalized.z * flySpeed);
             if (dist > 2.5E-7) {
                 float yaw = (float) Math.toDegrees(Math.PI * 2 - Math.atan2(normalized.x, normalized.y));
                 dragon.rotationYaw = limitAngle(dragon.rotationYaw, yaw, 5);
-                dragon.setAIMoveSpeed((float)(speed));
+                dragon.setAIMoveSpeed((float) (speed));
             }
             dragon.move(MoverType.SELF, dragon.getMotion());
         }
 
-        public double speedMod(){
+        public double speedMod() {
             return dragon instanceof EntityAmphithere ? 0.75D : 0.5D;
         }
     }

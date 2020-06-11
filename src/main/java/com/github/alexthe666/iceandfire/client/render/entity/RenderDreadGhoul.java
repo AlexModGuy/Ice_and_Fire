@@ -1,20 +1,14 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelDreadGhoul;
-import com.github.alexthe666.iceandfire.client.model.ModelPixie;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
-import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerPixieGlow;
-import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerPixieItem;
-import com.github.alexthe666.iceandfire.entity.EntityDreadBeast;
 import com.github.alexthe666.iceandfire.entity.EntityDreadGhoul;
-import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderDreadGhoul extends MobRenderer<EntityDreadGhoul, ModelDreadGhoul> {
@@ -45,7 +39,7 @@ public class RenderDreadGhoul extends MobRenderer<EntityDreadGhoul, ModelDreadGh
 
     @Override
     public ResourceLocation getEntityTexture(EntityDreadGhoul ghoul) {
-        if(ghoul.getScreamStage() == 2){
+        if (ghoul.getScreamStage() == 2) {
             switch (ghoul.getVariant()) {
                 default:
                     return TEXTURE_0_OPEN;
@@ -54,7 +48,7 @@ public class RenderDreadGhoul extends MobRenderer<EntityDreadGhoul, ModelDreadGh
                 case 2:
                     return TEXTURE_2_OPEN;
             }
-        }else if(ghoul.getScreamStage() == 1){
+        } else if (ghoul.getScreamStage() == 1) {
             switch (ghoul.getVariant()) {
                 default:
                     return TEXTURE_0_MID;
@@ -63,7 +57,7 @@ public class RenderDreadGhoul extends MobRenderer<EntityDreadGhoul, ModelDreadGh
                 case 2:
                     return TEXTURE_2_MID;
             }
-        }else{
+        } else {
             switch (ghoul.getVariant()) {
                 default:
                     return TEXTURE_0;

@@ -5,10 +5,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.Tags;
+
 public class FoodUtils {
 
     public static int getFoodPoints(Entity entity) {

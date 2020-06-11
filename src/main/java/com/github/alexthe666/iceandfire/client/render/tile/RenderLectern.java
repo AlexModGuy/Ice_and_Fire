@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
 import com.github.alexthe666.iceandfire.block.BlockLectern;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -11,7 +10,6 @@ import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.model.BookModel;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
@@ -26,7 +24,7 @@ public class RenderLectern<T extends TileEntityLectern> extends TileEntityRender
 
     @Override
     public void render(T entity, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        TileEntityLectern lectern = (TileEntityLectern) entity;
+        TileEntityLectern lectern = entity;
         matrixStackIn.push();
         matrixStackIn.translate(0.5F, 1.07F, 0.5F);
         matrixStackIn.scale(0.8F, 0.8F, 0.8F);

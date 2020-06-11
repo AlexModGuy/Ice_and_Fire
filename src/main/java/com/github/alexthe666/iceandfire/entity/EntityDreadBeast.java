@@ -31,15 +31,15 @@ import javax.annotation.Nullable;
 
 public class EntityDreadBeast extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
 
+    private static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityDreadBeast.class, DataSerializers.FLOAT);
+    private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityDreadBeast.class, DataSerializers.VARINT);
+    private static final float INITIAL_WIDTH = 1.2F;
+    private static final float INITIAL_HEIGHT = 0.9F;
     public static Animation ANIMATION_SPAWN = Animation.create(40);
     public static Animation ANIMATION_BITE = Animation.create(15);
     private int animationTick;
     private Animation currentAnimation;
     private int hostileTicks = 0;
-    private static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityDreadBeast.class, DataSerializers.FLOAT);
-   private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityDreadBeast.class, DataSerializers.VARINT);
-    private static final float INITIAL_WIDTH = 1.2F;
-    private static final float INITIAL_HEIGHT = 0.9F;
     private float firstWidth = 1.0F;
     private float firstHeight = 1.0F;
 
@@ -100,14 +100,14 @@ public class EntityDreadBeast extends EntityDreadMob implements IAnimatedEntity,
 
     public void livingTick() {
         super.livingTick();
-        if(Math.abs(firstWidth - INITIAL_WIDTH * getScale()) > 0.01F || Math.abs(firstHeight - INITIAL_HEIGHT * getScale()) > 0.01F){
+        if (Math.abs(firstWidth - INITIAL_WIDTH * getScale()) > 0.01F || Math.abs(firstHeight - INITIAL_HEIGHT * getScale()) > 0.01F) {
             firstWidth = INITIAL_WIDTH * getScale();
             firstHeight = INITIAL_HEIGHT * getScale();
         }
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
             BlockState belowBlock = world.getBlockState(this.getPosition().down());
             if (belowBlock.getBlock() != Blocks.AIR) {
-                for (int i = 0; i < 5; i++){
+                for (int i = 0; i < 5; i++) {
                     this.world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, belowBlock), this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getBoundingBox().minY, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
                 }
             }
@@ -199,7 +199,7 @@ public class EntityDreadBeast extends EntityDreadMob implements IAnimatedEntity,
     }
 
     @Override
-    public boolean isOnSameTeam(Entity entityIn){
+    public boolean isOnSameTeam(Entity entityIn) {
         return entityIn instanceof IDreadMob || super.isOnSameTeam(entityIn);
     }
 

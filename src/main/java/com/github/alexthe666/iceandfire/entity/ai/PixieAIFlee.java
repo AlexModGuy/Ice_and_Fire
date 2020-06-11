@@ -2,14 +2,12 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nullable;
@@ -46,7 +44,7 @@ public class PixieAIFlee<T extends Entity> extends Goal {
         if (this.pixie.isTamed()) {
             return false;
         }
-        List<T> list = this.pixie.world.getEntitiesWithinAABB(this.classToAvoid, this.pixie.getBoundingBox().grow((double) this.avoidDistance, 3.0D, (double) this.avoidDistance),
+        List<T> list = this.pixie.world.getEntitiesWithinAABB(this.classToAvoid, this.pixie.getBoundingBox().grow(this.avoidDistance, 3.0D, this.avoidDistance),
                 EntityPredicates.NOT_SPECTATING);
 
         if (list.isEmpty()) {

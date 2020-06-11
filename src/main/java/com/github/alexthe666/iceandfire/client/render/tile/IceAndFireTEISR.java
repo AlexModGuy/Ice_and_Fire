@@ -23,11 +23,12 @@ public class IceAndFireTEISR extends ItemStackTileEntityRenderer {
     private RenderGorgonHead renderGorgonHead = new RenderGorgonHead(true);
     private RenderGorgonHead renderGorgonHeadDead = new RenderGorgonHead(false);
     private TileEntityDreadPortal dreadPortalDummy = new TileEntityDreadPortal();
+
     public void render(ItemStack itemStackIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         if (itemStackIn.getItem() == IafItemRegistry.GORGON_HEAD) {
-            if(itemStackIn.getTag().getBoolean("Active")){
+            if (itemStackIn.getTag().getBoolean("Active")) {
                 renderGorgonHead.render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
-            }else{
+            } else {
                 renderGorgonHeadDead.render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
             }
         }

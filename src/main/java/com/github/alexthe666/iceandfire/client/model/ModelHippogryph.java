@@ -8,7 +8,6 @@ import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
 public class ModelHippogryph extends ModelDragonBase<EntityHippogryph> {
     public AdvancedModelBox Body;
@@ -532,7 +531,7 @@ public class ModelHippogryph extends ModelDragonBase<EntityHippogryph> {
 
     @Override
     public void setRotationAngles(EntityHippogryph entity, float f, float f1, float f2, float f3, float f4) {
-        EntityHippogryph hippo = (EntityHippogryph) entity;
+        EntityHippogryph hippo = entity;
         if (this.isChild) {
             this.Body.setShouldScaleChildren(true);
             this.Head.setShouldScaleChildren(false);

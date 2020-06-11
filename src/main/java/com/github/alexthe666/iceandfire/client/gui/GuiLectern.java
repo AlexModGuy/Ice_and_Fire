@@ -4,7 +4,6 @@ import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
@@ -15,16 +14,14 @@ import net.minecraft.client.renderer.entity.model.BookModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnchantmentNameParts;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import java.io.IOException;
+
 import java.util.List;
 import java.util.Random;
 
@@ -95,7 +92,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
         RenderSystem.matrixMode(5889);
         RenderSystem.pushMatrix();
         RenderSystem.loadIdentity();
-        int k = (int)this.minecraft.getMainWindow().getGuiScaleFactor();
+        int k = (int) this.minecraft.getMainWindow().getGuiScaleFactor();
         RenderSystem.viewport((this.width - 320) / 2 * k, (this.height - 240) / 2 * k, 320 * k, 240 * k);
         RenderSystem.translatef(-0.34F, 0.23F, 0.0F);
         RenderSystem.multMatrix(Matrix4f.perspective(90.0D, 1.3333334F, 9.0F, 80.0F));
@@ -105,20 +102,20 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
         MatrixStack.Entry matrixstack$entry = matrixstack.getLast();
         matrixstack$entry.getMatrix().setIdentity();
         matrixstack$entry.getNormal().setIdentity();
-        matrixstack.translate(0.0D, (double)3.3F, 1984.0D);
+        matrixstack.translate(0.0D, 3.3F, 1984.0D);
         float f = 5.0F;
         matrixstack.scale(5.0F, 5.0F, 5.0F);
         matrixstack.rotate(Vector3f.ZP.rotationDegrees(180.0F));
         matrixstack.rotate(Vector3f.XP.rotationDegrees(20.0F));
         float f1 = MathHelper.lerp(partialTicks, this.oOpen, this.open);
-        matrixstack.translate((double)((1.0F - f1) * 0.2F), (double)((1.0F - f1) * 0.1F), (double)((1.0F - f1) * 0.25F));
+        matrixstack.translate((1.0F - f1) * 0.2F, (1.0F - f1) * 0.1F, (1.0F - f1) * 0.25F);
         float f2 = -(1.0F - f1) * 90.0F - 90.0F;
         matrixstack.rotate(Vector3f.YP.rotationDegrees(f2));
         matrixstack.rotate(Vector3f.XP.rotationDegrees(180.0F));
         float f3 = MathHelper.lerp(partialTicks, this.oFlip, this.flip) + 0.25F;
         float f4 = MathHelper.lerp(partialTicks, this.oFlip, this.flip) + 0.75F;
-        f3 = (f3 - (float)MathHelper.fastFloor((double)f3)) * 1.6F - 0.3F;
-        f4 = (f4 - (float)MathHelper.fastFloor((double)f4)) * 1.6F - 0.3F;
+        f3 = (f3 - (float) MathHelper.fastFloor(f3)) * 1.6F - 0.3F;
+        f4 = (f4 - (float) MathHelper.fastFloor(f4)) * 1.6F - 0.3F;
         if (f3 < 0.0F) {
             f3 = 0.0F;
         }
@@ -150,7 +147,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         int l = this.container.getManuscriptAmount();
 
-        for(int i1 = 0; i1 < 3; ++i1) {
+        for (int i1 = 0; i1 < 3; ++i1) {
             int j1 = i + 60;
             int k1 = j1 + 20;
             this.setBlitOffset(0);
@@ -186,7 +183,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
                 }
 
                 fontrenderer = this.minecraft.fontRenderer;
-                fontrenderer.drawStringWithShadow(s, (float)(k1 + 86 - fontrenderer.getStringWidth(s)), (float)(j + 16 + 19 * i1 + 7), j2);
+                fontrenderer.drawStringWithShadow(s, (float) (k1 + 86 - fontrenderer.getStringWidth(s)), (float) (j + 16 + 19 * i1 + 7), j2);
             }
         }
     }

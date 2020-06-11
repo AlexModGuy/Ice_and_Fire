@@ -1,4 +1,5 @@
 package com.github.alexthe666.iceandfire.item;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;

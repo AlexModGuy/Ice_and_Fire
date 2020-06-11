@@ -13,16 +13,12 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class LayerHydraHead extends LayerRenderer<EntityHydra, ModelHydraBody> {
-    private final RenderHydra renderer;
-    private ModelHydraHead[] modelArr;
     public static final ResourceLocation TEXTURE_STONE = new ResourceLocation("iceandfire:textures/models/hydra/stone.png");
     private static final float[][] TRANSLATE = new float[][]{
             {0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F},// 1 total heads
@@ -46,6 +42,9 @@ public class LayerHydraHead extends LayerRenderer<EntityHydra, ModelHydraBody> {
             {45F, 30F, 20F, 5F, -5F, -20F, -30F, -45F, 0F},
             {50F, 37F, 25F, 15F, 0, -15F, -25F, -37F, -50F},
     };
+    private final RenderHydra renderer;
+    private ModelHydraHead[] modelArr;
+
     public LayerHydraHead(RenderHydra renderer) {
         super(renderer);
         this.renderer = renderer;
@@ -59,7 +58,7 @@ public class LayerHydraHead extends LayerRenderer<EntityHydra, ModelHydraBody> {
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityHydra entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         int heads = entity.getHeadCount();
         boolean stone = EntityGorgon.isStoneMob(entity);
-        if(entity.isInvisible() && !stone){
+        if (entity.isInvisible() && !stone) {
             return;
         }
         matrixStackIn.push();
@@ -88,10 +87,10 @@ public class LayerHydraHead extends LayerRenderer<EntityHydra, ModelHydraBody> {
     }
 
     protected void translateToBody(MatrixStack stack) {
-        postRender(((ModelHydraBody) this.renderer.getEntityModel()).BodyUpper, stack, 0.0625F);
+        postRender(this.renderer.getEntityModel().BodyUpper, stack, 0.0625F);
     }
 
-    protected void postRender(AdvancedModelBox renderer, MatrixStack matrixStackIn,  float scale) {
+    protected void postRender(AdvancedModelBox renderer, MatrixStack matrixStackIn, float scale) {
         if (renderer.rotateAngleX == 0.0F && renderer.rotateAngleY == 0.0F && renderer.rotateAngleZ == 0.0F) {
             if (renderer.rotationPointX != 0.0F || renderer.rotationPointY != 0.0F || renderer.rotationPointZ != 0.0F) {
                 matrixStackIn.translate(renderer.rotationPointX * scale, renderer.rotationPointY * scale, renderer.rotationPointZ * scale);

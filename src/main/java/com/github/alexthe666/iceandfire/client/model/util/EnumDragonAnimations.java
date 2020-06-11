@@ -94,13 +94,13 @@ public enum EnumDragonAnimations {
                         try {
                             animation.firedragon_model = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFire" + animation.fileSuffix));
                         } catch (Exception e) {
-                            IceAndFire.LOGGER.warning("dragon model at: dragonFire" + animation.fileSuffix + ".tbl doesn't exist!");
+                            IceAndFire.LOGGER.warn("dragon model at: dragonFire" + animation.fileSuffix + ".tbl doesn't exist!");
                             e.printStackTrace();
                         }
                         try {
                             animation.icedragon_model = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/dragonIce" + animation.fileSuffix));
                         } catch (Exception e) {
-                            IceAndFire.LOGGER.warning("dragon model at: dragonIce" + animation.fileSuffix + ".tbl doesn't exist!");
+                            IceAndFire.LOGGER.warn("dragon model at: dragonIce" + animation.fileSuffix + ".tbl doesn't exist!");
                             e.printStackTrace();
                         }
                         break;
@@ -109,7 +109,7 @@ public enum EnumDragonAnimations {
                             animation.firedragon_model = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFire" + animation.fileSuffix));
                             animation.icedragon_model = animation.firedragon_model;
                         } catch (Exception e) {
-                            IceAndFire.LOGGER.warning("dragon model at: dragonFire" + animation.fileSuffix + ".tbl doesn't exist!");
+                            IceAndFire.LOGGER.warn("dragon model at: dragonFire" + animation.fileSuffix + ".tbl doesn't exist!");
                             e.printStackTrace();
                         }
                         break;
@@ -118,7 +118,7 @@ public enum EnumDragonAnimations {
                             animation.icedragon_model = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/dragonIce" + animation.fileSuffix));
                             animation.firedragon_model = animation.icedragon_model;
                         } catch (Exception e) {
-                            IceAndFire.LOGGER.warning("dragon model at: dragonIce" + animation.fileSuffix + ".tbl doesn't exist!");
+                            IceAndFire.LOGGER.warn("dragon model at: dragonIce" + animation.fileSuffix + ".tbl doesn't exist!");
                             e.printStackTrace();
                         }
                         break;

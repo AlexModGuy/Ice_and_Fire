@@ -145,7 +145,7 @@ public class ReversedBuffer {
         }
     }
 
-    private float getPartialTicks(){
+    private float getPartialTicks() {
         return Minecraft.getInstance().getRenderPartialTicks();
     }
 }

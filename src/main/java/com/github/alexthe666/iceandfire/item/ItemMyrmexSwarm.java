@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
-import net.minecraft.client.resources.I18n;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -14,6 +14,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class ItemMyrmexSwarm extends Item {
             playerIn.getCooldownTracker().setCooldown(this, 20);
         }
         for (int i = 0; i < 5; i++) {
-            EntityMyrmexSwarmer myrmex = new EntityMyrmexSwarmer(worldIn);
+            EntityMyrmexSwarmer myrmex = new EntityMyrmexSwarmer(IafEntityRegistry.MYRMEX_SWARMER, worldIn);
             myrmex.setPosition(playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ());
             myrmex.setJungleVariant(jungle);
             myrmex.setSummonedBy(playerIn);

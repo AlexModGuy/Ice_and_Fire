@@ -2,14 +2,10 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.WalkNodeProcessor;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -42,7 +38,7 @@ public class AmphithereAIFollowOwner extends Goal {
         }
         if (LivingEntity == null) {
             return false;
-        } else if (LivingEntity instanceof PlayerEntity && ((PlayerEntity) LivingEntity).isSpectator()) {
+        } else if (LivingEntity instanceof PlayerEntity && LivingEntity.isSpectator()) {
             return false;
         } else if (this.ampithere.isSitting()) {
             return false;
@@ -94,7 +90,7 @@ public class AmphithereAIFollowOwner extends Goal {
                         for (int l = 0; l <= 4; ++l) {
                             for (int i1 = 0; i1 <= 4; ++i1) {
                                 if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.canTeleportToBlock(new BlockPos(i, j, k))) {
-                                    this.ampithere.setLocationAndAngles((double) ((float) (i + l) + 0.5F), (double) k, (double) ((float) (j + i1) + 0.5F), this.ampithere.rotationYaw, this.ampithere.rotationPitch);
+                                    this.ampithere.setLocationAndAngles((float) (i + l) + 0.5F, k, (float) (j + i1) + 0.5F, this.ampithere.rotationYaw, this.ampithere.rotationPitch);
                                     ampithere.getNavigator().clearPath();
                                     return;
                                 }

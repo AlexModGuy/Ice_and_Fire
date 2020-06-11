@@ -4,10 +4,10 @@ import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.item.ItemMyrmexEgg;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
@@ -77,7 +77,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
                 boolean isJungle = this.getHeldItem(Hand.MAIN_HAND).getItem() == IafItemRegistry.MYRMEX_JUNGLE_EGG;
                 CompoundNBT tag = this.getHeldItem(Hand.MAIN_HAND).getTag();
                 int metadata = 0;
-                if(tag != null){
+                if (tag != null) {
                     metadata = tag.getInt("EggOrdinal");
                 }
                 EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG, world);
@@ -207,8 +207,8 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
             renderYawOffset = rotationYaw;
             float radius = 1.05F;
             float angle = (0.01745329251F * this.renderYawOffset);
-            double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-            double extraZ = (double) (radius * MathHelper.cos(angle));
+            double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+            double extraZ = radius * MathHelper.cos(angle);
             passenger.setPosition(this.getPosX() + extraX, this.getPosY() + 0.25F, this.getPosZ() + extraZ);
         }
     }
@@ -237,11 +237,11 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
             PlayerEntity owner = null;
             try {
-                if(itemEntity.getThrowerId() != null){
+                if (itemEntity.getThrowerId() != null) {
                     owner = this.world.getPlayerByUuid(itemEntity.getThrowerId());
                 }
             } catch (Exception e) {
-                IceAndFire.LOGGER.warning("Myrmex picked up resin that wasn't thrown!");
+                IceAndFire.LOGGER.warn("Myrmex picked up resin that wasn't thrown!");
             }
             if (owner != null && this.getHive() != null) {
                 this.getHive().modifyPlayerReputation(owner.getUniqueID(), 5);

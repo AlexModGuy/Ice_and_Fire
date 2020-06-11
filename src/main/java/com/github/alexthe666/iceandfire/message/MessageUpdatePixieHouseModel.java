@@ -2,13 +2,9 @@ package com.github.alexthe666.iceandfire.message;
 
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -42,7 +38,7 @@ public class MessageUpdatePixieHouseModel {
         }
 
         public static void handle(MessageUpdatePixieHouseModel message, Supplier<NetworkEvent.Context> context) {
-            ((NetworkEvent.Context) context.get()).setPacketHandled(true);
+            context.get().setPacketHandled(true);
             PlayerEntity player = context.get().getSender();
             if (player != null) {
                 if (player.world != null) {

@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.api.FoodUtils;
-import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -24,7 +24,7 @@ public class DragonAITarget<T extends LivingEntity> extends NearestAttackableTar
 
     @Override
     public boolean shouldExecute() {
-        if(dragon.getCommand() == 1 || dragon.getCommand() == 2 || dragon.isSleeping()){
+        if (dragon.getCommand() == 1 || dragon.getCommand() == 2 || dragon.isSleeping()) {
             return false;
         }
         if (super.shouldExecute() && this.target != null && !this.target.getClass().equals(this.dragon.getClass())) {

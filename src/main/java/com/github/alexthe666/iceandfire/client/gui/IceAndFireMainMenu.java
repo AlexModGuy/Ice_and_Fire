@@ -4,15 +4,12 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.MainMenuScreen;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.ForgeHooksClient;
-import org.lwjgl.opengl.GL11;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -104,7 +101,7 @@ public class IceAndFireMainMenu extends MainMenuScreen {
                 InputStream is = connection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(is));
             } catch (IOException e) {
-                IceAndFire.LOGGER.warning("Ice and Fire couldn't download splash texts for main menu");
+                IceAndFire.LOGGER.warn("Ice and Fire couldn't download splash texts for main menu");
                 useBackup = true;
             }
         }
@@ -198,12 +195,12 @@ public class IceAndFireMainMenu extends MainMenuScreen {
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.enableBlend();
         this.minecraft.getTextureManager().bindTexture(TABLE_TEXTURE);
-        this.blit(0, 0, 0, 0, this.width, this.height, this.width, this.height, zLevel);
+        blit(0, 0, 0, 0, this.width, this.height, this.width, this.height, zLevel);
         this.minecraft.getTextureManager().bindTexture(BESTIARY_TEXTURE);
-        this.blit(50, 0, 0, 0, this.width - 100, this.height, this.width - 100, this.height, this.zLevel);
+        blit(50, 0, 0, 0, this.width - 100, this.height, this.width - 100, this.height, this.zLevel);
         if (this.isFlippingPage) {
             this.minecraft.getTextureManager().bindTexture(pageFlipTextures[Math.min(5, pageFlip)]);
-            this.blit(50, 0, 0, 0, this.width - 100, this.height, this.width - 100, this.height, this.zLevel);
+            blit(50, 0, 0, 0, this.width - 100, this.height, this.width - 100, this.height, this.zLevel);
         } else {
             int middleX = this.width / 2;
             int middleY = this.height / 5;
@@ -213,14 +210,14 @@ public class IceAndFireMainMenu extends MainMenuScreen {
                 float f2 = (float) 60 - partialTicks;
                 int color = 0X9C8B7B;
                 int opacity = 10 + (int) (255 * enscription.alpha * globalAlpha);
-                this.minecraft.fontRenderer.drawString(enscription.text, (int)(enscription.x * widthScale) + middleX, (int)(enscription.y * widthScale) + middleY, color | (opacity << 24));
+                this.minecraft.fontRenderer.drawString(enscription.text, (int) (enscription.x * widthScale) + middleX, (int) (enscription.y * widthScale) + middleY, color | (opacity << 24));
             }
             for (Picture picture : drawnPictures) {
                 GlStateManager.color4f(1.0F, 1.0F, 1.0F, picture.alpha * globalAlpha + 0.01F);
                 this.minecraft.getTextureManager().bindTexture(drawingTextures[picture.image]);
                 //3 -> 1
                 //1 -> 3
-                this.blit((int)((picture.x * widthScale) + middleX), (int)((picture.y * widthScale) + middleY), 0, 0, imageScale, (int)imageScale, (int)imageScale, (int)imageScale, this.zLevel);
+                blit((int) ((picture.x * widthScale) + middleX), (int) ((picture.y * widthScale) + middleY), 0, 0, imageScale, (int) imageScale, (int) imageScale, (int) imageScale, this.zLevel);
             }
         }
         GlStateManager.enableTexture();

@@ -39,7 +39,7 @@ public class MessageHippogryphArmor {
         }
 
         public static void handle(MessageHippogryphArmor message, Supplier<NetworkEvent.Context> context) {
-            ((NetworkEvent.Context) context.get()).setPacketHandled(true);
+            context.get().setPacketHandled(true);
             PlayerEntity player = context.get().getSender();
             if (player != null) {
                 if (player.world != null) {

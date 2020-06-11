@@ -14,8 +14,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Direction;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -97,12 +97,12 @@ public class MyrmexHive {
     @Nullable
     public EntityMyrmexQueen getQueen() {
         List<EntityMyrmexQueen> ourQueens = new ArrayList<>();
-        if(world.isRemote){
+        if (world.isRemote) {
             ServerWorld serverWorld = world.getServer().getWorld(DimensionType.OVERWORLD);
             List<Entity> allQueens = serverWorld.getEntities(IafEntityRegistry.MYRMEX_QUEEN, EntityPredicates.NOT_SPECTATING);
             for (Entity queen : allQueens) {
-                if (queen instanceof EntityMyrmexQueen && ((EntityMyrmexQueen)queen).getHive().equals(this)) {
-                    ourQueens.add(((EntityMyrmexQueen)queen));
+                if (queen instanceof EntityMyrmexQueen && ((EntityMyrmexQueen) queen).getHive().equals(this)) {
+                    ourQueens.add(((EntityMyrmexQueen) queen));
                 }
             }
         }
@@ -221,7 +221,7 @@ public class MyrmexHive {
         try {
             player = world.getPlayerByUuid(playerName);
         } catch (Exception e) {
-            IceAndFire.LOGGER.warning("Myrmex Hive could not find player with associated UUID");
+            IceAndFire.LOGGER.warn("Myrmex Hive could not find player with associated UUID");
         }
         if (player != null) {
             if (j - i != 0) {

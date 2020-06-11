@@ -1,17 +1,13 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
 
 public class TileEntityDreadPortal extends TileEntity {
     private long age;
@@ -27,7 +23,7 @@ public class TileEntityDreadPortal extends TileEntity {
         compound.putLong("Age", this.age);
 
         if (this.exitPortal != null) {
-         //   compound.setTag("ExitPortal", NBTUtil.createPosTag(this.exitPortal));
+            //   compound.setTag("ExitPortal", NBTUtil.createPosTag(this.exitPortal));
         }
 
         if (this.exactTeleport) {

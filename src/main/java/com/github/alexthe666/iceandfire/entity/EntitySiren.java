@@ -6,18 +6,18 @@ import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.props.SirenEntityProperties;
-import com.github.alexthe666.iceandfire.entity.util.ChainBuffer;
-import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
-import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
-import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.AquaticAIGetInWater;
 import com.github.alexthe666.iceandfire.entity.ai.AquaticAIGetOutOfWater;
 import com.github.alexthe666.iceandfire.entity.ai.SirenAIFindWaterTarget;
 import com.github.alexthe666.iceandfire.entity.ai.SirenAIWander;
+import com.github.alexthe666.iceandfire.entity.props.SirenEntityProperties;
+import com.github.alexthe666.iceandfire.entity.util.ChainBuffer;
+import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
+import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageSirenSong;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateAmphibious;
 import com.google.common.base.Predicate;
 import net.minecraft.block.material.Material;
@@ -53,7 +53,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     public static final int SEARCH_RANGE = 32;
     public static final Predicate<Entity> SIREN_PREY = new Predicate<Entity>() {
         public boolean apply(@Nullable Entity p_apply_1_) {
-            return (p_apply_1_ instanceof PlayerEntity && !((PlayerEntity) p_apply_1_).isCreative() && !((PlayerEntity) p_apply_1_).isSpectator()) || p_apply_1_ instanceof AbstractVillagerEntity || p_apply_1_ instanceof IHearsSiren;
+            return (p_apply_1_ instanceof PlayerEntity && !((PlayerEntity) p_apply_1_).isCreative() && !p_apply_1_.isSpectator()) || p_apply_1_ instanceof AbstractVillagerEntity || p_apply_1_ instanceof IHearsSiren;
         }
     };
     private static final DataParameter<Integer> HAIR_COLOR = EntityDataManager.createKey(EntitySiren.class, DataSerializers.VARINT);
@@ -555,7 +555,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
                 this.siren.setMotion(this.siren.getMotion().add(0, (double) this.siren.getAIMoveSpeed() * distanceY * 0.1D, 0));
                 if (distance < (double) Math.max(1.0F, this.siren.getWidth())) {
                     float f = this.siren.rotationYaw * 0.017453292F;
-                    this.siren.setMotion(this.siren.getMotion().add(-  MathHelper.sin(f) * 0.35F, 0, MathHelper.cos(f) * 0.35F));
+                    this.siren.setMotion(this.siren.getMotion().add(-MathHelper.sin(f) * 0.35F, 0, MathHelper.cos(f) * 0.35F));
                 }
             } else if (this.action == MovementController.Action.JUMPING) {
                 siren.setAIMoveSpeed((float) (this.speed * this.siren.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));

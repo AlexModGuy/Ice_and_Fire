@@ -60,7 +60,7 @@ public class ItemStoneStatue extends Item {
             if (stack.getTag() != null) {
 
                 if (stack.getTag().getBoolean("IAFStoneStatuePlayerEntity")) {
-                    EntityStoneStatue statue = new EntityStoneStatue(IafEntityRegistry.STONE_STATUE,context.getWorld());
+                    EntityStoneStatue statue = new EntityStoneStatue(IafEntityRegistry.STONE_STATUE, context.getWorld());
                     statue.setPositionAndRotation(context.getPos().getX() + 0.5, context.getPos().getY() + 1, context.getPos().getZ() + 0.5, context.getPlayer().rotationYaw, 0);
                     statue.smallArms = true;
                     if (!context.getWorld().isRemote) {
@@ -101,7 +101,7 @@ public class ItemStoneStatue extends Item {
                         }
                         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
                         properties.isStone = true;
-                        ((LivingEntity) entity).read(stack.getTag());
+                        entity.read(stack.getTag());
                         float yaw = MathHelper.wrapDegrees(context.getPlayer().rotationYaw + 180F);
                         entity.prevRotationYaw = yaw;
                         entity.rotationYaw = yaw;

@@ -4,13 +4,12 @@ import net.minecraft.block.Block;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 
 import java.util.Random;
 
 public class WorldGenRoostArch {
-    private Block block;
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+    private Block block;
 
     public WorldGenRoostArch(Block block) {
         this.block = block;

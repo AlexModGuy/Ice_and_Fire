@@ -3,14 +3,12 @@ package com.github.alexthe666.iceandfire.world.gen;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.world.gen.processor.DreadRuinProcessor;
 import com.mojang.datafixers.Dynamic;
-import net.minecraft.block.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
@@ -57,8 +55,8 @@ public class WorldGenDreadRuin extends Feature<NoFeatureConfig> {
     }
 
 
-    private ResourceLocation getRandomStructure(Random rand){
-        switch (rand.nextInt(11)){
+    private ResourceLocation getRandomStructure(Random rand) {
+        switch (rand.nextInt(11)) {
             case 0:
                 return STRUCTURE_0;
             case 1:
@@ -98,7 +96,7 @@ public class WorldGenDreadRuin extends Feature<NoFeatureConfig> {
         TemplateManager templateManager = server.getWorld(worldIn.getDimension().getType()).getStructureTemplateManager();
         PlacementSettings settings = new PlacementSettings().setRotation(getRotationFromFacing(facing)).addProcessor(new DreadRuinProcessor(position, biome));
         Template template = templateManager.getTemplate(structure);
-        BlockPos genPos = position.offset(facing, template.getSize().getZ()/2).offset(facing.rotateYCCW(), template.getSize().getX()/2);
+        BlockPos genPos = position.offset(facing, template.getSize().getZ() / 2).offset(facing.rotateYCCW(), template.getSize().getX() / 2);
         template.addBlocksToWorld(worldIn, genPos, settings, 2);
         return false;
     }

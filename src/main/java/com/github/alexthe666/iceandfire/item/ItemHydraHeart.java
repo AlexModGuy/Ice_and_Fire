@@ -1,19 +1,13 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -35,19 +29,19 @@ public class ItemHydraHeart extends Item {
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        if(entity instanceof PlayerEntity && itemSlot >= 0 && itemSlot <= 8){
+        if (entity instanceof PlayerEntity && itemSlot >= 0 && itemSlot <= 8) {
             double healthPercentage = ((PlayerEntity) entity).getHealth() / Math.max(1, ((PlayerEntity) entity).getMaxHealth());
-            if(healthPercentage < 1.0D){
+            if (healthPercentage < 1.0D) {
                 int level = 0;
-                if(healthPercentage < 0.25D){
+                if (healthPercentage < 0.25D) {
                     level = 3;
-                }else if(healthPercentage < 0.5D){
+                } else if (healthPercentage < 0.5D) {
                     level = 2;
-                }else if(healthPercentage < 0.75D){
+                } else if (healthPercentage < 0.75D) {
                     level = 1;
                 }
-                if(!((PlayerEntity) entity).isPotionActive(Effects.REGENERATION))
-                ((PlayerEntity) entity).addPotionEffect(new EffectInstance(Effects.REGENERATION, 900, level, true, false));
+                if (!((PlayerEntity) entity).isPotionActive(Effects.REGENERATION))
+                    ((PlayerEntity) entity).addPotionEffect(new EffectInstance(Effects.REGENERATION, 900, level, true, false));
 
             }
             //In hotbar

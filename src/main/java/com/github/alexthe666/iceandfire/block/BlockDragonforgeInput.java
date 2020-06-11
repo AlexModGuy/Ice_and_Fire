@@ -42,9 +42,9 @@ public class BlockDragonforgeInput extends ContainerBlock implements IDragonProo
         if (this.getConnectedTileEntity(worldIn, resultIn.getPos()) != null) {
             TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, resultIn.getPos());
             if (forge.isFire == isFire) {
-                if(worldIn.isRemote){
+                if (worldIn.isRemote) {
                     IceAndFire.PROXY.setRefrencedTE(worldIn.getTileEntity(forge.getPos()));
-                }else{
+                } else {
                     INamedContainerProvider inamedcontainerprovider = this.getContainer(forge.getBlockState(), worldIn, forge.getPos());
                     if (inamedcontainerprovider != null) {
                         player.openContainer(inamedcontainerprovider);
@@ -72,6 +72,7 @@ public class BlockDragonforgeInput extends ContainerBlock implements IDragonProo
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
+
     public int getMetaFromState(BlockState state) {
         return state.get(ACTIVE).booleanValue() ? 1 : 0;
     }
@@ -79,6 +80,7 @@ public class BlockDragonforgeInput extends ContainerBlock implements IDragonProo
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(ACTIVE);
     }
+
     @Deprecated
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         if (worldIn.getTileEntity(pos) instanceof TileEntityDragonforgeInput) {

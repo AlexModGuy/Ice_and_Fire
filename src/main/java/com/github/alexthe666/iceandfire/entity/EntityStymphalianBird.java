@@ -5,18 +5,21 @@ import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
+import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIAirTarget;
+import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIFlee;
+import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAITarget;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.entity.util.StymphalianBirdFlock;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIAirTarget;
-import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIFlee;
-import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAITarget;
 import com.google.common.base.Predicate;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.MonsterEntity;
@@ -26,10 +29,13 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.*;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
+
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.UUID;
@@ -209,7 +215,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     @Override
     public void livingTick() {
         super.livingTick();
-        if(world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity){
+        if (world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }
         if (this.getAttackTarget() != null && (this.getAttackTarget() instanceof PlayerEntity && ((PlayerEntity) this.getAttackTarget()).isCreative() || this.getVictor() != null && this.isVictor(this.getAttackTarget()))) {
@@ -269,7 +275,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
                             double d0 = target.getPosX() - wingX;
                             double d1 = target.getBoundingBox().minY - wingY;
                             double d2 = target.getPosZ() - wingZ;
-                            double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+                            double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
                             EntityStymphalianFeather entityarrow = new EntityStymphalianFeather(IafEntityRegistry.STYMPHALIAN_FEATHER, world, this);
                             entityarrow.setPosition(wingX, wingY, wingZ);
                             entityarrow.shoot(d0, d1 + d3 * 0.10000000298023224D, d2, 1.6F, (float) (14 - this.world.getDifficulty().getId() * 4));

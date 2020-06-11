@@ -24,7 +24,7 @@ public class LayerStoneEntity extends LayerRenderer {
 
     private static final ModelHorseStatue HORSE_MODEL = new ModelHorseStatue();
     private static final ModelGuardianStatue GUARDIAN_MODEL = new ModelGuardianStatue();
-    private static final ResourceLocation STONE_TEXTURE = new ResourceLocation( "textures/blocks/stone.png");
+    private static final ResourceLocation STONE_TEXTURE = new ResourceLocation("textures/blocks/stone.png");
     private LivingRenderer renderer;
 
     public LayerStoneEntity(LivingRenderer renderer) {

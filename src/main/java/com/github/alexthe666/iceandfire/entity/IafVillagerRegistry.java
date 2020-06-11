@@ -1,13 +1,5 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
-import com.github.alexthe666.iceandfire.enums.EnumTroll;
-import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.google.common.collect.Maps;
-import java.util.Map;
-import java.util.Random;
-
 /*
     TODO - Myrmex trades
  */

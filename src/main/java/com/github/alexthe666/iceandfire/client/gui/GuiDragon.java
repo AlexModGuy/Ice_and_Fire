@@ -11,16 +11,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Quaternion;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -40,14 +37,14 @@ public class GuiDragon extends ContainerScreen<ContainerDragon> {
     }
 
     public static void drawEntityOnScreen(int x, int y, int scale, float yaw, float pitch, LivingEntity entity) {
-        float f = (float)Math.atan((double)(yaw / 40.0F));
-        float f1 = (float)Math.atan((double)(pitch / 40.0F));
+        float f = (float) Math.atan(yaw / 40.0F);
+        float f1 = (float) Math.atan(pitch / 40.0F);
         RenderSystem.pushMatrix();
-        RenderSystem.translatef((float)x, (float)y, 1050.0F);
+        RenderSystem.translatef((float) x, (float) y, 1050.0F);
         RenderSystem.scalef(1.0F, 1.0F, -1.0F);
         MatrixStack matrixstack = new MatrixStack();
         matrixstack.translate(0.0D, 0.0D, 1000.0D);
-        matrixstack.scale((float)scale, (float)scale, (float)scale);
+        matrixstack.scale((float) scale, (float) scale, (float) scale);
         Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
         Quaternion quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);
         quaternion.multiply(quaternion1);
@@ -82,8 +79,8 @@ public class GuiDragon extends ContainerScreen<ContainerDragon> {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         Entity entity = IceAndFire.PROXY.getReferencedMob();
-        if(entity instanceof EntityDragonBase){
-            EntityDragonBase dragon = (EntityDragonBase)entity;
+        if (entity instanceof EntityDragonBase) {
+            EntityDragonBase dragon = (EntityDragonBase) entity;
             String s1 = dragon.getName().getFormattedText();
             this.font.drawString(s1, this.xSize / 2 - this.font.getStringWidth(s1) / 2, 6, 4210752);
             String s3 = dragon.getCustomName() == null ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + dragon.getCustomName();
@@ -109,7 +106,7 @@ public class GuiDragon extends ContainerScreen<ContainerDragon> {
         int l = (this.height - this.ySize) / 2;
         this.blit(k, l, 0, 0, this.xSize, this.ySize);
         Entity entity = IceAndFire.PROXY.getReferencedMob();
-        if(entity instanceof EntityDragonBase) {
+        if (entity instanceof EntityDragonBase) {
             EntityDragonBase dragon = (EntityDragonBase) entity;
             drawEntityOnScreen(k + 88, l + (int) (0.5F * (dragon.flyProgress)) + 55, 23, k + 51 - this.mousePosx, l + 75 - 50 - this.mousePosY, dragon);
         }

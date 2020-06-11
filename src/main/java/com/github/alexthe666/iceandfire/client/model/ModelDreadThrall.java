@@ -117,9 +117,9 @@ public class ModelDreadThrall extends AdvancedEntityModel<EntityDreadThrall> imp
 
     public void setRotationAngles(EntityDreadThrall entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetToDefaultPose();
-        animate((IAnimatedEntity) entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 1);
-        ItemStack itemstack = ((LivingEntity) entityIn).getHeldItemMainhand();
-        EntityDreadThrall thrall = (EntityDreadThrall) entityIn;
+        animate(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 1);
+        ItemStack itemstack = entityIn.getHeldItemMainhand();
+        EntityDreadThrall thrall = entityIn;
         if (false) {
             float f = MathHelper.sin(this.swingProgress * (float) Math.PI);
             float f1 = MathHelper.sin((1.0F - (1.0F - this.swingProgress) * (1.0F - this.swingProgress)) * (float) Math.PI);

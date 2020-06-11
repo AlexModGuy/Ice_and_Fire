@@ -1,9 +1,7 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.pathfinding.*;
 import net.minecraft.util.math.BlockPos;

@@ -3,8 +3,8 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.BlockEggInIce;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.SoundEvents;
@@ -35,14 +35,14 @@ public class DragonType {
         return piscivore;
     }
 
-    public DragonType setPiscivore(){
+    public DragonType setPiscivore() {
         piscivore = true;
         return this;
     }
 
     public void updateEggCondition(EntityDragonEgg egg) {
         BlockPos pos = new BlockPos(egg);
-        if(this == FIRE){
+        if (this == FIRE) {
             if (egg.world.getBlockState(pos).getMaterial() == Material.FIRE) {
                 egg.setDragonAge(egg.getDragonAge() + 1);
             }
@@ -50,7 +50,7 @@ public class DragonType {
                 if (egg.world.getBlockState(pos).getMaterial() == Material.FIRE) {
                     egg.world.setBlockState(pos, Blocks.AIR.getDefaultState());
                     EntityFireDragon dragon = new EntityFireDragon(egg.world);
-                    if(egg.hasCustomName()){
+                    if (egg.hasCustomName()) {
                         dragon.setCustomName(egg.getCustomName());
                     }
                     dragon.setVariant(egg.getEggType().ordinal());
@@ -69,7 +69,7 @@ public class DragonType {
 
             }
         }
-        if(this == ICE){
+        if (this == ICE) {
             if (egg.world.getBlockState(pos).getMaterial() == Material.WATER && egg.getRNG().nextInt(500) == 0) {
                 egg.remove();
                 egg.world.setBlockState(pos, IafBlockRegistry.EGG_IN_ICE.getDefaultState());

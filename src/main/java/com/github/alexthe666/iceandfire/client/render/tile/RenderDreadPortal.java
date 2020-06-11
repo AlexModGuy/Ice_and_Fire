@@ -5,18 +5,19 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadPortal;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Matrix4f;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import java.nio.FloatBuffer;
+
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
-public class RenderDreadPortal <T extends TileEntityDreadPortal> extends TileEntityRenderer<T> {
+public class RenderDreadPortal<T extends TileEntityDreadPortal> extends TileEntityRenderer<T> {
     public static final ResourceLocation END_SKY_TEXTURE = new ResourceLocation("rats:textures/environment/ratlantis_sky_portal.png");
     public static final ResourceLocation END_PORTAL_TEXTURE = new ResourceLocation("rats:textures/environment/ratlantis_portal.png");
     private static final Random RANDOM = new Random(31100L);
@@ -36,8 +37,8 @@ public class RenderDreadPortal <T extends TileEntityDreadPortal> extends TileEnt
         Matrix4f matrix4f = matrixStackIn.getLast().getMatrix();
         this.renderCube(tileEntityIn, f, 0.15F, matrix4f, bufferIn.getBuffer(RENDER_TYPES.get(0)));
 
-        for(int j = 1; j < i; ++j) {
-            this.renderCube(tileEntityIn, f, 2.0F / (float)(18 - j), matrix4f, bufferIn.getBuffer(RENDER_TYPES.get(j)));
+        for (int j = 1; j < i; ++j) {
+            this.renderCube(tileEntityIn, f, 2.0F / (float) (18 - j), matrix4f, bufferIn.getBuffer(RENDER_TYPES.get(j)));
         }
 
     }

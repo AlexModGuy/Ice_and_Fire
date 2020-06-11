@@ -4,5 +4,6 @@ import net.minecraft.entity.player.PlayerEntity;
 
 public interface IGroundMount {
     PlayerEntity getRidingPlayer();
+
     double getRideSpeedModifier();
 }

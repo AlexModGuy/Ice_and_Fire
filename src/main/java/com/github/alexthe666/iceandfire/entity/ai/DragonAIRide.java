@@ -47,10 +47,10 @@ public class DragonAIRide<T extends MobEntity & IFlyingMount> extends Goal {
         } else if (player.moveStrafing < 0) {
             lookVec = lookVec.rotateYaw((float) Math.PI * -0.5f);
         }
-        if(Math.abs(player.moveStrafing) > 0.0){
+        if (Math.abs(player.moveStrafing) > 0.0) {
             speed *= 0.25D;
         }
-        if(player.moveForward < 0.0){
+        if (player.moveForward < 0.0) {
             speed *= 0.15D;
         }
         if (dragon.up()) {
@@ -66,13 +66,13 @@ public class DragonAIRide<T extends MobEntity & IFlyingMount> extends Goal {
         if ((dragon.isFlying() || hovering()) && (dragon.fliesLikeElytra() || dragon.up() || dragon.down())) {
             y += lookVec.y * 10;
         }
-        if(dragon.fliesLikeElytra() && lookVec.y == -1 || !(dragon.isFlying() || hovering()) && !dragon.onGround){
+        if (dragon.fliesLikeElytra() && lookVec.y == -1 || !(dragon.isFlying() || hovering()) && !dragon.onGround) {
             y -= 1;
         }
         dragon.getMoveHelper().setMoveTo(x, y, z, speed);
     }
 
-    private boolean hovering(){
+    private boolean hovering() {
         return dragon.isHovering() || dragon instanceof EntityDragonBase && ((EntityDragonBase) dragon).useFlyingPathFinder();
     }
 }

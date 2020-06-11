@@ -82,7 +82,7 @@ public class DragonAIMate extends Goal {
         for (EntityDragonBase partner : list) {
             if (this.dragon.canMateWith(partner)) {
                 double d1 = this.dragon.getDistanceSq(partner);
-                if(d1 < d0) { // find min distance
+                if (d1 < d0) { // find min distance
                     mate = partner;
                     d0 = d1;
                 }

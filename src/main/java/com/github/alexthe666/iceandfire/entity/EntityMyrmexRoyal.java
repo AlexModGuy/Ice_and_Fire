@@ -6,8 +6,10 @@ import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.google.common.base.Predicate;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -51,7 +53,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     private boolean isLandNavigator;
     private boolean isMating = false;
 
-    public EntityMyrmexRoyal(EntityType t,  World worldIn) {
+    public EntityMyrmexRoyal(EntityType t, World worldIn) {
         super(t, worldIn);
         this.switchNavigator(true);
     }
@@ -354,6 +356,12 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         return false;
     }
 
+    protected boolean isDirectPathBetweenPoints(BlockPos posVec31, BlockPos posVec32) {
+        Vec3d vec3d = new Vec3d(posVec31).add(0.5, 0.5, 0.5);
+        Vec3d vec3d1 = new Vec3d(posVec32).add(0.5, 0.5, 0.5);
+        return world.rayTraceBlocks(new RayTraceContext(vec3d, vec3d1, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
+    }
+
     class FlyMoveHelper extends MovementController {
         public FlyMoveHelper(EntityMyrmexRoyal pixie) {
             super(pixie);
@@ -374,7 +382,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
                 double d1 = this.posY - EntityMyrmexRoyal.this.getPosY();
                 double d2 = this.posZ - EntityMyrmexRoyal.this.getPosZ();
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-                d3 = (double) MathHelper.sqrt(d3);
+                d3 = MathHelper.sqrt(d3);
 
                 if (d3 < EntityMyrmexRoyal.this.getBoundingBox().getAverageEdgeLength()) {
                     this.action = MovementController.Action.WAIT;
@@ -394,12 +402,6 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
                 }
             }
         }
-    }
-
-    protected boolean isDirectPathBetweenPoints(BlockPos posVec31, BlockPos posVec32) {
-        Vec3d vec3d = new Vec3d(posVec31).add(0.5, 0.5, 0.5);
-        Vec3d vec3d1 = new Vec3d(posVec32).add(0.5, 0.5, 0.5);;
-        return world.rayTraceBlocks(new RayTraceContext(vec3d, vec3d1, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
     }
 
     class AIFlyRandom extends Goal {
@@ -475,7 +477,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
         public void updateTask() {
             LivingEntity LivingEntity = EntityMyrmexRoyal.this.getAttackTarget();
-            if(LivingEntity != null){
+            if (LivingEntity != null) {
                 if (EntityMyrmexRoyal.this.getBoundingBox().intersects(LivingEntity.getBoundingBox())) {
                     EntityMyrmexRoyal.this.attackEntityAsMob(LivingEntity);
                 } else {

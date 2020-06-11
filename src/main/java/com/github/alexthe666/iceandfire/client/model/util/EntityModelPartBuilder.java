@@ -1,10 +1,8 @@
 package com.github.alexthe666.iceandfire.client.model.util;
 
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
-import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraftforge.fml.common.Mod;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -23,8 +21,7 @@ public class EntityModelPartBuilder {
             try {
                 for (Field f : clazz.getDeclaredFields()) {
                     Object obj = f.get(null);
-                    if(obj instanceof ModelRenderer){
-
+                    if (obj instanceof ModelRenderer) {
 
 
                         rendererList.add((ModelRenderer) obj);
@@ -47,7 +44,7 @@ public class EntityModelPartBuilder {
             try {
                 for (Field f : clazz.getDeclaredFields()) {
                     Object obj = f.get(null);
-                    if(obj instanceof AdvancedModelBox){
+                    if (obj instanceof AdvancedModelBox) {
                         rendererList.add((AdvancedModelBox) obj);
                     }
                 }

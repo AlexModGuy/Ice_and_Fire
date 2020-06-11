@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 
 public class WorldGenMausoleum extends Feature<NoFeatureConfig> {
 
-    public Direction facing;
     private static final ResourceLocation STRUCTURE = new ResourceLocation(IceAndFire.MODID, "dread_mausoleum_forge");
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+    public Direction facing;
 
     public WorldGenMausoleum(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);

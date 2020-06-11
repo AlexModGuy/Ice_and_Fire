@@ -1,9 +1,12 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadPortal;
-import net.minecraft.block.*;
+import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
@@ -88,9 +91,9 @@ public class BlockDreadPortal extends ContainerBlock implements IDreadBlock {
         if (tileentity instanceof TileEntityDreadPortal) {
             int i = 3;
             for (int j = 0; j < i; ++j) {
-                double d0 = (double) ((float) pos.getX() + rand.nextFloat());
-                double d1 = (double) ((float) pos.getY() + rand.nextFloat());
-                double d2 = (double) ((float) pos.getZ() + rand.nextFloat());
+                double d0 = (float) pos.getX() + rand.nextFloat();
+                double d1 = (float) pos.getY() + rand.nextFloat();
+                double d2 = (float) pos.getZ() + rand.nextFloat();
                 double d3 = ((double) rand.nextFloat() - 0.5D) * 0.25D;
                 double d4 = ((double) rand.nextFloat()) * -0.25D;
                 double d5 = ((double) rand.nextFloat() - 0.5D) * 0.25D;

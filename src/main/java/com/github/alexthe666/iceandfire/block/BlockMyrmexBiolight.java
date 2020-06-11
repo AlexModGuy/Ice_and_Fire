@@ -27,10 +27,10 @@ public class BlockMyrmexBiolight extends BushBlock {
     }
 
     public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-        if(!worldIn.isRemote){
+        if (!worldIn.isRemote) {
             this.updateState(state, worldIn, pos, state.getBlock());
         }
-        if(worldIn.getBlockState(pos.up()).isAir()){
+        if (worldIn.getBlockState(pos.up()).isAir()) {
             worldIn.destroyBlock(pos, true);
         }
     }
@@ -38,7 +38,7 @@ public class BlockMyrmexBiolight extends BushBlock {
     public void updateState(BlockState state, World worldIn, BlockPos pos, Block blockIn) {
         boolean flag2 = state.get(CONNECTED_DOWN);
         boolean flag3 = !worldIn.getBlockState(pos.down()).isAir();
-        if(flag2 != flag3){
+        if (flag2 != flag3) {
             worldIn.setBlockState(pos, state.with(CONNECTED_DOWN, Boolean.valueOf(flag3)), 3);
         }
 

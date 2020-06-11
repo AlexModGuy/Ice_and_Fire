@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
@@ -32,8 +31,8 @@ public class ItemAmphithereMacuahuitl extends SwordItem {
         targetEntity.playSound(IafSoundRegistry.AMPHITHERE_GUST, 1, 1);
         targetEntity.playSound(SoundEvents.ITEM_SHIELD_BLOCK, 1, 1);
         targetEntity.isAirBorne = true;
-        double xRatio = (double) -MathHelper.sin(attacker.rotationYaw * 0.017453292F);
-        double zRatio = (double) (MathHelper.cos(attacker.rotationYaw * 0.017453292F));
+        double xRatio = -MathHelper.sin(attacker.rotationYaw * 0.017453292F);
+        double zRatio = MathHelper.cos(attacker.rotationYaw * 0.017453292F);
         float strength = -0.6F;
         float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
         targetEntity.setMotion((targetEntity.getMotion().x / 2) - xRatio / (double) f * (double) strength, 0.8D, (targetEntity.getMotion().z / 2) - zRatio / (double) f * (double) strength);

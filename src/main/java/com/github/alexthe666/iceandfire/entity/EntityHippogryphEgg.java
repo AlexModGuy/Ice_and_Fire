@@ -4,7 +4,6 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.EggEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ItemParticleData;
@@ -32,7 +31,7 @@ public class EntityHippogryphEgg extends EggEntity {
 
     public EntityHippogryphEgg(EntityType type, World worldIn, LivingEntity throwerIn, ItemStack stack) {
         this(type, worldIn);
-        this.setPosition(throwerIn.getPosX(), throwerIn.getPosYEye() - (double)0.1F, throwerIn.getPosZ());
+        this.setPosition(throwerIn.getPosX(), throwerIn.getPosYEye() - (double) 0.1F, throwerIn.getPosZ());
         this.owner = throwerIn;
         this.itemstack = stack;
     }
@@ -48,7 +47,7 @@ public class EntityHippogryphEgg extends EggEntity {
 
     protected void onImpact(RayTraceResult result) {
         if (result.getType() == RayTraceResult.Type.ENTITY) {
-            ((EntityRayTraceResult)result).getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), 0.0F);
+            ((EntityRayTraceResult) result).getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), 0.0F);
         }
 
         if (!this.world.isRemote) {
@@ -58,7 +57,7 @@ public class EntityHippogryphEgg extends EggEntity {
             if (itemstack != null) {
                 int variant = 0;
                 CompoundNBT tag = itemstack.getTag();
-                if(tag != null){
+                if (tag != null) {
                     variant = tag.getInt("EggOrdinal");
                 }
                 hippogryph.setVariant(variant);

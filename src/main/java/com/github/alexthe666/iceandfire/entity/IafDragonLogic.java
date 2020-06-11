@@ -6,8 +6,8 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -192,7 +192,7 @@ public class IafDragonLogic {
             }
             dragon.getNavigator().clearPath();
         }
-        if(!dragon.isTamed()){
+        if (!dragon.isTamed()) {
             dragon.updateCheckPlayer();
         }
         if (dragon.isModelDead() && (dragon.isFlying() || dragon.isHovering())) {
@@ -432,7 +432,7 @@ public class IafDragonLogic {
             dragon.hasHadHornUse = false;
         }
         if ((dragon.groundAttack == IafDragonAttacks.Ground.FIRE) && dragon.getDragonStage() < 2) {
-            if(dragon.world.isRemote){
+            if (dragon.world.isRemote) {
                 dragon.spawnBabyParticles();
             }
             dragon.randomizeAttacks();
@@ -447,7 +447,7 @@ public class IafDragonLogic {
         if (dragon.isPlayingAttackAnimation() && dragon.getAttackTarget() != null && dragon.canEntityBeSeen(dragon.getAttackTarget())) {
             LivingEntity target = dragon.getAttackTarget();
             double dist = dragon.getDistance(target);
-            if(dist < dragon.getRenderSize() * 0.2574 * 2 + 2){
+            if (dist < dragon.getRenderSize() * 0.2574 * 2 + 2) {
                 if (dragon.getAnimation() == EntityDragonBase.ANIMATION_BITE) {
                     if (dragon.getAnimationTick() > 15 && dragon.getAnimationTick() < 25) {
                         target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
@@ -479,7 +479,7 @@ public class IafDragonLogic {
         String side = dragon.world.isRemote ? "CLIENT" : "SERVER";
         String owner = dragon.getOwner() == null ? "null" : dragon.getOwner().getName().getFormattedText();
         String attackTarget = dragon.getAttackTarget() == null ? "null" : dragon.getAttackTarget().getName().getFormattedText();
-        IceAndFire.LOGGER.log(Level.ALL, "DRAGON DEBUG[" + side + "]:"
+        IceAndFire.LOGGER.warn("DRAGON DEBUG[" + side + "]:"
                 + "\nStage: " + dragon.getDragonStage()
                 + "\nAge: " + dragon.getAgeInDays()
                 + "\nVariant: " + dragon.getVariantName(dragon.getVariant())

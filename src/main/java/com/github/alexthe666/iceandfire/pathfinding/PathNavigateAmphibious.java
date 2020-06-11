@@ -5,7 +5,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.pathfinding.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -32,8 +31,9 @@ public class PathNavigateAmphibious extends PathNavigator {
     protected boolean canNavigate() {
         return this.entity.onGround || this.getCanSwim() && this.isInLiquid() || this.entity.isPassenger();
     }
+
     protected Vec3d getEntityPosition() {
-        return new Vec3d(this.entity.getPosX(), (double) this.getPathablePosY(), this.entity.getPosZ());
+        return new Vec3d(this.entity.getPosX(), this.getPathablePosY(), this.entity.getPosZ());
     }
 
     public Path getPathToPos(BlockPos pos, int i) {

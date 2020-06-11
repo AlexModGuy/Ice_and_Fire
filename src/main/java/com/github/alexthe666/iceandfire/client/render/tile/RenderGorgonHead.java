@@ -2,18 +2,14 @@ package com.github.alexthe666.iceandfire.client.render.tile;
 
 import com.github.alexthe666.iceandfire.client.model.ModelGorgonHead;
 import com.github.alexthe666.iceandfire.client.model.ModelGorgonHeadActive;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
-public class RenderGorgonHead  {
+public class RenderGorgonHead {
 
     private static final RenderType ACTIVE_TEXTURE = RenderType.func_230167_a_(new ResourceLocation("iceandfire:textures/models/gorgon/head_active.png"), false);
     private static final RenderType INACTIVE_TEXTURE = RenderType.func_230167_a_(new ResourceLocation("iceandfire:textures/models/gorgon/head_inactive.png"), false);

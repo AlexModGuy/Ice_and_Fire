@@ -12,7 +12,6 @@ public class HippocampusAIRide extends Goal {
 
     public HippocampusAIRide(EntityHippocampus dragon) {
         this.dragon = dragon;
-        this.setMutexBits(0);
     }
 
     @Override
@@ -38,20 +37,20 @@ public class HippocampusAIRide extends Goal {
         if (player.moveStrafing != 0 || player.moveForward != 0) {
             Vec3d lookVec = player.getLookVec();
             if (player.moveForward < 0) {
-                lookVec = lookVec.rotateYaw((float)Math.PI);
+                lookVec = lookVec.rotateYaw((float) Math.PI);
             } else if (player.moveStrafing > 0) {
-                lookVec = lookVec.rotateYaw((float)Math.PI * 0.5f);
+                lookVec = lookVec.rotateYaw((float) Math.PI * 0.5f);
             } else if (player.moveStrafing < 0) {
-                lookVec = lookVec.rotateYaw((float)Math.PI * -0.5f);
+                lookVec = lookVec.rotateYaw((float) Math.PI * -0.5f);
             }
-            if(Math.abs(player.moveStrafing) > 0.0){
+            if (Math.abs(player.moveStrafing) > 0.0) {
                 speed *= 0.25D;
             }
-            if(player.moveForward < 0.0){
+            if (player.moveForward < 0.0) {
                 speed *= 0.15D;
             }
             x += lookVec.x * 10;
-            if(dragon.isInWater()){
+            if (dragon.isInWater()) {
                 y += lookVec.y * 10;
             }
             z += lookVec.z * 10;

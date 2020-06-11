@@ -1,20 +1,18 @@
 package com.github.alexthe666.iceandfire.world.gen.processor;
 
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.types.DynamicOps;
 import net.minecraft.block.AbstractChestBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
@@ -27,10 +25,21 @@ import java.util.Random;
 
 public class DreadRuinProcessor extends StructureProcessor {
 
-    private float integrity = 1.0F;
     public static final ResourceLocation DREAD_CHEST_LOOT = new ResourceLocation("iceandfire", "mausoleum_chest");
+    private float integrity = 1.0F;
 
     public DreadRuinProcessor(BlockPos position, @Nullable Biome biome) {
+    }
+
+    public static BlockState getRandomCrackedBlock(@Nullable BlockState prev, Random random) {
+        float rand = random.nextFloat();
+        if (rand < 0.5) {
+            return IafBlockRegistry.DREAD_STONE_BRICKS.getDefaultState();
+        } else if (rand < 0.9) {
+            return IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED.getDefaultState();
+        } else {
+            return IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY.getDefaultState();
+        }
     }
 
     @Nullable
@@ -54,7 +63,7 @@ public class DreadRuinProcessor extends StructureProcessor {
                 CompoundNBT tag = new CompoundNBT();
                 CompoundNBT spawnData = new CompoundNBT();
                 ResourceLocation spawnerMobId = ForgeRegistries.ENTITIES.getKey(getRandomMobForMobSpawner(random));
-                if(spawnerMobId != null){
+                if (spawnerMobId != null) {
                     spawnData.putString("id", spawnerMobId.toString());
                     tag.remove("SpawnPotentials");
                     tag.put("SpawnData", spawnData.copy());
@@ -79,29 +88,17 @@ public class DreadRuinProcessor extends StructureProcessor {
         return new Dynamic<>(ops, ops.createMap(ImmutableMap.of(ops.createString("dread_ruin_processor"), ops.createFloat(this.integrity))));
     }
 
-
     private EntityType getRandomMobForMobSpawner(Random random) {
         float rand = random.nextFloat();
-        if(rand < 0.3D){
+        if (rand < 0.3D) {
             return IafEntityRegistry.DREAD_THRALL;
-        }else if(rand < 0.5D){
+        } else if (rand < 0.5D) {
             return IafEntityRegistry.DREAD_GHOUL;
-        }else if(rand < 0.7D){
+        } else if (rand < 0.7D) {
             return IafEntityRegistry.DREAD_BEAST;
-        }else if(rand < 0.85D){
+        } else if (rand < 0.85D) {
             return IafEntityRegistry.DREAD_SCUTTLER;
         }
         return IafEntityRegistry.DREAD_KNIGHT;
-    }
-
-    public static BlockState getRandomCrackedBlock(@Nullable BlockState prev, Random random) {
-        float rand = random.nextFloat();
-        if (rand < 0.5) {
-            return IafBlockRegistry.DREAD_STONE_BRICKS.getDefaultState();
-        } else if (rand < 0.9) {
-            return IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED.getDefaultState();
-        } else {
-            return IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY.getDefaultState();
-        }
     }
 }

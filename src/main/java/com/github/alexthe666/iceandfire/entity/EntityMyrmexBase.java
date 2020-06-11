@@ -11,8 +11,8 @@ import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateMyrmex;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.google.common.collect.Sets;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -68,20 +68,19 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     private static final ResourceLocation TEXTURE_DESERT_PUPA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_pupa.png");
     private static final ResourceLocation TEXTURE_JUNGLE_LARVA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_larva.png");
     private static final ResourceLocation TEXTURE_JUNGLE_PUPA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_pupa.png");
+    private final Inventory villagerInventory = new Inventory(8);
     public boolean isEnteringHive = false;
     public boolean isBeingGuarded = false;
     protected int growthTicks = 1;
+    @Nullable
+    protected MerchantOffers offers;
     private int animationTick;
     private Animation currentAnimation;
     private MyrmexHive hive;
     private int timeUntilReset;
     private boolean leveledUp;
-
     @Nullable
     private PlayerEntity customer;
-    @Nullable
-    protected MerchantOffers offers;
-    private final Inventory villagerInventory = new Inventory(8);
 
 
     public EntityMyrmexBase(EntityType t, World worldIn) {
@@ -211,7 +210,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     public void tick() {
         super.tick();
-        if(world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity){
+        if (world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }
         if (this.getGrowthStage() < 2 && this.getRidingEntity() != null && this.getRidingEntity() instanceof EntityMyrmexBase) {
@@ -267,7 +266,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
         ListNBT listnbt = new ListNBT();
 
-        for(int i = 0; i < this.villagerInventory.getSizeInventory(); ++i) {
+        for (int i = 0; i < this.villagerInventory.getSizeInventory(); ++i) {
             ItemStack itemstack = this.villagerInventory.getStackInSlot(i);
             if (!itemstack.isEmpty()) {
                 listnbt.add(itemstack.write(new CompoundNBT()));
@@ -290,7 +289,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
         ListNBT listnbt = tag.getList("Inventory", 10);
 
-        for(int i = 0; i < listnbt.size(); ++i) {
+        for (int i = 0; i < listnbt.size(); ++i) {
             ItemStack itemstack = ItemStack.read(listnbt.getCompound(i));
             if (!itemstack.isEmpty()) {
                 this.villagerInventory.addItem(itemstack);
@@ -499,7 +498,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     @Override
     public float getRenderScale() {
-       return this.getGrowthStage() == 0 ? 0.5F : this.getGrowthStage() == 1 ? 0.75F : 1F;
+        return this.getGrowthStage() == 0 ? 0.5F : this.getGrowthStage() == 1 ? 0.75F : 1F;
     }
 
     public abstract ResourceLocation getAdultTexture();
@@ -656,13 +655,13 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         return this.getBoundingBox().grow(1.0F + size, 1.0F + size, 1.0F + size);
     }
 
-    public void setCustomer(@Nullable PlayerEntity player) {
-        this.customer = player;
-    }
-
     @Nullable
     public PlayerEntity getCustomer() {
         return this.customer;
+    }
+
+    public void setCustomer(@Nullable PlayerEntity player) {
+        this.customer = player;
     }
 
     public boolean hasCustomer() {
@@ -705,6 +704,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         }
 
     }
+
     public SoundEvent getYesSound() {
         return SoundEvents.ENTITY_VILLAGER_YES;
     }
@@ -718,7 +718,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     protected void resetCustomer() {
-        this.setCustomer((PlayerEntity)null);
+        this.setCustomer(null);
     }
 
     @Nullable
@@ -726,6 +726,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         this.resetCustomer();
         return super.changeDimension(destination, teleporter);
     }
+
     public Inventory getVillagerInventory() {
         return this.villagerInventory;
     }
@@ -747,16 +748,16 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     protected void addTrades(MerchantOffers givenMerchantOffers, VillagerTrades.ITrade[] newTrades, int maxNumbers) {
         Set<Integer> set = Sets.newHashSet();
         if (newTrades.length > maxNumbers) {
-            while(set.size() < maxNumbers) {
+            while (set.size() < maxNumbers) {
                 set.add(this.rand.nextInt(newTrades.length));
             }
         } else {
-            for(int i = 0; i < newTrades.length; ++i) {
+            for (int i = 0; i < newTrades.length; ++i) {
                 set.add(i);
             }
         }
 
-        for(Integer integer : set) {
+        for (Integer integer : set) {
             VillagerTrades.ITrade villagertrades$itrade = newTrades[integer];
             MerchantOffer merchantoffer = villagertrades$itrade.getOffer(this, this.rand);
             if (merchantoffer != null) {

@@ -1,4 +1,5 @@
 package com.github.alexthe666.iceandfire.entity;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
 

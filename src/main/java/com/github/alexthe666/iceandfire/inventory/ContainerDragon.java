@@ -18,6 +18,7 @@ public class ContainerDragon extends Container {
     public ContainerDragon(int i, PlayerInventory playerInventory) {
         this(i, new Inventory(5), playerInventory, null);
     }
+
     public ContainerDragon(int id, IInventory ratInventory, PlayerInventory playerInventory, EntityDragonBase rat) {
         super(IafContainerRegistry.DRAGON_CONTAINER, id);
 
@@ -43,7 +44,7 @@ public class ContainerDragon extends Container {
 
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor)stack.getItem()).dragonSlot == 0;
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 0;
             }
         });
         this.addSlot(new Slot(dragon.dragonInventory, 2, 8, 36) {
@@ -53,7 +54,7 @@ public class ContainerDragon extends Container {
 
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor)stack.getItem()).dragonSlot == 1;
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 1;
             }
         });
         this.addSlot(new Slot(dragon.dragonInventory, 3, 153, 18) {
@@ -63,7 +64,7 @@ public class ContainerDragon extends Container {
 
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor)stack.getItem()).dragonSlot == 2;
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 2;
             }
         });
         this.addSlot(new Slot(dragon.dragonInventory, 4, 153, 36) {
@@ -73,7 +74,7 @@ public class ContainerDragon extends Container {
 
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor)stack.getItem()).dragonSlot == 3;
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 3;
             }
         });
         int j;

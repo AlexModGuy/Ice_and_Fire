@@ -26,7 +26,7 @@ public class EntitySeaSerpentArrow extends AbstractArrowEntity {
         this.setDamage(3F);
     }
 
-    public EntitySeaSerpentArrow(EntityType t,World worldIn, LivingEntity shooter) {
+    public EntitySeaSerpentArrow(EntityType t, World worldIn, LivingEntity shooter) {
         super(t, shooter, worldIn);
         this.setDamage(3F);
     }
@@ -62,7 +62,7 @@ public class EntitySeaSerpentArrow extends AbstractArrowEntity {
                 Hand Hand = player.getActiveHand();
                 net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, Hand);
 
-                if (Hand == Hand.MAIN_HAND) {
+                if (Hand == net.minecraft.util.Hand.MAIN_HAND) {
                     this.setItemStackToSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
                 } else {
                     this.setItemStackToSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);

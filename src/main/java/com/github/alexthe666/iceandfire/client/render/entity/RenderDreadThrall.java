@@ -2,19 +2,12 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelDreadThrall;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
-import com.github.alexthe666.iceandfire.entity.EntityDreadScuttler;
 import com.github.alexthe666.iceandfire.entity.EntityDreadThrall;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.layers.ArmorLayer;
-import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
@@ -37,19 +30,8 @@ public class RenderDreadThrall extends MobRenderer<EntityDreadThrall, ModelDread
         this.addLayer(new HeldItemLayer<EntityDreadThrall, ModelDreadThrall>(this));
     }
 
-    @Override
-    public void preRenderCallback(EntityDreadThrall LivingEntityIn, MatrixStack stack, float partialTickTime) {
-        stack.translate(0.95F, 0.95F, 0.95F);
-    }
-
-    @Nullable
-    @Override
-    public ResourceLocation getEntityTexture(EntityDreadThrall entity) {
-        return TEXTURE;
-    }
-
-    private static ResourceLocation getArmorTexture(int index){
-        switch (index){
+    private static ResourceLocation getArmorTexture(int index) {
+        switch (index) {
             case 0:
                 return TEXTURE_ARMOR_0;
             case 1:
@@ -68,5 +50,16 @@ public class RenderDreadThrall extends MobRenderer<EntityDreadThrall, ModelDread
                 return TEXTURE_ARMOR_7;
         }
         return TEXTURE_ARMOR_0;
+    }
+
+    @Override
+    public void preRenderCallback(EntityDreadThrall LivingEntityIn, MatrixStack stack, float partialTickTime) {
+        stack.translate(0.95F, 0.95F, 0.95F);
+    }
+
+    @Nullable
+    @Override
+    public ResourceLocation getEntityTexture(EntityDreadThrall entity) {
+        return TEXTURE;
     }
 }

@@ -4,12 +4,10 @@ import com.github.alexthe666.iceandfire.client.model.ModelDreadKnight;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
 import com.github.alexthe666.iceandfire.entity.EntityDreadKnight;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
-import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
@@ -33,14 +31,14 @@ public class RenderDreadKnight extends MobRenderer<EntityDreadKnight, ModelDread
     @Nullable
     @Override
     public ResourceLocation getEntityTexture(EntityDreadKnight entity) {
-        switch (entity.getArmorVariant()){
+        switch (entity.getArmorVariant()) {
             case 0:
                 return TEXTURE_0;
             case 1:
                 return TEXTURE_1;
             case 2:
                 return TEXTURE_2;
-                default:
+            default:
                 return TEXTURE_0;
         }
     }

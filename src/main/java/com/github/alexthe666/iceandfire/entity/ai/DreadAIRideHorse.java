@@ -26,10 +26,10 @@ public class DreadAIRideHorse extends Goal {
                 return false;
             } else {
                 for (AbstractHorseEntity entityirongolem : list) {
-                   if(!entityirongolem.isBeingRidden()){
-                       this.horse = entityirongolem;
-                       break;
-                   }
+                    if (!entityirongolem.isBeingRidden()) {
+                        this.horse = entityirongolem;
+                        break;
+                    }
                 }
 
                 return this.horse != null;

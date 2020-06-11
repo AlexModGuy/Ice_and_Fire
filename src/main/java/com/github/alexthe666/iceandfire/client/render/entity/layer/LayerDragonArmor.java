@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonBase;
 import com.github.alexthe666.iceandfire.client.texture.ArrayLayeredTexture;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
@@ -23,13 +22,17 @@ import java.util.List;
 import java.util.Map;
 
 public class LayerDragonArmor extends LayerRenderer<EntityDragonBase, SegmentedModel<EntityDragonBase>> {
+    private static final Map<String, ResourceLocation> LAYERED_ARMOR_CACHE = Maps.newHashMap();
     private static EquipmentSlotType[] ARMOR_SLOTS = {EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
     private final MobRenderer render;
-    private static final Map<String, ResourceLocation> LAYERED_ARMOR_CACHE = Maps.newHashMap();
 
     public LayerDragonArmor(MobRenderer renderIn, boolean isFireDragon) {
         super(renderIn);
         this.render = renderIn;
+    }
+
+    public static void clearCache(String str) {
+        LAYERED_ARMOR_CACHE.remove(str);
     }
 
     public void render(EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
@@ -38,10 +41,6 @@ public class LayerDragonArmor extends LayerRenderer<EntityDragonBase, SegmentedM
 
     public boolean shouldCombineTextures() {
         return false;
-    }
-
-    public static void clearCache(String str){
-        LAYERED_ARMOR_CACHE.remove(str);
     }
 
     @Override
@@ -53,7 +52,7 @@ public class LayerDragonArmor extends LayerRenderer<EntityDragonBase, SegmentedM
         String armorTexture = dragon.dragonType.getName() + "|" + armorHead + "|" + armorNeck + "|" + armorLegs + "|" + armorFeet;
         if (!armorTexture.equals(dragon.dragonType.getName() + "|0|0|0|0")) {
             ResourceLocation resourcelocation = LAYERED_ARMOR_CACHE.get(armorTexture);
-            if(resourcelocation == null){
+            if (resourcelocation == null) {
                 resourcelocation = new ResourceLocation("iceandfire" + "dragonArmor_" + armorTexture);
                 List<String> tex = new ArrayList<String>();
                 for (EquipmentSlotType slot : ARMOR_SLOTS) {

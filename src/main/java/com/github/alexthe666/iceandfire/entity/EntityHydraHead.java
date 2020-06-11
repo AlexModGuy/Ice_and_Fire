@@ -24,8 +24,8 @@ public class EntityHydraHead extends EntityMutlipartPart {
     @Override
     public void tick() {
         super.tick();
-        if(hydra != null && hydra.getSeveredHead() != -1 && this.neck && !EntityGorgon.isStoneMob(hydra)){
-            if(hydra.getSeveredHead() == headIndex){
+        if (hydra != null && hydra.getSeveredHead() != -1 && this.neck && !EntityGorgon.isStoneMob(hydra)) {
+            if (hydra.getSeveredHead() == headIndex) {
                 if (this.world.isRemote) {
                     for (int k = 0; k < 5; ++k) {
                         double d2 = 0.4;

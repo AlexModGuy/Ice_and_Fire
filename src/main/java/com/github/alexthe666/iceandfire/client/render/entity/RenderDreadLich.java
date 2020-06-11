@@ -4,14 +4,10 @@ import com.github.alexthe666.iceandfire.client.model.ModelDreadLich;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
 import com.github.alexthe666.iceandfire.entity.EntityDreadLich;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
@@ -38,7 +34,7 @@ public class RenderDreadLich extends MobRenderer<EntityDreadLich, ModelDreadLich
     @Nullable
     @Override
     public ResourceLocation getEntityTexture(EntityDreadLich entity) {
-        switch (entity.getVariant()){
+        switch (entity.getVariant()) {
             case 1:
                 return TEXTURE_1;
             case 2:
@@ -47,7 +43,7 @@ public class RenderDreadLich extends MobRenderer<EntityDreadLich, ModelDreadLich
                 return TEXTURE_3;
             case 4:
                 return TEXTURE_4;
-                default:
+            default:
                 return TEXTURE_0;
         }
     }
