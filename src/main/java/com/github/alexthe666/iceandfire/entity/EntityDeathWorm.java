@@ -51,12 +51,12 @@ import javax.annotation.Nullable;
 
 public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlacklistedFromStatues, IAnimatedEntity, IVillagerFear, IAnimalFear, IPhasesThroughBlock, IGroundMount {
 
-    public static final ResourceLocation TAN_LOOT = new ResourceLocation("iceandfire", "deathworm_tan");
-    public static final ResourceLocation WHITE_LOOT = new ResourceLocation("iceandfire", "deathworm_white");
-    public static final ResourceLocation RED_LOOT = new ResourceLocation("iceandfire", "deathworm_red");
-    public static final ResourceLocation TAN_GIANT_LOOT = new ResourceLocation("iceandfire", "deathworm_tan_giant");
-    public static final ResourceLocation WHITE_GIANT_LOOT = new ResourceLocation("iceandfire", "deathworm_white_giant");
-    public static final ResourceLocation RED_GIANT_LOOT = new ResourceLocation("iceandfire", "deathworm_red_giant");
+    public static final ResourceLocation TAN_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_tan");
+    public static final ResourceLocation WHITE_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_white");
+    public static final ResourceLocation RED_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_red");
+    public static final ResourceLocation TAN_GIANT_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_tan_giant");
+    public static final ResourceLocation WHITE_GIANT_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_white_giant");
+    public static final ResourceLocation RED_GIANT_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_red_giant");
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.VARINT);
     private static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.FLOAT);
     private static final DataParameter<Byte> CONTROL_STATE = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.BYTE);

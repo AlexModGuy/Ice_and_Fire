@@ -8,10 +8,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 
 public class BlockMyrmexConnectedResin extends Block {
 
@@ -63,6 +65,32 @@ public class BlockMyrmexConnectedResin extends Block {
                 .with(UP, Boolean.valueOf(this.canFenceConnectTo(blockstate4, blockstate4.canBeConnectedTo(iblockreader, blockpos5, Direction.UP), Direction.UP)))
                 .with(DOWN, Boolean.valueOf(this.canFenceConnectTo(blockstate5, blockstate5.canBeConnectedTo(iblockreader, blockpos6, Direction.DOWN), Direction.DOWN)));
     }
+
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        BooleanProperty connect = null;
+        switch (facing) {
+            case NORTH:
+                connect = NORTH;
+                break;
+            case SOUTH:
+                connect = SOUTH;
+                break;
+            case EAST:
+                connect = EAST;
+                break;
+            case WEST:
+                connect = WEST;
+                break;
+            case DOWN:
+                connect = DOWN;
+                break;
+            default:
+                connect = UP;
+                break;
+        }
+        return stateIn.with(connect, Boolean.valueOf(this.canFenceConnectTo(facingState, facingState.canBeConnectedTo(worldIn, facingPos, facing.getOpposite()), facing.getOpposite())));
+    }
+
 
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(NORTH, EAST, WEST, SOUTH, DOWN, UP);
