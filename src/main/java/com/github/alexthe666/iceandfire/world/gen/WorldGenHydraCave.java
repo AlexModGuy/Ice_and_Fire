@@ -1,29 +1,38 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.*;
-import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenSwamp;
-import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.biome.DefaultBiomeFeatures;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.feature.*;
 
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-public class WorldGenHydraCave extends WorldGenerator {
+public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
 
-    public static final ResourceLocation HYDRA_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "hydra_cave"));
-    protected static final WorldGenSwamp SWAMP_FEATURE = new WorldGenSwamp();
+    public static final ResourceLocation HYDRA_CHEST = new ResourceLocation("iceandfire", "hydra_cave");
+    protected static final ConfiguredFeature<TreeFeatureConfig, ?> SWAMP_FEATURE = Feature.NORMAL_TREE.withConfiguration(DefaultBiomeFeatures.SWAMP_TREE_CONFIG);
+    private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+
+    public WorldGenHydraCave(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn) {
+        super(configFactoryIn);
+    }
 
     @Override
-    public boolean generate(World worldIn, Random rand, BlockPos position) {
+    public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
         int i1 = 8;
         int i2 = i1 - 2;
         int dist = 6;
@@ -39,28 +48,28 @@ public class WorldGenHydraCave extends WorldGenerator {
             float f = (float) (j + k + l) * 0.333F + 0.5F;
 
 
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
                 boolean doorwayX = blockpos.getX() >= position.getX() - 2 + rand.nextInt(2) && blockpos.getX() <= position.getX() + 2 + rand.nextInt(2);
                 boolean doorwayZ = blockpos.getZ() >= position.getZ() - 2 + rand.nextInt(2) && blockpos.getZ() <= position.getZ() + 2 + rand.nextInt(2);
                 boolean isNotInDoorway = !doorwayX && !doorwayZ && blockpos.getY() > position.getY() || blockpos.getY() > position.getY() + k - (1 + rand.nextInt(2));
                 if (blockpos.distanceSq(position) <= (double) (f * f)) {
-                    if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest) && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0 && isNotInDoorway) {
+                    if (!(worldIn.getBlockState(position).getBlock() instanceof ChestBlock) && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0 && isNotInDoorway) {
                         worldIn.setBlockState(blockpos, Blocks.GRASS.getDefaultState(), 3);
                         if (worldIn.getBlockState(position.down()).getBlock() == Blocks.GRASS) {
                             worldIn.setBlockState(blockpos.down(), Blocks.DIRT.getDefaultState(), 3);
                         }
                         if (rand.nextInt(4) == 0) {
-                            worldIn.setBlockState(blockpos.up(), Blocks.TALLGRASS.getDefaultState().with(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS));
+                            worldIn.setBlockState(blockpos.up(), Blocks.TALL_GRASS.getDefaultState(), 2);
                         }
                         if (rand.nextInt(9) == 0) {
-                            SWAMP_FEATURE.generate(worldIn, rand, blockpos.up());
+                            SWAMP_FEATURE.place(worldIn, generator, rand, blockpos.up());
                         }
 
                     }
                     if (blockpos.getY() == position.getY()) {
                         worldIn.setBlockState(blockpos, Blocks.GRASS.getDefaultState(), 3);
                     }
-                    if (blockpos.getY() <= position.getY() - 1 && !worldIn.isBlockFullCube(blockpos)) {
+                    if (blockpos.getY() <= position.getY() - 1 && !worldIn.getBlockState(blockpos).isSolid()) {
                         worldIn.setBlockState(blockpos, Blocks.STONE.getDefaultState(), 3);
 
                     }
@@ -75,66 +84,62 @@ public class WorldGenHydraCave extends WorldGenerator {
             int k = 4 + ySize;
             int l = i2 + rand.nextInt(2);
             float f = (float) (j + k + l) * 0.333F + 0.5F;
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(position) <= (double) (f * f) && blockpos.getY() > position.getY()) {
-                    if (!(worldIn.getBlockState(position).getBlock() instanceof BlockChest)) {
+                    if (!(worldIn.getBlockState(position).getBlock() instanceof ChestBlock)) {
                         worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 3);
 
                     }
                 }
             }
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k + 8, l))) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k + 8, l)).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(position) <= (double) (f * f) && blockpos.getY() == position.getY()) {
                     if (rand.nextInt(30) == 0 && isTouchingAir(worldIn, blockpos.up())) {
-                        worldIn.setBlockState(blockpos.up(1), Blocks.CHEST.getDefaultState().with(BlockChest.FACING, Direction.HORIZONTALS[new Random().nextInt(3)]), 2);
-                        if (worldIn.getBlockState(blockpos.up(1)).getBlock() instanceof BlockChest) {
+                        worldIn.setBlockState(blockpos.up(1), Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, HORIZONTALS[new Random().nextInt(3)]), 2);
+                        if (worldIn.getBlockState(blockpos.up(1)).getBlock() instanceof ChestBlock) {
                             TileEntity tileentity1 = worldIn.getTileEntity(blockpos.up(1));
-                            if (tileentity1 instanceof TileEntityChest && !tileentity1.isInvalid()) {
-                                ((TileEntityChest) tileentity1).setLootTable(HYDRA_CHEST, rand.nextLong());
+                            if (tileentity1 instanceof ChestTileEntity) {
+                                ((ChestTileEntity) tileentity1).setLootTable(HYDRA_CHEST, rand.nextLong());
                             }
                         }
                         continue;
                     }
                     if (rand.nextInt(45) == 0 && isTouchingAir(worldIn, blockpos.up())) {
-                        worldIn.setBlockState(blockpos.up(), Blocks.SKULL.getDefaultState().with(BlockSkull.FACING, Direction.UP));
+                        worldIn.setBlockState(blockpos.up(), Blocks.SKELETON_SKULL.getDefaultState().with(SkullBlock.ROTATION, rand.nextInt(15)), 2);
                         TileEntity tileentity1 = worldIn.getTileEntity(blockpos.up(1));
-                        if (tileentity1 instanceof TileEntitySkull && !tileentity1.isInvalid()) {
-                            int rot = MathHelper.floor((double)(rand.nextFloat() * 360.0F) + 0.5D) & 15;
-                            ((TileEntitySkull) tileentity1).setSkullRotation(rot);
-                        }
                         continue;
                     }
                     if (rand.nextInt(35) == 0 && isTouchingAir(worldIn, blockpos.up())) {
-                        worldIn.setBlockState(blockpos.up(), Blocks.LEAVES.getDefaultState().with(BlockLeaves.DECAYABLE, false));
-                        for(Direction facing : Direction.values()){
-                            if(rand.nextFloat() < 0.3F && facing != Direction.DOWN){
-                                worldIn.setBlockState(blockpos.up().offset(facing), Blocks.LEAVES.getDefaultState().with(BlockLeaves.DECAYABLE, false));
+                        worldIn.setBlockState(blockpos.up(), Blocks.OAK_LEAVES.getDefaultState().with(LeavesBlock.PERSISTENT, true), 2);
+                        for (Direction facing : Direction.values()) {
+                            if (rand.nextFloat() < 0.3F && facing != Direction.DOWN) {
+                                worldIn.setBlockState(blockpos.up().offset(facing), Blocks.OAK_LEAVES.getDefaultState(), 2);
                             }
                         }
                         continue;
                     }
                     if (rand.nextInt(15) == 0 && isTouchingAir(worldIn, blockpos.up())) {
-                        worldIn.setBlockState(blockpos.up(), Blocks.TALLGRASS.getDefaultState().with(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS));
+                        worldIn.setBlockState(blockpos.up(), Blocks.TALL_GRASS.getDefaultState(), 2);
                         continue;
                     }
                     if (rand.nextInt(15) == 0 && isTouchingAir(worldIn, blockpos.up())) {
-                        worldIn.setBlockState(blockpos.up(), rand.nextBoolean() ? Blocks.BROWN_MUSHROOM.getDefaultState() : Blocks.RED_MUSHROOM.getDefaultState());
+                        worldIn.setBlockState(blockpos.up(), rand.nextBoolean() ? Blocks.BROWN_MUSHROOM.getDefaultState() : Blocks.RED_MUSHROOM.getDefaultState(), 2);
                         continue;
                     }
                 }
             }
         }
-        EntityHydra hydra = new EntityHydra(worldIn);
+        EntityHydra hydra = new EntityHydra(IafEntityRegistry.HYDRA, worldIn.getWorld());
         hydra.setVariant(rand.nextInt(3));
         hydra.setHomePosAndDistance(position, 15);
         hydra.setPositionAndRotation(position.getX() + 0.5, position.getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
-        worldIn.spawnEntity(hydra);
+        worldIn.addEntity(hydra);
         return true;
     }
 
-    private boolean isTouchingAir(World worldIn, BlockPos pos) {
+    private boolean isTouchingAir(IWorld worldIn, BlockPos pos) {
         boolean isTouchingAir = true;
-        for (Direction direction : Direction.HORIZONTALS) {
+        for (Direction direction : HORIZONTALS) {
             if (!worldIn.isAirBlock(pos.offset(direction))) {
                 isTouchingAir = false;
             }

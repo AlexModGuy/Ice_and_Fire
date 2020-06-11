@@ -193,12 +193,10 @@ public class CommonProxy {
     @SubscribeEvent
     public static void registerBiomes(RegistryEvent.Register<Biome> event) {
         event.getRegistry().register(IafWorldRegistry.GLACIER_BIOME);
-        BiomeDictionary.addTypes(IafWorldRegistry.GLACIER_BIOME, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPARSE, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
-        //BiomeDictionary.addTypes(ModWorld.DREADLANDS_BIOME, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPOOKY, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
+        BiomeDictionary.addTypes(IafWorldRegistry.GLACIER_BIOME, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPARSE, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND, BiomeDictionary.Type.OVERWORLD);
         if (IafConfig.spawnGlaciers) {
             BiomeManager.addSpawnBiome(IafWorldRegistry.GLACIER_BIOME);
             BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(IafWorldRegistry.GLACIER_BIOME, IafConfig.glacierSpawnChance));
-
         }
     }
 

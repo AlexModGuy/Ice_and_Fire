@@ -4,11 +4,11 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.gen.feature.Feature<NoFeatureConfig>;
 
 import java.util.Random;
 
-public class WorldGenRoostBoulder extends WorldGenerator {
+public class WorldGenRoostBoulder extends Feature<NoFeatureConfig> {
 
     private final Block block;
     private final int startRadius;

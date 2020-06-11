@@ -13,14 +13,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.gen.feature.Feature<NoFeatureConfig>;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.gen.structure.template.TemplateManager;
 
 import java.util.Random;
 
-public class WorldGenMausoleum extends WorldGenerator {
+public class WorldGenMausoleum extends Feature<NoFeatureConfig> {
 
     public Direction facing;
     private static final ResourceLocation STRUCTURE = new ResourceLocation(IceAndFire.MODID, "dread_mausoleum_forge");

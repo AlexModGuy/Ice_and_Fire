@@ -129,8 +129,8 @@ public class WorldGenMyrmexDecoration {
             worldIn.setBlockState(MyrmexHive.getGroundedPos(worldIn, blockpos.west()), gold.with(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
             worldIn.setBlockState(MyrmexHive.getGroundedPos(worldIn, blockpos.east()), gold.with(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
             if (rand.nextInt(3) == 0) {
-                worldIn.setBlockState(blockpos.up(), Blocks.CHEST.getDefaultState().with(BlockChest.FACING, Direction.HORIZONTALS[new Random().nextInt(3)]), 2);
-                if (worldIn.getBlockState(blockpos.up()).getBlock() instanceof BlockChest) {
+                worldIn.setBlockState(blockpos.up(), Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.HORIZONTALS[new Random().nextInt(3)]), 2);
+                if (worldIn.getBlockState(blockpos.up()).getBlock() instanceof ChestBlock) {
                     TileEntity tileentity1 = worldIn.getTileEntity(blockpos.up());
                     if (tileentity1 instanceof TileEntityChest && !tileentity1.isInvalid()) {
                         ((TileEntityChest) tileentity1).setLootTable(MYRMEX_GOLD_CHEST, rand.nextLong());

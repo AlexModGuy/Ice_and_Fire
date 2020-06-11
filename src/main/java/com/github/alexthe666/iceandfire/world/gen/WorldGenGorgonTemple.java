@@ -2,32 +2,38 @@ package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.world.gen.processor.DreadRuinProcessor;
-import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.state.BlockState;
+import com.mojang.datafixers.Dynamic;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.LeavesBlock;
+import net.minecraft.block.LogBlock;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
-import net.minecraft.world.gen.structure.template.Template;
-import net.minecraft.world.gen.structure.template.TemplateManager;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.template.PlacementSettings;
+import net.minecraft.world.gen.feature.template.Template;
+import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Random;
+import java.util.function.Function;
 
-public class WorldGenGorgonTemple extends WorldGenerator {
+public class WorldGenGorgonTemple extends Feature<NoFeatureConfig> {
 
-    public Direction facing;
     private static final ResourceLocation STRUCTURE = new ResourceLocation(IceAndFire.MODID, "gorgon_temple");
+    private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
-    public WorldGenGorgonTemple(Direction facing) {
-        super(false);
-        this.facing = facing;
+    public WorldGenGorgonTemple(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn) {
+        super(configFactoryIn);
     }
+
 
     public static boolean isPartOfRuin(BlockState state) {
         return false;
@@ -52,7 +58,7 @@ public class WorldGenGorgonTemple extends WorldGenerator {
 
     public static BlockPos getGround(int x, int z, World world) {
         BlockPos skyPos = new BlockPos(x, world.getHeight(), z);
-        while ((!world.getBlockState(skyPos).isOpaqueCube() || canHeightSkipBlock(skyPos, world)) && skyPos.getY() > 1) {
+        while ((!world.getBlockState(skyPos).isSolid() || canHeightSkipBlock(skyPos, world)) && skyPos.getY() > 1) {
             skyPos = skyPos.down();
         }
         return skyPos;
@@ -60,25 +66,24 @@ public class WorldGenGorgonTemple extends WorldGenerator {
 
     private static boolean canHeightSkipBlock(BlockPos pos, World world) {
         BlockState state = world.getBlockState(pos);
-        return state.getBlock() instanceof BlockLog || state.getBlock() instanceof BlockLeaves || state.getBlock() instanceof BlockLiquid;
+        return state.getBlock() instanceof LogBlock || state.getBlock() instanceof LeavesBlock || !state.getFluidState().isEmpty();
     }
 
-    public boolean generate(World worldIn, Random rand, BlockPos position) {
-        position = position.add(rand.nextInt(8) - 4, 1, rand.nextInt(8) - 4);
-        MinecraftServer server = worldIn.getMinecraftServer();
-        BlockPos height = getGround(position, worldIn);
-        BlockState dirt = worldIn.getBlockState(height.down(2));
-        TemplateManager templateManager = worldIn.getSaveHandler().getStructureTemplateManager();
-        Template template = templateManager.getTemplate(server, STRUCTURE);
+    public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
+        Direction facing = HORIZONTALS[rand.nextInt(3)];
+        MinecraftServer server = worldIn.getWorld().getServer();
+        Biome biome = worldIn.getBiome(position);
+        TemplateManager templateManager = server.getWorld(worldIn.getDimension().getType()).getStructureTemplateManager();
         PlacementSettings settings = new PlacementSettings().setRotation(getRotationFromFacing(facing));
-        BlockPos pos = height.offset(facing, template.getSize().getZ() / 2).offset(facing.rotateYCCW(), template.getSize().getX() / 2);
-        if (checkIfCanGenAt(worldIn, pos, template.getSize().getX(), template.getSize().getZ(), facing)) {
-            template.addBlocksToWorld(worldIn, pos.down(10), new DreadRuinProcessor(position, settings, null), settings, 2);
+        Template template = templateManager.getTemplate(STRUCTURE);
+        BlockPos genPos = position.offset(facing, template.getSize().getZ()/2).offset(facing.rotateYCCW(), template.getSize().getX()/2);
+        if (checkIfCanGenAt(worldIn, genPos, template.getSize().getX(), template.getSize().getZ(), facing)) {
+            template.addBlocksToWorld(worldIn, genPos, settings, 2);
         }
         return true;
     }
 
-    public boolean checkIfCanGenAt(World world, BlockPos middle, int x, int z, Direction facing) {
+    public boolean checkIfCanGenAt(IWorld world, BlockPos middle, int x, int z, Direction facing) {
         return !isPartOfRuin(world.getBlockState(middle.offset(facing, z / 2))) && !isPartOfRuin(world.getBlockState(middle.offset(facing.getOpposite(), z / 2))) &&
                 !isPartOfRuin(world.getBlockState(middle.offset(facing.rotateY(), x / 2))) && !isPartOfRuin(world.getBlockState(middle.offset(facing.rotateYCCW(), x / 2)));
     }

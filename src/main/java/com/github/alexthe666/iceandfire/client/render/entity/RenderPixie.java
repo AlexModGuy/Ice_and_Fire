@@ -4,15 +4,16 @@ import com.github.alexthe666.iceandfire.client.model.ModelPixie;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerPixieGlow;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerPixieItem;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderPixie extends MobRenderer<EntityPixie> {
+public class RenderPixie extends MobRenderer<EntityPixie, ModelPixie> {
 
     public static final ResourceLocation TEXTURE_0 = new ResourceLocation("iceandfire:textures/models/pixie/pixie_0.png");
     public static final ResourceLocation TEXTURE_1 = new ResourceLocation("iceandfire:textures/models/pixie/pixie_1.png");
@@ -29,10 +30,10 @@ public class RenderPixie extends MobRenderer<EntityPixie> {
     }
 
     @Override
-    public void preRenderCallback(EntityPixie LivingEntityIn, float partialTickTime) {
-        GL11.glScalef(0.55F, 0.55F, 0.55F);
+    public void preRenderCallback(EntityPixie LivingEntityIn, MatrixStack stack, float partialTickTime) {
+        stack.scale(0.55F, 0.55F, 0.55F);
         if (LivingEntityIn.isSitting()) {
-            GL11.glTranslatef(0F, 0.5F, 0F);
+            stack.translate(0F, 0.5F, 0F);
 
         }
     }

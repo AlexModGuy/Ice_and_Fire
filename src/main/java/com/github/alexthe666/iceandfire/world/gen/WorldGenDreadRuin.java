@@ -2,22 +2,28 @@ package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.world.gen.processor.DreadRuinProcessor;
-import net.minecraft.init.Blocks;
+import com.mojang.datafixers.Dynamic;
+import net.minecraft.block.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
-import net.minecraft.world.gen.structure.template.Template;
-import net.minecraft.world.gen.structure.template.TemplateManager;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.template.PlacementSettings;
+import net.minecraft.world.gen.feature.template.Template;
+import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Random;
+import java.util.function.Function;
 
-public class WorldGenDreadRuin extends WorldGenerator {
+public class WorldGenDreadRuin extends Feature<NoFeatureConfig> {
     private static final ResourceLocation STRUCTURE_0 = new ResourceLocation(IceAndFire.MODID, "dread_ruin_0");
     private static final ResourceLocation STRUCTURE_1 = new ResourceLocation(IceAndFire.MODID, "dread_ruin_1");
     private static final ResourceLocation STRUCTURE_2 = new ResourceLocation(IceAndFire.MODID, "dread_ruin_2");
@@ -31,18 +37,10 @@ public class WorldGenDreadRuin extends WorldGenerator {
     private static final ResourceLocation STRUCTURE_10 = new ResourceLocation(IceAndFire.MODID, "dread_ruin_10");
     private static final ResourceLocation STRUCTURE_11 = new ResourceLocation(IceAndFire.MODID, "dread_ruin_11");
     private static final ResourceLocation STRUCTURE_12 = new ResourceLocation(IceAndFire.MODID, "dread_ruin_12");
+    private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
-    public boolean generate(World worldIn, Random rand, BlockPos position) {
-        ResourceLocation structure = getRandomStructure(rand);
-        Direction facing = Direction.HORIZONTALS[rand.nextInt(3)];
-        MinecraftServer server = worldIn.getMinecraftServer();
-        TemplateManager templateManager = worldIn.getSaveHandler().getStructureTemplateManager();
-        PlacementSettings settings = new PlacementSettings().setRotation(getRotationFromFacing(facing)).setReplacedBlock(Blocks.AIR);
-        Template template = templateManager.getTemplate(server, structure);
-        Biome biome = worldIn.getBiome(position);
-        BlockPos genPos = position.offset(facing, template.getSize().getZ()/2).offset(facing.rotateYCCW(), template.getSize().getX()/2);
-        template.addBlocksToWorld(worldIn, genPos, new DreadRuinProcessor(position, settings, biome), settings, 2);
-        return true;
+    public WorldGenDreadRuin(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn) {
+        super(configFactoryIn);
     }
 
     public static Rotation getRotationFromFacing(Direction facing) {
@@ -89,5 +87,19 @@ public class WorldGenDreadRuin extends WorldGenerator {
                 return STRUCTURE_12;
         }
         return STRUCTURE_0;
+    }
+
+    @Override
+    public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
+        ResourceLocation structure = getRandomStructure(rand);
+        Direction facing = HORIZONTALS[rand.nextInt(3)];
+        MinecraftServer server = worldIn.getWorld().getServer();
+        Biome biome = worldIn.getBiome(position);
+        TemplateManager templateManager = server.getWorld(worldIn.getDimension().getType()).getStructureTemplateManager();
+        PlacementSettings settings = new PlacementSettings().setRotation(getRotationFromFacing(facing)).addProcessor(new DreadRuinProcessor(position, biome));
+        Template template = templateManager.getTemplate(structure);
+        BlockPos genPos = position.offset(facing, template.getSize().getZ()/2).offset(facing.rotateYCCW(), template.getSize().getX()/2);
+        template.addBlocksToWorld(worldIn, genPos, settings, 2);
+        return false;
     }
 }

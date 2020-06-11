@@ -5,7 +5,9 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.MapStorage;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
 
 import java.util.*;
@@ -17,8 +19,8 @@ public class DragonPosWorldData extends WorldSavedData {
     private World world;
     private int tickCounter;
 
-    public DragonPosWorldData(String name) {
-        super(name);
+    public DragonPosWorldData() {
+        super(IDENTIFIER);
     }
 
     public DragonPosWorldData(World world) {
@@ -28,17 +30,19 @@ public class DragonPosWorldData extends WorldSavedData {
     }
 
     public static DragonPosWorldData get(World world) {
-        MapStorage storage = world.getPerWorldStorage();
-        DragonPosWorldData instance = (DragonPosWorldData) storage.getOrLoadData(DragonPosWorldData.class, IDENTIFIER);
+        if (world instanceof ServerWorld) {
+            ServerWorld overworld = world.getServer().getWorld(DimensionType.OVERWORLD);
 
-        if (instance == null) {
-            instance = new DragonPosWorldData(world);
-            storage.setData(IDENTIFIER, instance);
+            DimensionSavedDataManager storage = overworld.getSavedData();
+            DragonPosWorldData data = storage.getOrCreate(DragonPosWorldData::new, IDENTIFIER);
+            if(data != null){
+                data.world = world;
+                data.markDirty();
+            }
+            return data;
         }
-        instance.markDirty();
-        return instance;
+        return null;
     }
-
     public void addDragon(UUID uuid, BlockPos pos) {
         lastDragonPositions.put(uuid, pos);
         this.markDirty();
@@ -54,7 +58,7 @@ public class DragonPosWorldData extends WorldSavedData {
     }
 
     public void debug() {
-        IceAndFire.logger.warn(lastDragonPositions.toString());
+        IceAndFire.LOGGER.warning(lastDragonPositions.toString());
     }
 
 
@@ -62,30 +66,30 @@ public class DragonPosWorldData extends WorldSavedData {
         ++this.tickCounter;
     }
 
-    public void readFromNBT(CompoundNBT nbt) {
-        this.tickCounter = nbt.getInteger("Tick");
+    public void read(CompoundNBT nbt) {
+        this.tickCounter = nbt.getInt("Tick");
         ListNBT nbttaglist = nbt.getList("DragonMap", 10);
         this.lastDragonPositions.clear();
-        for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-            CompoundNBT CompoundNBT = nbttaglist.getCompoundTagAt(i);
+        for (int i = 0; i < nbttaglist.size(); ++i) {
+            CompoundNBT CompoundNBT = nbttaglist.getCompound(i);
             UUID uuid = CompoundNBT.getUniqueId("DragonUUID");
-            BlockPos pos = new BlockPos(CompoundNBT.getInteger("DragonPosX"), CompoundNBT.getInteger("DragonPosY"), CompoundNBT.getInteger("DragonPosZ"));
+            BlockPos pos = new BlockPos(CompoundNBT.getInt("DragonPosX"), CompoundNBT.getInt("DragonPosY"), CompoundNBT.getInt("DragonPosZ"));
             this.lastDragonPositions.put(uuid, pos);
         }
     }
 
-    public CompoundNBT writeToNBT(CompoundNBT compound) {
-        compound.setInteger("Tick", this.tickCounter);
+    public CompoundNBT write(CompoundNBT compound) {
+        compound.putInt("Tick", this.tickCounter);
         ListNBT nbttaglist = new ListNBT();
         for (Map.Entry<UUID, BlockPos> pair : lastDragonPositions.entrySet()) {
             CompoundNBT CompoundNBT = new CompoundNBT();
-            CompoundNBT.setUniqueId("DragonUUID", pair.getKey());
-            CompoundNBT.setInteger("DragonPosX", pair.get().getX());
-            CompoundNBT.setInteger("DragonPosY", pair.get().getY());
-            CompoundNBT.setInteger("DragonPosZ", pair.get().getZ());
-            nbttaglist.appendTag(CompoundNBT);
+            CompoundNBT.putUniqueId("DragonUUID", pair.getKey());
+            CompoundNBT.putInt("DragonPosX", pair.getValue().getX());
+            CompoundNBT.putInt("DragonPosY", pair.getValue().getY());
+            CompoundNBT.putInt("DragonPosZ", pair.getValue().getZ());
+            nbttaglist.add(CompoundNBT);
         }
-        compound.setTag("DragonMap", nbttaglist);
+        compound.put("DragonMap", nbttaglist);
         return compound;
     }
 }

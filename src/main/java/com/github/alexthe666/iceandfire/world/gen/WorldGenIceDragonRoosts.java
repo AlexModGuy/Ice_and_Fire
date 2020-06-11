@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.world.gen;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.event.WorldGenEvents;
-import net.minecraft.block.BlockChest;
+import net.minecraft.block.ChestBlock;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
@@ -13,11 +13,11 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.gen.feature.Feature<NoFeatureConfig>;
 
 import java.util.Random;
 
-public class WorldGenIceDragonRoosts extends WorldGenerator {
+public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
     private static boolean isMale;
 
     @Override
@@ -95,8 +95,8 @@ public class WorldGenIceDragonRoosts extends WorldGenerator {
                     }
                     if (dist < 0.3D && rand.nextInt(isMale ? 500 : 700) == 0) {
                         BlockPos height = WorldGenEvents.degradeSurface(worldIn, worldIn.getHeight(blockpos));
-                        worldIn.setBlockState(height, Blocks.CHEST.getDefaultState().with(BlockChest.FACING, Direction.HORIZONTALS[new Random().nextInt(3)]), 2);
-                        if (worldIn.getBlockState(height).getBlock() instanceof BlockChest) {
+                        worldIn.setBlockState(height, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.HORIZONTALS[new Random().nextInt(3)]), 2);
+                        if (worldIn.getBlockState(height).getBlock() instanceof ChestBlock) {
                             TileEntity tileentity1 = worldIn.getTileEntity(height);
                             if (tileentity1 instanceof TileEntityChest && !tileentity1.isInvalid()) {
                                 ((TileEntityChest) tileentity1).setLootTable(WorldGenIceDragonCave.ICEDRAGON_CHEST, new Random().nextLong());

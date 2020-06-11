@@ -3,8 +3,8 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
-import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -60,13 +60,13 @@ public class ItemStoneStatue extends Item {
             if (stack.getTag() != null) {
 
                 if (stack.getTag().getBoolean("IAFStoneStatuePlayerEntity")) {
-                    EntityStoneStatue statue = new EntityStoneStatue(context.getWorld());
+                    EntityStoneStatue statue = new EntityStoneStatue(IafEntityRegistry.STONE_STATUE,context.getWorld());
                     statue.setPositionAndRotation(context.getPos().getX() + 0.5, context.getPos().getY() + 1, context.getPos().getZ() + 0.5, context.getPlayer().rotationYaw, 0);
                     statue.smallArms = true;
                     if (!context.getWorld().isRemote) {
                         context.getWorld().addEntity(statue);
                     }
-                    statue.readEntityFromNBT(stack.getTag());
+                    statue.readAdditional(stack.getTag());
                     statue.setCrackAmount(0);
                     float yaw = MathHelper.wrapDegrees(context.getPlayer().rotationYaw + 180F);
                     statue.prevRotationYaw = yaw;
@@ -101,7 +101,6 @@ public class ItemStoneStatue extends Item {
                         }
                         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
                         properties.isStone = true;
-                        IceAndFire.sendMSGToAll(new MessageStoneStatue(entity.getEntityId(), true));
                         ((LivingEntity) entity).read(stack.getTag());
                         float yaw = MathHelper.wrapDegrees(context.getPlayer().rotationYaw + 180F);
                         entity.prevRotationYaw = yaw;

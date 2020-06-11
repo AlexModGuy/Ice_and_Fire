@@ -2,58 +2,62 @@ package com.github.alexthe666.iceandfire.world.gen.processor;
 
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.state.BlockState;
+import com.google.common.collect.ImmutableMap;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.types.DynamicOps;
+import net.minecraft.block.AbstractChestBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.structure.template.ITemplateProcessor;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
-import net.minecraft.world.gen.structure.template.Template;
-import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.gen.feature.template.IStructureProcessorType;
+import net.minecraft.world.gen.feature.template.PlacementSettings;
+import net.minecraft.world.gen.feature.template.StructureProcessor;
+import net.minecraft.world.gen.feature.template.Template;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class DreadRuinProcessor implements ITemplateProcessor {
+public class DreadRuinProcessor extends StructureProcessor {
 
     private float integrity = 1.0F;
-    public static final ResourceLocation DREAD_CHEST_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "mausoleum_chest"));
+    public static final ResourceLocation DREAD_CHEST_LOOT = new ResourceLocation("iceandfire", "mausoleum_chest");
 
-    public DreadRuinProcessor(BlockPos position, PlacementSettings settings, @Nullable Biome biome) {
+    public DreadRuinProcessor(BlockPos position, @Nullable Biome biome) {
     }
 
     @Nullable
     @Override
-    public Template.BlockInfo processBlock(World worldIn, BlockPos pos, Template.BlockInfo blockInfoIn) {
-        if (worldIn.rand.nextFloat() <= integrity) {
-            if (blockInfoIn.blockState.getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS) {
-                BlockState state = getRandomCrackedBlock(null, worldIn.rand);
+    public Template.BlockInfo process(IWorldReader worldIn, BlockPos pos, Template.BlockInfo blockInfoIn, Template.BlockInfo blockInfoIn2, PlacementSettings settings) {
+        Random random = settings.getRandom(pos);
+        if (random.nextFloat() <= integrity) {
+            if (blockInfoIn.state.getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS) {
+                BlockState state = getRandomCrackedBlock(null, random);
                 return new Template.BlockInfo(pos, state, null);
             }
-            if (blockInfoIn.blockState.getBlock() instanceof BlockChest) {
+            if (blockInfoIn.state.getBlock() instanceof AbstractChestBlock) {
                 ResourceLocation loot = DREAD_CHEST_LOOT;
-                Random rand = new Random(worldIn.getSeed() + pos.toLong());
-                CompoundNBT tag = blockInfoIn.tileentityData == null ? new CompoundNBT() : blockInfoIn.tileentityData;
-                tag.setString("LootTable", loot.toString());
-                tag.setLong("LootTableSeed", rand.nextLong());
+                CompoundNBT tag = new CompoundNBT();
+                tag.putString("LootTable", loot.toString());
+                tag.putLong("LootTableSeed", random.nextLong());
                 Template.BlockInfo newInfo = new Template.BlockInfo(pos, Blocks.CHEST.getDefaultState(), tag);
                 return newInfo;
             }
-            if (blockInfoIn.blockState.getBlock() == IafBlockRegistry.DREAD_SPAWNER) {
-                CompoundNBT tag = blockInfoIn.tileentityData == null ? new CompoundNBT() : blockInfoIn.tileentityData;
+            if (blockInfoIn.state.getBlock() == IafBlockRegistry.DREAD_SPAWNER) {
+                CompoundNBT tag = new CompoundNBT();
                 CompoundNBT spawnData = new CompoundNBT();
-                Random rand = new Random(worldIn.getSeed() + pos.toLong());
-                ResourceLocation spawnerMobId = EntityList.getKey(getRandomMobForMobSpawner(rand));
+                ResourceLocation spawnerMobId = ForgeRegistries.ENTITIES.getKey(getRandomMobForMobSpawner(random));
                 if(spawnerMobId != null){
-                    spawnData.setString("id", spawnerMobId.toString());
-                    tag.removeTag("SpawnPotentials");
-                    tag.setTag("SpawnData", spawnData.copy());
+                    spawnData.putString("id", spawnerMobId.toString());
+                    tag.remove("SpawnPotentials");
+                    tag.put("SpawnData", spawnData.copy());
                 }
                 Template.BlockInfo newInfo = new Template.BlockInfo(pos, IafBlockRegistry.DREAD_SPAWNER.getDefaultState(), tag);
                 return newInfo;
@@ -65,18 +69,29 @@ public class DreadRuinProcessor implements ITemplateProcessor {
 
     }
 
-    private Class<? extends Entity> getRandomMobForMobSpawner(Random random) {
+    @Override
+    protected IStructureProcessorType getType() {
+        return IStructureProcessorType.BLOCK_ROT;
+    }
+
+    @Override
+    protected <T> Dynamic<T> serialize0(DynamicOps<T> ops) {
+        return new Dynamic<>(ops, ops.createMap(ImmutableMap.of(ops.createString("dread_ruin_processor"), ops.createFloat(this.integrity))));
+    }
+
+
+    private EntityType getRandomMobForMobSpawner(Random random) {
         float rand = random.nextFloat();
         if(rand < 0.3D){
-            return EntityDreadThrall.class;
+            return IafEntityRegistry.DREAD_THRALL;
         }else if(rand < 0.5D){
-            return EntityDreadGhoul.class;
+            return IafEntityRegistry.DREAD_GHOUL;
         }else if(rand < 0.7D){
-            return EntityDreadBeast.class;
+            return IafEntityRegistry.DREAD_BEAST;
         }else if(rand < 0.85D){
-            return EntityDreadScuttler.class;
+            return IafEntityRegistry.DREAD_SCUTTLER;
         }
-        return EntityDreadKnight.class;
+        return IafEntityRegistry.DREAD_KNIGHT;
     }
 
     public static BlockState getRandomCrackedBlock(@Nullable BlockState prev, Random random) {

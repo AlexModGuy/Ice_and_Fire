@@ -12,13 +12,13 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.gen.feature.Feature<NoFeatureConfig>;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class WorldGenMyrmexHive extends WorldGenerator {
+public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
 
     private static final BlockState DESERT_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN.getDefaultState();
     private static final BlockState STICKY_DESERT_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN_STICKY.getDefaultState();

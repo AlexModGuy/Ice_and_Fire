@@ -1,17 +1,14 @@
 package com.github.alexthe666.iceandfire.world;
 
-import com.github.alexthe666.iceandfire.world.dimension.WorldProviderDreadLands;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
 
 public class IafWorldRegistry {
 
-    public static DimensionType DREADLANDS_DIM;
     public static Biome GLACIER_BIOME = new BiomeGlacier();
-    public static Biome DREADLANDS_BIOME = new BiomeDreadLands();
+    public static SurfaceBuilderGlacier GLACIER_SURFACE_BUILDER = new SurfaceBuilderGlacier(SurfaceBuilderConfig::deserialize);
 
-    public static void init() {
-       // DREADLANDS_DIM = DimensionType.register("Dreadlands", "_dreadlands", IafConfig.dreadlandsDimensionId, WorldProviderDreadLands.class, false);
-       // DimensionManager.registerDimension(IafConfig.dreadlandsDimensionId, DREADLANDS_DIM);
+    static {
+        GLACIER_SURFACE_BUILDER.setRegistryName("iceandfire:glacier_surface");
     }
 }

@@ -5,11 +5,11 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.gen.feature.Feature<NoFeatureConfig>;
 
 import java.util.Random;
 
-public class WorldGenSirenIsland extends WorldGenerator {
+public class WorldGenSirenIsland extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean generate(World worldIn, Random rand, BlockPos position) {
