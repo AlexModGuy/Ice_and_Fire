@@ -123,7 +123,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
     public void onUpdateParts() {
         for (Entity entity : segments) {
             if (entity != null) {
-                entity.tick();
+                ((EntityMutlipartPart)entity).setParent(this);
             }
         }
     }
@@ -136,6 +136,9 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         segments = new EntityMutlipartPart[11];
         for (int i = 0; i < segments.length; i++) {
             segments[i] = new EntityMutlipartPart(this, (-0.8F - (i * 0.8F)) * scale, 0, 0, 0.7F * scale, 0.7F * scale, 1);
+            segments[i].copyLocationAndAnglesFrom(this);
+            segments[i].setParent(this);
+            world.addEntity(segments[i]);
         }
     }
 

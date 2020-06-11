@@ -1,8 +1,5 @@
 {
   "variants": {
-    "inventory": {
-      "model": "iceandfire:block/dread_stone_slab"
-    },
     "type=bottom": {
       "model": "iceandfire:block/dread_stone_slab"
     },

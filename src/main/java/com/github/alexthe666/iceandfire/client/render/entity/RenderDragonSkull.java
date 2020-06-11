@@ -2,18 +2,26 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
+import com.github.alexthe666.iceandfire.entity.EntityMobSkull;
 import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Quaternion;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderDragonSkull extends MobRenderer<EntityDragonSkull, SegmentedModel<EntityDragonSkull>> {
+public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
 
     public static final float[] growth_stage_1 = new float[]{1F, 3F};
     public static final float[] growth_stage_2 = new float[]{3F, 7F};
@@ -25,32 +33,42 @@ public class RenderDragonSkull extends MobRenderer<EntityDragonSkull, SegmentedM
     private TabulaModel iceDragonModel;
 
     public RenderDragonSkull(EntityRendererManager renderManager, SegmentedModel fireDragonModel, SegmentedModel iceDragonModel) {
-        super(renderManager, fireDragonModel, 0.5F);
+        super(renderManager);
         growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
         this.fireDragonModel = (TabulaModel) fireDragonModel;
         this.iceDragonModel = (TabulaModel) iceDragonModel;
     }
 
-    public void render(EntityDragonSkull entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        if (entityIn.getDragonType() == 1) {
-            entityModel = iceDragonModel;
-        } else {
-            entityModel = fireDragonModel;
-        }
-        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+    private static void setRotationAngles(ModelRenderer cube, float rotX, float rotY, float rotZ) {
+        cube.rotateAngleX = rotX;
+        cube.rotateAngleY = rotY;
+        cube.rotateAngleZ = rotZ;
     }
 
+    public void render(EntityDragonSkull entity, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        TabulaModel model;
+        if (entity.getDragonType() == 1) {
+            model = iceDragonModel;
+        } else {
+            model = fireDragonModel;
+        }
+        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityTranslucent(getEntityTexture(entity)));
+        matrixStackIn.push();
+        matrixStackIn.rotate(new Quaternion(Vector3f.YN, entity.getYaw(), true));
+        float f = 0.0625F;
+        matrixStackIn.scale(1.0F, -1.0F, 1.0F);
+        float size = getRenderSize(entity) / 3;
+        matrixStackIn.scale(size, size, size);
+        matrixStackIn.translate(0, entity.isOnWall() ? -0.24F : -0.12F, 0.5F);
+        setRotationAngles(model.getCube("Head"), entity.isOnWall() ? (float) Math.toRadians(50F) : 0F, 0, 0);
+        model.getCube("Head").render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        matrixStackIn.pop();
+    }
     public ResourceLocation getEntityTexture(EntityDragonSkull entity) {
         if (entity.getDragonType() == 1) {
             return EnumDragonTextures.getIceDragonSkullTextures(entity);
         }
         return EnumDragonTextures.getFireDragonSkullTextures(entity);
-    }
-
-    @Override
-    protected void preRenderCallback(EntityDragonSkull entity, MatrixStack matrixStackIn, float partialTickTime) {
-        float scale = getRenderSize(entity);
-        matrixStackIn.scale(scale, scale, scale);
     }
 
 

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "iceandfire:block/pixie_house"
+    },
+    "facing=south": {
+      "model": "iceandfire:block/pixie_house",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "iceandfire:block/pixie_house",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "iceandfire:block/pixie_house",
+      "y": 90
+    }
+  }
+}

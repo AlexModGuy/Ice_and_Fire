@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.FMLPlayMessages;
 
 public class EntityHydraHead extends EntityMutlipartPart {
     public int headIndex;
@@ -13,6 +14,11 @@ public class EntityHydraHead extends EntityMutlipartPart {
     public EntityHydraHead(EntityType t, World world) {
         super(t, world);
     }
+
+    public EntityHydraHead(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+        this(IafEntityRegistry.HYDRA_MULTIPART, worldIn);
+    }
+
 
     public EntityHydraHead(EntityHydra entity, float radius, float angle, float y, float width, float height, float damageMulti, int headIndex, boolean neck) {
         super(IafEntityRegistry.HYDRA_MULTIPART, entity, radius, angle, y, width, height, damageMulti);
@@ -41,11 +47,11 @@ public class EntityHydraHead extends EntityMutlipartPart {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (this.parent instanceof EntityHydra) {
-            ((EntityHydra) this.parent).onHitHead(damage, headIndex);
-            return this.parent.attackEntityFrom(source, damage);
+        if (this.getParent() instanceof EntityHydra) {
+            ((EntityHydra) this.getParent()).onHitHead(damage, headIndex);
+            return this.getParent().attackEntityFrom(source, damage);
         } else {
-            return this.parent.attackEntityFrom(source, damage);
+            return this.getParent().attackEntityFrom(source, damage);
         }
     }
 }

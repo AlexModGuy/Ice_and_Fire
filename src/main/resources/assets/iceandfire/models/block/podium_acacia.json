@@ -1,7 +1,7 @@
 {
   "textures": {
-    "0": "block/planks_acacia",
-    "particle": "block/planks_acacia"
+    "0": "block/acacia_planks",
+    "particle": "block/acacia_planks"
   },
   "elements": [
     {

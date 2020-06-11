@@ -30,7 +30,7 @@ public class ContainerLectern extends Container {
     public ContainerLectern(int id, IInventory furnaceInventory, PlayerInventory playerInventory, IIntArray vars) {
         super(IafContainerRegistry.IAF_LECTERN_CONTAINER, id);
         this.tileFurnace = furnaceInventory;
-        this.addSlot(new Slot(furnaceInventory, 0, 15, 47) {
+        this.addSlot(new SlotLectern(playerInventory.player, furnaceInventory, 0, 15, 47) {
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() instanceof ItemBestiary;
@@ -133,9 +133,9 @@ public class ContainerLectern extends Container {
     private int getPageField(int i) {
         if(IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern){
             TileEntityLectern lectern = (TileEntityLectern) IceAndFire.PROXY.getRefrencedTE();
-            return lectern.selectedPages[i] == null ? 0 : lectern.selectedPages[i].ordinal();
+            return lectern.selectedPages[i] == null ? -1 : lectern.selectedPages[i].ordinal();
         }
-        return 0;
+        return -1;
     }
 
     public boolean enchantItem(PlayerEntity playerIn, int id) {
@@ -155,7 +155,7 @@ public class ContainerLectern extends Container {
                     didEnchant = EnumBestiaryPages.addPage(page, itemstack);
                     this.tileFurnace.setInventorySlotContents(0, itemstack);
                     if (this.tileFurnace instanceof TileEntityLectern) {
-                        ((TileEntityLectern) this.tileFurnace).randomizePages();
+                        ((TileEntityLectern) this.tileFurnace).randomizePages(itemstack, itemstack1);
                     }
                 }
                 if (!playerIn.isCreative() && didEnchant) {

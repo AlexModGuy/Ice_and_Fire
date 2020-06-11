@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.inventory;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
@@ -15,9 +17,14 @@ public class SlotLectern extends Slot {
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack) {
-        return false;
+    public void onSlotChanged() {
+        this.inventory.markDirty();
+        if(IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern){
+            TileEntityLectern lectern = (TileEntityLectern)IceAndFire.PROXY.getRefrencedTE();
+            lectern.selectedPages = lectern.randomizePages(this.getStack(), this.inventory.getStackInSlot(1));
+        }
     }
+
 
     @Override
     public ItemStack decrStackSize(int amount) {

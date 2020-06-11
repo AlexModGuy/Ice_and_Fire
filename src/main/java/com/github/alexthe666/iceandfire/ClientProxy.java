@@ -191,7 +191,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA_ARROW, manager -> new RenderHydraArrow(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MULTIPART, manager -> new RenderNothing(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_MULTIPART, manager -> new RenderNothing(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.ENTITY_MULTIPART, manager -> new RenderNothing(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.CYCLOPS_MULTIPART, manager -> new RenderNothing(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA_MULTIPART, manager -> new RenderNothing(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PODIUM, manager -> new RenderPodium(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.IAF_LECTERN, manager -> new RenderLectern(manager));
@@ -343,7 +343,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     public Object getFontRenderer() {
-        return this.bestiaryFontRenderer;
+        return Minecraft.getInstance().fontRenderer;
     }
 
     public int getDragon3rdPersonView() {

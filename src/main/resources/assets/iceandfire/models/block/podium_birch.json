@@ -1,7 +1,7 @@
 {
   "textures": {
-    "0": "block/planks_birch",
-    "particle": "block/planks_birch"
+    "0": "block/birch_planks",
+    "particle": "block/birch_planks"
   },
   "elements": [
     {

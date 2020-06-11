@@ -11,9 +11,6 @@
       "model": "iceandfire:block/dragon_bone_block",
       "x": 90,
       "y": 90
-    },
-    "axis=none": {
-      "model": "iceandfire:block/dragon_bone_block"
     }
   }
 }

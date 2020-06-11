@@ -77,7 +77,6 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
         f = MathHelper.clamp(f, -f3, f3);
         this.pageHelp2 += (f - this.pageHelp2) * 0.9F;
         this.pageFlip += this.pageHelp2;
-
     }
 
     @Override
@@ -167,12 +166,12 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
         }
         if (index == 0 && !flag) {
             this.markDirty();
-            selectedPages = randomizePages();
+            selectedPages = randomizePages(getStackInSlot(0), getStackInSlot(1));
         }
     }
 
-    public EnumBestiaryPages[] randomizePages() {
-        if (stacks.get(0).getItem() == IafItemRegistry.BESTIARY) {
+    public EnumBestiaryPages[] randomizePages(ItemStack bestiary, ItemStack manuscript) {
+        if (bestiary.getItem() == IafItemRegistry.BESTIARY) {
             List<EnumBestiaryPages> possibleList = getPossiblePages();
             localRand.setSeed(this.world.getGameTime());
             Collections.shuffle(possibleList, localRand);

@@ -1,7 +1,7 @@
 {
   "textures": {
-    "0": "block/planks_big_oak",
-    "particle": "block/planks_big_oak"
+    "0": "block/dark_oak_planks",
+    "particle": "block/dark_oak_planks"
   },
   "elements": [
     {

@@ -12,6 +12,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
@@ -1129,9 +1130,11 @@ public class GuiBestiary extends Screen {
     }
 
     public void drawImage(ResourceLocation texture, int x, int y, int u, int v, int width, int height, float scale) {
+        RenderSystem.pushMatrix();
         this.minecraft.getTextureManager().bindTexture(texture);
-        GL11.glScalef(scale, scale, scale);
-        blit(x, y, u, v, width, height, 1, 1);
+        RenderSystem.scalef(scale / 512F, scale / 512F, scale / 512F);
+        blit(x, y, u, v, width, height, 512, 512);
+        RenderSystem.popMatrix();
     }
 
     private void drawItemStack(ItemStack stack, int x, int y, float scale) {

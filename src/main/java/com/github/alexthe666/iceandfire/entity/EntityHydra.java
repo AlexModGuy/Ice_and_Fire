@@ -229,6 +229,12 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
             float maxAngle = 5;
             headBoxes[i] = new EntityHydraHead(this, 3.2F, ROTATE[getHeadCount() - 1][i] * 1.1F, 1.0F, 0.75F, 1.75F, 1, i, false);
             headBoxes[HEADS + i] = new EntityHydraHead(this, 2.1F, ROTATE[getHeadCount() - 1][i] * 1.1F, 1.0F, 0.75F, 0.75F, 1, i, true);
+            headBoxes[i].copyLocationAndAnglesFrom(this);
+            headBoxes[HEADS + i].copyLocationAndAnglesFrom(this);
+            headBoxes[i].setParent(this);
+            headBoxes[HEADS + i].setParent(this);
+            world.addEntity(headBoxes[i]);
+            world.addEntity(headBoxes[HEADS + i]);
         }
     }
 
@@ -243,7 +249,9 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         float partY = 1.0F - limbSwingAmount * 0.5F;
         for (int i = 0; i < getHeadCount(); i++) {
             headBoxes[i].setPosition(headBoxes[i].getPosX(), this.getPosY() + partY, headBoxes[i].getPosZ());
+            headBoxes[i].setParent(this);
             headBoxes[HEADS + i].setPosition(headBoxes[HEADS + i].getPosX(), this.getPosY() + partY, headBoxes[HEADS + i].getPosZ());
+            headBoxes[HEADS + i].setParent(this);
         }
         if (getHeadCount() > 1 && !isBurning()) {
             if (this.getHealth() < this.getMaxHealth() && this.ticksExisted % 30 == 0) {
@@ -262,11 +270,6 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
     }
 
     public void onUpdateParts() {
-        for (Entity entity : headBoxes) {
-            if (entity != null) {
-                entity.tick();
-            }
-        }
     }
 
     private void clearParts() {

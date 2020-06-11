@@ -8,11 +8,16 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.FMLPlayMessages;
 
 public class EntityMutlipartPart extends PartEntity {
 
     public EntityMutlipartPart(EntityType t, World world) {
         super(t, world);
+    }
+
+    public EntityMutlipartPart(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+        this(IafEntityRegistry.MULTIPART, worldIn);
     }
 
     public EntityMutlipartPart(EntityType type, LivingEntity parent, float radius, float angleYaw, float offsetY, float sizeX, float sizeY, float damageMultiplier) {
@@ -24,34 +29,29 @@ public class EntityMutlipartPart extends PartEntity {
     }
 
     public boolean processInitialInteract(PlayerEntity player, Hand hand) {
+        LivingEntity parent = getParent();
         if (world.isRemote) {
-            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(this.parent.getEntityId(), 0));
+            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(parent.getEntityId(), 0));
         }
-        return this.parent.processInitialInteract(player, hand);
+        return parent.processInitialInteract(player, hand);
     }
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (world.isRemote && source.getTrueSource() instanceof PlayerEntity) {
-            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(this.parent.getEntityId(), damage * damageMultiplier));
+        LivingEntity parent = getParent();
+        if (world.isRemote && source.getTrueSource() instanceof PlayerEntity && parent != null) {
+            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(parent.getEntityId(), damage * damageMultiplier));
         }
-        return this.parent.attackEntityFrom(source, damage * this.damageMultiplier);
+        return parent != null && parent.attackEntityFrom(source, damage * this.damageMultiplier);
     }
-
-    public LivingEntity getParent() {
-        return this.parent;
-    }
-
 
     @Override
     public void tick() {
         super.tick();
-        if (this.parent == null || shouldNotExist()) {
-            this.remove();
-        }
     }
 
     public boolean shouldNotExist() {
-        return !this.parent.isAlive();
+        LivingEntity parent = getParent();
+        return !parent.isAlive();
     }
 }
