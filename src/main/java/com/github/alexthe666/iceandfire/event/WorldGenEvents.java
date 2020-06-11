@@ -1,43 +1,10 @@
 package com.github.alexthe666.iceandfire.event;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.entity.*;
-import com.github.alexthe666.iceandfire.world.gen.*;
-import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
-import com.github.alexthe666.iceandfire.world.village.MapGenPixieVillage;
-import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
-import net.minecraft.block.state.pattern.BlockMatcher;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.init.Biomes;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldType;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraft.world.gen.feature.WorldGenMinable;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
-import net.minecraft.world.gen.structure.template.Template;
-import net.minecraft.world.gen.structure.template.TemplateManager;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.fml.common.IWorldGenerator;
+public class WorldGenEvents {
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+    /*implements
+} IWorldGenerator {
 
-public class WorldGenEvents implements IWorldGenerator {
-
-    public static final MapGenSnowVillage SNOW_VILLAGE = new MapGenSnowVillage();
-    public static final MapGenPixieVillage PIXIE_VILLAGE = new MapGenPixieVillage();
     public static final WorldGenMyrmexHive JUNGLE_MYRMEX_HIVE = new WorldGenMyrmexHive(false, true);
     public static final WorldGenMyrmexHive DESERT_MYRMEX_HIVE = new WorldGenMyrmexHive(false, false);
     private static final WorldGenFireDragonCave FIRE_DRAGON_CAVE = new WorldGenFireDragonCave();
@@ -63,13 +30,13 @@ public class WorldGenEvents implements IWorldGenerator {
         return world.getHeight(pos);
     }
 
-    private static boolean canHeightSkipBlock(BlockPos pos, World world) {
+    private static boolean canHeightSkipBlock(BlockPos pos, IWorld world) {
         BlockState state = world.getBlockState(pos);
-        return state.getBlock() instanceof BlockLog || state.getBlock() instanceof BlockLiquid;
+        return state.getBlock() instanceof LogBlock || !state.getFluidState().isEmpty();
     }
 
-    public static BlockPos degradeSurface(World world, BlockPos surface) {
-        while ((!world.getBlockState(surface).isOpaqueCube() || canHeightSkipBlock(surface, world)) && surface.getY() > 1) {
+    public static BlockPos degradeSurface(IWorld world, BlockPos surface) {
+        while ((!world.getBlockState(surface).isSolid() || canHeightSkipBlock(surface, world)) && surface.getY() > 1) {
             surface = surface.down();
         }
         return surface;
@@ -365,4 +332,6 @@ public class WorldGenEvents implements IWorldGenerator {
     //	}
     //	return false;
     //}
+
+     */
 }

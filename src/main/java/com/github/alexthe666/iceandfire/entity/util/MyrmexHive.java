@@ -19,6 +19,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
@@ -66,7 +67,7 @@ public class MyrmexHive {
         this.hiveUUID = UUID.randomUUID();
     }
 
-    public static BlockPos getGroundedPos(World world, BlockPos pos) {
+    public static BlockPos getGroundedPos(IWorld world, BlockPos pos) {
         BlockPos current = pos;
         while (world.isAirBlock(current.down()) && current.getY() > 0) {
             current = current.down();

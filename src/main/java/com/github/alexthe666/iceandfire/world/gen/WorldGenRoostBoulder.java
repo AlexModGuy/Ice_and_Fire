@@ -1,27 +1,27 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.Feature<NoFeatureConfig>;
 
 import java.util.Random;
+import java.util.stream.Collectors;
 
-public class WorldGenRoostBoulder extends Feature<NoFeatureConfig> {
+public class WorldGenRoostBoulder{
 
     private final Block block;
     private final int startRadius;
     private boolean replaceAir;
 
     public WorldGenRoostBoulder(Block blockIn, int startRadiusIn, boolean replaceAir) {
-        super(false);
         this.block = blockIn;
         this.startRadius = startRadiusIn;
         this.replaceAir = replaceAir;
     }
 
-    public boolean generate(World worldIn, Random rand, BlockPos position) {
+    public boolean generate(IWorld worldIn, Random rand, BlockPos position) {
         while (true) {
             label50:
             {
@@ -49,9 +49,9 @@ public class WorldGenRoostBoulder extends Feature<NoFeatureConfig> {
                     int l = i1 + rand.nextInt(2);
                     float f = (float) (j + k + l) * 0.333F + 0.5F;
 
-                    for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
-                        if (blockpos.distanceSq(position) <= (double) (f * f) && (replaceAir || worldIn.getBlockState(blockpos).isOpaqueCube())) {
-                            worldIn.setBlockState(blockpos, this.block.getDefaultState());
+                    for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
+                        if (blockpos.distanceSq(position) <= (double) (f * f) && (replaceAir || worldIn.getBlockState(blockpos).isSolid())) {
+                            worldIn.setBlockState(blockpos, this.block.getDefaultState(), 2);
                         }
                     }
 

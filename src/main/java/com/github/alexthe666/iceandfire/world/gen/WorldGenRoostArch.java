@@ -3,24 +3,26 @@ package com.github.alexthe666.iceandfire.world.gen;
 import net.minecraft.block.Block;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
 public class WorldGenRoostArch {
     private Block block;
+    private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
     public WorldGenRoostArch(Block block) {
         this.block = block;
     }
 
-    public boolean generate(World worldIn, Random rand, BlockPos position) {
+    public boolean generate(IWorld worldIn, Random rand, BlockPos position) {
         int height = 3 + rand.nextInt(3);
         int width = Math.min(3, height - 2);
-        Direction direction = Direction.HORIZONTALS[rand.nextInt(Direction.HORIZONTALS.length - 1)];
+        Direction direction = HORIZONTALS[rand.nextInt(HORIZONTALS.length - 1)];
         boolean diagonal = rand.nextBoolean();
         for (int i = 0; i < height; i++) {
-            worldIn.setBlockState(position.up(i), block.getDefaultState());
+            worldIn.setBlockState(position.up(i), block.getDefaultState(), 2);
         }
         BlockPos offsetPos = position;
         int placedWidths = 0;
@@ -30,12 +32,12 @@ public class WorldGenRoostArch {
                 offsetPos = position.up(height).offset(direction, i).offset(direction.rotateY(), i);
             }
             if (placedWidths < width - 1 || rand.nextBoolean()) {
-                worldIn.setBlockState(offsetPos, block.getDefaultState());
+                worldIn.setBlockState(offsetPos, block.getDefaultState(), 2);
             }
             placedWidths++;
         }
         while (worldIn.isAirBlock(offsetPos.down()) && offsetPos.getY() > 0) {
-            worldIn.setBlockState(offsetPos.down(), block.getDefaultState());
+            worldIn.setBlockState(offsetPos.down(), block.getDefaultState(), 2);
             offsetPos = offsetPos.down();
         }
         return true;
