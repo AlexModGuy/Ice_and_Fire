@@ -1,15 +1,21 @@
 package com.github.alexthe666.iceandfire.message;
 
+import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
-import io.netty.buffer.ByteBuf;
-import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageUpdatePixieHouse extends AbstractMessage<MessageUpdatePixieHouse> {
+import java.util.function.Supplier;
+
+public class MessageUpdatePixieHouse {
 
     public long blockPos;
     public boolean hasPixie;
@@ -25,39 +31,38 @@ public class MessageUpdatePixieHouse extends AbstractMessage<MessageUpdatePixieH
     public MessageUpdatePixieHouse() {
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        blockPos = buf.readLong();
-        hasPixie = buf.readBoolean();
-        pixieType = buf.readInt();
+    public static MessageUpdatePixieHouse read(PacketBuffer buf) {
+        return new MessageUpdatePixieHouse(buf.readLong(), buf.readBoolean(), buf.readInt());
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeLong(blockPos);
-        buf.writeBoolean(hasPixie);
-        buf.writeInt(pixieType);
+    public static void write(MessageUpdatePixieHouse message, PacketBuffer buf) {
+        buf.writeLong(message.blockPos);
+        buf.writeBoolean(message.hasPixie);
+        buf.writeInt(message.pixieType);
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageUpdatePixieHouse message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            BlockPos pos = BlockPos.fromLong(message.blockPos);
-            if (client.world.getTileEntity(pos) != null && client.world.getTileEntity(pos) instanceof TileEntityPixieHouse) {
-                TileEntityPixieHouse house = (TileEntityPixieHouse) client.world.getTileEntity(pos);
-                house.hasPixie = message.hasPixie;
-                house.pixieType = message.pixieType;
-            } else if (client.world.getTileEntity(pos) != null && client.world.getTileEntity(pos) instanceof TileEntityJar) {
-                TileEntityJar jar = (TileEntityJar) client.world.getTileEntity(pos);
-                jar.hasPixie = message.hasPixie;
-                jar.pixieType = message.pixieType;
+    public static class Handler {
+        public Handler() {
+        }
+
+        public static void handle(MessageUpdatePixieHouse message, Supplier<NetworkEvent.Context> context) {
+            ((NetworkEvent.Context) context.get()).setPacketHandled(true);
+            PlayerEntity player = context.get().getSender();
+            if (player != null) {
+                if (player.world != null) {
+                    BlockPos pos = BlockPos.fromLong(message.blockPos);
+                    if (player.world.getTileEntity(pos) != null && player.world.getTileEntity(pos) instanceof TileEntityPixieHouse) {
+                        TileEntityPixieHouse house = (TileEntityPixieHouse) player.world.getTileEntity(pos);
+                        house.hasPixie = message.hasPixie;
+                        house.pixieType = message.pixieType;
+                    } else if (player.world.getTileEntity(pos) != null && player.world.getTileEntity(pos) instanceof TileEntityJar) {
+                        TileEntityJar jar = (TileEntityJar) player.world.getTileEntity(pos);
+                        jar.hasPixie = message.hasPixie;
+                        jar.pixieType = message.pixieType;
+                    }
+                }
             }
         }
     }
 
-    @Override
-    public void onServerReceived(MinecraftServer server, MessageUpdatePixieHouse message, PlayerEntity player, MessageContext messageContext) {
-
-    }
 }

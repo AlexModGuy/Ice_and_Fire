@@ -1,16 +1,18 @@
 package com.github.alexthe666.iceandfire.message;
 
+import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.iceandfire.entity.EntityHydra;
 import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
-import io.netty.buffer.ByteBuf;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
-import net.ilexiconn.llibrary.server.network.AbstractMessage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageRemoveChainedEntity extends AbstractMessage<MessageRemoveChainedEntity> {
+import java.util.function.Supplier;
+
+public class MessageRemoveChainedEntity {
 
     public int chainedId;
     public int RemoveedEntityId;
@@ -23,39 +25,31 @@ public class MessageRemoveChainedEntity extends AbstractMessage<MessageRemoveCha
     public MessageRemoveChainedEntity() {
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        chainedId = buf.readInt();
-        RemoveedEntityId = buf.readInt();
+    public static MessageRemoveChainedEntity read(PacketBuffer buf) {
+        return new MessageRemoveChainedEntity(buf.readInt(), buf.readInt());
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(chainedId);
-        buf.writeInt(RemoveedEntityId);
+    public static void write(MessageRemoveChainedEntity message, PacketBuffer buf) {
+        buf.writeInt(message.chainedId);
+        buf.writeInt(message.RemoveedEntityId);
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageRemoveChainedEntity message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            Entity entity = player.world.getEntityByID(message.chainedId);
-            Entity toChain = player.world.getEntityByID(message.RemoveedEntityId);
-            if (entity != null && entity instanceof LivingEntity && toChain != null) {
-                ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
-                properties.connectedEntities.remove(toChain);
-            }
+    public static class Handler {
+        public Handler() {
         }
-    }
 
-    @Override
-    public void onServerReceived(MinecraftServer server, MessageRemoveChainedEntity message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            Entity entity = player.world.getEntityByID(message.chainedId);
-            Entity toChain = player.world.getEntityByID(message.RemoveedEntityId);
-            if (entity != null && entity instanceof LivingEntity && toChain != null) {
-                ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
-                properties.connectedEntities.remove(toChain);
+        public static void handle(MessageRemoveChainedEntity message, Supplier<NetworkEvent.Context> context) {
+            ((NetworkEvent.Context) context.get()).setPacketHandled(true);
+            PlayerEntity player = context.get().getSender();
+            if (player != null) {
+                if (player.world != null) {
+                    Entity entity = player.world.getEntityByID(message.chainedId);
+                    Entity toChain = player.world.getEntityByID(message.RemoveedEntityId);
+                    if (entity != null && entity instanceof LivingEntity && toChain != null) {
+                        ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
+                        properties.connectedEntities.remove(toChain);
+                    }
+                }
             }
         }
     }

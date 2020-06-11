@@ -2,14 +2,14 @@ package com.github.alexthe666.iceandfire.message;
 
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
-import io.netty.buffer.ByteBuf;
-import net.ilexiconn.llibrary.server.network.AbstractMessage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageHippogryphArmor extends AbstractMessage<MessageHippogryphArmor> {
+import java.util.function.Supplier;
+
+public class MessageHippogryphArmor {
 
     public int dragonId;
     public int slot_index;
@@ -24,53 +24,50 @@ public class MessageHippogryphArmor extends AbstractMessage<MessageHippogryphArm
     public MessageHippogryphArmor() {
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        dragonId = buf.readInt();
-        slot_index = buf.readInt();
-        armor_type = buf.readInt();
-
+    public static MessageHippogryphArmor read(PacketBuffer buf) {
+        return new MessageHippogryphArmor(buf.readInt(), buf.readInt(), buf.readInt());
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(dragonId);
-        buf.writeInt(slot_index);
-        buf.writeInt(armor_type);
+    public static void write(MessageHippogryphArmor message, PacketBuffer buf) {
+        buf.writeInt(message.dragonId);
+        buf.writeInt(message.slot_index);
+        buf.writeInt(message.armor_type);
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageHippogryphArmor message, PlayerEntity player, MessageContext messageContext) {
+    public static class Handler {
+        public Handler() {
+        }
 
-    }
-
-    @Override
-    public void onServerReceived(MinecraftServer server, MessageHippogryphArmor message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            Entity entity = player.world.getEntityByID(message.dragonId);
-            if (entity != null && entity instanceof EntityHippogryph) {
-                EntityHippogryph hippo = (EntityHippogryph) entity;
-                if (message.slot_index == 0) {
-                    hippo.setSaddled(message.armor_type == 1);
-                }
-                if (message.slot_index == 1) {
-                    hippo.setChested(message.armor_type == 1);
-                }
-                if (message.slot_index == 2) {
-                    hippo.setArmor(message.armor_type);
-                }
-            }
-            if (entity != null && entity instanceof EntityHippocampus) {
-                EntityHippocampus hippo = (EntityHippocampus) entity;
-                if (message.slot_index == 0) {
-                    hippo.setSaddled(message.armor_type == 1);
-                }
-                if (message.slot_index == 1) {
-                    hippo.setChested(message.armor_type == 1);
-                }
-                if (message.slot_index == 2) {
-                    hippo.setArmor(message.armor_type);
+        public static void handle(MessageHippogryphArmor message, Supplier<NetworkEvent.Context> context) {
+            ((NetworkEvent.Context) context.get()).setPacketHandled(true);
+            PlayerEntity player = context.get().getSender();
+            if (player != null) {
+                if (player.world != null) {
+                    Entity entity = player.world.getEntityByID(message.dragonId);
+                    if (entity != null && entity instanceof EntityHippogryph) {
+                        EntityHippogryph hippo = (EntityHippogryph) entity;
+                        if (message.slot_index == 0) {
+                            hippo.setSaddled(message.armor_type == 1);
+                        }
+                        if (message.slot_index == 1) {
+                            hippo.setChested(message.armor_type == 1);
+                        }
+                        if (message.slot_index == 2) {
+                            hippo.setArmor(message.armor_type);
+                        }
+                    }
+                    if (entity != null && entity instanceof EntityHippocampus) {
+                        EntityHippocampus hippo = (EntityHippocampus) entity;
+                        if (message.slot_index == 0) {
+                            hippo.setSaddled(message.armor_type == 1);
+                        }
+                        if (message.slot_index == 1) {
+                            hippo.setChested(message.armor_type == 1);
+                        }
+                        if (message.slot_index == 2) {
+                            hippo.setArmor(message.armor_type);
+                        }
+                    }
                 }
             }
         }

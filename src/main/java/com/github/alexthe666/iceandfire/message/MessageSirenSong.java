@@ -1,14 +1,18 @@
 package com.github.alexthe666.iceandfire.message;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import io.netty.buffer.ByteBuf;
-import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageSirenSong extends AbstractMessage<MessageSirenSong> {
+import java.util.function.Supplier;
+
+public class MessageSirenSong {
 
     public int sirenId;
     public boolean isSinging;
@@ -21,39 +25,31 @@ public class MessageSirenSong extends AbstractMessage<MessageSirenSong> {
     public MessageSirenSong() {
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        sirenId = buf.readInt();
-        isSinging = buf.readBoolean();
-
+    public static MessageSirenSong read(PacketBuffer buf) {
+        return new MessageSirenSong(buf.readInt(), buf.readBoolean());
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(sirenId);
-        buf.writeBoolean(isSinging);
+    public static void write(MessageSirenSong message, PacketBuffer buf) {
+        buf.writeInt(message.sirenId);
+        buf.writeBoolean(message.isSinging);
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageSirenSong message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            Entity entity = player.world.getEntityByID(message.sirenId);
-            if (entity != null && entity instanceof EntitySiren) {
-                EntitySiren siren = (EntitySiren) entity;
-                siren.setSinging(message.isSinging);
+
+    public static class Handler {
+        public Handler() {
+        }
+
+        public static void handle(MessageSirenSong message, Supplier<NetworkEvent.Context> context) {
+            ((NetworkEvent.Context) context.get()).setPacketHandled(true);
+            PlayerEntity player = context.get().getSender();
+            if (player != null && player.world != null) {
+                Entity entity = player.world.getEntityByID(message.sirenId);
+                if (entity != null && entity instanceof EntitySiren) {
+                    EntitySiren siren = (EntitySiren) entity;
+                    siren.setSinging(message.isSinging);
+                }
             }
         }
     }
 
-    @Override
-    public void onServerReceived(MinecraftServer server, MessageSirenSong message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            Entity entity = player.world.getEntityByID(message.sirenId);
-            if (entity != null && entity instanceof EntitySiren) {
-                EntitySiren siren = (EntitySiren) entity;
-                siren.setSinging(message.isSinging);
-            }
-        }
-    }
 }

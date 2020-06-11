@@ -1,15 +1,21 @@
 package com.github.alexthe666.iceandfire.message;
 
+import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.ISyncMount;
 import io.netty.buffer.ByteBuf;
-import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageStartRidingMob extends AbstractMessage<MessageStartRidingMob> {
+import java.util.function.Supplier;
+
+public class MessageStartRidingMob {
 
     public int dragonId;
     public boolean ride;
@@ -22,38 +28,35 @@ public class MessageStartRidingMob extends AbstractMessage<MessageStartRidingMob
     public MessageStartRidingMob() {
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        dragonId = buf.readInt();
-        ride = buf.readBoolean();
-
+    public static MessageStartRidingMob read(PacketBuffer buf) {
+        return new MessageStartRidingMob(buf.readInt(), buf.readBoolean());
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(dragonId);
-        buf.writeBoolean(ride);
+    public static void write(MessageStartRidingMob message, PacketBuffer buf) {
+        buf.writeDouble(message.dragonId);
+        buf.writeBoolean(message.ride);
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageStartRidingMob message, PlayerEntity player, MessageContext messageContext) {
-    }
+    public static class Handler {
+        public Handler() {
+        }
 
-    @Override
-    public void onServerReceived(MinecraftServer server, MessageStartRidingMob message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            Entity entity = player.world.getEntityByID(message.dragonId);
-            if (entity != null && entity instanceof ISyncMount && entity instanceof TameableEntity) {
-                TameableEntity dragon = (TameableEntity) entity;
-                if(message.ride){
-                    player.startRiding(dragon);
-                }else{
-                    player.dismountRidingEntity();
+        public static void handle(MessageStartRidingMob message, Supplier<NetworkEvent.Context> context) {
+            ((NetworkEvent.Context) context.get()).setPacketHandled(true);
+            PlayerEntity player = context.get().getSender();
+            if (player != null) {
+                if (player.world != null) {
+                    Entity entity = player.world.getEntityByID(message.dragonId);
+                    if (entity != null && entity instanceof ISyncMount && entity instanceof TameableEntity) {
+                        TameableEntity dragon = (TameableEntity) entity;
+                        if(message.ride){
+                            player.startRiding(dragon);
+                        }else{
+                            player.stopRiding();
+                        }
+                    }
                 }
             }
         }
     }
-
-
 }

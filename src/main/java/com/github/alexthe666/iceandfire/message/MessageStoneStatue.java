@@ -1,17 +1,22 @@
 package com.github.alexthe666.iceandfire.message;
 
+import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
+import com.github.alexthe666.iceandfire.entity.util.ISyncMount;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import io.netty.buffer.ByteBuf;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
-import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageStoneStatue extends AbstractMessage<MessageStoneStatue> {
+import java.util.function.Supplier;
+
+public class MessageStoneStatue {
 
     public int entityId;
     public boolean isStone;
@@ -24,42 +29,31 @@ public class MessageStoneStatue extends AbstractMessage<MessageStoneStatue> {
     public MessageStoneStatue() {
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        entityId = buf.readInt();
-        isStone = buf.readBoolean();
-
+    public static MessageStoneStatue read(PacketBuffer buf) {
+        return new MessageStoneStatue(buf.readInt(), buf.readBoolean());
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(entityId);
-        buf.writeBoolean(isStone);
+    public static void write(MessageStoneStatue message, PacketBuffer buf) {
+        buf.writeDouble(message.entityId);
+        buf.writeBoolean(message.isStone);
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageStoneStatue message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            Entity entity = player.world.getEntityByID(message.entityId);
-            if (entity != null && entity instanceof LivingEntity) {
-                StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-                properties.isStone = message.isStone;
-            }
+    public static class Handler {
+        public Handler() {
         }
-    }
 
-    @Override
-    public void onServerReceived(MinecraftServer server, MessageStoneStatue message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            if(player.getHeldItemMainhand().getItem() == IafItemRegistry.GORGON_HEAD){
-                Entity entity = player.world.getEntityByID(message.entityId);
-                if (entity != null && entity instanceof LivingEntity) {
-                    StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-                    properties.isStone = message.isStone;
+        public static void handle(MessageStoneStatue message, Supplier<NetworkEvent.Context> context) {
+            ((NetworkEvent.Context) context.get()).setPacketHandled(true);
+            PlayerEntity player = context.get().getSender();
+            if (player != null) {
+                if (player.world != null) {
+                    Entity entity = player.world.getEntityByID(message.entityId);
+                    if (entity != null && entity instanceof LivingEntity) {
+                        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
+                        properties.isStone = message.isStone;
+                    }
                 }
             }
-
         }
     }
 }

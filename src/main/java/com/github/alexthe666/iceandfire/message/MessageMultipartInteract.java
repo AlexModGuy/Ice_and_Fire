@@ -1,17 +1,18 @@
 package com.github.alexthe666.iceandfire.message;
 
-import io.netty.buffer.ByteBuf;
-import net.ilexiconn.llibrary.server.network.AbstractMessage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageMultipartInteract extends AbstractMessage<MessageMultipartInteract> {
+import java.util.function.Supplier;
+
+public class MessageMultipartInteract {
 
     public int creatureID;
     public float dmg;
@@ -24,49 +25,35 @@ public class MessageMultipartInteract extends AbstractMessage<MessageMultipartIn
     public MessageMultipartInteract() {
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        creatureID = buf.readInt();
-        dmg = buf.readFloat();
+    public static MessageMultipartInteract read(PacketBuffer buf) {
+        return new MessageMultipartInteract(buf.readInt(), buf.readFloat());
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(creatureID);
-        buf.writeFloat(dmg);
+    public static void write(MessageMultipartInteract message, PacketBuffer buf) {
+        buf.writeInt(message.creatureID);
+        buf.writeFloat(message.dmg);
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void onClientReceived(Minecraft client, MessageMultipartInteract message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            Entity entity = player.world.getEntityByID(message.creatureID);
-            if (entity != null && entity instanceof LivingEntity) {
-                double dist = player.getDistance(entity);
-                LivingEntity mob = (LivingEntity) entity;
-                if(dist < 100) {
-                    if (message.dmg > 0F) {
-                        mob.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);
-                    } else {
-                        mob.processInitialInteract(player, Hand.MAIN_HAND);
-                    }
-                }
-            }
+    public static class Handler {
+        public Handler() {
         }
-    }
 
-    @Override
-    public void onServerReceived(MinecraftServer server, MessageMultipartInteract message, PlayerEntity player, MessageContext messageContext) {
-        if (player.world != null) {
-            Entity entity = player.world.getEntityByID(message.creatureID);
-            if (entity != null && entity instanceof LivingEntity) {
-                double dist = player.getDistance(entity);
-                LivingEntity mob = (LivingEntity) entity;
-                if(dist < 100) {
-                    if (message.dmg > 0F) {
-                        mob.attackEntityFrom(DamageSource.causeMobDamage(player), dmg);
-                    } else {
-                        mob.processInitialInteract(player, Hand.MAIN_HAND);
+        public static void handle(MessageMultipartInteract message, Supplier<NetworkEvent.Context> context) {
+            ((NetworkEvent.Context) context.get()).setPacketHandled(true);
+            PlayerEntity player = context.get().getSender();
+            if (player != null) {
+                if (player.world != null) {
+                    Entity entity = player.world.getEntityByID(message.creatureID);
+                    if (entity != null && entity instanceof LivingEntity) {
+                        double dist = player.getDistance(entity);
+                        LivingEntity mob = (LivingEntity) entity;
+                        if(dist < 100) {
+                            if (message.dmg > 0F) {
+                                mob.attackEntityFrom(DamageSource.causeMobDamage(player), message.dmg);
+                            } else {
+                                mob.processInitialInteract(player, Hand.MAIN_HAND);
+                            }
+                        }
                     }
                 }
             }
