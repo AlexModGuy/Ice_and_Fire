@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/armor_gray_boots"
+    "layer0": "iceandfire:item/armor_gray_boots"
   }
 }

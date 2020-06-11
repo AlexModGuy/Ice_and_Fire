@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:dread_stone_bricks_cracked"
+    "": {
+      "model": "iceandfire:block/dread_stone_bricks_cracked"
     }
   }
 }

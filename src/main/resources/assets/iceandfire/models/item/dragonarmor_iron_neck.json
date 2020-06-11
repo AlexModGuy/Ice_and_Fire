@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/dragonarmor_iron_neck"
+    "layer0": "iceandfire:item/dragonarmor_iron_neck"
   }
 }

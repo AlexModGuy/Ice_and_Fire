@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/armor_green_helmet"
+    "layer0": "iceandfire:item/armor_green_helmet"
   }
 }

@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/dragonbone_bow_pulling_0"
+    "layer0": "iceandfire:item/dragonbone_bow_pulling_0"
   },
   "display": {
     "thirdperson_righthand": {

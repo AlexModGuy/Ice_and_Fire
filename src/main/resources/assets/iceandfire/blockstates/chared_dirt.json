@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:chared_dirt"
+    "": {
+      "model": "iceandfire:block/chared_dirt"
     }
   }
 }

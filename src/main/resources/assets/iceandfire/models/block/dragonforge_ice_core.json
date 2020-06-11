@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "iceandfire:blocks/dragonforge_ice_core"
+    "all": "iceandfire:block/dragonforge_ice_core"
   }
 }

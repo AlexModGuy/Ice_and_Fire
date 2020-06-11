@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "iceandfire:items/stymphalian_bird_dagger"
+    "layer0": "iceandfire:item/stymphalian_bird_dagger"
   }
 }

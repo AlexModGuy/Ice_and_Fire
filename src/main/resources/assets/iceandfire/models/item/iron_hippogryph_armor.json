@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/iron_hippogryph_armor"
+    "layer0": "iceandfire:item/iron_hippogryph_armor"
   }
 }

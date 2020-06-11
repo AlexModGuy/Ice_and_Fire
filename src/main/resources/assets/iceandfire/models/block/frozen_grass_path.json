@@ -1,10 +1,10 @@
 {
   "parent": "block/block",
   "textures": {
-    "particle": "iceandfire:blocks/frozen_dirt",
-    "top": "iceandfire:blocks/frozen_grass_path_top",
-    "side": "iceandfire:blocks/frozen_grass_path_side",
-    "bottom": "iceandfire:blocks/frozen_dirt"
+    "particle": "iceandfire:block/frozen_dirt",
+    "top": "iceandfire:block/frozen_grass_path_top",
+    "side": "iceandfire:block/frozen_grass_path_side",
+    "bottom": "iceandfire:block/frozen_dirt"
   },
   "elements": [
     {

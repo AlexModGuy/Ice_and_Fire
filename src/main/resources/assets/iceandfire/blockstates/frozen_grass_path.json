@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:frozen_grass_path"
+    "": {
+      "model": "iceandfire:block/frozen_grass_path"
     }
   }
 }

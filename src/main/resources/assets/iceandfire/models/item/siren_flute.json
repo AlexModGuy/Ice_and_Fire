@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "iceandfire:items/siren_flute"
+    "layer0": "iceandfire:item/siren_flute"
   }
 }

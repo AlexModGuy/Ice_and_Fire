@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "iceandfire:items/dragon_axe"
+    "layer0": "iceandfire:item/dragon_axe"
   }
 }

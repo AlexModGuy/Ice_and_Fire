@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:dragonforge_ice_core_disabled"
+    "": {
+      "model": "iceandfire:block/dragonforge_ice_core_disabled"
     }
   }
 }

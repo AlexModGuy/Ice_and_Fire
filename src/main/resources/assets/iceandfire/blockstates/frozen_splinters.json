@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:frozen_splinters"
+    "": {
+      "model": "iceandfire:block/frozen_splinters"
     }
   }
 }

@@ -2,46 +2,34 @@ package com.github.alexthe666.iceandfire.compat.jei;
 
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.compat.jei.firedragonforge.FireDragonForgeCatagory;
-import com.github.alexthe666.iceandfire.compat.jei.firedragonforge.FireDragonForgeRecipeHandler;
-import com.github.alexthe666.iceandfire.compat.jei.firedragonforge.FireDragonForgeRecipeWrapper;
 import com.github.alexthe666.iceandfire.compat.jei.icedragonforge.IceDragonForgeCatagory;
-import com.github.alexthe666.iceandfire.compat.jei.icedragonforge.IceDragonForgeRecipeHandler;
-import com.github.alexthe666.iceandfire.compat.jei.icedragonforge.IceDragonForgeRecipeWrapper;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
-import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import mezz.jei.api.IModPlugin;
-import mezz.jei.api.IModRegistry;
-import mezz.jei.api.JEIPlugin;
-import mezz.jei.api.recipe.IRecipeCategoryRegistration;
-import mezz.jei.api.recipe.IRecipeWrapper;
-import mezz.jei.api.recipe.IRecipeWrapperFactory;
+import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
+import mezz.jei.api.registration.IRecipeCategoryRegistration;
+import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
-@JEIPlugin
+@JeiPlugin
 public class IceAndFireJEIPlugin implements IModPlugin {
 
-    public static final String FIRE_DRAGON_FORGE_ID = "iceandfire.fire_dragon_forge";
-    public static final String ICE_DRAGON_FORGE_ID = "iceandfire.ice_dragon_forge";
+    public static final ResourceLocation MOD = new ResourceLocation("iceandfire:iceandfire");
+    public static final ResourceLocation FIRE_DRAGON_FORGE_ID = new ResourceLocation("iceandfire:fire_dragon_forge");
+    public static final ResourceLocation ICE_DRAGON_FORGE_ID = new ResourceLocation("iceandfire:ice_dragon_forge");
 
-    private static void addDescription(IModRegistry registry, ItemStack stack) {
-        registry.addIngredientInfo(stack, ItemStack.class, stack.getTranslationKey() + ".jei_desc");
+    private void addDescription(IRecipeRegistration registry, ItemStack itemStack) {
+        registry.addIngredientInfo(itemStack, VanillaTypes.ITEM, itemStack.getTranslationKey() + ".jei_desc");
     }
 
     @SuppressWarnings("deprecation")
-    public void register(IModRegistry registry) {
+    public void registerRecipes(IRecipeRegistration registry) {
         registry.addRecipes(IafRecipeRegistry.FIRE_FORGE_RECIPES, FIRE_DRAGON_FORGE_ID);
-        registry.addRecipeHandlers(new FireDragonForgeRecipeHandler());
-        registry.handleRecipes(DragonForgeRecipe.class, new FireDragonForgeFactory(), FIRE_DRAGON_FORGE_ID);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(IafBlockRegistry.dragonforge_fire_core_disabled), FIRE_DRAGON_FORGE_ID);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE), FIRE_DRAGON_FORGE_ID);
-
         registry.addRecipes(IafRecipeRegistry.ICE_FORGE_RECIPES, ICE_DRAGON_FORGE_ID);
-        registry.addRecipeHandlers(new IceDragonForgeRecipeHandler());
-        registry.handleRecipes(DragonForgeRecipe.class, new IceDragonForgeFactory(), ICE_DRAGON_FORGE_ID);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED), ICE_DRAGON_FORGE_ID);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(IafBlockRegistry.DRAGONFORGE_ICE_CORE), ICE_DRAGON_FORGE_ID);
         addDescription(registry, new ItemStack(IafItemRegistry.FIRE_DRAGON_BLOOD));
         addDescription(registry, new ItemStack(IafItemRegistry.ICE_DRAGON_BLOOD));
         addDescription(registry, new ItemStack(IafItemRegistry.DRAGONEGG_RED));
@@ -52,8 +40,8 @@ public class IceAndFireJEIPlugin implements IModPlugin {
         addDescription(registry, new ItemStack(IafItemRegistry.DRAGONEGG_WHITE));
         addDescription(registry, new ItemStack(IafItemRegistry.DRAGONEGG_SAPPHIRE));
         addDescription(registry, new ItemStack(IafItemRegistry.DRAGONEGG_SILVER));
-        addDescription(registry, new ItemStack(IafItemRegistry.DRAGON_SKULL));
-        addDescription(registry, new ItemStack(IafItemRegistry.DRAGON_SKULL, 1, 1));
+        addDescription(registry, new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE));
+        addDescription(registry, new ItemStack(IafItemRegistry.DRAGON_SKULL_ICE));
         addDescription(registry, new ItemStack(IafItemRegistry.FIRE_STEW));
         addDescription(registry, new ItemStack(IafItemRegistry.FROST_STEW));
 
@@ -61,7 +49,7 @@ public class IceAndFireJEIPlugin implements IModPlugin {
             addDescription(registry, new ItemStack(skull.skull_item));
         }
         for (ItemStack stack : IafRecipeRegistry.BANNER_ITEMS) {
-            registry.addIngredientInfo(stack, ItemStack.class, "item.iceandfire.custom_banner.jei_desc");
+            registry.addIngredientInfo(stack, VanillaTypes.ITEM, "item.iceandfire.custom_banner.jei_desc");
         }
     }
 
@@ -70,17 +58,15 @@ public class IceAndFireJEIPlugin implements IModPlugin {
         registry.addRecipeCategories(new IceDragonForgeCatagory());
     }
 
-    public class FireDragonForgeFactory implements IRecipeWrapperFactory<DragonForgeRecipe> {
-        @Override
-        public IRecipeWrapper getRecipeWrapper(DragonForgeRecipe recipe) {
-            return new FireDragonForgeRecipeWrapper(recipe);
-        }
+    @Override
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registry) {
+        registry.addRecipeCatalyst(new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE), FIRE_DRAGON_FORGE_ID);
+        registry.addRecipeCatalyst(new ItemStack(IafBlockRegistry.DRAGONFORGE_ICE_CORE), ICE_DRAGON_FORGE_ID);
     }
 
-    public class IceDragonForgeFactory implements IRecipeWrapperFactory<DragonForgeRecipe> {
-        @Override
-        public IRecipeWrapper getRecipeWrapper(DragonForgeRecipe recipe) {
-            return new IceDragonForgeRecipeWrapper(recipe);
-        }
+    @Override
+    public ResourceLocation getPluginUid() {
+        return MOD;
     }
+
 }

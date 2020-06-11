@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/sickly_dragon_meal"
+    "layer0": "iceandfire:item/sickly_dragon_meal"
   }
 }
 

@@ -1,6 +1,6 @@
 {
   "parent": "block/torch",
   "textures": {
-    "torch": "iceandfire:blocks/dread_torch"
+    "torch": "iceandfire:block/dread_torch"
   }
 }

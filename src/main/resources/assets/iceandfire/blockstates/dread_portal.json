@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:dread_portal"
+    "": {
+      "model": "iceandfire:block/dread_portal"
     }
   }
 }

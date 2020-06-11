@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:jar_empty"
+    "": {
+      "model": "iceandfire:block/jar_empty"
     }
   }
 }

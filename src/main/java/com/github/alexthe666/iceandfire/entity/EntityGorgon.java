@@ -203,7 +203,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                             if (!world.isRemote) {
                                 this.getAttackTarget().attackEntityFrom(IafDamageRegistry.GORGON_DMG, Integer.MAX_VALUE);
                                 if (!this.getAttackTarget().isAlive() && playerStatueCooldown == 0) {
-                                    EntityStoneStatue statue = new EntityStoneStatue(world);
+                                    EntityStoneStatue statue = new EntityStoneStatue(IafEntityRegistry.STONE_STATUE,world);
                                     statue.setPositionAndRotation(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY(), this.getAttackTarget().getPosZ(), this.getAttackTarget().rotationYaw, this.getAttackTarget().rotationPitch);
                                     statue.smallArms = true;
                                     if (!world.isRemote) {

@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/dread_key"
+    "layer0": "iceandfire:item/dread_key"
   }
 }

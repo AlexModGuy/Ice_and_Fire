@@ -26,7 +26,7 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
     private NonNullList<ItemStack> chestContents = NonNullList.withSize(18, ItemStack.EMPTY);
 
-    protected TileEntityMyrmexCocoon() {
+    public TileEntityMyrmexCocoon() {
         super(IafTileEntityRegistry.MYRMEX_COCOON);
     }
 

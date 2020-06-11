@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:dragonscale_bronze"
+    "": {
+      "model": "iceandfire:block/dragonscale_bronze"
     }
   }
 }

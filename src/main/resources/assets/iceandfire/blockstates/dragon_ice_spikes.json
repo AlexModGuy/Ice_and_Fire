@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:dragon_ice_spikes"
+    "": {
+      "model": "iceandfire:block/dragon_ice_spikes"
     }
   }
 }

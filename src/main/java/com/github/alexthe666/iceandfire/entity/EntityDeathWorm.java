@@ -830,7 +830,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
     }
 
     @Override
-    public boolean canPhaseThroughBlock(World world, BlockPos pos) {
+    public boolean canPhaseThroughBlock(IWorld world, BlockPos pos) {
         return world.getBlockState(pos).getMaterial() == Material.SAND;
     }
 

@@ -1,6 +1,25 @@
 package com.github.alexthe666.iceandfire.event;
 
-public class WorldGenEvents {
+import net.minecraft.block.BlockState;
+import net.minecraft.block.LogBlock;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
+
+public class WorldGenUtils {
+
+    private static boolean canHeightSkipBlock(BlockPos pos, IWorld world) {
+        BlockState state = world.getBlockState(pos);
+        return state.getBlock() instanceof LogBlock || !state.getFluidState().isEmpty();
+    }
+
+    public static BlockPos degradeSurface(IWorld world, BlockPos surface) {
+        while ((!world.getBlockState(surface).isSolid() || canHeightSkipBlock(surface, world)) && surface.getY() > 1) {
+            surface = surface.down();
+        }
+        return surface;
+    }
+
+    //TODO: redo pixie village gen
 
     /*implements
 } IWorldGenerator {
@@ -28,18 +47,6 @@ public class WorldGenEvents {
 
     public static BlockPos getHeight(World world, BlockPos pos) {
         return world.getHeight(pos);
-    }
-
-    private static boolean canHeightSkipBlock(BlockPos pos, IWorld world) {
-        BlockState state = world.getBlockState(pos);
-        return state.getBlock() instanceof LogBlock || !state.getFluidState().isEmpty();
-    }
-
-    public static BlockPos degradeSurface(IWorld world, BlockPos surface) {
-        while ((!world.getBlockState(surface).isSolid() || canHeightSkipBlock(surface, world)) && surface.getY() > 1) {
-            surface = surface.down();
-        }
-        return surface;
     }
 
     @Override

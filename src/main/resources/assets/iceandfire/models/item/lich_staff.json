@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/lich_staff"
+    "layer0": "iceandfire:item/lich_staff"
   },
   "display": {
     "thirdperson_righthand": {

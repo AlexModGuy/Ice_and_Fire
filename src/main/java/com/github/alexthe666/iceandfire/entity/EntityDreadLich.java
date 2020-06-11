@@ -60,9 +60,8 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
         this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this, new Class[] {IDreadMob.class}));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.addGoal(3, new DreadAITargetNonDread(this, LivingEntity.class, false, new Predicate<Entity>() {
-            @Override
-            public boolean apply(@Nullable Entity entity) {
+        this.targetSelector.addGoal(3, new DreadAITargetNonDread(this, LivingEntity.class, false, new Predicate<LivingEntity>() {
+            public boolean apply(LivingEntity entity) {
                 return entity instanceof LivingEntity && DragonUtils.canHostilesTarget(entity);
             }
         }));

@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "iceandfire:items/dragon_hoe"
+    "layer0": "iceandfire:item/dragon_hoe"
   }
 }

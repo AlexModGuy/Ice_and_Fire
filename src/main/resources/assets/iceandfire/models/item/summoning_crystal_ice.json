@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/summon_crystal_ice"
+    "layer0": "iceandfire:item/summon_crystal_ice"
   },
   "overrides": [
     {

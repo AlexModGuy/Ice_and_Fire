@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/scales_bronze"
+    "layer0": "iceandfire:item/scales_bronze"
   }
 }

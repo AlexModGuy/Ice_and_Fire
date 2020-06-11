@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/myrmex_jungle_boots"
+    "layer0": "iceandfire:item/myrmex_jungle_boots"
   }
 }

@@ -31,6 +31,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import javax.annotation.Nullable;
 
@@ -114,8 +117,11 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 int down = Math.max(15, this.getPosition().getY() - 20 + this.getRNG().nextInt(10));
                 BlockPos genPos = new BlockPos(this.getPosX(), down, this.getPosZ());
                 if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, genPos.getX(), genPos.getY(), genPos.getZ()))){
-                    WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true, this.isJungle());
-                    hiveGen.generate(world, this.getRNG(), genPos);
+                    WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true, this.isJungle(), NoFeatureConfig::deserialize);
+                    if(!world.isRemote){
+                        ServerWorld serverWorld = (ServerWorld)world;
+                        hiveGen.place(world, serverWorld.getChunkProvider().getChunkGenerator(), this.getRNG(), genPos, IFeatureConfig.NO_FEATURE_CONFIG);
+                    }
                     this.setMadeHome(true);
                     this.setLocationAndAngles(genPos.getX(), down, genPos.getZ(), 0, 0);
                     this.addPotionEffect(new EffectInstance(Effects.INVISIBILITY, 30));

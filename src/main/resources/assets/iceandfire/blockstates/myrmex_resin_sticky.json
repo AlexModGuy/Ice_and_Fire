@@ -1,13 +1,13 @@
 {
   "variants": {
     "inventory": {
-      "model": "iceandfire:desert_myrmex_resin_sticky"
+      "model": "iceandfire:block/desert_myrmex_resin_sticky"
     },
     "variant=desert": {
-      "model": "iceandfire:desert_myrmex_resin_sticky"
+      "model": "iceandfire:block/desert_myrmex_resin_sticky"
     },
     "variant=jungle": {
-      "model": "iceandfire:jungle_myrmex_resin_sticky"
+      "model": "iceandfire:block/jungle_myrmex_resin_sticky"
     }
   }
 }

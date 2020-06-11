@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "iceandfire:items/cockatrice_scepter"
+    "layer0": "iceandfire:item/cockatrice_scepter"
   }
 }

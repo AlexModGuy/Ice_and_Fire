@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:sea_serpent_scale_block_bronze"
+    "": {
+      "model": "iceandfire:block/sea_serpent_scale_block_bronze"
     }
   }
 }

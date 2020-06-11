@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/dragonsteel_fire_ingot"
+    "layer0": "iceandfire:item/dragonsteel_fire_ingot"
   }
 }

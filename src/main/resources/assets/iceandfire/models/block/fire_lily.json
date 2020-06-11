@@ -1,6 +1,6 @@
 {
   "parent": "block/cross",
   "textures": {
-    "cross": "iceandfire:blocks/fire_lily"
+    "cross": "iceandfire:block/fire_lily"
   }
 }

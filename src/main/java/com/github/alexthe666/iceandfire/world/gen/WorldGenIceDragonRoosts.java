@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.world.gen;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import com.github.alexthe666.iceandfire.event.WorldGenEvents;
+import com.github.alexthe666.iceandfire.event.WorldGenUtils;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -15,7 +15,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.Heightmap;
@@ -130,11 +129,11 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
                         new WorldGenRoostPile(IafBlockRegistry.DRAGON_ICE).generate(worldIn, rand, height);
                     }
                     if (dist < 0.3D && rand.nextInt(isMale ? 250 : 400) == 0) {
-                        BlockPos height = WorldGenEvents.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos));
+                        BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos));
                         new WorldGenRoostGoldPile(IafBlockRegistry.SILVER_PILE).generate(worldIn, rand, height);
                     }
                     if (dist < 0.3D && rand.nextInt(isMale ? 500 : 700) == 0) {
-                        BlockPos height = WorldGenEvents.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos));
+                        BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos));
                         worldIn.setBlockState(height, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, HORIZONTALS[new Random().nextInt(3)]), 2);
                         if (worldIn.getBlockState(height).getBlock() instanceof ChestBlock) {
                             TileEntity tileentity1 = worldIn.getTileEntity(height);

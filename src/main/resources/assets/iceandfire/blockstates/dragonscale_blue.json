@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:dragonscale_blue"
+    "": {
+      "model": "iceandfire:block/dragonscale_blue"
     }
   }
 }

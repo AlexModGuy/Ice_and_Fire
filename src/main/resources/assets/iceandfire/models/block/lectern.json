@@ -1,9 +1,9 @@
 {
   "textures": {
-    "0": "iceandfire:blocks/lectern",
-    "1": "iceandfire:blocks/lectern_top",
-    "2": "iceandfire:blocks/lectern_side",
-    "particle": "iceandfire:blocks/lectern"
+    "0": "iceandfire:block/lectern",
+    "1": "iceandfire:block/lectern_top",
+    "2": "iceandfire:block/lectern_side",
+    "particle": "iceandfire:block/lectern"
   },
   "elements": [
     {

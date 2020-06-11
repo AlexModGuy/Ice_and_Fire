@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "iceandfire:blocks/serpentscale_blue"
+    "all": "iceandfire:block/serpentscale_blue"
   }
 }

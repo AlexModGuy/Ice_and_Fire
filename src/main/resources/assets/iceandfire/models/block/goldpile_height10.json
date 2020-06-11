@@ -1,7 +1,7 @@
 {
   "textures": {
-    "particle": "iceandfire:blocks/goldpile",
-    "texture": "iceandfire:blocks/goldpile"
+    "particle": "iceandfire:block/goldpile",
+    "texture": "iceandfire:block/goldpile"
   },
   "elements": [
     {

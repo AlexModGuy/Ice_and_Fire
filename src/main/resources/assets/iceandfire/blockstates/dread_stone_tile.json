@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:dread_stone_tile"
+    "": {
+      "model": "iceandfire:block/dread_stone_tile"
     }
   }
 }

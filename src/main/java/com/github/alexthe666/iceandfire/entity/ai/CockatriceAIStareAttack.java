@@ -8,6 +8,8 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.EnumSet;
+
 public class CockatriceAIStareAttack extends Goal {
     private final EntityCockatrice entity;
     private final double moveSpeedAmp;
@@ -27,7 +29,7 @@ public class CockatriceAIStareAttack extends Goal {
         this.moveSpeedAmp = speedAmplifier;
         this.attackCooldown = delay;
         this.maxAttackDistance = maxDistance * maxDistance;
-        this.setMutexBits(3);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public static boolean isEntityLookingAt(LivingEntity looker, LivingEntity seen, double degree) {
@@ -64,7 +66,7 @@ public class CockatriceAIStareAttack extends Goal {
         LivingEntity LivingEntity = this.entity.getAttackTarget();
         if (LivingEntity != null) {
 
-            if (EntityGorgon.isStoneMob(LivingEntity) || LivingEntity.isDead) {
+            if (EntityGorgon.isStoneMob(LivingEntity) || !LivingEntity.isAlive()) {
                 entity.setAttackTarget(null);
                 this.entity.setTargetedEntity(0);
                 resetTask();
@@ -94,7 +96,7 @@ public class CockatriceAIStareAttack extends Goal {
                 --this.seeTime;
             }
             if (target != null) {
-                if (this.entity.getDistance(target.getX(), target.getY(), target.getZ()) > 4 && !isEntityLookingAt(LivingEntity, entity, EntityCockatrice.VIEW_RADIUS)) {
+                if (this.entity.getDistanceSq(target.getX(), target.getY(), target.getZ()) > 16 && !isEntityLookingAt(LivingEntity, entity, EntityCockatrice.VIEW_RADIUS)) {
                     this.entity.getNavigator().tryMoveToXYZ(target.getX(), target.getY(), target.getZ(), moveSpeedAmp);
                 }
 

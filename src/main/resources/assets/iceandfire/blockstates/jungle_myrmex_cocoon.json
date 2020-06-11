@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:jungle_myrmex_cocoon"
+    "": {
+      "model": "iceandfire:block/jungle_myrmex_cocoon"
     }
   }
 }

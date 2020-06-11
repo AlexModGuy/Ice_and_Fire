@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:dread_spawner"
+    "": {
+      "model": "iceandfire:block/dread_spawner"
     }
   }
 }

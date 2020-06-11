@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "iceandfire:items/hippogryph_sword"
+    "layer0": "iceandfire:item/hippogryph_sword"
   }
 }

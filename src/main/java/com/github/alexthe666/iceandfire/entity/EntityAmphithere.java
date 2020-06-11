@@ -877,7 +877,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
-    public boolean canPhaseThroughBlock(World world, BlockPos pos) {
+    public boolean canPhaseThroughBlock(IWorld world, BlockPos pos) {
         return world.getBlockState(pos).getBlock() instanceof LeavesBlock;
     }
 

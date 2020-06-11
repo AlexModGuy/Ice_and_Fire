@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:chared_grass_path"
+    "": {
+      "model": "iceandfire:block/chared_grass_path"
     }
   }
 }

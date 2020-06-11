@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:dragonsteel_ice_block"
+    "": {
+      "model": "iceandfire:block/dragonsteel_ice_block"
     }
   }
 }

@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/dragon_horn_ice_2"
+    "layer0": "iceandfire:item/dragon_horn_ice_2"
   },
   "display": {
     "thirdperson_righthand": {

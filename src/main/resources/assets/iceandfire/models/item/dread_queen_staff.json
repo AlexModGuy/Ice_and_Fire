@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/dread_queen_staff"
+    "layer0": "iceandfire:item/dread_queen_staff"
   },
   "display": {
     "thirdperson_righthand": {

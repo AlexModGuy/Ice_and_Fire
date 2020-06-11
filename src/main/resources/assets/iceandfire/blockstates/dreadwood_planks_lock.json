@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "iceandfire:dreadwood_planks_lock"
+    "": {
+      "model": "iceandfire:block/dreadwood_planks_lock"
     }
   }
 }

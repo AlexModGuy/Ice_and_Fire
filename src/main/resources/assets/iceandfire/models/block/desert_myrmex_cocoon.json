@@ -1,8 +1,8 @@
 {   "parent": "block/block",
     "textures": {
-        "texture": "iceandfire:blocks/desert_myrmex_resin_sticky",
-        "bottom": "iceandfire:blocks/desert_myrmex_resin_sticky",
-        "particle": "iceandfire:blocks/desert_myrmex_resin_sticky"
+        "texture": "iceandfire:block/desert_myrmex_resin_sticky",
+        "bottom": "iceandfire:block/desert_myrmex_resin_sticky",
+        "particle": "iceandfire:block/desert_myrmex_resin_sticky"
     },
     "elements": [
         {

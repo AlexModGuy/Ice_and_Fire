@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/hippogryph_talon"
+    "layer0": "iceandfire:item/hippogryph_talon"
   }
 }

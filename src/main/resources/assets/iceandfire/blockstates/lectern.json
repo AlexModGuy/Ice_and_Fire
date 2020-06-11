@@ -1,19 +1,19 @@
 {
   "variants": {
     "facing=north": {
-      "model": "iceandfire:lectern",
+      "model": "iceandfire:block/lectern",
       "y": 180
     },
     "facing=south": {
-      "model": "iceandfire:lectern",
+      "model": "iceandfire:block/lectern",
       "y": 0
     },
     "facing=west": {
-      "model": "iceandfire:lectern",
+      "model": "iceandfire:block/lectern",
       "y": -270
     },
     "facing=east": {
-      "model": "iceandfire:lectern",
+      "model": "iceandfire:block/lectern",
       "y": -90
     }
   }

@@ -1,7 +1,7 @@
 {
   "textures": {
-    "particle": "iceandfire:blocks/silverpile",
-    "texture": "iceandfire:blocks/silverpile"
+    "particle": "iceandfire:block/silverpile",
+    "texture": "iceandfire:block/silverpile"
   },
   "elements": [
     {

@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/sea_serpent_scales_bronze"
+    "layer0": "iceandfire:item/sea_serpent_scales_bronze"
   }
 }

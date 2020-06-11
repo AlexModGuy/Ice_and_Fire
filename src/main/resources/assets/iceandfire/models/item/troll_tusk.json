@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/troll_tusk"
+    "layer0": "iceandfire:item/troll_tusk"
   }
 }

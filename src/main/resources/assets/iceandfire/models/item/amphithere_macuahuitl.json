@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "iceandfire:items/amphithere_macuahuitl"
+    "layer0": "iceandfire:item/amphithere_macuahuitl"
   }
 }

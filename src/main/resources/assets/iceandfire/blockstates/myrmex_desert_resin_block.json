@@ -1,24 +1,24 @@
 {
     "multipart": [
-        {   "apply": { "model": "iceandfire:myrmex_desert_resin" }},
+        {   "apply": { "model": "iceandfire:block/myrmex_desert_resin" }},
 
         {   "when": { "up": "false" },
-            "apply": { "model": "iceandfire:myrmex_desert_resin_up", "uvlock": false }
+            "apply": { "model": "iceandfire:block/myrmex_desert_resin_up", "uvlock": false }
         },
         {   "when": { "down": "false" },
-            "apply": { "model": "iceandfire:myrmex_desert_resin_down", "uvlock": false }
+            "apply": { "model": "iceandfire:block/myrmex_desert_resin_down", "uvlock": false }
         },
         {   "when": { "east": "false" },
-            "apply": { "model": "iceandfire:myrmex_desert_resin_right", "y" : 0, "uvlock": false }
+            "apply": { "model": "iceandfire:block/myrmex_desert_resin_right", "y" : 0, "uvlock": false }
         },
         {   "when": { "west": "false" },
-            "apply": { "model": "iceandfire:myrmex_desert_resin_left", "y" : 0, "uvlock": false }
+            "apply": { "model": "iceandfire:block/myrmex_desert_resin_left", "y" : 0, "uvlock": false }
         },
         {   "when": { "north": "false" },
-            "apply": { "model": "iceandfire:myrmex_desert_resin_left", "y" : 90, "uvlock": false }
+            "apply": { "model": "iceandfire:block/myrmex_desert_resin_left", "y" : 90, "uvlock": false }
         },
         {   "when": { "south": "false" },
-            "apply": { "model": "iceandfire:myrmex_desert_resin_right", "y" : 90, "uvlock": false }
+            "apply": { "model": "iceandfire:block/myrmex_desert_resin_right", "y" : 90, "uvlock": false }
         }
     ]
 }

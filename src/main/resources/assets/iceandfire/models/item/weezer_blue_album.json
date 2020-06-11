@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:items/weezer_blue_album"
+    "layer0": "iceandfire:item/weezer_blue_album"
   }
 }
