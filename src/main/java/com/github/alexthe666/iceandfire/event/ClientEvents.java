@@ -1,48 +1,48 @@
 package com.github.alexthe666.iceandfire.event;
 
+import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.ClientProxy;
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.client.gui.IceAndFireMainMenu;
-import com.github.alexthe666.iceandfire.client.render.entity.ICustomStoneLayer;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderCockatrice;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntityCrack;
-import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
-import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.SirenEntityProperties;
-import com.github.alexthe666.iceandfire.util.IAFMath;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBox;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderLivingBase;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.lang.reflect.Field;
@@ -60,17 +60,15 @@ public class ClientEvents {
     private Random rand = new Random();
 
     public static void initializeStoneLayer() {
-        for (Map.Entry<Class<? extends Entity>, Render<? extends Entity>> entry : Minecraft.getInstance().getRenderManager().entityRenderMap.entrySet()) {
-            Render render = entry.get();
-            if (render instanceof RenderLivingBase && LivingEntity.class.isAssignableFrom(entry.getKey())) {
-                ((RenderLivingBase) render).addLayer(new LayerStoneEntity((RenderLivingBase) render));
-                ((RenderLivingBase) render).addLayer(new LayerStoneEntityCrack((RenderLivingBase) render));
+        for (Map.Entry<EntityType<?>, EntityRenderer<?>> entry : Minecraft.getInstance().getRenderManager().renderers.entrySet()) {
+            EntityRenderer render = entry.getValue();
+            if (render instanceof LivingRenderer) {
+                ((LivingRenderer) render).addLayer(new LayerStoneEntity((LivingRenderer) render));
+                ((LivingRenderer) render).addLayer(new LayerStoneEntityCrack((LivingRenderer) render));
             }
         }
-
-        Field renderingRegistryField = ReflectionHelper.findField(RenderingRegistry.class, ObfuscationReflectionHelper.remapFieldNames(RenderingRegistry.class.getName(), "INSTANCE", "INSTANCE"));
-        Field entityRendersField = ReflectionHelper.findField(RenderingRegistry.class, ObfuscationReflectionHelper.remapFieldNames(RenderingRegistry.class.getName(), "entityRenderers", "entityRenderers"));
-        Field entityRendersOldField = ReflectionHelper.findField(RenderingRegistry.class, ObfuscationReflectionHelper.remapFieldNames(RenderingRegistry.class.getName(), "entityRenderersOld", "entityRenderersOld"));
+        Field renderingRegistryField = ObfuscationReflectionHelper.findField(RenderingRegistry.class, "INSTANCE");
+        Field entityRendersField = ObfuscationReflectionHelper.findField(RenderingRegistry.class, "entityRenderers");
         RenderingRegistry registry = null;
         try {
             Field modifier = Field.class.getDeclaredField("modifiers");
@@ -81,48 +79,30 @@ public class ClientEvents {
         }
         if (registry != null) {
             Map<Class<? extends Entity>, IRenderFactory<? extends Entity>> entityRenders = null;
-            Map<Class<? extends Entity>, Render<? extends Entity>> entityRendersOld = null;
             try {
                 Field modifier1 = Field.class.getDeclaredField("modifiers");
                 modifier1.setAccessible(true);
                 entityRenders = (Map<Class<? extends Entity>, IRenderFactory<? extends Entity>>) entityRendersField.get(registry);
-                entityRendersOld = (Map<Class<? extends Entity>, Render<? extends Entity>>) entityRendersOldField.get(registry);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             if (entityRenders != null) {
                 for (Map.Entry<Class<? extends Entity>, IRenderFactory<? extends Entity>> entry : entityRenders.entrySet()) {
-                    if (entry.get() != null) {
+                    if (entry.getValue() != null) {
                         try {
-                            Render render = entry.get().createRenderFor(Minecraft.getInstance().getRenderManager());
-                            if (render != null && render instanceof RenderLivingBase && LivingEntity.class.isAssignableFrom(entry.getKey())) {
-                                LayerRenderer stoneLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getStoneLayer((RenderLivingBase) render) : new LayerStoneEntity((RenderLivingBase) render);
-                                LayerRenderer crackLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getCrackLayer((RenderLivingBase) render) : new LayerStoneEntityCrack((RenderLivingBase) render);
-                                ((RenderLivingBase) render).addLayer(stoneLayer);
-                                ((RenderLivingBase) render).addLayer(crackLayer);
-                                ((RenderLivingBase) render).addLayer(new LayerChainedEntity(render));
+                            EntityRenderer render = entry.getValue().createRenderFor(Minecraft.getInstance().getRenderManager());
+                            if (render != null && render instanceof LivingRenderer && LivingEntity.class.isAssignableFrom(entry.getKey())) {
+                                ((LivingRenderer) render).addLayer(new LayerStoneEntity((LivingRenderer) render));
+                                ((LivingRenderer) render).addLayer(new LayerStoneEntityCrack((LivingRenderer) render));
                             }
                         } catch (NullPointerException exp) {
-                            IceAndFire.logger.warn("Ice and Fire: Could not apply stone render layer to " + entry.getKey().getSimpleName() + ", someone isn't registering their renderer properly... <.<");
+                            IceAndFire.LOGGER.warning("Ice and Fire could not apply plague render layer to " + entry.getKey().getSimpleName() + ", someone isn't registering their renderer properly... <.<");
                         }
                     }
 
                 }
             }
-            if (entityRendersOld != null) {
-                for (Map.Entry<Class<? extends Entity>, Render<? extends Entity>> entry : entityRendersOld.entrySet()) {
-                    Render render = entry.get();
-                    if (render instanceof RenderLivingBase && LivingEntity.class.isAssignableFrom(entry.getKey())) {
-                        LayerRenderer stoneLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getStoneLayer((RenderLivingBase) render) : new LayerStoneEntity((RenderLivingBase) render);
-                        LayerRenderer crackLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getCrackLayer((RenderLivingBase) render) : new LayerStoneEntityCrack((RenderLivingBase) render);
-                        ((RenderLivingBase) render).addLayer(stoneLayer);
-                        ((RenderLivingBase) render).addLayer(crackLayer);
-                        ((RenderLivingBase) render).addLayer(new LayerChainedEntity(render));
-                    }
-                }
-            }
         }
-
     }
 
     private static ResourceLocation getIceTexture(int ticksFrozen) {
@@ -138,46 +118,49 @@ public class ClientEvents {
         return TEXTURE_0;
     }
 
-    public static void renderAABB(AxisAlignedBB boundingBox, double x, double y, double z) {
+    public static void renderMovingAABB(AxisAlignedBB boundingBox, MatrixStack stack) {
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder vertexbuffer = tessellator.getBuffer();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
-        double maxX = boundingBox.maxX * 0.625F;
-        double minX = boundingBox.minX * 0.625F;
-        double maxY = boundingBox.maxY * 0.625F;
-        double minY = boundingBox.minY * 0.625F;
-        double maxZ = boundingBox.maxZ * 0.625F;
-        double minZ = boundingBox.minZ * 0.625F;
-        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).tex(minX - maxX, maxY - minY).normal(0.0F, 0.0F, -1.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).tex(maxX - minX, maxY - minY).normal(0.0F, 0.0F, -1.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).tex(maxX - minX, minY - maxY).normal(0.0F, 0.0F, -1.0F).endVertex();
-        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).tex(minX - maxX, minY - maxY).normal(0.0F, 0.0F, -1.0F).endVertex();
+        IVertexBuilder vertexbuffer = tessellator.getBuffer().getVertexBuilder();
+        BufferBuilder buffer = tessellator.getBuffer();
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        float f3 = 0;
+        Matrix4f matrix4f = stack.getLast().getMatrix();
+        float maxX = (float)boundingBox.maxX * 0.125F;
+        float minX = (float)boundingBox.minX * 0.125F;
+        float maxY = (float)boundingBox.maxY * 0.125F;
+        float minY = (float)boundingBox.minY * 0.125F;
+        float maxZ = (float)boundingBox.maxZ * 0.125F;
+        float minZ = (float)boundingBox.minZ * 0.125F;
+        buffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+        vertexbuffer.pos(matrix4f, (float)boundingBox.minX,  (float)boundingBox.maxY,  (float)boundingBox.minZ).tex(f3 + minX - maxX, f3 + maxY - minY).color(255, 255, 255, 255).normal(0.0F, 0.0F, -1.0F).endVertex();
+        vertexbuffer.pos(matrix4f,  (float)boundingBox.maxX,  (float)boundingBox.maxY,  (float)boundingBox.minZ).tex(f3 + maxX - minX, f3 + maxY - minY).color(255, 255, 255, 255).normal(0.0F, 0.0F, -1.0F).endVertex();
+        vertexbuffer.pos(matrix4f,  (float)boundingBox.maxX,  (float)boundingBox.minY,  (float)boundingBox.minZ).tex(f3 + maxX - minX, f3 + minY - maxY).color(255, 255, 255, 255).normal(0.0F, 0.0F, -1.0F).endVertex();
+        vertexbuffer.pos(matrix4f,  (float)boundingBox.minX,  (float)boundingBox.minY,  (float)boundingBox.minZ).tex(f3 + minX - maxX, f3 + minY - maxY).color(255, 255, 255, 255).normal(0.0F, 0.0F, -1.0F).endVertex();
 
-        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).tex(minX - maxX, minY - maxY).normal(0.0F, 0.0F, 1.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).tex(maxX - minX, minY - maxY).normal(0.0F, 0.0F, 1.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).tex(maxX - minX, maxY - minY).normal(0.0F, 0.0F, 1.0F).endVertex();
-        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).tex(minX - maxX, maxY - minY).normal(0.0F, 0.0F, 1.0F).endVertex();
+        vertexbuffer.pos(matrix4f,  (float)boundingBox.minX,  (float)boundingBox.minY,  (float)boundingBox.maxZ).tex(f3 + minX - maxX, f3 + minY - maxY).color(255, 255, 255, 255).normal(0.0F, 0.0F, 1.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float) boundingBox.maxX,  (float)boundingBox.minY,  (float)boundingBox.maxZ).tex(f3 + maxX - minX, f3 + minY - maxY).color(255, 255, 255, 255).normal(0.0F, 0.0F, 1.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.maxX,  (float)boundingBox.maxY,  (float)boundingBox.maxZ).tex(f3 + maxX - minX, f3 + maxY - minY).color(255, 255, 255, 255).normal(0.0F, 0.0F, 1.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.minX,  (float)boundingBox.maxY,  (float)boundingBox.maxZ).tex(f3 + minX - maxX, f3 + maxY - minY).color(255, 255, 255, 255).normal(0.0F, 0.0F, 1.0F).endVertex();
 
-        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).tex(minX - maxX, minY - maxY).normal(0.0F, -1.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).tex(maxX - minX, minY - maxY).normal(0.0F, -1.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).tex(maxX - minX, maxZ - minZ).normal(0.0F, -1.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).tex(minX - maxX, maxZ - minZ).normal(0.0F, -1.0F, 0.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.minX,  (float)boundingBox.minY,  (float)boundingBox.minZ).tex(f3 + minX - maxX, f3 + minY - maxY).color(255, 255, 255, 255).normal(0.0F, -1.0F, 0.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.maxX,  (float)boundingBox.minY,  (float)boundingBox.minZ).tex(f3 + maxX - minX, f3 + minY - maxY).color(255, 255, 255, 255).normal(0.0F, -1.0F, 0.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.maxX,  (float)boundingBox.minY,  (float)boundingBox.maxZ).tex(f3 + maxX - minX, f3 + maxZ - minZ).color(255, 255, 255, 255).normal(0.0F, -1.0F, 0.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.minX,  (float)boundingBox.minY,  (float)boundingBox.maxZ).tex(f3 + minX - maxX, f3 + maxZ - minZ).color(255, 255, 255, 255).normal(0.0F, -1.0F, 0.0F).endVertex();
 
-        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).tex(minX - maxX, minY - maxY).normal(0.0F, 1.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).tex(maxX - minX, minY - maxY).normal(0.0F, 1.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).tex(maxX - minX, maxZ - minZ).normal(0.0F, 1.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).tex(minX - maxX, maxZ - minZ).normal(0.0F, 1.0F, 0.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.minX,  (float)boundingBox.maxY,  (float)boundingBox.maxZ).tex(f3 + minX - maxX, f3 + minY - maxY).color(255, 255, 255, 255).normal(0.0F, 1.0F, 0.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.maxX,  (float)boundingBox.maxY,  (float)boundingBox.maxZ).tex(f3 + maxX - minX, f3 + minY - maxY).color(255, 255, 255, 255).normal(0.0F, 1.0F, 0.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.maxX,  (float)boundingBox.maxY,  (float)boundingBox.minZ).tex(f3 + maxX - minX, f3 + maxZ - minZ).color(255, 255, 255, 255).normal(0.0F, 1.0F, 0.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.minX,  (float)boundingBox.maxY,  (float)boundingBox.minZ).tex(f3 + minX - maxX, f3 + maxZ - minZ).color(255, 255, 255, 255).normal(0.0F, 1.0F, 0.0F).endVertex();
 
-        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).tex(minX - maxX, minY - maxY).normal(-1.0F, 0.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).tex(minX - maxX, maxY - minY).normal(-1.0F, 0.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).tex(maxX - minX, maxY - minY).normal(-1.0F, 0.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).tex(maxX - minX, minY - maxY).normal(-1.0F, 0.0F, 0.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.minX,  (float)boundingBox.minY,  (float)boundingBox.maxZ).tex(f3 + minX - maxX, f3 + minY - maxY).color(255, 255, 255, 255).normal(-1.0F, 0.0F, 0.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.minX,  (float)boundingBox.maxY,  (float)boundingBox.maxZ).tex(f3 + minX - maxX, f3 + maxY - minY).color(255, 255, 255, 255).normal(-1.0F, 0.0F, 0.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.minX,  (float)boundingBox.maxY,  (float)boundingBox.minZ).tex(f3 + maxX - minX, f3 + maxY - minY).color(255, 255, 255, 255).normal(-1.0F, 0.0F, 0.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.minX,  (float)boundingBox.minY,  (float)boundingBox.minZ).tex(f3 + maxX - minX, f3 + minY - maxY).color(255, 255, 255, 255).normal(-1.0F, 0.0F, 0.0F).endVertex();
 
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).tex(minX - maxX, minY - maxY).normal(1.0F, 0.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).tex(minX - maxX, maxY - minY).normal(1.0F, 0.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).tex(maxX - minX, maxY - minY).normal(1.0F, 0.0F, 0.0F).endVertex();
-        vertexbuffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).tex(maxX - minX, minY - maxY).normal(1.0F, 0.0F, 0.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.maxX,  (float)boundingBox.minY,  (float)boundingBox.minZ).tex(f3 + minX - maxX, f3 + minY - maxY).color(255, 255, 255, 255).normal(1.0F, 0.0F, 0.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.maxX,  (float)boundingBox.maxY,  (float)boundingBox.minZ).tex(f3 + minX - maxX, f3 + maxY - minY).color(255, 255, 255, 255).normal(1.0F, 0.0F, 0.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.maxX,  (float)boundingBox.maxY,  (float)boundingBox.maxZ).tex(f3 + maxX - minX, f3 + maxY - minY).color(255, 255, 255, 255).normal(1.0F, 0.0F, 0.0F).endVertex();
+        vertexbuffer.pos(matrix4f, (float)boundingBox.maxX,  (float)boundingBox.minY,  (float)boundingBox.maxZ).tex(f3 + maxX - minX, f3 + minY - maxY).color(255, 255, 255, 255).normal(1.0F, 0.0F, 0.0F).endVertex();
         tessellator.draw();
     }
 
@@ -215,21 +198,10 @@ public class ClientEvents {
         }
     }
 
-    protected double translateToBody(RenderLiving renderer) {
-        double roll = 0;
-        roll += postRenderRoll(((TabulaModel) renderer.getMainModel()).getCube("BodyUpper"), 0.0625F);
-        roll += postRenderRoll(((TabulaModel) renderer.getMainModel()).getCube("Neck1"), 0.0625F);
-        return roll;
-    }
-
-    public double postRenderRoll(AdvancedModelBox renderer, float scale) {
-        return renderer.rotateAngleZ * (180F / (float) Math.PI);
-    }
-
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-        if (event.getLivingEntity() instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) event.getLivingEntity();
+        if (event.getEntityLiving() instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) event.getEntityLiving();
             if (player.world.isRemote && IafKeybindRegistry.dragon_change_view.isPressed()) {
                 int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
                 if (currentView + 1 > 3) {
@@ -240,10 +212,10 @@ public class ClientEvents {
                 IceAndFire.PROXY.setDragon3rdPersonView(currentView);
             }
 
-            SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getLivingEntity(), SirenEntityProperties.class);
+            SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
             if (player.world.isRemote && sirenProps != null) {
-                EntityRenderer renderer = Minecraft.getInstance().entityRenderer;
-                EntitySiren siren = sirenProps.getSiren(event.getLivingEntity().world);
+                GameRenderer renderer = Minecraft.getInstance().gameRenderer;
+                EntitySiren siren = sirenProps.getSiren(event.getEntityLiving().world);
                 if (siren == null) {
                     sirenProps.isCharmed = false;
                 }
@@ -252,7 +224,7 @@ public class ClientEvents {
                         IceAndFire.PROXY.spawnParticle("siren_appearance", player.getPosX(), player.getPosY(), player.getPosZ(), 0, 0, 0);
                     }
 
-                    if (IafConfig.sirenShader && sirenProps.isCharmed && !renderer.isShaderActive()) {
+                    if (IafConfig.sirenShader && sirenProps.isCharmed && renderer.getShaderGroup() != null) {
                         renderer.loadShader(SIREN_SHADER);
                     }
 
@@ -269,7 +241,7 @@ public class ClientEvents {
         if (event.getEntity().getRidingEntity() != null && event.getEntity().getRidingEntity() instanceof EntityDragonBase) {
             if (ClientProxy.currentDragonRiders.contains(event.getEntity().getUniqueID()) || event.getEntity() == Minecraft.getInstance().player && Minecraft.getInstance().gameSettings.thirdPersonView == 0) {
                 event.setCanceled(true);
-                net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post(event.getEntity(), event.getRenderer(), event.getPartialRenderTick(), event.getX(), event.getY(), event.getZ()));
+                net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post(event.getEntity(), event.getRenderer(), event.getPartialRenderTick(), event.getMatrixStack(), event.getBuffers(), event.getLight()));
             }
         }
     }
@@ -278,81 +250,157 @@ public class ClientEvents {
     public void onPostRenderLiving(RenderLivingEvent.Post event) {
         LivingEntity entity = event.getEntity();
         ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
+        FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, FrozenEntityProperties.class);
+        if (frozenProps != null && frozenProps.isFrozen) {
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+            float sideExpand = 0.25F;
+            AxisAlignedBB axisalignedbb1 = entity.getBoundingBox().grow(sideExpand, sideExpand, sideExpand);
+            Minecraft.getInstance().getTextureManager().bindTexture(getIceTexture(frozenProps.ticksUntilUnfrozen));
+            renderMovingAABB(axisalignedbb1, event.getMatrixStack());
+        }
+
+        MiscEntityProperties miscProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, MiscEntityProperties.class);
+        if (miscProps != null && miscProps.glarers.size() > 0) {
+            MatrixStack matrixStackIn = event.getMatrixStack();
+            Entity entityIn = entity;
+            for (Entity livingentity : miscProps.glarers) {
+                float f = 1;
+                float f1 = (float) entityIn.world.getGameTime() + event.getPartialRenderTick();
+                float f2 = f1 * 0.5F % 1.0F;
+                float f3 = entityIn.getEyeHeight();
+                matrixStackIn.push();
+                matrixStackIn.translate(0.0D, (double) f3, 0.0D);
+                Vec3d vec3d = this.getPosition(livingentity, (double) livingentity.getHeight() * 0.5D, event.getPartialRenderTick());
+                Vec3d vec3d1 = this.getPosition(entityIn, (double) f3, event.getPartialRenderTick());
+                Vec3d vec3d2 = vec3d.subtract(vec3d1);
+                float f4 = (float) (vec3d2.length() + 1.0D);
+                vec3d2 = vec3d2.normalize();
+                float f5 = (float) Math.acos(vec3d2.y);
+                float f6 = (float) Math.atan2(vec3d2.z, vec3d2.x);
+                matrixStackIn.rotate(Vector3f.YP.rotationDegrees((((float) Math.PI / 2F) - f6) * (180F / (float) Math.PI)));
+                matrixStackIn.rotate(Vector3f.XP.rotationDegrees(f5 * (180F / (float) Math.PI)));
+                int i = 1;
+                float f7 = f1 * 0.05F * -1.5F;
+                float f8 = f * f;
+                int j = 64 + (int) (f8 * 191.0F);
+                int k = 32 + (int) (f8 * 191.0F);
+                int l = 128 - (int) (f8 * 64.0F);
+                float f9 = 0.2F;
+                float f10 = 0.282F;
+                float f11 = MathHelper.cos(f7 + 2.3561945F) * 0.282F;
+                float f12 = MathHelper.sin(f7 + 2.3561945F) * 0.282F;
+                float f13 = MathHelper.cos(f7 + ((float) Math.PI / 4F)) * 0.282F;
+                float f14 = MathHelper.sin(f7 + ((float) Math.PI / 4F)) * 0.282F;
+                float f15 = MathHelper.cos(f7 + 3.926991F) * 0.282F;
+                float f16 = MathHelper.sin(f7 + 3.926991F) * 0.282F;
+                float f17 = MathHelper.cos(f7 + 5.4977875F) * 0.282F;
+                float f18 = MathHelper.sin(f7 + 5.4977875F) * 0.282F;
+                float f19 = MathHelper.cos(f7 + (float) Math.PI) * 0.2F;
+                float f20 = MathHelper.sin(f7 + (float) Math.PI) * 0.2F;
+                float f21 = MathHelper.cos(f7 + 0.0F) * 0.2F;
+                float f22 = MathHelper.sin(f7 + 0.0F) * 0.2F;
+                float f23 = MathHelper.cos(f7 + ((float) Math.PI / 2F)) * 0.2F;
+                float f24 = MathHelper.sin(f7 + ((float) Math.PI / 2F)) * 0.2F;
+                float f25 = MathHelper.cos(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
+                float f26 = MathHelper.sin(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
+                float f27 = 0.0F;
+                float f28 = 0.4999F;
+                float f29 = -1.0F + f2;
+                float f30 = f4 * 2.5F + f29;
+                IVertexBuilder ivertexbuilder = event.getBuffers().getBuffer(RenderCockatrice.TEXTURE_BEAM);
+                MatrixStack.Entry matrixstack$entry = event.getMatrixStack().getLast();
+                Matrix4f matrix4f = matrixstack$entry.getMatrix();
+                Matrix3f matrix3f = matrixstack$entry.getNormal();
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f19, f4, f20, j, k, l, 0.4999F, f30);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f19, 0.0F, f20, j, k, l, 0.4999F, f29);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f21, 0.0F, f22, j, k, l, 0.0F, f29);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f21, f4, f22, j, k, l, 0.0F, f30);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f23, f4, f24, j, k, l, 0.4999F, f30);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f23, 0.0F, f24, j, k, l, 0.4999F, f29);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f25, 0.0F, f26, j, k, l, 0.0F, f29);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f25, f4, f26, j, k, l, 0.0F, f30);
+                float f31 = 0.0F;
+                if (entityIn.ticksExisted % 2 == 0) {
+                    f31 = 0.5F;
+                }
+
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f11, f4, f12, j, k, l, 0.5F, f31 + 0.5F);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f13, f4, f14, j, k, l, 1.0F, f31 + 0.5F);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f17, f4, f18, j, k, l, 1.0F, f31);
+                func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f15, f4, f16, j, k, l, 0.5F, f31);
+                matrixStackIn.pop();
+            }
+        }
+
         if (properties != null) {
             if (!properties.connectedEntities.isEmpty()) {
-                if (!properties.alreadyIgnoresCamera) {
-                    entity.ignoreFrustumCheck = true;
-                }
-                GlStateManager.pushMatrix();
-                GlStateManager.disableCull();
-                GlStateManager.enableNormalize();
-                GlStateManager.depthMask(true);
-                GlStateManager.disableLighting();
-                int light = entity.world.getCombinedLight(new BlockPos(entity), 0);
-                int i1 = light % 65536;
-                int j1 = light / 65536;
-                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) i1, (float) j1);
-                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-                Tessellator tessellator = Tessellator.getInstance();
-                BufferBuilder bufferbuilder = tessellator.getBuffer();
-                event.getRenderer().bindTexture(CHAIN_TEXTURE);
-                double posX = Minecraft.getInstance().player.prevPosX + (Minecraft.getInstance().player.getPosX() - Minecraft.getInstance().player.prevPosX) * (double) event.getPartialRenderTick();
-                double posY = Minecraft.getInstance().player.prevPosY + (Minecraft.getInstance().player.getPosY() - Minecraft.getInstance().player.prevPosY) * (double) event.getPartialRenderTick();
-                double posZ = Minecraft.getInstance().player.prevPosZ + (Minecraft.getInstance().player.getPosZ() - Minecraft.getInstance().player.prevPosZ) * (double) event.getPartialRenderTick();
-                for (Entity chainer : properties.connectedEntities) {
-                    GlStateManager.pushMatrix();
-                    double chainPosX = chainer.prevPosX + (chainer.getPosX() - chainer.prevPosX) * (double) event.getPartialRenderTick();
-                    double chainPosY = chainer.prevPosY + (chainer.getPosY() - chainer.prevPosY) * (double) event.getPartialRenderTick();
-                    double chainPosZ = chainer.prevPosZ + (chainer.getPosZ() - chainer.prevPosZ) * (double) event.getPartialRenderTick();
-                    GlStateManager.translate(chainPosX - posX, chainPosY - posY, chainPosZ - posZ);
-                    GlStateManager.translate(0, 0.75, 0);
-                    double height = (double) chainer.getEyeHeight() * 0.75F;
-                    Vec3d vec3d = this.getChainPosition(entity, height, event.getPartialRenderTick());
-                    if (entity instanceof EntityDragonBase) {
-                        vec3d = this.getChainPosition(entity, ((EntityDragonBase) entity).getRenderSize() * 0.15F, event.getPartialRenderTick());
+                for(Entity livingentity : properties.connectedEntities) {
+                    if (!properties.alreadyIgnoresCamera) {
+                        entity.ignoreFrustumCheck = true;
                     }
-                    Vec3d vec3d1 = this.getChainPosition(chainer, height, event.getPartialRenderTick());
+                    MatrixStack matrixStackIn = event.getMatrixStack();
+                    float f = 1;
+                    float f1 = 0;
+                    float f2 = f1 * 0.5F % 1.0F;
+                    float f3 = entity.getEyeHeight();
+                    matrixStackIn.push();
+                    matrixStackIn.translate(0.0D, (double) f3, 0.0D);
+                    Vec3d vec3d = this.getPosition(livingentity, (double) livingentity.getHeight() * 0.5D, event.getPartialRenderTick());
+                    Vec3d vec3d1 = this.getPosition(entity, (double) f3, event.getPartialRenderTick());
                     Vec3d vec3d2 = vec3d.subtract(vec3d1);
-                    double d0 = vec3d2.length();
+                    float f4 = (float) (vec3d2.length() + 1.0D);
                     vec3d2 = vec3d2.normalize();
-                    float f5 = (float) acos(vec3d2.y);
-                    float f6 = -(float) IAFMath.atan2_accurate(vec3d2.z, vec3d2.x);
-                    GlStateManager.rotate((((float) Math.PI / 2F) + f6) * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
-                    GlStateManager.rotate(f5 * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
-                    double d1 = 0D;
-                    int j = 225;
-                    int k = 225;
-                    int l = 225;
-                    float texture_scale = 0.3F;
-                    double d12 = 0.0D + Math.cos(d1 + Math.PI) * texture_scale;
-                    double d13 = 0.0D + Math.sin(d1 + Math.PI) * texture_scale;
-                    double d14 = 0.0D + Math.cos(d1 + 0.0D) * texture_scale;
-                    double d15 = 0.0D + Math.sin(d1 + 0.0D) * texture_scale;
-
-                    double d16 = 0.0D + Math.cos(d1 + (Math.PI / 2D)) * texture_scale;
-                    double d17 = 0.0D + Math.sin(d1 + (Math.PI / 2D)) * texture_scale;
-                    double d18 = 0.0D + Math.cos(d1 + (Math.PI * 3D / 2D)) * texture_scale;
-                    double d19 = 0.0D + Math.sin(d1 + (Math.PI * 3D / 2D)) * texture_scale;
-                    double d22 = 0.0F;
-                    double d23 = d0 * 1 - texture_scale + d22;
-                    bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-                    bufferbuilder.pos(d12, d0, d13).tex(0.4999D, d23).color(j, k, l, 255).endVertex();
-                    bufferbuilder.pos(d12, 0.0D, d13).tex(0.4999D, d22).color(j, k, l, 255).endVertex();
-                    bufferbuilder.pos(d14, 0.0D, d15).tex(0.0D, d22).color(j, k, l, 255).endVertex();
-                    bufferbuilder.pos(d14, d0, d15).tex(0.0D, d23).color(j, k, l, 255).endVertex();
-                    bufferbuilder.pos(d16, d0, d17).tex(0.4999D, d23).color(j, k, l, 255).endVertex();
-                    bufferbuilder.pos(d16, 0.0D, d17).tex(0.4999D, d22).color(j, k, l, 255).endVertex();
-                    bufferbuilder.pos(d18, 0.0D, d19).tex(0.0D, d22).color(j, k, l, 255).endVertex();
-                    bufferbuilder.pos(d18, d0, d19).tex(0.0D, d23).color(j, k, l, 255).endVertex();
-                    tessellator.draw();
-                    GlStateManager.popMatrix();
+                    float f5 = (float) Math.acos(vec3d2.y);
+                    float f6 = (float) Math.atan2(vec3d2.z, vec3d2.x);
+                    matrixStackIn.rotate(Vector3f.YP.rotationDegrees((((float) Math.PI / 2F) - f6) * (180F / (float) Math.PI)));
+                    matrixStackIn.rotate(Vector3f.XP.rotationDegrees(f5 * (180F / (float) Math.PI)));
+                    int i = 1;
+                    float f7 = f1 * 0.05F * -1.5F;
+                    float f8 = f * f;
+                    int j = 64 + (int) (f8 * 191.0F);
+                    int k = 32 + (int) (f8 * 191.0F);
+                    int l = 128 - (int) (f8 * 64.0F);
+                    float f9 = 0.2F;
+                    float f10 = 0.282F;
+                    float f11 = MathHelper.cos(f7 + 2.3561945F) * 0.282F;
+                    float f12 = MathHelper.sin(f7 + 2.3561945F) * 0.282F;
+                    float f13 = MathHelper.cos(f7 + ((float) Math.PI / 4F)) * 0.282F;
+                    float f14 = MathHelper.sin(f7 + ((float) Math.PI / 4F)) * 0.282F;
+                    float f15 = MathHelper.cos(f7 + 3.926991F) * 0.282F;
+                    float f16 = MathHelper.sin(f7 + 3.926991F) * 0.282F;
+                    float f17 = MathHelper.cos(f7 + 5.4977875F) * 0.282F;
+                    float f18 = MathHelper.sin(f7 + 5.4977875F) * 0.282F;
+                    float f19 = MathHelper.cos(f7 + (float) Math.PI) * 0.2F;
+                    float f20 = MathHelper.sin(f7 + (float) Math.PI) * 0.2F;
+                    float f21 = MathHelper.cos(f7 + 0.0F) * 0.2F;
+                    float f22 = MathHelper.sin(f7 + 0.0F) * 0.2F;
+                    float f23 = MathHelper.cos(f7 + ((float) Math.PI / 2F)) * 0.2F;
+                    float f24 = MathHelper.sin(f7 + ((float) Math.PI / 2F)) * 0.2F;
+                    float f25 = MathHelper.cos(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
+                    float f26 = MathHelper.sin(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
+                    float f27 = 0.0F;
+                    float f28 = 0.4999F;
+                    float f29 = -1.0F + f2;
+                    float f30 = f4 * 2.5F + f29;
+                    IVertexBuilder ivertexbuilder = event.getBuffers().getBuffer(RenderType.getEntityCutout(CHAIN_TEXTURE));
+                    MatrixStack.Entry matrixstack$entry = matrixStackIn.getLast();
+                    Matrix4f matrix4f = matrixstack$entry.getMatrix();
+                    Matrix3f matrix3f = matrixstack$entry.getNormal();
+                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f19, f4, f20, j, k, l, 0.4999F, f30);
+                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f19, 0.0F, f20, j, k, l, 0.4999F, f29);
+                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f21, 0.0F, f22, j, k, l, 0.0F, f29);
+                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f21, f4, f22, j, k, l, 0.0F, f30);
+                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f23, f4, f24, j, k, l, 0.4999F, f30);
+                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f23, 0.0F, f24, j, k, l, 0.4999F, f29);
+                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f25, 0.0F, f26, j, k, l, 0.0F, f29);
+                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f25, f4, f26, j, k, l, 0.0F, f30);
+                    float f31 = 0.0F;
+                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f11, f4, f12, j, k, l, 0.5F, f31 + 0.5F);
+                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f13, f4, f14, j, k, l, 1.0F, f31 + 0.5F);
+                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f17, f4, f18, j, k, l, 1.0F, f31);
+                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f15, f4, f16, j, k, l, 0.5F, f31);
+                    matrixStackIn.pop();
                 }
-
-                GlStateManager.disableBlend();
-                GlStateManager.enableCull();
-                GlStateManager.enableLighting();
-                GlStateManager.disableNormalize();
-                GlStateManager.popMatrix();
 
             } else {
                 if (!properties.alreadyIgnoresCamera && entity.ignoreFrustumCheck) {
@@ -360,94 +408,19 @@ public class ClientEvents {
                 }
             }
         }
-        FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, FrozenEntityProperties.class);
-        if (frozenProps != null && frozenProps.isFrozen) {
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            GlStateManager.enableNormalize();
-            GlStateManager.enableBlend();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            float sideExpand = 0.25F;
-            AxisAlignedBB axisalignedbb1 = new AxisAlignedBB(event.getEntity().getRenderBoundingBox().minX - event.getEntity().getPosX() + event.getX() - sideExpand, event.getEntity().getRenderBoundingBox().minY - event.getEntity().getPosY() + event.getY(), event.getEntity().getRenderBoundingBox().minZ - event.getEntity().getPosZ() + event.getZ() - sideExpand, event.getEntity().getRenderBoundingBox().maxX - event.getEntity().getPosX() + event.getX() + sideExpand, event.getEntity().getRenderBoundingBox().maxY - event.getEntity().getPosY() + event.getY() + sideExpand, event.getEntity().getRenderBoundingBox().maxZ - event.getEntity().getPosZ() + event.getZ() + sideExpand);
-            event.getRenderer().bindTexture(getIceTexture(frozenProps.ticksUntilUnfrozen));
-            renderAABB(axisalignedbb1, 0, 0, 0);
-            GlStateManager.disableBlend();
-            GlStateManager.disableNormalize();
-        }
-        MiscEntityProperties miscProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, MiscEntityProperties.class);
-        if (miscProps != null && miscProps.glarers.size() > 0) {
-            float f = 1.0F;// ((float) miscProps.clientSideAttackTime + event.getPartialRenderTick()) / (float) 80;
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder bufferbuilder = tessellator.getBuffer();
-            event.getRenderer().bindTexture(RenderCockatrice.TEXTURE_BEAM);
-            GlStateManager.glTexParameteri(3553, 10242, 10497);
-            GlStateManager.glTexParameteri(3553, 10243, 10497);
-            GlStateManager.disableCull();
-            GlStateManager.disableBlend();
-            GlStateManager.depthMask(true);
-            float f1 = 240.0F;
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-            float f2 = (float) entity.world.getTotalWorldTime() + event.getPartialRenderTick();
-            float f3 = f2 * 0.15F % 1.0F;
-            float f4 = entity.getEyeHeight();
-            GlStateManager.pushMatrix();
-            GlStateManager.translate(0, 1.2F, 0);
-            for (Entity LivingEntity : miscProps.glarers) {
-                Vec3d vec3d = this.getChainPosition(LivingEntity, (double) LivingEntity.getEyeHeight() * 0.75D, event.getPartialRenderTick());
-                Vec3d vec3d1 = this.getChainPosition(entity, f4, event.getPartialRenderTick());
-                Vec3d vec3d2 = vec3d1.subtract(vec3d);
-                double d0 = vec3d2.length() + 1.0D;
-                vec3d2 = vec3d2.normalize();
-                float f5 = (float) acos(vec3d2.y);
-                float f6 = (float) IAFMath.atan2_accurate(vec3d2.z, vec3d2.x);
-                GlStateManager.rotate((((float) Math.PI / 2F) + -f6) * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
-                GlStateManager.rotate(f5 * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
-                double d1 = (double) f2 * 0.05D * -1.5D;
-                bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-                int j = 225;
-                int k = 225;
-                int l = 225;
-                double d4 = 0.0D + Math.cos(d1 + 2.356194490192345D) * 0.282D;
-                double d5 = 0.0D + Math.sin(d1 + 2.356194490192345D) * 0.282D;
-                double d6 = 0.0D + Math.cos(d1 + (Math.PI / 4D)) * 0.282D;
-                double d7 = 0.0D + Math.sin(d1 + (Math.PI / 4D)) * 0.282D;
-                double d8 = 0.0D + Math.cos(d1 + 3.9269908169872414D) * 0.282D;
-                double d9 = 0.0D + Math.sin(d1 + 3.9269908169872414D) * 0.282D;
-                double d10 = 0.0D + Math.cos(d1 + 5.497787143782138D) * 0.282D;
-                double d11 = 0.0D + Math.sin(d1 + 5.497787143782138D) * 0.282D;
-                double d12 = 0.0D + Math.cos(d1 + Math.PI) * 0.2D;
-                double d13 = 0.0D + Math.sin(d1 + Math.PI) * 0.2D;
-                double d14 = 0.0D + Math.cos(d1 + 0.0D) * 0.2D;
-                double d15 = 0.0D + Math.sin(d1 + 0.0D) * 0.2D;
-                double d16 = 0.0D + Math.cos(d1 + (Math.PI / 2D)) * 0.2D;
-                double d17 = 0.0D + Math.sin(d1 + (Math.PI / 2D)) * 0.2D;
-                double d18 = 0.0D + Math.cos(d1 + (Math.PI * 3D / 2D)) * 0.2D;
-                double d19 = 0.0D + Math.sin(d1 + (Math.PI * 3D / 2D)) * 0.2D;
-                double d22 = -1.0F + f3;
-                double d23 = d0 * 2.5D + d22;
-                bufferbuilder.pos(d12, d0, d13).tex(0.4999D, d23).color(j, k, l, 255).endVertex();
-                bufferbuilder.pos(d12, 0.0D, d13).tex(0.4999D, d22).color(j, k, l, 255).endVertex();
-                bufferbuilder.pos(d14, 0.0D, d15).tex(0.0D, d22).color(j, k, l, 255).endVertex();
-                bufferbuilder.pos(d14, d0, d15).tex(0.0D, d23).color(j, k, l, 255).endVertex();
-                bufferbuilder.pos(d16, d0, d17).tex(0.4999D, d23).color(j, k, l, 255).endVertex();
-                bufferbuilder.pos(d16, 0.0D, d17).tex(0.4999D, d22).color(j, k, l, 255).endVertex();
-                bufferbuilder.pos(d18, 0.0D, d19).tex(0.0D, d22).color(j, k, l, 255).endVertex();
-                bufferbuilder.pos(d18, d0, d19).tex(0.0D, d23).color(j, k, l, 255).endVertex();
-                double d24 = 0.0D;
-                if (entity.ticksExisted % 2 == 0) {
-                    d24 = 0.5D;
-                }
-                bufferbuilder.pos(d4, d0, d5).tex(0.5D, d24 + 0.5D).color(j, k, l, 255).endVertex();
-                bufferbuilder.pos(d6, d0, d7).tex(1.0D, d24 + 0.5D).color(j, k, l, 255).endVertex();
-                bufferbuilder.pos(d10, d0, d11).tex(1.0D, d24).color(j, k, l, 255).endVertex();
-                bufferbuilder.pos(d8, d0, d9).tex(0.5D, d24).color(j, k, l, 255).endVertex();
-                tessellator.draw();
-            }
-            GlStateManager.disableBlend();
-            GlStateManager.enableCull();
-            GlStateManager.popMatrix();
-        }
     }
+
+    private static void func_229108_a_(IVertexBuilder p_229108_0_, Matrix4f p_229108_1_, Matrix3f p_229108_2_, float p_229108_3_, float p_229108_4_, float p_229108_5_, int p_229108_6_, int p_229108_7_, int p_229108_8_, float p_229108_9_, float p_229108_10_) {
+        p_229108_0_.pos(p_229108_1_, p_229108_3_, p_229108_4_, p_229108_5_).color(p_229108_6_, p_229108_7_, p_229108_8_, 255).tex(p_229108_9_, p_229108_10_).overlay(OverlayTexture.NO_OVERLAY).lightmap(15728880).normal(p_229108_2_, 0.0F, 1.0F, 0.0F).endVertex();
+    }
+
+    private Vec3d getPosition(Entity LivingEntityIn, double p_177110_2_, float p_177110_4_) {
+        double d0 = LivingEntityIn.lastTickPosX + (LivingEntityIn.getPosX() - LivingEntityIn.lastTickPosX) * (double) p_177110_4_;
+        double d1 = p_177110_2_ + LivingEntityIn.lastTickPosY + (LivingEntityIn.getPosY() - LivingEntityIn.lastTickPosY) * (double) p_177110_4_;
+        double d2 = LivingEntityIn.lastTickPosZ + (LivingEntityIn.getPosZ() - LivingEntityIn.lastTickPosZ) * (double) p_177110_4_;
+        return new Vec3d(d0, d1, d2);
+    }
+
 
     private double acos(double x) {
         return (-0.69813170079773212 * x * x - 0.87266462599716477) * x + 1.5707963267948966;
@@ -462,7 +435,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onGuiOpened(GuiOpenEvent event) {
-        if (IafConfig.customMainMenu && event.getGui() instanceof GuiMainMenu && !(event.getGui() instanceof IceAndFireMainMenu)) {
+        if (IafConfig.customMainMenu && event.getGui() instanceof MainMenuScreen && !(event.getGui() instanceof IceAndFireMainMenu)) {
             event.setGui(new IceAndFireMainMenu());
         }
     }

@@ -91,6 +91,7 @@ public class CommonProxy {
                     if (obj instanceof IUsesTEISR) {
                         props = IceAndFire.PROXY.setupISTER(props);
                     }
+                    props.group(IceAndFire.TAB_BLOCKS);
                     BlockItem itemBlock = new BlockItem((Block) obj, props);
                     itemBlock.setRegistryName(((Block) obj).getRegistryName());
                     event.getRegistry().register(itemBlock);
@@ -100,6 +101,7 @@ public class CommonProxy {
                         if (block instanceof IUsesTEISR) {
                             props = IceAndFire.PROXY.setupISTER(props);
                         }
+                        props.group(IceAndFire.TAB_BLOCKS);
                         BlockItem itemBlock = new BlockItem(block, props);
                         itemBlock.setRegistryName(block.getRegistryName());
                         event.getRegistry().register(itemBlock);

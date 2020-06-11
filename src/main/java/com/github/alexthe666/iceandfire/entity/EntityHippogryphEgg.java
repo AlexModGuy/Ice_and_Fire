@@ -24,13 +24,18 @@ public class EntityHippogryphEgg extends EggEntity {
         super(type, world);
     }
 
+    public EntityHippogryphEgg(EntityType type, World worldIn, double x, double y, double z, ItemStack stack) {
+        this(type, worldIn);
+        this.setPosition(x, y, z);
+        this.itemstack = stack;
+    }
+
     public EntityHippogryphEgg(EntityType type, World worldIn, LivingEntity throwerIn, ItemStack stack) {
         this(type, worldIn);
         this.setPosition(throwerIn.getPosX(), throwerIn.getPosYEye() - (double)0.1F, throwerIn.getPosZ());
         this.owner = throwerIn;
         this.itemstack = stack;
     }
-
 
     @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {
