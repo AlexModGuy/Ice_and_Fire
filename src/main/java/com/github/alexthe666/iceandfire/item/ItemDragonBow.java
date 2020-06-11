@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 public class ItemDragonBow extends BowItem implements ICustomRendered {
 
     public ItemDragonBow() {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxDamage(584).maxStackSize(1));
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxDamage(584));
         this.setRegistryName(IceAndFire.MODID, "dragonbone_bow");
     }
 

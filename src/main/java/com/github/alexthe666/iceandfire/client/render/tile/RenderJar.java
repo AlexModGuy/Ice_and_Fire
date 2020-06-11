@@ -20,7 +20,7 @@ public class RenderJar<T extends TileEntityJar> extends TileEntityRenderer<T> {
     public static final RenderType TEXTURE_3 = RenderType.func_230167_a_(RenderPixie.TEXTURE_3, false);
     public static final RenderType TEXTURE_4 = RenderType.func_230167_a_(RenderPixie.TEXTURE_4, false);
     public static final RenderType TEXTURE_5 = RenderType.func_230167_a_(RenderPixie.TEXTURE_5, false);
-    private static final ModelPixie MODEL_PIXIE = new ModelPixie();
+    private static ModelPixie MODEL_PIXIE;
 
     public RenderJar(TileEntityRendererDispatcher p_i226016_1_) {
         super(p_i226016_1_);
@@ -30,7 +30,9 @@ public class RenderJar<T extends TileEntityJar> extends TileEntityRenderer<T> {
     public void render(T entity, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         int meta = 0;
         boolean hasPixie = false;
-
+        if(MODEL_PIXIE == null){
+            MODEL_PIXIE = new ModelPixie();
+        }
         if (entity != null && entity.getWorld() != null) {
             meta = entity.pixieType;
             hasPixie = entity.hasPixie;

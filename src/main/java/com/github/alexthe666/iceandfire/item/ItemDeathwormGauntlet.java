@@ -29,7 +29,7 @@ import java.util.List;
 public class ItemDeathwormGauntlet extends Item {
 
     public ItemDeathwormGauntlet(String color) {
-        super(new Item.Properties().maxStackSize(1).maxDamage(500).group(IceAndFire.TAB_ITEMS));
+        super(new Item.Properties().maxDamage(500).group(IceAndFire.TAB_ITEMS));
         this.setRegistryName(IceAndFire.MODID, "deathworm_gauntlet_" + color);
     }
 

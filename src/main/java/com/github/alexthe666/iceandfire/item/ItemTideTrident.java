@@ -23,7 +23,7 @@ import java.util.List;
 public class ItemTideTrident extends Item {
 
     public ItemTideTrident() {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1).maxDamage(400));
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxDamage(400));
         this.setRegistryName(IceAndFire.MODID, "tide_trident");
     }
 

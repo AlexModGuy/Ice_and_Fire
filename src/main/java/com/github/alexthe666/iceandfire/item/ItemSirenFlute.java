@@ -31,7 +31,7 @@ import java.util.function.Predicate;
 public class ItemSirenFlute extends Item {
 
     public ItemSirenFlute() {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxDamage(200).maxStackSize(1));
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxDamage(200));
         this.setRegistryName(IceAndFire.MODID, "siren_flute");
     }
 

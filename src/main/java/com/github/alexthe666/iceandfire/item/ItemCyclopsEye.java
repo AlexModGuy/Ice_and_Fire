@@ -23,7 +23,7 @@ import java.util.List;
 public class ItemCyclopsEye extends Item {
 
     public ItemCyclopsEye() {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1).maxDamage(500));
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxDamage(500));
         this.setRegistryName(IceAndFire.MODID, "cyclops_eye");
     }
 

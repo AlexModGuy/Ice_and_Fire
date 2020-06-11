@@ -30,7 +30,7 @@ import java.util.function.Predicate;
 public class ItemCockatriceScepter extends Item {
 
     public ItemCockatriceScepter() {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1).maxDamage(700));
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxDamage(700));
         this.setRegistryName(IceAndFire.MODID, "cockatrice_scepter");
     }
 

@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 public class ItemLichStaff extends Item {
 
     public ItemLichStaff() {
-        super(new Item.Properties().maxStackSize(1).maxDamage(100).group(IceAndFire.TAB_ITEMS));
+        super(new Item.Properties().maxDamage(100).group(IceAndFire.TAB_ITEMS));
         this.setRegistryName("iceandfire:lich_staff");
     }
 

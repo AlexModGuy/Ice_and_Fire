@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 public class ItemFishingSpear extends Item {
 
     public ItemFishingSpear() {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1).maxDamage(64));
+        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxDamage(64));
         this.setRegistryName(IceAndFire.MODID, "fishing_spear");
     }
 }
