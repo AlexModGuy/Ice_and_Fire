@@ -1,7 +1,7 @@
 {
   "textures": {
-    "0": "blocks/planks_jungle",
-    "particle": "blocks/planks_jungle"
+    "0": "block/planks_jungle",
+    "particle": "block/planks_jungle"
   },
   "elements": [
     {

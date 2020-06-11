@@ -2,8 +2,8 @@
   "textures": {
     "0": "iceandfire:block/jar_side",
     "1": "iceandfire:block/jar_bottom",
-    "2": "blocks/planks_oak",
-    "particle": "blocks/glass"
+    "2": "block/planks_oak",
+    "particle": "block/glass"
   },
   "elements": [
     {

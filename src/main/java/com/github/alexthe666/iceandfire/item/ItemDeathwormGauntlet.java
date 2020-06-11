@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemDeathwormGauntlet extends Item {
+public class ItemDeathwormGauntlet extends Item implements ICustomRendered {
 
     public ItemDeathwormGauntlet(String color) {
         super(new Item.Properties().maxDamage(500).group(IceAndFire.TAB_ITEMS));

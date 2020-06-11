@@ -21,7 +21,7 @@ public class BlockMyrmexBiolight extends BushBlock {
     protected static final AxisAlignedBB BUSH_AABB = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1D, 0.75D);
 
     public BlockMyrmexBiolight(boolean jungle) {
-        super(Properties.create(Material.PLANTS).hardnessAndResistance(0).lightValue(7).sound(SoundType.PLANT).tickRandomly());
+        super(Properties.create(Material.PLANTS).notSolid().variableOpacity().hardnessAndResistance(0).lightValue(7).sound(SoundType.PLANT).tickRandomly());
         this.setRegistryName(IceAndFire.MODID, jungle ? "myrmex_jungle_biolight" : "myrmex_desert_biolight");
         this.setDefaultState(this.getStateContainer().getBaseState().with(CONNECTED_DOWN, Boolean.valueOf(false)));
     }

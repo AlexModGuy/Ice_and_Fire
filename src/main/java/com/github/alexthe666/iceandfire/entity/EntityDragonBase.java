@@ -307,7 +307,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
             tail2Part = null;
         }
         if (tail3Part != null) {
-            tail2Part.remove();
+            tail3Part.remove();
             tail3Part = null;
         }
         if (tail4Part != null) {
@@ -1460,6 +1460,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     @Override
     public void tick() {
         super.tick();
+        recalculateSize();
         updateParts();
         this.prevDragonPitch = getDragonPitch();
         if (world.isRemote) {

@@ -23,7 +23,7 @@ public class BlockPixieHouse extends ContainerBlock implements ICustomRendered {
     public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
 
     public BlockPixieHouse(String type) {
-        super(Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 5.0F).tickRandomly());
+        super(Properties.create(Material.WOOD).notSolid().variableOpacity().hardnessAndResistance(2.0F, 5.0F).tickRandomly());
         this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
         this.setRegistryName(IceAndFire.MODID, "pixie_house_" + type);
     }

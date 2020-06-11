@@ -15,7 +15,7 @@ import java.util.Random;
 public class BlockBurntTorch extends TorchBlock implements IDreadBlock {
 
     public BlockBurntTorch() {
-        super(Properties.create(Material.WOOD).lightValue(0).sound(SoundType.WOOD).lightValue(0));
+        super(Properties.create(Material.WOOD).lightValue(0).sound(SoundType.WOOD).lightValue(0).notSolid().variableOpacity());
         setRegistryName(IceAndFire.MODID, "burnt_torch");
     }
 

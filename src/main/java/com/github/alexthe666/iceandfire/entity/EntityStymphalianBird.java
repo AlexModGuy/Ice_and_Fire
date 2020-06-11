@@ -89,7 +89,6 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         super.registerAttributes();
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(24.0D);
-        this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
         this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.stymphalianBirdTargetSearchLength));
         this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0D);
@@ -98,7 +97,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(VICTOR_ENTITY, Optional.of(null));
+        this.dataManager.register(VICTOR_ENTITY, Optional.empty());
         this.dataManager.register(FLYING, Boolean.valueOf(false));
     }
 

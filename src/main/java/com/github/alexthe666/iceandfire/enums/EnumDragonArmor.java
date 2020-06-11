@@ -35,7 +35,7 @@ public enum EnumDragonArmor {
     public static void initArmors() {
         for (int i = 0; i < EnumDragonArmor.values().length; i++) {
             EnumDragonArmor.values()[i].armorMaterial = new CustomArmorMaterial("iceandfire:armor_dragon_scales" + (i + 1), 36, new int[]{5, 7, 9, 5}, 15, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 2);
-            String sub = "iceandfire:armor_" + EnumDragonArmor.values()[i].name();
+            String sub = "iceandfire:" + EnumDragonArmor.values()[i].name();
             EnumDragonArmor.values()[i].helmet = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, EquipmentSlotType.HEAD);
             EnumDragonArmor.values()[i].chestplate = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, EquipmentSlotType.CHEST);
             EnumDragonArmor.values()[i].leggings = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, EquipmentSlotType.LEGS);

@@ -14,6 +14,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
@@ -58,7 +59,7 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
     @Override
     protected ITextComponent getDefaultName() {
-        return null;
+        return new TranslationTextComponent("container.myrmex_cocoon");
     }
 
     @Override

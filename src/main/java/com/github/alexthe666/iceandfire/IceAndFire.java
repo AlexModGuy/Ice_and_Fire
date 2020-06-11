@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire;
 
 
+import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -38,7 +39,7 @@ public class IceAndFire {
     public static ItemGroup TAB_BLOCKS = new ItemGroup("iceandfire.blocks") {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(IafItemRegistry.DRAGONSCALES_RED);
+            return new ItemStack(IafBlockRegistry.DRAGON_SCALE_RED);
         }
     };
     public static CommonProxy PROXY = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);

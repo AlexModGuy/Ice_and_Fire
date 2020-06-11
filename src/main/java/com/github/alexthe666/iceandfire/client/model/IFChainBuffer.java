@@ -202,7 +202,7 @@ public class IFChainBuffer {
      * @param boxes the box array
      */
     public void applyChainSwingBuffer(ModelRenderer... boxes) {
-        float rotateAmount = 0.01745329251F * MathHelper.lerp(this.prevYawVariation, this.yawVariation, getPartialTicks()) / boxes.length;
+        float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
         for (ModelRenderer box : boxes) {
             box.rotateAngleY += rotateAmount;
         }
@@ -214,7 +214,7 @@ public class IFChainBuffer {
      * @param boxes the box array
      */
     public void applyChainWaveBuffer(ModelRenderer... boxes) {
-        float rotateAmount = 0.01745329251F * MathHelper.lerp(this.prevPitchVariation, this.pitchVariation, getPartialTicks()) / boxes.length;
+        float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
         for (ModelRenderer box : boxes) {
             box.rotateAngleX += rotateAmount;
         }
@@ -226,7 +226,7 @@ public class IFChainBuffer {
      * @param boxes the box array
      */
     public void applyChainFlapBuffer(ModelRenderer... boxes) {
-        float rotateAmount = 0.01745329251F * MathHelper.lerp(this.prevYawVariation, this.yawVariation, getPartialTicks()) / boxes.length;
+        float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
         for (ModelRenderer box : boxes) {
             box.rotateAngleZ += rotateAmount;
         }
@@ -238,26 +238,27 @@ public class IFChainBuffer {
      * @param boxes the box array
      */
     public void applyChainFlapBufferReverse(ModelRenderer... boxes) {
-        float rotateAmount = 0.01745329251F * MathHelper.lerp(this.prevYawVariation, this.yawVariation, getPartialTicks()) / boxes.length;
+        float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
         for (ModelRenderer box : boxes) {
             box.rotateAngleZ -= rotateAmount * 0.5F;
         }
     }
 
     public void applyChainSwingBufferReverse(ModelRenderer... boxes) {
-        float rotateAmount = 0.01745329251F * MathHelper.lerp(this.prevYawVariation, this.yawVariation, getPartialTicks()) / boxes.length;
+        float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
         for (ModelRenderer box : boxes) {
             box.rotateAngleY -= rotateAmount;
         }
     }
 
     public void applyChainWaveBufferReverse(ModelRenderer... boxes) {
-        float rotateAmount = 0.01745329251F * MathHelper.lerp(this.prevPitchVariation, this.pitchVariation, getPartialTicks()) / boxes.length;
+        float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
         for (ModelRenderer box : boxes) {
             box.rotateAngleX -= rotateAmount;
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
     private float getPartialTicks() {
         return Minecraft.getInstance().getRenderPartialTicks();
     }

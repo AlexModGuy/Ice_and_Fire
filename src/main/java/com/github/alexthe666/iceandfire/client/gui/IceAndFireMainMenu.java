@@ -2,11 +2,16 @@ package com.github.alexthe666.iceandfire.client.gui;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.MainMenuScreen;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldVertexBufferUploader;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.ForgeHooksClient;
@@ -191,16 +196,17 @@ public class IceAndFireMainMenu extends MainMenuScreen {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
+        FontRenderer fontrenderer = this.minecraft.getFontResourceManager().getFontRenderer(Minecraft.standardGalacticFontRenderer);
         GlStateManager.enableTexture();
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.enableBlend();
         this.minecraft.getTextureManager().bindTexture(TABLE_TEXTURE);
-        blit(0, 0, 0, 0, this.width, this.height, this.width, this.height, zLevel);
+        blit(0, 0, 0, 0, this.width, this.height, this.width, this.height);
         this.minecraft.getTextureManager().bindTexture(BESTIARY_TEXTURE);
-        blit(50, 0, 0, 0, this.width - 100, this.height, this.width - 100, this.height, this.zLevel);
+        blit(50, 0, 0, 0, this.width - 100, this.height, this.width - 100, this.height);
         if (this.isFlippingPage) {
             this.minecraft.getTextureManager().bindTexture(pageFlipTextures[Math.min(5, pageFlip)]);
-            blit(50, 0, 0, 0, this.width - 100, this.height, this.width - 100, this.height, this.zLevel);
+            blit(50, 0, 0, 0, this.width - 100, this.height, this.width - 100, this.height);
         } else {
             int middleX = this.width / 2;
             int middleY = this.height / 5;
@@ -210,14 +216,15 @@ public class IceAndFireMainMenu extends MainMenuScreen {
                 float f2 = (float) 60 - partialTicks;
                 int color = 0X9C8B7B;
                 int opacity = 10 + (int) (255 * enscription.alpha * globalAlpha);
-                this.minecraft.fontRenderer.drawString(enscription.text, (int) (enscription.x * widthScale) + middleX, (int) (enscription.y * widthScale) + middleY, color | (opacity << 24));
+                fontrenderer.drawString(enscription.text, (int) (enscription.x * widthScale) + middleX, (int) (enscription.y * widthScale) + middleY, color | (opacity << 24));
             }
             for (Picture picture : drawnPictures) {
-                GlStateManager.color4f(1.0F, 1.0F, 1.0F, picture.alpha * globalAlpha + 0.01F);
+                float alpha = (picture.alpha * globalAlpha + 0.01F);
+                RenderSystem.enableBlend();
                 this.minecraft.getTextureManager().bindTexture(drawingTextures[picture.image]);
                 //3 -> 1
                 //1 -> 3
-                blit((int) ((picture.x * widthScale) + middleX), (int) ((picture.y * widthScale) + middleY), 0, 0, imageScale, (int) imageScale, (int) imageScale, (int) imageScale, this.zLevel);
+                GuiMainMenuBlit.blit((int) ((picture.x * widthScale) + middleX), (int) ((picture.y * widthScale) + middleY), 0, 0,  (int) imageScale, (int) imageScale, (int) imageScale, (int) imageScale, alpha);
             }
         }
         GlStateManager.enableTexture();
@@ -248,7 +255,6 @@ public class IceAndFireMainMenu extends MainMenuScreen {
             buttons.get(i).render(mouseX, mouseY, minecraft.getRenderPartialTicks());
         }
     }
-
 
     public String generateNewRandomName(FontRenderer fontRendererIn, int length, Random rand) {
         int i = rand.nextInt(2) + 3;

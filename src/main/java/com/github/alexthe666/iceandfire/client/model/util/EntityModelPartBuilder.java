@@ -44,7 +44,7 @@ public class EntityModelPartBuilder {
             try {
                 for (Field f : clazz.getDeclaredFields()) {
                     Object obj = f.get(null);
-                    if (obj instanceof AdvancedModelBox && obj != null) {
+                    if (obj instanceof AdvancedModelBox ) {
                         rendererList.add((AdvancedModelBox) obj);
                     }
                 }

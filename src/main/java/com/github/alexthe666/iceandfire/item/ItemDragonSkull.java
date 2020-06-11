@@ -23,13 +23,21 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemDragonSkull extends Item implements ICustomRendered {
-
     private int dragonType;
-
     public ItemDragonSkull(int dragonType) {
         super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
         this.dragonType = dragonType;
-        this.setRegistryName(IceAndFire.MODID, "dragon_skull_" + dragonType);
+        this.setRegistryName(IceAndFire.MODID, "dragon_skull_" + getType(dragonType));
+    }
+
+    private String getType(int type){
+        if(type == 2){
+            return "lightning";
+        }else if (type == 1){
+            return "ice";
+        }else{
+            return "fire";
+        }
     }
 
     @Override

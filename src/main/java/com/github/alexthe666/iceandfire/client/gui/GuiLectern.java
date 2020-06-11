@@ -1,7 +1,10 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -152,38 +155,44 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
             int k1 = j1 + 20;
             this.setBlitOffset(0);
             this.minecraft.getTextureManager().bindTexture(ENCHANTMENT_TABLE_GUI_TEXTURE);
-            int l1 = this.container.getPossiblePages()[l] == null ? -1 : this.container.getPossiblePages()[l].ordinal();//enchantment level
+            int l1 = this.container.getPossiblePages()[i1] == null ? -1 : this.container.getPossiblePages()[i1].ordinal();//enchantment level
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             if (l1 == 0) {
                 this.blit(j1, j + 14 + 19 * i1, 0, 185, 108, 19);
             } else {
                 String s = "" + l1;
                 int i2 = 86 - this.font.getStringWidth(s);
-                String s1 = I18n.format("bestiary." + this.container.getPossiblePages()[l].toString().toLowerCase());//EnchantmentNameParts.getInstance().generateNewRandomName(this.fontRenderer, l1);
                 FontRenderer fontrenderer = this.minecraft.getFontResourceManager().getFontRenderer(Minecraft.standardGalacticFontRenderer);
+                String s1 = "";
+                if (this.container.getPossiblePages()[i1] != null) {
+                    s1 = I18n.format("bestiary." + this.container.getPossiblePages()[i1].toString().toLowerCase());//EnchantmentNameParts.getInstance().generateNewRandomName(this.fontRenderer, l1);
+                }
                 int j2 = 6839882;
-                if (((l < i1 + 1 || this.minecraft.player.experienceLevel < l1) && !this.minecraft.player.abilities.isCreativeMode)) { // Forge: render buttons as disabled when enchantable but enchantability not met on lower levels
-                    this.blit(j1, j + 14 + 19 * i1, 0, 185, 108, 19);
-                    this.blit(j1 + 1, j + 15 + 19 * i1, 16 * i1, 239, 16, 16);
-                    fontrenderer.drawSplitString(s1, k1, j + 16 + 19 * i1, i2, (j2 & 16711422) >> 1);
-                    j2 = 4226832;
-                } else {
-                    int k2 = mouseX - (i + 60);
-                    int l2 = mouseY - (j + 14 + 19 * i1);
-                    if (k2 >= 0 && l2 >= 0 && k2 < 108 && l2 < 19) {
-                        this.blit(j1, j + 14 + 19 * i1, 0, 204, 108, 19);
-                        j2 = 16777088;
+                if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern) {
+                    TileEntityLectern lectern = (TileEntityLectern) IceAndFire.PROXY.getRefrencedTE();
+                    if (lectern.getStackInSlot(0).getItem() != IafItemRegistry.BESTIARY) { // Forge: render buttons as disabled when enchantable but enchantability not met on lower levels
+                        this.blit(j1, j + 14 + 19 * i1, 0, 185, 108, 19);
+                        this.blit(j1 + 1, j + 15 + 19 * i1, 16 * i1, 239, 16, 16);
+                        fontrenderer.drawSplitString(s1, k1, j + 16 + 19 * i1, i2, (j2 & 16711422) >> 1);
+                        j2 = 4226832;
                     } else {
-                        this.blit(j1, j + 14 + 19 * i1, 0, 166, 108, 19);
+                        int k2 = mouseX - (i + 60);
+                        int l2 = mouseY - (j + 14 + 19 * i1);
+                        if (k2 >= 0 && l2 >= 0 && k2 < 108 && l2 < 19) {
+                            this.blit(j1, j + 14 + 19 * i1, 0, 204, 108, 19);
+                            j2 = 16777088;
+                        } else {
+                            this.blit(j1, j + 14 + 19 * i1, 0, 166, 108, 19);
+                        }
+
+                        this.blit(j1 + 1, j + 15 + 19 * i1, 16 * i1, 223, 16, 16);
+                        fontrenderer.drawSplitString(s1, k1, j + 16 + 19 * i1, i2, j2);
+                        j2 = 8453920;
                     }
 
-                    this.blit(j1 + 1, j + 15 + 19 * i1, 16 * i1, 223, 16, 16);
-                    fontrenderer.drawSplitString(s1, k1, j + 16 + 19 * i1, i2, j2);
-                    j2 = 8453920;
+                    fontrenderer = this.minecraft.fontRenderer;
+                    fontrenderer.drawStringWithShadow(s, (float) (k1 + 86 - fontrenderer.getStringWidth(s)), (float) (j + 16 + 19 * i1 + 7), j2);
                 }
-
-                fontrenderer = this.minecraft.fontRenderer;
-                fontrenderer.drawStringWithShadow(s, (float) (k1 + 86 - fontrenderer.getStringWidth(s)), (float) (j + 16 + 19 * i1 + 7), j2);
             }
         }
     }

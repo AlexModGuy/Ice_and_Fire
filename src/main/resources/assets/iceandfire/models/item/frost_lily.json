@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:blocks/frost_lily"
+    "layer0": "iceandfire:block/frost_lily"
   }
 }

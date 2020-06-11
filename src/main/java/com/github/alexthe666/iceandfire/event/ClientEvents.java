@@ -176,24 +176,25 @@ public class ClientEvents {
                 int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
                 EntityDragonBase dragon = (EntityDragonBase) player.getRidingEntity();
                 float scale = ((EntityDragonBase) player.getRidingEntity()).getRenderSize() / 3;
+                MatrixStack matrixStack = new MatrixStack();
                 if (Minecraft.getInstance().gameSettings.thirdPersonView == 1) {
                     if (currentView == 0) {
                     } else if (currentView == 1) {
-                        GL11.glTranslatef(scale * 0.5F, 0F, -scale * 3F);
+                        matrixStack.translate(scale * 0.5F, 0F, -scale * 3F);
                     } else if (currentView == 2) {
-                        GL11.glTranslatef(0, 0F, -scale * 3F);
+                        matrixStack.translate(0, 0F, -scale * 3F);
                     } else if (currentView == 3) {
-                        GL11.glTranslatef(scale * 0.5F, 0F, -scale * 0.5F);
+                        matrixStack.translate(scale * 0.5F, 0F, -scale * 0.5F);
                     }
                 }
                 if (Minecraft.getInstance().gameSettings.thirdPersonView == 2) {
                     if (currentView == 0) {
                     } else if (currentView == 1) {
-                        GL11.glTranslatef(-scale * 1.2F, 0F, 5);
+                        matrixStack.translate(-scale * 1.2F, 0F, 5);
                     } else if (currentView == 2) {
-                        GL11.glTranslatef(scale * 1.2F, 0F, 5);
+                        matrixStack.translate(scale * 1.2F, 0F, 5);
                     } else if (currentView == 3) {
-                        GL11.glTranslatef(0, 0F, scale * 3F);
+                        matrixStack.translate(0, 0F, scale * 3F);
                     }
                 }
 

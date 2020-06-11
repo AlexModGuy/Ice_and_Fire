@@ -22,7 +22,7 @@ public class BlockIceSpikes extends Block {
     public Item itemBlock;
 
     public BlockIceSpikes() {
-        super(Properties.create(Material.PACKED_ICE).sound(SoundType.GLASS).hardnessAndResistance(2.5F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
+        super(Properties.create(Material.PACKED_ICE).notSolid().variableOpacity().sound(SoundType.GLASS).hardnessAndResistance(2.5F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
         this.setRegistryName(IceAndFire.MODID, "dragon_ice_spikes");
     }
 

@@ -23,7 +23,7 @@ public class BlockPodium extends ContainerBlock implements ICustomRendered {
     protected static final VoxelShape AABB = Block.makeCuboidShape(4, 0, 4, 12, 19, 12);
 
     public BlockPodium(String type) {
-        super(Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD));
+        super(Properties.create(Material.WOOD).notSolid().variableOpacity().hardnessAndResistance(2.0F).sound(SoundType.WOOD));
         this.setRegistryName(IceAndFire.MODID, "podium_" + type);
     }
 

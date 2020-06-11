@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.inventory;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
@@ -130,8 +131,11 @@ public class ContainerLectern extends Container {
     }
 
     private int getPageField(int i) {
-        TileEntityLectern lectern = (TileEntityLectern) tileFurnace;
-        return lectern.selectedPages[i].ordinal();
+        if(IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern){
+            TileEntityLectern lectern = (TileEntityLectern) IceAndFire.PROXY.getRefrencedTE();
+            return lectern.selectedPages[i] == null ? 0 : lectern.selectedPages[i].ordinal();
+        }
+        return 0;
     }
 
     public boolean enchantItem(PlayerEntity playerIn, int id) {

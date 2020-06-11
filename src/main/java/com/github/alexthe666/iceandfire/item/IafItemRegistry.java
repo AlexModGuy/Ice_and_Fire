@@ -161,9 +161,9 @@ public class IafItemRegistry {
     public static final Item HIPPOCAMPUS_FIN = new ItemGeneric("hippocampus_fin", 1);
     public static final Item HIPPOCAMPUS_SLAPPER = new ItemHippocampusSlapper();
     public static final Item EARPLUGS = new ItemModArmor(EARPLUGS_ARMOR_MATERIAL, EquipmentSlotType.HEAD, "earplugs");
-    public static final Item DEATH_WORM_CHITIN_YELLOW = new ItemGeneric("death_worm_chitin_yellow");
-    public static final Item DEATH_WORM_CHITIN_WHITE = new ItemGeneric("death_worm_chitin_white");
-    public static final Item DEATH_WORM_CHITIN_RED = new ItemGeneric("death_worm_chitin_red");
+    public static final Item DEATH_WORM_CHITIN_YELLOW = new ItemGeneric("deathworm_chitin_yellow");
+    public static final Item DEATH_WORM_CHITIN_WHITE = new ItemGeneric("deathworm_chitin_white");
+    public static final Item DEATH_WORM_CHITIN_RED = new ItemGeneric("deathworm_chitin_red");
     public static final Item DEATHWORM_YELLOW_HELMET = new ItemDeathwormArmor(DEATHWORM_0_ARMOR_MATERIAL, EquipmentSlotType.HEAD, "deathworm_yellow_helmet");
     public static final Item DEATHWORM_YELLOW_CHESTPLATE = new ItemDeathwormArmor(DEATHWORM_0_ARMOR_MATERIAL, EquipmentSlotType.CHEST, "deathworm_yellow_chestplate");
     public static final Item DEATHWORM_YELLOW_LEGGINGS = new ItemDeathwormArmor(DEATHWORM_0_ARMOR_MATERIAL, EquipmentSlotType.LEGS, "deathworm_yellow_leggings");

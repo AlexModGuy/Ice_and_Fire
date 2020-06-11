@@ -12,7 +12,7 @@ import net.minecraft.world.IBlockReader;
 public class BlockDreadSpawner extends SpawnerBlock implements IDreadBlock {
 
     public BlockDreadSpawner() {
-        super(Block.Properties.create(Material.ROCK).hardnessAndResistance(10.0F, 10000F).sound(SoundType.METAL));
+        super(Block.Properties.create(Material.ROCK).hardnessAndResistance(10.0F, 10000F).sound(SoundType.METAL).notSolid().variableOpacity());
         this.setRegistryName(IceAndFire.MODID, "dread_spawner");
     }
 

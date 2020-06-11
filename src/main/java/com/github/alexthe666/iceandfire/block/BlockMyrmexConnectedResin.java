@@ -23,7 +23,7 @@ public class BlockMyrmexConnectedResin extends Block {
     public static final BooleanProperty WEST = BooleanProperty.create("west");
 
     public BlockMyrmexConnectedResin(boolean jungle, boolean glass) {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(glass ? 1.5F : 3.5F).sound(glass ? SoundType.GLASS : SoundType.STONE));
+        super(Properties.create(Material.ROCK).hardnessAndResistance(glass ? 1.5F : 3.5F).notSolid().variableOpacity().sound(glass ? SoundType.GLASS : SoundType.STONE));
         this.setDefaultState(this.getStateContainer().getBaseState().with(UP, Boolean.valueOf(false))
                 .with(DOWN, Boolean.valueOf(false))
                 .with(NORTH, Boolean.valueOf(false))

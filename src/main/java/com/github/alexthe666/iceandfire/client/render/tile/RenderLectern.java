@@ -26,11 +26,11 @@ public class RenderLectern<T extends TileEntityLectern> extends TileEntityRender
     public void render(T entity, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         TileEntityLectern lectern = entity;
         matrixStackIn.push();
-        matrixStackIn.translate(0.5F, 1.07F, 0.5F);
+        matrixStackIn.translate(0.5F, 1.1F, 0.5F);
         matrixStackIn.scale(0.8F, 0.8F, 0.8F);
         matrixStackIn.rotate(new Quaternion(Vector3f.YP, this.getRotation(lectern), true));
-        matrixStackIn.rotate(new Quaternion(Vector3f.ZP, 112.5F, true));
-        matrixStackIn.rotate(new Quaternion(Vector3f.XP, 180F, true));
+        matrixStackIn.rotate(new Quaternion(Vector3f.XP, 112, true));
+        matrixStackIn.rotate(new Quaternion(Vector3f.YP, 90, true));
         float f4 = lectern.pageFlipPrev + (lectern.pageFlip - lectern.pageFlipPrev) * partialTicks + 0.25F;
         float f5 = lectern.pageFlipPrev + (lectern.pageFlip - lectern.pageFlipPrev) * partialTicks + 0.75F;
         f4 = (f4 - MathHelper.fastFloor(f4)) * 1.6F - 0.3F;
@@ -51,6 +51,9 @@ public class RenderLectern<T extends TileEntityLectern> extends TileEntityRender
         if (f5 > 1.0F) {
             f5 = 1.0F;
         }
+        float f6 = 1.29F;
+
+        this.book.func_228247_a_(partialTicks, MathHelper.clamp(f4, 0.0F, 1.0F), MathHelper.clamp(f5, 0.0F, 1.0F), f6);
         this.book.render(matrixStackIn, bufferIn.getBuffer(ENCHANTMENT_TABLE_BOOK_TEXTURE), combinedLightIn, combinedOverlayIn, 1, 1F, 1, 1);
         matrixStackIn.pop();
     }
@@ -58,13 +61,13 @@ public class RenderLectern<T extends TileEntityLectern> extends TileEntityRender
     private float getRotation(TileEntityLectern lectern) {
         switch (lectern.getBlockState().get(BlockLectern.FACING)) {
             default:
-                return 90;
+                return 180;
             case EAST:
-                return 0;
+                return 90;
             case WEST:
                 return -90;
             case SOUTH:
-                return 180;
+                return 0;
 
         }
     }

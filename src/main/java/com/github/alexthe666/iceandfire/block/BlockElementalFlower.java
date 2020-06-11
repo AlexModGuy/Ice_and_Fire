@@ -14,7 +14,7 @@ public class BlockElementalFlower extends BushBlock {
     public Item itemBlock;
 
     public BlockElementalFlower(boolean isFire) {
-        super(Properties.create(Material.PLANTS).tickRandomly().sound(SoundType.PLANT));
+        super(Properties.create(Material.PLANTS).notSolid().variableOpacity().tickRandomly().sound(SoundType.PLANT));
         setRegistryName(IceAndFire.MODID, isFire ? "fire_lily" : "frost_lily");
     }
 

@@ -7,6 +7,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import java.util.List;
 
@@ -71,11 +72,6 @@ public class PartEntity extends Entity {
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
-        return null;
-    }
-
-    @Override
     public boolean canBeCollidedWith() {
         return true;
     }
@@ -89,6 +85,12 @@ public class PartEntity extends Entity {
     protected void writeAdditional(CompoundNBT compound) {
 
     }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
+
 
     public void collideWithNearbyEntities() {
         List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
