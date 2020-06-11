@@ -50,7 +50,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientProxy extends CommonProxy {
 
     private static final ModelFireDragonArmor FIRE_DRAGON_SCALE_ARMOR_MODEL = new ModelFireDragonArmor(0.5F, false);
@@ -121,6 +121,11 @@ public class ClientProxy extends CommonProxy {
     @SuppressWarnings("deprecation")
     @OnlyIn(Dist.CLIENT)
     private void renderEntities() {
+
+
+    }
+
+    public void setupClient() {
         EnumDragonAnimations.initializeDragonModels();
         EnumSeaSerpentAnimations.initializeSerpentModels();
         try {
@@ -173,6 +178,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_GHOUL, manager -> new RenderDreadGhoul(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_BEAST, manager -> new RenderDreadBeast(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_SCUTTLER, manager -> new RenderDreadScuttler(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_THRALL, manager -> new RenderDreadThrall(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_LICH, manager -> new RenderDreadLich(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_LICH_SKULL, manager -> new RenderDreadLichSkull());
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_KNIGHT, manager -> new RenderDreadKnight(manager));
@@ -191,7 +197,6 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PIXIE_JAR, manager -> new RenderJar(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.DREAD_PORTAL, manager -> new RenderDreadPortal(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.DREAD_SPAWNER, manager -> new RenderDreadSpawner(manager));
-
     }
 
     @OnlyIn(Dist.CLIENT)

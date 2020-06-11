@@ -32,7 +32,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemGorgonHead extends Item implements ICustomRendered {
+public class ItemGorgonHead extends Item implements IUsesTEISR, ICustomRendered {
 
     public ItemGorgonHead() {
         super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxDamage(1));

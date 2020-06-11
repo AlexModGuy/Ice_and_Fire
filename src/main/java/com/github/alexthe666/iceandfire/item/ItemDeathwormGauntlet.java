@@ -52,7 +52,7 @@ public class ItemDeathwormGauntlet extends Item {
 
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
         MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(player, MiscEntityProperties.class);
-        if (stack.getTag() != null) {
+        if (stack.getTag() != null && properties != null) {
             if (properties.deathwormReceded || properties.deathwormLaunched) {
                 return;
             } else {

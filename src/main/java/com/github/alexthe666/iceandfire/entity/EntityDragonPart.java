@@ -16,8 +16,9 @@ public class EntityDragonPart extends EntityMutlipartPart {
         this.dragon = dragon;
     }
 
-    public EntityDragonPart(LivingEntity parent, float radius, float angleYaw, float offsetY, float sizeX, float sizeY, float damageMultiplier) {
+    public EntityDragonPart(EntityDragonBase parent, float radius, float angleYaw, float offsetY, float sizeX, float sizeY, float damageMultiplier) {
         super(IafEntityRegistry.DRAGON_MULTIPART, parent, radius, angleYaw, offsetY, sizeX, sizeY, damageMultiplier);
+        this.dragon = parent;
     }
 
     public void collideWithNearbyEntities() {
@@ -25,6 +26,6 @@ public class EntityDragonPart extends EntityMutlipartPart {
 
     @Override
     public boolean shouldNotExist() {
-        return !this.dragon.isAlive() && !this.dragon.isModelDead();
+        return this.dragon != null && !this.dragon.isAlive() && !this.dragon.isModelDead();
     }
 }

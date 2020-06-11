@@ -490,7 +490,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     @Override
     public boolean isAIDisabled() {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        return this.isModelDead() || properties == null || properties.isStone || super.isAIDisabled();
+        return this.isModelDead() || properties != null && properties.isStone || super.isAIDisabled();
     }
 
     @Override
@@ -1014,6 +1014,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         }
         if (!this.isModelDead()) {
             if (stack.getItem() == IafItemRegistry.CREATIVE_DRAGON_MEAL) {
+                this.setTamed(true);
                 this.setTamedBy(player);
                 this.setHunger(this.getHunger() + 20);
                 this.heal(Math.min(this.getHealth(), (int) (this.getMaxHealth() / 2)));
@@ -1060,11 +1061,10 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                     if (this.getDragonStage() < 2) {
                         this.startRiding(player, true);
                     }
-                    if (!hasHadHornUse && this.getDragonStage() > 2 && !player.isPassenger()) {
+                    if (this.getDragonStage() > 2 && !player.isPassenger()) {
                         player.setSneaking(false);
-                        if (!world.isRemote) {
-                            player.startRiding(this, true);
-                        }
+                        player.startRiding(this, true);
+
                         if (world.isRemote) {
                             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageStartRidingMob(this.getEntityId(), true));
                         }
@@ -1508,6 +1508,11 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         if (animationTick > this.getAnimation().getDuration() && !world.isRemote) {
             animationTick = 0;
         }
+    }
+
+    @Override
+    public EntitySize getSize(Pose poseIn) {
+        return this.getType().getSize().scale(this.getRenderScale());
     }
 
     @Override

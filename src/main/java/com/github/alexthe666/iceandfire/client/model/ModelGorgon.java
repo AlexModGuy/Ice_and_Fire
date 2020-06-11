@@ -359,7 +359,7 @@ public class ModelGorgon extends ModelDragonBase<EntityGorgon> {
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), "gorgon");
     }
 
 

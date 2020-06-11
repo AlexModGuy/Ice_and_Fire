@@ -227,7 +227,9 @@ public class ModelMyrmexPupa extends ModelDragonBase {
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(Body2, Body3, Body1, legTopR2, legTopR2_1, Body4, legTopR3, legTopR3_1, Body5,
+        Tail1, Tail2, Stinger, legMidR3, legBottomR3, legMidR3_1, legBottomR3_1, Neck1, legTopR1, legTopR1_1,
+        HeadBase, EyeR, MandibleL, MandibleR, EyeL, legMidR1, legBottomR1, legMidR1_1, legBottomR1_1, legMidR2, legBottomR2, legMidR2_1, legBottomR2_1);
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {

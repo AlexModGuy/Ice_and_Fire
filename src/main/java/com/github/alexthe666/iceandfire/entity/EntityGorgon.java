@@ -222,7 +222,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                             if (this.getAttackTarget() instanceof LivingEntity && !(this.getAttackTarget() instanceof IBlacklistedFromStatues) || this.getAttackTarget() instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone()) {
                                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getAttackTarget(), StoneEntityProperties.class);
                                 LivingEntity attackTarget = this.getAttackTarget();
-                                if (properties != null || !properties.isStone) {
+                                if (properties != null && !properties.isStone) {
                                     properties.isStone = true;
                                     if (world.isRemote) {
                                         IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageStoneStatue(attackTarget.getEntityId(), true));

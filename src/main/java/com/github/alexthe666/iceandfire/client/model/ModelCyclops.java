@@ -181,7 +181,8 @@ public class ModelCyclops extends ModelDragonBase<EntityCyclops> {
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(body, UpperBody, Loin, rightleg, leftleg, Head, rightarm, leftarm, Belly, Chest, Eye, Horn, rightear,
+        Leftear, Jaw, topTeethL, topTeethR, Eye_1, Horn2, bottomTeethR, bottomTeethL, rightarm2, leftarm2, LoinBack, rightleg2, leftleg2);
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4) {

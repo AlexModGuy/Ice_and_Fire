@@ -44,16 +44,16 @@ public class EntityModelPartBuilder {
             try {
                 for (Field f : clazz.getDeclaredFields()) {
                     Object obj = f.get(null);
-                    if (obj instanceof AdvancedModelBox) {
+                    if (obj instanceof AdvancedModelBox && obj != null) {
                         rendererList.add((AdvancedModelBox) obj);
                     }
                 }
             } catch (Exception e0) {
             }
-            boxes = ALL_PART_MAP.put(identifier, ImmutableList.copyOf(rendererList));
-        } else {
-            boxes = ALL_PART_MAP.get(identifier);
+            ALL_PART_MAP.put(identifier, ImmutableList.copyOf(rendererList));
         }
+        boxes = ALL_PART_MAP.get(identifier);
+
         return boxes;
     }
 }

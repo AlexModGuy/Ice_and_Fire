@@ -48,10 +48,10 @@ public class RenderDragonBase extends MobRenderer<EntityDragonBase, SegmentedMod
 
 
     public ResourceLocation getEntityTexture(EntityDragonBase entity) {
-        String baseTexture = entity.getVariantName(entity.getVariant()) + " " + entity.getDragonStage() + entity.isModelDead() + entity.isMale() + entity.isSkeletal() + entity.isSleeping() + entity.isBlinking();
+        String baseTexture = entity.getVariantName(entity.getVariant()) + entity.getDragonStage() + entity.isModelDead() + entity.isMale() + entity.isSkeletal() + entity.isSleeping() + entity.isBlinking();
         ResourceLocation resourcelocation = LAYERED_TEXTURE_CACHE.get(baseTexture);
         if (resourcelocation == null) {
-            resourcelocation = new ResourceLocation("iceandfire:" + "dragonTexture_" + baseTexture);
+            resourcelocation = new ResourceLocation("iceandfire:" + "dragon_texture_" + baseTexture);
             List<String> tex = new ArrayList<String>();
             tex.add(EnumDragonTextures.getTextureFromDragon(entity).toString());
             if (entity.isMale() && !entity.isSkeletal()) {
@@ -69,5 +69,9 @@ public class RenderDragonBase extends MobRenderer<EntityDragonBase, SegmentedMod
             LAYERED_TEXTURE_CACHE.put(baseTexture, resourcelocation);
         }
         return resourcelocation;
+    }
+
+    private String simplifyBoolean(boolean bool){
+        return bool ? "1" : "0";
     }
 }

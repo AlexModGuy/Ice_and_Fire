@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.model.ModelRenderer;
 
 public class ModelCockatrice extends ModelDragonBase<EntityCockatrice> {
 
-    private static final ModelCockatriceChick CHICK_MODEL = new ModelCockatriceChick();
     public AdvancedModelBox lowerBody;
     public AdvancedModelBox leftThigh;
     public AdvancedModelBox rightThigh;

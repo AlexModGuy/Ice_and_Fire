@@ -1,13 +1,24 @@
 package com.github.alexthe666.iceandfire.block;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
+import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
+import com.github.alexthe666.iceandfire.item.ICustomRendered;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+import java.lang.reflect.Field;
+
+@Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafBlockRegistry {
 
     public static final SoundType SOUND_TYPE_GOLD = new SoundType(1.0F, 1.0F, IafSoundRegistry.GOLD_PILE_BREAK, IafSoundRegistry.GOLD_PILE_STEP, IafSoundRegistry.GOLD_PILE_BREAK, IafSoundRegistry.GOLD_PILE_STEP, IafSoundRegistry.GOLD_PILE_STEP);
@@ -108,4 +119,66 @@ public class IafBlockRegistry {
     public static final Block DREAD_PORTAL = new BlockDreadPortal();
     public static final Block DREAD_SPAWNER = new BlockDreadSpawner();
     public static final Block BURNT_TORCH = new BlockBurntTorch();
+
+    @SubscribeEvent
+    public static void registerBlocks(RegistryEvent.Register<Block> event) {
+        try {
+            for (Field f : IafBlockRegistry.class.getDeclaredFields()) {
+                Object obj = f.get(null);
+                if (obj instanceof Block) {
+                    event.getRegistry().register((Block) obj);
+                } else if (obj instanceof Block[]) {
+                    for (Block block : (Block[]) obj) {
+                        event.getRegistry().register(block);
+                    }
+                }
+            }
+            for (EnumSeaSerpent color : EnumSeaSerpent.values()) {
+                event.getRegistry().register(color.scaleBlock);
+            }
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SubscribeEvent
+    public static void registerBlockItems(RegistryEvent.Register<Item> event) {
+        // ItemBlocks
+        try {
+            for (Field f : IafBlockRegistry.class.getDeclaredFields()) {
+                Object obj = f.get(null);
+                if (obj instanceof Block) {
+                    Item.Properties props = new Item.Properties();
+                    if (obj instanceof ICustomRendered) {
+                        props = IceAndFire.PROXY.setupISTER(props);
+                    }
+                    props.group(IceAndFire.TAB_BLOCKS);
+                    BlockItem itemBlock = new BlockItem((Block) obj, props);
+                    itemBlock.setRegistryName(((Block) obj).getRegistryName());
+                    event.getRegistry().register(itemBlock);
+                } else if (obj instanceof Block[]) {
+                    for (Block block : (Block[]) obj) {
+                        Item.Properties props = new Item.Properties();
+                        if (block.getRegistryName() != null) {
+                            if (block instanceof ICustomRendered) {
+                                props = IceAndFire.PROXY.setupISTER(props);
+                            }
+                            props.group(IceAndFire.TAB_BLOCKS);
+                            BlockItem itemBlock = new BlockItem(block, props);
+                            itemBlock.setRegistryName(block.getRegistryName());
+                            event.getRegistry().register(itemBlock);
+                        }
+                    }
+                }
+            }
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        for (EnumSeaSerpent color : EnumSeaSerpent.values()) {
+            Item.Properties props = new Item.Properties();
+            BlockItem itemBlock = new BlockItem(color.scaleBlock, props);
+            itemBlock.setRegistryName(color.scaleBlock.getRegistryName());
+            event.getRegistry().register(itemBlock);
+        }
+    }
 }

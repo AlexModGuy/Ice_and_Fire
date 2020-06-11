@@ -84,7 +84,7 @@ public class ModelMyrmexLarva extends ModelDragonBase {
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(Body2, Body3, Body1, Body4, Body5, Body4_1, Body5_1, Body4_2, Neck1, HeadBase);
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {

@@ -27,7 +27,7 @@ public class FireDragonForgeCatagory implements IRecipeCategory<DragonForgeRecip
 
     @Override
     public Class<? extends DragonForgeRecipe> getRecipeClass() {
-        return null;
+        return DragonForgeRecipe.class;
     }
 
     @SuppressWarnings("deprecation")

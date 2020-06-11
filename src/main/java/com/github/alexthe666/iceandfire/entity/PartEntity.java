@@ -41,11 +41,15 @@ public class PartEntity extends Entity {
 
     @Override
     public void tick() {
-        this.setPositionAndUpdate(this.parent.getPosX() + this.radius * Math.cos(this.parent.renderYawOffset * (Math.PI / 180.0F) + this.angleYaw), this.parent.getPosY() + this.offsetY, this.parent.getPosZ() + this.radius * Math.sin(this.parent.renderYawOffset * (Math.PI / 180.0F) + this.angleYaw));
-        if (!this.world.isRemote) {
-            this.collideWithNearbyEntities();
-        }
-        if (!this.parent.isAlive()) {
+        if(parent != null){
+            this.setPositionAndUpdate(this.parent.getPosX() + this.radius * Math.cos(this.parent.renderYawOffset * (Math.PI / 180.0F) + this.angleYaw), this.parent.getPosY() + this.offsetY, this.parent.getPosZ() + this.radius * Math.sin(this.parent.renderYawOffset * (Math.PI / 180.0F) + this.angleYaw));
+            if (!this.world.isRemote) {
+                this.collideWithNearbyEntities();
+            }
+            if (!this.parent.isAlive()) {
+                this.remove();
+            }
+        }else{
             this.remove();
         }
         super.tick();

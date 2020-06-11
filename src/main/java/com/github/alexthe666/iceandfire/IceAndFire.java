@@ -106,5 +106,6 @@ public class IceAndFire {
     }
 
     private void setupClient(FMLClientSetupEvent event) {
+        PROXY.setupClient();
     }
 }

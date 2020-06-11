@@ -305,7 +305,6 @@ public class ModelAmphithere extends ModelDragonBase<EntityAmphithere> {
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        this.resetToDefaultPose();
         animator.update(entity);
         animator.setAnimation(EntityAmphithere.ANIMATION_BITE);
         animator.startKeyframe(5);
@@ -422,6 +421,7 @@ public class ModelAmphithere extends ModelDragonBase<EntityAmphithere> {
 
     @Override
     public void setRotationAngles(EntityAmphithere amphithere, float f, float f1, float f2, float f3, float f4) {
+        this.resetToDefaultPose();
         animate(amphithere, f, f1, f2, f3, f4, 0);
         if (this.isChild) {
             this.BodyUpper.setShouldScaleChildren(true);
@@ -432,7 +432,6 @@ public class ModelAmphithere extends ModelDragonBase<EntityAmphithere> {
             this.HeadFront.setScale(1, 1, 1);
             this.HeadFront.rotationPointZ = -2F;
             this.Jaw.rotationPointZ = -4.5F;
-            GL11.glTranslatef(0, 0.2F, 0);
         } else {
             this.BodyUpper.setScale(1F, 1F, 1F);
             this.Head.setScale(1F, 1F, 1F);

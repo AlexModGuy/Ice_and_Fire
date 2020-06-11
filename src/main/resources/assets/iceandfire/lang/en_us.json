@@ -1,6 +1,6 @@
 {
-  "itemGroup.iceandfire_items": "Ice And Fire Items",
-  "itemGroup.iceandfire_blocks": "Ice And Fire Blocks",
+  "itemGroup.iceandfire": "Ice And Fire Items",
+  "itemGroup.iceandfire.blocks": "Ice And Fire Blocks",
   "iceandfire.empty": "Empty",
 
   "block.iceandfire.lectern": "Lectern",

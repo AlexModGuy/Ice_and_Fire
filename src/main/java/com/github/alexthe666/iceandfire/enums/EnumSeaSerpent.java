@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.enums;
 
 import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
+import com.github.alexthe666.iceandfire.block.BlockSeaSerpentScales;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentScales;
 import net.minecraft.block.Block;
@@ -31,6 +32,7 @@ public enum EnumSeaSerpent {
     EnumSeaSerpent(TextFormatting color) {
         this.resourceName = this.name().toLowerCase();
         this.color = color;
+        this.scaleBlock = new BlockSeaSerpentScales(this.resourceName, this.color);
     }
 
 

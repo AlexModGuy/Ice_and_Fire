@@ -21,6 +21,7 @@ public class BlockDragonScales extends Block implements IDragonProof {
 
     public BlockDragonScales(String name, EnumDragonEgg type) {
         super(Properties.create(Material.ROCK).variableOpacity().hardnessAndResistance(30F, 500).harvestTool(ToolType.PICKAXE).harvestLevel(2).sound(SoundType.STONE));
+        this.setRegistryName("iceandfire:" + name);
         this.type = type;
     }
 

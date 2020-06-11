@@ -127,7 +127,7 @@ public class ReversedBuffer {
      * @param boxes the box array
      */
     public void applyChainSwingBuffer(ModelRenderer... boxes) {
-        float rotateAmount = 0.01745329251F * MathHelper.lerp(this.prevYawVariation, this.yawVariation, getPartialTicks()) / boxes.length;
+        float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
         for (ModelRenderer box : boxes) {
             box.rotateAngleY -= rotateAmount;
         }
@@ -139,12 +139,13 @@ public class ReversedBuffer {
      * @param boxes the box array
      */
     public void applyChainWaveBuffer(ModelRenderer... boxes) {
-        float rotateAmount = 0.01745329251F * MathHelper.lerp(this.prevPitchVariation, this.pitchVariation, getPartialTicks()) / boxes.length;
+        float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
         for (ModelRenderer box : boxes) {
             box.rotateAngleX -= rotateAmount;
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
     private float getPartialTicks() {
         return Minecraft.getInstance().getRenderPartialTicks();
     }

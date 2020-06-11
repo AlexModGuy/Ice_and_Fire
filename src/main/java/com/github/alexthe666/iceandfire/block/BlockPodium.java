@@ -24,7 +24,7 @@ public class BlockPodium extends ContainerBlock implements ICustomRendered {
 
     public BlockPodium(String type) {
         super(Properties.create(Material.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD));
-        this.setRegistryName(IceAndFire.MODID, "podium");
+        this.setRegistryName(IceAndFire.MODID, "podium_" + type);
     }
 
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
