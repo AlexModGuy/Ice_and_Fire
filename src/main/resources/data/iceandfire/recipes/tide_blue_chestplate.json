@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "S S",
     "SSS",
@@ -7,16 +7,13 @@
   ],
   "key": {
     "S": {
-      "item": "iceandfire:sea_serpent_scales_blue",
-      "data": 0
+      "item": "iceandfire:sea_serpent_scales_blue"
     },
     "H": {
-      "item": "iceandfire:shiny_scales",
-      "data": 0
+      "item": "iceandfire:shiny_scales"
     }
   },
   "result": {
-    "item": "iceandfire:tide_blue_chestplate",
-    "data": 0
+    "item": "iceandfire:tide_blue_chestplate"
   }
 }

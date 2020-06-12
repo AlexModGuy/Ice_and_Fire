@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "D D",
     "DDD",
@@ -12,7 +12,6 @@
     }
   },
   "result": {
-    "item": "iceandfire:dragonsteel_ice_chestplate",
-    "data": 0
+    "item": "iceandfire:dragonsteel_ice_chestplate"
   }
 }

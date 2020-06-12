@@ -1,22 +1,17 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
-    "   ",
-    "SLS",
-    "   "
+    "SLS"
   ],
   "key": {
     "L": {
-      "item": "minecraft:leather",
-      "data": 0
+      "item": "minecraft:leather"
     },
     "S": {
-      "item": "minecraft:string",
-      "data": 0
+      "tag": "forge:string"
     }
   },
   "result": {
-    "item": "iceandfire:blindfold",
-    "data": 0
+    "item": "iceandfire:blindfold"
   }
 }

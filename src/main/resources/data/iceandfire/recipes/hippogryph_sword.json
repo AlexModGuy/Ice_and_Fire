@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     " T ",
     "FIF",
@@ -7,12 +7,10 @@
   ],
   "key": {
     "T": {
-      "item": "iceandfire:hippogryph_talon",
-      "data": 0
+      "item": "iceandfire:hippogryph_talon"
     },
     "S": {
-      "type": "forge:ore_dict",
-      "ore": "stickWood"
+      "tag": "forge:rods/wooden"
     },
     "I": {
       "type": "forge:ore_dict",
@@ -24,7 +22,6 @@
     }
   },
   "result": {
-    "item": "iceandfire:hippogryph_sword",
-    "data": 0
+    "item": "iceandfire:hippogryph_sword"
   }
 }

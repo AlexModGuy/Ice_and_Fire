@@ -2,13 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "iceandfire:silver_block",
-      "data": 0
+      "item": "iceandfire:silver_block"
     }
   ],
   "result": {
     "item": "iceandfire:silver_ingot",
-    "data": 0,
+    ,
     "count": 9
   }
 }

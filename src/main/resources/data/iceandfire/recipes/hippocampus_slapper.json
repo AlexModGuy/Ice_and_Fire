@@ -1,13 +1,12 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     " T",
     "S "
   ],
   "key": {
     "S": {
-      "type": "forge:ore_dict",
-      "ore": "stickWood"
+      "tag": "forge:rods/wooden"
     },
     "T": {
       "item": "iceandfire:hippocampus_fin"

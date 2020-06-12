@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "FFF",
     "FSF",
@@ -15,7 +15,6 @@
     }
   },
   "result": {
-    "item": "iceandfire:stymphalian_feather_bundle",
-    "data": 0
+    "item": "iceandfire:stymphalian_feather_bundle"
   }
 }

@@ -1,22 +1,20 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "D",
     "S"
   ],
   "key": {
     "D": {
-      "item": "iceandfire:dread_shard",
-      "data": 0
+      "item": "iceandfire:dread_shard"
     },
     "S": {
-      "type": "forge:ore_dict",
-      "ore": "stickWood"
+      "tag": "forge:rods/wooden"
     }
   },
   "result": {
     "item": "iceandfire:dread_torch",
-    "data": 0,
+    ,
     "count": 4
   }
 }

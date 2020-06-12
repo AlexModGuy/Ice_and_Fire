@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "OXO",
     "FXF",
@@ -7,19 +7,16 @@
   ],
   "key": {
     "S": {
-      "type": "forge:ore_dict",
-      "ore": "stickWood"
+      "tag": "forge:rods/wooden"
     },
     "F": {
       "item": "iceandfire:amphithere_feather"
     },
     "X": {
-      "type": "forge:ore_dict",
-      "ore": "plankWood"
+      "tag": "minecraft:planks"
     },
     "O": {
-      "type": "forge:ore_dict",
-      "ore": "obsidian"
+      "tag": "forge:obsidian"
     }
   },
   "result": {

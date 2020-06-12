@@ -1,17 +1,15 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "BB",
     "BB"
   ],
   "key": {
     "B": {
-      "item": "iceandfire:dragon_ice",
-      "data": 0
+      "item": "iceandfire:dragon_ice"
     }
   },
   "result": {
-    "item": "minecraft:packed_ice",
-    "data": 0
+    "item": "minecraft:packed_ice"
   }
 }

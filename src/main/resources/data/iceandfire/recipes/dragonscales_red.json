@@ -1,14 +1,13 @@
 {
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "iceandfire:dragonscale_red",
-      "data": 0
+      "item": "iceandfire:dragonscale_red"
     }
   ],
   "result": {
     "item": "iceandfire:dragonscales_red",
-    "data": 0,
+    ,
     "count": 9
   }
 }

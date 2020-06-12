@@ -1,17 +1,15 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "S S",
     "S S"
   ],
   "key": {
     "S": {
-      "item": "iceandfire:dragonscales_gray",
-      "data": 0
+      "item": "iceandfire:dragonscales_gray"
     }
   },
   "result": {
-    "item": "iceandfire:armor_gray_boots",
-    "data": 0
+    "item": "iceandfire:armor_gray_boots"
   }
 }

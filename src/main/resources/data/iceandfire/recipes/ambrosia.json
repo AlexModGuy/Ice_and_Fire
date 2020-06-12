@@ -1,26 +1,22 @@
 {
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "iceandfire:pixie_dust",
-      "data": 0
+      "item": "iceandfire:pixie_dust"
     },
     {
-      "item": "minecraft:golden_carrot",
-      "data": 0
+      "item": "minecraft:golden_carrot"
     },
     {
-      "item": "minecraft:speckled_melon",
-      "data": 0
+      "item": "minecraft:speckled_melon"
     },
     {
-      "item": "minecraft:bowl",
-      "data": 0
+      "item": "minecraft:bowl"
     }
   ],
   "result": {
     "item": "iceandfire:ambrosia",
-    "data": 0,
+    ,
     "count": 1
   }
 }

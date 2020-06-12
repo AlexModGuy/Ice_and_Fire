@@ -1,18 +1,15 @@
 {
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "slimeball"
+      "tag": "forge:slimeballs"
     },
     {
-      "item": "iceandfire:chain",
-      "data": 0
+      "item": "iceandfire:chain"
     }
   ],
   "result": {
     "item": "iceandfire:chain_sticky",
-    "data": 0,
     "count": 1
   }
 }

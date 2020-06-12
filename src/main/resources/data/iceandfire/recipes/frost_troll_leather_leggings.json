@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "TTT",
     "T T",
@@ -7,12 +7,10 @@
   ],
   "key": {
     "T": {
-      "item": "iceandfire:troll_leather_frost",
-      "data": 0
+      "item": "iceandfire:troll_leather_frost"
     }
   },
   "result": {
-    "item": "iceandfire:frost_troll_leather_leggings",
-    "data": 0
+    "item": "iceandfire:frost_troll_leather_leggings"
   }
 }

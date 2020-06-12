@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
       "item": "iceandfire:summoning_crystal_fire"
@@ -7,7 +7,7 @@
   ],
   "result": {
     "item": "iceandfire:summoning_crystal_fire",
-    "data": 0,
+    ,
     "count": 1
   }
 }

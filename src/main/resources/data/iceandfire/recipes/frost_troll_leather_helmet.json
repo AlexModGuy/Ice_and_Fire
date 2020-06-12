@@ -1,21 +1,18 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "TTT",
     "U U"
   ],
   "key": {
     "T": {
-      "item": "iceandfire:troll_leather_frost",
-      "data": 0
+      "item": "iceandfire:troll_leather_frost"
     },
     "U": {
-      "item": "iceandfire:troll_tusk",
-      "data": 0
+      "item": "iceandfire:troll_tusk"
     }
   },
   "result": {
-    "item": "iceandfire:frost_troll_leather_helmet",
-    "data": 0
+    "item": "iceandfire:frost_troll_leather_helmet"
   }
 }

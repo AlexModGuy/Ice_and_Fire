@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "EEE",
     "ERE",
@@ -10,8 +10,7 @@
       "item": "iceandfire:myrmex_jungle_resin_block"
     },
     "S": {
-      "type": "forge:ore_dict",
-      "ore": "stickWood"
+      "tag": "forge:rods/wooden"
     },
     "E": {
       "type": "forge:ore_dict",

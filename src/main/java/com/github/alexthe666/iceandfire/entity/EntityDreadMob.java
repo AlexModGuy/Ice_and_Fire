@@ -115,11 +115,11 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
 
     @Nullable
     public UUID getCommanderId() {
-        return this.dataManager.get(COMMANDER_UNIQUE_ID).orElse(null);
+        return (UUID) ((Optional) this.dataManager.get(COMMANDER_UNIQUE_ID)).orElse(null);
     }
 
     public void setCommanderId(@Nullable UUID uuid) {
-        this.dataManager.set(COMMANDER_UNIQUE_ID, Optional.of(uuid));
+        this.dataManager.set(COMMANDER_UNIQUE_ID, Optional.ofNullable(uuid));
     }
 
     @Override

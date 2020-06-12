@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "RD",
     "DR"
@@ -10,8 +10,7 @@
       "ore": "dirt"
     },
     "R": {
-      "item": "iceandfire:myrmex_jungle_resin",
-      "data": 0
+      "item": "iceandfire:myrmex_jungle_resin"
     }
   },
   "result": {

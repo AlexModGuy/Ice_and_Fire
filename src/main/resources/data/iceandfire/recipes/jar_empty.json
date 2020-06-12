@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "GPG",
     "G G",
@@ -16,7 +16,6 @@
     }
   },
   "result": {
-    "item": "iceandfire:jar_empty",
-    "data": 0
+    "item": "iceandfire:jar_empty"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "DDD",
     "DSD",
@@ -7,17 +7,15 @@
   ],
   "key": {
     "D": {
-      "item": "minecraft:stone",
-      "data": 0
+      "item": "minecraft:stone"
     },
     "S": {
-      "item": "iceandfire:dread_shard",
-      "data": 0
+      "item": "iceandfire:dread_shard"
     }
   },
   "result": {
     "item": "iceandfire:dread_stone",
-    "data": 0,
+    ,
     "count": 8
   }
 }

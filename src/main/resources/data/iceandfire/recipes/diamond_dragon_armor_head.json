@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "   ",
     " DD",
@@ -7,12 +7,10 @@
   ],
   "key": {
     "D": {
-      "type": "forge:ore_dict",
-      "ore": "blockDiamond"
+      "tag": "forge:storage_blocks/diamond"
     }
   },
   "result": {
-    "item": "iceandfire:dragonarmor_diamond",
-    "data": 0
+    "item": "iceandfire:dragonarmor_diamond_0"
   }
 }

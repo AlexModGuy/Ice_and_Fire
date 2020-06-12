@@ -1,17 +1,16 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "DDD"
   ],
   "key": {
     "D": {
-      "item": "iceandfire:dread_stone_bricks",
-      "data": 0
+      "item": "iceandfire:dread_stone_bricks"
     }
   },
   "result": {
     "item": "iceandfire:dread_stone_slab",
-    "data": 0,
+    ,
     "count": 6
   }
 }

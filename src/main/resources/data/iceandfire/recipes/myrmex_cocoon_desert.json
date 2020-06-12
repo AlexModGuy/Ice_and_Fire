@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "RSR",
     "S S",
@@ -7,16 +7,13 @@
   ],
   "key": {
     "S": {
-      "item": "iceandfire:myrmex_resin_sticky",
-      "data": 0
+      "item": "iceandfire:myrmex_resin_sticky"
     },
     "R": {
-      "item": "iceandfire:myrmex_resin",
-      "data": 0
+      "item": "iceandfire:myrmex_resin"
     }
   },
   "result": {
-    "item": "iceandfire:desert_myrmex_cocoon",
-    "data": 0
+    "item": "iceandfire:desert_myrmex_cocoon"
   }
 }

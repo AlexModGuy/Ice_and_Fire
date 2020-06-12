@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "   ",
     "FDF",
@@ -11,12 +11,10 @@
       "ore": "feather"
     },
     "D": {
-      "item": "minecraft:golden_horse_armor",
-      "data": 0
+      "item": "minecraft:golden_horse_armor"
     }
   },
   "result": {
-    "item": "iceandfire:gold_hippogryph_armor",
-    "data": 0
+    "item": "iceandfire:gold_hippogryph_armor"
   }
 }

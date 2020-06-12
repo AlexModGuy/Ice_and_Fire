@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "DDD",
     "D D"
@@ -11,7 +11,6 @@
     }
   },
   "result": {
-    "item": "iceandfire:dragonsteel_fire_helmet",
-    "data": 0
+    "item": "iceandfire:dragonsteel_fire_helmet"
   }
 }

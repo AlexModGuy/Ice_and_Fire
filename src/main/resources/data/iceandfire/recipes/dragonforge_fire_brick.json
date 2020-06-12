@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "SBS",
     "BSB",
@@ -7,8 +7,7 @@
   ],
   "key": {
     "B": {
-      "item": "minecraft:stonebrick",
-      "data": 0
+      "item": "minecraft:stonebrick"
     },
     "S": {
       "type": "forge:ore_dict",
@@ -17,7 +16,7 @@
   },
   "result": {
     "item": "iceandfire:dragonforge_fire_brick",
-    "data": 0,
+    ,
     "count": 4
   }
 }

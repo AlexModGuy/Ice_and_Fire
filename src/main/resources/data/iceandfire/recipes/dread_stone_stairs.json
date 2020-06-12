@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "C  ",
     "CC ",
@@ -7,8 +7,7 @@
   ],
   "key": {
     "C": {
-      "item": "iceandfire:dread_stone_bricks",
-      "data": 0
+      "item": "iceandfire:dread_stone_bricks"
     }
   },
   "result": {

@@ -1,17 +1,15 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "C C",
     "C C"
   ],
   "key": {
     "C": {
-      "item": "iceandfire:deathworm_chitin",
-      "data": 0
+      "item": "iceandfire:deathworm_chitin_yellow"
     }
   },
   "result": {
-    "item": "iceandfire:deathworm_yellow_boots",
-    "data": 0
+    "item": "iceandfire:deathworm_yellow_boots"
   }
 }

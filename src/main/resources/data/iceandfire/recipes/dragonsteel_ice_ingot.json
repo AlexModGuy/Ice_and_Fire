@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
       "type": "forge:ore_dict",
@@ -8,7 +8,7 @@
   ],
   "result": {
     "item": "iceandfire:dragonsteel_ice_ingot",
-    "data": 0,
+    ,
     "count": 9
   }
 }

@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "I I",
     "I I"
@@ -11,7 +11,7 @@
   },
   "result": {
     "item": "iceandfire:dragon_ice_spikes",
-    "data": 0,
-    "count" : 4
+    ,
+    "count": 4
   }
 }

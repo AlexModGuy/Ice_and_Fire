@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "S",
     "E",
@@ -7,8 +7,7 @@
   ],
   "key": {
     "W": {
-      "type": "forge:ore_dict",
-      "ore": "boneWither"
+      "tag": "forge:bomes/wither"
     },
     "S": {
       "item": "iceandfire:wither_shard"

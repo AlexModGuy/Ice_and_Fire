@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "BMB",
     "MBM",
@@ -11,12 +11,10 @@
       "ore": "foodMeat"
     },
     "B": {
-      "item": "minecraft:bone",
-      "data": 0
+      "item": "minecraft:bone"
     }
   },
   "result": {
-    "item": "iceandfire:dragon_meal",
-    "data": 0
+    "item": "iceandfire:dragon_meal"
   }
 }

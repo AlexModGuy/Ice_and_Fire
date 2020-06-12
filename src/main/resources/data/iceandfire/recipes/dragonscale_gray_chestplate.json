@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "S S",
     "SSS",
@@ -7,12 +7,10 @@
   ],
   "key": {
     "S": {
-      "item": "iceandfire:dragonscales_gray",
-      "data": 0
+      "item": "iceandfire:dragonscales_gray"
     }
   },
   "result": {
-    "item": "iceandfire:armor_gray_chestplate",
-    "data": 0
+    "item": "iceandfire:armor_gray_chestplate"
   }
 }

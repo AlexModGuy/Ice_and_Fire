@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "CC",
     "CB",
@@ -7,8 +7,7 @@
   ],
   "key": {
     "C": {
-      "item": "iceandfire:myrmex_jungle_chitin",
-      "data": 0
+      "item": "iceandfire:myrmex_jungle_chitin"
     },
     "B": {
       "type": "forge:ore_dict",
@@ -16,7 +15,6 @@
     }
   },
   "result": {
-    "item": "iceandfire:myrmex_jungle_axe",
-    "data": 0
+    "item": "iceandfire:myrmex_jungle_axe"
   }
 }

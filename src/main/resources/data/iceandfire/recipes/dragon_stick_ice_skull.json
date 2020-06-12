@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "S",
     "T",
@@ -11,12 +11,10 @@
       "data": 1
     },
     "T": {
-      "item": "minecraft:stick",
-      "data": 0
+      "item": "minecraft:stick"
     }
   },
   "result": {
-    "item": "iceandfire:dragon_stick",
-    "data": 0
+    "item": "iceandfire:dragon_stick"
   }
 }

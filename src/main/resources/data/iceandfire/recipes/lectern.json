@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "B",
     "P",
@@ -7,16 +7,13 @@
   ],
   "key": {
     "P": {
-      "type": "forge:ore_dict",
-      "ore": "plankWood"
+      "tag": "minecraft:planks"
     },
     "B": {
-      "item": "minecraft:book",
-      "data": 0
+      "item": "minecraft:book"
     }
   },
   "result": {
-    "item": "iceandfire:lectern",
-    "data": 0
+    "item": "iceandfire:lectern"
   }
 }

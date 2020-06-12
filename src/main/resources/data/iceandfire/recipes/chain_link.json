@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     " N ",
     "N N",
@@ -7,12 +7,10 @@
   ],
   "key": {
     "N": {
-      "type": "forge:ore_dict",
-      "ore": "nuggetIron"
+      "tag": "forge:nuggets/iron"
     }
   },
   "result": {
-    "item": "iceandfire:chain_link",
-    "data": 0
+    "item": "iceandfire:chain_link"
   }
 }

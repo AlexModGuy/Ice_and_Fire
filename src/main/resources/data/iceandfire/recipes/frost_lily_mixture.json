@@ -1,22 +1,19 @@
 {
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "minecraft:prismarine_crystals",
-      "data": 0
+      "item": "minecraft:prismarine_crystals"
     },
     {
-      "item": "iceandfire:frost_lily",
-      "data": 0
+      "item": "iceandfire:frost_lily"
     },
     {
-      "item": "minecraft:bowl",
-      "data": 0
+      "item": "minecraft:bowl"
     }
   ],
   "result": {
     "item": "iceandfire:frost_stew",
-    "data": 0,
+    ,
     "count": 1
   }
 }

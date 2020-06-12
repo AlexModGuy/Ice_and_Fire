@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     " DS",
     "W S",
@@ -11,16 +11,13 @@
       "ore": "boneWither"
     },
     "D": {
-      "item": "iceandfire:dragonbone",
-      "data": 0
+      "item": "iceandfire:dragonbone"
     },
     "S": {
-      "item": "minecraft:string",
-      "data": 0
+      "item": "minecraft:string"
     }
   },
   "result": {
-    "item": "iceandfire:dragonbone_bow",
-    "data": 0
+    "item": "iceandfire:dragonbone_bow"
   }
 }

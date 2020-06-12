@@ -1,18 +1,16 @@
 {
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "iceandfire:dragonbone",
-      "data": 0
+      "item": "iceandfire:dragonbone"
     },
     {
-      "item": "iceandfire:wither_shard",
-      "data": 0
+      "item": "iceandfire:wither_shard"
     }
   ],
   "result": {
     "item": "iceandfire:dragonbone_arrow",
-    "data": 0,
+    ,
     "count": 5
   }
 }

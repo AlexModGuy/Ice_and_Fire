@@ -2,13 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "iceandfire:sea_serpent_scale_block_deepblue",
-      "data": 0
+      "item": "iceandfire:sea_serpent_scale_block_deepblue"
     }
   ],
   "result": {
     "item": "iceandfire:sea_serpent_scales_deepblue",
-    "data": 0,
+    ,
     "count": 9
   }
 }

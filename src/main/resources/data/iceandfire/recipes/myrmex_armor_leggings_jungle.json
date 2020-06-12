@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "CCC",
     "C C",
@@ -11,7 +11,6 @@
     }
   },
   "result": {
-    "item": "iceandfire:myrmex_jungle_leggings",
-    "data": 0
+    "item": "iceandfire:myrmex_jungle_leggings"
   }
 }

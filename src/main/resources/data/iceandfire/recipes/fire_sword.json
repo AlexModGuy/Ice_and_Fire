@@ -1,18 +1,16 @@
 {
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "iceandfire:fire_dragon_blood",
-      "data": 0
+      "item": "iceandfire:fire_dragon_blood"
     },
     {
-      "item": "iceandfire:dragonbone_sword",
-      "data": 0
+      "item": "iceandfire:dragonbone_sword"
     }
   ],
   "result": {
     "item": "iceandfire:dragonbone_sword_fire",
-    "data": 0,
+    ,
     "count": 1
   }
 }

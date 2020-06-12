@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "RSR",
     "S S",
@@ -16,7 +16,6 @@
     }
   },
   "result": {
-    "item": "iceandfire:jungle_myrmex_cocoon",
-    "data": 0
+    "item": "iceandfire:jungle_myrmex_cocoon"
   }
 }

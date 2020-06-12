@@ -1,9 +1,8 @@
 {
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "iceandfire:myrmex_jungle_resin",
-      "data": 0
+      "item": "iceandfire:myrmex_jungle_resin"
     },
     {
       "item": "iceandfire:myrmex_resin",

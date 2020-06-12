@@ -1,46 +1,36 @@
 {
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "charredBlock"
+      "tag": "iceandfire:charred_block"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "charredBlock"
+      "tag": "iceandfire:charred_block"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "charredBlock"
+      "tag": "iceandfire:charred_block"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "charredBlock"
+      "tag": "iceandfire:charred_block"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "charredBlock"
+      "tag": "iceandfire:charred_block"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "charredBlock"
+      "tag": "iceandfire:charred_block"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "charredBlock"
+      "tag": "iceandfire:charred_block"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "charredBlock"
+      "tag": "iceandfire:charred_block"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "charredBlock"
+      "tag": "iceandfire:charred_block"
     }
   ],
   "result": {
     "item": "iceandfire:ash",
-    "data": 0,
     "count": 1
   }
 }

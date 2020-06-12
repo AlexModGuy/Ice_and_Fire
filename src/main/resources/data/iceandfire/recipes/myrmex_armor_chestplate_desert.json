@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "C C",
     "CCC",
@@ -11,7 +11,6 @@
     }
   },
   "result": {
-    "item": "iceandfire:myrmex_desert_chestplate",
-    "data": 0
+    "item": "iceandfire:myrmex_desert_chestplate"
   }
 }

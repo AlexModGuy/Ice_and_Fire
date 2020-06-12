@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "B  ",
     " B ",
@@ -7,8 +7,7 @@
   ],
   "key": {
     "B": {
-      "item": "iceandfire:dragonbone",
-      "data": 0
+      "item": "iceandfire:dragonbone"
     },
     "I": {
       "type": "forge:ore_dict",
@@ -16,7 +15,6 @@
     }
   },
   "result": {
-    "item": "iceandfire:dragon_flute",
-    "data": 0
+    "item": "iceandfire:dragon_flute"
   }
 }

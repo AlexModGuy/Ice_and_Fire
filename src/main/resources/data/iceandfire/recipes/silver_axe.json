@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "SS",
     "ST",
@@ -11,12 +11,10 @@
       "ore": "ingotSilver"
     },
     "T": {
-      "type": "forge:ore_dict",
-      "ore": "stickWood"
+      "tag": "forge:rods/wooden"
     }
   },
   "result": {
-    "item": "iceandfire:silver_axe",
-    "data": 0
+    "item": "iceandfire:silver_axe"
   }
 }

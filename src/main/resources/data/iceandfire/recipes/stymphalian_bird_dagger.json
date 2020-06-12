@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "F",
     "F",
@@ -7,15 +7,13 @@
   ],
   "key": {
     "S": {
-      "type": "forge:ore_dict",
-      "ore": "stickWood"
+      "tag": "forge:rods/wooden"
     },
     "F": {
       "item": "iceandfire:stymphalian_bird_feather"
     }
   },
   "result": {
-    "item": "iceandfire:stymphalian_bird_dagger",
-    "data": 0
+    "item": "iceandfire:stymphalian_bird_dagger"
   }
 }

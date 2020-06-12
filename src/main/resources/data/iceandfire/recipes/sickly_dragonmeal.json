@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "SPS",
     "PDP",
@@ -7,20 +7,16 @@
   ],
   "key": {
     "D": {
-      "item": "iceandfire:dragon_meal",
-      "data": 0
+      "item": "iceandfire:dragon_meal"
     },
     "P": {
-      "item": "minecraft:poisonous_potato",
-      "data": 0
+      "item": "minecraft:poisonous_potato"
     },
     "S": {
-      "item": "minecraft:spider_eye",
-      "data": 0
+      "item": "minecraft:spider_eye"
     }
   },
   "result": {
-    "item": "iceandfire:sickly_dragon_meal",
-    "data": 0
+    "item": "iceandfire:sickly_dragon_meal"
   }
 }

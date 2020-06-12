@@ -1,18 +1,16 @@
 {
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "minecraft:wooden_button",
-      "data": 0
+      "item": "minecraft:wooden_button"
     },
     {
-      "item": "minecraft:wooden_button",
-      "data": 0
+      "item": "minecraft:wooden_button"
     }
   ],
   "result": {
     "item": "iceandfire:earplugs",
-    "data": 0,
+    ,
     "count": 1
   }
 }

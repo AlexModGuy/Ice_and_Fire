@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "SPS",
     " P ",
@@ -7,16 +7,13 @@
   ],
   "key": {
     "S": {
-      "item": "minecraft:wooden_slab",
-      "data": 0
+      "item": "minecraft:wooden_slab"
     },
     "P": {
-      "item": "minecraft:planks",
-      "data": 0
+      "item": "minecraft:planks"
     }
   },
   "result": {
-    "item": "iceandfire:podium",
-    "data": 0
+    "item": "iceandfire:podium"
   }
 }

@@ -1,22 +1,19 @@
 {
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "minecraft:blaze_rod",
-      "data": 0
+      "item": "minecraft:blaze_rod"
     },
     {
-      "item": "iceandfire:fire_lily",
-      "data": 0
+      "item": "iceandfire:fire_lily"
     },
     {
-      "item": "minecraft:bowl",
-      "data": 0
+      "item": "minecraft:bowl"
     }
   ],
   "result": {
     "item": "iceandfire:fire_stew",
-    "data": 0,
+    ,
     "count": 1
   }
 }

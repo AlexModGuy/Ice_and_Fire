@@ -1,14 +1,13 @@
 {
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "iceandfire:dreadwood_log",
-      "data": 0
+      "item": "iceandfire:dreadwood_log"
     }
   ],
   "result": {
     "item": "iceandfire:dreadwood_planks",
-    "data": 0,
+    ,
     "count": 4
   }
 }

@@ -1,5 +1,5 @@
 {
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     " T ",
     "CHC",
@@ -7,8 +7,7 @@
   ],
   "key": {
     "C": {
-      "item": "iceandfire:deathworm_chitin",
-      "data": 2
+      "item": "iceandfire:deathworm_chitin_red"
     },
     "H": {
       "item": "iceandfire:chain"
@@ -18,7 +17,6 @@
     }
   },
   "result": {
-    "item": "iceandfire:deathworm_gauntlet_red",
-    "data": 0
+    "item": "iceandfire:deathworm_gauntlet_red"
   }
 }
