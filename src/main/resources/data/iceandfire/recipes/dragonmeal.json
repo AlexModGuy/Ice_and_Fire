@@ -7,8 +7,7 @@
   ],
   "key": {
     "M": {
-      "type": "forge:ore_dict",
-      "ore": "listAllmeatraw"
+      "tag": "forge:meats"
     },
     "B": {
       "item": "minecraft:bone"

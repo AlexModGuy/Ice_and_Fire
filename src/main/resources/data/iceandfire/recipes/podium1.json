@@ -7,13 +7,13 @@
   ],
   "key": {
     "S": {
-      "item": "minecraft:wooden_slab"
+      "item": "minecraft:oak_slab"
     },
     "P": {
-      "item": "minecraft:planks"
+      "item": "minecraft:oak_planks"
     }
   },
   "result": {
-    "item": "iceandfire:podium"
+    "item": "iceandfire:podium_oak"
   }
 }

@@ -7,12 +7,11 @@
   ],
   "key": {
     "D": {
-      "type": "forge:ore_dict",
-      "ore": "blockIceDragonsteel"
+      "tag": "forge:storage_blocks/dragonsteel_ice"
+
     }
   },
   "result": {
-    "item": "iceandfire:dragonarmor_dragonsteel_ice",
-    "data": 3
+    "item": "iceandfire:dragonarmor_dragonsteel_ice_tail"
   }
 }

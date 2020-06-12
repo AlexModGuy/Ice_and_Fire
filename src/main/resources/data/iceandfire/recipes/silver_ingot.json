@@ -2,40 +2,40 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "nuggetSilver"
+      "tag": "forge:nuggets/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "nuggetSilver"
+      "tag": "forge:nuggets/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "nuggetSilver"
+      "tag": "forge:nuggets/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "nuggetSilver"
+      "tag": "forge:nuggets/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "nuggetSilver"
+      "tag": "forge:nuggets/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "nuggetSilver"
+      "tag": "forge:nuggets/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "nuggetSilver"
+      "tag": "forge:nuggets/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "nuggetSilver"
+      "tag": "forge:nuggets/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "nuggetSilver"
+      "tag": "forge:nuggets/silver"
+
     }
   ],
   "result": {

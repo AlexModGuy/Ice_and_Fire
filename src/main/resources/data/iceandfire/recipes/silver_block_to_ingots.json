@@ -2,12 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "iceandfire:silver_block"
+      "tag": "forge:storage_blocks/silver"
+
     }
   ],
   "result": {
     "item": "iceandfire:silver_ingot",
-    ,
     "count": 9
   }
 }

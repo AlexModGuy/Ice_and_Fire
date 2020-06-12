@@ -2,17 +2,16 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "nuggetGold"
+      "tag": "forge:nuggets/gold"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "nuggetGold"
+      "tag": "forge:nuggets/gold"
+
     }
   ],
   "result": {
-    "item": "iceandfire:goldpile",
-    ,
+    "item": "iceandfire:gold_pile",
     "count": 1
   }
 }

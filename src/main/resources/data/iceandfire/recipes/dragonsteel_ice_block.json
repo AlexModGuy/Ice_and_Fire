@@ -2,45 +2,35 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotIceDragonsteel"
+      "tag": "forge:ingots/dragonsteel_ice"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotIceDragonsteel"
+      "tag": "forge:ingots/dragonsteel_ice"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotIceDragonsteel"
+      "tag": "forge:ingots/dragonsteel_ice"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotIceDragonsteel"
+      "tag": "forge:ingots/dragonsteel_ice"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotIceDragonsteel"
+      "tag": "forge:ingots/dragonsteel_ice"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotIceDragonsteel"
+      "tag": "forge:ingots/dragonsteel_ice"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotIceDragonsteel"
+      "tag": "forge:ingots/dragonsteel_ice"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotIceDragonsteel"
+      "tag": "forge:ingots/dragonsteel_ice"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotIceDragonsteel"
+      "tag": "forge:ingots/dragonsteel_ice"
     }
   ],
   "result": {
     "item": "iceandfire:dragonsteel_ice_block",
-    ,
     "count": 1
   }
 }

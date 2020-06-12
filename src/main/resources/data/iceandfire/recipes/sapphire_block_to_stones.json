@@ -2,12 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "iceandfire:sapphire_block"
+      "tag": "forge:storage_blocks/sapphire"
     }
   ],
   "result": {
     "item": "iceandfire:sapphire_gem",
-    ,
     "count": 9
   }
 }

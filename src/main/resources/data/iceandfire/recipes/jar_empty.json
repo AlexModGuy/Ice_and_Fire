@@ -7,15 +7,13 @@
   ],
   "key": {
     "G": {
-      "type": "forge:ore_dict",
-      "ore": "blockGlass"
+      "tag" : "forge:glass/colorless"
     },
     "P": {
-      "type": "forge:ore_dict",
-      "ore": "plankWood"
+      "tag" : "minecraft:planks"
     }
   },
   "result": {
-    "item": "iceandfire:jar_empty"
+    "item": "iceandfire:pixie_jar_empty"
   }
 }

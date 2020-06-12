@@ -9,8 +9,7 @@
       "item": "minecraft:leather_boots"
     },
     "W": {
-      "type": "forge:ore_dict",
-      "ore": "woolBlock"
+      "item": "minecraft:white_wool"
     }
   },
   "result": {

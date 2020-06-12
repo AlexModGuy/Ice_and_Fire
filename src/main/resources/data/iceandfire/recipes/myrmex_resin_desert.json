@@ -6,8 +6,7 @@
   ],
   "key": {
     "S": {
-      "type": "forge:ore_dict",
-      "ore": "sand"
+      "item": "minecraft:sand"
     },
     "R": {
       "item": "iceandfire:myrmex_desert_resin"

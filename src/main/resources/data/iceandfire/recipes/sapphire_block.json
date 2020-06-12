@@ -2,45 +2,36 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "gemSapphire"
+      "tag": "forge:gems/sapphire"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "gemSapphire"
+      "tag": "forge:gems/sapphire"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "gemSapphire"
+      "tag": "forge:gems/sapphire"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "gemSapphire"
+      "tag": "forge:gems/sapphire"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "gemSapphire"
+      "tag": "forge:gems/sapphire"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "gemSapphire"
+      "tag": "forge:gems/sapphire"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "gemSapphire"
+      "tag": "forge:gems/sapphire"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "gemSapphire"
+      "tag": "forge:gems/sapphire"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "gemSapphire"
+      "tag": "forge:gems/sapphire"
+
     }
   ],
   "result": {
     "item": "iceandfire:sapphire_block",
-    ,
     "count": 1
   }
 }

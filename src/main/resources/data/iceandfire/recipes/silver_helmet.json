@@ -6,8 +6,7 @@
   ],
   "key": {
     "S": {
-      "type": "forge:ore_dict",
-      "ore": "ingotSilver"
+      "tag": "forge:ingots/silver"
     }
   },
   "result": {

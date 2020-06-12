@@ -9,8 +9,8 @@
       "item": "minecraft:leather_helmet"
     },
     "W": {
-      "type": "forge:ore_dict",
-      "ore": "woolBlock"
+      "item": "minecraft:white_wool"
+
     }
   },
   "result": {

@@ -7,16 +7,15 @@
   ],
   "key": {
     "B": {
-      "item": "minecraft:stonebrick"
+      "item": "minecraft:stone_bricks"
     },
     "S": {
-      "type": "forge:ore_dict",
-      "ore": "fireDragonScaleBlock"
+      "tag": "forge:storage_blocks/fire_dragon_scale"
+
     }
   },
   "result": {
     "item": "iceandfire:dragonforge_fire_brick",
-    ,
     "count": 4
   }
 }

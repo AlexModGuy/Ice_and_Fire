@@ -7,11 +7,10 @@
   ],
   "key": {
     "D": {
-      "type": "forge:ore_dict",
-      "ore": "blockFireDragonsteel"
+      "tag": "forge:storage_blocks/dragonsteel_fire"
     }
   },
   "result": {
-    "item": "iceandfire:dragonarmor_dragonsteel_fire"
+    "item": "iceandfire:dragonarmor_dragonsteel_fire_head"
   }
 }

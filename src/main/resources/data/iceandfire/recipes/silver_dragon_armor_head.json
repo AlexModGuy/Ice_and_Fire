@@ -7,11 +7,10 @@
   ],
   "key": {
     "D": {
-      "type": "forge:ore_dict",
-      "ore": "blockSilver"
+      "tag": "forge:storage_blocks/silver"
     }
   },
   "result": {
-    "item": "iceandfire:dragonarmor_silver"
+    "item": "iceandfire:dragonarmor_silver_head"
   }
 }

@@ -13,8 +13,8 @@
       "item": "iceandfire:sea_serpent_fang"
     },
     "Y": {
-      "type": "forge:ore_dict",
-      "ore": "seaSerpentScales"
+      "tag": "forge:scales/sea_serpent"
+
     }
   },
   "result": {

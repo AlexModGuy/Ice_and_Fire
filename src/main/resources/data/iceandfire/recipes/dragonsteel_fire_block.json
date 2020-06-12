@@ -2,45 +2,44 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotFireDragonsteel"
+      "tag": "forge:ingots/dragonsteel_fire"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotFireDragonsteel"
+      "tag": "forge:ingots/dragonsteel_fire"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotFireDragonsteel"
+      "tag": "forge:ingots/dragonsteel_fire"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotFireDragonsteel"
+      "tag": "forge:ingots/dragonsteel_fire"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotFireDragonsteel"
+      "tag": "forge:ingots/dragonsteel_fire"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotFireDragonsteel"
+      "tag": "forge:ingots/dragonsteel_fire"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotFireDragonsteel"
+      "tag": "forge:ingots/dragonsteel_fire"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotFireDragonsteel"
+      "tag": "forge:ingots/dragonsteel_fire"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotFireDragonsteel"
+      "tag": "forge:ingots/dragonsteel_fire"
+
     }
   ],
   "result": {
     "item": "iceandfire:dragonsteel_fire_block",
-    ,
     "count": 1
   }
 }

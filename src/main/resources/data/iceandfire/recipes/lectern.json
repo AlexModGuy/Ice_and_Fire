@@ -10,7 +10,7 @@
       "tag": "minecraft:planks"
     },
     "B": {
-      "item": "minecraft:book"
+      "item": "iceandfire:manuscript"
     }
   },
   "result": {

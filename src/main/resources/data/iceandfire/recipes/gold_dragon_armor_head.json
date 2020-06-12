@@ -7,11 +7,10 @@
   ],
   "key": {
     "D": {
-      "type": "forge:ore_dict",
-      "ore": "blockGold"
+      "tag": "forge:storage_blocks/gold"
     }
   },
   "result": {
-    "item": "iceandfire:dragonarmor_gold"
+    "item": "iceandfire:dragonarmor_gold_head"
   }
 }

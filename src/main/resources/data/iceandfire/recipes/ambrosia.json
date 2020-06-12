@@ -8,7 +8,7 @@
       "item": "minecraft:golden_carrot"
     },
     {
-      "item": "minecraft:speckled_melon"
+      "item": "minecraft:glistening_melon_slice"
     },
     {
       "item": "minecraft:bowl"
@@ -16,7 +16,6 @@
   ],
   "result": {
     "item": "iceandfire:ambrosia",
-    ,
     "count": 1
   }
 }

@@ -7,16 +7,13 @@
   ],
   "key": {
     "S": {
-      "item": "minecraft:wooden_slab",
-      "data": 4
+      "item": "minecraft:acacia_slab"
     },
     "P": {
-      "item": "minecraft:planks",
-      "data": 4
+      "item": "minecraft:acacia_planks"
     }
   },
   "result": {
-    "item": "iceandfire:podium",
-    "data": 4
+    "item": "iceandfire:podium_acacia"
   }
 }

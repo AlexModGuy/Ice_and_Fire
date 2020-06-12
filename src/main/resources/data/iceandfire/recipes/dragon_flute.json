@@ -10,8 +10,7 @@
       "item": "iceandfire:dragonbone"
     },
     "I": {
-      "type": "forge:ore_dict",
-      "ore": "ingotIron"
+      "tag": "forge:ingots/iron"
     }
   },
   "result": {

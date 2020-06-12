@@ -2,13 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "boneWither"
+      "tag": "forge:bones/wither"
     }
   ],
   "result": {
     "item": "iceandfire:wither_shard",
-    ,
     "count": 3
   }
 }

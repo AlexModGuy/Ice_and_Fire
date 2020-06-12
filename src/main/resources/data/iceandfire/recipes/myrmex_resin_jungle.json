@@ -6,8 +6,7 @@
   ],
   "key": {
     "D": {
-      "type": "forge:ore_dict",
-      "ore": "dirt"
+      "item": "minecraft:dirt"
     },
     "R": {
       "item": "iceandfire:myrmex_jungle_resin"

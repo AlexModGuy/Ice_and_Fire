@@ -2,17 +2,16 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "nuggetSilver"
+      "tag": "forge:nuggets/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "nuggetSilver"
+      "tag": "forge:nuggets/silver"
+
     }
   ],
   "result": {
-    "item": "iceandfire:silverpile",
-    ,
+    "item": "iceandfire:silver_pile",
     "count": 1
   }
 }

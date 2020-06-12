@@ -5,13 +5,11 @@
       "item": "iceandfire:myrmex_jungle_resin"
     },
     {
-      "item": "iceandfire:myrmex_resin",
-      "data": 1
+      "item": "iceandfire:myrmex_jungle_resin"
     }
   ],
   "result": {
-    "item": "iceandfire:myrmex_resin_sticky",
-    "data": 1,
+    "item": "iceandfire:myrmex_jungle_resin_sticky",
     "count": 1
   }
 }

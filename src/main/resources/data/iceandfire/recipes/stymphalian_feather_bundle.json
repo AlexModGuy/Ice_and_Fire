@@ -7,8 +7,7 @@
   ],
   "key": {
     "S": {
-      "type": "forge:ore_dict",
-      "ore": "string"
+      "tag": "forge:string"
     },
     "F": {
       "item": "iceandfire:stymphalian_bird_feather"

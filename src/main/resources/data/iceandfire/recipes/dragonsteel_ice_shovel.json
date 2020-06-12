@@ -7,12 +7,12 @@
   ],
   "key": {
     "D": {
-      "type": "forge:ore_dict",
-      "ore": "ingotIceDragonsteel"
+      "tag": "forge:ingots/dragonsteel_ice"
+
     },
     "T": {
-      "type": "forge:ore_dict",
-      "ore": "boneWither"
+      "tag": "forge:bones/wither"
+
     }
   },
   "result": {

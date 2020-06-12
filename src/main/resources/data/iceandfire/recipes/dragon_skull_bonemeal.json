@@ -2,13 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "mythicalSkull"
+      "tag": "iceandfire:mob_skulls"
     }
   ],
   "result": {
-    "item": "minecraft:dye",
-    "data": 15,
+    "item": "minecraft:bone_meal",
     "count": 5
   }
 }

@@ -7,12 +7,10 @@
   ],
   "key": {
     "D": {
-      "type": "forge:ore_dict",
-      "ore": "blockIron"
+      "tag": "forge:storage_blocks/iron"
     }
   },
   "result": {
-    "item": "iceandfire:dragonarmor_iron",
-    "data": 1
+    "item": "iceandfire:dragonarmor_iron_neck"
   }
 }

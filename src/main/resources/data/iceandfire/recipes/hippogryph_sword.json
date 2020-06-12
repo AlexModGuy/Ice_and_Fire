@@ -13,12 +13,10 @@
       "tag": "forge:rods/wooden"
     },
     "I": {
-      "type": "forge:ore_dict",
-      "ore": "ingotIron"
+      "tag": "forge:ingots/iron"
     },
     "F": {
-      "type": "forge:ore_dict",
-      "ore": "feather"
+      "tag": "forge:feathers"
     }
   },
   "result": {

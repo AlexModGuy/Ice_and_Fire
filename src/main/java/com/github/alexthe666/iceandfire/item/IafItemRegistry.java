@@ -20,21 +20,21 @@ import java.lang.reflect.Field;
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafItemRegistry {
 
-    public static final CustomArmorMaterial SILVER_ARMOR_MATERIAL = new CustomArmorMaterial("Silver", 15, new int[]{1, 4, 5, 2}, 20, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
-    public static final CustomArmorMaterial BLINDFOLD_ARMOR_MATERIAL = new CustomArmorMaterial("Blindfold", 5, new int[]{1, 1, 1, 1}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
-    public static final CustomArmorMaterial SHEEP_ARMOR_MATERIAL = new CustomArmorMaterial("Sheep", 5, new int[]{1, 3, 2, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
-    public static final CustomArmorMaterial MYRMEX_DESERT_ARMOR_MATERIAL = new CustomArmorMaterial("MyrmexDesert", 20, new int[]{3, 5, 8, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
-    public static final CustomArmorMaterial MYRMEX_JUNGLE_ARMOR_MATERIAL = new CustomArmorMaterial("MyrmexJungle", 20, new int[]{3, 5, 8, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
-    public static final CustomArmorMaterial EARPLUGS_ARMOR_MATERIAL = new CustomArmorMaterial("Earplugs", 5, new int[]{1, 1, 1, 1}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
-    public static final CustomArmorMaterial DEATHWORM_0_ARMOR_MATERIAL = new CustomArmorMaterial("Yellow Deathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
-    public static final CustomArmorMaterial DEATHWORM_1_ARMOR_MATERIAL = new CustomArmorMaterial("White Deathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
-    public static final CustomArmorMaterial DEATHWORM_2_ARMOR_MATERIAL = new CustomArmorMaterial("Red Deathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
-    public static final CustomArmorMaterial TROLL_MOUNTAIN_ARMOR_MATERIAL = new CustomArmorMaterial("Mountain Troll", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
-    public static final CustomArmorMaterial TROLL_FOREST_ARMOR_MATERIAL = new CustomArmorMaterial("Forest Troll", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
-    public static final CustomArmorMaterial TROLL_FROST_ARMOR_MATERIAL = new CustomArmorMaterial("Frost Troll", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
-    public static final CustomArmorMaterial DRAGONSTEEL_FIRE_ARMOR_MATERIAL = new CustomArmorMaterial("Dragonsteel Fire", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
-    public static final CustomArmorMaterial DRAGONSTEEL_ICE_ARMOR_MATERIAL = new CustomArmorMaterial("Dragonsteel Ice", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
-    public static final CustomToolMaterial SILVER_TOOL_MATERIAL = new CustomToolMaterial("Silver", 2, 460, 11.0F, 1.0F, 18);
+    public static final CustomArmorMaterial SILVER_ARMOR_MATERIAL = new CustomArmorMaterial("silver", 15, new int[]{1, 4, 5, 2}, 20, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
+    public static final CustomArmorMaterial BLINDFOLD_ARMOR_MATERIAL = new CustomArmorMaterial("blindfold", 5, new int[]{1, 1, 1, 1}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
+    public static final CustomArmorMaterial SHEEP_ARMOR_MATERIAL = new CustomArmorMaterial("sheep", 5, new int[]{1, 3, 2, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
+    public static final CustomArmorMaterial MYRMEX_DESERT_ARMOR_MATERIAL = new CustomArmorMaterial("myrmexdesert", 20, new int[]{3, 5, 8, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
+    public static final CustomArmorMaterial MYRMEX_JUNGLE_ARMOR_MATERIAL = new CustomArmorMaterial("myrmexjungle", 20, new int[]{3, 5, 8, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
+    public static final CustomArmorMaterial EARPLUGS_ARMOR_MATERIAL = new CustomArmorMaterial("earplugs", 5, new int[]{1, 1, 1, 1}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
+    public static final CustomArmorMaterial DEATHWORM_0_ARMOR_MATERIAL = new CustomArmorMaterial("yellow seathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
+    public static final CustomArmorMaterial DEATHWORM_1_ARMOR_MATERIAL = new CustomArmorMaterial("white seathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
+    public static final CustomArmorMaterial DEATHWORM_2_ARMOR_MATERIAL = new CustomArmorMaterial("red deathworm", 15, new int[]{2, 5, 7, 3}, 5, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.5F);
+    public static final CustomArmorMaterial TROLL_MOUNTAIN_ARMOR_MATERIAL = new CustomArmorMaterial("mountain troll", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
+    public static final CustomArmorMaterial TROLL_FOREST_ARMOR_MATERIAL = new CustomArmorMaterial("forest troll", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
+    public static final CustomArmorMaterial TROLL_FROST_ARMOR_MATERIAL = new CustomArmorMaterial("frost troll", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
+    public static final CustomArmorMaterial DRAGONSTEEL_FIRE_ARMOR_MATERIAL = new CustomArmorMaterial("dragonsteel fire", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
+    public static final CustomArmorMaterial DRAGONSTEEL_ICE_ARMOR_MATERIAL = new CustomArmorMaterial("dragonsteel fce", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
+    public static final CustomToolMaterial SILVER_TOOL_MATERIAL = new CustomToolMaterial("silver", 2, 460, 11.0F, 1.0F, 18);
     public static final CustomToolMaterial DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("Dragonbone", 4, 1660, 10.0F, 4.0F, 22);
     public static final CustomToolMaterial FIRE_DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("FireDragonbone", 4, 2000, 10.0F, 5.5F, 22);
     public static final CustomToolMaterial ICE_DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("IceDragonbone", 4, 2000, 10.0F, 5.5F, 22);

@@ -13,8 +13,8 @@
       "tag": "forge:rods/wooden"
     },
     "E": {
-      "type": "forge:ore_dict",
-      "ore": "desertMyrmexEgg"
+      "item": "iceandfire:myrmex_desert_egg"
+
     }
   },
   "result": {

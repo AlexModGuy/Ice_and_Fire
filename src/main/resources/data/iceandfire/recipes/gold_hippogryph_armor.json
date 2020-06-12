@@ -7,8 +7,7 @@
   ],
   "key": {
     "F": {
-      "type": "forge:ore_dict",
-      "ore": "feather"
+      "tag": "forge:feathers"
     },
     "D": {
       "item": "minecraft:golden_horse_armor"

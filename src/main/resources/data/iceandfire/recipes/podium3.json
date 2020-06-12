@@ -7,16 +7,13 @@
   ],
   "key": {
     "S": {
-      "item": "minecraft:wooden_slab",
-      "data": 2
+      "item": "minecraft:spruce_slab"
     },
     "P": {
-      "item": "minecraft:planks",
-      "data": 2
+      "item": "minecraft:spruce_planks"
     }
   },
   "result": {
-    "item": "iceandfire:podium",
-    "data": 2
+    "item": "iceandfire:podium_spruce"
   }
 }

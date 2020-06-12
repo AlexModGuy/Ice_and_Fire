@@ -10,8 +10,8 @@
       "item": "minecraft:leather_leggings"
     },
     "W": {
-      "type": "forge:ore_dict",
-      "ore": "woolBlock"
+      "item": "minecraft:white_wool"
+
     }
   },
   "result": {

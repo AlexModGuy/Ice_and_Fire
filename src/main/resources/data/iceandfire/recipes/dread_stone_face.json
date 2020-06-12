@@ -10,12 +10,11 @@
       "item": "iceandfire:dread_stone_bricks"
     },
     "S": {
-      "item": "minecraft:skull"
+      "item": "minecraft:skeleton_skull"
     }
   },
   "result": {
     "item": "iceandfire:dread_stone_face",
-    ,
     "count": 8
   }
 }

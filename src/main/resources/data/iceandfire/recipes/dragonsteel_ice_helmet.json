@@ -6,8 +6,8 @@
   ],
   "key": {
     "D": {
-      "type": "forge:ore_dict",
-      "ore": "ingotIceDragonsteel"
+      "tag": "forge:ingots/dragonsteel_ice"
+
     }
   },
   "result": {

@@ -7,11 +7,10 @@
   ],
   "key": {
     "M": {
-      "type": "forge:ore_dict",
-      "ore": "foodMeat"
+      "tag": "forge:meats"
     },
     "B": {
-      "item": "minecraft:bone"
+      "item": "forge:bones"
     }
   },
   "result": {

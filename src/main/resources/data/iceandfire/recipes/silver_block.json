@@ -2,45 +2,44 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotSilver"
+      "tag": "forge:ingots/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotSilver"
+      "tag": "forge:ingots/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotSilver"
+      "tag": "forge:ingots/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotSilver"
+      "tag": "forge:ingots/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotSilver"
+      "tag": "forge:ingots/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotSilver"
+      "tag": "forge:ingots/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotSilver"
+      "tag": "forge:ingots/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotSilver"
+      "tag": "forge:ingots/silver"
+
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "ingotSilver"
+      "tag": "forge:ingots/silver"
+
     }
   ],
   "result": {
     "item": "iceandfire:silver_block",
-    ,
     "count": 1
   }
 }
