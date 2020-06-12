@@ -190,9 +190,6 @@ public class EntityPixie extends TameableEntity {
                 case 4:
                     jar = IafBlockRegistry.JAR_PIXIE_4;
                     break;
-                case 5:
-                    jar = IafBlockRegistry.JAR_PIXIE_5;
-                    break;
             }
             ItemStack stack = new ItemStack(jar, 1);
             if (!world.isRemote) {
@@ -294,7 +291,7 @@ public class EntityPixie extends TameableEntity {
     }
 
     public int getColor() {
-        return this.getDataManager().get(COLOR).intValue();
+        return MathHelper.clamp(this.getDataManager().get(COLOR).intValue(), 0, 4);
     }
 
     public void setColor(int color) {

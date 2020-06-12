@@ -1,0 +1,1 @@
+{  "type": "minecraft:block",  "pools": [    {      "name": "dread_stone_bricks",      "rolls": 1,      "entries": [        {          "type": "minecraft:item",          "name": "iceandfire:dread_stone_bricks"        }      ],      "conditions": [        {          "condition": "minecraft:survives_explosion"        }      ]    }  ]}

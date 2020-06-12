@@ -1,0 +1,1 @@
+{  "type": "minecraft:block",  "pools": [    {      "name": "dragonforge_ice_input",      "rolls": 1,      "entries": [        {          "type": "minecraft:item",          "name": "iceandfire:dragonforge_ice_input"        }      ],      "conditions": [        {          "condition": "minecraft:survives_explosion"        }      ]    }  ]}

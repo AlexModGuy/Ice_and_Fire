@@ -88,7 +88,6 @@ public class IafBlockRegistry {
     public static final Block JAR_PIXIE_2 = new BlockJar(2);
     public static final Block JAR_PIXIE_3 = new BlockJar(3);
     public static final Block JAR_PIXIE_4 = new BlockJar(4);
-    public static final Block JAR_PIXIE_5 = new BlockJar(5);
     public static final Block MYRMEX_DESERT_RESIN = new BlockMyrmexResin(false, "desert");
     public static final Block MYRMEX_DESERT_RESIN_STICKY = new BlockMyrmexResin(true, "desert");
     public static final Block MYRMEX_JUNGLE_RESIN = new BlockMyrmexResin(false, "jungle");

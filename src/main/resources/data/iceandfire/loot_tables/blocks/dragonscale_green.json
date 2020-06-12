@@ -1,0 +1,1 @@
+{  "type": "minecraft:block",  "pools": [    {      "name": "dragonscale_green",      "rolls": 1,      "entries": [        {          "type": "minecraft:item",          "name": "iceandfire:dragonscale_green"        }      ],      "conditions": [        {          "condition": "minecraft:survives_explosion"        }      ]    }  ]}

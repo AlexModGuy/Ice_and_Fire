@@ -1,0 +1,1 @@
+{  "type": "minecraft:block",  "pools": [    {      "name": "podium_birch",      "rolls": 1,      "entries": [        {          "type": "minecraft:item",          "name": "iceandfire:podium_birch"        }      ],      "conditions": [        {          "condition": "minecraft:survives_explosion"        }      ]    }  ]}

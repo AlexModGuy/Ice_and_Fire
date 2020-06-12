@@ -1,0 +1,1 @@
+{  "type": "minecraft:block",  "pools": [    {      "name": "desert_myrmex_cocoon",      "rolls": 1,      "entries": [        {          "type": "minecraft:item",          "name": "iceandfire:desert_myrmex_cocoon"        }      ],      "conditions": [        {          "condition": "minecraft:survives_explosion"        }      ]    }  ]}

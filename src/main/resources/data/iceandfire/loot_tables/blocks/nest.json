@@ -1,0 +1,1 @@
+{  "type": "minecraft:block",  "pools": [    {      "name": "nest",      "rolls": 1,      "entries": [        {          "type": "minecraft:item",          "name": "iceandfire:nest"        }      ],      "conditions": [        {          "condition": "minecraft:survives_explosion"        }      ]    }  ]}

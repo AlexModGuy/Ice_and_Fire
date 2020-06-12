@@ -1,0 +1,1 @@
+{  "type": "minecraft:block",  "pools": [    {      "name": "chared_gravel",      "rolls": 1,      "entries": [        {          "type": "minecraft:item",          "name": "iceandfire:chared_gravel"        }      ],      "conditions": [        {          "condition": "minecraft:survives_explosion"        }      ]    }  ]}

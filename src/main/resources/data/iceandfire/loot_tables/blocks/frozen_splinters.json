@@ -1,0 +1,1 @@
+{  "type": "minecraft:block",  "pools": [    {      "name": "frozen_splinters",      "rolls": 1,      "entries": [        {          "type": "minecraft:item",          "name": "iceandfire:frozen_splinters"        }      ],      "conditions": [        {          "condition": "minecraft:survives_explosion"        }      ]    }  ]}

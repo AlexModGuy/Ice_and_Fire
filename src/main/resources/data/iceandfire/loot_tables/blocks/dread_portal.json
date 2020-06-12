@@ -1,0 +1,1 @@
+{  "type": "minecraft:block",  "pools": [    {      "name": "dread_portal",      "rolls": 1,      "entries": [        {          "type": "minecraft:item",          "name": "iceandfire:dread_portal"        }      ],      "conditions": [        {          "condition": "minecraft:survives_explosion"        }      ]    }  ]}

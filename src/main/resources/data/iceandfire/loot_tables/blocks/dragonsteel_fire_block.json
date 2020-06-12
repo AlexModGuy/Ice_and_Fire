@@ -1,0 +1,1 @@
+{  "type": "minecraft:block",  "pools": [    {      "name": "dragonsteel_fire_block",      "rolls": 1,      "entries": [        {          "type": "minecraft:item",          "name": "iceandfire:dragonsteel_fire_block"        }      ],      "conditions": [        {          "condition": "minecraft:survives_explosion"        }      ]    }  ]}

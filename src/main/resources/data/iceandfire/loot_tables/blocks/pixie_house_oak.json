@@ -1,0 +1,1 @@
+{  "type": "minecraft:block",  "pools": [    {      "name": "pixie_house_oak",      "rolls": 1,      "entries": [        {          "type": "minecraft:item",          "name": "iceandfire:pixie_house_oak"        }      ],      "conditions": [        {          "condition": "minecraft:survives_explosion"        }      ]    }  ]}

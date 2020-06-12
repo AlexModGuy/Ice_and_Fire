@@ -1,0 +1,1 @@
+{  "type": "minecraft:block",  "pools": [    {      "name": "podium_jungle",      "rolls": 1,      "entries": [        {          "type": "minecraft:item",          "name": "iceandfire:podium_jungle"        }      ],      "conditions": [        {          "condition": "minecraft:survives_explosion"        }      ]    }  ]}
