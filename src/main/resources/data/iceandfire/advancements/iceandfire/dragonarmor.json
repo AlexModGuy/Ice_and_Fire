@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "iceandfire:dragonarmor_iron"
+      "item": "iceandfire:dragonarmor_iron_body"
     },
     "title": {
       "translate": "advancements.iceandfire.dragonarmor.title"
@@ -17,70 +17,10 @@
     "conditions": {
       "items": [
         {
-          "item": "iceandfire:dragonarmor_iron"
+          "tag": "iceandfire:dragon_armors"
         }
       ]
     }
-  },
-  "gold": {
-    "trigger": "minecraft:inventory_changed",
-    "conditions": {
-      "items": [
-        {
-          "item": "iceandfire:dragonarmor_gold"
-        }
-      ]
-    }
-  },
-  "diamond": {
-    "trigger": "minecraft:inventory_changed",
-    "conditions": {
-      "items": [
-        {
-          "item": "iceandfire:dragonarmor_diamond"
-        }
-      ]
-    }
-  },
-  "silver": {
-    "trigger": "minecraft:inventory_changed",
-    "conditions": {
-      "items": [
-        {
-          "item": "iceandfire:dragonarmor_silver"
-        }
-      ]
-    }
-  },
-    "dragonsteel_fire": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "iceandfire:dragonarmor_dragonsteel_fire"
-          }
-        ]
-      }
-    },
-    "dragonsteel_ice": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "iceandfire:dragonarmor_dragonsteel_ice"
-          }
-        ]
-      }
-    }
-  },
-  "requirements": [
-    [
-      "iron",
-      "gold",
-      "diamond",
-      "silver",
-      "dragonsteel_fire",
-      "dragonsteel_ice"
-    ]
-  ]
+  }
+  }
 }

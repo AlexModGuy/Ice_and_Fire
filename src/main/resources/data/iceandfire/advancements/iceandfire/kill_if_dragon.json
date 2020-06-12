@@ -16,7 +16,7 @@
       "trigger": "minecraft:player_killed_entity",
       "conditions": {
         "entity": {
-          "type": "iceandfire:firedragon"
+          "type": "iceandfire:fire_dragon"
         }
       }
     },
@@ -24,7 +24,7 @@
       "trigger": "minecraft:player_killed_entity",
       "conditions": {
         "entity": {
-          "type": "iceandfire:icedragon"
+          "type": "iceandfire:ice_dragon"
         }
       }
     }

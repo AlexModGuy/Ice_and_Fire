@@ -7,12 +7,10 @@
   ],
   "key": {
     "S": {
-      "item": "iceandfire:myrmex_jungle_resin_sticky",
-      "data": 1
+      "item": "iceandfire:myrmex_resin_sticky_jungle"
     },
     "R": {
-      "item": "iceandfire:myrmex_jungle_resin",
-      "data": 1
+      "item": "iceandfire:myrmex_resin_jungle"
     }
   },
   "result": {

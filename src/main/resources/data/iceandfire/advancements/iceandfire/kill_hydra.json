@@ -16,7 +16,7 @@
       "trigger": "minecraft:player_killed_entity",
       "conditions": {
         "entity": {
-          "type": "iceandfire:if_hydra"
+          "type": "iceandfire:hydra"
         }
       }
     }

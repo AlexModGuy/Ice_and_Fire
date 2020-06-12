@@ -229,23 +229,26 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         segments = new EntityMutlipartPart[9];
         for (int i = 0; i < segments.length; i++) {
             if (i > 3) {
-                segments[i] = new EntityMutlipartPart(this, (2F - ((i + 1) * 0.55F)) * scale, 0, 0, 0.5F * scale, 0.5F * scale, 1);
+                segments[i] = new EntityDeathwormPart(this, (2F - ((i + 1) * 0.55F)) * scale, 0, 0, 0.5F * scale, 0.5F * scale, 1);
             } else {
-                segments[i] = new EntityMutlipartPart(this, (1.8F - (i * 0.5F)) * scale, 0, 0, 0.45F * scale, 0.4F * scale, 1);
+                segments[i] = new EntityDeathwormPart(this, (1.8F - (i * 0.5F)) * scale, 0, 0, 0.45F * scale, 0.4F * scale, 1);
             }
         }
     }
 
     public void onUpdateParts() {
-        for (Entity entity : segments) {
+        for (EntityMutlipartPart entity : segments) {
             if (entity != null) {
-                entity.tick();
+                entity.setParent(this);
+                if(!entity.isAddedToWorld()){
+                    world.addEntity(entity);
+                }
             }
         }
     }
 
     private void clearParts() {
-        for (Entity entity : segments) {
+        for (EntityMutlipartPart entity : segments) {
             if (entity != null) {
                 entity.remove();
             }

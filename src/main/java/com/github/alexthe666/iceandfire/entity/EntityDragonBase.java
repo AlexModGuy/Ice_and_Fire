@@ -263,44 +263,34 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         removeParts();
         headPart = new EntityDragonPart(this, 1.55F * scale, 0, 0.6F * scale, 0.5F * scale, 0.35F * scale, 1.5F);
         headPart.copyLocationAndAnglesFrom(this);
-        world.addEntity(headPart);
         headPart.setParent(this);
         neckPart = new EntityDragonPart(this, 0.85F * scale, 0, 0.7F * scale, 0.5F * scale, 0.2F * scale, 1);
         neckPart.copyLocationAndAnglesFrom(this);
-        world.addEntity(neckPart);
         neckPart.setParent(this);
         rightWingUpperPart = new EntityDragonPart(this, 1F * scale, 90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
         rightWingUpperPart.copyLocationAndAnglesFrom(this);
-        world.addEntity(rightWingUpperPart);
         rightWingUpperPart.setParent(this);
         rightWingLowerPart = new EntityDragonPart(this, 1.4F * scale, 100, 0.3F * scale, 0.85F * scale, 0.2F * scale, 0.5F);
         rightWingLowerPart.copyLocationAndAnglesFrom(this);
-        world.addEntity(rightWingLowerPart);
         rightWingLowerPart.setParent(this);
         leftWingUpperPart = new EntityDragonPart(this, 1F * scale, -90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
         leftWingUpperPart.copyLocationAndAnglesFrom(this);
-        world.addEntity(leftWingUpperPart);
         leftWingUpperPart.setParent(this);
         leftWingLowerPart = new EntityDragonPart(this, 1.4F * scale, -100, 0.3F * scale, 0.85F * scale, 0.2F * scale, 0.5F);
         leftWingLowerPart.copyLocationAndAnglesFrom(this);
-        world.addEntity(leftWingLowerPart);
         leftWingLowerPart.setParent(this);
         tail1Part = new EntityDragonPart(this, -0.75F * scale, 0, 0.6F * scale, 0.35F * scale, 0.35F * scale, 1);
         tail1Part.copyLocationAndAnglesFrom(this);
-        world.addEntity(tail1Part);
         tail1Part.setParent(this);
         tail2Part = new EntityDragonPart(this, -1.15F * scale, 0, 0.45F * scale, 0.35F * scale, 0.35F * scale, 1);
         tail2Part.copyLocationAndAnglesFrom(this);
-        world.addEntity(tail2Part);
         tail2Part.setParent(this);
         tail3Part = new EntityDragonPart(this, -1.5F * scale, 0, 0.35F * scale, 0.35F * scale, 0.35F * scale, 1);
         tail3Part.copyLocationAndAnglesFrom(this);
-        world.addEntity(tail3Part);
         tail3Part.setParent(this);
         tail4Part = new EntityDragonPart(this, -1.95F * scale, 0, 0.25F * scale, 0.45F * scale, 0.3F * scale, 1.5F);
         tail4Part.copyLocationAndAnglesFrom(this);
         world.addEntity(tail4Part);
-        tail4Part.setParent(this);
     }
 
     public void removeParts() {
@@ -348,33 +338,63 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
 
     public void updateParts() {
         if (headPart != null) {
+            if(!headPart.isAddedToWorld()){
+                world.addEntity(headPart);
+            }
             headPart.setParent(this);
         }
         if (neckPart != null) {
+            if(!neckPart.isAddedToWorld()){
+                world.addEntity(neckPart);
+            }
             neckPart.setParent(this);
         }
         if (rightWingUpperPart != null) {
+            if(!rightWingUpperPart.isAddedToWorld()){
+                world.addEntity(rightWingUpperPart);
+            }
             rightWingUpperPart.setParent(this);
         }
         if (rightWingLowerPart != null) {
+            if(!rightWingLowerPart.isAddedToWorld()){
+                world.addEntity(rightWingLowerPart);
+            }
             rightWingLowerPart.setParent(this);
         }
         if (leftWingUpperPart != null) {
+            if(!leftWingUpperPart.isAddedToWorld()){
+                world.addEntity(leftWingUpperPart);
+            }
             leftWingUpperPart.setParent(this);
         }
         if (leftWingLowerPart != null) {
+            if(!leftWingLowerPart.isAddedToWorld()){
+                world.addEntity(leftWingLowerPart);
+            }
             leftWingLowerPart.setParent(this);
         }
         if (tail1Part != null) {
+            if(!tail1Part.isAddedToWorld()){
+                world.addEntity(tail1Part);
+            }
             tail1Part.setParent(this);
         }
         if (tail2Part != null) {
+            if(!tail2Part.isAddedToWorld()){
+                world.addEntity(tail2Part);
+            }
             tail2Part.setParent(this);
         }
         if (tail3Part != null) {
+            if(!tail3Part.isAddedToWorld()){
+                world.addEntity(tail3Part);
+            }
             tail3Part.setParent(this);
         }
         if (tail4Part != null) {
+            if(!tail4Part.isAddedToWorld()){
+                world.addEntity(tail4Part);
+            }
             tail4Part.setParent(this);
         }
     }
@@ -992,6 +1012,13 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
             return false;
         }
         return !this.isSitting() && !this.isSleeping() && this.getControllingPassenger() == null && !this.isModelDead() && sleepProgress == 0 && this.getAnimation() != ANIMATION_SHAKEPREY;
+    }
+
+    public boolean isAlive() {
+        if(isModelDead()){
+            return true;
+        }
+        return !this.removed && this.getHealth() > 0.0F;
     }
 
     @Override

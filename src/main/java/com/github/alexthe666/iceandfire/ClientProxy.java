@@ -189,7 +189,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA, manager -> new RenderHydra(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA_BREATH, manager -> new RenderNothing(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA_ARROW, manager -> new RenderHydraArrow(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MULTIPART, manager -> new RenderNothing(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DEATHWORM_MULTIPART, manager -> new RenderNothing(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_MULTIPART, manager -> new RenderNothing(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.CYCLOPS_MULTIPART, manager -> new RenderNothing(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA_MULTIPART, manager -> new RenderNothing(manager));

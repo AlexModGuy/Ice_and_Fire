@@ -56,7 +56,7 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
     public static Animation ANIMATION_EATPLAYER;
     public static Animation ANIMATION_KICK;
     public static Animation ANIMATION_ROAR;
-    public PartEntity eyeEntity;
+    public EntityCyclopsEye eyeEntity;
     private int animationTick;
     private Animation currentAnimation;
 
@@ -272,6 +272,9 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
         eyeEntity.setParent(this);
+        if(!eyeEntity.isAddedToWorld()){
+            world.addEntity(eyeEntity);
+        }
         breakBlock();
     }
 

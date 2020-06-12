@@ -1,0 +1,30 @@
+{
+  "replace": false,
+  "values": [
+    "iceandfire:dragonarmor_iron_head",
+    "iceandfire:dragonarmor_iron_neck",
+    "iceandfire:dragonarmor_iron_body",
+    "iceandfire:dragonarmor_iron_tail",
+    "iceandfire:dragonarmor_gold_head",
+    "iceandfire:dragonarmor_gold_neck",
+    "iceandfire:dragonarmor_gold_body",
+    "iceandfire:dragonarmor_gold_tail",
+    "iceandfire:dragonarmor_silver_head",
+    "iceandfire:dragonarmor_silver_neck",
+    "iceandfire:dragonarmor_silver_body",
+    "iceandfire:dragonarmor_silver_tail",
+    "iceandfire:dragonarmor_diamond_head",
+    "iceandfire:dragonarmor_diamond_neck",
+    "iceandfire:dragonarmor_diamond_body",
+    "iceandfire:dragonarmor_diamond_tail",
+    "iceandfire:dragonarmor_dragonsteel_fire_head",
+    "iceandfire:dragonarmor_dragonsteel_fire_neck",
+    "iceandfire:dragonarmor_dragonsteel_fire_body",
+    "iceandfire:dragonarmor_dragonsteel_fire_tail",
+    "iceandfire:dragonarmor_dragonsteel_ice_head",
+    "iceandfire:dragonarmor_dragonsteel_ice_neck",
+    "iceandfire:dragonarmor_dragonsteel_ice_body",
+    "iceandfire:dragonarmor_dragonsteel_ice_tail"
+
+  ]
+}

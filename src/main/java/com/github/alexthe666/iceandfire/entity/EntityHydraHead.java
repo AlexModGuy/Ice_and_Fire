@@ -19,7 +19,6 @@ public class EntityHydraHead extends EntityMutlipartPart {
         this(IafEntityRegistry.HYDRA_MULTIPART, worldIn);
     }
 
-
     public EntityHydraHead(EntityHydra entity, float radius, float angle, float y, float width, float height, float damageMulti, int headIndex, boolean neck) {
         super(IafEntityRegistry.HYDRA_MULTIPART, entity, radius, angle, y, width, height, damageMulti);
         this.headIndex = headIndex;

@@ -16,7 +16,7 @@
             "trigger": "minecraft:tame_animal",
             "conditions": {
                 "entity": {
-                    "type": "iceandfire:if_cockatrice"
+                    "type": "iceandfire:cockatrice"
                 }
             }
         }

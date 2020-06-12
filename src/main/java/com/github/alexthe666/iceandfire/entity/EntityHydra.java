@@ -94,7 +94,7 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
             @Override
             public boolean apply(@Nullable Entity entity) {
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-                return entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity) && !(entity instanceof PartEntity) && !(entity instanceof IMob) && (properties == null || properties != null && !properties.isStone) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
+                return entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity) && !(entity instanceof EntityMutlipartPart) && !(entity instanceof IMob) && (properties == null || properties != null && !properties.isStone) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
             }
         }));
     }
@@ -233,8 +233,6 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
             headBoxes[HEADS + i].copyLocationAndAnglesFrom(this);
             headBoxes[i].setParent(this);
             headBoxes[HEADS + i].setParent(this);
-            world.addEntity(headBoxes[i]);
-            world.addEntity(headBoxes[HEADS + i]);
         }
     }
 
@@ -250,8 +248,14 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         for (int i = 0; i < getHeadCount(); i++) {
             headBoxes[i].setPosition(headBoxes[i].getPosX(), this.getPosY() + partY, headBoxes[i].getPosZ());
             headBoxes[i].setParent(this);
+            if(!headBoxes[i].isAddedToWorld()){
+                world.addEntity(headBoxes[i]);
+            }
             headBoxes[HEADS + i].setPosition(headBoxes[HEADS + i].getPosX(), this.getPosY() + partY, headBoxes[HEADS + i].getPosZ());
             headBoxes[HEADS + i].setParent(this);
+            if(!headBoxes[HEADS + i].isAddedToWorld()){
+                world.addEntity(headBoxes[HEADS + i]);
+            }
         }
         if (getHeadCount() > 1 && !isBurning()) {
             if (this.getHealth() < this.getMaxHealth() && this.ticksExisted % 30 == 0) {
