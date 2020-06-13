@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,7 +30,7 @@ import java.util.List;
 public class ItemDeathwormGauntlet extends Item implements ICustomRendered {
 
     public ItemDeathwormGauntlet(String color) {
-        super(new Item.Properties().maxDamage(500).group(IceAndFire.TAB_ITEMS));
+        super(IceAndFire.PROXY.setupISTER(new Item.Properties().maxDamage(500).group(IceAndFire.TAB_ITEMS)));
         this.setRegistryName(IceAndFire.MODID, "deathworm_gauntlet_" + color);
     }
 
@@ -117,7 +118,7 @@ public class ItemDeathwormGauntlet extends Item implements ICustomRendered {
                         PlayerEntity player = (PlayerEntity) entity;
                         Vec3d vec3d = player.getLook(1.0F).normalize();
                         double range = 5;
-                        for (LivingEntity LivingEntity : world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(player.getPosX() - range, player.getPosY() - range, player.getPosZ() - range, player.getPosX() + range, player.getPosY() + range, player.getPosZ() + range))) {
+                        for (MobEntity LivingEntity : world.getEntitiesWithinAABB(MobEntity.class, new AxisAlignedBB(player.getPosX() - range, player.getPosY() - range, player.getPosZ() - range, player.getPosX() + range, player.getPosY() + range, player.getPosZ() + range))) {
                             Vec3d vec3d1 = new Vec3d(LivingEntity.getPosX() - player.getPosX(), LivingEntity.getPosY() - player.getPosY(), LivingEntity.getPosZ() - player.getPosZ());
                             double d0 = vec3d1.length();
                             vec3d1 = vec3d1.normalize();

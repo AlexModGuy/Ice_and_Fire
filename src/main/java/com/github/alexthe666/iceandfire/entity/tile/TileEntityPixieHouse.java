@@ -1,10 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -34,6 +36,28 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
     public TileEntityPixieHouse() {
         super(IafTileEntityRegistry.PIXIE_HOUSE);
         this.rand = new Random();
+    }
+
+    public static int getHouseTypeFromBlock(Block block) {
+        if (block == IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_RED) {
+            return 1;
+        }
+        if (block == IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_BROWN) {
+            return 0;
+        }
+        if (block == IafBlockRegistry.PIXIE_HOUSE_OAK) {
+            return 3;
+        }
+        if (block == IafBlockRegistry.PIXIE_HOUSE_BIRCH) {
+            return 2;
+        }
+        if (block == IafBlockRegistry.PIXIE_HOUSE_SPRUCE) {
+            return 5;
+        }
+        if (block == IafBlockRegistry.PIXIE_HOUSE_DARK_OAK) {
+            return 4;
+        }
+        return 0;
     }
 
     public CompoundNBT write(CompoundNBT compound) {

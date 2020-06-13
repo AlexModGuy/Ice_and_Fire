@@ -18,8 +18,8 @@ import java.util.Random;
 import java.util.stream.IntStream;
 
 public class RenderDreadPortal<T extends TileEntityDreadPortal> extends TileEntityRenderer<T> {
-    public static final ResourceLocation END_SKY_TEXTURE = new ResourceLocation("rats:textures/environment/ratlantis_sky_portal.png");
-    public static final ResourceLocation END_PORTAL_TEXTURE = new ResourceLocation("rats:textures/environment/ratlantis_portal.png");
+    public static final ResourceLocation END_SKY_TEXTURE = new ResourceLocation("iceandfire:textures/environment/dread_portal_background.png");
+    public static final ResourceLocation END_PORTAL_TEXTURE = new ResourceLocation("rats:textures/environment/dread_portal.png");
     private static final Random RANDOM = new Random(31100L);
     private static final List<RenderType> RENDER_TYPES = IntStream.range(0, 16).mapToObj((p_228882_0_) -> {
         return IafRenderType.getDreadlandsRenderType(p_228882_0_ + 1);

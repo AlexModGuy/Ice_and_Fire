@@ -14,7 +14,7 @@ public class RenderTrollWeapon {
 
     public void renderItem(EnumTroll.Weapon weapon, MatrixStack stackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         stackIn.push();
-        stackIn.translate(0.5F, 0.75F, 0.5F);
+        stackIn.translate(0.5F, -0.75F, 0.5F);
         MODEL.render(stackIn, bufferIn.getBuffer(RenderType.getEntityCutout(weapon.TEXTURE)), combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
         stackIn.pop();
     }

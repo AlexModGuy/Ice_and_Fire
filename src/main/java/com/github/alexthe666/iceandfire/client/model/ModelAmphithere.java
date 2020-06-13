@@ -6,8 +6,11 @@ import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.entity.Entity;
 
 public class ModelAmphithere extends ModelDragonBase<EntityAmphithere> {
     public AdvancedModelBox BodyUpper;
@@ -558,7 +561,9 @@ public class ModelAmphithere extends ModelDragonBase<EntityAmphithere> {
     }
 
     @Override
-    public void renderStatue() {
+    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
         this.resetToDefaultPose();
+        this.render(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+
     }
 }

@@ -222,7 +222,18 @@ public class ClientProxy extends CommonProxy {
         RenderTypeLookup.setRenderLayer(IafBlockRegistry.DREAD_TORCH, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(IafBlockRegistry.BURNT_TORCH, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(IafBlockRegistry.EGG_IN_ICE, RenderType.getCutout());
-
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_EMPTY, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_PIXIE_0, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_PIXIE_1, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_PIXIE_2, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_PIXIE_3, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_PIXIE_4, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_BROWN, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_RED, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_OAK, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_BIRCH, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_SPRUCE, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_DARK_OAK, RenderType.getCutout());
     }
 
     @OnlyIn(Dist.CLIENT)

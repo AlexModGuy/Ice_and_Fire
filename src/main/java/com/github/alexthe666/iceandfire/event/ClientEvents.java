@@ -78,25 +78,25 @@ public class ClientEvents {
             e.printStackTrace();
         }
         if (registry != null) {
-            Map<Class<? extends Entity>, IRenderFactory<? extends Entity>> entityRenders = null;
+            Map<EntityType<? extends Entity>, IRenderFactory<? extends Entity>> entityRenders = null;
             try {
                 Field modifier1 = Field.class.getDeclaredField("modifiers");
                 modifier1.setAccessible(true);
-                entityRenders = (Map<Class<? extends Entity>, IRenderFactory<? extends Entity>>) entityRendersField.get(registry);
+                entityRenders = (Map<EntityType<? extends Entity>, IRenderFactory<? extends Entity>>) entityRendersField.get(registry);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             if (entityRenders != null) {
-                for (Map.Entry<Class<? extends Entity>, IRenderFactory<? extends Entity>> entry : entityRenders.entrySet()) {
+                for (Map.Entry<EntityType<? extends Entity>, IRenderFactory<? extends Entity>> entry : entityRenders.entrySet()) {
                     if (entry.getValue() != null) {
                         try {
                             EntityRenderer render = entry.getValue().createRenderFor(Minecraft.getInstance().getRenderManager());
-                            if (render != null && render instanceof LivingRenderer && LivingEntity.class.isAssignableFrom(entry.getKey())) {
+                            if (render != null && render instanceof LivingRenderer) {
                                 ((LivingRenderer) render).addLayer(new LayerStoneEntity((LivingRenderer) render));
                                 ((LivingRenderer) render).addLayer(new LayerStoneEntityCrack((LivingRenderer) render));
                             }
                         } catch (NullPointerException exp) {
-                            IceAndFire.LOGGER.warn("Ice and Fire could not apply plague render layer to " + entry.getKey().getSimpleName() + ", someone isn't registering their renderer properly... <.<");
+                            IceAndFire.LOGGER.warn("Ice and Fire could not apply stone render layer to " + entry.getKey().getTranslationKey() + ", someone isn't registering their renderer properly... <.<");
                         }
                     }
 

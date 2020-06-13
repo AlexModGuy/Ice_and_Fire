@@ -6,7 +6,11 @@ import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.entity.Entity;
 
 public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
     public AdvancedModelBox Body;
@@ -222,23 +226,6 @@ public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
         return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
     }
 
-
-    public void renderStatue() {
-        this.resetToDefaultPose();
-        this.NoseBand.showModel = false;
-        this.ReinL.showModel = false;
-        this.ReinR.showModel = false;
-        this.ChestL.showModel = false;
-        this.ChestR.showModel = false;
-        this.Saddle.showModel = false;
-        this.Saddleback.showModel = false;
-        this.StirrupIronL.showModel = false;
-        this.StirrupIronR.showModel = false;
-        this.SaddleFront.showModel = false;
-        this.StirrupL.showModel = false;
-        this.StirrupR.showModel = false;
-    }
-
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
         animator.update(entity);
@@ -322,5 +309,23 @@ public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
         }
         this.chainWave(NECK, speed_idle, degree_idle * 0.15F, -2, f2, 1);
         hippo.tail_buffer.applyChainSwingBuffer(TAIL);
+    }
+
+    @Override
+    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+        this.resetToDefaultPose();
+        this.render(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.NoseBand.showModel = false;
+        this.ReinL.showModel = false;
+        this.ReinR.showModel = false;
+        this.ChestL.showModel = false;
+        this.ChestR.showModel = false;
+        this.Saddle.showModel = false;
+        this.Saddleback.showModel = false;
+        this.StirrupIronL.showModel = false;
+        this.StirrupIronR.showModel = false;
+        this.SaddleFront.showModel = false;
+        this.StirrupL.showModel = false;
+        this.StirrupR.showModel = false;
     }
 }

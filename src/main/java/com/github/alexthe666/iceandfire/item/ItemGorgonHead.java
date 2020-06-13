@@ -35,7 +35,7 @@ import java.util.List;
 public class ItemGorgonHead extends Item implements IUsesTEISR, ICustomRendered {
 
     public ItemGorgonHead() {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxDamage(1));
+        super(IceAndFire.PROXY.setupISTER(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxDamage(1)));
         this.setRegistryName(IceAndFire.MODID, "gorgon_head");
     }
 

@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.message;
 
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,7 +29,7 @@ public class MessageStoneStatue {
     }
 
     public static void write(MessageStoneStatue message, PacketBuffer buf) {
-        buf.writeDouble(message.entityId);
+        buf.writeInt(message.entityId);
         buf.writeBoolean(message.isStone);
     }
 
@@ -39,13 +40,14 @@ public class MessageStoneStatue {
         public static void handle(MessageStoneStatue message, Supplier<NetworkEvent.Context> context) {
             context.get().setPacketHandled(true);
             PlayerEntity player = context.get().getSender();
+            if (context.get().getDirection().getReceptionSide().isClient()) {
+                player = Minecraft.getInstance().player;
+            }
             if (player != null) {
-                if (player.world != null) {
-                    Entity entity = player.world.getEntityByID(message.entityId);
-                    if (entity != null && entity instanceof LivingEntity) {
-                        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-                        properties.isStone = message.isStone;
-                    }
+                Entity entity = player.world.getEntityByID(message.entityId);
+                if (entity != null && entity instanceof LivingEntity) {
+                    StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
+                    properties.isStone = message.isStone;
                 }
             }
         }

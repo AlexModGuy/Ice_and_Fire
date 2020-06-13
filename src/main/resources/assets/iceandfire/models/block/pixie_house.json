@@ -1,6 +1,6 @@
 {
   "textures": {
-    "particle": "block/mushroom_block_skin_stem"
+    "particle": "block/mushroom_stem"
   },
   "elements": []
 }

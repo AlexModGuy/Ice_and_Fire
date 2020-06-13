@@ -104,7 +104,7 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.15.2-31.1.18'
     compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2")
-    compile 'citadel:citadel:1.1.7:deobf'
+    compile 'citadel:citadel:1.1.9:deobf'
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

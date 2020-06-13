@@ -4,6 +4,7 @@ import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.client.model.ICustomStatueModel;
 import com.github.alexthe666.iceandfire.client.model.ModelGuardianStatue;
 import com.github.alexthe666.iceandfire.client.model.ModelHorseStatue;
+import com.github.alexthe666.iceandfire.client.render.IafRenderType;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -23,43 +24,38 @@ import net.minecraft.util.ResourceLocation;
 
 public class LayerStoneEntityCrack<T extends Entity, M extends EntityModel<T>> extends LayerRenderer<T, M> {
 
-    protected static final ResourceLocation[] DESTROY_STAGES = new ResourceLocation[]{new ResourceLocation("textures/blocks/destroy_stage_0.png"), new ResourceLocation("textures/blocks/destroy_stage_1.png"), new ResourceLocation("textures/blocks/destroy_stage_2.png"), new ResourceLocation("textures/blocks/destroy_stage_3.png"), new ResourceLocation("textures/blocks/destroy_stage_4.png"), new ResourceLocation("textures/blocks/destroy_stage_5.png"), new ResourceLocation("textures/blocks/destroy_stage_6.png"), new ResourceLocation("textures/blocks/destroy_stage_7.png"), new ResourceLocation("textures/blocks/destroy_stage_8.png"), new ResourceLocation("textures/blocks/destroy_stage_9.png")};
+    protected static final ResourceLocation[] DESTROY_STAGES = new ResourceLocation[]{new ResourceLocation("textures/block/destroy_stage_0.png"), new ResourceLocation("textures/block/destroy_stage_1.png"), new ResourceLocation("textures/block/destroy_stage_2.png"), new ResourceLocation("textures/block/destroy_stage_3.png"), new ResourceLocation("textures/block/destroy_stage_4.png"), new ResourceLocation("textures/block/destroy_stage_5.png"), new ResourceLocation("textures/block/destroy_stage_6.png"), new ResourceLocation("textures/block/destroy_stage_7.png"), new ResourceLocation("textures/block/destroy_stage_8.png"), new ResourceLocation("textures/block/destroy_stage_9.png")};
     private static final ModelHorseStatue HORSE_MODEL = new ModelHorseStatue();
     private static final ModelGuardianStatue GUARDIAN_MODEL = new ModelGuardianStatue();
     private IEntityRenderer<T, M> renderer;
 
     public LayerStoneEntityCrack(IEntityRenderer<T, M> entityRendererIn) {
         super(entityRendererIn);
-        this.renderer = renderer;
+        this.renderer = entityRendererIn;
     }
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, Entity living, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (living instanceof LivingEntity) {
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(living, StoneEntityProperties.class);
-            if (properties != null && properties.isStone) {
-                float x = Math.max(this.renderer.getEntityModel().textureWidth, 1) / 16F; //default to 4
-                float y = Math.max(this.renderer.getEntityModel().textureHeight, 1) / 16F; //default to 2
-                RenderType tex = RenderType.getEntitySolid(DESTROY_STAGES[properties.breakLvl - 1]);
+            if (properties != null && properties.isStone && properties.breakLvl >= 1) {
+                EntityModel model = this.renderer.getEntityModel();
+                if (model != null) {
+                    float x = Math.max(model.textureWidth, 1) / 16F; //default to 4
+                    float y = Math.max(model.textureHeight, 1) / 16F; //default to 2
+                    RenderType tex = IafRenderType.getStoneCrackRenderType(DESTROY_STAGES[properties.breakLvl - 1], x, y);
 
-                GlStateManager.matrixMode(5890);
-                GlStateManager.loadIdentity();
-                GlStateManager.scalef(x, y, 1);
-                GlStateManager.matrixMode(5888);
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(tex);
-                if (this.renderer.getEntityModel() instanceof ICustomStatueModel) {
-                    ((ICustomStatueModel) this.renderer.getEntityModel()).renderStatue();
-                } else if (living instanceof AbstractHorseEntity && !(living instanceof LlamaEntity)) {
-                    HORSE_MODEL.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-                } else if (living instanceof GuardianEntity) {
-                    GUARDIAN_MODEL.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-                } else {
-                    this.renderer.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                    IVertexBuilder ivertexbuilder = bufferIn.getBuffer(tex);
+                    if (this.renderer.getEntityModel() instanceof ICustomStatueModel) {
+                        ((ICustomStatueModel) this.renderer.getEntityModel()).renderStatue(matrixStackIn, ivertexbuilder, packedLightIn, living);
+                    } else if (living instanceof AbstractHorseEntity && !(living instanceof LlamaEntity)) {
+                        HORSE_MODEL.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                    } else if (living instanceof GuardianEntity) {
+                        GUARDIAN_MODEL.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                    } else {
+                        this.renderer.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                    }
                 }
-
-                GlStateManager.matrixMode(5890);
-                GlStateManager.loadIdentity();
-                GlStateManager.matrixMode(5888);
             }
         }
     }

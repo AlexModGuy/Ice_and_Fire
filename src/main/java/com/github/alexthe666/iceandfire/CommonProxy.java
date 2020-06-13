@@ -1,28 +1,16 @@
 package com.github.alexthe666.iceandfire;
 
-import com.github.alexthe666.iceandfire.block.BlockSeaSerpentScales;
-import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
-import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
-import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
-import com.github.alexthe666.iceandfire.enums.EnumSkullType;
-import com.github.alexthe666.iceandfire.enums.EnumTroll;
-import com.github.alexthe666.iceandfire.item.ICustomRendered;
-import com.github.alexthe666.iceandfire.item.IUsesTEISR;
-import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.github.alexthe666.iceandfire.loot.CustomizeToDragon;
 import com.github.alexthe666.iceandfire.loot.CustomizeToSeaSerpent;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SpawnEggItem;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvent;
@@ -31,6 +19,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -156,5 +145,10 @@ public class CommonProxy {
     }
 
     public void setupClient() {
+    }
+
+    public void setup() {
+        MinecraftForge.EVENT_BUS.register(new ServerEvents());
+        IafEntityRegistry.setup();
     }
 }

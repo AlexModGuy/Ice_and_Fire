@@ -90,11 +90,11 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         this.goalSelector.addGoal(3, new DeathWormAIFindSandTarget(this, 10));
         this.goalSelector.addGoal(4, new DeathWormAIGetInSand(this, 1.0D));
         this.goalSelector.addGoal(5, new DeathWormAIWander(this, 1));
-        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
-        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(3, new DeathwormAITargetItems(this, false, false));
-        this.targetSelector.addGoal(5, new DeathWormAITarget(this, LivingEntity.class, false, new Predicate<LivingEntity>() {
+        this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(3, new OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(4, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(4, new DeathwormAITargetItems(this, false, false));
+        this.targetSelector.addGoal(1, new DeathWormAITarget(this, LivingEntity.class, false, new Predicate<LivingEntity>() {
             @Override
             public boolean apply(@Nullable LivingEntity input) {
                 if (EntityDeathWorm.this.isTamed()) {
@@ -602,6 +602,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
     @Override
     public void tick() {
         super.tick();
+        recalculateSize();
         onUpdateParts();
         if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof PlayerEntity) {
             LivingEntity target = DragonUtils.riderLookingAtEntity(this, (PlayerEntity) this.getControllingPassenger(), 3);

@@ -4,6 +4,7 @@ import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.client.model.ICustomStatueModel;
 import com.github.alexthe666.iceandfire.client.model.ModelGuardianStatue;
 import com.github.alexthe666.iceandfire.client.model.ModelHorseStatue;
+import com.github.alexthe666.iceandfire.client.render.IafRenderType;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -24,7 +25,6 @@ public class LayerStoneEntity extends LayerRenderer {
 
     private static final ModelHorseStatue HORSE_MODEL = new ModelHorseStatue();
     private static final ModelGuardianStatue GUARDIAN_MODEL = new ModelGuardianStatue();
-    private static final ResourceLocation STONE_TEXTURE = new ResourceLocation("textures/blocks/stone.png");
     private LivingRenderer renderer;
 
     public LayerStoneEntity(LivingRenderer renderer) {
@@ -39,15 +39,11 @@ public class LayerStoneEntity extends LayerRenderer {
             if (properties != null && properties.isStone) {
                 float x = Math.max(this.renderer.getEntityModel().textureWidth, 1) / 16F; //default to 4
                 float y = Math.max(this.renderer.getEntityModel().textureHeight, 1) / 16F; //default to 2
-                RenderType tex = RenderType.getEntitySolid(STONE_TEXTURE);
+                RenderType tex = IafRenderType.getStoneMobRenderType(x, y);
 
-                GlStateManager.matrixMode(5890);
-                GlStateManager.loadIdentity();
-                GlStateManager.scalef(x, y, 1);
-                GlStateManager.matrixMode(5888);
                 IVertexBuilder ivertexbuilder = bufferIn.getBuffer(tex);
                 if (this.renderer.getEntityModel() instanceof ICustomStatueModel) {
-                    ((ICustomStatueModel) this.renderer.getEntityModel()).renderStatue();
+                    ((ICustomStatueModel) this.renderer.getEntityModel()).renderStatue(matrixStackIn, ivertexbuilder, packedLightIn, living);
                 } else if (living instanceof AbstractHorseEntity && !(living instanceof LlamaEntity)) {
                     HORSE_MODEL.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
                 } else if (living instanceof GuardianEntity) {
@@ -56,9 +52,6 @@ public class LayerStoneEntity extends LayerRenderer {
                     this.renderer.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
                 }
 
-                GlStateManager.matrixMode(5890);
-                GlStateManager.loadIdentity();
-                GlStateManager.matrixMode(5888);
             }
         }
     }

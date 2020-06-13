@@ -23,9 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class EntityDreadMob extends MonsterEntity implements IDreadMob {
-
-    protected static final DataParameter<java.util.Optional<UUID>> COMMANDER_UNIQUE_ID = EntityDataManager.createKey(EntityDreadMob.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-
+    protected static final DataParameter<Optional<UUID>> COMMANDER_UNIQUE_ID = EntityDataManager.createKey(EntityDreadMob.class, DataSerializers.OPTIONAL_UNIQUE_ID);
     public EntityDreadMob(EntityType t, World worldIn) {
         super(t, worldIn);
     }
@@ -76,7 +74,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(COMMANDER_UNIQUE_ID, null);
+        this.dataManager.register(COMMANDER_UNIQUE_ID, Optional.empty());
     }
 
     @Override

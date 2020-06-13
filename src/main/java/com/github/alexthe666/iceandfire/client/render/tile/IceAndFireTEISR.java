@@ -1,7 +1,9 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
+import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadPortal;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemDeathwormGauntlet;
 import com.github.alexthe666.iceandfire.item.ItemTrollWeapon;
@@ -9,6 +11,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -22,6 +25,7 @@ public class IceAndFireTEISR extends ItemStackTileEntityRenderer {
     private RenderDreadPortal renderDreadPortal = new RenderDreadPortal(TileEntityRendererDispatcher.instance);
     private RenderGorgonHead renderGorgonHead = new RenderGorgonHead(true);
     private RenderGorgonHead renderGorgonHeadDead = new RenderGorgonHead(false);
+    private RenderPixieHouse renderPixieHouse = new RenderPixieHouse(TileEntityRendererDispatcher.instance);
     private TileEntityDreadPortal dreadPortalDummy = new TileEntityDreadPortal();
 
     public void render(ItemStack itemStackIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
@@ -40,8 +44,12 @@ public class IceAndFireTEISR extends ItemStackTileEntityRenderer {
         if (itemStackIn.getItem() instanceof ItemDeathwormGauntlet) {
             renderDeathWormGauntlet.renderItem(itemStackIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
         }
-        if (itemStackIn.getItem() == Item.getItemFromBlock(IafBlockRegistry.DREAD_PORTAL)) {
+        if (itemStackIn.getItem()  instanceof BlockItem && ((BlockItem) itemStackIn.getItem()).getBlock() == IafBlockRegistry.DREAD_PORTAL) {
             renderDreadPortal.render(dreadPortalDummy, 0, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+        }
+        if (itemStackIn.getItem()  instanceof BlockItem && ((BlockItem) itemStackIn.getItem()).getBlock() instanceof BlockPixieHouse) {
+            renderPixieHouse.metaOverride = (BlockItem) itemStackIn.getItem();
+            renderPixieHouse.render(null, 0, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
         }
     }
 }

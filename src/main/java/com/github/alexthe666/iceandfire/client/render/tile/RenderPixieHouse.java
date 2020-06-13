@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.item.BlockItem;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 
@@ -23,6 +24,7 @@ public class RenderPixieHouse<T extends TileEntityPixieHouse> extends TileEntity
     private static final RenderType TEXTURE_3 = RenderType.func_230167_a_(new ResourceLocation("iceandfire:textures/models/pixie/house/pixie_house_3.png"), false);
     private static final RenderType TEXTURE_4 = RenderType.func_230167_a_(new ResourceLocation("iceandfire:textures/models/pixie/house/pixie_house_4.png"), false);
     private static final RenderType TEXTURE_5 = RenderType.func_230167_a_(new ResourceLocation("iceandfire:textures/models/pixie/house/pixie_house_5.png"), false);
+    public BlockItem metaOverride;
 
     public RenderPixieHouse(TileEntityRendererDispatcher rendererDispatcherIn) {
         super(rendererDispatcherIn);
@@ -36,7 +38,7 @@ public class RenderPixieHouse<T extends TileEntityPixieHouse> extends TileEntity
             MODEL_PIXIE = new ModelPixie();
         }
         if (entity != null && entity.getWorld() != null && entity.getWorld().getBlockState(entity.getPos()).getBlock() instanceof BlockPixieHouse) {
-            meta = entity.houseType;
+            meta = TileEntityPixieHouse.getHouseTypeFromBlock(entity.getWorld().getBlockState(entity.getPos()).getBlock());
             if (entity.getWorld().getBlockState(entity.getPos()).get(BlockPixieHouse.FACING) == Direction.NORTH) {
                 rotation = 180;
             }
@@ -47,6 +49,9 @@ public class RenderPixieHouse<T extends TileEntityPixieHouse> extends TileEntity
                 rotation = 90;
             }
 
+        }
+        if(entity == null){
+            meta = TileEntityPixieHouse.getHouseTypeFromBlock(metaOverride.getBlock());
         }
         matrixStackIn.push();
         matrixStackIn.translate(0.5F, 1.501F, 0.5F);

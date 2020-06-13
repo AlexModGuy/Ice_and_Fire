@@ -27,7 +27,7 @@ public class ParticleDreadPortal extends SpriteTexturedParticle {
     public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
         Vec3d inerp = renderInfo.getProjectedView();
         particleScale = 0.125F * (this.maxAge - (this.age));
-        float width = particleScale * 0.09F;
+        particleScale = particleScale * 0.09F;
         if (age > this.getMaxAge()) {
             this.setExpired();
         }

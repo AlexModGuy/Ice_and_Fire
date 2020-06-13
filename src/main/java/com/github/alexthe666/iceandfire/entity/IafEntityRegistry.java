@@ -76,7 +76,7 @@ public class IafEntityRegistry {
         return (EntityType) builder.build(entityName).setRegistryName(nameLoc);
     }
 
-    public static void init() {
+    public static void setup() {
         EntityPropertiesHandler.INSTANCE.registerProperties(StoneEntityProperties.class);
         EntityPropertiesHandler.INSTANCE.registerProperties(MiscEntityProperties.class);
         EntityPropertiesHandler.INSTANCE.registerProperties(FrozenEntityProperties.class);

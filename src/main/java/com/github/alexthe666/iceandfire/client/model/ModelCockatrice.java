@@ -6,7 +6,11 @@ import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.entity.Entity;
 
 public class ModelCockatrice extends ModelDragonBase<EntityCockatrice> {
 
@@ -426,7 +430,8 @@ public class ModelCockatrice extends ModelDragonBase<EntityCockatrice> {
 
 
     @Override
-    public void renderStatue() {
+    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
         this.resetToDefaultPose();
+        this.render(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

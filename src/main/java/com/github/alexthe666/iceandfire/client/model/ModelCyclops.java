@@ -4,10 +4,13 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -182,7 +185,7 @@ public class ModelCyclops extends ModelDragonBase<EntityCyclops> {
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
         return ImmutableList.of(body, UpperBody, Loin, rightleg, leftleg, Head, rightarm, leftarm, Belly, Chest, Eye, Horn, rightear,
-        Leftear, Jaw, topTeethL, topTeethR, Eye_1, Horn2, bottomTeethR, bottomTeethL, rightarm2, leftarm2, LoinBack, rightleg2, leftleg2);
+                Leftear, Jaw, topTeethL, topTeethR, Eye_1, Horn2, bottomTeethR, bottomTeethL, rightarm2, leftarm2, LoinBack, rightleg2, leftleg2);
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4) {
@@ -419,7 +422,10 @@ public class ModelCyclops extends ModelDragonBase<EntityCyclops> {
     }
 
     @Override
-    public void renderStatue() {
+    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+        this.resetToDefaultPose();
+        this.render(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+
         this.resetToDefaultPose();
     }
 }

@@ -3,17 +3,15 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
-import com.github.alexthe666.citadel.client.model.container.TextureOffset;
-import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
-import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ModelDragonBase<T extends Entity> extends AdvancedEntityModel<T> implements ICustomStatueModel {
+
+    private List<AdvancedModelBox> advancedPartList = new ArrayList<>();
 
     public void rotate(ModelAnimator animator, AdvancedModelBox model, float x, float y, float z) {
         animator.rotate(model, (float) Math.toRadians(x), (float) Math.toRadians(y), (float) Math.toRadians(z));
@@ -65,10 +63,8 @@ public abstract class ModelDragonBase<T extends Entity> extends AdvancedEntityMo
         modelRenderer.rotateAngleZ = z;
     }
 
-    private List<AdvancedModelBox> advancedPartList = new ArrayList<>();
-
     public void accept(ModelRenderer p_accept_1_) {
-        if(p_accept_1_ instanceof AdvancedModelBox){
+        if (p_accept_1_ instanceof AdvancedModelBox) {
             advancedPartList.add((AdvancedModelBox) p_accept_1_);
         }
     }
