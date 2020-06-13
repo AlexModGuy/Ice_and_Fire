@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
+import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -79,40 +80,28 @@ public class ItemStoneStatue extends Item {
                     }
                     return ActionResultType.SUCCESS;
                 } else {
+                    World world = context.getWorld();
                     String id = stack.getTag().getString("IAFStoneStatueEntityID");
                     EntityType type = EntityType.byKey(id).orElse(null);
-                    Class classFromEntity = type.getClass();
-                    Entity entity = null;
-                    if (classFromEntity == null) {
-                        return ActionResultType.SUCCESS;
-                    }
-                    if (Entity.class.isAssignableFrom(classFromEntity)) {
-                        try {
-                            entity = (Entity) classFromEntity.getDeclaredConstructor(EntityType.class, World.class).newInstance(type, context.getWorld());
-                        } catch (ReflectiveOperationException e) {
-                            e.printStackTrace();
-                            return ActionResultType.SUCCESS;
-                        }
-                    }
-                    if (entity != null && entity instanceof LivingEntity) {
+                    if(type != null) {
+                        Entity entity = type.create(world);
                         entity.setLocationAndAngles(context.getPos().getX() + 0.5, context.getPos().getY() + 1, context.getPos().getZ() + 0.5, context.getPlayer().rotationYaw, 0);
-                        if (!context.getWorld().isRemote) {
-                            context.getWorld().addEntity(entity);
+                        world.addEntity(entity);
+                        if (entity != null && entity instanceof LivingEntity) {
+                            ((LivingEntity) entity).readAdditional(stack.getTag());
+                            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
+                            properties.setStone(true);
+                            float yaw = MathHelper.wrapDegrees(context.getPlayer().rotationYaw + 180F);
+                            entity.prevRotationYaw = yaw;
+                            entity.rotationYaw = yaw;
+                            ((LivingEntity) entity).rotationYawHead = yaw;
+                            ((LivingEntity) entity).renderYawOffset = yaw;
+                            ((LivingEntity) entity).prevRenderYawOffset = yaw;
                         }
-                        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-                        properties.isStone = true;
-                        entity.read(stack.getTag());
-                        float yaw = MathHelper.wrapDegrees(context.getPlayer().rotationYaw + 180F);
-                        entity.prevRotationYaw = yaw;
-                        entity.rotationYaw = yaw;
-                        ((LivingEntity) entity).rotationYawHead = yaw;
-                        ((LivingEntity) entity).renderYawOffset = yaw;
-                        ((LivingEntity) entity).prevRenderYawOffset = yaw;
                         if (!context.getPlayer().isCreative()) {
                             stack.shrink(1);
                         }
                     }
-
                 }
             }
         }

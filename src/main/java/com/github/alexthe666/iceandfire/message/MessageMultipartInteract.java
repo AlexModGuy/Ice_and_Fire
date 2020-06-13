@@ -1,11 +1,13 @@
 package com.github.alexthe666.iceandfire.message;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -39,6 +41,9 @@ public class MessageMultipartInteract {
         public static void handle(MessageMultipartInteract message, Supplier<NetworkEvent.Context> context) {
             context.get().setPacketHandled(true);
             PlayerEntity player = context.get().getSender();
+            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
+                player = IceAndFire.PROXY.getClientSidePlayer();
+            }
             if (player != null) {
                 if (player.world != null) {
                     Entity entity = player.world.getEntityByID(message.creatureID);

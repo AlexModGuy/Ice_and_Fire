@@ -3,13 +3,14 @@ package com.github.alexthe666.iceandfire.entity.tile;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class TileEntityDreadPortal extends TileEntity {
+public class TileEntityDreadPortal extends TileEntity implements ITickableTileEntity {
     private long age;
     private BlockPos exitPortal;
     private boolean exactTeleport;
@@ -49,7 +50,7 @@ public class TileEntityDreadPortal extends TileEntity {
         return 65536.0D;
     }
 
-    public void update() {
+    public void tick() {
         ++this.age;
     }
 

@@ -212,7 +212,7 @@ public class IafDragonFlightManager {
             this.dragon = dragonBase;
         }
 
-        public void onUpdateMoveHelper() {
+        public void tick() {
             if (dragon.collidedHorizontally) {
                 dragon.rotationYaw += 180.0F;
                 this.speed = 0.1F;

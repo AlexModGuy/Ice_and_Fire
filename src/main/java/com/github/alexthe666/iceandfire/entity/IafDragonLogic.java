@@ -178,7 +178,7 @@ public class IafDragonLogic {
             dragon.randomizeAttacks();
         }
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(dragon, StoneEntityProperties.class);
-        if ((properties != null && properties.isStone || dragon.isPassenger())) {
+        if ((properties != null && properties.isStone() || dragon.isPassenger())) {
             dragon.setFlying(false);
             dragon.setHovering(false);
             dragon.setSleeping(false);
@@ -262,7 +262,7 @@ public class IafDragonLogic {
             dragon.setFlying(false);
             dragon.setHovering(false);
         }
-        if ((properties == null || properties != null && !properties.isStone) && !dragon.isFlying() && !dragon.isHovering()) {
+        if ((properties == null || properties != null && !properties.isStone()) && !dragon.isFlying() && !dragon.isHovering()) {
             if (dragon.isAllowedToTriggerFlight() || dragon.getPosY() < -1) {
                 if (dragon.getRNG().nextInt(dragon.getFlightChancePerTick()) == 0 || dragon.getPosY() < -1 || dragon.getAttackTarget() != null && dragon.getAttackTarget().getPosY() + 5 < dragon.getPosY()) {
                     dragon.setHovering(true);

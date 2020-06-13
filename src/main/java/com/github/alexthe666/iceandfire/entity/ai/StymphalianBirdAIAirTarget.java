@@ -73,7 +73,7 @@ public class StymphalianBirdAIAirTarget extends Goal {
         if (bird.isChild()) {
             return false;
         }
-        if (properties != null && properties.isStone) {
+        if (properties != null && properties.isStone()) {
             return false;
         }
         return bird.airTarget != null;

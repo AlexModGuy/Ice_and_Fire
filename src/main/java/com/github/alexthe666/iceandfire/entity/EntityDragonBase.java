@@ -540,7 +540,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     @Override
     public boolean isAIDisabled() {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        return this.isModelDead() || properties != null && properties.isStone || super.isAIDisabled();
+        return this.isModelDead() || properties != null && properties.isStone() || super.isAIDisabled();
     }
 
     @Override
@@ -1008,7 +1008,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
 
     public boolean canMove() {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        if (properties != null && properties.isStone) {
+        if (properties != null && properties.isStone()) {
             return false;
         }
         return !this.isSitting() && !this.isSleeping() && this.getControllingPassenger() == null && !this.isModelDead() && sleepProgress == 0 && this.getAnimation() != ANIMATION_SHAKEPREY;
@@ -1111,7 +1111,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                 }
                 this.setTamedBy(player);
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-                if (stack.getItem() == IafItemRegistry.DRAGON_HORN && (properties == null || !properties.isStone)) {
+                if (stack.getItem() == IafItemRegistry.DRAGON_HORN && (properties == null || !properties.isStone())) {
                     return super.processInteract(player, hand);
                 }
                 if (stack.isEmpty() && !player.isShiftKeyDown()) {
@@ -1383,7 +1383,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
 
     public boolean doesWantToLand() {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone || this.isChained() && flyTicks > 100 || this.airAttack == IafDragonAttacks.Air.TACKLE && this.getAttackTarget() != null;
+        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone() || this.isChained() && flyTicks > 100 || this.airAttack == IafDragonAttacks.Air.TACKLE && this.getAttackTarget() != null;
     }
 
     public abstract String getVariantName(int variant);

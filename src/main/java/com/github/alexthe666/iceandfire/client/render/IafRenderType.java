@@ -42,7 +42,7 @@ public class IafRenderType extends RenderType {
 
     public static RenderType getStoneCrackRenderType(ResourceLocation crackTex, float xSize, float ySize) {
         RenderState.TextureState renderstate$texturestate = new RenderState.TextureState(crackTex, false, false);
-        RenderType.State rendertype$state = RenderType.State.getBuilder().texture(renderstate$texturestate).texturing(new StoneTexturingState(crackTex, xSize, ySize)).diffuseLighting(DIFFUSE_LIGHTING_ENABLED).alpha(DEFAULT_ALPHA).depthTest(DEPTH_EQUAL).cull(CULL_DISABLED).lightmap(LIGHTMAP_ENABLED).overlay(OVERLAY_ENABLED).build(false);
+        RenderType.State rendertype$state = RenderType.State.getBuilder().texture(renderstate$texturestate).texturing(new StoneTexturingState(crackTex, xSize, ySize)).diffuseLighting(DIFFUSE_LIGHTING_ENABLED).alpha(RenderState.HALF_ALPHA).transparency(TRANSLUCENT_TRANSPARENCY).depthTest(DEPTH_EQUAL).cull(CULL_DISABLED).lightmap(LIGHTMAP_ENABLED).overlay(OVERLAY_ENABLED).build(false);
         return makeType("stone_entity_type", DefaultVertexFormats.ENTITY, 7, 256, rendertype$state);
     }
 
@@ -92,10 +92,9 @@ public class IafRenderType extends RenderType {
                 RenderSystem.pushMatrix();
                 RenderSystem.loadIdentity();
                 RenderSystem.translatef(0.5F, 0.5F, 0.0F);
-                RenderSystem.scalef(0.5F, 0.5F, 1.0F);
-                RenderSystem.translatef(17.0F / (float) p_i225986_1_, (2.0F + (float) p_i225986_1_ / 0.5F) * ((float) (Util.milliTime() % 80000L) / 80000.0F), 0.0F);
-                // RenderSystem.rotatef(((float)(p_i225986_1_ * p_i225986_1_) * 4321.0F + (float)p_i225986_1_ * 9.0F) * 2.0F, 0.0F, 0.0F, 1.0F);
-                RenderSystem.scalef(4.5F - (float) p_i225986_1_ / 4.0F, 4.5F - (float) p_i225986_1_ / 4.0F, 1.0F);
+                RenderSystem.scalef(0.5F, -0.5F, 1.0F);
+                float yDist = p_i225986_1_  <= 1 ? 1 : ((float) (Util.milliTime() % 80000L) / 80000.0F);
+                RenderSystem.translatef(17.0F / (float) p_i225986_1_, (2.0F + (float) p_i225986_1_ / 0.5F) * yDist, 0.0F);
                 RenderSystem.mulTextureByProjModelView();
                 RenderSystem.matrixMode(5888);
                 RenderSystem.setupEndPortalTexGen();

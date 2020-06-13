@@ -20,6 +20,12 @@ public class RenderJar<T extends TileEntityJar> extends TileEntityRenderer<T> {
     public static final RenderType TEXTURE_3 = RenderType.func_230167_a_(RenderPixie.TEXTURE_3, false);
     public static final RenderType TEXTURE_4 = RenderType.func_230167_a_(RenderPixie.TEXTURE_4, false);
     public static final RenderType TEXTURE_5 = RenderType.func_230167_a_(RenderPixie.TEXTURE_5, false);
+    public static final RenderType TEXTURE_0_GLO = RenderType.getEyes(RenderPixie.TEXTURE_0);
+    public static final RenderType TEXTURE_1_GLO = RenderType.getEyes(RenderPixie.TEXTURE_1);
+    public static final RenderType TEXTURE_2_GLO = RenderType.getEyes(RenderPixie.TEXTURE_2);
+    public static final RenderType TEXTURE_3_GLO = RenderType.getEyes(RenderPixie.TEXTURE_3);
+    public static final RenderType TEXTURE_4_GLO = RenderType.getEyes(RenderPixie.TEXTURE_4);
+    public static final RenderType TEXTURE_5_GLO = RenderType.getEyes(RenderPixie.TEXTURE_5);
     private static ModelPixie MODEL_PIXIE;
 
     public RenderJar(TileEntityRendererDispatcher p_i226016_1_) {
@@ -43,24 +49,27 @@ public class RenderJar<T extends TileEntityJar> extends TileEntityRenderer<T> {
             matrixStackIn.rotate(new Quaternion(Vector3f.XP, 180, true));
             matrixStackIn.push();
             RenderType type = TEXTURE_0;
+            RenderType typeGlow = TEXTURE_0_GLO;
             switch (meta) {
                 default:
                     type = TEXTURE_0;
+                    typeGlow = TEXTURE_0_GLO;
                     break;
                 case 1:
                     type = TEXTURE_1;
+                    typeGlow = TEXTURE_1_GLO;
                     break;
                 case 2:
                     type = TEXTURE_2;
+                    typeGlow = TEXTURE_2_GLO;
                     break;
                 case 3:
                     type = TEXTURE_3;
+                    typeGlow = TEXTURE_3_GLO;
                     break;
                 case 4:
                     type = TEXTURE_4;
-                    break;
-                case 5:
-                    type = TEXTURE_5;
+                    typeGlow = TEXTURE_4_GLO;
                     break;
             }
             IVertexBuilder ivertexbuilder = bufferIn.getBuffer(type);
@@ -75,6 +84,7 @@ public class RenderJar<T extends TileEntityJar> extends TileEntityRenderer<T> {
                 matrixStackIn.scale(0.50F, 0.50F, 0.50F);
                 MODEL_PIXIE.animateInJar(entity.hasProduced, entity, 0);
                 MODEL_PIXIE.render(matrixStackIn, ivertexbuilder, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+                MODEL_PIXIE.render(matrixStackIn, bufferIn.getBuffer(typeGlow), combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
             }
             matrixStackIn.pop();
             matrixStackIn.pop();

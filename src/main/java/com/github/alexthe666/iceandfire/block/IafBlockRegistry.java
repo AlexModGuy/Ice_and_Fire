@@ -5,13 +5,11 @@ import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.WallOrFloorItem;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -110,6 +108,7 @@ public class IafBlockRegistry {
     public static final BlockDreadBase DREAD_STONE_TILE = new BlockDreadBase(Material.ROCK, "dread_stone_tile", "pickaxe", 3, 20.0F, 100000.0F, SoundType.STONE);
     public static final Block DREAD_STONE_FACE = new BlockDreadStoneFace();
     public static final Block DREAD_TORCH = new BlockDreadTorch();
+    public static final Block DREAD_TORCH_WALL = new BlockDreadTorchWall();
     public static final Block DREAD_STONE_BRICKS_STAIRS = new BlockGenericStairs(DREAD_STONE_BRICKS.getDefaultState(), "dread_stone_stairs");
     public static final Block DREAD_STONE_BRICKS_SLAB = new SlabBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(10F, 10000F)).setRegistryName("iceandfire:dread_stone_slab");
     public static final Block DREADWOOD_LOG = new BlockDreadWoodLog();
@@ -118,6 +117,7 @@ public class IafBlockRegistry {
     public static final Block DREAD_PORTAL = new BlockDreadPortal();
     public static final Block DREAD_SPAWNER = new BlockDreadSpawner();
     public static final Block BURNT_TORCH = new BlockBurntTorch();
+    public static final Block BURNT_TORCH_WALL = new BlockBurntTorchWall();
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -146,13 +146,18 @@ public class IafBlockRegistry {
         try {
             for (Field f : IafBlockRegistry.class.getDeclaredFields()) {
                 Object obj = f.get(null);
-                if (obj instanceof Block) {
+                if (obj instanceof Block && !(obj instanceof WallTorchBlock)) {
                     Item.Properties props = new Item.Properties();
                     if (obj instanceof ICustomRendered) {
                         props = IceAndFire.PROXY.setupISTER(props);
                     }
                     props.group(IceAndFire.TAB_BLOCKS);
-                    BlockItem itemBlock = new BlockItem((Block) obj, props);
+                    BlockItem itemBlock;
+                    if(obj instanceof IWallBlock){
+                        itemBlock = new WallOrFloorItem((Block)obj, ((IWallBlock)obj).wallBlock(), props);
+                    }else{
+                        itemBlock = new BlockItem((Block) obj, props);
+                    }
                     itemBlock.setRegistryName(((Block) obj).getRegistryName());
                     event.getRegistry().register(itemBlock);
                 } else if (obj instanceof Block[]) {

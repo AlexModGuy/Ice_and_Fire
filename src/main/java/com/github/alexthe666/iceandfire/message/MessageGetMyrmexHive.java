@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -44,6 +45,9 @@ public class MessageGetMyrmexHive {
         public static void handle(MessageGetMyrmexHive message, Supplier<NetworkEvent.Context> context) {
             context.get().setPacketHandled(true);
             PlayerEntity player = context.get().getSender();
+            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
+                player = IceAndFire.PROXY.getClientSidePlayer();
+            }
             if (player != null) {
                 IceAndFire.PROXY.setReferencedHive(message.hive);
                 if (player.world != null) {

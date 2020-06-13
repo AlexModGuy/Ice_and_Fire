@@ -88,7 +88,7 @@ public class ParticlePixieDust extends SpriteTexturedParticle {
 
 
     public int getBrightnessForRender(float partialTick) {
-        return super.getBrightnessForRender(partialTick);
+        return 240;
     }
 
     public void onUpdate() {

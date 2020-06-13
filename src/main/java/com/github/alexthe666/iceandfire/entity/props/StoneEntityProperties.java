@@ -6,8 +6,26 @@ import net.minecraft.nbt.CompoundNBT;
 
 public class StoneEntityProperties extends EntityProperties<LivingEntity> {
 
-    public boolean isStone;
-    public int breakLvl;
+    private boolean isStone;
+    private int breakLvl;
+
+    public boolean isStone(){
+        return isStone;
+    }
+
+    public void setStone(boolean stone){
+        this.isStone = stone;
+        this.sync();
+    }
+
+    public int getBreakLevel(){
+        return breakLvl;
+    }
+
+    public void setBreakLevel(int breakLevel){
+        this.breakLvl = breakLevel;
+        this.sync();
+    }
 
     @Override
     public int getTrackingTime() {

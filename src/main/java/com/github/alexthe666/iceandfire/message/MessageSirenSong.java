@@ -1,9 +1,11 @@
 package com.github.alexthe666.iceandfire.message;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -38,6 +40,9 @@ public class MessageSirenSong {
         public static void handle(MessageSirenSong message, Supplier<NetworkEvent.Context> context) {
             context.get().setPacketHandled(true);
             PlayerEntity player = context.get().getSender();
+            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
+                player = IceAndFire.PROXY.getClientSidePlayer();
+            }
             if (player != null && player.world != null) {
                 Entity entity = player.world.getEntityByID(message.sirenId);
                 if (entity != null && entity instanceof EntitySiren) {

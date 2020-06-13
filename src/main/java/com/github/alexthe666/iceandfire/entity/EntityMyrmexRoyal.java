@@ -368,7 +368,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
             this.speed = 1.75F;
         }
 
-        public void onUpdateMoveHelper() {
+        public void tick() {
             if (this.action == MovementController.Action.MOVE_TO) {
                 if (EntityMyrmexRoyal.this.collidedHorizontally) {
                     EntityMyrmexRoyal.this.rotationYaw += 180.0F;
@@ -430,7 +430,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
             return false;
         }
 
-        public void updateTask() {
+        public void tick() {
             if (!isDirectPathBetweenPoints(EntityMyrmexRoyal.this.getPosition(), target)) {
                 if (EntityMyrmexRoyal.this instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) EntityMyrmexRoyal.this).getSummoner() != null) {
                     Entity summon = ((EntityMyrmexSwarmer) EntityMyrmexRoyal.this).getSummoner();
@@ -475,7 +475,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
         }
 
-        public void updateTask() {
+        public void tick() {
             LivingEntity LivingEntity = EntityMyrmexRoyal.this.getAttackTarget();
             if (LivingEntity != null) {
                 if (EntityMyrmexRoyal.this.getBoundingBox().intersects(LivingEntity.getBoundingBox())) {

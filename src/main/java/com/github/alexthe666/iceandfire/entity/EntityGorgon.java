@@ -60,7 +60,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
     public static boolean isStoneMob(LivingEntity mob) {
         try {
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(mob, StoneEntityProperties.class);
-            return properties != null && properties.isStone;
+            return properties != null && properties.isStone();
         } catch (Exception e) {
             IceAndFire.LOGGER.warn("stone entity properties do not exist for " + mob.getName());
         }
@@ -99,7 +99,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
             @Override
             public boolean apply(@Nullable Entity entity) {
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-                return entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity) && !(entity instanceof EntityMutlipartPart) && (properties == null || properties != null && !properties.isStone) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
+                return entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity) && !(entity instanceof EntityMutlipartPart) && (properties == null || properties != null && !properties.isStone()) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
             }
         }));
         this.goalSelector.removeGoal(aiMelee);
@@ -220,8 +220,8 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                             if (this.getAttackTarget() instanceof LivingEntity && !(this.getAttackTarget() instanceof IBlacklistedFromStatues) || this.getAttackTarget() instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone()) {
                                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getAttackTarget(), StoneEntityProperties.class);
                                 LivingEntity attackTarget = this.getAttackTarget();
-                                if (properties != null && !properties.isStone) {
-                                    properties.isStone = true;
+                                if (properties != null && !properties.isStone()) {
+                                    properties.setStone(true);
                                     if (world.isRemote) {
                                         IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageStoneStatue(attackTarget.getEntityId(), true));
                                     } else {

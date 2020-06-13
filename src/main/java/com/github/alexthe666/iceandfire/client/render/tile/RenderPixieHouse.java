@@ -65,29 +65,37 @@ public class RenderPixieHouse<T extends TileEntityPixieHouse> extends TileEntity
             matrixStackIn.push();
             //GL11.glRotatef(MathHelper.clampAngle(entity.ticksExisted * 3), 0, 1, 0);
             RenderType type = RenderJar.TEXTURE_0;
+            RenderType type2 = RenderJar.TEXTURE_0_GLO;
             switch (entity.pixieType) {
                 default:
                     type = RenderJar.TEXTURE_0;
+                    type2 = RenderJar.TEXTURE_0_GLO;
                     break;
                 case 1:
                     type = RenderJar.TEXTURE_1;
+                    type2 = RenderJar.TEXTURE_1_GLO;
                     break;
                 case 2:
                     type = RenderJar.TEXTURE_2;
+                    type2 = RenderJar.TEXTURE_2_GLO;
                     break;
                 case 3:
                     type = RenderJar.TEXTURE_3;
+                    type2 = RenderJar.TEXTURE_3_GLO;
                     break;
                 case 4:
                     type = RenderJar.TEXTURE_4;
+                    type2 = RenderJar.TEXTURE_4_GLO;
                     break;
                 case 5:
                     type = RenderJar.TEXTURE_5;
+                    type2 = RenderJar.TEXTURE_5_GLO;
                     break;
             }
             matrixStackIn.push();
             MODEL_PIXIE.animateInHouse(entity);
             MODEL_PIXIE.render(matrixStackIn, bufferIn.getBuffer(type), combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+            MODEL_PIXIE.render(matrixStackIn, bufferIn.getBuffer(type2), combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
             matrixStackIn.pop();
             matrixStackIn.pop();
             matrixStackIn.pop();

@@ -22,7 +22,7 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
         model.resetToDefaultPose();
         model.getCube("BodyUpper").rotationPointY += 9;//model was made too high
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-        if (properties != null && properties.isStone) {
+        if (properties != null && properties.isStone()) {
             return;
         }
         model.llibAnimator.update(entity);

@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=east":  { "model": "iceandfire:block/dread_torch_wall" },
+        "facing=south":  { "model": "iceandfire:block/dread_torch_wall", "y": 90 },
+        "facing=west":  { "model": "iceandfire:block/dread_torch_wall", "y": 180 },
+        "facing=north":  { "model": "iceandfire:block/dread_torch_wall", "y": 270 }
+    }
+}

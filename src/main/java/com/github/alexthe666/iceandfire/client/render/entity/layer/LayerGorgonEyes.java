@@ -28,7 +28,7 @@ public class LayerGorgonEyes extends LayerRenderer<EntityGorgon, ModelGorgon> {
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityGorgon entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-        if (properties == null || !properties.isStone) {
+        if (properties == null || !properties.isStone()) {
             if (entity.getAnimation() == EntityGorgon.ANIMATION_SCARE || entity.getAnimation() == EntityGorgon.ANIMATION_HIT) {
                 RenderType eyes = RenderType.getEyes(TEXTURE);
                 IVertexBuilder ivertexbuilder = bufferIn.getBuffer(eyes);

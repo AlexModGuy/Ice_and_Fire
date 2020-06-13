@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 
 public class BlockJar extends ContainerBlock implements ICustomRendered {
-    protected static final VoxelShape AABB = Block.makeCuboidShape(4, 0, 4, 12, 1, 12);
+    protected static final VoxelShape AABB = Block.makeCuboidShape(3, 0, 3, 13, 16, 13);
     public Item itemBlock;
     private boolean empty;
     private int pixieType;

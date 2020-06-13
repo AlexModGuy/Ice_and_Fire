@@ -36,7 +36,7 @@ public class LayerStoneEntity extends LayerRenderer {
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, Entity living, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (living instanceof LivingEntity) {
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(living, StoneEntityProperties.class);
-            if (properties != null && properties.isStone) {
+            if (properties != null && properties.isStone()) {
                 float x = Math.max(this.renderer.getEntityModel().textureWidth, 1) / 16F; //default to 4
                 float y = Math.max(this.renderer.getEntityModel().textureHeight, 1) / 16F; //default to 2
                 RenderType tex = IafRenderType.getStoneMobRenderType(x, y);

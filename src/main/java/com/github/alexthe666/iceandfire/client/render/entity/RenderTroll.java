@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerTrollSto
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerTrollWeapon;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
@@ -19,6 +20,7 @@ public class RenderTroll extends MobRenderer<EntityTroll, ModelTroll> implements
     public RenderTroll(EntityRendererManager renderManager) {
         super(renderManager, new ModelTroll(), 0.9F);
         this.layerRenderers.add(new LayerTrollWeapon(this));
+        this.layerRenderers.add(new LayerTrollStone(this));
         this.layerRenderers.add(new LayerTrollEyes(this));
     }
 
@@ -28,12 +30,12 @@ public class RenderTroll extends MobRenderer<EntityTroll, ModelTroll> implements
     }
 
     @Override
-    public LayerRenderer getStoneLayer(MobRenderer render) {
+    public LayerRenderer getStoneLayer(LivingRenderer render) {
         return new LayerTrollStone(render);
     }
 
     @Override
-    public LayerRenderer getCrackLayer(MobRenderer render) {
+    public LayerRenderer getCrackLayer(LivingRenderer render) {
         return new LayerStoneEntityCrack(render);
     }
 }

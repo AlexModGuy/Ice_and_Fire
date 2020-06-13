@@ -28,7 +28,7 @@ public class LayerPixieGlow extends LayerRenderer<EntityPixie, ModelPixie> {
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityPixie pixie, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(pixie, StoneEntityProperties.class);
-        if (properties == null || !properties.isStone) {
+        if (properties == null || !properties.isStone()) {
             ResourceLocation texture = RenderPixie.TEXTURE_0;
             switch (pixie.getColor()) {
                 default:

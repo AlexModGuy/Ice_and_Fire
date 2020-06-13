@@ -11,13 +11,14 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.server.management.PreYggdrasilConverter;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.UUID;
 
-public class TileEntityEggInIce extends TileEntity implements ITickable {
+public class TileEntityEggInIce extends TileEntity implements ITickableTileEntity {
     public EnumDragonEgg type;
     public int age;
     public int ticksExisted;

@@ -398,6 +398,8 @@ public class ModelTroll extends ModelDragonBase<EntityTroll> {
     @Override
     public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
         this.resetToDefaultPose();
+        animateStatue((EntityTroll) living);
+        this.log1.showModel = false;
         this.render(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 
         this.resetToDefaultPose();

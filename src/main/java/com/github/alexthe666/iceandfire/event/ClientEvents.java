@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.client.gui.IceAndFireMainMenu;
+import com.github.alexthe666.iceandfire.client.render.entity.ICustomStoneLayer;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderCockatrice;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntityCrack;
@@ -24,6 +25,7 @@ import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
@@ -63,7 +65,8 @@ public class ClientEvents {
         for (Map.Entry<EntityType<?>, EntityRenderer<?>> entry : Minecraft.getInstance().getRenderManager().renderers.entrySet()) {
             EntityRenderer render = entry.getValue();
             if (render instanceof LivingRenderer) {
-                ((LivingRenderer) render).addLayer(new LayerStoneEntity((LivingRenderer) render));
+                LayerRenderer stoneLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getStoneLayer((LivingRenderer)render) : new LayerStoneEntity((LivingRenderer) render);
+                ((LivingRenderer) render).addLayer(stoneLayer);
                 ((LivingRenderer) render).addLayer(new LayerStoneEntityCrack((LivingRenderer) render));
             }
         }
@@ -92,7 +95,8 @@ public class ClientEvents {
                         try {
                             EntityRenderer render = entry.getValue().createRenderFor(Minecraft.getInstance().getRenderManager());
                             if (render != null && render instanceof LivingRenderer) {
-                                ((LivingRenderer) render).addLayer(new LayerStoneEntity((LivingRenderer) render));
+                                LayerRenderer stoneLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getStoneLayer((LivingRenderer)render) : new LayerStoneEntity((LivingRenderer) render);
+                                ((LivingRenderer) render).addLayer(stoneLayer);
                                 ((LivingRenderer) render).addLayer(new LayerStoneEntityCrack((LivingRenderer) render));
                             }
                         } catch (NullPointerException exp) {

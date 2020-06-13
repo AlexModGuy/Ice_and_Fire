@@ -66,7 +66,7 @@ public class HippogryphAIAirTarget extends Goal {
         if (hippogryph.isChild()) {
             return false;
         }
-        if (properties != null && properties.isStone) {
+        if (properties != null && properties.isStone()) {
             return false;
         }
         return hippogryph.airTarget != null;

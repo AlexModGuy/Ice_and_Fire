@@ -638,7 +638,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
 
     public boolean canMove() {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        if (properties != null && properties.isStone) {
+        if (properties != null && properties.isStone()) {
             return false;
         }
         return !this.isSitting() && this.getControllingPassenger() == null && sitProgress == 0;
@@ -833,7 +833,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             this.flyTicks = 0;
         }
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        if (properties != null && properties.isStone) {
+        if (properties != null && properties.isStone()) {
             this.setFlying(false);
             this.setHovering(false);
         }
@@ -947,7 +947,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             this.setFlying(false);
             this.setHovering(false);
         }
-        if ((properties == null || properties != null && !properties.isStone) && (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSitting() && this.canMove() && !this.isOverAir() || this.getPosY() < -1)) {
+        if ((properties == null || properties != null && !properties.isStone()) && (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSitting() && this.canMove() && !this.isOverAir() || this.getPosY() < -1)) {
             this.setHovering(true);
             this.hoverTicks = 0;
             this.flyTicks = 0;

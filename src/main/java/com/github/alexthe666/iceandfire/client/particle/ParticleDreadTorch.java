@@ -30,6 +30,9 @@ public class ParticleDreadTorch extends SpriteTexturedParticle {
         Vec3d inerp = renderInfo.getProjectedView();
         particleScale = 0.125F * (this.maxAge - (this.age));
         particleScale = particleScale * 0.09F;
+        motionX *= 0.75D;
+        motionY *= 0.75D;
+        motionZ *= 0.75D;
         if (age > this.getMaxAge()) {
             this.setExpired();
         }
@@ -76,8 +79,7 @@ public class ParticleDreadTorch extends SpriteTexturedParticle {
 
 
     public int getBrightnessForRender(float partialTick) {
-        BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
-        return this.world.isBlockLoaded(blockpos) ? this.world.getLight(blockpos) : 0;
+        return 240;
     }
 
     public int getFXLayer() {

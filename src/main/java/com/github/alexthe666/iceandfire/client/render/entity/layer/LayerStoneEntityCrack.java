@@ -38,12 +38,12 @@ public class LayerStoneEntityCrack<T extends Entity, M extends EntityModel<T>> e
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, Entity living, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (living instanceof LivingEntity) {
             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(living, StoneEntityProperties.class);
-            if (properties != null && properties.isStone && properties.breakLvl >= 1) {
+            if (properties != null && properties.isStone() && properties.getBreakLevel() >= 1) {
                 EntityModel model = this.renderer.getEntityModel();
                 if (model != null) {
                     float x = Math.max(model.textureWidth, 1) / 16F; //default to 4
                     float y = Math.max(model.textureHeight, 1) / 16F; //default to 2
-                    RenderType tex = IafRenderType.getStoneCrackRenderType(DESTROY_STAGES[properties.breakLvl - 1], x, y);
+                    RenderType tex = IafRenderType.getStoneCrackRenderType(DESTROY_STAGES[properties.getBreakLevel() - 1], x, y);
 
                     IVertexBuilder ivertexbuilder = bufferIn.getBuffer(tex);
                     if (this.renderer.getEntityModel() instanceof ICustomStatueModel) {

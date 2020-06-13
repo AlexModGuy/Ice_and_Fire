@@ -1005,7 +1005,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
             return false;
         }
 
-        public void updateTask() {
+        public void tick() {
             if (!isDirectPathBetweenPoints(EntityAmphithere.this)) {
                 target = EntityAmphithere.getPositionRelativetoGround(EntityAmphithere.this, EntityAmphithere.this.world, EntityAmphithere.this.getPosX() + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.getPosZ() + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.rand);
             }
@@ -1046,7 +1046,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
             return false;
         }
 
-        public void updateTask() {
+        public void tick() {
             if (!isDirectPathBetweenPoints()) {
                 target = EntityAmphithere.getPositionInOrbit(EntityAmphithere.this, world, EntityAmphithere.this.orbitPos, EntityAmphithere.this.rand);
             }

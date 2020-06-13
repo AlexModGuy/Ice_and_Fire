@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.TorchBlock;
@@ -12,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
-public class BlockDreadTorch extends TorchBlock implements IDreadBlock {
+public class BlockDreadTorch extends TorchBlock implements IDreadBlock, IWallBlock {
 
     public BlockDreadTorch() {
         super(Properties.create(Material.WOOD).lightValue(0).sound(SoundType.STONE).lightValue(7).notSolid().variableOpacity());
@@ -36,5 +37,10 @@ public class BlockDreadTorch extends TorchBlock implements IDreadBlock {
         } else {
             //worldIn.spawnParticle(ParticleTypes.SMOKE_NORMAL, d0, d1, d2, 0.0D, 0.0D, 0.0D);
         }*/
+    }
+
+    @Override
+    public Block wallBlock() {
+        return IafBlockRegistry.DREAD_TORCH_WALL;
     }
 }

@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
@@ -20,7 +21,7 @@ import net.minecraft.util.NonNullList;
 import java.util.Random;
 import java.util.UUID;
 
-public class TileEntityPixieHouse extends TileEntity implements ITickable {
+public class TileEntityPixieHouse extends TileEntity implements ITickableTileEntity {
 
     private static final float PARTICLE_WIDTH = 0.3F;
     private static final float PARTICLE_HEIGHT = 0.6F;

@@ -5,6 +5,7 @@ import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.entity.ai.TrollAIFleeSun;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
@@ -12,6 +13,7 @@ import com.github.alexthe666.iceandfire.entity.util.BlockBreakExplosion;
 import com.github.alexthe666.iceandfire.entity.util.IHumanoid;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -292,8 +294,9 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
             BlockPos blockpos = this.getRidingEntity() instanceof BoatEntity ? (new BlockPos(this.getPosX(), (double) Math.round(this.getPosY()), this.getPosZ())).up() : new BlockPos(this.getPosX(), (double) Math.round(this.getPosY()), this.getPosZ());
             if (f > 0.5F && this.world.canSeeSky(blockpos)) {
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-                if (properties != null && !properties.isStone) {
-                    properties.isStone = true;
+                if (properties != null && !properties.isStone()) {
+                    properties.setStone(true);
+                    IceAndFire.sendMSGToAll(new MessageStoneStatue(this.getEntityId(), true));
                     this.setMotion(0, 0, 0);
                     this.setAnimation(NO_ANIMATION);
                     this.playSound(IafSoundRegistry.GORGON_TURN_STONE, 1, 1);

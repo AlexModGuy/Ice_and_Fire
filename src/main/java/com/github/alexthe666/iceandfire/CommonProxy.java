@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.loot.CustomizeToSeaSerpent;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -145,6 +146,10 @@ public class CommonProxy {
     }
 
     public void setupClient() {
+    }
+
+    public PlayerEntity getClientSidePlayer(){
+        return null;
     }
 
     public void setup() {

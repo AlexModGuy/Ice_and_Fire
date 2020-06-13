@@ -1091,7 +1091,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
             return EntitySeaSerpent.this.getAttackTarget() == null && EntitySeaSerpent.this.swimBehavior == EntitySeaSerpent.SwimBehavior.CIRCLE;
         }
 
-        public void updateTask() {
+        public void tick() {
             if (EntitySeaSerpent.this.getDistanceSq(new Vec3d(target)) < 25) {
                 target = EntitySeaSerpent.getPositionInOrbit(EntitySeaSerpent.this, world, EntitySeaSerpent.this.orbitPos, EntitySeaSerpent.this.rand);
             }
@@ -1167,7 +1167,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
             }
         }
 
-        public void updateTask() {
+        public void tick() {
             if (EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP) {
                 if (EntitySeaSerpent.this.getAttackTarget() != null) {
                     if (EntitySeaSerpent.this.isInWater()) {
