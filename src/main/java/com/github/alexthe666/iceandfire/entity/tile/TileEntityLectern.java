@@ -240,7 +240,7 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
     }
 
     public ITextComponent getName() {
-        return new TranslationTextComponent("tile.iceandfire.lectern.name");
+        return new TranslationTextComponent("block.iceandfire.lectern");
     }
 
     @Override

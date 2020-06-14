@@ -23,7 +23,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:web",
+          "name": "minecraft:cobweb",
           "functions": [
             {
               "function": "set_count",
@@ -261,7 +261,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:sapling",
+          "name": "minecraft:jungle_sapling",
           "functions": [
             {
               "function": "set_count",
@@ -269,17 +269,13 @@
                 "min": 1,
                 "max": 1
               }
-            },
-            {
-              "function": "minecraft:set_data",
-              "data": 3
             }
           ],
           "weight": 55
         },
         {
           "type": "item",
-          "name": "minecraft:dye",
+          "name": "minecraft:green_dye",
           "functions": [
             {
               "function": "set_count",
@@ -287,10 +283,6 @@
                 "min": 1,
                 "max": 5
               }
-            },
-            {
-              "function": "minecraft:set_data",
-              "data": 3
             }
           ],
           "weight": 60
@@ -311,7 +303,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:skull",
+          "name": "minecraft:skeleton_skull",
           "functions": [
             {
               "function": "set_count",

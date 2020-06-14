@@ -9,12 +9,15 @@ import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 
+import java.util.EnumSet;
+
 public class DeathWormAITarget<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
     private EntityDeathWorm deathworm;
 
     public DeathWormAITarget(EntityDeathWorm entityIn, Class<T> classTarget, boolean checkSight, Predicate<LivingEntity> targetPredicate) {
         super(entityIn, classTarget, 20, checkSight, false, targetPredicate);
         this.deathworm = entityIn;
+        this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
 
     @Override

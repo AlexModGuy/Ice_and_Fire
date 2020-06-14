@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.message;
 
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -38,7 +39,7 @@ public class MessageAddChainedEntity {
 
         public static void handle(MessageAddChainedEntity message, Supplier<NetworkEvent.Context> context) {
             context.get().setPacketHandled(true);
-            PlayerEntity player = context.get().getSender();
+            PlayerEntity player = IceAndFire.PROXY.getClientSidePlayer();
             if (player != null) {
                 Entity entity = player.world.getEntityByID(message.chainedId);
                 Entity toChain = player.world.getEntityByID(message.addedEntityId);

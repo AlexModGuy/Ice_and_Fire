@@ -68,6 +68,7 @@ public class EntityChainTie extends HangingEntity {
     }
 
     protected void updateBoundingBox() {
+        super.updateBoundingBox();
         this.setRawPosition((double) this.hangingPosition.getX() + 0.5D, (double) this.hangingPosition.getY() + 0.5D, (double) this.hangingPosition.getZ() + 0.5D);
         if (this.isAddedToWorld() && this.world instanceof net.minecraft.world.server.ServerWorld)
             ((net.minecraft.world.server.ServerWorld) this.world).chunkCheck(this); // Forge - Process chunk registration after moving.

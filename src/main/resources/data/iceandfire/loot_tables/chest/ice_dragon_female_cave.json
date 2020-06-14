@@ -135,7 +135,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:skull",
+          "name": "minecraft:skeleton_skull",
           "functions": [
             {
               "function": "set_count",
@@ -149,7 +149,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:web",
+          "name": "minecraft:cobweb",
           "functions": [
             {
               "function": "set_count",

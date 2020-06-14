@@ -454,8 +454,9 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     public void openGUI(PlayerEntity playerEntity) {
+        IceAndFire.PROXY.setReferencedMob(this);
         if (!this.world.isRemote && (!this.isBeingRidden() || this.isPassenger(playerEntity))) {
-            NetworkHooks.openGui((ServerPlayerEntity) playerEntity, new INamedContainerProvider() {
+            playerEntity.openContainer( new INamedContainerProvider() {
                 @Override
                 public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
                     return new ContainerDragon(p_createMenu_1_, dragonInventory, p_createMenu_2_, EntityDragonBase.this);
@@ -463,11 +464,10 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
 
                 @Override
                 public ITextComponent getDisplayName() {
-                    return new TranslationTextComponent("entity.rats.rat");
+                    return EntityDragonBase.this.getDisplayName();
                 }
             });
         }
-        IceAndFire.PROXY.setReferencedMob(this);
     }
 
     public int getTalkInterval() {
@@ -1847,10 +1847,8 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     @Override
     public void travel(Vec3d dragonVec) {
         if (this.getAnimation() == ANIMATION_SHAKEPREY || !this.canMove() && !this.isBeingRidden() || this.isSitting()) {
-            moveVertical = 0;
-            moveStrafing = 0;
-            moveForward = 0;
-            super.travel(dragonVec.mul(0, 0, 0));
+
+            super.travel(dragonVec.mul(0, 1, 0));
             return;
         }
         super.travel(dragonVec);

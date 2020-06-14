@@ -21,13 +21,12 @@ public class ContainerDragon extends Container {
 
     public ContainerDragon(int id, IInventory ratInventory, PlayerInventory playerInventory, EntityDragonBase rat) {
         super(IafContainerRegistry.DRAGON_CONTAINER, id);
-
-        this.dragonInventory = dragon.dragonInventory;
-        this.dragon = dragon;
+        this.dragonInventory = ratInventory;
+        this.dragon = rat;
         byte b0 = 3;
         dragonInventory.openInventory(playerInventory.player);
         int i = (b0 - 4) * 18;
-        this.addSlot(new Slot(dragon.dragonInventory, 0, 8, 54) {
+        this.addSlot(new Slot(ratInventory, 0, 8, 54) {
             public void onSlotChanged() {
                 this.inventory.markDirty();
             }
@@ -37,7 +36,7 @@ public class ContainerDragon extends Container {
                 return super.isItemValid(stack) && stack.getItem() instanceof BannerItem;
             }
         });
-        this.addSlot(new Slot(dragon.dragonInventory, 1, 8, 18) {
+        this.addSlot(new Slot(ratInventory, 1, 8, 18) {
             public void onSlotChanged() {
                 this.inventory.markDirty();
             }
@@ -47,7 +46,7 @@ public class ContainerDragon extends Container {
                 return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 0;
             }
         });
-        this.addSlot(new Slot(dragon.dragonInventory, 2, 8, 36) {
+        this.addSlot(new Slot(ratInventory, 2, 8, 36) {
             public void onSlotChanged() {
                 this.inventory.markDirty();
             }
@@ -57,7 +56,7 @@ public class ContainerDragon extends Container {
                 return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 1;
             }
         });
-        this.addSlot(new Slot(dragon.dragonInventory, 3, 153, 18) {
+        this.addSlot(new Slot(ratInventory, 3, 153, 18) {
             public void onSlotChanged() {
                 this.inventory.markDirty();
             }
@@ -67,7 +66,7 @@ public class ContainerDragon extends Container {
                 return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 2;
             }
         });
-        this.addSlot(new Slot(dragon.dragonInventory, 4, 153, 36) {
+        this.addSlot(new Slot(ratInventory, 4, 153, 36) {
             public void onSlotChanged() {
                 this.inventory.markDirty();
             }

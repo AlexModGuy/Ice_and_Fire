@@ -538,6 +538,7 @@ public class ModelHippogryph extends ModelDragonBase<EntityHippogryph> {
 
     @Override
     public void setRotationAngles(EntityHippogryph entity, float f, float f1, float f2, float f3, float f4) {
+        animate(entity, f, f1, f2, f3, f4, 1);
         EntityHippogryph hippo = entity;
         if (this.isChild) {
             this.Body.setShouldScaleChildren(true);

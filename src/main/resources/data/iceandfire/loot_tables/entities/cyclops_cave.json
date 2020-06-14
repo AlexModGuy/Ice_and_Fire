@@ -79,7 +79,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:web",
+          "name": "minecraft:cobweb",
           "functions": [
             {
               "function": "set_count",

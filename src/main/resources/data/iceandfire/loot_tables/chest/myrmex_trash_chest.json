@@ -23,7 +23,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:web",
+          "name": "minecraft:cobweb",
           "functions": [
             {
               "function": "set_count",
@@ -177,7 +177,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:dye",
+          "name": "minecraft:bone_meal",
           "functions": [
             {
               "function": "set_count",
@@ -185,10 +185,6 @@
                 "min": 1,
                 "max": 5
               }
-            },
-            {
-              "function": "minecraft:set_data",
-              "data": 4
             }
           ],
           "weight": 7

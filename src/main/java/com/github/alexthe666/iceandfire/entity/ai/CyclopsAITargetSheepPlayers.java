@@ -4,6 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 
+import java.util.EnumSet;
 import java.util.function.Predicate;
 
 
@@ -16,6 +17,8 @@ public class CyclopsAITargetSheepPlayers<T extends LivingEntity> extends Nearest
                 return false; //TODO Sheep hunt cyclops
             }
         });
+        this.setMutexFlags(EnumSet.of(Flag.TARGET));
+
     }
 
 

@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:nuggets/dragonsteel_fire"
+      "tag": "forge:storage_blocks/dragonsteel_fire"
     }
   ],
   "result": {

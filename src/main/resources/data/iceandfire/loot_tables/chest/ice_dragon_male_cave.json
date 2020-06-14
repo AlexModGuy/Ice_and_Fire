@@ -133,7 +133,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:skull",
+          "name": "minecraft:skeleton_skull",
           "functions": [
             {
               "function": "set_count",
@@ -147,7 +147,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:web",
+          "name": "minecraft:cobweb",
           "functions": [
             {
               "function": "set_count",
@@ -365,14 +365,8 @@
         },
         {
           "type": "item",
-          "name": "minecraft:golden_apple",
-          "weight": 1,
-          "functions": [
-            {
-              "function": "set_data",
-              "data": 1
-            }
-          ]
+          "name": "minecraft:enchanted_golden_apple",
+          "weight": 1
         },
         {
           "type": "item",

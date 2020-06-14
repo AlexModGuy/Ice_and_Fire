@@ -10,8 +10,8 @@
       "item": "iceandfire:myrmex_jungle_chitin"
     },
     "B": {
-      "type": "forge:ore_dict",
-      "ore": "boneWither"
+      "tag": "forge:bones/wither"
+
     }
   },
   "result": {

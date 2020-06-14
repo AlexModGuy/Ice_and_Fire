@@ -9,7 +9,7 @@
       "entries": [
         {
           "type": "item",
-          "name": "minecraft:skull",
+          "name": "minecraft:skeleton_skull",
           "functions": [
             {
               "function": "set_count",

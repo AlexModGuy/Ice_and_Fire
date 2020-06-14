@@ -25,7 +25,7 @@ public class ContainerHippocampus extends Container {
 
     public ContainerHippocampus(int id, IInventory ratInventory, PlayerInventory playerInventory, EntityHippocampus hippocampus) {
         super(IafContainerRegistry.HIPPOCAMPUS_CONTAINER, id);
-        this.hippocampusInventory = hippocampus.hippocampusInventory;
+        this.hippocampusInventory = ratInventory;
         this.hippocampus = hippocampus;
         this.player = playerInventory.player;
         int i = 3;
@@ -47,7 +47,9 @@ public class ContainerHippocampus extends Container {
             }
 
             public void onSlotChanged() {
-                ContainerHippocampus.this.hippocampus.refreshInventory();
+                if (ContainerHippocampus.this.hippocampus != null) {
+                    ContainerHippocampus.this.hippocampus.refreshInventory();
+                }
             }
 
             @OnlyIn(Dist.CLIENT)
@@ -76,11 +78,11 @@ public class ContainerHippocampus extends Container {
                 this.addSlot(new Slot(hippocampusInventory, 3 + l + k * 5, 80 + l * 18, 18 + k * 18) {
                     @OnlyIn(Dist.CLIENT)
                     public boolean isEnabled() {
-                        return ContainerHippocampus.this.hippocampus.isChested();
+                        return ContainerHippocampus.this.hippocampus != null && ContainerHippocampus.this.hippocampus.isChested();
                     }
 
                     public boolean isItemValid(ItemStack stack) {
-                        return ContainerHippocampus.this.hippocampus.isChested();
+                        return ContainerHippocampus.this.hippocampus != null && ContainerHippocampus.this.hippocampus.isChested();
                     }
                 });
             }

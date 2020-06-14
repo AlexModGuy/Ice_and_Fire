@@ -12,6 +12,7 @@ import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.GrassBlock;
+import net.minecraft.block.SpreadableSnowyDirtBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -294,7 +295,7 @@ public class IafDragonDestructionManager {
     }
 
     public static BlockState transformBlockFire(BlockState in) {
-        if (in.getBlock() instanceof GrassBlock) {
+        if (in.getBlock() instanceof SpreadableSnowyDirtBlock) {
             return IafBlockRegistry.CHARRED_GRASS.getDefaultState().with(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.EARTH && in.getBlock() == Blocks.DIRT) {
             return IafBlockRegistry.CHARRED_DIRT.getDefaultState().with(BlockReturningState.REVERTS, true);
@@ -315,7 +316,7 @@ public class IafDragonDestructionManager {
     }
 
     public static BlockState transformBlockIce(BlockState in) {
-        if (in.getBlock() instanceof GrassBlock) {
+        if (in.getBlock() instanceof SpreadableSnowyDirtBlock) {
             return IafBlockRegistry.CHARRED_GRASS.getDefaultState().with(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.EARTH && in.getBlock() == Blocks.DIRT || in.getMaterial() == Material.SNOW_BLOCK) {
             return IafBlockRegistry.FROZEN_DIRT.getDefaultState().with(BlockReturningState.REVERTS, true);

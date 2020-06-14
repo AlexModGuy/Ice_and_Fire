@@ -11,6 +11,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 
 public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
@@ -37,6 +38,8 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
                 return item instanceof ItemEntity && !item.getItem().isEmpty() && item.getItem().getItem() == Item.getItemFromBlock(Blocks.TNT);
             }
         };
+        this.setMutexFlags(EnumSet.of(Flag.TARGET));
+
     }
 
     @Override

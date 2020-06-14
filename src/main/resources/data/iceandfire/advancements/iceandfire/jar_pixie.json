@@ -12,15 +12,64 @@
     },
     "parent": "iceandfire:iceandfire/tame_pixie",
     "criteria": {
-        "bestiary": {
+        "jar_0": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
                     {
-                        "item": "iceandfire:jar_pixie"
+                        "item": "iceandfire:pixie_jar_0"
+                    }
+                ]
+            }
+        },
+        "jar_1": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:pixie_jar_1"
+                    }
+                ]
+            }
+        },
+        "jar_2": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:pixie_jar_2"
+                    }
+                ]
+            }
+        },
+        "jar_3": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:pixie_jar_3"
+                    }
+                ]
+            }
+        },
+        "jar_4": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:pixie_jar_4"
                     }
                 ]
             }
         }
-    }
+    },
+    "requirements": [
+        [
+            "jar_0",
+            "jar_1",
+            "jar_2",
+            "jar_3",
+            "jar_4"
+        ]
+    ]
 }

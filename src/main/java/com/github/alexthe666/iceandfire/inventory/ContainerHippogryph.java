@@ -25,7 +25,7 @@ public class ContainerHippogryph extends Container {
 
     public ContainerHippogryph(int id, IInventory ratInventory, PlayerInventory playerInventory, EntityHippogryph hippogryph) {
         super(IafContainerRegistry.HIPPOGRYPH_CONTAINER, id);
-        this.hippogryphInventory = hippogryph.hippogryphInventory;
+        this.hippogryphInventory = ratInventory;
         this.hippogryph = hippogryph;
         this.player = playerInventory.player;
         int i = 3;
@@ -47,7 +47,9 @@ public class ContainerHippogryph extends Container {
             }
 
             public void onSlotChanged() {
-                ContainerHippogryph.this.hippogryph.refreshInventory();
+                if (ContainerHippogryph.this.hippogryph != null) {
+                    ContainerHippogryph.this.hippogryph.refreshInventory();
+                }
             }
 
             @OnlyIn(Dist.CLIENT)
@@ -76,11 +78,11 @@ public class ContainerHippogryph extends Container {
                 this.addSlot(new Slot(hippogryphInventory, 3 + l + k * 5, 80 + l * 18, 18 + k * 18) {
                     @OnlyIn(Dist.CLIENT)
                     public boolean isEnabled() {
-                        return ContainerHippogryph.this.hippogryph.isChested();
+                        return ContainerHippogryph.this.hippogryph != null && ContainerHippogryph.this.hippogryph.isChested();
                     }
 
                     public boolean isItemValid(ItemStack stack) {
-                        return ContainerHippogryph.this.hippogryph.isChested();
+                        return ContainerHippogryph.this.hippogryph != null && ContainerHippogryph.this.hippogryph.isChested();
                     }
                 });
             }

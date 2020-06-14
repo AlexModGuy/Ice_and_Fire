@@ -36,7 +36,7 @@ public class GuiDragon extends ContainerScreen<ContainerDragon> {
         this.ySize = 214;
     }
 
-    public static void drawEntityOnScreen(int x, int y, int scale, float yaw, float pitch, LivingEntity entity) {
+    public static void drawEntityOnScreen(int x, int y, float scale, float yaw, float pitch, LivingEntity entity) {
         float f = (float) Math.atan(yaw / 40.0F);
         float f1 = (float) Math.atan(pitch / 40.0F);
         RenderSystem.pushMatrix();
@@ -93,7 +93,7 @@ public class GuiDragon extends ContainerScreen<ContainerDragon> {
             this.font.drawString(s6, this.xSize / 2 - this.font.getStringWidth(s6) / 2, 102, 0XFFFFFF);
             String s4 = StatCollector.translateToLocal("dragon.stage") + dragon.getDragonStage() + " " + StatCollector.translateToLocal("dragon.days.front") + dragon.getAgeInDays() + " " + StatCollector.translateToLocal("dragon.days.back");
             this.font.drawString(s4, this.xSize / 2 - this.font.getStringWidth(s4) / 2, 111, 0XFFFFFF);
-            String s7 = dragon.getOwner() != null ? StatCollector.translateToLocal("dragon.owner") + dragon.getOwner().getName() : StatCollector.translateToLocal("dragon.untamed");
+            String s7 = dragon.getOwner() != null ? StatCollector.translateToLocal("dragon.owner") + dragon.getOwner().getName().getFormattedText() : StatCollector.translateToLocal("dragon.untamed");
             this.font.drawString(s7, this.xSize / 2 - this.font.getStringWidth(s7) / 2, 120, 0XFFFFFF);
         }
     }
@@ -108,7 +108,8 @@ public class GuiDragon extends ContainerScreen<ContainerDragon> {
         Entity entity = IceAndFire.PROXY.getReferencedMob();
         if (entity instanceof EntityDragonBase) {
             EntityDragonBase dragon = (EntityDragonBase) entity;
-            drawEntityOnScreen(k + 88, l + (int) (0.5F * (dragon.flyProgress)) + 55, 23, k + 51 - this.mousePosx, l + 75 - 50 - this.mousePosY, dragon);
+            float dragonScale = 1F / Math.max(0.0001F, dragon.getRenderScale());
+            drawEntityOnScreen(k + 88, l + (int) (0.5F * (dragon.flyProgress)) + 55, dragonScale * 23F, k + 51 - this.mousePosx, l + 75 - 50 - this.mousePosY, dragon);
         }
 
     }

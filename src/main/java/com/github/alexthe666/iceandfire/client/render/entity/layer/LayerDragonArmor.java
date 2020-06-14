@@ -49,11 +49,11 @@ public class LayerDragonArmor extends LayerRenderer<EntityDragonBase, SegmentedM
         int armorNeck = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EquipmentSlotType.CHEST));
         int armorLegs = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EquipmentSlotType.LEGS));
         int armorFeet = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(EquipmentSlotType.FEET));
-        String armorTexture = dragon.dragonType.getName() + "|" + armorHead + "|" + armorNeck + "|" + armorLegs + "|" + armorFeet;
-        if (!armorTexture.equals(dragon.dragonType.getName() + "|0|0|0|0")) {
+        String armorTexture = dragon.dragonType.getName() + "_" + armorHead + "_" + armorNeck + "_" + armorLegs + "_" + armorFeet;
+        if (!armorTexture.equals(dragon.dragonType.getName() + "_0_0_0_0")) {
             ResourceLocation resourcelocation = LAYERED_ARMOR_CACHE.get(armorTexture);
             if (resourcelocation == null) {
-                resourcelocation = new ResourceLocation("iceandfire" + "dragonArmor_" + armorTexture);
+                resourcelocation = new ResourceLocation("iceandfire" + "dragon_armor_" + armorTexture);
                 List<String> tex = new ArrayList<String>();
                 for (EquipmentSlotType slot : ARMOR_SLOTS) {
                     if (dragon.dragonType == DragonType.FIRE) {

@@ -10,8 +10,8 @@
       "tag": "forge:ingots/dragonsteel_fire"
     },
     "T": {
-      "type": "forge:ore_dict",
-      "ore": "boneWither"
+      "tag": "forge:bones/wither"
+
     }
   },
   "result": {

@@ -191,7 +191,7 @@ public class TileEntityPodium extends LockableTileEntity implements ITickableTil
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("tile.iceandfire.podium.name");
+        return new TranslationTextComponent("block.iceandfire.podium");
     }
 
     @Override

@@ -13,6 +13,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
 
 public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
@@ -39,6 +40,7 @@ public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
                 return item instanceof ItemEntity && !item.getItem().isEmpty() && item.getItem().getItem() == Items.COCOA_BEANS;
             }
         };
+        this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
 
     @Override

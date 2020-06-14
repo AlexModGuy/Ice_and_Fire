@@ -10,7 +10,7 @@
       "tag": "forge:meats"
     },
     "B": {
-      "item": "forge:bones"
+      "tag": "forge:bones"
     }
   },
   "result": {

@@ -3,11 +3,14 @@ package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.loot.CustomizeToDragon;
+import com.github.alexthe666.iceandfire.loot.CustomizeToSeaSerpent;
 import com.github.alexthe666.iceandfire.message.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -66,6 +69,11 @@ public class IceAndFire {
         //modLoadingContext.registerConfig(ModConfig.Type.CLIENT, ConfigHolder.CLIENT_SPEC);
         //modLoadingContext.registerConfig(ModConfig.Type.SERVER, ConfigHolder.SERVER_SPEC);
         PROXY.init();
+    }
+
+    static{
+        LootFunctionManager.registerFunction(new CustomizeToDragon.Serializer());
+        LootFunctionManager.registerFunction(new CustomizeToSeaSerpent.Serializer());
     }
 
     public static <MSG> void sendMSGToServer(MSG message) {

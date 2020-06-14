@@ -54,10 +54,10 @@ import java.util.Random;
 public class ClientEvents {
 
     private static final ResourceLocation SIREN_SHADER = new ResourceLocation("iceandfire:shaders/post/siren.json");
-    private static final ResourceLocation TEXTURE_0 = new ResourceLocation("textures/blocks/frosted_ice_0.png");
-    private static final ResourceLocation TEXTURE_1 = new ResourceLocation("textures/blocks/frosted_ice_1.png");
-    private static final ResourceLocation TEXTURE_2 = new ResourceLocation("textures/blocks/frosted_ice_2.png");
-    private static final ResourceLocation TEXTURE_3 = new ResourceLocation("textures/blocks/frosted_ice_3.png");
+    private static final ResourceLocation TEXTURE_0 = new ResourceLocation("textures/block/frosted_ice_0.png");
+    private static final ResourceLocation TEXTURE_1 = new ResourceLocation("textures/block/frosted_ice_1.png");
+    private static final ResourceLocation TEXTURE_2 = new ResourceLocation("textures/block/frosted_ice_2.png");
+    private static final ResourceLocation TEXTURE_3 = new ResourceLocation("textures/block/frosted_ice_3.png");
     private static final ResourceLocation CHAIN_TEXTURE = new ResourceLocation("iceandfire:textures/models/misc/chain_link.png");
     private Random rand = new Random();
 
@@ -126,15 +126,14 @@ public class ClientEvents {
         Tessellator tessellator = Tessellator.getInstance();
         IVertexBuilder vertexbuffer = tessellator.getBuffer().getVertexBuilder();
         BufferBuilder buffer = tessellator.getBuffer();
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         float f3 = 0;
         Matrix4f matrix4f = stack.getLast().getMatrix();
-        float maxX = (float) boundingBox.maxX * 0.125F;
-        float minX = (float) boundingBox.minX * 0.125F;
-        float maxY = (float) boundingBox.maxY * 0.125F;
-        float minY = (float) boundingBox.minY * 0.125F;
-        float maxZ = (float) boundingBox.maxZ * 0.125F;
-        float minZ = (float) boundingBox.minZ * 0.125F;
+        float maxX = (float) boundingBox.maxX * 0.425F;
+        float minX = (float) boundingBox.minX * 0.425F;
+        float maxY = (float) boundingBox.maxY * 0.425F;
+        float minY = (float) boundingBox.minY * 0.425F;
+        float maxZ = (float) boundingBox.maxZ * 0.425F;
+        float minZ = (float) boundingBox.minZ * 0.425F;
         buffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
         vertexbuffer.pos(matrix4f, (float) boundingBox.minX, (float) boundingBox.maxY, (float) boundingBox.minZ).tex(f3 + minX - maxX, f3 + maxY - minY).color(255, 255, 255, 255).normal(0.0F, 0.0F, -1.0F).endVertex();
         vertexbuffer.pos(matrix4f, (float) boundingBox.maxX, (float) boundingBox.maxY, (float) boundingBox.minZ).tex(f3 + maxX - minX, f3 + maxY - minY).color(255, 255, 255, 255).normal(0.0F, 0.0F, -1.0F).endVertex();
@@ -253,20 +252,28 @@ public class ClientEvents {
                 net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post(event.getEntity(), event.getRenderer(), event.getPartialRenderTick(), event.getMatrixStack(), event.getBuffers(), event.getLight()));
             }
         }
+        FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), FrozenEntityProperties.class);
+        if (frozenProps != null && frozenProps.isFrozen) {
+            LivingEntity entity = event.getEntity();
+            float sideExpand = -0.125F;
+            float sideExpandY = 0.325F;
+            AxisAlignedBB axisalignedbb1 = new AxisAlignedBB(-entity.getWidth() / 2F - sideExpand, 0, -entity.getWidth() / 2F - sideExpand, entity.getWidth() / 2F + sideExpand, entity.getHeight() + sideExpandY, entity.getWidth() / 2F + sideExpand);
+            event.getMatrixStack().push();
+            event.getMatrixStack().push();
+            RenderSystem.enableDepthTest();
+            Minecraft.getInstance().getTextureManager().bindTexture(getIceTexture(frozenProps.ticksUntilUnfrozen));
+            renderMovingAABB(axisalignedbb1, event.getMatrixStack());
+            RenderSystem.disableDepthTest();
+            event.getMatrixStack().pop();
+            event.getMatrixStack().pop();
+        }
+
     }
 
     @SubscribeEvent
     public void onPostRenderLiving(RenderLivingEvent.Post event) {
         LivingEntity entity = event.getEntity();
         ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, ChainEntityProperties.class);
-        FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, FrozenEntityProperties.class);
-        if (frozenProps != null && frozenProps.isFrozen) {
-            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            float sideExpand = 0.25F;
-            AxisAlignedBB axisalignedbb1 = entity.getBoundingBox().grow(sideExpand, sideExpand, sideExpand);
-            Minecraft.getInstance().getTextureManager().bindTexture(getIceTexture(frozenProps.ticksUntilUnfrozen));
-            renderMovingAABB(axisalignedbb1, event.getMatrixStack());
-        }
 
         MiscEntityProperties miscProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, MiscEntityProperties.class);
         if (miscProps != null && miscProps.glarers.size() > 0) {
@@ -350,27 +357,25 @@ public class ClientEvents {
                     MatrixStack matrixStackIn = event.getMatrixStack();
                     float f = 1;
                     float f1 = 0;
-                    float f2 = f1 * 0.5F % 1.0F;
+                    float f2 = 1;
                     float f3 = entity.getEyeHeight();
                     matrixStackIn.push();
                     matrixStackIn.translate(0.0D, f3, 0.0D);
                     Vec3d vec3d = this.getPosition(livingentity, (double) livingentity.getHeight() * 0.5D, event.getPartialRenderTick());
                     Vec3d vec3d1 = this.getPosition(entity, f3, event.getPartialRenderTick());
                     Vec3d vec3d2 = vec3d.subtract(vec3d1);
-                    float f4 = (float) (vec3d2.length() + 1.0D);
+                    float f4 = (float) (vec3d2.length() + 0.0D);
                     vec3d2 = vec3d2.normalize();
                     float f5 = (float) Math.acos(vec3d2.y);
                     float f6 = (float) Math.atan2(vec3d2.z, vec3d2.x);
                     matrixStackIn.rotate(Vector3f.YP.rotationDegrees((((float) Math.PI / 2F) - f6) * (180F / (float) Math.PI)));
                     matrixStackIn.rotate(Vector3f.XP.rotationDegrees(f5 * (180F / (float) Math.PI)));
                     int i = 1;
-                    float f7 = f1 * 0.05F * -1.5F;
+                    float f7 = -1.0F;
                     float f8 = f * f;
-                    int j = 64 + (int) (f8 * 191.0F);
-                    int k = 32 + (int) (f8 * 191.0F);
-                    int l = 128 - (int) (f8 * 64.0F);
-                    float f9 = 0.2F;
-                    float f10 = 0.282F;
+                    int j = 255;
+                    int k = 255;
+                    int l = 255;
                     float f11 = MathHelper.cos(f7 + 2.3561945F) * 0.282F;
                     float f12 = MathHelper.sin(f7 + 2.3561945F) * 0.282F;
                     float f13 = MathHelper.cos(f7 + ((float) Math.PI / 4F)) * 0.282F;
@@ -379,35 +384,36 @@ public class ClientEvents {
                     float f16 = MathHelper.sin(f7 + 3.926991F) * 0.282F;
                     float f17 = MathHelper.cos(f7 + 5.4977875F) * 0.282F;
                     float f18 = MathHelper.sin(f7 + 5.4977875F) * 0.282F;
-                    float f19 = MathHelper.cos(f7 + (float) Math.PI) * 0.2F;
-                    float f20 = MathHelper.sin(f7 + (float) Math.PI) * 0.2F;
-                    float f21 = MathHelper.cos(f7 + 0.0F) * 0.2F;
-                    float f22 = MathHelper.sin(f7 + 0.0F) * 0.2F;
+                    float f19 = 0;
+                    float f20 = 0.2F;
+                    float f21 = 0F;
+                    float f22 = -0.2F;
                     float f23 = MathHelper.cos(f7 + ((float) Math.PI / 2F)) * 0.2F;
                     float f24 = MathHelper.sin(f7 + ((float) Math.PI / 2F)) * 0.2F;
                     float f25 = MathHelper.cos(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
                     float f26 = MathHelper.sin(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
                     float f27 = 0.0F;
                     float f28 = 0.4999F;
-                    float f29 = -1.0F + f2;
-                    float f30 = f4 * 2.5F + f29;
-                    IVertexBuilder ivertexbuilder = event.getBuffers().getBuffer(RenderType.getEntityCutout(CHAIN_TEXTURE));
+                    float f29 = 0;
+                    float f30 = f4 + f29;
+                    float f32 = 0.75F;
+                    float f31 = f4 + f32;
+
+                    IVertexBuilder ivertexbuilder = event.getBuffers().getBuffer(RenderType.getEntityCutoutNoCull(CHAIN_TEXTURE));
                     MatrixStack.Entry matrixstack$entry = matrixStackIn.getLast();
                     Matrix4f matrix4f = matrixstack$entry.getMatrix();
                     Matrix3f matrix3f = matrixstack$entry.getNormal();
+                    matrixStackIn.push();
                     func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f19, f4, f20, j, k, l, 0.4999F, f30);
                     func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f19, 0.0F, f20, j, k, l, 0.4999F, f29);
                     func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f21, 0.0F, f22, j, k, l, 0.0F, f29);
                     func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f21, f4, f22, j, k, l, 0.0F, f30);
-                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f23, f4, f24, j, k, l, 0.4999F, f30);
-                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f23, 0.0F, f24, j, k, l, 0.4999F, f29);
-                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f25, 0.0F, f26, j, k, l, 0.0F, f29);
-                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f25, f4, f26, j, k, l, 0.0F, f30);
-                    float f31 = 0.0F;
-                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f11, f4, f12, j, k, l, 0.5F, f31 + 0.5F);
-                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f13, f4, f14, j, k, l, 1.0F, f31 + 0.5F);
-                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f17, f4, f18, j, k, l, 1.0F, f31);
-                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f15, f4, f16, j, k, l, 0.5F, f31);
+
+                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f23, f4, f24, j, k, l, 0.4999F, f31);
+                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f23, 0.0F, f24, j, k, l, 0.4999F, f32);
+                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f25, 0.0F, f26, j, k, l, 0.0F, f32);
+                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f25, f4, f26, j, k, l, 0.0F, f31);
+                    matrixStackIn.pop();
                     matrixStackIn.pop();
                 }
 

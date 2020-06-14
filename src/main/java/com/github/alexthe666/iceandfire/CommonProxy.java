@@ -67,8 +67,7 @@ public class CommonProxy {
     }
 
     public void init() {
-        LootFunctionManager.registerFunction(new CustomizeToDragon.Serializer());
-        LootFunctionManager.registerFunction(new CustomizeToSeaSerpent.Serializer());
+
     }
 
     public void postInit() {

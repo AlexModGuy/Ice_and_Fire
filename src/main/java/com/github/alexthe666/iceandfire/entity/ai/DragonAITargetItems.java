@@ -26,7 +26,7 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
 
     public DragonAITargetItems(MobEntity creature, boolean checkSight) {
         this(creature, checkSight, false);
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+        this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
 
     public DragonAITargetItems(MobEntity creature, boolean checkSight, boolean onlyNearby) {

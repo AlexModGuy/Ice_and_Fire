@@ -297,7 +297,8 @@ public class DragonUtils {
     }
 
     public static boolean isAlive(LivingEntity entity) {
-        return (!(entity instanceof IDeadMob) || !((IDeadMob) entity).isMobDead()) && !EntityGorgon.isStoneMob(entity);
+        boolean alive = (!(entity instanceof IDeadMob) || !((IDeadMob) entity).isMobDead()) && !EntityGorgon.isStoneMob(entity);
+        return alive;
     }
 
 
