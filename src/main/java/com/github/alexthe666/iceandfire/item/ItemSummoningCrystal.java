@@ -18,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -80,8 +81,8 @@ public class ItemSummoningCrystal extends Item {
             }
         }
         if (!flag) {
-            tooltip.add(new TranslationTextComponent("item.iceandfire.summoning_crystal.desc_0"));
-            tooltip.add(new TranslationTextComponent("item.iceandfire.summoning_crystal.desc_1"));
+            tooltip.add(new TranslationTextComponent("item.iceandfire.summoning_crystal.desc_0").applyTextStyle(TextFormatting.GRAY));
+            tooltip.add(new TranslationTextComponent("item.iceandfire.summoning_crystal.desc_1").applyTextStyle(TextFormatting.GRAY));
 
         }
 

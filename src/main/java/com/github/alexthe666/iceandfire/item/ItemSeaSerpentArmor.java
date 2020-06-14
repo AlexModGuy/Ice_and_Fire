@@ -30,6 +30,20 @@ public class ItemSeaSerpentArmor extends ArmorItem {
         this.armor_type = armorType;
     }
 
+    public String getTranslationKey() {
+        switch (this.slot){
+            case HEAD:
+                return "item.iceandfire.sea_serpent_helmet";
+            case CHEST:
+                return "item.iceandfire.sea_serpent_chestplate";
+            case LEGS:
+                return "item.iceandfire.sea_serpent_leggings";
+            case FEET:
+                return "item.iceandfire.sea_serpent_boots";
+        }
+        return "item.iceandfire.sea_serpent_helmet";
+    }
+
     @OnlyIn(Dist.CLIENT)
     @Nullable
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {

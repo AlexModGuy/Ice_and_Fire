@@ -28,6 +28,10 @@ public class ItemDragonEgg extends Item {
         this.setRegistryName(IceAndFire.MODID, name);
     }
 
+    public String getTranslationKey() {
+        return "item.iceandfire.dragonegg";
+    }
+
     @Override
     public void onCreated(ItemStack itemStack, World world, PlayerEntity player) {
         itemStack.setTag(new CompoundNBT());

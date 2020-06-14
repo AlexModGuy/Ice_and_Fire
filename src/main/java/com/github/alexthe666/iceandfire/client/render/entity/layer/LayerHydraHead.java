@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
@@ -69,7 +70,8 @@ public class LayerHydraHead extends LayerRenderer<EntityHydra, ModelHydraBody> {
             matrixStackIn.translate(TRANSLATE[heads - 1][head - 1] * bodyWidth, 0, 0);
             matrixStackIn.rotate(new Quaternion(Vector3f.YP, ROTATE[heads - 1][head - 1], true));
             ResourceLocation tex = stone ? TEXTURE_STONE : getEntityTexture(entity);
-            modelArr[head - 1].render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityCutout(tex)), packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+            modelArr[head - 1].setRotationAngles(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+            modelArr[head - 1].render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityCutout(tex)), packedLightIn, LivingRenderer.getPackedOverlay(entity, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
             matrixStackIn.pop();
         }
         matrixStackIn.pop();

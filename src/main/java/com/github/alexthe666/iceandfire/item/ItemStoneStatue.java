@@ -40,7 +40,7 @@ public class ItemStoneStatue extends Item {
             String id = stack.getTag().getString("IAFStoneStatueEntityID");
             if (EntityType.byKey(id).orElse(null) != null) {
                 EntityType type = EntityType.byKey(id).orElse(null);
-                ITextComponent untranslated = isPlayer ? new TranslationTextComponent("entity.player.name") : type.getName();
+                ITextComponent untranslated = isPlayer ? new TranslationTextComponent("entity.player.name") : new TranslationTextComponent(type.getTranslationKey());
                 tooltip.add(untranslated.applyTextStyle(TextFormatting.GRAY));
             }
         }

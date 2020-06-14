@@ -33,6 +33,20 @@ public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonIt
         this.eggType = eggType;
     }
 
+    public String getTranslationKey() {
+        switch (this.slot){
+            case HEAD:
+                return "item.iceandfire.dragon_helmet";
+            case CHEST:
+                return "item.iceandfire.dragon_chestplate";
+            case LEGS:
+                return "item.iceandfire.dragon_leggings";
+            case FEET:
+                return "item.iceandfire.dragon_boots";
+        }
+        return "item.iceandfire.dragon_helmet";
+    }
+
     @OnlyIn(Dist.CLIENT)
     @Nullable
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {

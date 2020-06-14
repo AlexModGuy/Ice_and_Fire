@@ -21,6 +21,10 @@ public class ItemDragonScales extends Item {
         this.setRegistryName(IceAndFire.MODID, name);
     }
 
+    public String getTranslationKey() {
+        return "item.iceandfire.dragonscales";
+    }
+
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         tooltip.add(new TranslationTextComponent("dragon." + type.toString().toLowerCase()).applyTextStyle(type.color));

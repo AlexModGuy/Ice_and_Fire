@@ -22,9 +22,13 @@ public class ItemDragonArmor extends Item implements ICustomRendered {
         super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
         this.type = type;
         this.dragonSlot = dragonSlot;
-        this.name = name + "_" + getNameForSlot(dragonSlot);
-        this.setRegistryName(IceAndFire.MODID, this.name);
+        this.name = name;
+        this.setRegistryName(IceAndFire.MODID, name + "_" + getNameForSlot(dragonSlot));
 
+    }
+
+    public String getTranslationKey() {
+        return "item.iceandfire." + name;
     }
 
     private String getNameForSlot(int slot){
