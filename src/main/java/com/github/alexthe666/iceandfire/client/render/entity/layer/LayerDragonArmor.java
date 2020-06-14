@@ -66,7 +66,7 @@ public class LayerDragonArmor extends LayerRenderer<EntityDragonBase, SegmentedM
                 Minecraft.getInstance().getTextureManager().loadTexture(resourcelocation, layeredBase);
                 LAYERED_ARMOR_CACHE.put(armorTexture, resourcelocation);
             }
-            IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityCutout(resourcelocation));
+            IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(resourcelocation));
             this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         }
     }

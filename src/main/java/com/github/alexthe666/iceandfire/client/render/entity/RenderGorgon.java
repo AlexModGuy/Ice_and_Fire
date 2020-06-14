@@ -18,7 +18,7 @@ public class RenderGorgon extends MobRenderer<EntityGorgon, ModelGorgon> {
     public static final ResourceLocation DEAD_TEXTURE = new ResourceLocation("iceandfire:textures/models/gorgon/gorgon_decapitated.png");
 
     public RenderGorgon(EntityRendererManager renderManager) {
-        super(renderManager, new ModelGorgon(), 0.6F);
+        super(renderManager, new ModelGorgon(), 0.4F);
         this.layerRenderers.add(new LayerGorgonEyes(this));
     }
 

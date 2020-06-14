@@ -225,6 +225,20 @@ public class DragonUtils {
         return target.getPosition();
     }
 
+    public static BlockPos getBlockInTargetsViewGorgon(EntityGorgon cockatrice, LivingEntity target) {
+        float radius = 6;
+        float neg = cockatrice.getRNG().nextBoolean() ? 1 : -1;
+        float angle = (0.01745329251F * target.rotationYawHead);
+        double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+        double extraZ = radius * MathHelper.cos(angle);
+        BlockPos radialPos = new BlockPos(target.getPosX() + extraX, target.getPosY(), target.getPosZ() + extraZ);
+        if (!cockatrice.isTargetBlocked(new Vec3d(radialPos).add(0, 0.75, 0)) && cockatrice.getDistanceSq(new Vec3d(radialPos)) < 300) {
+            return radialPos;
+        }
+        return target.getPosition();
+    }
+
+
     public static BlockPos getBlockInTargetsViewSeaSerpent(EntitySeaSerpent serpent, LivingEntity target) {
         float radius = 10 * serpent.getSeaSerpentScale() + serpent.getRNG().nextInt(10);
         float neg = serpent.getRNG().nextBoolean() ? 1 : -1;

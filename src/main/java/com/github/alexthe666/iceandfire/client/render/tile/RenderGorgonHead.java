@@ -24,7 +24,7 @@ public class RenderGorgonHead {
     public void render(MatrixStack stackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         SegmentedModel model = active ? ACTIVE_MODEL : INACTIVE_MODEL;
         stackIn.push();
-        stackIn.translate(0.5F, active ? - 0.5F : -0.75F, 0.5F);
+        stackIn.translate(0.5F, active ?  1.5F : 1.25F, 0.5F);
         IVertexBuilder ivertexbuilder = bufferIn.getBuffer(active ? ACTIVE_TEXTURE : INACTIVE_TEXTURE);
         model.render(stackIn, ivertexbuilder, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
         stackIn.pop();

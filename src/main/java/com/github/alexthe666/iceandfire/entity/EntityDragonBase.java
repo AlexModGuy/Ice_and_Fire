@@ -532,7 +532,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     public int getArmorOrdinal(ItemStack stack) {
         if (!stack.isEmpty() && stack.getItem() instanceof ItemDragonArmor) {
             ItemDragonArmor armorItem = (ItemDragonArmor) stack.getItem();
-            return armorItem.type;
+            return armorItem.type + 1;
         }
         return 0;
     }

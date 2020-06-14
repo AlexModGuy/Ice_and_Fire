@@ -308,7 +308,9 @@ public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
             this.swing(FinRBack, speed_idle, degree_idle * 0.25F, true, 0, -0.1F, f2, 1);
         }
         this.chainWave(NECK, speed_idle, degree_idle * 0.15F, -2, f2, 1);
-        hippo.tail_buffer.applyChainSwingBuffer(TAIL);
+        if(hippo.tail_buffer != null){
+            hippo.tail_buffer.applyChainSwingBuffer(TAIL);
+        }
     }
 
     @Override

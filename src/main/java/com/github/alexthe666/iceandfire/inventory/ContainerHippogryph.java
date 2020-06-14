@@ -99,6 +99,44 @@ public class ContainerHippogryph extends Container {
         }
     }
 
+
+    @Override
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = this.inventorySlots.get(index);
+        if (slot != null && slot.getHasStack()) {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
+            if (index < this.hippogryphInventory.getSizeInventory()) {
+                if (!this.mergeItemStack(itemstack1, this.hippogryphInventory.getSizeInventory(), this.inventorySlots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (this.getSlot(1).isItemValid(itemstack1) && !this.getSlot(1).getHasStack()) {
+                if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
+                    return ItemStack.EMPTY;
+                }
+
+            } else if (this.getSlot(2).isItemValid(itemstack1) && !this.getSlot(2).getHasStack()) {
+                if (!this.mergeItemStack(itemstack1, 2, 3, false)) {
+                    return ItemStack.EMPTY;
+                }
+
+            } else if (this.getSlot(0).isItemValid(itemstack1)) {
+                if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (this.hippogryphInventory.getSizeInventory() <= 3 || !this.mergeItemStack(itemstack1, 3, this.hippogryphInventory.getSizeInventory(), false)) {
+                return ItemStack.EMPTY;
+            }
+            if (itemstack1.isEmpty()) {
+                slot.putStack(ItemStack.EMPTY);
+            } else {
+                slot.onSlotChanged();
+            }
+        }
+        return itemstack;
+    }
+
     public boolean canInteractWith(PlayerEntity playerIn) {
         return this.hippogryphInventory.isUsableByPlayer(playerIn) && this.hippogryph.isAlive() && this.hippogryph.getDistance(playerIn) < 8.0F;
     }

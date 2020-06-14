@@ -22,7 +22,7 @@ public class GorgonAIStareAttack extends Goal {
         this.moveSpeedAmp = speedAmplifier;
         this.attackCooldown = delay;
         this.maxAttackDistance = maxDistance * maxDistance;
-        this.setMutexFlags(EnumSet.of(Flag.TARGET, Flag.MOVE));
+        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
     public void setAttackCooldown(int cooldown) {
@@ -30,7 +30,7 @@ public class GorgonAIStareAttack extends Goal {
     }
 
     public boolean shouldExecute() {
-        return this.entity.getAttackTarget() == null;
+        return this.entity.getAttackTarget() != null;
     }
 
     public boolean shouldContinueExecuting() {
@@ -98,8 +98,10 @@ public class GorgonAIStareAttack extends Goal {
 
                 this.entity.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
                 this.entity.getLookController().setLookPosition(LivingEntity.getPosX(), LivingEntity.getPosY() + (double) LivingEntity.getEyeHeight(), LivingEntity.getPosZ(), (float) this.entity.getHorizontalFaceSpeed(), (float) this.entity.getVerticalFaceSpeed());
+                this.entity.forcePreyToLook(LivingEntity);
             } else {
                 this.entity.getLookController().setLookPositionWithEntity(LivingEntity, 30.0F, 30.0F);
+                this.entity.forcePreyToLook(LivingEntity);
             }
 
         }

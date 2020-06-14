@@ -17,6 +17,7 @@ import com.google.common.base.Predicate;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -25,6 +26,8 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -71,13 +74,18 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
         return attackTarget != null && attackTarget.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == IafItemRegistry.BLINDFOLD;
     }
 
+    public boolean isTargetBlocked(Vec3d target) {
+        Vec3d vec3d = new Vec3d(this.getPosX(), this.getPosYEye(), this.getPosZ());
+        RayTraceResult result = this.world.rayTraceBlocks(new RayTraceContext(vec3d, target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+        return result.getType() != RayTraceResult.Type.MISS;
+    }
+
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new SwimGoal(this));
         this.goalSelector.addGoal(2, new RestrictSunGoal(this));
         this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0D));
         this.goalSelector.addGoal(3, aiStare = new GorgonAIStareAttack(this, 1.0D, 0, 15.0F));
         this.goalSelector.addGoal(3, aiMelee = new MeleeAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(4, new GorgonAIStareAttack(this, 1.0D, 0, 15.0F));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D) {
             public boolean shouldExecute() {
                 executionChance = 20;
@@ -94,12 +102,17 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
         });
         this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<PlayerEntity>(this, PlayerEntity.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, PlayerEntity.class, 0, false, false, new Predicate<Entity>() {
+            @Override
+            public boolean apply(@Nullable Entity entity) {
+                return entity.isAlive();
+            }
+        }));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, LivingEntity.class, 0, true, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
                 StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-                return entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity) && !(entity instanceof EntityMutlipartPart) && (properties == null || properties != null && !properties.isStone()) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
+                return entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity) && !(entity instanceof EntityMutlipartPart) && (properties == null || !properties.isStone()) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
             }
         }));
         this.goalSelector.removeGoal(aiMelee);
@@ -128,13 +141,14 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
         super.setAttackTarget(LivingEntityIn);
         if (LivingEntityIn != null && !world.isRemote) {
 
+
             boolean blindness = this.isPotionActive(Effects.BLINDNESS) || LivingEntityIn.isPotionActive(Effects.BLINDNESS) || LivingEntityIn instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) LivingEntityIn).canBeTurnedToStone() || isBlindfolded(LivingEntityIn);
             if (blindness && this.deathTime == 0) {
-                this.goalSelector.removeGoal(aiStare);
                 this.goalSelector.addGoal(3, aiMelee);
+                this.goalSelector.removeGoal(aiStare);
             } else {
-                this.goalSelector.removeGoal(aiMelee);
                 this.goalSelector.addGoal(3, aiStare);
+                this.goalSelector.removeGoal(aiMelee);
             }
         }
     }
@@ -182,11 +196,14 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
         }
         if (this.getAttackTarget() != null) {
             boolean blindness = this.isPotionActive(Effects.BLINDNESS) || this.getAttackTarget().isPotionActive(Effects.BLINDNESS);
-            this.getLookController().setLookPosition(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY() + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().getPosZ(), (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
             if (!blindness && this.deathTime == 0 && this.getAttackTarget() instanceof MobEntity && !(this.getAttackTarget() instanceof PlayerEntity)) {
                 forcePreyToLook((MobEntity) this.getAttackTarget());
             }
+            if(isEntityLookingAt(this.getAttackTarget(), this, 0.4)){
+                this.getLookController().setLookPosition(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY() + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().getPosZ(), (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
+            }
         }
+
 
         if (this.getAttackTarget() != null && isEntityLookingAt(this, this.getAttackTarget(), 0.4) && isEntityLookingAt(this.getAttackTarget(), this, 0.4) && !isBlindfolded(this.getAttackTarget())) {
             boolean blindness = this.isPotionActive(Effects.BLINDNESS) || this.getAttackTarget().isPotionActive(Effects.BLINDNESS) || this.getAttackTarget() instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone();
@@ -213,8 +230,8 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                                     statue.renderYawOffset = this.getAttackTarget().rotationYaw;
                                     statue.prevRenderYawOffset = this.getAttackTarget().rotationYaw;
                                     playerStatueCooldown = 40;
+                                    this.setAttackTarget(null);
                                 }
-                                this.setAttackTarget(null);
                             }
                         } else {
                             if (this.getAttackTarget() instanceof LivingEntity && !(this.getAttackTarget() instanceof IBlacklistedFromStatues) || this.getAttackTarget() instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone()) {
@@ -256,15 +273,19 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
     }
 
     public int getHorizontalFaceSpeed() {
-        return 10;
+        return 30;
     }
 
     public CreatureAttribute getCreatureAttribute() {
         return CreatureAttribute.UNDEAD;
     }
 
-    public void forcePreyToLook(MobEntity mob) {
-        mob.getLookController().setLookPosition(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ(), (float) mob.getHorizontalFaceSpeed(), (float) mob.getVerticalFaceSpeed());
+    public void forcePreyToLook(LivingEntity mob) {
+        if(mob instanceof MobEntity){
+            MobEntity mobEntity = (MobEntity)mob;
+            mobEntity.getLookController().setLookPosition(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ(), (float) mobEntity.getHorizontalFaceSpeed(), (float) mobEntity.getVerticalFaceSpeed());
+
+        }
     }
 
     protected void registerAttributes() {
