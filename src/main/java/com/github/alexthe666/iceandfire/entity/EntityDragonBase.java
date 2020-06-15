@@ -244,10 +244,10 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         this.targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(4, new DragonAITargetNonTamed(this, PlayerEntity.class, false, new Predicate<PlayerEntity>() {
+        this.targetSelector.addGoal(4, new DragonAITargetNonTamed(this, LivingEntity.class, false, new Predicate<LivingEntity>() {
             @Override
-            public boolean apply(@Nullable PlayerEntity entity) {
-                return DragonUtils.canHostilesTarget(entity) && !entity.isCreative();
+            public boolean apply(@Nullable LivingEntity entity) {
+                return (!(entity instanceof PlayerEntity) || ((PlayerEntity) entity).isCreative()) && DragonUtils.canHostilesTarget(entity);
             }
         }));
         this.targetSelector.addGoal(5, new DragonAITarget(this, LivingEntity.class, true, new Predicate<Entity>() {
@@ -290,7 +290,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         tail3Part.setParent(this);
         tail4Part = new EntityDragonPart(this, -1.95F * scale, 0, 0.25F * scale, 0.45F * scale, 0.3F * scale, 1.5F);
         tail4Part.copyLocationAndAnglesFrom(this);
-        world.addEntity(tail4Part);
+        tail4Part.setParent(this);
     }
 
     public void removeParts() {

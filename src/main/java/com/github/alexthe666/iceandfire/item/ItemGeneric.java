@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -22,6 +23,12 @@ public class ItemGeneric extends Item {
 
     public ItemGeneric(String name, int textLength) {
         super(new Item.Properties().group(IceAndFire.TAB_ITEMS));
+        this.setRegistryName(IceAndFire.MODID, name);
+        this.description = textLength;
+    }
+
+    public ItemGeneric(String name, int textLength, boolean hide) {
+        super(new Item.Properties());
         this.setRegistryName(IceAndFire.MODID, name);
         this.description = textLength;
     }

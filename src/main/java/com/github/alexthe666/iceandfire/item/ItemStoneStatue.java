@@ -29,7 +29,7 @@ import java.util.List;
 public class ItemStoneStatue extends Item {
 
     public ItemStoneStatue() {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
+        super(new Item.Properties().maxStackSize(1));
         this.setRegistryName(IceAndFire.MODID, "stone_statue");
     }
 

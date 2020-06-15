@@ -69,7 +69,6 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
         eyeEntity = new EntityCyclopsEye(this, 0.2F, 0, 7.4F, 1.2F, 0.5F, 1);
         eyeEntity.copyLocationAndAnglesFrom(this);
         eyeEntity.setParent(this);
-        worldIn.addEntity(eyeEntity);
         ANIMATION_STOMP = Animation.create(27);
         ANIMATION_EATPLAYER = Animation.create(40);
         ANIMATION_KICK = Animation.create(20);

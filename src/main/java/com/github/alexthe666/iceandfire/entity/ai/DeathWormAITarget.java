@@ -22,15 +22,15 @@ public class DeathWormAITarget<T extends LivingEntity> extends NearestAttackable
 
     @Override
     public boolean shouldExecute() {
-        if (super.shouldExecute() && this.target != null && !this.target.getClass().equals(this.deathworm.getClass())) {
-            if (this.target instanceof PlayerEntity && !deathworm.isOwner(this.target)) {
+        if (super.shouldExecute() && nearestTarget != null && !nearestTarget.getClass().equals(this.deathworm.getClass())) {
+            if (nearestTarget instanceof PlayerEntity && !deathworm.isOwner(nearestTarget)) {
                 return !deathworm.isTamed();
             } else {
-                if (!deathworm.isOwner(this.target)) {
+                if (!deathworm.isOwner(nearestTarget)) {
                     return true;
                 }
-                if (this.target instanceof MonsterEntity && deathworm.getWormAge() > 2) {
-                    if (this.target instanceof CreatureEntity) {
+                if (nearestTarget instanceof MonsterEntity && deathworm.getWormAge() > 2) {
+                    if (nearestTarget instanceof CreatureEntity) {
                         return deathworm.getWormAge() > 3;
                     }
                     return true;

@@ -241,7 +241,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         return null;
     }
 
-    public int getIntFromArmor(ItemStack stack) {
+    public static int getIntFromArmor(ItemStack stack) {
         if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.IRON_HIPPOGRYPH_ARMOR) {
             return 1;
         }

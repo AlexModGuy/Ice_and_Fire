@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof {
+public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof, INoTab {
     private static boolean keepInventory;
     private boolean isFire;
     private boolean activated;
@@ -131,4 +131,8 @@ public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof
     }
 
 
+    @Override
+    public boolean shouldBeInTab() {
+        return !activated;
+    }
 }

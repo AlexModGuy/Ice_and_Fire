@@ -1,6 +1,8 @@
 package com.github.alexthe666.iceandfire.inventory;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
+import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -20,12 +22,15 @@ public class ContainerHippocampus extends Container {
     private final PlayerEntity player;
 
     public ContainerHippocampus(int i, PlayerInventory playerInventory) {
-        this(i, new Inventory(3), playerInventory, null);
+        this(i, new Inventory(18), playerInventory, null);
     }
 
     public ContainerHippocampus(int id, IInventory ratInventory, PlayerInventory playerInventory, EntityHippocampus hippocampus) {
         super(IafContainerRegistry.HIPPOCAMPUS_CONTAINER, id);
         this.hippocampusInventory = ratInventory;
+        if(hippocampus == null && IceAndFire.PROXY.getReferencedMob() instanceof EntityHippocampus){
+            hippocampus = (EntityHippocampus)IceAndFire.PROXY.getReferencedMob();
+        }
         this.hippocampus = hippocampus;
         this.player = playerInventory.player;
         int i = 3;
@@ -34,6 +39,12 @@ public class ContainerHippocampus extends Container {
         this.addSlot(new Slot(hippocampusInventory, 0, 8, 18) {
             public boolean isItemValid(ItemStack stack) {
                 return stack.getItem() == Items.SADDLE && !this.getHasStack();
+            }
+
+            public void onSlotChanged() {
+                if (ContainerHippocampus.this.hippocampus != null) {
+                    ContainerHippocampus.this.hippocampus.refreshInventory();
+                }
             }
 
             @OnlyIn(Dist.CLIENT)
@@ -60,7 +71,13 @@ public class ContainerHippocampus extends Container {
         this.addSlot(new Slot(hippocampusInventory, 2, 8, 52) {
 
             public boolean isItemValid(ItemStack stack) {
-                return hippocampus.getIntFromArmor(stack) != 0;
+                return EntityHippocampus.getIntFromArmor(stack) != 0;
+            }
+
+            public void onSlotChanged() {
+                if (ContainerHippocampus.this.hippocampus != null) {
+                    ContainerHippocampus.this.hippocampus.refreshInventory();
+                }
             }
 
             public int getSlotStackLimit() {

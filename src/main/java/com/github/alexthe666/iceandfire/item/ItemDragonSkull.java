@@ -59,7 +59,7 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
         String iceorfire = dragonType == 0 ? "dragon.fire" : "dragon.ice";
         tooltip.add(new TranslationTextComponent(iceorfire).applyTextStyle(TextFormatting.GRAY));
         if (stack.getTag() != null) {
-            tooltip.add(new TranslationTextComponent("dragon.stage").appendSibling(new StringTextComponent("" + stack.getTag().getInt("Stage"))));
+            tooltip.add(new TranslationTextComponent("dragon.stage").applyTextStyle(TextFormatting.GRAY).appendSibling(new StringTextComponent( " " + stack.getTag().getInt("Stage"))));
         }
     }
 

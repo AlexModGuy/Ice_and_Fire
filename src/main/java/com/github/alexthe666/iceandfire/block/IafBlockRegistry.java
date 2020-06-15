@@ -151,7 +151,9 @@ public class IafBlockRegistry {
                     if (obj instanceof ICustomRendered) {
                         props = IceAndFire.PROXY.setupISTER(props);
                     }
-                    props.group(IceAndFire.TAB_BLOCKS);
+                    if(!(obj instanceof INoTab) || ((INoTab) obj).shouldBeInTab()){
+                        props.group(IceAndFire.TAB_BLOCKS);
+                    }
                     BlockItem itemBlock;
                     if(obj instanceof IWallBlock){
                         itemBlock = new WallOrFloorItem((Block)obj, ((IWallBlock)obj).wallBlock(), props);
@@ -167,7 +169,9 @@ public class IafBlockRegistry {
                             if (block instanceof ICustomRendered) {
                                 props = IceAndFire.PROXY.setupISTER(props);
                             }
-                            props.group(IceAndFire.TAB_BLOCKS);
+                            if(!(block instanceof INoTab) || ((INoTab) block).shouldBeInTab()){
+                                props.group(IceAndFire.TAB_BLOCKS);
+                            }
                             BlockItem itemBlock = new BlockItem(block, props);
                             itemBlock.setRegistryName(block.getRegistryName());
                             event.getRegistry().register(itemBlock);

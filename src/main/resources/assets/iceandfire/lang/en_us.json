@@ -3,7 +3,7 @@
   "itemGroup.iceandfire.blocks": "Ice And Fire Blocks",
   "iceandfire.empty": "Empty",
 
-  "block.iceandfire.lectern": "Lectern",
+  "block.iceandfire.lectern": "Bestiary Lectern",
   "block.iceandfire.podium": "Podium",
   "block.iceandfire.podium_oak": "Oak Podium",
   "block.iceandfire.podium_spruce": "Spruce Podium",
@@ -659,7 +659,7 @@
   "advancements.iceandfire.bestiary.title": "Book of Monsters",
   "advancements.iceandfire.bestiary.description": "Using 3 manuscripts found in dungeons, create a bestiary",
   "advancements.iceandfire.lectern.title": "Would you Like to Know More?",
-  "advancements.iceandfire.lectern.description": "Craft a lectern to learn more about the world of Ice and Fire",
+  "advancements.iceandfire.lectern.description": "Craft a Bestiary Lectern to learn more about the world of Ice and Fire",
   "advancements.iceandfire.kill_a_dragon.title": "Dragonslayer",
   "advancements.iceandfire.kill_a_dragon.description": "Kill an ice dragon or a fire dragon",
   "advancements.iceandfire.dragon_egg.title": "Mother of Dragons",

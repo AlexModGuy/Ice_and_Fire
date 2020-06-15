@@ -7,8 +7,7 @@
   ],
   "key": {
     "D": {
-      "type": "forge:ore_dict",
-      "ore": "blockDiamond"
+      "tag": "forge:storage_blocks/diamond"
     }
   },
   "result": {

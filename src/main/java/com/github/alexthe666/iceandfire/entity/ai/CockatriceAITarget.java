@@ -23,11 +23,11 @@ public class CockatriceAITarget<T extends LivingEntity> extends NearestAttackabl
         if (this.goalOwner.getRNG().nextInt(20) != 0 || this.cockatrice.world.getDifficulty() == Difficulty.PEACEFUL) {
             return false;
         }
-        if (super.shouldExecute() && this.target != null && !this.target.getClass().equals(this.cockatrice.getClass())) {
-            if (this.target instanceof PlayerEntity && !cockatrice.isOwner(this.target)) {
+        if (super.shouldExecute() && nearestTarget != null && !nearestTarget.getClass().equals(this.cockatrice.getClass())) {
+            if (nearestTarget instanceof PlayerEntity && !cockatrice.isOwner(nearestTarget)) {
                 return !cockatrice.isTamed();
             } else {
-                return !cockatrice.isOwner(this.target) && cockatrice.canMove();
+                return !cockatrice.isOwner(nearestTarget) && cockatrice.canMove();
             }
         }
         return false;

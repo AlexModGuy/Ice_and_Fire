@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.inventory;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,12 +21,15 @@ public class ContainerHippogryph extends Container {
     private final PlayerEntity player;
 
     public ContainerHippogryph(int i, PlayerInventory playerInventory) {
-        this(i, new Inventory(3), playerInventory, null);
+        this(i, new Inventory(18), playerInventory, null);
     }
 
     public ContainerHippogryph(int id, IInventory ratInventory, PlayerInventory playerInventory, EntityHippogryph hippogryph) {
         super(IafContainerRegistry.HIPPOGRYPH_CONTAINER, id);
         this.hippogryphInventory = ratInventory;
+        if(hippogryph == null && IceAndFire.PROXY.getReferencedMob() instanceof EntityHippogryph){
+            hippogryph = (EntityHippogryph)IceAndFire.PROXY.getReferencedMob();
+        }
         this.hippogryph = hippogryph;
         this.player = playerInventory.player;
         int i = 3;
@@ -34,6 +38,12 @@ public class ContainerHippogryph extends Container {
         this.addSlot(new Slot(hippogryphInventory, 0, 8, 18) {
             public boolean isItemValid(ItemStack stack) {
                 return stack.getItem() == Items.SADDLE && !this.getHasStack();
+            }
+
+            public void onSlotChanged() {
+                if (ContainerHippogryph.this.hippogryph != null) {
+                    ContainerHippogryph.this.hippogryph.refreshInventory();
+                }
             }
 
             @OnlyIn(Dist.CLIENT)
@@ -60,11 +70,17 @@ public class ContainerHippogryph extends Container {
         this.addSlot(new Slot(hippogryphInventory, 2, 8, 52) {
 
             public boolean isItemValid(ItemStack stack) {
-                return hippogryph.getIntFromArmor(stack) != 0;
+                return EntityHippogryph.getIntFromArmor(stack) != 0;
             }
 
             public int getSlotStackLimit() {
                 return 1;
+            }
+
+            public void onSlotChanged() {
+                if (ContainerHippogryph.this.hippogryph != null) {
+                    ContainerHippogryph.this.hippogryph.refreshInventory();
+                }
             }
 
             @OnlyIn(Dist.CLIENT)

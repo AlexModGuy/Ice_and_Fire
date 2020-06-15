@@ -60,7 +60,7 @@
       "entries": [
         {
           "type": "item",
-          "name": "minecraft:wool",
+          "name": "minecraft:white_wool",
           "weight": 1,
           "functions": [
             {

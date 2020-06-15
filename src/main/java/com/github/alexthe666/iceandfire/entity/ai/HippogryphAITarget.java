@@ -23,14 +23,14 @@ public class HippogryphAITarget<T extends LivingEntity> extends NearestAttackabl
         if (this.goalOwner.getRNG().nextInt(20) != 0) {
             return false;
         }
-        if (super.shouldExecute() && this.target != null && !this.target.getClass().equals(this.hippogryph.getClass())) {
-            if (this.hippogryph.getWidth() >= this.target.getWidth()) {
-                if (this.target instanceof PlayerEntity) {
+        if (super.shouldExecute() && nearestTarget != null && !nearestTarget.getClass().equals(this.hippogryph.getClass())) {
+            if (this.hippogryph.getWidth() >= nearestTarget.getWidth()) {
+                if (nearestTarget instanceof PlayerEntity) {
                     return !hippogryph.isTamed();
                 } else {
-                    if (!hippogryph.isOwner(this.target) && hippogryph.canMove() && this.target instanceof AnimalEntity) {
+                    if (!hippogryph.isOwner(nearestTarget) && hippogryph.canMove() && nearestTarget instanceof AnimalEntity) {
                         if (hippogryph.isTamed()) {
-                            return DragonUtils.canTameDragonAttack(hippogryph, this.target);
+                            return DragonUtils.canTameDragonAttack(hippogryph, nearestTarget);
                         } else {
                             return true;
                         }

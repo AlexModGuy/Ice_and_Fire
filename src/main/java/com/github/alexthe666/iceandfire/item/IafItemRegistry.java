@@ -250,8 +250,8 @@ public class IafItemRegistry {
     public static final Item DRAGONSTEEL_ICE_CHESTPLATE = new ItemDragonsteelArmor(DRAGONSTEEL_ICE_ARMOR_MATERIAL, 1, EquipmentSlotType.CHEST, "dragonsteel_ice_chestplate", "iceandfire.dragonsteel_ice_chestplate");
     public static final Item DRAGONSTEEL_ICE_LEGGINGS = new ItemDragonsteelArmor(DRAGONSTEEL_ICE_ARMOR_MATERIAL, 2, EquipmentSlotType.LEGS, "dragonsteel_ice_leggings", "iceandfire.dragonsteel_ice_leggings");
     public static final Item DRAGONSTEEL_ICE_BOOTS = new ItemDragonsteelArmor(DRAGONSTEEL_ICE_ARMOR_MATERIAL, 3, EquipmentSlotType.FEET, "dragonsteel_ice_boots", "iceandfire.dragonsteel_ice_boots");
-    public static final Item WEEZER_BLUE_ALBUM = new ItemGeneric("weezer_blue_album", 1);
-    public static final Item DRAGON_DEBUG_STICK = new ItemGeneric("dragon_debug_stick", 1);
+    public static final Item WEEZER_BLUE_ALBUM = new ItemGeneric("weezer_blue_album", 1, true);
+    public static final Item DRAGON_DEBUG_STICK = new ItemGeneric("dragon_debug_stick", 1, true);
     public static final Item DREAD_SWORD = new ItemModSword(DREAD_SWORD_TOOL_MATERIAL, "dread_sword");
     public static final Item DREAD_KNIGHT_SWORD = new ItemModSword(DREAD_KNIGHT_TOOL_MATERIAL, "dread_knight_sword");
     public static final Item LICH_STAFF = new ItemLichStaff();

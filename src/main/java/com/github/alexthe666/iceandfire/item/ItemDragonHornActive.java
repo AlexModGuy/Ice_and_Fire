@@ -27,7 +27,7 @@ import java.util.List;
 public class ItemDragonHornActive extends Item {
 
     public ItemDragonHornActive(String name) {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
+        super(new Item.Properties().maxStackSize(1));
         this.setRegistryName(IceAndFire.MODID, name);
         this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
             @Override

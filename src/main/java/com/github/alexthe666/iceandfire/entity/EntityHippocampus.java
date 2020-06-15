@@ -168,7 +168,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         return null;
     }
 
-    public int getIntFromArmor(ItemStack stack) {
+    public static int getIntFromArmor(ItemStack stack) {
         if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.IRON_HORSE_ARMOR) {
             return 1;
         }

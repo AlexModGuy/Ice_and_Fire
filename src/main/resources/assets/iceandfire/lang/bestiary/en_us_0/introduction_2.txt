@@ -1,4 +1,4 @@
-    Once a lectern has been placed,
+    Once the lectern has been placed,
 it can be interacted with by
 right clicking on it. The inside 
 will have three slots, the leftmost

@@ -31,10 +31,10 @@ public class StymphalianBirdAITarget extends NearestAttackableTargetGoal<LivingE
     @Override
     public boolean shouldExecute() {
         boolean supe = super.shouldExecute();
-        if (target != null && bird.getVictor() != null && bird.getVictor().getUniqueID().equals(target.getUniqueID())) {
+        if (nearestTarget != null && bird.getVictor() != null && bird.getVictor().getUniqueID().equals(nearestTarget.getUniqueID())) {
             return false;
         }
-        return supe && this.target != null && !this.target.getClass().equals(this.bird.getClass());
+        return supe && nearestTarget != null && !nearestTarget.getClass().equals(this.bird.getClass());
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {

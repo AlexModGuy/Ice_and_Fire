@@ -219,7 +219,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:deadbush",
+          "name": "minecraft:dead_bush",
           "functions": [
             {
               "function": "set_count",
@@ -233,7 +233,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:reeds",
+          "name": "minecraft:sugar_cane",
           "functions": [
             {
               "function": "set_count",

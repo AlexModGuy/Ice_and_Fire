@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "iceandfire:silver_ore"
+  },
+  "result": "iceandfire:silver_ingot",
+  "experience": 0.35,
+  "cookingtime": 200
+}

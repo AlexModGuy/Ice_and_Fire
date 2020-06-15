@@ -28,7 +28,7 @@ public class ItemModAxe extends AxeItem {
     private final CustomToolMaterial toolMaterial;
 
     public ItemModAxe(CustomToolMaterial toolmaterial, String gameName) {
-        super(toolmaterial, 5.0F, -3.0F, (new Item.Properties()).group(ItemGroup.TOOLS));
+        super(toolmaterial, 5.0F, -3.0F, (new Item.Properties()).group(IceAndFire.TAB_ITEMS));
         this.toolMaterial = toolmaterial;
         this.setRegistryName(IceAndFire.MODID, gameName);
     }

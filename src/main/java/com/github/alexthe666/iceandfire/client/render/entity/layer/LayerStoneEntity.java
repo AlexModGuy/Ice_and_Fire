@@ -44,8 +44,6 @@ public class LayerStoneEntity extends LayerRenderer {
                 IVertexBuilder ivertexbuilder = bufferIn.getBuffer(tex);
                 if (this.renderer.getEntityModel() instanceof ICustomStatueModel) {
                     ((ICustomStatueModel) this.renderer.getEntityModel()).renderStatue(matrixStackIn, ivertexbuilder, packedLightIn, living);
-                } else if (living instanceof AbstractHorseEntity && !(living instanceof LlamaEntity)) {
-                    HORSE_MODEL.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
                 } else if (living instanceof GuardianEntity) {
                     GUARDIAN_MODEL.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
                 } else {

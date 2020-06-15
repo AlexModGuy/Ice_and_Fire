@@ -225,20 +225,6 @@ public class IafRecipeRegistry {
 
          */
 
-        /*
-        GameRegistry.addSmelting(IafBlockRegistry.SILVER_ORE, new ItemStack(IafItemRegistry.SILVER_INGOT), 1);
-        GameRegistry.addSmelting(IafBlockRegistry.SAPPHIRE_ORE, new ItemStack(IafItemRegistry.SAPPHIRE_GEM), 1);
-        GameRegistry.addSmelting(IafBlockRegistry.MYRMEX_DESERT_RESIN_BLOCK, new ItemStack(IafBlockRegistry.MYRMEX_DESERT_RESIN_GLASS), 1);
-        GameRegistry.addSmelting(IafBlockRegistry.MYRMEX_JUNGLE_RESIN_BLOCK, new ItemStack(IafBlockRegistry.MYRMEX_JUNGLE_RESIN_GLASS), 1);
-        GameRegistry.addSmelting(IafBlockRegistry.FROZEN_DIRT, new ItemStack(Blocks.DIRT), 0.1F);
-        GameRegistry.addSmelting(IafBlockRegistry.FROZEN_GRASS, new ItemStack(Blocks.GRASS), 0.1F);
-        GameRegistry.addSmelting(IafBlockRegistry.FROZEN_GRASS_PATH, new ItemStack(Blocks.GRASS_PATH), 0.1F);
-        GameRegistry.addSmelting(IafBlockRegistry.FROZEN_COBBLESTONE, new ItemStack(Blocks.COBBLESTONE), 0.1F);
-        GameRegistry.addSmelting(IafBlockRegistry.FROZEN_STONE, new ItemStack(Blocks.STONE), 0.1F);
-        GameRegistry.addSmelting(IafBlockRegistry.FROZEN_GRAVEL, new ItemStack(Blocks.GRAVEL), 0.1F);
-        GameRegistry.addSmelting(IafBlockRegistry.FROZEN_SPLINTERS, new ItemStack(Items.STICK, 3), 0.1F);
-        GameRegistry.addSmelting(IafBlockRegistry.DREAD_STONE_BRICKS, new ItemStack(IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED), 0.1F);
-        */
         IafItemRegistry.BLINDFOLD_ARMOR_MATERIAL.setRepairMaterial(Ingredient.fromStacks(new ItemStack(Items.STRING)));
         IafItemRegistry.SILVER_ARMOR_MATERIAL.setRepairMaterial(Ingredient.fromStacks(new ItemStack(IafItemRegistry.SILVER_INGOT)));
         IafItemRegistry.SILVER_TOOL_MATERIAL.setRepairMaterial(Ingredient.fromStacks(new ItemStack(IafItemRegistry.SILVER_INGOT)));

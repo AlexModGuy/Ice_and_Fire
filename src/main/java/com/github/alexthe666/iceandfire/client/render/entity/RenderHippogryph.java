@@ -41,7 +41,7 @@ public class RenderHippogryph extends MobRenderer<EntityHippogryph, ModelHippogr
         private final RenderHippogryph renderer;
         private final RenderType SADDLE_TEXTURE = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippogryph/saddle.png"));
         private final RenderType BRIDLE = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippogryph/bridle.png"));
-        private final RenderType CHEST = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippogryph/chest.png"));
+        private final RenderType CHEST = RenderType.getEntityTranslucent(new ResourceLocation("iceandfire:textures/models/hippogryph/chest.png"));
         private final RenderType TEXTURE_DIAMOND = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippogryph/armor_diamond.png"));
         private final RenderType TEXTURE_GOLD = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippogryph/armor_gold.png"));
         private final RenderType TEXTURE_IRON = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippogryph/armor_iron.png"));
@@ -66,7 +66,6 @@ public class RenderHippogryph extends MobRenderer<EntityHippogryph, ModelHippogr
                 this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
             if (hippo.getArmor() != 0) {
-                GL11.glPushMatrix();
                 RenderType type = null;
                 switch (hippo.getArmor()) {
                     case 1:
