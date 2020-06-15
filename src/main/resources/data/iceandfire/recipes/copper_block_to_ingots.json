@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:storage_blocks/copper"
+
+    }
+  ],
+  "result": {
+    "item": "iceandfire:copper_ingot",
+    "count": 9
+  }
+}

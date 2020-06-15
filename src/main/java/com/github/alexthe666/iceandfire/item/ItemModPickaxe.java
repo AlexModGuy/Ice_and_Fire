@@ -62,17 +62,11 @@ public class ItemModPickaxe extends PickaxeItem {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        if (this == IafItemRegistry.SILVER_AXE) {
+        if (toolMaterial == IafItemRegistry.SILVER_TOOL_MATERIAL) {
             tooltip.add(new TranslationTextComponent("silvertools.hurt").applyTextStyle(TextFormatting.GREEN));
         }
-        if (this == IafItemRegistry.MYRMEX_DESERT_AXE || this == IafItemRegistry.MYRMEX_JUNGLE_AXE) {
+        if (toolMaterial == IafItemRegistry.MYRMEX_CHITIN_TOOL_MATERIAL) {
             tooltip.add(new TranslationTextComponent("myrmextools.hurt").applyTextStyle(TextFormatting.GREEN));
-        }
-        if (this == IafItemRegistry.DRAGONSTEEL_FIRE_SWORD) {
-            tooltip.add(new TranslationTextComponent("dragon_sword_fire.hurt2").applyTextStyle(TextFormatting.GREEN));
-        }
-        if (this == IafItemRegistry.DRAGONSTEEL_ICE_SWORD) {
-            tooltip.add(new TranslationTextComponent("dragon_sword_ice.hurt2").applyTextStyle(TextFormatting.GREEN));
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_FIRE_TOOL_MATERIAL) {
             tooltip.add(new TranslationTextComponent("dragon_sword_fire.hurt2").applyTextStyle(TextFormatting.DARK_RED));

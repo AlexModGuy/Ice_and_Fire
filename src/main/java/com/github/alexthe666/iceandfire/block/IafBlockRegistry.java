@@ -32,10 +32,15 @@ public class IafBlockRegistry {
     public static final Block FROST_LILY = new BlockElementalFlower(false);
     public static final Block GOLD_PILE = new BlockGoldPile("gold_pile");
     public static final Block SILVER_PILE = new BlockGoldPile("silver_pile");
+    public static final Block COPPER_PILE = new BlockGoldPile("copper_pile");
     public static final Block SILVER_ORE = new BlockIafOre(2, 3.0F, 5.0F, "iceandfire.silverOre", "silver_ore");
-    public static final Block SAPPHIRE_ORE = new BlockIafOre(2, 3.0F, 5.0F, "iceandfire.sapphireOre", "sapphire_ore");
+    public static final Block SAPPHIRE_ORE = new BlockIafOre(2, 4.0F, 15.0F, "iceandfire.sapphireOre", "sapphire_ore");
+    public static final Block COPPER_ORE = new BlockIafOre(0, 3.0F, 5.0F, "iceandfire.copper_ore", "copper_ore");
+    public static final Block AMYTHEST_ORE = new BlockIafOre(2, 4.0F, 15.0F, "iceandfire.amythest_ore", "amythest_ore");
     public static final Block SILVER_BLOCK = new BlockGeneric(Material.IRON, "silver_block", "pickaxe", 2, 3.0F, 10.0F, SoundType.METAL);
     public static final Block SAPPHIRE_BLOCK = new BlockGeneric(Material.IRON, "sapphire_block", "pickaxe", 2, 3.0F, 10.0F, SoundType.METAL);
+    public static final Block COPPER_BLOCK = new BlockGeneric(Material.IRON, "copper_block", "pickaxe", 0, 4.0F, 10.0F, SoundType.METAL);
+    public static final Block AMYTHEST_BLOCK = new BlockGeneric(Material.IRON, "amythest_block", "pickaxe", 2, 5.0F, 15.0F, SoundType.METAL);
     public static final Block CHARRED_DIRT = new BlockReturningState(Material.EARTH, "chared_dirt", "shovel", 0, 0.5F, 0.0F, SoundType.GROUND, Blocks.DIRT.getDefaultState());
     public static final Block CHARRED_GRASS = new BlockReturningState(Material.PLANTS, "chared_grass", "shovel", 0, 0.6F, 0.0F, SoundType.GROUND, Blocks.GRASS.getDefaultState());
     public static final Block CHARRED_STONE = new BlockReturningState(Material.ROCK, "chared_stone", "pickaxe", 0, 1.5F, 10.0F, SoundType.STONE, Blocks.STONE.getDefaultState());

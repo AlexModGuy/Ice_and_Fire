@@ -1,0 +1,1 @@
+{  "type": "minecraft:block",  "pools": [    {      "name": "amythest_block",      "rolls": 1,      "entries": [        {          "type": "minecraft:item",          "name": "iceandfire:amythest_block"        }      ],      "conditions": [        {          "condition": "minecraft:survives_explosion"        }      ]    }  ]}

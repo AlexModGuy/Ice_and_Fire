@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "layers=1": {
+      "model": "iceandfire:block/copperpile_height2"
+    },
+    "layers=2": {
+      "model": "iceandfire:block/copperpile_height4"
+    },
+    "layers=3": {
+      "model": "iceandfire:block/copperpile_height6"
+    },
+    "layers=4": {
+      "model": "iceandfire:block/copperpile_height8"
+    },
+    "layers=5": {
+      "model": "iceandfire:block/copperpile_height10"
+    },
+    "layers=6": {
+      "model": "iceandfire:block/copperpile_height12"
+    },
+    "layers=7": {
+      "model": "iceandfire:block/copperpile_height14"
+    },
+    "layers=8": {
+      "model": "iceandfire:block/copperpile_height16"
+    }
+  }
+}

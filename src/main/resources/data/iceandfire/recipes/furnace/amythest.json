@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "iceandfire:amythest_ore"
+  },
+  "result": "iceandfire:amythest_gem",
+  "experience": 0.35,
+  "cookingtime": 200
+}

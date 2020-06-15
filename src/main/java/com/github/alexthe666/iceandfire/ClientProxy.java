@@ -73,6 +73,9 @@ public class ClientProxy extends CommonProxy {
     private static final ModelDragonsteelIceArmor DRAGONSTEEL_ICE_ARMOR_MODEL_LEGS = new ModelDragonsteelIceArmor(0.2F);
     private static final ModelSilverArmor SILVER_ARMOR_MODEL = new ModelSilverArmor(0.5F);
     private static final ModelSilverArmor SILVER_ARMOR_MODEL_LEGS = new ModelSilverArmor(0.2F);
+    private static final ModelCopperArmor COPPER_ARMOR_MODEL = new ModelCopperArmor(0.5F);
+    private static final ModelCopperArmor COPPER_ARMOR_MODEL_LEGS = new ModelCopperArmor(0.2F);
+
     public static List<UUID> currentDragonRiders = new ArrayList<UUID>();
     public static TabulaModel FIRE_DRAGON_BASE_MODEL;
     public static TabulaModel ICE_DRAGON_BASE_MODEL;
@@ -353,6 +356,10 @@ public class ClientProxy extends CommonProxy {
                 return SILVER_ARMOR_MODEL;
             case 15:
                 return SILVER_ARMOR_MODEL_LEGS;
+            case 16:
+                return COPPER_ARMOR_MODEL;
+            case 17:
+                return COPPER_ARMOR_MODEL_LEGS;
         }
         return null;
     }

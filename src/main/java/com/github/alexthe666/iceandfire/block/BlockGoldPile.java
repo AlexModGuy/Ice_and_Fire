@@ -109,7 +109,7 @@ public class BlockGoldPile extends Block {
 
         if (!item.isEmpty()) {
             if (item.getItem() != null) {
-                if (item.getItem() == Item.getItemFromBlock(IafBlockRegistry.GOLD_PILE)) {
+                if (item.getItem() == Item.getItemFromBlock(this)) {
                     if (!item.isEmpty()) {
                         if (state.get(LAYERS) < 7) {
                             worldIn.setBlockState(pos, state.with(LAYERS, state.get(LAYERS) + 1), 3);

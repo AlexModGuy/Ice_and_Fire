@@ -54,7 +54,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
     }
 
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.font.drawString(this.nameable.getFormattedText(), 12, 5, 4210752);
+        this.font.drawString(this.nameable.getFormattedText(), 12, 4, 4210752);
         this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8, this.ySize - 96 + 2, 4210752);
     }
 

@@ -23,6 +23,7 @@ import java.lang.reflect.Field;
 public class IafItemRegistry {
 
     public static final CustomArmorMaterial SILVER_ARMOR_MATERIAL = new CustomArmorMaterial("silver", 15, new int[]{1, 4, 5, 2}, 20, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
+    public static final CustomArmorMaterial COPPER_ARMOR_MATERIAL = new CustomArmorMaterial("copper", 10, new int[]{1, 3, 4, 2}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 0);
     public static final CustomArmorMaterial BLINDFOLD_ARMOR_MATERIAL = new CustomArmorMaterial("blindfold", 5, new int[]{1, 1, 1, 1}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
     public static final CustomArmorMaterial SHEEP_ARMOR_MATERIAL = new CustomArmorMaterial("sheep", 5, new int[]{1, 3, 2, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
     public static final CustomArmorMaterial MYRMEX_DESERT_ARMOR_MATERIAL = new CustomArmorMaterial("myrmexdesert", 20, new int[]{3, 5, 8, 4}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
@@ -36,27 +37,31 @@ public class IafItemRegistry {
     public static final CustomArmorMaterial TROLL_FROST_ARMOR_MATERIAL = new CustomArmorMaterial("frost troll", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
     public static final CustomArmorMaterial DRAGONSTEEL_FIRE_ARMOR_MATERIAL = new CustomArmorMaterial("dragonsteel fire", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
     public static final CustomArmorMaterial DRAGONSTEEL_ICE_ARMOR_MATERIAL = new CustomArmorMaterial("dragonsteel fce", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
-    public static final CustomToolMaterial SILVER_TOOL_MATERIAL = new CustomToolMaterial("silver", 2, 460, 11.0F, 1.0F, 18);
-    public static final CustomToolMaterial DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("Dragonbone", 4, 1660, 10.0F, 4.0F, 22);
-    public static final CustomToolMaterial FIRE_DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("FireDragonbone", 4, 2000, 10.0F, 5.5F, 22);
-    public static final CustomToolMaterial ICE_DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("IceDragonbone", 4, 2000, 10.0F, 5.5F, 22);
-    public static final CustomToolMaterial TROLL_WEAPON_TOOL_MATERIAL = new CustomToolMaterial("trollWeapon", 2, 300, 11.0F, 1.0F, 1);
-    public static final CustomToolMaterial MYRMEX_CHITIN_TOOL_MATERIAL = new CustomToolMaterial("MyrmexChitin", 3, 600, 6.0F, -1.0F, 8);
-    public static final CustomToolMaterial DRAGONSTEEL_FIRE_TOOL_MATERIAL = new CustomToolMaterial("DragonsteelFire", 5, IafConfig.dragonsteelBaseDurability, 10.0F, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10);
-    public static final CustomToolMaterial DRAGONSTEEL_ICE_TOOL_MATERIAL = new CustomToolMaterial("DragonsteelIce", 5, IafConfig.dragonsteelBaseDurability, 10.0F, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10);
-    public static final CustomToolMaterial HIPPOGRYPH_SWORD_TOOL_MATERIAL = new CustomToolMaterial("HippogryphSword", 2, 500, 10.0F, 2.5F, 10);
-    public static final CustomToolMaterial STYMHALIAN_SWORD_TOOL_MATERIAL = new CustomToolMaterial("StymphalianSword", 2, 500, 10.0F, 2F, 10);
-    public static final CustomToolMaterial AMPHITHERE_SWORD_TOOL_MATERIAL = new CustomToolMaterial("AmphithereSword", 2, 500, 10.0F, 1F, 10);
-    public static final CustomToolMaterial HIPPOCAMPUS_SWORD_TOOL_MATERIAL = new CustomToolMaterial("HippocampusSword", 0, 500, 0.0F, -2F, 50);
-    public static final CustomToolMaterial DREAD_SWORD_TOOL_MATERIAL = new CustomToolMaterial("DreadSword", 0, 100, 0.0F, 1F, 0);
-    public static final CustomToolMaterial DREAD_KNIGHT_TOOL_MATERIAL = new CustomToolMaterial("DreadKnightSword", 0, 1200, 0.0F, 13F, 10);
-    public static final CustomToolMaterial DREAD_QUEEN_SWORD_TOOL_MATERIAL = new CustomToolMaterial("DreadQueenSword", 0, IafConfig.dragonsteelBaseDurability, 10.0F, (float) IafConfig.dragonsteelBaseDamage, 10);
+    public static final CustomToolMaterial SILVER_TOOL_MATERIAL = new CustomToolMaterial("silver", 2, 460, 1.0F, 11.0F, 18);
+    public static final CustomToolMaterial COPPER_TOOL_MATERIAL = new CustomToolMaterial("copper", 2, 300, 0.0F, 0.7F, 10);
+    public static final CustomToolMaterial DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("Dragonbone", 4, 1660, 4.0F, 10.0F, 22);
+    public static final CustomToolMaterial FIRE_DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("FireDragonbone", 4, 2000, 5.5F, 10F, 22);
+    public static final CustomToolMaterial ICE_DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("IceDragonbone", 4, 2000, 5.5F, 10F, 22);
+    public static final CustomToolMaterial TROLL_WEAPON_TOOL_MATERIAL = new CustomToolMaterial("trollWeapon", 2, 300, 1F, 10F, 1);
+    public static final CustomToolMaterial MYRMEX_CHITIN_TOOL_MATERIAL = new CustomToolMaterial("MyrmexChitin", 3, 600, 1.0F, 6.0F, 8);
+    public static final CustomToolMaterial DRAGONSTEEL_FIRE_TOOL_MATERIAL = new CustomToolMaterial("DragonsteelFire", 5, IafConfig.dragonsteelBaseDurability, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10F, 10);
+    public static final CustomToolMaterial DRAGONSTEEL_ICE_TOOL_MATERIAL = new CustomToolMaterial("DragonsteelIce", 5, IafConfig.dragonsteelBaseDurability, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10F, 10);
+    public static final CustomToolMaterial HIPPOGRYPH_SWORD_TOOL_MATERIAL = new CustomToolMaterial("HippogryphSword", 2, 500, 2.5F, 10F, 10);
+    public static final CustomToolMaterial STYMHALIAN_SWORD_TOOL_MATERIAL = new CustomToolMaterial("StymphalianSword", 2, 500, 2, 10.0F, 10);
+    public static final CustomToolMaterial AMPHITHERE_SWORD_TOOL_MATERIAL = new CustomToolMaterial("AmphithereSword", 2, 500, 1F, 10F, 10);
+    public static final CustomToolMaterial HIPPOCAMPUS_SWORD_TOOL_MATERIAL = new CustomToolMaterial("HippocampusSword", 0, 500, -2F, 0F, 50);
+    public static final CustomToolMaterial DREAD_SWORD_TOOL_MATERIAL = new CustomToolMaterial("DreadSword", 0, 100, 1F, 10F, 0);
+    public static final CustomToolMaterial DREAD_KNIGHT_TOOL_MATERIAL = new CustomToolMaterial("DreadKnightSword", 0, 1200, 13F, 0F, 10);
+    public static final CustomToolMaterial DREAD_QUEEN_SWORD_TOOL_MATERIAL = new CustomToolMaterial("DreadQueenSword", 0, IafConfig.dragonsteelBaseDurability, (float) IafConfig.dragonsteelBaseDamage, 10F, 10);
 
     public static final Item BESTIARY = new ItemBestiary();
     public static final Item MANUSCRIPT = new ItemGeneric("manuscript");
     public static final Item SAPPHIRE_GEM = new ItemGeneric("sapphire_gem");
     public static final Item SILVER_INGOT = new ItemGeneric("silver_ingot");
     public static final Item SILVER_NUGGET = new ItemGeneric("silver_nugget");
+    public static final Item AMYTHEST_GEM = new ItemGeneric("amythest_gem");
+    public static final Item COPPER_INGOT = new ItemGeneric("copper_ingot");
+    public static final Item COPPER_NUGGET = new ItemGeneric("copper_nugget");
     public static final Item SILVER_HELMET = new ItemSilverArmor(SILVER_ARMOR_MATERIAL, EquipmentSlotType.HEAD, "armor_silver_metal_helmet");
     public static final Item SILVER_CHESTPLATE = new ItemSilverArmor(SILVER_ARMOR_MATERIAL, EquipmentSlotType.CHEST, "armor_silver_metal_chestplate");
     public static final Item SILVER_LEGGINGS = new ItemSilverArmor(SILVER_ARMOR_MATERIAL, EquipmentSlotType.LEGS, "armor_silver_metal_leggings");
@@ -66,6 +71,17 @@ public class IafItemRegistry {
     public static final Item SILVER_PICKAXE = new ItemModPickaxe(SILVER_TOOL_MATERIAL, "silver_pickaxe");
     public static final Item SILVER_AXE = new ItemModAxe(SILVER_TOOL_MATERIAL, "silver_axe");
     public static final Item SILVER_HOE = new ItemModHoe(SILVER_TOOL_MATERIAL, "silver_hoe");
+
+    public static final Item COPPER_HELMET = new ItemCopperArmor(COPPER_ARMOR_MATERIAL, EquipmentSlotType.HEAD, "armor_copper_metal_helmet");
+    public static final Item COPPER_CHESTPLATE = new ItemCopperArmor(COPPER_ARMOR_MATERIAL, EquipmentSlotType.CHEST, "armor_copper_metal_chestplate");
+    public static final Item COPPER_LEGGINGS = new ItemCopperArmor(COPPER_ARMOR_MATERIAL, EquipmentSlotType.LEGS, "armor_copper_metal_leggings");
+    public static final Item COPPER_BOOTS = new ItemCopperArmor(COPPER_ARMOR_MATERIAL, EquipmentSlotType.FEET, "armor_copper_metal_boots");
+    public static final Item COPPER_SWORD = new ItemModSword(COPPER_TOOL_MATERIAL, "copper_sword");
+    public static final Item COPPER_SHOVEL = new ItemModShovel(COPPER_TOOL_MATERIAL, "copper_shovel");
+    public static final Item COPPER_PICKAXE = new ItemModPickaxe(COPPER_TOOL_MATERIAL, "copper_pickaxe");
+    public static final Item COPPER_AXE = new ItemModAxe(COPPER_TOOL_MATERIAL, "copper_axe");
+    public static final Item COPPER_HOE = new ItemModHoe(COPPER_TOOL_MATERIAL, "copper_hoe");
+    
     public static final Item FIRE_STEW = new ItemGeneric("fire_stew");
     public static final Item FROST_STEW = new ItemGeneric("frost_stew");
     public static final Item DRAGONEGG_RED = new ItemDragonEgg("dragonegg_red", EnumDragonEgg.RED);
