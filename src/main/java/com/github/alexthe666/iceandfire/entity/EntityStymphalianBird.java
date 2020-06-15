@@ -200,7 +200,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     }
 
     public boolean isTargetBlocked(Vec3d target) {
-        return world.rayTraceBlocks(new RayTraceContext(target, this.getPositionVec(), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
+        return world.rayTraceBlocks(new RayTraceContext(target, this.getEyePosition(1.0F), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
     }
 
     public boolean attackEntityAsMob(Entity entityIn) {

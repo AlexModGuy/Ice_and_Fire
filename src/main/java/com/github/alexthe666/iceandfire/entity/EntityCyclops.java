@@ -271,7 +271,7 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
         eyeEntity.setParent(this);
-        if(!eyeEntity.isAddedToWorld()){
+        if(!eyeEntity.shouldContinuePersisting()){
             world.addEntity(eyeEntity);
         }
         breakBlock();

@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 
 public class ParticleDragonFlame extends SpriteTexturedParticle {
 
-    private static final ResourceLocation DRAGONFLAME = new ResourceLocation("iceandfire:textures/particles/flame.png");
+    private static final ResourceLocation DRAGONFLAME = new ResourceLocation("iceandfire:textures/particles/dragon_flame.png");
     private float dragonSize;
     private double initialX;
     private double initialY;

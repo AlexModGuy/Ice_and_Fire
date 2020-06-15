@@ -42,7 +42,6 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.Inventory;
@@ -77,7 +76,6 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -336,63 +334,66 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         }
     }
 
+
+
+
     public void updateParts() {
         if (headPart != null) {
-            if(!headPart.isAddedToWorld()){
+            if(!headPart.shouldContinuePersisting()){
                 world.addEntity(headPart);
             }
             headPart.setParent(this);
         }
         if (neckPart != null) {
-            if(!neckPart.isAddedToWorld()){
+            if(!neckPart.shouldContinuePersisting()){
                 world.addEntity(neckPart);
             }
             neckPart.setParent(this);
         }
         if (rightWingUpperPart != null) {
-            if(!rightWingUpperPart.isAddedToWorld()){
+            if(!rightWingUpperPart.shouldContinuePersisting()){
                 world.addEntity(rightWingUpperPart);
             }
             rightWingUpperPart.setParent(this);
         }
         if (rightWingLowerPart != null) {
-            if(!rightWingLowerPart.isAddedToWorld()){
+            if(!rightWingLowerPart.shouldContinuePersisting()){
                 world.addEntity(rightWingLowerPart);
             }
             rightWingLowerPart.setParent(this);
         }
         if (leftWingUpperPart != null) {
-            if(!leftWingUpperPart.isAddedToWorld()){
+            if(!leftWingUpperPart.shouldContinuePersisting()){
                 world.addEntity(leftWingUpperPart);
             }
             leftWingUpperPart.setParent(this);
         }
         if (leftWingLowerPart != null) {
-            if(!leftWingLowerPart.isAddedToWorld()){
+            if(!leftWingLowerPart.shouldContinuePersisting()){
                 world.addEntity(leftWingLowerPart);
             }
             leftWingLowerPart.setParent(this);
         }
         if (tail1Part != null) {
-            if(!tail1Part.isAddedToWorld()){
+            if(!tail1Part.shouldContinuePersisting()){
                 world.addEntity(tail1Part);
             }
             tail1Part.setParent(this);
         }
         if (tail2Part != null) {
-            if(!tail2Part.isAddedToWorld()){
+            if(!tail2Part.shouldContinuePersisting()){
                 world.addEntity(tail2Part);
             }
             tail2Part.setParent(this);
         }
         if (tail3Part != null) {
-            if(!tail3Part.isAddedToWorld()){
+            if(!tail3Part.shouldContinuePersisting()){
                 world.addEntity(tail3Part);
             }
             tail3Part.setParent(this);
         }
         if (tail4Part != null) {
-            if(!tail4Part.isAddedToWorld()){
+            if(!tail4Part.shouldContinuePersisting()){
                 world.addEntity(tail4Part);
             }
             tail4Part.setParent(this);
@@ -1738,7 +1739,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
 
     public boolean isTargetBlocked(Vec3d target) {
         if (target != null) {
-            BlockRayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(new Vec3d(this.getPosition()), target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+            BlockRayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(new Vec3d(this.getPosition()).add(0, this.getEyeHeight(), 0), target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
             if (rayTrace != null && rayTrace.getHitVec() != null) {
                 BlockPos sidePos = rayTrace.getPos();
                 BlockPos pos = new BlockPos(rayTrace.getHitVec());
@@ -1747,7 +1748,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                 } else if (!world.isAirBlock(pos)) {
                     return true;
                 }
-                return rayTrace != null && rayTrace.getType() != RayTraceResult.Type.BLOCK;
+                return rayTrace != null && rayTrace.getType() == RayTraceResult.Type.BLOCK;
             }
         }
         return false;
@@ -2120,7 +2121,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     public double getFlightSpeedModifier() {
-        return 1;
+        return FLIGHT_CHANCE_PER_TICK;
     }
 
     public boolean isAllowedToTriggerFlight() {
@@ -2223,7 +2224,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     protected int getFlightChancePerTick() {
-        return FLIGHT_CHANCE_PER_TICK;
+        return 1;
     }
 
     public void onRemovedFromWorld() {

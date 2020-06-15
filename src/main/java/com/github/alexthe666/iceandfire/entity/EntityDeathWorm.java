@@ -143,7 +143,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
 
     private void addSegmentsToWorld() {
         for (Entity entity : segments) {
-            if(!entity.isAddedToWorld()){
+            if(!((EntityMutlipartPart)entity).shouldContinuePersisting()){
                 world.addEntity(entity);
             }
         }

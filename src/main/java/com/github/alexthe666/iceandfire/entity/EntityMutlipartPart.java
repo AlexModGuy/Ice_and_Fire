@@ -173,4 +173,8 @@ public abstract class EntityMutlipartPart extends Entity {
         LivingEntity parent = getParent();
         return !parent.isAlive();
     }
+
+    public boolean shouldContinuePersisting() {
+        return isAddedToWorld() || this.removed;
+    }
 }

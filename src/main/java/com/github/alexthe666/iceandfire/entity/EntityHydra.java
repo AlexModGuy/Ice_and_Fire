@@ -248,12 +248,12 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         for (int i = 0; i < getHeadCount(); i++) {
             headBoxes[i].setPosition(headBoxes[i].getPosX(), this.getPosY() + partY, headBoxes[i].getPosZ());
             headBoxes[i].setParent(this);
-            if(!headBoxes[i].isAddedToWorld()){
+            if(!headBoxes[i].shouldContinuePersisting()){
                 world.addEntity(headBoxes[i]);
             }
             headBoxes[HEADS + i].setPosition(headBoxes[HEADS + i].getPosX(), this.getPosY() + partY, headBoxes[HEADS + i].getPosZ());
             headBoxes[HEADS + i].setParent(this);
-            if(!headBoxes[HEADS + i].isAddedToWorld()){
+            if(!headBoxes[HEADS + i].shouldContinuePersisting()){
                 world.addEntity(headBoxes[HEADS + i]);
             }
         }

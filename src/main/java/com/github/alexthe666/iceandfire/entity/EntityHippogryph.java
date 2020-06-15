@@ -1027,7 +1027,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
 
     public boolean isTargetBlocked(Vec3d target) {
         if (target != null) {
-            RayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(this.getPositionVec(), target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+            RayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(this.getEyePosition(1.0F), target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
 
             if (rayTrace != null && rayTrace.getHitVec() != null) {
                 BlockPos pos = new BlockPos(rayTrace.getHitVec());

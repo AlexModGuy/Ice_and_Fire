@@ -240,7 +240,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         for (EntityMutlipartPart entity : segments) {
             if (entity != null) {
                 entity.setParent(this);
-                if(!entity.isAddedToWorld()){
+                if(!entity.shouldContinuePersisting()){
                     world.addEntity(entity);
                 }
             }
