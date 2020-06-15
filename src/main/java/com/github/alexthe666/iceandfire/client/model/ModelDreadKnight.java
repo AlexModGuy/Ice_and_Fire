@@ -286,6 +286,7 @@ public class ModelDreadKnight extends ModelDragonBase<EntityDreadKnight> impleme
 
     @Override
     public void translateHand(HandSide sideIn, MatrixStack matrixStackIn) {
+        body.translateRotate(matrixStackIn);
         getArmForSide(sideIn).translateRotate(matrixStackIn);
     }
 }

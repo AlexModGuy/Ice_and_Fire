@@ -286,6 +286,7 @@ public class ModelDreadLich extends ModelDragonBase<EntityDreadLich> implements 
 
     @Override
     public void translateHand(HandSide sideIn, MatrixStack matrixStackIn) {
+        body.translateRotate(matrixStackIn);
         getArmForSide(sideIn).translateRotate(matrixStackIn);
     }
 }

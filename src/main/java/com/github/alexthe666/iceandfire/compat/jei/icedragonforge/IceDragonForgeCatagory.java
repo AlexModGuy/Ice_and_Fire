@@ -9,7 +9,11 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class IceDragonForgeCatagory implements IRecipeCategory<DragonForgeRecipe> {
 
@@ -47,8 +51,10 @@ public class IceDragonForgeCatagory implements IRecipeCategory<DragonForgeRecipe
 
     @Override
     public void setIngredients(DragonForgeRecipe dragonForgeRecipe, IIngredients iIngredients) {
-        iIngredients.setInput(VanillaTypes.ITEM, dragonForgeRecipe.getInput());
-        iIngredients.setInput(VanillaTypes.ITEM, dragonForgeRecipe.getBlood());
+        List<ItemStack> ingredientsList = new ArrayList<>();
+        ingredientsList.add(dragonForgeRecipe.getInput());
+        ingredientsList.add(dragonForgeRecipe.getBlood());
+        iIngredients.setInputs(VanillaTypes.ITEM, ingredientsList);
         iIngredients.setOutput(VanillaTypes.ITEM, dragonForgeRecipe.getOutput());
 
     }

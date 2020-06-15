@@ -64,7 +64,7 @@ public class IafEntityRegistry {
     public static final EntityType<EntityDreadBeast> DREAD_BEAST = registerEntity(EntityType.Builder.create(EntityDreadBeast::new, EntityClassification.CREATURE).size(1.2F, 0.9F), "dread_beast");
     public static final EntityType<EntityDreadScuttler> DREAD_SCUTTLER = registerEntity(EntityType.Builder.create(EntityDreadScuttler::new, EntityClassification.CREATURE).size(1.5F, 1.3F), "dread_scuttler");
     public static final EntityType<EntityDreadLich> DREAD_LICH = registerEntity(EntityType.Builder.create(EntityDreadLich::new, EntityClassification.CREATURE).size(0.6F, 1.8F), "dread_lich");
-    public static final EntityType<EntityDreadLichSkull> DREAD_LICH_SKULL = registerEntity(EntityType.Builder.create(EntityDreadLichSkull::new, EntityClassification.MISC).size(0.5F, 0.5F), "dread_lich_skull");
+    public static final EntityType<EntityDreadLichSkull> DREAD_LICH_SKULL = registerEntity(EntityType.Builder.create(EntityDreadLichSkull::new, EntityClassification.MISC).size(0.5F, 0.5F).setCustomClientFactory(EntityDreadLichSkull::new), "dread_lich_skull");
     public static final EntityType<EntityDreadKnight> DREAD_KNIGHT = registerEntity(EntityType.Builder.create(EntityDreadKnight::new, EntityClassification.CREATURE).size(0.6F, 1.8F), "dread_knight");
     public static final EntityType<EntityDreadHorse> DREAD_HORSE = registerEntity(EntityType.Builder.create(EntityDreadHorse::new, EntityClassification.CREATURE).size(1.3964844F, 1.6F), "dread_horse");
     public static final EntityType<EntityHydra> HYDRA = registerEntity(EntityType.Builder.create(EntityHydra::new, EntityClassification.CREATURE).size(2.8F, 1.39F), "hydra");

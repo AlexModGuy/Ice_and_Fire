@@ -9,6 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
@@ -20,6 +21,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import java.util.List;
 
@@ -45,6 +48,10 @@ public class EntityDreadLichSkull extends AbstractArrowEntity {
     public EntityDreadLichSkull(EntityType type, World worldIn, LivingEntity shooter, double dmg) {
         super(type, shooter, worldIn);
         this.setDamage(dmg);
+    }
+
+    public EntityDreadLichSkull(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+        this(IafEntityRegistry.DREAD_LICH_SKULL, worldIn);
     }
 
     public boolean isInWater() {
@@ -180,4 +187,10 @@ public class EntityDreadLichSkull extends AbstractArrowEntity {
     protected ItemStack getArrowStack() {
         return ItemStack.EMPTY;
     }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
+
 }

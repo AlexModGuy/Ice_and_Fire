@@ -4,10 +4,10 @@
       "model": "iceandfire:block/dread_stone_slab"
     },
     "type=top": {
-      "model": "iceandfire:block/dread_stone_slab_upper"
+      "model": "iceandfire:block/dread_stone_upper_slab"
     },
     "type=double": {
-      "model": "rats:block/dread_stone_bricks"
+      "model": "iceandfire:block/dread_stone_bricks"
     }
   }
 }

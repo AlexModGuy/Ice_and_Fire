@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
-import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
@@ -9,9 +8,11 @@ import com.github.alexthe666.iceandfire.client.model.util.HideableModelRenderer;
 import com.github.alexthe666.iceandfire.entity.EntityDreadThrall;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.entity.model.IHasArm;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -19,7 +20,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelDreadThrall extends AdvancedEntityModel<EntityDreadThrall> implements IHasArm {
+public class ModelDreadThrall extends ModelDragonBase<EntityDreadThrall> implements IHasArm {
 
     public HideableModelRenderer bipedHead;
     public HideableModelRenderer bipedHeadwear;
@@ -283,6 +284,13 @@ public class ModelDreadThrall extends AdvancedEntityModel<EntityDreadThrall> imp
 
     @Override
     public void translateHand(HandSide sideIn, MatrixStack matrixStackIn) {
+        bipedBody.translateRotate(matrixStackIn);
         getArmForSide(sideIn).translateRotate(matrixStackIn);
+    }
+
+    @Override
+    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+        this.resetToDefaultPose();
+        this.render(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
     }
 }

@@ -8,8 +8,10 @@ import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.enums.*;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.BannerPatternItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.SpawnEggItem;
+import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.SoundEvents;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -319,7 +321,22 @@ public class IafItemRegistry {
             event.getRegistry().register(skull.skull_item);
         }
         IafRecipeRegistry.preInit();
+        //Banner Patterns
+        try {
+            for (Field f : IafRecipeRegistry.class.getDeclaredFields()) {
+                Object obj = f.get(null);
+                if (obj instanceof BannerPattern) {
+                    BannerPattern pattern = (BannerPattern)obj;
+                    event.getRegistry().register(new BannerPatternItem(pattern, (new Item.Properties()).maxStackSize(1).group(IceAndFire.TAB_ITEMS)).setRegistryName("iceandfire:banner_pattern_" + pattern.getFileName()));
+
+                }
+            }
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
         //spawn Eggs
+
         event.getRegistry().register(new SpawnEggItem(IafEntityRegistry.FIRE_DRAGON, 0X340000, 0XA52929, new Item.Properties().group(IceAndFire.TAB_ITEMS)).setRegistryName("iceandfire:spawn_egg_fire_dragon"));
         event.getRegistry().register(new SpawnEggItem(IafEntityRegistry.ICE_DRAGON, 0XB5DDFB, 0X7EBAF0, new Item.Properties().group(IceAndFire.TAB_ITEMS)).setRegistryName("iceandfire:spawn_egg_ice_dragon"));
         event.getRegistry().register(new SpawnEggItem(IafEntityRegistry.HIPPOGRYPH, 0XD8D8D8, 0XD1B55D, new Item.Properties().group(IceAndFire.TAB_ITEMS)).setRegistryName("iceandfire:spawn_egg_hippogryph"));
