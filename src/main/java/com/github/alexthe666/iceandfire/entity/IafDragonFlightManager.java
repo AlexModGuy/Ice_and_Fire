@@ -250,7 +250,8 @@ public class IafDragonFlightManager {
                 double lvt_16_1_ = speed * MathHelper.cos(yawTurnHead * 0.017453292F) * Math.abs((double) distX / dist);
                 double lvt_18_1_ = speed * MathHelper.sin(yawTurnHead * 0.017453292F) * Math.abs((double) distZ / dist);
                 double lvt_20_1_ = speed * MathHelper.sin(finPitch * 0.017453292F) * Math.abs((double) distY / dist);
-                dragon.setMotion(dragon.getMotion().add(lvt_16_1_ * 0.2D, lvt_20_1_ * 0.2D, lvt_18_1_ * 0.2D));
+                double motionCap = 0.2D;
+                dragon.setMotion(dragon.getMotion().add(Math.min(lvt_16_1_ * 0.2D, motionCap), Math.min(lvt_20_1_ * 0.2D, motionCap), Math.min(lvt_18_1_ * 0.2D, motionCap)));
             }
         }
 

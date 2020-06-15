@@ -54,7 +54,7 @@ public class RenderDreadThrall extends MobRenderer<EntityDreadThrall, ModelDread
 
     @Override
     public void preRenderCallback(EntityDreadThrall LivingEntityIn, MatrixStack stack, float partialTickTime) {
-        stack.translate(0.95F, 0.95F, 0.95F);
+        stack.scale(0.95F, 0.95F, 0.95F);
     }
 
     @Nullable

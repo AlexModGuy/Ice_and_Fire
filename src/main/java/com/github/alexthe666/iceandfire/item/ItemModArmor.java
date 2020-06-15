@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.IArmorMaterial;
@@ -33,6 +34,23 @@ public class ItemModArmor extends ArmorItem {
             }
         }
         return super.getTranslationKey(stack);
+    }
+
+    @Nullable
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+        if(this.material == IafItemRegistry.MYRMEX_DESERT_ARMOR_MATERIAL){
+            return "iceandfire:textures/models/armor/" + (slot == EquipmentSlotType.LEGS ? "myrmex_desert_layer_2" : "myrmex_desert_layer_1") + ".png";
+        }
+        if(this.material == IafItemRegistry.MYRMEX_JUNGLE_ARMOR_MATERIAL){
+            return "iceandfire:textures/models/armor/" + (slot == EquipmentSlotType.LEGS ? "myrmex_jungle_layer_2" : "myrmex_jungle_layer_1") + ".png";
+        }
+        if(this.material == IafItemRegistry.SHEEP_ARMOR_MATERIAL){
+            return "iceandfire:textures/models/armor/" + (slot == EquipmentSlotType.LEGS ? "sheep_disguise_layer_2" : "sheep_disguise_layer_1") + ".png";
+        }
+        if(this.material == IafItemRegistry.EARPLUGS_ARMOR_MATERIAL){
+            return "iceandfire:textures/models/armor/earplugs_layer_1.png";
+        }
+        return null;
     }
 
     @Override

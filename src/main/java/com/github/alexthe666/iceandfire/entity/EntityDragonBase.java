@@ -2107,6 +2107,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         }
     }
 
+    @Override
     public void setAttackTarget(@Nullable LivingEntity LivingEntityIn) {
         super.setAttackTarget(LivingEntityIn);
         this.flightManager.onSetAttackTarget(LivingEntityIn);
@@ -2121,7 +2122,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     public double getFlightSpeedModifier() {
-        return FLIGHT_CHANCE_PER_TICK;
+        return 1;
     }
 
     public boolean isAllowedToTriggerFlight() {
@@ -2224,7 +2225,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     protected int getFlightChancePerTick() {
-        return 1;
+        return FLIGHT_CHANCE_PER_TICK;
     }
 
     public void onRemovedFromWorld() {

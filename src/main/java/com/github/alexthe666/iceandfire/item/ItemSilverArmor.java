@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
@@ -25,5 +26,11 @@ public class ItemSilverArmor extends ArmorItem {
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
         return (A) IceAndFire.PROXY.getArmorModel(slot == EquipmentSlotType.LEGS ? 15 : 14);
     }
+
+    @Nullable
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+        return "iceandfire:textures/models/armor/" + (slot == EquipmentSlotType.LEGS ? "armor_silver_metal_layer_2" : "armor_silver_metal_layer_1") + ".png";
+    }
+
 
 }
