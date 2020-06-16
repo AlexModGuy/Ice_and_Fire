@@ -13,7 +13,7 @@ public class IafKeybindRegistry {
         dragon_fireAttack = new KeyBinding("key.dragon_fireAttack", 82, "key.categories.gameplay");
         dragon_strike = new KeyBinding("key.dragon_strike", 71, "key.categories.gameplay");
         dragon_down = new KeyBinding("key.dragon_down", 88, "key.categories.gameplay");
-        dragon_change_view = new KeyBinding("key.dragon_change_view", 23, "key.categories.misc");
+        dragon_change_view = new KeyBinding("key.dragon_change_view", 296, "key.categories.misc");
         ClientRegistry.registerKeyBinding(dragon_fireAttack);
         ClientRegistry.registerKeyBinding(dragon_strike);
         ClientRegistry.registerKeyBinding(dragon_down);

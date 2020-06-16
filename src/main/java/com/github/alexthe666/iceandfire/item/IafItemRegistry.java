@@ -133,6 +133,10 @@ public class IafItemRegistry {
     public static final ItemDragonArmor DRAGONARMOR_IRON_1 = new ItemDragonArmor(0, 1, "dragonarmor_iron");
     public static final ItemDragonArmor DRAGONARMOR_IRON_2 = new ItemDragonArmor(0, 2, "dragonarmor_iron");
     public static final ItemDragonArmor DRAGONARMOR_IRON_3 = new ItemDragonArmor(0, 3, "dragonarmor_iron");
+    public static final ItemDragonArmor DRAGONARMOR_COPPER_0 = new ItemDragonArmor(6, 0, "dragonarmor_copper");
+    public static final ItemDragonArmor DRAGONARMOR_COPPER_1 = new ItemDragonArmor(6, 1, "dragonarmor_copper");
+    public static final ItemDragonArmor DRAGONARMOR_COPPER_2 = new ItemDragonArmor(6, 2, "dragonarmor_copper");
+    public static final ItemDragonArmor DRAGONARMOR_COPPER_3 = new ItemDragonArmor(6, 3, "dragonarmor_copper");
     public static final ItemDragonArmor DRAGONARMOR_GOLD_0 = new ItemDragonArmor(1, 0, "dragonarmor_gold");
     public static final ItemDragonArmor DRAGONARMOR_GOLD_1 = new ItemDragonArmor(1, 1, "dragonarmor_gold");
     public static final ItemDragonArmor DRAGONARMOR_GOLD_2 = new ItemDragonArmor(1, 2, "dragonarmor_gold");
@@ -153,10 +157,10 @@ public class IafItemRegistry {
     public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_ICE_1 = new ItemDragonArmor(5, 1, "dragonarmor_dragonsteel_ice");
     public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_ICE_2 = new ItemDragonArmor(5, 2, "dragonarmor_dragonsteel_ice");
     public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_ICE_3 = new ItemDragonArmor(5, 3, "dragonarmor_dragonsteel_ice");
-    public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_LIGHTNING_0 = new ItemDragonArmor(6, 0, "dragonarmor_dragonsteel_lightning");
-    public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_LIGHTNING_1 = new ItemDragonArmor(6, 1, "dragonarmor_dragonsteel_lightning");
-    public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_LIGHTNING_2 = new ItemDragonArmor(6, 2, "dragonarmor_dragonsteel_lightning");
-    public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_LIGHTNING_3 = new ItemDragonArmor(6, 3, "dragonarmor_dragonsteel_lightning");
+    public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_LIGHTNING_0 = new ItemDragonArmor(7, 0, "dragonarmor_dragonsteel_lightning");
+    public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_LIGHTNING_1 = new ItemDragonArmor(7, 1, "dragonarmor_dragonsteel_lightning");
+    public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_LIGHTNING_2 = new ItemDragonArmor(7, 2, "dragonarmor_dragonsteel_lightning");
+    public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_LIGHTNING_3 = new ItemDragonArmor(7, 3, "dragonarmor_dragonsteel_lightning");
     public static final Item DRAGON_MEAL = new ItemGeneric("dragon_meal");
     public static final Item SICKLY_DRAGON_MEAL = new ItemGeneric("sickly_dragon_meal", 1);
     public static final Item CREATIVE_DRAGON_MEAL = new ItemGeneric("creative_dragon_meal", 2);
@@ -389,6 +393,7 @@ public class IafItemRegistry {
 
         event.getRegistry().register(new SpawnEggItem(IafEntityRegistry.FIRE_DRAGON, 0X340000, 0XA52929, new Item.Properties().group(IceAndFire.TAB_ITEMS)).setRegistryName("iceandfire:spawn_egg_fire_dragon"));
         event.getRegistry().register(new SpawnEggItem(IafEntityRegistry.ICE_DRAGON, 0XB5DDFB, 0X7EBAF0, new Item.Properties().group(IceAndFire.TAB_ITEMS)).setRegistryName("iceandfire:spawn_egg_ice_dragon"));
+        event.getRegistry().register(new SpawnEggItem(IafEntityRegistry.LIGHTNING_DRAGON, 0X422367, 0X725691, new Item.Properties().group(IceAndFire.TAB_ITEMS)).setRegistryName("iceandfire:spawn_egg_lightning_dragon"));
         event.getRegistry().register(new SpawnEggItem(IafEntityRegistry.HIPPOGRYPH, 0XD8D8D8, 0XD1B55D, new Item.Properties().group(IceAndFire.TAB_ITEMS)).setRegistryName("iceandfire:spawn_egg_hippogryph"));
         event.getRegistry().register(new SpawnEggItem(IafEntityRegistry.GORGON, 0XD0D99F, 0X684530, new Item.Properties().group(IceAndFire.TAB_ITEMS)).setRegistryName("iceandfire:spawn_egg_gorgon"));
         event.getRegistry().register(new SpawnEggItem(IafEntityRegistry.PIXIE, 0XFF7F89, 0XE2CCE2, new Item.Properties().group(IceAndFire.TAB_ITEMS)).setRegistryName("iceandfire:spawn_egg_pixie"));

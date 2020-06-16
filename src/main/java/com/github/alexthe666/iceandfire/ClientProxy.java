@@ -11,6 +11,7 @@ import com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary;
 import com.github.alexthe666.iceandfire.client.model.*;
 import com.github.alexthe666.iceandfire.client.model.animator.FireDragonTabulaModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.animator.IceDragonTabulaModelAnimator;
+import com.github.alexthe666.iceandfire.client.model.animator.LightningTabulaDragonAnimator;
 import com.github.alexthe666.iceandfire.client.model.animator.SeaSerpentTabulaModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.EnumSeaSerpentAnimations;
@@ -84,6 +85,7 @@ public class ClientProxy extends CommonProxy {
     public static TabulaModel FIRE_DRAGON_BASE_MODEL;
     public static TabulaModel ICE_DRAGON_BASE_MODEL;
     public static TabulaModel SEA_SERPENT_BASE_MODEL;
+    public static TabulaModel LIGHTNING_DRAGON_BASE_MODEL;
     private static MyrmexHive referedClientHive = null;
     private FontRenderer bestiaryFontRenderer;
     private int previousViewType = 0;
@@ -143,11 +145,13 @@ public class ClientProxy extends CommonProxy {
             FIRE_DRAGON_BASE_MODEL = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFireGround"), new FireDragonTabulaModelAnimator());
             ICE_DRAGON_BASE_MODEL = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/dragonIceGround"), new IceDragonTabulaModelAnimator());
             SEA_SERPENT_BASE_MODEL = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent"), new SeaSerpentTabulaModelAnimator());
+            LIGHTNING_DRAGON_BASE_MODEL = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/lightningdragon/dragonLightningGround"), new LightningTabulaDragonAnimator());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.FIRE_DRAGON, manager -> new RenderDragonBase(manager, FIRE_DRAGON_BASE_MODEL, true));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.ICE_DRAGON, manager -> new RenderDragonBase(manager, ICE_DRAGON_BASE_MODEL, false));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.FIRE_DRAGON, manager -> new RenderDragonBase(manager, FIRE_DRAGON_BASE_MODEL, 0));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.ICE_DRAGON, manager -> new RenderDragonBase(manager, ICE_DRAGON_BASE_MODEL, 1));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.LIGHTNING_DRAGON, manager -> new RenderLightningDragon(manager, LIGHTNING_DRAGON_BASE_MODEL, 2));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_EGG, manager -> new RenderDragonEgg(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_ARROW, manager -> new RenderDragonArrow(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_SKULL, manager -> new RenderDragonSkull(manager, FIRE_DRAGON_BASE_MODEL, ICE_DRAGON_BASE_MODEL));

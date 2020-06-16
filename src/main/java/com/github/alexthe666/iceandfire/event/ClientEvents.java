@@ -179,25 +179,24 @@ public class ClientEvents {
                 int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
                 EntityDragonBase dragon = (EntityDragonBase) player.getRidingEntity();
                 float scale = ((EntityDragonBase) player.getRidingEntity()).getRenderSize() / 3;
-                MatrixStack matrixStack = new MatrixStack();
                 if (Minecraft.getInstance().gameSettings.thirdPersonView == 1) {
                     if (currentView == 0) {
                     } else if (currentView == 1) {
-                        matrixStack.translate(scale * 0.5F, 0F, -scale * 3F);
+                        event.getInfo().movePosition(-scale * 3F, 0F, 0);
                     } else if (currentView == 2) {
-                        matrixStack.translate(0, 0F, -scale * 3F);
+                        event.getInfo().movePosition(-scale * 3F, 0F, 0);
                     } else if (currentView == 3) {
-                        matrixStack.translate(scale * 0.5F, 0F, -scale * 0.5F);
+                        event.getInfo().movePosition(-scale * 0.5F, 0F, 0);
                     }
                 }
                 if (Minecraft.getInstance().gameSettings.thirdPersonView == 2) {
                     if (currentView == 0) {
                     } else if (currentView == 1) {
-                        matrixStack.translate(-scale * 1.2F, 0F, 5);
+                        event.getInfo().movePosition(-scale * 1.2F, 0F, 0);
                     } else if (currentView == 2) {
-                        matrixStack.translate(scale * 1.2F, 0F, 5);
+                        event.getInfo().movePosition(-scale * 1.2F, 0F, 0);
                     } else if (currentView == 3) {
-                        matrixStack.translate(0, 0F, scale * 3F);
+                        event.getInfo().movePosition(-scale * 3F, 0F, 0);
                     }
                 }
 
@@ -210,7 +209,7 @@ public class ClientEvents {
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntityLiving() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-            if (player.world.isRemote && IafKeybindRegistry.dragon_change_view.isPressed()) {
+            if (player.world.isRemote && IafKeybindRegistry.dragon_change_view.isKeyDown()) {
                 int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
                 if (currentView + 1 > 3) {
                     currentView = 0;

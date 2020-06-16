@@ -26,21 +26,13 @@ public class LayerDragonArmor extends LayerRenderer<EntityDragonBase, SegmentedM
     private static EquipmentSlotType[] ARMOR_SLOTS = {EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
     private final MobRenderer render;
 
-    public LayerDragonArmor(MobRenderer renderIn, boolean isFireDragon) {
+    public LayerDragonArmor(MobRenderer renderIn, int type) {
         super(renderIn);
         this.render = renderIn;
     }
 
     public static void clearCache(String str) {
         LAYERED_ARMOR_CACHE.remove(str);
-    }
-
-    public void render(EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-
-    }
-
-    public boolean shouldCombineTextures() {
-        return false;
     }
 
     @Override

@@ -220,14 +220,19 @@ public class IceDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator 
             }
         }
         if (!entity.isModelDead()) {
-            entity.turn_buffer.applyChainSwingBuffer(neckParts);
-            entity.tail_buffer.applyChainSwingBuffer(tailPartsWBody);
-            if (entity.flyProgress > 0 || entity.hoverProgress > 0) {
-                entity.roll_buffer.applyChainFlapBuffer(model.getCube("BodyUpper"));
-                entity.pitch_buffer_body.applyChainWaveBuffer(model.getCube("BodyUpper"));
-                entity.pitch_buffer.applyChainWaveBufferReverse(tailPartsWBody);
+            if (entity.turn_buffer != null && !(entity.isBeingRidden() && entity.isBreathingFire())) {
+                entity.turn_buffer.applyChainSwingBuffer(neckParts);
             }
-
+            if (entity.tail_buffer != null) {
+                entity.tail_buffer.applyChainSwingBuffer(tailPartsWBody);
+            }
+            if (entity.roll_buffer != null && entity.pitch_buffer_body != null && entity.pitch_buffer != null) {
+                if (entity.flyProgress > 0 || entity.hoverProgress > 0) {
+                    entity.roll_buffer.applyChainFlapBuffer(model.getCube("BodyUpper"));
+                    entity.pitch_buffer_body.applyChainWaveBuffer(model.getCube("BodyUpper"));
+                    entity.pitch_buffer.applyChainWaveBufferReverse(tailPartsWBody);
+                }
+            }
         }
         if (entity.getWidth() >= 2 && entity.flyProgress == 0 && entity.hoverProgress == 0) {
             LegArticulator.articulateQuadruped(entity, entity.legSolver, model.getCube("BodyUpper"), model.getCube("BodyLower"), model.getCube("Neck1"),

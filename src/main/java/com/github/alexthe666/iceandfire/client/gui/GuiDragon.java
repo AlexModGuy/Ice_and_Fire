@@ -85,7 +85,7 @@ public class GuiDragon extends ContainerScreen<ContainerDragon> {
             this.font.drawString(s1, this.xSize / 2 - this.font.getStringWidth(s1) / 2, 6, 4210752);
             String s3 = dragon.getCustomName() == null ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + dragon.getCustomName();
             this.font.drawString(s3, this.xSize / 2 - this.font.getStringWidth(s3) / 2, 75, 0XFFFFFF);
-            String s2 = StatCollector.translateToLocal("dragon.health") + Math.min(dragon.getHealth(), dragon.getMaxHealth()) + "/" + dragon.getMaxHealth();
+            String s2 = StatCollector.translateToLocal("dragon.health") + " " + Math.floor(Math.min(dragon.getHealth(), dragon.getMaxHealth())) + " / " + dragon.getMaxHealth();
             this.font.drawString(s2, this.xSize / 2 - this.font.getStringWidth(s2) / 2, 84, 0XFFFFFF);
             String s5 = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((dragon.isMale() ? "dragon.gender.male" : "dragon.gender.female"));
             this.font.drawString(s5, this.xSize / 2 - this.font.getStringWidth(s5) / 2, 93, 0XFFFFFF);

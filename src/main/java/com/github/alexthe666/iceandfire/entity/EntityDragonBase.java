@@ -245,13 +245,13 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         this.targetSelector.addGoal(4, new DragonAITargetNonTamed(this, LivingEntity.class, false, new Predicate<LivingEntity>() {
             @Override
             public boolean apply(@Nullable LivingEntity entity) {
-                return (!(entity instanceof PlayerEntity) || ((PlayerEntity) entity).isCreative()) && DragonUtils.canHostilesTarget(entity);
+                return (!(entity instanceof PlayerEntity) || ((PlayerEntity) entity).isCreative()) && DragonUtils.canHostilesTarget(entity) && entity.getType() != EntityDragonBase.this.getType();
             }
         }));
         this.targetSelector.addGoal(5, new DragonAITarget(this, LivingEntity.class, true, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                return entity instanceof LivingEntity && DragonUtils.canHostilesTarget(entity);
+                return entity instanceof LivingEntity && DragonUtils.canHostilesTarget(entity) && entity.getType() != EntityDragonBase.this.getType();
             }
         }));
         this.targetSelector.addGoal(6, new DragonAITargetItems(this, false));
@@ -1003,6 +1003,9 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                     val += 10D;
                     break;
                 case 7:
+                    val += 1.5D;
+                    break;
+                case 8:
                     val += 10D;
                     break;
             }
@@ -1119,18 +1122,20 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                     return super.processInteract(player, hand);
                 }
                 if (stack.isEmpty() && !player.isShiftKeyDown()) {
-                    if (this.getDragonStage() < 2) {
-                        this.startRiding(player, true);
-                    }
-                    if (this.getDragonStage() > 2 && !player.isPassenger()) {
-                        player.setSneaking(false);
-                        player.startRiding(this, true);
+                   if(!world.isRemote){
+                       if (this.getDragonStage() < 2) {
+                           this.startRiding(player, true);
+                       }
+                       if (this.getDragonStage() > 2 && !player.isPassenger()) {
+                           player.setSneaking(false);
+                           player.startRiding(this, true);
 
-                        if (world.isRemote) {
-                            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageStartRidingMob(this.getEntityId(), true));
-                        }
-                        this.setSleeping(false);
-                    }
+                           if (world.isRemote) {
+                               IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true));
+                           }
+                           this.setSleeping(false);
+                       }
+                   }
                     return true;
                 } else if (stack.isEmpty() && player.isShiftKeyDown()) {
                     this.openGUI(player);
@@ -2076,7 +2081,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                 pitchMinus = 0.95F * Math.abs(dragonPitch / 90);
             }
         }
-        float xzMod = 1.9F * getRenderSize() * 0.3F + getRenderSize() * (0.3F * (float) Math.sin((dragonPitch + 90) * Math.PI / 180) * pitchAdjustment - pitchMinus);
+        float xzMod = 1.7F * getRenderSize() * 0.3F + getRenderSize() * (0.3F * (float) Math.sin((dragonPitch + 90) * Math.PI / 180) * pitchAdjustment - pitchMinus);
         float headPosX = (float) (getPosX() + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
         float headPosY = (float) (getPosY() + (0.7F + sitProg + hoverProg + deadProg + epicRoarProg + sleepProg + flyProg + pitchMulti) * getRenderSize() * 0.3F);
         float headPosZ = (float) (getPosZ() + (xzMod) * Math.sin((rotationYaw + 90) * Math.PI / 180));

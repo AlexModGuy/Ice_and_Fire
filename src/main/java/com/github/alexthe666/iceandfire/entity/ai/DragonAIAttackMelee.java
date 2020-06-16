@@ -36,7 +36,7 @@ public class DragonAIAttackMelee extends Goal {
 
         if (LivingEntity == null) {
             return false;
-        } else if (LivingEntity.isAlive()) {
+        } else if (!LivingEntity.isAlive()) {
             return false;
         } else if (!dragon.canMove() || dragon.isHovering() || dragon.isFlying()) {
             return false;
