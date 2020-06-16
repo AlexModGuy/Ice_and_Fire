@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -27,36 +28,42 @@ import java.util.Random;
 
 public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof, INoTab {
     private static boolean keepInventory;
-    private boolean isFire;
+    private int isFire;
     private boolean activated;
 
-    public BlockDragonforgeCore(boolean isFire, boolean activated) {
+    public BlockDragonforgeCore(int isFire, boolean activated) {
         super(Properties.create(Material.IRON).variableOpacity().hardnessAndResistance(40, 500).sound(SoundType.METAL).lightValue(activated ? 15 : 0));
         String disabled = activated ? "" : "_disabled";
-        this.setRegistryName(IceAndFire.MODID, "dragonforge_" + (isFire ? "fire" : "ice") + "_core" + disabled);
+        this.setRegistryName(IceAndFire.MODID, "dragonforge_" + DragonType.getNameFromInt(isFire) + "_core" + disabled);
         this.isFire = isFire;
         this.activated = activated;
     }
 
-    public static void setState(boolean fire, boolean active, World worldIn, BlockPos pos) {
+    public static void setState(int dragonType, boolean active, World worldIn, BlockPos pos) {
         TileEntity tileentity = worldIn.getTileEntity(pos);
         keepInventory = true;
 
         if (active) {
-            if (fire) {
+            if (dragonType == 0) {
                 worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE.getDefaultState(), 3);
                 worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE.getDefaultState(), 3);
-            } else {
+            } else if(dragonType == 1){
                 worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE.getDefaultState(), 3);
                 worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE.getDefaultState(), 3);
+            }else if(dragonType == 2){
+                worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE.getDefaultState(), 3);
             }
         } else {
-            if (fire) {
+            if (dragonType == 0) {
                 worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.getDefaultState(), 3);
                 worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.getDefaultState(), 3);
-            } else {
+            } else if(dragonType == 1){
                 worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED.getDefaultState(), 3);
                 worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED.getDefaultState(), 3);
+            }else if(dragonType == 2){
+                worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.getDefaultState(), 3);
+                worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.getDefaultState(), 3);
             }
         }
 
@@ -88,20 +95,21 @@ public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof
         return ActionResultType.FAIL;
     }
 
-    public Item getItemDropped(BlockState state, Random rand, int fortune) {
-        return isFire ? Item.getItemFromBlock(IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED) : Item.getItemFromBlock(IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED);
-    }
-
     public ItemStack getItem(World worldIn, BlockPos pos, BlockState state) {
-        return new ItemStack(isFire ? Item.getItemFromBlock(IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED) : Item.getItemFromBlock(IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED));
+        if(isFire == 0){
+            return new ItemStack(Item.getItemFromBlock(IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED));
+        }
+        if(isFire == 1){
+            return new ItemStack(Item.getItemFromBlock(IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED));
+        }
+        if(isFire == 2){
+            return new ItemStack(Item.getItemFromBlock(IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED));
+        }
+        return new ItemStack(Item.getItemFromBlock(IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED));
     }
 
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
-    }
-
-    public boolean isFireSource(World world, BlockPos pos, Direction side) {
-        return isFire;
     }
 
     public void randomDisplayTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {

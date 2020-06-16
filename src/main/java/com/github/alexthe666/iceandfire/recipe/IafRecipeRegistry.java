@@ -42,11 +42,13 @@ public class IafRecipeRegistry {
     public static final BannerPattern PATTERN_DREAD = addBanner("dread", new ItemStack(IafItemRegistry.DREAD_SHARD));
     public static List<DragonForgeRecipe> FIRE_FORGE_RECIPES = new ArrayList<>();
     public static List<DragonForgeRecipe> ICE_FORGE_RECIPES = new ArrayList<>();
+    public static List<DragonForgeRecipe> LIGHTNING_FORGE_RECIPES = new ArrayList<>();
     public static List<ItemStack> BANNER_ITEMS = new ArrayList<>();
 
     public static void preInit() {
         FIRE_FORGE_RECIPES.add(new DragonForgeRecipe(new ItemStack(Items.IRON_INGOT), new ItemStack(IafItemRegistry.FIRE_DRAGON_BLOOD), new ItemStack(IafItemRegistry.DRAGONSTEEL_FIRE_INGOT)));
         ICE_FORGE_RECIPES.add(new DragonForgeRecipe(new ItemStack(Items.IRON_INGOT), new ItemStack(IafItemRegistry.ICE_DRAGON_BLOOD), new ItemStack(IafItemRegistry.DRAGONSTEEL_ICE_INGOT)));
+        LIGHTNING_FORGE_RECIPES.add(new DragonForgeRecipe(new ItemStack(Items.IRON_INGOT), new ItemStack(IafItemRegistry.LIGHTNING_DRAGON_BLOOD), new ItemStack(IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT)));
 
 
         DispenserBlock.registerDispenseBehavior(IafItemRegistry.STYMPHALIAN_ARROW, new ProjectileDispenseBehavior() {
@@ -292,6 +294,16 @@ public class IafRecipeRegistry {
         return null;
     }
 
+    public static DragonForgeRecipe getLightningForgeRecipe(ItemStack stack) {
+        for (DragonForgeRecipe recipe : LIGHTNING_FORGE_RECIPES) {
+            if (recipe.getInput().getItem() == stack.getItem()) {
+                return recipe;
+            }
+        }
+        return null;
+    }
+
+
     public static DragonForgeRecipe getFireForgeRecipeForBlood(ItemStack stack) {
         for (DragonForgeRecipe recipe : FIRE_FORGE_RECIPES) {
             if (recipe.getInput().getItem() == stack.getItem()) {
@@ -301,8 +313,18 @@ public class IafRecipeRegistry {
         return null;
     }
 
+
     public static DragonForgeRecipe getIceForgeRecipeForBlood(ItemStack stack) {
         for (DragonForgeRecipe recipe : ICE_FORGE_RECIPES) {
+            if (recipe.getInput().getItem() == stack.getItem()) {
+                return recipe;
+            }
+        }
+        return null;
+    }
+
+    public static DragonForgeRecipe getLightningForgeRecipeForBlood(ItemStack stack) {
+        for (DragonForgeRecipe recipe : LIGHTNING_FORGE_RECIPES) {
             if (recipe.getInput().getItem() == stack.getItem()) {
                 return recipe;
             }

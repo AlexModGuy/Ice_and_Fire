@@ -36,16 +36,19 @@ public class IafItemRegistry {
     public static final CustomArmorMaterial TROLL_FOREST_ARMOR_MATERIAL = new CustomArmorMaterial("forest troll", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
     public static final CustomArmorMaterial TROLL_FROST_ARMOR_MATERIAL = new CustomArmorMaterial("frost troll", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
     public static final CustomArmorMaterial DRAGONSTEEL_FIRE_ARMOR_MATERIAL = new CustomArmorMaterial("dragonsteel fire", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
-    public static final CustomArmorMaterial DRAGONSTEEL_ICE_ARMOR_MATERIAL = new CustomArmorMaterial("dragonsteel fce", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
+    public static final CustomArmorMaterial DRAGONSTEEL_ICE_ARMOR_MATERIAL = new CustomArmorMaterial("dragonsteel_ice", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
+    public static final CustomArmorMaterial DRAGONSTEEL_LIGHTNING_ARMOR_MATERIAL = new CustomArmorMaterial("dragonsteel_lightning", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
     public static final CustomToolMaterial SILVER_TOOL_MATERIAL = new CustomToolMaterial("silver", 2, 460, 1.0F, 11.0F, 18);
     public static final CustomToolMaterial COPPER_TOOL_MATERIAL = new CustomToolMaterial("copper", 2, 300, 0.0F, 0.7F, 10);
     public static final CustomToolMaterial DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("Dragonbone", 4, 1660, 4.0F, 10.0F, 22);
     public static final CustomToolMaterial FIRE_DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("FireDragonbone", 4, 2000, 5.5F, 10F, 22);
     public static final CustomToolMaterial ICE_DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("IceDragonbone", 4, 2000, 5.5F, 10F, 22);
+    public static final CustomToolMaterial LIGHTNING_DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("LightningDragonbone", 4, 2000, 5.5F, 10F, 22);
     public static final CustomToolMaterial TROLL_WEAPON_TOOL_MATERIAL = new CustomToolMaterial("trollWeapon", 2, 300, 1F, 10F, 1);
     public static final CustomToolMaterial MYRMEX_CHITIN_TOOL_MATERIAL = new CustomToolMaterial("MyrmexChitin", 3, 600, 1.0F, 6.0F, 8);
     public static final CustomToolMaterial DRAGONSTEEL_FIRE_TOOL_MATERIAL = new CustomToolMaterial("DragonsteelFire", 5, IafConfig.dragonsteelBaseDurability, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10F, 10);
     public static final CustomToolMaterial DRAGONSTEEL_ICE_TOOL_MATERIAL = new CustomToolMaterial("DragonsteelIce", 5, IafConfig.dragonsteelBaseDurability, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10F, 10);
+    public static final CustomToolMaterial DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL = new CustomToolMaterial("DragonsteelLightning", 5, IafConfig.dragonsteelBaseDurability, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10F, 10);
     public static final CustomToolMaterial HIPPOGRYPH_SWORD_TOOL_MATERIAL = new CustomToolMaterial("HippogryphSword", 2, 500, 2.5F, 10F, 10);
     public static final CustomToolMaterial STYMHALIAN_SWORD_TOOL_MATERIAL = new CustomToolMaterial("StymphalianSword", 2, 500, 2, 10.0F, 10);
     public static final CustomToolMaterial AMPHITHERE_SWORD_TOOL_MATERIAL = new CustomToolMaterial("AmphithereSword", 2, 500, 1F, 10F, 10);
@@ -84,6 +87,7 @@ public class IafItemRegistry {
     
     public static final Item FIRE_STEW = new ItemGeneric("fire_stew");
     public static final Item FROST_STEW = new ItemGeneric("frost_stew");
+    public static final Item LIGHTNING_STEW = new ItemGeneric("lightning_stew");
     public static final Item DRAGONEGG_RED = new ItemDragonEgg("dragonegg_red", EnumDragonEgg.RED);
     public static final Item DRAGONEGG_GREEN = new ItemDragonEgg("dragonegg_green", EnumDragonEgg.GREEN);
     public static final Item DRAGONEGG_BRONZE = new ItemDragonEgg("dragonegg_bronze", EnumDragonEgg.BRONZE);
@@ -92,6 +96,10 @@ public class IafItemRegistry {
     public static final Item DRAGONEGG_WHITE = new ItemDragonEgg("dragonegg_white", EnumDragonEgg.WHITE);
     public static final Item DRAGONEGG_SAPPHIRE = new ItemDragonEgg("dragonegg_sapphire", EnumDragonEgg.SAPPHIRE);
     public static final Item DRAGONEGG_SILVER = new ItemDragonEgg("dragonegg_silver", EnumDragonEgg.SILVER);
+    public static final Item DRAGONEGG_ELECTRIC = new ItemDragonEgg("dragonegg_electric", EnumDragonEgg.ELECTRIC);
+    public static final Item DRAGONEGG_AMYTHEST = new ItemDragonEgg("dragonegg_amythest", EnumDragonEgg.AMYTHEST);
+    public static final Item DRAGONEGG_COPPER = new ItemDragonEgg("dragonegg_copper", EnumDragonEgg.COPPER);
+    public static final Item DRAGONEGG_BLACK = new ItemDragonEgg("dragonegg_black", EnumDragonEgg.BLACK);
     public static final Item DRAGONSCALES_RED = new ItemDragonScales("dragonscales_red", EnumDragonEgg.RED);
     public static final Item DRAGONSCALES_GREEN = new ItemDragonScales("dragonscales_green", EnumDragonEgg.GREEN);
     public static final Item DRAGONSCALES_BRONZE = new ItemDragonScales("dragonscales_bronze", EnumDragonEgg.BRONZE);
@@ -100,6 +108,10 @@ public class IafItemRegistry {
     public static final Item DRAGONSCALES_WHITE = new ItemDragonScales("dragonscales_white", EnumDragonEgg.WHITE);
     public static final Item DRAGONSCALES_SAPPHIRE = new ItemDragonScales("dragonscales_sapphire", EnumDragonEgg.SAPPHIRE);
     public static final Item DRAGONSCALES_SILVER = new ItemDragonScales("dragonscales_silver", EnumDragonEgg.SILVER);
+    public static final Item DRAGONSCALES_ELECTRIC = new ItemDragonScales("dragonscales_electric", EnumDragonEgg.ELECTRIC);
+    public static final Item DRAGONSCALES_AMYTHEST = new ItemDragonScales("dragonscales_amythest", EnumDragonEgg.AMYTHEST);
+    public static final Item DRAGONSCALES_COPPER = new ItemDragonScales("dragonscales_copper", EnumDragonEgg.COPPER);
+    public static final Item DRAGONSCALES_BLACK = new ItemDragonScales("dragonscales_black", EnumDragonEgg.BLACK);
     public static final Item DRAGON_BONE = new ItemDragonBone();
     public static final Item WITHERBONE = new ItemGeneric("witherbone");
     public static final Item FISHING_SPEAR = new ItemFishingSpear();
@@ -111,10 +123,12 @@ public class IafItemRegistry {
     public static final Item DRAGONBONE_HOE = new ItemModHoe(DRAGONBONE_TOOL_MATERIAL, "dragonbone_hoe");
     public static final Item DRAGONBONE_SWORD_FIRE = new ItemAlchemySword(FIRE_DRAGONBONE_TOOL_MATERIAL, "dragonbone_sword_fire");
     public static final Item DRAGONBONE_SWORD_ICE = new ItemAlchemySword(ICE_DRAGONBONE_TOOL_MATERIAL, "dragonbone_sword_ice");
+    public static final Item DRAGONBONE_SWORD_LIGHTNING = new ItemAlchemySword(LIGHTNING_DRAGONBONE_TOOL_MATERIAL, "dragonbone_sword_lightning");
     public static final Item DRAGONBONE_ARROW = new ItemGeneric("dragonbone_arrow");
     public static final Item DRAGON_BOW = new ItemDragonBow();
     public static final Item DRAGON_SKULL_FIRE = new ItemDragonSkull(0);
     public static final Item DRAGON_SKULL_ICE = new ItemDragonSkull(1);
+    public static final Item DRAGON_SKULL_LIGHTNING = new ItemDragonSkull(2);
     public static final ItemDragonArmor DRAGONARMOR_IRON_0 = new ItemDragonArmor(0, 0, "dragonarmor_iron");
     public static final ItemDragonArmor DRAGONARMOR_IRON_1 = new ItemDragonArmor(0, 1, "dragonarmor_iron");
     public static final ItemDragonArmor DRAGONARMOR_IRON_2 = new ItemDragonArmor(0, 2, "dragonarmor_iron");
@@ -139,15 +153,22 @@ public class IafItemRegistry {
     public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_ICE_1 = new ItemDragonArmor(5, 1, "dragonarmor_dragonsteel_ice");
     public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_ICE_2 = new ItemDragonArmor(5, 2, "dragonarmor_dragonsteel_ice");
     public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_ICE_3 = new ItemDragonArmor(5, 3, "dragonarmor_dragonsteel_ice");
+    public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_LIGHTNING_0 = new ItemDragonArmor(6, 0, "dragonarmor_dragonsteel_lightning");
+    public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_LIGHTNING_1 = new ItemDragonArmor(6, 1, "dragonarmor_dragonsteel_lightning");
+    public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_LIGHTNING_2 = new ItemDragonArmor(6, 2, "dragonarmor_dragonsteel_lightning");
+    public static final ItemDragonArmor DRAGONARMOR_DRAGONSTEEL_LIGHTNING_3 = new ItemDragonArmor(6, 3, "dragonarmor_dragonsteel_lightning");
     public static final Item DRAGON_MEAL = new ItemGeneric("dragon_meal");
     public static final Item SICKLY_DRAGON_MEAL = new ItemGeneric("sickly_dragon_meal", 1);
     public static final Item CREATIVE_DRAGON_MEAL = new ItemGeneric("creative_dragon_meal", 2);
-    public static final Item FIRE_DRAGON_FLESH = new ItemDragonFlesh(true);
-    public static final Item ICE_DRAGON_FLESH = new ItemDragonFlesh(false);
+    public static final Item FIRE_DRAGON_FLESH = new ItemDragonFlesh(0);
+    public static final Item ICE_DRAGON_FLESH = new ItemDragonFlesh(1);
+    public static final Item LIGHTNING_DRAGON_FLESH = new ItemDragonFlesh(2);
     public static final Item FIRE_DRAGON_HEART = new ItemGeneric("fire_dragon_heart");
     public static final Item ICE_DRAGON_HEART = new ItemGeneric("ice_dragon_heart");
+    public static final Item LIGHTNING_DRAGON_HEART = new ItemGeneric("lightning_dragon_heart");
     public static final Item FIRE_DRAGON_BLOOD = new ItemGeneric("fire_dragon_blood");
     public static final Item ICE_DRAGON_BLOOD = new ItemGeneric("ice_dragon_blood");
+    public static final Item LIGHTNING_DRAGON_BLOOD = new ItemGeneric("lightning_dragon_blood");
     public static final Item DRAGON_STAFF = new ItemDragonStaff();
     public static final Item DRAGON_HORN = new ItemDragonHornStatic();
     public static final Item DRAGON_HORN_FIRE = new ItemDragonHornActive("dragon_horn_fire");
@@ -268,6 +289,19 @@ public class IafItemRegistry {
     public static final Item DRAGONSTEEL_ICE_CHESTPLATE = new ItemDragonsteelArmor(DRAGONSTEEL_ICE_ARMOR_MATERIAL, 1, EquipmentSlotType.CHEST, "dragonsteel_ice_chestplate", "iceandfire.dragonsteel_ice_chestplate");
     public static final Item DRAGONSTEEL_ICE_LEGGINGS = new ItemDragonsteelArmor(DRAGONSTEEL_ICE_ARMOR_MATERIAL, 2, EquipmentSlotType.LEGS, "dragonsteel_ice_leggings", "iceandfire.dragonsteel_ice_leggings");
     public static final Item DRAGONSTEEL_ICE_BOOTS = new ItemDragonsteelArmor(DRAGONSTEEL_ICE_ARMOR_MATERIAL, 3, EquipmentSlotType.FEET, "dragonsteel_ice_boots", "iceandfire.dragonsteel_ice_boots");
+
+    public static final Item DRAGONSTEEL_LIGHTNING_INGOT = new ItemGeneric("dragonsteel_lightning_ingot");
+    public static final Item DRAGONSTEEL_LIGHTNING_SWORD = new ItemModSword(DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL, "dragonsteel_lightning_sword");
+    public static final Item DRAGONSTEEL_LIGHTNING_PICKAXE = new ItemModPickaxe(DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL, "dragonsteel_lightning_pickaxe");
+    public static final Item DRAGONSTEEL_LIGHTNING_AXE = new ItemModAxe(DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL, "dragonsteel_lightning_axe");
+    public static final Item DRAGONSTEEL_LIGHTNING_SHOVEL = new ItemModShovel(DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL, "dragonsteel_lightning_shovel");
+    public static final Item DRAGONSTEEL_LIGHTNING_HOE = new ItemModHoe(DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL, "dragonsteel_lightning_hoe");
+    public static final Item DRAGONSTEEL_LIGHTNING_HELMET = new ItemDragonsteelArmor(DRAGONSTEEL_LIGHTNING_ARMOR_MATERIAL, 0, EquipmentSlotType.HEAD, "dragonsteel_lightning_helmet", "iceandfire.dragonsteel_lightning_helmet");
+    public static final Item DRAGONSTEEL_LIGHTNING_CHESTPLATE = new ItemDragonsteelArmor(DRAGONSTEEL_LIGHTNING_ARMOR_MATERIAL, 1, EquipmentSlotType.CHEST, "dragonsteel_lightning_chestplate", "iceandfire.dragonsteel_lightning_chestplate");
+    public static final Item DRAGONSTEEL_LIGHTNING_LEGGINGS = new ItemDragonsteelArmor(DRAGONSTEEL_LIGHTNING_ARMOR_MATERIAL, 2, EquipmentSlotType.LEGS, "dragonsteel_lightning_leggings", "iceandfire.dragonsteel_lightning_leggings");
+    public static final Item DRAGONSTEEL_LIGHTNING_BOOTS = new ItemDragonsteelArmor(DRAGONSTEEL_LIGHTNING_ARMOR_MATERIAL, 3, EquipmentSlotType.FEET, "dragonsteel_lightning_boots", "iceandfire.dragonsteel_lightning_boots");
+
+
     public static final Item WEEZER_BLUE_ALBUM = new ItemGeneric("weezer_blue_album", 1, true);
     public static final Item DRAGON_DEBUG_STICK = new ItemGeneric("dragon_debug_stick", 1, true);
     public static final Item DREAD_SWORD = new ItemModSword(DREAD_SWORD_TOOL_MATERIAL, "dread_sword");

@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,6 +19,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -48,6 +50,15 @@ public class ItemAlchemySword extends SwordItem {
             target.addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, 100, 2));
             target.knockBack(target, 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
         }
+        if (this == IafItemRegistry.DRAGONBONE_SWORD_LIGHTNING) {
+            if(!attacker.world.isRemote){
+                ((ServerWorld)attacker.world).addLightningBolt(new LightningBoltEntity(attacker.world, (double)target.getPosX(), (double)target.getPosY(), (double)target.getPosZ(), false));
+            }
+            if (target instanceof EntityFireDragon || target instanceof EntityIceDragon) {
+                target.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 9.5F);
+            }
+            target.knockBack(target, 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
+        }
         return super.hitEntity(stack, target, attacker);
     }
 
@@ -61,7 +72,10 @@ public class ItemAlchemySword extends SwordItem {
         if (this == IafItemRegistry.DRAGONBONE_SWORD_ICE) {
             tooltip.add(new TranslationTextComponent("dragon_sword_ice.hurt1").applyTextStyle(TextFormatting.GREEN));
             tooltip.add(new TranslationTextComponent("dragon_sword_ice.hurt2").applyTextStyle(TextFormatting.AQUA));
-
+        }
+        if (this == IafItemRegistry.DRAGONBONE_SWORD_LIGHTNING) {
+            tooltip.add(new TranslationTextComponent("dragon_sword_lightning.hurt1").applyTextStyle(TextFormatting.GREEN));
+            tooltip.add(new TranslationTextComponent("dragon_sword_lightning.hurt2").applyTextStyle(TextFormatting.DARK_PURPLE));
         }
     }
 

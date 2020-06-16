@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:ingots/dragonsteel_lightning"
+    },
+    {
+      "tag": "forge:ingots/dragonsteel_lightning"
+    },
+    {
+      "tag": "forge:ingots/dragonsteel_lightning"
+    },
+    {
+      "tag": "forge:ingots/dragonsteel_lightning"
+    },
+    {
+      "tag": "forge:ingots/dragonsteel_lightning"
+    },
+    {
+      "tag": "forge:ingots/dragonsteel_lightning"
+    },
+    {
+      "tag": "forge:ingots/dragonsteel_lightning"
+    },
+    {
+      "tag": "forge:ingots/dragonsteel_lightning"
+    },
+    {
+      "tag": "forge:ingots/dragonsteel_lightning"
+    }
+  ],
+  "result": {
+    "item": "iceandfire:dragonsteel_lightning_block",
+    "count": 1
+  }
+}

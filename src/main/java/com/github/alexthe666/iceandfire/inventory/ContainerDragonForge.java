@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.inventory;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,7 +17,7 @@ import net.minecraft.util.IntArray;
 public class ContainerDragonForge extends Container {
 
     private final IInventory tileFurnace;
-    public boolean isFire;
+    public int isFire;
     private int cookTime;
 
     public ContainerDragonForge(int i, PlayerInventory playerInventory) {
@@ -27,7 +28,11 @@ public class ContainerDragonForge extends Container {
     public ContainerDragonForge(int id, IInventory furnaceInventory, PlayerInventory playerInventory, IIntArray vars) {
         super(IafContainerRegistry.DRAGON_FORGE_CONTAINER, id);
         this.tileFurnace = furnaceInventory;
-        isFire = ((TileEntityDragonforge) tileFurnace).isFire;
+        if(furnaceInventory instanceof TileEntityDragonforge){
+            isFire = ((TileEntityDragonforge) furnaceInventory).isFire;
+        }else if(IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityDragonforge){
+            isFire = ((TileEntityDragonforge) IceAndFire.PROXY.getRefrencedTE()).isFire;
+        }
         this.addSlot(new Slot(furnaceInventory, 0, 68, 34));
         this.addSlot(new Slot(furnaceInventory, 1, 86, 34));
         this.addSlot(new FurnaceResultSlot(playerInventory.player, furnaceInventory, 2, 148, 35));
@@ -62,11 +67,11 @@ public class ContainerDragonForge extends Container {
                 }
                 slot.onSlotChange(itemstack1, itemstack);
             } else if (index != 1 && index != 0) {
-                if (isFire && IafRecipeRegistry.getFireForgeRecipe(itemstack1) != null || !isFire && IafRecipeRegistry.getIceForgeRecipe(itemstack1) != null) {
+                if (isFire == 0 && IafRecipeRegistry.getFireForgeRecipe(itemstack1) != null || isFire == 1 && IafRecipeRegistry.getIceForgeRecipe(itemstack1) != null || isFire == 2 && IafRecipeRegistry.getLightningForgeRecipe(itemstack1) != null) {
                     if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (isFire && IafRecipeRegistry.getFireForgeRecipeForBlood(itemstack1) != null || !isFire && IafRecipeRegistry.getIceForgeRecipeForBlood(itemstack1) != null) {
+                } else if (isFire == 0 && IafRecipeRegistry.getFireForgeRecipeForBlood(itemstack1) != null || isFire == 1 && IafRecipeRegistry.getIceForgeRecipeForBlood(itemstack1) != null || isFire == 2 && IafRecipeRegistry.getLightningForgeRecipeForBlood(itemstack1) != null) {
                     if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
                         return ItemStack.EMPTY;
                     }

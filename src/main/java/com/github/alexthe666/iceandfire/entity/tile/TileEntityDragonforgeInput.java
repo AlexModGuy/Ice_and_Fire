@@ -52,7 +52,7 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
     protected void lureDragons() {
         if (core != null && core.canSmelt()) {
             for (EntityDragonBase dragon : world.getEntitiesWithinAABB(EntityDragonBase.class, new AxisAlignedBB((double) pos.getX() - LURE_DISTANCE, (double) pos.getY() - LURE_DISTANCE, (double) pos.getZ() - LURE_DISTANCE, (double) pos.getX() + LURE_DISTANCE, (double) pos.getY() + LURE_DISTANCE, (double) pos.getZ() + LURE_DISTANCE))) {
-                if (isFire() == (dragon.dragonType == DragonType.FIRE) && (dragon.isChained() || dragon.isTamed()) && canSeeInput(dragon, new Vec3d(this.getPos().getX() + 0.5F, this.getPos().getY() + 0.5F, this.getPos().getZ() + 0.5F))) {
+                if (getDragonType() == DragonType.getIntFromType(dragon.dragonType) && (dragon.isChained() || dragon.isTamed()) && canSeeInput(dragon, new Vec3d(this.getPos().getX() + 0.5F, this.getPos().getY() + 0.5F, this.getPos().getZ() + 0.5F))) {
                     dragon.burningTarget = this.pos;
                 }
             }
@@ -82,11 +82,29 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
     }
 
     private BlockState getDeactivatedState() {
-        return isFire() ? IafBlockRegistry.DRAGONFORGE_FIRE_INPUT.getDefaultState().with(BlockDragonforgeInput.ACTIVE, false) : IafBlockRegistry.DRAGONFORGE_ICE_INPUT.getDefaultState().with(BlockDragonforgeInput.ACTIVE, false);
+        switch (getDragonType()){
+            case 0:
+                return IafBlockRegistry.DRAGONFORGE_FIRE_INPUT.getDefaultState().with(BlockDragonforgeInput.ACTIVE, false);
+            case 1:
+                return IafBlockRegistry.DRAGONFORGE_ICE_INPUT.getDefaultState().with(BlockDragonforgeInput.ACTIVE, false);
+            case 2:
+                return IafBlockRegistry.DRAGONFORGE_LIGHTNING_INPUT.getDefaultState().with(BlockDragonforgeInput.ACTIVE, false);
+
+        }
+        return IafBlockRegistry.DRAGONFORGE_FIRE_INPUT.getDefaultState().with(BlockDragonforgeInput.ACTIVE, false);
     }
 
-    private boolean isFire() {
-        return world.getBlockState(pos).getBlock() == IafBlockRegistry.DRAGONFORGE_FIRE_INPUT;
+    private int getDragonType() {
+        if(world.getBlockState(pos).getBlock() == IafBlockRegistry.DRAGONFORGE_FIRE_INPUT){
+            return 0;
+        }
+        if(world.getBlockState(pos).getBlock() == IafBlockRegistry.DRAGONFORGE_ICE_INPUT){
+            return 1;
+        }
+        if(world.getBlockState(pos).getBlock() == IafBlockRegistry.DRAGONFORGE_LIGHTNING_INPUT){
+            return 2;
+        }
+        return 0;
     }
 
     private boolean isActive() {

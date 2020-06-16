@@ -1,0 +1,1 @@
+{  "type": "minecraft:block",  "pools": [    {      "name": "lightning_lily",      "rolls": 1,      "entries": [        {          "type": "minecraft:item",          "name": "iceandfire:lightning_lily"        }      ],      "conditions": [        {          "condition": "minecraft:survives_explosion"        }      ]    }  ]}

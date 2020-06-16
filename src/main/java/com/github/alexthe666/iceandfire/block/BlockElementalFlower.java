@@ -13,9 +13,9 @@ import java.util.Random;
 public class BlockElementalFlower extends BushBlock {
     public Item itemBlock;
 
-    public BlockElementalFlower(boolean isFire) {
+    public BlockElementalFlower(String name) {
         super(Properties.create(Material.PLANTS).notSolid().variableOpacity().tickRandomly().sound(SoundType.PLANT));
-        setRegistryName(IceAndFire.MODID, isFire ? "fire_lily" : "frost_lily");
+        setRegistryName(IceAndFire.MODID, name);
     }
 
     protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
@@ -27,6 +27,8 @@ public class BlockElementalFlower extends BushBlock {
         BlockState soil = worldIn.getBlockState(pos.down());
         if (this == IafBlockRegistry.FIRE_LILY) {
             return soil.getMaterial() == Material.SAND || soil.getBlock() == Blocks.NETHERRACK;
+        } else  if (this == IafBlockRegistry.LIGHTNING_LILY) {
+            return soil.getMaterial() == Material.EARTH || soil.getBlock() == Blocks.GRASS;
         } else {
             return soil.getMaterial() == Material.PACKED_ICE || soil.getMaterial() == Material.ICE;
         }

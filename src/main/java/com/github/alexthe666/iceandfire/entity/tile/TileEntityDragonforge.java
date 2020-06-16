@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity.tile;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeBricks;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeCore;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
+import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
@@ -35,7 +36,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     private static final int[] SLOTS_BOTTOM = new int[]{2};
     private static final int[] SLOTS_SIDES = new int[]{0, 1};
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
-    public boolean isFire;
+    public int isFire;
     public int cookTime;
     net.minecraftforge.items.IItemHandler handlerTop = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.Direction.UP);
     net.minecraftforge.items.IItemHandler handlerBottom = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.Direction.DOWN);
@@ -51,7 +52,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         super(IafTileEntityRegistry.DRAGONFORGE_CORE);
     }
 
-    public TileEntityDragonforge(boolean isFire) {
+    public TileEntityDragonforge(int isFire) {
         super(IafTileEntityRegistry.DRAGONFORGE_CORE);
         this.isFire = isFire;
     }
@@ -73,13 +74,39 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     private void updateGrills(boolean grill) {
         for (Direction facing : HORIZONTALS) {
             BlockPos grillPos = this.getPos().offset(facing);
-            if (isFire && world.getBlockState(grillPos).getBlock() == IafBlockRegistry.DRAGONFORGE_FIRE_BRICK || !isFire && world.getBlockState(grillPos).getBlock() == IafBlockRegistry.DRAGONFORGE_ICE_BRICK) {
-                BlockState grillState = isFire ? IafBlockRegistry.DRAGONFORGE_FIRE_BRICK.getDefaultState().with(BlockDragonforgeBricks.GRILL, grill) : IafBlockRegistry.DRAGONFORGE_ICE_BRICK.getDefaultState().with(BlockDragonforgeBricks.GRILL, grill);
+            if (grillMatches(world.getBlockState(grillPos).getBlock())) {
+                BlockState grillState = getGrillBlock().getDefaultState().with(BlockDragonforgeBricks.GRILL, grill);
                 if (world.getBlockState(grillPos) != grillState) {
                     world.setBlockState(grillPos, grillState);
                 }
             }
         }
+    }
+
+    public Block getGrillBlock(){
+        if(isFire == 0){
+            return IafBlockRegistry.DRAGONFORGE_FIRE_BRICK;
+        }
+        if(isFire == 1){
+            return IafBlockRegistry.DRAGONFORGE_FIRE_BRICK;
+        }
+        if(isFire == 2){
+            return IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK;
+        }
+        return IafBlockRegistry.DRAGONFORGE_FIRE_BRICK;
+    }
+
+    public boolean grillMatches(Block block){
+        if(isFire == 0 && block == IafBlockRegistry.DRAGONFORGE_FIRE_BRICK){
+            return true;
+        }
+        if(isFire == 1 && block == IafBlockRegistry.DRAGONFORGE_ICE_BRICK){
+            return true;
+        }
+        if(isFire == 2 && block == IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK){
+            return true;
+        }
+        return false;
     }
 
     public ItemStack getStackInSlot(int index) {
@@ -131,10 +158,23 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         return this.cookTime > 0;
     }
 
+    public int getFireType(Block block){
+        if(block == IafBlockRegistry.DRAGONFORGE_FIRE_CORE || block == IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED){
+            return 0;
+        }
+        if(block == IafBlockRegistry.DRAGONFORGE_ICE_CORE || block == IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED){
+            return 1;
+        }
+        if(block == IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE || block == IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED){
+            return 2;
+        }
+        return 0;
+    }
+
     public void tick() {
         boolean flag = this.isBurning();
         boolean flag1 = false;
-        isFire = this.getBlockState().getBlock().getTranslationKey().equals(IafBlockRegistry.DRAGONFORGE_FIRE_CORE.getTranslationKey());
+        isFire = getFireType(this.getBlockState().getBlock());
         if (lastDragonFlameTimer > 0) {
             lastDragonFlameTimer--;
         }
@@ -192,20 +232,24 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
 
     private ItemStack getCurrentResult() {
         DragonForgeRecipe forgeRecipe = null;
-        if (this.isFire) {
+        if (this.isFire == 0) {
             forgeRecipe = IafRecipeRegistry.getFireForgeRecipe(this.forgeItemStacks.get(0));
-        } else {
+        } else if (this.isFire == 1) {
             forgeRecipe = IafRecipeRegistry.getIceForgeRecipe(this.forgeItemStacks.get(0));
+        } else {
+            forgeRecipe = IafRecipeRegistry.getLightningForgeRecipe(this.forgeItemStacks.get(0));
         }
         ItemStack itemstack = ItemStack.EMPTY;
         if (forgeRecipe != null && this.forgeItemStacks.get(1).isItemEqual(forgeRecipe.getBlood())) {
             itemstack = forgeRecipe.getOutput();
         }
         if (itemstack == ItemStack.EMPTY) {
-            if (this.isFire) {
+            if (this.isFire == 0) {
                 itemstack = new ItemStack(IafBlockRegistry.ASH);
-            } else {
+            } else if (this.isFire == 1) {
                 itemstack = new ItemStack(IafBlockRegistry.DRAGON_ICE);
+            } else if (this.isFire == 2) {
+                itemstack = new ItemStack(IafBlockRegistry.ASH);
             }
         }
         return itemstack;
@@ -273,10 +317,12 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
             return false;
         } else if (index == 1) {
             DragonForgeRecipe forgeRecipe = null;
-            if (this.isFire) {
+            if (this.isFire == 0) {
                 forgeRecipe = IafRecipeRegistry.getFireForgeRecipeForBlood(this.forgeItemStacks.get(0));
-            } else {
+            } else if (this.isFire == 1) {
                 forgeRecipe = IafRecipeRegistry.getIceForgeRecipeForBlood(this.forgeItemStacks.get(0));
+            } else {
+                forgeRecipe = IafRecipeRegistry.getLightningForgeRecipe(this.forgeItemStacks.get(0));
             }
             if (forgeRecipe != null) {
                 return true;
@@ -338,7 +384,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent(isFire ? "container.dragonforge_fire" : "container.dragonforge_ice");
+        return new TranslationTextComponent("container.dragonforge_fire" + DragonType.getNameFromInt(isFire));
     }
 
     public void transferPower(int i) {
@@ -381,7 +427,13 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     private Block getBrick() {
-        return isFire ? IafBlockRegistry.DRAGONFORGE_FIRE_BRICK : IafBlockRegistry.DRAGONFORGE_ICE_BRICK;
+        if(isFire == 0){
+            return IafBlockRegistry.DRAGONFORGE_FIRE_BRICK;
+        }
+        if(isFire == 1){
+            return IafBlockRegistry.DRAGONFORGE_ICE_BRICK;
+        }
+        return IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK;
     }
 
     private boolean doesBlockEqual(BlockPos pos, Block block) {

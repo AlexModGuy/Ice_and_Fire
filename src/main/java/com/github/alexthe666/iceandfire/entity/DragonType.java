@@ -23,6 +23,26 @@ public class DragonType {
         this.name = name;
     }
 
+    public static String getNameFromInt(int type){
+        if(type == 2){
+            return "lightning";
+        }else if (type == 1){
+            return "ice";
+        }else{
+            return "fire";
+        }
+    }
+
+    public static int getIntFromType(DragonType type){
+        if(type == LIGHTNING){
+            return 2;
+        }else if (type == ICE){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+
     public String getName() {
         return name;
     }

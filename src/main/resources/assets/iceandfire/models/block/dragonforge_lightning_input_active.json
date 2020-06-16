@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "iceandfire:block/dragonforge_lightning_input_active"
+  }
+}

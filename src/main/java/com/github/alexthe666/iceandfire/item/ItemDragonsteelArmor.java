@@ -40,6 +40,10 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
             legs = 13;
             armor = 12;
         }
+        if (material == IafItemRegistry.DRAGONSTEEL_LIGHTNING_ARMOR_MATERIAL) {
+            legs = 21;
+            armor = 20;
+        }
         return (A) IceAndFire.PROXY.getArmorModel(slot == EquipmentSlotType.LEGS ? legs : armor);
     }
 
@@ -52,8 +56,10 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
         if (material == IafItemRegistry.DRAGONSTEEL_FIRE_ARMOR_MATERIAL) {
             return "iceandfire:textures/models/armor/armor_dragonsteel_fire" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
-        } else {
+        } else if (material == IafItemRegistry.DRAGONSTEEL_ICE_ARMOR_MATERIAL) {
             return "iceandfire:textures/models/armor/armor_dragonsteel_ice" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
+        } else {
+            return "iceandfire:textures/models/armor/armor_dragonsteel_lightning" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
         }
     }
 }

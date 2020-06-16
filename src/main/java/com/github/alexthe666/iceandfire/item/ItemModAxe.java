@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -19,6 +20,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -59,6 +61,12 @@ public class ItemModAxe extends AxeItem {
             target.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 300, 2));
             target.knockBack(target, 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
         }
+        if (toolMaterial == IafItemRegistry.DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL) {
+            if(!attacker.world.isRemote){
+                ((ServerWorld)attacker.world).addLightningBolt(new LightningBoltEntity(attacker.world, (double)target.getPosX(), (double)target.getPosY(), (double)target.getPosZ(), false));
+            }
+            target.knockBack(target, 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
+        }
         return super.hitEntity(stack, target, attacker);
     }
 
@@ -76,6 +84,9 @@ public class ItemModAxe extends AxeItem {
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_ICE_TOOL_MATERIAL) {
             tooltip.add(new TranslationTextComponent("dragon_sword_ice.hurt2").applyTextStyle(TextFormatting.AQUA));
+        }
+        if (toolMaterial == IafItemRegistry.DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL) {
+            tooltip.add(new TranslationTextComponent("dragon_sword_lightning.hurt2").applyTextStyle(TextFormatting.DARK_PURPLE));
         }
     }
 

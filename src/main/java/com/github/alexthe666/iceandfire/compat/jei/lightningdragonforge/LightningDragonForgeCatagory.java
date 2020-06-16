@@ -1,0 +1,73 @@
+package com.github.alexthe666.iceandfire.compat.jei.lightningdragonforge;
+
+import com.github.alexthe666.iceandfire.compat.jei.IceAndFireJEIPlugin;
+import com.github.alexthe666.iceandfire.compat.jei.firedragonforge.FireDragonForgeDrawable;
+import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class LightningDragonForgeCatagory implements IRecipeCategory<DragonForgeRecipe> {
+
+    public LightningDragonForgeDrawable drawable;
+
+    public LightningDragonForgeCatagory() {
+        drawable = new LightningDragonForgeDrawable();
+    }
+
+
+    @Override
+    public ResourceLocation getUid() {
+        return IceAndFireJEIPlugin.LIGHTNING_DRAGON_FORGE_ID;
+    }
+
+    @Override
+    public Class<? extends DragonForgeRecipe> getRecipeClass() {
+        return DragonForgeRecipe.class;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public String getTitle() {
+        return I18n.format("iceandfire.lightning_dragon_forge");
+    }
+
+    @Override
+    public IDrawable getBackground() {
+        return drawable;
+    }
+
+    @Override
+    public IDrawable getIcon() {
+        return null;
+    }
+
+    @Override
+    public void setIngredients(DragonForgeRecipe dragonForgeRecipe, IIngredients iIngredients) {
+        List<ItemStack> ingredientsList = new ArrayList<>();
+        ingredientsList.add(dragonForgeRecipe.getInput());
+        ingredientsList.add(dragonForgeRecipe.getBlood());
+        iIngredients.setInputs(VanillaTypes.ITEM, ingredientsList);
+        iIngredients.setOutput(VanillaTypes.ITEM, dragonForgeRecipe.getOutput());
+
+    }
+
+    @Override
+    public void setRecipe(IRecipeLayout recipeLayout, DragonForgeRecipe dragonForgeRecipe, IIngredients iIngredients) {
+        IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
+        guiItemStacks.init(0, true, 64, 29);
+        guiItemStacks.init(1, true, 82, 29);
+        guiItemStacks.init(2, false, 144, 30);
+        guiItemStacks.set(iIngredients);
+    }
+
+}

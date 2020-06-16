@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import net.minecraft.block.*;
@@ -23,15 +24,16 @@ import javax.annotation.Nullable;
 
 public class BlockDragonforgeInput extends ContainerBlock implements IDragonProof {
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
-    private boolean isFire;
+    private int dragonType;
 
-    public BlockDragonforgeInput(boolean isFire) {
+    public BlockDragonforgeInput(int dragonType) {
         super(Properties.create(Material.ROCK).variableOpacity().hardnessAndResistance(40, 500).sound(SoundType.METAL));
 
-        this.setRegistryName(IceAndFire.MODID, "dragonforge_" + (isFire ? "fire" : "ice") + "_input");
-        this.isFire = isFire;
+        this.setRegistryName(IceAndFire.MODID, "dragonforge_" + DragonType.getNameFromInt(dragonType) + "_input");
+        this.dragonType = dragonType;
         this.setDefaultState(this.getStateContainer().getBaseState().with(ACTIVE, Boolean.valueOf(false)));
     }
+
 
     @Override
     public PushReaction getPushReaction(BlockState state) {
@@ -41,7 +43,7 @@ public class BlockDragonforgeInput extends ContainerBlock implements IDragonProo
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult resultIn) {
         if (this.getConnectedTileEntity(worldIn, resultIn.getPos()) != null) {
             TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, resultIn.getPos());
-            if (forge.isFire == isFire) {
+            if (forge.isFire == dragonType) {
                 if (worldIn.isRemote) {
                     IceAndFire.PROXY.setRefrencedTE(worldIn.getTileEntity(forge.getPos()));
                 } else {

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:storage_blocks/dragonsteel_lightning"
+
+    }
+  ],
+  "result": {
+    "item": "iceandfire:dragonsteel_lightning_ingot",
+    "count": 9
+  }
+}

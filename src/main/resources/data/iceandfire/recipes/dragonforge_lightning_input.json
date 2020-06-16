@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BIB",
+    "I I",
+    "BIB"
+  ],
+  "key": {
+    "B": {
+      "item": "iceandfire:dragonforge_lightning_brick"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "result": {
+    "item": "iceandfire:dragonforge_lightning_input"
+  }
+}

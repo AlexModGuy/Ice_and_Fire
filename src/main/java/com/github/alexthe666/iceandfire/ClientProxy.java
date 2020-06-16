@@ -61,6 +61,8 @@ public class ClientProxy extends CommonProxy {
     private static final ModelFireDragonArmor FIRE_DRAGON_SCALE_ARMOR_MODEL_LEGS = new ModelFireDragonArmor(0.2F, true);
     private static final ModelIceDragonArmor ICE_DRAGON_SCALE_ARMOR_MODEL = new ModelIceDragonArmor(0.5F, false);
     private static final ModelIceDragonArmor ICE_DRAGON_SCALE_ARMOR_MODEL_LEGS = new ModelIceDragonArmor(0.2F, true);
+    private static final ModelLightningDragonArmor LIGHTNING_DRAGON_SCALE_ARMOR_MODEL = new ModelLightningDragonArmor(0.5F, false);
+    private static final ModelLightningDragonArmor LIGHTNING_DRAGON_SCALE_ARMOR_MODEL_LEGS = new ModelLightningDragonArmor(0.2F, true);
     private static final ModelDeathWormArmor DEATHWORM_ARMOR_MODEL = new ModelDeathWormArmor(0.5F);
     private static final ModelDeathWormArmor DEATHWORM_ARMOR_MODEL_LEGS = new ModelDeathWormArmor(0.2F);
     private static final ModelTrollArmor TROLL_ARMOR_MODEL = new ModelTrollArmor(0.75F);
@@ -71,6 +73,8 @@ public class ClientProxy extends CommonProxy {
     private static final ModelDragonsteelFireArmor DRAGONSTEEL_FIRE_ARMOR_MODEL_LEGS = new ModelDragonsteelFireArmor(0.2F);
     private static final ModelDragonsteelIceArmor DRAGONSTEEL_ICE_ARMOR_MODEL = new ModelDragonsteelIceArmor(0.4F);
     private static final ModelDragonsteelIceArmor DRAGONSTEEL_ICE_ARMOR_MODEL_LEGS = new ModelDragonsteelIceArmor(0.2F);
+    private static final ModelDragonsteelLightningArmor DRAGONSTEEL_LIGHTNING_ARMOR_MODEL = new ModelDragonsteelLightningArmor(0.4F);
+    private static final ModelDragonsteelLightningArmor DRAGONSTEEL_LIGHTNING_ARMOR_MODEL_LEGS = new ModelDragonsteelLightningArmor(0.2F);
     private static final ModelSilverArmor SILVER_ARMOR_MODEL = new ModelSilverArmor(0.5F);
     private static final ModelSilverArmor SILVER_ARMOR_MODEL_LEGS = new ModelSilverArmor(0.2F);
     private static final ModelCopperArmor COPPER_ARMOR_MODEL = new ModelCopperArmor(0.5F);
@@ -360,6 +364,14 @@ public class ClientProxy extends CommonProxy {
                 return COPPER_ARMOR_MODEL;
             case 17:
                 return COPPER_ARMOR_MODEL_LEGS;
+            case 18:
+                return LIGHTNING_DRAGON_SCALE_ARMOR_MODEL;
+            case 19:
+                return LIGHTNING_DRAGON_SCALE_ARMOR_MODEL_LEGS;
+            case 20:
+                return new ModelDragonsteelLightningArmor(0.4F);
+            case 21:
+                return DRAGONSTEEL_LIGHTNING_ARMOR_MODEL_LEGS;
         }
         return null;
     }

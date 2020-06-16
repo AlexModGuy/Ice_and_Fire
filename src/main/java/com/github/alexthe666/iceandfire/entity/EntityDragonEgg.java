@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.entity.util.IDeadMob;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -70,7 +71,6 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
         if (!s.isEmpty()) {
             this.setOwnerId(UUID.fromString(s));
         }
-
     }
 
     @Override
@@ -125,12 +125,12 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
 
     @Override
     public Iterable<ItemStack> getArmorInventoryList() {
-        return null;
+        return ImmutableList.of();
     }
 
     @Override
     public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -176,7 +176,7 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
 
     @Override
     public HandSide getPrimaryHand() {
-        return null;
+        return HandSide.RIGHT;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeBrick;
 import net.minecraft.block.*;
@@ -25,11 +26,11 @@ import java.util.Random;
 public class BlockDragonforgeBricks extends ContainerBlock implements IDragonProof {
 
     public static final BooleanProperty GRILL = BooleanProperty.create("grill");
-    private final boolean isFire;
+    private final int isFire;
 
-    public BlockDragonforgeBricks(boolean isFire) {
+    public BlockDragonforgeBricks(int isFire) {
         super(Properties.create(Material.ROCK).variableOpacity().hardnessAndResistance(40, 500).sound(SoundType.METAL));
-        this.setRegistryName(IceAndFire.MODID, "dragonforge_" + (isFire ? "fire" : "ice") + "_brick");
+        this.setRegistryName(IceAndFire.MODID, "dragonforge_" + DragonType.getNameFromInt(isFire) + "_brick");
         this.isFire = isFire;
         this.setDefaultState(this.getStateContainer().getBaseState().with(GRILL, Boolean.valueOf(false)));
     }

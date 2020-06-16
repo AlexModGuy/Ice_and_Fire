@@ -8,16 +8,28 @@ import net.minecraft.world.World;
 
 public class ItemDragonFlesh extends ItemGenericFood {
 
-    boolean isFire;
+    int dragonType;
 
-    public ItemDragonFlesh(boolean isFire) {
-        super(8, 0.8F, true, false, false, isFire ? "fire_dragon_flesh" : "ice_dragon_flesh");
-        this.isFire = isFire;
+    public ItemDragonFlesh(int dragonType) {
+        super(8, 0.8F, true, false, false, getNameForType(dragonType));
+        this.dragonType = dragonType;
+    }
+
+    private static String getNameForType(int dragonType) {
+        switch (dragonType){
+            case 0:
+                return "fire_dragon_flesh";
+            case 1:
+                return "ice_dragon_flesh";
+            case 2:
+                return "lightning_dragon_flesh";
+        }
+        return "fire_dragon_flesh";
     }
 
     public void onFoodEaten(ItemStack stack, World worldIn, LivingEntity livingEntity) {
         if (!worldIn.isRemote) {
-            if (isFire) {
+            if (dragonType == 0) {
                 livingEntity.setFire(5);
             } else {
                 livingEntity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 2));

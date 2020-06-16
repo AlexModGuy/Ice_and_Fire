@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.client.renderer.entity.model.BipedModel;
@@ -50,7 +51,17 @@ public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonIt
     @OnlyIn(Dist.CLIENT)
     @Nullable
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
-        return (A) IceAndFire.PROXY.getArmorModel((armor_type.ordinal() < 3 ? (slot == EquipmentSlotType.LEGS ? 1 : 0) : (slot == EquipmentSlotType.LEGS ? 3 : 2)));
+        int dragonType = DragonType.getIntFromType(armor_type.eggType.dragonType);
+        if(dragonType == 0){
+            return (A) IceAndFire.PROXY.getArmorModel((slot == EquipmentSlotType.LEGS ? 1 : 0));
+        }else if(dragonType == 1){
+            return (A) IceAndFire.PROXY.getArmorModel((slot == EquipmentSlotType.LEGS ? 3 : 2));
+        }else if(dragonType == 2){
+            return (A) IceAndFire.PROXY.getArmorModel((slot == EquipmentSlotType.LEGS ? 19 : 18));
+        }else{
+            return null;
+        }
+
     }
 
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {

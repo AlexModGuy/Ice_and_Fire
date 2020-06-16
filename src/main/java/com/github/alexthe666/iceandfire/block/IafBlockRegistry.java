@@ -28,8 +28,9 @@ public class IafBlockRegistry {
     public static final Block PODIUM_JUNGLE = new BlockPodium("jungle");
     public static final Block PODIUM_DARK_OAK = new BlockPodium("dark_oak");
     public static final Block PODIUM_ACACIA = new BlockPodium("acacia");
-    public static final Block FIRE_LILY = new BlockElementalFlower(true);
-    public static final Block FROST_LILY = new BlockElementalFlower(false);
+    public static final Block FIRE_LILY = new BlockElementalFlower("fire_lily");
+    public static final Block FROST_LILY = new BlockElementalFlower("frost_lily");
+    public static final Block LIGHTNING_LILY = new BlockElementalFlower("lightning_lily");
     public static final Block GOLD_PILE = new BlockGoldPile("gold_pile");
     public static final Block SILVER_PILE = new BlockGoldPile("silver_pile");
     public static final Block COPPER_PILE = new BlockGoldPile("copper_pile");
@@ -67,17 +68,25 @@ public class IafBlockRegistry {
     public static final Block DRAGON_SCALE_WHITE = new BlockDragonScales("dragonscale_white", EnumDragonEgg.WHITE);
     public static final Block DRAGON_SCALE_SAPPHIRE = new BlockDragonScales("dragonscale_sapphire", EnumDragonEgg.SAPPHIRE);
     public static final Block DRAGON_SCALE_SILVER = new BlockDragonScales("dragonscale_silver", EnumDragonEgg.SILVER);
+    public static final Block DRAGON_SCALE_ELECTRIC = new BlockDragonScales("dragonscale_electric", EnumDragonEgg.ELECTRIC);
+    public static final Block DRAGON_SCALE_AMYTHEST = new BlockDragonScales("dragonscale_amythest", EnumDragonEgg.AMYTHEST);
+    public static final Block DRAGON_SCALE_COPPER = new BlockDragonScales("dragonscale_copper", EnumDragonEgg.COPPER);
+    public static final Block DRAGON_SCALE_BLACK = new BlockDragonScales("dragonscale_black", EnumDragonEgg.BLACK);
+
     public static final Block DRAGON_BONE_BLOCK = new BlockDragonBone();
     public static final Block DRAGON_BONE_BLOCK_WALL = new BlockDragonBoneWall(Block.Properties.from(IafBlockRegistry.DRAGON_BONE_BLOCK));
-    public static final Block DRAGONFORGE_FIRE_BRICK = new BlockDragonforgeBricks(true);
-    public static final Block DRAGONFORGE_ICE_BRICK = new BlockDragonforgeBricks(false);
-    public static final Block DRAGONFORGE_FIRE_INPUT = new BlockDragonforgeInput(true);
-    public static final Block DRAGONFORGE_ICE_INPUT = new BlockDragonforgeInput(false);
-
-    public static final Block DRAGONFORGE_FIRE_CORE = new BlockDragonforgeCore(true, true);
-    public static final Block DRAGONFORGE_ICE_CORE = new BlockDragonforgeCore(false, true);
-    public static final Block DRAGONFORGE_FIRE_CORE_DISABLED = new BlockDragonforgeCore(true, false);
-    public static final Block DRAGONFORGE_ICE_CORE_DISABLED = new BlockDragonforgeCore(false, false);
+    public static final Block DRAGONFORGE_FIRE_BRICK = new BlockDragonforgeBricks(0);
+    public static final Block DRAGONFORGE_ICE_BRICK = new BlockDragonforgeBricks(1);
+    public static final Block DRAGONFORGE_LIGHTNING_BRICK = new BlockDragonforgeBricks(2);
+    public static final Block DRAGONFORGE_FIRE_INPUT = new BlockDragonforgeInput(0);
+    public static final Block DRAGONFORGE_ICE_INPUT = new BlockDragonforgeInput(1);
+    public static final Block DRAGONFORGE_LIGHTNING_INPUT = new BlockDragonforgeInput(2);
+    public static final Block DRAGONFORGE_FIRE_CORE = new BlockDragonforgeCore(0, true);
+    public static final Block DRAGONFORGE_ICE_CORE = new BlockDragonforgeCore(1, true);
+    public static final Block DRAGONFORGE_LIGHTNING_CORE = new BlockDragonforgeCore(2, true);
+    public static final Block DRAGONFORGE_FIRE_CORE_DISABLED = new BlockDragonforgeCore(0, false);
+    public static final Block DRAGONFORGE_ICE_CORE_DISABLED = new BlockDragonforgeCore(1, false);
+    public static final Block DRAGONFORGE_LIGHTNING_CORE_DISABLED = new BlockDragonforgeCore(2, false);
     public static final Block EGG_IN_ICE = new BlockEggInIce();
     public static final Block PIXIE_HOUSE_MUSHROOM_RED = new BlockPixieHouse("mushroom_red");
     public static final Block PIXIE_HOUSE_MUSHROOM_BROWN = new BlockPixieHouse("mushroom_brown");
@@ -105,6 +114,7 @@ public class IafBlockRegistry {
     public static final Block MYRMEX_JUNGLE_RESIN_GLASS = new BlockMyrmexConnectedResin(true, true);
     public static final Block DRAGONSTEEL_FIRE_BLOCK = new BlockGeneric(Material.IRON, "dragonsteel_fire_block", "pickaxe", 3, 10.0F, 1000.0F, SoundType.METAL);
     public static final Block DRAGONSTEEL_ICE_BLOCK = new BlockGeneric(Material.IRON, "dragonsteel_ice_block", "pickaxe", 3, 10.0F, 1000.0F, SoundType.METAL);
+    public static final Block DRAGONSTEEL_LIGHTNING_BLOCK = new BlockGeneric(Material.IRON, "dragonsteel_lightning_block", "pickaxe", 3, 10.0F, 1000.0F, SoundType.METAL);
     public static final BlockDreadBase DREAD_STONE = new BlockDreadBase(Material.ROCK, "dread_stone", "pickaxe", 3, 20.0F, 100000.0F, SoundType.STONE);
     public static final BlockDreadBase DREAD_STONE_BRICKS = new BlockDreadBase(Material.ROCK, "dread_stone_bricks", "pickaxe", 3, 20.0F, 100000.0F, SoundType.STONE);
     public static final BlockDreadBase DREAD_STONE_BRICKS_CHISELED = new BlockDreadBase(Material.ROCK, "dread_stone_bricks_chiseled", "pickaxe", 3, 20.0F, 100000.0F, SoundType.STONE);

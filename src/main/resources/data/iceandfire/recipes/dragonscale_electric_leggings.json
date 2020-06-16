@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "S S",
+    "S S"
+  ],
+  "key": {
+    "S": {
+      "item": "iceandfire:dragonscales_electric"
+    }
+  },
+  "result": {
+    "item": "iceandfire:armor_electric_leggings"
+  }
+}

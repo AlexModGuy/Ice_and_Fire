@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "S S"
+  ],
+  "key": {
+    "S": {
+      "item": "iceandfire:dragonscales_copper"
+    }
+  },
+  "result": {
+    "item": "iceandfire:armor_copper_helmet"
+  }
+}

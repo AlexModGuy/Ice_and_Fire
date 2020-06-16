@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S S",
+    "SSS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "iceandfire:dragonscales_amythest"
+    }
+  },
+  "result": {
+    "item": "iceandfire:armor_amythest_chestplate"
+  }
+}

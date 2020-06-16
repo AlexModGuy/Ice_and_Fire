@@ -1,0 +1,93 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "iceandfire:item/dragonsteel_lightning_axe"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        -90,
+        55
+      ],
+      "translation": [
+        0,
+        5.0,
+        0
+      ],
+      "scale": [
+        1.7,
+        1.7,
+        0.85
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        0,
+        90,
+        -55
+      ],
+      "translation": [
+        0,
+        5.0,
+        0
+      ],
+      "scale": [
+        1.7,
+        1.7,
+        0.85
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        -20,
+        -90,
+        10
+      ],
+      "translation": [
+        1.13,
+        5.2,
+        -0.26
+      ],
+      "scale": [
+        1.36,
+        1.36,
+        0.68
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        -20,
+        -90,
+        -80
+      ],
+      "translation": [
+        1.13,
+        5.2,
+        -0.26
+      ],
+      "scale": [
+        1.36,
+        1.36,
+        0.68
+      ]
+    },
+    "gui": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        -1,
+        -1,
+        0
+      ],
+      "scale": [
+        1.1,
+        1.1,
+        1.1
+      ]
+    }
+  }
+}

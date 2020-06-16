@@ -1002,6 +1002,9 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                 case 6:
                     val += 10D;
                     break;
+                case 7:
+                    val += 10D;
+                    break;
             }
         }
         return val;

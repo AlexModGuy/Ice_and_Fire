@@ -24,7 +24,10 @@
     "iceandfire:dragonarmor_dragonsteel_ice_head",
     "iceandfire:dragonarmor_dragonsteel_ice_neck",
     "iceandfire:dragonarmor_dragonsteel_ice_body",
-    "iceandfire:dragonarmor_dragonsteel_ice_tail"
-
+    "iceandfire:dragonarmor_dragonsteel_ice_tail",
+    "iceandfire:dragonarmor_dragonsteel_lightning_head",
+    "iceandfire:dragonarmor_dragonsteel_lightning_neck",
+    "iceandfire:dragonarmor_dragonsteel_lightning_body",
+    "iceandfire:dragonarmor_dragonsteel_lightning_tail"
   ]
 }
