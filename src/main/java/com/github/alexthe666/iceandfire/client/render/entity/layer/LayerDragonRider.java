@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.client.render.entity.layer;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.iceandfire.ClientProxy;
+import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDreadQueen;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -55,6 +56,7 @@ public class LayerDragonRider extends LayerRenderer<EntityDragonBase, SegmentedM
                 if (prey) {
                     if (animationTicks == 0 || animationTicks >= 15 || dragon.isFlying()) {
                         translateToHead(matrixStackIn);
+                        offsetPerDragonType(dragon.dragonType, matrixStackIn);
                         EntityRenderer render = Minecraft.getInstance().getRenderManager().getRenderer(passenger);
                         EntityModel modelBase = null;
                         if (render instanceof MobRenderer) {
@@ -122,6 +124,13 @@ public class LayerDragonRider extends LayerRenderer<EntityDragonBase, SegmentedM
         }
     }
 
+    private void offsetPerDragonType(DragonType dragonType, MatrixStack stackIn){
+        if(dragonType == DragonType.LIGHTNING){
+            stackIn.translate(0.1F, -0.2F, -0.1F);
+        }
+    }
+
+
     public <E extends Entity> void renderEntity(E entityIn, double x, double y, double z, float yaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int packedLight) {
         EntityRenderer<? super E> render = null;
         EntityRendererManager manager = Minecraft.getInstance().getRenderManager();
@@ -130,7 +139,7 @@ public class LayerDragonRider extends LayerRenderer<EntityDragonBase, SegmentedM
 
             if (render != null) {
                 try {
-                    render.render(entityIn, yaw, partialTicks, matrixStack, bufferIn, packedLight);
+                    render.render(entityIn, 0, partialTicks, matrixStack, bufferIn, packedLight);
                 } catch (Throwable throwable1) {
                     throw new ReportedException(CrashReport.makeCrashReport(throwable1, "Rendering entity in world"));
                 }

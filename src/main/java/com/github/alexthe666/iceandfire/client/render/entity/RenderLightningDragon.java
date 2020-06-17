@@ -38,6 +38,7 @@ public class RenderLightningDragon extends RenderDragonBase {
     }
 
     public void render(EntityDragonBase entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         EntityLightningDragon lightningDragon = (EntityLightningDragon)entityIn;
         matrixStackIn.push();
         if (lightningDragon.hasLightningTarget()) {
@@ -54,7 +55,6 @@ public class RenderLightningDragon extends RenderDragonBase {
             lightningRender.render(partialTicks, matrixStackIn, bufferIn);
         }
         matrixStackIn.pop();
-        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
 
     }
 

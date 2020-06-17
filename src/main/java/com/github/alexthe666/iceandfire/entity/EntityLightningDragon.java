@@ -191,6 +191,7 @@ public class EntityLightningDragon extends EntityDragonBase {
     @Override
     public void livingTick() {
         super.livingTick();
+        groundAttack = IafDragonAttacks.Ground.FIRE;
         if (!world.isRemote && this.getAttackTarget() != null) {
             if (this.getBoundingBox().grow(2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F).intersects(this.getAttackTarget().getBoundingBox())) {
                 attackEntityAsMob(this.getAttackTarget());
@@ -371,7 +372,6 @@ public class EntityLightningDragon extends EntityDragonBase {
             }
             return;
         }
-        this.getNavigator().clearPath();
         this.burnParticleX = burnX;
         this.burnParticleY = burnY;
         this.burnParticleZ = burnZ;
@@ -388,11 +388,8 @@ public class EntityLightningDragon extends EntityDragonBase {
             double progressY = headPos.y + d3 * (i / (float) distance);
             double progressZ = headPos.z + d4 * (i / (float) distance);
             if (canPositionBeSeen(progressX, progressY, progressZ)) {
-                if (world.isRemote && rand.nextInt(5) == 0) {
-                    //IceAndFire.PROXY.spawnDragonParticle("dragonfire", headPos.x, headPos.y, headPos.z, 0, 0, 0, this);
-                    setHasLightningTarget(true);
-                    setLightningTargetVec((float)burnX, (float)burnY, (float)burnZ);
-                }
+                setHasLightningTarget(true);
+                setLightningTargetVec((float)burnX, (float)burnY, (float)burnZ);
             } else {
                 if (!world.isRemote) {
                     RayTraceResult result = this.world.rayTraceBlocks(new RayTraceContext(new Vec3d(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ()), new Vec3d(progressX, progressY, progressZ), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
@@ -473,4 +470,41 @@ public class EntityLightningDragon extends EntityDragonBase {
         return new ItemStack(IafItemRegistry.DRAGON_HORN_FIRE);
     }
 
+
+    public Vec3d getHeadPosition() {
+        //this.setDragonPitch(this.ticksExisted % 180 - 90);
+        float sitProg = this.sitProgress * 0.03F;
+        float deadProg = this.modelDeadProgress * -0.02F;
+        float hoverProg = this.hoverProgress * 0.03F;
+        float flyProg = this.flyProgress * 0.01F;
+        int tick = 0;
+        if (this.getAnimationTick() < 10) {
+            tick = this.getAnimationTick();
+        } else if (this.getAnimationTick() > 50) {
+            tick = 60 - this.getAnimationTick();
+        } else {
+            tick = 10;
+        }
+        float epicRoarProg = this.getAnimation() == ANIMATION_EPIC_ROAR ? tick * 0.1F : 0;
+        float sleepProg = this.sleepProgress * 0.025F;
+        float pitchY = 0;
+        float pitchAdjustment = 0;
+        float pitchMinus = 0;
+        float dragonPitch = -getDragonPitch();// -90 = down, 0 = straight, 90 = up
+        if (this.isFlying() || this.isHovering()) {
+            if(dragonPitch > 0){
+                pitchY = (dragonPitch / 90F) * 1.2F;
+            }else{
+                pitchY = (dragonPitch / 90F) * 3F;
+            }
+        }
+        float absPitch = Math.abs(dragonPitch) / 90F;//1 down/up, 0 straight
+        float minXZ = dragonPitch > 20 ? (dragonPitch - 20) * 0.009F : 0;
+        float xzMod = (0.58F - hoverProg * 0.45F + flyProg * 0.2F + absPitch * 0.3F) * getRenderSize();
+        float xzModSine = xzMod * (Math.max(0.25F, (float)Math.cos(Math.toRadians(dragonPitch))) - minXZ);
+        float headPosX = (float) (getPosX() + (xzModSine) * Math.cos((renderYawOffset + 90) * Math.PI / 180));
+        float headPosY = (float) (getPosY() + (0.7F + sitProg + hoverProg + deadProg + epicRoarProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F);
+        float headPosZ = (float) (getPosZ() + (xzModSine) * Math.sin((renderYawOffset + 90) * Math.PI / 180));
+        return new Vec3d(headPosX, headPosY, headPosZ);
+    }
 }

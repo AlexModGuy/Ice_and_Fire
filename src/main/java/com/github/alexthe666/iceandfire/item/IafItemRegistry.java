@@ -124,7 +124,7 @@ public class IafItemRegistry {
     public static final Item DRAGONBONE_SWORD_FIRE = new ItemAlchemySword(FIRE_DRAGONBONE_TOOL_MATERIAL, "dragonbone_sword_fire");
     public static final Item DRAGONBONE_SWORD_ICE = new ItemAlchemySword(ICE_DRAGONBONE_TOOL_MATERIAL, "dragonbone_sword_ice");
     public static final Item DRAGONBONE_SWORD_LIGHTNING = new ItemAlchemySword(LIGHTNING_DRAGONBONE_TOOL_MATERIAL, "dragonbone_sword_lightning");
-    public static final Item DRAGONBONE_ARROW = new ItemGeneric("dragonbone_arrow");
+    public static final Item DRAGONBONE_ARROW = new ItemDragonArrow();
     public static final Item DRAGON_BOW = new ItemDragonBow();
     public static final Item DRAGON_SKULL_FIRE = new ItemDragonSkull(0);
     public static final Item DRAGON_SKULL_ICE = new ItemDragonSkull(1);
