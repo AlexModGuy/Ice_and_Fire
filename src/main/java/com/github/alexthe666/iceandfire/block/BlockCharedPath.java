@@ -16,14 +16,38 @@ import java.util.Random;
 public class BlockCharedPath extends GrassPathBlock {
     public static final BooleanProperty REVERTS = BooleanProperty.create("revert");
     public Item itemBlock;
-    boolean isFire;
+    public int dragonType;
 
     @SuppressWarnings("deprecation")
-    public BlockCharedPath(boolean isFire) {
-        super(Block.Properties.create(Material.PLANTS).sound(isFire ? SoundType.GROUND : SoundType.GLASS).hardnessAndResistance(0.6F).harvestTool(ToolType.SHOVEL).harvestLevel(0).slipperiness(isFire ? 1 : 0.98F).tickRandomly());
-        this.isFire = isFire;
-        setRegistryName(IceAndFire.MODID, isFire ? "chared_grass_path" : "frozen_grass_path");
+    public BlockCharedPath(int dragonType) {
+        super(Block.Properties.create(Material.PLANTS).sound(dragonType != 1 ? SoundType.GROUND : SoundType.GLASS).hardnessAndResistance(0.6F).harvestTool(ToolType.SHOVEL).harvestLevel(0).slipperiness(dragonType != 1 ? 0.6F : 0.98F).tickRandomly());
+        this.dragonType = dragonType;
+        setRegistryName(IceAndFire.MODID, getNameFromType(dragonType));
         this.setDefaultState(stateContainer.getBaseState().with(REVERTS, Boolean.valueOf(false)));
+    }
+
+    public String getNameFromType(int dragonType){
+        switch (dragonType){
+            case 0:
+                return "chared_grass_path";
+            case 1:
+                return "frozen_grass_path";
+            case 2:
+                return "crackled_grass_path";
+        }
+        return "";
+    }
+
+    public BlockState getSmushedState(int dragonType){
+        switch (dragonType){
+            case 0:
+                return IafBlockRegistry.CHARRED_DIRT.getDefaultState();
+            case 1:
+                return  IafBlockRegistry.FROZEN_DIRT.getDefaultState();
+            case 2:
+                return IafBlockRegistry.CRACKLED_DIRT.getDefaultState();
+        }
+        return null;
     }
 
     public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
@@ -35,7 +59,7 @@ public class BlockCharedPath extends GrassPathBlock {
             }
         }
         if (worldIn.getBlockState(pos.up()).getMaterial().isSolid()) {
-            worldIn.setBlockState(pos, isFire ? IafBlockRegistry.CHARRED_DIRT.getDefaultState() : IafBlockRegistry.FROZEN_DIRT.getDefaultState());
+            worldIn.setBlockState(pos, getSmushedState(dragonType));
         }
         updateBlockState(worldIn, pos);
         super.tick(state, worldIn, pos, rand);
@@ -43,7 +67,7 @@ public class BlockCharedPath extends GrassPathBlock {
 
     private void updateBlockState(World worldIn, BlockPos pos) {
         if (worldIn.getBlockState(pos.up()).getMaterial().isSolid()) {
-            worldIn.setBlockState(pos, isFire ? IafBlockRegistry.CHARRED_DIRT.getDefaultState() : IafBlockRegistry.FROZEN_DIRT.getDefaultState());
+            worldIn.setBlockState(pos, getSmushedState(dragonType));
         }
     }
 

@@ -249,7 +249,7 @@ public class EntityLightningDragon extends EntityDragonBase {
                 d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                 d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                 d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-                EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(IafEntityRegistry.FIRE_DRAGON_CHARGE, world, this, d2, d3, d4);
+                EntityDragonLightningCharge entitylargefireball = new EntityDragonLightningCharge(IafEntityRegistry.LIGHTNING_DRAGON_CHARGE, world, this, d2, d3, d4);
                 float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
                 entitylargefireball.setPosition(headVec.x, headVec.y, headVec.z);
                 if (!world.isRemote) {
@@ -404,7 +404,7 @@ public class EntityLightningDragon extends EntityDragonBase {
                 if (!world.isRemote) {
                     RayTraceResult result = this.world.rayTraceBlocks(new RayTraceContext(new Vec3d(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ()), new Vec3d(progressX, progressY, progressZ), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
                     BlockPos pos = new BlockPos(result.getHitVec());
-                    IafDragonDestructionManager.destroyAreaFire(world, pos, this);
+                    IafDragonDestructionManager.destroyAreaLightning(world, pos, this);
                     setHasLightningTarget(true);
                     setLightningTargetVec((float)result.getHitVec().x, (float)result.getHitVec().y, (float)result.getHitVec().z);
                 }
@@ -417,7 +417,7 @@ public class EntityLightningDragon extends EntityDragonBase {
             setHasLightningTarget(true);
             setLightningTargetVec((float)spawnX, (float)spawnY, (float)spawnZ);
             if (!world.isRemote) {
-                IafDragonDestructionManager.destroyAreaFire(world, new BlockPos(spawnX, spawnY, spawnZ), this);
+                IafDragonDestructionManager.destroyAreaLightning(world, new BlockPos(spawnX, spawnY, spawnZ), this);
             }
         }
     }

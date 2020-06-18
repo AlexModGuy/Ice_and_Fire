@@ -9,11 +9,14 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.projectile.AbstractFireballEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
+import net.minecraft.network.IPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.*;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityDragonFireCharge extends AbstractFireballEntity implements IDragonProjectile {
 
@@ -21,7 +24,10 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
 
     public EntityDragonFireCharge(EntityType type, World worldIn) {
         super(type, worldIn);
+    }
 
+    public EntityDragonFireCharge(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+        this(IafEntityRegistry.FIRE_DRAGON_CHARGE, worldIn);
     }
 
     public EntityDragonFireCharge(EntityType type, World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
@@ -42,7 +48,7 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
 
     @Override
     public boolean canBeCollidedWith() {
-        return false;
+        return true;
     }
 
     public void tick() {
@@ -164,6 +170,11 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
 
     public float getCollisionBorderSize() {
         return 0F;
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
 }

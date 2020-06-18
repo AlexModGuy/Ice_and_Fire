@@ -1,0 +1,1 @@
+{  "type": "minecraft:block",  "pools": [    {      "name": "crackled_stone",      "rolls": 1,      "entries": [        {          "type": "minecraft:item",          "name": "iceandfire:crackled_stone"        }      ],      "conditions": [        {          "condition": "minecraft:survives_explosion"        }      ]    }  ]}

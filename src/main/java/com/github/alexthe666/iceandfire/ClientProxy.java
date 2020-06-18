@@ -157,6 +157,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_SKULL, manager -> new RenderDragonSkull(manager, FIRE_DRAGON_BASE_MODEL, ICE_DRAGON_BASE_MODEL));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.FIRE_DRAGON_CHARGE, manager -> new RenderDragonFireCharge(manager, true));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.ICE_DRAGON_CHARGE, manager -> new RenderDragonFireCharge(manager, false));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.LIGHTNING_DRAGON_CHARGE, manager -> new RenderDragonLightningCharge());
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HIPPOGRYPH_EGG, manager -> new SpriteRenderer(manager, Minecraft.getInstance().getItemRenderer()));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HIPPOGRYPH, manager -> new RenderHippogryph(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.STONE_STATUE, manager -> new RenderStoneStatue(manager));

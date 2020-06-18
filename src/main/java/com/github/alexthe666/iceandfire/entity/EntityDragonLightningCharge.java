@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.util.IDragonProjectile;
 import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
 import net.minecraft.entity.Entity;
@@ -19,20 +18,20 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class EntityDragonIceCharge extends AbstractFireballEntity implements IDragonProjectile {
+public class EntityDragonLightningCharge  extends AbstractFireballEntity implements IDragonProjectile {
 
     public int ticksInAir;
 
-    public EntityDragonIceCharge(EntityType type, World worldIn) {
+    public EntityDragonLightningCharge(EntityType type, World worldIn) {
         super(type, worldIn);
 
     }
 
-    public EntityDragonIceCharge(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
-        this(IafEntityRegistry.ICE_DRAGON_CHARGE, worldIn);
+    public EntityDragonLightningCharge(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+        this(IafEntityRegistry.LIGHTNING_DRAGON_CHARGE, worldIn);
     }
 
-    public EntityDragonIceCharge(EntityType type, World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
+    public EntityDragonLightningCharge(EntityType type, World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
         super(type, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.07D;
@@ -40,17 +39,12 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
         this.accelerationZ = accelZ / d0 * 0.07D;
     }
 
-    public EntityDragonIceCharge(EntityType type, World worldIn, EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
+    public EntityDragonLightningCharge(EntityType type, World worldIn, EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
         super(type, shooter, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.07D;
         this.accelerationY = accelY / d0 * 0.07D;
         this.accelerationZ = accelZ / d0 * 0.07D;
-    }
-
-
-    protected boolean isFireballFiery() {
-        return false;
     }
 
     @Override
@@ -59,17 +53,15 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
     }
 
     public void tick() {
-        if (this.world.isRemote) {
-            for (int i = 0; i < 14; ++i) {
-                IceAndFire.PROXY.spawnParticle("dragonice", this.getPosX() + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.getPosY() + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.getPosZ() + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
-            }
+        this.setMotion(0, 0, 0);
+        this.extinguish();
+        if (this.isInWater()) {
+            remove();
         }
-        if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isAlive()) && this.world.isBlockLoaded(new BlockPos(this))) {
-            super.tick();
 
-            if (this.isFireballFiery()) {
-                this.setFire(1);
-            }
+        if (this.world.isRemote || (this.shootingEntity == null || this.shootingEntity.isAlive()) && this.world.isBlockLoaded(new BlockPos(this))) {
+            super.tick();
+            this.extinguish();
 
             ++this.ticksInAir;
             Vec3d vec3d = this.getMotion();
@@ -114,7 +106,6 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
                 f = 0.8F;
             }
             this.setPosition(d0, d1, d2);
-            this.world.addParticle(this.getParticle(), this.getPosX(), this.getPosY() + 0.5D, this.getPosZ(), 0.0D, 0.0D, 0.0D);
             this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
         } else {
             this.remove();
@@ -152,19 +143,18 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
                         return;
                     }
                     if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
-                        entity.attackEntityFrom(IafDamageRegistry.DRAGON_ICE, 10.0F);
+                        entity.attackEntityFrom(IafDamageRegistry.DRAGON_LIGHTNING, 10.0F);
                         if (entity instanceof LivingEntity && ((LivingEntity) entity).getHealth() == 0) {
                             ((EntityDragonBase) this.shootingEntity).randomizeAttacks();
                         }
                     }
-                    entity.setFire(5);
                     this.applyEnchantments(this.shootingEntity, entity);
                     this.remove();
                 }
             }
         }
         if (this.shootingEntity instanceof EntityDragonBase && IafConfig.dragonGriefing != 2) {
-            IafDragonDestructionManager.destroyAreaIceCharge(world, this.getPosition(), ((EntityDragonBase) this.shootingEntity));
+            IafDragonDestructionManager.destroyAreaLightning(world, this.getPosition(), ((EntityDragonBase) this.shootingEntity));
         }
     }
 

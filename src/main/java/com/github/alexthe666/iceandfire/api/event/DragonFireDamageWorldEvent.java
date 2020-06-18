@@ -6,7 +6,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.Cancelable;
 
 /**
- * DragonFireDamageWorldEvent is fired right before a Dragon damages/changes terrain fire or ice. <br>
+ * DragonFireDamageWorldEvent is fired right before a Dragon damages/changes terrain fire, lightning or ice. <br>
  * {@link #dragonBase} dragon in question. <br>
  * {@link #targetX} x coordinate being targeted for burning/freezing. <br>
  * {@link #targetY} y coordinate being targeted for burning/freezing. <br>

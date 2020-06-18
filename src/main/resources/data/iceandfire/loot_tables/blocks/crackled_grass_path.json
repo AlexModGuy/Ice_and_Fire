@@ -1,0 +1,1 @@
+{  "type": "minecraft:block",  "pools": [    {      "name": "crackled_grass_path",      "rolls": 1,      "entries": [        {          "type": "minecraft:item",          "name": "iceandfire:crackled_grass_path"        }      ],      "conditions": [        {          "condition": "minecraft:survives_explosion"        }      ]    }  ]}
