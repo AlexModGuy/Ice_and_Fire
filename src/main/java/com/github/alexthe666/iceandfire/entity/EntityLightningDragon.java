@@ -21,6 +21,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.*;
@@ -191,7 +192,6 @@ public class EntityLightningDragon extends EntityDragonBase {
     @Override
     public void livingTick() {
         super.livingTick();
-        groundAttack = IafDragonAttacks.Ground.FIRE;
         if (!world.isRemote && this.getAttackTarget() != null) {
             if (this.getBoundingBox().grow(2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F).intersects(this.getAttackTarget().getBoundingBox())) {
                 attackEntityAsMob(this.getAttackTarget());
@@ -272,6 +272,16 @@ public class EntityLightningDragon extends EntityDragonBase {
                 this.setBreathingFire(true);
             }
         }
+    }
+
+    @Override
+    protected Item getBloodItem() {
+        return IafItemRegistry.LIGHTNING_DRAGON_BLOOD;
+    }
+
+    @Override
+    protected IItemProvider getHeartItem() {
+        return IafItemRegistry.LIGHTNING_DRAGON_HEART;
     }
 
     @Override
@@ -463,11 +473,7 @@ public class EntityLightningDragon extends EntityDragonBase {
     }
 
     protected ItemStack getSkull() {
-        return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE);
-    }
-
-    public ItemStack getHorn() {
-        return new ItemStack(IafItemRegistry.DRAGON_HORN_FIRE);
+        return new ItemStack(IafItemRegistry.DRAGON_SKULL_LIGHTNING);
     }
 
 

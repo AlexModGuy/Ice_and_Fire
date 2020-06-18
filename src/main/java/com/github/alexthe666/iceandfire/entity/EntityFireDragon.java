@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.*;
@@ -228,6 +229,11 @@ public class EntityFireDragon extends EntityDragonBase {
     }
 
     @Override
+    protected IItemProvider getHeartItem() {
+        return IafItemRegistry.FIRE_DRAGON_HEART;
+    }
+
+    @Override
     public ResourceLocation getDeadLootTable() {
         if (this.getDeathStage() >= (this.getAgeInDays() / 5) / 2) {
             return SKELETON_LOOT;
@@ -416,9 +422,8 @@ public class EntityFireDragon extends EntityDragonBase {
     protected ItemStack getSkull() {
         return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE);
     }
-
-    public ItemStack getHorn() {
-        return new ItemStack(IafItemRegistry.DRAGON_HORN_FIRE);
+    @Override
+    protected Item getBloodItem() {
+        return IafItemRegistry.FIRE_DRAGON_BLOOD;
     }
-
 }

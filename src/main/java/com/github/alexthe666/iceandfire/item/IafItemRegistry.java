@@ -174,9 +174,7 @@ public class IafItemRegistry {
     public static final Item ICE_DRAGON_BLOOD = new ItemGeneric("ice_dragon_blood");
     public static final Item LIGHTNING_DRAGON_BLOOD = new ItemGeneric("lightning_dragon_blood");
     public static final Item DRAGON_STAFF = new ItemDragonStaff();
-    public static final Item DRAGON_HORN = new ItemDragonHornStatic();
-    public static final Item DRAGON_HORN_FIRE = new ItemDragonHornActive("dragon_horn_fire");
-    public static final Item DRAGON_HORN_ICE = new ItemDragonHornActive("dragon_horn_ice");
+    public static final Item DRAGON_HORN = new ItemDragonHorn();
     public static final Item DRAGON_FLUTE = new ItemDragonFlute();
     public static final Item SUMMONING_CRYSTAL_FIRE = new ItemSummoningCrystal("fire");
     public static final Item SUMMONING_CRYSTAL_ICE = new ItemSummoningCrystal("ice");

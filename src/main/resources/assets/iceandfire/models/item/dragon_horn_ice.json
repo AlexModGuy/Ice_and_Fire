@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "iceandfire:item/dragon_horn"
+    "layer0": "iceandfire:item/dragon_horn_ice"
   },
   "display": {
     "thirdperson_righthand": {
@@ -72,27 +72,5 @@
         0.88
       ]
     }
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "pulling": 1
-      },
-      "model": "iceandfire:item/dragon_horn_ice_0"
-    },
-    {
-      "predicate": {
-        "pulling": 1,
-        "pull": 0.65
-      },
-      "model": "iceandfire:item/dragon_horn_ice_1"
-    },
-    {
-      "predicate": {
-        "pulling": 1,
-        "pull": 0.9
-      },
-      "model": "iceandfire:item/dragon_horn_ice_2"
-    }
-  ]
+  }
 }

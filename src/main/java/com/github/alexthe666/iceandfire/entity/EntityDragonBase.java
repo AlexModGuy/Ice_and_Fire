@@ -1042,7 +1042,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                     stack.shrink(1);
                 }
                 this.setDeathStage(this.getDeathStage() + 1);
-                player.inventory.addItemStackToInventory(new ItemStack(this instanceof EntityFireDragon ? IafItemRegistry.FIRE_DRAGON_BLOOD : IafItemRegistry.ICE_DRAGON_BLOOD, 1));
+                player.inventory.addItemStackToInventory(new ItemStack(this.getBloodItem(), 1));
                 return true;
             } else if (!world.isRemote && stack.isEmpty() && IafConfig.dragonDropSkull) {
                 if (this.getDeathStage() == lastDeathStage - 1) {
@@ -1057,7 +1057,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                     }
                     this.remove();
                 } else if (this.getDeathStage() == (lastDeathStage / 2) - 1 && IafConfig.dragonDropHeart) {
-                    ItemStack heart = new ItemStack(this instanceof EntityFireDragon ? IafItemRegistry.FIRE_DRAGON_HEART : IafItemRegistry.ICE_DRAGON_HEART, 1);
+                    ItemStack heart = new ItemStack(this.getHeartItem(), 1);
                     ItemStack egg = new ItemStack(this.getVariantEgg(this.rand.nextInt(4)), 1);
                     if (!world.isRemote) {
                         this.entityDropItem(heart, 1);
@@ -1221,11 +1221,11 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
 
     }
 
-    protected ItemStack getSkull() {
-        return ItemStack.EMPTY;
-    }
+    protected abstract IItemProvider getHeartItem();
 
-    public ItemStack getHorn() {
+    protected abstract Item getBloodItem();
+
+    protected ItemStack getSkull() {
         return ItemStack.EMPTY;
     }
 

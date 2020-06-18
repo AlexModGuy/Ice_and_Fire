@@ -19,10 +19,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -538,10 +535,6 @@ public class EntityIceDragon extends EntityDragonBase {
         return new ItemStack(IafItemRegistry.DRAGON_SKULL_ICE);
     }
 
-    public ItemStack getHorn() {
-        return new ItemStack(IafItemRegistry.DRAGON_HORN_ICE);
-    }
-
     public boolean useFlyingPathFinder() {
         return this.isFlying() || this.isInMaterialWater();
     }
@@ -549,5 +542,15 @@ public class EntityIceDragon extends EntityDragonBase {
     @Override
     public Item getSummoningCrystal() {
         return IafItemRegistry.SUMMONING_CRYSTAL_ICE;
+    }
+
+    @Override
+    protected Item getBloodItem() {
+        return IafItemRegistry.ICE_DRAGON_BLOOD;
+    }
+
+    @Override
+    protected IItemProvider getHeartItem() {
+        return IafItemRegistry.ICE_DRAGON_HEART;
     }
 }
