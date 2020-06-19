@@ -31,12 +31,23 @@
                     }
                 ]
             }
+        },
+        "lightning": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:dragonsteel_lightning_ingot"
+                    }
+                ]
+            }
         }
     },
     "requirements": [
         [
             "ice",
-            "fire"
+            "fire",
+            "lightning"
         ]
     ]
 }

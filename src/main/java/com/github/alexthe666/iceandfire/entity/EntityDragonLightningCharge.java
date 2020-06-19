@@ -53,12 +53,7 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
     }
 
     public void tick() {
-        this.setMotion(0, 0, 0);
         this.extinguish();
-        if (this.isInWater()) {
-            remove();
-        }
-
         if (this.world.isRemote || (this.shootingEntity == null || this.shootingEntity.isAlive()) && this.world.isBlockLoaded(new BlockPos(this))) {
             super.tick();
             this.extinguish();
@@ -107,8 +102,6 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
             }
             this.setPosition(d0, d1, d2);
             this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
-        } else {
-            this.remove();
         }
     }
 
@@ -122,7 +115,7 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
                 if (entity != null && entity instanceof IDragonProjectile) {
                     return;
                 }
-                if (entity != null && this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && entity != null) {
+                if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
                     EntityDragonBase dragon = (EntityDragonBase) this.shootingEntity;
                     if (dragon.isOnSameTeam(entity) || dragon.isEntityEqual(entity) || dragon.isPart(entity)) {
                         return;
@@ -152,10 +145,14 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
                     this.remove();
                 }
             }
+            if(movingObject.getType() != RayTraceResult.Type.MISS){
+                if (this.shootingEntity instanceof EntityDragonBase && IafConfig.dragonGriefing != 2) {
+                    IafDragonDestructionManager.destroyAreaLightningCharge(world, new BlockPos(this.getPosX(), this.getPosY(), this.getPosZ()), ((EntityDragonBase) this.shootingEntity));
+                }
+                this.remove();
+            }
         }
-        if (this.shootingEntity instanceof EntityDragonBase && IafConfig.dragonGriefing != 2) {
-            IafDragonDestructionManager.destroyAreaLightning(world, this.getPosition(), ((EntityDragonBase) this.shootingEntity));
-        }
+
     }
 
     @Override

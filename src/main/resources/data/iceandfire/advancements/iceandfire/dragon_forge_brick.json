@@ -31,12 +31,23 @@
                     }
                 ]
             }
+        },
+        "lightning": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:dragonforge_lightning_brick"
+                    }
+                ]
+            }
         }
     },
     "requirements": [
         [
             "ice",
-            "fire"
+            "fire",
+            "lightning"
         ]
     ]
 }

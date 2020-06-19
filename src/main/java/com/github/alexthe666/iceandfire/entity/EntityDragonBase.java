@@ -1240,7 +1240,9 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     public boolean canPositionBeSeen(double x, double y, double z) {
-        return this.world.rayTraceBlocks(new RayTraceContext(new Vec3d(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ()), new Vec3d(x, y, z), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
+        RayTraceResult result = this.world.rayTraceBlocks(new RayTraceContext(new Vec3d(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ()), new Vec3d(x, y, z), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+        double dist = result.getHitVec().squareDistanceTo(x, y, z);
+        return dist <= 1.0D || result.getType() == RayTraceResult.Type.MISS;
     }
 
     public abstract ResourceLocation getDeadLootTable();

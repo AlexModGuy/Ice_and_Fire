@@ -91,6 +91,46 @@
                     }
                 ]
             }
+        },
+        "electric": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:dragonegg_electric"
+                    }
+                ]
+            }
+        },
+        "amythest": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:dragonegg_amythest"
+                    }
+                ]
+            }
+        },
+        "copper": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:dragonegg_copper"
+                    }
+                ]
+            }
+        },
+        "black": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "iceandfire:dragonegg_black"
+                    }
+                ]
+            }
         }
     },
     "requirements": [
@@ -102,7 +142,11 @@
             "white",
             "blue",
             "sapphire",
-            "silver"
+            "silver",
+            "electric",
+            "amythest",
+            "copper",
+            "black"
         ]
     ]
 }

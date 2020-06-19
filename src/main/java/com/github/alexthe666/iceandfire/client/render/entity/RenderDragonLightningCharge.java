@@ -35,28 +35,28 @@ public class RenderDragonLightningCharge extends EntityRenderer<EntityDragonLigh
         matrixStackIn.translate(0F, 0.5F, 0F);
         matrixStackIn.translate(0F, -0.25F, 0F);
         matrixStackIn.rotate(new Quaternion(Vector3f.YP, yaw - 180, true));
-        matrixStackIn.rotate(new Quaternion(Vector3f.XP, f * 10, true));
+        matrixStackIn.rotate(new Quaternion(Vector3f.XP, f * 20, true));
         matrixStackIn.translate(0F, 0.25F, 0F);
         MODEL_SPIRIT.render(matrixStackIn, ivertexbuilder2, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         matrixStackIn.pop();
 
         matrixStackIn.push();
-        matrixStackIn.scale(1.5F, 1.5F, 1.5F);
         matrixStackIn.translate(0F, 0.5F, 0F);
         matrixStackIn.translate(0F, -0.25F, 0F);
         matrixStackIn.rotate(new Quaternion(Vector3f.YP, yaw - 180, true));
-        matrixStackIn.rotate(new Quaternion(Vector3f.XP, f * 10, true));
+        matrixStackIn.rotate(new Quaternion(Vector3f.XP, f * 15, true));
         matrixStackIn.translate(0F, 0.25F, 0F);
+        matrixStackIn.scale(1.5F, 1.5F, 1.5F);
         MODEL_SPIRIT.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         matrixStackIn.pop();
 
         matrixStackIn.push();
-        matrixStackIn.scale(2.5F, 2.5F, 2.5F);
-        matrixStackIn.translate(0F, 0.5F, 0F);
+        matrixStackIn.translate(0F, 0.75F, 0F);
         matrixStackIn.translate(0F, -0.25F, 0F);
         matrixStackIn.rotate(new Quaternion(Vector3f.YP, yaw - 180, true));
         matrixStackIn.rotate(new Quaternion(Vector3f.XP, f * 10, true));
-        matrixStackIn.translate(0F, 0.25F, 0F);
+        matrixStackIn.translate(0F, 0.75F, 0F);
+        matrixStackIn.scale(2.5F, 2.5F, 2.5F);
         MODEL_SPIRIT.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         matrixStackIn.pop();
 

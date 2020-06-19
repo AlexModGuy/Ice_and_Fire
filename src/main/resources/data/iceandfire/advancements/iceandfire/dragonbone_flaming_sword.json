@@ -31,12 +31,23 @@
         }
       ]
     }
-  }
+  },
+    "lightning_sword": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "iceandfire:dragonbone_sword_lightning"
+          }
+        ]
+      }
+    }
   },
   "requirements": [
     [
       "ice_sword",
-      "fire_sword"
+      "fire_sword",
+      "lightning_sword"
     ]
   ]
 }

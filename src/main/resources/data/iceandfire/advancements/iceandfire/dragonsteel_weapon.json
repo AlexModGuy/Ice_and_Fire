@@ -51,14 +51,36 @@
         }
       ]
     }
-  }
+  },
+    "lightning_sword": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "iceandfire:dragonsteel_lightning_sword"
+          }
+        ]
+      }
+    },
+    "lightning_axe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "iceandfire:dragonsteel_lightning_axe"
+          }
+        ]
+      }
+    }
   },
   "requirements": [
     [
       "ice_sword",
       "fire_sword",
       "ice_axe",
-      "fire_axe"
+      "fire_axe",
+      "lightning_sword",
+      "lightning_axe"
     ]
   ]
 }

@@ -31,7 +31,7 @@ public class IafDragonDestructionManager {
         double damageRadius = 3.5D;
         float dmgScale = (float) IafConfig.dragonAttackDamageFire;
         if (stage <= 3) {
-            for (BlockPos pos : BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1)).collect(Collectors.toSet())) {
+            for (BlockPos pos : BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (IafConfig.dragonGriefing != 2 && world.rand.nextBoolean()) {
                     if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
                         BlockState transformState = transformBlockFire(world.getBlockState(pos));
@@ -58,7 +58,7 @@ public class IafDragonDestructionManager {
             int l = radius + world.rand.nextInt(1);
             float f = (float) (j + k + l) * 0.333F + 0.5F;
             damageRadius = 2.5F + f * 1.2F;
-            for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(center) <= (double) (f * f)) {
                     if (IafConfig.dragonGriefing != 2 && world.rand.nextFloat() > (float) blockpos.distanceSq(center) / (f * f)) {
                         if (!(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
@@ -90,7 +90,7 @@ public class IafDragonDestructionManager {
         double damageRadius = 3.5D;
         float dmgScale = (float) IafConfig.dragonAttackDamageIce;
         if (stage <= 3) {
-            for (BlockPos pos : BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1)).collect(Collectors.toSet())) {
+            for (BlockPos pos : BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (IafConfig.dragonGriefing != 2 && world.rand.nextBoolean()) {
                     if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
                         BlockState transformState = transformBlockIce(world.getBlockState(pos));
@@ -120,7 +120,7 @@ public class IafDragonDestructionManager {
             int l = radius + world.rand.nextInt(1);
             float f = (float) (j + k + l) * 0.333F + 0.5F;
             damageRadius = 2.5F + f * 1.2F;
-            for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(center) <= (double) (f * f)) {
                     if (IafConfig.dragonGriefing != 2 && world.rand.nextFloat() > (float) blockpos.distanceSq(center) / (f * f)) {
                         if (!(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
@@ -154,12 +154,12 @@ public class IafDragonDestructionManager {
                 return;
             int stage = destroyer.getDragonStage();
             if (stage <= 3) {
-                for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2)).collect(Collectors.toSet())) {
+                for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                     if (world.rand.nextFloat() > pos.distanceSq(center) && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
                         world.setBlockState(pos, Blocks.AIR.getDefaultState());
                     }
                 }
-                for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2)).collect(Collectors.toSet())) {
+                for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                     if (world.rand.nextBoolean()) {
                         if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
                             BlockState transformState = transformBlockFire(world.getBlockState(pos));
@@ -182,7 +182,7 @@ public class IafDragonDestructionManager {
                 int k = (radius + world.rand.nextInt(2));
                 int l = radius + world.rand.nextInt(2);
                 float f = (float) (j + k + l) * 0.333F + 0.5F;
-                for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).collect(Collectors.toSet())) {
+                for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                     if (blockpos.distanceSq(center) <= (double) (f * f)) {
                         if (world.rand.nextFloat() > (float) blockpos.distanceSq(center) / (f * f) && !(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
                             world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
@@ -192,7 +192,7 @@ public class IafDragonDestructionManager {
                 j++;
                 k++;
                 l++;
-                for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).collect(Collectors.toSet())) {
+                for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                     if (blockpos.distanceSq(center) <= (double) (f * f)) {
                         if (!(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
                             BlockState transformState = transformBlockFire(world.getBlockState(blockpos));
@@ -224,12 +224,12 @@ public class IafDragonDestructionManager {
                 return;
             int stage = destroyer.getDragonStage();
             if (stage <= 3) {
-                for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2)).collect(Collectors.toSet())) {
+                for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                     if (world.rand.nextFloat() > pos.distanceSq(center) && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
                         world.setBlockState(pos, Blocks.AIR.getDefaultState());
                     }
                 }
-                for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2)).collect(Collectors.toSet())) {
+                for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                     if (world.rand.nextBoolean()) {
                         if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
                             BlockState transformState = transformBlockIce(world.getBlockState(pos));
@@ -255,7 +255,7 @@ public class IafDragonDestructionManager {
                 int k = (radius + world.rand.nextInt(2));
                 int l = radius + world.rand.nextInt(2);
                 float f = (float) (j + k + l) * 0.333F + 0.5F;
-                for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).collect(Collectors.toSet())) {
+                for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                     if (blockpos.distanceSq(center) <= (double) (f * f)) {
                         if (world.rand.nextFloat() > (float) blockpos.distanceSq(center) / (f * f) && !(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
                             world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
@@ -265,7 +265,7 @@ public class IafDragonDestructionManager {
                 j++;
                 k++;
                 l++;
-                for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).collect(Collectors.toSet())) {
+                for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                     if (blockpos.distanceSq(center) <= (double) (f * f)) {
                         if (!(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
                             BlockState transformState = transformBlockIce(world.getBlockState(blockpos));
@@ -301,14 +301,11 @@ public class IafDragonDestructionManager {
         double damageRadius = 3.5D;
         float dmgScale = (float) IafConfig.dragonAttackDamageLightning;
         if (stage <= 3) {
-            for (BlockPos pos : BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1)).collect(Collectors.toSet())) {
+            for (BlockPos pos : BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (IafConfig.dragonGriefing != 2 && world.rand.nextBoolean()) {
                     if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
                         BlockState transformState = transformBlockLightning(world.getBlockState(pos));
                         world.setBlockState(pos, transformState);
-                        if (world.rand.nextBoolean() && transformState.getMaterial().isSolid() && world.isAirBlock(pos.up())) {
-                            world.setBlockState(pos.up(), Blocks.FIRE.getDefaultState());
-                        }
                     }
                 }
                 if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityDragonforgeInput) {
@@ -318,7 +315,7 @@ public class IafDragonDestructionManager {
             for (LivingEntity LivingEntity : world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB((double) center.getX() - damageRadius, (double) center.getY() - damageRadius, (double) center.getZ() - damageRadius, (double) center.getX() + damageRadius, (double) center.getY() + damageRadius, (double) center.getZ() + damageRadius))) {
                 if (!DragonUtils.onSameTeam(destroyer, LivingEntity) && !destroyer.isEntityEqual(LivingEntity) && destroyer.canEntityBeSeen(LivingEntity)) {
                     LivingEntity.attackEntityFrom(IafDamageRegistry.DRAGON_LIGHTNING, stage * dmgScale);
-                    LivingEntity.setFire(5 + stage * 5);
+                    //LivingEntity.setFire(5 + stage * 5);
                 }
             }
         } else {
@@ -328,11 +325,11 @@ public class IafDragonDestructionManager {
             int l = radius + world.rand.nextInt(1);
             float f = (float) (j + k + l) * 0.333F + 0.5F;
             damageRadius = 2.5F + f * 1.2F;
-            for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(center) <= (double) (f * f)) {
                     if (IafConfig.dragonGriefing != 2 && world.rand.nextFloat() > (float) blockpos.distanceSq(center) / (f * f)) {
                         if (!(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
-                            BlockState transformState = transformBlockFire(world.getBlockState(blockpos));
+                            BlockState transformState = transformBlockLightning(world.getBlockState(blockpos));
                             world.setBlockState(blockpos, transformState);
                         }
                     }
@@ -356,17 +353,15 @@ public class IafDragonDestructionManager {
                 return;
             int stage = destroyer.getDragonStage();
             if (stage <= 3) {
-                for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2)).collect(Collectors.toSet())) {
-                    if (world.rand.nextFloat() > pos.distanceSq(center) && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
+                for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2)).map(BlockPos::toImmutable).collect(Collectors.toList())) {
+                    if (world.rand.nextFloat() * 7F > Math.sqrt(center.distanceSq(pos)) && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
                         world.setBlockState(pos, Blocks.AIR.getDefaultState());
                     }
                 }
-                for (BlockPos pos : BlockPos.getAllInBox(center.add(-2, -2, -2), center.add(2, 2, 2)).collect(Collectors.toSet())) {
-                    if (world.rand.nextBoolean()) {
-                        if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
-                            BlockState transformState = transformBlockLightning(world.getBlockState(pos));
-                            world.setBlockState(pos, transformState);
-                        }
+                for (BlockPos pos : BlockPos.getAllInBox(center.add(-3, -3, -3), center.add(3, 3, 3)).map(BlockPos::toImmutable).collect(Collectors.toList())) {
+                    if (world.rand.nextFloat() * 7F > Math.sqrt(center.distanceSq(pos)) && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
+                        BlockState transformState = transformBlockLightning(world.getBlockState(pos));
+                        world.setBlockState(pos, transformState);
                     }
                 }
                 for (LivingEntity LivingEntity : world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB((double) center.getX() - 2, (double) center.getY() - 2, (double) center.getZ() - 2, (double) center.getX() + 2, (double) center.getY() + 2, (double) center.getZ() + 2))) {
@@ -380,7 +375,7 @@ public class IafDragonDestructionManager {
                 int k = (radius + world.rand.nextInt(2));
                 int l = radius + world.rand.nextInt(2);
                 float f = (float) (j + k + l) * 0.333F + 0.5F;
-                for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).collect(Collectors.toSet())) {
+                for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                     if (blockpos.distanceSq(center) <= (double) (f * f)) {
                         if (world.rand.nextFloat() > (float) blockpos.distanceSq(center) / (f * f) && !(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
                             world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
@@ -390,7 +385,7 @@ public class IafDragonDestructionManager {
                 j++;
                 k++;
                 l++;
-                for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).collect(Collectors.toSet())) {
+                for (BlockPos blockpos : BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                     if (blockpos.distanceSq(center) <= (double) (f * f)) {
                         if (!(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
                             BlockState transformState = transformBlockLightning(world.getBlockState(blockpos));

@@ -1,5 +1,5 @@
 {
-  "parent": "item/generated",
+  "parent": "item/handheld",
   "textures": {
     "layer0": "iceandfire:item/tide_trident"
   },
@@ -40,13 +40,13 @@
     },
     "firstperson_righthand": {
       "rotation": [
-        0,
+        -5,
         90,
         -35
       ],
       "translation": [
-        1.13,
-        3.2,
+        3.13,
+        0.2,
         -3
       ],
       "scale": [

@@ -9,6 +9,8 @@ import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -16,6 +18,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityTideTrident extends TridentEntity {
 
@@ -27,14 +31,28 @@ public class EntityTideTrident extends TridentEntity {
     }
 
     public EntityTideTrident(World worldIn, LivingEntity thrower, ItemStack thrownStackIn) {
-        super(worldIn, thrower, thrownStackIn);
+        this(IafEntityRegistry.TIDE_TRIDENT, worldIn);
+        this.setPosition(thrower.getPosX(), thrower.getPosYEye() - (double)0.1F, thrower.getPosZ());
+        this.setShooter(thrower);
         thrownStack = thrownStackIn;
+        this.thrownStack = new ItemStack(Items.TRIDENT);
+        this.thrownStack = thrownStackIn.copy();
+    }
+
+    public EntityTideTrident(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+        this(IafEntityRegistry.TIDE_TRIDENT, worldIn);
     }
 
     public EntityTideTrident(World worldIn, double x, double y, double z) {
         super(worldIn, x, y, z);
         thrownStack = new ItemStack(IafItemRegistry.TIDE_TRIDENT);
     }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
+
 
     @Override
     protected void onEntityHit(EntityRayTraceResult p_213868_1_) {

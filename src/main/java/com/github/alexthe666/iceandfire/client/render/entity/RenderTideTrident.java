@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelTideTrident;
+import com.github.alexthe666.iceandfire.entity.EntityTideTrident;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -15,7 +16,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderTideTrident extends EntityRenderer<TridentEntity> {
+public class RenderTideTrident extends EntityRenderer<EntityTideTrident> {
     public static final ResourceLocation TRIDENT = new ResourceLocation("iceandfire:textures/models/misc/tide_trident.png");
     private final ModelTideTrident tridentModel = new ModelTideTrident();
 
@@ -23,7 +24,7 @@ public class RenderTideTrident extends EntityRenderer<TridentEntity> {
         super(renderManagerIn);
     }
 
-    public void render(TridentEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(EntityTideTrident entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         matrixStackIn.push();
         matrixStackIn.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationYaw, entityIn.rotationYaw) - 90.0F));
         matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch) + 90.0F));
@@ -36,7 +37,7 @@ public class RenderTideTrident extends EntityRenderer<TridentEntity> {
     /**
      * Returns the location of an entity's texture.
      */
-    public ResourceLocation getEntityTexture(TridentEntity entity) {
+    public ResourceLocation getEntityTexture(EntityTideTrident entity) {
         return TRIDENT;
     }
 
