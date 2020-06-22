@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.mojang.datafixers.Dynamic;
@@ -9,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
@@ -50,6 +52,13 @@ public class WorldGenSirenIsland extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
+        if(!IafConfig.generateSirenIslands || rand.nextInt(IafConfig.generateSirenChance) != 0){
+            return false;
+        }
+        position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
+        if(!worldIn.getFluidState(position.down()).isEmpty()){
+            return false;
+        }
         int up = rand.nextInt(4) + 1;
         BlockPos center = position.up(up);
         int layer = 0;

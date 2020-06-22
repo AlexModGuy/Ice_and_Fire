@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexConnectedResin;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
@@ -16,6 +17,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
@@ -48,6 +50,13 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+        if(!IafConfig.generateMyrmexColonies || rand.nextInt(IafConfig.myrmexColonyGenChance) != 0){
+            return false;
+        }
+        pos = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);
+        if(!worldIn.getFluidState(pos.down()).isEmpty()){
+            return false;
+        }
         hasFoodRoom = false;
         hasNursery = false;
         totalRooms = 0;
@@ -297,7 +306,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         int k = height + ySize;
         int l = i2 + rand.nextInt(2);
         float f = (float) (j + k + l) * 0.333F;
-        for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
+        for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
             if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F)) && !world.isAirBlock(blockpos)) {
                 world.setBlockState(blockpos, fill, 3);
             }
@@ -311,7 +320,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         int k = height + ySize;
         int l = i2 + rand.nextInt(2);
         float f = (float) (j + k + l) * 0.333F;
-        for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
+        for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
             if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F))) {
                 world.setBlockState(blockpos, rand.nextInt(3) == 0 ? fill2 : fill, 3);
             }
@@ -325,7 +334,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         int k = height + ySize;
         int l = i2 + rand.nextInt(2);
         float f = (float) (j + k + l) * 0.333F;
-        for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
+        for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
             if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F))
                     && (!world.isAirBlock(blockpos) || world.isAirBlock(blockpos) && !hasResinUnder(blockpos, world))) {
                 world.setBlockState(blockpos, rand.nextInt(3) == 0 ? fill2 : fill, 3);
@@ -340,7 +349,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         int k = height + ySize;
         int l = i2 + rand.nextInt(2);
         float f = (float) (j + k + l) * 0.333F;
-        for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
+        for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
             if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F))
                     && !world.isAirBlock(blockpos)) {
                 world.setBlockState(blockpos, rand.nextInt(3) == 0 ? fill2 : fill, 3);
@@ -390,7 +399,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         int k = height + ySize;
         int l = i2 + rand.nextInt(2);
         float f = (float) (j + k + l) * 0.333F;
-        for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k + 2, l)).collect(Collectors.toSet())) {
+        for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k + 2, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
             if (blockpos.distanceSq(position) <= (double) (f * f)) {
                 if (world.getBlockState(blockpos.down()).isSolid() && world.isAirBlock(blockpos)) {
                     decorate(world, blockpos, position, size, rand, roomType);

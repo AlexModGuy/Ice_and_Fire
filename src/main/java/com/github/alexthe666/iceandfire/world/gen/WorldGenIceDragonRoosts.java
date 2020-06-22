@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
@@ -61,6 +62,10 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
+        if(!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0){
+            return false;
+        }
+        position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
         isMale = rand.nextBoolean();
         int boulders = 0;
         int radius = 12 + rand.nextInt(8);
@@ -69,13 +74,13 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
             int k = 2;
             int l = radius;
             float f = (float) (j + k + l) * 0.333F + 0.5F;
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, k, -l), position.add(j, 0, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, k, -l), position.add(j, 0, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 int yAdd = blockpos.getY() - position.getY();
                 if (blockpos.distanceSq(position) <= (double) (f * f) && yAdd < 2 + rand.nextInt(k) && !worldIn.isAirBlock(blockpos.down())) {
                     worldIn.setBlockState(blockpos, IafBlockRegistry.FROZEN_GRASS.getDefaultState(), 2);
                 }
             }
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, k, -l), position.add(j, 0, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, k, -l), position.add(j, 0, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (worldIn.getBlockState(blockpos).getBlock() == IafBlockRegistry.FROZEN_GRASS && !worldIn.isAirBlock(blockpos.up())) {
                     worldIn.setBlockState(blockpos, IafBlockRegistry.FROZEN_DIRT.getDefaultState(), 2);
                 }
@@ -86,7 +91,7 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
             int k = (radius / 5);
             int l = radius;
             float f = (float) (j + k + l) * 0.333F + 0.5F;
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, 0, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, 0, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(position) < (double) (f * f)) {
                     worldIn.setBlockState(blockpos, rand.nextBoolean() ? IafBlockRegistry.FROZEN_GRAVEL.getDefaultState() : IafBlockRegistry.FROZEN_DIRT.getDefaultState(), 2);
                 }
@@ -102,7 +107,7 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
             int l = radius;
             float f = (float) (j + k + l) * 0.333F + 0.5F;
             BlockPos up = position.up(k - 1);
-            for (BlockPos blockpos : BlockPos.getAllInBox(up.add(-j, -k + 2, -l), up.add(j, k, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(up.add(-j, -k + 2, -l), up.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(position) <= (double) (f * f)) {
                     worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 2);
                 }
@@ -114,7 +119,7 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
             int k = (radius / 5);
             int l = radius;
             float f = (float) (j + k + l) * 0.333F + 0.5F;
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(position) <= (double) (f * f)) {
                     double dist = blockpos.distanceSq(position) / (double) (f * f);
                     if (!worldIn.isAirBlock(position) && rand.nextDouble() > dist * 0.5D) {
@@ -129,11 +134,11 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
                         new WorldGenRoostPile(IafBlockRegistry.DRAGON_ICE).generate(worldIn, rand, height);
                     }
                     if (dist < 0.3D && rand.nextInt(isMale ? 250 : 400) == 0) {
-                        BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos));
+                        BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos)).up();
                         new WorldGenRoostGoldPile(IafBlockRegistry.SILVER_PILE).generate(worldIn, rand, height);
                     }
                     if (dist < 0.3D && rand.nextInt(isMale ? 500 : 700) == 0) {
-                        BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos));
+                        BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos)).up();
                         worldIn.setBlockState(height, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, HORIZONTALS[new Random().nextInt(3)]), 2);
                         if (worldIn.getBlockState(height).getBlock() instanceof ChestBlock) {
                             TileEntity tileentity1 = worldIn.getTileEntity(height);
@@ -150,7 +155,7 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
             }
         }
         {
-            EntityIceDragon dragon = new EntityIceDragon(IafEntityRegistry.ICE_DRAGON, worldIn.getWorld());
+            EntityIceDragon dragon = IafEntityRegistry.ICE_DRAGON.create(worldIn.getWorld());
             dragon.setGender(isMale);
             dragon.growDragon(40 + radius);
             dragon.setAgingDisabled(true);

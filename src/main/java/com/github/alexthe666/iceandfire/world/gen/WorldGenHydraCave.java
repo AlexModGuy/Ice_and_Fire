@@ -16,6 +16,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.DefaultBiomeFeatures;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
@@ -37,6 +38,10 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
+        if(true){
+            return false;
+        }
+        position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
         int i1 = 8;
         int i2 = i1 - 2;
         int dist = 6;
@@ -52,7 +57,7 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
             float f = (float) (j + k + l) * 0.333F + 0.5F;
 
 
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 boolean doorwayX = blockpos.getX() >= position.getX() - 2 + rand.nextInt(2) && blockpos.getX() <= position.getX() + 2 + rand.nextInt(2);
                 boolean doorwayZ = blockpos.getZ() >= position.getZ() - 2 + rand.nextInt(2) && blockpos.getZ() <= position.getZ() + 2 + rand.nextInt(2);
                 boolean isNotInDoorway = !doorwayX && !doorwayZ && blockpos.getY() > position.getY() || blockpos.getY() > position.getY() + k - (1 + rand.nextInt(2));
@@ -88,7 +93,7 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
             int k = 4 + ySize;
             int l = i2 + rand.nextInt(2);
             float f = (float) (j + k + l) * 0.333F + 0.5F;
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(position) <= (double) (f * f) && blockpos.getY() > position.getY()) {
                     if (!(worldIn.getBlockState(position).getBlock() instanceof ChestBlock)) {
                         worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 3);
@@ -96,7 +101,7 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
                     }
                 }
             }
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k + 8, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k + 8, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(position) <= (double) (f * f) && blockpos.getY() == position.getY()) {
                     if (rand.nextInt(30) == 0 && isTouchingAir(worldIn, blockpos.up())) {
                         worldIn.setBlockState(blockpos.up(1), Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, HORIZONTALS[new Random().nextInt(3)]), 2);

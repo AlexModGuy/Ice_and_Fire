@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import com.github.alexthe666.iceandfire.IafConfig;
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
@@ -10,6 +12,12 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -35,21 +43,40 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
+        if(!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0){
+            return false;
+        }
+
         isMale = rand.nextBoolean();
         int boulders = 0;
         int radius = 12 + rand.nextInt(8);
+        position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
+        worldIn.setBlockState(position, Blocks.AIR.getDefaultState(), 2);
+        if(!worldIn.isRemote()){
+            EntityFireDragon dragon = IafEntityRegistry.FIRE_DRAGON.create(worldIn.getWorld());
+            dragon.enablePersistence();
+            dragon.growDragon(40 + radius);
+            dragon.setAgingDisabled(true);
+            dragon.setHealth(dragon.getMaxHealth());
+            dragon.setVariant(new Random().nextInt(4));
+            dragon.setPositionAndRotation(position.getX() + 0.5, 1 + worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position).getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
+            dragon.homePos = position;
+            dragon.hasHomePosition = true;
+            dragon.setHunger(50);
+            worldIn.addEntity(dragon);
+        }
         {
             int j = radius;
             int k = 2;
             int l = radius;
             float f = (float) (j + k + l) * 0.333F + 0.5F;
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, k, -l), position.add(j, 0, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, k, -l), position.add(j, 0, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 int yAdd = blockpos.getY() - position.getY();
                 if (blockpos.distanceSq(position) <= (double) (f * f) && yAdd < 2 + rand.nextInt(k) && !worldIn.isAirBlock(blockpos.down())) {
                     worldIn.setBlockState(blockpos, IafBlockRegistry.CHARRED_GRASS.getDefaultState(), 2);
                 }
             }
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, k, -l), position.add(j, 0, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, k, -l), position.add(j, 0, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (worldIn.getBlockState(blockpos).getBlock() == IafBlockRegistry.CHARRED_GRASS && !worldIn.isAirBlock(blockpos.up())) {
                     worldIn.setBlockState(blockpos, IafBlockRegistry.CHARRED_DIRT.getDefaultState(), 2);
                 }
@@ -60,7 +87,7 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
             int k = (radius / 5);
             int l = radius;
             float f = (float) (j + k + l) * 0.333F + 0.5F;
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, 0, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, 0, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(position) < (double) (f * f)) {
                     worldIn.setBlockState(blockpos, rand.nextBoolean() ? IafBlockRegistry.CHARRED_GRAVEL.getDefaultState() : IafBlockRegistry.CHARRED_DIRT.getDefaultState(), 2);
                 }
@@ -76,7 +103,7 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
             int l = radius;
             float f = (float) (j + k + l) * 0.333F + 0.5F;
             BlockPos up = position.up(k - 1);
-            for (BlockPos blockpos : BlockPos.getAllInBox(up.add(-j, -k + 2, -l), up.add(j, k, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(up.add(-j, -k + 2, -l), up.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(position) <= (double) (f * f)) {
                     worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 2);
                 }
@@ -88,7 +115,7 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
             int k = (radius / 5);
             int l = radius;
             float f = (float) (j + k + l) * 0.333F + 0.5F;
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(position) <= (double) (f * f)) {
                     double dist = blockpos.distanceSq(position) / (double) (f * f);
                     if (!worldIn.isAirBlock(position) && rand.nextDouble() > dist * 0.5D) {
@@ -103,11 +130,11 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
                         new WorldGenRoostPile(IafBlockRegistry.ASH).generate(worldIn, rand, height);
                     }
                     if (dist < 0.3D && rand.nextInt(isMale ? 250 : 400) == 0) {
-                        BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos));
+                        BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos)).up();
                         new WorldGenRoostGoldPile(IafBlockRegistry.GOLD_PILE).generate(worldIn, rand, height);
                     }
                     if (dist < 0.3D && rand.nextInt(isMale ? 500 : 700) == 0) {
-                        BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos));
+                        BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos)).up();
                         worldIn.setBlockState(height, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, HORIZONTALS[new Random().nextInt(3)]), 2);
                         if (worldIn.getBlockState(height).getBlock() instanceof ChestBlock) {
                             TileEntity tileentity1 = worldIn.getTileEntity(height);
@@ -123,20 +150,6 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
                 }
             }
         }
-        {
-            EntityFireDragon dragon = new EntityFireDragon(IafEntityRegistry.FIRE_DRAGON, worldIn.getWorld());
-            dragon.setGender(isMale);
-            dragon.growDragon(40 + radius);
-            dragon.setAgingDisabled(true);
-            dragon.setHealth(dragon.getMaxHealth());
-            dragon.setVariant(new Random().nextInt(4));
-            dragon.setPositionAndRotation(position.getX() + 0.5, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position).getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
-            dragon.homePos = position;
-            dragon.hasHomePosition = true;
-            dragon.setHunger(50);
-            worldIn.addEntity(dragon);
-        }
-
         return false;
     }
 

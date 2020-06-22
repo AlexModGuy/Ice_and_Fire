@@ -1538,7 +1538,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         double prevZ = getPosZ();
         float localWidth = this.getWidth();
         if (this.getWidth() > localWidth && !this.firstUpdate && !this.world.isRemote) {
-            this.setPosition(prevX, prevY, prevZ);
+            //this.setPosition(prevX, prevY, prevZ);
         }
         if (scale != lastScale) {
             resetParts(this.getRenderSize() / 3);
@@ -2164,10 +2164,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
 
     @Override
     public boolean writeUnlessPassenger(CompoundNBT compound) {
-        String s = this.getEntityString();
-        compound.putString("id", s);
-        this.writeAdditional(compound);
-        return true;
+        return this.writeUnlessRemoved(compound);
     }
 
     public void playSound(SoundEvent soundIn, float volume, float pitch) {

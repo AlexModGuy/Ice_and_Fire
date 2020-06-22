@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.BlockState;
@@ -15,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
@@ -69,15 +71,21 @@ public class WorldGenGorgonTemple extends Feature<NoFeatureConfig> {
     }
 
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
+        if(!IafConfig.spawnGorgons || rand.nextInt(IafConfig.spawnGorgonsChance) != 0){
+            return false;
+        }
+        position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
         Direction facing = HORIZONTALS[rand.nextInt(3)];
         MinecraftServer server = worldIn.getWorld().getServer();
         Biome biome = worldIn.getBiome(position);
         TemplateManager templateManager = server.getWorld(worldIn.getDimension().getType()).getStructureTemplateManager();
         PlacementSettings settings = new PlacementSettings().setRotation(getRotationFromFacing(facing));
         Template template = templateManager.getTemplate(STRUCTURE);
-        BlockPos genPos = position.offset(facing, template.getSize().getZ() / 2).offset(facing.rotateYCCW(), template.getSize().getX() / 2);
-        if (checkIfCanGenAt(worldIn, genPos, template.getSize().getX(), template.getSize().getZ(), facing)) {
-            template.addBlocksToWorld(worldIn, genPos, settings, 2);
+        if(template != null){
+            BlockPos genPos = position.offset(facing, template.getSize().getZ() / 2).offset(facing.rotateYCCW(), template.getSize().getX() / 2);
+            if (checkIfCanGenAt(worldIn, genPos, template.getSize().getX(), template.getSize().getZ(), facing)) {
+                template.addBlocksToWorld(worldIn, genPos, settings, 2);
+            }
         }
         return true;
     }

@@ -60,7 +60,11 @@ public class WorldGenIceDragonCave extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
+        if(!IafConfig.generateDragonDens || rand.nextInt(IafConfig.generateDragonDenChance) != 0){
+            return false;
+        }
         List<SphereInfo> sphereList = new ArrayList<SphereInfo>();
+        position = new BlockPos(position.getX(), 20 + rand.nextInt(20), position.getZ());
         isMale = rand.nextBoolean();
         int dragonAge = 75 + rand.nextInt(50);
         int radius = (int) (dragonAge * 0.2F) + rand.nextInt(8);
@@ -96,7 +100,7 @@ public class WorldGenIceDragonCave extends Feature<NoFeatureConfig> {
         int k = radius / 2;
         int l = radius;
         float f = (float) (j + k + l) * 0.333F + 0.5F;
-        for (BlockPos blockpos : BlockPos.getAllInBox(pos.add(-j, -k, -l), pos.add(j, k / 2, l)).collect(Collectors.toSet())) {
+        for (BlockPos blockpos : BlockPos.getAllInBox(pos.add(-j, -k, -l), pos.add(j, k / 2, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
             if (blockpos.distanceSq(pos) <= (double) (f * f) && worldIn.getBlockState(blockpos.down()).getMaterial() == Material.ROCK && worldIn.getBlockState(blockpos).getMaterial() != Material.ROCK) {
                 setGoldPile(worldIn, blockpos, rand);
             }
@@ -117,7 +121,7 @@ public class WorldGenIceDragonCave extends Feature<NoFeatureConfig> {
         int k = radius / 2;
         int l = radius;
         float f = (float) (j + k + l) * 0.333F + 0.5F;
-        for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
+        for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
             if (blockpos.distanceSq(position) <= (double) (f * f)) {
                 if (!(worldIn.getBlockState(position).getBlock() instanceof ContainerBlock) && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0) {
                     boolean doOres = rand.nextInt(IafConfig.oreToStoneRatioForDragonCaves + 1) == 0;
@@ -161,7 +165,7 @@ public class WorldGenIceDragonCave extends Feature<NoFeatureConfig> {
         int k = radius / 2;
         int l = radius;
         float f = (float) (j + k + l) * 0.333F + 0.5F;
-        for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
+        for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
             if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F))) {
                 if (!(worldIn.getBlockState(position).getBlock() instanceof ContainerBlock)) {
                     worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 2);

@@ -48,7 +48,7 @@ public class WorldGenRoostBoulder {
                     int l = i1 + rand.nextInt(2);
                     float f = (float) (j + k + l) * 0.333F + 0.5F;
 
-                    for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
+                    for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                         if (blockpos.distanceSq(position) <= (double) (f * f) && (replaceAir || worldIn.getBlockState(blockpos).isSolid())) {
                             worldIn.setBlockState(blockpos, this.block.getDefaultState(), 2);
                         }

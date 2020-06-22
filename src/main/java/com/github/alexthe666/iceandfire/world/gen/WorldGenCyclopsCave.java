@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
@@ -20,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
@@ -29,7 +31,7 @@ import java.util.stream.Collectors;
 
 public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
 
-    public static final ResourceLocation CYCLOPS_CHEST = new ResourceLocation("iceandfire", "cyclops_cave");
+    public static final ResourceLocation CYCLOPS_CHEST = new ResourceLocation("iceandfire", "chest/cyclops_cave");
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
     public WorldGenCyclopsCave(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn) {
@@ -37,6 +39,7 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
     }
 
     private void genSheepPen(IWorld worldIn, BlockPos blockpos, Random rand, BlockPos origin, float radius) {
+
         int width = 5 + rand.nextInt(3);
         int sheeps = 2 + rand.nextInt(3);
         int sheepsSpawned = 0;
@@ -45,7 +48,7 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
         for (int sideCount = 0; sideCount < 4; sideCount++) {
             for (int side = 0; side < width; side++) {
                 if (origin.distanceSq(end.offset(direction, side)) <= (double) (radius * radius)) {
-                    worldIn.setBlockState(end.offset(direction, side), Blocks.OAK_FENCE.getDefaultState(), 2);
+                    worldIn.setBlockState(end.offset(direction, side), Blocks.OAK_FENCE.getDefaultState(), 3);
                     if (worldIn.isAirBlock(end.offset(direction, side).offset(direction.rotateY())) && sheepsSpawned < sheeps) {
                         BlockPos sheepPos = end.offset(direction, side).offset(direction.rotateY());
 
@@ -119,6 +122,13 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
+        if(!IafConfig.generateCyclopsCaves || rand.nextInt(IafConfig.spawnCyclopsCaveChance) != 0){
+            return false;
+        }
+        position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
+        if(!worldIn.getFluidState(position.down()).isEmpty()){
+            return false;
+        }
         int i1 = 16;
         int i2 = i1 - 2;
         int sheepPenCount = 0;
@@ -135,7 +145,7 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
             float f = (float) (j + k + l) * 0.333F + 0.5F;
 
 
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 boolean doorwayX = blockpos.getX() >= position.getX() - 2 + rand.nextInt(2) && blockpos.getX() <= position.getX() + 2 + rand.nextInt(2);
                 boolean doorwayZ = blockpos.getZ() >= position.getZ() - 2 + rand.nextInt(2) && blockpos.getZ() <= position.getZ() + 2 + rand.nextInt(2);
                 boolean isNotInDoorway = !doorwayX && !doorwayZ && blockpos.getY() > position.getY() || blockpos.getY() > position.getY() + k - (3 + rand.nextInt(2));
@@ -160,7 +170,7 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
             int k = 10 + ySize;
             int l = i2 + rand.nextInt(2);
             float f = (float) (j + k + l) * 0.333F + 0.5F;
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(position) <= (double) (f * f) && blockpos.getY() > position.getY()) {
                     if (!(worldIn.getBlockState(position).getBlock() instanceof AbstractChestBlock)) {
                         worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 3);
@@ -168,7 +178,7 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
                     }
                 }
             }
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(position) <= (double) (f * f) && blockpos.getY() == position.getY()) {
                     if (rand.nextInt(130) == 0 && isTouchingAir(worldIn, blockpos.up())) {
                         this.genSkeleton(worldIn, blockpos.up(), rand, position, f);
@@ -198,7 +208,9 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
                     if (rand.nextInt(50) == 0 && isTouchingAir(worldIn, blockpos.up())) {
                         int torchHeight = rand.nextInt(2) + 1;
                         for (int fence = 0; fence < torchHeight; fence++) {
-                            worldIn.setBlockState(blockpos.up(1 + fence), Blocks.OAK_FENCE.getDefaultState(), 2);
+                            worldIn.setBlockState(blockpos.up(1 + fence), Blocks.OAK_FENCE.getDefaultState(), 3);
+                            //TODO
+                            //worldIn.getChunk(blockpos.up(1 + fence)).markBlockForPostprocessing(blockpos.up(1 + fence));
                         }
                         worldIn.setBlockState(blockpos.up(1 + torchHeight), Blocks.TORCH.getDefaultState(), 2);
                     }

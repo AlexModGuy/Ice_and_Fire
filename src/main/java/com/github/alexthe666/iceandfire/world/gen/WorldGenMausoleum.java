@@ -16,6 +16,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
@@ -72,6 +73,7 @@ public class WorldGenMausoleum extends Feature<NoFeatureConfig> {
     }
 
     public boolean generate(World worldIn, Random rand, BlockPos position) {
+        position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
         facing = Direction.byHorizontalIndex(rand.nextInt(3));
         position = position.add(rand.nextInt(8) - 4, 1, rand.nextInt(8) - 4);
         MinecraftServer server = worldIn.getWorld().getServer();
@@ -86,7 +88,7 @@ public class WorldGenMausoleum extends Feature<NoFeatureConfig> {
             for (BlockPos underPos : BlockPos.getAllInBox(
                     height.down().offset(facing, -template.getSize().getZ() / 2).offset(facing.rotateYCCW(), -template.getSize().getX() / 2),
                     height.down(3).offset(facing, template.getSize().getZ() / 2).offset(facing.rotateYCCW(), template.getSize().getX() / 2)
-            ).collect(Collectors.toSet())) {
+            ).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (!worldIn.getBlockState(underPos).isSolid() && !worldIn.isAirBlock(underPos.up())) {
                     worldIn.setBlockState(underPos, dirt);
                     worldIn.setBlockState(underPos.down(), dirt);

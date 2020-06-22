@@ -85,7 +85,7 @@ public class WorldGenMyrmexDecoration {
                 int k = i1 + rand.nextInt(2);
                 int l = i1 + rand.nextInt(2);
                 float f = (float) (j + k + l) * 0.333F + 0.5F;
-                for (BlockPos pos : BlockPos.getAllInBox(blockpos.add(-j, -k, -l), blockpos.add(j, k, l)).collect(Collectors.toSet())) {
+                for (BlockPos pos : BlockPos.getAllInBox(blockpos.add(-j, -k, -l), blockpos.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                     if (pos.distanceSq(blockpos) <= (double) (f * f) && worldIn.isAirBlock(pos)) {
                         worldIn.setBlockState(pos, leaf, 4);
                     }
@@ -162,7 +162,7 @@ public class WorldGenMyrmexDecoration {
                 int k = i1 + rand.nextInt(2);
                 int l = i1 + rand.nextInt(2);
                 float f = (float) (j + k + l) * 0.333F + 0.5F;
-                for (BlockPos pos : BlockPos.getAllInBox(blockpos.add(-j, -k, -l), blockpos.add(j, k, l)).collect(Collectors.toSet())) {
+                for (BlockPos pos : BlockPos.getAllInBox(blockpos.add(-j, -k, -l), blockpos.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                     if (pos.distanceSq(blockpos) <= (double) (f * f)) {
                         worldIn.setBlockState(pos, blob.getDefaultState(), 4);
                     }

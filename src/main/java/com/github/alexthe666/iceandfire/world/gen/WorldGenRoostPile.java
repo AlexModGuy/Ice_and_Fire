@@ -22,7 +22,7 @@ public class WorldGenRoostPile {
             int l = radius - i;
             float f = (float) (j + l) * 0.333F + 0.5F;
             BlockPos up = position.up(i);
-            for (BlockPos blockpos : BlockPos.getAllInBox(up.add(-j, 0, -l), up.add(j, 0, l)).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(up.add(-j, 0, -l), up.add(j, 0, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(position) <= (double) (f * f)) {
                     worldIn.setBlockState(blockpos, block.getDefaultState(), 2);
                 }
