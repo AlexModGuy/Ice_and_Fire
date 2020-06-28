@@ -56,9 +56,7 @@ public class WorldGenSirenIsland extends Feature<NoFeatureConfig> {
             return false;
         }
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
-        if(!worldIn.getFluidState(position.down()).isEmpty()){
-            return false;
-        }
+
         int up = rand.nextInt(4) + 1;
         BlockPos center = position.up(up);
         int layer = 0;

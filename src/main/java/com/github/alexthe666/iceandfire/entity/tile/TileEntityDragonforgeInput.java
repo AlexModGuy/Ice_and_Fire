@@ -1,11 +1,17 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeInput;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.message.MessageUpdateDragonforge;
+import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.texture.ITickable;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -47,18 +53,35 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
             }
         }
         lureDragons();
+
+    }
+
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+        read(packet.getNbtCompound());
+    }
+
+    public CompoundNBT getUpdateTag() {
+        return this.write(new CompoundNBT());
     }
 
     protected void lureDragons() {
+        boolean flag = false;
         if (core != null && core.canSmelt()) {
             for (EntityDragonBase dragon : world.getEntitiesWithinAABB(EntityDragonBase.class, new AxisAlignedBB((double) pos.getX() - LURE_DISTANCE, (double) pos.getY() - LURE_DISTANCE, (double) pos.getZ() - LURE_DISTANCE, (double) pos.getX() + LURE_DISTANCE, (double) pos.getY() + LURE_DISTANCE, (double) pos.getZ() + LURE_DISTANCE))) {
                 if (getDragonType() == DragonType.getIntFromType(dragon.dragonType) && (dragon.isChained() || dragon.isTamed()) && canSeeInput(dragon, new Vec3d(this.getPos().getX() + 0.5F, this.getPos().getY() + 0.5F, this.getPos().getZ() + 0.5F))) {
                     dragon.burningTarget = this.pos;
+                    flag = true;
                 }
             }
         } else {
             for (EntityDragonBase dragon : world.getEntitiesWithinAABB(EntityDragonBase.class, new AxisAlignedBB((double) pos.getX() - LURE_DISTANCE, (double) pos.getY() - LURE_DISTANCE, (double) pos.getZ() - LURE_DISTANCE, (double) pos.getX() + LURE_DISTANCE, (double) pos.getY() + LURE_DISTANCE, (double) pos.getZ() + LURE_DISTANCE))) {
-                if (dragon.burningTarget == this.pos) {
+                if (dragon.burningTarget == this.pos || flag) {
                     dragon.burningTarget = null;
                     dragon.setBreathingFire(false);
                 }
@@ -74,8 +97,8 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
         if (target != null) {
             RayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(dragon.getHeadPosition(), target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, dragon));
             if (rayTrace != null && rayTrace.getHitVec() != null) {
-                BlockPos pos = new BlockPos(rayTrace.getHitVec());
-                return world.getBlockState(pos).getBlock() instanceof BlockDragonforgeInput;
+                double distance = target.distanceTo(rayTrace.getHitVec());
+                return distance < 1.0F;
             }
         }
         return false;

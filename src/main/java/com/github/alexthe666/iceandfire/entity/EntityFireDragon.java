@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
@@ -64,6 +65,11 @@ public class EntityFireDragon extends EntityDragonBase {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
+    }
+
+    @Override
+    protected boolean shouldTarget(Entity entity) {
+        return entity instanceof PlayerEntity || DragonUtils.isLivestock(entity) || !this.isTamed() && DragonUtils.isVillager(entity);
     }
 
     public String getVariantName(int variant) {

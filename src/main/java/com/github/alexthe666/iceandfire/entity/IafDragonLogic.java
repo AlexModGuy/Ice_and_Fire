@@ -18,8 +18,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-import java.util.logging.Level;
-
 /*
     dragon logic separation for client, server and shared sides.
  */
@@ -119,10 +117,10 @@ public class IafDragonLogic {
         } else {
             dragon.setDragonPitch(0);
         }
-        if (IafConfig.doDragonsSleep && !dragon.isInWater() && !dragon.isSleeping() && dragon.onGround && !dragon.isFlying() && !dragon.isHovering() && dragon.getAttackTarget() == null && !dragon.isDaytime() && dragon.getRNG().nextInt(250) == 0 && dragon.getAttackTarget() == null && dragon.getPassengers().isEmpty()) {
+        if (IafConfig.doDragonsSleep && !dragon.isInWater() && !dragon.isSleeping() && dragon.onGround && !dragon.isFlying() && !dragon.isHovering() && dragon.getAttackTarget() == null && !dragon.isTimeToWake() && dragon.getRNG().nextInt(250) == 0 && dragon.getAttackTarget() == null && dragon.getPassengers().isEmpty()) {
             dragon.setSleeping(true);
         }
-        if (dragon.isSleeping() && (dragon.isFlying() || dragon.isHovering() || dragon.isInWater() || (dragon.world.canBlockSeeSky(new BlockPos(dragon)) && dragon.isDaytime() && !dragon.isTamed() || dragon.isDaytime() && dragon.isTamed()) || dragon.getAttackTarget() != null || !dragon.getPassengers().isEmpty())) {
+        if (dragon.isSleeping() && (dragon.isFlying() || dragon.isHovering() || dragon.isInWater() || (dragon.world.canBlockSeeSky(new BlockPos(dragon)) && dragon.isTimeToWake() && !dragon.isTamed() || dragon.isTimeToWake() && dragon.isTamed()) || dragon.getAttackTarget() != null || !dragon.getPassengers().isEmpty())) {
             dragon.setSleeping(false);
         }
         if (dragon.isSitting() && dragon.getControllingPassenger() != null) {

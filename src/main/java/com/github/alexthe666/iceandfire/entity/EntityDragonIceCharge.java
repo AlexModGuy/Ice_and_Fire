@@ -64,20 +64,15 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
                 IceAndFire.PROXY.spawnParticle("dragonice", this.getPosX() + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.getPosY() + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.getPosZ() + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
             }
         }
-        if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isAlive()) && this.world.isBlockLoaded(new BlockPos(this))) {
+        if (this.world.isRemote || (this.shootingEntity == null || this.shootingEntity.isAlive()) && this.world.isBlockLoaded(new BlockPos(this))) {
             super.tick();
-
-            if (this.isFireballFiery()) {
-                this.setFire(1);
-            }
-
             ++this.ticksInAir;
             Vec3d vec3d = this.getMotion();
             RayTraceResult raytraceresult = ProjectileHelper.rayTrace(this, this.getBoundingBox().expand(vec3d).grow(1.0D), (p_213879_1_) -> {
                 return !p_213879_1_.isSpectator() && p_213879_1_ != this.shootingEntity;
             }, RayTraceContext.BlockMode.OUTLINE, true);
 
-            if (raytraceresult != null) {
+            if (!world.isRemote && raytraceresult != null) {
                 this.onImpact(raytraceresult);
             }
 
@@ -157,14 +152,15 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
                             ((EntityDragonBase) this.shootingEntity).randomizeAttacks();
                         }
                     }
-                    entity.setFire(5);
                     this.applyEnchantments(this.shootingEntity, entity);
                     this.remove();
                 }
             }
         }
-        if (this.shootingEntity instanceof EntityDragonBase && IafConfig.dragonGriefing != 2) {
-            IafDragonDestructionManager.destroyAreaIceCharge(world, this.getPosition(), ((EntityDragonBase) this.shootingEntity));
+        if(movingObject.getType() != RayTraceResult.Type.MISS) {
+            if (this.shootingEntity instanceof EntityDragonBase && IafConfig.dragonGriefing != 2) {
+                IafDragonDestructionManager.destroyAreaIceCharge(world, this.getPosition(), ((EntityDragonBase) this.shootingEntity));
+            }
         }
     }
 

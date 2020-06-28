@@ -310,7 +310,7 @@ public class LightningBoltData {
         private SegmentSpreader segmentSpreader = SegmentSpreader.NO_MEMORY;
 
         public static BoltRenderInfo electricity() {
-            return new BoltRenderInfo(0.5F, 0.1F, 0.1F, 0.5F, new Vector4f(0.70F, 0.45F, 0.89F, 0.8F), 0.8F);
+            return new BoltRenderInfo(0.5F, 0.25F, 0.25F, 0.15F, new Vector4f(0.70F, 0.45F, 0.89F, 0.8F), 0.8F);
         }
 
         public BoltRenderInfo(){}

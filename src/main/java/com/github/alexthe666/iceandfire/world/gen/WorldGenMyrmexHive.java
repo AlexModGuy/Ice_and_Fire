@@ -50,7 +50,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-        if(!IafConfig.generateMyrmexColonies || rand.nextInt(IafConfig.myrmexColonyGenChance) != 0){
+        if(true || !IafConfig.generateMyrmexColonies || rand.nextInt(IafConfig.myrmexColonyGenChance) != 0){
             return false;
         }
         pos = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);

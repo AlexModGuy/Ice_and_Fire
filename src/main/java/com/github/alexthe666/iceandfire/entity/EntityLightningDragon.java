@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
@@ -75,6 +76,15 @@ public class EntityLightningDragon extends EntityDragonBase {
         this.dataManager.register(LIGHTNING_TARGET_X, 0.0F);
         this.dataManager.register(LIGHTNING_TARGET_Y, 0.0F);
         this.dataManager.register(LIGHTNING_TARGET_Z, 0.0F);
+    }
+
+    @Override
+    protected boolean shouldTarget(Entity entity) {
+        return entity instanceof PlayerEntity || DragonUtils.isLivestock(entity) || !this.isTamed() && DragonUtils.isVillager(entity);
+    }
+
+    public boolean isTimeToWake() {
+        return !this.world.isDaytime();
     }
 
     @Override
@@ -479,7 +489,7 @@ public class EntityLightningDragon extends EntityDragonBase {
 
     public Vec3d getHeadPosition() {
         //this.setDragonPitch(this.ticksExisted % 180 - 90);
-        float sitProg = this.sitProgress * 0.03F;
+        float sitProg = this.sitProgress * 0.005F;
         float deadProg = this.modelDeadProgress * -0.02F;
         float hoverProg = this.hoverProgress * 0.03F;
         float flyProg = this.flyProgress * 0.01F;
@@ -491,7 +501,7 @@ public class EntityLightningDragon extends EntityDragonBase {
         } else {
             tick = 10;
         }
-        float epicRoarProg = this.getAnimation() == ANIMATION_EPIC_ROAR ? tick * 0.1F : 0;
+        float epicRoarProg = this.getAnimation() == ANIMATION_EPIC_ROAR && !this.isSitting() ? tick * 0.1F : 0;
         float sleepProg = this.sleepProgress * 0.025F;
         float pitchY = 0;
         float pitchAdjustment = 0;
@@ -506,10 +516,10 @@ public class EntityLightningDragon extends EntityDragonBase {
         }
         float absPitch = Math.abs(dragonPitch) / 90F;//1 down/up, 0 straight
         float minXZ = dragonPitch > 20 ? (dragonPitch - 20) * 0.009F : 0;
-        float xzMod = (0.58F - hoverProg * 0.45F + flyProg * 0.2F + absPitch * 0.3F) * getRenderSize();
+        float xzMod = (0.58F - hoverProg * 0.45F + flyProg * 0.2F + absPitch * 0.3F - sitProg) * getRenderSize();
         float xzModSine = xzMod * (Math.max(0.25F, (float)Math.cos(Math.toRadians(dragonPitch))) - minXZ);
         float headPosX = (float) (getPosX() + (xzModSine) * Math.cos((renderYawOffset + 90) * Math.PI / 180));
-        float headPosY = (float) (getPosY() + (0.7F + sitProg + hoverProg + deadProg + epicRoarProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F);
+        float headPosY = (float) (getPosY() + (0.7F + (sitProg * 5F) + hoverProg + deadProg + epicRoarProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F);
         float headPosZ = (float) (getPosZ() + (xzModSine) * Math.sin((renderYawOffset + 90) * Math.PI / 180));
         return new Vec3d(headPosX, headPosY, headPosZ);
     }

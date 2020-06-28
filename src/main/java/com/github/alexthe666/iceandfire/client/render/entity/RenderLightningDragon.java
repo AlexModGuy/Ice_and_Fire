@@ -45,10 +45,10 @@ public class RenderLightningDragon extends RenderDragonBase {
 
             Vec3d vec3d1 = lightningDragon.getHeadPosition();
             Vec3d vec3d = new Vec3d(lightningDragon.getLightningTargetX(), lightningDragon.getLightningTargetY(), lightningDragon.getLightningTargetZ());
-            float energyScale = 0.3F * lightningDragon.getRenderScale();
-            LightningBoltData bolt = new LightningBoltData(LightningBoltData.BoltRenderInfo.electricity(), vec3d1, vec3d, 15)
+            float energyScale = 0.4F * lightningDragon.getRenderScale();
+            LightningBoltData bolt = new LightningBoltData(LightningBoltData.BoltRenderInfo.ELECTRICITY, vec3d1, vec3d, 15)
                     .size(0.05F * getBoundedScale(energyScale, 0.5F, 2))
-                    .lifespan(3)
+                    .lifespan(4)
                     .spawn(LightningBoltData.SpawnFunction.NO_DELAY);
             lightningRender.update(null, bolt, partialTicks);
             matrixStackIn.translate(-lightningDragon.getPosX(), -lightningDragon.getPosY(), -lightningDragon.getPosZ());

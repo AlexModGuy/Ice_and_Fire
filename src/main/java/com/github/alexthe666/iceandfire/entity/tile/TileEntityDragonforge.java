@@ -1,10 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeBricks;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeCore;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
+import com.github.alexthe666.iceandfire.message.MessageUpdateDragonforge;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import net.minecraft.block.Block;
@@ -19,6 +21,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.util.Direction;
@@ -44,7 +48,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
             net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN);
     private NonNullList<ItemStack> forgeItemStacks = NonNullList.withSize(3, ItemStack.EMPTY);
-    private int lastDragonFlameTimer = 0;
+    public int lastDragonFlameTimer = 0;
     private boolean prevAssembled;
     private boolean canAddFlameAgain = true;
 
@@ -188,7 +192,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
                 return;
             }
         }
-        if (this.canSmelt() && cookTime > 0 && lastDragonFlameTimer == 0) {
+        if (cookTime > 0 && this.canSmelt() && lastDragonFlameTimer == 0) {
             this.cookTime--;
         }
 
@@ -396,6 +400,9 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         } else {
             cookTime = 0;
         }
+        if(!world.isRemote){
+            IceAndFire.sendMSGToAll(new MessageUpdateDragonforge(pos.toLong(), cookTime));
+        }
         lastDragonFlameTimer = 40;
     }
 
@@ -418,6 +425,20 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
                 doesBlockEqual(pos.east(), getBrick()) &&
                 doesBlockEqual(pos.west(), getBrick()) &&
                 doesBlockEqual(pos.south(), getBrick());
+    }
+
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
+        read(packet.getNbtCompound());
+    }
+
+    public CompoundNBT getUpdateTag() {
+        return this.write(new CompoundNBT());
     }
 
     public boolean assembled() {

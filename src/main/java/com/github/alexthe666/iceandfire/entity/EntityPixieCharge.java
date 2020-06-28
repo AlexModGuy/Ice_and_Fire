@@ -16,6 +16,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.*;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.FMLPlayMessages;
 
 public class EntityPixieCharge extends AbstractFireballEntity {
 
@@ -26,6 +27,12 @@ public class EntityPixieCharge extends AbstractFireballEntity {
         super(t, worldIn);
         rgb = EntityPixie.PARTICLE_RGB[rand.nextInt(EntityPixie.PARTICLE_RGB.length - 1)];
     }
+
+
+    public EntityPixieCharge(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+        this(IafEntityRegistry.PIXIE_CHARGE, worldIn);
+    }
+
 
     public EntityPixieCharge(EntityType t, World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
         super(t, posX, posY, posZ, accelX, accelY, accelZ, worldIn);

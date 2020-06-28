@@ -293,7 +293,7 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
                         BlockPos pos = new BlockPos(a, b, c);
                         BlockState state = world.getBlockState(pos);
                         Block block = state.getBlock();
-                        if (state.getMaterial() != Material.AIR && !(block instanceof BushBlock) && block != Blocks.BEDROCK && (state.getBlock() instanceof LeavesBlock || BlockTags.LOGS.contains(state.getBlock()))) {
+                        if (!state.isAir() && !state.getShape(world, pos).isEmpty() && !(block instanceof BushBlock) && block != Blocks.BEDROCK && (state.getBlock() instanceof LeavesBlock || BlockTags.LOGS.contains(state.getBlock()))) {
                             this.getMotion().scale(0.6D);
                             if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, a, b, c))) continue;
                             if (block != Blocks.AIR) {

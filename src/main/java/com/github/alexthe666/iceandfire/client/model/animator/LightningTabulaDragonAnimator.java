@@ -93,13 +93,6 @@ public class LightningTabulaDragonAnimator extends IceAndFireTabulaModelAnimator
                     transitionTo(cube, EnumDragonAnimations.FLYING_POSE.lightningdragon_model.getCube(cube.boxName), entity.flyProgress - entity.diveProgress * 2, 20, false);
                 }
             }
-            if (entity.sitProgress > 0.0F) {
-                if (!entity.isPassenger()) {
-                    if (!isPartEqual(cube, EnumDragonAnimations.SITTING_POSE.lightningdragon_model.getCube(cube.boxName))) {
-                        transitionTo(cube, EnumDragonAnimations.SITTING_POSE.lightningdragon_model.getCube(cube.boxName), entity.sitProgress, 20, false);
-                    }
-                }
-            }
             if (entity.ridingProgress > 0.0F) {
                 if (!isPartEqual(cube, EnumDragonAnimations.SIT_ON_PLAYER_POSE.lightningdragon_model.getCube(cube.boxName))) {
                     transitionTo(cube, EnumDragonAnimations.SIT_ON_PLAYER_POSE.lightningdragon_model.getCube(cube.boxName), entity.ridingProgress, 20, false);
@@ -126,6 +119,18 @@ public class LightningTabulaDragonAnimator extends IceAndFireTabulaModelAnimator
                     }
                     transitionTo(cube, EnumDragonAnimations.STREAM_BREATH.lightningdragon_model.getCube(cube.boxName), MathHelper.clamp(entity.fireBreathProgress - 5, 0, 5), 5, false);
 
+                }
+            }
+            if (entity.sitProgress > 0.0F) {
+                if (!entity.isPassenger()) {
+                    if (!isPartEqual(cube, EnumDragonAnimations.SITTING_POSE.lightningdragon_model.getCube(cube.boxName))) {
+                        transitionTo(cube, EnumDragonAnimations.SITTING_POSE.lightningdragon_model.getCube(cube.boxName), entity.sitProgress, 20, false);
+                    }
+                }
+                if (cube.boxName.equals("Head")) {
+                    if (entity.isBreathingFire()) {
+                        cube.rotateAngleX -= Math.toRadians(20F * entity.fireBreathProgress / 10F);
+                    }
                 }
             }
             if (!walking) {
@@ -166,7 +171,8 @@ public class LightningTabulaDragonAnimator extends IceAndFireTabulaModelAnimator
                 model.chainSwing(neckParts, speed_walk, degree_walk * 0.15F, 2, limbSwing, limbSwingAmount);
                 model.chainWave(neckParts, speed_walk, degree_walk * 0.05F, -2, limbSwing, limbSwingAmount);
                 model.chainSwing(tailParts, speed_idle, degree_idle * 0.25F, -2, ageInTicks, 1);
-                model.chainWave(tailParts, speed_idle, degree_idle * 0.15F, -2, ageInTicks, 1);
+                float sitMod = entity.isSitting() ? 0.15F : 1F;
+                model.chainWave(tailParts, speed_idle, degree_idle * 0.15F * sitMod, -2, ageInTicks, 1);
                 model.chainWave(neckParts, speed_idle, degree_idle * -0.15F, -3, ageInTicks, 1);
                 model.walk(model.getCube("Neck1"), speed_idle, degree_idle * 0.05F, false, 0, 0, ageInTicks, 1);
             }
@@ -217,7 +223,7 @@ public class LightningTabulaDragonAnimator extends IceAndFireTabulaModelAnimator
         if (!entity.isMale()) {
             TabulaModel maleModel = EnumDragonAnimations.MALE.lightningdragon_model;
             TabulaModel femaleModel = EnumDragonAnimations.FEMALE.lightningdragon_model;
-            if(femaleModel.getCube(cube.boxName) != null) {
+            if (femaleModel.getCube(cube.boxName) != null) {
                 float x = femaleModel.getCube(cube.boxName).rotateAngleX;
                 float y = femaleModel.getCube(cube.boxName).rotateAngleY;
                 float z = femaleModel.getCube(cube.boxName).rotateAngleZ;

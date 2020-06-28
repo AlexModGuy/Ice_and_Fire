@@ -13,6 +13,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.WaterMobEntity;
+import net.minecraft.entity.passive.fish.AbstractFishEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -59,6 +62,11 @@ public class EntityIceDragon extends EntityDragonBase {
         ANIMATION_ROAR = Animation.create(40);
         ANIMATION_EPIC_ROAR = Animation.create(60);
         this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
+    }
+
+    @Override
+    protected boolean shouldTarget(Entity entity) {
+        return entity instanceof PlayerEntity || DragonUtils.isLivestock(entity)  || entity instanceof WaterMobEntity || !this.isTamed() && DragonUtils.isVillager(entity);
     }
 
     @Override

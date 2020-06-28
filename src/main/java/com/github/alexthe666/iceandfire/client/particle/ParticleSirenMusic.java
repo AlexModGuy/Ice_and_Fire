@@ -22,9 +22,9 @@ public class ParticleSirenMusic extends SpriteTexturedParticle {
         super(world, x, y, z, motX, motY, motZ);
         this.setPosition(x, y, z);
         this.colorScale = (float) 1;
-        this.particleRed = MathHelper.sin((colorScale / 24 + 0.0F) * ((float) Math.PI * 2F)) * 0.65F + 0.35F;
-        this.particleGreen = MathHelper.sin((colorScale / 24 + 0.33333334F) * ((float) Math.PI * 2F)) * 0.65F + 0.35F;
-        this.particleBlue = MathHelper.sin((colorScale / 24 + 0.6666667F) * ((float) Math.PI * 2F)) * 0.65F + 0.35F;
+        this.particleRed = Math.max(0.0F, MathHelper.sin(((float)colorScale + 0.0F) * 6.2831855F) * 0.65F + 0.35F);
+        this.particleGreen = Math.max(0.0F, MathHelper.sin(((float)colorScale + 0.33333334F) * 6.2831855F) * 0.65F + 0.35F);
+        this.particleBlue = Math.max(0.0F, MathHelper.sin(((float)colorScale + 0.6666667F) * 6.2831855F) * 0.65F + 0.35F);
     }
 
     @Override
@@ -76,18 +76,18 @@ public class ParticleSirenMusic extends SpriteTexturedParticle {
 
     public void tick() {
         super.tick();
-        colorScale += 0.25;
+        colorScale += 0.015;
         if (colorScale > 25) {
             colorScale = 0;
         }
-        this.particleRed = MathHelper.sin((colorScale / 24 + 0.0F) * ((float) Math.PI * 2F)) * 0.5F + 0.35F;
-        this.particleGreen = MathHelper.sin((colorScale / 24 + 0.33333334F) * ((float) Math.PI * 2F)) * 0.5F + 0.35F;
-        this.particleBlue = MathHelper.sin((colorScale / 24 + 0.6666667F) * ((float) Math.PI * 2F)) * 0.5F + 0.35F;
+        this.particleRed = Math.max(0.0F, MathHelper.sin(((float)colorScale + 0.0F) * 6.2831855F) * 0.65F + 0.35F);
+        this.particleGreen = Math.max(0.0F, MathHelper.sin(((float)colorScale + 0.33333334F) * 6.2831855F) * 0.65F + 0.35F);
+        this.particleBlue = Math.max(0.0F, MathHelper.sin(((float)colorScale + 0.6666667F) * 6.2831855F) * 0.65F + 0.35F);
+
     }
 
     public int getBrightnessForRender(float partialTick) {
-        BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
-        return this.world.isBlockLoaded(blockpos) ? this.world.getLight(blockpos) : 0;
+        return super.getBrightnessForRender(partialTick);
     }
 
     public int getFXLayer() {

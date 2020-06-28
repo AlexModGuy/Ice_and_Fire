@@ -57,7 +57,7 @@ public class IafEntityRegistry {
     public static final EntityType<EntitySeaSerpentBubbles> SEA_SERPENT_BUBBLES = registerEntity(EntityType.Builder.create(EntitySeaSerpentBubbles::new, EntityClassification.MISC).size(0.5F, 0.5F), "sea_serpent_bubbles");
     public static final EntityType<EntitySeaSerpentArrow> SEA_SERPENT_ARROW = registerEntity(EntityType.Builder.create(EntitySeaSerpentArrow::new, EntityClassification.MISC).size(0.5F, 0.5F), "sea_serpent_arrow");
     public static final EntityType<EntityChainTie> CHAIN_TIE = registerEntity(EntityType.Builder.create(EntityChainTie::new, EntityClassification.MISC).size(0.8F, 0.9F), "chain_tie");
-    public static final EntityType<EntityPixieCharge> PIXIE_CHARGE = registerEntity(EntityType.Builder.create(EntityPixieCharge::new, EntityClassification.MISC).size(0.5F, 0.5F), "pixie_charge");
+    public static final EntityType<EntityPixieCharge> PIXIE_CHARGE = registerEntity(EntityType.Builder.create(EntityPixieCharge::new, EntityClassification.MISC).size(0.5F, 0.5F).setCustomClientFactory(EntityPixieCharge::new), "pixie_charge");
     public static final EntityType<EntityMyrmexSwarmer> MYRMEX_SWARMER = registerEntity(EntityType.Builder.create(EntityMyrmexSwarmer::new, EntityClassification.CREATURE).size(0.5F, 0.5F), "myrmex_swarmer");
     public static final EntityType<EntityTideTrident> TIDE_TRIDENT = registerEntity(EntityType.Builder.create(EntityTideTrident::new, EntityClassification.MISC).size(0.85F, 0.5F).setCustomClientFactory(EntityTideTrident::new), "tide_trident");
     public static final EntityType<EntityMobSkull> MOB_SKULL = registerEntity(EntityType.Builder.create(EntityMobSkull::new, EntityClassification.MISC).size(0.85F, 0.85F), "mob_skull");

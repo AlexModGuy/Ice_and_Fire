@@ -245,17 +245,19 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         this.targetSelector.addGoal(4, new DragonAITargetNonTamed(this, LivingEntity.class, false, new Predicate<LivingEntity>() {
             @Override
             public boolean apply(@Nullable LivingEntity entity) {
-                return (!(entity instanceof PlayerEntity) || ((PlayerEntity) entity).isCreative()) && DragonUtils.canHostilesTarget(entity) && entity.getType() != EntityDragonBase.this.getType();
+                return (!(entity instanceof PlayerEntity) || ((PlayerEntity) entity).isCreative()) && DragonUtils.canHostilesTarget(entity) && entity.getType() != EntityDragonBase.this.getType() && EntityDragonBase.this.shouldTarget(entity);
             }
         }));
         this.targetSelector.addGoal(5, new DragonAITarget(this, LivingEntity.class, true, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                return entity instanceof LivingEntity && DragonUtils.canHostilesTarget(entity) && entity.getType() != EntityDragonBase.this.getType();
+                return entity instanceof LivingEntity && DragonUtils.canHostilesTarget(entity) && entity.getType() != EntityDragonBase.this.getType() && EntityDragonBase.this.shouldTarget(entity);
             }
         }));
         this.targetSelector.addGoal(6, new DragonAITargetItems(this, false));
     }
+
+    protected abstract boolean shouldTarget(Entity entity);
 
     public void resetParts(float scale) {
         removeParts();
@@ -335,65 +337,63 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
 
-
-
     public void updateParts() {
         if (headPart != null) {
-            if(!headPart.shouldContinuePersisting()){
+            if (!headPart.shouldContinuePersisting()) {
                 world.addEntity(headPart);
             }
             headPart.setParent(this);
         }
         if (neckPart != null) {
-            if(!neckPart.shouldContinuePersisting()){
+            if (!neckPart.shouldContinuePersisting()) {
                 world.addEntity(neckPart);
             }
             neckPart.setParent(this);
         }
         if (rightWingUpperPart != null) {
-            if(!rightWingUpperPart.shouldContinuePersisting()){
+            if (!rightWingUpperPart.shouldContinuePersisting()) {
                 world.addEntity(rightWingUpperPart);
             }
             rightWingUpperPart.setParent(this);
         }
         if (rightWingLowerPart != null) {
-            if(!rightWingLowerPart.shouldContinuePersisting()){
+            if (!rightWingLowerPart.shouldContinuePersisting()) {
                 world.addEntity(rightWingLowerPart);
             }
             rightWingLowerPart.setParent(this);
         }
         if (leftWingUpperPart != null) {
-            if(!leftWingUpperPart.shouldContinuePersisting()){
+            if (!leftWingUpperPart.shouldContinuePersisting()) {
                 world.addEntity(leftWingUpperPart);
             }
             leftWingUpperPart.setParent(this);
         }
         if (leftWingLowerPart != null) {
-            if(!leftWingLowerPart.shouldContinuePersisting()){
+            if (!leftWingLowerPart.shouldContinuePersisting()) {
                 world.addEntity(leftWingLowerPart);
             }
             leftWingLowerPart.setParent(this);
         }
         if (tail1Part != null) {
-            if(!tail1Part.shouldContinuePersisting()){
+            if (!tail1Part.shouldContinuePersisting()) {
                 world.addEntity(tail1Part);
             }
             tail1Part.setParent(this);
         }
         if (tail2Part != null) {
-            if(!tail2Part.shouldContinuePersisting()){
+            if (!tail2Part.shouldContinuePersisting()) {
                 world.addEntity(tail2Part);
             }
             tail2Part.setParent(this);
         }
         if (tail3Part != null) {
-            if(!tail3Part.shouldContinuePersisting()){
+            if (!tail3Part.shouldContinuePersisting()) {
                 world.addEntity(tail3Part);
             }
             tail3Part.setParent(this);
         }
         if (tail4Part != null) {
-            if(!tail4Part.shouldContinuePersisting()){
+            if (!tail4Part.shouldContinuePersisting()) {
                 world.addEntity(tail4Part);
             }
             tail4Part.setParent(this);
@@ -402,7 +402,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
 
     protected void updateBurnTarget() {
         if (burningTarget != null && !this.isSleeping() && !this.isModelDead() && !this.isChild()) {
-            if (world.getTileEntity(burningTarget) != null && world.getTileEntity(burningTarget) instanceof TileEntityDragonforgeInput && this.getDistanceSq(burningTarget.getX() + 0.5D, burningTarget.getY() + 0.5D, burningTarget.getZ() + 0.5D) < 300) {
+            if (world.getTileEntity(burningTarget) != null && world.getTileEntity(burningTarget) instanceof TileEntityDragonforgeInput && this.getDistanceSq(burningTarget.getX() + 0.5D, burningTarget.getY() + 0.5D, burningTarget.getZ() + 0.5D) < 300 && canPositionBeSeen(burningTarget.getX() + 0.5D, burningTarget.getY() + 0.5D, burningTarget.getZ() + 0.5D)) {
                 this.getLookController().setLookPosition(burningTarget.getX() + 0.5D, burningTarget.getY() + 0.5D, burningTarget.getZ() + 0.5D, 180F, 180F);
                 this.breathFireAtPos(burningTarget);
                 this.setBreathingFire(true);
@@ -457,7 +457,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     public void openGUI(PlayerEntity playerEntity) {
         IceAndFire.PROXY.setReferencedMob(this);
         if (!this.world.isRemote && (!this.isBeingRidden() || this.isPassenger(playerEntity))) {
-            playerEntity.openContainer( new INamedContainerProvider() {
+            playerEntity.openContainer(new INamedContainerProvider() {
                 @Override
                 public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
                     return new ContainerDragon(p_createMenu_1_, dragonInventory, p_createMenu_2_, EntityDragonBase.this);
@@ -1022,7 +1022,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     public boolean isAlive() {
-        if(isModelDead()){
+        if (isModelDead()) {
             return true;
         }
         return !this.removed && this.getHealth() > 0.0F;
@@ -1122,20 +1122,20 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                     return super.processInteract(player, hand);
                 }
                 if (stack.isEmpty() && !player.isShiftKeyDown()) {
-                   if(!world.isRemote){
-                       if (this.getDragonStage() < 2) {
-                           this.startRiding(player, true);
-                       }
-                       if (this.getDragonStage() > 2 && !player.isPassenger()) {
-                           player.setSneaking(false);
-                           player.startRiding(this, true);
+                    if (!world.isRemote) {
+                        if (this.getDragonStage() < 2) {
+                            this.startRiding(player, true);
+                        }
+                        if (this.getDragonStage() > 2 && !player.isPassenger()) {
+                            player.setSneaking(false);
+                            player.startRiding(this, true);
 
-                           if (world.isRemote) {
-                               IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true));
-                           }
-                           this.setSleeping(false);
-                       }
-                   }
+                            if (world.isRemote) {
+                                IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true));
+                            }
+                            this.setSleeping(false);
+                        }
+                    }
                     return true;
                 } else if (stack.isEmpty() && player.isShiftKeyDown()) {
                     this.openGUI(player);
@@ -1303,7 +1303,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         }
     }
 
-    public boolean isDaytime() {
+    public boolean isTimeToWake() {
         return this.world.isDaytime();
     }
 
@@ -1345,7 +1345,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                                     if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, a, b, c))) continue;
                                     BlockPos pos = new BlockPos(a, b, c);
                                     BlockState state = world.getBlockState(pos);
-                                    if (state.getMaterial().blocksMovement() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos)) {
+                                    if (state.getMaterial().blocksMovement() && !state.isAir() && !state.getShape(world, pos).isEmpty() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos)) {
                                         this.setMotion(this.getMotion().mul(0.6F, 1, 0.6F));
                                         if (!world.isRemote) {
                                             world.destroyBlock(pos, rand.nextFloat() <= IafConfig.dragonBlockBreakingDropChance && DragonUtils.canDropFromDragonBlockBreak(state));
@@ -1530,7 +1530,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
 
     }
 
-    public void recalculateSize(){
+    public void recalculateSize() {
         super.recalculateSize();
         float scale = Math.min(this.getRenderSize() * 0.35F, 7F);
         double prevX = getPosX();
@@ -1545,6 +1545,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         }
         lastScale = scale;
     }
+
     @Override
     public void tick() {
         super.tick();
