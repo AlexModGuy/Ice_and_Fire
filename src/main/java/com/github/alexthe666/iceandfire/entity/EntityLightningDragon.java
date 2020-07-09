@@ -492,7 +492,7 @@ public class EntityLightningDragon extends EntityDragonBase {
         float sitProg = this.sitProgress * 0.005F;
         float deadProg = this.modelDeadProgress * -0.02F;
         float hoverProg = this.hoverProgress * 0.03F;
-        float flyProg = this.flyProgress * 0.01F;
+        float flyProg = Math.max(0, this.flyProgress * 0.01F);
         int tick = 0;
         if (this.getAnimationTick() < 10) {
             tick = this.getAnimationTick();

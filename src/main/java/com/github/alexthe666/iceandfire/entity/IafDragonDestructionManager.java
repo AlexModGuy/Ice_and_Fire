@@ -321,6 +321,9 @@ public class IafDragonDestructionManager {
             for (LivingEntity LivingEntity : world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB((double) center.getX() - damageRadius, (double) center.getY() - damageRadius, (double) center.getZ() - damageRadius, (double) center.getX() + damageRadius, (double) center.getY() + damageRadius, (double) center.getZ() + damageRadius))) {
                 if (!DragonUtils.onSameTeam(destroyer, LivingEntity) && !destroyer.isEntityEqual(LivingEntity) && destroyer.canEntityBeSeen(LivingEntity)) {
                     LivingEntity.attackEntityFrom(IafDamageRegistry.DRAGON_LIGHTNING, stage * dmgScale);
+                    double d1 = destroyer.getPosX() - LivingEntity.getPosX();
+                    double d0 = destroyer.getPosZ() - LivingEntity.getPosZ();
+                    LivingEntity.knockBack(destroyer, 0.9F, d1, d0);
                     //LivingEntity.setFire(5 + stage * 5);
                 }
             }
@@ -347,7 +350,9 @@ public class IafDragonDestructionManager {
             for (LivingEntity LivingEntity : world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB((double) center.getX() - damageRadius, (double) center.getY() - damageRadius, (double) center.getZ() - damageRadius, (double) center.getX() + damageRadius, (double) center.getY() + damageRadius, (double) center.getZ() + damageRadius))) {
                 if (!DragonUtils.onSameTeam(destroyer, LivingEntity) && !destroyer.isEntityEqual(LivingEntity) && destroyer.canEntityBeSeen(LivingEntity)) {
                     LivingEntity.attackEntityFrom(IafDamageRegistry.DRAGON_LIGHTNING, stage * dmgScale);
-                    LivingEntity.setFire(5 + stage * 5);
+                    double d1 = destroyer.getPosX() - LivingEntity.getPosX();
+                    double d0 = destroyer.getPosZ() - LivingEntity.getPosZ();
+                    LivingEntity.knockBack(destroyer, 0.9F, d1, d0);
                 }
             }
         }
@@ -373,6 +378,9 @@ public class IafDragonDestructionManager {
                 for (LivingEntity LivingEntity : world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB((double) center.getX() - 2, (double) center.getY() - 2, (double) center.getZ() - 2, (double) center.getX() + 2, (double) center.getY() + 2, (double) center.getZ() + 2))) {
                     if (!destroyer.isOnSameTeam(LivingEntity) && !destroyer.isEntityEqual(LivingEntity) && destroyer.canEntityBeSeen(LivingEntity)) {
                         LivingEntity.attackEntityFrom(IafDamageRegistry.DRAGON_LIGHTNING, Math.max(1, stage - 1) * 2F);
+                        double d1 = destroyer.getPosX() - LivingEntity.getPosX();
+                        double d0 = destroyer.getPosZ() - LivingEntity.getPosZ();
+                        LivingEntity.knockBack(destroyer, 0.9F, d1, d0);
                     }
                 }
             } else {
@@ -402,6 +410,9 @@ public class IafDragonDestructionManager {
                 for (LivingEntity LivingEntity : world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB((double) center.getX() - j, (double) center.getY() - k, (double) center.getZ() - l, (double) center.getX() + j, (double) center.getY() + k, (double) center.getZ() + l))) {
                     if (!destroyer.isOnSameTeam(LivingEntity) && !destroyer.isEntityEqual(LivingEntity) && destroyer.canEntityBeSeen(LivingEntity)) {
                         LivingEntity.attackEntityFrom(IafDamageRegistry.DRAGON_LIGHTNING, Math.max(1, stage - 1) * 2F);
+                        double d1 = destroyer.getPosX() - LivingEntity.getPosX();
+                        double d0 = destroyer.getPosZ() - LivingEntity.getPosZ();
+                        LivingEntity.knockBack(destroyer, 0.9F, d1, d0);
                     }
                 }
             }

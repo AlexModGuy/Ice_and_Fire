@@ -55,7 +55,13 @@ public class ModelDragonEgg<T extends LivingEntity> extends AdvancedEntityModel<
         this.resetToDefaultPose();
         if (entity instanceof EntityDragonEgg) {
             EntityDragonEgg dragon = (EntityDragonEgg) entity;
-            if (dragon.world.getBlockState(new BlockPos(dragon)).getMaterial() == Material.FIRE && dragon.getEggType().dragonType == DragonType.FIRE) {
+            boolean flag = false;
+            if (dragon.getEggType().dragonType == DragonType.FIRE) {
+                flag = dragon.world.getBlockState(new BlockPos(dragon)).getMaterial() == Material.FIRE;
+            } else if(dragon.getEggType().dragonType == DragonType.LIGHTNING){
+                flag = dragon.world.isRainingAt(dragon.getPosition());
+            }
+            if (flag) {
                 this.walk(Egg1, 0.3F, 0.3F, true, 1, 0, f2, 1);
                 this.flap(Egg1, 0.3F, 0.3F, false, 0, 0, f2, 1);
             }

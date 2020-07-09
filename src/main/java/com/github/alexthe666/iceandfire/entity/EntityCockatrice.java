@@ -102,7 +102,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
         this.targetSelector.addGoal(5, new CockatriceAITarget(this, LivingEntity.class, true, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                return ((entity instanceof IMob) && EntityCockatrice.this.isTamed() && !(entity instanceof CreeperEntity) && !(entity instanceof ZombiePigmanEntity) && !(entity instanceof EndermanEntity) || entity instanceof PlayerEntity || ServerEvents.isAnimaniaFerret(entity)) && !ServerEvents.isAnimaniaChicken(entity);
+                return ((entity instanceof IMob) && EntityCockatrice.this.isTamed() && !(entity instanceof CreeperEntity) && !(entity instanceof ZombiePigmanEntity) && !(entity instanceof EndermanEntity) || entity instanceof PlayerEntity && !((PlayerEntity) entity).isCreative() || ServerEvents.isAnimaniaFerret(entity)) && !ServerEvents.isAnimaniaChicken(entity);
             }
         }));
         this.goalSelector.removeGoal(aiMelee);

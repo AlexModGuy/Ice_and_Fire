@@ -100,5 +100,34 @@ public class DragonType {
                 }
             }
         }
+        if (this == LIGHTNING) {
+            boolean flag;
+            try (BlockPos.PooledMutable blockpos$pooledmutable = BlockPos.PooledMutable.retain(egg)) {
+                flag = egg.world.isRainingAt(blockpos$pooledmutable) || egg.world.isRainingAt(blockpos$pooledmutable.setPos(egg.getPosX(), egg.getPosY() + (double)egg.size.height, egg.getPosZ()));
+            }
+            if (egg.world.canSeeSky(egg.getPosition().up()) && flag) {
+                egg.setDragonAge(egg.getDragonAge() + 1);
+            }
+            if (egg.getDragonAge() > IafConfig.dragonEggTime) {
+                EntityLightningDragon dragon = new EntityLightningDragon(egg.world);
+                if (egg.hasCustomName()) {
+                    dragon.setCustomName(egg.getCustomName());
+                }
+                dragon.setVariant(egg.getEggType().ordinal());
+                dragon.setGender(egg.getRNG().nextBoolean());
+                dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+                dragon.setHunger(50);
+                if (!egg.world.isRemote) {
+                    egg.world.addEntity(dragon);
+                }
+                dragon.setTamed(true);
+                dragon.setOwnerId(egg.getOwnerId());
+                egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), SoundEvents.ENTITY_LIGHTNING_BOLT_IMPACT, egg.getSoundCategory(), 2.5F, 1.0F, false);
+                egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), IafSoundRegistry.DRAGON_HATCH, egg.getSoundCategory(), 2.5F, 1.0F, false);
+                egg.remove();
+
+
+            }
+        }
     }
 }

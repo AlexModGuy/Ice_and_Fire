@@ -829,7 +829,7 @@
   "item.iceandfire.fire_dragon_blood.jei_desc": "Obtained by interacting with a dragon corpse while holding an empty bottle.",
   "item.iceandfire.ice_dragon_blood.jei_desc": "Obtained by interacting with a dragon corpse while holding an empty bottle.",
   "item.iceandfire.lightning_dragon_blood.jei_desc": "Obtained by interacting with a dragon corpse while holding an empty bottle.",
-  "item.iceandfire.dragonegg.jei_desc": "Place in an open flame if a fire dragon or underwater if ice dragon and wait a long time. The dragon will bond with the closest player.",
+  "item.iceandfire.dragonegg.jei_desc": "Place in an open flame if a fire dragon, underwater if ice dragon, or in rain if lightning dragon and wait a long time. The dragon will bond with the closest player.",
   "item.iceandfire.dragon_skull_fire.jei_desc": "Can be placed on the ground or on walls as a trophy.",
   "item.iceandfire.dragon_skull_ice.jei_desc": "Can be placed on the ground or on walls as a trophy.",
   "item.iceandfire.dragon_skull_lightning.jei_desc": "Can be placed on the ground or on walls as a trophy.",

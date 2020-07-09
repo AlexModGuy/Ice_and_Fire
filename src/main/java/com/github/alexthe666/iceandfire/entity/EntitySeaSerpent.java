@@ -116,6 +116,11 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public boolean isInRangeToRender3d(double x, double y, double z) {
+        return true;
+    }
+
     public static BlockPos getPositionRelativeToSeafloor(EntitySeaSerpent entity, World world, double x, double z, Random rand) {
         BlockPos pos;
         BlockPos topY = new BlockPos(x, entity.getPosY(), z);
@@ -261,13 +266,31 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     }
 
     @Override
+    public EntitySize getSize(Pose poseIn) {
+        return this.getType().getSize().scale(this.getRenderScale());
+    }
+
+    @Override
     public float getRenderScale() {
-        if (this.getSeaSerpentScale() != lastScale) {
-            resetParts(this.getSeaSerpentScale());
-        }
-        lastScale = this.getSeaSerpentScale();
         return this.getSeaSerpentScale();
     }
+
+    public void recalculateSize() {
+        super.recalculateSize();
+        float scale = this.getSeaSerpentScale();
+        double prevX = getPosX();
+        double prevY = getPosY();
+        double prevZ = getPosZ();
+        float localWidth = this.getWidth();
+        if (this.getWidth() > localWidth && !this.firstUpdate && !this.world.isRemote) {
+            //this.setPosition(prevX, prevY, prevZ);
+        }
+        if (scale != lastScale) {
+            resetParts(this.getSeaSerpentScale());
+        }
+        lastScale = scale;
+    }
+
 
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
@@ -281,6 +304,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     @Override
     public void tick() {
         super.tick();
+        recalculateSize();
         onUpdateParts();
         if (this.isInWater()) {
             spawnParticlesAroundEntity(ParticleTypes.BUBBLE, this, (int) this.getSeaSerpentScale());
