@@ -313,10 +313,10 @@ public class IafItemRegistry {
     public static final Item DREAD_QUEEN_STAFF = new ItemDreadQueenStaff();
     public static final Item DREAD_SHARD = new ItemGeneric("dread_shard", 0);
     public static final Item DREAD_KEY = new ItemGeneric("dread_key", 0);
-
     public static final Item HYDRA_FANG = new ItemGeneric("hydra_fang", 0);
     public static final Item HYDRA_HEART = new ItemHydraHeart();
     public static final Item HYDRA_ARROW = new ItemHydraArrow();
+    public static final Item CANNOLI = new ItemCannoli();
 
     static {
         EnumDragonArmor.initArmors();

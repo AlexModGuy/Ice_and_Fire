@@ -9,11 +9,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityStymphalianFeather extends AbstractArrowEntity {
 
@@ -24,6 +27,15 @@ public class EntityStymphalianFeather extends AbstractArrowEntity {
     public EntityStymphalianFeather(EntityType t, World worldIn, LivingEntity shooter) {
         super(t, shooter, worldIn);
         this.setDamage(IafConfig.stymphalianBirdFeatherAttackStength);
+    }
+
+    public EntityStymphalianFeather(FMLPlayMessages.SpawnEntity spawnEntity, World world) {
+        this(IafEntityRegistry.STYMPHALIAN_FEATHER, world);
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     public void remove() {

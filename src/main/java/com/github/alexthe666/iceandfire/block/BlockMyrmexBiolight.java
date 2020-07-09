@@ -1,15 +1,14 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BushBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -26,18 +25,22 @@ public class BlockMyrmexBiolight extends BushBlock {
         this.setDefaultState(this.getStateContainer().getBaseState().with(CONNECTED_DOWN, Boolean.valueOf(false)));
     }
 
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        return stateIn;
+    }
+
     public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
         if (!worldIn.isRemote) {
             this.updateState(state, worldIn, pos, state.getBlock());
         }
-        if (worldIn.getBlockState(pos.up()).isAir()) {
+        if (!worldIn.getBlockState(pos.up()).isSolid()) {
             worldIn.destroyBlock(pos, true);
         }
     }
 
     public void updateState(BlockState state, World worldIn, BlockPos pos, Block blockIn) {
         boolean flag2 = state.get(CONNECTED_DOWN);
-        boolean flag3 = !worldIn.getBlockState(pos.down()).isAir();
+        boolean flag3 = !worldIn.getBlockState(pos.down()).isSolid();
         if (flag2 != flag3) {
             worldIn.setBlockState(pos, state.with(CONNECTED_DOWN, Boolean.valueOf(flag3)), 3);
         }

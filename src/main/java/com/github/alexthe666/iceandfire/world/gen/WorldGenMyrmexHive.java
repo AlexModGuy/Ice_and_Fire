@@ -50,7 +50,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-        if(true || !IafConfig.generateMyrmexColonies || rand.nextInt(IafConfig.myrmexColonyGenChance) != 0){
+        if(!IafConfig.generateMyrmexColonies || rand.nextInt(IafConfig.myrmexColonyGenChance) != 0){
             return false;
         }
         pos = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);
@@ -60,7 +60,8 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         hasFoodRoom = false;
         hasNursery = false;
         totalRooms = 0;
-        BlockPos undergroundPos = new BlockPos(pos.getX(), pos.getY(), pos.getZ());
+        int down = Math.max(15, pos.getY() - 20 + rand.nextInt(10));
+        BlockPos undergroundPos = new BlockPos(pos.getX(), down, pos.getZ());
         entrances = 0;
         centerOfHive = undergroundPos;
         generateMainRoom(worldIn, rand, undergroundPos);
@@ -70,7 +71,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
 
     private void generateMainRoom(IWorld world, Random rand, BlockPos position) {
         hive = new MyrmexHive(world.getWorld(), position, 100);
-        MyrmexWorldData.addHive(world.getWorld(), hive);
+       // MyrmexWorldData.addHive(world.getWorld(), hive);
         BlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
         BlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         generateSphere(world, rand, position, 14, 7, resin, sticky_resin);
@@ -146,11 +147,11 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
                 if (entrances < 3 && rand.nextInt(1 + entrances * 2) == 0 && hasFoodRoom && hasNursery && totalRooms > 3) {
                     generateEntrance(world, rand, offset.offset(direction, length), 4, 4, direction);
                 } else {
-                    generateRoom(world, rand, offset.offset(direction, length), 7, 4, roomChance / 2, direction);
                     for (int i = -3; i < 3; i++) {
                         generateCircleAir(world, rand, offset.offset(direction, length + i), 3, 5, direction);
                     }
                     totalRooms++;
+                    generateRoom(world, rand, offset.offset(direction, length), 7, 4, 0, direction);
                 }
             }
         }
@@ -167,29 +168,29 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
             type = RoomType.NURSERY;
             hasNursery = true;
         }
-        generateSphereRespectResin(world, rand, position, size + 2, height + 2, resin, sticky_resin);
+        //generateSphereRespectResin(world, rand, position, size + 2, height + 2, resin, sticky_resin);
         generateSphere(world, rand, position, size, height - 1, Blocks.AIR.getDefaultState());
         decorateSphere(world, rand, position, size, height - 1, type);
-        hive.addRoom(position, type);
+        //hive.addRoom(position, type);
         if (!small) {
             if (rand.nextInt(3) == 0 && direction.getOpposite() != Direction.NORTH) {
-                generatePath(world, rand, position.offset(Direction.NORTH, size - 2), 5 + rand.nextInt(20), Direction.NORTH, roomChance);
+             //   generatePath(world, rand, position.offset(Direction.NORTH, size - 2), 5 + rand.nextInt(20), Direction.NORTH, roomChance);
             }
             if (rand.nextInt(3) == 0 && direction.getOpposite() != Direction.SOUTH) {
-                generatePath(world, rand, position.offset(Direction.SOUTH, size - 2), 5 + rand.nextInt(20), Direction.SOUTH, roomChance);
+             //   generatePath(world, rand, position.offset(Direction.SOUTH, size - 2), 5 + rand.nextInt(20), Direction.SOUTH, roomChance);
             }
             if (rand.nextInt(3) == 0 && direction.getOpposite() != Direction.WEST) {
-                generatePath(world, rand, position.offset(Direction.WEST, size - 2), 5 + rand.nextInt(20), Direction.WEST, roomChance);
+              //  generatePath(world, rand, position.offset(Direction.WEST, size - 2), 5 + rand.nextInt(20), Direction.WEST, roomChance);
             }
             if (rand.nextInt(3) == 0 && direction.getOpposite() != Direction.EAST) {
-                generatePath(world, rand, position.offset(Direction.EAST, size - 2), 5 + rand.nextInt(20), Direction.EAST, roomChance);
+              //  generatePath(world, rand, position.offset(Direction.EAST, size - 2), 5 + rand.nextInt(20), Direction.EAST, roomChance);
             }
         }
     }
 
     private void generateEntrance(IWorld world, Random rand, BlockPos position, int size, int height, Direction direction) {
         BlockPos up = position.up();
-        hive.getEntranceBottoms().put(up, direction);
+        //hive.getEntranceBottoms().put(up, direction);
         while (!world.canBlockSeeSky(up)) {
             generateCircleRespectSky(world, rand, up, size, height, direction);
             up = up.up().offset(direction);
@@ -199,7 +200,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         generateSphereRespectAir(world, rand, up, size + 2, height + 2, resin, sticky_resin);
         generateSphere(world, rand, up.up(), size, height - 1, Blocks.AIR.getDefaultState());
         decorateSphere(world, rand, up.up(), size, height - 1, RoomType.ENTERANCE);
-        hive.getEntrances().put(up, direction);
+        //hive.getEntrances().put(up, direction);
         entrances++;
     }
 
@@ -308,7 +309,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         float f = (float) (j + k + l) * 0.333F;
         for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
             if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F)) && !world.isAirBlock(blockpos)) {
-                world.setBlockState(blockpos, fill, 3);
+                world.setBlockState(blockpos, fill, 2);
             }
         }
     }
@@ -322,7 +323,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         float f = (float) (j + k + l) * 0.333F;
         for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
             if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F))) {
-                world.setBlockState(blockpos, rand.nextInt(3) == 0 ? fill2 : fill, 3);
+                world.setBlockState(blockpos, rand.nextInt(3) == 0 ? fill2 : fill, 2);
             }
         }
     }
@@ -337,7 +338,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
             if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F))
                     && (!world.isAirBlock(blockpos) || world.isAirBlock(blockpos) && !hasResinUnder(blockpos, world))) {
-                world.setBlockState(blockpos, rand.nextInt(3) == 0 ? fill2 : fill, 3);
+                world.setBlockState(blockpos, rand.nextInt(3) == 0 ? fill2 : fill, 2);
             }
         }
     }
@@ -352,7 +353,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
             if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F))
                     && !world.isAirBlock(blockpos)) {
-                world.setBlockState(blockpos, rand.nextInt(3) == 0 ? fill2 : fill, 3);
+                world.setBlockState(blockpos, rand.nextInt(3) == 0 ? fill2 : fill, 2);
             }
         }
     }

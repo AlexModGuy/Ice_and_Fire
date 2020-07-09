@@ -8,6 +8,8 @@ import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.structure.IStructurePieceType;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -27,12 +29,15 @@ public class IafWorldRegistry {
     public static Feature<NoFeatureConfig> MAUSOLEUM;
     public static Feature<NoFeatureConfig> MYRMEX_HIVE_DESERT;
     public static Feature<NoFeatureConfig> MYRMEX_HIVE_JUNGLE;
+    public static IStructurePieceType MYRMEX_STRUCTURE_TYPE;
+   // public static final Structure<NoFeatureConfig> MYRMEX_STRUCTURE = new MyrmexStructure(NoFeatureConfig::deserialize);
 
     static {
         GLACIER_SURFACE_BUILDER.setRegistryName("iceandfire:glacier_surface");
     }
 
     public static void init() {
+      //  MYRMEX_STRUCTURE_TYPE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:myrmex_structure", MyrmexStructurePeices.Piece::new);
         FIRE_DRAGON_ROOST = Registry.register(Registry.FEATURE, "iceandfire:fire_dragon_roost", new WorldGenFireDragonRoosts(NoFeatureConfig::deserialize));
         ICE_DRAGON_ROOST = Registry.register(Registry.FEATURE, "iceandfire:ice_dragon_roost", new WorldGenIceDragonRoosts(NoFeatureConfig::deserialize));
         FIRE_DRAGON_CAVE = Registry.register(Registry.FEATURE, "iceandfire:fire_dragon_cave", new WorldGenFireDragonCave(NoFeatureConfig::deserialize));
@@ -73,10 +78,10 @@ public class IafWorldRegistry {
                     biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MAUSOLEUM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
                 }
                 if(BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.HOT) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.DRY)){
-                    biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MYRMEX_HIVE_DESERT.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+                    biome.addFeature(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, MYRMEX_HIVE_DESERT.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
                 }
                 if(BiomeDictionary.hasType(biome, BiomeDictionary.Type.JUNGLE)){
-                    biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MYRMEX_HIVE_JUNGLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+                    biome.addFeature(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, MYRMEX_HIVE_JUNGLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
                 }
             }else{
                 if(BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN)){

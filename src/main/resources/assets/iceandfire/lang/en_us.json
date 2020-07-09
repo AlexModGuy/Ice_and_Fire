@@ -422,6 +422,8 @@
   "item.iceandfire.dread_key": "§bGravemaster's Key§r",
   "item.iceandfire.hydra_fang": "Hydra Fang",
   "item.iceandfire.hydra_heart": "Hydra Heart",
+  "item.iceandfire.cannoli": "§6Cannoli§r",
+  "item.iceandfire.cannoli.desc": "\"You may encounter dragons or ruffians\"",
   "item.iceandfire.hydra_heart.desc_0": "When in hotbar, gives increasing regeneration",
   "item.iceandfire.hydra_heart.desc_1": "based on how injured the holder is",
   "item.iceandfire.hydra_arrow": "Hydra Arrow",
@@ -459,7 +461,6 @@
   "item.iceandfire.spawn_egg_dread_knight": "Spawn Dread Knight",
   "item.iceandfire.spawn_egg_dread_horse": "Spawn Dread Knight Horse",
   "item.iceandfire.spawn_egg_hydra": "Spawn Hydra",
-
   "item.iceandfire.banner_pattern_fire": "Banner Pattern",
   "item.iceandfire.banner_pattern_fire.desc": "Fire Dragon",
   "item.iceandfire.banner_pattern_ice": "Banner Pattern",

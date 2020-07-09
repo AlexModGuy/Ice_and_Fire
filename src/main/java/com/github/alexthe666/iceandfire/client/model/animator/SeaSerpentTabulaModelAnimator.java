@@ -71,10 +71,12 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
             model.getCube("Tail3").rotateAngleX -= (float) Math.toRadians(turn) * entity.jumpRot;
             model.getCube("Tail4").rotateAngleX -= (float) Math.toRadians(turn) * entity.jumpRot;
         }
+        if(entity.isInWater()){
+            entity.roll_buffer.applyChainFlapBuffer(model.getCube("BodyUpper"));
+            entity.pitch_buffer.applyChainWaveBuffer(model.getCube("BodyUpper"));
+            entity.head_buffer.applyChainSwingBufferReverse(neckParts);
+        }
         entity.tail_buffer.applyChainSwingBuffer(tailParts);
-        entity.roll_buffer.applyChainFlapBuffer(model.getCube("BodyUpper"));
-        entity.pitch_buffer.applyChainWaveBuffer(model.getCube("BodyUpper"));
-        entity.head_buffer.applyChainSwingBufferReverse(neckParts);
 
     }
 

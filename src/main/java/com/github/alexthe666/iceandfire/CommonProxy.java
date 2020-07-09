@@ -18,6 +18,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
@@ -58,6 +59,12 @@ public class CommonProxy {
             BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(IafWorldRegistry.GLACIER_BIOME, IafConfig.glacierSpawnChance));
         }
     }
+
+    @SubscribeEvent
+    public static void registerWorldGenFeatures(RegistryEvent.Register<Feature<?>> event) {
+  //      event.getRegistry().registerAll(IafWorldRegistry.MYRMEX_STRUCTURE);
+    }
+
 
     public void setReferencedHive(MyrmexHive hive) {
 

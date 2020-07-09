@@ -87,7 +87,7 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
             int k = (radius / 5);
             int l = radius;
             float f = (float) (j + k + l) * 0.333F + 0.5F;
-            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, 0, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
+            for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, 1, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(position) < (double) (f * f)) {
                     worldIn.setBlockState(blockpos, rand.nextBoolean() ? IafBlockRegistry.CHARRED_GRAVEL.getDefaultState() : IafBlockRegistry.CHARRED_DIRT.getDefaultState(), 2);
                 }
