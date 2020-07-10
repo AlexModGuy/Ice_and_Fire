@@ -120,7 +120,13 @@ public class WorldGenMyrmexDecoration {
     }
 
     public static void generateGold(IWorld worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
-        BlockState gold = rand.nextBoolean() ? IafBlockRegistry.GOLD_PILE.getDefaultState() : IafBlockRegistry.SILVER_PILE.getDefaultState();
+        BlockState gold = IafBlockRegistry.GOLD_PILE.getDefaultState();
+        int choice = rand.nextInt(2);
+        if(choice == 1){
+            gold = IafBlockRegistry.SILVER_PILE.getDefaultState();
+        }else if(choice == 2){
+            gold = IafBlockRegistry.COPPER_PILE.getDefaultState();
+        }
         if (worldIn.getBlockState(blockpos.down()).isSolidSide(worldIn, blockpos.down(), Direction.UP)) {
             worldIn.setBlockState(blockpos, gold.with(BlockGoldPile.LAYERS, 8), 3);
             worldIn.setBlockState(MyrmexHive.getGroundedPos(worldIn, blockpos.north()), gold.with(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
@@ -180,10 +186,16 @@ public class WorldGenMyrmexDecoration {
                 Block ore = Blocks.REDSTONE_ORE;
                 if (rand.nextInt(3) == 0) {
                     ore = rand.nextBoolean() ? Blocks.GOLD_ORE : IafBlockRegistry.SILVER_ORE;
+                    if(rand.nextInt(2) == 0){
+                        ore = IafBlockRegistry.COPPER_ORE;
+                    }
                 } else if (rand.nextInt(3) == 0) {
                     ore = Blocks.DIAMOND_ORE;
                 } else if (rand.nextInt(2) == 0) {
                     ore = rand.nextBoolean() ? Blocks.EMERALD_ORE : IafBlockRegistry.SAPPHIRE_ORE;
+                    if(rand.nextInt(2) == 0){
+                        ore = IafBlockRegistry.AMYTHEST_ORE;
+                    }
                 }
                 worldIn.setBlockState(blockpos, ore.getDefaultState(), 2);
             }

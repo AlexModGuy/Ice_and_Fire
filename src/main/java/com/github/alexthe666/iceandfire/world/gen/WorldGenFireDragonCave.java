@@ -133,7 +133,10 @@ public class WorldGenFireDragonCave extends Feature<NoFeatureConfig> {
                         if (chance > 30 && chance < 40) {
                             worldIn.setBlockState(blockpos, Blocks.GOLD_ORE.getDefaultState(), 3);
                         }
-                        if (chance > 40 && chance < 50) {
+                        if (chance > 40 && chance < 45) {
+                            worldIn.setBlockState(blockpos, IafConfig.generateCopperOre ? IafBlockRegistry.COPPER_ORE.getDefaultState() : IafBlockRegistry.CHARRED_STONE.getDefaultState(), 3);
+                        }
+                        if (chance > 45 && chance < 50) {
                             worldIn.setBlockState(blockpos, IafConfig.generateSilverOre ? IafBlockRegistry.SILVER_ORE.getDefaultState() : IafBlockRegistry.CHARRED_STONE.getDefaultState(), 3);
                         }
                         if (chance > 50 && chance < 60) {

@@ -9,6 +9,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -17,13 +18,18 @@ import java.util.Random;
 public class BlockMyrmexBiolight extends BushBlock {
 
     public static final BooleanProperty CONNECTED_DOWN = BooleanProperty.create("down");
-    protected static final AxisAlignedBB BUSH_AABB = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1D, 0.75D);
 
     public BlockMyrmexBiolight(boolean jungle) {
-        super(Properties.create(Material.PLANTS).notSolid().variableOpacity().hardnessAndResistance(0).lightValue(7).sound(SoundType.PLANT).tickRandomly());
+        super(Properties.create(Material.PLANTS).notSolid().doesNotBlockMovement().variableOpacity().hardnessAndResistance(0).lightValue(7).sound(SoundType.PLANT).tickRandomly());
         this.setRegistryName(IceAndFire.MODID, jungle ? "myrmex_jungle_biolight" : "myrmex_desert_biolight");
         this.setDefaultState(this.getStateContainer().getBaseState().with(CONNECTED_DOWN, Boolean.valueOf(false)));
     }
+
+    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+        BlockPos blockpos = pos.up();
+        return worldIn.getBlockState(blockpos).getBlock() == this || worldIn.getBlockState(blockpos).isSolid();
+    }
+
 
     public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
         return stateIn;

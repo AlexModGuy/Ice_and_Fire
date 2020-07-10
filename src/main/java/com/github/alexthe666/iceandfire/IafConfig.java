@@ -5,7 +5,9 @@ public class IafConfig {
     public static boolean useVanillaFont = false;
     public static boolean logCascadingWorldGen = false;
     public static boolean generateSilverOre = true;
+    public static boolean generateCopperOre = true;
     public static boolean generateSapphireOre = true;
+    public static boolean generateAmythestOre = true;
     public static boolean generateDragonSkeletons = true;
     public static int generateDragonSkeletonChance = 300;
     public static int worldGenDistance = 300;
