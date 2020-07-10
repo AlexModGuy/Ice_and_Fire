@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.mojang.datafixers.Dynamic;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 
 public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
 
-    public static final ResourceLocation HYDRA_CHEST = new ResourceLocation("iceandfire", "hydra_cave");
+    public static final ResourceLocation HYDRA_CHEST = new ResourceLocation("iceandfire", "chest/hydra_cave");
     protected static final ConfiguredFeature<TreeFeatureConfig, ?> SWAMP_FEATURE = Feature.NORMAL_TREE.withConfiguration(DefaultBiomeFeatures.SWAMP_TREE_CONFIG);
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
@@ -38,7 +39,7 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
-        if(true){
+        if(!IafConfig.generateHydraCaves || rand.nextInt(IafConfig.generateHydraChance) != 0){
             return false;
         }
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
@@ -62,13 +63,13 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
                 boolean doorwayZ = blockpos.getZ() >= position.getZ() - 2 + rand.nextInt(2) && blockpos.getZ() <= position.getZ() + 2 + rand.nextInt(2);
                 boolean isNotInDoorway = !doorwayX && !doorwayZ && blockpos.getY() > position.getY() || blockpos.getY() > position.getY() + k - (1 + rand.nextInt(2));
                 if (blockpos.distanceSq(position) <= (double) (f * f)) {
-                    if (!(worldIn.getBlockState(position).getBlock() instanceof ChestBlock) && worldIn.getBlockState(position).getBlock().getBlockHardness(worldIn.getBlockState(position), worldIn, position) >= 0 && isNotInDoorway) {
-                        worldIn.setBlockState(blockpos, Blocks.GRASS.getDefaultState(), 3);
-                        if (worldIn.getBlockState(position.down()).getBlock() == Blocks.GRASS) {
+                    if (!(worldIn.getBlockState(position).getBlock() instanceof ChestBlock) && isNotInDoorway) {
+                        worldIn.setBlockState(blockpos, Blocks.GRASS_BLOCK.getDefaultState(), 3);
+                        if (worldIn.getBlockState(position.down()).getBlock() == Blocks.GRASS_BLOCK) {
                             worldIn.setBlockState(blockpos.down(), Blocks.DIRT.getDefaultState(), 3);
                         }
                         if (rand.nextInt(4) == 0) {
-                            worldIn.setBlockState(blockpos.up(), Blocks.TALL_GRASS.getDefaultState(), 2);
+                            worldIn.setBlockState(blockpos.up(), Blocks.GRASS.getDefaultState(), 2);
                         }
                         if (rand.nextInt(9) == 0) {
                             SWAMP_FEATURE.place(worldIn, generator, rand, blockpos.up());
@@ -76,7 +77,7 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
 
                     }
                     if (blockpos.getY() == position.getY()) {
-                        worldIn.setBlockState(blockpos, Blocks.GRASS.getDefaultState(), 3);
+                        worldIn.setBlockState(blockpos, Blocks.GRASS_BLOCK.getDefaultState(), 3);
                     }
                     if (blockpos.getY() <= position.getY() - 1 && !worldIn.getBlockState(blockpos).isSolid()) {
                         worldIn.setBlockState(blockpos, Blocks.STONE.getDefaultState(), 3);
