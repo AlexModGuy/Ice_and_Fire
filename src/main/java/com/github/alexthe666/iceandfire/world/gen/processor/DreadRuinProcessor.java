@@ -28,7 +28,7 @@ public class DreadRuinProcessor extends StructureProcessor {
     public static final ResourceLocation DREAD_CHEST_LOOT = new ResourceLocation("iceandfire", "mausoleum_chest");
     private float integrity = 1.0F;
 
-    public DreadRuinProcessor(BlockPos position, @Nullable Biome biome) {
+    public DreadRuinProcessor() {
     }
 
     public static BlockState getRandomCrackedBlock(@Nullable BlockState prev, Random random) {

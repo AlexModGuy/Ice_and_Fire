@@ -60,12 +60,6 @@ public class CommonProxy {
         }
     }
 
-    @SubscribeEvent
-    public static void registerWorldGenFeatures(RegistryEvent.Register<Feature<?>> event) {
-  //      event.getRegistry().registerAll(IafWorldRegistry.MYRMEX_STRUCTURE);
-    }
-
-
     public void setReferencedHive(MyrmexHive hive) {
 
     }

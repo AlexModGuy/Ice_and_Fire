@@ -3,6 +3,8 @@ package com.github.alexthe666.iceandfire.world;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.world.gen.*;
+import com.github.alexthe666.iceandfire.world.structure.MausoleumPiece;
+import com.github.alexthe666.iceandfire.world.structure.MausoleumStructure;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
@@ -29,18 +31,16 @@ public class IafWorldRegistry {
     public static Feature<NoFeatureConfig> SIREN_ISLAND;
     public static Feature<NoFeatureConfig> HYDRA_CAVE;
     public static Feature<NoFeatureConfig> GORGON_TEMPLE;
-    public static Feature<NoFeatureConfig> MAUSOLEUM;
     public static Feature<NoFeatureConfig> MYRMEX_HIVE_DESERT;
     public static Feature<NoFeatureConfig> MYRMEX_HIVE_JUNGLE;
-    public static IStructurePieceType MYRMEX_STRUCTURE_TYPE;
-   // public static final Structure<NoFeatureConfig> MYRMEX_STRUCTURE = new MyrmexStructure(NoFeatureConfig::deserialize);
+    public static IStructurePieceType MAUSOLEUM_PIECE;
+    public static Structure<NoFeatureConfig> MAUSOLEUM;
 
     static {
         GLACIER_SURFACE_BUILDER.setRegistryName("iceandfire:glacier_surface");
     }
 
     public static void init() {
-      //  MYRMEX_STRUCTURE_TYPE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:myrmex_structure", MyrmexStructurePeices.Piece::new);
         FIRE_DRAGON_ROOST = Registry.register(Registry.FEATURE, "iceandfire:fire_dragon_roost", new WorldGenFireDragonRoosts(NoFeatureConfig::deserialize));
         ICE_DRAGON_ROOST = Registry.register(Registry.FEATURE, "iceandfire:ice_dragon_roost", new WorldGenIceDragonRoosts(NoFeatureConfig::deserialize));
         FIRE_DRAGON_CAVE = Registry.register(Registry.FEATURE, "iceandfire:fire_dragon_cave", new WorldGenFireDragonCave(NoFeatureConfig::deserialize));
@@ -49,9 +49,11 @@ public class IafWorldRegistry {
         SIREN_ISLAND = Registry.register(Registry.FEATURE, "iceandfire:siren_island", new WorldGenSirenIsland(NoFeatureConfig::deserialize));
         HYDRA_CAVE = Registry.register(Registry.FEATURE, "iceandfire:hydra_cave", new WorldGenHydraCave(NoFeatureConfig::deserialize));
         GORGON_TEMPLE = Registry.register(Registry.FEATURE, "iceandfire:gorgon_temple", new WorldGenGorgonTemple(NoFeatureConfig::deserialize));
-        MAUSOLEUM = Registry.register(Registry.FEATURE, "iceandfire:mausoleum", new WorldGenMausoleum(NoFeatureConfig::deserialize));
         MYRMEX_HIVE_DESERT = Registry.register(Registry.FEATURE, "iceandfire:myrmex_hive_desert", new WorldGenMyrmexHive(false, false, NoFeatureConfig::deserialize));
         MYRMEX_HIVE_JUNGLE = Registry.register(Registry.FEATURE, "iceandfire:myrmex_hive_jungle", new WorldGenMyrmexHive(false, true, NoFeatureConfig::deserialize));
+        MAUSOLEUM_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:mausoleum_piece", MausoleumPiece.Piece::new);
+        MAUSOLEUM = Registry.register(Registry.FEATURE, "iceandfire:mausoleum", new MausoleumStructure(NoFeatureConfig::deserialize));
+        MAUSOLEUM = Registry.register(Registry.STRUCTURE_FEATURE, "iceandfire:mausoleum", MAUSOLEUM);
 
         for (Biome biome : ForgeRegistries.BIOMES) {
             if(IafConfig.generateSilverOre){

@@ -29,8 +29,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class WorldGenIceDragonCave extends Feature<NoFeatureConfig> {
-    public static final ResourceLocation ICEDRAGON_CHEST = new ResourceLocation("iceandfire", "ice_dragon_female_cave");
-    public static final ResourceLocation ICEDRAGON_MALE_CHEST = new ResourceLocation("iceandfire", "ice_dragon_male_cave");
+    public static final ResourceLocation ICEDRAGON_CHEST = new ResourceLocation("iceandfire", "chest/ice_dragon_female_cave");
+    public static final ResourceLocation ICEDRAGON_MALE_CHEST = new ResourceLocation("iceandfire", "chest/ice_dragon_male_cave");
     private static final WorldGenCaveStalactites CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.FROZEN_STONE);
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private static boolean isMale;

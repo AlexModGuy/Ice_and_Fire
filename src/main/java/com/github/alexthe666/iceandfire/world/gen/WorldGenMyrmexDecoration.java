@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 
 public class WorldGenMyrmexDecoration {
 
-    public static final ResourceLocation MYRMEX_GOLD_CHEST = new ResourceLocation("iceandfire", "myrmex_loot_chest");
-    public static final ResourceLocation DESERT_MYRMEX_FOOD_CHEST = new ResourceLocation("iceandfire", "myrmex_desert_food_chest");
-    public static final ResourceLocation JUNGLE_MYRMEX_FOOD_CHEST = new ResourceLocation("iceandfire", "myrmex_jungle_food_chest");
-    public static final ResourceLocation MYRMEX_TRASH_CHEST = new ResourceLocation("iceandfire", "myrmex_trash_chest");
+    public static final ResourceLocation MYRMEX_GOLD_CHEST = new ResourceLocation("iceandfire", "chests/myrmex_loot_chest");
+    public static final ResourceLocation DESERT_MYRMEX_FOOD_CHEST = new ResourceLocation("iceandfire", "chests/myrmex_desert_food_chest");
+    public static final ResourceLocation JUNGLE_MYRMEX_FOOD_CHEST = new ResourceLocation("iceandfire", "chests/myrmex_jungle_food_chest");
+    public static final ResourceLocation MYRMEX_TRASH_CHEST = new ResourceLocation("iceandfire", "chests/myrmex_trash_chest");
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
     public static void generateSkeleton(IWorld worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
