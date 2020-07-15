@@ -55,7 +55,7 @@ public class IafConfig {
     public static boolean spawnHippogryphs = true;
     public static int hippogryphSpawnRate = 2;
     public static boolean spawnGorgons = true;
-    public static int spawnGorgonsChance = 75;
+    public static int spawnGorgonsChance = 16;
     public static double gorgonMaxHealth = 100D;
     public static boolean spawnPixies = true;
     public static int spawnPixiesChance = 60;

@@ -4,6 +4,8 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.world.gen.*;
 import com.github.alexthe666.iceandfire.world.structure.DreadMausoleumStructure;
+import com.github.alexthe666.iceandfire.world.structure.GorgonTemplePiece;
+import com.github.alexthe666.iceandfire.world.structure.GorgonTempleStructure;
 import com.github.alexthe666.iceandfire.world.structure.MausoleumPiece;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.registry.Registry;
@@ -31,11 +33,12 @@ public class IafWorldRegistry {
     public static Feature<NoFeatureConfig> CYCLOPS_CAVE;
     public static Feature<NoFeatureConfig> SIREN_ISLAND;
     public static Feature<NoFeatureConfig> HYDRA_CAVE;
-    public static Feature<NoFeatureConfig> GORGON_TEMPLE;
     public static Feature<NoFeatureConfig> MYRMEX_HIVE_DESERT;
     public static Feature<NoFeatureConfig> MYRMEX_HIVE_JUNGLE;
     public static IStructurePieceType MAUSOLEUM_PIECE;
     public static Structure<NoFeatureConfig> MAUSOLEUM = new DreadMausoleumStructure(NoFeatureConfig::deserialize);
+    public static IStructurePieceType GORGON_PIECE;
+    public static Structure<NoFeatureConfig> GORGON_TEMPLE = new GorgonTempleStructure(NoFeatureConfig::deserialize);
 
     static {
         GLACIER_SURFACE_BUILDER.setRegistryName("iceandfire:glacier_surface");
@@ -49,12 +52,16 @@ public class IafWorldRegistry {
         CYCLOPS_CAVE = Registry.register(Registry.FEATURE, "iceandfire:cyclops_cave", new WorldGenCyclopsCave(NoFeatureConfig::deserialize));
         SIREN_ISLAND = Registry.register(Registry.FEATURE, "iceandfire:siren_island", new WorldGenSirenIsland(NoFeatureConfig::deserialize));
         HYDRA_CAVE = Registry.register(Registry.FEATURE, "iceandfire:hydra_cave", new WorldGenHydraCave(NoFeatureConfig::deserialize));
-        GORGON_TEMPLE = Registry.register(Registry.FEATURE, "iceandfire:gorgon_temple", new WorldGenGorgonTemple(NoFeatureConfig::deserialize));
         MYRMEX_HIVE_DESERT = Registry.register(Registry.FEATURE, "iceandfire:myrmex_hive_desert", new WorldGenMyrmexHive(false, false, NoFeatureConfig::deserialize));
         MYRMEX_HIVE_JUNGLE = Registry.register(Registry.FEATURE, "iceandfire:myrmex_hive_jungle", new WorldGenMyrmexHive(false, true, NoFeatureConfig::deserialize));
         MAUSOLEUM_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:mausoleum_piece", MausoleumPiece.Piece::new);
         MAUSOLEUM = Registry.register(Registry.FEATURE, "iceandfire:mausoleum", MAUSOLEUM);
         Registry.register(Registry.STRUCTURE_FEATURE, "iceandfire:mausoleum", MAUSOLEUM);
+
+        GORGON_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece", GorgonTemplePiece.Piece::new);
+        GORGON_TEMPLE = Registry.register(Registry.FEATURE, "iceandfire:gorgon_temple", GORGON_TEMPLE);
+        Registry.register(Registry.STRUCTURE_FEATURE, "iceandfire:gorgon_temple", GORGON_TEMPLE);
+
     }
 
     public static void setup() {
@@ -87,7 +94,8 @@ public class IafWorldRegistry {
                     }
                 }
                 if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.BEACH)) {
-                    biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, GORGON_TEMPLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+                    biome.addStructure(GORGON_TEMPLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+                    biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, GORGON_TEMPLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
                     biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, CYCLOPS_CAVE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
                 }
                 if(BiomeDictionary.hasType(biome, BiomeDictionary.Type.SWAMP)){
