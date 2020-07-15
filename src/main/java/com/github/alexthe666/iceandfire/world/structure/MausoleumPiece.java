@@ -25,7 +25,7 @@ import java.util.Random;
 
 public class MausoleumPiece {
     private static final BlockPos STRUCTURE_OFFSET = new BlockPos(0, 0, 0);
-    private static final ResourceLocation PART_1 = new ResourceLocation("iceandfire:dread_mausoleum");
+    private static final ResourceLocation PART_1 = new ResourceLocation("iceandfire:dread_mausoleum_forge");
 
     public static void func_204760_a(TemplateManager p_204760_0_, BlockPos p_204760_1_, Rotation p_204760_2_, List<StructurePiece> p_204760_3_, Random p_204760_4_) {
         p_204760_3_.add(new MausoleumPiece.Piece(p_204760_0_, PART_1, p_204760_1_, p_204760_2_, p_204760_4_));
@@ -43,9 +43,7 @@ public class MausoleumPiece {
             int lvt_8_1_ = world.getHeight(Heightmap.Type.WORLD_SURFACE, inital.getX(), inital.getZ());
             BlockPos pos = new BlockPos(inital.getX(), lvt_8_1_, inital.getZ());
             this.templatePosition = new BlockPos(this.templatePosition.getX(), pos.getY(), this.templatePosition.getZ());
-            if(!world.getBlockState(templatePosition).getFluidState().isEmpty()){
-                return false;
-            }
+
             return super.func_225577_a_(world, p_225577_2_, p_225577_3_, p_225577_4_, p_225577_5_);
         }
 
@@ -55,7 +53,7 @@ public class MausoleumPiece {
             this.rotation = p_i48904_4_;
             this.field_204756_e = p_i48904_2_;
             this.func_204754_a(p_i48904_1_);
-            this.template = p_i48904_1_.getTemplate(p_i48904_2_);
+            this.template = p_i48904_1_.getTemplate(PART_1);
             this.random = new Random();
             this.manager = p_i48904_1_;
         }
@@ -77,13 +75,13 @@ public class MausoleumPiece {
         }
 
         private void func_204754_a(TemplateManager p_204754_1_) {
-            Template lvt_2_1_ = p_204754_1_.getTemplateDefaulted(this.field_204756_e);
-            PlacementSettings lvt_3_1_ = (new PlacementSettings()).setRotation(this.rotation).setMirror(Mirror.NONE).addProcessor(BlockIgnoreStructureProcessor.AIR_AND_STRUCTURE_BLOCK).addProcessor(new DreadRuinProcessor());
+            Template lvt_2_1_ = p_204754_1_.getTemplateDefaulted(PART_1);
+            PlacementSettings lvt_3_1_ = (new PlacementSettings()).setRotation(this.rotation).setMirror(Mirror.NONE).addProcessor(BlockIgnoreStructureProcessor.AIR_AND_STRUCTURE_BLOCK);
             this.setup(lvt_2_1_, this.templatePosition, lvt_3_1_);
         }
 
         protected void handleDataMarker(String function, BlockPos pos, IWorld worldIn, Random rand, MutableBoundingBox sbb) {
-                worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+                //worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
             }
         }
 

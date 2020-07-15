@@ -42,7 +42,41 @@ public class DreadRuinProcessor extends StructureProcessor {
         }
     }
 
-    @Nullable
+    public Template.BlockInfo process(IWorldReader worldReader, BlockPos pos, Template.BlockInfo infoIn1, Template.BlockInfo infoIn2, PlacementSettings settings) {
+        Random random = settings.getRandom(infoIn2.pos);
+        if (random.nextFloat() <= integrity) {
+            if (infoIn2.state.getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS) {
+                BlockState state = getRandomCrackedBlock(null, random);
+                return new Template.BlockInfo(infoIn2.pos, state, null);
+            }
+            if (infoIn2.state.getBlock() instanceof AbstractChestBlock) {
+                ResourceLocation loot = DREAD_CHEST_LOOT;
+                CompoundNBT tag = new CompoundNBT();
+                tag.putString("LootTable", loot.toString());
+                tag.putLong("LootTableSeed", random.nextLong());
+                Template.BlockInfo newInfo = new Template.BlockInfo(infoIn2.pos, Blocks.CHEST.getDefaultState(), tag);
+                return newInfo;
+            }
+            if (infoIn2.state.getBlock() == IafBlockRegistry.DREAD_SPAWNER) {
+                CompoundNBT tag = new CompoundNBT();
+                CompoundNBT spawnData = new CompoundNBT();
+                ResourceLocation spawnerMobId = ForgeRegistries.ENTITIES.getKey(getRandomMobForMobSpawner(random));
+                if (spawnerMobId != null) {
+                    spawnData.putString("id", spawnerMobId.toString());
+                    tag.remove("SpawnPotentials");
+                    tag.put("SpawnData", spawnData.copy());
+                }
+                Template.BlockInfo newInfo = new Template.BlockInfo(infoIn2.pos, IafBlockRegistry.DREAD_SPAWNER.getDefaultState(), tag);
+                return newInfo;
+
+            }
+            return infoIn2;
+        }
+        return infoIn2;
+    }
+
+
+   /* @Nullable
     @Override
     public Template.BlockInfo process(IWorldReader worldIn, BlockPos pos, Template.BlockInfo blockInfoIn, Template.BlockInfo blockInfoIn2, PlacementSettings settings) {
         Random random = settings.getRandom(pos);
@@ -76,7 +110,7 @@ public class DreadRuinProcessor extends StructureProcessor {
         }
         return blockInfoIn;
 
-    }
+    }*/
 
     @Override
     protected IStructureProcessorType getType() {

@@ -141,7 +141,7 @@ public class IafConfig {
     public static boolean dragonAuto3rdPerson = true;
     public static double dreadQueenMaxHealth = 750;
     public static boolean generateMausoleums = true;
-    public static int generateMausoleumChance = 1800;
+    public static int generateMausoleumChance = 30;
     public static boolean spawnLiches = true;
     public static int lichSpawnRate = 2;
     public static double hydraMaxHealth = 250D;

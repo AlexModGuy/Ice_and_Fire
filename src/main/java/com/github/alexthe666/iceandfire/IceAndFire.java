@@ -70,7 +70,7 @@ public class IceAndFire {
         //modLoadingContext.registerConfig(ModConfig.Type.CLIENT, ConfigHolder.CLIENT_SPEC);
         //modLoadingContext.registerConfig(ModConfig.Type.SERVER, ConfigHolder.SERVER_SPEC);
         PROXY.init();
-        IafWorldRegistry.init();
+        IafWorldRegistry.register();
     }
 
     static{
@@ -117,6 +117,7 @@ public class IceAndFire {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageUpdatePodium.class, MessageUpdatePodium::write, MessageUpdatePodium::read, MessageUpdatePodium.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageUpdateDragonforge.class, MessageUpdateDragonforge::write, MessageUpdateDragonforge::read, MessageUpdateDragonforge.Handler::handle);
         PROXY.setup();
+        IafWorldRegistry.setup();
     }
 
     private void setupComplete(final FMLLoadCompleteEvent event) {
