@@ -25,7 +25,7 @@ import java.util.Random;
 
 public class DreadRuinProcessor extends StructureProcessor {
 
-    public static final ResourceLocation DREAD_CHEST_LOOT = new ResourceLocation("iceandfire", "mausoleum_chest");
+    public static final ResourceLocation DREAD_CHEST_LOOT = new ResourceLocation("iceandfire", "chest/mausoleum_chest");
     private float integrity = 1.0F;
 
     public DreadRuinProcessor() {

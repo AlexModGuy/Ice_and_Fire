@@ -90,6 +90,7 @@ public class GorgonTemplePiece  {
                 EntityGorgon gorgon = IafEntityRegistry.GORGON.create(worldIn.getWorld());
                 gorgon.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(pos), SpawnReason.SPAWNER, null, null);
                 gorgon.setPosition(pos.getX(), pos.getY(), pos.getZ());
+                gorgon.enablePersistence();
                 worldIn.addEntity(gorgon);
             }
         }

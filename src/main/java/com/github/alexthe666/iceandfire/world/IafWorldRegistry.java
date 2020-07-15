@@ -31,6 +31,7 @@ public class IafWorldRegistry {
     public static Feature<NoFeatureConfig> FIRE_DRAGON_CAVE;
     public static Feature<NoFeatureConfig> ICE_DRAGON_CAVE;
     public static Feature<NoFeatureConfig> CYCLOPS_CAVE;
+    public static Feature<NoFeatureConfig> PIXIE_VILLAGE;
     public static Feature<NoFeatureConfig> SIREN_ISLAND;
     public static Feature<NoFeatureConfig> HYDRA_CAVE;
     public static Feature<NoFeatureConfig> MYRMEX_HIVE_DESERT;
@@ -50,6 +51,7 @@ public class IafWorldRegistry {
         FIRE_DRAGON_CAVE = Registry.register(Registry.FEATURE, "iceandfire:fire_dragon_cave", new WorldGenFireDragonCave(NoFeatureConfig::deserialize));
         ICE_DRAGON_CAVE = Registry.register(Registry.FEATURE, "iceandfire:ice_dragon_cave", new WorldGenIceDragonCave(NoFeatureConfig::deserialize));
         CYCLOPS_CAVE = Registry.register(Registry.FEATURE, "iceandfire:cyclops_cave", new WorldGenCyclopsCave(NoFeatureConfig::deserialize));
+        PIXIE_VILLAGE = Registry.register(Registry.FEATURE, "iceandfire:pixie_village", new WorldGenPixieVillage(NoFeatureConfig::deserialize));
         SIREN_ISLAND = Registry.register(Registry.FEATURE, "iceandfire:siren_island", new WorldGenSirenIsland(NoFeatureConfig::deserialize));
         HYDRA_CAVE = Registry.register(Registry.FEATURE, "iceandfire:hydra_cave", new WorldGenHydraCave(NoFeatureConfig::deserialize));
         MYRMEX_HIVE_DESERT = Registry.register(Registry.FEATURE, "iceandfire:myrmex_hive_desert", new WorldGenMyrmexHive(false, false, NoFeatureConfig::deserialize));
@@ -100,6 +102,9 @@ public class IafWorldRegistry {
                 }
                 if(BiomeDictionary.hasType(biome, BiomeDictionary.Type.SWAMP)){
                     biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, HYDRA_CAVE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+                }
+                if(BiomeDictionary.hasType(biome, BiomeDictionary.Type.MAGICAL) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SPOOKY)){
+                    biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, PIXIE_VILLAGE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
                 }
                 if (biome.getPrecipitation() == Biome.RainType.SNOW || biome.getDefaultTemperature() < 0.0 && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SNOWY)) {
                     biome.addStructure(MAUSOLEUM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
