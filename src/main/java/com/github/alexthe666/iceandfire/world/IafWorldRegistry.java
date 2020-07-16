@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.world;
 
 import com.github.alexthe666.iceandfire.IafConfig;
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.world.gen.*;
 import com.github.alexthe666.iceandfire.world.structure.DreadMausoleumStructure;
@@ -8,7 +9,9 @@ import com.github.alexthe666.iceandfire.world.structure.GorgonTemplePiece;
 import com.github.alexthe666.iceandfire.world.structure.GorgonTempleStructure;
 import com.github.alexthe666.iceandfire.world.structure.MausoleumPiece;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.*;
@@ -36,6 +39,7 @@ public class IafWorldRegistry {
     public static Feature<NoFeatureConfig> HYDRA_CAVE;
     public static Feature<NoFeatureConfig> MYRMEX_HIVE_DESERT;
     public static Feature<NoFeatureConfig> MYRMEX_HIVE_JUNGLE;
+    public static Feature<NoFeatureConfig> MOB_SPAWNS;
     public static IStructurePieceType MAUSOLEUM_PIECE;
     public static Structure<NoFeatureConfig> MAUSOLEUM = new DreadMausoleumStructure(NoFeatureConfig::deserialize);
     public static IStructurePieceType GORGON_PIECE;
@@ -56,6 +60,7 @@ public class IafWorldRegistry {
         HYDRA_CAVE = Registry.register(Registry.FEATURE, "iceandfire:hydra_cave", new WorldGenHydraCave(NoFeatureConfig::deserialize));
         MYRMEX_HIVE_DESERT = Registry.register(Registry.FEATURE, "iceandfire:myrmex_hive_desert", new WorldGenMyrmexHive(false, false, NoFeatureConfig::deserialize));
         MYRMEX_HIVE_JUNGLE = Registry.register(Registry.FEATURE, "iceandfire:myrmex_hive_jungle", new WorldGenMyrmexHive(false, true, NoFeatureConfig::deserialize));
+        MOB_SPAWNS = Registry.register(Registry.FEATURE, "iceandfire:mob_spawns", new WorldGenMobSpawn(NoFeatureConfig::deserialize));
         MAUSOLEUM_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:mausoleum_piece", MausoleumPiece.Piece::new);
         MAUSOLEUM = Registry.register(Registry.FEATURE, "iceandfire:mausoleum", MAUSOLEUM);
         Registry.register(Registry.STRUCTURE_FEATURE, "iceandfire:mausoleum", MAUSOLEUM);
@@ -68,6 +73,9 @@ public class IafWorldRegistry {
 
     public static void setup() {
         for (Biome biome : ForgeRegistries.BIOMES) {
+            if(BiomeDictionary.hasType(biome, BiomeDictionary.Type.OVERWORLD)) {
+                biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MOB_SPAWNS.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+            }
             if(IafConfig.generateSilverOre){
                 biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, IafBlockRegistry.SILVER_ORE.getDefaultState(), 8)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(2, 0, 0, 32))));
             }
@@ -123,5 +131,11 @@ public class IafWorldRegistry {
             }
 
         }
+    }
+
+    public static boolean isFarEnoughFromSpawn(IWorld world, BlockPos pos) {
+        BlockPos spawnRelative = new BlockPos(world.getSpawnPoint().getX(), pos.getY(), world.getSpawnPoint().getZ());
+        boolean spawnCheck = spawnRelative.distanceSq(pos) > IafConfig.dangerousWorldGenDistanceLimit * IafConfig.dangerousWorldGenDistanceLimit;
+        return spawnCheck;
     }
 }

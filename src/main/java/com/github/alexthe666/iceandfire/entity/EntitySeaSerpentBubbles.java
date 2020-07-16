@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractFireballEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
+import net.minecraft.network.IPacket;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
@@ -14,6 +15,8 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.*;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements IDragonProjectile {
 
@@ -24,6 +27,16 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
 
     public EntitySeaSerpentBubbles(EntityType t, World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
         super(t, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
+    }
+
+
+    public EntitySeaSerpentBubbles(FMLPlayMessages.SpawnEntity spawnEntity, World world) {
+        this(IafEntityRegistry.SEA_SERPENT_BUBBLES, world);
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     public EntitySeaSerpentBubbles(EntityType t, World worldIn, EntitySeaSerpent shooter, double accelX, double accelY, double accelZ) {

@@ -8,6 +8,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 import java.util.Random;
 
 public class SeaSerpentAIGetInWater extends Goal {
@@ -20,6 +21,7 @@ public class SeaSerpentAIGetInWater extends Goal {
     private double shelterZ;
 
     public SeaSerpentAIGetInWater(EntitySeaSerpent serpent, double movementSpeedIn) {
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
         this.movementSpeed = movementSpeedIn;
         this.world = serpent.world;
         this.serpent = serpent;
@@ -45,7 +47,7 @@ public class SeaSerpentAIGetInWater extends Goal {
      * Returns whether an in-progress Goal should continue executing
      */
     public boolean shouldContinueExecuting() {
-        return !this.serpent.getNavigator().noPath();
+        return !this.serpent.getNavigator().noPath() && !this.serpent.isInWater();
     }
 
     /**

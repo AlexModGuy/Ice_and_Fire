@@ -4,14 +4,20 @@ import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.props.*;
+import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
+import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafEntityRegistry {
@@ -54,7 +60,7 @@ public class IafEntityRegistry {
     public static final EntityType<EntityAmphithere> AMPHITHERE = registerEntity(EntityType.Builder.create(EntityAmphithere::new, EntityClassification.CREATURE).size(2.5F, 1.25F), "amphithere");
     public static final EntityType<EntityAmphithereArrow> AMPHITHERE_ARROW = registerEntity(EntityType.Builder.create(EntityAmphithereArrow::new, EntityClassification.MISC).size(0.5F, 0.5F), "amphithere_arrow");
     public static final EntityType<EntitySeaSerpent> SEA_SERPENT = registerEntity(EntityType.Builder.create(EntitySeaSerpent::new, EntityClassification.CREATURE).size(0.5F, 0.5F).setTrackingRange(256), "sea_serpent");
-    public static final EntityType<EntitySeaSerpentBubbles> SEA_SERPENT_BUBBLES = registerEntity(EntityType.Builder.create(EntitySeaSerpentBubbles::new, EntityClassification.MISC).size(0.5F, 0.5F), "sea_serpent_bubbles");
+    public static final EntityType<EntitySeaSerpentBubbles> SEA_SERPENT_BUBBLES = registerEntity(EntityType.Builder.create(EntitySeaSerpentBubbles::new, EntityClassification.MISC).size(0.5F, 0.5F).setCustomClientFactory(EntitySeaSerpentBubbles::new), "sea_serpent_bubbles");
     public static final EntityType<EntitySeaSerpentArrow> SEA_SERPENT_ARROW = registerEntity(EntityType.Builder.create(EntitySeaSerpentArrow::new, EntityClassification.MISC).size(0.5F, 0.5F), "sea_serpent_arrow");
     public static final EntityType<EntityChainTie> CHAIN_TIE = registerEntity(EntityType.Builder.create(EntityChainTie::new, EntityClassification.MISC).size(0.8F, 0.9F), "chain_tie");
     public static final EntityType<EntityPixieCharge> PIXIE_CHARGE = registerEntity(EntityType.Builder.create(EntityPixieCharge::new, EntityClassification.MISC).size(0.5F, 0.5F).setCustomClientFactory(EntityPixieCharge::new), "pixie_charge");
@@ -86,6 +92,60 @@ public class IafEntityRegistry {
         EntityPropertiesHandler.INSTANCE.registerProperties(SirenEntityProperties.class);
         EntityPropertiesHandler.INSTANCE.registerProperties(ChickenEntityProperties.class);
         EntityPropertiesHandler.INSTANCE.registerProperties(ChainEntityProperties.class);
+        if (IafConfig.spawnHippogryphs) {
+            for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
+                if (!type.developer) {
+                    for (Biome biome : ForgeRegistries.BIOMES) {
+                        if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.HILLS)) {
+                            List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.CREATURE);
+              //              spawnList.add(new Biome.SpawnListEntry(HIPPOGRYPH, IafConfig.hippogryphSpawnRate, 1, 1));
+                        }
+                    }
+                }
+            }
+        }
+        if (IafConfig.spawnDeathWorm) {
+            for (Biome biome : ForgeRegistries.BIOMES) {
+                if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.DRY) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.BEACH) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.MESA)) {
+                    List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.CREATURE);
+                //    spawnList.add(new Biome.SpawnListEntry(DEATH_WORM, IafConfig.deathWormSpawnRate, 1, 3));
+                }
+            }
+        }
+        if (IafConfig.spawnTrolls) {
+            for (EnumTroll type : EnumTroll.values()) {
+                for (Biome biome : ForgeRegistries.BIOMES) {
+                    if (biome != null && BiomeDictionary.hasType(biome, type.spawnBiome)) {
+                        List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.MONSTER);
+                        spawnList.add(new Biome.SpawnListEntry(TROLL, IafConfig.trollSpawnRate, 1, 1));
+                    }
+                }
+            }
+        }
+        if (IafConfig.spawnLiches) {
+            for (Biome biome : ForgeRegistries.BIOMES) {
+                if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SNOWY)) {
+                    List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.MONSTER);
+                    spawnList.add(new Biome.SpawnListEntry(DREAD_LICH, IafConfig.lichSpawnRate, 1, 1));
+                }
+            }
+        }
+        if (IafConfig.spawnCockatrices) {
+            for (Biome biome : ForgeRegistries.BIOMES) {
+                if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SAVANNA) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SPARSE)) {
+                    List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.CREATURE);
+                    spawnList.add(new Biome.SpawnListEntry(COCKATRICE, IafConfig.cockatriceSpawnRate, 1, 2));
+                }
+            }
+        }
+        if (IafConfig.spawnAmphitheres) {
+            for (Biome biome : ForgeRegistries.BIOMES) {
+                if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.JUNGLE)) {
+                    List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.CREATURE);
+                    spawnList.add(new Biome.SpawnListEntry(AMPHITHERE, IafConfig.amphithereSpawnRate, 1, 3));
+                }
+            }
+        }
     }
 
     @SubscribeEvent

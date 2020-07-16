@@ -27,6 +27,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.DolphinEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.Item;
@@ -188,8 +189,8 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
 
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SeaSerpentAIGetInWater(this, 1.0D));
-        this.goalSelector.addGoal(1, new EntitySeaSerpent.AISwimBite());
         this.goalSelector.addGoal(1, new EntitySeaSerpent.AISwimWander());
+        this.goalSelector.addGoal(1, new EntitySeaSerpent.AISwimBite());
         this.goalSelector.addGoal(1, new EntitySeaSerpent.AISwimCircle());
         this.goalSelector.addGoal(2, new SeaSerpentAIAttackMelee(this, 1.0D, true));
         this.goalSelector.addGoal(3, new EntityAIWatchClosestIgnoreRider(this, LivingEntity.class, 6.0F));
@@ -208,7 +209,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
             this.navigator.setCanSwim(true);
             this.isLandNavigator = true;
         } else {
-            this.moveController = new EntitySeaSerpent.SwimmingMoveHelper();
+            this.moveController = new EntitySeaSerpent.SwimmingMoveHelper(this);
             this.navigator = new SwimmerPathNavigator(this, world);
             this.isLandNavigator = false;
         }
@@ -514,7 +515,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         }
         if (prevJumping != this.isJumpingOutOfWater() && !this.isJumpingOutOfWater()) {
             this.playSound(IafSoundRegistry.SEA_SERPENT_SPLASH, 5F, 0.75F);
-            spawnSlamParticles(ParticleTypes.FIREWORK);
+            spawnSlamParticles(ParticleTypes.BUBBLE);
             spawnSlamParticles(ParticleTypes.BUBBLE);
             spawnSlamParticles(ParticleTypes.BUBBLE);
             spawnSlamParticles(ParticleTypes.BUBBLE);
@@ -889,7 +890,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     }
 
     @Override
-    public void travel(Vec3d motionVec) {
+    public void travel(Vec3d vec) {
         if (this.swimBehavior == SwimBehavior.JUMP && this.isJumpingOutOfWater() && this.getAttackTarget() == null) {
             // moveJumping();
         }
@@ -897,7 +898,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         if (this.isServerWorld()) {
             float f5;
             if (this.isInWater()) {
-                this.moveRelative(0.1F, motionVec);
+                this.moveRelative(0.1F, vec);
                 f4 = 0.6F;
                 float d0 = (float) EnchantmentHelper.getDepthStriderModifier(this);
                 if (d0 > 3.0F) {
@@ -909,10 +910,10 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
                 if (d0 > 0.0F) {
                     f4 += (0.54600006F - f4) * d0 / 3.0F;
                 }
-                this.move(MoverType.SELF, motionVec);
-                this.setMotion(this.getMotion().mul(0.9 * f4, 0.9 * f4, 0.9 * f4));
+                this.move(MoverType.SELF, this.getMotion());
+                this.setMotion(this.getMotion().mul((double) f4 * 0.9D, (double) f4 * 0.9D, (double) f4 * 0.9D));
             } else {
-                super.travel(motionVec);
+                super.travel(vec);
             }
         }
         this.prevLimbSwingAmount = this.limbSwingAmount;
@@ -956,58 +957,53 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     }
 
     public class SwimmingMoveHelper extends MovementController {
-        private EntitySeaSerpent serpent = EntitySeaSerpent.this;
+        private final EntitySeaSerpent dolphin;
 
-        public SwimmingMoveHelper() {
-            super(EntitySeaSerpent.this);
+        public SwimmingMoveHelper(EntitySeaSerpent dolphinIn) {
+            super(dolphinIn);
+            this.dolphin = dolphinIn;
         }
 
         @Override
         public void tick() {
-            if (this.action == MovementController.Action.MOVE_TO) {
-                double d0 = this.posX - EntitySeaSerpent.this.getPosX();
-                double d1 = this.posY - EntitySeaSerpent.this.getPosY();
-                double d2 = this.posZ - EntitySeaSerpent.this.getPosZ();
-                double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-                d3 = MathHelper.sqrt(d3);
-                if (d3 < 6 && EntitySeaSerpent.this.getAttackTarget() == null) {
-                    if (!EntitySeaSerpent.this.changedSwimBehavior && EntitySeaSerpent.this.swimBehavior == EntitySeaSerpent.SwimBehavior.WANDER && EntitySeaSerpent.this.rand.nextInt(20) == 0) {
-                        EntitySeaSerpent.this.swimBehavior = EntitySeaSerpent.SwimBehavior.CIRCLE;
-                        EntitySeaSerpent.this.changedSwimBehavior = true;
-                    }
-                    if (!EntitySeaSerpent.this.changedSwimBehavior && EntitySeaSerpent.this.swimBehavior == EntitySeaSerpent.SwimBehavior.CIRCLE && EntitySeaSerpent.this.rand.nextInt(5) == 0 && ticksCircling > 150) {
-                        EntitySeaSerpent.this.swimBehavior = EntitySeaSerpent.SwimBehavior.WANDER;
-                        EntitySeaSerpent.this.changedSwimBehavior = true;
-                    }
+            if (this.dolphin.isBeingRidden()) {
+                double flySpeed = 0.8F;
+                Vec3d dragonVec = dolphin.getPositionVector();
+                Vec3d moveVec = new Vec3d(posX, posY, posZ);
+                Vec3d normalized = moveVec.subtract(dragonVec).normalize();
+                double dist = dragonVec.distanceTo(moveVec);
+                dolphin.setMotion(normalized.x * flySpeed, normalized.y * flySpeed, normalized.z * flySpeed);
+                if (dist > 2.5E-7) {
+                    float yaw = (float) Math.toDegrees(Math.PI * 2 - Math.atan2(normalized.x, normalized.y));
+                    dolphin.rotationYaw = limitAngle(dolphin.rotationYaw, yaw, 5);
+                    dolphin.setAIMoveSpeed((float) (speed));
                 }
-                if (EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP && !EntitySeaSerpent.this.isInWater() && !onGround) {
-                    EntitySeaSerpent.this.ticksSinceJump = 0;
+                dolphin.move(MoverType.SELF, dolphin.getMotion());
+            } else if (this.action == MovementController.Action.MOVE_TO && !this.dolphin.getNavigator().noPath()) {
+                double distanceX = this.posX - this.dolphin.getPosX();
+                double distanceY = this.posY - this.dolphin.getPosY();
+                double distanceZ = this.posZ - this.dolphin.getPosZ();
+                double distance = Math.abs(distanceX * distanceX + distanceZ * distanceZ);
+                double distanceWithY = MathHelper.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
+                distanceY = distanceY / distanceWithY;
+                float angle = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
+                this.dolphin.rotationYaw = this.limitAngle(this.dolphin.rotationYaw, angle, 30.0F);
+                this.dolphin.setAIMoveSpeed(1F);
+                float f1 = 0;
+                float f2 = 0;
+                if (distance < (double) Math.max(1.0F, this.dolphin.getWidth())) {
+                    float f = this.dolphin.rotationYaw * 0.017453292F;
+                    f1 -= (double) (MathHelper.sin(f) * 0.35F);
+                    f2 += (double) (MathHelper.cos(f) * 0.35F);
                 }
-                int dist = EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP ? 10 : 3;
-                if (d3 < dist && EntitySeaSerpent.this.getAttackTarget() == null || EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP && EntitySeaSerpent.this.shouldStopJumping() && EntitySeaSerpent.this.getAttackTarget() == null) {
+                this.dolphin.setMotion(this.dolphin.getMotion().add(f1, this.dolphin.getAIMoveSpeed() * distanceY * 0.1D, f2));
+            } else if (this.action == MovementController.Action.JUMPING) {
+                this.dolphin.setAIMoveSpeed((float) (this.speed * this.dolphin.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
+                if (this.dolphin.onGround) {
                     this.action = MovementController.Action.WAIT;
-                    EntitySeaSerpent.this.setMotion(EntitySeaSerpent.this.getMotion().mul(0.5D, 1, 0.5D));
-                    if (EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP) {
-                        EntitySeaSerpent.this.swimBehavior = SwimBehavior.WANDER;
-                        EntitySeaSerpent.this.ticksSinceJump = 0;
-                        EntitySeaSerpent.this.setJumpingOutOfWater(false);
-                    }
-                } else {
-                    EntitySeaSerpent.this.setMotion(EntitySeaSerpent.this.getMotion().add(d0 / d3 * 0.5D * this.speed, d1 / d3 * 0.5D * this.speed, d2 / d3 * 0.5D * this.speed));
-                    float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
-                    EntitySeaSerpent.this.rotationPitch = f1;
-                    if (!EntitySeaSerpent.this.isArcing) {
-                        if (EntitySeaSerpent.this.getAttackTarget() == null) {
-                            EntitySeaSerpent.this.rotationYaw = -((float) MathHelper.atan2(EntitySeaSerpent.this.getMotion().x, EntitySeaSerpent.this.getMotion().z)) * (180F / (float) Math.PI);
-                            EntitySeaSerpent.this.renderYawOffset = EntitySeaSerpent.this.rotationYaw;
-                        } else if (EntitySeaSerpent.this.swimBehavior != SwimBehavior.JUMP) {
-                            double d4 = EntitySeaSerpent.this.getAttackTarget().getPosX() - EntitySeaSerpent.this.getPosX();
-                            double d5 = EntitySeaSerpent.this.getAttackTarget().getPosZ() - EntitySeaSerpent.this.getPosZ();
-                            EntitySeaSerpent.this.rotationYaw = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
-                            EntitySeaSerpent.this.renderYawOffset = EntitySeaSerpent.this.rotationYaw;
-                        }
-                    }
                 }
+            } else {
+                this.dolphin.setAIMoveSpeed(0.0F);
             }
         }
     }
@@ -1016,11 +1012,12 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         BlockPos target;
 
         public AISwimWander() {
-            this.setMutexFlags(EnumSet.of(Flag.MOVE));
         }
 
         public boolean shouldExecute() {
-            if (EntitySeaSerpent.this.swimBehavior != EntitySeaSerpent.SwimBehavior.WANDER && EntitySeaSerpent.this.swimBehavior != EntitySeaSerpent.SwimBehavior.JUMP || !EntitySeaSerpent.this.canMove() || EntitySeaSerpent.this.getAttackTarget() != null) {
+            if (EntitySeaSerpent.this.swimBehavior != EntitySeaSerpent.SwimBehavior.WANDER && EntitySeaSerpent.this.swimBehavior != EntitySeaSerpent.SwimBehavior.JUMP
+                    || !EntitySeaSerpent.this.canMove()
+                    || EntitySeaSerpent.this.getAttackTarget() != null) {
                 return false;
             }
             if (EntitySeaSerpent.this.isInWater()) {
@@ -1060,7 +1057,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
             if (target == null)
                 target = generateTarget();
             if (target != null && (EntitySeaSerpent.isWaterBlock(world, target) || EntitySeaSerpent.this.swimBehavior == EntitySeaSerpent.SwimBehavior.JUMP) && EntitySeaSerpent.this.isDirectPathBetweenPoints(target)) {
-                EntitySeaSerpent.this.moveController.setMoveTo((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 0.25D);
+                EntitySeaSerpent.this.getMoveHelper().setMoveTo((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 0.25D);
                 if (EntitySeaSerpent.this.getAttackTarget() == null) {
                     EntitySeaSerpent.this.getLookController().setLookPosition((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 180.0F, 20.0F);
 
@@ -1073,7 +1070,6 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         BlockPos target;
 
         public AISwimCircle() {
-            this.setMutexFlags(EnumSet.of(Flag.MOVE));
         }
 
         public boolean shouldExecute() {
@@ -1120,7 +1116,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
                 target = EntitySeaSerpent.getPositionInOrbit(EntitySeaSerpent.this, world, EntitySeaSerpent.this.orbitPos, EntitySeaSerpent.this.rand);
             }
             if (EntitySeaSerpent.isWaterBlock(world, target) && EntitySeaSerpent.this.isDirectPathBetweenPoints(target)) {
-                EntitySeaSerpent.this.moveController.setMoveTo((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 0.25D);
+                EntitySeaSerpent.this.getMoveHelper().setMoveTo((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 0.25D);
                 if (EntitySeaSerpent.this.getAttackTarget() == null) {
                     EntitySeaSerpent.this.getLookController().setLookPosition((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 180.0F, 20.0F);
 
@@ -1136,7 +1132,6 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         boolean isOver = false;
 
         public AISwimBite() {
-            this.setMutexFlags(EnumSet.of(Flag.MOVE));
         }
 
         public void resetTask() {
@@ -1242,7 +1237,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
 
             if (target != null) {
                 if (EntitySeaSerpent.isWaterBlock(world, target) || EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP) {
-                    EntitySeaSerpent.this.moveController.setMoveTo((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 0.5D);
+                    EntitySeaSerpent.this.getMoveHelper().setMoveTo((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 0.5D);
                     if (EntitySeaSerpent.this.getAttackTarget() == null) {
                         EntitySeaSerpent.this.getLookController().setLookPosition((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 180.0F, 20.0F);
 
