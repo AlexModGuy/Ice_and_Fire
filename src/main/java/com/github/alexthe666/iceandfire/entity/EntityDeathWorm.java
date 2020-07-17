@@ -15,9 +15,15 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDeathWormLand;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDeathWormSand;
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableSet;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.crash.ReportedException;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.controller.LookController;
@@ -41,6 +47,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.IBooleanFunction;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.*;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
@@ -48,6 +58,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
+import java.util.stream.Stream;
 
 public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlacklistedFromStatues, IAnimatedEntity, IVillagerFear, IAnimalFear, IPhasesThroughBlock, IGroundMount {
 
@@ -74,6 +85,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
     private float prevScale = 0.0F;
     private LookController lookHelper;
     private int growthCounter = 0;
+    private float nextStepDistance;
 
     public EntityDeathWorm(EntityType type, World worldIn) {
         super(type, worldIn);
@@ -378,6 +390,138 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         }
         return super.attackEntityFrom(source, amount);
     }
+
+    public void move(MoverType typeIn, Vec3d pos) {
+        if (this.noClip || this.isInSand() || this.isSandBelow()) {
+            this.setBoundingBox(this.getBoundingBox().offset(pos));
+            this.resetPositionToBB();
+        } else {
+            if (typeIn == MoverType.PISTON) {
+                pos = this.handlePistonMovement(pos);
+                if (pos.equals(Vec3d.ZERO)) {
+                    return;
+                }
+            }
+
+            this.world.getProfiler().startSection("move");
+            if (this.motionMultiplier.lengthSquared() > 1.0E-7D) {
+                pos = pos.mul(this.motionMultiplier);
+                this.motionMultiplier = Vec3d.ZERO;
+                this.setMotion(Vec3d.ZERO);
+            }
+
+            pos = this.func_225514_a_(pos, typeIn);
+            Vec3d vec3d = this.getAllowedMovement(pos);
+            if (vec3d.lengthSquared() > 1.0E-7D) {
+                this.setBoundingBox(this.getBoundingBox().offset(vec3d));
+                this.resetPositionToBB();
+            }
+
+            this.world.getProfiler().endSection();
+            this.world.getProfiler().startSection("rest");
+            this.collidedHorizontally = !MathHelper.epsilonEquals(pos.x, vec3d.x) || !MathHelper.epsilonEquals(pos.z, vec3d.z);
+            this.collidedVertically = pos.y != vec3d.y;
+            this.onGround = this.collidedVertically && pos.y < 0.0D;
+            this.collided = this.collidedHorizontally || this.collidedVertically;
+            BlockPos blockpos = this.getOnPosition();
+            BlockState blockstate = this.world.getBlockState(blockpos);
+            this.updateFallState(vec3d.y, this.onGround, blockstate, blockpos);
+            Vec3d vec3d1 = this.getMotion();
+            if (pos.x != vec3d.x) {
+                this.setMotion(0.0D, vec3d1.y, vec3d1.z);
+            }
+
+            if (pos.z != vec3d.z) {
+                this.setMotion(vec3d1.x, vec3d1.y, 0.0D);
+            }
+
+            Block block = blockstate.getBlock();
+            if (pos.y != vec3d.y) {
+                block.onLanded(this.world, this);
+            }
+
+            if (this.onGround && !this.isSteppingCarefully()) {
+                block.onEntityWalk(this.world, blockpos, this);
+            }
+
+            if (this.canTriggerWalking() && !this.isPassenger()) {
+                double d0 = vec3d.x;
+                double d1 = vec3d.y;
+                double d2 = vec3d.z;
+                if (block != Blocks.LADDER && block != Blocks.SCAFFOLDING) {
+                    d1 = 0.0D;
+                }
+
+                this.distanceWalkedModified = (float)((double)this.distanceWalkedModified + (double)MathHelper.sqrt(horizontalMag(vec3d)) * 0.6D);
+                this.distanceWalkedOnStepModified = (float)((double)this.distanceWalkedOnStepModified + (double)MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2) * 0.6D);
+                if (this.distanceWalkedOnStepModified > this.nextStepDistance && !blockstate.isAir(this.world, blockpos)) {
+                    this.nextStepDistance = this.determineNextStepDistance();
+                    if (this.isInWater()) {
+                        Entity entity = this.isBeingRidden() && this.getControllingPassenger() != null ? this.getControllingPassenger() : this;
+                        float f = entity == this ? 0.35F : 0.4F;
+                        Vec3d vec3d2 = entity.getMotion();
+                        float f1 = MathHelper.sqrt(vec3d2.x * vec3d2.x * (double)0.2F + vec3d2.y * vec3d2.y + vec3d2.z * vec3d2.z * (double)0.2F) * f;
+                        if (f1 > 1.0F) {
+                            f1 = 1.0F;
+                        }
+
+                        this.playSwimSound(f1);
+                    } else {
+                        this.playStepSound(blockpos, blockstate);
+                    }
+                }
+            }
+
+            try {
+                this.inLava = false;
+                this.doBlockCollisions();
+            } catch (Throwable throwable) {
+                CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Checking entity block collision");
+                CrashReportCategory crashreportcategory = crashreport.makeCategory("Entity being checked for collision");
+                this.fillCrashReport(crashreportcategory);
+                throw new ReportedException(crashreport);
+            }
+
+            this.setMotion(this.getMotion().mul((double)this.getSpeedFactor(), 1.0D, (double)this.getSpeedFactor()));
+            boolean flag = this.isInWaterRainOrBubbleColumn();
+            this.world.getProfiler().endSection();
+        }
+    }
+
+
+    private Vec3d getAllowedMovement(Vec3d vec) {
+        AxisAlignedBB axisalignedbb = this.getBoundingBox();
+        ISelectionContext iselectioncontext = ISelectionContext.forEntity(this);
+        VoxelShape voxelshape = this.world.getWorldBorder().getShape();
+        Stream<VoxelShape> stream = VoxelShapes.compare(voxelshape, VoxelShapes.create(axisalignedbb.shrink(1.0E-7D)), IBooleanFunction.AND) ? Stream.empty() : Stream.of(voxelshape);
+        Stream<VoxelShape> stream1 = this.world.getEmptyCollisionShapes(this, axisalignedbb.expand(vec), ImmutableSet.of());
+        ReuseableStream<VoxelShape> reuseablestream = new ReuseableStream<>(Stream.concat(stream1, stream));
+        Vec3d vec3d = vec.lengthSquared() == 0.0D ? vec : collideBoundingBoxHeuristically(this, vec, axisalignedbb, this.world, iselectioncontext, reuseablestream);
+        boolean flag = vec.x != vec3d.x;
+        boolean flag1 = vec.y != vec3d.y;
+        boolean flag2 = vec.z != vec3d.z;
+        if(this.isInSand() || this.isSandBelow()){
+            return vec3d;
+        }
+        boolean flag3 = this.onGround || flag1 && vec.y < 0.0D;
+        if (this.stepHeight > 0.0F && flag3 && (flag || flag2)) {
+            Vec3d vec3d1 = collideBoundingBoxHeuristically(this, new Vec3d(vec.x, (double)this.stepHeight, vec.z), axisalignedbb, this.world, iselectioncontext, reuseablestream);
+            Vec3d vec3d2 = collideBoundingBoxHeuristically(this, new Vec3d(0.0D, (double)this.stepHeight, 0.0D), axisalignedbb.expand(vec.x, 0.0D, vec.z), this.world, iselectioncontext, reuseablestream);
+            if (vec3d2.y < (double)this.stepHeight) {
+                Vec3d vec3d3 = collideBoundingBoxHeuristically(this, new Vec3d(vec.x, 0.0D, vec.z), axisalignedbb.offset(vec3d2), this.world, iselectioncontext, reuseablestream).add(vec3d2);
+                if (horizontalMag(vec3d3) > horizontalMag(vec3d1)) {
+                    vec3d1 = vec3d3;
+                }
+            }
+
+            if (horizontalMag(vec3d1) > horizontalMag(vec3d)) {
+                return vec3d1.add(collideBoundingBoxHeuristically(this, new Vec3d(0.0D, -vec3d1.y + vec.y, 0.0D), axisalignedbb.offset(vec3d1), this.world, iselectioncontext, reuseablestream));
+            }
+        }
+
+        return vec3d;
+    }
+
 
     public boolean checkBlockCollision(AxisAlignedBB bb) {
         int j2 = MathHelper.floor(bb.minX);

@@ -20,7 +20,6 @@ public class DeathWormAIFindSandTarget extends Goal {
     public DeathWormAIFindSandTarget(EntityDeathWorm mob, int range) {
         this.mob = mob;
         this.range = range;
-        this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
 
     @Override
@@ -37,6 +36,7 @@ public class DeathWormAIFindSandTarget extends Goal {
                 BlockPos vec3 = this.findSandTarget();
                 if (vec3 != null) {
                     this.mob.getNavigator().tryMoveToXYZ(vec3.getX(), vec3.getY(), vec3.getZ(), 1.0);
+                    this.mob.getMoveHelper().setMoveTo(vec3.getX(), vec3.getY(), vec3.getZ(), 1.0);
                     return true;
                 }
             }
