@@ -6,6 +6,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.LightType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -25,6 +27,11 @@ public class RenderDeathWorm extends MobRenderer<EntityDeathWorm, ModelDeathWorm
     protected void preRenderCallback(EntityDeathWorm entity, MatrixStack matrixStackIn, float partialTickTime) {
         this.shadowSize = entity.getRenderScale() / 3;
         matrixStackIn.scale(entity.getRenderScale(), entity.getRenderScale(), entity.getRenderScale());
+    }
+
+
+    protected int getBlockLight(EntityDeathWorm entityIn, float partialTicks) {
+        return entityIn.isBurning() ? 15 : entityIn.getWormBrightness(partialTicks);
     }
 
     @Nullable
