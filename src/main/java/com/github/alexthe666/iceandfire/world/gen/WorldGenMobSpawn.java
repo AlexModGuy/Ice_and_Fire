@@ -46,6 +46,16 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position.add(8, 0, 8));
         BlockPos oceanPos = worldIn.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, position.add(8, 0, 8));
         Biome biome = worldIn.getBiome(position);
+        if (IafConfig.spawnDeathWorm && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.DRY) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.BEACH) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.MESA)) {
+            if (rand.nextInt(IafConfig.deathWormSpawnRate + 1) == 0) {
+                EntityDeathWorm deathWorm = IafEntityRegistry.DEATH_WORM.create(worldIn.getWorld());
+                deathWorm.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
+                deathWorm.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(position), SpawnReason.CHUNK_GENERATION, null, null);
+                worldIn.addEntity(deathWorm);
+            }
+
+        }
+
         if (IafConfig.generateWanderingCyclops && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.PLAINS)) {
             if (rand.nextInt(IafConfig.spawnWanderingCyclopsChance + 1) == 0) {
                 EntityCyclops cyclops = IafEntityRegistry.CYCLOPS.create(worldIn.getWorld());
@@ -54,7 +64,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                 cyclops.setVariant(rand.nextInt(3));
                 for (int i = 0; i < 3 + rand.nextInt(3); i++) {
                     SheepEntity sheep = EntityType.SHEEP.create(worldIn.getWorld());
-                    cyclops.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
+                    sheep.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                     sheep.setFleeceColor(SheepEntity.getRandomSheepColor(rand));
                     worldIn.addEntity(sheep);
                 }
@@ -96,22 +106,6 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                 worldIn.addEntity(icedragon);
             }
         }
-        
-        if (IafConfig.generateWanderingCyclops && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && BiomeDictionary.hasType(worldIn.getBiome(position), BiomeDictionary.Type.PLAINS)) {
-            if (rand.nextInt(IafConfig.spawnWanderingCyclopsChance + 1) == 0) {
-                EntityCyclops cyclops = IafEntityRegistry.CYCLOPS.create(worldIn.getWorld());
-                cyclops.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
-                cyclops.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(position), SpawnReason.SPAWNER, null, null);
-                cyclops.setVariant(rand.nextInt(3));
-                for (int i = 0; i < 3 + rand.nextInt(3); i++) {
-                    SheepEntity sheep = EntityType.SHEEP.create(worldIn.getWorld());
-                    cyclops.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
-                    sheep.setFleeceColor(SheepEntity.getRandomSheepColor(rand));
-                    worldIn.addEntity(sheep);
-                }
-            }
-        }
-
         if (IafConfig.spawnHippocampus && BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN) && rand.nextInt(IafConfig.hippocampusSpawnChance + 1) == 0) {
             for (int i = 0; i < rand.nextInt(5); i++) {
                 BlockPos pos =oceanPos.add(rand.nextInt(10) - 5, rand.nextInt(30), rand.nextInt(10) - 5);

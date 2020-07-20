@@ -133,11 +133,6 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
 
     public void onUpdateParts() {
         addSegmentsToWorld();
-        for (Entity entity : segments) {
-            if (entity != null) {
-                ((EntityMutlipartPart)entity).setParent(this);
-            }
-        }
         if (isSandBelow()) {
             int i = MathHelper.floor(this.getPosX());
             int j = MathHelper.floor(this.getPosY() - 1);
@@ -166,8 +161,11 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
 
     private void addSegmentsToWorld() {
         for (Entity entity : segments) {
-            if(!((EntityMutlipartPart)entity).shouldContinuePersisting()){
-                world.addEntity(entity);
+            if(entity != null){
+                if(!((EntityMutlipartPart)entity).shouldContinuePersisting()){
+                    world.addEntity(entity);
+                }
+                ((EntityMutlipartPart) entity).setParent(this);
             }
         }
     }
@@ -328,9 +326,6 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         this.setVariant(this.getRNG().nextInt(3));
         float size = 0.25F + (float) (Math.random() * 0.35F);
         this.setDeathWormScale(this.getRNG().nextInt(20) == 0 ? size * 4 : size);
-        if (isSandBelow() && this.getRenderScale() != 1) {
-            this.getMotion().add(0, -0.5D, 0);
-        }
         return spawnDataIn;
     }
 

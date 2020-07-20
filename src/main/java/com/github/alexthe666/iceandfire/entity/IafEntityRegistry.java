@@ -96,19 +96,11 @@ public class IafEntityRegistry {
             for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
                 if (!type.developer) {
                     for (Biome biome : ForgeRegistries.BIOMES) {
-                        if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.HILLS)) {
-                            List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.CREATURE);
-              //              spawnList.add(new Biome.SpawnListEntry(HIPPOGRYPH, IafConfig.hippogryphSpawnRate, 1, 1));
-                        }
+                        //   if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.HILLS)  && BiomeDictionary.hasType(biome, type.spawnBiomese)) {
+                        //          List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.CREATURE);
+                        //                spawnList.add(new Biome.SpawnListEntry(HIPPOGRYPH, IafConfig.hippogryphSpawnRate, 1, 1));
+                        //        }
                     }
-                }
-            }
-        }
-        if (IafConfig.spawnDeathWorm) {
-            for (Biome biome : ForgeRegistries.BIOMES) {
-                if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.DRY) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.BEACH) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.MESA)) {
-                    List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.CREATURE);
-                //    spawnList.add(new Biome.SpawnListEntry(DEATH_WORM, IafConfig.deathWormSpawnRate, 1, 3));
                 }
             }
         }

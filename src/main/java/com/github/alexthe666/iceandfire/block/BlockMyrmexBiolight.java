@@ -32,10 +32,11 @@ public class BlockMyrmexBiolight extends BushBlock {
 
 
     public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-        return stateIn;
+        boolean flag3 = worldIn.getBlockState(currentPos.down()).getBlock() == this;
+        return stateIn.with(CONNECTED_DOWN, flag3);
     }
 
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
+    public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
         if (!worldIn.isRemote) {
             this.updateState(state, worldIn, pos, state.getBlock());
         }
@@ -46,7 +47,7 @@ public class BlockMyrmexBiolight extends BushBlock {
 
     public void updateState(BlockState state, World worldIn, BlockPos pos, Block blockIn) {
         boolean flag2 = state.get(CONNECTED_DOWN);
-        boolean flag3 = !worldIn.getBlockState(pos.down()).isSolid();
+        boolean flag3 = worldIn.getBlockState(pos.down()).getBlock() == this;
         if (flag2 != flag3) {
             worldIn.setBlockState(pos, state.with(CONNECTED_DOWN, Boolean.valueOf(flag3)), 3);
         }
