@@ -565,7 +565,6 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
             initSegments(this.getRenderScale());
         }
         noClip = this.isInSand();
-        System.out.println(noClip);
         if(!isInSand() && this.isEntityInsideOpaqueBlock()){
             this.setMotion(this.getMotion().add(0, 0.4D, 0));
         }

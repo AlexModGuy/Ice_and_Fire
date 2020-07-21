@@ -93,14 +93,10 @@ public class IafEntityRegistry {
         EntityPropertiesHandler.INSTANCE.registerProperties(ChickenEntityProperties.class);
         EntityPropertiesHandler.INSTANCE.registerProperties(ChainEntityProperties.class);
         if (IafConfig.spawnHippogryphs) {
-            for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
-                if (!type.developer) {
-                    for (Biome biome : ForgeRegistries.BIOMES) {
-                        //   if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.HILLS)  && BiomeDictionary.hasType(biome, type.spawnBiomese)) {
-                        //          List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.CREATURE);
-                        //                spawnList.add(new Biome.SpawnListEntry(HIPPOGRYPH, IafConfig.hippogryphSpawnRate, 1, 1));
-                        //        }
-                    }
+            for (Biome biome : ForgeRegistries.BIOMES) {
+                if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.HILLS)) {
+                    List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.CREATURE);
+                    spawnList.add(new Biome.SpawnListEntry(HIPPOGRYPH, IafConfig.hippogryphSpawnRate, 1, 1));
                 }
             }
         }
