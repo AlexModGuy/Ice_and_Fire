@@ -46,7 +46,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position.add(8, 0, 8));
         BlockPos oceanPos = worldIn.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, position.add(8, 0, 8));
         Biome biome = worldIn.getBiome(position);
-        if (IafConfig.spawnDeathWorm && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.DRY) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.BEACH) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.MESA)) {
+        if (IafConfig.spawnDeathWorm && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.DRY) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.BEACH) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.MESA)) {
             if (rand.nextInt(IafConfig.deathWormSpawnRate + 1) == 0) {
                 EntityDeathWorm deathWorm = IafEntityRegistry.DEATH_WORM.create(worldIn.getWorld());
                 deathWorm.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
@@ -71,7 +71,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
             }
         }
 
-        if (false) {
+        if (IafConfig.generateDragonSkeletons) {
             if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.SAVANNA) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
                 EntityLightningDragon firedragon = IafEntityRegistry.LIGHTNING_DRAGON.create(worldIn.getWorld());
                 firedragon.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
@@ -119,7 +119,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                 }
             }
         }
-        if (IafConfig.spawnSeaSerpents && BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN) && rand.nextInt(IafConfig.seaSerpentSpawnChance + 1) == 0) {
+        if (IafConfig.spawnSeaSerpents && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN) && rand.nextInt(IafConfig.seaSerpentSpawnChance + 1) == 0) {
             BlockPos pos =oceanPos.add(rand.nextInt(10) - 5, rand.nextInt(30), rand.nextInt(10) - 5);
             if (worldIn.getBlockState(pos).getMaterial() == Material.WATER) {
                 EntitySeaSerpent serpent = IafEntityRegistry.SEA_SERPENT.create(worldIn.getWorld());

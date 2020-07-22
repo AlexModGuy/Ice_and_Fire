@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
+import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.event.WorldGenUtils;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
@@ -13,12 +13,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.passive.PigEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -34,17 +28,17 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
+public class WorldGenLightningDragonRoosts extends Feature<NoFeatureConfig> {
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private static boolean isMale;
 
-    public WorldGenFireDragonRoosts(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn) {
+    public WorldGenLightningDragonRoosts(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
     }
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
-        if(!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)){
+        if(!IafConfig.generateDragonRoosts || rand.nextInt(100) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)){
             return false;
         }
 
@@ -54,7 +48,7 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
         worldIn.setBlockState(position, Blocks.AIR.getDefaultState(), 2);
         if(!worldIn.isRemote()){
-            EntityFireDragon dragon = IafEntityRegistry.FIRE_DRAGON.create(worldIn.getWorld());
+            EntityLightningDragon dragon = IafEntityRegistry.LIGHTNING_DRAGON.create(worldIn.getWorld());
             dragon.enablePersistence();
             dragon.growDragon(40 + radius);
             dragon.setAgingDisabled(true);
@@ -64,6 +58,7 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
             dragon.homePos = position;
             dragon.hasHomePosition = true;
             dragon.setHunger(50);
+            dragon.setSleeping(true);
             worldIn.addEntity(dragon);
         }
         {
@@ -74,12 +69,12 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
             for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, k, -l), position.add(j, 0, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 int yAdd = blockpos.getY() - position.getY();
                 if (blockpos.distanceSq(position) <= (double) (f * f) && yAdd < 2 + rand.nextInt(k) && !worldIn.isAirBlock(blockpos.down())) {
-                    worldIn.setBlockState(blockpos, IafBlockRegistry.CHARRED_GRASS.getDefaultState(), 2);
+                    worldIn.setBlockState(blockpos, IafBlockRegistry.CRACKLED_GRASS.getDefaultState(), 2);
                 }
             }
             for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, k, -l), position.add(j, 0, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
-                if (worldIn.getBlockState(blockpos).getBlock() == IafBlockRegistry.CHARRED_GRASS && !worldIn.isAirBlock(blockpos.up())) {
-                    worldIn.setBlockState(blockpos, IafBlockRegistry.CHARRED_DIRT.getDefaultState(), 2);
+                if (worldIn.getBlockState(blockpos).getBlock() == IafBlockRegistry.CRACKLED_GRASS && !worldIn.isAirBlock(blockpos.up())) {
+                    worldIn.setBlockState(blockpos, IafBlockRegistry.CRACKLED_DIRT.getDefaultState(), 2);
                 }
             }
         }
@@ -90,10 +85,10 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
             float f = (float) (j + k + l) * 0.333F + 0.5F;
             for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, 1, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 if (blockpos.distanceSq(position) < (double) (f * f)) {
-                    worldIn.setBlockState(blockpos, rand.nextBoolean() ? IafBlockRegistry.CHARRED_GRAVEL.getDefaultState() : IafBlockRegistry.CHARRED_DIRT.getDefaultState(), 2);
+                    worldIn.setBlockState(blockpos, rand.nextBoolean() ? IafBlockRegistry.CRACKLED_GRAVEL.getDefaultState() : IafBlockRegistry.CRACKLED_DIRT.getDefaultState(), 2);
                 }
                 if (blockpos.distanceSq(position) == (double) (f * f)) {
-                    worldIn.setBlockState(blockpos, rand.nextBoolean() ? IafBlockRegistry.CHARRED_COBBLESTONE.getDefaultState() : IafBlockRegistry.CHARRED_COBBLESTONE.getDefaultState(), 2);
+                    worldIn.setBlockState(blockpos, rand.nextBoolean() ? IafBlockRegistry.CRACKLED_COBBLESTONE.getDefaultState() : IafBlockRegistry.CRACKLED_COBBLESTONE.getDefaultState(), 2);
                 }
             }
         }
@@ -124,15 +119,19 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
                     }
                     if (dist > 0.5D && rand.nextInt(1000) == 0) {
                         BlockPos height = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos);
-                        new WorldGenRoostBoulder(IafBlockRegistry.CHARRED_COBBLESTONE, rand.nextInt(3), true).generate(worldIn, rand, height);
+                        new WorldGenRoostBoulder(IafBlockRegistry.CRACKLED_COBBLESTONE, rand.nextInt(3), true).generate(worldIn, rand, height);
                     }
-                    if (rand.nextInt(1000) == 0) {
+                    if (dist > 0.05D &&rand.nextInt(800) == 0) {
                         BlockPos height = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos);
-                        new WorldGenRoostPile(IafBlockRegistry.ASH).generate(worldIn, rand, height);
+                        new WorldGenRoostSpire().generate(worldIn, rand, height);
+                    }
+                    if (dist > 0.05D && rand.nextInt(1000) == 0) {
+                        BlockPos height = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos);
+                        new WorldGenRoostSpike(HORIZONTALS[rand.nextInt(3)]).generate(worldIn, rand, height);
                     }
                     if (dist < 0.3D && rand.nextInt(isMale ? 250 : 400) == 0) {
                         BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos)).up();
-                        new WorldGenRoostGoldPile(IafBlockRegistry.GOLD_PILE).generate(worldIn, rand, height);
+                        new WorldGenRoostGoldPile(IafBlockRegistry.COPPER_PILE).generate(worldIn, rand, height);
                     }
                     if (dist < 0.3D && rand.nextInt(isMale ? 500 : 700) == 0) {
                         BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos)).up();
@@ -140,13 +139,13 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
                         if (worldIn.getBlockState(height).getBlock() instanceof ChestBlock) {
                             TileEntity tileentity1 = worldIn.getTileEntity(height);
                             if (tileentity1 instanceof ChestTileEntity) {
-                                ((ChestTileEntity) tileentity1).setLootTable(WorldGenFireDragonCave.FIREDRAGON_CHEST, new Random().nextLong());
+                                ((ChestTileEntity) tileentity1).setLootTable(WorldGenLightningDragonCave.LIGHTNINGDRAGON_CHEST, new Random().nextLong());
                             }
                         }
                     }
-                    if (rand.nextInt(5000) == 0) {
+                    if (rand.nextInt(6000) == 0) {
                         BlockPos height = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos);
-                        new WorldGenRoostArch(IafBlockRegistry.CHARRED_COBBLESTONE).generate(worldIn, rand, height);
+                        new WorldGenRoostArch(IafBlockRegistry.CRACKLED_COBBLESTONE).generate(worldIn, rand, height);
                     }
                 }
             }
@@ -161,17 +160,17 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
                 return;
             }
             if (state.getMaterial() == Material.ORGANIC) {
-                world.setBlockState(blockpos, IafBlockRegistry.CHARRED_GRASS.getDefaultState(), 2);
+                world.setBlockState(blockpos, IafBlockRegistry.CRACKLED_GRASS.getDefaultState(), 2);
             } else if (state.getMaterial() == Material.EARTH && state.getBlock() == Blocks.DIRT) {
-                world.setBlockState(blockpos, IafBlockRegistry.CHARRED_DIRT.getDefaultState(), 2);
+                world.setBlockState(blockpos, IafBlockRegistry.CRACKLED_DIRT.getDefaultState(), 2);
             } else if (state.getMaterial() == Material.EARTH && state.getBlock() == Blocks.GRAVEL) {
-                world.setBlockState(blockpos, IafBlockRegistry.CHARRED_GRAVEL.getDefaultState(), 2);
+                world.setBlockState(blockpos, IafBlockRegistry.CRACKLED_GRAVEL.getDefaultState(), 2);
             } else if (state.getMaterial() == Material.ROCK && (state.getBlock() == Blocks.COBBLESTONE || state.getBlock().getTranslationKey().contains("cobblestone"))) {
-                world.setBlockState(blockpos, IafBlockRegistry.CHARRED_COBBLESTONE.getDefaultState(), 2);
-            } else if (state.getMaterial() == Material.ROCK && state.getBlock() != IafBlockRegistry.CHARRED_COBBLESTONE) {
-                world.setBlockState(blockpos, IafBlockRegistry.CHARRED_STONE.getDefaultState(), 2);
+                world.setBlockState(blockpos, IafBlockRegistry.CRACKLED_COBBLESTONE.getDefaultState(), 2);
+            } else if (state.getMaterial() == Material.ROCK && state.getBlock() != IafBlockRegistry.CRACKLED_COBBLESTONE) {
+                world.setBlockState(blockpos, IafBlockRegistry.CRACKLED_STONE.getDefaultState(), 2);
             } else if (state.getBlock() == Blocks.GRASS_PATH) {
-                world.setBlockState(blockpos, IafBlockRegistry.CHARRED_GRASS_PATH.getDefaultState(), 2);
+                world.setBlockState(blockpos, IafBlockRegistry.CRACKLED_GRASS_PATH.getDefaultState(), 2);
             } else if (state.getMaterial() == Material.WOOD) {
                 world.setBlockState(blockpos, IafBlockRegistry.ASH.getDefaultState(), 2);
             } else if (state.getMaterial() == Material.LEAVES || state.getMaterial() == Material.PLANTS) {

@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.*;
 import net.minecraft.entity.SpawnReason;
@@ -41,7 +42,7 @@ public class WorldGenPixieVillage extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
-        if(!IafConfig.spawnPixies || rand.nextInt(IafConfig.spawnPixiesChance) != 0){
+        if(!IafConfig.spawnPixies || rand.nextInt(IafConfig.spawnPixiesChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)){
             return false;
         }
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);

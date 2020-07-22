@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.world.gen;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -52,7 +53,7 @@ public class WorldGenSirenIsland extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
-        if(!IafConfig.generateSirenIslands || rand.nextInt(IafConfig.generateSirenChance) != 0){
+        if(!IafConfig.generateSirenIslands || rand.nextInt(IafConfig.generateSirenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)){
             return false;
         }
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);

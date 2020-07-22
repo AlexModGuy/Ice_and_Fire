@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
 public class WorldGenIceDragonCave extends Feature<NoFeatureConfig> {
     public static final ResourceLocation ICEDRAGON_CHEST = new ResourceLocation("iceandfire", "chest/ice_dragon_female_cave");
     public static final ResourceLocation ICEDRAGON_MALE_CHEST = new ResourceLocation("iceandfire", "chest/ice_dragon_male_cave");
-    private static final WorldGenCaveStalactites CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.FROZEN_STONE);
+    private static final WorldGenCaveStalactites CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.FROZEN_STONE, 3);
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private static boolean isMale;
 
@@ -60,7 +61,7 @@ public class WorldGenIceDragonCave extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
-        if(!IafConfig.generateDragonDens || rand.nextInt(IafConfig.generateDragonDenChance) != 0){
+        if(!IafConfig.generateDragonDens || rand.nextInt(IafConfig.generateDragonDenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)){
             return false;
         }
         List<SphereInfo> sphereList = new ArrayList<SphereInfo>();

@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.world.gen;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
@@ -39,7 +40,7 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
-        if(!IafConfig.generateHydraCaves || rand.nextInt(IafConfig.generateHydraChance) != 0){
+        if(!IafConfig.generateHydraCaves || rand.nextInt(IafConfig.generateHydraChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)){
             return false;
         }
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);

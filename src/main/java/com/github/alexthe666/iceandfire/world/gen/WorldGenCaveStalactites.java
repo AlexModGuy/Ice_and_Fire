@@ -8,13 +8,15 @@ import java.util.Random;
 
 public class WorldGenCaveStalactites {
     private Block block;
+    private int maxHeight = 3;
 
-    public WorldGenCaveStalactites(Block block) {
+    public WorldGenCaveStalactites(Block block, int maxHeight) {
         this.block = block;
+        this.maxHeight = maxHeight;
     }
 
     public boolean generate(IWorld worldIn, Random rand, BlockPos position) {
-        int height = 3 + rand.nextInt(3);
+        int height = maxHeight + rand.nextInt(3);
         for (int i = 0; i < height; i++) {
             if (i < height / 2) {
                 worldIn.setBlockState(position.down(i).north(), block.getDefaultState(), 2);

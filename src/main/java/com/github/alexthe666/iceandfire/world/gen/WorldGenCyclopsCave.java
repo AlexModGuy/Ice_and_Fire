@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.AbstractChestBlock;
 import net.minecraft.block.Blocks;
@@ -122,7 +123,7 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
-        if(!IafConfig.generateCyclopsCaves || rand.nextInt(IafConfig.spawnCyclopsCaveChance) != 0){
+        if(!IafConfig.generateCyclopsCaves || rand.nextInt(IafConfig.spawnCyclopsCaveChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)){
             return false;
         }
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);

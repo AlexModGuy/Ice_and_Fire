@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
+import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.datafixers.Dynamic;
@@ -29,14 +30,14 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class WorldGenFireDragonCave extends Feature<NoFeatureConfig> {
-    public static final ResourceLocation FIREDRAGON_CHEST = new ResourceLocation("iceandfire", "chest/fire_dragon_female_cave");
-    public static final ResourceLocation FIREDRAGON_MALE_CHEST = new ResourceLocation("iceandfire", "chest/fire_dragon_male_cave");
-    private static final WorldGenCaveStalactites CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.CHARRED_STONE, 3);
+public class WorldGenLightningDragonCave extends Feature<NoFeatureConfig> {
+    public static final ResourceLocation LIGHTNINGDRAGON_CHEST = new ResourceLocation("iceandfire", "chest/lightning_dragon_female_cave");
+    public static final ResourceLocation LIGHTNINGDRAGON_MALE_CHEST = new ResourceLocation("iceandfire", "chest/lightning_dragon_male_cave");
+    private static final WorldGenCaveStalactites CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.CRACKLED_STONE, 9);
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private static boolean isMale;
 
-    public WorldGenFireDragonCave(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn) {
+    public WorldGenLightningDragonCave(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
     }
 
@@ -46,13 +47,13 @@ public class WorldGenFireDragonCave extends Feature<NoFeatureConfig> {
             if (chance < 60) {
                 int goldRand = Math.max(1, IafConfig.dragonDenGoldAmount) * (isMale ? 1 : 2);
                 boolean generateGold = rand.nextInt(goldRand) == 0;
-                world.setBlockState(pos, generateGold ? IafBlockRegistry.GOLD_PILE.getDefaultState().with(BlockGoldPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
+                world.setBlockState(pos, generateGold ? IafBlockRegistry.COPPER_PILE.getDefaultState().with(BlockGoldPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
             } else if (chance == 61) {
                 world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, HORIZONTALS[rand.nextInt(3)]), 2);
                 if (world.getBlockState(pos).getBlock() instanceof ChestBlock) {
                     TileEntity tileentity1 = world.getTileEntity(pos);
                     if (tileentity1 instanceof ChestTileEntity) {
-                        ((ChestTileEntity) tileentity1).setLootTable(isMale ? FIREDRAGON_MALE_CHEST : FIREDRAGON_CHEST, rand.nextLong());
+                        ((ChestTileEntity) tileentity1).setLootTable(isMale ? LIGHTNINGDRAGON_MALE_CHEST : LIGHTNINGDRAGON_CHEST, rand.nextLong());
                     }
                 }
             }
@@ -79,7 +80,7 @@ public class WorldGenFireDragonCave extends Feature<NoFeatureConfig> {
             decorateCave(worldIn, rand, info.pos, info.radius + 2);
         }
         sphereList.clear();
-        EntityFireDragon dragon = new EntityFireDragon(IafEntityRegistry.FIRE_DRAGON, worldIn.getWorld());
+        EntityLightningDragon dragon = new EntityLightningDragon(IafEntityRegistry.LIGHTNING_DRAGON, worldIn.getWorld());
         dragon.setGender(isMale);
         dragon.growDragon(dragonAge);
         dragon.setAgingDisabled(true);
@@ -135,10 +136,10 @@ public class WorldGenFireDragonCave extends Feature<NoFeatureConfig> {
                             worldIn.setBlockState(blockpos, Blocks.GOLD_ORE.getDefaultState(), 3);
                         }
                         if (chance > 40 && chance < 45) {
-                            worldIn.setBlockState(blockpos, IafConfig.generateCopperOre ? IafBlockRegistry.COPPER_ORE.getDefaultState() : IafBlockRegistry.CHARRED_STONE.getDefaultState(), 3);
+                            worldIn.setBlockState(blockpos, IafConfig.generateCopperOre ? IafBlockRegistry.COPPER_ORE.getDefaultState() : IafBlockRegistry.CRACKLED_STONE.getDefaultState(), 3);
                         }
                         if (chance > 45 && chance < 50) {
-                            worldIn.setBlockState(blockpos, IafConfig.generateSilverOre ? IafBlockRegistry.SILVER_ORE.getDefaultState() : IafBlockRegistry.CHARRED_STONE.getDefaultState(), 3);
+                            worldIn.setBlockState(blockpos, IafConfig.generateSilverOre ? IafBlockRegistry.SILVER_ORE.getDefaultState() : IafBlockRegistry.CRACKLED_STONE.getDefaultState(), 3);
                         }
                         if (chance > 50 && chance < 60) {
                             worldIn.setBlockState(blockpos, Blocks.COAL_ORE.getDefaultState(), 3);
@@ -153,10 +154,10 @@ public class WorldGenFireDragonCave extends Feature<NoFeatureConfig> {
                             worldIn.setBlockState(blockpos, Blocks.DIAMOND_ORE.getDefaultState(), 3);
                         }
                         if (chance > 90 && chance < 1000) {
-                            worldIn.setBlockState(blockpos, Blocks.EMERALD_ORE.getDefaultState(), 3);
+                            worldIn.setBlockState(blockpos, IafConfig.generateAmythestOre ? IafBlockRegistry.AMYTHEST_ORE.getDefaultState() : Blocks.EMERALD_ORE.getDefaultState(), 3);
                         }
                     } else {
-                        worldIn.setBlockState(blockpos, rand.nextBoolean() ? IafBlockRegistry.CHARRED_COBBLESTONE.getDefaultState() : IafBlockRegistry.CHARRED_STONE.getDefaultState(), 2);
+                        worldIn.setBlockState(blockpos, rand.nextBoolean() ? IafBlockRegistry.CRACKLED_COBBLESTONE.getDefaultState() : IafBlockRegistry.CRACKLED_STONE.getDefaultState(), 2);
                     }
                 }
             }

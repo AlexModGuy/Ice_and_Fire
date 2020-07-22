@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
+import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.BlockState;
@@ -51,7 +52,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-        if(!IafConfig.generateMyrmexColonies || rand.nextInt(IafConfig.myrmexColonyGenChance) != 0){
+        if(!IafConfig.generateMyrmexColonies || rand.nextInt(IafConfig.myrmexColonyGenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, pos)){
             return false;
         }
         if(MyrmexWorldData.get(worldIn.getWorld()) != null && MyrmexWorldData.get(worldIn.getWorld()).getNearestHive(pos, 200) != null){
