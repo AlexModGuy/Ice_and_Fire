@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.item.ItemBestiary;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -140,5 +141,15 @@ public enum EnumBestiaryPages {
             tag.putIntArray("Pages", fromList(enumToInt(enumlist)));
         }
         return flag;
+    }
+
+
+    @Nullable
+    public static EnumBestiaryPages fromInt(int index) {
+        if(index < 0){
+            return null;
+        }
+        int length = values().length;
+        return values()[index % length];
     }
 }

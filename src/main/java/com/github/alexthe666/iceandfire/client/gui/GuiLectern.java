@@ -45,6 +45,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
     public float open;
     public float oOpen;
     private ItemStack last = ItemStack.EMPTY;
+    private int flapTimer = 0;
 
     public GuiLectern(ContainerLectern container, PlayerInventory inv, ITextComponent name) {
         super(container, inv, name);
@@ -73,6 +74,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
             double i1 = mouseY - (j + 14 + 19 * k);
 
             if (l >= 0 && i1 >= 0 && l < 108 && i1 < 19 && this.container.enchantItem(minecraft.player, k)) {
+                flapTimer = 5;
                 this.minecraft.playerController.sendEnchantPacket(this.container.windowId, k);
                 return true;
             }
@@ -131,7 +133,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
         }
 
         RenderSystem.enableRescaleNormal();
-        MODEL_BOOK.func_228247_a_(0.0F, f3, f4, f1);
+        MODEL_BOOK.func_228247_a_(0, f3, f4, f1);
         IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
         IVertexBuilder ivertexbuilder = irendertypebuffer$impl.getBuffer(MODEL_BOOK.getRenderType(ENCHANTMENT_TABLE_BOOK_TEXTURE));
         MODEL_BOOK.render(matrixstack, ivertexbuilder, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
@@ -152,7 +154,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
             this.minecraft.getTextureManager().bindTexture(ENCHANTMENT_TABLE_GUI_TEXTURE);
             int l1 = this.container.getPossiblePages()[i1] == null ? -1 : this.container.getPossiblePages()[i1].ordinal();//enchantment level
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            if (l1 == 0) {
+            if (l1 == -1) {
                 this.blit(j1, j + 14 + 19 * i1, 0, 185, 108, 19);
             } else {
                 String s = "" + 3;
@@ -265,6 +267,10 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
 
         this.open = MathHelper.clamp(this.open, 0.0F, 1.0F);
         float f1 = (this.flipT - this.flip) * 0.4F;
+        if(flapTimer > 0){
+            f1 = (ticks + this.minecraft.getRenderPartialTicks()) * 0.5F;
+            flapTimer--;
+        }
         float f = 0.2F;
         f1 = MathHelper.clamp(f1, -0.2F, 0.2F);
         this.flipA += (f1 - this.flipA) * 0.9F;

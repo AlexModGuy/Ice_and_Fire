@@ -1,8 +1,11 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.message.MessageUpdateDragonforge;
+import com.github.alexthe666.iceandfire.message.MessageUpdateLectern;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -171,27 +174,31 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
     }
 
     public EnumBestiaryPages[] randomizePages(ItemStack bestiary, ItemStack manuscript) {
-        if (bestiary.getItem() == IafItemRegistry.BESTIARY) {
-            List<EnumBestiaryPages> possibleList = getPossiblePages();
-            localRand.setSeed(this.world.getGameTime());
-            Collections.shuffle(possibleList, localRand);
-            boolean flag = false;
-            if (possibleList.size() > 0) {
-                selectedPages[0] = possibleList.get(0);
-            } else {
-                flag = true;
-                selectedPages[0] = null;
+        if (!world.isRemote) {
+            if (bestiary.getItem() == IafItemRegistry.BESTIARY) {
+                List<EnumBestiaryPages> possibleList = getPossiblePages();
+                localRand.setSeed(this.world.getGameTime());
+                Collections.shuffle(possibleList, localRand);
+                if (possibleList.size() > 0) {
+                    selectedPages[0] = possibleList.get(0);
+                } else {
+                    selectedPages[0] = null;
+                }
+                if (possibleList.size() > 1) {
+                    selectedPages[1] = possibleList.get(1);
+                } else {
+                    selectedPages[1] = null;
+                }
+                if (possibleList.size() > 2) {
+                    selectedPages[2] = possibleList.get(2);
+                } else {
+                    selectedPages[2] = null;
+                }
             }
-            if (possibleList.size() > 1) {
-                selectedPages[1] = possibleList.get(1);
-            } else {
-                selectedPages[1] = null;
-            }
-            if (possibleList.size() > 2) {
-                selectedPages[2] = possibleList.get(2);
-            } else {
-                selectedPages[2] = null;
-            }
+            int page1 = selectedPages[0] == null ? -1 : selectedPages[0].ordinal();
+            int page2 = selectedPages[1] == null ? -1 : selectedPages[1].ordinal();
+            int page3 = selectedPages[2] == null ? -1 : selectedPages[2].ordinal();
+            IceAndFire.sendMSGToAll(new MessageUpdateLectern(pos.toLong(), page1, page2, page3));
         }
         return selectedPages;
     }
@@ -201,13 +208,19 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
         super.read(compound);
         this.stacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, this.stacks);
+        selectedPages = new EnumBestiaryPages[3];
+        for (int i = 0; i < 3; i++) {
+            selectedPages[i] = EnumBestiaryPages.fromInt(compound.getInt("SelectedPage" + (i + 1)));
+        }
     }
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
         ItemStackHelper.saveAllItems(compound, this.stacks);
-
+        for (int i = 0; i < 3; i++) {
+            compound.putInt("SelectedPage" + (i + 1), selectedPages[i].ordinal());
+        }
         return compound;
     }
 

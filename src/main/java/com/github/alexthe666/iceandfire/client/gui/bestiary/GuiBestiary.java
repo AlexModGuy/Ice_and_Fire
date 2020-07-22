@@ -180,7 +180,8 @@ public class GuiBestiary extends Screen {
         RenderHelper.enableStandardItemLighting();
     }
 
-    public boolean doesGuiPauseGame() {
+    @Override
+    public boolean isPauseScreen() {
         return false;
     }
 

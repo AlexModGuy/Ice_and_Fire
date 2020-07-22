@@ -339,7 +339,6 @@ public class IafItemRegistry {
                         if(item.getRegistryName() != null){
                             event.getRegistry().register(item);
                         }
-                        System.out.println(item.getRegistryName());
                     }
                 }
             }

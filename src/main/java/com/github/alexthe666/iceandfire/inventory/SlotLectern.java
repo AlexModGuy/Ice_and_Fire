@@ -19,10 +19,6 @@ public class SlotLectern extends Slot {
     @Override
     public void onSlotChanged() {
         this.inventory.markDirty();
-        if(IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern){
-            TileEntityLectern lectern = (TileEntityLectern)IceAndFire.PROXY.getRefrencedTE();
-            lectern.selectedPages = lectern.randomizePages(this.getStack(), this.inventory.getStackInSlot(1));
-        }
     }
 
 
