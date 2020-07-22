@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import net.minecraft.block.material.Material;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.pathfinding.WalkNodeProcessor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
@@ -18,8 +19,15 @@ public class PathNavigateDeathWormSand extends PathNavigator {
         worm = deathworm;
     }
 
+    public boolean getCanSwim() {
+        return this.nodeProcessor.getCanSwim();
+    }
+
     protected PathFinder getPathFinder(int i) {
-        return new PathFinder(new NodeProcessorDeathWorm(), i);
+        this.nodeProcessor = new NodeProcessorDeathWorm();
+        this.nodeProcessor.setCanEnterDoors(true);
+        this.nodeProcessor.setCanSwim(true);
+        return new PathFinder(this.nodeProcessor, i);
     }
 
     /**

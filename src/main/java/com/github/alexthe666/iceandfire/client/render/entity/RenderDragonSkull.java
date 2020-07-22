@@ -54,12 +54,14 @@ public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
         }
         IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityTranslucent(getEntityTexture(entity)));
         matrixStackIn.push();
-        matrixStackIn.rotate(new Quaternion(Vector3f.YN, entity.getYaw(), true));
+        matrixStackIn.rotate(new Quaternion(Vector3f.XP, -180, true));
+        matrixStackIn.rotate(new Quaternion(Vector3f.YN, 180 - entity.getYaw(), true));
         float f = 0.0625F;
-        matrixStackIn.scale(1.0F, -1.0F, 1.0F);
+        matrixStackIn.scale(1.0F,  1.0F, 1.0F);
         float size = getRenderSize(entity) / 3;
         matrixStackIn.scale(size, size, size);
-        matrixStackIn.translate(0, entity.isOnWall() ? -0.24F : -0.12F, 0.5F);
+        matrixStackIn.translate(0, entity.isOnWall() ? -0.24F : -0.12F, entity.isOnWall() ? 0.4F : 0.5F);
+        model.resetToDefaultPose();
         setRotationAngles(model.getCube("Head"), entity.isOnWall() ? (float) Math.toRadians(50F) : 0F, 0, 0);
         model.getCube("Head").render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         matrixStackIn.pop();

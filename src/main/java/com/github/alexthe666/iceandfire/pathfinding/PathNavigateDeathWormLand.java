@@ -19,7 +19,6 @@ public class PathNavigateDeathWormLand extends PathNavigator {
 
     public PathNavigateDeathWormLand(EntityDeathWorm worm, World worldIn) {
         super(worm, worldIn);
-        this.nodeProcessor.setCanSwim(true);
         this.worm = worm;
     }
 

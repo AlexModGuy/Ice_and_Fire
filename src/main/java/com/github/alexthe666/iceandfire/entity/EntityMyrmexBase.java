@@ -156,14 +156,16 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                     this.levelUp();
                     this.leveledUp = false;
                 }
-
+                if (this.getHive() != null && this.getCustomer() != null) {
+                    this.getHive().setWorld(this.world);
+                    this.getHive().modifyPlayerReputation(this.getCustomer().getUniqueID(), 1);
+                }
                 this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 200, 0));
             }
         }
         if (this.getHive() != null && this.getCustomer() != null) {
             this.world.setEntityState(this, (byte) 14);
             this.getHive().setWorld(this.world);
-            this.getHive().modifyPlayerReputation(this.getCustomer().getUniqueID(), 1);
         }
         super.updateAITasks();
     }
@@ -775,18 +777,42 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         this.populateTradeData();
     }
 
+    protected abstract VillagerTrades.ITrade[] getLevel1Trades();
+    protected abstract VillagerTrades.ITrade[] getLevel2Trades();
 
     protected void populateTradeData() {
-        VillagerTrades.ITrade[] avillagertrades$itrade = VillagerTrades.field_221240_b.get(1); //TODO update myrmex trade data
-        VillagerTrades.ITrade[] avillagertrades$itrade1 = VillagerTrades.field_221240_b.get(2);
-        if (avillagertrades$itrade != null && avillagertrades$itrade1 != null) {
+        VillagerTrades.ITrade[] level1 = getLevel1Trades();
+        VillagerTrades.ITrade[] level2 = getLevel2Trades();
+        if (level1 != null && level2 != null) {
             MerchantOffers merchantoffers = this.getOffers();
-            this.addTrades(merchantoffers, avillagertrades$itrade, 5);
-            int i = this.rand.nextInt(avillagertrades$itrade1.length);
-            VillagerTrades.ITrade villagertrades$itrade = avillagertrades$itrade1[i];
-            MerchantOffer merchantoffer = villagertrades$itrade.getOffer(this, this.rand);
-            if (merchantoffer != null) {
-                merchantoffers.add(merchantoffer);
+            this.addTrades(merchantoffers, level1, 5);
+            int i = this.rand.nextInt(level2.length);
+            int j = this.rand.nextInt(level2.length);
+            int k = this.rand.nextInt(level2.length);
+            int rolls = 0;
+            while((j == i) && rolls < 100){
+                j = this.rand.nextInt(level2.length);
+                rolls++;
+            }
+            rolls = 0;
+            while((k == i || k == j) && rolls < 100){
+                k = this.rand.nextInt(level2.length);
+                rolls++;
+            }
+            VillagerTrades.ITrade rareTrade1 = level2[i];
+            VillagerTrades.ITrade rareTrade2 = level2[j];
+            VillagerTrades.ITrade rareTrade3 = level2[k];
+            MerchantOffer merchantoffer1 = rareTrade1.getOffer(this, this.rand);
+            if (merchantoffer1 != null) {
+                merchantoffers.add(merchantoffer1);
+            }
+            MerchantOffer merchantoffer2 = rareTrade2.getOffer(this, this.rand);
+            if (merchantoffer2 != null) {
+                merchantoffers.add(merchantoffer2);
+            }
+            MerchantOffer merchantoffer3 = rareTrade3.getOffer(this, this.rand);
+            if (merchantoffer3 != null) {
+                merchantoffers.add(merchantoffer3);
             }
         }
     }

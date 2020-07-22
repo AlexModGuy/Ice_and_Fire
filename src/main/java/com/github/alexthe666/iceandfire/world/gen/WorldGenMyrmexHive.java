@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.IafConfig;
+import com.github.alexthe666.iceandfire.block.BlockMyrmexBiolight;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexConnectedResin;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
@@ -465,7 +466,8 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
             int tuberLength = roomType == RoomType.ENTERANCE || roomType == RoomType.TUNNEL ? 1 : roomType == RoomType.QUEEN ? 1 + random.nextInt(5) : 1 + random.nextInt(3);
             for (int i = 0; i < tuberLength; i++) {
                 if (world.isAirBlock(blockpos.down(i))) {
-                    world.setBlockState(blockpos.down(i), jungle ? IafBlockRegistry.MYRMEX_JUNGLE_BIOLIGHT.getDefaultState() : IafBlockRegistry.MYRMEX_DESERT_BIOLIGHT.getDefaultState(), 2);
+                    boolean connected = i != tuberLength - 1;
+                    world.setBlockState(blockpos.down(i), jungle ? IafBlockRegistry.MYRMEX_JUNGLE_BIOLIGHT.getDefaultState().with(BlockMyrmexBiolight.CONNECTED_DOWN, connected) : IafBlockRegistry.MYRMEX_DESERT_BIOLIGHT.getDefaultState().with(BlockMyrmexBiolight.CONNECTED_DOWN, connected), 2);
                 }
             }
         }

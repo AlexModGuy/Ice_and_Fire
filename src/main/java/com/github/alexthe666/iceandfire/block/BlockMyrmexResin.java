@@ -8,7 +8,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 public class BlockMyrmexResin extends Block implements ICustomRendered {
@@ -19,6 +22,11 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
         super(Properties.create(Material.CLAY).hardnessAndResistance(2.5F).sound(sticky ? SoundType.SLIME : SoundType.GROUND));
         this.setRegistryName(IceAndFire.MODID, sticky ? "myrmex_resin_sticky_" + suffix : "myrmex_resin_" + suffix);
         this.sticky = sticky;
+    }
+
+    @Deprecated
+    public boolean canEntitySpawn(BlockState state, IBlockReader worldIn, BlockPos pos, EntityType<?> type) {
+        return false;
     }
 
     public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entity) {
