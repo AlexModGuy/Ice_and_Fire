@@ -31,7 +31,7 @@ public class LayerMyrmexItem extends LayerRenderer<EntityMyrmexBase, SegmentedMo
     }
 
     protected void translateToHand(HandSide side, MatrixStack stack) {
-        ((ModelMyrmexBase) this.livingEntityRenderer.getEntityModel()).postRenderArm(1, stack);
+        ((ModelMyrmexBase) this.livingEntityRenderer.getEntityModel()).postRenderArm(0, stack);
     }
 
     public boolean shouldCombineTextures() {
@@ -51,7 +51,7 @@ public class LayerMyrmexItem extends LayerRenderer<EntityMyrmexBase, SegmentedMo
                         matrixStackIn.translate(0.0F, 0.2F, 0.0F);
                     }
                     this.translateToHand(HandSide.RIGHT, matrixStackIn);
-                    matrixStackIn.translate(0F, 1F, -2F);
+                    matrixStackIn.translate(0F, 0.3F, -1.4F);
                     matrixStackIn.rotate(new Quaternion(Vector3f.XP, 160, true));
                     matrixStackIn.rotate(new Quaternion(Vector3f.YP, 180, true));
                     Minecraft.getInstance().getItemRenderer().renderItem(itemstack, ItemCameraTransforms.TransformType.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn);

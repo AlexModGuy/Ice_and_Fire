@@ -37,6 +37,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -60,6 +61,7 @@ import java.util.UUID;
 
 public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimatedEntity, IMerchant {
 
+    public static final ResourceLocation MYRMEX_HARVESTABLES = new ResourceLocation("iceandfire", "myrmex_harvestables");
     public static final Animation ANIMATION_PUPA_WIGGLE = Animation.create(20);
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(EntityMyrmexBase.class, DataSerializers.BYTE);
     private static final DataParameter<Integer> GROWTH_STAGE = EntityDataManager.createKey(EntityMyrmexBase.class, DataSerializers.VARINT);
@@ -109,12 +111,10 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         return false;
     }
 
+
+
     public static boolean isEdibleBlock(BlockState blockState) {
-        Block block = blockState.getBlock();
-        if (block instanceof BlockMyrmexBiolight) {
-            return false;
-        }
-        return blockState.getMaterial() == Material.LEAVES || blockState.getMaterial() == Material.PLANTS || blockState.getMaterial() == Material.CACTUS || block instanceof BushBlock || block instanceof CactusBlock || block instanceof LeavesBlock;
+        return BlockTags.getCollection().getOrCreate(MYRMEX_HARVESTABLES).contains(blockState.getBlock());
     }
 
     public static int getRandomCaste(World world, Random random, boolean royal) {
@@ -155,10 +155,6 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                 if (this.leveledUp) {
                     this.levelUp();
                     this.leveledUp = false;
-                }
-                if (this.getHive() != null && this.getCustomer() != null) {
-                    this.getHive().setWorld(this.world);
-                    this.getHive().modifyPlayerReputation(this.getCustomer().getUniqueID(), 1);
                 }
                 this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 200, 0));
             }
@@ -653,7 +649,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public AxisAlignedBB getAttackBounds() {
-        float size = this.getRenderScale() * 0.25F;
+        float size = this.getRenderScale() * 0.65F;
         return this.getBoundingBox().grow(1.0F + size, 1.0F + size, 1.0F + size);
     }
 
@@ -696,6 +692,10 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         if (offer.getDoesRewardExp()) {
             int i = 3 + this.rand.nextInt(4);
             this.world.addEntity(new ExperienceOrbEntity(this.world, this.getPosX(), this.getPosY() + 0.5D, this.getPosZ(), i));
+        }
+        if (this.getHive() != null && this.getCustomer() != null) {
+            this.getHive().setWorld(this.world);
+            this.getHive().modifyPlayerReputation(this.getCustomer().getUniqueID(), 1);
         }
     }
 

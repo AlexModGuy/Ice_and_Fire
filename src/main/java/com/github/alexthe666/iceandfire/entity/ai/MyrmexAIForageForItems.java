@@ -64,7 +64,7 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
         if (this.targetEntity == null || this.targetEntity != null && (!this.targetEntity.isAlive() || this.targetEntity.isInWater())) {
             this.resetTask();
         }
-        if (this.targetEntity != null && !this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
+        if (this.targetEntity != null && !this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 8F) {
             this.myrmex.onPickupItem(targetEntity);
             this.myrmex.setHeldItem(Hand.MAIN_HAND, this.targetEntity.getItem());
             this.targetEntity.remove();

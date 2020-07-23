@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
+import com.github.alexthe666.iceandfire.entity.util.MyrmexTrades;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.google.common.base.Predicate;
 import net.minecraft.block.BlockState;
@@ -14,6 +15,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -70,6 +72,16 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         this.dataManager.register(HASMADEHOME, Boolean.valueOf(true));
     }
 
+    @Override
+    protected VillagerTrades.ITrade[] getLevel1Trades() {
+        return isJungle() ? MyrmexTrades.JUNGLE_QUEEN.get(1) : MyrmexTrades.DESERT_QUEEN.get(1);
+    }
+
+    @Override
+    protected VillagerTrades.ITrade[] getLevel2Trades() {
+        return isJungle() ? MyrmexTrades.JUNGLE_QUEEN.get(2) : MyrmexTrades.DESERT_QUEEN.get(2);
+    }
+
     public void setCustomName(ITextComponent name) {
         if (!this.getHive().equals(name)) {
             if (this.getHive() != null) {
@@ -121,8 +133,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, genPos.getX(), genPos.getY(), genPos.getZ()))) {
                     WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true, this.isJungle(), NoFeatureConfig::deserialize);
                     if (!world.isRemote) {
-                        ServerWorld serverWorld = (ServerWorld) world;
-                        hiveGen.place(world, serverWorld.getChunkProvider().getChunkGenerator(), this.getRNG(), genPos, IFeatureConfig.NO_FEATURE_CONFIG);
+                        hiveGen.placeSmallGen(world, this.getRNG(), genPos);
                     }
                     this.setMadeHome(true);
                     this.setLocationAndAngles(genPos.getX(), down, genPos.getZ(), 0, 0);

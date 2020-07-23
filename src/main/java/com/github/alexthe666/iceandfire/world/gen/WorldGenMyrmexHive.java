@@ -51,16 +51,29 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         this.jungle = jungle;
     }
 
+    public boolean placeSmallGen(IWorld worldIn, Random rand, BlockPos pos) {
+        hasFoodRoom = false;
+        hasNursery = false;
+        totalRooms = 0;
+        entrances = 0;
+        centerOfHive = pos;
+        generateMainRoom(worldIn, rand, pos);
+        this.small = false;
+        return false;
+    }
+
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-        if(!IafConfig.generateMyrmexColonies || rand.nextInt(IafConfig.myrmexColonyGenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, pos)){
-            return false;
-        }
-        if(MyrmexWorldData.get(worldIn.getWorld()) != null && MyrmexWorldData.get(worldIn.getWorld()).getNearestHive(pos, 200) != null){
-            return false;
+        if(!small){
+            if(!IafConfig.generateMyrmexColonies || rand.nextInt(IafConfig.myrmexColonyGenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, pos)){
+                return false;
+            }
+            if(MyrmexWorldData.get(worldIn.getWorld()) != null && MyrmexWorldData.get(worldIn.getWorld()).getNearestHive(pos, 200) != null){
+                return false;
+            }
         }
         pos = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);
-        if(!worldIn.getFluidState(pos.down()).isEmpty()){
+        if(!small && !worldIn.getFluidState(pos.down()).isEmpty()){
             return false;
         }
         hasFoodRoom = false;
@@ -197,7 +210,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
     private void generateEntrance(IWorld world, Random rand, BlockPos position, int size, int height, Direction direction) {
         BlockPos up = position.up();
         hive.getEntranceBottoms().put(up, direction);
-        while (up.getY() < world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, up).getY() && !world.getBlockState(up).isIn(BlockTags.LOGS)) {
+        while (up.getY() < world.getHeight(small ? Heightmap.Type.MOTION_BLOCKING_NO_LEAVES : Heightmap.Type.WORLD_SURFACE_WG, up).getY() && !world.getBlockState(up).isIn(BlockTags.LOGS)) {
             generateCircleRespectSky(world, rand, up, size, height, direction);
             up = up.up().offset(direction);
         }

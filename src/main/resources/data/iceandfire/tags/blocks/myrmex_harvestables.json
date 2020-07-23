@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:pumpkin",
+    "minecraft:dead_bush",
+    "minecraft:grass",
+    "minecraft:tall_grass",
+    "minecraft:fern",
+    "minecraft:large_fern",
+    "minecraft:large_fern",
+    "minecraft:melon",
+    "minecraft:cactus",
+    "#minecraft:leaves",
+    "#minecraft:flowers",
+    "#minecraft:saplings",
+    "#minecraft:crops",
+    "minecraft:sweet_berry_bush",
+    "minecraft:dried_kelp_block"
+  ]
+}
