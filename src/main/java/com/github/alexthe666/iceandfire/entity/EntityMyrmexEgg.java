@@ -25,6 +25,8 @@ import net.minecraft.util.HandSide;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.UUID;
 
@@ -145,9 +147,16 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
 
 
             } else {
-                MyrmexHive hive = MyrmexWorldData.get(world).getHiveFromUUID(hiveUUID);
-                if (!world.isRemote && hive != null && Math.sqrt(this.getDistanceSq(hive.getCenter().getX(), hive.getCenter().getY(), hive.getCenter().getZ())) < 2000) {
-                    myrmex.setHive(hive);
+                if(MyrmexWorldData.get(world) != null) {
+                    MyrmexHive hive;
+                    if(this.hiveUUID == null){
+                        hive = MyrmexWorldData.get(world).getNearestHive(new BlockPos(this), 400);
+                    }else {
+                        hive = MyrmexWorldData.get(world).getHiveFromUUID(hiveUUID);
+                    }
+                    if (!world.isRemote && hive != null && Math.sqrt(this.getDistanceSq(hive.getCenter().getX(), hive.getCenter().getY(), hive.getCenter().getZ())) < 2000) {
+                        myrmex.setHive(hive);
+                    }
                 }
             }
 

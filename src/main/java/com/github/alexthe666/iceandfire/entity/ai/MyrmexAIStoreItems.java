@@ -73,19 +73,19 @@ public class MyrmexAIStoreItems extends Goal {
                 if (!itemstack.isEmpty()) {
                     for (int i = 0; i < cocoon.getSizeInventory(); ++i) {
                         if (!itemstack.isEmpty()) {
-                            ItemStack itemstack1 = cocoon.getStackInSlot(i);
-                            if (itemstack1.isEmpty()) {
-                                cocoon.setInventorySlotContents(i, itemstack);
+                            ItemStack cocoonStack = cocoon.getStackInSlot(i);
+                            if (cocoonStack.isEmpty()) {
+                                cocoon.setInventorySlotContents(i, itemstack.copy());
                                 cocoon.markDirty();
+
                                 this.myrmex.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
                                 this.myrmex.isEnteringHive = false;
                                 return;
-                            }
-                            if (ItemStack.areItemsEqual(itemstack1, itemstack)) {
-                                int j = Math.min(cocoon.getInventoryStackLimit(), itemstack1.getMaxStackSize());
-                                int k = Math.min(itemstack.getCount(), j - itemstack1.getCount());
+                            }else if (cocoonStack.getItem() == itemstack.getItem()) {
+                                int j = Math.min(cocoon.getInventoryStackLimit(), cocoonStack.getMaxStackSize());
+                                int k = Math.min(itemstack.getCount(), j - cocoonStack.getCount());
                                 if (k > 0) {
-                                    itemstack1.grow(k);
+                                    cocoonStack.grow(k);
                                     itemstack.shrink(k);
 
                                     if (itemstack.isEmpty()) {

@@ -32,7 +32,7 @@ public class MyrmexAIPickupBabies<T extends ItemEntity> extends TargetGoal {
             }
         };
         this.myrmex = myrmex;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+        this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
 
     @Override
@@ -40,7 +40,7 @@ public class MyrmexAIPickupBabies<T extends ItemEntity> extends TargetGoal {
         if (!this.myrmex.canMove() || this.myrmex.holdingSomething() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching || this.myrmex.holdingBaby()) {
             return false;
         }
-        List<LivingEntity> listBabies = this.goalOwner.world.getEntitiesWithinAABB(LivingEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        List<LivingEntity> listBabies = this.goalOwner.world.getEntitiesWithinAABB(LivingEntity.class, this.getTargetableArea(20), this.targetEntitySelector);
         if (listBabies.isEmpty()) {
             return false;
         } else {

@@ -19,6 +19,10 @@ public class RenderMyrmexEgg extends LivingRenderer<EntityMyrmexEgg, SegmentedMo
         super(renderManager, new ModelDragonEgg(), 0.3F);
     }
 
+    protected boolean canRenderName(EntityMyrmexEgg entity) {
+        return entity.getAlwaysRenderNameTagForRender() && entity.hasCustomName();
+    }
+
     @Override
     public ResourceLocation getEntityTexture(EntityMyrmexEgg entity) {
         return entity.isJungle() ? EGG_JUNGLE : EGG_DESERT;

@@ -199,7 +199,9 @@ public class MyrmexTrades {
 
     private static ItemStack createEgg(boolean jungle, int caste){
         ItemStack egg = new ItemStack(jungle ? IafItemRegistry.MYRMEX_JUNGLE_EGG : IafItemRegistry.MYRMEX_DESERT_EGG);
-        egg.getOrCreateTag().putInt("EggOrdinal", caste);
+        CompoundNBT tag = new CompoundNBT();
+        tag.putInt("EggOrdinal", caste);
+        egg.setTag(tag);
         return egg;
     }
 

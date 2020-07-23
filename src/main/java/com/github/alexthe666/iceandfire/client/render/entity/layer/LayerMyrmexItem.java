@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
@@ -51,7 +52,10 @@ public class LayerMyrmexItem extends LayerRenderer<EntityMyrmexBase, SegmentedMo
                         matrixStackIn.translate(0.0F, 0.2F, 0.0F);
                     }
                     this.translateToHand(HandSide.RIGHT, matrixStackIn);
-                    matrixStackIn.translate(0F, 0.3F, -1.4F);
+                    matrixStackIn.translate(0F, 0.3F, -1.6F);
+                    if(itemstack.getItem() instanceof BlockItem){
+                        matrixStackIn.translate(0F, 0, 0.2F);
+                    }
                     matrixStackIn.rotate(new Quaternion(Vector3f.XP, 160, true));
                     matrixStackIn.rotate(new Quaternion(Vector3f.YP, 180, true));
                     Minecraft.getInstance().getItemRenderer().renderItem(itemstack, ItemCameraTransforms.TransformType.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn);

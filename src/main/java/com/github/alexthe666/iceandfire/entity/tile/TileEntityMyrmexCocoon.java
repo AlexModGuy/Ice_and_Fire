@@ -1,10 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.ChestContainer;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -15,6 +17,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+
+import javax.annotation.Nullable;
 
 public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
@@ -64,8 +68,15 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
     @Override
     protected Container createMenu(int id, PlayerInventory player) {
-        return ChestContainer.createGeneric9X2(id, player);
+        return new ChestContainer(ContainerType.GENERIC_9X2, id, player, this, 2);
     }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
+        return new ChestContainer(ContainerType.GENERIC_9X2, id, playerInventory, this, 2);
+    }
+
 
     public int getInventoryStackLimit() {
         return 64;

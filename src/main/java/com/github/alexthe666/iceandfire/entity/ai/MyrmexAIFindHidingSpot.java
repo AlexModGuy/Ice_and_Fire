@@ -19,7 +19,7 @@ public class MyrmexAIFindHidingSpot extends Goal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super Entity> targetEntitySelector;
     private final EntityMyrmexSentinel myrmex;
-    private BlockPos targetBlock = BlockPos.ZERO;
+    private BlockPos targetBlock = null;
     private int wanderRadius = RADIUS;
 
     public MyrmexAIFindHidingSpot(EntityMyrmexSentinel myrmex) {
@@ -38,33 +38,37 @@ public class MyrmexAIFindHidingSpot extends Goal {
     @Override
     public boolean shouldExecute() {
         this.targetBlock = getTargetPosition(wanderRadius);
-        return this.myrmex.canMove() && this.myrmex.getAttackTarget() == null && myrmex.canSeeSky();
+        return this.myrmex.canMove() && this.myrmex.getAttackTarget() == null && myrmex.canSeeSky() && !myrmex.isHiding();
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !myrmex.shouldEnterHive() && this.myrmex.getNavigator().noPath();
+        return !myrmex.shouldEnterHive() && this.myrmex.getNavigator().noPath()  && !myrmex.isHiding();
     }
 
     @Override
     public void tick() {
-        if (areMyrmexNear(RADIUS) || this.myrmex.isOnResin()) {
-            this.myrmex.getNavigator().tryMoveToXYZ(this.targetBlock.getX() + 0.5D, this.targetBlock.getY(), this.targetBlock.getZ() + 0.5D, 1D);
-            if (this.myrmex.getDistanceSq(new Vec3d(this.targetBlock)) < 2) {
-                this.wanderRadius += RADIUS;
-                this.targetBlock = getTargetPosition(wanderRadius);
-            }
-        } else {
-            if (this.myrmex.getAttackTarget() == null) {
-                this.myrmex.setHiding(true);
-                resetTask();
-            }
-        }
+       if(targetBlock != null){
+           if (areMyrmexNear(5) || this.myrmex.isOnResin()) {
+               this.myrmex.getNavigator().tryMoveToXYZ(this.targetBlock.getX() + 0.5D, this.targetBlock.getY(), this.targetBlock.getZ() + 0.5D, 1D);
+               if (this.myrmex.getDistanceSq(new Vec3d(this.targetBlock)) < 20) {
+                   this.wanderRadius += RADIUS;
+                   this.targetBlock = getTargetPosition(wanderRadius);
+               }
+           } else {
+               if (this.myrmex.getAttackTarget() == null || !this.myrmex.getAttackTarget().isAlive()) {
+                  if(this.myrmex.getCustomer() == null){
+                      myrmex.setHiding(true);
+                      return;
+                  }
+               }
+           }
+       }
 
     }
 
     public void resetTask() {
-        this.targetBlock = BlockPos.ZERO;
+        this.targetBlock = null;
         wanderRadius = RADIUS;
     }
 
