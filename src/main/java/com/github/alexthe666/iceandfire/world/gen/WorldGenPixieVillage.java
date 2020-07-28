@@ -46,7 +46,7 @@ public class WorldGenPixieVillage extends Feature<NoFeatureConfig> {
             return false;
         }
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
-        int maxRoads = 5 + rand.nextInt(5);
+        int maxRoads = IafConfig.pixieVillageSize + rand.nextInt(5);
         BlockPos buildPosition = position;
         int placedRoads = 0;
         while(placedRoads < maxRoads){

@@ -708,15 +708,14 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public SoundEvent getYesSound() {
-        return SoundEvents.ENTITY_VILLAGER_YES;
+        return IafSoundRegistry.MYRMEX_IDLE;
     }
 
     protected SoundEvent getVillagerYesNoSound(boolean getYesSound) {
-        return getYesSound ? SoundEvents.ENTITY_VILLAGER_YES : SoundEvents.ENTITY_VILLAGER_NO;
+        return IafSoundRegistry.MYRMEX_IDLE;
     }
 
     public void playCelebrateSound() {
-        this.playSound(SoundEvents.ENTITY_VILLAGER_CELEBRATE, this.getSoundVolume(), this.getSoundPitch());
     }
 
     protected void resetCustomer() {

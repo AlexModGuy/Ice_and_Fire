@@ -40,7 +40,7 @@ public class BlockMyrmexBiolight extends BushBlock {
         if (!worldIn.isRemote) {
             this.updateState(state, worldIn, pos, state.getBlock());
         }
-        if (!worldIn.getBlockState(pos.up()).isSolid() && worldIn.getBlockState(pos.down()).getBlock() != this) {
+        if (!worldIn.getBlockState(pos.up()).isSolid() && worldIn.getBlockState(pos.up()).getBlock() != this) {
             worldIn.destroyBlock(pos, true);
         }
     }
