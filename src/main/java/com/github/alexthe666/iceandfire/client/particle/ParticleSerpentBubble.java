@@ -18,6 +18,7 @@ public class ParticleSerpentBubble extends SpriteTexturedParticle {
     public ParticleSerpentBubble(World world, double x, double y, double z, double motX, double motY, double motZ, float size) {
         super(world, x, y, z, motX, motY, motZ);
         this.setPosition(x, y, z);
+        this.particleScale = 0.3F;
     }
 
     @Override
@@ -69,7 +70,7 @@ public class ParticleSerpentBubble extends SpriteTexturedParticle {
 
     public int getBrightnessForRender(float partialTick) {
         BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
-        return this.world.isBlockLoaded(blockpos) ? this.world.getLight(blockpos) : 0;
+        return 240;
     }
 
     public int getFXLayer() {

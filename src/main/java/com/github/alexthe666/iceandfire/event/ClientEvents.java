@@ -223,7 +223,6 @@ public class ClientEvents {
             if (player.world.isRemote && sirenProps != null) {
                 GameRenderer renderer = Minecraft.getInstance().gameRenderer;
                 EntitySiren siren = sirenProps.getSiren(event.getEntityLiving().world);
-                System.out.println(renderer.getShaderGroup());
                 if (IafConfig.sirenShader && !sirenProps.isCharmed && renderer != null && renderer.getShaderGroup() != null && SIREN_SHADER.toString().equals(renderer.getShaderGroup().getShaderGroupName())) {
                     renderer.stopUseShader();
                 }

@@ -178,6 +178,7 @@ public class IafItemRegistry {
     public static final Item DRAGON_FLUTE = new ItemDragonFlute();
     public static final Item SUMMONING_CRYSTAL_FIRE = new ItemSummoningCrystal("fire");
     public static final Item SUMMONING_CRYSTAL_ICE = new ItemSummoningCrystal("ice");
+    public static final Item SUMMONING_CRYSTAL_LIGHTNING = new ItemSummoningCrystal("lightning");
     public static final Item HIPPOGRYPH_EGG = new ItemHippogryphEgg();
     public static final Item IRON_HIPPOGRYPH_ARMOR = new ItemGeneric("iron_hippogryph_armor", 0, 1);
     public static final Item GOLD_HIPPOGRYPH_ARMOR = new ItemGeneric("gold_hippogryph_armor", 0, 1);

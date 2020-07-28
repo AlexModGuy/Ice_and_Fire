@@ -181,13 +181,6 @@ public class EntityHydraBreath extends AbstractFireballEntity implements IDragon
                     }
 
                 }
-
-            }
-            if (movingObject.getType() != RayTraceResult.Type.MISS) {
-                if (this.shootingEntity instanceof EntityDragonBase && IafConfig.dragonGriefing != 2) {
-                    IafDragonDestructionManager.destroyAreaLightningCharge(world, new BlockPos(this.getPosX(), this.getPosY(), this.getPosZ()), ((EntityDragonBase) this.shootingEntity));
-                }
-                this.remove();
             }
         }
     }

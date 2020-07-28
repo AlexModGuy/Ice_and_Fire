@@ -43,6 +43,7 @@ import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.*;
 import net.minecraft.world.*;
 import net.minecraft.world.gen.Heightmap;
@@ -195,7 +196,8 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         this.goalSelector.addGoal(2, new SeaSerpentAIAttackMelee(this, 1.0D, true));
         this.goalSelector.addGoal(3, new EntityAIWatchClosestIgnoreRider(this, LivingEntity.class, 6.0F));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new FlyingAITarget(this, LivingEntity.class, 0, true, false, NOT_SEA_SERPENT));
+        this.targetSelector.addGoal(2, new FlyingAITarget(this, LivingEntity.class, 150, true, false, NOT_SEA_SERPENT));
+        this.targetSelector.addGoal(3, new FlyingAITarget(this, PlayerEntity.class, 0, true, false, NOT_SEA_SERPENT));
     }
 
     protected int getExperiencePoints(PlayerEntity player) {
@@ -515,6 +517,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         }
         if (prevJumping != this.isJumpingOutOfWater() && !this.isJumpingOutOfWater()) {
             this.playSound(IafSoundRegistry.SEA_SERPENT_SPLASH, 5F, 0.75F);
+            this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 5F, 0.75F);
             spawnSlamParticles(ParticleTypes.BUBBLE);
             spawnSlamParticles(ParticleTypes.BUBBLE);
             spawnSlamParticles(ParticleTypes.BUBBLE);
@@ -966,20 +969,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
 
         @Override
         public void tick() {
-            if (this.dolphin.isBeingRidden()) {
-                double flySpeed = 0.8F;
-                Vec3d dragonVec = dolphin.getPositionVector();
-                Vec3d moveVec = new Vec3d(posX, posY, posZ);
-                Vec3d normalized = moveVec.subtract(dragonVec).normalize();
-                double dist = dragonVec.distanceTo(moveVec);
-                dolphin.setMotion(normalized.x * flySpeed, normalized.y * flySpeed, normalized.z * flySpeed);
-                if (dist > 2.5E-7) {
-                    float yaw = (float) Math.toDegrees(Math.PI * 2 - Math.atan2(normalized.x, normalized.y));
-                    dolphin.rotationYaw = limitAngle(dolphin.rotationYaw, yaw, 5);
-                    dolphin.setAIMoveSpeed((float) (speed));
-                }
-                dolphin.move(MoverType.SELF, dolphin.getMotion());
-            } else if (this.action == MovementController.Action.MOVE_TO && !this.dolphin.getNavigator().noPath()) {
+            if (this.action == MovementController.Action.MOVE_TO) {
                 double distanceX = this.posX - this.dolphin.getPosX();
                 double distanceY = this.posY - this.dolphin.getPosY();
                 double distanceZ = this.posZ - this.dolphin.getPosZ();

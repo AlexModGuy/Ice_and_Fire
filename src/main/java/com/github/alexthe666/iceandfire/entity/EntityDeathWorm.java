@@ -204,7 +204,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         super.onDeath(cause);
     }
 
-    public void fall(float distance, float damageMultiplier) {
+    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
     @Nullable
@@ -565,6 +565,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
             initSegments(this.getRenderScale());
         }
         noClip = this.isInSand();
+        this.setNoGravity(this.isInSandStrict());
         if(!isInSand() && this.isEntityInsideOpaqueBlock()){
             this.setMotion(this.getMotion().add(0, 0.4D, 0));
         }
@@ -688,13 +689,13 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
             if (state.isOpaqueCube(world, pos)) {
                 if (world.isRemote) {
                     this.world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, state), this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getSurface((int) Math.floor(this.getPosX()), (int) Math.floor(this.getPosY()), (int) Math.floor(this.getPosZ())) + 0.5F, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
-                    for (int i = 0; i < segments.length; i++) {
-                   //     this.world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, state), segments[i].getPosX() + (double) (this.rand.nextFloat() * segments[i].getWidth() * 2.0F) - (double) segments[i].getWidth(), this.getSurface((int) Math.floor(segments[i].getPosX()), (int) Math.floor(segments[i].getPosY()), (int) Math.floor(segments[i].getPosZ())) + 0.5F, segments[i].getPosZ() + (double) (this.rand.nextFloat() * segments[i].getWidth() * 2.0F) - (double) segments[i].getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
-                    }
                 }
             }
             if (this.ticksExisted % 10 == 0) {
                 this.playSound(SoundEvents.BLOCK_SAND_BREAK, 1, 0.5F);
+            }
+            if(this.getAttackTarget() != null){
+                this.getMoveHelper().setMoveTo(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY(), this.getAttackTarget().getPosZ(), 1);
             }
         }
         if (this.up() && this.onGround) {

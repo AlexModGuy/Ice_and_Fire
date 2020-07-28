@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "iceandfire:summoning_crystal_lightning"
+    }
+  ],
+  "result": {
+    "item": "iceandfire:summoning_crystal_lightning",
+    "count": 1
+  }
+}
