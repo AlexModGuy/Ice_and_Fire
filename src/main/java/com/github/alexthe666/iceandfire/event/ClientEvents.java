@@ -223,22 +223,26 @@ public class ClientEvents {
             if (player.world.isRemote && sirenProps != null) {
                 GameRenderer renderer = Minecraft.getInstance().gameRenderer;
                 EntitySiren siren = sirenProps.getSiren(event.getEntityLiving().world);
+                System.out.println(renderer.getShaderGroup());
+                if (IafConfig.sirenShader && !sirenProps.isCharmed && renderer != null && renderer.getShaderGroup() != null && SIREN_SHADER.toString().equals(renderer.getShaderGroup().getShaderGroupName())) {
+                    renderer.stopUseShader();
+                }
                 if (siren == null) {
                     sirenProps.isCharmed = false;
+
+                    return;
                 }
                 if (sirenProps.isCharmed) {
                     if (player.world.isRemote && rand.nextInt(40) == 0) {
-                        IceAndFire.PROXY.spawnParticle("siren_appearance", player.getPosX(), player.getPosY(), player.getPosZ(), 0, 0, 0);
+                        IceAndFire.PROXY.spawnParticle("siren_appearance", player.getPosX(), player.getPosY(), player.getPosZ(), siren.getHairColor(), 0, 0);
                     }
 
-                    if (IafConfig.sirenShader && sirenProps.isCharmed && renderer.getShaderGroup() != null) {
+                    if (IafConfig.sirenShader && renderer.getShaderGroup() == null) {
                         renderer.loadShader(SIREN_SHADER);
                     }
 
                 }
-                if (IafConfig.sirenShader && !sirenProps.isCharmed && renderer != null && renderer.getShaderGroup() != null && renderer.getShaderGroup().getShaderGroupName() != null && SIREN_SHADER.toString().equals(renderer.getShaderGroup().getShaderGroupName())) {
-                    renderer.stopUseShader();
-                }
+
             }
         }
     }

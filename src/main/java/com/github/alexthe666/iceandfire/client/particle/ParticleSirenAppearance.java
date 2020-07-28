@@ -1,6 +1,8 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
 import com.github.alexthe666.iceandfire.client.model.ModelSiren;
+import com.github.alexthe666.iceandfire.client.render.entity.RenderSiren;
+import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
@@ -13,17 +15,18 @@ import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.ElderGuardianRenderer;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class ParticleSirenAppearance extends Particle {
     private final Model field_228342_a_ = new ModelSiren();
-    private final RenderType field_228341_A_ = RenderType.getEntityTranslucent(ElderGuardianRenderer.GUARDIAN_ELDER_TEXTURE);
-
-    public ParticleSirenAppearance(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn) {
+    private int sirenType;
+    public ParticleSirenAppearance(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int sirenType) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn);
         this.particleGravity = 0.0F;
         this.maxAge = 30;
+        this.sirenType = sirenType;
     }
 
     public IParticleRenderType getRenderType() {
@@ -39,8 +42,9 @@ public class ParticleSirenAppearance extends Particle {
         matrixstack.scale(-1.0F, -1.0F, 1.0F);
         matrixstack.translate(0.0D, -1.101F, 1.5D);
         IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
-        IVertexBuilder ivertexbuilder = irendertypebuffer$impl.getBuffer(this.field_228341_A_);
+        IVertexBuilder ivertexbuilder = irendertypebuffer$impl.getBuffer(RenderType.getEntityTranslucent(RenderSiren.getSirenOverlayTexture(sirenType)));
         this.field_228342_a_.render(matrixstack, ivertexbuilder, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, f1);
         irendertypebuffer$impl.finish();
     }
 }
+

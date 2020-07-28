@@ -41,4 +41,15 @@ public class RenderSiren extends MobRenderer<EntitySiren, ModelSiren> {
         }
     }
 
+    public static ResourceLocation getSirenOverlayTexture(int siren) {
+        switch (siren) {
+            default:
+                return TEXTURE_0;
+            case 1:
+                return TEXTURE_1;
+            case 2:
+                return TEXTURE_2;
+        }
+    }
+
 }

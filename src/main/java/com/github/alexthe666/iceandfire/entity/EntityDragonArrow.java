@@ -6,7 +6,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityDragonArrow extends AbstractArrowEntity {
 
@@ -18,6 +21,15 @@ public class EntityDragonArrow extends AbstractArrowEntity {
     public EntityDragonArrow(EntityType typeIn, double x, double y, double z, World world) {
         super(typeIn, x, y, z, world);
         this.setDamage(10);
+    }
+
+    public EntityDragonArrow(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+        this(IafEntityRegistry.DRAGON_ARROW, worldIn);
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     public EntityDragonArrow(EntityType typeIn, LivingEntity shooter, World worldIn) {

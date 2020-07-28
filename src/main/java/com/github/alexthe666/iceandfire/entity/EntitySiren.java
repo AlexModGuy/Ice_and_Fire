@@ -183,10 +183,10 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
         if (!world.isRemote && this.getAttackTarget() == null && !this.isAgressive()) {
             this.setSinging(true);
         }
-        if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 4D && this.getAnimationTick() == 5) {
+        if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 7D && this.getAnimationTick() == 5) {
             this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributes().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
         }
-        if (this.getAnimation() == ANIMATION_PULL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 12D && this.getAnimationTick() == 5) {
+        if (this.getAnimation() == ANIMATION_PULL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 16D && this.getAnimationTick() == 5) {
             this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributes().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
             double attackmotionX = (Math.signum(this.getPosX() - this.getAttackTarget().getPosX()) * 0.5D - this.getAttackTarget().getMotion().z) * 0.100000000372529 * 5;
             double attackmotionY = (Math.signum(this.getPosY() - this.getAttackTarget().getPosY() + 1) * 0.5D - this.getAttackTarget().getMotion().y) * 0.100000000372529 * 5;

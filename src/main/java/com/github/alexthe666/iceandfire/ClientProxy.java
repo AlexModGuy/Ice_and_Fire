@@ -297,7 +297,7 @@ public class ClientProxy extends CommonProxy {
             particle = new ParticlePixieDust(world, x, y, z, (float) motX, (float) motY, (float) motZ);
         }
         if (name.equals("siren_appearance")) {
-            particle = new ParticleSirenAppearance(world, x, y, z);
+            particle = new ParticleSirenAppearance(world, x, y, z, (int)motX);
         }
         if (name.equals("siren_music")) {
             particle = new ParticleSirenMusic(world, x, y, z, motX, motY, motZ, 1);

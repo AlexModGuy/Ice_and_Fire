@@ -153,10 +153,9 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
                     double d4 = entity.getPosZ() - headPosZ + this.rand.nextGaussian() * 0.4D;
                     EntityHydraBreath entitylargefireball = new EntityHydraBreath(IafEntityRegistry.HYDRA_BREATH, world, this, d2, d3, d4);
                     entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-                    if (!world.isRemote && entity.isAlive()) {
+                    if (!world.isRemote) {
                         world.addEntity(entitylargefireball);
                     }
-                    entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
                 }
                 if (isBreathing[i] && (entity == null || !entity.isAlive() || breathTicks[i] > 60) && !world.isRemote) {
                     isBreathing[i] = false;
