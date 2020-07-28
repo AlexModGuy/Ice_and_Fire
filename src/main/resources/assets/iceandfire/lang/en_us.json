@@ -675,6 +675,7 @@
   "container.lectern.no_bestiary": "Cannot add pages",
   "container.lectern.costs": "Costs:",
   "container.lectern.manuscript.many": "%s Manuscripts",
+  "container.myrmex_cocoon": "Myrmex Cocoon",
   "bestiary.contains": "Contains:",
   "bestiary.hold_shift": "Hold §e[SHIFT]§r§7 to view contents",
   "bestiary.introduction": "Introduction",

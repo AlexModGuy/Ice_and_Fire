@@ -97,7 +97,7 @@ public class MyrmexHive {
     @Nullable
     public EntityMyrmexQueen getQueen() {
         List<EntityMyrmexQueen> ourQueens = new ArrayList<>();
-        if (world.isRemote) {
+        if (!world.isRemote) {
             ServerWorld serverWorld = world.getServer().getWorld(DimensionType.OVERWORLD);
             List<Entity> allQueens = serverWorld.getEntities(IafEntityRegistry.MYRMEX_QUEEN, EntityPredicates.NOT_SPECTATING);
             for (Entity queen : allQueens) {

@@ -3,8 +3,11 @@ package com.github.alexthe666.iceandfire.client.gui;
 import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.gui.bestiary.ChangePageButton;
+import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageGetMyrmexHive;
+import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
+import com.github.alexthe666.iceandfire.message.MessageMyrmexSettings;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -12,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -54,7 +58,8 @@ public class GuiMyrmexStaff extends Screen {
         }
         populateRoomMap();
         this.addButton(new Button(i + 124, j + 15, 120, 20, ClientProxy.getReferedClientHive().reproduces ? I18n.format("myrmex.message.disablebreeding") : I18n.format("myrmex.message.enablebreeding"), (p_214132_1_) -> {
-            ClientProxy.getReferedClientHive().reproduces = !ClientProxy.getReferedClientHive().reproduces;
+            boolean opposite = !ClientProxy.getReferedClientHive().reproduces;
+            ClientProxy.getReferedClientHive().reproduces = opposite;
         }));
         this.addButton(this.previousPage = new ChangePageButton(i + 5, j + 150, false, 0, this.jungle ? 2 : 1, (p_214132_1_) -> {
             if (this.currentPage > 0) {
@@ -139,13 +144,13 @@ public class GuiMyrmexStaff extends Screen {
         if (ClientProxy.getReferedClientHive() != null) {
             if (!ClientProxy.getReferedClientHive().colonyName.isEmpty()) {
                 String title = I18n.format("myrmex.message.colony_named", ClientProxy.getReferedClientHive().colonyName);
-                this.font.drawString(title, i + 40 - title.length() / 2, j - 3, color);
+                this.font.drawStringWithShadow(title, i + 40 - title.length() / 2, j - 3, color);
             } else {
-                this.font.drawString(I18n.format("myrmex.message.colony"), i + 80, j - 3, color);
+                this.font.drawStringWithShadow(I18n.format("myrmex.message.colony"), i + 80, j - 3, color);
             }
             int opinion = ClientProxy.getReferedClientHive().getPlayerReputation(Minecraft.getInstance().player.getUniqueID());
-            this.font.drawString(I18n.format("myrmex.message.hive_opinion", opinion), i, j + 12, color);
-            this.font.drawString(I18n.format("myrmex.message.rooms"), i, j + 25, color);
+            this.font.drawStringWithShadow(I18n.format("myrmex.message.hive_opinion", opinion), i, j + 12, color);
+            this.font.drawStringWithShadow(I18n.format("myrmex.message.rooms"), i, j + 25, color);
             /*int hiveCount = 0;
             for (WorldGenMyrmexHive.RoomType type : ROOMS) {
                 List<BlockPos> roomPos = ClientProxy.getReferedClientHive().getRooms(type);
@@ -167,14 +172,15 @@ public class GuiMyrmexStaff extends Screen {
         }
     }
 
-    public void onGuiClosed() {
+    public void onClose() {
         IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageGetMyrmexHive(ClientProxy.getReferedClientHive()));
+        super.onClose();
     }
 
 
     private void drawRoomInfo(String type, BlockPos pos, int i, int j, int color) {
         String translate = "myrmex.message.room." + type;
-        this.font.drawString(I18n.format(translate, pos.getX(), pos.getY(), pos.getZ()), i, j + 36 + hiveCount * 22, color);
+        this.font.drawStringWithShadow(I18n.format(translate, pos.getX(), pos.getY(), pos.getZ()), i, j + 36 + hiveCount * 22, color);
         hiveCount++;
     }
 

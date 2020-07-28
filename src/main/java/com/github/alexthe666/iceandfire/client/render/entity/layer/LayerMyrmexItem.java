@@ -55,6 +55,8 @@ public class LayerMyrmexItem extends LayerRenderer<EntityMyrmexBase, SegmentedMo
                     matrixStackIn.translate(0F, 0.3F, -1.6F);
                     if(itemstack.getItem() instanceof BlockItem){
                         matrixStackIn.translate(0F, 0, 0.2F);
+                    }else{
+                        matrixStackIn.translate(0F, 0.2F, 0.3F);
                     }
                     matrixStackIn.rotate(new Quaternion(Vector3f.XP, 160, true));
                     matrixStackIn.rotate(new Quaternion(Vector3f.YP, 180, true));

@@ -320,7 +320,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     public boolean isBreedingSeason() {
-        return this.getGrowthStage() >= 2 && hiveTicks > 4000 && (this.getHive() == null || this.getHive().reproduces);
+        return this.getGrowthStage() >= 2 && (this.getHive() == null || this.getHive().reproduces);
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -43,7 +43,7 @@ public class MyrmexAIFindHidingSpot extends Goal {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !myrmex.shouldEnterHive() && this.myrmex.getNavigator().noPath()  && !myrmex.isHiding();
+        return !myrmex.shouldEnterHive() && this.myrmex.getNavigator().noPath() && this.myrmex.getAttackTarget() == null  && !myrmex.isHiding();
     }
 
     @Override
@@ -56,11 +56,8 @@ public class MyrmexAIFindHidingSpot extends Goal {
                    this.targetBlock = getTargetPosition(wanderRadius);
                }
            } else {
-               if (this.myrmex.getAttackTarget() == null || !this.myrmex.getAttackTarget().isAlive()) {
-                  if(this.myrmex.getCustomer() == null){
-                      myrmex.setHiding(true);
-                      return;
-                  }
+               if (this.myrmex.getAttackTarget() == null && this.myrmex.getCustomer() == null && myrmex.visibleTicks == 0) {
+                   myrmex.setHiding(true);
                }
            }
        }

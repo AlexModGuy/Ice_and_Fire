@@ -49,7 +49,7 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.goalOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
+        return this.goalOwner.getBoundingBox().grow(targetDistance, targetDistance, targetDistance);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
         if (this.targetEntity == null || this.targetEntity != null && (!this.targetEntity.isAlive() || this.targetEntity.isInWater())) {
             this.resetTask();
         }
-        if (this.targetEntity != null && !this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 8F) {
+        if (this.targetEntity != null && this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 8F) {
             this.myrmex.onPickupItem(targetEntity);
             this.myrmex.setHeldItem(Hand.MAIN_HAND, this.targetEntity.getItem());
             this.targetEntity.remove();

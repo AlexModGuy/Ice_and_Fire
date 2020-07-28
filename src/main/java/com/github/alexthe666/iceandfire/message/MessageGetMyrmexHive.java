@@ -51,12 +51,15 @@ public class MessageGetMyrmexHive {
             if (player != null) {
                 IceAndFire.PROXY.setReferencedHive(message.hive);
                 if (player.world != null) {
-                    MyrmexHive serverHive = MyrmexWorldData.get(player.world).getHiveFromUUID(message.hive.hiveUUID);
-                    if (serverHive != null) {
-                        CompoundNBT tag = new CompoundNBT();
-                        message.hive.writeVillageDataToNBT(tag);
-                        serverHive.readVillageDataFromNBT(tag);
+                    if(MyrmexWorldData.get(player.world) != null){
+                        MyrmexHive serverHive = MyrmexWorldData.get(player.world).getHiveFromUUID(message.hive.hiveUUID);
+                        if (serverHive != null) {
+                            CompoundNBT tag = new CompoundNBT();
+                            message.hive.writeVillageDataToNBT(tag);
+                            serverHive.readVillageDataFromNBT(tag);
+                        }
                     }
+
                 }
             }
         }

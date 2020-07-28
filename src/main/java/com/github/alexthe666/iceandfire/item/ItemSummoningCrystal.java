@@ -17,10 +17,12 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -125,6 +127,11 @@ public class ItemSummoningCrystal extends Item {
                                         boolean flag2 = false;
                                         if (!flag) {//server side but couldn't find dragon
                                             if (data != null) {
+                                                if(context.getWorld().isRemote){
+                                                    ServerWorld serverWorld = (ServerWorld)context.getWorld();
+                                                    ChunkPos pos = new ChunkPos(dragonChunkPos);
+                                                    serverWorld.forceChunk(pos.x, pos.z, true);
+                                                }
                                                 /*ticket = ForgeChunkManager.requestPlayerTicket(IceAndFire.INSTANCE, player.getName(), worldIn, ForgeChunkManager.Type.NORMAL);
                                                 if (ticket != null) {
                                                     if (dragonChunkPos != null) {

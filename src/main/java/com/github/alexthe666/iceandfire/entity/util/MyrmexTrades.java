@@ -583,7 +583,9 @@ public class MyrmexTrades {
         }
 
         public MerchantOffer getOffer(Entity p_221182_1_, Random p_221182_2_) {
-            return new MerchantOffer(new ItemStack(IafItemRegistry.MYRMEX_JUNGLE_RESIN, this.emeraldCount), new ItemStack(this.stack.getItem(), this.itemCount), this.maxUses, this.exp, this.multiplier);
+            ItemStack cloneStack = new ItemStack(this.stack.getItem(), this.itemCount);
+            cloneStack.setTag(this.stack.getTag());
+            return new MerchantOffer(new ItemStack(IafItemRegistry.MYRMEX_JUNGLE_RESIN, this.emeraldCount), cloneStack, this.maxUses, this.exp, this.multiplier);
         }
     }
 

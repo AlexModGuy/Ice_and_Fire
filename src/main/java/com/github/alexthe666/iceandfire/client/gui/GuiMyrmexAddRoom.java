@@ -92,11 +92,11 @@ public class GuiMyrmexAddRoom extends Screen {
         if (ClientProxy.getReferedClientHive() != null) {
             if (!ClientProxy.getReferedClientHive().colonyName.isEmpty()) {
                 String title = I18n.format("myrmex.message.colony_named", ClientProxy.getReferedClientHive().colonyName);
-                this.font.drawString(title, i + 40 - title.length() / 2, j - 3, color);
+                this.font.drawStringWithShadow(title, i + 40 - title.length() / 2, j - 3, color);
             } else {
-                this.font.drawString(I18n.format("myrmex.message.colony"), i + 80, j - 3, color);
+                this.font.drawStringWithShadow(I18n.format("myrmex.message.colony"), i + 80, j - 3, color);
             }
-            this.font.drawString(I18n.format("myrmex.message.create_new_room", interactPos.getX(), interactPos.getY(), interactPos.getZ()), i + 30, j + 6, color);
+            this.font.drawStringWithShadow(I18n.format("myrmex.message.create_new_room", interactPos.getX(), interactPos.getY(), interactPos.getZ()), i + 30, j + 6, color);
 
         }
 
@@ -106,7 +106,7 @@ public class GuiMyrmexAddRoom extends Screen {
         IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageGetMyrmexHive(ClientProxy.getReferedClientHive()));
     }
 
-    public boolean doesGuiPauseGame() {
+    public boolean isPauseScreen() {
         return false;
     }
 

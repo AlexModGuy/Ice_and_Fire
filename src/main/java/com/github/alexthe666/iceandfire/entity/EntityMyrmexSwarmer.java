@@ -58,7 +58,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 
 
     protected double attackDistance() {
-        return 13;
+        return 25;
     }
 
     protected void registerGoals() {
@@ -86,7 +86,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(SUMMONER_ID, Optional.of(null));
+        this.dataManager.register(SUMMONER_ID, Optional.empty());
         this.dataManager.register(TICKS_ALIVE, 0);
     }
 

@@ -465,7 +465,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                 this.getHive().setWorld(this.world);
                 EntityMyrmexQueen queen = this.getHive().getQueen();
                 BlockPos center = this.getHive().getCenterGround();
-                if (queen.hasCustomName()) {
+                if (queen != null && queen.hasCustomName()) {
                     player.sendStatusMessage(new TranslationTextComponent("myrmex.message.staff_set_named", queen.getName(), center.getX(), center.getY(), center.getZ()), true);
                 } else {
                     player.sendStatusMessage(new TranslationTextComponent("myrmex.message.staff_set_unnamed", center.getX(), center.getY(), center.getZ()), true);

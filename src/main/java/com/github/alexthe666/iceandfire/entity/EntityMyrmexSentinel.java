@@ -81,6 +81,9 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         } else {
             visibleTicks = 0;
         }
+        if(this.getAttackTarget() != null){
+            visibleTicks = 100;
+        }
         if (this.canSeeSky()) {
             this.daylightTicks++;
         } else {
@@ -88,7 +91,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         }
         boolean holding = getHeldEntity() != null;
         boolean hiding = isHiding() && !this.hasCustomer();
-        if (holding || this.isOnResin() || this.getAttackTarget() != null || visibleTicks > 0) {
+        if ((holding || this.isOnResin() || this.getAttackTarget() != null) || visibleTicks > 0) {
             this.setHiding(false);
         }
         if (holding && holdingProgress < 20.0F) {
