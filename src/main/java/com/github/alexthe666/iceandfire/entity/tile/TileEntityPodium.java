@@ -1,8 +1,10 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.inventory.ContainerPodium;
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
 import com.github.alexthe666.iceandfire.item.ItemMyrmexEgg;
+import com.github.alexthe666.iceandfire.message.MessageUpdatePodium;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -101,6 +103,10 @@ public class TileEntityPodium extends LockableTileEntity implements ITickableTil
         if (!stack.isEmpty() && stack.getCount() > this.getInventoryStackLimit()) {
             stack.setCount(this.getInventoryStackLimit());
         }
+        this.write(this.getUpdateTag());
+        if(!world.isRemote){
+            IceAndFire.sendMSGToAll(new MessageUpdatePodium(this.getPos().toLong(), stacks.get(0)));
+        }
     }
 
     @Override
@@ -167,7 +173,7 @@ public class TileEntityPodium extends LockableTileEntity implements ITickableTil
 
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+        return new SUpdateTileEntityPacket(pos, -1, getUpdateTag());
     }
 
     @Override

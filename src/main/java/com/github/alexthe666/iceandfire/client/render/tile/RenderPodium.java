@@ -43,6 +43,14 @@ public class RenderPodium<T extends TileEntityPodium> extends TileEntityRenderer
                 return RenderType.getEntityCutout(RenderDragonEgg.EGG_SAPPHIRE);
             case SILVER:
                 return RenderType.getEntityCutout(RenderDragonEgg.EGG_SILVER);
+            case ELECTRIC:
+                return RenderType.getEntityCutout(RenderDragonEgg.EGG_ELECTRIC);
+            case AMYTHEST:
+                return RenderType.getEntityCutout(RenderDragonEgg.EGG_AMYTHEST);
+            case COPPER:
+                return RenderType.getEntityCutout(RenderDragonEgg.EGG_COPPER);
+            case BLACK:
+                return RenderType.getEntityCutout(RenderDragonEgg.EGG_BLACK);
         }
     }
 

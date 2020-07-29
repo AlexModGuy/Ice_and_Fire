@@ -47,12 +47,14 @@ public class ModelDragonEgg<T extends LivingEntity> extends AdvancedEntityModel<
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(Egg1, Egg2, Egg3, Egg4);
     }
 
     @Override
     public void setRotationAngles(LivingEntity entity, float f, float f1, float f2, float f3, float f4) {
         this.resetToDefaultPose();
+        this.Egg1.setRotationPoint(0.0F, 19.6F, 0.0F);
+        this.Egg4.setRotationPoint(0.0F, -0.9F, 0.0F);
         if (entity instanceof EntityDragonEgg) {
             EntityDragonEgg dragon = (EntityDragonEgg) entity;
             boolean flag = false;

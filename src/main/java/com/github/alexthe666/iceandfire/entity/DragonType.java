@@ -7,8 +7,10 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.server.ServerWorld;
 
 public class DragonType {
 
@@ -122,7 +124,10 @@ public class DragonType {
                 }
                 dragon.setTamed(true);
                 dragon.setOwnerId(egg.getOwnerId());
-                egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), SoundEvents.ENTITY_LIGHTNING_BOLT_IMPACT, egg.getSoundCategory(), 2.5F, 1.0F, false);
+                if(!egg.world.isRemote){
+                    ((ServerWorld)egg.world).addLightningBolt(new LightningBoltEntity(egg.world, (double)egg.getPosX(), (double)egg.getPosY(), (double)egg.getPosZ(), true));
+                }
+                egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, egg.getSoundCategory(), 2.5F, 1.0F, false);
                 egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), IafSoundRegistry.DRAGON_HATCH, egg.getSoundCategory(), 2.5F, 1.0F, false);
                 egg.remove();
 

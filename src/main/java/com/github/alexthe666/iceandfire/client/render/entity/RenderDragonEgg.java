@@ -21,12 +21,16 @@ public class RenderDragonEgg extends LivingRenderer<EntityDragonEgg, SegmentedMo
     public static final ResourceLocation EGG_WHITE = new ResourceLocation("iceandfire:textures/models/icedragon/egg_white.png");
     public static final ResourceLocation EGG_SAPPHIRE = new ResourceLocation("iceandfire:textures/models/icedragon/egg_sapphire.png");
     public static final ResourceLocation EGG_SILVER = new ResourceLocation("iceandfire:textures/models/icedragon/egg_silver.png");
+    public static final ResourceLocation EGG_ELECTRIC = new ResourceLocation("iceandfire:textures/models/lightningdragon/egg_electric.png");
+    public static final ResourceLocation EGG_AMYTHEST = new ResourceLocation("iceandfire:textures/models/lightningdragon/egg_amythest.png");
+    public static final ResourceLocation EGG_BLACK = new ResourceLocation("iceandfire:textures/models/lightningdragon/egg_black.png");
+    public static final ResourceLocation EGG_COPPER = new ResourceLocation("iceandfire:textures/models/lightningdragon/egg_copper.png");
 
     public RenderDragonEgg(EntityRendererManager renderManager) {
         super(renderManager, new ModelDragonEgg(), 0.3F);
     }
 
-    protected boolean canRenderName(EntityMyrmexEgg entity) {
+    protected boolean canRenderName(EntityDragonEgg entity) {
         return entity.getAlwaysRenderNameTagForRender() && entity.hasCustomName();
     }
 
@@ -50,6 +54,14 @@ public class RenderDragonEgg extends LivingRenderer<EntityDragonEgg, SegmentedMo
                 return EGG_SAPPHIRE;
             case SILVER:
                 return EGG_SILVER;
+            case ELECTRIC:
+                return EGG_ELECTRIC;
+            case AMYTHEST:
+                return EGG_AMYTHEST;
+            case COPPER:
+                return EGG_COPPER;
+            case BLACK:
+                return EGG_BLACK;
 
         }
     }
