@@ -42,7 +42,7 @@ public class LayerPixieItem extends LayerRenderer<EntityPixie, ModelPixie> {
                 matrixStackIn.translate(-0.075F, 0, -0.05F);
             }
             matrixStackIn.translate(0.05F, 0.55F, -0.4F);
-            matrixStackIn.rotate(new Quaternion(Vector3f.XP, 160, true));
+            matrixStackIn.rotate(new Quaternion(Vector3f.XP, 200, true));
             matrixStackIn.rotate(new Quaternion(Vector3f.YP, 180, true));
             Minecraft.getInstance().getItemRenderer().renderItem(itemstack, ItemCameraTransforms.TransformType.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn);
             matrixStackIn.pop();

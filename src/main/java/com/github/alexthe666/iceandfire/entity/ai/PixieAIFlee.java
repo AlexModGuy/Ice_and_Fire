@@ -38,7 +38,7 @@ public class PixieAIFlee<T extends Entity> extends Goal {
 
 
     public boolean shouldExecute() {
-        if (this.pixie.getHeldItem(Hand.MAIN_HAND) == ItemStack.EMPTY) {
+        if (this.pixie.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
             return false;
         }
         if (this.pixie.isTamed()) {

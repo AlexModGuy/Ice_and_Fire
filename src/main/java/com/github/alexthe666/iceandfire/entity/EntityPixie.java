@@ -55,9 +55,6 @@ public class EntityPixie extends TameableEntity {
     public boolean slowSpeed = false;
     public int ticksUntilHouseAI;
     private BlockPos housePos;
-    private PixieAIFlee aiFlee;
-    private PixieAISteal aiTempt;
-
     public EntityPixie(EntityType type, World worldIn) {
         super(type, worldIn);
         this.moveController = new EntityPixie.AIMoveControl(this);
@@ -192,13 +189,6 @@ public class EntityPixie extends TameableEntity {
     }
 
     public void flipAI(boolean flee) {
-        if (flee) {
-            this.goalSelector.removeGoal(aiTempt);
-            this.goalSelector.addGoal(3, aiFlee);
-        } else {
-            this.goalSelector.removeGoal(aiFlee);
-            this.goalSelector.addGoal(3, aiTempt);
-        }
     }
 
     public void fall(float distance, float damageMultiplier) {
@@ -208,20 +198,17 @@ public class EntityPixie extends TameableEntity {
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new PixieAIFollowOwner(this, 1.0D, 2.0F, 4.0F));
         this.goalSelector.addGoal(1, new PixieAIPickupItem(this, false));
-
-        this.goalSelector.addGoal(2, aiTempt = new PixieAISteal(this, 1.0D));
-
-        this.goalSelector.addGoal(2, aiFlee = new PixieAIFlee(this, PlayerEntity.class, 10, new Predicate<PlayerEntity>() {
+        this.goalSelector.addGoal(2, new PixieAIFlee(this, PlayerEntity.class, 10, new Predicate<PlayerEntity>() {
             @Override
             public boolean apply(@Nullable PlayerEntity entity) {
                 return true;
             }
         }));
+        this.goalSelector.addGoal(2, new PixieAISteal(this, 1.0D));
         this.goalSelector.addGoal(3, new AIMoveRandom());
         this.goalSelector.addGoal(4, new AIEnterHouse());
         this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
-        this.goalSelector.removeGoal(aiFlee);
     }
 
     @Override
@@ -254,9 +241,9 @@ public class EntityPixie extends TameableEntity {
         if (ticksUntilHouseAI > 0) {
             ticksUntilHouseAI--;
         }
-        if(!world.isRemote){
+        if (!world.isRemote) {
             if (housePos != null && this.getDistanceSq(new Vec3d(housePos).add(0.5D, 0.5D, 0.5D)) < 1.5F && world.getTileEntity(housePos) != null && world.getTileEntity(housePos) instanceof TileEntityPixieHouse) {
-                TileEntityPixieHouse house = (TileEntityPixieHouse)world.getTileEntity(housePos);
+                TileEntityPixieHouse house = (TileEntityPixieHouse) world.getTileEntity(housePos);
                 if (house.hasPixie) {
                     this.housePos = null;
                 } else {

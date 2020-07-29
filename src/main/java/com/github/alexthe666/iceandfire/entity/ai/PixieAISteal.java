@@ -28,11 +28,10 @@ public class PixieAISteal extends Goal {
     public PixieAISteal(EntityPixie temptedEntityIn, double speedIn) {
         this.temptedEntity = temptedEntityIn;
         this.speed = speedIn;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     public boolean shouldExecute() {
-        if (!IafConfig.pixiesStealItems) {
+        if (!IafConfig.pixiesStealItems || !temptedEntity.getHeldItemMainhand().isEmpty()) {
             return false;
         }
         if (temptedEntity.getRNG().nextInt(3) == 0) {
@@ -51,7 +50,7 @@ public class PixieAISteal extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return this.shouldExecute();
+        return !temptedEntity.isTamed() && temptedEntity.getHeldItemMainhand().isEmpty();
     }
 
     public void startExecuting() {

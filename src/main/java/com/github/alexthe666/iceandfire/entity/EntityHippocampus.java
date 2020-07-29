@@ -92,7 +92,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
 
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new HippocampusAIRide(this));
-        this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, Item.getItemFromBlock(Blocks.SPONGE), false));
+        this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, Items.KELP, false));
         this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, Items.PRISMARINE_CRYSTALS, false));
         this.goalSelector.addGoal(1, new AquaticAIFindWaterTarget(this, 10, true));
         this.goalSelector.addGoal(2, new AquaticAIGetInWater(this, 1.0D));
@@ -577,7 +577,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
             }
             return true;
         }
-        if (itemstack != null && itemstack.getItem() == Item.getItemFromBlock(Blocks.SPONGE)) {
+        if (itemstack != null && itemstack.getItem() == Items.KELP) {
             if (!world.isRemote) {
                 this.heal(5);
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);

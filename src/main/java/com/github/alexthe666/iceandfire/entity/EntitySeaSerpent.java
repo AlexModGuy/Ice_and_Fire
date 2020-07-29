@@ -450,6 +450,9 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     public void livingTick() {
         super.livingTick();
         if (!world.isRemote) {
+            if (isJumpingOutOfWater() && !shouldStopJumping()){
+                this.setMotion(this.getMotion().add(0, 0.08D, 0));
+            }
             if (isJumpingOutOfWater() && swimBehavior == SwimBehavior.WANDER && shouldStopJumping()) {
                 this.setMotion(this.getMotion().add(0, -0.25D, 0));
                 if (this.isInWater()) {

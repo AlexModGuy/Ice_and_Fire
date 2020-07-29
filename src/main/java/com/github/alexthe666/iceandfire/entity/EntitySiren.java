@@ -485,37 +485,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
 
     @Override
     public void travel(Vec3d motion) {
-        if (this.isServerWorld()) {
-            float f4;
-            float f5;
-            if (this.isInWater()) {
-                this.moveRelative(0.1F, motion);
-                f4 = 0.8F;
-                float d0 = (float) EnchantmentHelper.getDepthStriderModifier(this);
-                if (d0 > 3.0F) {
-                    d0 = 3.0F;
-                }
-                if (!this.onGround) {
-                    d0 *= 0.5F;
-                }
-                if (d0 > 0.0F) {
-                    f4 += (0.54600006F - f4) * d0 / 3.0F;
-                }
-                this.move(MoverType.SELF, motion);
-                this.setMotion(this.getMotion().mul(f4 * 0.9, f4 * 0.9, f4 * 0.9));
-            } else {
-                super.travel(motion);
-            }
-        }
-        this.prevLimbSwingAmount = this.limbSwingAmount;
-        double deltaX = this.getPosX() - this.prevPosX;
-        double deltaZ = this.getPosZ() - this.prevPosZ;
-        float delta = MathHelper.sqrt(deltaX * deltaX + deltaZ * deltaZ) * 4.0F;
-        if (delta > 1.0F) {
-            delta = 1.0F;
-        }
-        this.limbSwingAmount += (delta - this.limbSwingAmount) * 0.4F;
-        this.limbSwing += this.limbSwingAmount;
+      super.travel(motion);
     }
 
     @Override
@@ -542,28 +512,31 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
 
         @Override
         public void tick() {
-            if (this.action == MovementController.Action.MOVE_TO && !this.siren.getNavigator().noPath() && !this.siren.isBeingRidden()) {
-                double distanceX = this.posX - this.siren.getPosX();
-                double distanceY = this.posY - this.siren.getPosY();
-                double distanceZ = this.posZ - this.siren.getPosZ();
+            if (this.action == MovementController.Action.MOVE_TO) {
+                double distanceX = this.posX - siren.getPosX();
+                double distanceY = this.posY - siren.getPosY();
+                double distanceZ = this.posZ - siren.getPosZ();
                 double distance = Math.abs(distanceX * distanceX + distanceZ * distanceZ);
                 double distanceWithY = MathHelper.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
                 distanceY = distanceY / distanceWithY;
                 float angle = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
-                this.siren.rotationYaw = this.limitAngle(this.siren.rotationYaw, angle, 30.0F);
-                this.siren.setAIMoveSpeed(1F);
-                this.siren.setMotion(this.siren.getMotion().add(0, (double) this.siren.getAIMoveSpeed() * distanceY * 0.1D, 0));
-                if (distance < (double) Math.max(1.0F, this.siren.getWidth())) {
-                    float f = this.siren.rotationYaw * 0.017453292F;
-                    this.siren.setMotion(this.siren.getMotion().add(-MathHelper.sin(f) * 0.35F, 0, MathHelper.cos(f) * 0.35F));
+                siren.rotationYaw = this.limitAngle(siren.rotationYaw, angle, 30.0F);
+                siren.setAIMoveSpeed(1F);
+                float f1 = 0;
+                float f2 = 0;
+                if (distance < (double) Math.max(1.0F, siren.getWidth())) {
+                    float f = siren.rotationYaw * 0.017453292F;
+                    f1 -= (double) (MathHelper.sin(f) * 0.35F);
+                    f2 += (double) (MathHelper.cos(f) * 0.35F);
                 }
+                siren.setMotion(siren.getMotion().add(f1, siren.getAIMoveSpeed() * distanceY * 0.1D, f2));
             } else if (this.action == MovementController.Action.JUMPING) {
-                siren.setAIMoveSpeed((float) (this.speed * this.siren.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
+                siren.setAIMoveSpeed((float) (this.speed * siren.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
                 if (siren.onGround) {
                     this.action = MovementController.Action.WAIT;
                 }
             } else {
-                this.siren.setAIMoveSpeed(0.0F);
+                siren.setAIMoveSpeed(0.0F);
             }
         }
     }
