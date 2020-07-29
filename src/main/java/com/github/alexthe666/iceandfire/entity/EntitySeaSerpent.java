@@ -444,7 +444,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         }
     }
 
-    public void fall(float distance, float damageMultiplier) {
+    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
     public void livingTick() {

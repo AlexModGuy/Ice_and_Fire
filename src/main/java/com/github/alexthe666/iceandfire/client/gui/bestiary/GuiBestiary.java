@@ -206,7 +206,7 @@ public class GuiBestiary extends Screen {
                     GL11.glPopMatrix();
                     drawItemStack(new ItemStack(Blocks.OAK_PLANKS), 161, 124, 1.5F);
                     drawItemStack(new ItemStack(Blocks.OAK_PLANKS), 161, 107, 1.5F);
-                    drawItemStack(new ItemStack(Items.BOOK), 161, 91, 1.5F);
+                    drawItemStack(new ItemStack(IafItemRegistry.MANUSCRIPT), 161, 91, 1.5F);
                     drawItemStack(new ItemStack(IafBlockRegistry.LECTERN), 151, 78, 2F);
                 }
                 break;

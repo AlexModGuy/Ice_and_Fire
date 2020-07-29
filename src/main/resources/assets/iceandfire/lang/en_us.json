@@ -704,6 +704,8 @@
   "bestiary.dragonforge": "Dragon Forge",
   "bestiary.hydra": "Hydra",
   "bestiary.dread_mobs": "The Undead",
+  "bestiary.lightningdragon": "Lightning Dragon",
+  "bestiary.lightningdragonegg": "Lightning Dragon Eggs",
 
   "lectern.nopages": "No new information can be added.",
   "silvertools.hurt": "+2 damage against undead",
@@ -758,7 +760,7 @@
   "advancements.iceandfire.lectern.title": "Would you Like to Know More?",
   "advancements.iceandfire.lectern.description": "Craft a Bestiary Lectern to learn more about the world of Ice and Fire",
   "advancements.iceandfire.kill_a_dragon.title": "Dragonslayer",
-  "advancements.iceandfire.kill_a_dragon.description": "Kill an ice dragon or a fire dragon",
+  "advancements.iceandfire.kill_a_dragon.description": "Kill an ice, fire or lightning dragon",
   "advancements.iceandfire.dragon_egg.title": "Mother of Dragons",
   "advancements.iceandfire.dragon_egg.description": "Obtain a dragon egg",
   "advancements.iceandfire.dragon_stick.title": "Dragon Commander",
