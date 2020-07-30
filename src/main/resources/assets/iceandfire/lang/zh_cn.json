@@ -430,6 +430,7 @@
   "item.iceandfire.hydra_arrow.desc": "施加中毒并从目标身上吸取生命值",
   "item.iceandfire.summoning_crystal_ice": "唤龙冰晶石",
   "item.iceandfire.summoning_crystal_fire": "唤龙火晶石",
+  "item.iceandfire.summoning_crystal_lightning": "唤龙电晶石",
   "item.iceandfire.summoning_crystal.desc_0": "右击一条龙与之绑定",
   "item.iceandfire.summoning_crystal.desc_1": "绑定后右击可将龙唤至身边",
   "item.iceandfire.summoning_crystal.bound": "已与%s绑定",
@@ -675,6 +676,7 @@
   "container.lectern.no_bestiary": "没有可增加的篇目了。",
   "container.lectern.costs": "消耗：",
   "container.lectern.manuscript.many": "%s手稿",
+  "container.myrmex_cocoon": "储物蚁茧",
   "bestiary.contains": "包括:",
   "bestiary.hold_shift": "按住§e[SHIFT]§r§7以查阅目录",
   "bestiary.introduction": "介绍",
@@ -702,7 +704,9 @@
   "bestiary.dragonforge": "龙息锻炉",
   "bestiary.hydra": "九头蛇",
   "bestiary.dread_mobs": "悚怖亡灵",
-
+  "bestiary.lightningdragon": "电龙",
+  "bestiary.lightningdragonegg": "电龙蛋"
+  
   "lectern.nopages": "无法添加新的信息.",
   "silvertools.hurt": "+2 亡灵克制",
   "myrmextools.hurt": "+4 蠕虫与非节肢克制",
@@ -756,7 +760,7 @@
   "advancements.iceandfire.lectern.title": "想不想知道得再多一点？",
   "advancements.iceandfire.lectern.description": "合成手稿誊写桌以了解更多关于冰火传说世界的知识",
   "advancements.iceandfire.kill_a_dragon.title": "屠龙勇士",
-  "advancements.iceandfire.kill_a_dragon.description": "击杀一条冰/火龙",
+  "advancements.iceandfire.kill_a_dragon.description": "击杀一条冰龙、火龙或者电龙",
   "advancements.iceandfire.dragon_egg.title": "龙母",
   "advancements.iceandfire.dragon_egg.description": "获得龙蛋",
   "advancements.iceandfire.dragon_stick.title": "驯龙者",
