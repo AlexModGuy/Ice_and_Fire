@@ -1,0 +1,50 @@
+In savannas, the lightning lily
+rarely grows from the earth.
+This flower can be used to create
+a dragon breeding mixture in
+a similar way to ice and fire
+dragons.
+<item><iceandfire:lightning_lily 100 20 40 1>
+<item><iceandfire:lightning_stew 100 60 40 1>
+
+
+
+
+Lightning dragons drops include
+their scales, bones, skulls, blood
+and more, just like their fire and
+ice cousins. These can be used in
+the same manner. Overall, any use
+or item derived from ice or fire
+dragon drops can also be made from
+lightning dragon drops.
+
+
+Such as: lighting dragon scale armor,
+blood bottles, dragonsteel, scale
+blocks, and more.
+
+<item><iceandfire:dragonscale_amythest 100 120 40 1>
+<item><iceandfire:armor_amythest_helmet 100 140 30 1>
+<item><iceandfire:dragonsteel_lightning_ingot 100 160 40 1>
+
+<item><iceandfire:dragonforge_lightning_core 100 140 50 1>
+
+<item><iceandfire:summoning_crystal_lightning 100 120 60 1>
+<item><iceandfire:lightning_dragon_blood 100 140 70 1>
+<item><iceandfire:dragonbone_sword_lightning 100 160 60 1>
+
+
+
+
+
+
+
+
+
+
+
+lightning dragon weaponry deals
+extra damage to both fire and
+ice dragons, and strikes foes
+with lightning bolts.

@@ -7,6 +7,7 @@ lingers in only the most exotic
 biomes - the lightning dragon.
 
 
+<image><drawings_lightningdragon.png 0 80 0 0 194 93 1>
 
 
 
@@ -17,3 +18,27 @@ Haunting the black night skies of
 savannas, mesas and jungles, the
 lightning dragon is nocturnal,
 unlike its fire and ice cousins.
+The lightning dragon inhabits
+roosts and underground caves full
+of crackled blocks that have been
+struck by lightning. Like how ice
+and fire dragons have affinities for
+certain metals and gemstones,
+lightning dragons love copper and
+amethyst.
+
+<item><iceandfire:copper_ingot 100 130 40 1>
+<item><iceandfire:copper_ore 100 110 40 1>
+<item><iceandfire:amythest_gem 100 170 40 1>
+<item><iceandfire:amythest_ore 100 150 40 1>
+
+
+
+copper ore can be found in high
+elevation anywhere in the
+overworld. Amethyst only occurs
+deep underground in savannas.
+
+Copper can be made into any form
+that silver can, although it is
+a much weaker metal.

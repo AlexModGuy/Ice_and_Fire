@@ -1,0 +1,42 @@
+The most striking ablility of
+the lightning dragon is that
+of spewing crackling lightning
+from its mouth. However, they
+are also in posession of a range
+ of different attacks.
+
+
+<image><drawings_lightningdragon_attacks.png 20 130 0 101 270 77 0.65>
+
+
+
+
+The dragon's lightning blast
+attack fires a bolt of lightning
+directly from the beast's mouth.
+This attack does not ingnite or
+freeze the victim, yet it deals
+much more direct damage than a
+fire or ice blast.
+
+
+<image><drawings_lightningdragon_attacks.png 280 10 0 0 220 90 0.75>
+
+
+
+
+The lightning bolt attack
+isn't the dragon's only
+elemental attack. Older
+lightning dragons can also
+send a charge of ball lightning
+at their target, blasting away
+terrain and dealing devastating
+damage.
+
+<image><drawings_lightningdragon_attacks.png 360 220 262 212 230 78 0.6>
+
+
+
+One of the most common lightning
+dragon attacks is the dragon's bite.

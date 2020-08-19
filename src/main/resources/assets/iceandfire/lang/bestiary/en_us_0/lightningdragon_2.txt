@@ -1,0 +1,43 @@
+This is the main attack of the
+Lightning Dragon. It is powerful, and
+quick, but is not usually instantly
+deadly. However, the dragon has a
+rarer melee attack: shaking its
+prey to death.
+
+<image><drawings_lightningdragon_attacks.png 40 112 290 124 186 69 0.7>
+
+
+
+
+In this attack, the dragon picks
+up its target in its mouth, and
+rapidly shakes it in order to
+severely injure its prey.
+
+
+<image><drawings_lightningdragon_attacks.png 80 234 330 20 117 77 0.7>
+
+
+
+
+The dragon also has a final melee
+attack, in which it builds up a
+kinetic force in its tail to slam
+into its target. This attack is
+very effective, but it takes a
+while to build up. They can also
+beat their wings to push prey back.
+
+Taking down a dragon of any stage
+is not a very easy task. Since
+Lightning dragons use elemental
+ranged attacks, it would be smart
+thinking to use cover and long
+range weaponry. If you want to
+take down one of these beasts, try
+and avoid the lightning bolts, and
+watch for charge up behavior for
+many attacks. Once you've defeated
+one, you will have access to some
+valuable commodities.

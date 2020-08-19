@@ -458,7 +458,7 @@ public class EntityLightningDragon extends EntityDragonBase {
     }
 
     public boolean isBreedingItem(ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.FIRE_STEW;
+        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.LIGHTNING_STEW;
     }
 
     protected void spawnDeathParticles() {

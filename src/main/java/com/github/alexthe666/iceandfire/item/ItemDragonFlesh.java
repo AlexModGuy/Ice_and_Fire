@@ -1,10 +1,12 @@
 package com.github.alexthe666.iceandfire.item;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class ItemDragonFlesh extends ItemGenericFood {
 
@@ -31,8 +33,12 @@ public class ItemDragonFlesh extends ItemGenericFood {
         if (!worldIn.isRemote) {
             if (dragonType == 0) {
                 livingEntity.setFire(5);
-            } else {
+            } else if(dragonType == 1){
                 livingEntity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 2));
+            }else{
+                if(!livingEntity.world.isRemote){
+                    ((ServerWorld)livingEntity.world).addLightningBolt(new LightningBoltEntity(livingEntity.world, (double)livingEntity.getPosX(), (double)livingEntity.getPosY(), (double)livingEntity.getPosZ(), false));
+                }
             }
         }
     }
