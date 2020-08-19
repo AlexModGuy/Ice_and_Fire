@@ -5,6 +5,7 @@ deadly. However, the dragon has a
 rarer melee attack: shaking its
 prey to death.
 
+<image><drawings_firedragon_attacks.png 40 100 290 124 186 69 0.7>
 
 
 
@@ -14,6 +15,7 @@ rapidly shakes it in order to
 severely injure its prey.
 
 
+<image><drawings_firedragon_attacks.png 80 220 330 20 117 77 0.7>
 
 
 

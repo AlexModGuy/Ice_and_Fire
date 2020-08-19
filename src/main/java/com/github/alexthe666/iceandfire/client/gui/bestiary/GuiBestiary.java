@@ -211,34 +211,6 @@ public class GuiBestiary extends Screen {
                 }
                 break;
             case FIREDRAGON:
-                if (bookPages == 0) {
-                    GL11.glPushMatrix();
-                    GL11.glScalef(1.5F, 1.5F, 1F);
-                    drawImage(DRAWINGS_0, 20, 50, 127, 0, 88, 62, 512F);
-                    GL11.glPopMatrix();
-                }
-                if (bookPages == 1) {
-                    GL11.glPushMatrix();
-                    drawImage(DRAWINGS_0, 38, 60, 0, 0, 127, 62, 512F);
-                    drawImage(DRAWINGS_0, 240, 5, 0, 185, 114, 62, 512F);
-                    drawImage(DRAWINGS_0, 240, 150, 0, 62, 99, 37, 512F);
-                    GL11.glPopMatrix();
-                }
-                if (bookPages == 2) {
-                    GL11.glPushMatrix();
-                    drawImage(DRAWINGS_0, 42, 80, 0, 99, 100, 41, 512F);
-                    drawImage(DRAWINGS_0, 44, 160, 0, 140, 95, 45, 512F);
-                    GL11.glPopMatrix();
-                }
-                if (bookPages == 3) {
-                    GL11.glPushMatrix();
-                    drawImage(DRAWINGS_0, 45, 50, 214, 0, 87, 63, 512F);
-                    drawImage(DRAWINGS_0, 45, 110, 214, 62, 89, 62, 512F);
-                    drawImage(DRAWINGS_0, 245, 10, 214, 124, 89, 63, 512F);
-                    drawImage(DRAWINGS_0, 245, 70, 214, 184, 89, 64, 512F);
-                    drawImage(DRAWINGS_0, 245, 130, 300, 0, 88, 62, 512F);
-                    GL11.glPopMatrix();
-                }
                 break;
             case FIREDRAGONEGG:
                 if (bookPages == 0) {
@@ -257,34 +229,6 @@ public class GuiBestiary extends Screen {
                 }
                 break;
             case ICEDRAGON:
-                if (bookPages == 0) {
-                    GL11.glPushMatrix();
-                    GL11.glScalef(1.5F, 1.5F, 1F);
-                    drawImage(DRAWINGS_0, 20, 50, 127, 248, 87, 62, 512F);
-                    GL11.glPopMatrix();
-                }
-                if (bookPages == 1) {
-                    GL11.glPushMatrix();
-                    drawImage(DRAWINGS_0, 38, 60, 0, 247, 126, 61, 512F);
-                    drawImage(DRAWINGS_0, 240, 5, 0, 432, 114, 62, 512F);
-                    drawImage(DRAWINGS_0, 240, 150, 0, 309, 99, 37, 512F);
-                    GL11.glPopMatrix();
-                }
-                if (bookPages == 2) {
-                    GL11.glPushMatrix();
-                    drawImage(DRAWINGS_0, 42, 80, 0, 346, 100, 41, 512F);
-                    drawImage(DRAWINGS_0, 44, 160, 0, 387, 95, 45, 512F);
-                    GL11.glPopMatrix();
-                }
-                if (bookPages == 3) {
-                    GL11.glPushMatrix();
-                    drawImage(DRAWINGS_0, 50, 52, 214, 248, 86, 62, 512F);
-                    drawImage(DRAWINGS_0, 50, 112, 214, 310, 87, 62, 512F);
-                    drawImage(DRAWINGS_0, 250, 12, 214, 372, 87, 63, 512F);
-                    drawImage(DRAWINGS_0, 250, 72, 214, 432, 87, 64, 512F);
-                    drawImage(DRAWINGS_0, 250, 132, 300, 248, 71, 62, 512F);
-                    GL11.glPopMatrix();
-                }
                 break;
             case ICEDRAGONEGG:
                 if (bookPages == 0) {
@@ -1026,7 +970,7 @@ public class GuiBestiary extends Screen {
                             PICTURE_LOCATION_CACHE.put(texture, resourcelocation);
                         }
                         GL11.glPushMatrix();
-                        drawImage(resourcelocation, Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), Integer.parseInt(split[5]), Integer.parseInt(split[6]), Integer.parseInt(split[7]) * 512F);
+                        drawImage(resourcelocation, Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), Integer.parseInt(split[5]), Integer.parseInt(split[6]), Float.parseFloat(split[7]) * 512F);
                         GL11.glPopMatrix();
                     }
                 }

@@ -6,6 +6,7 @@ describe such a beast and its
 activities.
 
 
+<image><drawings_icedragon.png 0 80 0 0 194 93 1>
 
 
 

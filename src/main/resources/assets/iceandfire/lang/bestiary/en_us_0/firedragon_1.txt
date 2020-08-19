@@ -5,6 +5,7 @@ different attacks.
 
 
 
+<image><drawings_firedragon_attacks.png 20 110 0 106 264 77 0.65>
 
 
 
@@ -19,6 +20,7 @@ inflicting massive amounts of
 damage.
 
 
+<image><drawings_firedragon_attacks.png 280 10 0 0 210 81 0.75>
 
 
 
@@ -33,6 +35,7 @@ thrown towards the dragon's
 prey. Only older dragons are
 capable of this attack.
 
+<image><drawings_firedragon_attacks.png 360 242 262 220 213 78 0.6>
 
 
 

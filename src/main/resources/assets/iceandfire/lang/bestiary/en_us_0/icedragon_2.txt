@@ -5,6 +5,8 @@ deadly. However, the dragon has a
 rarer melee attack: shaking its
 prey to death.
 
+<image><drawings_icedragon_attacks.png 40 120 290 124 186 69 0.7>
+
 
 
 
@@ -14,6 +16,7 @@ rapidly shakes it in order to
 severely injure its prey.
 
 
+<image><drawings_icedragon_attacks.png 80 240 330 20 130 77 0.7>
 
 
 
