@@ -470,7 +470,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
             if (blockpos$pooledmutableblockpos.getX() != k || blockpos$pooledmutableblockpos.getY() != j || blockpos$pooledmutableblockpos.getZ() != l) {
                 blockpos$pooledmutableblockpos.setPos(k, j, l);
 
-                if (this.world.getBlockState(blockpos$pooledmutableblockpos).causesSuffocation(world, blockpos$pooledmutableblockpos) && this.world.getBlockState(blockpos$pooledmutableblockpos).getMaterial() != Material.SAND) {
+                if (this.world.getBlockState(blockpos$pooledmutableblockpos).isSuffocating(world, blockpos$pooledmutableblockpos) && this.world.getBlockState(blockpos$pooledmutableblockpos).getMaterial() != Material.SAND) {
                     return true;
                 }
             }

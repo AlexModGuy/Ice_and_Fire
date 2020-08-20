@@ -379,7 +379,8 @@ public class IafItemRegistry {
                 Object obj = f.get(null);
                 if (obj instanceof BannerPattern) {
                     BannerPattern pattern = (BannerPattern)obj;
-                    event.getRegistry().register(new BannerPatternItem(pattern, (new Item.Properties()).maxStackSize(1).group(IceAndFire.TAB_ITEMS)).setRegistryName("iceandfire:banner_pattern_" + pattern.getFileName()));
+                    String name = f.getName().replace("PATTERN_", "").toLowerCase();
+                    event.getRegistry().register(new BannerPatternItem(pattern, (new Item.Properties()).maxStackSize(1).group(IceAndFire.TAB_ITEMS)).setRegistryName("iceandfire:banner_pattern_" + name));
 
                 }
             }
