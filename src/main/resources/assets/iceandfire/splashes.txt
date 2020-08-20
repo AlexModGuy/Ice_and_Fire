@@ -472,3 +472,6 @@ Runnin' round and round like rats in a maze!
 RAT RAT RAT
 ORANGE???
 System.out.println("whats good");
+Sometimes you rhyme quick, sometimes you rhyme slow!
+Hot Molasses!
+Cemetery Gates!

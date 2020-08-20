@@ -15,22 +15,25 @@ public class MessageStartRidingMob {
 
     public int dragonId;
     public boolean ride;
+    public boolean baby;
 
-    public MessageStartRidingMob(int dragonId, boolean ride) {
+    public MessageStartRidingMob(int dragonId, boolean ride, boolean baby) {
         this.dragonId = dragonId;
         this.ride = ride;
+        this.baby = baby;
     }
 
     public MessageStartRidingMob() {
     }
 
     public static MessageStartRidingMob read(PacketBuffer buf) {
-        return new MessageStartRidingMob(buf.readInt(), buf.readBoolean());
+        return new MessageStartRidingMob(buf.readInt(), buf.readBoolean(), buf.readBoolean());
     }
 
     public static void write(MessageStartRidingMob message, PacketBuffer buf) {
-        buf.writeDouble(message.dragonId);
+        buf.writeInt(message.dragonId);
         buf.writeBoolean(message.ride);
+        buf.writeBoolean(message.baby);
     }
 
     public static class Handler {
@@ -49,9 +52,17 @@ public class MessageStartRidingMob {
                     if (entity != null && entity instanceof ISyncMount && entity instanceof TameableEntity) {
                         TameableEntity dragon = (TameableEntity) entity;
                         if (message.ride) {
-                            player.startRiding(dragon);
+                            if(message.baby){
+                                dragon.startRiding(player, true);
+                            }else{
+                                player.startRiding(dragon, true);
+                            }
                         } else {
-                            player.stopRiding();
+                            if(message.baby){
+                                dragon.stopRiding();
+                            }else{
+                                player.stopRiding();
+                            }
                         }
                     }
                 }

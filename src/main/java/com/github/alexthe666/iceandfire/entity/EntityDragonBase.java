@@ -1125,14 +1125,14 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                     if (!world.isRemote) {
                         if (this.getDragonStage() < 2) {
                             this.startRiding(player, true);
+                            IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, true));
+                            return true;
                         }
                         if (this.getDragonStage() > 2 && !player.isPassenger()) {
                             player.setSneaking(false);
                             player.startRiding(this, true);
+                            IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, false));
 
-                            if (world.isRemote) {
-                                IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true));
-                            }
                             this.setSleeping(false);
                         }
                     }
@@ -1645,12 +1645,12 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     public void updateRidden() {
-        super.updateRidden();
         Entity entity = this.getRidingEntity();
         if (this.isPassenger() && !entity.isAlive()) {
             this.stopRiding();
         } else {
             this.setMotion(0, 0, 0);
+            this.tick();
             if (this.isPassenger()) {
                 this.updateRiding(entity);
             }
@@ -1667,9 +1667,13 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
             double extraY = (riding.isShiftKeyDown() ? 1.2D : 1.4D) + (i == 2 ? 0.4D : 0D);
             this.rotationYawHead = ((PlayerEntity) riding).rotationYawHead;
             this.prevRotationYaw = ((PlayerEntity) riding).rotationYawHead;
-            this.setPositionAndRotation(riding.getPosX() + extraX, riding.getPosY() + extraY, riding.getPosZ() + extraZ, ((PlayerEntity) riding).rotationYawHead, 0);
+            this.setPosition(riding.getPosX() + extraX, riding.getPosY() + extraY, riding.getPosZ() + extraZ);
             if ((this.getControlState() == 1 << 4 || ((PlayerEntity) riding).isElytraFlying()) && !riding.isPassenger()) {
                 this.stopRiding();
+                if(world.isRemote){
+                    IceAndFire.sendMSGToServer(new MessageStartRidingMob(this.getEntityId(), false, true));
+                }
+
             }
 
         }
