@@ -2,6 +2,7 @@
 
 
 
+<image><drawings_2.png 45 40 157 0 106 68 1>
 
 
 

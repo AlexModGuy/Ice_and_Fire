@@ -1,17 +1,16 @@
     After taking down one of the
-more monstrous fire dragons I
-had found in a cavern, I noticed
+more monstrous lightning dragons
+I had found in a cavern, I noticed
 that the beast was guarding its
 own clutch of eggs. These eggs
 were a multitude of beautiful
 colors, all coated in shiny scales.
 
-<image><drawings_0.png 20 95 327 118 24 33 1>
-<image><drawings_0.png 60 95 303 118 24 33 1>
-<image><drawings_0.png 95 95 351 118 24 33 1>
-<image><drawings_0.png 135 95 375 118 24 33 1>
 
-
+<image><drawings_0.png 20 95 327 479 24 33 1>
+<image><drawings_0.png 60 95 303 479 24 33 1>
+<image><drawings_0.png 95 95 351 479 24 33 1>
+<image><drawings_0.png 135 95 375 479 24 33 1>
 
 
 I instantly thought of how much
@@ -30,13 +29,10 @@ to raise my own brood of dragons.
 
 While moving the eggs to a safer
 location near my home, I noticed
-that these eggs were much warmer
-than those of a chicken or other
-bird. This gave me an idea on
-how to unlock the secrets of the
-dragons...
+that these eggs reacted strangely
+to the presence and assortment of
+the clouds above.
 
-I stacked up some wood and
-netherrack into a large pile and
-placed the largest of the eggs
-onto it.
+I made sure I placed the egg under
+an open sky so that the behavior
+could be investigated.

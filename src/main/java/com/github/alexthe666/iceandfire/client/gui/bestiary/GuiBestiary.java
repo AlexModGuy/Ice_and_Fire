@@ -213,38 +213,10 @@ public class GuiBestiary extends Screen {
             case FIREDRAGON:
                 break;
             case FIREDRAGONEGG:
-                if (bookPages == 0) {
-                    GL11.glPushMatrix();
-                    drawImage(DRAWINGS_0, 20, 95, 327, 118, 24, 33, 512F);
-                    drawImage(DRAWINGS_0, 60, 95, 303, 118, 24, 33, 512F);
-                    drawImage(DRAWINGS_0, 95, 95, 351, 118, 24, 33, 512F);
-                    drawImage(DRAWINGS_0, 135, 95, 375, 118, 24, 33, 512F);
-                    GL11.glPopMatrix();
-                }
-                if (bookPages == 1) {
-                    GL11.glPushMatrix();
-                    GL11.glScalef(1.5F, 1.5F, 1F);
-                    drawImage(DRAWINGS_0, 25, 20, 303, 62, 71, 56, 512F);
-                    GL11.glPopMatrix();
-                }
                 break;
             case ICEDRAGON:
                 break;
             case ICEDRAGONEGG:
-                if (bookPages == 0) {
-                    GL11.glPushMatrix();
-                    drawImage(DRAWINGS_0, 20, 95, 327, 366, 24, 33, 512F);
-                    drawImage(DRAWINGS_0, 60, 95, 303, 366, 24, 33, 512F);
-                    drawImage(DRAWINGS_0, 95, 95, 351, 366, 24, 33, 512F);
-                    drawImage(DRAWINGS_0, 135, 95, 375, 366, 24, 33, 512F);
-                    GL11.glPopMatrix();
-                }
-                if (bookPages == 1) {
-                    GL11.glPushMatrix();
-                    GL11.glScalef(1.5F, 1.5F, 1F);
-                    drawImage(DRAWINGS_0, 25, 20, 303, 309, 70, 56, 512F);
-                    GL11.glPopMatrix();
-                }
                 break;
             case TAMEDDRAGONS:
                 if (bookPages == 0) {
@@ -1065,8 +1037,10 @@ public class GuiBestiary extends Screen {
             e.printStackTrace();
         }
         GL11.glPushMatrix();
-        GL11.glScalef(2, 2, 2);
-        font.drawString(StatCollector.translateToLocal("bestiary." + this.pageType.toString().toLowerCase()), 10, 2, 0X7A756A);
+        String s = StatCollector.translateToLocal("bestiary." + this.pageType.toString().toLowerCase());
+        float scale = font.getStringWidth(s) <= 100 ? 2 : font.getStringWidth(s) * 0.0125F;
+        GL11.glScalef(scale, scale, scale);
+        font.drawString(s, 10, 2, 0X7A756A);
         GL11.glPopMatrix();
     }
 
