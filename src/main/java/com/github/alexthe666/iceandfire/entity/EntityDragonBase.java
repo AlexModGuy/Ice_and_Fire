@@ -80,6 +80,7 @@ import net.minecraftforge.common.MinecraftForge;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public abstract class EntityDragonBase extends TameableEntity implements ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor {
 
@@ -1339,18 +1340,13 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                 if (IafConfig.dragonGriefing != 2 && (!this.isTamed() || IafConfig.tamedDragonGriefing)) {
                     float hardness = IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
                     if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
-                        for (int a = (int) Math.floor(this.getBoundingBox().minX) - bounds; a <= (int) Math.ceil(this.getBoundingBox().maxX) + bounds; a++) {
-                            for (int b = (int) Math.floor(this.getBoundingBox().minY) + flightModifier; (b <= (int) Math.ceil(this.getBoundingBox().maxY) + bounds + 1) && (b <= 127); b++) {
-                                for (int c = (int) Math.floor(this.getBoundingBox().minZ) - bounds; c <= (int) Math.ceil(this.getBoundingBox().maxZ) + bounds; c++) {
-                                    if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, a, b, c))) continue;
-                                    BlockPos pos = new BlockPos(a, b, c);
-                                    BlockState state = world.getBlockState(pos);
-                                    if (state.getMaterial().blocksMovement() && !state.isAir() && !state.getShape(world, pos).isEmpty() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos)) {
-                                        this.setMotion(this.getMotion().mul(0.6F, 1, 0.6F));
-                                        if (!world.isRemote) {
-                                            world.destroyBlock(pos, rand.nextFloat() <= IafConfig.dragonBlockBreakingDropChance && DragonUtils.canDropFromDragonBlockBreak(state));
-                                        }
-                                    }
+                        for (BlockPos pos : BlockPos.getAllInBox((int)Math.floor(this.getBoundingBox().minX) - bounds, (int)Math.floor(this.getBoundingBox().minY) + 1, (int)Math.floor(this.getBoundingBox().minZ) - bounds, (int)Math.floor(this.getBoundingBox().maxX) + bounds, (int)Math.floor(this.getBoundingBox().maxY) + bounds + flightModifier, (int)Math.floor(this.getBoundingBox().maxZ) + bounds).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
+                            if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, pos.getX(), pos.getY(), pos.getZ()))) continue;
+                            BlockState state = world.getBlockState(pos);
+                            if (state.getMaterial().blocksMovement() && !state.isAir() && !state.getShape(world, pos).isEmpty() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos)) {
+                                this.setMotion(this.getMotion().mul(0.6F, 1, 0.6F));
+                                if (!world.isRemote) {
+                                    world.destroyBlock(pos, rand.nextFloat() <= IafConfig.dragonBlockBreakingDropChance && DragonUtils.canDropFromDragonBlockBreak(state));
                                 }
                             }
                         }

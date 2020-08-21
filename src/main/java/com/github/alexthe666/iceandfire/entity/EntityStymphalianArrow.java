@@ -7,10 +7,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityStymphalianArrow extends AbstractArrowEntity {
 
@@ -23,6 +26,15 @@ public class EntityStymphalianArrow extends AbstractArrowEntity {
         this(t, worldIn);
         this.setPosition(x, y, z);
         this.setDamage(3.5F);
+    }
+
+    public EntityStymphalianArrow(FMLPlayMessages.SpawnEntity spawnEntity, World world) {
+        this(IafEntityRegistry.STYMPHALIAN_ARROW, world);
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     public EntityStymphalianArrow(EntityType t, World worldIn, LivingEntity shooter) {

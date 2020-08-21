@@ -16,6 +16,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityAmphithereArrow extends AbstractArrowEntity {
@@ -29,6 +30,10 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
         this(type, worldIn);
         this.setPosition(x, y, z);
         this.setDamage(2.5F);
+    }
+
+    public EntityAmphithereArrow(FMLPlayMessages.SpawnEntity spawnEntity, World world) {
+        this(IafEntityRegistry.AMPHITHERE_ARROW, world);
     }
 
     public EntityAmphithereArrow(EntityType type, LivingEntity shooter, World worldIn) {

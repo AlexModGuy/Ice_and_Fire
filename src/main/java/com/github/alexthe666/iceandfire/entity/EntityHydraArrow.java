@@ -9,12 +9,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.IPacket;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityHydraArrow extends AbstractArrowEntity {
 
@@ -28,6 +31,16 @@ public class EntityHydraArrow extends AbstractArrowEntity {
         this.setPosition(x, y, z);
         this.setDamage(5F);
     }
+
+    public EntityHydraArrow(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+        this(IafEntityRegistry.HYDRA_ARROW, worldIn);
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
+
 
     public EntityHydraArrow(EntityType t, World worldIn, LivingEntity shooter) {
         super(t, shooter, worldIn);

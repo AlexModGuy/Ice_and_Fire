@@ -7,11 +7,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.IPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntitySeaSerpentArrow extends AbstractArrowEntity {
 
@@ -25,6 +28,16 @@ public class EntitySeaSerpentArrow extends AbstractArrowEntity {
         this.setPosition(x, y, z);
         this.setDamage(3F);
     }
+
+    public EntitySeaSerpentArrow(FMLPlayMessages.SpawnEntity spawnEntity, World world) {
+        this(IafEntityRegistry.SEA_SERPENT_ARROW, world);
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
+
 
     public EntitySeaSerpentArrow(EntityType t, World worldIn, LivingEntity shooter) {
         super(t, shooter, worldIn);
