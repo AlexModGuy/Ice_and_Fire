@@ -1,4 +1,8 @@
   冰龙的生命历程同样值得关注。
   
   
-  
+<image><drawings_icedragon.png 10 50 198 253 184 93 1>
+<image><drawings_icedragon.png 10 130 198 380 184 93 1>
+<image><drawings_icedragon.png 200 5 8 429 184 78 1>
+<image><drawings_icedragon.png 200 75 8 342 184 78 1>
+<image><drawings_icedragon.png 200 150 8 263 184 78 1>
