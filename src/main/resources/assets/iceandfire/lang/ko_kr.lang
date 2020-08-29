@@ -1,6 +1,6 @@
 itemGroup.iceandfire_items=얼음과 불 모드 아이템
 itemGroup.iceandfire_blocks=얼음과 불 모드 블럭
-iceandfire.empty =텅 빈
+iceandfire.empty=텅 빈
 
 tile.iceandfire.lectern.name=독서대
 tile.iceandfire.podium.name=단상

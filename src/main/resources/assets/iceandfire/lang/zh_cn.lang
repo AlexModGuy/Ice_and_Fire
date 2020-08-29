@@ -1,6 +1,6 @@
 itemGroup.iceandfire_items=冰火传说 物品
 itemGroup.iceandfire_blocks=冰火传说 方块
-iceandfire.empty =空
+iceandfire.empty=空
 
 tile.iceandfire.lectern.name=书桌
 tile.iceandfire.podium.name=展台
