@@ -95,13 +95,13 @@ public class EntityLightningDragon extends EntityDragonBase {
     public String getVariantName(int variant) {
         switch (variant) {
             default:
-                return "red_";
+                return "electric_";
             case 1:
-                return "green_";
+                return "amythest_";
             case 2:
-                return "bronze_";
+                return "copper_";
             case 3:
-                return "gray_";
+                return "black_";
         }
     }
 
