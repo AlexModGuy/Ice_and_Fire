@@ -1,4 +1,16 @@
 {
+  "lightningdragon_breath_crackle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:lightningdragon_breath_crackle"
+    ]
+  },
+  "lightningdragon_breath": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:lightningdragon_breath"
+    ]
+  },
   "lightningdragon_adult_roar": {
     "category": "neutral",
     "sounds": [

@@ -48,7 +48,6 @@ public class EntityLightningDragon extends EntityDragonBase {
     private static final DataParameter<Float> LIGHTNING_TARGET_Z = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.FLOAT);
     public static Animation ANIMATION_FIRECHARGE;
 
-
     public EntityLightningDragon(World worldIn) {
         this(IafEntityRegistry.LIGHTNING_DRAGON, worldIn);
     }
@@ -202,6 +201,7 @@ public class EntityLightningDragon extends EntityDragonBase {
     @Override
     public void livingTick() {
         super.livingTick();
+
         if (!world.isRemote && this.getAttackTarget() != null) {
             if (this.getBoundingBox().grow(2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F).intersects(this.getAttackTarget().getBoundingBox())) {
                 attackEntityAsMob(this.getAttackTarget());
@@ -234,8 +234,8 @@ public class EntityLightningDragon extends EntityDragonBase {
         if (this.isBreathingFire()) {
             if (this.isActuallyBreathingFire()) {
                 rotationYaw = renderYawOffset;
-                if (this.ticksExisted % 5 == 0) {
-                    this.playSound(IafSoundRegistry.FIREDRAGON_BREATH, 4, 1);
+                if (this.fireTicks % 7 == 0) {
+                    this.playSound(IafSoundRegistry.LIGHTNINGDRAGON_BREATH, 4, 1);
                 }
                 stimulateFire(burningTarget.getX() + 0.5F, burningTarget.getY() + 0.5F, burningTarget.getZ() + 0.5F, 1);
             }
@@ -251,7 +251,7 @@ public class EntityLightningDragon extends EntityDragonBase {
             } else if (this.getAnimationTick() == 20) {
                 rotationYaw = renderYawOffset;
                 Vec3d headVec = this.getHeadPosition();
-                this.playSound(IafSoundRegistry.FIREDRAGON_BREATH, 4, 1);
+                this.playSound(IafSoundRegistry.LIGHTNINGDRAGON_BREATH_CRACKLE, 4, 1);
                 double d2 = controller.getLookVec().x;
                 double d3 = controller.getLookVec().y;
                 double d4 = controller.getLookVec().z;
@@ -270,8 +270,8 @@ public class EntityLightningDragon extends EntityDragonBase {
             if (this.isBreathingFire()) {
                 if (this.isActuallyBreathingFire()) {
                     rotationYaw = renderYawOffset;
-                    if (this.ticksExisted % 5 == 0) {
-                        this.playSound(IafSoundRegistry.FIREDRAGON_BREATH, 4, 1);
+                    if (this.fireTicks % 7 == 0) {
+                        this.playSound(IafSoundRegistry.LIGHTNINGDRAGON_BREATH, 4, 1);
                     }
                     RayTraceResult mop = rayTraceRider(controller, 10 * this.getDragonStage(), 1.0F);
                     if (mop != null) {
@@ -382,7 +382,7 @@ public class EntityLightningDragon extends EntityDragonBase {
                 d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                 d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                 d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-                this.playSound(IafSoundRegistry.FIREDRAGON_BREATH, 4, 1);
+                this.playSound(IafSoundRegistry.LIGHTNINGDRAGON_BREATH_CRACKLE, 4, 1);
                 EntityDragonLightningCharge entitylargefireball = new EntityDragonLightningCharge(IafEntityRegistry.LIGHTNING_DRAGON_CHARGE, world, this, d2, d3, d4);
                 float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
                 entitylargefireball.setPosition(headVec.x, headVec.y, headVec.z);
