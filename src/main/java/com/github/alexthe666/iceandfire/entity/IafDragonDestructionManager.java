@@ -99,7 +99,7 @@ public class IafDragonDestructionManager {
                         if(transformState.getBlock() != world.getBlockState(pos).getBlock()){
                             world.setBlockState(pos, transformState);
                         }
-                        if (world.rand.nextInt(9) == 0 && transformState.getMaterial().isSolid() && world.isAirBlock(pos.up())) {
+                        if (world.rand.nextInt(9) == 0 && transformState.getMaterial().isSolid() && world.isAirBlock(pos.up()) && world.getBlockState(pos.down()).isSolid()) {
                             world.setBlockState(pos.up(), IafBlockRegistry.DRAGON_ICE_SPIKES.getDefaultState());
                         }
                     }
@@ -130,7 +130,7 @@ public class IafDragonDestructionManager {
                         if (!(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
                             BlockState transformState = transformBlockIce(world.getBlockState(blockpos));
                             world.setBlockState(blockpos, transformState);
-                            if (world.rand.nextInt(9) == 0 && transformState.getMaterial().isSolid() && world.isAirBlock(blockpos.up())) {
+                            if (world.rand.nextInt(9) == 0 && transformState.getMaterial().isSolid() && world.isAirBlock(blockpos.up()) && world.getBlockState(blockpos.down()).isSolid()) {
                                 world.setBlockState(blockpos.up(), IafBlockRegistry.DRAGON_ICE_SPIKES.getDefaultState());
                             }
                         }
@@ -238,7 +238,7 @@ public class IafDragonDestructionManager {
                         if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
                             BlockState transformState = transformBlockIce(world.getBlockState(pos));
                             world.setBlockState(pos, transformState);
-                            if (world.rand.nextBoolean() && transformState.isSolid() && world.isAirBlock(pos.up())) {
+                            if (world.rand.nextBoolean() && transformState.isSolid() && world.isAirBlock(pos.up()) && world.getBlockState(pos.down()).isSolid()) {
                                 world.setBlockState(pos.up(), IafBlockRegistry.DRAGON_ICE_SPIKES.getDefaultState());
                             }
                         }
@@ -274,7 +274,7 @@ public class IafDragonDestructionManager {
                         if (!(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
                             BlockState transformState = transformBlockIce(world.getBlockState(blockpos));
                             world.setBlockState(blockpos, transformState);
-                            if (world.rand.nextBoolean() && transformState.isSolid() && world.isAirBlock(blockpos.up())) {
+                            if (world.rand.nextBoolean() && transformState.isSolid() && world.isAirBlock(blockpos.up()) && world.getBlockState(blockpos.down()).isSolid()) {
                                 world.setBlockState(blockpos.up(), IafBlockRegistry.DRAGON_ICE_SPIKES.getDefaultState());
                             }
                         }
@@ -448,7 +448,7 @@ public class IafDragonDestructionManager {
 
     public static BlockState transformBlockIce(BlockState in) {
         if (in.getBlock() instanceof SpreadableSnowyDirtBlock) {
-            return IafBlockRegistry.CHARRED_GRASS.getDefaultState().with(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.FROZEN_GRASS.getDefaultState().with(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.EARTH && in.getBlock() == Blocks.DIRT || in.getMaterial() == Material.SNOW_BLOCK) {
             return IafBlockRegistry.FROZEN_DIRT.getDefaultState().with(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.SAND && in.getBlock() == Blocks.GRAVEL) {
