@@ -222,6 +222,30 @@ public final class IafSoundRegistry {
 
     public static final SoundEvent DREAD_GHOUL_IDLE = createSoundEvent("dread_ghoul_idle");
 
+    public static final SoundEvent LIGHTNINGDRAGON_CHILD_IDLE = createSoundEvent("lightningdragon_child_idle");
+
+    public static final SoundEvent LIGHTNINGDRAGON_CHILD_HURT = createSoundEvent("lightningdragon_child_hurt");
+
+    public static final SoundEvent LIGHTNINGDRAGON_CHILD_DEATH = createSoundEvent("lightningdragon_child_death");
+
+    public static final SoundEvent LIGHTNINGDRAGON_CHILD_ROAR = createSoundEvent("lightningdragon_child_roar");
+
+    public static final SoundEvent LIGHTNINGDRAGON_TEEN_ROAR = createSoundEvent("lightningdragon_teen_roar");
+
+    public static final SoundEvent LIGHTNINGDRAGON_TEEN_IDLE = createSoundEvent("lightningdragon_teen_idle");
+
+    public static final SoundEvent LIGHTNINGDRAGON_TEEN_DEATH = createSoundEvent("lightningdragon_teen_death");
+
+    public static final SoundEvent LIGHTNINGDRAGON_TEEN_HURT = createSoundEvent("lightningdragon_teen_hurt");
+
+    public static final SoundEvent LIGHTNINGDRAGON_ADULT_ROAR = createSoundEvent("lightningdragon_adult_roar");
+
+    public static final SoundEvent LIGHTNINGDRAGON_ADULT_IDLE = createSoundEvent("lightningdragon_adult_idle");
+
+    public static final SoundEvent LIGHTNINGDRAGON_ADULT_DEATH = createSoundEvent("lightningdragon_adult_death");
+
+    public static final SoundEvent LIGHTNINGDRAGON_ADULT_HURT = createSoundEvent("lightningdragon_adult_hurt");
+
     private static SoundEvent createSoundEvent(final String soundName) {
         final ResourceLocation soundID = new ResourceLocation(MODID, soundName);
         return new SoundEvent(soundID).setRegistryName(soundID);

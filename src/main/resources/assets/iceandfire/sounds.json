@@ -1,5 +1,92 @@
 {
-
+  "lightningdragon_adult_roar": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:lightningdragon_adult_roar_0",
+      "iceandfire:lightningdragon_adult_roar_1",
+      "iceandfire:lightningdragon_adult_roar_2"
+    ]
+  },
+  "lightningdragon_teen_roar": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:lightningdragon_teen_roar_0",
+      "iceandfire:lightningdragon_teen_roar_1",
+      "iceandfire:lightningdragon_teen_roar_2"
+    ]
+  },
+  "lightningdragon_child_roar": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:lightningdragon_child_die_0"
+    ]
+  },
+  "lightningdragon_child_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:lightningdragon_child_idle_0",
+      "iceandfire:lightningdragon_child_idle_1",
+      "iceandfire:lightningdragon_child_idle_2"
+    ]
+  },
+  "lightningdragon_child_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:lightningdragon_child_hurt_0",
+      "iceandfire:lightningdragon_child_hurt_1",
+      "iceandfire:lightningdragon_child_hurt_2"
+    ]
+  },
+  "lightningdragon_child_death": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:lightningdragon_child_die_0"
+    ]
+  },
+  "lightningdragon_teen_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:lightningdragon_teen_idle_0",
+      "iceandfire:lightningdragon_teen_idle_1",
+      "iceandfire:lightningdragon_teen_idle_2"
+    ]
+  },
+  "lightningdragon_teen_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:lightningdragon_teen_hurt_0",
+      "iceandfire:lightningdragon_teen_hurt_1",
+      "iceandfire:lightningdragon_teen_hurt_2"
+    ]
+  },
+  "lightningdragon_teen_death": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:lightningdragon_teen_die_0"
+    ]
+  },
+  "lightningdragon_adult_idle": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:lightningdragon_adult_idle_0",
+      "iceandfire:lightningdragon_adult_idle_1",
+      "iceandfire:lightningdragon_adult_idle_2"
+    ]
+  },
+  "lightningdragon_adult_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:lightningdragon_adult_hurt_0",
+      "iceandfire:lightningdragon_adult_hurt_1",
+      "iceandfire:lightningdragon_adult_hurt_2"
+    ]
+  },
+  "lightningdragon_adult_death": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:lightningdragon_adult_die_0"
+    ]
+  },
   "dread_ghoul_idle": {
     "category": "neutral",
     "sounds": [
