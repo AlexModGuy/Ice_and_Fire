@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
+import com.github.alexthe666.iceandfire.entity.util.IDeadMob;
 import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.entity.LivingEntity;
@@ -272,8 +273,13 @@ public class IafDragonLogic {
                 }
             }
         }
-        if (dragon.getAttackTarget() != null && !dragon.getPassengers().isEmpty() && dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner())) {
-            dragon.setAttackTarget(null);
+        if (dragon.getAttackTarget() != null){
+           if(!dragon.getPassengers().isEmpty() && dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner())) {
+               dragon.setAttackTarget(null);
+           }
+           if(dragon.getAttackTarget() instanceof IDeadMob && ((IDeadMob)dragon.getAttackTarget()).isMobDead()){
+               dragon.setAttackTarget(null);
+           }
         }
         if (!dragon.isAgingDisabled()) {
             dragon.setAgeInTicks(dragon.getAgeInTicks() + 1);

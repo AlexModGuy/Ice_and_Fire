@@ -318,7 +318,7 @@ public class EntityLightningDragon extends EntityDragonBase {
                     d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                     d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                     d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-                    this.playSound(IafSoundRegistry.FIREDRAGON_BREATH, 4, 1);
+                    this.playSound(IafSoundRegistry.LIGHTNINGDRAGON_BREATH, 4, 1);
                     EntityDragonLightningCharge entitylargefireball = new EntityDragonLightningCharge(IafEntityRegistry.LIGHTNING_DRAGON_CHARGE, world, this, d2, d3, d4);
                     float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
                     entitylargefireball.setPosition(headVec.x, headVec.y, headVec.z);
@@ -335,7 +335,7 @@ public class EntityLightningDragon extends EntityDragonBase {
                     if (this.isActuallyBreathingFire()) {
                         rotationYaw = renderYawOffset;
                         if (this.ticksExisted % 5 == 0) {
-                            this.playSound(IafSoundRegistry.FIREDRAGON_BREATH, 4, 1);
+                            this.playSound(IafSoundRegistry.LIGHTNINGDRAGON_BREATH, 4, 1);
                         }
                         stimulateFire(entity.getPosX(), entity.getPosY(), entity.getPosZ(), 1);
                         if (!entity.isAlive() || entity == null) {
@@ -467,7 +467,7 @@ public class EntityLightningDragon extends EntityDragonBase {
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             if (world.isRemote) {
-                this.world.addParticle(ParticleTypes.FLAME, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d2, d0, d1);
+                this.world.addParticle(ParticleTypes.RAIN, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d2, d0, d1);
             }
         }
     }
