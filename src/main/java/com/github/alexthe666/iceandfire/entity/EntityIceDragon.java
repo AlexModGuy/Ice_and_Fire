@@ -492,7 +492,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 if (this.ticksExisted % 5 == 0) {
                     this.playSound(IafSoundRegistry.ICEDRAGON_BREATH, 4, 1);
                 }
-                stimulateFire(burningTarget.getX(), burningTarget.getY(), burningTarget.getZ(), 1);
+                stimulateFire(burningTarget.getX() + 0.5F, burningTarget.getY() + 0.5F, burningTarget.getZ() + 0.5F, 1);
             }
         } else {
             this.setBreathingFire(true);

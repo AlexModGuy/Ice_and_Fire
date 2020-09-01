@@ -92,7 +92,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
             return IafBlockRegistry.DRAGONFORGE_FIRE_BRICK;
         }
         if(isFire == 1){
-            return IafBlockRegistry.DRAGONFORGE_FIRE_BRICK;
+            return IafBlockRegistry.DRAGONFORGE_ICE_BRICK;
         }
         if(isFire == 2){
             return IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK;
@@ -134,7 +134,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
             stack.setCount(this.getInventoryStackLimit());
         }
 
-        if (index == 0 && !flag) {
+        if (index == 0 && !flag || this.cookTime > this.getMaxCookTime(forgeItemStacks.get(0), forgeItemStacks.get(1))) {
             this.cookTime = 0;
             this.markDirty();
         }
@@ -195,13 +195,14 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         if (cookTime > 0 && this.canSmelt() && lastDragonFlameTimer == 0) {
             this.cookTime--;
         }
-
+        if(this.getStackInSlot(0).isEmpty() && !world.isRemote){
+            this.cookTime = 0;
+        }
         if (!this.world.isRemote) {
             if (this.isBurning()) {
-                if (this.isBurning() && this.canSmelt()) {
+                if (this.canSmelt()) {
                     ++this.cookTime;
-
-                    if (this.cookTime >= getMaxCookTime()) {
+                    if (this.cookTime >= getMaxCookTime(forgeItemStacks.get(0), forgeItemStacks.get(1))) {
                         this.cookTime = 0;
                         this.smeltItem();
                         flag1 = true;
@@ -210,7 +211,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
                     this.cookTime = 0;
                 }
             } else if (!this.isBurning() && this.cookTime > 0) {
-                this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, getMaxCookTime());
+                this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, getMaxCookTime(forgeItemStacks.get(0), forgeItemStacks.get(1)));
             }
 
             if (flag != this.isBurning()) {
@@ -226,28 +227,30 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         }
     }
 
-    public int getMaxCookTime() {
-        ItemStack stack = getCurrentResult();
+    public int getMaxCookTime(ItemStack cookStack, ItemStack bloodStack) {
+        ItemStack stack = getCurrentResult(cookStack, bloodStack);
         if (stack.getItem() == Item.getItemFromBlock(IafBlockRegistry.ASH) || stack.getItem() == Item.getItemFromBlock(IafBlockRegistry.DRAGON_ICE)) {
             return 100;
         }
         return 1000;
     }
 
-    private ItemStack getCurrentResult() {
+    private ItemStack getCurrentResult(ItemStack cookStack, ItemStack bloodStack) {
         DragonForgeRecipe forgeRecipe = null;
         if (this.isFire == 0) {
-            forgeRecipe = IafRecipeRegistry.getFireForgeRecipe(this.forgeItemStacks.get(0));
+            forgeRecipe = IafRecipeRegistry.getFireForgeRecipe(cookStack);
         } else if (this.isFire == 1) {
-            forgeRecipe = IafRecipeRegistry.getIceForgeRecipe(this.forgeItemStacks.get(0));
+            forgeRecipe = IafRecipeRegistry.getIceForgeRecipe(cookStack);
         } else {
-            forgeRecipe = IafRecipeRegistry.getLightningForgeRecipe(this.forgeItemStacks.get(0));
+            forgeRecipe = IafRecipeRegistry.getLightningForgeRecipe(cookStack);
         }
         ItemStack itemstack = ItemStack.EMPTY;
-        if (forgeRecipe != null && this.forgeItemStacks.get(1).isItemEqual(forgeRecipe.getBlood())) {
-            itemstack = forgeRecipe.getOutput();
+        if (forgeRecipe != null) {
+            if(bloodStack.isItemEqual(forgeRecipe.getBlood())){
+                itemstack = forgeRecipe.getOutput();
+            }
         }
-        if (itemstack == ItemStack.EMPTY) {
+        if (itemstack.isEmpty()) {
             if (this.isFire == 0) {
                 itemstack = new ItemStack(IafBlockRegistry.ASH);
             } else if (this.isFire == 1) {
@@ -263,7 +266,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         if (this.forgeItemStacks.get(0).isEmpty()) {
             return false;
         } else {
-            ItemStack itemstack = getCurrentResult();
+            ItemStack itemstack = getCurrentResult(forgeItemStacks.get(0), forgeItemStacks.get(1));
             if (itemstack.isEmpty()) {
                 return false;
             } else {
@@ -295,7 +298,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         if (this.canSmelt()) {
             ItemStack itemstack = this.forgeItemStacks.get(0);
             ItemStack bloodStack = this.forgeItemStacks.get(1);
-            ItemStack itemstack1 = getCurrentResult();
+            ItemStack itemstack1 = getCurrentResult(forgeItemStacks.get(0), forgeItemStacks.get(1));
             ItemStack itemstack2 = this.forgeItemStacks.get(2);
 
             if (itemstack2.isEmpty()) {
@@ -392,15 +395,15 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     public void transferPower(int i) {
-        if (this.canSmelt()) {
-            if (canAddFlameAgain) {
-                cookTime = Math.min(this.getMaxCookTime() + 1, cookTime + i);
-                canAddFlameAgain = false;
-            }
-        } else {
-            cookTime = 0;
-        }
         if(!world.isRemote){
+            if (this.canSmelt()) {
+                if (canAddFlameAgain) {
+                    cookTime = Math.min(this.getMaxCookTime(forgeItemStacks.get(0), forgeItemStacks.get(1)) + 1, cookTime + i);
+                    canAddFlameAgain = false;
+                }
+            } else {
+                cookTime = 0;
+            }
             IceAndFire.sendMSGToAll(new MessageUpdateDragonforge(pos.toLong(), cookTime));
         }
         lastDragonFlameTimer = 40;

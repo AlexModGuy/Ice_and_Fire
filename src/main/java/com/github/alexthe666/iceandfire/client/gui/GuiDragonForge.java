@@ -61,10 +61,10 @@ public class GuiDragonForge extends ContainerScreen<ContainerDragonForge> {
     private int func_175381_h(int p_175381_1_) {
         TileEntity te = IceAndFire.PROXY.getRefrencedTE();
         int j = 0;
-        int maxCookTime = 200;
+        int maxCookTime = 1000;
         if (te instanceof TileEntityDragonforge) {
-            j = ((TileEntityDragonforge) te).cookTime;
-            maxCookTime = ((TileEntityDragonforge) te).getMaxCookTime();
+            maxCookTime = ((TileEntityDragonforge) te).getMaxCookTime(tileFurnace.getSlot(0).getStack(), tileFurnace.getSlot(1).getStack());
+            j = Math.min(((TileEntityDragonforge) te).cookTime, maxCookTime);
         }
         return j != 0 ? j * p_175381_1_ / maxCookTime : 0;
     }
