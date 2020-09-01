@@ -2244,7 +2244,10 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     public void onRemovedFromWorld() {
         if (IafConfig.chunkLoadSummonCrystal) {
             if (this.isBoundToCrystal()) {
-                DragonPosWorldData.get(world).addDragon(this.getUniqueID(), this.getPosition());
+                DragonPosWorldData data = DragonPosWorldData.get(world);
+                if(data != null){
+                    data.addDragon(this.getUniqueID(), this.getPosition());
+                }
             }
         }
         super.onRemovedFromWorld();
