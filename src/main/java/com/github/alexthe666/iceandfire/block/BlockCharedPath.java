@@ -51,6 +51,7 @@ public class BlockCharedPath extends GrassPathBlock {
     }
 
     public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
+        super.tick(state, worldIn, pos, rand);
         if (!worldIn.isRemote) {
             if (!worldIn.isAreaLoaded(pos, 3))
                 return;
@@ -62,7 +63,6 @@ public class BlockCharedPath extends GrassPathBlock {
             worldIn.setBlockState(pos, getSmushedState(dragonType));
         }
         updateBlockState(worldIn, pos);
-        super.tick(state, worldIn, pos, rand);
     }
 
     private void updateBlockState(World worldIn, BlockPos pos) {
