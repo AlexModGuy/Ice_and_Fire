@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.client.particle.LightningRender;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.culling.ClippingHelperImpl;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -42,16 +43,19 @@ public class RenderLightningDragon extends RenderDragonBase {
         EntityLightningDragon lightningDragon = (EntityLightningDragon)entityIn;
         matrixStackIn.push();
         if (lightningDragon.hasLightningTarget()) {
-            Vec3d vec3d1 = lightningDragon.getHeadPosition();
-            Vec3d vec3d = new Vec3d(lightningDragon.getLightningTargetX(), lightningDragon.getLightningTargetY(), lightningDragon.getLightningTargetZ());
-            float energyScale = 0.4F * lightningDragon.getRenderScale();
-            LightningBoltData bolt = new LightningBoltData(LightningBoltData.BoltRenderInfo.ELECTRICITY, vec3d1, vec3d, 15)
-                    .size(0.05F * getBoundedScale(energyScale, 0.5F, 2))
-                    .lifespan(4)
-                    .spawn(LightningBoltData.SpawnFunction.NO_DELAY);
-            lightningRender.update(null, bolt, partialTicks);
-            matrixStackIn.translate(-lightningDragon.getPosX(), -lightningDragon.getPosY(), -lightningDragon.getPosZ());
-            lightningRender.render(partialTicks, matrixStackIn, bufferIn);
+            double dist = Minecraft.getInstance().player.getDistance(lightningDragon);
+            if(dist <= Math.max(256, Minecraft.getInstance().gameSettings.renderDistanceChunks * 16F)){
+                Vec3d vec3d1 = lightningDragon.getHeadPosition();
+                Vec3d vec3d = new Vec3d(lightningDragon.getLightningTargetX(), lightningDragon.getLightningTargetY(), lightningDragon.getLightningTargetZ());
+                float energyScale = 0.4F * lightningDragon.getRenderScale();
+                LightningBoltData bolt = new LightningBoltData(LightningBoltData.BoltRenderInfo.ELECTRICITY, vec3d1, vec3d, 15)
+                        .size(0.05F * getBoundedScale(energyScale, 0.5F, 2))
+                        .lifespan(4)
+                        .spawn(LightningBoltData.SpawnFunction.NO_DELAY);
+                lightningRender.update(null, bolt, partialTicks);
+                matrixStackIn.translate(-lightningDragon.getPosX(), -lightningDragon.getPosY(), -lightningDragon.getPosZ());
+                lightningRender.render(partialTicks, matrixStackIn, bufferIn);
+            }
         }
         matrixStackIn.pop();
 
