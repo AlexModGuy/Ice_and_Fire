@@ -34,9 +34,9 @@ public class EntityTideTrident extends TridentEntity {
         this(IafEntityRegistry.TIDE_TRIDENT, worldIn);
         this.setPosition(thrower.getPosX(), thrower.getPosYEye() - (double)0.1F, thrower.getPosZ());
         this.setShooter(thrower);
-        thrownStack = thrownStackIn;
-        this.thrownStack = new ItemStack(Items.TRIDENT);
         this.thrownStack = thrownStackIn.copy();
+        this.dataManager.set(LOYALTY_LEVEL, (byte)EnchantmentHelper.getLoyaltyModifier(thrownStackIn));
+        this.dataManager.set(field_226571_aq_, thrownStackIn.hasEffect());
     }
 
     public EntityTideTrident(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
