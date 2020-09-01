@@ -277,7 +277,7 @@ public class IafDragonLogic {
            if(!dragon.getPassengers().isEmpty() && dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner())) {
                dragon.setAttackTarget(null);
            }
-           if(dragon.getAttackTarget() instanceof IDeadMob && ((IDeadMob)dragon.getAttackTarget()).isMobDead()){
+           if(!DragonUtils.isAlive(dragon.getAttackTarget())){
                dragon.setAttackTarget(null);
            }
         }

@@ -319,7 +319,6 @@ public class DragonUtils {
     public static boolean canGrief(boolean weak) {
         if (weak) {
             return IafConfig.dragonGriefing == 0;
-
         } else {
             return IafConfig.dragonGriefing < 2;
         }

@@ -246,13 +246,13 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         this.targetSelector.addGoal(4, new DragonAITargetNonTamed(this, LivingEntity.class, false, new Predicate<LivingEntity>() {
             @Override
             public boolean apply(@Nullable LivingEntity entity) {
-                return (!(entity instanceof PlayerEntity) || ((PlayerEntity) entity).isCreative()) && DragonUtils.canHostilesTarget(entity) && entity.getType() != EntityDragonBase.this.getType() && EntityDragonBase.this.shouldTarget(entity);
+                return (!(entity instanceof PlayerEntity) || !((PlayerEntity) entity).isCreative()) && DragonUtils.canHostilesTarget(entity) && entity.getType() != EntityDragonBase.this.getType() && EntityDragonBase.this.shouldTarget(entity) && DragonUtils.isAlive(entity);
             }
         }));
-        this.targetSelector.addGoal(5, new DragonAITarget(this, LivingEntity.class, true, new Predicate<Entity>() {
+        this.targetSelector.addGoal(5, new DragonAITarget(this, LivingEntity.class, true, new Predicate<LivingEntity>() {
             @Override
-            public boolean apply(@Nullable Entity entity) {
-                return entity instanceof LivingEntity && DragonUtils.canHostilesTarget(entity) && entity.getType() != EntityDragonBase.this.getType() && EntityDragonBase.this.shouldTarget(entity);
+            public boolean apply(@Nullable LivingEntity entity) {
+                return entity instanceof LivingEntity && DragonUtils.canHostilesTarget(entity) && entity.getType() != EntityDragonBase.this.getType() && EntityDragonBase.this.shouldTarget(entity) && DragonUtils.isAlive(entity);
             }
         }));
         this.targetSelector.addGoal(6, new DragonAITargetItems(this, false));
@@ -1340,8 +1340,9 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                 if (IafConfig.dragonGriefing != 2 && (!this.isTamed() || IafConfig.tamedDragonGriefing)) {
                     float hardness = IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
                     if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
-                        for (BlockPos pos : BlockPos.getAllInBox((int)Math.floor(this.getBoundingBox().minX) - bounds, (int)Math.floor(this.getBoundingBox().minY) + 1, (int)Math.floor(this.getBoundingBox().minZ) - bounds, (int)Math.floor(this.getBoundingBox().maxX) + bounds, (int)Math.floor(this.getBoundingBox().maxY) + bounds + flightModifier, (int)Math.floor(this.getBoundingBox().maxZ) + bounds).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
-                            if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, pos.getX(), pos.getY(), pos.getZ()))) continue;
+                        for (BlockPos pos : BlockPos.getAllInBox((int) Math.floor(this.getBoundingBox().minX) - bounds, (int) Math.floor(this.getBoundingBox().minY) + 1, (int) Math.floor(this.getBoundingBox().minZ) - bounds, (int) Math.floor(this.getBoundingBox().maxX) + bounds, (int) Math.floor(this.getBoundingBox().maxY) + bounds + flightModifier, (int) Math.floor(this.getBoundingBox().maxZ) + bounds).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
+                            if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, pos.getX(), pos.getY(), pos.getZ())))
+                                continue;
                             BlockState state = world.getBlockState(pos);
                             if (state.getMaterial().blocksMovement() && !state.isAir() && !state.getShape(world, pos).isEmpty() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos)) {
                                 this.setMotion(this.getMotion().mul(0.6F, 1, 0.6F));
@@ -1666,7 +1667,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
             this.setPosition(riding.getPosX() + extraX, riding.getPosY() + extraY, riding.getPosZ() + extraZ);
             if ((this.getControlState() == 1 << 4 || ((PlayerEntity) riding).isElytraFlying()) && !riding.isPassenger()) {
                 this.stopRiding();
-                if(world.isRemote){
+                if (world.isRemote) {
                     IceAndFire.sendMSGToServer(new MessageStartRidingMob(this.getEntityId(), false, true));
                 }
 
@@ -2129,6 +2130,10 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         this.flightManager.onSetAttackTarget(LivingEntityIn);
     }
 
+    public boolean canAttack(LivingEntity target) {
+        return super.canAttack(target) && DragonUtils.isAlive(target);
+    }
+
     public boolean isPart(Entity entityHit) {
         return headPart != null && headPart.isEntityEqual(entityHit) || neckPart != null && neckPart.isEntityEqual(entityHit) ||
                 leftWingLowerPart != null && leftWingLowerPart.isEntityEqual(entityHit) || rightWingLowerPart != null && rightWingLowerPart.isEntityEqual(entityHit) ||
@@ -2245,7 +2250,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         if (IafConfig.chunkLoadSummonCrystal) {
             if (this.isBoundToCrystal()) {
                 DragonPosWorldData data = DragonPosWorldData.get(world);
-                if(data != null){
+                if (data != null) {
                     data.addDragon(this.getUniqueID(), this.getPosition());
                 }
             }

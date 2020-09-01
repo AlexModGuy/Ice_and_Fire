@@ -69,6 +69,9 @@ public class EntityFireDragon extends EntityDragonBase {
 
     @Override
     protected boolean shouldTarget(Entity entity) {
+        if(entity instanceof EntityDragonBase && !this.isTamed()){
+            return entity.getType() != this.getType() && this.getWidth() >= entity.getWidth() && !((EntityDragonBase) entity).isMobDead();
+        }
         return entity instanceof PlayerEntity || DragonUtils.isLivestock(entity) || !this.isTamed() && DragonUtils.isVillager(entity);
     }
 
