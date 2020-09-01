@@ -1,18 +1,18 @@
 {
   "lightningdragon_breath_crackle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:lightningdragon_breath_crackle"
     ]
   },
   "lightningdragon_breath": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:lightningdragon_breath"
     ]
   },
   "lightningdragon_adult_roar": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:lightningdragon_adult_roar_0",
       "iceandfire:lightningdragon_adult_roar_1",
@@ -20,7 +20,7 @@
     ]
   },
   "lightningdragon_teen_roar": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:lightningdragon_teen_roar_0",
       "iceandfire:lightningdragon_teen_roar_1",
@@ -28,7 +28,7 @@
     ]
   },
   "lightningdragon_child_roar": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:lightningdragon_child_die_0"
     ]
@@ -42,7 +42,7 @@
     ]
   },
   "lightningdragon_child_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:lightningdragon_child_hurt_0",
       "iceandfire:lightningdragon_child_hurt_1",
@@ -50,13 +50,13 @@
     ]
   },
   "lightningdragon_child_death": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:lightningdragon_child_die_0"
     ]
   },
   "lightningdragon_teen_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:lightningdragon_teen_idle_0",
       "iceandfire:lightningdragon_teen_idle_1",
@@ -64,7 +64,7 @@
     ]
   },
   "lightningdragon_teen_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:lightningdragon_teen_hurt_0",
       "iceandfire:lightningdragon_teen_hurt_1",
@@ -72,13 +72,13 @@
     ]
   },
   "lightningdragon_teen_death": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:lightningdragon_teen_die_0"
     ]
   },
   "lightningdragon_adult_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:lightningdragon_adult_idle_0",
       "iceandfire:lightningdragon_adult_idle_1",
@@ -86,7 +86,7 @@
     ]
   },
   "lightningdragon_adult_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:lightningdragon_adult_hurt_0",
       "iceandfire:lightningdragon_adult_hurt_1",
@@ -94,40 +94,40 @@
     ]
   },
   "lightningdragon_adult_death": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:lightningdragon_adult_die_0"
     ]
   },
   "dread_ghoul_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:dread_ghoul_idle_0",
       "iceandfire:dread_ghoul_idle_1"
     ]
   },
   "dread_lich_summon": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:dread_lich_summon_0",
       "iceandfire:dread_lich_summon_1"
     ]
   },
   "hydra_regen_head": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:hydra_regen_head"
     ]
   },
   "hydra_spit": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:hydra_spit_0",
       "iceandfire:hydra_spit_1"
     ]
   },
   "hydra_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:hydra_idle_0",
       "iceandfire:hydra_idle_1",
@@ -135,7 +135,7 @@
     ]
   },
   "hydra_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:hydra_hurt_0",
       "iceandfire:hydra_hurt_1",
@@ -143,20 +143,20 @@
     ]
   },
   "hydra_die": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:hydra_die"
     ]
   },
   "bestiary_page": {
-    "category": "neutral",
+    "category": "player",
     "sounds": [
       "iceandfire:bestiary_page_0",
       "iceandfire:bestiary_page_1"
     ]
   },
   "pixie_wand": {
-    "category": "neutral",
+    "category": "player",
     "sounds": [
       "iceandfire:pixie_wand_0",
       "iceandfire:pixie_wand_1",
@@ -164,38 +164,38 @@
     ]
   },
   "sea_serpent_breath": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:sea_serpent_breath"
     ]
   },
   "sea_serpent_bite": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:sea_serpent_bite"
     ]
   },
   "sea_serpent_splash": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:sea_serpent_splash"
     ]
   },
   "sea_serpent_roar": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:sea_serpent_roar"
     ]
   },
   "sea_serpent_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:sea_serpent_idle_0",
       "iceandfire:sea_serpent_idle_1"
     ]
   },
   "sea_serpent_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:sea_serpent_hurt_0",
       "iceandfire:sea_serpent_hurt_1",
@@ -203,7 +203,7 @@
     ]
   },
   "sea_serpent_die": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:sea_serpent_die"
     ]
@@ -246,21 +246,21 @@
     ]
   },
   "myrmex_bite": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:myrmex_bite_0",
       "iceandfire:myrmex_bite_1"
     ]
   },
   "myrmex_sting": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:myrmex_sting_0",
       "iceandfire:myrmex_sting_1"
     ]
   },
   "myrmex_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:myrmex_idle_0",
       "iceandfire:myrmex_idle_1",
@@ -268,26 +268,26 @@
     ]
   },
   "myrmex_walk": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:myrmex_walk"
     ]
   },
   "myrmex_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:myrmex_hurt_0",
       "iceandfire:myrmex_hurt_1"
     ]
   },
   "myrmex_die": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:myrmex_die"
     ]
   },
   "stymphalian_bird_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:stymphalian_bird_idle_0",
       "iceandfire:stymphalian_bird_idle_1",
@@ -295,39 +295,39 @@
     ]
   },
   "stymphalian_bird_attack": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:stymphalian_bird_attack"
     ]
   },
   "stymphalian_bird_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:stymphalian_bird_hurt_0",
       "iceandfire:stymphalian_bird_hurt_1"
     ]
   },
   "stymphalian_bird_die": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:stymphalian_bird_die"
     ]
   },
   "cockatrice_cry": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:cockatrice_cry"
     ]
   },
   "cockatrice_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:cockatrice_hurt_0",
       "iceandfire:cockatrice_hurt_1"
     ]
   },
   "cockatrice_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:cockatrice_idle_0",
       "iceandfire:cockatrice_idle_1",
@@ -335,65 +335,65 @@
     ]
   },
   "cockatrice_die": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:cockatrice_die_0",
       "iceandfire:cockatrice_die_1"
     ]
   },
   "troll_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:troll_idle_0",
       "iceandfire:troll_idle_1"
     ]
   },
   "troll_roar": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:troll_roar"
     ]
   },
   "troll_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:troll_hurt_0",
       "iceandfire:troll_hurt_1"
     ]
   },
   "troll_die": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:troll_die"
     ]
   },
   "naga_attack": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:naga_idle"
     ]
   },
   "naga_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:naga_idle"
     ]
   },
   "naga_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:naga_hurt_0",
       "iceandfire:naga_hurt_1"
     ]
   },
   "naga_die": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:naga_die"
     ]
   },
   "mermaid_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:mermaid_idle_0",
       "iceandfire:mermaid_idle_1",
@@ -403,74 +403,74 @@
     ]
   },
   "mermaid_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:mermaid_hurt_0",
       "iceandfire:mermaid_hurt_1"
     ]
   },
   "mermaid_die": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:mermaid_die"
     ]
   },
   "siren_song": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:siren_song"
     ]
   },
   "deathworm_giant_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:deathworm_giant_idle_0",
       "iceandfire:deathworm_giant_idle_1"
     ]
   },
   "deathworm_giant_attack": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:deathworm_giant_attack_0",
       "iceandfire:deathworm_giant_attack_1"
     ]
   },
   "deathworm_giant_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:deathworm_giant_hurt_0",
       "iceandfire:deathworm_giant_hurt_1"
     ]
   },
   "deathworm_giant_die": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:deathworm_giant_die"
     ]
   },
   "deathworm_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:deathworm_idle_0",
       "iceandfire:deathworm_idle_1"
     ]
   },
   "deathworm_attack": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:deathworm_attack_0",
       "iceandfire:deathworm_attack_1"
     ]
   },
   "deathworm_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:deathworm_hurt_0",
       "iceandfire:deathworm_hurt_1"
     ]
   },
   "deathworm_die": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:deathworm_die"
     ]
@@ -499,39 +499,39 @@
     ]
   },
   "cyclops_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:cyclops_idle"
     ]
   },
   "cyclops_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:cyclops_hurt_0",
       "iceandfire:cyclops_hurt_1"
     ]
   },
   "cyclops_die": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:cyclops_hurt_0",
       "iceandfire:cyclops_hurt_1"
     ]
   },
   "cyclops_bite": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:cyclops_bite"
     ]
   },
   "cyclops_blinded": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:cyclops_blinded"
     ]
   },
   "dragon_flight": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:dragon_flight_0",
       "iceandfire:dragon_flight_1",
@@ -539,13 +539,13 @@
     ]
   },
   "gold_pile_step": {
-    "category": "neutral",
+    "category": "block",
     "sounds": [
       "iceandfire:gold_pile_step"
     ]
   },
   "gold_pile_break": {
-    "category": "neutral",
+    "category": "block",
     "sounds": [
       "iceandfire:gold_pile_break"
     ]
@@ -583,27 +583,27 @@
     ]
   },
   "gorgon_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:gorgon_idle_0",
       "iceandfire:gorgon_idle_1"
     ]
   },
   "gorgon_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:gorgon_hurt_0",
       "iceandfire:gorgon_hurt_1"
     ]
   },
   "gorgon_die": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:gorgon_die"
     ]
   },
   "gorgon_attack": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:gorgon_attack"
     ]
@@ -653,19 +653,19 @@
     ]
   },
   "firedragon_breath": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:firedragon_breath"
     ]
   },
   "icedragon_breath": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:icedragon_breath"
     ]
   },
   "firedragon_child_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:firedragon_child_idle_0",
       "iceandfire:firedragon_child_idle_1",
@@ -673,26 +673,26 @@
     ]
   },
   "firedragon_child_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:firedragon_child_hurt_0",
       "iceandfire:firedragon_child_hurt_1"
     ]
   },
   "firedragon_child_death": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:firedragon_child_die_0"
     ]
   },
   "firedragon_child_roar": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:firedragon_child_die_0"
     ]
   },
   "firedragon_teen_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:firedragon_teen_idle_0",
       "iceandfire:firedragon_teen_idle_1",
@@ -703,27 +703,27 @@
     ]
   },
   "firedragon_teen_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:firedragon_teen_hurt_0",
       "iceandfire:firedragon_teen_hurt_1"
     ]
   },
   "firedragon_teen_death": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:firedragon_teen_die_0"
     ]
   },
   "firedragon_teen_roar": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:firedragon_teen_roar_0",
       "iceandfire:firedragon_teen_roar_1"
     ]
   },
   "firedragon_adult_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:firedragon_adult_idle_0",
       "iceandfire:firedragon_adult_idle_1",
@@ -732,7 +732,7 @@
     ]
   },
   "firedragon_adult_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:firedragon_adult_hurt_0",
       "iceandfire:firedragon_adult_hurt_1",
@@ -740,7 +740,7 @@
     ]
   },
   "firedragon_adult_death": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:firedragon_adult_hurt_0",
       "iceandfire:firedragon_adult_hurt_1",
@@ -748,34 +748,34 @@
     ]
   },
   "firedragon_adult_roar": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:firedragon_adult_roar_0",
       "iceandfire:firedragon_adult_roar_1"
     ]
   },
   "icedragon_adult_roar": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:icedragon_adult_roar_0",
       "iceandfire:icedragon_adult_roar_1"
     ]
   },
   "icedragon_teen_roar": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:icedragon_teen_roar_0",
       "iceandfire:icedragon_teen_roar_1"
     ]
   },
   "icedragon_child_roar": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:icedragon_child_die_0"
     ]
   },
   "icedragon_child_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:icedragon_child_idle_0",
       "iceandfire:icedragon_child_idle_1",
@@ -783,7 +783,7 @@
     ]
   },
   "icedragon_child_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:icedragon_child_hurt_0",
       "iceandfire:icedragon_child_hurt_1",
@@ -792,7 +792,7 @@
     ]
   },
   "icedragon_child_death": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:icedragon_child_hurt_0",
       "iceandfire:icedragon_child_hurt_1",
@@ -801,7 +801,7 @@
     ]
   },
   "icedragon_teen_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:icedragon_teen_idle_0",
       "iceandfire:icedragon_teen_idle_1",
@@ -810,7 +810,7 @@
     ]
   },
   "icedragon_teen_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:icedragon_teen_hurt_0",
       "iceandfire:icedragon_teen_hurt_1",
@@ -818,14 +818,14 @@
     ]
   },
   "icedragon_teen_death": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:icedragon_teen_die_0",
       "iceandfire:icedragon_teen_die_1"
     ]
   },
   "icedragon_adult_idle": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:icedragon_adult_idle_0",
       "iceandfire:icedragon_adult_idle_1",
@@ -833,7 +833,7 @@
     ]
   },
   "icedragon_adult_hurt": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:icedragon_adult_hurt_0",
       "iceandfire:icedragon_adult_hurt_1",
@@ -841,7 +841,7 @@
     ]
   },
   "icedragon_adult_death": {
-    "category": "neutral",
+    "category": "hostile",
     "sounds": [
       "iceandfire:icedragon_adult_die_0",
       "iceandfire:icedragon_adult_die_1"
@@ -854,7 +854,7 @@
     ]
   },
   "dragonflute": {
-    "category": "neutral",
+    "category": "player",
     "sounds": [
       "iceandfire:dragon_flute"
     ]

@@ -475,3 +475,16 @@ System.out.println("whats good");
 Sometimes you rhyme quick, sometimes you rhyme slow!
 Hot Molasses!
 Cemetery Gates!
+Bing Bing Bam Bam!
+Tame!
+2 Bad!
+Terrible!
+Love?
+Jungle Biome!
+Raindrops!
+Lightning-y!
+Zing!
+Satisfactory!
+Slice!
+Both bands suck!
+Wow!
