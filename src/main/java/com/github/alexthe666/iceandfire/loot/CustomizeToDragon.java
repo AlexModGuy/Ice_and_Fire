@@ -43,7 +43,7 @@ public class CustomizeToDragon extends LootFunction {
             }
             if (stack.getItem() instanceof ItemDragonFlesh) {
                 stack.setCount(1 + random.nextInt(1 + (dragon.getAgeInDays() / 25)));
-                return new ItemStack(dragon.dragonType == DragonType.FIRE ? IafItemRegistry.FIRE_DRAGON_FLESH : IafItemRegistry.ICE_DRAGON_FLESH, stack.getCount());
+                return new ItemStack(stack.getItem(), stack.getCount());
             }
             if (stack.getItem() instanceof ItemDragonSkull) {
                 ItemStack stack1 = new ItemStack(dragon.dragonType == DragonType.FIRE ? IafItemRegistry.DRAGON_SKULL_FIRE : IafItemRegistry.DRAGON_SKULL_ICE, stack.getCount());
