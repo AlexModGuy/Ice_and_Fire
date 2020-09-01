@@ -454,7 +454,7 @@ public class IafDragonDestructionManager {
         } else if (in.getMaterial() == Material.SAND && in.getBlock() == Blocks.GRAVEL) {
             return IafBlockRegistry.FROZEN_GRAVEL.getDefaultState().with(BlockFallingReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.SAND && in.getBlock() != Blocks.GRAVEL) {
-            return Blocks.GLASS.getDefaultState();
+            return in;
         } else if (in.getMaterial() == Material.ROCK && (in.getBlock() == Blocks.COBBLESTONE || in.getBlock().getTranslationKey().contains("cobblestone"))) {
             return IafBlockRegistry.FROZEN_COBBLESTONE.getDefaultState().with(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.ROCK && in.getBlock() != IafBlockRegistry.FROZEN_COBBLESTONE) {
@@ -478,6 +478,8 @@ public class IafDragonDestructionManager {
             return IafBlockRegistry.CRACKLED_DIRT.getDefaultState().with(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.SAND && in.getBlock() == Blocks.GRAVEL) {
             return IafBlockRegistry.CRACKLED_GRAVEL.getDefaultState().with(BlockFallingReturningState.REVERTS, true);
+        } else if (in.getMaterial() == Material.SAND && in.getBlock() != Blocks.GRAVEL) {
+            return Blocks.GLASS.getDefaultState();
         } else if (in.getMaterial() == Material.ROCK && (in.getBlock() == Blocks.COBBLESTONE || in.getBlock().getTranslationKey().contains("cobblestone"))) {
             return IafBlockRegistry.CRACKLED_COBBLESTONE.getDefaultState().with(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.ROCK && in.getBlock() != IafBlockRegistry.CRACKLED_COBBLESTONE) {

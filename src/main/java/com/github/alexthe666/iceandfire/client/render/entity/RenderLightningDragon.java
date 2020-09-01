@@ -42,7 +42,6 @@ public class RenderLightningDragon extends RenderDragonBase {
         EntityLightningDragon lightningDragon = (EntityLightningDragon)entityIn;
         matrixStackIn.push();
         if (lightningDragon.hasLightningTarget()) {
-
             Vec3d vec3d1 = lightningDragon.getHeadPosition();
             Vec3d vec3d = new Vec3d(lightningDragon.getLightningTargetX(), lightningDragon.getLightningTargetY(), lightningDragon.getLightningTargetZ());
             float energyScale = 0.4F * lightningDragon.getRenderScale();
