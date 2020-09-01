@@ -115,7 +115,7 @@ public class DragonType {
                 if (egg.hasCustomName()) {
                     dragon.setCustomName(egg.getCustomName());
                 }
-                dragon.setVariant(egg.getEggType().ordinal());
+                dragon.setVariant(egg.getEggType().ordinal() - 8);
                 dragon.setGender(egg.getRNG().nextBoolean());
                 dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                 dragon.setHunger(50);
