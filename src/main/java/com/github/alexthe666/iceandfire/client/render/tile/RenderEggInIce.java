@@ -18,7 +18,7 @@ public class RenderEggInIce<T extends TileEntityEggInIce> extends TileEntityRend
         ModelDragonEgg model = new ModelDragonEgg();
         if (egg.type != null) {
             matrixStackIn.push();
-            matrixStackIn.translate(0.5, 1.5F, 0.5F);
+            matrixStackIn.translate(0.5, -0.8F, 0.5F);
             matrixStackIn.push();
             model.renderFrozen(egg);
             model.render(matrixStackIn, bufferIn.getBuffer(RenderPodium.getEggTexture(egg.type)), combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
