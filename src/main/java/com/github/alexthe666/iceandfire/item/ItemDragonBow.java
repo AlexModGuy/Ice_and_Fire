@@ -20,7 +20,7 @@ import java.util.function.Predicate;
 public class ItemDragonBow extends BowItem implements ICustomRendered {
     public static final Predicate<ItemStack> DRAGON_ARROWS = (p_220002_0_) -> {
         Tag<Item> tag = ItemTags.getCollection().getOrCreate(IafTagRegistry.DRAGON_ARROWS);
-        return p_220002_0_.getItem().isIn(ItemTags.ARROWS);
+        return p_220002_0_.getItem().isIn(tag);
     };
 
     public ItemDragonBow() {
