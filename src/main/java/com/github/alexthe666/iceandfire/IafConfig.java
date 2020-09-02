@@ -77,7 +77,7 @@ public class IafConfig {
     public static boolean sirenShader = true;
     public static int sirenMaxSingTime = 12000;
     public static int sirenTimeBetweenSongs = 2000;
-    public static int generateSirenChance = 300;
+    public static int generateSirenChance = 600;
     public static boolean spawnHippocampus = true;
     public static int hippocampusSpawnChance = 70;
     public static int deathWormTargetSearchLength = 64;
@@ -127,7 +127,7 @@ public class IafConfig {
     public static double amphithereMaxHealth = 50D;
     public static double amphithereAttackStrength = 7D;
     public static boolean spawnSeaSerpents = true;
-    public static int seaSerpentSpawnChance = 200;
+    public static int seaSerpentSpawnChance = 300;
     public static boolean seaSerpentGriefing = true;
     public static double seaSerpentBaseHealth = 20D;
     public static double seaSerpentAttackStrength = 4D;
