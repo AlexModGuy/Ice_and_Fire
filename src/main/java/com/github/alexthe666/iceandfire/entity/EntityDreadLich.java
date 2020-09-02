@@ -38,6 +38,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear, IRangedAttackMob {
 
@@ -55,6 +56,12 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     public EntityDreadLich(EntityType type, World worldIn) {
         super(type, worldIn);
     }
+
+    public static boolean canLichSpawnOn(EntityType<? extends MobEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
+        BlockPos blockpos = pos.down();
+        return reason == SpawnReason.SPAWNER || worldIn.getBlockState(blockpos).canEntitySpawn(worldIn, blockpos, typeIn) && randomIn.nextInt(40) == 0;
+    }
+
 
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new SwimGoal(this));
