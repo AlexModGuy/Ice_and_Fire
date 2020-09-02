@@ -38,6 +38,10 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
         // setScale(this.getDragonAge());
     }
 
+    public boolean isBreedingItem(ItemStack p_70877_1_) {
+        return false;
+    }
+
     @Override
     protected void registerAttributes() {
         super.registerAttributes();

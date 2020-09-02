@@ -10,6 +10,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -103,6 +104,10 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
         ItemStack stack = new ItemStack(getSkullType().skull_item, 1);
         if (!this.world.isRemote)
             this.entityDropItem(stack, 0.0F);
+    }
+
+    public boolean isBreedingItem(ItemStack p_70877_1_) {
+        return false;
     }
 
     @Override
