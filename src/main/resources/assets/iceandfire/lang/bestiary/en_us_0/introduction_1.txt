@@ -6,8 +6,8 @@ sapphire ore.
 
 
 Sapphire ore is found randomly in
-snowy biomes and its drop can be
-traded with snow villagers.
+snowy biomes.
+
 
 
 
