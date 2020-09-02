@@ -69,7 +69,7 @@ public class BlockGoldPile extends Block {
         Block block = blockstate.getBlock();
         if (block != Blocks.ICE && block != Blocks.PACKED_ICE && block != Blocks.BARRIER) {
             if (block != Blocks.HONEY_BLOCK && block != Blocks.SOUL_SAND) {
-                return Block.doesSideFillSquare(blockstate.getCollisionShape(worldIn, pos.down()), Direction.UP) || block == this && blockstate.get(LAYERS) == 8;
+                return Block.doesSideFillSquare(blockstate.getCollisionShape(worldIn, pos.down()), Direction.UP) || block instanceof BlockGoldPile && blockstate.get(LAYERS) == 8;
             } else {
                 return true;
             }
@@ -111,7 +111,7 @@ public class BlockGoldPile extends Block {
             if (item.getItem() != null) {
                 if (item.getItem() == Item.getItemFromBlock(this)) {
                     if (!item.isEmpty()) {
-                        if (state.get(LAYERS) < 7) {
+                        if (state.get(LAYERS) < 8) {
                             worldIn.setBlockState(pos, state.with(LAYERS, state.get(LAYERS) + 1), 3);
                             if (!playerIn.isCreative()) {
                                 item.shrink(1);
