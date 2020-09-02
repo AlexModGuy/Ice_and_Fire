@@ -33,6 +33,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Vector3d;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.OwnerHurtByTargetGoal;
@@ -1201,9 +1202,11 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                             }
                         } else {
                             this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, this.getSoundVolume(), this.getSoundPitch());
-                            this.setCommand(this.getCommand() + 1);
-                            if (this.getCommand() > 2) {
-                                this.setCommand(0);
+                            if(!world.isRemote){
+                                this.setCommand(this.getCommand() + 1);
+                                if (this.getCommand() > 2) {
+                                    this.setCommand(0);
+                                }
                             }
                             String commandText = "stand";
                             if (this.getCommand() == 1) {
@@ -1868,16 +1871,24 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     @Override
-    public void travel(Vec3d dragonVec) {
+    public void travel(Vec3d vec3d) {
         if (this.getAnimation() == ANIMATION_SHAKEPREY || !this.canMove() && !this.isBeingRidden() || this.isSitting()) {
-
-            super.travel(dragonVec.mul(0, 1, 0));
-            return;
+            if (this.getNavigator().getPath() != null) {
+                this.getNavigator().clearPath();
+            }
+            vec3d = new Vec3d(0, 0, 0);
         }
-        super.travel(dragonVec);
+        super.travel(vec3d);
     }
 
-    public void updateCheckPlayer() {
+    @Override
+    public void move(MoverType typeIn, Vec3d pos) {
+        if(canMove() || this.isBeingRidden()){
+            super.move(typeIn, pos);
+        }
+    }
+
+        public void updateCheckPlayer() {
         double checklength = this.getBoundingBox().getAverageEdgeLength() * 3;
         PlayerEntity player = world.getClosestPlayer(this, checklength);
         if (this.isSleeping()) {

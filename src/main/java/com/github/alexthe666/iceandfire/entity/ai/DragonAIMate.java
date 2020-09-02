@@ -34,7 +34,7 @@ public class DragonAIMate extends Goal {
     }
 
     public boolean shouldExecute() {
-        if (!this.dragon.isInLove()) {
+        if (!this.dragon.isInLove() || !this.dragon.canMove()) {
             return false;
         } else {
             this.targetMate = this.getNearbyMate();
