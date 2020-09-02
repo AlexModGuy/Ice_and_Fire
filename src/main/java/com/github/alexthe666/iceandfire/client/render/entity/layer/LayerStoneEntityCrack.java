@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.client.model.ICustomStatueModel;
 import com.github.alexthe666.iceandfire.client.model.ModelGuardianStatue;
@@ -46,6 +47,9 @@ public class LayerStoneEntityCrack<T extends Entity, M extends EntityModel<T>> e
                     RenderType tex = IafRenderType.getStoneCrackRenderType(DESTROY_STAGES[properties.getBreakLevel() - 1], x, y);
 
                     IVertexBuilder ivertexbuilder = bufferIn.getBuffer(tex);
+                    if(this.renderer.getEntityModel() instanceof TabulaModel){
+                        ((TabulaModel) this.renderer.getEntityModel()).resetToDefaultPose();
+                    }
                     if (this.renderer.getEntityModel() instanceof ICustomStatueModel) {
                         ((ICustomStatueModel) this.renderer.getEntityModel()).renderStatue(matrixStackIn, ivertexbuilder, packedLightIn, living);
                     } else if (living instanceof GuardianEntity) {

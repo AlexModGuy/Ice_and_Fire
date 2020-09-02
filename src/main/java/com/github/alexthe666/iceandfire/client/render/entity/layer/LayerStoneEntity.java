@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.client.model.ICustomStatueModel;
 import com.github.alexthe666.iceandfire.client.model.ModelGuardianStatue;
@@ -42,6 +43,9 @@ public class LayerStoneEntity extends LayerRenderer {
                 RenderType tex = IafRenderType.getStoneMobRenderType(x, y);
 
                 IVertexBuilder ivertexbuilder = bufferIn.getBuffer(tex);
+                if(this.renderer.getEntityModel() instanceof TabulaModel){
+                    ((TabulaModel) this.renderer.getEntityModel()).resetToDefaultPose();
+                }
                 if (this.renderer.getEntityModel() instanceof ICustomStatueModel) {
                     ((ICustomStatueModel) this.renderer.getEntityModel()).renderStatue(matrixStackIn, ivertexbuilder, packedLightIn, living);
                 } else if (living instanceof GuardianEntity) {
