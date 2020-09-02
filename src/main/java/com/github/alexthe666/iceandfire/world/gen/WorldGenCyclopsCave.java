@@ -7,18 +7,19 @@ import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.datafixers.Dynamic;
-import net.minecraft.block.AbstractChestBlock;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.block.RotatedPillarBlock;
+import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.IFluidState;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.DyeColor;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
@@ -49,7 +50,7 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
         for (int sideCount = 0; sideCount < 4; sideCount++) {
             for (int side = 0; side < width; side++) {
                 if (origin.distanceSq(end.offset(direction, side)) <= (double) (radius * radius)) {
-                    worldIn.setBlockState(end.offset(direction, side), Blocks.OAK_FENCE.getDefaultState(), 3);
+                    worldIn.setBlockState(end.offset(direction, side), getFenceState(worldIn, end.offset(direction, side)), 3);
                     if (worldIn.isAirBlock(end.offset(direction, side).offset(direction.rotateY())) && sheepsSpawned < sheeps) {
                         BlockPos sheepPos = end.offset(direction, side).offset(direction.rotateY());
 
@@ -60,6 +61,15 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
 
                         sheepsSpawned++;
                     }
+                }
+            }
+            end = end.offset(direction, width);
+            direction = direction.rotateY();
+        }
+        for (int sideCount = 0; sideCount < 4; sideCount++) {
+            for (int side = 0; side < width; side++) {
+                if (origin.distanceSq(end.offset(direction, side)) <= (double) (radius * radius)) {
+                    worldIn.setBlockState(end.offset(direction, side), getFenceState(worldIn, end.offset(direction, side)), 3);
                 }
             }
             end = end.offset(direction, width);
@@ -123,11 +133,11 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
-        if(!IafConfig.generateCyclopsCaves || rand.nextInt(IafConfig.spawnCyclopsCaveChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)){
+        if (!IafConfig.generateCyclopsCaves || rand.nextInt(IafConfig.spawnCyclopsCaveChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)) {
             return false;
         }
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
-        if(!worldIn.getFluidState(position.down()).isEmpty()){
+        if (!worldIn.getFluidState(position.down()).isEmpty()) {
             return false;
         }
         int i1 = 16;
@@ -209,7 +219,7 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
                     if (rand.nextInt(50) == 0 && isTouchingAir(worldIn, blockpos.up())) {
                         int torchHeight = rand.nextInt(2) + 1;
                         for (int fence = 0; fence < torchHeight; fence++) {
-                            worldIn.setBlockState(blockpos.up(1 + fence), Blocks.OAK_FENCE.getDefaultState(), 3);
+                            worldIn.setBlockState(blockpos.up(1 + fence), getFenceState(worldIn, blockpos.up(1 + fence)), 3);
                             //TODO
                             //worldIn.getChunk(blockpos.up(1 + fence)).markBlockForPostprocessing(blockpos.up(1 + fence));
                         }
@@ -223,5 +233,13 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
         cyclops.setPositionAndRotation(position.getX() + 0.5, position.getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
         worldIn.addEntity(cyclops);
         return true;
+    }
+
+    public BlockState getFenceState(IWorld world, BlockPos pos) {
+        boolean east = world.getBlockState(pos.east()).getBlock() == Blocks.OAK_FENCE;
+        boolean west = world.getBlockState(pos.west()).getBlock() == Blocks.OAK_FENCE;
+        boolean north = world.getBlockState(pos.north()).getBlock() == Blocks.OAK_FENCE;
+        boolean south = world.getBlockState(pos.south()).getBlock() == Blocks.OAK_FENCE;
+        return Blocks.OAK_FENCE.getDefaultState().with(FenceBlock.EAST, east).with(FenceBlock.WEST, west).with(FenceBlock.NORTH, north).with(FenceBlock.SOUTH, south);
     }
 }
