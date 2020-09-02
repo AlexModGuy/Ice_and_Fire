@@ -91,6 +91,8 @@ public class RenderPodium<T extends TileEntityPodium> extends TileEntityRenderer
                 float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
                 matrixStackIn.rotate(new Quaternion(Vector3f.YP, f4, true));
                 matrixStackIn.push();
+                matrixStackIn.translate(0, 0.2F, 0);
+                matrixStackIn.scale(0.65F, 0.65F, 0.65F);
                 Minecraft.getInstance().getItemRenderer().renderItem(podium.getStackInSlot(0), ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
                 matrixStackIn.pop();
                 matrixStackIn.pop();
