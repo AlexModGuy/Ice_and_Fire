@@ -72,7 +72,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
         }
 
         if (IafConfig.generateDragonSkeletons) {
-            if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.SAVANNA) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
+            if ((BiomeDictionary.hasType(biome, BiomeDictionary.Type.SAVANNA) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.MESA)) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
                 EntityLightningDragon firedragon = IafEntityRegistry.LIGHTNING_DRAGON.create(worldIn.getWorld());
                 firedragon.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                 int dragonage = 10 + rand.nextInt(100);
@@ -82,8 +82,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                 firedragon.setDeathStage((dragonage / 5) / 2);
                 firedragon.rotationYaw = rand.nextInt(360);
                 worldIn.addEntity(firedragon);
-            }
-            if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.DRY) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
+            }else if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.DRY) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
                 EntityFireDragon firedragon = IafEntityRegistry.FIRE_DRAGON.create(worldIn.getWorld());
                 firedragon.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                 int dragonage = 10 + rand.nextInt(100);
