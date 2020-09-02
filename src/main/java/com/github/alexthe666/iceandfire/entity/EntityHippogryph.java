@@ -167,7 +167,12 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 return entity instanceof LivingEntity && !(entity instanceof AbstractHorseEntity) && DragonUtils.isAlive((LivingEntity) entity);
             }
         }));
-
+        this.targetSelector.addGoal(5, new HippogryphAITarget(this, PlayerEntity.class, 350,false, new Predicate<PlayerEntity>() {
+            @Override
+            public boolean apply(@Nullable PlayerEntity entity) {
+                return !entity.isCreative();
+            }
+        }));
     }
 
     @Override

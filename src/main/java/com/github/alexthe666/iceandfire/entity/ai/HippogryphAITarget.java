@@ -18,6 +18,12 @@ public class HippogryphAITarget<T extends LivingEntity> extends NearestAttackabl
         this.hippogryph = entityIn;
     }
 
+    public HippogryphAITarget(EntityHippogryph entityIn, Class<T> classTarget, int i, boolean checkSight, @Nullable Predicate<LivingEntity> targetPredicate) {
+        super(entityIn, classTarget, i, checkSight, false, targetPredicate);
+        this.hippogryph = entityIn;
+    }
+
+
     @Override
     public boolean shouldExecute() {
         if (this.goalOwner.getRNG().nextInt(20) != 0) {
