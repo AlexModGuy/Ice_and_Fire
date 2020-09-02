@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
@@ -62,6 +63,10 @@ public class EntityDeathWormEgg extends ProjectileItemEntity {
 
     protected Item getDefaultItem() {
         return giant ? IafItemRegistry.DEATHWORM_EGG_GIGANTIC : IafItemRegistry.DEATHWORM_EGG;
+    }
+
+    protected ItemStack func_213882_k() {
+        return new ItemStack(getDefaultItem());
     }
 
     /**
