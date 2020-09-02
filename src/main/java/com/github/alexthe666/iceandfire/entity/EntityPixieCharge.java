@@ -67,7 +67,7 @@ public class EntityPixieCharge extends AbstractFireballEntity {
         return false;
     }
 
-    public void onUpdate() {
+    public void tick() {
         if (this.world.isRemote) {
             for (int i = 0; i < 5; ++i) {
                 IceAndFire.PROXY.spawnParticle("if_pixie", this.getPosX() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.getPosY() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.getPosZ() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
