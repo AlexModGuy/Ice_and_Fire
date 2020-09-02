@@ -82,7 +82,7 @@ public class EntityDreadLichSkull extends AbstractArrowEntity {
                 List<Entity> list = world.getEntitiesInAABBexcluding(shootingEntity, (new AxisAlignedBB(this.getPosX(), this.getPosY(), this.getPosZ(), this.getPosX() + 1.0D, this.getPosY() + 1.0D, this.getPosZ() + 1.0D)).grow(d0, 10.0D, d0), EntityPredicates.IS_ALIVE);
                 if (!list.isEmpty()) {
                     for(Entity e : list){
-                        if(e instanceof LivingEntity){
+                        if(e instanceof LivingEntity && !e.getUniqueID().equals(shootingEntity.getUniqueID())){
                             target = (LivingEntity) e;
                         }
                     }

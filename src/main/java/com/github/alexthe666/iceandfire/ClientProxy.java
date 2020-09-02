@@ -376,7 +376,7 @@ public class ClientProxy extends CommonProxy {
             case 19:
                 return LIGHTNING_DRAGON_SCALE_ARMOR_MODEL_LEGS;
             case 20:
-                return new ModelDragonsteelLightningArmor(0.4F);
+                return DRAGONSTEEL_LIGHTNING_ARMOR_MODEL;
             case 21:
                 return DRAGONSTEEL_LIGHTNING_ARMOR_MODEL_LEGS;
         }

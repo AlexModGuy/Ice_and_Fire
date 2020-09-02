@@ -130,7 +130,7 @@ public class ModelLightningDragonArmor extends BipedModel {
         this.BackSpike3.addBox(-0.5F, 0.0F, -0.5F, 1, 3, 1, 0.0F);
         this.setRotateAngle(BackSpike3, 1.1838568316277536F, 0.0F, 0.0F);
         this.Teeth1 = new ModelRenderer(this, 6, 34);
-        this.Teeth1.setRotationPoint(0.0F, -1.0F, 0.0F);
+        this.Teeth1.setRotationPoint(0.0F, -6.2F, 0.0F);
         this.Teeth1.addBox(-3.6F, 0.1F, -8.9F, 4, 1, 5, 0.0F);
         this.BackSpike2 = new ModelRenderer(this, 0, 34);
         this.BackSpike2.setRotationPoint(0.0F, 3.5F, 0.6F);
