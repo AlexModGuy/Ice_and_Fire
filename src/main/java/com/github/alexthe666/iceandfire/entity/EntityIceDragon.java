@@ -212,7 +212,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 }
             }
         }
-        boolean swimming = isSwimming() && !isHovering() && !isFlying() && ridingProgress == 0;
+        boolean swimming = isInMaterialWater();
         if (swimming && swimProgress < 20.0F) {
             swimProgress += 0.5F;
         } else if (!swimming && swimProgress > 0.0F) {
@@ -503,7 +503,7 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     public double getFlightSpeedModifier() {
-        return super.getFlightSpeedModifier() * (this.isInMaterialWater() ? 0.8F : 1F);
+        return super.getFlightSpeedModifier() * (this.isInMaterialWater() ? 0.3F : 1F);
     }
 
     public boolean isAllowedToTriggerFlight() {
