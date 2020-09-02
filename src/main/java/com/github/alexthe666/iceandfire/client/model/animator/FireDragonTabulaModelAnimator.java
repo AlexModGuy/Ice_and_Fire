@@ -189,7 +189,7 @@ public class FireDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator
             }
         }
         if (!entity.isModelDead()) {
-            if (entity.turn_buffer != null && !(entity.isBeingRidden() && entity.isBreathingFire())) {
+            if (entity.turn_buffer != null && !entity.isBeingRidden() && !entity.isBreathingFire()) {
                 entity.turn_buffer.applyChainSwingBuffer(neckParts);
             }
             if(entity.tail_buffer != null) {

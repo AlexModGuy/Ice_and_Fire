@@ -517,9 +517,10 @@ public class EntityLightningDragon extends EntityDragonBase {
                 pitchY = (dragonPitch / 90F) * 3F;
             }
         }
+        float flightXz = 1.0F + flyProg + hoverProg;
         float absPitch = Math.abs(dragonPitch) / 90F;//1 down/up, 0 straight
         float minXZ = dragonPitch > 20 ? (dragonPitch - 20) * 0.009F : 0;
-        float xzMod = (0.58F - hoverProg * 0.45F + flyProg * 0.2F + absPitch * 0.3F - sitProg) * getRenderSize();
+        float xzMod = (0.58F - hoverProg * 0.45F + flyProg * 0.2F + absPitch * 0.3F - sitProg)* flightXz * getRenderSize();
         float xzModSine = xzMod * (Math.max(0.25F, (float)Math.cos(Math.toRadians(dragonPitch))) - minXZ);
         float headPosX = (float) (getPosX() + (xzModSine) * Math.cos((renderYawOffset + 90) * Math.PI / 180));
         float headPosY = (float) (getPosY() + (0.7F + (sitProg * 5F) + hoverProg + deadProg + epicRoarProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F);

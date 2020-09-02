@@ -2095,7 +2095,8 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                 pitchMinus = 0.95F * Math.abs(dragonPitch / 90);
             }
         }
-        float xzMod = 1.7F * getRenderSize() * 0.3F + getRenderSize() * (0.3F * (float) Math.sin((dragonPitch + 90) * Math.PI / 180) * pitchAdjustment - pitchMinus - hoverProg * 0.45F);
+        float flightXz = 1.0F + flyProg + hoverProg;
+        float xzMod = (1.7F * getRenderSize() * 0.3F * flightXz) + getRenderSize() * (0.3F * (float) Math.sin((dragonPitch + 90) * Math.PI / 180) * pitchAdjustment - pitchMinus - hoverProg * 0.45F);
         float headPosX = (float) (getPosX() + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
         float headPosY = (float) (getPosY() + (0.7F + sitProg + hoverProg + deadProg + epicRoarProg + sleepProg + flyProg + pitchMulti) * getRenderSize() * 0.3F);
         float headPosZ = (float) (getPosZ() + (xzMod) * Math.sin((rotationYaw + 90) * Math.PI / 180));
