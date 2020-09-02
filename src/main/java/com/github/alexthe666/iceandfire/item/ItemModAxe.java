@@ -38,7 +38,7 @@ public class ItemModAxe extends AxeItem {
 
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (this == IafItemRegistry.SILVER_AXE) {
+        if (toolMaterial == IafItemRegistry.SILVER_TOOL_MATERIAL) {
             if (target.getCreatureAttribute() == CreatureAttribute.UNDEAD) {
                 target.attackEntityFrom(DamageSource.causeMobDamage(attacker), attackDamage + 3.0F);
             }

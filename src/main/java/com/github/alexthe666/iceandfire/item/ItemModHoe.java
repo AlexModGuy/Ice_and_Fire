@@ -39,7 +39,7 @@ public class ItemModHoe extends HoeItem {
 
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (this == IafItemRegistry.SILVER_HOE) {
+        if (toolMaterial == IafItemRegistry.SILVER_TOOL_MATERIAL) {
             if (target.getCreatureAttribute() == CreatureAttribute.UNDEAD) {
                 target.attackEntityFrom(DamageSource.causeMobDamage(attacker), 3.0F);
             }
