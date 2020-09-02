@@ -53,18 +53,6 @@ public class RenderHippogryph extends MobRenderer<EntityHippogryph, ModelHippogr
         }
 
         public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityHippogryph hippo, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-            if (hippo.isSaddled()) {
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(SADDLE_TEXTURE);
-                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-            }
-            if (hippo.isSaddled() && hippo.getControllingPassenger() != null) {
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(BRIDLE);
-                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-            }
-            if (hippo.isChested()) {
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(CHEST);
-                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-            }
             if (hippo.getArmor() != 0) {
                 RenderType type = null;
                 switch (hippo.getArmor()) {
@@ -80,7 +68,18 @@ public class RenderHippogryph extends MobRenderer<EntityHippogryph, ModelHippogr
                 }
                 IVertexBuilder ivertexbuilder = bufferIn.getBuffer(type);
                 this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-
+            }
+            if (hippo.isSaddled()) {
+                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(SADDLE_TEXTURE);
+                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+            }
+            if (hippo.isSaddled() && hippo.getControllingPassenger() != null) {
+                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(BRIDLE);
+                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+            }
+            if (hippo.isChested()) {
+                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(CHEST);
+                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
         }
     }
