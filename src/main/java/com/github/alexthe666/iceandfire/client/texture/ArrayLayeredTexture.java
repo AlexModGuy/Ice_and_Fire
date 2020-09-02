@@ -25,13 +25,12 @@ public class ArrayLayeredTexture extends Texture {
         this.layeredTextureNames = textureNames;
     }
 
-    public void loadTexture(IResourceManager manager) throws IOException {
+    public void loadTexture(IResourceManager manager) {
         Iterator<String> iterator = this.layeredTextureNames.iterator();
         String s = iterator.next();
 
         try (IResource iresource = manager.getResource(new ResourceLocation(s))) {
             NativeImage nativeimage = net.minecraftforge.client.MinecraftForgeClient.getImageLayer(new ResourceLocation(s), manager);
-
             while (iterator.hasNext()) {
                 String s1 = iterator.next();
                 if (s1 != null) {
@@ -39,8 +38,8 @@ public class ArrayLayeredTexture extends Texture {
                             IResource iresource1 = manager.getResource(new ResourceLocation(s1));
                             NativeImage nativeimage1 = NativeImage.read(iresource1.getInputStream())
                     ) {
-                        for (int i = 0; i < nativeimage1.getHeight(); ++i) {
-                            for (int j = 0; j < nativeimage1.getWidth(); ++j) {
+                        for (int i = 0; i < Math.min(nativeimage1.getHeight(), nativeimage.getHeight()); i++) {
+                            for (int j = 0; j < Math.min(nativeimage1.getWidth(), nativeimage.getWidth()); j++) {
                                 nativeimage.blendPixel(j, i, nativeimage1.getPixelRGBA(j, i));
                             }
                         }
