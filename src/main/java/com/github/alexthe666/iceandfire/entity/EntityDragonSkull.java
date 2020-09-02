@@ -137,6 +137,8 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
                 return IafItemRegistry.DRAGON_SKULL_FIRE;
             case 1:
                 return IafItemRegistry.DRAGON_SKULL_ICE;
+            case 2:
+                return IafItemRegistry.DRAGON_SKULL_LIGHTNING;
             default:
                 return IafItemRegistry.DRAGON_SKULL_FIRE;
         }

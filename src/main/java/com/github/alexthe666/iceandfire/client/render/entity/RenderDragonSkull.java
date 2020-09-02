@@ -30,13 +30,15 @@ public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
     public static final float[] growth_stage_5 = new float[]{20F, 30F};
     public float[][] growth_stages;
     private TabulaModel fireDragonModel;
+    private TabulaModel lightningDragonModel;
     private TabulaModel iceDragonModel;
 
-    public RenderDragonSkull(EntityRendererManager renderManager, SegmentedModel fireDragonModel, SegmentedModel iceDragonModel) {
+    public RenderDragonSkull(EntityRendererManager renderManager, SegmentedModel fireDragonModel, SegmentedModel iceDragonModel, SegmentedModel lightningDragonModel) {
         super(renderManager);
         growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
         this.fireDragonModel = (TabulaModel) fireDragonModel;
         this.iceDragonModel = (TabulaModel) iceDragonModel;
+        this.lightningDragonModel = (TabulaModel) lightningDragonModel;
     }
 
     private static void setRotationAngles(ModelRenderer cube, float rotX, float rotY, float rotZ) {
@@ -47,7 +49,9 @@ public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
 
     public void render(EntityDragonSkull entity, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         TabulaModel model;
-        if (entity.getDragonType() == 1) {
+        if (entity.getDragonType() == 2) {
+            model = lightningDragonModel;
+        } else if (entity.getDragonType() == 1) {
             model = iceDragonModel;
         } else {
             model = fireDragonModel;
@@ -67,6 +71,9 @@ public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
         matrixStackIn.pop();
     }
     public ResourceLocation getEntityTexture(EntityDragonSkull entity) {
+        if (entity.getDragonType() == 2) {
+            return EnumDragonTextures.getLightningDragonSkullTextures(entity);
+        }
         if (entity.getDragonType() == 1) {
             return EnumDragonTextures.getIceDragonSkullTextures(entity);
         }

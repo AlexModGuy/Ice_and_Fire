@@ -155,7 +155,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.LIGHTNING_DRAGON, manager -> new RenderLightningDragon(manager, LIGHTNING_DRAGON_BASE_MODEL, 2));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_EGG, manager -> new RenderDragonEgg(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_ARROW, manager -> new RenderDragonArrow(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_SKULL, manager -> new RenderDragonSkull(manager, FIRE_DRAGON_BASE_MODEL, ICE_DRAGON_BASE_MODEL));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_SKULL, manager -> new RenderDragonSkull(manager, FIRE_DRAGON_BASE_MODEL, ICE_DRAGON_BASE_MODEL, LIGHTNING_DRAGON_BASE_MODEL));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.FIRE_DRAGON_CHARGE, manager -> new RenderDragonFireCharge(manager, true));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.ICE_DRAGON_CHARGE, manager -> new RenderDragonFireCharge(manager, false));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.LIGHTNING_DRAGON_CHARGE, manager -> new RenderDragonLightningCharge());
