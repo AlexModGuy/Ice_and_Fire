@@ -208,19 +208,13 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
         super.read(compound);
         this.stacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, this.stacks);
-        selectedPages = new EnumBestiaryPages[3];
-        for (int i = 0; i < 3; i++) {
-            selectedPages[i] = EnumBestiaryPages.fromInt(compound.getInt("SelectedPage" + (i + 1)));
-        }
+
     }
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
         ItemStackHelper.saveAllItems(compound, this.stacks);
-        for (int i = 0; i < 3; i++) {
-            compound.putInt("SelectedPage" + (i + 1), selectedPages[i].ordinal());
-        }
         return compound;
     }
 

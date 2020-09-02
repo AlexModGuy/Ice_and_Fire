@@ -191,7 +191,7 @@ public enum EnumDragonTextures {
                 default:
                     return textures.LIGHTNINGSTAGE4EYESTEXTURE;
             }
-        }else {
+        } else {
             switch (dragon.getDragonStage()) {
                 case 1:
                     return textures.FIRESTAGE1EYESTEXTURE;
@@ -617,7 +617,6 @@ public enum EnumDragonTextures {
                         case 8:
                             return ARMORHEAD8;
                     }
-
             }
         }
     }

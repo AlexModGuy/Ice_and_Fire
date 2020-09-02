@@ -165,7 +165,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
                 if (enchantment != null) {
                     s1 = I18n.format("bestiary." + enchantment.toString().toLowerCase());//EnchantmentNameParts.getInstance().generateNewRandomName(this.fontRenderer, l1);
                     if (fontrenderer.getStringWidth(s1) > 80) {
-                        textScale = 1.0F - (fontrenderer.getStringWidth(s1) - 80) * 0.02F;
+                        textScale = 1.0F - (fontrenderer.getStringWidth(s1) - 80) * 0.01F;
                     }
                 }
                 int j2 = 6839882;
@@ -185,7 +185,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
 
                         this.blit(j1 + 1, j + 15 + 19 * i1, 16 * i1, 223, 16, 16);
                         RenderSystem.pushMatrix();
-                        RenderSystem.translatef(width / 2F - 10, height / 2F - 83 + (1.0F - textScale) * 45, 2);
+                        RenderSystem.translatef(width / 2F - 10, height / 2F - 83 + (1.0F - textScale) * 55, 2);
                         RenderSystem.scalef(textScale, textScale, 1);
                         fontrenderer.drawString(s1, 0, 20 + 19 * i1, j2);
                         RenderSystem.popMatrix();
