@@ -352,12 +352,13 @@ public class EntityFireDragon extends EntityDragonBase {
         double distance = Math.max(2.5F * this.getDistanceSq(burnX, burnY, burnZ), 0);
         double conqueredDistance = burnProgress / 40D * distance;
         int increment = (int) Math.ceil(conqueredDistance / 100);
+        int particleCount = this.getDragonStage() <= 3 ? 6 : 3;
         for (int i = 0; i < conqueredDistance; i += increment) {
             double progressX = headPos.x + d2 * (i / (float) distance);
             double progressY = headPos.y + d3 * (i / (float) distance);
             double progressZ = headPos.z + d4 * (i / (float) distance);
             if (canPositionBeSeen(progressX, progressY, progressZ)) {
-                if (world.isRemote && rand.nextInt(5) == 0) {
+                if (world.isRemote && rand.nextInt(particleCount) == 0) {
                     IceAndFire.PROXY.spawnDragonParticle("dragonfire", headPos.x, headPos.y, headPos.z, 0, 0, 0, this);
                 }
             } else {
