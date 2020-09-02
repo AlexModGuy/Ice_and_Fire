@@ -1,7 +1,10 @@
 package com.github.alexthe666.iceandfire.config;
 
 import com.github.alexthe666.iceandfire.world.DragonPosWorldData;
+import com.google.common.collect.Lists;
 import net.minecraftforge.common.ForgeConfigSpec;
+
+import java.util.List;
 
 public class ServerConfig {
 
@@ -136,9 +139,17 @@ public class ServerConfig {
     public final ForgeConfigSpec.DoubleValue weezerTinkersDisarmChance;
     public final ForgeConfigSpec.BooleanValue chunkLoadSummonCrystal;
     public ForgeConfigSpec.IntValue dangerousWorldGenDistanceLimit;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBreakBlocks;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> noDropBreakBlocks;
 
     public ServerConfig(final ForgeConfigSpec.Builder builder) {
         builder.push("general");
+        blacklistedBreakBlocks = builder
+                .comment("Blocks that a dragon cannot break. Use the format like \"minecraft:chest\" or \"rats:block_of_cheese\" ")
+                .defineList("whitelist", Lists.newArrayList(), o -> o instanceof String);
+        noDropBreakBlocks = builder
+                .comment("Blocks that a dragon can break, but won't spawn drops for. Use the format like \"minecraft:stone\" or \"rats:block_of_cheese\" ")
+                .defineList("whitelist", Lists.newArrayList("minecraft:stone", "minecraft:dirt", "minecraft:grass"), o -> o instanceof String);
         this.generateSilverOre = buildBoolean(builder, "Generate Silver Ore", "all", true, "Whether to generate silver ore or not");
         this.generateCopperOre = buildBoolean(builder, "Generate Copper Ore", "all", true, "Whether to generate copper ore or not");
         this.generateSapphireOre = buildBoolean(builder, "Generate Sapphire Ore", "all", true, "Whether to generate sapphire ore or not");

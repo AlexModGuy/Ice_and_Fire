@@ -1,8 +1,12 @@
 package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
+import com.google.common.collect.Lists;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class IafConfig {
     public static boolean customMainMenu = true;
@@ -26,8 +30,8 @@ public class IafConfig {
     // public static boolean useDimensionBlackList = true;
     // public static int[] structureBlacklistedDimensions = new int[]{1, -1};
     // public static int[] structureWhitelistedDimensions = new int[]{0};
-    public static String[] blacklistedBreakBlocks = new String[0];
-    public static String[] noDropBreakBlocks = new String[]{"minecraft:stone", "minecraft:dirt", "minecraft:grass"};
+    public static List<? extends String> blacklistedBreakBlocks = Lists.newArrayList();
+    public static List<? extends String> noDropBreakBlocks = Lists.newArrayList("minecraft:stone", "minecraft:dirt", "minecraft:grass");
     public static boolean blacklistBreakBlocksIsWhiteList = false;
     public static boolean spawnGlaciers = true;
     public static int glacierSpawnChance = 4;
@@ -297,6 +301,8 @@ public class IafConfig {
             weezerTinkersDisarmChance = ConfigHolder.SERVER.weezerTinkersDisarmChance.get();
             chunkLoadSummonCrystal = ConfigHolder.SERVER.chunkLoadSummonCrystal.get();
             dangerousWorldGenDistanceLimit = ConfigHolder.SERVER.dangerousWorldGenDistanceLimit.get();
+            blacklistedBreakBlocks = ConfigHolder.SERVER.blacklistedBreakBlocks.get();
+            noDropBreakBlocks = ConfigHolder.SERVER.noDropBreakBlocks.get();
         } catch (Exception e) {
             IceAndFire.LOGGER.warn("An exception was caused trying to load the common config for Ice and Fire.");
             e.printStackTrace();
