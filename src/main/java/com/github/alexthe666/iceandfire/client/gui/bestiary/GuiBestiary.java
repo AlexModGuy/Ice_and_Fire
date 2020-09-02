@@ -355,18 +355,6 @@ public class GuiBestiary extends Screen {
                     GL11.glPopMatrix();
                 }
                 break;
-            case VILLAGERS:
-                if (bookPages == 0) {
-                    GL11.glPushMatrix();
-                    GL11.glScalef(1.5F, 1.5F, 1F);
-                    drawImage(DRAWINGS_0, 35, 50, 388, 52, 58, 36, 512F);
-                    GL11.glPopMatrix();
-                    GL11.glPushMatrix();
-                    GL11.glScalef(1.5F, 1.5F, 1F);
-                    drawItemStack(new ItemStack(IafItemRegistry.FISHING_SPEAR), 70, 2, 2.5F);
-                    GL11.glPopMatrix();
-                }
-                break;
             case HIPPOGRYPH:
                 if (bookPages == 0) {
                     GL11.glPushMatrix();
