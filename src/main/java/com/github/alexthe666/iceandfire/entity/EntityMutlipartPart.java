@@ -154,7 +154,7 @@ public abstract class EntityMutlipartPart extends Entity {
 
     public boolean processInitialInteract(PlayerEntity player, Hand hand) {
         LivingEntity parent = getParent();
-        if (world.isRemote) {
+        if (world.isRemote && parent != null) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(parent.getEntityId(), 0));
         }
         return parent.processInitialInteract(player, hand);
