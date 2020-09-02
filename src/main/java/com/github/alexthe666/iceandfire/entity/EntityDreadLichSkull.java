@@ -79,9 +79,13 @@ public class EntityDreadLichSkull extends AbstractArrowEntity {
             LivingEntity target = ((PlayerEntity) shootingEntity).getAttackingEntity();
             if (target == null || !target.isAlive()) {
                 double d0 = 10;
-                List<LivingEntity> list = world.getEntitiesWithinAABB(LivingEntity.class, (new AxisAlignedBB(this.getPosX(), this.getPosY(), this.getPosZ(), this.getPosX() + 1.0D, this.getPosY() + 1.0D, this.getPosZ() + 1.0D)).grow(d0, 10.0D, d0), EntityPredicates.IS_ALIVE);
+                List<Entity> list = world.getEntitiesInAABBexcluding(shootingEntity, (new AxisAlignedBB(this.getPosX(), this.getPosY(), this.getPosZ(), this.getPosX() + 1.0D, this.getPosY() + 1.0D, this.getPosZ() + 1.0D)).grow(d0, 10.0D, d0), EntityPredicates.IS_ALIVE);
                 if (!list.isEmpty()) {
-                    target = list.get(0);
+                    for(Entity e : list){
+                        if(e instanceof LivingEntity){
+                            target = (LivingEntity) e;
+                        }
+                    }
                 }
             }
             if (target != null && target.isAlive()) {
