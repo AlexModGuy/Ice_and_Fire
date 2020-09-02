@@ -31,7 +31,7 @@ public class ItemChain extends Item {
     public ItemChain(boolean sticky) {
         super(new Item.Properties().group(IceAndFire.TAB_ITEMS));
         this.sticky = sticky;
-        this.setRegistryName(IceAndFire.MODID, sticky ? "chain" : "chain_sticky");
+        this.setRegistryName(IceAndFire.MODID, sticky ? "chain_sticky" : "chain");
     }
 
     public static boolean attachToFence(PlayerEntity player, World worldIn, BlockPos fence) {
