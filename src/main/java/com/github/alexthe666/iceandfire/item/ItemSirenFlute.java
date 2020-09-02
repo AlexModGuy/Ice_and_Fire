@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class ItemSirenFlute extends Item {
@@ -57,16 +58,15 @@ public class ItemSirenFlute extends Item {
         for (int j = 0; j < list.size(); ++j) {
             Entity entity1 = list.get(j);
             AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow(entity1.getCollisionBorderSize());
-            Vec3d raytraceresult = axisalignedbb.rayTrace(vec3d, vec3d2).orElseGet(null);
+            Optional<Vec3d> raytraceresult = axisalignedbb.rayTrace(vec3d, vec3d2);
 
             if (axisalignedbb.contains(vec3d)) {
                 if (d2 >= 0.0D) {
                     pointedEntity = entity1;
                     d2 = 0.0D;
                 }
-            } else if (raytraceresult != null) {
-                double d3 = vec3d.distanceTo(raytraceresult);
-
+            } else if (raytraceresult.isPresent()) {
+                double d3 = vec3d.distanceTo(raytraceresult.get());
                 if (d3 < d2 || d2 == 0.0D) {
                     if (entity1.getLowestRidingEntity() == player.getLowestRidingEntity() && !player.canRiderInteract()) {
                         if (d2 == 0.0D) {
