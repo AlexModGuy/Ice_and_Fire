@@ -146,10 +146,10 @@ public class ServerConfig {
         builder.push("general");
         blacklistedBreakBlocks = builder
                 .comment("Blocks that a dragon cannot break. Use the format like \"minecraft:chest\" or \"rats:block_of_cheese\" ")
-                .defineList("whitelist", Lists.newArrayList(), o -> o instanceof String);
+                .defineList("blacklistedBreakBlocks", Lists.newArrayList(), o -> o instanceof String);
         noDropBreakBlocks = builder
                 .comment("Blocks that a dragon can break, but won't spawn drops for. Use the format like \"minecraft:stone\" or \"rats:block_of_cheese\" ")
-                .defineList("whitelist", Lists.newArrayList("minecraft:stone", "minecraft:dirt", "minecraft:grass"), o -> o instanceof String);
+                .defineList("noDropBreakBlocks", Lists.newArrayList("minecraft:stone", "minecraft:dirt", "minecraft:grass_block"), o -> o instanceof String);
         this.generateSilverOre = buildBoolean(builder, "Generate Silver Ore", "all", true, "Whether to generate silver ore or not");
         this.generateCopperOre = buildBoolean(builder, "Generate Copper Ore", "all", true, "Whether to generate copper ore or not");
         this.generateSapphireOre = buildBoolean(builder, "Generate Sapphire Ore", "all", true, "Whether to generate sapphire ore or not");

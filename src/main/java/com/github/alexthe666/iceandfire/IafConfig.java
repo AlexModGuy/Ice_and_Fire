@@ -31,7 +31,7 @@ public class IafConfig {
     // public static int[] structureBlacklistedDimensions = new int[]{1, -1};
     // public static int[] structureWhitelistedDimensions = new int[]{0};
     public static List<? extends String> blacklistedBreakBlocks = Lists.newArrayList();
-    public static List<? extends String> noDropBreakBlocks = Lists.newArrayList("minecraft:stone", "minecraft:dirt", "minecraft:grass");
+    public static List<? extends String> noDropBreakBlocks = Lists.newArrayList("minecraft:stone", "minecraft:dirt", "minecraft:grass_block");
     public static boolean blacklistBreakBlocksIsWhiteList = false;
     public static boolean spawnGlaciers = true;
     public static int glacierSpawnChance = 4;
