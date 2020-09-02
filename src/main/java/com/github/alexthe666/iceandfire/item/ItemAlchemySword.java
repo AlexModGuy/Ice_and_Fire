@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.LightningBoltEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -51,7 +52,13 @@ public class ItemAlchemySword extends SwordItem {
             target.knockBack(target, 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
         }
         if (this == IafItemRegistry.DRAGONBONE_SWORD_LIGHTNING) {
-            if(!attacker.world.isRemote){
+            boolean flag = true;
+            if(attacker instanceof PlayerEntity){
+                if(((PlayerEntity)attacker).swingProgress > 0.2){
+                    flag = false;
+                }
+            }
+            if(!attacker.world.isRemote && flag){
                 ((ServerWorld)attacker.world).addLightningBolt(new LightningBoltEntity(attacker.world, (double)target.getPosX(), (double)target.getPosY(), (double)target.getPosZ(), false));
             }
             if (target instanceof EntityFireDragon || target instanceof EntityIceDragon) {
