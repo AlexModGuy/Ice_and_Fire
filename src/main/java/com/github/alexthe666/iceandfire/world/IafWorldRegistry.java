@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.world;
 
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.world.gen.*;
 import com.github.alexthe666.iceandfire.world.structure.DreadMausoleumStructure;
@@ -18,7 +17,6 @@ import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
-import net.minecraft.world.gen.feature.structure.ShipwreckConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
@@ -155,5 +153,18 @@ public class IafWorldRegistry {
         BlockPos spawnRelative = new BlockPos(0, pos.getY(), 0);
         boolean spawnCheck = spawnRelative.distanceSq(pos) > IafConfig.dangerousWorldGenDistanceLimit * IafConfig.dangerousWorldGenDistanceLimit;
         return spawnCheck;
+    }
+
+    public static boolean isFarEnoughFromDangerousGen(IWorld world, BlockPos pos) {
+        boolean canGen = true;
+        IafWorldData data = IafWorldData.get(world.getWorld());
+        if(data != null){
+            BlockPos last = data.lastGeneratedDangerousStructure;
+            canGen = last.distanceSq(pos) > IafConfig.dangerousWorldGenSeparationLimit * IafConfig.dangerousWorldGenSeparationLimit;
+            if(canGen){
+                data.setLastGeneratedDangerousStructure(pos);
+            }
+        }
+        return canGen;
     }
 }

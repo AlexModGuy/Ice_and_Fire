@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private static boolean isMale;
+    private BlockPos lastIceRoost = BlockPos.ZERO;
 
     public WorldGenIceDragonRoosts(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
@@ -66,6 +67,7 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
         if(!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)){
             return false;
         }
+        if(IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position))
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
         isMale = rand.nextBoolean();
         int boulders = 0;
@@ -134,7 +136,7 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
                         BlockPos height = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos);
                         new WorldGenRoostPile(IafBlockRegistry.DRAGON_ICE).generate(worldIn, rand, height);
                     }
-                    if (dist < 0.3D && rand.nextInt(isMale ? 250 : 400) == 0) {
+                    if (dist < 0.3D && rand.nextInt(isMale ? 200 : 300) == 0) {
                         BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos)).up();
                         new WorldGenRoostGoldPile(IafBlockRegistry.SILVER_PILE).generate(worldIn, rand, height);
                     }

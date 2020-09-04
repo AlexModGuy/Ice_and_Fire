@@ -157,6 +157,7 @@ public class IafConfig {
     public static double weezerTinkersDisarmChance = 0.2F;
     public static boolean chunkLoadSummonCrystal = true;
     public static double dangerousWorldGenDistanceLimit = 1000;
+    public static double dangerousWorldGenSeparationLimit = 300;
 
     public static void bakeClient(final ModConfig config) {
         try {
@@ -301,6 +302,7 @@ public class IafConfig {
             weezerTinkersDisarmChance = ConfigHolder.SERVER.weezerTinkersDisarmChance.get();
             chunkLoadSummonCrystal = ConfigHolder.SERVER.chunkLoadSummonCrystal.get();
             dangerousWorldGenDistanceLimit = ConfigHolder.SERVER.dangerousWorldGenDistanceLimit.get();
+            dangerousWorldGenSeparationLimit = ConfigHolder.SERVER.dangerousWorldGenSeparationLimit.get();
             blacklistedBreakBlocks = ConfigHolder.SERVER.blacklistedBreakBlocks.get();
             noDropBreakBlocks = ConfigHolder.SERVER.noDropBreakBlocks.get();
         } catch (Exception e) {

@@ -65,7 +65,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
         if(!small){
-            if(!IafConfig.generateMyrmexColonies || rand.nextInt(IafConfig.myrmexColonyGenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, pos)){
+            if(!IafConfig.generateMyrmexColonies || rand.nextInt(IafConfig.myrmexColonyGenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, pos) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, pos)){
                 return false;
             }
             if(MyrmexWorldData.get(worldIn.getWorld()) != null && MyrmexWorldData.get(worldIn.getWorld()).getNearestHive(pos, 200) != null){

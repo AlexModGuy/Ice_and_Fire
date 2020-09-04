@@ -139,6 +139,7 @@ public class ServerConfig {
     public final ForgeConfigSpec.DoubleValue weezerTinkersDisarmChance;
     public final ForgeConfigSpec.BooleanValue chunkLoadSummonCrystal;
     public ForgeConfigSpec.IntValue dangerousWorldGenDistanceLimit;
+    public ForgeConfigSpec.IntValue dangerousWorldGenSeparationLimit;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBreakBlocks;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> noDropBreakBlocks;
 
@@ -309,6 +310,8 @@ public class ServerConfig {
 
         this.chunkLoadSummonCrystal = buildBoolean(builder, "Chunk Load Summon Crystal", "all", true, "True if the summon crystal can load chunks to find dragons.");
         this.dangerousWorldGenDistanceLimit = buildInt(builder, "Dangerous World Gen Dist From Spawn", "all", 1000, 1, 10000, "How far away dangerous structures(dragon roosts, cyclops caves, etc.) must be from spawn(0, 0).");
+        this.dangerousWorldGenSeparationLimit = buildInt(builder, "Dangerous World Gen Dist Seperation", "all", 300, 1, 10000, "How far away dangerous structures(dragon roosts, cyclops caves, etc.) must be from the last generated structure.");
+
     }
 
     private static ForgeConfigSpec.BooleanValue buildBoolean(ForgeConfigSpec.Builder builder, String name, String catagory, boolean defaultValue, String comment){

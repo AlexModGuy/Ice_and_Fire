@@ -44,7 +44,7 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
-        if(!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)){
+        if(!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)){
             return false;
         }
 
@@ -130,8 +130,8 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
                         BlockPos height = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos);
                         new WorldGenRoostPile(IafBlockRegistry.ASH).generate(worldIn, rand, height);
                     }
-                    if (dist < 0.3D && rand.nextInt(isMale ? 250 : 400) == 0) {
-                        BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos)).up();
+                    if (dist < 0.3D && rand.nextInt(isMale ? 200 : 300) == 0) {
+                        BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos)).up(1);
                         new WorldGenRoostGoldPile(IafBlockRegistry.GOLD_PILE).generate(worldIn, rand, height);
                     }
                     if (dist < 0.3D && rand.nextInt(isMale ? 500 : 700) == 0) {
