@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "iceandfire:dragonscale_copper"
+    }
+  ],
+  "result": {
+    "item": "iceandfire:dragonscales_copper",
+    "count": 9
+  }
+}
