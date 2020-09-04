@@ -156,7 +156,7 @@ public class IafConfig {
     public static boolean explosiveDragonBreath = false;
     public static double weezerTinkersDisarmChance = 0.2F;
     public static boolean chunkLoadSummonCrystal = true;
-    public static double dangerousWorldGenDistanceLimit = 300;
+    public static double dangerousWorldGenDistanceLimit = 1000;
 
     public static void bakeClient(final ModConfig config) {
         try {
