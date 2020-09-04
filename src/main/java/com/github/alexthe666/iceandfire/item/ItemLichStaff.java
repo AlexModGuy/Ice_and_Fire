@@ -26,27 +26,27 @@ public class ItemLichStaff extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand hand) {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
-        playerIn.setActiveHand(hand);
-        playerIn.swingArm(hand);
-        double d2 = playerIn.getLookVec().x;
-        double d3 = playerIn.getLookVec().y;
-        double d4 = playerIn.getLookVec().z;
-        float inaccuracy = 1.0F;
-        d2 = d2 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-        d3 = d3 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-        d4 = d4 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-        EntityDreadLichSkull charge = new EntityDreadLichSkull(IafEntityRegistry.DREAD_LICH_SKULL, worldIn, playerIn, 6);
-        charge.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 7.0F, 1.0F);
-        charge.setPosition(playerIn.getPosX(), playerIn.getPosY() + 1, playerIn.getPosZ());
-        if (!worldIn.isRemote) {
+        if(!worldIn.isRemote){
+            playerIn.setActiveHand(hand);
+            playerIn.swingArm(hand);
+            double d2 = playerIn.getLookVec().x;
+            double d3 = playerIn.getLookVec().y;
+            double d4 = playerIn.getLookVec().z;
+            float inaccuracy = 1.0F;
+            d2 = d2 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+            d3 = d3 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+            d4 = d4 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+            EntityDreadLichSkull charge = new EntityDreadLichSkull(IafEntityRegistry.DREAD_LICH_SKULL, worldIn, playerIn, 6);
+            charge.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 7.0F, 1.0F);
+            charge.setPosition(playerIn.getPosX(), playerIn.getPosY() + 1, playerIn.getPosZ());
             worldIn.addEntity(charge);
+            charge.shoot(d2, d3, d4, 1, 1);
+            playerIn.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1F, 0.75F + 0.5F * playerIn.getRNG().nextFloat());
+            itemStackIn.damageItem(1, playerIn, (p_213625_1_) -> {
+                p_213625_1_.sendBreakAnimation(hand);
+            });
+            playerIn.getCooldownTracker().setCooldown(this, 4);
         }
-        charge.shoot(d2, d3, d4, 1, 1);
-        playerIn.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1F, 0.75F + 0.5F * playerIn.getRNG().nextFloat());
-        itemStackIn.damageItem(1, playerIn, (p_213625_1_) -> {
-            p_213625_1_.sendBreakAnimation(hand);
-        });
-        playerIn.getCooldownTracker().setCooldown(this, 4);
         return new ActionResult<ItemStack>(ActionResultType.SUCCESS, itemStackIn);
     }
 }
