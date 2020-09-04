@@ -917,6 +917,7 @@ public class GuiBestiary extends Screen {
             Iterator iterator = IOUtils.readLines(resource.getInputStream(), "UTF-8").iterator();
             String line = null;
             int linenumber = 0;
+            int zLevelAdd = 0;
             while (iterator.hasNext()) {
                 line = ((String) iterator.next()).trim();
                 if (line.contains("<") || line.contains(">")) {
@@ -939,6 +940,13 @@ public class GuiBestiary extends Screen {
                     String[] split = line.split(" ");
                     RenderHelper.enableStandardItemLighting();
                     drawItemStack(new ItemStack(getItemByRegistryName(split[0]), 1), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Float.parseFloat(split[4]) * 2F);
+                }
+                if (line.contains("<block>")) {
+                    zLevelAdd += 1;
+                    line = line.substring(8, line.length() - 1);
+                    String[] split = line.split(" ");
+                    RenderHelper.enableStandardItemLighting();
+                    drawBlockStack(new ItemStack(getItemByRegistryName(split[0]), 1), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Float.parseFloat(split[4]) * 2F, zLevelAdd);
                 }
                 if (line.contains("<recipe>")) {
                     line = line.substring(9, line.length() - 1);
@@ -1053,7 +1061,23 @@ public class GuiBestiary extends Screen {
         if (!stack.isEmpty()) font = stack.getItem().getFontRenderer(stack);
         if (font == null) font = getFont();
         GL11.glScalef(scale, scale, scale);
-        this.itemRenderer.zLevel = 5;
+        this.itemRenderer.zLevel = -100;
+        this.itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
+        zLevel = 0.0F;
+        this.itemRenderer.zLevel = 0.0F;
+        GL11.glPopMatrix();
+    }
+
+    private void drawBlockStack(ItemStack stack, int x, int y, float scale, int zScale) {
+        GL11.glPushMatrix();
+        GlStateManager.translatef(0, 0, 32.0F);
+        float zLevel = 200.0F;
+        this.itemRenderer.zLevel = 200.0F;
+        net.minecraft.client.gui.FontRenderer font = null;
+        if (!stack.isEmpty()) font = stack.getItem().getFontRenderer(stack);
+        if (font == null) font = getFont();
+        GL11.glScalef(scale, scale, scale);
+        this.itemRenderer.zLevel = -100 + zScale * 10;
         this.itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
         zLevel = 0.0F;
         this.itemRenderer.zLevel = 0.0F;
