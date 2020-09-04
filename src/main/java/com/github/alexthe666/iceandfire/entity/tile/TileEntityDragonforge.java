@@ -208,7 +208,10 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
                         flag1 = true;
                     }
                 } else {
-                    this.cookTime = 0;
+                    if(cookTime > 0){
+                        IceAndFire.sendMSGToAll(new MessageUpdateDragonforge(pos.toLong(), cookTime));
+                        this.cookTime = 0;
+                    }
                 }
             } else if (!this.isBurning() && this.cookTime > 0) {
                 this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, getMaxCookTime(forgeItemStacks.get(0), forgeItemStacks.get(1)));
