@@ -26,7 +26,7 @@ public class BlockIafOre extends Block {
     }
 
     protected int getExperience(Random p_220281_1_) {
-        if (this == IafBlockRegistry.SAPPHIRE_ORE) {
+        if (this == IafBlockRegistry.SAPPHIRE_ORE || this == IafBlockRegistry.AMYTHEST_ORE) {
             return MathHelper.nextInt(p_220281_1_, 3, 7);
         }
         return 0;
