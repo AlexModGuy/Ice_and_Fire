@@ -72,17 +72,19 @@ public class ItemDragonHorn extends Item {
     @Override
     public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
         ItemStack trueStack = playerIn.getHeldItem(hand);
-        if (target instanceof EntityDragonBase && ((EntityDragonBase) target).isOwner(playerIn) && (trueStack.getTag() == null || trueStack.getTag() != null && trueStack.getTag().getCompound("EntityTag").isEmpty())) {
-            CompoundNBT entityTag = new CompoundNBT();
-            target.writeAdditional(entityTag);
-            CompoundNBT newTag = new CompoundNBT();
-            newTag.putString("DragonHornEntityID", Registry.ENTITY_TYPE.getKey(target.getType()).toString());
-            newTag.put("EntityTag", entityTag);
-            trueStack.setTag(newTag);
-            playerIn.swingArm(hand);
-            playerIn.world.playSound(playerIn, playerIn.getPosition(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3, 0.75F);
-            target.remove();
-            return true;
+        if(!playerIn.world.isRemote){
+            if (target instanceof EntityDragonBase && ((EntityDragonBase) target).isOwner(playerIn) && (trueStack.getTag() == null || trueStack.getTag() != null && trueStack.getTag().getCompound("EntityTag").isEmpty())) {
+                CompoundNBT entityTag = new CompoundNBT();
+                target.writeAdditional(entityTag);
+                CompoundNBT newTag = new CompoundNBT();
+                newTag.putString("DragonHornEntityID", Registry.ENTITY_TYPE.getKey(target.getType()).toString());
+                newTag.put("EntityTag", entityTag);
+                trueStack.setTag(newTag);
+                playerIn.swingArm(hand);
+                playerIn.world.playSound(playerIn, playerIn.getPosition(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3, 0.75F);
+                target.remove();
+                return true;
+            }
         }
         return false;
     }
