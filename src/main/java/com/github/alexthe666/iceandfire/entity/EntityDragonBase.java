@@ -1883,7 +1883,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
 
     @Override
     public void move(MoverType typeIn, Vec3d pos) {
-        if(canMove() || this.isBeingRidden()){
+        if(isSitting() && onGround || this.isBeingRidden()){
             super.move(typeIn, pos);
         }
     }
