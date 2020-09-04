@@ -28,10 +28,7 @@ import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Difficulty;
@@ -115,6 +112,10 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
 
     public boolean detachHome() {
         return this.hasHomePosition && this.getCommand() == 3 || super.detachHome();
+    }
+
+    public SoundCategory getSoundCategory() {
+        return SoundCategory.HOSTILE;
     }
 
     public BlockPos getHomePosition() {

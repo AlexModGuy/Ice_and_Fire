@@ -122,6 +122,9 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         return this.lookHelper;
     }
 
+    public SoundCategory getSoundCategory() {
+        return SoundCategory.HOSTILE;
+    }
 
     public boolean getCanSpawnHere() {
         int i = MathHelper.floor(this.getPosX());

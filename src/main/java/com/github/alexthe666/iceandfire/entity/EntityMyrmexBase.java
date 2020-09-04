@@ -91,6 +91,10 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         //this.moveController = new GroundMoveHelper(this);
     }
 
+    public SoundCategory getSoundCategory() {
+        return SoundCategory.HOSTILE;
+    }
+
     private static boolean isJungleBiome(World world, BlockPos position) {
         Biome biome = world.getBiome(position);
         return biome.getSurfaceBuilderConfig().getTop().getBlock() != Blocks.SAND && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY);

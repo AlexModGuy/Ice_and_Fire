@@ -42,6 +42,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.*;
@@ -116,6 +117,10 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
             tail_buffer = new IFChainBuffer();
             head_buffer = new IFChainBuffer();
         }
+    }
+
+    public SoundCategory getSoundCategory() {
+        return SoundCategory.HOSTILE;
     }
 
     @OnlyIn(Dist.CLIENT)

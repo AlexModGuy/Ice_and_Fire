@@ -2200,6 +2200,10 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         }
     }
 
+    public SoundCategory getSoundCategory() {
+        return SoundCategory.HOSTILE;
+    }
+
     public boolean hasFlightClearance() {
         BlockPos topOfBB = new BlockPos(this.getPosX(), this.getBoundingBox().maxY, this.getPosZ());
         for (int i = 1; i < 4; i++) {
