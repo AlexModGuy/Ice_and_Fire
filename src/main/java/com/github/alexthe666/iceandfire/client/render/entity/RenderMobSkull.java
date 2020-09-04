@@ -120,7 +120,7 @@ public class RenderMobSkull extends EntityRenderer<EntityMobSkull> {
 
                 break;
             case SEASERPENT:
-                matrixStackIn.translate(0, -0.5F, 0.8F);
+                matrixStackIn.translate(0, -0.35F, 0.8F);
                 matrixStackIn.scale(2.5F, 2.5F, 2.5F);
                 seaSerpentModel.resetToDefaultPose();
                 setRotationAngles(seaSerpentModel.getCube("Head"), onWall ? (float) Math.toRadians(50F) : 0F, 0, 0);
