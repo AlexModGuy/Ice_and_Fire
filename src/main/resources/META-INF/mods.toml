@@ -3,7 +3,7 @@ loaderVersion="[31,)" #mandatory This is typically bumped every Minecraft versio
 issueTrackerURL="https://github.com/Alex-the-666/ice-and-fire/issues" #optional
 [[mods]] #mandatory
 modId="iceandfire" #mandatory
-version="2.0.0-BETA2" #mandatory
+version="2.0.0-BETA3" #mandatory
 displayName="Ice and Fire" #mandatory
 displayURL="https://www.curseforge.com/minecraft/mc-mods/ice-and-fire-dragons" #optional
 authors="Alexthe666" #optional

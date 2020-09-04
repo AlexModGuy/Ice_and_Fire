@@ -157,7 +157,7 @@ public abstract class EntityMutlipartPart extends Entity {
         if (world.isRemote && parent != null) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(parent.getEntityId(), 0));
         }
-        return parent.processInitialInteract(player, hand);
+        return parent != null && parent.processInitialInteract(player, hand);
     }
 
     @Override
