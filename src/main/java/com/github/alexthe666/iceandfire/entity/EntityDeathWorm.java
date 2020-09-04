@@ -216,9 +216,9 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
             case 0:
                 return this.getRenderScale() > 3 ? TAN_GIANT_LOOT : TAN_LOOT;
             case 1:
-                return this.getRenderScale() > 3 ? WHITE_GIANT_LOOT : WHITE_LOOT;
-            case 2:
                 return this.getRenderScale() > 3 ? RED_GIANT_LOOT : RED_LOOT;
+            case 2:
+                return this.getRenderScale() > 3 ? WHITE_GIANT_LOOT : WHITE_LOOT;
         }
         return null;
     }
