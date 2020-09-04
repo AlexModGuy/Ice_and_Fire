@@ -1931,7 +1931,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     public abstract SoundEvent getRoarSound();
 
     public void roar() {
-        if (EntityGorgon.isStoneMob(this)) {
+        if (EntityGorgon.isStoneMob(this) || this.isModelDead()) {
             return;
         }
         if (rand.nextBoolean()) {
