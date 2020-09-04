@@ -101,7 +101,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     private int ticksCircling;
     private boolean isArcing = false;
     private float arcingYAdditive = 0F;
-    private int ticksSinceJump = 0;
+    private int ticksSinceJump = 1000;
     private int ticksSinceRoar = 0;
     private int ticksJumping = 0;
     private boolean isBreathing;
@@ -117,15 +117,6 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
             tail_buffer = new IFChainBuffer();
             head_buffer = new IFChainBuffer();
         }
-    }
-
-    public SoundCategory getSoundCategory() {
-        return SoundCategory.HOSTILE;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public boolean isInRangeToRender3d(double x, double y, double z) {
-        return true;
     }
 
     public static BlockPos getPositionRelativeToSeafloor(EntitySeaSerpent entity, World world, double x, double z, Random rand) {
@@ -193,6 +184,15 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         return world.getBlockState(pos).getMaterial() == Material.WATER;
     }
 
+    public SoundCategory getSoundCategory() {
+        return SoundCategory.HOSTILE;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public boolean isInRangeToRender3d(double x, double y, double z) {
+        return true;
+    }
+
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SeaSerpentAIGetInWater(this, 1.0D));
         this.goalSelector.addGoal(1, new EntitySeaSerpent.AISwimWander());
@@ -253,7 +253,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         for (EntityMutlipartPart entity : segments) {
             if (entity != null) {
                 entity.setParent(this);
-                if(!entity.shouldContinuePersisting()){
+                if (!entity.shouldContinuePersisting()) {
                     world.addEntity(entity);
                 }
             }
@@ -455,11 +455,11 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     public void livingTick() {
         super.livingTick();
         if (!world.isRemote) {
-            if (isJumpingOutOfWater() && !shouldStopJumping()){
+            if (isJumpingOutOfWater() && !shouldStopJumping()) {
                 this.setMotion(this.getMotion().add(0, 0.08D, 0));
             }
             if (isJumpingOutOfWater() && swimBehavior == SwimBehavior.WANDER && shouldStopJumping()) {
-                this.setMotion(this.getMotion().add(0, -0.25D, 0));
+                //   this.setMotion(this.getMotion().add(0, -0.25D, 0));
                 if (this.isInWater()) {
                     this.setJumpingOutOfWater(false);
                     this.ticksSinceJump = 0;
@@ -579,7 +579,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
             if (this.getAttackTarget() != null) {
                 if (this.isInWater()) {
                     if (this.attackDecision) {
-                        if (isPreyAtSurface() && this.getDistanceSq(this.getAttackTarget()) < 200 * getSeaSerpentScale()) {
+                        if (isPreyAtSurface() && this.getDistanceSq(this.getAttackTarget()) < 200 * getSeaSerpentScale() && ticksSinceJump > TIME_BETWEEN_JUMPS) {
                             this.swimBehavior = SwimBehavior.JUMP;
                         } else {
                             this.swimBehavior = SwimBehavior.ATTACK;
@@ -863,10 +863,14 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
                     double d2 = entity.getPosX() - headPosX;
                     double d3 = entity.getPosY() - headPosY;
                     double d4 = entity.getPosZ() - headPosZ;
+                    float inaccuracy = 1.0F;
+                    d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+                    d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+                    d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
                     EntitySeaSerpentBubbles entitylargefireball = new EntitySeaSerpentBubbles(IafEntityRegistry.SEA_SERPENT_BUBBLES, world, this, d2, d3, d4);
                     float size = 0.8F;
                     entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-                    if (!world.isRemote && entity.isAlive()) {
+                    if (!world.isRemote) {
                         world.addEntity(entitylargefireball);
                     }
                     if (!entity.isAlive() || entity == null) {
@@ -903,7 +907,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     @Override
     public void travel(Vec3d vec) {
         if (this.swimBehavior == SwimBehavior.JUMP && this.isJumpingOutOfWater() && this.getAttackTarget() == null) {
-            // moveJumping();
+            moveJumping();
         }
         float f4;
         if (this.isServerWorld()) {
@@ -978,30 +982,49 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         @Override
         public void tick() {
             if (this.action == MovementController.Action.MOVE_TO) {
-                double distanceX = this.posX - this.dolphin.getPosX();
-                double distanceY = this.posY - this.dolphin.getPosY();
-                double distanceZ = this.posZ - this.dolphin.getPosZ();
-                double distance = Math.abs(distanceX * distanceX + distanceZ * distanceZ);
-                double distanceWithY = MathHelper.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
-                distanceY = distanceY / distanceWithY;
-                float angle = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
-                this.dolphin.rotationYaw = this.limitAngle(this.dolphin.rotationYaw, angle, 30.0F);
-                this.dolphin.setAIMoveSpeed(1F);
-                float f1 = 0;
-                float f2 = 0;
-                if (distance < (double) Math.max(1.0F, this.dolphin.getWidth())) {
-                    float f = this.dolphin.rotationYaw * 0.017453292F;
-                    f1 -= (double) (MathHelper.sin(f) * 0.35F);
-                    f2 += (double) (MathHelper.cos(f) * 0.35F);
+                double d0 = this.posX - EntitySeaSerpent.this.getPosX();
+                double d1 = this.posY - EntitySeaSerpent.this.getPosY();
+                double d2 = this.posZ - EntitySeaSerpent.this.getPosZ();
+                double d3 = d0 * d0 + d1 * d1 + d2 * d2;
+                d3 = MathHelper.sqrt(d3);
+                if (d3 < 6 && EntitySeaSerpent.this.getAttackTarget() == null) {
+                    if (!EntitySeaSerpent.this.changedSwimBehavior && EntitySeaSerpent.this.swimBehavior == EntitySeaSerpent.SwimBehavior.WANDER && EntitySeaSerpent.this.rand.nextInt(20) == 0) {
+                        EntitySeaSerpent.this.swimBehavior = EntitySeaSerpent.SwimBehavior.CIRCLE;
+                        EntitySeaSerpent.this.changedSwimBehavior = true;
+                    }
+                    if (!EntitySeaSerpent.this.changedSwimBehavior && EntitySeaSerpent.this.swimBehavior == EntitySeaSerpent.SwimBehavior.CIRCLE && EntitySeaSerpent.this.rand.nextInt(5) == 0 && ticksCircling > 150) {
+                        EntitySeaSerpent.this.swimBehavior = EntitySeaSerpent.SwimBehavior.WANDER;
+                        EntitySeaSerpent.this.changedSwimBehavior = true;
+                    }
                 }
-                this.dolphin.setMotion(this.dolphin.getMotion().add(f1, this.dolphin.getAIMoveSpeed() * distanceY * 0.1D, f2));
-            } else if (this.action == MovementController.Action.JUMPING) {
-                this.dolphin.setAIMoveSpeed((float) (this.speed * this.dolphin.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
-                if (this.dolphin.onGround) {
+                if (EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP && !EntitySeaSerpent.this.isInWater() && !onGround) {
+                    EntitySeaSerpent.this.ticksSinceJump = 0;
+                }
+                int dist = EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP ? 10 : 3;
+                if (d3 < dist && EntitySeaSerpent.this.getAttackTarget() == null || EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP && EntitySeaSerpent.this.shouldStopJumping() && EntitySeaSerpent.this.getAttackTarget() == null) {
                     this.action = MovementController.Action.WAIT;
+                    EntitySeaSerpent.this.setMotion(EntitySeaSerpent.this.getMotion().mul(0.5, 1, 0.5));
+                    if (EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP) {
+                        EntitySeaSerpent.this.swimBehavior = SwimBehavior.WANDER;
+                        EntitySeaSerpent.this.ticksSinceJump = 0;
+                        EntitySeaSerpent.this.setJumpingOutOfWater(false);
+                    }
+                } else {
+                    EntitySeaSerpent.this.setMotion(EntitySeaSerpent.this.getMotion().add(d0 / d3 * 0.5D * this.speed, d1 / d3 * 0.5D * this.speed, d2 / d3 * 0.5D * this.speed));
+                    float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
+                    EntitySeaSerpent.this.rotationPitch = f1;
+                    if (!EntitySeaSerpent.this.isArcing) {
+                        if (EntitySeaSerpent.this.getAttackTarget() == null) {
+                            EntitySeaSerpent.this.rotationYaw = -((float) MathHelper.atan2(EntitySeaSerpent.this.getMotion().x, EntitySeaSerpent.this.getMotion().y)) * (180F / (float) Math.PI);
+                            EntitySeaSerpent.this.renderYawOffset = EntitySeaSerpent.this.rotationYaw;
+                        } else if (EntitySeaSerpent.this.swimBehavior != SwimBehavior.JUMP) {
+                            double d4 = EntitySeaSerpent.this.getAttackTarget().getPosX() - EntitySeaSerpent.this.getPosX();
+                            double d5 = EntitySeaSerpent.this.getAttackTarget().getPosZ() - EntitySeaSerpent.this.getPosZ();
+                            EntitySeaSerpent.this.rotationYaw = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
+                            EntitySeaSerpent.this.renderYawOffset = EntitySeaSerpent.this.rotationYaw;
+                        }
+                    }
                 }
-            } else {
-                this.dolphin.setAIMoveSpeed(0.0F);
             }
         }
     }

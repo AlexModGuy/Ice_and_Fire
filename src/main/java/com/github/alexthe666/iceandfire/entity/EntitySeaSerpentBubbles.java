@@ -33,6 +33,11 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
         super(t, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
     }
 
+    @Override
+    public boolean canBeCollidedWith() {
+        return false;
+    }
+
 
     public EntitySeaSerpentBubbles(FMLPlayMessages.SpawnEntity spawnEntity, World world) {
         this(IafEntityRegistry.SEA_SERPENT_BUBBLES, world);
@@ -55,13 +60,8 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
         return false;
     }
 
-    @Override
-    public boolean canBeCollidedWith() {
-        return false;
-    }
-
     public void tick() {
-        this.extinguish();
+        super.tick();
         if(this.ticksExisted > 400 ){
             this.remove();
         }
@@ -132,6 +132,7 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
             this.setPosition(d0, d1, d2);
             this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
         }
+        this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
         if(this.ticksExisted > 20 && !isWet()){
             this.remove();
         }
@@ -159,6 +160,14 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
         return ParticleTypes.SPLASH;
     }
 
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        return false;
+    }
+
+    public float getCollisionBorderSize() {
+        return 0F;
+    }
 
     @Override
     protected void onImpact(RayTraceResult movingObject) {
