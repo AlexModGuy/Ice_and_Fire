@@ -433,6 +433,11 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
                 doesBlockEqual(pos.south(), getBrick());
     }
 
+    private boolean checkY(BlockPos pos) {
+        return doesBlockEqual(pos.up(), getBrick()) &&
+                doesBlockEqual(pos.down(), getBrick());
+    }
+
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
         return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
@@ -449,7 +454,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
 
     public boolean assembled() {
         return checkBoneCorners(pos.down()) && checkBrickSlots(pos.down()) &&
-                checkBrickCorners(pos) && atleastThreeAreBricks(pos) &&
+                checkBrickCorners(pos) && atleastThreeAreBricks(pos) && checkY(pos) &&
                 checkBoneCorners(pos.up()) && checkBrickSlots(pos.up());
     }
 
