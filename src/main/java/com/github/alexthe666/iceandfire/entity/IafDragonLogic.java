@@ -299,7 +299,11 @@ public class IafDragonLogic {
             dragon.playSound(dragon.getBabyFireSound(), 1, 1);
         }
         if (dragon.isBreathingFire()) {
-
+            if(dragon.isSleeping() || dragon.isModelDead()){
+                dragon.setBreathingFire(false);
+                dragon.randomizeAttacks();
+                dragon.fireTicks = 0;
+            }
             if (dragon.burningTarget == null) {
                 if (dragon.fireTicks > dragon.getDragonStage() * 25 || dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner()) && dragon.fireStopTicks <= 0) {
                     dragon.setBreathingFire(false);
