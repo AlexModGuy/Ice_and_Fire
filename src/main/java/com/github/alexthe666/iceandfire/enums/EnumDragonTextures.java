@@ -515,14 +515,17 @@ public enum EnumDragonTextures {
 
         public final ResourceLocation FIRETEXTURE;
         public final ResourceLocation ICETEXTURE;
+        public final ResourceLocation LIGHTNINGTEXTURE;
 
         Armor(String resource) {
             if (!resource.isEmpty()) {
                 FIRETEXTURE = new ResourceLocation("iceandfire:textures/models/firedragon/" + resource + ".png");
                 ICETEXTURE = new ResourceLocation("iceandfire:textures/models/icedragon/" + resource + ".png");
+                LIGHTNINGTEXTURE = new ResourceLocation("iceandfire:textures/models/lightningdragon/" + resource + ".png");
             } else {
                 FIRETEXTURE = new ResourceLocation("iceandfire:textures/models/firedragon/empty.png");
                 ICETEXTURE = new ResourceLocation("iceandfire:textures/models/firedragon/empty.png");
+                LIGHTNINGTEXTURE = new ResourceLocation("iceandfire:textures/models/firedragon/empty.png");
             }
         }
 
