@@ -824,11 +824,11 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
                 this.getAttackTarget().isAirBorne = true;
                 float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
+                attackTarget.setMotion(attackTarget.getMotion().add(-0.5 / (double) f, 1, -0.5 / (double) f));
                 attackTarget.setMotion(attackTarget.getMotion().mul(0.5D, 1, 0.5D));
-                attackTarget.setMotion(attackTarget.getMotion().add(-0.5 / (double) f * 4, 1, -0.5 / (double) f * 4));
 
                 if (this.getAttackTarget().onGround) {
-                    attackTarget.setMotion(attackTarget.getMotion().add(0, 0.4, 0));
+                    attackTarget.setMotion(attackTarget.getMotion().add(0, 0.3, 0));
                 }
             }
         }
