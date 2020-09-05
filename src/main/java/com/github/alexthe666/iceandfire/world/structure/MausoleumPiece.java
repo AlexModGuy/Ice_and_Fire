@@ -76,7 +76,7 @@ public class MausoleumPiece {
 
         private void func_204754_a(TemplateManager p_204754_1_) {
             Template lvt_2_1_ = p_204754_1_.getTemplateDefaulted(PART_1);
-            PlacementSettings lvt_3_1_ = (new PlacementSettings()).setRotation(this.rotation).setMirror(Mirror.NONE).addProcessor(BlockIgnoreStructureProcessor.AIR_AND_STRUCTURE_BLOCK);
+            PlacementSettings lvt_3_1_ = (new PlacementSettings()).setRotation(this.rotation).setMirror(Mirror.NONE);
             this.setup(lvt_2_1_, this.templatePosition, lvt_3_1_);
         }
 
