@@ -171,7 +171,6 @@ public class ModelSiren extends ModelDragonBase<EntitySiren> {
         float speed_idle = 0.05F;
         float degree_walk = 1F;
         float degree_idle = 0.5F;
-        this.faceTarget(f3, f4, 2, Neck, Head);
         AdvancedModelBox[] TAIL_NO_BASE = {Tail_2, Tail_3};
         this.walk(Hair1, speed_idle * 1F, degree_idle * 0.3F, false, 2, 0F, f2, 1);
         this.walk(Hair2, speed_idle * 1F, degree_idle * 0.2F, false, 2, 0F, f2, 1);
@@ -248,6 +247,8 @@ public class ModelSiren extends ModelDragonBase<EntitySiren> {
                     }
                     break;
             }
+        }else{
+            this.faceTarget(f3, f4, 2, Neck, Head);
         }
         entity.tail_buffer.applyChainSwingBuffer(TAIL_NO_BASE);
 

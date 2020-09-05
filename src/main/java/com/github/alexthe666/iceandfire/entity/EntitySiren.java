@@ -176,6 +176,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     @Override
     public void livingTick() {
         super.livingTick();
+        renderYawOffset = rotationYaw;
         if (singCooldown > 0) {
             singCooldown--;
             this.setSinging(false);
@@ -265,7 +266,6 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
         }
         if (isActuallySinging() && !this.isInWater()) {
             if (this.getRNG().nextInt(3) == 0) {
-                this.renderYawOffset = 0;
                 renderYawOffset = rotationYaw;
                 if (this.world.isRemote) {
                     float radius = -0.9F;
