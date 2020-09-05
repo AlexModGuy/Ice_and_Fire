@@ -23,7 +23,6 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityTideTrident extends TridentEntity {
 
-    private ItemStack thrownStack;
 
     public EntityTideTrident(EntityType type, World worldIn) {
         super(type, worldIn);
@@ -34,7 +33,7 @@ public class EntityTideTrident extends TridentEntity {
         this(IafEntityRegistry.TIDE_TRIDENT, worldIn);
         this.setPosition(thrower.getPosX(), thrower.getPosYEye() - (double)0.1F, thrower.getPosZ());
         this.setShooter(thrower);
-        this.thrownStack = thrownStackIn.copy();
+        thrownStack = thrownStackIn;
         this.dataManager.set(LOYALTY_LEVEL, (byte)EnchantmentHelper.getLoyaltyModifier(thrownStackIn));
         this.dataManager.set(field_226571_aq_, thrownStackIn.hasEffect());
     }
