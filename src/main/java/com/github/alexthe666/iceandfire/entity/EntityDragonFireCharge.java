@@ -162,6 +162,7 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
             if (this.shootingEntity instanceof EntityDragonBase && IafConfig.dragonGriefing != 2) {
                 IafDragonDestructionManager.destroyAreaFireCharge(world, this.getPosition(), ((EntityDragonBase) this.shootingEntity));
             }
+            this.remove();
         }
     }
 
