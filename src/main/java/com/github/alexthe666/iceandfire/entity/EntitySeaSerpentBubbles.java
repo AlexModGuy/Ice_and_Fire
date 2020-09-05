@@ -156,8 +156,8 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
         return true;
     }
 
-    protected IParticleData getParticleType() {
-        return ParticleTypes.SPLASH;
+    protected IParticleData getParticle() {
+        return ParticleTypes.BUBBLE;
     }
 
     @Override

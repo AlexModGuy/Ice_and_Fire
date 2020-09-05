@@ -557,14 +557,14 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
             }
             if (this.getAttackTarget() != null && this.getAnimation() != ANIMATION_ROAR) {
                 if (!attackDecision) {
-                    if (!this.getAttackTarget().isInWater() || !this.isDirectPathBetweenPoints(this.getAttackTarget().getPosition()) || this.getDistanceSq(this.getAttackTarget()) < 60 * this.getSeaSerpentScale()) {
+                    if (!this.getAttackTarget().isInWater() || !this.canEntityBeSeen(this.getAttackTarget()) || this.getDistanceSq(this.getAttackTarget()) < 30 * this.getSeaSerpentScale()) {
                         attackDecision = true;
                     }
                     if (!attackDecision) {
                         shoot(this.getAttackTarget());
                     }
                 } else {
-                    if (this.getDistanceSq(this.getAttackTarget()) > 500 * this.getSeaSerpentScale()) {
+                    if (this.getDistanceSq(this.getAttackTarget()) > 200 * this.getSeaSerpentScale()) {
                         attackDecision = false;
                     }
                 }
@@ -1003,7 +1003,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
                 int dist = EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP ? 10 : 3;
                 if (d3 < dist && EntitySeaSerpent.this.getAttackTarget() == null || EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP && EntitySeaSerpent.this.shouldStopJumping() && EntitySeaSerpent.this.getAttackTarget() == null) {
                     this.action = MovementController.Action.WAIT;
-                    EntitySeaSerpent.this.setMotion(EntitySeaSerpent.this.getMotion().mul(0.5, 1, 0.5));
+                    EntitySeaSerpent.this.setMotion(EntitySeaSerpent.this.getMotion().mul(0.5, 1, 0.5).add(0, -0.08F, 0));
                     if (EntitySeaSerpent.this.swimBehavior == SwimBehavior.JUMP) {
                         EntitySeaSerpent.this.swimBehavior = SwimBehavior.WANDER;
                         EntitySeaSerpent.this.ticksSinceJump = 0;
@@ -1015,7 +1015,8 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
                     EntitySeaSerpent.this.rotationPitch = f1;
                     if (!EntitySeaSerpent.this.isArcing) {
                         if (EntitySeaSerpent.this.getAttackTarget() == null) {
-                            EntitySeaSerpent.this.rotationYaw = -((float) MathHelper.atan2(EntitySeaSerpent.this.getMotion().x, EntitySeaSerpent.this.getMotion().y)) * (180F / (float) Math.PI);
+                            float f = (float)(MathHelper.atan2(d3, d1) * (double)(180F / (float)Math.PI)) - 90.0F;
+                            EntitySeaSerpent.this.rotationYaw = -((float) MathHelper.atan2(EntitySeaSerpent.this.getMotion().x, EntitySeaSerpent.this.getMotion().z)) * (180F / (float) Math.PI);
                             EntitySeaSerpent.this.renderYawOffset = EntitySeaSerpent.this.rotationYaw;
                         } else if (EntitySeaSerpent.this.swimBehavior != SwimBehavior.JUMP) {
                             double d4 = EntitySeaSerpent.this.getAttackTarget().getPosX() - EntitySeaSerpent.this.getPosX();
