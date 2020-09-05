@@ -77,6 +77,10 @@ public class EntityLightningDragon extends EntityDragonBase {
         this.dataManager.register(LIGHTNING_TARGET_Z, 0.0F);
     }
 
+    public int getStartMetaForType() {
+        return 8;
+    }
+
     @Override
     protected boolean shouldTarget(Entity entity) {
         if(entity instanceof EntityDragonBase && !this.isTamed()){
