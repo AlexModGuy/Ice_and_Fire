@@ -309,7 +309,7 @@ public class IafRecipeRegistry {
 
     public static DragonForgeRecipe getFireForgeRecipeForBlood(ItemStack stack) {
         for (DragonForgeRecipe recipe : FIRE_FORGE_RECIPES) {
-            if (recipe.getInput().getItem() == stack.getItem()) {
+            if (recipe.getBlood().getItem() == stack.getItem()) {
                 return recipe;
             }
         }
@@ -319,7 +319,7 @@ public class IafRecipeRegistry {
 
     public static DragonForgeRecipe getIceForgeRecipeForBlood(ItemStack stack) {
         for (DragonForgeRecipe recipe : ICE_FORGE_RECIPES) {
-            if (recipe.getInput().getItem() == stack.getItem()) {
+            if (recipe.getBlood().getItem() == stack.getItem()) {
                 return recipe;
             }
         }
@@ -328,7 +328,7 @@ public class IafRecipeRegistry {
 
     public static DragonForgeRecipe getLightningForgeRecipeForBlood(ItemStack stack) {
         for (DragonForgeRecipe recipe : LIGHTNING_FORGE_RECIPES) {
-            if (recipe.getInput().getItem() == stack.getItem()) {
+            if (recipe.getBlood().getItem() == stack.getItem()) {
                 return recipe;
             }
         }

@@ -67,6 +67,8 @@ public class ContainerDragonForge extends Container {
                 }
                 slot.onSlotChange(itemstack1, itemstack);
             } else if (index != 1 && index != 0) {
+                System.out.println(itemstack1);
+                System.out.println(IafRecipeRegistry.getIceForgeRecipeForBlood(itemstack1));
                 if (isFire == 0 && IafRecipeRegistry.getFireForgeRecipe(itemstack1) != null || isFire == 1 && IafRecipeRegistry.getIceForgeRecipe(itemstack1) != null || isFire == 2 && IafRecipeRegistry.getLightningForgeRecipe(itemstack1) != null) {
                     if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
