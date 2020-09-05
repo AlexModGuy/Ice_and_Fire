@@ -124,7 +124,6 @@ public class GuiBestiary extends Screen {
                     if (this.indexButtons.get(id - 2) != null && allPageTypes.get(id - 2) != null) {
                         Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
                         this.index = false;
-                        this.indexPages = 0;
                         this.bookPages = 0;
                         this.pageType = allPageTypes.get(id - 2);
                     }
