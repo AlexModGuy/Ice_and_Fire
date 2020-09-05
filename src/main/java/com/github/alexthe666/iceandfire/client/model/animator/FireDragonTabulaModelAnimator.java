@@ -151,6 +151,12 @@ public class FireDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator
         float degree_idle = entity.isSleeping() ? 0.25F : 0.5F;
         float degree_fly = 0.5F;
         if (!entity.isAIDisabled()) {
+            if (entity.isActuallyBreathingFire()) {
+                float speed_shake = 0.7F;
+                float degree_shake = 0.1F;
+                model.chainFlap(neckParts, speed_shake, degree_shake, 2, ageInTicks, 1);
+                model.chainSwing(neckParts, speed_shake * 0.65F, degree_shake * 0.1F, 1, ageInTicks, 1);
+            }
             if (!walking) {
                 model.bob(model.getCube("BodyUpper"), -speed_fly, degree_fly * 5, false, ageInTicks, 1);
                 model.walk(model.getCube("BodyUpper"), -speed_fly, degree_fly * 0.1F, false, 0, 0, ageInTicks, 1);
@@ -180,12 +186,6 @@ public class FireDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator
             model.bob(model.getCube("armL1"), speed_idle, -degree_idle * 1.3F, false, ageInTicks, 1);
             if (entity.getAnimation() != EntityDragonBase.ANIMATION_SHAKEPREY || entity.getAnimation() != EntityDragonBase.ANIMATION_ROAR) {
                 model.faceTarget(rotationYaw, rotationPitch, 4, neckParts);
-            }
-            if (entity.isActuallyBreathingFire()) {
-                float speed_shake = 0.7F;
-                float degree_shake = 0.1F;
-                model.chainFlap(neckParts, speed_shake, degree_shake, 2, ageInTicks, 1);
-                model.chainSwing(neckParts, speed_shake * 0.65F, degree_shake * 0.1F, 1, ageInTicks, 1);
             }
         }
         if (!entity.isModelDead()) {

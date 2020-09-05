@@ -186,7 +186,7 @@ public class LightningTabulaDragonAnimator extends IceAndFireTabulaModelAnimator
             }
             if (entity.isActuallyBreathingFire()) {
                 float speed_shake = 0.7F;
-                float degree_shake = 0.1F;
+                float degree_shake = 0.03F;
                 model.chainFlap(neckParts, speed_shake, degree_shake, 2, ageInTicks, 1);
                 model.chainSwing(neckParts, speed_shake * 0.65F, degree_shake * 0.1F, 1, ageInTicks, 1);
             }

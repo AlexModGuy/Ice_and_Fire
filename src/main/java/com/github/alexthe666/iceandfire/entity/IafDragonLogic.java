@@ -273,13 +273,13 @@ public class IafDragonLogic {
                 }
             }
         }
-        if (dragon.getAttackTarget() != null){
-           if(!dragon.getPassengers().isEmpty() && dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner())) {
-               dragon.setAttackTarget(null);
-           }
-           if(!DragonUtils.isAlive(dragon.getAttackTarget())){
-               dragon.setAttackTarget(null);
-           }
+        if (dragon.getAttackTarget() != null) {
+            if (!dragon.getPassengers().isEmpty() && dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner())) {
+                dragon.setAttackTarget(null);
+            }
+            if (!DragonUtils.isAlive(dragon.getAttackTarget())) {
+                dragon.setAttackTarget(null);
+            }
         }
         if (!dragon.isAgingDisabled()) {
             dragon.setAgeInTicks(dragon.getAgeInTicks() + 1);
@@ -299,9 +299,8 @@ public class IafDragonLogic {
             dragon.playSound(dragon.getBabyFireSound(), 1, 1);
         }
         if (dragon.isBreathingFire()) {
-            dragon.fireTicks++;
 
-            if(dragon.burningTarget == null){
+            if (dragon.burningTarget == null) {
                 if (dragon.fireTicks > dragon.getDragonStage() * 25 || dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner()) && dragon.fireStopTicks <= 0) {
                     dragon.setBreathingFire(false);
                     dragon.randomizeAttacks();
@@ -365,9 +364,12 @@ public class IafDragonLogic {
     logic done on server and client on parallel.
     */
     public void updateDragonCommon() {
-        if (dragon.isBreathingFire() && dragon.burnProgress < 40) {
-            dragon.burnProgress++;
-        } else if (!dragon.isBreathingFire()) {
+        if (dragon.isBreathingFire()) {
+            dragon.fireTicks++;
+            if (dragon.burnProgress < 40) {
+                dragon.burnProgress++;
+            }
+        } else {
             dragon.burnProgress = 0;
         }
         if (dragon.flightCycle == 2 && !dragon.isDiving() && (dragon.isFlying() || dragon.isHovering())) {
