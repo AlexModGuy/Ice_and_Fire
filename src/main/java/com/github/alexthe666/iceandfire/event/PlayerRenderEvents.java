@@ -68,7 +68,7 @@ public class PlayerRenderEvents {
             float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
             event.getMatrixStack().rotate(new Quaternion(Vector3f.YP, f4, true));
             event.getMatrixStack().push();
-            GL11.glScalef(1.4F, 1.4F, 1.4F);
+            event.getMatrixStack().translate(0, 2, 0);
             Minecraft.getInstance().getItemRenderer().renderItem(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM), ItemCameraTransforms.TransformType.GROUND, false, event.getMatrixStack(), event.getBuffers(), event.getEntityLiving().world, event.getLight(), OverlayTexture.NO_OVERLAY);
             event.getMatrixStack().pop();
             event.getMatrixStack().pop();
