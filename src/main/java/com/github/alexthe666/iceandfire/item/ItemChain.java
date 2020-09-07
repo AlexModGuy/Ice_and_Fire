@@ -61,7 +61,7 @@ public class ItemChain extends Item {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         tooltip.add(new TranslationTextComponent("item.iceandfire.chain.desc_0").applyTextStyle(TextFormatting.GRAY));
         tooltip.add(new TranslationTextComponent("item.iceandfire.chain.desc_1").applyTextStyle(TextFormatting.GRAY));
-        if (!sticky) {
+        if (sticky) {
             tooltip.add(new TranslationTextComponent("item.iceandfire.chain_sticky.desc_2").applyTextStyle(TextFormatting.GREEN));
             tooltip.add(new TranslationTextComponent("item.iceandfire.chain_sticky.desc_3").applyTextStyle(TextFormatting.GREEN));
         }
