@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.FMLPlayMessages;
@@ -46,11 +47,12 @@ public class EntityHydraHead extends EntityMutlipartPart {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (this.getParent() instanceof EntityHydra) {
-            ((EntityHydra) this.getParent()).onHitHead(damage, headIndex);
-            return this.getParent().attackEntityFrom(source, damage);
+        LivingEntity parent = this.getParent();
+        if (parent instanceof EntityHydra) {
+            ((EntityHydra) parent).onHitHead(damage, headIndex);
+            return parent.attackEntityFrom(source, damage);
         } else {
-            return this.getParent().attackEntityFrom(source, damage);
+            return parent != null && parent.attackEntityFrom(source, damage);
         }
     }
 }

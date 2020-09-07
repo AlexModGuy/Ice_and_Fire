@@ -28,7 +28,7 @@ public class IafConfig {
     public static List<? extends String> whitelistedDimensions = Lists.newArrayList("minecraft:overworld");
     public static List<? extends String> blacklistedDimensions = Lists.newArrayList("minecraft:nether", "minecraft:the_end");
     public static List<? extends String> dragonWhitelistedDimensions = Lists.newArrayList("minecraft:overworld");
-    public static List<? extends String> dragonBlacklistedDimensions = Lists.newArrayList("minecraft:nether", "minecraft:the_end");
+    public static List<? extends String> dragonBlacklistedDimensions = Lists.newArrayList("minecraft:the_nether", "minecraft:the_end");
     public static List<? extends String> blacklistedBreakBlocks = Lists.newArrayList();
     public static List<? extends String> noDropBreakBlocks = Lists.newArrayList("minecraft:stone", "minecraft:dirt", "minecraft:grass_block");
     public static boolean blacklistBreakBlocksIsWhiteList = false;

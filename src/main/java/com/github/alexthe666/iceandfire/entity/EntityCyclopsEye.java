@@ -22,11 +22,12 @@ public class EntityCyclopsEye extends EntityMutlipartPart {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (this.getParent() instanceof EntityCyclops && source.isProjectile()) {
-            ((EntityCyclops) this.getParent()).onHitEye(source, damage);
+        LivingEntity parent = this.getParent();
+        if (parent instanceof EntityCyclops && source.isProjectile()) {
+            ((EntityCyclops) parent).onHitEye(source, damage);
             return true;
         } else {
-            return this.getParent().attackEntityFrom(source, damage);
+            return parent != null && parent.attackEntityFrom(source, damage);
         }
     }
 }
