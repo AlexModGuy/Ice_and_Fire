@@ -142,6 +142,11 @@ public class ServerConfig {
     public ForgeConfigSpec.IntValue dangerousWorldGenSeparationLimit;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBreakBlocks;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> noDropBreakBlocks;
+    public final ForgeConfigSpec.BooleanValue useDimensionBlackList;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistDimensions;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistDimensions;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> dragonBlacklistDimensions;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> dragonWhitelistDimensions;
 
     public ServerConfig(final ForgeConfigSpec.Builder builder) {
         builder.push("general");
@@ -152,6 +157,19 @@ public class ServerConfig {
                 .comment("Blocks that a dragon can break, but won't spawn drops for. Use the format like \"minecraft:stone\" or \"rats:block_of_cheese\" ")
                 .defineList("noDropBreakBlocks", Lists.newArrayList("minecraft:stone", "minecraft:dirt", "minecraft:grass_block"), o -> o instanceof String);
         this.generateSilverOre = buildBoolean(builder, "Generate Silver Ore", "all", true, "Whether to generate silver ore or not");
+        this.useDimensionBlackList = buildBoolean(builder, "Use Dimension Blacklist", "all", false, "True if using blacklists, false if using whitelists for dragons and structure gen.");
+        blacklistDimensions = builder
+                .comment("Blacklisted structure gen dimensions. Use the format like \"minecraft:the_nether\" or \"rats:ratlantis\" ")
+                .defineList("blacklistDimensions", Lists.newArrayList("minecraft:the_nether", "minecraft:the_end"), o -> o instanceof String);
+        whitelistDimensions = builder
+                .comment("Whitelist structure gen dimensions. Use the format like \"minecraft:the_nether\" or \"rats:ratlantis\" ")
+                .defineList("blacklistDimensions", Lists.newArrayList("minecraft:overworld"), o -> o instanceof String);
+        dragonBlacklistDimensions = builder
+                .comment("Blacklisted structure gen dimensions. Use the format like \"minecraft:the_nether\" or \"rats:ratlantis\" ")
+                .defineList("blacklistDimensions", Lists.newArrayList("minecraft:the_nether", "minecraft:the_end"), o -> o instanceof String);
+        dragonWhitelistDimensions = builder
+                .comment("Whitelist structure gen dimensions. Use the format like \"minecraft:the_nether\" or \"rats:ratlantis\" ")
+                .defineList("blacklistDimensions", Lists.newArrayList("minecraft:overworld"), o -> o instanceof String);
         this.generateCopperOre = buildBoolean(builder, "Generate Copper Ore", "all", true, "Whether to generate copper ore or not");
         this.generateSapphireOre = buildBoolean(builder, "Generate Sapphire Ore", "all", true, "Whether to generate sapphire ore or not");
         this.generateAmythestOre = buildBoolean(builder, "Generate Amethyst Ore", "all", true, "Whether to generate amethyst ore or not");

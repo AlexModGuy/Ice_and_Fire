@@ -62,6 +62,9 @@ public class WorldGenLightningDragonCave extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
+        if(!IafWorldRegistry.isDimensionListedForDragons(worldIn)){
+            return false;
+        }
         if(!IafConfig.generateDragonDens || rand.nextInt(IafConfig.generateDragonDenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)){
             return false;
         }

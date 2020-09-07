@@ -64,6 +64,9 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
+        if(!IafWorldRegistry.isDimensionListedForDragons(worldIn)){
+            return false;
+        }
         if(!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)){
             return false;
         }

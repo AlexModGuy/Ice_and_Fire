@@ -53,6 +53,9 @@ public class WorldGenSirenIsland extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
+        if(!IafWorldRegistry.isDimensionListed(worldIn)){
+            return false;
+        }
         if(!IafConfig.generateSirenIslands || rand.nextInt(IafConfig.generateSirenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)  || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)){
             return false;
         }

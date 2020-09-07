@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.world.structure.GorgonTemplePiece;
 import com.github.alexthe666.iceandfire.world.structure.GorgonTempleStructure;
 import com.github.alexthe666.iceandfire.world.structure.MausoleumPiece;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.IWorld;
@@ -81,13 +82,13 @@ public class IafWorldRegistry {
             if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.OVERWORLD)) {
                 biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MOB_SPAWNS.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
             }
-            if(BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.HOT) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SAVANNA)){
+            if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.HOT) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SAVANNA)) {
                 biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.FLOWER.withConfiguration(new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(IafBlockRegistry.FIRE_LILY.getDefaultState()), new SimpleBlockPlacer()).tries(1).build()).withPlacement(Placement.COUNT_HEIGHTMAP_32.configure(new FrequencyConfig(1))));
             }
-            if(BiomeDictionary.hasType(biome, BiomeDictionary.Type.SAVANNA)){
+            if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.SAVANNA)) {
                 biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.FLOWER.withConfiguration(new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(IafBlockRegistry.LIGHTNING_LILY.getDefaultState()), new SimpleBlockPlacer()).tries(1).build()).withPlacement(Placement.COUNT_HEIGHTMAP_32.configure(new FrequencyConfig(1))));
             }
-            if(BiomeDictionary.hasType(biome, BiomeDictionary.Type.SNOWY)){
+            if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.SNOWY)) {
                 biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.FLOWER.withConfiguration(new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(IafBlockRegistry.FROST_LILY.getDefaultState()), new SimpleBlockPlacer()).tries(1).build()).withPlacement(Placement.COUNT_HEIGHTMAP_32.configure(new FrequencyConfig(1))));
             }
             if (IafConfig.generateSilverOre) {
@@ -155,13 +156,58 @@ public class IafWorldRegistry {
         return spawnCheck;
     }
 
+    public static boolean isDimensionListed(IWorld world) {
+        ResourceLocation name = world.getDimension().getType().getRegistryName();
+        if(name == null){
+            return false;
+        }
+        if (IafConfig.useDimensionBlackList) {
+            for (String blacklisted : IafConfig.blacklistedDimensions) {
+                if (name.toString().equals(blacklisted)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            for (String whitelist : IafConfig.whitelistedDimensions) {
+                if (name.toString().equals(whitelist)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    public static boolean isDimensionListedForDragons(IWorld world) {
+        ResourceLocation name = world.getDimension().getType().getRegistryName();
+        if(name == null){
+            return false;
+        }
+        if (IafConfig.useDimensionBlackList) {
+            for (String blacklisted : IafConfig.dragonBlacklistedDimensions) {
+                if (name.toString().equals(blacklisted)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            for (String whitelist : IafConfig.dragonWhitelistedDimensions) {
+                if (name.toString().equals(whitelist)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+
     public static boolean isFarEnoughFromDangerousGen(IWorld world, BlockPos pos) {
         boolean canGen = true;
         IafWorldData data = IafWorldData.get(world.getWorld());
-        if(data != null){
+        if (data != null) {
             BlockPos last = data.lastGeneratedDangerousStructure;
             canGen = last.distanceSq(pos) > IafConfig.dangerousWorldGenSeparationLimit * IafConfig.dangerousWorldGenSeparationLimit;
-            if(canGen){
+            if (canGen) {
                 data.setLastGeneratedDangerousStructure(pos);
             }
         }

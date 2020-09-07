@@ -24,12 +24,11 @@ public class IafConfig {
     public static boolean generateDragonRoosts = true;
     public static int generateDragonRoostChance = 360;
     public static int dragonDenGoldAmount = 4;
-    // public static int dangerousWorldGenDistanceLimit = 200;
-    // public static int[] dragonBlacklistedDimensions = new int[]{1, -1};
-    // public static int[] dragonWhitelistedDimensions = new int[]{0};
-    // public static boolean useDimensionBlackList = true;
-    // public static int[] structureBlacklistedDimensions = new int[]{1, -1};
-    // public static int[] structureWhitelistedDimensions = new int[]{0};
+    public static boolean useDimensionBlackList = true;
+    public static List<? extends String> whitelistedDimensions = Lists.newArrayList("minecraft:overworld");
+    public static List<? extends String> blacklistedDimensions = Lists.newArrayList("minecraft:nether", "minecraft:the_end");
+    public static List<? extends String> dragonWhitelistedDimensions = Lists.newArrayList("minecraft:overworld");
+    public static List<? extends String> dragonBlacklistedDimensions = Lists.newArrayList("minecraft:nether", "minecraft:the_end");
     public static List<? extends String> blacklistedBreakBlocks = Lists.newArrayList();
     public static List<? extends String> noDropBreakBlocks = Lists.newArrayList("minecraft:stone", "minecraft:dirt", "minecraft:grass_block");
     public static boolean blacklistBreakBlocksIsWhiteList = false;
@@ -305,6 +304,11 @@ public class IafConfig {
             dangerousWorldGenSeparationLimit = ConfigHolder.SERVER.dangerousWorldGenSeparationLimit.get();
             blacklistedBreakBlocks = ConfigHolder.SERVER.blacklistedBreakBlocks.get();
             noDropBreakBlocks = ConfigHolder.SERVER.noDropBreakBlocks.get();
+            useDimensionBlackList = ConfigHolder.SERVER.useDimensionBlackList.get();
+            dragonWhitelistedDimensions = ConfigHolder.SERVER.dragonWhitelistDimensions.get();
+            dragonBlacklistedDimensions = ConfigHolder.SERVER.dragonBlacklistDimensions.get();
+            whitelistedDimensions = ConfigHolder.SERVER.whitelistDimensions.get();
+            blacklistedDimensions = ConfigHolder.SERVER.blacklistDimensions.get();
         } catch (Exception e) {
             IceAndFire.LOGGER.warn("An exception was caused trying to load the common config for Ice and Fire.");
             e.printStackTrace();
