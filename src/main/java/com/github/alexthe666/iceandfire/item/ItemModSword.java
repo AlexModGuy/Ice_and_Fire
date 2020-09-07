@@ -39,15 +39,15 @@ public class ItemModSword extends SwordItem {
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (toolMaterial == IafItemRegistry.SILVER_TOOL_MATERIAL) {
             if (target.getCreatureAttribute() == CreatureAttribute.UNDEAD) {
-                target.attackEntityFrom(DamageSource.causeMobDamage(attacker), 3.0F);
+                target.attackEntityFrom(DamageSource.MAGIC, this.getAttackDamage() + 3);
             }
         }
         if (this.toolMaterial == IafItemRegistry.MYRMEX_CHITIN_TOOL_MATERIAL) {
             if (target.getCreatureAttribute() != CreatureAttribute.ARTHROPOD) {
-                target.attackEntityFrom(DamageSource.GENERIC, 6.0F);
+                target.attackEntityFrom(DamageSource.GENERIC, this.getAttackDamage() + 5F);
             }
             if (target instanceof EntityDeathWorm) {
-                target.attackEntityFrom(DamageSource.GENERIC, 6.0F);
+                target.attackEntityFrom(DamageSource.GENERIC, this.getAttackDamage() + 5F);
             }
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_FIRE_TOOL_MATERIAL) {

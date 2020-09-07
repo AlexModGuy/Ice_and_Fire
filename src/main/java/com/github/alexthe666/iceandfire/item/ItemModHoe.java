@@ -42,7 +42,7 @@ public class ItemModHoe extends HoeItem {
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (toolMaterial == IafItemRegistry.SILVER_TOOL_MATERIAL) {
             if (target.getCreatureAttribute() == CreatureAttribute.UNDEAD) {
-                target.attackEntityFrom(DamageSource.causeMobDamage(attacker), 3.0F);
+                target.attackEntityFrom(DamageSource.MAGIC, 3.0F);
             }
         }
         if (this.toolMaterial == IafItemRegistry.MYRMEX_CHITIN_TOOL_MATERIAL) {
