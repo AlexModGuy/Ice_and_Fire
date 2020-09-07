@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -35,9 +36,13 @@ public class LayerDragonBanner extends LayerRenderer<EntityDragonBase, Segmented
             float f = (entity.getRenderSize() / 3F);
             float f2 = 1F / f;
             matrixStackIn.push();
-            matrixStackIn.translate(0, -0.125F, 0.4F);
             postRender(((TabulaModel) this.renderer.getEntityModel()).getCube("BodyUpper"), matrixStackIn, 0.0625F);
-            Minecraft.getInstance().getItemRenderer().renderItem(itemstack, ItemCameraTransforms.TransformType.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn);
+            matrixStackIn.translate(0, -0.2F, 0.4F);
+            matrixStackIn.rotate(new Quaternion(Vector3f.XP, 180, true));
+            matrixStackIn.push();
+            matrixStackIn.scale(f2, f2, f2);
+            Minecraft.getInstance().getItemRenderer().renderItem(itemstack, ItemCameraTransforms.TransformType.NONE, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn);
+            matrixStackIn.pop();
             matrixStackIn.pop();
         }
         matrixStackIn.pop();

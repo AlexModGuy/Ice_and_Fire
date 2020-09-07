@@ -353,74 +353,77 @@ public class ClientEvents {
 
         if (properties != null) {
             if (!properties.connectedEntities.isEmpty()) {
-                for (Entity livingentity : properties.connectedEntities) {
-                    if (!properties.alreadyIgnoresCamera) {
-                        entity.ignoreFrustumCheck = true;
+                try {
+                    for (Entity livingentity : properties.connectedEntities) {
+                        if (!properties.alreadyIgnoresCamera) {
+                            entity.ignoreFrustumCheck = true;
+                        }
+                        MatrixStack matrixStackIn = event.getMatrixStack();
+                        float f = 1;
+                        float f1 = 0;
+                        float f2 = 1;
+                        float f3 = entity.getEyeHeight();
+                        matrixStackIn.push();
+                        matrixStackIn.translate(0.0D, f3, 0.0D);
+                        Vec3d vec3d = this.getPosition(livingentity, (double) livingentity.getHeight() * 0.5D, event.getPartialRenderTick());
+                        Vec3d vec3d1 = this.getPosition(entity, f3, event.getPartialRenderTick());
+                        Vec3d vec3d2 = vec3d.subtract(vec3d1);
+                        float f4 = (float) (vec3d2.length() + 0.0D);
+                        vec3d2 = vec3d2.normalize();
+                        float f5 = (float) Math.acos(vec3d2.y);
+                        float f6 = (float) Math.atan2(vec3d2.z, vec3d2.x);
+                        matrixStackIn.rotate(Vector3f.YP.rotationDegrees((((float) Math.PI / 2F) - f6) * (180F / (float) Math.PI)));
+                        matrixStackIn.rotate(Vector3f.XP.rotationDegrees(f5 * (180F / (float) Math.PI)));
+                        int i = 1;
+                        float f7 = -1.0F;
+                        float f8 = f * f;
+                        int j = 255;
+                        int k = 255;
+                        int l = 255;
+                        float f11 = MathHelper.cos(f7 + 2.3561945F) * 0.282F;
+                        float f12 = MathHelper.sin(f7 + 2.3561945F) * 0.282F;
+                        float f13 = MathHelper.cos(f7 + ((float) Math.PI / 4F)) * 0.282F;
+                        float f14 = MathHelper.sin(f7 + ((float) Math.PI / 4F)) * 0.282F;
+                        float f15 = MathHelper.cos(f7 + 3.926991F) * 0.282F;
+                        float f16 = MathHelper.sin(f7 + 3.926991F) * 0.282F;
+                        float f17 = MathHelper.cos(f7 + 5.4977875F) * 0.282F;
+                        float f18 = MathHelper.sin(f7 + 5.4977875F) * 0.282F;
+                        float f19 = 0;
+                        float f20 = 0.2F;
+                        float f21 = 0F;
+                        float f22 = -0.2F;
+                        float f23 = MathHelper.cos(f7 + ((float) Math.PI / 2F)) * 0.2F;
+                        float f24 = MathHelper.sin(f7 + ((float) Math.PI / 2F)) * 0.2F;
+                        float f25 = MathHelper.cos(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
+                        float f26 = MathHelper.sin(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
+                        float f27 = 0.0F;
+                        float f28 = 0.4999F;
+                        float f29 = 0;
+                        float f30 = f4 + f29;
+                        float f32 = 0.75F;
+                        float f31 = f4 + f32;
+
+                        IVertexBuilder ivertexbuilder = event.getBuffers().getBuffer(RenderType.getEntityCutoutNoCull(CHAIN_TEXTURE));
+                        MatrixStack.Entry matrixstack$entry = matrixStackIn.getLast();
+                        Matrix4f matrix4f = matrixstack$entry.getMatrix();
+                        Matrix3f matrix3f = matrixstack$entry.getNormal();
+                        matrixStackIn.push();
+                        int light = event.getLight();
+                        func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f19, f4, f20, j, k, l, 0.4999F, f30, light);
+                        func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f19, 0.0F, f20, j, k, l, 0.4999F, f29, light);
+                        func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f21, 0.0F, f22, j, k, l, 0.0F, f29, light);
+                        func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f21, f4, f22, j, k, l, 0.0F, f30, light);
+
+                        func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f23, f4, f24, j, k, l, 0.4999F, f31, light);
+                        func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f23, 0.0F, f24, j, k, l, 0.4999F, f32, light);
+                        func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f25, 0.0F, f26, j, k, l, 0.0F, f32, light);
+                        func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f25, f4, f26, j, k, l, 0.0F, f31, light);
+                        matrixStackIn.pop();
+                        matrixStackIn.pop();
                     }
-                    MatrixStack matrixStackIn = event.getMatrixStack();
-                    float f = 1;
-                    float f1 = 0;
-                    float f2 = 1;
-                    float f3 = entity.getEyeHeight();
-                    matrixStackIn.push();
-                    matrixStackIn.translate(0.0D, f3, 0.0D);
-                    Vec3d vec3d = this.getPosition(livingentity, (double) livingentity.getHeight() * 0.5D, event.getPartialRenderTick());
-                    Vec3d vec3d1 = this.getPosition(entity, f3, event.getPartialRenderTick());
-                    Vec3d vec3d2 = vec3d.subtract(vec3d1);
-                    float f4 = (float) (vec3d2.length() + 0.0D);
-                    vec3d2 = vec3d2.normalize();
-                    float f5 = (float) Math.acos(vec3d2.y);
-                    float f6 = (float) Math.atan2(vec3d2.z, vec3d2.x);
-                    matrixStackIn.rotate(Vector3f.YP.rotationDegrees((((float) Math.PI / 2F) - f6) * (180F / (float) Math.PI)));
-                    matrixStackIn.rotate(Vector3f.XP.rotationDegrees(f5 * (180F / (float) Math.PI)));
-                    int i = 1;
-                    float f7 = -1.0F;
-                    float f8 = f * f;
-                    int j = 255;
-                    int k = 255;
-                    int l = 255;
-                    float f11 = MathHelper.cos(f7 + 2.3561945F) * 0.282F;
-                    float f12 = MathHelper.sin(f7 + 2.3561945F) * 0.282F;
-                    float f13 = MathHelper.cos(f7 + ((float) Math.PI / 4F)) * 0.282F;
-                    float f14 = MathHelper.sin(f7 + ((float) Math.PI / 4F)) * 0.282F;
-                    float f15 = MathHelper.cos(f7 + 3.926991F) * 0.282F;
-                    float f16 = MathHelper.sin(f7 + 3.926991F) * 0.282F;
-                    float f17 = MathHelper.cos(f7 + 5.4977875F) * 0.282F;
-                    float f18 = MathHelper.sin(f7 + 5.4977875F) * 0.282F;
-                    float f19 = 0;
-                    float f20 = 0.2F;
-                    float f21 = 0F;
-                    float f22 = -0.2F;
-                    float f23 = MathHelper.cos(f7 + ((float) Math.PI / 2F)) * 0.2F;
-                    float f24 = MathHelper.sin(f7 + ((float) Math.PI / 2F)) * 0.2F;
-                    float f25 = MathHelper.cos(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
-                    float f26 = MathHelper.sin(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
-                    float f27 = 0.0F;
-                    float f28 = 0.4999F;
-                    float f29 = 0;
-                    float f30 = f4 + f29;
-                    float f32 = 0.75F;
-                    float f31 = f4 + f32;
-
-                    IVertexBuilder ivertexbuilder = event.getBuffers().getBuffer(RenderType.getEntityCutoutNoCull(CHAIN_TEXTURE));
-                    MatrixStack.Entry matrixstack$entry = matrixStackIn.getLast();
-                    Matrix4f matrix4f = matrixstack$entry.getMatrix();
-                    Matrix3f matrix3f = matrixstack$entry.getNormal();
-                    matrixStackIn.push();
-                    int light = event.getLight();
-                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f19, f4, f20, j, k, l, 0.4999F, f30, light);
-                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f19, 0.0F, f20, j, k, l, 0.4999F, f29, light);
-                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f21, 0.0F, f22, j, k, l, 0.0F, f29, light);
-                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f21, f4, f22, j, k, l, 0.0F, f30, light);
-
-                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f23, f4, f24, j, k, l, 0.4999F, f31, light);
-                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f23, 0.0F, f24, j, k, l, 0.4999F, f32, light);
-                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f25, 0.0F, f26, j, k, l, 0.0F, f32, light);
-                    func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f25, f4, f26, j, k, l, 0.0F, f31, light);
-                    matrixStackIn.pop();
-                    matrixStackIn.pop();
+                }catch (Exception e){
+                    IceAndFire.LOGGER.warn("Could not render chain link");
                 }
-
             } else {
                 if (!properties.alreadyIgnoresCamera && entity.ignoreFrustumCheck) {
                     entity.ignoreFrustumCheck = false;
