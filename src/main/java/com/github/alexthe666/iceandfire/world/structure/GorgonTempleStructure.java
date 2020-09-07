@@ -31,7 +31,7 @@ public class GorgonTempleStructure extends ScatteredStructure<NoFeatureConfig> {
     }
 
     public int getSize() {
-        return 8;
+        return 4;
     }
 
     public IStartFactory getStartFactory() {
@@ -43,11 +43,11 @@ public class GorgonTempleStructure extends ScatteredStructure<NoFeatureConfig> {
     }
 
     protected int getBiomeFeatureDistance(ChunkGenerator<?> chunkGenerator) {
-        return Math.max(IafConfig.spawnGorgonsChance, 2);
+        return 8;// Math.max(IafConfig.spawnGorgonsChance, 2);
     }
 
     protected int getBiomeFeatureSeparation(ChunkGenerator<?> chunkGenerator) {
-        return Math.max(IafConfig.spawnGorgonsChance / 2, 1);
+        return 4; //Math.max(IafConfig.spawnGorgonsChance / 2, 1);
     }
 
     public static class Start extends StructureStart {
@@ -61,7 +61,7 @@ public class GorgonTempleStructure extends ScatteredStructure<NoFeatureConfig> {
 
         public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn) {
             Rotation rotation = Rotation.values()[this.rand.nextInt(Rotation.values().length)];
-            BlockPos blockpos = new BlockPos(chunkX * 16, 64, chunkZ * 16);
+            BlockPos blockpos = new BlockPos(chunkX * 16, 90, chunkZ * 16);
             GorgonTemplePiece.func_204760_a(templateManagerIn, blockpos, rotation, this.components, this.rand);
             this.recalculateStructureSize();
         }

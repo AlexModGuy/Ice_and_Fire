@@ -39,10 +39,10 @@ public class MausoleumPiece {
 
         public boolean func_225577_a_(IWorld world, ChunkGenerator<?> p_225577_2_, Random p_225577_3_, MutableBoundingBox p_225577_4_, ChunkPos p_225577_5_) {
             this.placeSettings.addProcessor(new DreadRuinProcessor());
-            BlockPos inital = this.templatePosition.add(this.template.getSize().getX() / 2, 0, this.template.getSize().getZ() / 2);
+            BlockPos inital = this.templatePosition;
             int lvt_8_1_ = world.getHeight(Heightmap.Type.WORLD_SURFACE, inital.getX(), inital.getZ());
             BlockPos pos = new BlockPos(inital.getX(), lvt_8_1_, inital.getZ());
-            this.templatePosition = new BlockPos(this.templatePosition.getX(), pos.getY(), this.templatePosition.getZ());
+            this.templatePosition = new BlockPos(this.templatePosition.getX(), pos.getY() - 10, this.templatePosition.getZ());
 
             return super.func_225577_a_(world, p_225577_2_, p_225577_3_, p_225577_4_, p_225577_5_);
         }
