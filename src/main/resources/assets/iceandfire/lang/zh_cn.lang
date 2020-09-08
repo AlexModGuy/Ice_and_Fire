@@ -1,6 +1,6 @@
 itemGroup.iceandfire_items=冰火传说 物品
 itemGroup.iceandfire_blocks=冰火传说 方块
-iceandfire.empty =空
+iceandfire.empty=空
 
 tile.iceandfire.lectern.name=书桌
 tile.iceandfire.podium.name=展台
@@ -460,8 +460,7 @@ dragon.ice=寒冰
 dragon.name=名字: 
 dragon.unnamed=无名氏
 dragon.health=生命: 
-dragon.stage=成长
-dragon.gender=性别: 
+dragon.gender=性别:
 dragon.gender.male=雄
 dragon.gender.female=雌
 dragon.hunger=饥饿: 
@@ -712,8 +711,6 @@ modifier.fractured2.name=碎骨 II
 modifier.fractured2.desc=疼！§r\n你的工具有了更高的伤害。
 modifier.splitting2.name=散射 II
 modifier.splitting2.desc=一分为二！§r\箭头有概率突然加速并一分为二。
-modifier.splitting2.name=散射 II
-modifier.splitting2.desc=一分为三！§r\箭头有概率突然加速并一分为三。
 material.desert_myrmex.name=沙漠蚁甲
 material.jungle_myrmex.name=丛林蚁甲
 material.dragonsteel_fire.name=龙炎钢

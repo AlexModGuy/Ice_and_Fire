@@ -1,6 +1,6 @@
 itemGroup.iceandfire_items=Предметы Ice And Fire
 itemGroup.iceandfire_blocks=Блоки Ice And Fire
-iceandfire.empty =Пусто
+iceandfire.empty=Пусто
 
 tile.iceandfire.lectern.name=Кафедра
 tile.iceandfire.podium.name=Подиум
@@ -410,8 +410,7 @@ dragon.ice=Ледяной
 dragon.name=Имя: 
 dragon.unnamed=Безымянный
 dragon.health=Здоровье: 
-dragon.stage=Стадия 
-dragon.gender=Пол: 
+dragon.gender=Пол:
 dragon.gender.male=Самец
 dragon.gender.female=Самка
 dragon.hunger=Сытость: 
