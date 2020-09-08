@@ -30,6 +30,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import java.lang.reflect.Field;
 
@@ -52,6 +53,23 @@ public class CommonProxy {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    @SubscribeEvent
+    public static void registerVillagers(RegistryEvent.Register<VillagerRegistry.VillagerProfession> event) {
+        event.getRegistry().register(IafVillagerRegistry.INSTANCE.fisherman);
+        event.getRegistry().register(IafVillagerRegistry.INSTANCE.craftsman);
+        event.getRegistry().register(IafVillagerRegistry.INSTANCE.shaman);
+        event.getRegistry().register(IafVillagerRegistry.INSTANCE.desertMyrmexWorker);
+        event.getRegistry().register(IafVillagerRegistry.INSTANCE.jungleMyrmexWorker);
+        event.getRegistry().register(IafVillagerRegistry.INSTANCE.desertMyrmexSoldier);
+        event.getRegistry().register(IafVillagerRegistry.INSTANCE.jungleMyrmexSoldier);
+        event.getRegistry().register(IafVillagerRegistry.INSTANCE.desertMyrmexSentinel);
+        event.getRegistry().register(IafVillagerRegistry.INSTANCE.jungleMyrmexSentinel);
+        event.getRegistry().register(IafVillagerRegistry.INSTANCE.desertMyrmexRoyal);
+        event.getRegistry().register(IafVillagerRegistry.INSTANCE.jungleMyrmexRoyal);
+        event.getRegistry().register(IafVillagerRegistry.INSTANCE.desertMyrmexQueen);
+        event.getRegistry().register(IafVillagerRegistry.INSTANCE.jungleMyrmexQueen);
     }
 
     @SubscribeEvent
