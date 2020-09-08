@@ -1,31 +1,45 @@
-    龙之寓言的封皮后夹着一张破破烂烂的
-便笺。
-    上面写道：
-    
-
-    谨以此记录着超自然工具设计和神奇生
-灵追寻指南的手稿，赠予愿探索神秘奇迹的
-有缘人。愿它助你一臂之力。
+    异兽手记的封皮后面粘着一张破
+破烂烂的便笺。上面写道：
 
 
+<item><iceandfire:manuscript 0 38 20 1>
 
-
-
-
-    从奇特的矿物开始，龙之寓言将指引你
-走近世界上的超自然现象。
+“谨以此记录着超自然工具设计和神奇
+生灵追寻指南的手稿，赠予愿探索神秘
+奇迹的有缘人。愿它助你一臂之力。”
 
 
 
 
-与黄金埋藏在同样深处的银矿便是一种具有
-神秘力量的矿物。
 
+
+    从奇特的矿物开始，异兽手记将指
+引你走近世界上的奇异现象，了解到与
+它们有关的神奇知识。T
+
+
+
+与黄金埋藏在同样深处的银矿便是一种
+具有神秘力量的矿物。
+
+<item><iceandfire:silver_ore 0 115 22 1>
+<item><iceandfire:silver_ingot 0 135 22 1>
+<item><iceandfire:silver_nugget 0 155 22 1>
 
 
 
 
 原矿炼成的银锭有广泛的应用。
+
+<item><iceandfire:silver_sword 0 104 50 1>
+<item><iceandfire:silver_pickaxe 0 120 50 1>
+<item><iceandfire:silver_axe 0 136 50 1>
+<item><iceandfire:silver_shovel 0 152 50 1>
+<item><iceandfire:silver_hoe 0 168 50 1>
+<item><iceandfire:armor_silver_metal_helmet 0 110 70 1>
+<item><iceandfire:armor_silver_metal_chestplate 0 125 70 1>
+<item><iceandfire:armor_silver_metal_leggings 0 140 70 1>
+<item><iceandfire:armor_silver_metal_boots 0 155 70 1>
 
 
 
@@ -36,3 +50,5 @@
 
 
 银质武器上附带的魔力能更有效地杀伤亡灵。
+
+

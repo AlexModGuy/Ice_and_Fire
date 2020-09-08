@@ -7,7 +7,10 @@
 
 
 
-
+<image><drawings_0.png 20 95 327 366 24 33 1>
+<image><drawings_0.png 60 95 303 366 24 33 1>
+<image><drawings_0.png 95 95 351 366 24 33 1>
+<image><drawings_0.png 135 95 375 366 24 33 1>
 
 
   我首先想到的是这玩意大概会很值钱————

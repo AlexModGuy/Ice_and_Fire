@@ -1,0 +1,50 @@
+在热带草原的土壤上，生长着一种数量
+稀少的植物————闪电百合。这种花可以
+用来制成促使电龙繁衍的汤剂，与火龙
+和冰龙的机制几乎一致。
+
+
+<item><iceandfire:lightning_lily 100 20 40 1>
+<item><iceandfire:lightning_stew 100 60 40 1>
+
+
+
+
+电龙的掉落物包括它们的龙鳞、龙骨、
+颅骨、龙血等，与它们的冰火近亲非常
+相似，的用途也与冰火类的大同小异。
+总而言之，任何以冰龙或火龙的龙躯材
+料制成的物品也都可以用电龙的龙躯材
+料制作。
+
+
+
+
+例如：电龙鳞护甲、电龙血瓶、龙霆钢、
+电龙龙鳞块，诸如此类。
+
+
+<item><iceandfire:dragonscale_amythest 100 120 40 1>
+<item><iceandfire:armor_amythest_helmet 100 140 30 1>
+<item><iceandfire:dragonsteel_lightning_ingot 100 160 40 1>
+
+<item><iceandfire:dragonforge_lightning_core 100 140 50 1>
+
+<item><iceandfire:summoning_crystal_lightning 100 120 60 1>
+<item><iceandfire:lightning_dragon_blood 100 140 70 1>
+<item><iceandfire:dragonbone_sword_lightning 100 160 60 1>
+
+
+
+
+
+
+
+
+
+
+
+电龙系武器对于火龙和冰龙都有额外伤
+害，攻击时还会附带释放龙霆矢。
+
+
