@@ -147,6 +147,7 @@ public class ServerConfig {
     public ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistDimensions;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> dragonBlacklistDimensions;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> dragonWhitelistDimensions;
+    public final ForgeConfigSpec.DoubleValue dragonFlightSpeedMod;
 
     public ServerConfig(final ForgeConfigSpec.Builder builder) {
         builder.push("general");
@@ -329,6 +330,7 @@ public class ServerConfig {
         this.chunkLoadSummonCrystal = buildBoolean(builder, "Chunk Load Summon Crystal", "all", true, "True if the summon crystal can load chunks to find dragons.");
         this.dangerousWorldGenDistanceLimit = buildInt(builder, "Dangerous World Gen Dist From Spawn", "all", 1000, 1, 10000, "How far away dangerous structures(dragon roosts, cyclops caves, etc.) must be from spawn(0, 0).");
         this.dangerousWorldGenSeparationLimit = buildInt(builder, "Dangerous World Gen Dist Seperation", "all", 300, 1, 10000, "How far away dangerous structures(dragon roosts, cyclops caves, etc.) must be from the last generated structure.");
+        this.dragonFlightSpeedMod = buildDouble(builder, "Dragon Flight Speed Modifier", "all", 1F, 0.0F, 2.0F, "Change this to slow down or speed up dragon or amphithere flight.");
 
     }
 

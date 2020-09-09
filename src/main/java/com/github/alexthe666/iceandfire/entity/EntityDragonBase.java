@@ -1622,11 +1622,12 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     public float getRenderSize() {
-        float step = (growth_stages[this.getDragonStage() - 1][1] - growth_stages[this.getDragonStage() - 1][0]) / 25;
+        int stage = this.getDragonStage() - 1;
+        float step = (growth_stages[stage][1] - growth_stages[stage][0]) / 25;
         if (this.getAgeInDays() > 125) {
-            return growth_stages[this.getDragonStage() - 1][0] + ((step * 25));
+            return growth_stages[stage][0] + ((step * 25));
         }
-        return growth_stages[this.getDragonStage() - 1][0] + ((step * this.getAgeFactor()));
+        return growth_stages[stage][0] + ((step * this.getAgeFactor()));
     }
 
     private int getAgeFactor() {
@@ -2164,7 +2165,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
     }
 
     public double getFlightSpeedModifier() {
-        return 1;
+        return IafConfig.dragonFlightSpeedMod;
     }
 
     public boolean isAllowedToTriggerFlight() {
