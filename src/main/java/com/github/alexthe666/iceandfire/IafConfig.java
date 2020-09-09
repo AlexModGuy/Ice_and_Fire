@@ -40,7 +40,7 @@ public class IafConfig {
     public static boolean tamedDragonGriefing = true;
     public static int dragonFlapNoiseDistance = 4;
     public static int dragonFluteDistance = 8;
-    public static int dragonHealth = 500;
+    public static double dragonHealth = 500;
     public static int dragonAttackDamage = 17;
     public static double dragonAttackDamageFire = 2F;
     public static double dragonAttackDamageIce = 2.5F;

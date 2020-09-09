@@ -27,7 +27,7 @@ public class ServerConfig {
     public final ForgeConfigSpec.BooleanValue tamedDragonGriefing;
     public final ForgeConfigSpec.IntValue dragonFlapNoiseDistance;
     public final ForgeConfigSpec.IntValue dragonFluteDistance;
-    public final ForgeConfigSpec.IntValue dragonHealth;
+    public final ForgeConfigSpec.DoubleValue dragonHealth;
     public final ForgeConfigSpec.IntValue dragonAttackDamage;
     public final ForgeConfigSpec.DoubleValue dragonAttackDamageFire;
     public final ForgeConfigSpec.DoubleValue dragonAttackDamageIce;
@@ -195,7 +195,7 @@ public class ServerConfig {
         this.tamedDragonGriefing = buildBoolean(builder, "Tamed Dragon Griefing", "all", true, "True if tamed dragons can follow the griefing rules.");
         this.dragonFlapNoiseDistance = buildInt(builder, "Dragon Flap Noise Distance", "all", 4, 0, 10000, "Dragon Flap Noise Distance - Larger number, further away you can hear it");
         this.dragonFluteDistance = buildInt(builder, "Dragon Flute Distance", "all", 4, 0, 10000, "Dragon Flute Distance - how many chunks away is the dragon flute effective?");
-        this.dragonHealth = buildInt(builder, "Dragon Health", "all", 500, 1, 100000, "Max dragon health. Health is scaled to this");
+        this.dragonHealth = buildDouble(builder, "Dragon Health", "all", 500, 1, 100000, "Max dragon health. Health is scaled to this");
         this.dragonAttackDamage = buildInt(builder, "Dragon Attack Damage", "all", 17, 1, 10000, "Max dragon attack damage. Attack Damage is scaled to this");
         this.dragonAttackDamageFire = buildDouble(builder, "Dragon Attack Damage(Fire breath)", "all", 2.0F, 0, 10000, "Damage dealt from a successful fire breath attack. Attack Damage is scaled to by age, so a stage 5 dragon will deal 5x as much as this number");
         this.dragonAttackDamageIce = buildDouble(builder, "Dragon Attack Damage(Ice breath)", "all", 2.5F, 0, 10000, "Damage dealt from a successful ice breath attack. Attack Damage is scaled to by age, so a stage 5 dragon will deal 5x as much as this number");
