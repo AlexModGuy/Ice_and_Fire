@@ -2,12 +2,12 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "dragonforge_ice_core",
+      "name": "dragonforge_lightning_brick",
       "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "iceandfire:dragonforge_ice_core_disabled"
+          "name": "iceandfire:dragonforge_lightning_brick"
         }
       ],
       "conditions": [
