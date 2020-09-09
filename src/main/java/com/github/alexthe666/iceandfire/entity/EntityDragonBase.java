@@ -805,10 +805,10 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         int armorFeet = this.getArmorOrdinal(this.getItemStackFromSlot(EquipmentSlotType.FEET));
         armorResLoc = dragonType.getName() + "|" + armorHead + "|" + armorNeck + "|" + armorLegs + "|" + armorFeet;
         IceAndFire.PROXY.updateDragonArmorRender(armorResLoc);
-        double healthStep = (maximumHealth - minimumHealth) / (125);
-        double attackStep = (maximumDamage - minimumDamage) / (125);
-        double speedStep = (maximumSpeed - minimumSpeed) / (125);
-        double armorStep = (maximumArmor - minimumArmor) / (125);
+        double healthStep = (maximumHealth - minimumHealth) / 125F;
+        double attackStep = (maximumDamage - minimumDamage) / 125F;
+        double speedStep = (maximumSpeed - minimumSpeed) / 125F;
+        double armorStep = (maximumArmor - minimumArmor) / 125F;
         if (this.getAgeInDays() <= 125) {
             this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.round(minimumHealth + (healthStep * this.getAgeInDays())));
             this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.round(minimumDamage + (attackStep * this.getAgeInDays())));

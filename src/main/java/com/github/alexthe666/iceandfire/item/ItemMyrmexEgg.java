@@ -83,6 +83,7 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
         if (tag != null) {
             eggOrdinal = tag.getInt("EggOrdinal");
         }
+        egg.setJungle(isJungle);
         egg.setMyrmexCaste(eggOrdinal);
         egg.setLocationAndAngles(offset.getX() + 0.5, offset.getY(), offset.getZ() + 0.5, 0, 0);
         egg.onPlayerPlace(context.getPlayer());

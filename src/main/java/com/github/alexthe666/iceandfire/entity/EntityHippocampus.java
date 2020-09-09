@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.*;
@@ -748,7 +749,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     public double getRideSpeedModifier() {
-        return this.isInWater() ? 1.2F : 0.55F;
+        return this.isInWater() ? 1.2F * IafConfig.dragonFlightSpeedMod : 0.55F;
     }
 
     class SwimmingMoveHelper extends MovementController {
