@@ -673,9 +673,6 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         compound.putBoolean("ModelDead", this.isModelDead());
         compound.putFloat("DeadProg", this.modelDeadProgress);
         compound.putBoolean("Tackle", this.isTackling());
-        if (this.getCustomName() != null && this.getCustomName() != null) {
-            compound.putString("CustomName", this.getCustomName().getFormattedText());
-        }
         compound.putBoolean("HasHomePosition", this.hasHomePosition);
         if (homePos != null && this.hasHomePosition) {
             compound.putInt("HomeAreaX", homePos.getX());
@@ -698,6 +695,9 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
             compound.put("Items", nbttaglist);
         }
         compound.putBoolean("CrystalBound", this.isBoundToCrystal());
+        if (this.hasCustomName()) {
+            compound.putString("CustomName", ITextComponent.Serializer.toJson(this.getCustomName()));
+        }
     }
 
     @Override
@@ -716,9 +716,6 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         this.setDeathStage(compound.getInt("DeathStage"));
         this.setModelDead(compound.getBoolean("ModelDead"));
         this.modelDeadProgress = compound.getFloat("DeadProg");
-        if (!compound.getString("CustomName").isEmpty()) {
-            this.setCustomName(new StringTextComponent(compound.getString("CustomName")));
-        }
         this.hasHomePosition = compound.getBoolean("HasHomePosition");
         if (hasHomePosition && compound.getInt("HomeAreaX") != 0 && compound.getInt("HomeAreaY") != 0 && compound.getInt("HomeAreaZ") != 0) {
             homePos = new BlockPos(compound.getInt("HomeAreaX"), compound.getInt("HomeAreaY"), compound.getInt("HomeAreaZ"));
@@ -746,6 +743,9 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
             }
         }
         this.setCrystalBound(compound.getBoolean("CrystalBound"));
+        if (compound.contains("CustomName", 8) && !compound.getString("CustomName").startsWith("TextComponent")) {
+            this.setCustomName(ITextComponent.Serializer.fromJson(compound.getString("CustomName")));
+        }
     }
 
     private void initInventory() {
@@ -1114,7 +1114,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                     CompoundNBT dragonTag = new CompoundNBT();
                     dragonTag.putUniqueId("DragonUUID", this.getUniqueID());
                     if (this.getCustomName() != null) {
-                        dragonTag.putString("CustomName", this.getCustomName().getFormattedText());
+                        dragonTag.putString("CustomName", this.getCustomName().getString());
                     }
                     compound.put("Dragon", dragonTag);
                     this.playSound(SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, 1, 1);

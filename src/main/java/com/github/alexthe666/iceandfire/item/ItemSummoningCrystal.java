@@ -83,7 +83,7 @@ public class ItemSummoningCrystal extends Item {
                     if (!draginTag.getString("CustomName").isEmpty()) {
                         dragonName = draginTag.getString("CustomName");
                     }
-                    tooltip.add(new TranslationTextComponent("item.iceandfire.summoning_crystal.bound", dragonName));
+                    tooltip.add(new TranslationTextComponent("item.iceandfire.summoning_crystal.bound", dragonName).applyTextStyle(TextFormatting.GRAY));
                     flag = true;
                 }
             }
