@@ -45,6 +45,7 @@ import net.minecraft.world.*;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVillagerFear, IHumanoid {
 
@@ -81,6 +82,12 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
     public boolean isAIDisabled() {
         return EntityGorgon.isStoneMob(this) || super.isAIDisabled();
     }
+
+    public static boolean canTrollSpawnOn(EntityType<? extends MobEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
+        BlockPos blockpos = pos.down();
+        return reason == SpawnReason.SPAWNER || randomIn.nextInt(IafConfig.trollSpawnCheckChance) == 0 && worldIn.getBlockState(blockpos).canEntitySpawn(worldIn, blockpos, typeIn);
+    }
+
 
     public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn) {
         BlockPos pos = new BlockPos(this);
