@@ -99,7 +99,7 @@ public class IceDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator 
                 }
             }
             if (entity.hoverProgress > 0.0F) {
-                if (!isPartEqual(cube, EnumDragonAnimations.HOVERING_POSE.icedragon_model.getCube(cube.boxName)) && !isWing(model, cube) && !cube.boxName.contains("Tail")) {
+                if (!isPartEqual(cube, EnumDragonAnimations.HOVERING_POSE.icedragon_model.getCube(cube.boxName)) && !isWing(model, cube) && !cube.boxName.contains("Tail") ) {
                     transitionTo(cube, EnumDragonAnimations.HOVERING_POSE.icedragon_model.getCube(cube.boxName), entity.hoverProgress, 20, false);
                 }
             }

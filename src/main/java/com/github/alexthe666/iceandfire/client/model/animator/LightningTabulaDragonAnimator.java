@@ -84,7 +84,7 @@ public class LightningTabulaDragonAnimator extends IceAndFireTabulaModelAnimator
                 }
             }
             if (entity.hoverProgress > 0.0F) {
-                if (!isPartEqual(cube, EnumDragonAnimations.HOVERING_POSE.lightningdragon_model.getCube(cube.boxName)) && !isWing(model, cube) && !cube.boxName.contains("Tail")) {
+                if (!isPartEqual(cube, EnumDragonAnimations.HOVERING_POSE.lightningdragon_model.getCube(cube.boxName)) && !isWing(model, cube) && !cube.boxName.contains("Tail") && !cube.boxName.contains("Head")) {
                     transitionTo(cube, EnumDragonAnimations.HOVERING_POSE.lightningdragon_model.getCube(cube.boxName), entity.hoverProgress, 20, false);
                 }
             }
@@ -192,7 +192,7 @@ public class LightningTabulaDragonAnimator extends IceAndFireTabulaModelAnimator
             }
         }
         if (!entity.isModelDead()) {
-            if (entity.turn_buffer != null && !(entity.isBeingRidden() && entity.isBreathingFire())) {
+            if (entity.turn_buffer != null && !entity.isBeingRidden() && !entity.isBreathingFire()) {
                 entity.turn_buffer.applyChainSwingBuffer(neckParts);
             }
             if (entity.tail_buffer != null) {
