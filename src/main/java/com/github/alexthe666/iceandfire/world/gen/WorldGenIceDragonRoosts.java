@@ -64,13 +64,15 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos position, NoFeatureConfig config) {
-        if(!IafWorldRegistry.isDimensionListedForDragons(worldIn)){
+        if (!IafWorldRegistry.isDimensionListedForDragons(worldIn)) {
             return false;
         }
-        if(!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)){
+        if (!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)) {
             return false;
         }
-        if(IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position))
+        if (!worldIn.getFluidState(worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position).down()).isEmpty()) {
+            return false;
+        }
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
         isMale = rand.nextBoolean();
         int boulders = 0;
