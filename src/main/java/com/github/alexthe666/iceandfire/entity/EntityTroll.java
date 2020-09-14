@@ -85,9 +85,8 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
 
     public static boolean canTrollSpawnOn(EntityType<? extends MobEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
         BlockPos blockpos = pos.down();
-        return reason == SpawnReason.SPAWNER || randomIn.nextInt(IafConfig.trollSpawnCheckChance) == 0 && worldIn.getBlockState(blockpos).canEntitySpawn(worldIn, blockpos, typeIn);
+        return reason == SpawnReason.SPAWNER || randomIn.nextInt(IafConfig.trollSpawnCheckChance) == 0 && worldIn.getBlockState(blockpos).canEntitySpawn(worldIn, blockpos, typeIn)  && isValidLightLevel(worldIn, pos, randomIn) && canSpawnOn(IafEntityRegistry.TROLL, worldIn, reason, pos, randomIn);
     }
-
 
     public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn) {
         BlockPos pos = new BlockPos(this);
