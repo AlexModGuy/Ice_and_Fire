@@ -96,7 +96,7 @@ public class IafEntityRegistry {
         EntityPropertiesHandler.INSTANCE.registerProperties(ChainEntityProperties.class);
         if (IafConfig.spawnHippogryphs) {
             for (Biome biome : ForgeRegistries.BIOMES) {
-                if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.HILLS)) {
+                if (biome != null && (BiomeDictionary.hasType(biome, BiomeDictionary.Type.HILLS) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.PLATEAU))) {
                     List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.CREATURE);
                     spawnList.add(new Biome.SpawnListEntry(HIPPOGRYPH, IafConfig.hippogryphSpawnRate, 1, 1));
                 }
