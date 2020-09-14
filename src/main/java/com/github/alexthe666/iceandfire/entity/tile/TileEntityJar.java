@@ -112,15 +112,16 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
         if (this.hasPixie && hasProduced != prevHasProduced && ticksExisted > 5) {
             if (!this.getWorld().isRemote) {
                 IceAndFire.sendMSGToAll(new MessageUpdatePixieJar(pos.toLong(), hasProduced));
+            }else{
+                world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, IafSoundRegistry.PIXIE_HURT, SoundCategory.BLOCKS, 1, 1, false);
             }
-            world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, IafSoundRegistry.PIXIE_HURT, SoundCategory.NEUTRAL, 1, 1, false);
         }
         prevRotationYaw = rotationYaw;
         if (rand.nextInt(30) == 0) {
             this.rotationYaw = (rand.nextFloat() * 360F) - 180F;
         }
-        if (this.hasPixie && ticksExisted % 40 == 0 && this.rand.nextInt(6) == 0) {
-            this.world.playSound(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5, IafSoundRegistry.PIXIE_IDLE, SoundCategory.NEUTRAL, 1, 1, false);
+        if (this.hasPixie && ticksExisted % 40 == 0 && this.rand.nextInt(6) == 0 && world.isRemote) {
+            this.world.playSound(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5, IafSoundRegistry.PIXIE_IDLE, SoundCategory.BLOCKS, 1, 1, false);
         }
         prevHasProduced = hasProduced;
     }
