@@ -91,10 +91,6 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         //this.moveController = new GroundMoveHelper(this);
     }
 
-    public SoundCategory getSoundCategory() {
-        return SoundCategory.HOSTILE;
-    }
-
     private static boolean isJungleBiome(World world, BlockPos position) {
         Biome biome = world.getBiome(position);
         return biome.getSurfaceBuilderConfig().getTop().getBlock() != Blocks.SAND && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY);
@@ -114,8 +110,6 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         }
         return false;
     }
-
-
 
     public static boolean isEdibleBlock(BlockState blockState) {
         return BlockTags.getCollection().getOrCreate(MYRMEX_HARVESTABLES).contains(blockState.getBlock());
@@ -142,6 +136,10 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                 return 0;//worker
             }
         }
+    }
+
+    public SoundCategory getSoundCategory() {
+        return SoundCategory.HOSTILE;
     }
 
     public boolean canMove() {
@@ -437,7 +435,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
             if (this.getOffers().isEmpty()) {
                 return super.processInteract(player, hand);
             } else {
-                if (!this.world.isRemote) {
+                if (!this.world.isRemote && (this.getAttackTarget() == null || !this.getAttackTarget().equals(player))) {
                     this.setCustomer(player);
                     this.openMerchantContainer(player, this.getDisplayName(), 1);
                 }
@@ -781,6 +779,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     protected abstract VillagerTrades.ITrade[] getLevel1Trades();
+
     protected abstract VillagerTrades.ITrade[] getLevel2Trades();
 
     protected void populateTradeData() {
@@ -793,12 +792,12 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
             int j = this.rand.nextInt(level2.length);
             int k = this.rand.nextInt(level2.length);
             int rolls = 0;
-            while((j == i) && rolls < 100){
+            while ((j == i) && rolls < 100) {
                 j = this.rand.nextInt(level2.length);
                 rolls++;
             }
             rolls = 0;
-            while((k == i || k == j) && rolls < 100){
+            while ((k == i || k == j) && rolls < 100) {
                 k = this.rand.nextInt(level2.length);
                 rolls++;
             }
