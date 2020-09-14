@@ -53,7 +53,7 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.goalOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
+        return this.goalOwner.getBoundingBox().grow(targetDistance, targetDistance, targetDistance);
     }
 
     @Override
@@ -68,10 +68,10 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
     @Override
     public void tick() {
         super.tick();
-        if (this.targetEntity == null || this.targetEntity != null && this.targetEntity.isAlive()) {
+        if (this.targetEntity == null || this.targetEntity != null && !this.targetEntity.isAlive()) {
             this.resetTask();
         }
-        if (this.targetEntity != null && !this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
+        if (this.targetEntity != null && this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
             EntityPixie pixie = (EntityPixie) this.goalOwner;
             if (this.targetEntity.getItem() != null && this.targetEntity.getItem().getItem() != null && this.targetEntity.getItem().getItem() == Items.SUGAR) {
                 pixie.heal(5);

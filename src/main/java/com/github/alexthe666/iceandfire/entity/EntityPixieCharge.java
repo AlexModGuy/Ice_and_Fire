@@ -35,11 +35,6 @@ public class EntityPixieCharge extends AbstractFireballEntity {
         this(IafEntityRegistry.PIXIE_CHARGE, worldIn);
     }
 
-    @Override
-    public IPacket<?> createSpawnPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
-    }
-
     public EntityPixieCharge(EntityType t, World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
         super(t, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
@@ -58,6 +53,11 @@ public class EntityPixieCharge extends AbstractFireballEntity {
         rgb = EntityPixie.PARTICLE_RGB[rand.nextInt(EntityPixie.PARTICLE_RGB.length - 1)];
     }
 
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
+
     protected boolean isFireballFiery() {
         return false;
     }
@@ -73,8 +73,39 @@ public class EntityPixieCharge extends AbstractFireballEntity {
                 IceAndFire.PROXY.spawnParticle("if_pixie", this.getPosX() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.getPosY() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.getPosZ() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
             }
         }
+        this.extinguish();
+        if (this.ticksExisted > 30) {
+            this.remove();
+        }
         if (this.world.isRemote || (this.shootingEntity == null || this.shootingEntity.isAlive()) && this.world.isBlockLoaded(new BlockPos(this))) {
-            super.baseTick();
+            if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.removed) && this.world.isBlockLoaded(new BlockPos(this))) {
+                if (this.isFireballFiery()) {
+                    this.setFire(1);
+                }
+
+                ++this.ticksInAir;
+                RayTraceResult raytraceresult = ProjectileHelper.rayTrace(this, true, this.ticksInAir >= 25, this.shootingEntity, RayTraceContext.BlockMode.COLLIDER);
+                if (raytraceresult.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
+                    this.onImpact(raytraceresult);
+                }
+
+                Vec3d vec3d = this.getMotion();
+                double d0 = this.getPosX() + vec3d.x;
+                double d1 = this.getPosY() + vec3d.y;
+                double d2 = this.getPosZ() + vec3d.z;
+                ProjectileHelper.rotateTowardsMovement(this, 0.2F);
+                float f = this.getMotionFactor();
+
+
+                this.setMotion(vec3d.add(this.accelerationX, this.accelerationY, this.accelerationZ).scale(f));
+                this.setPosition(d0, d1, d2);
+            } else {
+                this.remove();
+            }
+            this.accelerationX *= 0.95F;
+            this.accelerationY *= 0.95F;
+            this.accelerationZ *= 0.95F;
+            this.addVelocity(this.accelerationX, this.accelerationY, this.accelerationZ);
             ++this.ticksInAir;
             Vec3d vec3d = this.getMotion();
             RayTraceResult raytraceresult = ProjectileHelper.rayTrace(this, this.getBoundingBox().expand(vec3d).grow(1.0D), (p_213879_1_) -> {
@@ -84,6 +115,7 @@ public class EntityPixieCharge extends AbstractFireballEntity {
             if (raytraceresult != null) {
                 this.onImpact(raytraceresult);
             }
+
             double d0 = this.getPosX() + vec3d.x;
             double d1 = this.getPosY() + vec3d.y;
             double d2 = this.getPosZ() + vec3d.z;
@@ -118,35 +150,39 @@ public class EntityPixieCharge extends AbstractFireballEntity {
             }
             this.setPosition(d0, d1, d2);
             this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
-
-        } else {
-            this.remove();
         }
     }
 
     @Override
     protected void onImpact(RayTraceResult movingObject) {
-        boolean flag = this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING);
+        boolean flag = false;
         if (!this.world.isRemote) {
-            if (movingObject.getType() == RayTraceResult.Type.ENTITY) {
+            if (movingObject.getType() == RayTraceResult.Type.ENTITY && !((EntityRayTraceResult) movingObject).getEntity().isEntityEqual(this.shootingEntity)) {
                 Entity entity = ((EntityRayTraceResult) movingObject).getEntity();
-                if (entity instanceof LivingEntity) {
-                    ((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.LEVITATION, 100, 0));
-                    ((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.GLOWING, 100, 0));
-                    entity.attackEntityFrom(DamageSource.causeIndirectMagicDamage(shootingEntity, null), 5.0F);
-                }
-                if (this.world.isRemote) {
-                    for (int i = 0; i < 20; ++i) {
-                        IceAndFire.PROXY.spawnParticle("if_pixie", this.getPosX() + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.getPosY() + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.getPosZ() + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
+                if (this.shootingEntity != null && this.shootingEntity.equals(entity)) {
+                    flag = true;
+                } else {
+                    if (entity instanceof LivingEntity) {
+                        ((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.LEVITATION, 100, 0));
+                        ((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.GLOWING, 100, 0));
+                        entity.attackEntityFrom(DamageSource.causeIndirectMagicDamage(shootingEntity, null), 5.0F);
+                    }
+                    if (this.world.isRemote) {
+                        for (int i = 0; i < 20; ++i) {
+                            IceAndFire.PROXY.spawnParticle("if_pixie", this.getPosX() + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.getPosY() + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.getPosZ() + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
+                        }
+                    }
+                    if (this.shootingEntity == null || !(shootingEntity instanceof PlayerEntity) || !((PlayerEntity) shootingEntity).isCreative()) {
+                        if (rand.nextInt(3) == 0) {
+                            this.entityDropItem(new ItemStack(IafItemRegistry.PIXIE_DUST, 1), 0.45F);
+                        }
                     }
                 }
-                if (this.shootingEntity == null || !(shootingEntity instanceof PlayerEntity) || !((PlayerEntity) shootingEntity).isCreative()) {
-                    if (rand.nextInt(3) == 0) {
-                        this.entityDropItem(new ItemStack(IafItemRegistry.PIXIE_DUST, 1), 0.45F);
-                    }
+                if (!flag && this.ticksExisted > 4) {
+                    this.remove();
                 }
             }
-            this.remove();
+
         }
     }
 }
