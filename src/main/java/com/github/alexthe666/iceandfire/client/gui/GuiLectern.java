@@ -54,19 +54,20 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
         this.nameable = name;
     }
 
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.font.drawString(this.nameable.getFormattedText(), 12, 4, 4210752);
-        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8, this.ySize - 96 + 2, 4210752);
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
+        FontRenderer font = this.getMinecraft().fontRenderer;
+        font.func_238421_b_(matrixStack, this.nameable.getString(), 12, 4, 4210752);
+        font.func_238421_b_(matrixStack, this.playerInventory.getDisplayName().getString(), 8, this.ySize - 96 + 2, 4210752);
     }
 
-    public void tick() {
-        super.tick();
+    public void func_231023_e_() {
+        super.func_231023_e_();
         this.container.onUpdate();
         this.tickBook();
     }
 
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        int i = (this.width - this.xSize) / 2;
+        int i = (this.field_230709_l_ - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
 
         for (int k = 0; k < 3; ++k) {

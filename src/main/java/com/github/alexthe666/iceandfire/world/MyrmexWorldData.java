@@ -7,7 +7,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
@@ -36,7 +35,7 @@ public class MyrmexWorldData extends WorldSavedData {
 
     public static MyrmexWorldData get(World world) {
         if (world instanceof ServerWorld) {
-            ServerWorld overworld = world.getServer().getWorld(DimensionType.OVERWORLD);
+            ServerWorld overworld = world.getServer().getWorld(world.func_234923_W_());
 
             DimensionSavedDataManager storage = overworld.getSavedData();
             MyrmexWorldData data = storage.getOrCreate(MyrmexWorldData::new, IDENTIFIER);

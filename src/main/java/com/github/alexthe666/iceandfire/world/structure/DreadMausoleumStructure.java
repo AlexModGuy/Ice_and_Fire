@@ -1,30 +1,21 @@
 package com.github.alexthe666.iceandfire.world.structure;
 
-import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.ScatteredStructure;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
-import java.util.Random;
-import java.util.function.Function;
+public class DreadMausoleumStructure extends Structure<NoFeatureConfig> {
 
-public class DreadMausoleumStructure extends ScatteredStructure<NoFeatureConfig> {
-
-    public DreadMausoleumStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> p_i51440_1_) {
+    public DreadMausoleumStructure(Codec<NoFeatureConfig> p_i51440_1_) {
         super(p_i51440_1_);
         this.setRegistryName("iceandfire:mausoleum");
     }
@@ -41,7 +32,7 @@ public class DreadMausoleumStructure extends ScatteredStructure<NoFeatureConfig>
         return DreadMausoleumStructure.Start::new;
     }
 
-    protected int getSeedModifier() {
+    /*protected int getSeedModifier() {
         return 123456789;
     }
 
@@ -51,21 +42,18 @@ public class DreadMausoleumStructure extends ScatteredStructure<NoFeatureConfig>
 
     protected int getBiomeFeatureSeparation(ChunkGenerator<?> chunkGenerator) {
         return Math.max(IafConfig.generateMausoleumChance / 2, 1);
-    }
+    }*/
 
     public static class Start extends StructureStart {
-        public Start(Structure<?> p_i225817_1_, int p_i225817_2_, int p_i225817_3_, MutableBoundingBox p_i225817_4_, int p_i225817_5_, long p_i225817_6_) {
-            super(p_i225817_1_, p_i225817_2_, p_i225817_3_, p_i225817_4_, p_i225817_5_, p_i225817_6_);
+        public Start(Structure<NoFeatureConfig> p_i225806_1_, int p_i225806_2_, int p_i225806_3_, MutableBoundingBox p_i225806_4_, int p_i225806_5_, long p_i225806_6_) {
+            super(p_i225806_1_, p_i225806_2_, p_i225806_3_, p_i225806_4_, p_i225806_5_, p_i225806_6_);
         }
 
-        public void func_225565_a_(IWorld p_225565_1_, ChunkGenerator<?> p_225565_2_, Random p_225565_3_, MutableBoundingBox p_225565_4_, ChunkPos p_225565_5_) {
-            super.func_225565_a_(p_225565_1_, p_225565_2_, p_225565_3_, p_225565_4_, p_225565_5_);
-        }
-
-        public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn) {
+        @Override
+        public void func_230364_a_(ChunkGenerator p_230364_1_, TemplateManager p_230364_2_, int p_230364_3_, int p_230364_4_, Biome p_230364_5_, IFeatureConfig p_230364_6_) {
             Rotation rotation = Rotation.values()[this.rand.nextInt(Rotation.values().length)];
-            BlockPos blockpos = new BlockPos(chunkX * 16, 64, chunkZ * 16);
-            MausoleumPiece.func_204760_a(templateManagerIn, blockpos, rotation, this.components, this.rand);
+            BlockPos blockpos = new BlockPos(p_230364_3_ * 16, 64, p_230364_4_ * 16);
+            MausoleumPiece.func_204760_a(p_230364_2_, blockpos, rotation, this.components, this.rand);
             this.recalculateStructureSize();
         }
     }
