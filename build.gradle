@@ -28,7 +28,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '2.0.1'
+version = '2.0.1-1.16.1'
 group = 'com.github.alexthe666' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'iceandfire'
 
@@ -40,7 +40,7 @@ minecraft {
     // stable_#            Stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'snapshot', version: '20200225-1.15.1'
+    mappings channel: 'snapshot', version: '20200514-1.16'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -101,10 +101,10 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.2-31.1.18'
-    compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2")
-    compile 'citadel:citadel:1.1.10:deobf'
+    minecraft 'net.minecraftforge:forge:1.16.1-32.0.66'
+    compileOnly fg.deobf("mezz.jei:jei-1.16.1:7.0.0.2:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.16.1:7.0.0.2")
+    compile 'citadel:citadel:1.2.0:deobf'
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
