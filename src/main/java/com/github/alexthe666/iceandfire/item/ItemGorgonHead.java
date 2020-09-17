@@ -23,7 +23,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -59,12 +59,12 @@ public class ItemGorgonHead extends Item implements IUsesTEISR, ICustomRendered 
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entity, int timeLeft) {
         double dist = 32;
-        Vec3d vec3d = entity.getEyePosition(1.0F);
-        Vec3d vec3d1 = entity.getLook(1.0F);
-        Vec3d vec3d2 = vec3d.add(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
+        Vector3d Vector3d = entity.getEyePosition(1.0F);
+        Vector3d Vector3d1 = entity.getLook(1.0F);
+        Vector3d Vector3d2 = Vector3d.add(Vector3d1.x * dist, Vector3d1.y * dist, Vector3d1.z * dist);
         double d1 = dist;
         Entity pointedEntity = null;
-        List<Entity> list = worldIn.getEntitiesInAABBexcluding(entity, entity.getBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), new Predicate<Entity>() {
+        List<Entity> list = worldIn.getEntitiesInAABBexcluding(entity, entity.getBoundingBox().expand(Vector3d1.x * dist, Vector3d1.y * dist, Vector3d1.z * dist).grow(1.0D, 1.0D, 1.0D), new Predicate<Entity>() {
             public boolean apply(@Nullable Entity entity) {
                 boolean blindness = entity instanceof LivingEntity && ((LivingEntity) entity).isPotionActive(Effects.BLINDNESS) || (entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entity).canBeTurnedToStone());
                 return entity != null && entity.canBeCollidedWith() && !blindness && (entity instanceof PlayerEntity || (entity instanceof LivingEntity && EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class) != null && !EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class).isStone()));
@@ -74,15 +74,15 @@ public class ItemGorgonHead extends Item implements IUsesTEISR, ICustomRendered 
         for (int j = 0; j < list.size(); ++j) {
             Entity entity1 = list.get(j);
             AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow(entity1.getCollisionBorderSize());
-            Optional<Vec3d> optional = axisalignedbb.rayTrace(vec3d, vec3d2);
+            Optional<Vector3d> optional = axisalignedbb.rayTrace(Vector3d, Vector3d2);
 
-            if (axisalignedbb.contains(vec3d)) {
+            if (axisalignedbb.contains(Vector3d)) {
                 if (d2 >= 0.0D) {
                     pointedEntity = entity1;
                     d2 = 0.0D;
                 }
             } else if (optional.isPresent()) {
-                double d3 = vec3d.distanceTo(optional.get());
+                double d3 = Vector3d.distanceTo(optional.get());
 
                 if (d3 < d2 || d2 == 0.0D) {
                     if (entity1.getLowestRidingEntity() == entity.getLowestRidingEntity() && !entity.canRiderInteract()) {

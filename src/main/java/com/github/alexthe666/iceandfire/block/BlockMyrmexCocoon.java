@@ -45,7 +45,7 @@ public class BlockMyrmexCocoon extends ContainerBlock {
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (!player.isShiftKeyDown()) {
+        if (!player.isSneaking()) {
             if (worldIn.isRemote) {
                 IceAndFire.PROXY.setRefrencedTE(worldIn.getTileEntity(pos));
             } else {

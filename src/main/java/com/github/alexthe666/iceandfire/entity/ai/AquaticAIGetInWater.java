@@ -6,7 +6,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -36,14 +36,14 @@ public class AquaticAIGetInWater extends Goal {
         if (creature.isBeingRidden() || creature instanceof TameableEntity && ((TameableEntity) creature).isTamed() || creature.isInWater() || isAttackerInWater() || creature instanceof EntitySiren && (((EntitySiren) creature).isSinging() || ((EntitySiren) creature).wantsToSing())) {
             return false;
         } else {
-            Vec3d vec3d = this.findPossibleShelter();
+            Vector3d Vector3d = this.findPossibleShelter();
 
-            if (vec3d == null) {
+            if (Vector3d == null) {
                 return false;
             } else {
-                this.shelterX = vec3d.x;
-                this.shelterY = vec3d.y;
-                this.shelterZ = vec3d.z;
+                this.shelterX = Vector3d.x;
+                this.shelterY = Vector3d.y;
+                this.shelterZ = Vector3d.z;
                 return true;
             }
         }
@@ -64,12 +64,12 @@ public class AquaticAIGetInWater extends Goal {
     }
 
     @Nullable
-    public Vec3d findPossibleShelter() {
+    public Vector3d findPossibleShelter() {
         return findPossibleShelter(10, 3);
     }
 
     @Nullable
-    protected Vec3d findPossibleShelter(int xz, int y) {
+    protected Vector3d findPossibleShelter(int xz, int y) {
         Random random = this.creature.getRNG();
         BlockPos blockpos = new BlockPos(this.creature.getPosX(), this.creature.getBoundingBox().minY, this.creature.getPosZ());
 
@@ -77,7 +77,7 @@ public class AquaticAIGetInWater extends Goal {
             BlockPos blockpos1 = blockpos.add(random.nextInt(xz * 2) - xz, random.nextInt(y * 2) - y, random.nextInt(xz * 2) - xz);
 
             if (this.world.getBlockState(blockpos1).getMaterial() == Material.WATER) {
-                return new Vec3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
+                return new Vector3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
             }
         }
 

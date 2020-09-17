@@ -6,7 +6,7 @@ import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
 
@@ -33,11 +33,11 @@ public class CockatriceAIStareAttack extends Goal {
     }
 
     public static boolean isEntityLookingAt(LivingEntity looker, LivingEntity seen, double degree) {
-        Vec3d vec3d = looker.getLook(1.0F).normalize();
-        Vec3d vec3d1 = new Vec3d(seen.getPosX() - looker.getPosX(), seen.getBoundingBox().minY + (double) seen.getEyeHeight() - (looker.getPosY() + (double) looker.getEyeHeight()), seen.getPosZ() - looker.getPosZ());
-        double d0 = vec3d1.length();
-        vec3d1 = vec3d1.normalize();
-        double d1 = vec3d.dotProduct(vec3d1);
+        Vector3d Vector3d = looker.getLook(1.0F).normalize();
+        Vector3d Vector3d1 = new Vector3d(seen.getPosX() - looker.getPosX(), seen.getBoundingBox().minY + (double) seen.getEyeHeight() - (looker.getPosY() + (double) looker.getEyeHeight()), seen.getPosZ() - looker.getPosZ());
+        double d0 = Vector3d1.length();
+        Vector3d1 = Vector3d1.normalize();
+        double d1 = Vector3d.dotProduct(Vector3d1);
         return d1 > 1.0D - degree / d0;
     }
 

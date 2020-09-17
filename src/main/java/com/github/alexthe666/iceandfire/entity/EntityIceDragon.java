@@ -24,6 +24,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -157,7 +158,7 @@ public class EntityIceDragon extends EntityDragonBase {
                     break;
                 case SHAKE_PREY:
                     boolean flag = false;
-                    if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector().add(0, this.getHeight() / 2, 0), entityIn.getPositionVector().add(0, entityIn.getHeight() / 2, 0)) &&
+                    if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVec().add(0, this.getHeight() / 2, 0), entityIn.getPositionVec().add(0, entityIn.getHeight() / 2, 0)) &&
                             entityIn.getWidth() < this.getWidth() * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
                         this.setAnimation(ANIMATION_SHAKEPREY);
                         flag = true;
@@ -267,7 +268,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 this.setAnimation(ANIMATION_FIRECHARGE);
             } else if (this.getAnimationTick() == 15) {
                 rotationYaw = renderYawOffset;
-                Vec3d headVec = this.getHeadPosition();
+                Vector3d headVec = this.getHeadPosition();
                 this.playSound(IafSoundRegistry.ICEDRAGON_BREATH, 4, 1);
                 double d2 = controller.getLookVec().x;
                 double d3 = controller.getLookVec().y;
@@ -312,7 +313,7 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     public boolean isInMaterialWater() {
-        return this.world.isMaterialInBB(this.getBoundingBox().grow(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D), Material.WATER);
+        return this.isInWater();
     }
 
     private void shootIceAtMob(LivingEntity entity) {
@@ -322,7 +323,7 @@ public class EntityIceDragon extends EntityDragonBase {
                     this.setAnimation(ANIMATION_FIRECHARGE);
                 } else if (this.getAnimationTick() == 15) {
                     rotationYaw = renderYawOffset;
-                    Vec3d headVec = this.getHeadPosition();
+                    Vector3d headVec = this.getHeadPosition();
                     double d2 = entity.getPosX() - headVec.x;
                     double d3 = entity.getPosY() - headVec.y;
                     double d4 = entity.getPosZ() - headVec.z;
@@ -386,7 +387,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 this.setAnimation(ANIMATION_FIRECHARGE);
             } else if (this.getAnimationTick() == 20) {
                 rotationYaw = renderYawOffset;
-                Vec3d headVec = this.getHeadPosition();
+                Vector3d headVec = this.getHeadPosition();
                 double d2 = burnX - headVec.x;
                 double d3 = burnY - headVec.y;
                 double d4 = burnZ - headVec.z;
@@ -408,7 +409,7 @@ public class EntityIceDragon extends EntityDragonBase {
         this.burnParticleX = burnX;
         this.burnParticleY = burnY;
         this.burnParticleZ = burnZ;
-        Vec3d headPos = getHeadPosition();
+        Vector3d headPos = getHeadPosition();
         double d2 = burnX - headPos.x;
         double d3 = burnY - headPos.y;
         double d4 = burnZ - headPos.z;
@@ -427,7 +428,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 }
             } else {
                 if (!world.isRemote) {
-                    RayTraceResult result = this.world.rayTraceBlocks(new RayTraceContext(new Vec3d(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ()), new Vec3d(progressX, progressY, progressZ), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+                    RayTraceResult result = this.world.rayTraceBlocks(new RayTraceContext(new Vector3d(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ()), new Vector3d(progressX, progressY, progressZ), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
                     BlockPos pos = new BlockPos(result.getHitVec());
                     IafDragonDestructionManager.destroyAreaIce(world, pos, this);
                 }

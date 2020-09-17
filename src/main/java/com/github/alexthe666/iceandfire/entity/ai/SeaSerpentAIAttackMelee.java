@@ -52,7 +52,7 @@ public class SeaSerpentAIAttackMelee extends Goal {
     public boolean shouldExecute() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
 
-        if (LivingEntity == null || !this.attacker.onGround) {
+        if (LivingEntity == null || !this.attacker.func_233570_aj_()) {
             return false;
         } else if (!LivingEntity.isAlive()) {
             return false;
@@ -88,7 +88,7 @@ public class SeaSerpentAIAttackMelee extends Goal {
             return false;
         } else if (!this.longMemory) {
             return !this.attacker.getNavigator().noPath();
-        } else if (!this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(LivingEntity))) {
+        } else if (!this.attacker.isWithinHomeDistanceFromPosition(LivingEntity.func_233580_cy_())) {
             return false;
         } else {
             return !(LivingEntity instanceof PlayerEntity) || !LivingEntity.isSpectator() && !((PlayerEntity) LivingEntity).isCreative();

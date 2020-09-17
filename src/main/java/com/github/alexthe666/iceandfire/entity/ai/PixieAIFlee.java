@@ -8,7 +8,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -21,7 +21,7 @@ public class PixieAIFlee<T extends Entity> extends Goal {
     private final Class<T> classToAvoid;
     protected EntityPixie pixie;
     protected T closestLivingEntity;
-    private Vec3d hidePlace;
+    private Vector3d hidePlace;
 
     public PixieAIFlee(EntityPixie pixie, Class<T> classToAvoidIn, float avoidDistanceIn, Predicate<? super T> avoidTargetSelectorIn) {
         this.pixie = pixie;
@@ -52,15 +52,15 @@ public class PixieAIFlee<T extends Entity> extends Goal {
         } else {
             this.closestLivingEntity = list.get(0);
             if (closestLivingEntity != null) {
-                Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.pixie, 16, 7, new Vec3d(this.closestLivingEntity.getPosX(), this.closestLivingEntity.getPosY(), this.closestLivingEntity.getPosZ()));
+                Vector3d Vector3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.pixie, 16, 7, new Vector3d(this.closestLivingEntity.getPosX(), this.closestLivingEntity.getPosY(), this.closestLivingEntity.getPosZ()));
 
-                if (vec3d == null) {
+                if (Vector3d == null) {
                     return false;
                 } else {
-                    vec3d = vec3d.add(0, 3, 0);
-                    this.pixie.getMoveHelper().setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1D);
-                    this.pixie.getLookController().setLookPosition(vec3d.x, vec3d.y, vec3d.z, 180.0F, 20.0F);
-                    hidePlace = vec3d;
+                    Vector3d = Vector3d.add(0, 3, 0);
+                    this.pixie.getMoveHelper().setMoveTo(Vector3d.x, Vector3d.y, Vector3d.z, 1D);
+                    this.pixie.getLookController().setLookPosition(Vector3d.x, Vector3d.y, Vector3d.z, 180.0F, 20.0F);
+                    hidePlace = Vector3d;
                     pixie.slowSpeed = true;
                     return true;
                 }

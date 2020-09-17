@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.pathfinding.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import java.util.stream.Collectors;
@@ -15,8 +15,8 @@ public class PathNavigateCyclops extends GroundPathNavigator {
     public BlockPos targetPosition;
     private EntityCyclops cyclops;
     private int ticksAtLastPos;
-    private Vec3d lastPosCheck = Vec3d.ZERO;
-    private Vec3d timeoutCachedNode = Vec3d.ZERO;
+    private Vector3d lastPosCheck = Vector3d.ZERO;
+    private Vector3d timeoutCachedNode = Vector3d.ZERO;
     private long timeoutTimer;
     private long lastTimeoutCheck;
     private double timeoutLimit;
@@ -55,20 +55,20 @@ public class PathNavigateCyclops extends GroundPathNavigator {
     }
 
     protected void pathFollow() {
-        Vec3d vec3d = this.getEntityPosition();
+        Vector3d Vector3d = this.getEntityPosition();
         int i = this.currentPath.getCurrentPathLength();
         for (int j = this.currentPath.getCurrentPathIndex(); j < this.currentPath.getCurrentPathLength(); ++j) {
-            if ((double) this.currentPath.getPathPointFromIndex(j).y != Math.floor(vec3d.y)) {
+            if ((double) this.currentPath.getPathPointFromIndex(j).y != Math.floor(Vector3d.y)) {
                 i = j;
                 break;
             }
         }
 
         this.maxDistanceToWaypoint = this.entity.getWidth();
-        Vec3d vec3d1 = this.currentPath.getCurrentPos();
-        float distX = MathHelper.abs((float) (this.entity.getPosX() - (vec3d1.x + 0.5D)));
-        float distZ = MathHelper.abs((float) (this.entity.getPosZ() - (vec3d1.z + 0.5D)));
-        float distY = (float) Math.abs(this.entity.getPosY() - vec3d1.y);
+        Vector3d Vector3d1 = this.currentPath.getCurrentPos();
+        float distX = MathHelper.abs((float) (this.entity.getPosX() - (Vector3d1.x + 0.5D)));
+        float distZ = MathHelper.abs((float) (this.entity.getPosZ() - (Vector3d1.z + 0.5D)));
+        float distY = (float) Math.abs(this.entity.getPosY() - Vector3d1.y);
 
         if (distX < this.maxDistanceToWaypoint && distZ < this.maxDistanceToWaypoint && distY < this.entity.getHeight()) {
             this.currentPath.setCurrentPathIndex(this.currentPath.getCurrentPathIndex() + 1);
@@ -79,16 +79,16 @@ public class PathNavigateCyclops extends GroundPathNavigator {
         int i1 = k;
 
         for (int j1 = i - 1; j1 >= this.currentPath.getCurrentPathIndex(); --j1) {
-            if (this.isDirectPathBetweenPoints(vec3d, this.currentPath.getVectorFromIndex(this.entity, j1), k, l, i1)) {
+            if (this.isDirectPathBetweenPoints(Vector3d, this.currentPath.getVectorFromIndex(this.entity, j1), k, l, i1)) {
                 this.currentPath.setCurrentPathIndex(j1);
                 break;
             }
         }
 
-        this.checkForStuck(vec3d);
+        this.checkForStuck(Vector3d);
     }
 
-    protected void checkForStuck(Vec3d positionVec3) {
+    protected void checkForStuck(Vector3d positionVec3) {
         if (this.totalTicks - this.ticksAtLastPos > 100) {
             if (positionVec3.squareDistanceTo(this.lastPosCheck) < 2.25D) {
                 this.clearPath();
@@ -99,18 +99,18 @@ public class PathNavigateCyclops extends GroundPathNavigator {
         }
 
         if (this.currentPath != null && !this.currentPath.isFinished()) {
-            Vec3d vec3d = this.currentPath.getCurrentPos();
+            Vector3d Vector3d = this.currentPath.getCurrentPos();
 
-            if (vec3d.equals(this.timeoutCachedNode)) {
+            if (Vector3d.equals(this.timeoutCachedNode)) {
                 this.timeoutTimer += System.currentTimeMillis() - this.lastTimeoutCheck;
             } else {
-                this.timeoutCachedNode = vec3d;
+                this.timeoutCachedNode = Vector3d;
                 double d0 = positionVec3.distanceTo(this.timeoutCachedNode);
                 this.timeoutLimit = this.entity.getAIMoveSpeed() > 0.0F ? d0 / (double) this.entity.getAIMoveSpeed() * 1000.0D : 0.0D;
             }
 
             if (this.timeoutLimit > 0.0D && (double) this.timeoutTimer > this.timeoutLimit * 3.0D) {
-                this.timeoutCachedNode = Vec3d.ZERO;
+                this.timeoutCachedNode = Vector3d.ZERO;
                 this.timeoutTimer = 0L;
                 this.timeoutLimit = 0.0D;
                 this.clearPath();
@@ -125,7 +125,7 @@ public class PathNavigateCyclops extends GroundPathNavigator {
     }
 
     @Override
-    protected boolean isDirectPathBetweenPoints(Vec3d posVec31, Vec3d posVec32, int sizeX, int sizeY, int sizeZ) {
+    protected boolean isDirectPathBetweenPoints(Vector3d posVec31, Vector3d posVec32, int sizeX, int sizeY, int sizeZ) {
         int i = MathHelper.floor(posVec31.x);
         int j = MathHelper.floor(posVec31.z);
         double d0 = posVec32.x - posVec31.x;
@@ -193,7 +193,7 @@ public class PathNavigateCyclops extends GroundPathNavigator {
         }
     }
 
-    private boolean isSafeToStandAt(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3d vec31, double p_179683_8_, double p_179683_10_) {
+    private boolean isSafeToStandAt(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vector3d vec31, double p_179683_8_, double p_179683_10_) {
         int i = x - sizeX / 2;
         int j = z - sizeZ / 2;
 
@@ -241,7 +241,7 @@ public class PathNavigateCyclops extends GroundPathNavigator {
     /**
      * Returns true if an entity does not collide with any solid blocks at the position.
      */
-    private boolean isPositionClear(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3d p_179692_7_, double p_179692_8_, double p_179692_10_) {
+    private boolean isPositionClear(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vector3d p_179692_7_, double p_179692_8_, double p_179692_10_) {
         for (BlockPos blockpos : BlockPos.getAllInBox(new BlockPos(x, y, z), new BlockPos(x + sizeX - 1, y + sizeY - 1, z + sizeZ - 1)).collect(Collectors.toList())) {
             double d0 = (double) blockpos.getX() + 0.5D - p_179692_7_.x;
             double d1 = (double) blockpos.getZ() + 0.5D - p_179692_7_.z;

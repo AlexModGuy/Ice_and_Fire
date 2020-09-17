@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.entity.util.IDeadMob;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
@@ -8,7 +9,9 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -37,11 +40,12 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
         super(type, worldIn);
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0D);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, 10.0D)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0D);
     }
 
     @Override
@@ -68,7 +72,8 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
             s = tag.getString("OwnerUUID");
         } else {
             String s1 = tag.getString("Owner");
-            s = PreYggdrasilConverter.convertMobOwnerIfNeeded(this.getServer(), s1);
+            UUID converedUUID = PreYggdrasilConverter.convertMobOwnerIfNeeded(this.getServer(), s1);
+            s = converedUUID == null ? s1 : converedUUID.toString();
         }
         if (!s.isEmpty()) {
             this.setOwnerId(UUID.fromString(s));

@@ -7,7 +7,7 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.List;
 
@@ -78,9 +78,9 @@ public class EntitySheepAIFollowCyclops extends Goal {
 
     public Path getPathToLivingEntity(AnimalEntity entityIn, EntityCyclops cyclops) {
         PathNavigator navi = entityIn.getNavigator();
-        Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockTowards(entityIn, 2, 7, new Vec3d(cyclops.getPosX(), cyclops.getPosY(), cyclops.getPosZ()));
-        if (vec3d != null) {
-            BlockPos blockpos = new BlockPos(vec3d);
+        Vector3d Vector3d = RandomPositionGenerator.findRandomTargetBlockTowards(entityIn, 2, 7, new Vector3d(cyclops.getPosX(), cyclops.getPosY(), cyclops.getPosZ()));
+        if (Vector3d != null) {
+            BlockPos blockpos = new BlockPos(Vector3d);
             return navi.getPathToPos(blockpos, 0);
         }
         return null;

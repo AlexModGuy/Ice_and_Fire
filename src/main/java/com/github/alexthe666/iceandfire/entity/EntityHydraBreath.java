@@ -17,6 +17,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.FMLPlayMessages;
@@ -75,22 +76,23 @@ public class EntityHydraBreath extends AbstractFireballEntity implements IDragon
         if(this.ticksExisted > 30){
             this.remove();
         }
-        if (this.world.isRemote || (this.shootingEntity == null || this.shootingEntity.isAlive()) && this.world.isBlockLoaded(new BlockPos(this))) {
-            if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.removed) && this.world.isBlockLoaded(new BlockPos(this))) {
+        Entity shootingEntity = this.func_234616_v_();
+        if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.func_233580_cy_())) {
+            if (this.world.isRemote || (shootingEntity == null || !shootingEntity.removed) && this.world.isBlockLoaded(this.func_233580_cy_())) {
                 if (this.isFireballFiery()) {
                     this.setFire(1);
                 }
 
                 ++this.ticksInAir;
-                RayTraceResult raytraceresult = ProjectileHelper.rayTrace(this, true, this.ticksInAir >= 25, this.shootingEntity, RayTraceContext.BlockMode.COLLIDER);
+                RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_, RayTraceContext.BlockMode.COLLIDER);
                 if (raytraceresult.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                     this.onImpact(raytraceresult);
                 }
 
-                Vec3d vec3d = this.getMotion();
-                double d0 = this.getPosX() + vec3d.x;
-                double d1 = this.getPosY() + vec3d.y;
-                double d2 = this.getPosZ() + vec3d.z;
+                Vector3d Vector3d = this.getMotion();
+                double d0 = this.getPosX() + Vector3d.x;
+                double d1 = this.getPosY() + Vector3d.y;
+                double d2 = this.getPosZ() + Vector3d.z;
                 ProjectileHelper.rotateTowardsMovement(this, 0.2F);
                 float f = this.getMotionFactor();
                 if (this.world.isRemote) {
@@ -99,7 +101,7 @@ public class EntityHydraBreath extends AbstractFireballEntity implements IDragon
                     }
                 }
 
-                this.setMotion(vec3d.add(this.accelerationX, this.accelerationY, this.accelerationZ).scale((double)f));
+                this.setMotion(Vector3d.add(this.accelerationX, this.accelerationY, this.accelerationZ).scale((double)f));
                 this.setPosition(d0, d1, d2);
             } else {
                 this.remove();
@@ -109,21 +111,19 @@ public class EntityHydraBreath extends AbstractFireballEntity implements IDragon
             this.accelerationZ *= 0.95F;
             this.addVelocity(this.accelerationX, this.accelerationY, this.accelerationZ);
             ++this.ticksInAir;
-            Vec3d vec3d = this.getMotion();
-            RayTraceResult raytraceresult = ProjectileHelper.rayTrace(this, this.getBoundingBox().expand(vec3d).grow(1.0D), (p_213879_1_) -> {
-                return !p_213879_1_.isSpectator() && p_213879_1_ != this.shootingEntity;
-            }, RayTraceContext.BlockMode.OUTLINE, true);
+            Vector3d Vector3d = this.getMotion();
+            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_, RayTraceContext.BlockMode.COLLIDER);
 
             if (raytraceresult != null) {
                 this.onImpact(raytraceresult);
             }
 
-            double d0 = this.getPosX() + vec3d.x;
-            double d1 = this.getPosY() + vec3d.y;
-            double d2 = this.getPosZ() + vec3d.z;
-            float f = MathHelper.sqrt(horizontalMag(vec3d));
-            this.rotationYaw = (float) (MathHelper.atan2(vec3d.x, vec3d.z) * (double) (180F / (float) Math.PI));
-            for (this.rotationPitch = (float) (MathHelper.atan2(vec3d.y, f) * (double) (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
+            double d0 = this.getPosX() + Vector3d.x;
+            double d1 = this.getPosY() + Vector3d.y;
+            double d2 = this.getPosZ() + Vector3d.z;
+            float f = MathHelper.sqrt(horizontalMag(Vector3d));
+            this.rotationYaw = (float) (MathHelper.atan2(Vector3d.x, Vector3d.z) * (double) (180F / (float) Math.PI));
+            for (this.rotationPitch = (float) (MathHelper.atan2(Vector3d.y, f) * (double) (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
             }
             while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
                 this.prevRotationPitch += 360.0F;
@@ -163,6 +163,7 @@ public class EntityHydraBreath extends AbstractFireballEntity implements IDragon
     @Override
     protected void onImpact(RayTraceResult movingObject) {
         boolean flag = this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING);
+        Entity shootingEntity = this.func_234616_v_();
         if (!this.world.isRemote) {
             if (movingObject.getType() == RayTraceResult.Type.ENTITY) {
                 Entity entity = ((EntityRayTraceResult) movingObject).getEntity();
@@ -170,8 +171,8 @@ public class EntityHydraBreath extends AbstractFireballEntity implements IDragon
                 if (entity != null && entity instanceof EntityHydraHead) {
                     return;
                 }
-                if (this.shootingEntity != null && this.shootingEntity instanceof EntityHydra) {
-                    EntityHydra dragon = (EntityHydra) this.shootingEntity;
+                if (shootingEntity != null && shootingEntity instanceof EntityHydra) {
+                    EntityHydra dragon = (EntityHydra) shootingEntity;
                     if (dragon.isOnSameTeam(entity) || dragon.isEntityEqual(entity)) {
                         return;
                     }

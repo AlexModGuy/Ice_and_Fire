@@ -11,18 +11,19 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.ElderGuardianRenderer;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
 public class ParticleSirenAppearance extends Particle {
     private final Model field_228342_a_ = new ModelSiren();
     private int sirenType;
-    public ParticleSirenAppearance(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int sirenType) {
+    public ParticleSirenAppearance(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int sirenType) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn);
         this.particleGravity = 0.0F;
         this.maxAge = 30;

@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -31,14 +31,14 @@ public class TrollAIFleeSun extends Goal {
         } else if (!this.world.canSeeSky(new BlockPos(this.troll.getPosX(), this.troll.getBoundingBox().minY, this.troll.getPosZ()))) {
             return false;
         } else {
-            Vec3d vec3d = this.findPossibleShelter();
+            Vector3d Vector3d = this.findPossibleShelter();
 
-            if (vec3d == null) {
+            if (Vector3d == null) {
                 return false;
             } else {
-                this.shelterX = vec3d.x;
-                this.shelterY = vec3d.y;
-                this.shelterZ = vec3d.z;
+                this.shelterX = Vector3d.x;
+                this.shelterY = Vector3d.y;
+                this.shelterZ = Vector3d.z;
                 return true;
             }
         }
@@ -59,7 +59,7 @@ public class TrollAIFleeSun extends Goal {
     }
 
     @Nullable
-    private Vec3d findPossibleShelter() {
+    private Vector3d findPossibleShelter() {
         Random random = this.troll.getRNG();
         BlockPos blockpos = new BlockPos(this.troll.getPosX(), this.troll.getBoundingBox().minY, this.troll.getPosZ());
 
@@ -67,7 +67,7 @@ public class TrollAIFleeSun extends Goal {
             BlockPos blockpos1 = blockpos.add(random.nextInt(20) - 10, random.nextInt(6) - 3, random.nextInt(20) - 10);
 
             if (!this.world.canSeeSky(blockpos1) && this.troll.getBlockPathWeight(blockpos1) < 0.0F) {
-                return new Vec3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
+                return new Vector3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
             }
         }
 

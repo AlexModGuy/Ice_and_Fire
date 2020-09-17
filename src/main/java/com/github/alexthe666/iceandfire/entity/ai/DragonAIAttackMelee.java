@@ -62,7 +62,7 @@ public class DragonAIAttackMelee extends Goal {
             this.resetTask();
             return false;
         }
-        return LivingEntity != null && (LivingEntity.isAlive() && (!this.longMemory ? (dragon.isFlying() || dragon.isHovering() || !this.dragon.getNavigator().noPath()) : (this.dragon.isWithinHomeDistanceFromPosition(new BlockPos(LivingEntity)) && (!(LivingEntity instanceof PlayerEntity) || !LivingEntity.isSpectator() && !((PlayerEntity) LivingEntity).isCreative()))));
+        return LivingEntity != null && (LivingEntity.isAlive() && (!this.longMemory ? (dragon.isFlying() || dragon.isHovering() || !this.dragon.getNavigator().noPath()) : (this.dragon.isWithinHomeDistanceFromPosition(LivingEntity.func_233580_cy_()) && (!(LivingEntity instanceof PlayerEntity) || !LivingEntity.isSpectator() && !((PlayerEntity) LivingEntity).isCreative()))));
     }
 
     @Override

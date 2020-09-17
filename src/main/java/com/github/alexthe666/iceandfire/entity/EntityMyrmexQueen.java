@@ -13,7 +13,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.entity.monster.IMob;
@@ -85,7 +87,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     public void setCustomName(ITextComponent name) {
         if (!this.getHive().equals(name)) {
             if (this.getHive() != null) {
-                this.getHive().colonyName = name.getFormattedText();
+                this.getHive().colonyName = name.getString();
             }
         }
         super.setCustomName(name);
@@ -128,10 +130,10 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         } else if (this.canSeeSky()) {
             this.setAnimation(ANIMATION_DIGNEST);
             if (this.getAnimationTick() == 42) {
-                int down = Math.max(15, this.getPosition().getY() - 20 + this.getRNG().nextInt(10));
+                int down = Math.max(15, this.func_233580_cy_().getY() - 20 + this.getRNG().nextInt(10));
                 BlockPos genPos = new BlockPos(this.getPosX(), down, this.getPosZ());
                 if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, genPos.getX(), genPos.getY(), genPos.getZ()))) {
-                    WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true, this.isJungle(), NoFeatureConfig::deserialize);
+                    WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true, this.isJungle(), NoFeatureConfig.field_236558_a_);
                     if (!world.isRemote) {
                         hiveGen.placeSmallGen(world, this.getRNG(), genPos);
                     }
@@ -182,7 +184,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAnimationTick() == 0) {
@@ -191,7 +193,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 LivingEntity attackTarget = this.getAttackTarget();
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue() * 2));
                 this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 200, 2));
                 this.getAttackTarget().isAirBorne = true;
                 float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
@@ -199,7 +201,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 attackTarget.setMotion(attackTarget.getMotion().mul(0.5D, 1, 0.5D));
                 attackTarget.setMotion(attackTarget.getMotion().add(-0.5 / (double) f * 4, 1, -0.5 / (double) f * 4));
 
-                if (this.getAttackTarget().onGround) {
+                if (this.getAttackTarget().func_233570_aj_()) {
                     attackTarget.setMotion(attackTarget.getMotion().add(0, 0.4, 0));
                 }
             }
@@ -239,13 +241,20 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         return false;
     }
 
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength * 3.5D);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(120);
-        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(15.0D);
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, 120D)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.2D)
+                //ATTACK
+                .func_233815_a_(Attributes.field_233823_f_, IafConfig.myrmexBaseAttackStrength * 3.5D)
+                //FOLLOW RANGE
+                .func_233815_a_(Attributes.field_233819_b_, 128.0D)
+                //ARMOR
+                .func_233815_a_(Attributes.field_233826_i_, 15.0D);
     }
+
 
     @Override
     public ResourceLocation getAdultTexture() {

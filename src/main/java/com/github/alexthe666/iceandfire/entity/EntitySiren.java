@@ -23,6 +23,8 @@ import com.google.common.base.Predicate;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
@@ -39,6 +41,7 @@ import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -138,9 +141,9 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
         return true;
     }
 
-    public boolean isDirectPathBetweenPoints(Vec3d vec1, Vec3d pos) {
-        Vec3d vec3d1 = new Vec3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
-        return this.world.rayTraceBlocks(new RayTraceContext(vec1, vec3d1, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
+    public boolean isDirectPathBetweenPoints(Vector3d vec1, Vector3d pos) {
+        Vector3d Vector3d1 = new Vector3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+        return this.world.rayTraceBlocks(new RayTraceContext(vec1, Vector3d1, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
     }
 
     public float getPathPriority(PathNodeType nodeType) {
@@ -162,7 +165,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     private boolean isPathOnHighGround() {
         if (this.navigator != null && this.navigator.getPath() != null && this.navigator.getPath().getFinalPathPoint() != null) {
             BlockPos target = new BlockPos(this.navigator.getPath().getFinalPathPoint().x, this.navigator.getPath().getFinalPathPoint().y, this.navigator.getPath().getFinalPathPoint().z);
-            BlockPos siren = new BlockPos(this);
+            BlockPos siren = this.func_233580_cy_();
             return world.isAirBlock(siren.up()) && world.isAirBlock(target.up()) && target.getY() >= siren.getY();
         }
         return false;
@@ -185,10 +188,10 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
             this.setSinging(true);
         }
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 7D && this.getAnimationTick() == 5) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributes().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.field_233823_f_).getValue());
         }
         if (this.getAnimation() == ANIMATION_PULL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 16D && this.getAnimationTick() == 5) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributes().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.field_233823_f_).getValue());
             double attackmotionX = (Math.signum(this.getPosX() - this.getAttackTarget().getPosX()) * 0.5D - this.getAttackTarget().getMotion().z) * 0.100000000372529 * 5;
             double attackmotionY = (Math.signum(this.getPosY() - this.getAttackTarget().getPosY() + 1) * 0.5D - this.getAttackTarget().getMotion().y) * 0.100000000372529 * 5;
             double attackmotionZ = (Math.signum(this.getPosZ() - this.getAttackTarget().getPosZ()) * 0.5D - this.getAttackTarget().getMotion().z) * 0.100000000372529 * 5;
@@ -415,11 +418,15 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
         this.dataManager.set(SING_POSE, MathHelper.clamp(pose, 0, 2));
     }
 
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.sirenMaxHealth);
+
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, IafConfig.sirenMaxHealth)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.25D)
+                //ATTACK
+                .func_233815_a_(Attributes.field_233823_f_, 6.0D);
     }
 
     @Override
@@ -484,7 +491,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     @Override
-    public void travel(Vec3d motion) {
+    public void travel(Vector3d motion) {
       super.travel(motion);
     }
 
@@ -531,7 +538,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
                 }
                 siren.setMotion(siren.getMotion().add(f1, siren.getAIMoveSpeed() * distanceY * 0.1D, f2));
             } else if (this.action == MovementController.Action.JUMPING) {
-                siren.setAIMoveSpeed((float) (this.speed * siren.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
+                siren.setAIMoveSpeed((float) (this.speed * siren.getAttribute(Attributes.field_233821_d_).getValue()));
                 if (siren.onGround) {
                     this.action = MovementController.Action.WAIT;
                 }

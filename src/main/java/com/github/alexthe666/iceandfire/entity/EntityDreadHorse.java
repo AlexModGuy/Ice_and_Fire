@@ -2,6 +2,8 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.entity.util.IDreadMob;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.horse.SkeletonHorseEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -24,12 +26,14 @@ public class EntityDreadHorse extends SkeletonHorseEntity implements IDreadMob {
         super(type, worldIn);
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(25.0D);
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
-        this.getAttribute(JUMP_STRENGTH).setBaseValue(this.getModifiedJumpStrength());
+
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, 25.0D)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.3D)
+                .func_233815_a_(Attributes.field_233826_i_, 4.0D);
     }
 
 
@@ -42,29 +46,29 @@ public class EntityDreadHorse extends SkeletonHorseEntity implements IDreadMob {
     @Override
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
-        if (this.getCommanderId() == null) {
-            compound.putString("CommanderUUID", "");
-        } else {
-            compound.putString("CommanderUUID", this.getCommanderId().toString());
+        if (this.getCommanderId() != null) {
+            compound.putUniqueId("CommanderUUID", this.getCommanderId());
         }
     }
 
     @Override
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
-        String s;
-        if (compound.contains("CommanderUUID", 8)) {
-            s = compound.getString("CommanderUUID");
+        UUID uuid;
+        if (compound.hasUniqueId("CommanderUUID")) {
+            uuid = compound.getUniqueId("CommanderUUID");
         } else {
-            String s1 = compound.getString("Owner");
-            s = PreYggdrasilConverter.convertMobOwnerIfNeeded(this.getServer(), s1);
+            String s = compound.getString("CommanderUUID");
+            uuid = PreYggdrasilConverter.convertMobOwnerIfNeeded(this.getServer(), s);
         }
-        if (!s.isEmpty()) {
+
+        if (uuid != null) {
             try {
-                this.setCommanderId(UUID.fromString(s));
-            } catch (Throwable var4) {
+                this.setCommanderId(uuid);
+            } catch (Throwable throwable) {
             }
         }
+
     }
 
     @Nullable

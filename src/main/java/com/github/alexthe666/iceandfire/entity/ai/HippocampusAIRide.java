@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class HippocampusAIRide extends Goal {
 
@@ -35,7 +35,7 @@ public class HippocampusAIRide extends Goal {
         double z = dragon.getPosZ();
         double speed = 1.8F * dragon.getRideSpeedModifier();
         if (player.moveStrafing != 0 || player.moveForward != 0) {
-            Vec3d lookVec = player.getLookVec();
+            Vector3d lookVec = player.getLookVec();
             if (player.moveForward < 0) {
                 lookVec = lookVec.rotateYaw((float) Math.PI);
             } else if (player.moveStrafing > 0) {

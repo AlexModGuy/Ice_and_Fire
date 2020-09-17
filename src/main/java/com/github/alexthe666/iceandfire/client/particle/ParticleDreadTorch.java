@@ -6,11 +6,12 @@ import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.SpriteTexturedParticle;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 
 public class ParticleDreadTorch extends SpriteTexturedParticle {
     private static final ResourceLocation SNOWFLAKE = new ResourceLocation("iceandfire:textures/particles/snowflake_0.png");
@@ -18,7 +19,7 @@ public class ParticleDreadTorch extends SpriteTexturedParticle {
 
     private boolean big;
 
-    public ParticleDreadTorch(World world, double x, double y, double z, double motX, double motY, double motZ, float size) {
+    public ParticleDreadTorch(ClientWorld world, double x, double y, double z, double motX, double motY, double motZ, float size) {
         super(world, x, y, z, motX, motY, motZ);
         this.setPosition(x, y, z);
         this.motionY += 0.01D;
@@ -27,7 +28,7 @@ public class ParticleDreadTorch extends SpriteTexturedParticle {
 
     @Override
     public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
-        Vec3d inerp = renderInfo.getProjectedView();
+        Vector3d inerp = renderInfo.getProjectedView();
         particleScale = 0.125F * (this.maxAge - (this.age));
         particleScale = particleScale * 0.09F;
         motionX *= 0.75D;
@@ -37,10 +38,10 @@ public class ParticleDreadTorch extends SpriteTexturedParticle {
             this.setExpired();
         }
 
-        Vec3d vec3d = renderInfo.getProjectedView();
-        float f = (float) (MathHelper.lerp(partialTicks, this.prevPosX, this.posX) - vec3d.getX());
-        float f1 = (float) (MathHelper.lerp(partialTicks, this.prevPosY, this.posY) - vec3d.getY());
-        float f2 = (float) (MathHelper.lerp(partialTicks, this.prevPosZ, this.posZ) - vec3d.getZ());
+        Vector3d Vector3d = renderInfo.getProjectedView();
+        float f = (float) (MathHelper.lerp(partialTicks, this.prevPosX, this.posX) - Vector3d.getX());
+        float f1 = (float) (MathHelper.lerp(partialTicks, this.prevPosY, this.posY) - Vector3d.getY());
+        float f2 = (float) (MathHelper.lerp(partialTicks, this.prevPosZ, this.posZ) - Vector3d.getZ());
         Quaternion quaternion;
         if (this.particleAngle == 0.0F) {
             quaternion = renderInfo.getRotation();

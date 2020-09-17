@@ -3,8 +3,8 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -29,7 +29,7 @@ public class DragonAITargetNonTamed<T extends LivingEntity> extends NearestAttac
     }
 
     protected double getTargetDistance() {
-        IAttributeInstance iattributeinstance = this.goalOwner.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
+        ModifiableAttributeInstance iattributeinstance = this.goalOwner.getAttribute(Attributes.field_233819_b_);
         return iattributeinstance == null ? 128.0D : iattributeinstance.getValue();
     }
 }

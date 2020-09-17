@@ -13,10 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -124,9 +121,9 @@ public class EntityChainTie extends HangingEntity {
         }
     }
 
-    public boolean processInitialInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         if (this.world.isRemote) {
-            return true;
+            return func_230254_b_(player, hand);
         } else {
             boolean flag = false;
             double d0 = 30D;
@@ -157,7 +154,7 @@ public class EntityChainTie extends HangingEntity {
                 }
             }
 
-            return true;
+            return ActionResultType.SUCCESS;
         }
     }
 

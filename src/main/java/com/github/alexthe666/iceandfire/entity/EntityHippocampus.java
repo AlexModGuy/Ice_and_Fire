@@ -20,6 +20,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.BreedGoal;
 import net.minecraft.entity.passive.TameableEntity;
@@ -42,13 +44,10 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.DifficultyInstance;
@@ -222,13 +221,14 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         dataManager.set(CONTROL_STATE, state);
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
-        this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, 40.0D)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.3D)
+                //ATTACK
+                .func_233815_a_(Attributes.field_233823_f_, 1.0D);
     }
 
     public boolean shouldDismountInWater(Entity rider) {
@@ -444,7 +444,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
             case 3:
                 armorValue = 30;
         }
-        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(armorValue);
+        this.getAttribute(Attributes.field_233826_i_).setBaseValue(armorValue);
     }
 
     public int getVariant() {
@@ -509,10 +509,10 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     @Override
-    public void travel(Vec3d vec) {
+    public void travel(Vector3d vec) {
         float f4;
         if (this.isSitting()) {
-            super.travel(Vec3d.ZERO);
+            super.travel(Vector3d.ZERO);
             return;
         }
         if (this.isServerWorld()) {
@@ -567,7 +567,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         super.playHurtSound(source);
     }
 
-    public boolean processInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         if (itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
             this.setSitting(false);
@@ -576,7 +576,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
             if (!player.isCreative()) {
                 itemstack.shrink(1);
             }
-            return true;
+            return ActionResultType.SUCCESS;
         }
         if (itemstack != null && itemstack.getItem() == Items.KELP) {
             if (!world.isRemote) {
@@ -595,7 +595,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
                     this.world.addParticle(ParticleTypes.HEART, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0);
                 }
             }
-            return true;
+            return ActionResultType.SUCCESS;
 
         }
         if (isOwner(player) && itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
@@ -605,22 +605,22 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
             if (!player.isCreative()) {
                 itemstack.shrink(1);
             }
-            return true;
+            return ActionResultType.SUCCESS;
         }
         if (isOwner(player) && itemstack != null && itemstack.getItem() == Items.STICK) {
             this.setSitting(!this.isSitting());
-            return true;
+            return ActionResultType.SUCCESS;
         }
         if (isOwner(player) && itemstack.isEmpty()) {
-            if (player.isShiftKeyDown()) {
+            if (player.isSneaking()) {
                 this.openGUI(player);
-                return true;
+                return ActionResultType.SUCCESS;
             } else if (this.isSaddled() && !this.isChild() && !player.isPassenger()) {
                 player.startRiding(this, true);
-                return true;
+                return ActionResultType.SUCCESS;
             }
         }
-        return super.processInteract(player, hand);
+        return super.func_230254_b_(player, hand);
     }
 
     public void openGUI(PlayerEntity playerEntity) {
@@ -763,9 +763,9 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         public void tick() {
             if (this.hippo.isBeingRidden()) {
                 double flySpeed = 0.8F * hippo.getRideSpeedModifier();
-                Vec3d dragonVec = hippo.getPositionVector();
-                Vec3d moveVec = new Vec3d(posX, posY, posZ);
-                Vec3d normalized = moveVec.subtract(dragonVec).normalize();
+                Vector3d dragonVec = hippo.getPositionVec();
+                Vector3d moveVec = new Vector3d(posX, posY, posZ);
+                Vector3d normalized = moveVec.subtract(dragonVec).normalize();
                 double dist = dragonVec.distanceTo(moveVec);
                 hippo.setMotion(normalized.x * flySpeed, normalized.y * flySpeed, normalized.z * flySpeed);
                 if (dist > 2.5E-7) {
@@ -793,7 +793,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
                 }
                 this.hippo.setMotion(this.hippo.getMotion().add(f1, this.hippo.getAIMoveSpeed() * distanceY * 0.1D, f2));
             } else if (this.action == MovementController.Action.JUMPING) {
-                this.hippo.setAIMoveSpeed((float) (this.speed * this.hippo.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
+                this.hippo.setAIMoveSpeed((float) (this.speed * this.hippo.getAttribute(Attributes.field_233821_d_).getValue()));
                 if (this.hippo.onGround) {
                     this.action = MovementController.Action.WAIT;
                 }

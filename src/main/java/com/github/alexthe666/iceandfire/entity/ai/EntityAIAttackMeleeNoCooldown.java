@@ -10,6 +10,5 @@ public class EntityAIAttackMeleeNoCooldown extends MeleeAttackGoal {
 
     public void tick() {
         super.tick();
-        this.attackTick = 0;
     }
 }

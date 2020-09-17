@@ -18,7 +18,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -116,13 +116,13 @@ public class ItemDeathwormGauntlet extends Item implements ICustomRendered {
                 if (properties.prevDeathwormLungeTicks == 20) {
                     if (entity instanceof PlayerEntity) {
                         PlayerEntity player = (PlayerEntity) entity;
-                        Vec3d vec3d = player.getLook(1.0F).normalize();
+                        Vector3d Vector3d = player.getLook(1.0F).normalize();
                         double range = 5;
                         for (MobEntity LivingEntity : world.getEntitiesWithinAABB(MobEntity.class, new AxisAlignedBB(player.getPosX() - range, player.getPosY() - range, player.getPosZ() - range, player.getPosX() + range, player.getPosY() + range, player.getPosZ() + range))) {
-                            Vec3d vec3d1 = new Vec3d(LivingEntity.getPosX() - player.getPosX(), LivingEntity.getPosY() - player.getPosY(), LivingEntity.getPosZ() - player.getPosZ());
-                            double d0 = vec3d1.length();
-                            vec3d1 = vec3d1.normalize();
-                            double d1 = vec3d.dotProduct(vec3d1);
+                            Vector3d Vector3d1 = new Vector3d(LivingEntity.getPosX() - player.getPosX(), LivingEntity.getPosY() - player.getPosY(), LivingEntity.getPosZ() - player.getPosZ());
+                            double d0 = Vector3d1.length();
+                            Vector3d1 = Vector3d1.normalize();
+                            double d1 = Vector3d.dotProduct(Vector3d1);
                             boolean canSee = d1 > 1.0D - 0.5D / d0 && player.canEntityBeSeen(LivingEntity);
                             if (canSee) {
                                 properties.specialWeaponDmg++;

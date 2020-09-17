@@ -42,14 +42,11 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.BiomeDictionary;
@@ -112,7 +109,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public static boolean isEdibleBlock(BlockState blockState) {
-        return BlockTags.getCollection().getOrCreate(MYRMEX_HARVESTABLES).contains(blockState.getBlock());
+        return BlockTags.getCollection().getOrCreate(MYRMEX_HARVESTABLES).func_230235_a_(blockState.getBlock());
     }
 
     public static int getRandomCaste(World world, Random random, boolean royal) {
@@ -187,12 +184,6 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         return 0.52F;
     }
 
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-        this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
-    }
-
     public float getBlockPathWeight(BlockPos pos) {
         return this.world.getBlockState(pos.down()).getBlock() instanceof BlockMyrmexResin ? 10.0F : this.world.getLight(pos) - 0.5F;
     }
@@ -221,7 +212,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
             this.prevRenderYawOffset = 0;
         }
         if (!this.world.isRemote) {
-            this.setBesideClimbableBlock(this.collidedHorizontally && (this.onGround || !this.collidedVertically));
+            this.setBesideClimbableBlock(this.collidedHorizontally && (this.func_233570_aj_() || !this.collidedVertically));
         }
         if (this.getGrowthStage() < 2) {
             growthTicks++;
@@ -310,7 +301,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public BlockPos getPos() {
-        return new BlockPos(this);
+        return this.func_233580_cy_();
     }
 
     public int getGrowthStage() {
@@ -415,35 +406,34 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         super.onDeath(cause);
     }
 
-    public boolean processInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         if (!shouldHaveNormalAI()) {
-            return false;
+            return ActionResultType.PASS;
         }
         boolean flag2 = itemstack.getItem() == IafItemRegistry.MYRMEX_JUNGLE_STAFF || itemstack.getItem() == IafItemRegistry.MYRMEX_DESERT_STAFF;
 
         if (flag2) {
             this.onStaffInteract(player, itemstack);
             player.swingArm(hand);
-            return true;
+            return ActionResultType.SUCCESS;
         }
         boolean flag = itemstack.getItem() == Items.NAME_TAG || itemstack.getItem() == Items.LEAD;
         if (flag) {
-            itemstack.interactWithEntity(player, this, hand);
-            return true;
-        } else if (!super.processInteract(player, hand) && this.getGrowthStage() >= 2 && this.isAlive() && !this.isChild() && !player.isShiftKeyDown()) {
+            return super.func_230254_b_(player, hand);
+        } else if (this.getGrowthStage() >= 2 && this.isAlive() && !this.isChild() && !player.isSneaking()) {
             if (this.getOffers().isEmpty()) {
-                return super.processInteract(player, hand);
+                return super.func_230254_b_(player, hand);
             } else {
                 if (!this.world.isRemote && (this.getAttackTarget() == null || !this.getAttackTarget().equals(player))) {
                     this.setCustomer(player);
                     this.openMerchantContainer(player, this.getDisplayName(), 1);
                 }
 
-                return true;
+                return ActionResultType.SUCCESS;
             }
         } else {
-            return super.processInteract(player, hand);
+            return super.func_230254_b_(player, hand);
         }
     }
 
@@ -483,7 +473,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     @Nullable
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setHive(MyrmexWorldData.get(world).getNearestHive(this.getPosition(), 400));
+        this.setHive(MyrmexWorldData.get(world).getNearestHive(this.func_233580_cy_(), 400));
         if (this.getHive() != null) {
             this.setJungleVariant(isJungleBiome(world, this.getHive().getCenter()));
         } else {
@@ -533,7 +523,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public boolean canSeeSky() {
-        return world.canBlockSeeSky(new BlockPos(this));
+        return world.canBlockSeeSky(this.func_233580_cy_());
     }
 
     public boolean isOnResin() {
@@ -547,20 +537,20 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public boolean isInNursery() {
-        if (getHive() != null && getHive().getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty() && getHive().getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition()) != null) {
+        if (getHive() != null && getHive().getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty() && getHive().getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.func_233580_cy_()) != null) {
             return false;
         }
         if (getHive() != null) {
-            BlockPos nursery = getHive().getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition());
+            BlockPos nursery = getHive().getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.func_233580_cy_());
             return MathHelper.sqrt(this.getDistanceSq(nursery.getX(), nursery.getY(), nursery.getZ())) < 45;
         }
         return false;
     }
 
     @Override
-    public void travel(Vec3d motion) {
+    public void travel(Vector3d motion) {
         if (!this.canMove()) {
-            super.travel(Vec3d.ZERO);
+            super.travel(Vector3d.ZERO);
             return;
         }
         super.travel(motion);
@@ -725,9 +715,9 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     @Nullable
-    public Entity changeDimension(DimensionType destination, net.minecraftforge.common.util.ITeleporter teleporter) {
+    public Entity changeDimension(ServerWorld p_241206_1_, net.minecraftforge.common.util.ITeleporter teleporter) {
         this.resetCustomer();
-        return super.changeDimension(destination, teleporter);
+        return super.changeDimension(p_241206_1_, teleporter);
     }
 
     public Inventory getVillagerInventory() {

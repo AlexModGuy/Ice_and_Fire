@@ -11,7 +11,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -42,7 +42,7 @@ public class MyrmexAIForage extends Goal {
             return false;
         }
         List<BlockPos> allBlocks = new ArrayList<BlockPos>();
-        for (BlockPos pos : BlockPos.getAllInBox(this.myrmex.getPosition().add(-RADIUS, -RADIUS/2, -RADIUS), this.myrmex.getPosition().add(RADIUS, RADIUS/2, RADIUS)).map(BlockPos::toImmutable).collect(Collectors.toList())) {
+        for (BlockPos pos : BlockPos.getAllInBox(this.myrmex.func_233580_cy_().add(-RADIUS, -RADIUS/2, -RADIUS), this.myrmex.func_233580_cy_().add(RADIUS, RADIUS/2, RADIUS)).map(BlockPos::toImmutable).collect(Collectors.toList())) {
             if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this.myrmex, pos.getX(), pos.getY(), pos.getZ())))
                 continue;
             if (EntityMyrmexBase.isEdibleBlock(this.myrmex.world.getBlockState(pos))) {
@@ -53,7 +53,7 @@ public class MyrmexAIForage extends Goal {
         if (allBlocks.isEmpty()) {
             this.myrmex.keepSearching = true;
             this.wanderRadius += RADIUS;
-            Vec3d vec = RandomPositionGenerator.findRandomTarget(this.myrmex, wanderRadius, 7);
+            Vector3d vec = RandomPositionGenerator.findRandomTarget(this.myrmex, wanderRadius, 7);
             if (vec != null) {
                 this.targetBlock = new BlockPos(vec);
             }

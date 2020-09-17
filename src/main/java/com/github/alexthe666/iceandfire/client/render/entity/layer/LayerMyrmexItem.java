@@ -48,7 +48,7 @@ public class LayerMyrmexItem extends LayerRenderer<EntityMyrmexBase, SegmentedMo
                 if (!itemstack.isEmpty()) {
                     matrixStackIn.push();
 
-                    if (entitylivingbaseIn.isShiftKeyDown()) {
+                    if (entitylivingbaseIn.isSneaking()) {
                         matrixStackIn.translate(0.0F, 0.2F, 0.0F);
                     }
                     this.translateToHand(HandSide.RIGHT, matrixStackIn);

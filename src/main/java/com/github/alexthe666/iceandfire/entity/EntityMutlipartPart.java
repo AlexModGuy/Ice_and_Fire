@@ -9,6 +9,7 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
@@ -32,6 +33,11 @@ public abstract class EntityMutlipartPart extends Entity {
     public EntityMutlipartPart(EntityType t, World world) {
         super(t, world);
         multipartSize = t.getSize();
+    }
+
+    @Override
+    public Entity getEntity() {
+        return this;
     }
 
 
@@ -152,12 +158,12 @@ public abstract class EntityMutlipartPart extends Entity {
         }
     }
 
-    public boolean processInitialInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
         LivingEntity parent = getParent();
         if (world.isRemote && parent != null) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(parent.getEntityId(), 0));
         }
-        return parent != null && parent.processInitialInteract(player, hand);
+        return parent != null ? parent.processInitialInteract(player, hand) : ActionResultType.PASS;
     }
 
     @Override

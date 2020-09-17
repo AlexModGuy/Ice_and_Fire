@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.gen.Heightmap;
 
 import javax.annotation.Nullable;
@@ -51,7 +51,7 @@ public class MyrmexAIFindHidingSpot extends Goal {
        if(targetBlock != null){
            if (areMyrmexNear(5) || this.myrmex.isOnResin()) {
                this.myrmex.getNavigator().tryMoveToXYZ(this.targetBlock.getX() + 0.5D, this.targetBlock.getY(), this.targetBlock.getZ() + 0.5D, 1D);
-               if (this.myrmex.getDistanceSq(new Vec3d(this.targetBlock)) < 20) {
+               if (this.myrmex.getDistanceSq(Vector3d.func_237489_a_(this.targetBlock)) < 20) {
                    this.wanderRadius += RADIUS;
                    this.targetBlock = getTargetPosition(wanderRadius);
                }

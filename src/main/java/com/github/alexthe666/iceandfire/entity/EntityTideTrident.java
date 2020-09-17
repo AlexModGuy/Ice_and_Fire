@@ -16,6 +16,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.FMLPlayMessages;
@@ -62,7 +63,7 @@ public class EntityTideTrident extends TridentEntity {
             f += EnchantmentHelper.getModifierForCreature(this.thrownStack, livingentity.getCreatureAttribute());
         }
 
-        Entity entity1 = this.getShooter();
+        Entity entity1 = this.func_234616_v_();
         DamageSource damagesource = DamageSource.causeTridentDamage(this, entity1 == null ? this : entity1);
         //this.dealtDamage = true;
         SoundEvent soundevent = SoundEvents.ITEM_TRIDENT_HIT;
@@ -85,11 +86,12 @@ public class EntityTideTrident extends TridentEntity {
         this.setMotion(this.getMotion().mul(-0.01D, -0.1D, -0.01D));
         float f1 = 1.0F;
         if (this.world instanceof ServerWorld && this.world.isThundering() && EnchantmentHelper.hasChanneling(this.thrownStack)) {
-            BlockPos blockpos = entity.getPosition();
+            BlockPos blockpos = entity.func_233580_cy_();
             if (this.world.canSeeSky(blockpos)) {
-                LightningBoltEntity lightningboltentity = new LightningBoltEntity(this.world, (double) blockpos.getX() + 0.5D, blockpos.getY(), (double) blockpos.getZ() + 0.5D, false);
-                lightningboltentity.setCaster(entity1 instanceof ServerPlayerEntity ? (ServerPlayerEntity) entity1 : null);
-                ((ServerWorld) this.world).addLightningBolt(lightningboltentity);
+                LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.world);
+                lightningboltentity.func_233576_c_(Vector3d.func_237492_c_(blockpos));
+                lightningboltentity.setCaster(entity1 instanceof ServerPlayerEntity ? (ServerPlayerEntity)entity1 : null);
+                this.world.addEntity(lightningboltentity);
                 soundevent = SoundEvents.ITEM_TRIDENT_THUNDER;
                 f1 = 5.0F;
             }

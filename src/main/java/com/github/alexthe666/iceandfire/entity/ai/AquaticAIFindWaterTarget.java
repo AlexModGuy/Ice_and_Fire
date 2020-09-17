@@ -8,7 +8,7 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.Comparator;
 import java.util.EnumSet;
@@ -34,7 +34,7 @@ public class AquaticAIFindWaterTarget extends Goal {
         }
         Path path = this.mob.getNavigator().getPath();
         if (this.mob.getRNG().nextFloat() < 0.15F || path != null && path.getFinalPathPoint() != null && this.mob.getDistanceSq(path.getFinalPathPoint().x, path.getFinalPathPoint().y, path.getFinalPathPoint().z) < 3) {
-            if (path != null && path.getFinalPathPoint() != null || !this.mob.getNavigator().noPath() && !isDirectPathBetweenPoints(this.mob, this.mob.getPositionVector(), new Vec3d(path.getFinalPathPoint().x, path.getFinalPathPoint().y, path.getFinalPathPoint().z))) {
+            if (path != null && path.getFinalPathPoint() != null || !this.mob.getNavigator().noPath() && !isDirectPathBetweenPoints(this.mob, this.mob.getPositionVec(), new Vector3d(path.getFinalPathPoint().x, path.getFinalPathPoint().y, path.getFinalPathPoint().z))) {
                 this.mob.getNavigator().clearPath();
             }
             if (this.mob.getNavigator().noPath()) {
@@ -63,12 +63,12 @@ public class AquaticAIFindWaterTarget extends Goal {
                 }
             }
         } else {
-            return new BlockPos(this.mob.getAttackTarget());
+            return this.mob.getAttackTarget().func_233580_cy_();
         }
         return null;
     }
 
-    public boolean isDirectPathBetweenPoints(Entity entity, Vec3d vec1, Vec3d vec2) {
+    public boolean isDirectPathBetweenPoints(Entity entity, Vector3d vec1, Vector3d vec2) {
         return mob.world.rayTraceBlocks(new RayTraceContext(vec1, vec2, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity)).getType() == RayTraceResult.Type.MISS;
 
     }
@@ -77,12 +77,12 @@ public class AquaticAIFindWaterTarget extends Goal {
         private BlockPos pos;
 
         public Sorter(Entity theEntityIn) {
-            this.pos = theEntityIn.getPosition();
+            this.pos = theEntityIn.func_233580_cy_();
         }
 
         //further; more prefered.
         public int compare(BlockPos p_compare_1_, BlockPos p_compare_2_) {
-            this.pos = AquaticAIFindWaterTarget.this.mob.getPosition();
+            this.pos = AquaticAIFindWaterTarget.this.mob.func_233580_cy_();
             double d0 = this.pos.distanceSq(p_compare_1_);
             double d1 = this.pos.distanceSq(p_compare_2_);
             return d0 < d1 ? 1 : (d0 > d1 ? -1 : 0);

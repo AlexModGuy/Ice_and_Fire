@@ -6,7 +6,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -35,14 +35,14 @@ public class AmphithereAIFleePlayer extends Goal {
                 return false;
             } else {
                 this.closestLivingEntity = list.get(0);
-                Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.entity, 20, 7, new Vec3d(this.closestLivingEntity.getPosX(), this.closestLivingEntity.getPosY(), this.closestLivingEntity.getPosZ()));
+                Vector3d Vector3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.entity, 20, 7, new Vector3d(this.closestLivingEntity.getPosX(), this.closestLivingEntity.getPosY(), this.closestLivingEntity.getPosZ()));
 
-                if (vec3d == null) {
+                if (Vector3d == null) {
                     return false;
-                } else if (this.closestLivingEntity.getDistanceSq(vec3d.x, vec3d.y, vec3d.z) < this.closestLivingEntity.getDistanceSq(this.entity)) {
+                } else if (this.closestLivingEntity.getDistanceSq(Vector3d) < this.closestLivingEntity.getDistanceSq(this.entity)) {
                     return false;
                 } else {
-                    this.path = this.entity.getNavigator().getPathToPos(vec3d.x, vec3d.y, vec3d.z, 0);
+                    this.path = this.entity.getNavigator().getPathToPos(Vector3d.x, Vector3d.y, Vector3d.z, 0);
                     return this.path != null;
                 }
             }

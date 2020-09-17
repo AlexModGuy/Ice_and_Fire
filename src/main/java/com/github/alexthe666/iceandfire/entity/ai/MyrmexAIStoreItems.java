@@ -41,7 +41,7 @@ public class MyrmexAIStoreItems extends Goal {
         } else {
             first = true;
             mainRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getCenter());
-            nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(WorldGenMyrmexHive.RoomType.FOOD, this.myrmex.getRNG(), this.myrmex.getPosition()));
+            nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(WorldGenMyrmexHive.RoomType.FOOD, this.myrmex.getRNG(), this.myrmex.func_233580_cy_()));
             nextCocoon = getNearbyCocoon(nextRoom);
             return nextCocoon != null;
         }

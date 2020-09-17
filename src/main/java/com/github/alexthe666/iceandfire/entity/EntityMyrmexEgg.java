@@ -12,7 +12,9 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -41,11 +43,12 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
         super(t, worldIn);
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0D);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, 10.0D)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.0D);
     }
 
     @Override
@@ -100,7 +103,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     public boolean canSeeSky() {
-        return world.canBlockSeeSky(new BlockPos(this));
+        return world.canBlockSeeSky(this.func_233580_cy_());
     }
 
     @Override
@@ -133,7 +136,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
             myrmex.setGrowthStage(0);
             myrmex.setPositionAndRotation(this.getPosX(), this.getPosY(), this.getPosZ(), 0, 0);
             if (myrmex instanceof EntityMyrmexQueen) {
-                MyrmexHive hive = new MyrmexHive(world, this.getPosition(), 100);
+                MyrmexHive hive = new MyrmexHive(world, this.func_233580_cy_(), 100);
                 PlayerEntity player = world.getClosestPlayer(this, 30);
                 if (player != null) {
                     hive.hasOwner = true;
@@ -150,7 +153,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
                 if(MyrmexWorldData.get(world) != null) {
                     MyrmexHive hive;
                     if(this.hiveUUID == null){
-                        hive = MyrmexWorldData.get(world).getNearestHive(new BlockPos(this), 400);
+                        hive = MyrmexWorldData.get(world).getNearestHive(this.func_233580_cy_(), 400);
                     }else {
                         hive = MyrmexWorldData.get(world).getHiveFromUUID(hiveUUID);
                     }
@@ -235,12 +238,12 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     public boolean isInNursery() {
-        MyrmexHive hive = MyrmexWorldData.get(this.world).getNearestHive(new BlockPos(this), 100);
-        if (hive != null && hive.getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty() && hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition()) != null) {
+        MyrmexHive hive = MyrmexWorldData.get(this.world).getNearestHive(this.func_233580_cy_(), 100);
+        if (hive != null && hive.getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty() && hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.func_233580_cy_()) != null) {
             return false;
         }
         if (hive != null) {
-            BlockPos nursery = hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition());
+            BlockPos nursery = hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.func_233580_cy_());
             return this.getDistanceSq(nursery.getX(), nursery.getY(), nursery.getZ()) < 2025;
         }
         return false;

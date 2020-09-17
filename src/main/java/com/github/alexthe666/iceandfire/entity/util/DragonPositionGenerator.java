@@ -5,20 +5,20 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
 public class DragonPositionGenerator {
 
-    public static Vec3d findRandomTargetBlock(MobEntity MobEntityIn, int xz, int y, @Nullable Vec3d targetVec3) {
-        Vec3d vec = generateRandomPos(MobEntityIn, xz, y, targetVec3, false);
-        return vec == null ? MobEntityIn.getPositionVector() : vec;
+    public static Vector3d findRandomTargetBlock(MobEntity MobEntityIn, int xz, int y, @Nullable Vector3d targetVec3) {
+        Vector3d vec = generateRandomPos(MobEntityIn, xz, y, targetVec3, false);
+        return vec == null ? MobEntityIn.getPositionVec() : vec;
     }
 
     @Nullable
-    public static Vec3d generateRandomPos(MobEntity mob, int xz, int y, @Nullable Vec3d vec, boolean skipWater) {
+    public static Vector3d generateRandomPos(MobEntity mob, int xz, int y, @Nullable Vector3d vec, boolean skipWater) {
         PathNavigator pathnavigate = mob.getNavigator();
         Random random = mob.getRNG();
         boolean flag;
@@ -83,7 +83,7 @@ public class DragonPositionGenerator {
         }
 
         if (flag1) {
-            return new Vec3d((double) k1 + mob.getPosX(), (double) i + mob.getPosY(), (double) j + mob.getPosZ());
+            return new Vector3d((double) k1 + mob.getPosX(), (double) i + mob.getPosY(), (double) j + mob.getPosZ());
         } else {
             return null;
         }

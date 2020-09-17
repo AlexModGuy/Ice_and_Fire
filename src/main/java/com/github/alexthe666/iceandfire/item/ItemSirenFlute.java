@@ -18,7 +18,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -42,12 +42,12 @@ public class ItemSirenFlute extends Item {
         player.setActiveHand(hand);
         player.getCooldownTracker().setCooldown(this, 900);
         double dist = 32;
-        Vec3d vec3d = player.getEyePosition(1.0F);
-        Vec3d vec3d1 = player.getLook(1.0F);
-        Vec3d vec3d2 = vec3d.add(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
+        Vector3d Vector3d = player.getEyePosition(1.0F);
+        Vector3d Vector3d1 = player.getLook(1.0F);
+        Vector3d Vector3d2 = Vector3d.add(Vector3d1.x * dist, Vector3d1.y * dist, Vector3d1.z * dist);
         double d1 = dist;
         Entity pointedEntity = null;
-        List<Entity> list = player.world.getEntitiesInAABBexcluding(player, player.getBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), new Predicate<Entity>() {
+        List<Entity> list = player.world.getEntitiesInAABBexcluding(player, player.getBoundingBox().expand(Vector3d1.x * dist, Vector3d1.y * dist, Vector3d1.z * dist).grow(1.0D, 1.0D, 1.0D), new Predicate<Entity>() {
             @Override
             public boolean test(Entity entity) {
                 boolean blindness = entity instanceof LivingEntity && ((LivingEntity) entity).isPotionActive(Effects.BLINDNESS) || (entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entity).canBeTurnedToStone());
@@ -58,15 +58,15 @@ public class ItemSirenFlute extends Item {
         for (int j = 0; j < list.size(); ++j) {
             Entity entity1 = list.get(j);
             AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow(entity1.getCollisionBorderSize());
-            Optional<Vec3d> raytraceresult = axisalignedbb.rayTrace(vec3d, vec3d2);
+            Optional<Vector3d> raytraceresult = axisalignedbb.rayTrace(Vector3d, Vector3d2);
 
-            if (axisalignedbb.contains(vec3d)) {
+            if (axisalignedbb.contains(Vector3d)) {
                 if (d2 >= 0.0D) {
                     pointedEntity = entity1;
                     d2 = 0.0D;
                 }
             } else if (raytraceresult.isPresent()) {
-                double d3 = vec3d.distanceTo(raytraceresult.get());
+                double d3 = Vector3d.distanceTo(raytraceresult.get());
                 if (d3 < d2 || d2 == 0.0D) {
                     if (entity1.getLowestRidingEntity() == player.getLowestRidingEntity() && !player.canRiderInteract()) {
                         if (d2 == 0.0D) {

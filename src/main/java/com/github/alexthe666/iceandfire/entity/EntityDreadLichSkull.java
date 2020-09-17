@@ -66,7 +66,7 @@ public class EntityDreadLichSkull extends AbstractArrowEntity {
     public void tick() {
         float sqrt = MathHelper.sqrt(this.getMotion().x * this.getMotion().x + this.getMotion().z * this.getMotion().z);
         boolean flag = true;
-        Entity shootingEntity = this.getShooter();
+        Entity shootingEntity = this.func_234616_v_();
         if (shootingEntity != null && shootingEntity instanceof MobEntity && ((MobEntity) shootingEntity).getAttackTarget() != null) {
             LivingEntity target = ((MobEntity) shootingEntity).getAttackTarget();
             double minusX = target.getPosX() - this.getPosX();
@@ -99,7 +99,7 @@ public class EntityDreadLichSkull extends AbstractArrowEntity {
                 flag = false;
             }
         }
-        if ((sqrt < 0.1F || this.collided || this.inGround) && this.ticksExisted > 5 && flag) {
+        if ((sqrt < 0.1F || this.collidedHorizontally || this.collidedVertically || this.inGround) && this.ticksExisted > 5 && flag) {
             this.remove();
         }
         double d0 = 0;
@@ -128,22 +128,22 @@ public class EntityDreadLichSkull extends AbstractArrowEntity {
         }
     }
 
-    protected void onHit(RayTraceResult raytraceResultIn) {
+    protected void onEntityHit(EntityRayTraceResult raytraceResultIn) {
         if (raytraceResultIn.getType() == RayTraceResult.Type.ENTITY) {
             Entity entity = ((EntityRayTraceResult) raytraceResultIn).getEntity();
-            Entity shootingEntity = this.getShooter();
+            Entity shootingEntity = this.func_234616_v_();
             if (entity != null) {
                 if (shootingEntity != null && entity.isOnSameTeam(shootingEntity)) {
                     return;
                 }
             }
         }
-        super.onHit(raytraceResultIn);
+        super.onEntityHit(raytraceResultIn);
     }
 
     protected void arrowHit(LivingEntity living) {
         super.arrowHit(living);
-        Entity shootingEntity = this.getShooter();
+        Entity shootingEntity = this.func_234616_v_();
         if (living != null && (shootingEntity == null || !living.isEntityEqual(shootingEntity))) {
             if (living instanceof PlayerEntity) {
                 this.damageShield((PlayerEntity) living, (float) this.getDamage());

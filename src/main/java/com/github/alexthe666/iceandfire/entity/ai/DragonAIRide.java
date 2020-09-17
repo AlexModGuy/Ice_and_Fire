@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.entity.util.IFlyingMount;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
 
@@ -39,7 +39,7 @@ public class DragonAIRide<T extends MobEntity & IFlyingMount> extends Goal {
         double y = dragon.getPosY();
         double z = dragon.getPosZ();
         double speed = 1.8F * dragon.getFlightSpeedModifier();
-        Vec3d lookVec = player.getLookVec();
+        Vector3d lookVec = player.getLookVec();
         if (player.moveForward < 0) {
             lookVec = lookVec.rotateYaw((float) Math.PI);
         } else if (player.moveStrafing > 0) {
@@ -66,7 +66,7 @@ public class DragonAIRide<T extends MobEntity & IFlyingMount> extends Goal {
         if ((dragon.isFlying() || hovering()) && (dragon.fliesLikeElytra() || dragon.up() || dragon.down())) {
             y += lookVec.y * 10;
         }
-        if (dragon.fliesLikeElytra() && lookVec.y == -1 || !(dragon.isFlying() || hovering()) && !dragon.onGround) {
+        if (dragon.fliesLikeElytra() && lookVec.y == -1 || !(dragon.isFlying() || hovering()) && !dragon.func_233570_aj_()) {
             y -= 1;
         }
         dragon.getMoveHelper().setMoveTo(x, y, z, speed);

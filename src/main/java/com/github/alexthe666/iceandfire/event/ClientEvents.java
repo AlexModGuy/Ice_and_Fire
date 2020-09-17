@@ -35,7 +35,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -288,13 +288,13 @@ public class ClientEvents {
                 float f3 = entityIn.getEyeHeight();
                 matrixStackIn.push();
                 matrixStackIn.translate(0.0D, f3, 0.0D);
-                Vec3d vec3d = this.getPosition(livingentity, (double) livingentity.getHeight() * 0.5D, event.getPartialRenderTick());
-                Vec3d vec3d1 = this.getPosition(entityIn, f3, event.getPartialRenderTick());
-                Vec3d vec3d2 = vec3d.subtract(vec3d1);
-                float f4 = (float) (vec3d2.length() + 1.0D);
-                vec3d2 = vec3d2.normalize();
-                float f5 = (float) Math.acos(vec3d2.y);
-                float f6 = (float) Math.atan2(vec3d2.z, vec3d2.x);
+                Vector3d Vector3d = this.getPosition(livingentity, (double) livingentity.getHeight() * 0.5D, event.getPartialRenderTick());
+                Vector3d Vector3d1 = this.getPosition(entityIn, f3, event.getPartialRenderTick());
+                Vector3d Vector3d2 = Vector3d.subtract(Vector3d1);
+                float f4 = (float) (Vector3d2.length() + 1.0D);
+                Vector3d2 = Vector3d2.normalize();
+                float f5 = (float) Math.acos(Vector3d2.y);
+                float f6 = (float) Math.atan2(Vector3d2.z, Vector3d2.x);
                 matrixStackIn.rotate(Vector3f.YP.rotationDegrees((((float) Math.PI / 2F) - f6) * (180F / (float) Math.PI)));
                 matrixStackIn.rotate(Vector3f.XP.rotationDegrees(f5 * (180F / (float) Math.PI)));
                 int i = 1;
@@ -365,13 +365,13 @@ public class ClientEvents {
                         float f3 = entity.getEyeHeight();
                         matrixStackIn.push();
                         matrixStackIn.translate(0.0D, f3, 0.0D);
-                        Vec3d vec3d = this.getPosition(livingentity, (double) livingentity.getHeight() * 0.5D, event.getPartialRenderTick());
-                        Vec3d vec3d1 = this.getPosition(entity, f3, event.getPartialRenderTick());
-                        Vec3d vec3d2 = vec3d.subtract(vec3d1);
-                        float f4 = (float) (vec3d2.length() + 0.0D);
-                        vec3d2 = vec3d2.normalize();
-                        float f5 = (float) Math.acos(vec3d2.y);
-                        float f6 = (float) Math.atan2(vec3d2.z, vec3d2.x);
+                        Vector3d Vector3d = this.getPosition(livingentity, (double) livingentity.getHeight() * 0.5D, event.getPartialRenderTick());
+                        Vector3d Vector3d1 = this.getPosition(entity, f3, event.getPartialRenderTick());
+                        Vector3d Vector3d2 = Vector3d.subtract(Vector3d1);
+                        float f4 = (float) (Vector3d2.length() + 0.0D);
+                        Vector3d2 = Vector3d2.normalize();
+                        float f5 = (float) Math.acos(Vector3d2.y);
+                        float f6 = (float) Math.atan2(Vector3d2.z, Vector3d2.x);
                         matrixStackIn.rotate(Vector3f.YP.rotationDegrees((((float) Math.PI / 2F) - f6) * (180F / (float) Math.PI)));
                         matrixStackIn.rotate(Vector3f.XP.rotationDegrees(f5 * (180F / (float) Math.PI)));
                         int i = 1;
@@ -432,11 +432,11 @@ public class ClientEvents {
         }
     }
 
-    private Vec3d getPosition(Entity LivingEntityIn, double p_177110_2_, float p_177110_4_) {
+    private Vector3d getPosition(Entity LivingEntityIn, double p_177110_2_, float p_177110_4_) {
         double d0 = LivingEntityIn.lastTickPosX + (LivingEntityIn.getPosX() - LivingEntityIn.lastTickPosX) * (double) p_177110_4_;
         double d1 = p_177110_2_ + LivingEntityIn.lastTickPosY + (LivingEntityIn.getPosY() - LivingEntityIn.lastTickPosY) * (double) p_177110_4_;
         double d2 = LivingEntityIn.lastTickPosZ + (LivingEntityIn.getPosZ() - LivingEntityIn.lastTickPosZ) * (double) p_177110_4_;
-        return new Vec3d(d0, d1, d2);
+        return new Vector3d(d0, d1, d2);
     }
 
 
@@ -444,11 +444,11 @@ public class ClientEvents {
         return (-0.69813170079773212 * x * x - 0.87266462599716477) * x + 1.5707963267948966;
     }
 
-    private Vec3d getChainPosition(Entity LivingEntityIn, double p_177110_2_, float p_177110_4_) {
+    private Vector3d getChainPosition(Entity LivingEntityIn, double p_177110_2_, float p_177110_4_) {
         double d0 = LivingEntityIn.lastTickPosX + (LivingEntityIn.getPosX() - LivingEntityIn.lastTickPosX) * (double) p_177110_4_;
         double d1 = p_177110_2_ + LivingEntityIn.lastTickPosY + (LivingEntityIn.getPosY() - LivingEntityIn.lastTickPosY) * (double) p_177110_4_;
         double d2 = LivingEntityIn.lastTickPosZ + (LivingEntityIn.getPosZ() - LivingEntityIn.lastTickPosZ) * (double) p_177110_4_;
-        return new Vec3d(d0, d1, d2);
+        return new Vector3d(d0, d1, d2);
     }
 
     @SubscribeEvent

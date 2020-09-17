@@ -7,7 +7,7 @@ import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.Random;
 
@@ -23,7 +23,7 @@ public class HippogryphAIAirTarget extends Goal {
             if (!hippogryph.isFlying() && !hippogryph.isHovering()) {
                 return false;
             }
-            if (hippogryph.isSitting()) {
+            if (hippogryph.func_233684_eK_()) {
                 return false;
             }
             if (hippogryph.isChild()) {
@@ -32,14 +32,14 @@ public class HippogryphAIAirTarget extends Goal {
             if (hippogryph.getOwner() != null && hippogryph.getPassengers().contains(hippogryph.getOwner())) {
                 return false;
             }
-            if (hippogryph.airTarget != null && hippogryph.getDistanceSquared(new Vec3d(hippogryph.airTarget.getX(), hippogryph.getPosY(), hippogryph.airTarget.getZ())) > 3) {
+            if (hippogryph.airTarget != null && hippogryph.getDistanceSquared(new Vector3d(hippogryph.airTarget.getX(), hippogryph.getPosY(), hippogryph.airTarget.getZ())) > 3) {
                 hippogryph.airTarget = null;
             }
 
             if (hippogryph.airTarget != null) {
                 return false;
             } else {
-                Vec3d vec = this.findAirTarget();
+                Vector3d vec = this.findAirTarget();
 
                 if (vec == null) {
                     return false;
@@ -57,7 +57,7 @@ public class HippogryphAIAirTarget extends Goal {
         if (!hippogryph.isFlying() && !hippogryph.isHovering()) {
             return false;
         }
-        if (hippogryph.isSitting()) {
+        if (hippogryph.func_233684_eK_()) {
             return false;
         }
         if (hippogryph.isChild()) {
@@ -72,8 +72,8 @@ public class HippogryphAIAirTarget extends Goal {
         return hippogryph.airTarget != null;
     }
 
-    public Vec3d findAirTarget() {
-        return new Vec3d(getNearbyAirTarget());
+    public Vector3d findAirTarget() {
+        return Vector3d.func_237489_a_(getNearbyAirTarget());
     }
 
     public BlockPos getNearbyAirTarget() {
@@ -92,7 +92,7 @@ public class HippogryphAIAirTarget extends Goal {
                 return pos;
             }
         }
-        return hippogryph.getPosition();
+        return hippogryph.func_233580_cy_();
     }
 
 }

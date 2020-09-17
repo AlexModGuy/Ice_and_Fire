@@ -36,7 +36,7 @@ public class HippogryphAIMate extends Goal {
     }
 
     public boolean shouldExecute() {
-        if (!this.hippo.isInLove() || this.hippo.isSitting()) {
+        if (!this.hippo.isInLove() || this.hippo.func_233684_eK_()) {
             return false;
         } else {
             this.targetMate = this.getNearbyMate();

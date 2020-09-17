@@ -522,7 +522,7 @@ public class MyrmexHive {
                 return closest.getKey().offset(closest.getValue(), 3);
             }
         }
-        return entity.getPosition();
+        return entity.func_233580_cy_();
     }
 
     public BlockPos getClosestEntranceBottomToEntity(Entity entity, Random random) {
@@ -532,7 +532,7 @@ public class MyrmexHive {
                 closest = entry;
             }
         }
-        return closest != null ? closest.getKey() : entity.getPosition();
+        return closest != null ? closest.getKey() : entity.func_233580_cy_();
     }
 
     public PlayerEntity getOwner(World world) {

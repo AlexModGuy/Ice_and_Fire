@@ -56,7 +56,7 @@ public class EntityStymphalianFeather extends AbstractArrowEntity {
     }
 
     protected void onEntityHit(EntityRayTraceResult entityHit) {
-        Entity shootingEntity = this.getShooter();
+        Entity shootingEntity = this.func_234616_v_();
         if (shootingEntity instanceof EntityStymphalianBird && entityHit.getEntity() != null && entityHit.getEntity() instanceof EntityStymphalianBird) {
             return;
         } else {

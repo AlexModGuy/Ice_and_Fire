@@ -7,7 +7,7 @@ import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class StymphalianBirdAIAirTarget extends Goal {
@@ -31,7 +31,7 @@ public class StymphalianBirdAIAirTarget extends Goal {
         } else {
             return new BlockPos((int) bird.getAttackTarget().getPosX(), (int) bird.getAttackTarget().getPosY() + bird.getAttackTarget().getEyeHeight(), (int) bird.getAttackTarget().getPosZ());
         }
-        return bird.getPosition();
+        return bird.func_233580_cy_();
     }
 
     public boolean shouldExecute() {
@@ -45,14 +45,14 @@ public class StymphalianBirdAIAirTarget extends Goal {
             if (bird.doesWantToLand()) {
                 return false;
             }
-            if (bird.airTarget != null && (bird.isTargetBlocked(new Vec3d(bird.airTarget)))) {
+            if (bird.airTarget != null && (bird.isTargetBlocked(Vector3d.func_237489_a_(bird.airTarget)))) {
                 bird.airTarget = null;
             }
 
             if (bird.airTarget != null) {
                 return false;
             } else {
-                Vec3d vec = this.findAirTarget();
+                Vector3d vec = this.findAirTarget();
 
                 if (vec == null) {
                     return false;
@@ -79,7 +79,7 @@ public class StymphalianBirdAIAirTarget extends Goal {
         return bird.airTarget != null;
     }
 
-    public Vec3d findAirTarget() {
-        return new Vec3d(getNearbyAirTarget(bird));
+    public Vector3d findAirTarget() {
+        return Vector3d.func_237489_a_(getNearbyAirTarget(bird));
     }
 }

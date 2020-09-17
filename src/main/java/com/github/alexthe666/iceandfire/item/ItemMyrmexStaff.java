@@ -45,7 +45,7 @@ public class ItemMyrmexStaff extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand hand) {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
-        if (playerIn.isShiftKeyDown()) {
+        if (playerIn.isSneaking()) {
             return super.onItemRightClick(worldIn, playerIn, hand);
         }
         UUID id = itemStackIn.getTag().getUniqueId("HiveUUID");
@@ -66,7 +66,7 @@ public class ItemMyrmexStaff extends Item {
 
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
-        if (!context.getPlayer().isShiftKeyDown()) {
+        if (!context.getPlayer().isSneaking()) {
             return super.onItemUse(context);
         } else {
             UUID id = context.getPlayer().getHeldItem(context.getHand()).getTag().getUniqueId("HiveUUID");

@@ -22,7 +22,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -42,8 +42,8 @@ public class BlockBreakExplosion extends Explosion {
     private final MobEntity exploder;
     private final float size;
     private final List<BlockPos> affectedBlockPositions;
-    private final Map<PlayerEntity, Vec3d> playerKnockbackMap;
-    private final Vec3d position;
+    private final Map<PlayerEntity, Vector3d> playerKnockbackMap;
+    private final Vector3d position;
     private Mode mode;
 
     public BlockBreakExplosion(World world, MobEntity entity, double x, double y, double z, float size) {
@@ -56,7 +56,7 @@ public class BlockBreakExplosion extends Explosion {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.position = new Vec3d(x, y, z);
+        this.position = new Vector3d(x, y, z);
     }
 
     private static void func_229976_a_(ObjectArrayList<Pair<ItemStack, BlockPos>> p_229976_0_, ItemStack p_229976_1_, BlockPos p_229976_2_) {
@@ -134,12 +134,12 @@ public class BlockBreakExplosion extends Explosion {
         int j1 = MathHelper.floor(this.z + (double) f3 + 1.0D);
         List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this.exploder, new AxisAlignedBB(k1, i2, j2, l1, i1, j1));
         net.minecraftforge.event.ForgeEventFactory.onExplosionDetonate(this.world, this, list, f3);
-        Vec3d vec3d = new Vec3d(this.x, this.y, this.z);
+        Vector3d Vector3d = new Vector3d(this.x, this.y, this.z);
 
         for (int k2 = 0; k2 < list.size(); ++k2) {
             Entity entity = list.get(k2);
             if (!entity.isImmuneToExplosions() && !(entity instanceof ItemEntity)) {
-                double d12 = MathHelper.sqrt(entity.getDistanceSq(vec3d)) / f3;
+                double d12 = MathHelper.sqrt(entity.getDistanceSq(Vector3d)) / f3;
                 if (d12 <= 1.0D) {
                     double d5 = entity.getPosX() - this.x;
                     double d7 = entity.getPosYEye() - this.y;
@@ -149,7 +149,7 @@ public class BlockBreakExplosion extends Explosion {
                         d5 = d5 / d13;
                         d7 = d7 / d13;
                         d9 = d9 / d13;
-                        double d14 = getBlockDensity(vec3d, entity);
+                        double d14 = getBlockDensity(Vector3d, entity);
                         double d10 = (1.0D - d12) * d14;
                         entity.attackEntityFrom(this.getDamageSource(), (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)));
                         double d11 = d10;
@@ -161,7 +161,7 @@ public class BlockBreakExplosion extends Explosion {
                         if (entity instanceof PlayerEntity) {
                             PlayerEntity playerentity = (PlayerEntity) entity;
                             if (!playerentity.isSpectator() && (!playerentity.isCreative() || !playerentity.abilities.isFlying)) {
-                                this.playerKnockbackMap.put(playerentity, new Vec3d(d5 * d10, d7 * d10, d9 * d10));
+                                this.playerKnockbackMap.put(playerentity, new Vector3d(d5 * d10, d7 * d10, d9 * d10));
                             }
                         }
                     }
@@ -222,7 +222,7 @@ public class BlockBreakExplosion extends Explosion {
     }
 
     @Override
-    public Map<PlayerEntity, Vec3d> getPlayerKnockbackMap() {
+    public Map<PlayerEntity, Vector3d> getPlayerKnockbackMap() {
         return this.playerKnockbackMap;
     }
 
@@ -241,7 +241,7 @@ public class BlockBreakExplosion extends Explosion {
     }
 
     @Override
-    public Vec3d getPosition() {
+    public Vector3d func_233580_cy_() {
         return this.position;
     }
 }

@@ -9,7 +9,9 @@ import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.entity.monster.IMob;
@@ -62,7 +64,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAnimationTick() == 0) {
@@ -70,7 +72,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue() * 2));
                 this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 200, 2));
             }
         }
@@ -108,12 +110,18 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         }));
     }
 
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength * 2);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40);
-        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(6.0D);
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, 40)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.35D)
+                //ATTACK
+                .func_233815_a_(Attributes.field_233823_f_, IafConfig.myrmexBaseAttackStrength * 2D)
+                //FOLLOW RANGE
+                .func_233815_a_(Attributes.field_233819_b_, 64.0D)
+                //ARMOR
+                .func_233815_a_(Attributes.field_233826_i_, 6.0D);
     }
 
     @Override

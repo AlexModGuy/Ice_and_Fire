@@ -74,7 +74,7 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
         boolean flag = false;
         if (core != null && core.canSmelt()) {
             for (EntityDragonBase dragon : world.getEntitiesWithinAABB(EntityDragonBase.class, new AxisAlignedBB((double) pos.getX() - LURE_DISTANCE, (double) pos.getY() - LURE_DISTANCE, (double) pos.getZ() - LURE_DISTANCE, (double) pos.getX() + LURE_DISTANCE, (double) pos.getY() + LURE_DISTANCE, (double) pos.getZ() + LURE_DISTANCE))) {
-                if (getDragonType() == DragonType.getIntFromType(dragon.dragonType) && (dragon.isChained() || dragon.isTamed()) && canSeeInput(dragon, new Vec3d(this.getPos().getX() + 0.5F, this.getPos().getY() + 0.5F, this.getPos().getZ() + 0.5F))) {
+                if (getDragonType() == DragonType.getIntFromType(dragon.dragonType) && (dragon.isChained() || dragon.isTamed()) && canSeeInput(dragon, new Vector3d(this.getPos().getX() + 0.5F, this.getPos().getY() + 0.5F, this.getPos().getZ() + 0.5F))) {
                     dragon.burningTarget = this.pos;
                     flag = true;
                 }
@@ -93,7 +93,7 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
         core = null;
     }
 
-    private boolean canSeeInput(EntityDragonBase dragon, Vec3d target) {
+    private boolean canSeeInput(EntityDragonBase dragon, Vector3d target) {
         if (target != null) {
             RayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(dragon.getHeadPosition(), target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, dragon));
             if (rayTrace != null && rayTrace.getHitVec() != null) {

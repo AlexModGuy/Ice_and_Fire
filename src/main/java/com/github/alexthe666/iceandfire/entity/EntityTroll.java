@@ -18,6 +18,8 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -89,7 +91,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn) {
-        BlockPos pos = new BlockPos(this);
+        BlockPos pos = this.func_233580_cy_();
         return this.getRNG().nextInt(IafConfig.trollSpawnCheckChance) == 0 && !this.world.canSeeSky(pos.up()) && super.canSpawn(worldIn, spawnReasonIn);
     }
 
@@ -106,14 +108,18 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
         setAvoidSun(true);
     }
 
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.trollAttackStrength);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.trollMaxHealth);
-        this.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1D);
-        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(9.0D);
-
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, IafConfig.trollMaxHealth)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.35D)
+                //ATTACK
+                .func_233815_a_(Attributes.field_233823_f_, IafConfig.trollAttackStrength)
+                //KNOCKBACK RESIST
+                .func_233815_a_(Attributes.field_233820_c_, 1.0D)
+                //ARMOR
+                .func_233815_a_(Attributes.field_233826_i_, 9.0D);
     }
 
     public boolean attackEntityAsMob(Entity entityIn) {
@@ -185,7 +191,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
     @Nullable
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setTrollType(EnumTroll.getBiomeType(world.getBiome(this.getPosition())));
+        this.setTrollType(EnumTroll.getBiomeType(world.getBiome(this.func_233580_cy_())));
         this.setWeaponType(EnumTroll.getWeaponForType(this.getTrollType()));
         return spawnDataIn;
     }
@@ -324,10 +330,10 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
             }
         }
         if (this.getAnimation() == ANIMATION_STRIKE_VERTICAL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 4D && this.getAnimationTick() == 10 && this.deathTime <= 0) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributes().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.field_233823_f_).getValue());
         }
         if (this.getAnimation() == ANIMATION_STRIKE_HORIZONTAL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 4D && this.getAnimationTick() == 10 && this.deathTime <= 0) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributes().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.field_233823_f_).getValue());
             float f1 = 0.5F;
             float f2 = this.getAttackTarget().moveForward;
             float f3 = 0.6F;

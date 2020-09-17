@@ -11,7 +11,9 @@ import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.entity.monster.IMob;
@@ -111,20 +113,20 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
             this.setAnimation(ANIMATION_NIBBLE);
             if (this.getAnimationTick() == 5) {
                 this.playBiteSound();
-                this.getHeldEntity().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() / 6));
+                this.getHeldEntity().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue() / 6));
             }
         }
         if (this.getAnimation() == ANIMATION_GRAB && this.getAttackTarget() != null && this.getAnimationTick() == 7) {
             this.playStingSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() / 2));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue() / 2));
                 this.getAttackTarget().startRiding(this);
             }
         }
         if (this.getAnimation() == ANIMATION_SLASH && this.getAttackTarget() != null && this.getAnimationTick() % 5 == 0 && this.getAnimationTick() <= 20) {
             this.playBiteSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()) / 4);
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()) / 4);
             }
         }
         if (this.getAnimation() == ANIMATION_STING && (this.getAnimationTick() == 0 || this.getAnimationTick() == 10)) {
@@ -133,7 +135,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && (this.getAnimationTick() == 6 || this.getAnimationTick() == 16)) {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 18) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
                 this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 100, 3));
             }
         }
@@ -165,12 +167,18 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         this.dataManager.register(HIDING, Boolean.valueOf(false));
     }
 
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength * 3D);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60);
-        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(12.0D);
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, 60D)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.35D)
+                //ATTACK
+                .func_233815_a_(Attributes.field_233823_f_, IafConfig.myrmexBaseAttackStrength * 3D)
+                //FOLLOW RANGE
+                .func_233815_a_(Attributes.field_233819_b_, 64.0D)
+                //ARMOR
+                .func_233815_a_(Attributes.field_233826_i_, 12.0D);
     }
 
     @Override

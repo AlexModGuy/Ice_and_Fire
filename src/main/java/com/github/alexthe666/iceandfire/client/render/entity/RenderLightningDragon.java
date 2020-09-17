@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.Objects;
 
@@ -30,9 +30,9 @@ public class RenderLightningDragon extends RenderDragonBase {
         } else {
             EntityLightningDragon lightningDragon = (EntityLightningDragon)livingEntityIn;
             if (lightningDragon.hasLightningTarget()) {
-                Vec3d vec3d1 = lightningDragon.getHeadPosition();
-                Vec3d vec3d = new Vec3d(lightningDragon.getLightningTargetX(), lightningDragon.getLightningTargetY(), lightningDragon.getLightningTargetZ());
-                return camera.isBoundingBoxInFrustum(new AxisAlignedBB(vec3d1.x, vec3d1.y, vec3d1.z, vec3d.x, vec3d.y, vec3d.z));
+                Vector3d Vector3d1 = lightningDragon.getHeadPosition();
+                Vector3d Vector3d = new Vector3d(lightningDragon.getLightningTargetX(), lightningDragon.getLightningTargetY(), lightningDragon.getLightningTargetZ());
+                return camera.isBoundingBoxInFrustum(new AxisAlignedBB(Vector3d1.x, Vector3d1.y, Vector3d1.z, Vector3d.x, Vector3d.y, Vector3d.z));
             }
             return false;
         }
@@ -45,10 +45,10 @@ public class RenderLightningDragon extends RenderDragonBase {
         if (lightningDragon.hasLightningTarget()) {
             double dist = Minecraft.getInstance().player.getDistance(lightningDragon);
             if(dist <= Math.max(256, Minecraft.getInstance().gameSettings.renderDistanceChunks * 16F)){
-                Vec3d vec3d1 = lightningDragon.getHeadPosition();
-                Vec3d vec3d = new Vec3d(lightningDragon.getLightningTargetX(), lightningDragon.getLightningTargetY(), lightningDragon.getLightningTargetZ());
+                Vector3d Vector3d1 = lightningDragon.getHeadPosition();
+                Vector3d Vector3d = new Vector3d(lightningDragon.getLightningTargetX(), lightningDragon.getLightningTargetY(), lightningDragon.getLightningTargetZ());
                 float energyScale = 0.4F * lightningDragon.getRenderScale();
-                LightningBoltData bolt = new LightningBoltData(LightningBoltData.BoltRenderInfo.ELECTRICITY, vec3d1, vec3d, 15)
+                LightningBoltData bolt = new LightningBoltData(LightningBoltData.BoltRenderInfo.ELECTRICITY, Vector3d1, Vector3d, 15)
                         .size(0.05F * getBoundedScale(energyScale, 0.5F, 2))
                         .lifespan(4)
                         .spawn(LightningBoltData.SpawnFunction.NO_DELAY);

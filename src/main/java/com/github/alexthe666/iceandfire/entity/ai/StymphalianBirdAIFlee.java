@@ -7,7 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -18,7 +18,7 @@ public class StymphalianBirdAIFlee extends Goal {
     private final float avoidDistance;
     protected EntityStymphalianBird stymphalianBird;
     protected LivingEntity closestLivingEntity;
-    private Vec3d hidePlace;
+    private Vector3d hidePlace;
 
     public StymphalianBirdAIFlee(EntityStymphalianBird stymphalianBird, float avoidDistanceIn) {
         this.stymphalianBird = stymphalianBird;
@@ -44,15 +44,15 @@ public class StymphalianBirdAIFlee extends Goal {
         } else {
             this.closestLivingEntity = list.get(0);
             if (closestLivingEntity != null && this.stymphalianBird.getVictor() != null && this.closestLivingEntity.equals(this.stymphalianBird.getVictor())) {
-                Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.stymphalianBird, 32, 7, new Vec3d(this.closestLivingEntity.getPosX(), this.closestLivingEntity.getPosY(), this.closestLivingEntity.getPosZ()));
+                Vector3d Vector3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.stymphalianBird, 32, 7, new Vector3d(this.closestLivingEntity.getPosX(), this.closestLivingEntity.getPosY(), this.closestLivingEntity.getPosZ()));
 
-                if (vec3d == null) {
+                if (Vector3d == null) {
                     return false;
                 } else {
-                    vec3d = vec3d.add(0, 3, 0);
-                    this.stymphalianBird.getMoveHelper().setMoveTo(vec3d.x, vec3d.y, vec3d.z, 3D);
-                    this.stymphalianBird.getLookController().setLookPosition(vec3d.x, vec3d.y, vec3d.z, 180.0F, 20.0F);
-                    hidePlace = vec3d;
+                    Vector3d = Vector3d.add(0, 3, 0);
+                    this.stymphalianBird.getMoveHelper().setMoveTo(Vector3d.x, Vector3d.y, Vector3d.z, 3D);
+                    this.stymphalianBird.getLookController().setLookPosition(Vector3d.x, Vector3d.y, Vector3d.z, 180.0F, 20.0F);
+                    hidePlace = Vector3d;
                     return true;
                 }
             }

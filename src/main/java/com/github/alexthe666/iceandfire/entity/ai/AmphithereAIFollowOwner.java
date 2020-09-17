@@ -40,7 +40,7 @@ public class AmphithereAIFollowOwner extends Goal {
             return false;
         } else if (LivingEntity instanceof PlayerEntity && LivingEntity.isSpectator()) {
             return false;
-        } else if (this.ampithere.isSitting()) {
+        } else if (this.ampithere.func_233684_eK_()) {
             return false;
         } else if (this.ampithere.getDistanceSq(LivingEntity) < (double) (this.minDist * this.minDist)) {
             return false;
@@ -51,7 +51,7 @@ public class AmphithereAIFollowOwner extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return !noPath() && this.ampithere.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist) && !this.ampithere.isSitting();
+        return !noPath() && this.ampithere.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist) && !this.ampithere.func_233684_eK_();
     }
 
     private boolean noPath() {
@@ -77,7 +77,7 @@ public class AmphithereAIFollowOwner extends Goal {
     public void tick() {
         this.ampithere.getLookController().setLookPositionWithEntity(this.owner, 10.0F, (float) this.ampithere.getVerticalFaceSpeed());
 
-        if (!this.ampithere.isSitting()) {
+        if (!this.ampithere.func_233684_eK_()) {
             if (--this.timeToRecalcPath <= 0) {
                 this.timeToRecalcPath = 10;
                 tryMoveTo();

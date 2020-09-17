@@ -24,6 +24,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
@@ -47,11 +49,9 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -149,7 +149,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new DragonAIRide(this));
         this.goalSelector.addGoal(1, new SwimGoal(this));
-        this.goalSelector.addGoal(2, this.sitGoal = new SitGoal(this));
+        this.goalSelector.addGoal(2, new SitGoal(this));
         this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.5D, true));
         this.goalSelector.addGoal(4, new HippogryphAIMate(this, 1.0D));
         this.goalSelector.addGoal(5, new TemptGoal(this, 1.0D, Ingredient.fromItems(Items.RABBIT, Items.COOKED_RABBIT), false));
@@ -263,7 +263,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         return this.ticksExisted % 50 > 43;
     }
 
-    public boolean processInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         String s = TextFormatting.getTextWithoutFormattingCodes(player.getName().getUnformattedComponentText());
         boolean isDev = s.equals("Alexthe666") || s.equals("Raptorfarian");
@@ -277,7 +277,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 for (int i = 0; i < 20; i++) {
                     this.world.addParticle(ParticleTypes.CLOUD, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0);
                 }
-                return true;
+                return ActionResultType.SUCCESS;
             }
             if (itemstack != null && itemstack.getItem() == Items.LIGHT_GRAY_DYE && this.getEnumVariant() != EnumHippogryphTypes.RAPTOR && isDev) {
                 this.setEnumVariant(EnumHippogryphTypes.RAPTOR);
@@ -288,7 +288,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 for (int i = 0; i < 20; i++) {
                     this.world.addParticle(ParticleTypes.CLOUD, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0);
                 }
-                return true;
+                return ActionResultType.SUCCESS;
             }
             if (itemstack != null && itemstack.getItem() == Items.RABBIT_STEW && this.getGrowingAge() == 0 && !isInLove()) {
                 this.setInLove(player);
@@ -296,20 +296,20 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 if (!player.isCreative()) {
                     itemstack.shrink(1);
                 }
-                return true;
+                return ActionResultType.SUCCESS;
             }
             if (itemstack != null && itemstack.getItem() == Items.STICK) {
-                if (player.isShiftKeyDown()) {
+                if (player.isSneaking()) {
                     if (this.hasHomePosition) {
                         this.hasHomePosition = false;
                         player.sendStatusMessage(new TranslationTextComponent("hippogryph.command.remove_home"), true);
-                        return true;
+                        return ActionResultType.SUCCESS;
                     } else {
-                        BlockPos pos = new BlockPos(this);
+                        BlockPos pos = this.func_233580_cy_();
                         this.homePos = pos;
                         this.hasHomePosition = true;
                         player.sendStatusMessage(new TranslationTextComponent("hippogryph.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
-                        return true;
+                        return ActionResultType.SUCCESS;
                     }
                 } else {
                     this.setCommand(this.getCommand() + 1);
@@ -319,7 +319,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                     player.sendStatusMessage(new TranslationTextComponent("hippogryph.command." + (this.getCommand() == 1 ? "sit" : "stand")), true);
 
                 }
-                return true;
+                return ActionResultType.SUCCESS;
             }
             if (itemstack != null && itemstack.getItem() == Items.GLISTERING_MELON_SLICE && this.getEnumVariant() != EnumHippogryphTypes.DODO) {
                 this.setEnumVariant(EnumHippogryphTypes.DODO);
@@ -330,7 +330,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 for (int i = 0; i < 20; i++) {
                     this.world.addParticle(ParticleTypes.ENCHANT, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0);
                 }
-                return true;
+                return ActionResultType.SUCCESS;
             }
             if (itemstack != null && itemstack.getItem().isFood() && itemstack.getItem().getFood() != null && itemstack.getItem().getFood().isMeat() && this.getHealth() < this.getMaxHealth()) {
                 this.heal(5);
@@ -341,19 +341,19 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 if (!player.isCreative()) {
                     itemstack.shrink(1);
                 }
-                return true;
+                return ActionResultType.SUCCESS;
             }
             if (itemstack.isEmpty()) {
-                if (player.isShiftKeyDown()) {
+                if (player.isSneaking()) {
                     this.openGUI(player);
-                    return true;
+                    return ActionResultType.SUCCESS;
                 } else if (this.isSaddled() && !this.isChild() && !player.isPassenger()) {
                     player.startRiding(this, true);
-                    return true;
+                    return ActionResultType.SUCCESS;
                 }
             }
         }
-        return super.processInteract(player, hand);
+        return super.func_230254_b_(player, hand);
     }
 
 
@@ -628,17 +628,19 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             case 3:
                 armorValue = 30;
         }
-        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(armorValue);
+        this.getAttribute(Attributes.field_233826_i_).setBaseValue(armorValue);
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
-        this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
-        this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, 40.0D)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.3D)
+                //ATTACK
+                .func_233815_a_(Attributes.field_233823_f_, 5.0D)
+                //FOLLOW RANGE
+                .func_233815_a_(Attributes.field_233819_b_, 32.0D);
     }
 
     public boolean canMove() {
@@ -652,7 +654,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     @Nullable
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         ILivingEntityData data = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setEnumVariant(EnumHippogryphTypes.getBiomeType(world.getBiome(this.getPosition())));
+        this.setEnumVariant(EnumHippogryphTypes.getBiomeType(world.getBiome(this.func_233580_cy_())));
         return data;
     }
 
@@ -728,8 +730,8 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         return true;
     }
 
-    public boolean isDirectPathBetweenPoints(Vec3d vec1, Vec3d vec2) {
-        RayTraceResult movingobjectposition = this.world.rayTraceBlocks(new RayTraceContext(vec1, new Vec3d(vec2.x, vec2.y + (double) this.getHeight() * 0.5D, vec2.z), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+    public boolean isDirectPathBetweenPoints(Vector3d vec1, Vector3d vec2) {
+        RayTraceResult movingobjectposition = this.world.rayTraceBlocks(new RayTraceContext(vec1, new Vector3d(vec2.x, vec2.y + (double) this.getHeight() * 0.5D, vec2.z), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
 
         return movingobjectposition == null || movingobjectposition.getType() != RayTraceResult.Type.BLOCK;
     }
@@ -759,9 +761,9 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
-    public void travel(Vec3d move) {
+    public void travel(Vector3d move) {
         if (!this.canMove() && !this.isBeingRidden()) {
-            super.travel(Vec3d.ZERO);
+            super.travel(Vector3d.ZERO);
             return;
         }
         super.travel(move);
@@ -813,7 +815,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 8) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
             }
         }
         LivingEntity attackTarget = this.getAttackTarget();
@@ -821,13 +823,13 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             double dist = this.getDistanceSq(this.getAttackTarget());
 
             if (dist < 8) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
                 this.getAttackTarget().isAirBorne = true;
                 float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
                 attackTarget.setMotion(attackTarget.getMotion().add(-0.5 / (double) f, 1, -0.5 / (double) f));
                 attackTarget.setMotion(attackTarget.getMotion().mul(0.5D, 1, 0.5D));
 
-                if (this.getAttackTarget().onGround) {
+                if (this.getAttackTarget().func_233570_aj_()) {
                     attackTarget.setMotion(attackTarget.getMotion().add(0, 0.3, 0));
                 }
             }
@@ -993,10 +995,10 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 this.setAnimation(this.getRNG().nextBoolean() ? ANIMATION_SCRATCH : ANIMATION_BITE);
             }
             if (target != null && this.getAnimationTick() >= 10 && this.getAnimationTick() < 13) {
-                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
+                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
             }
         }
-        if (this.getControllingPassenger() != null && this.getControllingPassenger().isShiftKeyDown()) {
+        if (this.getControllingPassenger() != null && this.getControllingPassenger().isSneaking()) {
             this.getControllingPassenger().stopRiding();
         }
         if (this.isFlying() && !this.isHovering() && this.getControllingPassenger() != null && this.isOverAir() && Math.max(Math.abs(this.getMotion().x), Math.abs(this.getMotion().z)) < 0.1F) {
@@ -1030,7 +1032,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         }
     }
 
-    public boolean isTargetBlocked(Vec3d target) {
+    public boolean isTargetBlocked(Vector3d target) {
         if (target != null) {
             RayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(this.getEyePosition(1.0F), target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
 
@@ -1043,7 +1045,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     public void flyTowardsTarget() {
-        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.getPosY(), airTarget.getZ())) > 3) {
+        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vector3d(airTarget.getX(), this.getPosY(), airTarget.getZ())) > 3) {
             double targetX = airTarget.getX() + 0.5D - this.getPosX();
             double targetY = Math.min(airTarget.getY(), 256) + 1D - this.getPosY();
             double targetZ = airTarget.getZ() + 0.5D - this.getPosZ();
@@ -1072,10 +1074,10 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         return airTarget != null && ((world.getBlockState(airTarget).getMaterial() == Material.AIR) || world.getBlockState(airTarget).getMaterial() == Material.AIR);
     }
 
-    public float getDistanceSquared(Vec3d vec3d) {
-        float f = (float) (this.getPosX() - vec3d.x);
-        float f1 = (float) (this.getPosY() - vec3d.y);
-        float f2 = (float) (this.getPosZ() - vec3d.z);
+    public float getDistanceSquared(Vector3d Vector3d) {
+        float f = (float) (this.getPosX() - Vector3d.x);
+        float f1 = (float) (this.getPosY() - Vector3d.y);
+        float f2 = (float) (this.getPosZ() - Vector3d.z);
         return f * f + f1 * f1 + f2 * f2;
     }
 

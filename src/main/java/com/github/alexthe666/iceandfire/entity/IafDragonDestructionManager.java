@@ -326,7 +326,7 @@ public class IafDragonDestructionManager {
                     LivingEntity.attackEntityFrom(IafDamageRegistry.DRAGON_LIGHTNING, stage * dmgScale);
                     double d1 = destroyer.getPosX() - LivingEntity.getPosX();
                     double d0 = destroyer.getPosZ() - LivingEntity.getPosZ();
-                    LivingEntity.knockBack(destroyer, 0.3F, d1, d0);
+                    LivingEntity.func_233627_a_(0.3F, d1, d0);
                     //LivingEntity.setFire(5 + stage * 5);
                 }
             }
@@ -355,7 +355,7 @@ public class IafDragonDestructionManager {
                     LivingEntity.attackEntityFrom(IafDamageRegistry.DRAGON_LIGHTNING, stage * dmgScale);
                     double d1 = destroyer.getPosX() - LivingEntity.getPosX();
                     double d0 = destroyer.getPosZ() - LivingEntity.getPosZ();
-                    LivingEntity.knockBack(destroyer, 0.3F, d1, d0);
+                    LivingEntity.func_233627_a_(0.3F, d1, d0);
                 }
             }
         }
@@ -383,7 +383,7 @@ public class IafDragonDestructionManager {
                         LivingEntity.attackEntityFrom(IafDamageRegistry.DRAGON_LIGHTNING, Math.max(1, stage - 1) * 2F);
                         double d1 = destroyer.getPosX() - LivingEntity.getPosX();
                         double d0 = destroyer.getPosZ() - LivingEntity.getPosZ();
-                        LivingEntity.knockBack(destroyer, 0.9F, d1, d0);
+                        LivingEntity.func_233627_a_(0.9F, d1, d0);
                     }
                 }
             } else {
@@ -415,7 +415,7 @@ public class IafDragonDestructionManager {
                         LivingEntity.attackEntityFrom(IafDamageRegistry.DRAGON_LIGHTNING, Math.max(1, stage - 1) * 2F);
                         double d1 = destroyer.getPosX() - LivingEntity.getPosX();
                         double d0 = destroyer.getPosZ() - LivingEntity.getPosZ();
-                        LivingEntity.knockBack(destroyer, 0.9F, d1, d0);
+                        LivingEntity.func_233627_a_( 0.9F, d1, d0);
                     }
                 }
             }

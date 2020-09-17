@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.pathfinding.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import java.util.stream.Collectors;
@@ -36,8 +36,8 @@ public class PathNavigateDeathWormLand extends PathNavigator {
         return this.entity.onGround || this.worm.isInSand() || this.entity.isPassenger();
     }
 
-    protected Vec3d getEntityPosition() {
-        return new Vec3d(this.entity.getPosX(), this.getPathablePosY(), this.entity.getPosZ());
+    protected Vector3d getEntityPosition() {
+        return new Vector3d(this.entity.getPosX(), this.getPathablePosY(), this.entity.getPosZ());
     }
 
     /**
@@ -126,7 +126,7 @@ public class PathNavigateDeathWormLand extends PathNavigator {
     /**
      * Checks if the specified entity can safely walk to the specified location.
      */
-    protected boolean isDirectPathBetweenPoints(Vec3d posVec31, Vec3d posVec32, int sizeX, int sizeY, int sizeZ) {
+    protected boolean isDirectPathBetweenPoints(Vector3d posVec31, Vector3d posVec32, int sizeX, int sizeY, int sizeZ) {
         int i = MathHelper.floor(posVec31.x);
         int j = MathHelper.floor(posVec31.z);
         double d0 = posVec32.x - posVec31.x;
@@ -193,7 +193,7 @@ public class PathNavigateDeathWormLand extends PathNavigator {
     /**
      * Returns true when an entity could stand at a position, including solid blocks under the entire entity.
      */
-    private boolean isSafeToStandAt(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3d vec31, double p_179683_8_, double p_179683_10_) {
+    private boolean isSafeToStandAt(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vector3d vec31, double p_179683_8_, double p_179683_10_) {
         int i = x - sizeX / 2;
         int j = z - sizeZ / 2;
 
@@ -232,7 +232,7 @@ public class PathNavigateDeathWormLand extends PathNavigator {
     /**
      * Returns true if an entity does not collide with any solid blocks at the position.
      */
-    private boolean isPositionClear(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3d p_179692_7_, double p_179692_8_, double p_179692_10_) {
+    private boolean isPositionClear(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vector3d p_179692_7_, double p_179692_8_, double p_179692_10_) {
         for (BlockPos blockpos : BlockPos.getAllInBox(new BlockPos(x, y, z), new BlockPos(x + sizeX - 1, y + sizeY - 1, z + sizeZ - 1)).collect(Collectors.toList())) {
             double d0 = (double) blockpos.getX() + 0.5D - p_179692_7_.x;
             double d1 = (double) blockpos.getZ() + 0.5D - p_179692_7_.z;

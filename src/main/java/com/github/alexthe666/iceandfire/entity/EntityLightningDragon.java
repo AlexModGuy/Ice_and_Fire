@@ -26,6 +26,7 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -186,7 +187,7 @@ public class EntityLightningDragon extends EntityDragonBase {
                     break;
                 case SHAKE_PREY:
                     boolean flag = false;
-                    if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector().add(0, this.getHeight() / 2, 0), entityIn.getPositionVector().add(0, entityIn.getHeight() / 2, 0)) &&
+                    if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVec().add(0, this.getHeight() / 2, 0), entityIn.getPositionVec().add(0, entityIn.getHeight() / 2, 0)) &&
                             entityIn.getWidth() < this.getWidth() * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
                         this.setAnimation(ANIMATION_SHAKEPREY);
                         flag = true;
@@ -257,7 +258,7 @@ public class EntityLightningDragon extends EntityDragonBase {
                 this.setAnimation(ANIMATION_FIRECHARGE);
             } else if (this.getAnimationTick() == 20) {
                 rotationYaw = renderYawOffset;
-                Vec3d headVec = this.getHeadPosition();
+                Vector3d headVec = this.getHeadPosition();
                 this.playSound(IafSoundRegistry.LIGHTNINGDRAGON_BREATH_CRACKLE, 4, 1);
                 double d2 = controller.getLookVec().x;
                 double d3 = controller.getLookVec().y;
@@ -317,7 +318,7 @@ public class EntityLightningDragon extends EntityDragonBase {
                     this.setAnimation(ANIMATION_FIRECHARGE);
                 } else if (this.getAnimationTick() == 20) {
                     rotationYaw = renderYawOffset;
-                    Vec3d headVec = this.getHeadPosition();
+                    Vector3d headVec = this.getHeadPosition();
                     double d2 = entity.getPosX() - headVec.x;
                     double d3 = entity.getPosY() - headVec.y;
                     double d4 = entity.getPosZ() - headVec.z;
@@ -381,7 +382,7 @@ public class EntityLightningDragon extends EntityDragonBase {
                 this.setAnimation(ANIMATION_FIRECHARGE);
             } else if (this.getAnimationTick() == 20) {
                 rotationYaw = renderYawOffset;
-                Vec3d headVec = this.getHeadPosition();
+                Vector3d headVec = this.getHeadPosition();
                 double d2 = burnX - headVec.x;
                 double d3 = burnY - headVec.y;
                 double d4 = burnZ - headVec.z;
@@ -402,7 +403,7 @@ public class EntityLightningDragon extends EntityDragonBase {
         this.burnParticleX = burnX;
         this.burnParticleY = burnY;
         this.burnParticleZ = burnZ;
-        Vec3d headPos = getHeadPosition();
+        Vector3d headPos = getHeadPosition();
         double d2 = burnX - headPos.x;
         double d3 = burnY - headPos.y;
         double d4 = burnZ - headPos.z;
@@ -419,7 +420,7 @@ public class EntityLightningDragon extends EntityDragonBase {
                 setLightningTargetVec((float)burnX, (float)burnY, (float)burnZ);
             } else {
                 if (!world.isRemote) {
-                    RayTraceResult result = this.world.rayTraceBlocks(new RayTraceContext(new Vec3d(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ()), new Vec3d(progressX, progressY, progressZ), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+                    RayTraceResult result = this.world.rayTraceBlocks(new RayTraceContext(new Vector3d(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ()), new Vector3d(progressX, progressY, progressZ), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
                     BlockPos pos = new BlockPos(result.getHitVec());
                     IafDragonDestructionManager.destroyAreaLightning(world, pos, this);
                     setHasLightningTarget(true);
@@ -494,7 +495,7 @@ public class EntityLightningDragon extends EntityDragonBase {
     }
 
 
-    public Vec3d getHeadPosition() {
+    public Vector3d getHeadPosition() {
         //this.setDragonPitch(this.ticksExisted % 180 - 90);
         float sitProg = this.sitProgress * 0.005F;
         float deadProg = this.modelDeadProgress * -0.02F;
@@ -529,6 +530,6 @@ public class EntityLightningDragon extends EntityDragonBase {
         float headPosX = (float) (getPosX() + (xzModSine) * Math.cos((renderYawOffset + 90) * Math.PI / 180));
         float headPosY = (float) (getPosY() + (0.7F + (sitProg * 5F) + hoverProg + deadProg + epicRoarProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F);
         float headPosZ = (float) (getPosZ() + (xzModSine) * Math.sin((renderYawOffset + 90) * Math.PI / 180));
-        return new Vec3d(headPosX, headPosY, headPosZ);
+        return new Vector3d(headPosX, headPosY, headPosZ);
     }
 }

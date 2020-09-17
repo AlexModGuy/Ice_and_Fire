@@ -18,6 +18,8 @@ import com.google.common.base.Predicate;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
@@ -39,12 +41,13 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import org.w3c.dom.Attr;
 
 import javax.annotation.Nullable;
 
@@ -137,15 +140,18 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
         }
     }
 
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
-        this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32D);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.cyclopsAttackStrength);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.cyclopsMaxHealth);
-        this.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1D);
-        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(20.0D);
-
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, IafConfig.cyclopsMaxHealth)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.35D)
+                //ATTACK
+                .func_233815_a_(Attributes.field_233823_f_, IafConfig.cyclopsAttackStrength)
+                //FOLLOW RANGE
+                .func_233815_a_(Attributes.field_233819_b_, 32D)
+                //ARMOR
+                .func_233815_a_(Attributes.field_233826_i_, 20.0D);
     }
 
     @Override
@@ -201,14 +207,14 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
             double extraY = raiseUp;
             passenger.setPosition(this.getPosX() + extraX, this.getPosY() + extraY, this.getPosZ() + extraZ);
             if (this.getAnimationTick() == 32) {
-                passenger.attackEntityFrom(DamageSource.causeMobDamage(this), passenger instanceof PlayerEntity ? (float) IafConfig.cyclopsBiteStrength : passenger instanceof LivingEntity ? ((LivingEntity) passenger).getMaxHealth() * 2F : (float) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2F);
+                passenger.attackEntityFrom(DamageSource.causeMobDamage(this), passenger instanceof PlayerEntity ? (float) IafConfig.cyclopsBiteStrength : passenger instanceof LivingEntity ? ((LivingEntity) passenger).getMaxHealth() * 2F : (float) this.getAttribute(Attributes.field_233823_f_).getValue() * 2F);
                 passenger.stopRiding();
             }
         }
     }
 
     @Override
-    public void travel(Vec3d vec) {
+    public void travel(Vector3d vec) {
         if (this.getAnimation() == ANIMATION_EATPLAYER) {
             super.travel(vec.mul(0, 0, 0));
             return;
@@ -245,11 +251,11 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
             this.playSound(IafSoundRegistry.CYCLOPS_BITE, 1, 1);
         }
         if (this.getAnimation() == ANIMATION_STOMP && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 12D && this.getAnimationTick() == 14) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributes().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.field_233823_f_).getValue());
         }
         if (this.getAnimation() == ANIMATION_KICK && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 14D && this.getAnimationTick() == 12) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributes().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
-            this.getAttackTarget().knockBack(this, 2, 1, 1);
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.field_233823_f_).getValue());
+            this.getAttackTarget().func_233627_a_(2, this.getPosX() - this.getAttackTarget().getPosX(), this.getPosZ() - this.getAttackTarget().getPosZ());
 
         }
         if (this.getAnimation() != ANIMATION_EATPLAYER && this.getAttackTarget() != null && !this.getPassengers().isEmpty() && this.getPassengers().contains(this.getAttackTarget())) {
@@ -301,7 +307,7 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
                         BlockPos pos = new BlockPos(a, b, c);
                         BlockState state = world.getBlockState(pos);
                         Block block = state.getBlock();
-                        if (!state.isAir() && !state.getShape(world, pos).isEmpty() && !(block instanceof BushBlock) && block != Blocks.BEDROCK && (state.getBlock() instanceof LeavesBlock || BlockTags.LOGS.contains(state.getBlock()))) {
+                        if (!state.isAir() && !state.getShape(world, pos).isEmpty() && !(block instanceof BushBlock) && block != Blocks.BEDROCK && (state.getBlock() instanceof LeavesBlock || BlockTags.LOGS.func_230235_a_(state.getBlock()))) {
                             this.getMotion().scale(0.6D);
                             if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, a, b, c))) continue;
                             if (block != Blocks.AIR) {
@@ -356,8 +362,8 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
     public void onHitEye(DamageSource source, float damage) {
         if (!this.isBlinded()) {
             this.setBlinded(true);
-            this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(6F);
-            this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
+            this.getAttribute(Attributes.field_233819_b_).setBaseValue(6F);
+            this.getAttribute(Attributes.field_233821_d_).setBaseValue(0.35D);
             this.setAnimation(ANIMATION_ROAR);
             this.attackEntityFrom(source, damage * 3);
         }

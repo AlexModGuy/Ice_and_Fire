@@ -17,8 +17,7 @@ public class CyclopsAIAttackMelee extends MeleeAttackGoal {
             this.resetTask();
             return;
         }
-        if (distance <= d0 && this.attackTick <= 0) {
-            this.attackTick = 20;
+        if (distance <= d0 ) {
             this.attacker.swingArm(Hand.MAIN_HAND);
             this.attacker.attackEntityAsMob(entity);
         }

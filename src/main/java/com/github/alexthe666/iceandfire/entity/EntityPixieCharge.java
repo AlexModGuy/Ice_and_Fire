@@ -15,6 +15,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.FMLPlayMessages;
@@ -68,6 +69,7 @@ public class EntityPixieCharge extends AbstractFireballEntity {
     }
 
     public void tick() {
+        Entity shootingEntity = this.func_234616_v_();
         if (this.world.isRemote) {
             for (int i = 0; i < 5; ++i) {
                 IceAndFire.PROXY.spawnParticle("if_pixie", this.getPosX() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.getPosY() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.getPosZ() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
@@ -77,27 +79,27 @@ public class EntityPixieCharge extends AbstractFireballEntity {
         if (this.ticksExisted > 30) {
             this.remove();
         }
-        if (this.world.isRemote || (this.shootingEntity == null || this.shootingEntity.isAlive()) && this.world.isBlockLoaded(new BlockPos(this))) {
-            if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.removed) && this.world.isBlockLoaded(new BlockPos(this))) {
+        if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.func_233580_cy_())) {
+            if (this.world.isRemote || (shootingEntity == null || !shootingEntity.removed) && this.world.isBlockLoaded(this.func_233580_cy_())) {
                 if (this.isFireballFiery()) {
                     this.setFire(1);
                 }
 
                 ++this.ticksInAir;
-                RayTraceResult raytraceresult = ProjectileHelper.rayTrace(this, true, this.ticksInAir >= 25, this.shootingEntity, RayTraceContext.BlockMode.COLLIDER);
+                RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_, RayTraceContext.BlockMode.COLLIDER);
                 if (raytraceresult.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                     this.onImpact(raytraceresult);
                 }
 
-                Vec3d vec3d = this.getMotion();
-                double d0 = this.getPosX() + vec3d.x;
-                double d1 = this.getPosY() + vec3d.y;
-                double d2 = this.getPosZ() + vec3d.z;
+                Vector3d Vector3d = this.getMotion();
+                double d0 = this.getPosX() + Vector3d.x;
+                double d1 = this.getPosY() + Vector3d.y;
+                double d2 = this.getPosZ() + Vector3d.z;
                 ProjectileHelper.rotateTowardsMovement(this, 0.2F);
                 float f = this.getMotionFactor();
 
 
-                this.setMotion(vec3d.add(this.accelerationX, this.accelerationY, this.accelerationZ).scale(f));
+                this.setMotion(Vector3d.add(this.accelerationX, this.accelerationY, this.accelerationZ).scale(f));
                 this.setPosition(d0, d1, d2);
             } else {
                 this.remove();
@@ -107,21 +109,19 @@ public class EntityPixieCharge extends AbstractFireballEntity {
             this.accelerationZ *= 0.95F;
             this.addVelocity(this.accelerationX, this.accelerationY, this.accelerationZ);
             ++this.ticksInAir;
-            Vec3d vec3d = this.getMotion();
-            RayTraceResult raytraceresult = ProjectileHelper.rayTrace(this, this.getBoundingBox().expand(vec3d).grow(1.0D), (p_213879_1_) -> {
-                return !p_213879_1_.isSpectator() && p_213879_1_ != this.shootingEntity;
-            }, RayTraceContext.BlockMode.OUTLINE, true);
+            Vector3d Vector3d = this.getMotion();
+            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_, RayTraceContext.BlockMode.COLLIDER);
 
             if (raytraceresult != null) {
                 this.onImpact(raytraceresult);
             }
 
-            double d0 = this.getPosX() + vec3d.x;
-            double d1 = this.getPosY() + vec3d.y;
-            double d2 = this.getPosZ() + vec3d.z;
-            float f = MathHelper.sqrt(horizontalMag(vec3d));
-            this.rotationYaw = (float) (MathHelper.atan2(vec3d.x, vec3d.z) * (double) (180F / (float) Math.PI));
-            for (this.rotationPitch = (float) (MathHelper.atan2(vec3d.y, f) * (double) (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
+            double d0 = this.getPosX() + Vector3d.x;
+            double d1 = this.getPosY() + Vector3d.y;
+            double d2 = this.getPosZ() + Vector3d.z;
+            float f = MathHelper.sqrt(horizontalMag(Vector3d));
+            this.rotationYaw = (float) (MathHelper.atan2(Vector3d.x, Vector3d.z) * (double) (180F / (float) Math.PI));
+            for (this.rotationPitch = (float) (MathHelper.atan2(Vector3d.y, f) * (double) (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
             }
             while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
                 this.prevRotationPitch += 360.0F;
@@ -156,10 +156,11 @@ public class EntityPixieCharge extends AbstractFireballEntity {
     @Override
     protected void onImpact(RayTraceResult movingObject) {
         boolean flag = false;
+        Entity shootingEntity = this.func_234616_v_();
         if (!this.world.isRemote) {
-            if (movingObject.getType() == RayTraceResult.Type.ENTITY && !((EntityRayTraceResult) movingObject).getEntity().isEntityEqual(this.shootingEntity)) {
+            if (movingObject.getType() == RayTraceResult.Type.ENTITY && !((EntityRayTraceResult) movingObject).getEntity().isEntityEqual(shootingEntity)) {
                 Entity entity = ((EntityRayTraceResult) movingObject).getEntity();
-                if (this.shootingEntity != null && this.shootingEntity.equals(entity)) {
+                if (shootingEntity != null && shootingEntity.equals(entity)) {
                     flag = true;
                 } else {
                     if (entity instanceof LivingEntity) {
@@ -172,7 +173,7 @@ public class EntityPixieCharge extends AbstractFireballEntity {
                             IceAndFire.PROXY.spawnParticle("if_pixie", this.getPosX() + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.getPosY() + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.getPosZ() + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
                         }
                     }
-                    if (this.shootingEntity == null || !(shootingEntity instanceof PlayerEntity) || !((PlayerEntity) shootingEntity).isCreative()) {
+                    if (shootingEntity == null || !(shootingEntity instanceof PlayerEntity) || !((PlayerEntity) shootingEntity).isCreative()) {
                         if (rand.nextInt(3) == 0) {
                             this.entityDropItem(new ItemStack(IafItemRegistry.PIXIE_DUST, 1), 0.45F);
                         }

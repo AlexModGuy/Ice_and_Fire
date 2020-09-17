@@ -13,6 +13,7 @@ import net.minecraft.network.IPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.FMLPlayMessages;
@@ -53,27 +54,26 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
     }
 
     public void tick() {
+        Entity shootingEntity = this.func_234616_v_();
         this.extinguish();
-        if (this.world.isRemote || (this.shootingEntity == null || this.shootingEntity.isAlive()) && this.world.isBlockLoaded(new BlockPos(this))) {
+        if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.func_233580_cy_())) {
             super.tick();
             this.extinguish();
 
             ++this.ticksInAir;
-            Vec3d vec3d = this.getMotion();
-            RayTraceResult raytraceresult = ProjectileHelper.rayTrace(this, this.getBoundingBox().expand(vec3d).grow(1.0D), (p_213879_1_) -> {
-                return !p_213879_1_.isSpectator() && p_213879_1_ != this.shootingEntity;
-            }, RayTraceContext.BlockMode.OUTLINE, true);
+            Vector3d Vector3d = this.getMotion();
+            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_, RayTraceContext.BlockMode.COLLIDER);
 
             if (raytraceresult != null) {
                 this.onImpact(raytraceresult);
             }
 
-            double d0 = this.getPosX() + vec3d.x;
-            double d1 = this.getPosY() + vec3d.y;
-            double d2 = this.getPosZ() + vec3d.z;
-            float f = MathHelper.sqrt(horizontalMag(vec3d));
-            this.rotationYaw = (float) (MathHelper.atan2(vec3d.x, vec3d.z) * (double) (180F / (float) Math.PI));
-            for (this.rotationPitch = (float) (MathHelper.atan2(vec3d.y, f) * (double) (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
+            double d0 = this.getPosX() + Vector3d.x;
+            double d1 = this.getPosY() + Vector3d.y;
+            double d2 = this.getPosZ() + Vector3d.z;
+            float f = MathHelper.sqrt(horizontalMag(Vector3d));
+            this.rotationYaw = (float) (MathHelper.atan2(Vector3d.x, Vector3d.z) * (double) (180F / (float) Math.PI));
+            for (this.rotationPitch = (float) (MathHelper.atan2(Vector3d.y, f) * (double) (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
             }
             while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
                 this.prevRotationPitch += 360.0F;
@@ -107,6 +107,7 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
 
     @Override
     protected void onImpact(RayTraceResult movingObject) {
+        Entity shootingEntity = this.func_234616_v_();
         boolean flag = this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING);
         if (!this.world.isRemote) {
             if (movingObject.getType() == RayTraceResult.Type.ENTITY) {
@@ -115,15 +116,15 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
                 if (entity != null && entity instanceof IDragonProjectile) {
                     return;
                 }
-                if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
-                    EntityDragonBase dragon = (EntityDragonBase) this.shootingEntity;
+                if (shootingEntity != null && shootingEntity instanceof EntityDragonBase) {
+                    EntityDragonBase dragon = (EntityDragonBase) shootingEntity;
                     if (dragon.isOnSameTeam(entity) || dragon.isEntityEqual(entity) || dragon.isPart(entity)) {
                         return;
                     }
                 }
-                if (entity == null || !(entity instanceof IDragonProjectile) && entity != shootingEntity && this.shootingEntity instanceof EntityDragonBase) {
-                    EntityDragonBase dragon = (EntityDragonBase) this.shootingEntity;
-                    if (this.shootingEntity != null && (entity == this.shootingEntity || (entity instanceof TameableEntity && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
+                if (entity == null || !(entity instanceof IDragonProjectile) && entity != shootingEntity && shootingEntity instanceof EntityDragonBase) {
+                    EntityDragonBase dragon = (EntityDragonBase) shootingEntity;
+                    if (shootingEntity != null && (entity == shootingEntity || (entity instanceof TameableEntity && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
                         return;
                     }
                     if (dragon != null) {
@@ -132,22 +133,24 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
                     this.remove();
                 }
                 if (entity != null && !(entity instanceof IDragonProjectile) && !entity.isEntityEqual(shootingEntity)) {
-                    if (this.shootingEntity != null && (entity.isEntityEqual(shootingEntity) || (this.shootingEntity instanceof EntityDragonBase & entity instanceof TameableEntity && ((EntityDragonBase) shootingEntity).getOwner() == ((TameableEntity) entity).getOwner()))) {
+                    if (shootingEntity != null && (entity.isEntityEqual(shootingEntity) || (shootingEntity instanceof EntityDragonBase & entity instanceof TameableEntity && ((EntityDragonBase) shootingEntity).getOwner() == ((TameableEntity) entity).getOwner()))) {
                         return;
                     }
-                    if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
+                    if (shootingEntity != null && shootingEntity instanceof EntityDragonBase) {
                         entity.attackEntityFrom(IafDamageRegistry.DRAGON_LIGHTNING, 10.0F);
                         if (entity instanceof LivingEntity && ((LivingEntity) entity).getHealth() == 0) {
-                            ((EntityDragonBase) this.shootingEntity).randomizeAttacks();
+                            ((EntityDragonBase) shootingEntity).randomizeAttacks();
                         }
                     }
-                    this.applyEnchantments(this.shootingEntity, entity);
+                    if(shootingEntity instanceof LivingEntity){
+                        this.applyEnchantments((LivingEntity)shootingEntity, entity);
+                    }
                     this.remove();
                 }
             }
             if(movingObject.getType() != RayTraceResult.Type.MISS){
-                if (this.shootingEntity instanceof EntityDragonBase && IafConfig.dragonGriefing != 2) {
-                    IafDragonDestructionManager.destroyAreaLightningCharge(world, new BlockPos(this.getPosX(), this.getPosY(), this.getPosZ()), ((EntityDragonBase) this.shootingEntity));
+                if (shootingEntity instanceof EntityDragonBase && IafConfig.dragonGriefing != 2) {
+                    IafDragonDestructionManager.destroyAreaLightningCharge(world, new BlockPos(this.getPosX(), this.getPosY(), this.getPosZ()), ((EntityDragonBase) shootingEntity));
                 }
                 this.remove();
             }

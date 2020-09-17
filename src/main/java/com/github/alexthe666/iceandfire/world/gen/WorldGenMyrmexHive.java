@@ -9,7 +9,7 @@ import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.SpawnReason;
@@ -17,12 +17,13 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
     private boolean jungle;
     private BlockPos centerOfHive;
 
-    public WorldGenMyrmexHive(boolean small, boolean jungle, Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn) {
+    public WorldGenMyrmexHive(boolean small, boolean jungle, Codec<NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
         this.small = small;
         this.jungle = jungle;
@@ -63,7 +64,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+    public boolean func_230362_a_(ISeedReader worldIn, StructureManager structureManager, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
         if(!small){
             if(!IafWorldRegistry.isDimensionListed(worldIn)){
                 return false;
@@ -213,7 +214,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
     private void generateEntrance(IWorld world, Random rand, BlockPos position, int size, int height, Direction direction) {
         BlockPos up = position.up();
         hive.getEntranceBottoms().put(up, direction);
-        while (up.getY() < world.getHeight(small ? Heightmap.Type.MOTION_BLOCKING_NO_LEAVES : Heightmap.Type.WORLD_SURFACE_WG, up).getY() && !world.getBlockState(up).isIn(BlockTags.LOGS)) {
+        while (up.getY() < world.getHeight(small ? Heightmap.Type.MOTION_BLOCKING_NO_LEAVES : Heightmap.Type.WORLD_SURFACE_WG, up).getY() && !BlockTags.LOGS.func_230235_a_(world.getBlockState(up).getBlock())) {
             generateCircleRespectSky(world, rand, up, size, height, direction);
             up = up.up().offset(direction);
         }
@@ -488,6 +489,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
             }
         }
     }
+
 
     public enum RoomType {
         DEFAULT(false),

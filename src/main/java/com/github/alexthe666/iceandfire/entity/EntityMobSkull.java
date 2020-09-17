@@ -6,7 +6,9 @@ import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -15,6 +17,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
@@ -32,11 +35,12 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
         this.ignoreFrustumCheck = true;
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0);
-        getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10);
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, 10.0D)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.0D);
     }
 
     @Override
@@ -50,7 +54,7 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
     }
 
     public boolean isOnWall() {
-        return this.world.isAirBlock(this.getPosition().down());
+        return this.world.isAirBlock(this.func_233580_cy_().down());
     }
 
     public void onUpdate() {
@@ -111,11 +115,11 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
     }
 
     @Override
-    public boolean processInteract(PlayerEntity player, Hand hand) {
-        if (player.isShiftKeyDown()) {
+    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
+        if (player.isSneaking()) {
             this.setYaw(player.rotationYaw);
         }
-        return super.processInteract(player, hand);
+        return super.func_230254_b_(player, hand);
     }
 
     @Override

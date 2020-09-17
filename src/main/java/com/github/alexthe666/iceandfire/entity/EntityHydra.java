@@ -9,6 +9,9 @@ import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.MonsterEntity;
@@ -23,7 +26,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -133,21 +136,21 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
             if (striking && strikingProgress[i] > 9) {
                 isStriking[i] = false;
                 if (this.getAttackTarget() != null && this.getDistance(this.getAttackTarget()) < 6) {
-                    this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttributes().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
+                    this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.field_233823_f_).getValue());
                     this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 100, 3, false, false));
-                    this.getAttackTarget().knockBack(this.getAttackTarget(), 0.25F, this.getPosX() - this.getAttackTarget().getPosX(), this.getPosZ() - this.getAttackTarget().getPosZ());
+                    this.getAttackTarget().func_233627_a_(0.25F, this.getPosX() - this.getAttackTarget().getPosX(), this.getPosZ() - this.getAttackTarget().getPosZ());
                 }
             }
             if (breathing) {
                 LivingEntity entity = this.getAttackTarget();
                 if (ticksExisted % 7 == 0 && entity != null && i < this.getHeadCount()) {
-                    Vec3d vec3d = this.getLook(1.0F);
+                    Vector3d Vector3d = this.getLook(1.0F);
                     if (rand.nextFloat() < 0.2F) {
                         this.playSound(IafSoundRegistry.HYDRA_SPIT, this.getSoundVolume(), this.getSoundPitch());
                     }
-                    double headPosX = this.headBoxes[i].getPosX() + vec3d.x * 1.0D;
+                    double headPosX = this.headBoxes[i].getPosX() + Vector3d.x * 1.0D;
                     double headPosY = this.headBoxes[i].getPosY() + 1.3F;
-                    double headPosZ = this.headBoxes[i].getPosZ() + vec3d.z * 1.0D;
+                    double headPosZ = this.headBoxes[i].getPosZ() + Vector3d.z * 1.0D;
                     double d2 = entity.getPosX() - headPosX + this.rand.nextGaussian() * 0.4D;
                     double d3 = entity.getPosY() + entity.getEyeHeight() - headPosY + this.rand.nextGaussian() * 0.4D;
                     double d4 = entity.getPosZ() - headPosZ + this.rand.nextGaussian() * 0.4D;
@@ -332,13 +335,16 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         this.dataManager.register(SEVERED_HEAD, Integer.valueOf(-1));
     }
 
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.generateHydraChance);
-        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
-        this.getAttribute(LivingEntity.SWIM_SPEED).setBaseValue(2.0D);
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, IafConfig.hydraMaxHealth)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.3D)
+                //ATTACK
+                .func_233815_a_(Attributes.field_233823_f_, 3.0D)
+                //ARMOR
+                .func_233815_a_(Attributes.field_233826_i_, 1.0D);
     }
 
     @Override

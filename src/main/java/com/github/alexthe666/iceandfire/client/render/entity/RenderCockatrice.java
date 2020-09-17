@@ -17,7 +17,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -40,11 +40,11 @@ public class RenderCockatrice extends MobRenderer<EntityCockatrice, SegmentedMod
         p_229108_0_.pos(p_229108_1_, p_229108_3_, p_229108_4_, p_229108_5_).color(p_229108_6_, p_229108_7_, p_229108_8_, 255).tex(p_229108_9_, p_229108_10_).overlay(OverlayTexture.NO_OVERLAY).lightmap(15728880).normal(p_229108_2_, 0.0F, 1.0F, 0.0F).endVertex();
     }
 
-    private Vec3d getPosition(LivingEntity LivingEntityIn, double p_177110_2_, float p_177110_4_) {
+    private Vector3d getPosition(LivingEntity LivingEntityIn, double p_177110_2_, float p_177110_4_) {
         double d0 = LivingEntityIn.lastTickPosX + (LivingEntityIn.getPosX() - LivingEntityIn.lastTickPosX) * (double) p_177110_4_;
         double d1 = p_177110_2_ + LivingEntityIn.lastTickPosY + (LivingEntityIn.getPosY() - LivingEntityIn.lastTickPosY) * (double) p_177110_4_;
         double d2 = LivingEntityIn.lastTickPosZ + (LivingEntityIn.getPosZ() - LivingEntityIn.lastTickPosZ) * (double) p_177110_4_;
-        return new Vec3d(d0, d1, d2);
+        return new Vector3d(d0, d1, d2);
     }
 
     public boolean shouldRender(EntityCockatrice livingEntityIn, ClippingHelperImpl camera, double camX, double camY, double camZ) {
@@ -54,9 +54,9 @@ public class RenderCockatrice extends MobRenderer<EntityCockatrice, SegmentedMod
             if (livingEntityIn.hasTargetedEntity()) {
                 LivingEntity livingentity = livingEntityIn.getTargetedEntity();
                 if (livingentity != null) {
-                    Vec3d vec3d = this.getPosition(livingentity, (double) livingentity.getHeight() * 0.5D, 1.0F);
-                    Vec3d vec3d1 = this.getPosition(livingEntityIn, livingEntityIn.getEyeHeight(), 1.0F);
-                    return camera.isBoundingBoxInFrustum(new AxisAlignedBB(vec3d1.x, vec3d1.y, vec3d1.z, vec3d.x, vec3d.y, vec3d.z));
+                    Vector3d Vector3d = this.getPosition(livingentity, (double) livingentity.getHeight() * 0.5D, 1.0F);
+                    Vector3d Vector3d1 = this.getPosition(livingEntityIn, livingEntityIn.getEyeHeight(), 1.0F);
+                    return camera.isBoundingBoxInFrustum(new AxisAlignedBB(Vector3d1.x, Vector3d1.y, Vector3d1.z, Vector3d.x, Vector3d.y, Vector3d.z));
                 }
             }
 
@@ -81,13 +81,13 @@ public class RenderCockatrice extends MobRenderer<EntityCockatrice, SegmentedMod
                 float f3 = entityIn.getEyeHeight();
                 matrixStackIn.push();
                 matrixStackIn.translate(0.0D, f3, 0.0D);
-                Vec3d vec3d = this.getPosition(livingentity, (double) livingentity.getHeight() * 0.5D, partialTicks);
-                Vec3d vec3d1 = this.getPosition(entityIn, f3, partialTicks);
-                Vec3d vec3d2 = vec3d.subtract(vec3d1);
-                float f4 = (float) (vec3d2.length() + 1.0D);
-                vec3d2 = vec3d2.normalize();
-                float f5 = (float) Math.acos(vec3d2.y);
-                float f6 = (float) Math.atan2(vec3d2.z, vec3d2.x);
+                Vector3d Vector3d = this.getPosition(livingentity, (double) livingentity.getHeight() * 0.5D, partialTicks);
+                Vector3d Vector3d1 = this.getPosition(entityIn, f3, partialTicks);
+                Vector3d Vector3d2 = Vector3d.subtract(Vector3d1);
+                float f4 = (float) (Vector3d2.length() + 1.0D);
+                Vector3d2 = Vector3d2.normalize();
+                float f5 = (float) Math.acos(Vector3d2.y);
+                float f6 = (float) Math.atan2(Vector3d2.z, Vector3d2.x);
                 matrixStackIn.rotate(Vector3f.YP.rotationDegrees((((float) Math.PI / 2F) - f6) * (180F / (float) Math.PI)));
                 matrixStackIn.rotate(Vector3f.XP.rotationDegrees(f5 * (180F / (float) Math.PI)));
                 int i = 1;

@@ -19,7 +19,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.MonsterEntity;
@@ -33,6 +35,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 
@@ -84,14 +87,19 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         this.targetSelector.addGoal(2, new StymphalianBirdAITarget(this, LivingEntity.class, true));
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(24.0D);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
-        this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.stymphalianBirdTargetSearchLength));
-        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0D);
+
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, 24.0D)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.3D)
+                //ATTACK
+                .func_233815_a_(Attributes.field_233823_f_, IafConfig.myrmexBaseAttackStrength * 2D)
+                //FOLLOW RANGE
+                .func_233815_a_(Attributes.field_233819_b_, Math.min(2048, IafConfig.stymphalianBirdTargetSearchLength))
+                //ARMOR
+                .func_233815_a_(Attributes.field_233826_i_, 4.0D);
     }
 
     @Override
@@ -115,10 +123,8 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     @Override
     public void writeAdditional(CompoundNBT tag) {
         super.writeAdditional(tag);
-        if (this.getVictorId() == null) {
-            tag.putString("VictorUUID", "");
-        } else {
-            tag.putString("VictorUUID", this.getVictorId().toString());
+        if (this.getVictorId() != null) {
+            tag.putUniqueId("VictorUUID", this.getVictorId());
         }
         tag.putBoolean("Flying", this.isFlying());
     }
@@ -126,18 +132,18 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     @Override
     public void readAdditional(CompoundNBT tag) {
         super.readAdditional(tag);
-        String s;
+        UUID s;
 
         if (tag.hasUniqueId("VictorUUID")) {
-            s = tag.getString("VictorUUID");
+            s = tag.getUniqueId("VictorUUID");
         } else {
-            String s1 = tag.getString("Victor");
+            String s1 = tag.getString("VictorUUID");
             s = PreYggdrasilConverter.convertMobOwnerIfNeeded(this.getServer(), s1);
         }
 
-        if (!s.isEmpty()) {
+        if (s != null) {
             try {
-                this.setVictorId(UUID.fromString(s));
+                this.setVictorId(s);
             } catch (Throwable var4) {
             }
         }
@@ -199,7 +205,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         return entityIn == this.getVictor();
     }
 
-    public boolean isTargetBlocked(Vec3d target) {
+    public boolean isTargetBlocked(Vector3d target) {
         return world.rayTraceBlocks(new RayTraceContext(target, this.getEyePosition(1.0F), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
     }
 
@@ -241,7 +247,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
                     this.airTarget = null;
                     this.aiFlightLaunch = false;
                 }
-                if (this.onGround && dist < 40 && this.getAnimation() != ANIMATION_SHOOT_ARROWS) {
+                if (this.func_233570_aj_() && dist < 40 && this.getAnimation() != ANIMATION_SHOOT_ARROWS) {
                     this.setFlying(false);
                 }
             }
@@ -251,7 +257,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (this.getAnimation() == ANIMATION_PECK && this.getAnimationTick() == 7) {
                 if (dist < 1.5F) {
-                    this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue()));
+                    this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
                 }
                 if (onGround) {
                     this.setFlying(false);
@@ -265,7 +271,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
                 this.faceEntity(target, 360, 360);
                 if (this.isFlying()) {
                     rotationYaw = renderYawOffset;
-                    if ((this.getAnimationTick() == 7 || this.getAnimationTick() == 14) && isDirectPathBetweenPoints(this, this.getPositionVector(), target.getPositionVector())) {
+                    if ((this.getAnimationTick() == 7 || this.getAnimationTick() == 14) && isDirectPathBetweenPoints(this, this.getPositionVec(), target.getPositionVec())) {
                         this.playSound(IafSoundRegistry.STYMPHALIAN_BIRD_ATTACK, 1, 1);
                         for (int i = 0; i < 4; i++) {
                             float wingX = (float) (getPosX() + 1.8F * 0.5F * Math.cos((rotationYaw + 180 * (i % 2)) * Math.PI / 180));
@@ -288,13 +294,13 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
             }
         }
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        boolean flying = this.isFlying() && !this.onGround || airBorneCounter > 10 || this.getAnimation() == ANIMATION_SHOOT_ARROWS;
+        boolean flying = this.isFlying() && !this.func_233570_aj_() || airBorneCounter > 10 || this.getAnimation() == ANIMATION_SHOOT_ARROWS;
         if (flying && flyProgress < 20.0F) {
             flyProgress += 1F;
         } else if (!flying && flyProgress > 0.0F) {
             flyProgress -= 1F;
         }
-        if (!this.isFlying() && this.airTarget != null && this.onGround && !world.isRemote) {
+        if (!this.isFlying() && this.airTarget != null && this.func_233570_aj_() && !world.isRemote) {
             this.airTarget = null;
         }
         if (this.isFlying() && getAttackTarget() == null) {
@@ -312,7 +318,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
             this.flyTicks = 0;
             this.aiFlightLaunch = true;
         }
-        if (!world.isRemote && this.onGround && this.isFlying() && !aiFlightLaunch && this.getAnimation() != ANIMATION_SHOOT_ARROWS) {
+        if (!world.isRemote && this.func_233570_aj_() && this.isFlying() && !aiFlightLaunch && this.getAnimation() != ANIMATION_SHOOT_ARROWS) {
             this.setFlying(false);
             this.airTarget = null;
         }
@@ -350,7 +356,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         }
     }
 
-    public boolean isDirectPathBetweenPoints(Entity entity, Vec3d vec1, Vec3d vec2) {
+    public boolean isDirectPathBetweenPoints(Entity entity, Vector3d vec1, Vector3d vec2) {
         return world.rayTraceBlocks(new RayTraceContext(vec1, vec2, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
     }
 
@@ -368,7 +374,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     }
 
     public void flyTowardsTarget() {
-        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.getPosY(), airTarget.getZ())) > 3) {
+        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vector3d(airTarget.getX(), this.getPosY(), airTarget.getZ())) > 3) {
             double targetX = airTarget.getX() + 0.5D - getPosX();
             double targetY = Math.min(airTarget.getY(), 256) + 1D - getPosY();
             double targetZ = airTarget.getZ() + 0.5D - getPosZ();
@@ -387,7 +393,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         } else {
             this.airTarget = null;
         }
-        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.getPosY(), airTarget.getZ())) < 3 && this.doesWantToLand()) {
+        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vector3d(airTarget.getX(), this.getPosY(), airTarget.getZ())) < 3 && this.doesWantToLand()) {
             this.setFlying(false);
         }
     }
@@ -446,10 +452,10 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         }
     }
 
-    public float getDistanceSquared(Vec3d vec3d) {
-        float f = (float) (this.getPosX() - vec3d.x);
-        float f1 = (float) (this.getPosY() - vec3d.y);
-        float f2 = (float) (this.getPosZ() - vec3d.z);
+    public float getDistanceSquared(Vector3d Vector3d) {
+        float f = (float) (this.getPosX() - Vector3d.x);
+        float f1 = (float) (this.getPosY() - Vector3d.y);
+        float f2 = (float) (this.getPosZ() - Vector3d.z);
         return f * f + f1 * f1 + f2 * f2;
     }
 

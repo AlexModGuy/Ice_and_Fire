@@ -33,21 +33,21 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
         if (entity.getCreatureAttribute() == CreatureAttribute.ARTHROPOD) {
             lichSummoned = new EntityDreadScuttler(IafEntityRegistry.DREAD_SCUTTLER, entity.world);
             float readInScale = (entity.getWidth() / 1.5F);
-            ((EntityDreadScuttler) lichSummoned).onInitialSpawn(entity.world, entity.world.getDifficultyForLocation(new BlockPos(entity)), SpawnReason.MOB_SUMMONED, null, null);
+            ((EntityDreadScuttler) lichSummoned).onInitialSpawn(entity.world, entity.world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
             ((EntityDreadScuttler) lichSummoned).setScale(readInScale);
             return lichSummoned;
         }
         if (entity instanceof ZombieEntity || entity instanceof IHumanoid) {
             lichSummoned = new EntityDreadGhoul(IafEntityRegistry.DREAD_GHOUL, entity.world);
             float readInScale = (entity.getWidth() / 0.6F);
-            ((EntityDreadGhoul) lichSummoned).onInitialSpawn(entity.world, entity.world.getDifficultyForLocation(new BlockPos(entity)), SpawnReason.MOB_SUMMONED, null, null);
+            ((EntityDreadGhoul) lichSummoned).onInitialSpawn(entity.world, entity.world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
             ((EntityDreadGhoul) lichSummoned).setScale(readInScale);
             return lichSummoned;
         }
         if (entity.getCreatureAttribute() == CreatureAttribute.UNDEAD || entity instanceof AbstractSkeletonEntity || entity instanceof PlayerEntity) {
             lichSummoned = new EntityDreadThrall(IafEntityRegistry.DREAD_THRALL, entity.world);
             EntityDreadThrall thrall = (EntityDreadThrall) lichSummoned;
-            thrall.onInitialSpawn(entity.world, entity.world.getDifficultyForLocation(new BlockPos(entity)), SpawnReason.MOB_SUMMONED, null, null);
+            thrall.onInitialSpawn(entity.world, entity.world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
             thrall.setCustomArmorHead(false);
             thrall.setCustomArmorChest(false);
             thrall.setCustomArmorLegs(false);
@@ -64,7 +64,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
         if (entity instanceof AnimalEntity) {
             lichSummoned = new EntityDreadBeast(IafEntityRegistry.DREAD_BEAST, entity.world);
             float readInScale = (entity.getWidth() / 1.2F);
-            ((EntityDreadBeast) lichSummoned).onInitialSpawn(entity.world, entity.world.getDifficultyForLocation(new BlockPos(entity)), SpawnReason.MOB_SUMMONED, null, null);
+            ((EntityDreadBeast) lichSummoned).onInitialSpawn(entity.world, entity.world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
             ((EntityDreadBeast) lichSummoned).setScale(readInScale);
             return lichSummoned;
         }
@@ -80,31 +80,31 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
     @Override
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
-        if (this.getCommanderId() == null) {
-            compound.putString("CommanderUUID", "");
-        } else {
-            compound.putString("CommanderUUID", this.getCommanderId().toString());
+        if (this.getCommanderId() != null) {
+            compound.putUniqueId("CommanderUUID", this.getCommanderId());
         }
-
     }
 
     @Override
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
-        String s;
-        if (compound.contains("CommanderUUID", 8)) {
-            s = compound.getString("CommanderUUID");
+        UUID uuid;
+        if (compound.hasUniqueId("CommanderUUID")) {
+            uuid = compound.getUniqueId("CommanderUUID");
         } else {
-            String s1 = compound.getString("Owner");
-            s = PreYggdrasilConverter.convertMobOwnerIfNeeded(this.getServer(), s1);
+            String s = compound.getString("CommanderUUID");
+            uuid = PreYggdrasilConverter.convertMobOwnerIfNeeded(this.getServer(), s);
         }
-        if (!s.isEmpty()) {
+
+        if (uuid != null) {
             try {
-                this.setCommanderId(UUID.fromString(s));
-            } catch (Throwable var4) {
+                this.setCommanderId(uuid);
+            } catch (Throwable throwable) {
             }
         }
+
     }
+
 
     @Override
     public boolean isOnSameTeam(Entity entityIn) {
@@ -140,7 +140,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
                 return player;
             } else {
                 if (!world.isRemote) {
-                    Entity entity = world.getServer().getWorld(this.dimension).getEntityByUuid(uuid);
+                    Entity entity = world.getServer().getWorld(this.world.func_234923_W_()).getEntityByUuid(uuid);
                     if (entity instanceof LivingEntity) {
                         return entity;
                     }

@@ -6,20 +6,23 @@ import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.SpriteTexturedParticle;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
 public class ParticlePixieDust extends SpriteTexturedParticle {
     private static final ResourceLocation PIXIE_DUST = new ResourceLocation("iceandfire:textures/particles/pixie_dust.png");
     float reddustParticleScale;
 
-    public ParticlePixieDust(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, float p_i46349_8_, float p_i46349_9_, float p_i46349_10_) {
+    public ParticlePixieDust(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, float p_i46349_8_, float p_i46349_9_, float p_i46349_10_) {
         this(worldIn, xCoordIn, yCoordIn, zCoordIn, 1F, p_i46349_8_, p_i46349_9_, p_i46349_10_);
     }
 
-    protected ParticlePixieDust(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, float scale, float red, float green, float blue) {
+    protected ParticlePixieDust(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, float scale, float red, float green, float blue) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, 0.0D, 0.0D, 0.0D);
         this.motionX *= 0.10000000149011612D;
         this.motionY *= 0.10000000149011612D;
@@ -36,7 +39,7 @@ public class ParticlePixieDust extends SpriteTexturedParticle {
 
     @Override
     public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
-        Vec3d inerp = renderInfo.getProjectedView();
+        Vector3d inerp = renderInfo.getProjectedView();
         float scaley = ((float) this.age + partialTicks) / (float) this.maxAge * 32.0F;
         scaley = MathHelper.clamp(scaley, 0.0F, 1.0F);
         this.particleScale = this.reddustParticleScale * scaley;
@@ -46,10 +49,10 @@ public class ParticlePixieDust extends SpriteTexturedParticle {
             this.setExpired();
         }
 
-        Vec3d vec3d = renderInfo.getProjectedView();
-        float f = (float) (MathHelper.lerp(partialTicks, this.prevPosX, this.posX) - vec3d.getX());
-        float f1 = (float) (MathHelper.lerp(partialTicks, this.prevPosY, this.posY) - vec3d.getY());
-        float f2 = (float) (MathHelper.lerp(partialTicks, this.prevPosZ, this.posZ) - vec3d.getZ());
+        Vector3d Vector3d = renderInfo.getProjectedView();
+        float f = (float) (MathHelper.lerp(partialTicks, this.prevPosX, this.posX) - Vector3d.getX());
+        float f1 = (float) (MathHelper.lerp(partialTicks, this.prevPosY, this.posY) - Vector3d.getY());
+        float f2 = (float) (MathHelper.lerp(partialTicks, this.prevPosZ, this.posZ) - Vector3d.getZ());
         Quaternion quaternion;
         if (this.particleAngle == 0.0F) {
             quaternion = renderInfo.getRotation();

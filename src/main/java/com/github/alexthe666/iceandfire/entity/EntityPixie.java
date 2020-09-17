@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.PixieAIFlee;
@@ -15,6 +16,8 @@ import com.google.common.base.Predicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
@@ -33,10 +36,12 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -76,27 +81,28 @@ public class EntityPixie extends TameableEntity {
         for (int xSearch = -10; xSearch < 10; xSearch++) {
             for (int ySearch = -10; ySearch < 10; ySearch++) {
                 for (int zSearch = -10; zSearch < 10; zSearch++) {
-                    if (world.getTileEntity(entity.getPosition().add(xSearch, ySearch, zSearch)) != null && world.getTileEntity(entity.getPosition().add(xSearch, ySearch, zSearch)) instanceof TileEntityPixieHouse) {
-                        TileEntityPixieHouse house = (TileEntityPixieHouse) world.getTileEntity(entity.getPosition().add(xSearch, ySearch, zSearch));
+                    if (world.getTileEntity(entity.func_233580_cy_().add(xSearch, ySearch, zSearch)) != null && world.getTileEntity(entity.func_233580_cy_().add(xSearch, ySearch, zSearch)) instanceof TileEntityPixieHouse) {
+                        TileEntityPixieHouse house = (TileEntityPixieHouse) world.getTileEntity(entity.func_233580_cy_().add(xSearch, ySearch, zSearch));
                         if (!house.hasPixie) {
-                            return entity.getPosition().add(xSearch, ySearch, zSearch);
+                            return entity.func_233580_cy_().add(xSearch, ySearch, zSearch);
                         }
                     }
                 }
             }
         }
-        return entity.getPosition();
+        return entity.func_233580_cy_();
     }
 
     protected int getExperiencePoints(PlayerEntity player) {
         return 3;
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25);
-        getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10);
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, 10D)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.25D);
     }
 
     public boolean attackEntityFrom(DamageSource source, float amount) {
@@ -139,19 +145,16 @@ public class EntityPixie extends TameableEntity {
     protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
-    public boolean processInteract(PlayerEntity player, Hand hand) {
-        if (player.getHeldItem(hand).interactWithEntity(player, this, hand)) {
-            return true;
-        }
+    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         if (this.isOwner(player)) {
             if (player.getHeldItem(hand).getItem() == Items.SUGAR && this.getHealth() < this.getMaxHealth()) {
                 this.heal(5);
                 player.getHeldItem(hand).shrink(1);
                 this.playSound(IafSoundRegistry.PIXIE_TAUNT, 1F, 1F);
-                return true;
+                return ActionResultType.SUCCESS;
             } else {
-                this.setSitting(!this.isSitting());
-                return true;
+                this.func_233686_v_(!this.func_233684_eK_());
+                return ActionResultType.SUCCESS;
             }
         } else if (player.getHeldItem(hand).getItem() == Item.getItemFromBlock(IafBlockRegistry.JAR_EMPTY) && !this.isTamed()) {
             if (!player.isCreative()) {
@@ -185,7 +188,7 @@ public class EntityPixie extends TameableEntity {
             //player.addStat(ModAchievements.jarPixie);
             this.remove();
         }
-        return super.processInteract(player, hand);
+        return super.func_230254_b_(player, hand);
     }
 
     public void flipAI(boolean flee) {
@@ -224,14 +227,15 @@ public class EntityPixie extends TameableEntity {
         if (this.getPosY() > this.world.getHeight()) {
             return true;
         }
-        BlockPos height = this.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, new BlockPos(this));
+        BlockPos height = this.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, this.func_233580_cy_());
         int maxY = 20 + height.getY();
         return this.getPosY() > maxY;
     }
 
     public void livingTick() {
         super.livingTick();
-        if (!this.isSitting() && !this.isBeyondHeight()) {
+
+        if (!this.func_233684_eK_() && !this.isBeyondHeight()) {
             this.setMotion(this.getMotion().add(0, 0.08, 0));
         } else {
         }
@@ -242,7 +246,7 @@ public class EntityPixie extends TameableEntity {
             ticksUntilHouseAI--;
         }
         if (!world.isRemote) {
-            if (housePos != null && this.getDistanceSq(new Vec3d(housePos).add(0.5D, 0.5D, 0.5D)) < 1.5F && world.getTileEntity(housePos) != null && world.getTileEntity(housePos) instanceof TileEntityPixieHouse) {
+            if (housePos != null && this.getDistanceSq(Vector3d.func_237489_a_(housePos)) < 1.5F && world.getTileEntity(housePos) != null && world.getTileEntity(housePos) instanceof TileEntityPixieHouse) {
                 TileEntityPixieHouse house = (TileEntityPixieHouse) world.getTileEntity(housePos);
                 if (house.hasPixie) {
                     this.housePos = null;
@@ -369,11 +373,11 @@ public class EntityPixie extends TameableEntity {
 
         public boolean shouldExecute() {
             target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.getPosX() + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.getPosZ() + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
-            return !EntityPixie.this.isOwnerClose() && !EntityPixie.this.isSitting() && isDirectPathBetweenPoints(EntityPixie.this.getPosition(), target) && !EntityPixie.this.getMoveHelper().isUpdating() && EntityPixie.this.rand.nextInt(4) == 0 && EntityPixie.this.housePos == null;
+            return !EntityPixie.this.isOwnerClose() && !EntityPixie.this.func_233684_eK_() && isDirectPathBetweenPoints(EntityPixie.this.func_233580_cy_(), target) && !EntityPixie.this.getMoveHelper().isUpdating() && EntityPixie.this.rand.nextInt(4) == 0 && EntityPixie.this.housePos == null;
         }
 
         protected boolean isDirectPathBetweenPoints(BlockPos posVec31, BlockPos posVec32) {
-            return EntityPixie.this.world.rayTraceBlocks(new RayTraceContext(new Vec3d(posVec31.getX() + 0.5D, posVec31.getY() + 0.5D, posVec31.getZ() + 0.5D), new Vec3d(posVec32.getX() + 0.5D, posVec32.getY() + (double) EntityPixie.this.getHeight() * 0.5D, posVec32.getZ() + 0.5D), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, EntityPixie.this)).getType() == RayTraceResult.Type.MISS;
+            return EntityPixie.this.world.rayTraceBlocks(new RayTraceContext(new Vector3d(posVec31.getX() + 0.5D, posVec31.getY() + 0.5D, posVec31.getZ() + 0.5D), new Vector3d(posVec32.getX() + 0.5D, posVec32.getY() + (double) EntityPixie.this.getHeight() * 0.5D, posVec32.getZ() + 0.5D), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, EntityPixie.this)).getType() == RayTraceResult.Type.MISS;
         }
 
         public boolean shouldContinueExecuting() {
@@ -381,7 +385,7 @@ public class EntityPixie extends TameableEntity {
         }
 
         public void tick() {
-            if (!isDirectPathBetweenPoints(EntityPixie.this.getPosition(), target)) {
+            if (!isDirectPathBetweenPoints(EntityPixie.this.func_233580_cy_(), target)) {
                 target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.getPosX() + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.getPosZ() + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
             }
             if (EntityPixie.this.world.isAirBlock(target)) {
@@ -400,12 +404,12 @@ public class EntityPixie extends TameableEntity {
         }
 
         public boolean shouldExecute() {
-            if (EntityPixie.this.isOwnerClose() || EntityPixie.this.getMoveHelper().isUpdating() || EntityPixie.this.isSitting() || EntityPixie.this.rand.nextInt(20) != 0 || EntityPixie.this.ticksUntilHouseAI != 0) {
+            if (EntityPixie.this.isOwnerClose() || EntityPixie.this.getMoveHelper().isUpdating() || EntityPixie.this.func_233684_eK_() || EntityPixie.this.rand.nextInt(20) != 0 || EntityPixie.this.ticksUntilHouseAI != 0) {
                 return false;
             }
 
             BlockPos blockpos1 = findAHouse(EntityPixie.this, EntityPixie.this.world);
-            return !blockpos1.toString().equals(EntityPixie.this.getPosition().toString());
+            return !blockpos1.toString().equals(EntityPixie.this.func_233580_cy_().toString());
         }
 
         public boolean shouldContinueExecuting() {
@@ -413,10 +417,10 @@ public class EntityPixie extends TameableEntity {
         }
 
         public void tick() {
-            BlockPos blockpos = EntityPixie.this.getHousePos() == null ? EntityPixie.this.getPosition() : EntityPixie.this.getHousePos();
+            BlockPos blockpos = EntityPixie.this.getHousePos() == null ? EntityPixie.this.func_233580_cy_() : EntityPixie.this.getHousePos();
 
             if (blockpos == null) {
-                blockpos = new BlockPos(EntityPixie.this);
+                blockpos = EntityPixie.this.func_233580_cy_();
             }
 
             for (int i = 0; i < 3; ++i) {

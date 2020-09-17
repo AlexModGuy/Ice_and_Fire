@@ -90,7 +90,7 @@ public class EntityHydraArrow extends AbstractArrowEntity {
             this.damageShield((PlayerEntity) living, (float) this.getDamage());
         }
         living.addPotionEffect(new EffectInstance(Effects.POISON, 300, 0));
-        Entity shootingEntity = this.getShooter();
+        Entity shootingEntity = this.func_234616_v_();
         if (shootingEntity instanceof LivingEntity) {
             ((LivingEntity) shootingEntity).heal((float) this.getDamage());
         }

@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -31,13 +31,13 @@ public class SeaSerpentAIGetInWater extends Goal {
         if (serpent.isInWater()) {
             return false;
         } else {
-            Vec3d vec3d = this.findPossibleShelter();
-            if (vec3d == null) {
+            Vector3d Vector3d = this.findPossibleShelter();
+            if (Vector3d == null) {
                 return false;
             } else {
-                this.shelterX = vec3d.x;
-                this.shelterY = vec3d.y;
-                this.shelterZ = vec3d.z;
+                this.shelterX = Vector3d.x;
+                this.shelterY = Vector3d.y;
+                this.shelterZ = Vector3d.z;
                 return true;
             }
         }
@@ -58,12 +58,12 @@ public class SeaSerpentAIGetInWater extends Goal {
     }
 
     @Nullable
-    public Vec3d findPossibleShelter() {
+    public Vector3d findPossibleShelter() {
         return findPossibleShelter(15, 12);
     }
 
     @Nullable
-    protected Vec3d findPossibleShelter(int xz, int y) {
+    protected Vector3d findPossibleShelter(int xz, int y) {
         Random random = this.serpent.getRNG();
         BlockPos blockpos = new BlockPos(this.serpent.getPosX(), this.serpent.getBoundingBox().minY, this.serpent.getPosZ());
 
@@ -73,7 +73,7 @@ public class SeaSerpentAIGetInWater extends Goal {
                 blockpos1 = blockpos1.down();
             }
             if (this.world.getBlockState(blockpos1).getMaterial() == Material.WATER) {
-                return new Vec3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
+                return new Vector3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
             }
         }
 

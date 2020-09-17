@@ -15,6 +15,8 @@ import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.monster.IMob;
@@ -28,7 +30,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
@@ -52,11 +54,11 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
 
     public static boolean isEntityLookingAt(LivingEntity looker, LivingEntity seen, double degree) {
         degree *= 1 + (looker.getDistance(seen) * 0.1);
-        Vec3d vec3d = looker.getLook(1.0F).normalize();
-        Vec3d vec3d1 = new Vec3d(seen.getPosX() - looker.getPosX(), seen.getBoundingBox().minY + (double) seen.getEyeHeight() - (looker.getPosY() + (double) looker.getEyeHeight()), seen.getPosZ() - looker.getPosZ());
-        double d0 = vec3d1.length();
-        vec3d1 = vec3d1.normalize();
-        double d1 = vec3d.dotProduct(vec3d1);
+        Vector3d Vector3d = looker.getLook(1.0F).normalize();
+        Vector3d Vector3d1 = new Vector3d(seen.getPosX() - looker.getPosX(), seen.getBoundingBox().minY + (double) seen.getEyeHeight() - (looker.getPosY() + (double) looker.getEyeHeight()), seen.getPosZ() - looker.getPosZ());
+        double d0 = Vector3d1.length();
+        Vector3d1 = Vector3d1.normalize();
+        double d1 = Vector3d.dotProduct(Vector3d1);
         return d1 > 1.0D - degree / d0 && (looker.canEntityBeSeen(seen) && !isStoneMob(seen));
     }
 
@@ -74,9 +76,9 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
         return attackTarget != null && attackTarget.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == IafItemRegistry.BLINDFOLD;
     }
 
-    public boolean isTargetBlocked(Vec3d target) {
-        Vec3d vec3d = new Vec3d(this.getPosX(), this.getPosYEye(), this.getPosZ());
-        RayTraceResult result = this.world.rayTraceBlocks(new RayTraceContext(vec3d, target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+    public boolean isTargetBlocked(Vector3d target) {
+        Vector3d Vector3d = new Vector3d(this.getPosX(), this.getPosYEye(), this.getPosZ());
+        RayTraceResult result = this.world.rayTraceBlocks(new RayTraceContext(Vector3d, target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
         return result.getType() != RayTraceResult.Type.MISS;
     }
 
@@ -288,12 +290,16 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
         }
     }
 
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.gorgonMaxHealth);
-        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, IafConfig.gorgonMaxHealth)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.25D)
+                //ATTACK
+                .func_233815_a_(Attributes.field_233823_f_, 3.0D)
+                //ARMOR
+                .func_233815_a_(Attributes.field_233826_i_, 1.0D);
     }
 
     @Override
