@@ -41,8 +41,8 @@ public class TileEntityDreadSpawner extends TileEntity implements ITickableTileE
         super(IafTileEntityRegistry.DREAD_SPAWNER);
     }
 
-    public void read(CompoundNBT compound) {
-        super.read(compound);
+    public void func_230337_a_(BlockState blockstate, CompoundNBT compound) {
+        super.func_230337_a_(blockstate, compound);
         this.spawnerLogic.read(compound);
     }
 
@@ -70,7 +70,7 @@ public class TileEntityDreadSpawner extends TileEntity implements ITickableTileE
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        read(packet.getNbtCompound());
+        func_230337_a_(this.getBlockState(), packet.getNbtCompound());
     }
 
     public CompoundNBT getUpdateTag() {

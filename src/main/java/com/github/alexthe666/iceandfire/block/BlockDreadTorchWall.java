@@ -7,6 +7,7 @@ import net.minecraft.block.TorchBlock;
 import net.minecraft.block.WallTorchBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -18,7 +19,8 @@ import java.util.Random;
 public class BlockDreadTorchWall extends WallTorchBlock implements IDreadBlock {
 
     public BlockDreadTorchWall() {
-        super(Properties.create(Material.WOOD).lightValue(0).sound(SoundType.STONE).lightValue(7).notSolid().variableOpacity().lootFrom(IafBlockRegistry.DREAD_TORCH));
+        super(Properties.create(Material.WOOD).func_235838_a_((p_235454_0_) -> {  return 5;
+        }).sound(SoundType.STONE).notSolid().variableOpacity().lootFrom(IafBlockRegistry.DREAD_TORCH), RedstoneParticleData.REDSTONE_DUST);
         setRegistryName(IceAndFire.MODID, "dread_torch_wall");
     }
 

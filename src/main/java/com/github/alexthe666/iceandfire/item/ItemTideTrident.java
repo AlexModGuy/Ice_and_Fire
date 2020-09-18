@@ -3,14 +3,16 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityTideTrident;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.TridentEntity;
@@ -91,7 +93,7 @@ public class ItemTideTrident extends TridentItem {
                         });
                         if (j == 0) {
                             EntityTideTrident tridententity = new EntityTideTrident(worldIn, playerentity, stack);
-                            tridententity.shoot(playerentity, playerentity.rotationPitch, playerentity.rotationYaw, 0.0F, 2.5F + (float)j * 0.5F, 1.0F);
+                            tridententity.shoot(playerentity.rotationPitch, playerentity.rotationYaw, 0.0F, 2.5F + (float)j * 0.5F, 1.0F);
                             if (playerentity.abilities.isCreativeMode) {
                                 tridententity.pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
                             }
@@ -118,7 +120,7 @@ public class ItemTideTrident extends TridentItem {
                         f3 = f3 * (f5 / f4);
                         playerentity.addVelocity((double)f1, (double)f2, (double)f3);
                         playerentity.startSpinAttack(20);
-                        if (playerentity.onGround) {
+                        if (playerentity.func_233570_aj_()) {
                             float f6 = 1.1999999F;
                             playerentity.move(MoverType.SELF, new Vector3d(0.0D, (double)1.1999999F, 0.0D));
                         }
@@ -157,22 +159,22 @@ public class ItemTideTrident extends TridentItem {
         return true;
     }
 
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
-        Multimap<String, AttributeModifier> multimap = HashMultimap.create();
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         if (equipmentSlot == EquipmentSlotType.MAINHAND) {
-            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 12.0D, AttributeModifier.Operation.ADDITION));
-            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", (double)-2.9F, AttributeModifier.Operation.ADDITION));
+            builder.put(Attributes.field_233823_f_, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)12.0D, AttributeModifier.Operation.ADDITION));
+            builder.put(Attributes.field_233825_h_, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", (double)-2.9F, AttributeModifier.Operation.ADDITION));
         }
 
-        return multimap;
+        return builder.build();
     }
 
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 
-        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").applyTextStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.tide_trident.desc_0").applyTextStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.tide_trident.desc_1").applyTextStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.tide_trident.desc_0").func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.tide_trident.desc_1").func_240699_a_(TextFormatting.GRAY));
     }
 }

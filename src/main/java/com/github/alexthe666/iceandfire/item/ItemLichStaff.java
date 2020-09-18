@@ -37,7 +37,7 @@ public class ItemLichStaff extends Item {
             d3 = d3 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
             d4 = d4 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
             EntityDreadLichSkull charge = new EntityDreadLichSkull(IafEntityRegistry.DREAD_LICH_SKULL, worldIn, playerIn, 6);
-            charge.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 7.0F, 1.0F);
+            charge.shoot( playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 7.0F, 1.0F);
             charge.setPosition(playerIn.getPosX(), playerIn.getPosY() + 1, playerIn.getPosZ());
             worldIn.addEntity(charge);
             charge.shoot(d2, d3, d4, 1, 1);

@@ -269,7 +269,6 @@ public class IafItemRegistry {
     public static final Item SERPENT_FANG = new ItemGeneric("sea_serpent_fang");
     public static final Item SEA_SERPENT_ARROW = new ItemSeaSerpentArrow();
     public static final Item TIDE_TRIDENT = new ItemTideTrident();
-    public static final Item CHAIN_LINK = new ItemGeneric("chain_link");
     public static final Item CHAIN = new ItemChain(false);
     public static final Item CHAIN_STICKY = new ItemChain(true);
     public static final Item DRAGONSTEEL_FIRE_INGOT = new ItemGeneric("dragonsteel_fire_ingot");

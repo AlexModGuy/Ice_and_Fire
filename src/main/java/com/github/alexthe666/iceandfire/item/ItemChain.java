@@ -59,20 +59,20 @@ public class ItemChain extends Item {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.chain.desc_0").applyTextStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.chain.desc_1").applyTextStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.chain.desc_0").func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.chain.desc_1").func_240699_a_(TextFormatting.GRAY));
         if (sticky) {
-            tooltip.add(new TranslationTextComponent("item.iceandfire.chain_sticky.desc_2").applyTextStyle(TextFormatting.GREEN));
-            tooltip.add(new TranslationTextComponent("item.iceandfire.chain_sticky.desc_3").applyTextStyle(TextFormatting.GREEN));
+            tooltip.add(new TranslationTextComponent("item.iceandfire.chain_sticky.desc_2").func_240699_a_(TextFormatting.GREEN));
+            tooltip.add(new TranslationTextComponent("item.iceandfire.chain_sticky.desc_3").func_240699_a_(TextFormatting.GREEN));
         }
     }
 
-    public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
+    public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(target, ChainEntityProperties.class);
         if (chainProperties != null) {
             if (chainProperties.isConnectedToEntity(target, playerIn) || chainProperties.wasJustDisconnected) {
                 chainProperties.wasJustDisconnected = false;
-                return true;
+                return ActionResultType.SUCCESS;
             } else {
                 if (!sticky) {//for some reason, this is false for sticky ones
                     double d0 = 60.0D;
@@ -100,9 +100,9 @@ public class ItemChain extends Item {
                 }
             }
             chainProperties.updateConnectedEntities(target);
-            return true;
+            return ActionResultType.SUCCESS;
         }
-        return false;
+        return ActionResultType.PASS;
     }
 
     public ActionResultType onItemUse(ItemUseContext context) {

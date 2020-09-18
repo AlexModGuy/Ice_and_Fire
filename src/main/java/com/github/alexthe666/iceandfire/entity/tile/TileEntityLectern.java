@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageUpdateDragonforge;
 import com.github.alexthe666.iceandfire.message.MessageUpdateLectern;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -204,8 +205,8 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
     }
 
     @Override
-    public void read(CompoundNBT compound) {
-        super.read(compound);
+    public void func_230337_a_(BlockState blockstate, CompoundNBT compound) {
+        super.func_230337_a_(blockstate, compound);
         this.stacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, this.stacks);
 
@@ -286,7 +287,7 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        read(packet.getNbtCompound());
+        func_230337_a_(this.getBlockState(), packet.getNbtCompound());
     }
 
     public CompoundNBT getUpdateTag() {

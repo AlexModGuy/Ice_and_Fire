@@ -36,12 +36,7 @@ public class ItemSummoningCrystal extends Item {
     public ItemSummoningCrystal(String variant) {
         super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
         this.setRegistryName(IceAndFire.MODID, "summoning_crystal_" + variant);
-        this.addPropertyOverride(new ResourceLocation("has_dragon"), new IItemPropertyGetter() {
-            @OnlyIn(Dist.CLIENT)
-            public float call(ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) {
-                return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
-            }
-        });
+
     }
 
     public static boolean hasDragon(ItemStack stack) {
@@ -83,14 +78,14 @@ public class ItemSummoningCrystal extends Item {
                     if (!draginTag.getString("CustomName").isEmpty()) {
                         dragonName = draginTag.getString("CustomName");
                     }
-                    tooltip.add(new TranslationTextComponent("item.iceandfire.summoning_crystal.bound", dragonName).applyTextStyle(TextFormatting.GRAY));
+                    tooltip.add(new TranslationTextComponent("item.iceandfire.summoning_crystal.bound", dragonName).func_240699_a_(TextFormatting.GRAY));
                     flag = true;
                 }
             }
         }
         if (!flag) {
-            tooltip.add(new TranslationTextComponent("item.iceandfire.summoning_crystal.desc_0").applyTextStyle(TextFormatting.GRAY));
-            tooltip.add(new TranslationTextComponent("item.iceandfire.summoning_crystal.desc_1").applyTextStyle(TextFormatting.GRAY));
+            tooltip.add(new TranslationTextComponent("item.iceandfire.summoning_crystal.desc_0").func_240699_a_(TextFormatting.GRAY));
+            tooltip.add(new TranslationTextComponent("item.iceandfire.summoning_crystal.desc_1").func_240699_a_(TextFormatting.GRAY));
 
         }
 
@@ -113,7 +108,7 @@ public class ItemSummoningCrystal extends Item {
                         if (id != null) {
                             if (!context.getWorld().isRemote) {
                                 try {
-                                    Entity entity = context.getWorld().getServer().getWorld(context.getPlayer().dimension).getEntityByUuid(id);
+                                    Entity entity = context.getWorld().getServer().getWorld(context.getPlayer().world.func_234923_W_()).getEntityByUuid(id);
                                     if (entity != null) {
                                         flag = true;
                                         summonEntity(entity, context.getWorld(), offsetPos, yaw);
@@ -152,7 +147,7 @@ public class ItemSummoningCrystal extends Item {
                                         }
                                         if (flag2) {
                                             try {
-                                                Entity entity = context.getWorld().getServer().getWorld(context.getPlayer().dimension).getEntityByUuid(id);
+                                                Entity entity = context.getWorld().getServer().getWorld(context.getPlayer().world.func_234923_W_()).getEntityByUuid(id);
                                                 if (entity != null) {
                                                     flag = true;
                                                     summonEntity(entity, context.getWorld(), offsetPos, yaw);

@@ -167,7 +167,7 @@ public class ContainerLectern extends Container {
                 this.tileFurnace.markDirty();
                 //this.xpSeed = playerIn.getXPSeed();
                 this.onCraftMatrixChanged(this.tileFurnace);
-                playerIn.world.playSound(null, playerIn.getPosition(), IafSoundRegistry.BESTIARY_PAGE, SoundCategory.BLOCKS, 1.0F, playerIn.world.rand.nextFloat() * 0.1F + 0.9F);
+                playerIn.world.playSound(null, playerIn.func_233580_cy_(), IafSoundRegistry.BESTIARY_PAGE, SoundCategory.BLOCKS, 1.0F, playerIn.world.rand.nextFloat() * 0.1F + 0.9F);
             }
             onUpdate();
             return true;

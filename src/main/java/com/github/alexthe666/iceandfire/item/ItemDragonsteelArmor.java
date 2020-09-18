@@ -49,7 +49,7 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.dragonscales_armor.desc").applyTextStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.dragonscales_armor.desc").func_240699_a_(TextFormatting.GRAY));
     }
 
     @Override

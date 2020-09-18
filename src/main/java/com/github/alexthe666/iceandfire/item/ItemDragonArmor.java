@@ -62,6 +62,6 @@ public class ItemDragonArmor extends Item implements ICustomRendered {
                 words = "dragon.armor_tail";
                 break;
         }
-        tooltip.add(new TranslationTextComponent(words).applyTextStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent(words).func_240699_a_(TextFormatting.GRAY));
     }
 }

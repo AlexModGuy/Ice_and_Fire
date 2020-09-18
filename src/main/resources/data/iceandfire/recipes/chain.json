@@ -1,13 +1,13 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " CC",
-    " C ",
-    "CC "
+    "C",
+    "C",
+    "C"
   ],
   "key": {
     "C": {
-      "item": "iceandfire:chain_link"
+      "item": "minecraft:chain"
     }
   },
   "result": {

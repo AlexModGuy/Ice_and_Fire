@@ -7,7 +7,7 @@ import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.culling.ClippingHelperImpl;
+import net.minecraft.client.renderer.culling.ClippingHelper;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.entity.LivingEntity;
@@ -24,7 +24,7 @@ public class RenderLightningDragon extends RenderDragonBase {
         super(manager, model, dragonType);
     }
 
-    public boolean shouldRender(EntityDragonBase livingEntityIn, ClippingHelperImpl camera, double camX, double camY, double camZ) {
+    public boolean shouldRender(EntityDragonBase livingEntityIn, ClippingHelper camera, double camX, double camY, double camZ) {
         if (super.shouldRender(livingEntityIn, camera, camX, camY, camZ)) {
             return true;
         } else {

@@ -32,6 +32,6 @@ public class BlockSeaSerpentScales extends Block {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("sea_serpent." + name).applyTextStyle(color));
+        tooltip.add(new TranslationTextComponent("sea_serpent." + name).func_240699_a_(color));
     }
 }

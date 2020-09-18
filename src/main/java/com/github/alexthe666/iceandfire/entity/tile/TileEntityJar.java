@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieJar;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -75,7 +76,7 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        read(packet.getNbtCompound());
+        func_230337_a_(this.getBlockState(), packet.getNbtCompound());
         if (!world.isRemote) {
             IceAndFire.sendMSGToAll(new MessageUpdatePixieHouseModel(pos.toLong(), packet.getNbtCompound().getInt("PixieType")));
         }
@@ -85,7 +86,7 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
         return this.write(new CompoundNBT());
     }
 
-    public void read(CompoundNBT compound) {
+    public void func_230337_a_(BlockState state, CompoundNBT compound) {
         hasPixie = compound.getBoolean("HasPixie");
         pixieType = compound.getInt("PixieType");
         hasProduced = compound.getBoolean("HasProduced");
@@ -94,7 +95,7 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
         pixieOwnerUUID = compound.getUniqueId("PixieOwnerUUID");
         this.pixieItems = NonNullList.withSize(1, ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, pixieItems);
-        super.read(compound);
+        super.func_230337_a_(state, compound);
     }
 
     @Override

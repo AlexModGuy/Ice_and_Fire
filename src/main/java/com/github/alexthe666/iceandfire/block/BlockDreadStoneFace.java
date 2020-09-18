@@ -23,10 +23,10 @@ public class BlockDreadStoneFace extends HorizontalBlock implements IDreadBlock,
         setRegistryName(IceAndFire.MODID, "dread_stone_face");
     }
 
-    @Override
+    /*@Override
     public float getBlockHardness(BlockState blockState, IBlockReader worldIn, BlockPos pos) {
         return blockState.get(PLAYER_PLACED) ? super.getBlockHardness(blockState, worldIn, pos) : -1;
-    }
+    }*/
 
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         return this.getDefaultState().with(HORIZONTAL_FACING, context.getPlacementHorizontalFacing().getOpposite());

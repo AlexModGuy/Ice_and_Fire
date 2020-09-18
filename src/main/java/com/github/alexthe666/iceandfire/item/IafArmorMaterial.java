@@ -10,7 +10,7 @@ public class IafArmorMaterial extends CustomArmorMaterial {
     private int maxDamageFactor;
 
     public IafArmorMaterial(String name, int durability, int[] damageReduction, int encantability, SoundEvent sound, float toughness) {
-        super(name, durability, damageReduction, encantability, sound, toughness);
+        super(name, durability, damageReduction, encantability, sound, toughness, 0);
         this.maxDamageFactor = durability;
     }
 

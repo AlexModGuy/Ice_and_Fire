@@ -20,7 +20,8 @@ public class BlockMyrmexBiolight extends BushBlock {
     public static final BooleanProperty CONNECTED_DOWN = BooleanProperty.create("down");
 
     public BlockMyrmexBiolight(boolean jungle) {
-        super(Properties.create(Material.PLANTS).notSolid().doesNotBlockMovement().variableOpacity().hardnessAndResistance(0).lightValue(7).sound(SoundType.PLANT).tickRandomly());
+        super(Properties.create(Material.PLANTS).notSolid().doesNotBlockMovement().variableOpacity().hardnessAndResistance(0).func_235838_a_((p_235454_0_) -> {  return 7;
+        }).sound(SoundType.PLANT).tickRandomly());
         this.setRegistryName(IceAndFire.MODID, jungle ? "myrmex_jungle_biolight" : "myrmex_desert_biolight");
         this.setDefaultState(this.getStateContainer().getBaseState().with(CONNECTED_DOWN, Boolean.valueOf(false)));
     }

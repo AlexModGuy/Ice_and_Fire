@@ -31,7 +31,8 @@ public class BlockJar extends ContainerBlock implements ICustomRendered {
     private int pixieType;
 
     public BlockJar(int pixieType) {
-        super(pixieType != -1 ? Properties.create(Material.GLASS).notSolid().variableOpacity().hardnessAndResistance(1, 2).sound(SoundType.GLASS).lightValue(10).lootFrom(IafBlockRegistry.JAR_EMPTY) : Properties.create(Material.GLASS).notSolid().variableOpacity().hardnessAndResistance(1, 2).sound(SoundType.GLASS).lightValue(pixieType == -1 ? 0 : 10));
+        super(pixieType != -1 ? Properties.create(Material.GLASS).notSolid().variableOpacity().hardnessAndResistance(1, 2).sound(SoundType.GLASS).func_235838_a_((p_235454_0_) -> {  return pixieType == -1 ? 0 : 10;
+        }).lootFrom(IafBlockRegistry.JAR_EMPTY) : Properties.create(Material.GLASS).notSolid().variableOpacity().hardnessAndResistance(1, 2).sound(SoundType.GLASS));
         this.empty = pixieType == -1;
         this.pixieType = pixieType;
         if (empty) {

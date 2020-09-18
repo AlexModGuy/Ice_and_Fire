@@ -71,7 +71,7 @@ public class LegSolver {
             } else {
                 dist -= 1 - (y % 1);
             }
-            if (entity.onGround && height <= dist) {
+            if (entity.func_233570_aj_() && height <= dist) {
                 return height == dist ? height : Math.min(height + this.getFallSpeed(), dist);
             } else if (height > 0) {
                 return Math.max(height - this.getRiseSpeed(), dist);

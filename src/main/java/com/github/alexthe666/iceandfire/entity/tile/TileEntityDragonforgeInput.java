@@ -16,6 +16,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 
 import javax.annotation.Nullable;
 
@@ -63,7 +64,7 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        read(packet.getNbtCompound());
+        func_230337_a_(this.getBlockState(), packet.getNbtCompound());
     }
 
     public CompoundNBT getUpdateTag() {

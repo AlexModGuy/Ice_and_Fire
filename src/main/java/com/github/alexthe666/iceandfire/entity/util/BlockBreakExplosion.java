@@ -13,8 +13,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
@@ -26,8 +28,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
 
 import java.util.Collections;
 import java.util.List;
@@ -101,9 +101,9 @@ public class BlockBreakExplosion extends Explosion {
                         for (float f1 = 0.3F; f > 0.0F; f -= 0.22500001F) {
                             BlockPos blockpos = new BlockPos(d4, d6, d8);
                             BlockState blockstate = this.world.getBlockState(blockpos);
-                            IFluidState ifluidstate = this.world.getFluidState(blockpos);
+                            FluidState ifluidstate = this.world.getFluidState(blockpos);
                             if (!blockstate.isAir(this.world, blockpos) || !ifluidstate.isEmpty()) {
-                                float f2 = Math.max(blockstate.getExplosionResistance(this.world, blockpos, exploder, this), ifluidstate.getExplosionResistance(this.world, blockpos, exploder, this));
+                                float f2 = Math.max(blockstate.getExplosionResistance(this.world, blockpos, this), ifluidstate.getExplosionResistance(this.world, blockpos, this));
                                 if (this.exploder != null) {
                                     f2 = this.exploder.getExplosionResistance(this, this.world, blockpos, blockstate, ifluidstate, f2);
                                 }
@@ -241,7 +241,7 @@ public class BlockBreakExplosion extends Explosion {
     }
 
     @Override
-    public Vector3d func_233580_cy_() {
+    public Vector3d getPosition() {
         return this.position;
     }
 }

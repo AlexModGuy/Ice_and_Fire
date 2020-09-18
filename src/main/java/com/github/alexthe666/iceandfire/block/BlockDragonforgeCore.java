@@ -32,7 +32,8 @@ public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof
     private boolean activated;
 
     public BlockDragonforgeCore(int isFire, boolean activated) {
-        super(Properties.create(Material.IRON).variableOpacity().hardnessAndResistance(40, 500).sound(SoundType.METAL).lightValue(activated ? 15 : 0));
+        super(Properties.create(Material.IRON).variableOpacity().hardnessAndResistance(40, 500).sound(SoundType.METAL).func_235838_a_((p_235454_0_) -> {  return activated ? 15 : 0;
+        }));
         String disabled = activated ? "" : "_disabled";
         this.setRegistryName(IceAndFire.MODID, "dragonforge_" + DragonType.getNameFromInt(isFire) + "_core" + disabled);
         this.isFire = isFire;

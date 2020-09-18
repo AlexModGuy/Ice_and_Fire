@@ -52,7 +52,7 @@ public class ItemDragonFlute extends Item {
                 }
             }*/
         }
-        worldIn.playSound(player, player.getPosition(), IafSoundRegistry.DRAGONFLUTE, SoundCategory.NEUTRAL, 1, 1.75F);
+        worldIn.playSound(player, player.func_233580_cy_(), IafSoundRegistry.DRAGONFLUTE, SoundCategory.NEUTRAL, 1, 1.75F);
 
         return new ActionResult<ItemStack>(ActionResultType.SUCCESS, itemStackIn);
     }

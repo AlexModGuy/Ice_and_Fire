@@ -1,9 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen.processor;
 
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -37,7 +34,7 @@ public class DreadPortalProcessor extends StructureProcessor {
 
     @Nullable
     @Override
-    public Template.BlockInfo process(IWorldReader worldIn, BlockPos pos, Template.BlockInfo blockInfoIn, Template.BlockInfo blockInfoIn2, PlacementSettings settings) {
+    public Template.BlockInfo process(IWorldReader p_230386_1_, BlockPos pos, BlockPos p_230386_3_, Template.BlockInfo blockInfoIn, Template.BlockInfo p_230386_5_, PlacementSettings settings, @Nullable Template template) {
         Random random = settings.getRandom(pos);
         if (random.nextFloat() <= integrity) {
             if (blockInfoIn.state.getBlock() == Blocks.DIAMOND_BLOCK) {
@@ -58,8 +55,4 @@ public class DreadPortalProcessor extends StructureProcessor {
         return IStructureProcessorType.BLOCK_ROT;
     }
 
-    @Override
-    protected <T> Dynamic<T> serialize0(DynamicOps<T> ops) {
-        return new Dynamic<>(ops, ops.createMap(ImmutableMap.of(ops.createString("dread_portal_processor"), ops.createFloat(this.integrity))));
-    }
 }

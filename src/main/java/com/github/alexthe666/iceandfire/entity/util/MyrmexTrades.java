@@ -240,29 +240,6 @@ public class MyrmexTrades {
         }
     }
 
-    static class EnchantedBookForDesertResinTrade implements VillagerTrades.ITrade {
-        private final int field_221194_a;
-
-        public EnchantedBookForDesertResinTrade(int p_i50537_1_) {
-            this.field_221194_a = p_i50537_1_;
-        }
-
-        public MerchantOffer getOffer(Entity p_221182_1_, Random p_221182_2_) {
-            Enchantment lvt_3_1_ = Registry.ENCHANTMENT.getRandom(p_221182_2_);
-            int lvt_4_1_ = MathHelper.nextInt(p_221182_2_, lvt_3_1_.getMinLevel(), lvt_3_1_.getMaxLevel());
-            ItemStack lvt_5_1_ = EnchantedBookItem.getEnchantedItemStack(new EnchantmentData(lvt_3_1_, lvt_4_1_));
-            int lvt_6_1_ = 2 + p_221182_2_.nextInt(5 + lvt_4_1_ * 10) + 3 * lvt_4_1_;
-            if (lvt_3_1_.isTreasureEnchantment()) {
-                lvt_6_1_ *= 2;
-            }
-
-            if (lvt_6_1_ > 64) {
-                lvt_6_1_ = 64;
-            }
-
-            return new MerchantOffer(new ItemStack(IafItemRegistry.MYRMEX_DESERT_RESIN, lvt_6_1_), new ItemStack(Items.BOOK), lvt_5_1_, 12, this.field_221194_a, 0.2F);
-        }
-    }
 
     static class ItemWithPotionForDesertResinAndItemsTrade implements VillagerTrades.ITrade {
         private final ItemStack field_221219_a;
@@ -464,30 +441,6 @@ public class MyrmexTrades {
         @Nullable
         public MerchantOffer getOffer(Entity p_221182_1_, Random p_221182_2_) {
             return new MerchantOffer(new ItemStack(IafItemRegistry.MYRMEX_JUNGLE_RESIN, this.field_221202_c), new ItemStack(this.field_221200_a.getItem(), this.field_221201_b), new ItemStack(this.field_221203_d.getItem(), this.field_221204_e), this.field_221205_f, this.field_221206_g, this.field_221207_h);
-        }
-    }
-
-    static class EnchantedBookForJungleResinTrade implements VillagerTrades.ITrade {
-        private final int field_221194_a;
-
-        public EnchantedBookForJungleResinTrade(int p_i50537_1_) {
-            this.field_221194_a = p_i50537_1_;
-        }
-
-        public MerchantOffer getOffer(Entity p_221182_1_, Random p_221182_2_) {
-            Enchantment lvt_3_1_ = Registry.ENCHANTMENT.getRandom(p_221182_2_);
-            int lvt_4_1_ = MathHelper.nextInt(p_221182_2_, lvt_3_1_.getMinLevel(), lvt_3_1_.getMaxLevel());
-            ItemStack lvt_5_1_ = EnchantedBookItem.getEnchantedItemStack(new EnchantmentData(lvt_3_1_, lvt_4_1_));
-            int lvt_6_1_ = 2 + p_221182_2_.nextInt(5 + lvt_4_1_ * 10) + 3 * lvt_4_1_;
-            if (lvt_3_1_.isTreasureEnchantment()) {
-                lvt_6_1_ *= 2;
-            }
-
-            if (lvt_6_1_ > 64) {
-                lvt_6_1_ = 64;
-            }
-
-            return new MerchantOffer(new ItemStack(IafItemRegistry.MYRMEX_JUNGLE_RESIN, lvt_6_1_), new ItemStack(Items.BOOK), lvt_5_1_, 12, this.field_221194_a, 0.2F);
         }
     }
 

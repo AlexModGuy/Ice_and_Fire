@@ -26,10 +26,11 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
         this.setDefaultState(this.getStateContainer().getBaseState().with(PLAYER_PLACED, Boolean.valueOf(false)));
     }
 
-    @Override
+    /*@Override
     public float getBlockHardness(BlockState blockState, IBlockReader worldIn, BlockPos pos) {
         return blockState.get(PLAYER_PLACED) ? super.getBlockHardness(blockState, worldIn, pos) : -1;
-    }
+    }*/
+    //TODOs
 
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult resultIn) {
         ItemStack stack = player.getHeldItem(handIn);

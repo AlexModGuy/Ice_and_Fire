@@ -6,7 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.BreakableBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
@@ -45,7 +45,7 @@ public class BlockMyrmexConnectedResin extends BreakableBlock {
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         IBlockReader iblockreader = context.getWorld();
         BlockPos blockpos = context.getPos();
-        IFluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
+        FluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
         BlockPos blockpos1 = blockpos.north();
         BlockPos blockpos2 = blockpos.east();
         BlockPos blockpos3 = blockpos.south();
@@ -59,12 +59,12 @@ public class BlockMyrmexConnectedResin extends BreakableBlock {
         BlockState blockstate4 = iblockreader.getBlockState(blockpos5);
         BlockState blockstate5 = iblockreader.getBlockState(blockpos6);
         return super.getStateForPlacement(context)
-                .with(NORTH, Boolean.valueOf(this.canFenceConnectTo(blockstate, blockstate.canBeConnectedTo(iblockreader, blockpos1, Direction.SOUTH), Direction.SOUTH)))
-                .with(EAST, Boolean.valueOf(this.canFenceConnectTo(blockstate1, blockstate1.canBeConnectedTo(iblockreader, blockpos2, Direction.WEST), Direction.WEST)))
-                .with(SOUTH, Boolean.valueOf(this.canFenceConnectTo(blockstate2, blockstate2.canBeConnectedTo(iblockreader, blockpos3, Direction.NORTH), Direction.NORTH)))
-                .with(WEST, Boolean.valueOf(this.canFenceConnectTo(blockstate3, blockstate3.canBeConnectedTo(iblockreader, blockpos4, Direction.EAST), Direction.EAST)))
-                .with(UP, Boolean.valueOf(this.canFenceConnectTo(blockstate4, blockstate4.canBeConnectedTo(iblockreader, blockpos5, Direction.UP), Direction.UP)))
-                .with(DOWN, Boolean.valueOf(this.canFenceConnectTo(blockstate5, blockstate5.canBeConnectedTo(iblockreader, blockpos6, Direction.DOWN), Direction.DOWN)));
+                .with(NORTH, Boolean.valueOf(this.canFenceConnectTo(blockstate, false, Direction.SOUTH)))
+                .with(EAST, Boolean.valueOf(this.canFenceConnectTo(blockstate1, false, Direction.WEST)))
+                .with(SOUTH, Boolean.valueOf(this.canFenceConnectTo(blockstate2, false, Direction.NORTH)))
+                .with(WEST, Boolean.valueOf(this.canFenceConnectTo(blockstate3, false, Direction.EAST)))
+                .with(UP, Boolean.valueOf(this.canFenceConnectTo(blockstate4, false, Direction.UP)))
+                .with(DOWN, Boolean.valueOf(this.canFenceConnectTo(blockstate5, false, Direction.DOWN)));
     }
 
     public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
@@ -89,7 +89,7 @@ public class BlockMyrmexConnectedResin extends BreakableBlock {
                 connect = UP;
                 break;
         }
-        return stateIn.with(connect, Boolean.valueOf(this.canFenceConnectTo(facingState, facingState.canBeConnectedTo(worldIn, facingPos, facing.getOpposite()), facing.getOpposite())));
+        return stateIn.with(connect, Boolean.valueOf(this.canFenceConnectTo(facingState, false, facing.getOpposite())));
     }
 
 

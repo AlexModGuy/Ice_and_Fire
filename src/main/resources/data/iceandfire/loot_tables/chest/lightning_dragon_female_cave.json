@@ -79,13 +79,13 @@
         },
         {
           "type": "item",
-          "name": "iceandfire:chain_link",
+          "name": "minecraft:chain",
           "functions": [
             {
               "function": "set_count",
               "count": {
                 "min": 1,
-                "max": 6
+                "max": 2
               }
             }
           ],

@@ -15,7 +15,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundCategory;
@@ -99,9 +99,9 @@ public class BlockLaunchExplosion extends Explosion {
                         for (float f1 = 0.3F; f > 0.0F; f -= 0.22500001F) {
                             BlockPos blockpos = new BlockPos(d4, d6, d8);
                             BlockState blockstate = this.world.getBlockState(blockpos);
-                            IFluidState ifluidstate = this.world.getFluidState(blockpos);
+                            FluidState ifluidstate = this.world.getFluidState(blockpos);
                             if (!blockstate.isAir(this.world, blockpos) || !ifluidstate.isEmpty()) {
-                                float f2 = Math.max(blockstate.getExplosionResistance(this.world, blockpos, exploder, this), ifluidstate.getExplosionResistance(this.world, blockpos, exploder, this));
+                                float f2 = Math.max(blockstate.getExplosionResistance(this.world, blockpos, this), ifluidstate.getExplosionResistance(this.world, blockpos, this));
                                 if (this.exploder != null) {
                                     f2 = this.exploder.getExplosionResistance(this, this.world, blockpos, blockstate, ifluidstate, f2);
                                 }
@@ -243,7 +243,7 @@ public class BlockLaunchExplosion extends Explosion {
     }
 
     @Override
-    public Vector3d func_233580_cy_() {
+    public Vector3d getPosition() {
         return this.position;
     }
 }

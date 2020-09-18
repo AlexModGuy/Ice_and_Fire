@@ -10,8 +10,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.dispenser.ProjectileDispenseBehavior;
-import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -57,7 +57,7 @@ public class IafRecipeRegistry {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
-            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+            protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityStymphalianArrow entityarrow = new EntityStymphalianArrow(IafEntityRegistry.STYMPHALIAN_ARROW, worldIn, position.getX(), position.getY(), position.getZ());
                 entityarrow.pickupStatus = ArrowEntity.PickupStatus.ALLOWED;
                 return entityarrow;
@@ -67,7 +67,7 @@ public class IafRecipeRegistry {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
-            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+            protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityAmphithereArrow entityarrow = new EntityAmphithereArrow(IafEntityRegistry.AMPHITHERE_ARROW, worldIn, position.getX(), position.getY(), position.getZ());
                 entityarrow.pickupStatus = EntityAmphithereArrow.PickupStatus.ALLOWED;
                 return entityarrow;
@@ -77,7 +77,7 @@ public class IafRecipeRegistry {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
-            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+            protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntitySeaSerpentArrow entityarrow = new EntitySeaSerpentArrow(IafEntityRegistry.SEA_SERPENT_ARROW, worldIn, position.getX(), position.getY(), position.getZ());
                 entityarrow.pickupStatus = EntitySeaSerpentArrow.PickupStatus.ALLOWED;
                 return entityarrow;
@@ -87,7 +87,7 @@ public class IafRecipeRegistry {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
-            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+            protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityDragonArrow entityarrow = new EntityDragonArrow(IafEntityRegistry.DRAGON_ARROW, position.getX(), position.getY(), position.getZ(), worldIn);
                 entityarrow.pickupStatus = EntityDragonArrow.PickupStatus.ALLOWED;
                 return entityarrow;
@@ -97,7 +97,7 @@ public class IafRecipeRegistry {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
-            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+            protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityHydraArrow entityarrow = new EntityHydraArrow(IafEntityRegistry.HYDRA_ARROW, worldIn, position.getX(), position.getY(), position.getZ());
                 entityarrow.pickupStatus = EntityHydraArrow.PickupStatus.ALLOWED;
                 return entityarrow;
@@ -107,7 +107,7 @@ public class IafRecipeRegistry {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
-            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+            protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityHippogryphEgg entityarrow = new EntityHippogryphEgg(IafEntityRegistry.HIPPOGRYPH_EGG, worldIn, position.getX(), position.getY(), position.getZ(), stackIn);
                 return entityarrow;
             }
@@ -116,7 +116,7 @@ public class IafRecipeRegistry {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
-            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+            protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityCockatriceEgg entityarrow = new EntityCockatriceEgg(IafEntityRegistry.COCKATRICE_EGG, position.getX(), position.getY(), position.getZ(), worldIn);
                 return entityarrow;
             }
@@ -125,7 +125,7 @@ public class IafRecipeRegistry {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
-            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+            protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityDeathWormEgg entityarrow = new EntityDeathWormEgg(IafEntityRegistry.DEATH_WORM_EGG, position.getX(), position.getY(), position.getZ(), worldIn, false);
                 return entityarrow;
             }
@@ -134,7 +134,7 @@ public class IafRecipeRegistry {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
-            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+            protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityDeathWormEgg entityarrow = new EntityDeathWormEgg(IafEntityRegistry.DEATH_WORM_EGG, position.getX(), position.getY(), position.getZ(), worldIn, true);
                 return entityarrow;
             }
@@ -276,7 +276,7 @@ public class IafRecipeRegistry {
     }
 
     public static BannerPattern addBanner(String name, ItemStack craftingStack) {
-        return BannerPattern.create(name.toUpperCase(), name, "iceandfire." + name, craftingStack);
+        return BannerPattern.create(name.toUpperCase(), name, "iceandfire." + name, true);
     }
 
     public static DragonForgeRecipe getFireForgeRecipe(ItemStack stack) {

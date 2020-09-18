@@ -24,6 +24,6 @@ public class ItemSeaSerpentScales extends ItemGeneric {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("sea_serpent." + colorName).applyTextStyle(color));
+        tooltip.add(new TranslationTextComponent("sea_serpent." + colorName).func_240699_a_(color));
     }
 }

@@ -224,8 +224,6 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
                         int torchHeight = rand.nextInt(2) + 1;
                         for (int fence = 0; fence < torchHeight; fence++) {
                             worldIn.setBlockState(blockpos.up(1 + fence), getFenceState(worldIn, blockpos.up(1 + fence)), 3);
-                            //TODO
-                            //worldIn.getChunk(blockpos.up(1 + fence)).markBlockForPostprocessing(blockpos.up(1 + fence));
                         }
                         worldIn.setBlockState(blockpos.up(1 + torchHeight), Blocks.TORCH.getDefaultState(), 2);
                     }

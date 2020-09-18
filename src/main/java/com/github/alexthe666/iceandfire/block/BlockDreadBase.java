@@ -24,10 +24,11 @@ public class BlockDreadBase extends BlockGeneric implements IDragonProof, IDread
     }
 
 
-    @Override
+    /*@Override
     public float getBlockHardness(BlockState blockState, IBlockReader worldIn, BlockPos pos) {
-        return blockState.get(PLAYER_PLACED) ? super.getBlockHardness(blockState, worldIn, pos) : -1;
-    }
+        return blockState.get(PLAYER_PLACED) ? super.getHarvestLevel(blockState, worldIn, pos) : -1;
+    }*/
+    //TODO ^^^^
 
     public BlockState getStateFromMeta(int meta) {
         return this.getDefaultState().with(PLAYER_PLACED, Boolean.valueOf(meta > 0));

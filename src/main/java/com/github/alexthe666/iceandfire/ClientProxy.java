@@ -25,6 +25,9 @@ import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.event.ClientEvents;
 import com.github.alexthe666.iceandfire.event.PlayerRenderEvents;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.item.ItemDragonHorn;
+import com.github.alexthe666.iceandfire.item.ItemSummoningCrystal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.fonts.Font;
@@ -33,9 +36,11 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.util.InputMappings;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -112,12 +117,7 @@ public class ClientProxy extends CommonProxy {
     @SuppressWarnings("deprecation")
     public void init() {
         IafGuiRegistry.register();
-        try {
-            Font font = new Font(Minecraft.getInstance().textureManager, new ResourceLocation("iceandfire:textures/font/bestiary.png"));
-            this.bestiaryFontRenderer = new FontRenderer(Minecraft.getInstance().textureManager, font);
-        } catch (Exception e) {
-            this.bestiaryFontRenderer = Minecraft.getInstance().fontRenderer;
-        }
+        this.bestiaryFontRenderer = Minecraft.getInstance().fontRenderer;
         IafKeybindRegistry.init();
         MinecraftForge.EVENT_BUS.register(new PlayerRenderEvents());
         MinecraftForge.EVENT_BUS.register(new ClientEvents());
@@ -252,11 +252,23 @@ public class ClientProxy extends CommonProxy {
         RenderTypeLookup.setRenderLayer(IafBlockRegistry.DREAD_SPAWNER, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(IafBlockRegistry.DREAD_TORCH_WALL, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(IafBlockRegistry.BURNT_TORCH_WALL, RenderType.getCutout());
+        ItemModelsProperties.func_239418_a_(IafItemRegistry.DRAGON_HORN, new ResourceLocation("iceorfire"), (p_239428_0_, p_239428_1_, p_239428_2_) -> {
+            return ItemDragonHorn.getDragonType(p_239428_0_) * 0.25F;
+        });
+        ItemModelsProperties.func_239418_a_(IafItemRegistry.SUMMONING_CRYSTAL_FIRE, new ResourceLocation("has_dragon"), (stack, p_239428_1_, p_239428_2_) -> {
+            return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
+        });
+        ItemModelsProperties.func_239418_a_(IafItemRegistry.SUMMONING_CRYSTAL_ICE, new ResourceLocation("has_dragon"), (stack, p_239428_1_, p_239428_2_) -> {
+            return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
+        });
+        ItemModelsProperties.func_239418_a_(IafItemRegistry.SUMMONING_CRYSTAL_LIGHTNING, new ResourceLocation("has_dragon"), (stack, p_239428_1_, p_239428_2_) -> {
+            return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
+        });
     }
 
     @OnlyIn(Dist.CLIENT)
     public void spawnDragonParticle(String name, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase) {
-        World world = Minecraft.getInstance().world;
+        ClientWorld world = Minecraft.getInstance().world;
         if (world == null) {
             return;
         }
@@ -274,7 +286,7 @@ public class ClientProxy extends CommonProxy {
 
     @OnlyIn(Dist.CLIENT)
     public void spawnParticle(String name, double x, double y, double z, double motX, double motY, double motZ, float size) {
-        World world = Minecraft.getInstance().world;
+        ClientWorld world = Minecraft.getInstance().world;
         if (world == null) {
             return;
         }

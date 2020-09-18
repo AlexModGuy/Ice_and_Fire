@@ -7,7 +7,7 @@ import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.culling.ClippingHelperImpl;
+import net.minecraft.client.renderer.culling.ClippingHelper;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
@@ -17,7 +17,10 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Matrix3f;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -47,7 +50,7 @@ public class RenderCockatrice extends MobRenderer<EntityCockatrice, SegmentedMod
         return new Vector3d(d0, d1, d2);
     }
 
-    public boolean shouldRender(EntityCockatrice livingEntityIn, ClippingHelperImpl camera, double camX, double camY, double camZ) {
+    public boolean shouldRender(EntityCockatrice livingEntityIn, ClippingHelper camera, double camX, double camY, double camZ) {
         if (super.shouldRender(livingEntityIn, camera, camX, camY, camZ)) {
             return true;
         } else {

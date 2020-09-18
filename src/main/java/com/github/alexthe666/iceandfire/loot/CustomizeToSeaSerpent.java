@@ -7,11 +7,12 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootFunction;
+import net.minecraft.loot.LootFunctionType;
+import net.minecraft.loot.LootParameters;
+import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootFunction;
-import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
 
 import java.util.Random;
 
@@ -38,9 +39,14 @@ public class CustomizeToSeaSerpent extends LootFunction {
         return stack;
     }
 
+    @Override
+    public LootFunctionType func_230425_b_() {
+        return IafLootRegistry.CUSTOMIZE_TO_SERPENT;
+    }
+
     public static class Serializer extends LootFunction.Serializer<CustomizeToSeaSerpent> {
         public Serializer() {
-            super(new ResourceLocation("iceandfire:customize_to_sea_serpent"), CustomizeToSeaSerpent.class);
+            super();
         }
 
         public void serialize(JsonObject object, CustomizeToSeaSerpent functionClazz, JsonSerializationContext serializationContext) {

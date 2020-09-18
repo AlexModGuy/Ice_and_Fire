@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.nbt.CompoundNBT;
@@ -47,20 +48,20 @@ public class TileEntityEggInIce extends TileEntity implements ITickableTileEntit
     }
 
     @Override
-    public void read(CompoundNBT tag) {
-        super.read(tag);
+    public void func_230337_a_(BlockState state, CompoundNBT tag) {
+        super.func_230337_a_(state,tag);
         type = EnumDragonEgg.values()[tag.getByte("Color")];
         age = tag.getByte("Age");
-        String s;
+        UUID s;
 
         if (tag.hasUniqueId("OwnerUUID")) {
-            s = tag.getString("OwnerUUID");
+            s = tag.getUniqueId("OwnerUUID");
         } else {
-            String s1 = tag.getString("Owner");
+            String s1 = tag.getString("OwnerUUID");
             s = PreYggdrasilConverter.convertMobOwnerIfNeeded(this.world.getServer(), s1);
         }
-        if (!s.isEmpty()) {
-            ownerUUID = UUID.fromString(s);
+        if (s != null) {
+            ownerUUID = s;
         }
     }
 
@@ -71,7 +72,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickableTileEntit
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        read(packet.getNbtCompound());
+        func_230337_a_(this.getBlockState(), packet.getNbtCompound());
     }
 
     public CompoundNBT getUpdateTag() {

@@ -63,8 +63,8 @@ public class ItemCyclopsEye extends Item {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").applyTextStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.cyclops_eye.desc_0").applyTextStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.cyclops_eye.desc_1").applyTextStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.cyclops_eye.desc_0").func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.cyclops_eye.desc_1").func_240699_a_(TextFormatting.GRAY));
     }
 }

@@ -71,7 +71,7 @@ public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonIt
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("dragon." + eggType.toString().toLowerCase()).applyTextStyle(eggType.color));
-        tooltip.add(new TranslationTextComponent("item.dragonscales_armor.desc").applyTextStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("dragon." + eggType.toString().toLowerCase()).func_240699_a_(eggType.color));
+        tooltip.add(new TranslationTextComponent("item.dragonscales_armor.desc").func_240699_a_(TextFormatting.GRAY));
     }
 }

@@ -2,9 +2,6 @@ package com.github.alexthe666.iceandfire.world.gen.processor;
 
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
 import net.minecraft.block.AbstractChestBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -115,11 +112,6 @@ public class DreadRuinProcessor extends StructureProcessor {
     @Override
     protected IStructureProcessorType getType() {
         return IStructureProcessorType.BLOCK_ROT;
-    }
-
-    @Override
-    protected <T> Dynamic<T> serialize0(DynamicOps<T> ops) {
-        return new Dynamic<>(ops, ops.createMap(ImmutableMap.of(ops.createString("dread_ruin_processor"), ops.createFloat(this.integrity))));
     }
 
     private EntityType getRandomMobForMobSpawner(Random random) {

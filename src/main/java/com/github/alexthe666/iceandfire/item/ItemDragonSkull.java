@@ -57,9 +57,9 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         String iceorfire = "dragon." + getType(dragonType);
-        tooltip.add(new TranslationTextComponent(iceorfire).applyTextStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent(iceorfire).func_240699_a_(TextFormatting.GRAY));
         if (stack.getTag() != null) {
-            tooltip.add(new TranslationTextComponent("dragon.stage").applyTextStyle(TextFormatting.GRAY).appendSibling(new StringTextComponent( " " + stack.getTag().getInt("Stage"))));
+            tooltip.add(new TranslationTextComponent("dragon.stage").func_240699_a_(TextFormatting.GRAY).func_230529_a_(new StringTextComponent( " " + stack.getTag().getInt("Stage"))));
         }
     }
 

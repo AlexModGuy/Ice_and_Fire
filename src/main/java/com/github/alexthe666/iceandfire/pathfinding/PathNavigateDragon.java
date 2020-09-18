@@ -42,7 +42,7 @@ public class PathNavigateDragon extends GroundPathNavigator {
     }
 
     public Path getPathToEntity(Entity entityIn, int i) {
-        this.targetPosition = new BlockPos(entityIn);
+        this.targetPosition = entityIn.func_233580_cy_();
         return super.getPathToEntity(entityIn, i);
     }
 
@@ -51,27 +51,27 @@ public class PathNavigateDragon extends GroundPathNavigator {
         if (path != null) {
             return this.setPath(path, speedIn);
         } else {
-            this.targetPosition = new BlockPos(entityIn);
+            this.targetPosition = entityIn.func_233580_cy_();
             this.speed = speedIn;
             return true;
         }
     }
 
     protected void pathFollow() {
-        Vector3d Vector3d = this.getEntityPosition();
+        Vector3d cector3d = this.getEntityPosition();
         int i = this.currentPath.getCurrentPathLength();
         if (dragon.logic != null) {
             dragon.logic.debugPathfinder(this.currentPath);
         }
         for (int j = this.currentPath.getCurrentPathIndex(); j < this.currentPath.getCurrentPathLength(); ++j) {
-            if ((double) this.currentPath.getPathPointFromIndex(j).y != Math.floor(Vector3d.y)) {
+            if ((double) this.currentPath.getPathPointFromIndex(j).y != Math.floor(cector3d.y)) {
                 i = j;
                 break;
             }
         }
 
         this.maxDistanceToWaypoint = this.entity.getWidth();
-        Vector3d Vector3d1 = this.currentPath.getCurrentPos();
+        Vector3d Vector3d1 = Vector3d.func_237489_a_(this.currentPath.getCurrentPos());
         float distX = MathHelper.abs((float) (this.entity.getPosX() - (Vector3d1.x + 0.5D)));
         float distZ = MathHelper.abs((float) (this.entity.getPosZ() - (Vector3d1.z + 0.5D)));
         float distY = (float) Math.abs(this.entity.getPosY() - Vector3d1.y);
@@ -85,13 +85,13 @@ public class PathNavigateDragon extends GroundPathNavigator {
         int i1 = k;
 
         for (int j1 = i - 1; j1 >= this.currentPath.getCurrentPathIndex(); --j1) {
-            if (this.isDirectPathBetweenPoints(Vector3d, this.currentPath.getVectorFromIndex(this.entity, j1), k, l, i1)) {
+            if (this.isDirectPathBetweenPoints(cector3d, this.currentPath.getVectorFromIndex(this.entity, j1), k, l, i1)) {
                 this.currentPath.setCurrentPathIndex(j1);
                 break;
             }
         }
 
-        this.checkForStuck(Vector3d);
+        this.checkForStuck(cector3d);
     }
 
     protected void checkForStuck(Vector3d positionVec3) {
@@ -105,12 +105,12 @@ public class PathNavigateDragon extends GroundPathNavigator {
         }
 
         if (this.currentPath != null && !this.currentPath.isFinished()) {
-            Vector3d Vector3d = this.currentPath.getCurrentPos();
+            Vector3d vector3d = Vector3d.func_237489_a_(this.currentPath.getCurrentPos());
 
-            if (Vector3d.equals(this.timeoutCachedNode)) {
+            if (vector3d.equals(this.timeoutCachedNode)) {
                 this.timeoutTimer += System.currentTimeMillis() - this.lastTimeoutCheck;
             } else {
-                this.timeoutCachedNode = Vector3d;
+                this.timeoutCachedNode = vector3d;
                 double d0 = positionVec3.distanceTo(this.timeoutCachedNode);
                 this.timeoutLimit = this.entity.getAIMoveSpeed() > 0.0F ? d0 / (double) this.entity.getAIMoveSpeed() * 1000.0D : 0.0D;
             }

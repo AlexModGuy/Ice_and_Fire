@@ -9,6 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.*;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.SoundCategory;
@@ -19,7 +20,7 @@ import java.util.function.Predicate;
 
 public class ItemDragonBow extends BowItem implements ICustomRendered {
     public static final Predicate<ItemStack> DRAGON_ARROWS = (p_220002_0_) -> {
-        Tag<Item> tag = ItemTags.getCollection().getOrCreate(IafTagRegistry.DRAGON_ARROWS);
+        ITag<Item> tag = ItemTags.getCollection().getOrCreate(IafTagRegistry.DRAGON_ARROWS);
         return p_220002_0_.getItem().isIn(tag);
     };
 
@@ -58,8 +59,8 @@ public class ItemDragonBow extends BowItem implements ICustomRendered {
                     if (!worldIn.isRemote) {
                         ArrowItem arrowitem = (ArrowItem)(itemstack.getItem() instanceof ItemDragonArrow ? itemstack.getItem() : IafItemRegistry.DRAGONBONE_ARROW);
                         AbstractArrowEntity abstractarrowentity = arrowitem.createArrow(worldIn, itemstack, playerentity);
-                        abstractarrowentity = customeArrow(abstractarrowentity);
-                        abstractarrowentity.shoot(playerentity, playerentity.rotationPitch, playerentity.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+                        abstractarrowentity = customArrow(abstractarrowentity);
+                        abstractarrowentity.shoot(playerentity.rotationPitch, playerentity.rotationYaw, 0.0F, f * 3.0F, 1.0F);
                         if (f == 1.0F) {
                             abstractarrowentity.setIsCritical(true);
                         }

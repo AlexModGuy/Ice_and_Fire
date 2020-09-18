@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -52,13 +53,13 @@ public class ItemModSword extends SwordItem {
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_FIRE_TOOL_MATERIAL) {
             target.setFire(15);
-            target.knockBack(target, 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
+            target.func_233627_a_( 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_ICE_TOOL_MATERIAL) {
             FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(target, FrozenEntityProperties.class);
             frozenProps.setFrozenFor(300);
             target.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 300, 2));
-            target.knockBack(target, 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
+            target.func_233627_a_( 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL) {
             boolean flag = true;
@@ -68,9 +69,13 @@ public class ItemModSword extends SwordItem {
                 }
             }
             if(!attacker.world.isRemote && flag){
-                ((ServerWorld)attacker.world).addLightningBolt(new LightningBoltEntity(attacker.world, (double)target.getPosX(), (double)target.getPosY(), (double)target.getPosZ(), false));
+                LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(target.world);
+                lightningboltentity.func_233576_c_(target.getPositionVec());
+                if(!target.world.isRemote){
+                    target.world.addEntity(lightningboltentity);
+                }
             }
-            target.knockBack(target, 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
+            target.func_233627_a_( 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
         }
         return super.hitEntity(stack, target, attacker);
     }
@@ -78,19 +83,19 @@ public class ItemModSword extends SwordItem {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (toolMaterial == IafItemRegistry.SILVER_TOOL_MATERIAL) {
-            tooltip.add(new TranslationTextComponent("silvertools.hurt").applyTextStyle(TextFormatting.GREEN));
+            tooltip.add(new TranslationTextComponent("silvertools.hurt").func_240699_a_(TextFormatting.GREEN));
         }
         if (toolMaterial == IafItemRegistry.MYRMEX_CHITIN_TOOL_MATERIAL) {
-            tooltip.add(new TranslationTextComponent("myrmextools.hurt").applyTextStyle(TextFormatting.GREEN));
+            tooltip.add(new TranslationTextComponent("myrmextools.hurt").func_240699_a_(TextFormatting.GREEN));
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_FIRE_TOOL_MATERIAL) {
-            tooltip.add(new TranslationTextComponent("dragon_sword_fire.hurt2").applyTextStyle(TextFormatting.DARK_RED));
+            tooltip.add(new TranslationTextComponent("dragon_sword_fire.hurt2").func_240699_a_(TextFormatting.DARK_RED));
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_ICE_TOOL_MATERIAL) {
-            tooltip.add(new TranslationTextComponent("dragon_sword_ice.hurt2").applyTextStyle(TextFormatting.AQUA));
+            tooltip.add(new TranslationTextComponent("dragon_sword_ice.hurt2").func_240699_a_(TextFormatting.AQUA));
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL) {
-            tooltip.add(new TranslationTextComponent("dragon_sword_lightning.hurt2").applyTextStyle(TextFormatting.DARK_PURPLE));
+            tooltip.add(new TranslationTextComponent("dragon_sword_lightning.hurt2").func_240699_a_(TextFormatting.DARK_PURPLE));
         }
     }
 }

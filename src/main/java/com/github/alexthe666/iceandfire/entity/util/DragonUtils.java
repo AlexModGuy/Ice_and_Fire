@@ -40,7 +40,7 @@ public class DragonUtils {
             BlockPos pos = new BlockPos(escortPos.getX() + dragon.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance) - IafConfig.dragonWanderFromHomeDistance / 2,
                     (distFromGround > 16 ? escortPos.getY() : escortPos.getY() + 8 + dragon.getRNG().nextInt(16)),
                     (escortPos.getZ() + dragon.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance) - IafConfig.dragonWanderFromHomeDistance / 2));
-            if (!dragon.isTargetBlocked(new Vector3d(pos)) && dragon.getDistanceSquared(new Vector3d(pos)) > 6) {
+            if (!dragon.isTargetBlocked(Vector3d.func_237489_a_(pos)) && dragon.getDistanceSquared(Vector3d.func_237489_a_(pos)) > 6) {
                 return pos;
             }
         }
@@ -52,12 +52,12 @@ public class DragonUtils {
         float neg = dragon.getRNG().nextBoolean() ? 1 : -1;
         float renderYawOffset = dragon.renderYawOffset;
         if (dragon.hasHomePosition && dragon.homePos != null) {
-            BlockPos dragonPos = new BlockPos(dragon);
+            BlockPos dragonPos = dragon.func_233580_cy_();
             BlockPos ground = dragon.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, dragonPos);
             int distFromGround = (int) dragon.getPosY() - ground.getY();
             for (int i = 0; i < 10; i++) {
                 BlockPos pos = new BlockPos(dragon.homePos.getX() + dragon.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance * 2) - IafConfig.dragonWanderFromHomeDistance, (distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, dragon.getPosY() + dragon.getRNG().nextInt(16) - 8) : (int) dragon.getPosY() + dragon.getRNG().nextInt(16) + 1), (dragon.homePos.getZ() + dragon.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance * 2) - IafConfig.dragonWanderFromHomeDistance));
-                if (!dragon.isTargetBlocked(new Vector3d(pos)) && dragon.getDistanceSquared(new Vector3d(pos)) > 6) {
+                if (!dragon.isTargetBlocked(Vector3d.func_237489_a_(pos)) && dragon.getDistanceSquared(Vector3d.func_237489_a_(pos)) > 6) {
                     return pos;
                 }
             }
@@ -70,7 +70,7 @@ public class DragonUtils {
         int distFromGround = (int) dragon.getPosY() - ground.getY();
         BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, dragon.getPosY() + dragon.getRNG().nextInt(16) - 8) : (int) dragon.getPosY() + dragon.getRNG().nextInt(16) + 1);
         BlockPos pos = dragon.doesWantToLand() ? ground : newPos;
-        if (!dragon.isTargetBlocked(new Vector3d(newPos)) && dragon.getDistanceSquared(new Vector3d(newPos)) > 6) {
+        if (!dragon.isTargetBlocked(Vector3d.func_237489_a_(newPos)) && dragon.getDistanceSquared(Vector3d.func_237489_a_(newPos)) > 6) {
             return pos;
         }
         return null;
@@ -88,7 +88,7 @@ public class DragonUtils {
         BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, dragon.getPosY() + dragon.getRNG().nextInt(16) - 8) : (int) dragon.getPosY() + dragon.getRNG().nextInt(16) + 1);
         BlockPos pos = dragon.doesWantToLand() ? ground : newPos;
         BlockPos surface = dragon.world.getBlockState(newPos.down(2)).getMaterial() != Material.WATER ? newPos.down(dragon.getRNG().nextInt(10) + 1) : newPos;
-        if (dragon.getDistanceSquared(new Vector3d(surface)) > 6 && dragon.world.getBlockState(surface).getMaterial() == Material.WATER) {
+        if (dragon.getDistanceSquared(Vector3d.func_237489_a_(surface)) > 6 && dragon.world.getBlockState(surface).getMaterial() == Material.WATER) {
             return surface;
         }
         return null;
@@ -144,12 +144,12 @@ public class DragonUtils {
         double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
         double extraZ = radius * MathHelper.cos(angle);
         if (hippo.hasHomePosition && hippo.homePos != null) {
-            BlockPos dragonPos = new BlockPos(hippo);
+            BlockPos dragonPos = hippo.func_233580_cy_();
             BlockPos ground = hippo.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, dragonPos);
             int distFromGround = (int) hippo.getPosY() - ground.getY();
             for (int i = 0; i < 10; i++) {
                 BlockPos pos = new BlockPos(hippo.homePos.getX() + hippo.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance) - IafConfig.dragonWanderFromHomeDistance, (distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, hippo.getPosY() + hippo.getRNG().nextInt(16) - 8) : (int) hippo.getPosY() + hippo.getRNG().nextInt(16) + 1), (hippo.homePos.getZ() + hippo.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance * 2) - IafConfig.dragonWanderFromHomeDistance));
-                if (!hippo.isTargetBlocked(new Vector3d(pos)) && hippo.getDistanceSquared(new Vector3d(pos)) > 6) {
+                if (!hippo.isTargetBlocked(Vector3d.func_237489_a_(pos)) && hippo.getDistanceSquared(Vector3d.func_237489_a_(pos)) > 6) {
                     return pos;
                 }
             }
@@ -159,7 +159,7 @@ public class DragonUtils {
         int distFromGround = (int) hippo.getPosY() - ground.getY();
         BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, hippo.getPosY() + hippo.getRNG().nextInt(16) - 8) : (int) hippo.getPosY() + hippo.getRNG().nextInt(16) + 1);
         BlockPos pos = hippo.doesWantToLand() ? ground : newPos;
-        if (!hippo.isTargetBlocked(new Vector3d(newPos)) && hippo.getDistanceSquared(new Vector3d(newPos)) > 6) {
+        if (!hippo.isTargetBlocked(Vector3d.func_237489_a_(newPos)) && hippo.getDistanceSquared(Vector3d.func_237489_a_(newPos)) > 6) {
             return newPos;
         }
         return null;
@@ -178,7 +178,7 @@ public class DragonUtils {
         int flightHeight = Math.min(IafConfig.stymphalianBirdFlightHeight, bird.flock != null && !bird.flock.isLeader(bird) ? ground.getY() + bird.getRNG().nextInt(16) : ground.getY() + bird.getRNG().nextInt(16));
         BlockPos newPos = radialPos.up(distFromGround > 16 ? flightHeight : (int) bird.getPosY() + bird.getRNG().nextInt(16) + 1);
         BlockPos pos = bird.doesWantToLand() ? ground : newPos;
-        if (!bird.isTargetBlocked(new Vector3d(newPos)) && bird.getDistanceSquared(new Vector3d(newPos)) > 6) {
+        if (!bird.isTargetBlocked(Vector3d.func_237489_a_(newPos)) && bird.getDistanceSquared(Vector3d.func_237489_a_(newPos)) > 6) {
             return newPos;
         }
         return null;
@@ -219,7 +219,7 @@ public class DragonUtils {
         double extraZ = radius * MathHelper.cos(angle);
         BlockPos radialPos = new BlockPos(target.getPosX() + extraX, 0, target.getPosZ() + extraZ);
         BlockPos ground = target.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, radialPos);
-        if (!cockatrice.isTargetBlocked(new Vector3d(ground)) && cockatrice.getDistanceSq(new Vector3d(ground)) > 30) {
+        if (!cockatrice.isTargetBlocked(Vector3d.func_237489_a_(ground)) && cockatrice.getDistanceSq(Vector3d.func_237489_a_(ground)) > 30) {
             return ground;
         }
         return target.func_233580_cy_();
@@ -232,7 +232,7 @@ public class DragonUtils {
         double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
         double extraZ = radius * MathHelper.cos(angle);
         BlockPos radialPos = new BlockPos(target.getPosX() + extraX, target.getPosY(), target.getPosZ() + extraZ);
-        if (!cockatrice.isTargetBlocked(new Vector3d(radialPos).add(0, 0.75, 0)) && cockatrice.getDistanceSq(new Vector3d(radialPos)) < 300) {
+        if (!cockatrice.isTargetBlocked(Vector3d.func_237489_a_(radialPos).add(0, 0.75, 0)) && cockatrice.getDistanceSq(Vector3d.func_237489_a_(radialPos)) < 300) {
             return radialPos;
         }
         return target.func_233580_cy_();
@@ -247,7 +247,7 @@ public class DragonUtils {
         double extraZ = radius * MathHelper.cos(angle);
         BlockPos radialPos = new BlockPos(target.getPosX() + extraX, 0, target.getPosZ() + extraZ);
         BlockPos ground = target.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, radialPos);
-        if (serpent.getDistanceSq(new Vector3d(ground)) > 30) {
+        if (serpent.getDistanceSq(Vector3d.func_237489_a_(ground)) > 30) {
             return ground;
         }
         return target.func_233580_cy_();

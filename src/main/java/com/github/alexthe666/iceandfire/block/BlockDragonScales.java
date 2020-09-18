@@ -29,6 +29,6 @@ public class BlockDragonScales extends Block implements IDragonProof {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("dragon." + type.toString().toLowerCase()).applyTextStyle(type.color));
+        tooltip.add(new TranslationTextComponent("dragon." + type.toString().toLowerCase()).func_240699_a_(type.color));
     }
 }
