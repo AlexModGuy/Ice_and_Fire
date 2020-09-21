@@ -709,7 +709,7 @@
   "bestiary.hydra": "九头蛇",
   "bestiary.dread_mobs": "悚怖亡灵",
   "bestiary.lightningdragon": "电龙",
-  "bestiary.lightningdragonegg": "电龙蛋"
+  "bestiary.lightningdragonegg": "电龙蛋",
   
   "lectern.nopages": "无法添加新的信息.",
   "silvertools.hurt": "+2 亡灵克制",
@@ -1175,7 +1175,7 @@
   "block.minecraft.banner.amphithere.lime": "黄绿翼蚺纹章",
   "block.minecraft.banner.amphithere.pink": "粉色翼蚺纹章",
   "block.minecraft.banner.amphithere.gray": "灰色翼蚺纹章",
-  ".banner.amphithere.silver": "银色翼蚺纹章",
+  "block.minecraft.banner.amphithere.silver": "银色翼蚺纹章",
   "block.minecraft.banner.amphithere.cyan": "青色翼蚺纹章",
   "block.minecraft.banner.amphithere.purple": "紫色翼蚺纹章",
   "block.minecraft.banner.amphithere.blue": "蓝色翼蚺纹章",
