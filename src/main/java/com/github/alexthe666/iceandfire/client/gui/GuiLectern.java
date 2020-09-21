@@ -58,7 +58,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
         this.nameable = name;
     }
 
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void func_230451_b_(MatrixStack matrixStack, int mouseX, int mouseY) {
         FontRenderer font = this.getMinecraft().fontRenderer;
         font.func_238421_b_(matrixStack, this.nameable.getString(), 12, 4, 4210752);
         font.func_238421_b_(matrixStack, this.playerInventory.getDisplayName().getString(), 8, this.ySize - 96 + 2, 4210752);

@@ -29,14 +29,16 @@ public class GuiHippocampus extends ContainerScreen<ContainerHippocampus> {
         this.hippogryphInv = dragonInv;
     }
 
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void func_230451_b_(MatrixStack matrixStack, int mouseX, int mouseY) {
+        int k = 0;
+        int l = 0;
         Entity entity = IceAndFire.PROXY.getReferencedMob();
         FontRenderer font = this.getMinecraft().fontRenderer;
         if (entity instanceof EntityHippocampus) {
             EntityHippocampus hippo = (EntityHippocampus) entity;
-            font.func_238421_b_(matrixStack, hippo.getDisplayName().getString(), 8, 6, 4210752);
+            font.func_238421_b_(matrixStack, hippo.getDisplayName().getString(), l+8, 6, 4210752);
         }
-        font.func_238421_b_(matrixStack, this.playerInventory.getDisplayName().getString(), 8, this.ySize - 96 + 2, 4210752);
+        font.func_238421_b_(matrixStack, this.playerInventory.getDisplayName().getString(), k+ 8, l + this.ySize - 96 + 2, 4210752);
     }
 
     public void func_230430_a_(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
@@ -62,6 +64,5 @@ public class GuiHippocampus extends ContainerScreen<ContainerHippocampus> {
             }
             GuiDragon.drawEntityOnScreen(i + 51, j + 60, 17, (float) (i + 51) - this.mousePosx, (float) (j + 75 - 50) - this.mousePosY, hippo);
         }
-        this.drawGuiContainerForegroundLayer(matrixStack, mouseX, mouseY);
     }
 }

@@ -367,7 +367,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
 
                 @Override
                 public ITextComponent getDisplayName() {
-                    return new TranslationTextComponent("entity.rats.rat");
+                    return new TranslationTextComponent("entity.iceandfire.hippogryph");
                 }
             });
         }

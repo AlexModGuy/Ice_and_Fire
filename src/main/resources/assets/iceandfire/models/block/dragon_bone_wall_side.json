@@ -1,7 +1,6 @@
 {
-    "parent": "iceandfire:block/wall_side",
+    "parent": "minecraft:block/template_wall_side",
     "textures": {
-        "wall": "iceandfire:block/dragon_bone_block_side",
-        "top" : "iceandfire:block/dragon_bone_block"
+        "wall": "iceandfire:block/dragon_bone_block"
     }
 }

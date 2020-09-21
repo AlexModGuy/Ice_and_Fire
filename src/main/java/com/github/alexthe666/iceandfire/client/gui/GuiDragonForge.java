@@ -34,7 +34,7 @@ public class GuiDragonForge extends ContainerScreen<ContainerDragonForge> {
         }
     }
 
-    protected void drawGuiContainerForegroundLayer(MatrixStack stack, int mouseX, int mouseY) {
+    protected void func_230451_b_(MatrixStack stack, int mouseX, int mouseY) {
         FontRenderer font = this.getMinecraft().fontRenderer;
         if (tileFurnace != null) {
             String s = I18n.format("block.iceandfire.dragonforge_" + DragonType.getNameFromInt(dragonType) + "_core");

@@ -634,7 +634,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
 
                 @Override
                 public ITextComponent getDisplayName() {
-                    return new TranslationTextComponent("entity.rats.rat");
+                    return new TranslationTextComponent("entity.iceandfire.hippocampus");
                 }
             });
         }

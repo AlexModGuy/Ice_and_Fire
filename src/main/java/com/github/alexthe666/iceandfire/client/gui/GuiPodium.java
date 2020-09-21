@@ -31,9 +31,9 @@ public class GuiPodium extends ContainerScreen<ContainerPodium> {
     protected void func_230451_b_(MatrixStack ms, int p_230451_2_, int p_230451_3_) {
         if (podiumInventory != null) {
             String s = I18n.format("block.iceandfire.podium");
-            this.getMinecraft().fontRenderer.func_238405_a_(ms, s, this.xSize / 2 - this.getMinecraft().fontRenderer.getStringWidth(s) / 2, 6, 4210752);
+            this.getMinecraft().fontRenderer.func_238421_b_(ms, s, this.xSize / 2 - this.getMinecraft().fontRenderer.getStringWidth(s) / 2, 6, 4210752);
         }
-        this.getMinecraft().fontRenderer.func_238405_a_(ms, this.playerInventory.getDisplayName().getString(), 8, this.ySize - 96 + 2, 4210752);
+        this.getMinecraft().fontRenderer.func_238421_b_(ms, this.playerInventory.getDisplayName().getString(), 8, this.ySize - 96 + 2, 4210752);
     }
 
 
