@@ -87,10 +87,12 @@ public class GorgonTempleStructure extends Structure<NoFeatureConfig> {
 
         @Override
         public void func_230364_a_(ChunkGenerator p_230364_1_, TemplateManager p_230364_2_, int chunkX, int chunkZ, Biome p_230364_5_, IFeatureConfig p_230364_6_) {
-            Rotation rotation = Rotation.values()[this.rand.nextInt(Rotation.values().length)];
-            BlockPos blockpos = new BlockPos(chunkX * 16, 90, chunkZ * 16);
-            GorgonTemplePiece.func_204760_a(p_230364_2_, blockpos, rotation, this.components, this.rand);
-            this.recalculateStructureSize();
+            if(IafConfig.spawnGorgons) {
+                Rotation rotation = Rotation.values()[this.rand.nextInt(Rotation.values().length)];
+                BlockPos blockpos = new BlockPos(chunkX * 16, 90, chunkZ * 16);
+                GorgonTemplePiece.func_204760_a(p_230364_2_, blockpos, rotation, this.components, this.rand);
+                this.recalculateStructureSize();
+            }
         }
     }
 

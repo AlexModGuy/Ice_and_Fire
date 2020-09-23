@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world.structure;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.mojang.serialization.Codec;
 import net.minecraft.util.Rotation;
@@ -56,10 +57,12 @@ public class DreadMausoleumStructure extends Structure<NoFeatureConfig> {
 
         @Override
         public void func_230364_a_(ChunkGenerator p_230364_1_, TemplateManager p_230364_2_, int p_230364_3_, int p_230364_4_, Biome p_230364_5_, IFeatureConfig p_230364_6_) {
-            Rotation rotation = Rotation.values()[this.rand.nextInt(Rotation.values().length)];
-            BlockPos blockpos = new BlockPos(p_230364_3_ * 16, 64, p_230364_4_ * 16);
-            MausoleumPiece.func_204760_a(p_230364_2_, blockpos, rotation, this.components, this.rand);
-            this.recalculateStructureSize();
+           if(IafConfig.generateMausoleums){
+               Rotation rotation = Rotation.values()[this.rand.nextInt(Rotation.values().length)];
+               BlockPos blockpos = new BlockPos(p_230364_3_ * 16, 64, p_230364_4_ * 16);
+               MausoleumPiece.func_204760_a(p_230364_2_, blockpos, rotation, this.components, this.rand);
+               this.recalculateStructureSize();
+           }
         }
     }
 

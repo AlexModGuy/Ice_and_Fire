@@ -82,7 +82,7 @@ public class IafConfig {
     public static int sirenTimeBetweenSongs = 2000;
     public static int generateSirenChance = 400;
     public static boolean spawnHippocampus = true;
-    public static int hippocampusSpawnChance = 70;
+    public static int hippocampusSpawnChance = 60;
     public static int deathWormTargetSearchLength = 64;
     public static double deathWormMaxHealth = 10D;
     public static double deathWormAttackStrength = 3D;
@@ -105,7 +105,7 @@ public class IafConfig {
     public static boolean spawnStymphalianBirds = true;
     public static boolean stymphalianBirdsDataTagDrops = true;
     public static boolean stympahlianBirdAttackAnimals = false;
-    public static int stymphalianBirdSpawnChance = 100;
+    public static int stymphalianBirdSpawnChance = 80;
     public static boolean spawnTrolls = true;
     public static int trollSpawnRate = 60;
     public static int trollSpawnCheckChance = 40;
@@ -123,14 +123,14 @@ public class IafConfig {
     public static double myrmexBaseAttackStrength = 3.0D;
     public static boolean experimentalPathFinder;
     public static boolean spawnAmphitheres = true;
-    public static int amphithereSpawnRate = 5;
+    public static int amphithereSpawnRate = 10;
     public static float amphithereVillagerSearchLength = 64;
     public static int amphithereTameTime = 400;
     public static double amphithereFlightSpeed = 1.75F;
     public static double amphithereMaxHealth = 50D;
     public static double amphithereAttackStrength = 7D;
     public static boolean spawnSeaSerpents = true;
-    public static int seaSerpentSpawnChance = 300;
+    public static int seaSerpentSpawnChance = 250;
     public static boolean seaSerpentGriefing = true;
     public static double seaSerpentBaseHealth = 20D;
     public static double seaSerpentAttackStrength = 4D;
@@ -151,7 +151,7 @@ public class IafConfig {
     public static int lichSpawnRate = 1;
     public static double hydraMaxHealth = 250D;
     public static boolean generateHydraCaves = true;
-    public static int generateHydraChance = 200;
+    public static int generateHydraChance = 120;
     public static boolean explosiveDragonBreath = false;
     public static double weezerTinkersDisarmChance = 0.2F;
     public static boolean chunkLoadSummonCrystal = true;
