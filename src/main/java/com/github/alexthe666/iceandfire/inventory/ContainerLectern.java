@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemBestiary;
+import com.github.alexthe666.iceandfire.message.MessageUpdateLectern;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -154,8 +155,11 @@ public class ContainerLectern extends Container {
                 if (itemstack.getItem() == IafItemRegistry.BESTIARY) {
                     didEnchant = EnumBestiaryPages.addPage(page, itemstack);
                     this.tileFurnace.setInventorySlotContents(0, itemstack);
-                    if (this.tileFurnace instanceof TileEntityLectern) {
-                        ((TileEntityLectern) this.tileFurnace).randomizePages(itemstack, itemstack1);
+                    if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern) {
+                        if(playerIn.world.isRemote){
+                            IceAndFire.sendMSGToServer(new MessageUpdateLectern(((TileEntityLectern)IceAndFire.PROXY.getRefrencedTE()).getPos().toLong(), 0, 0, 0, true, page.ordinal()));
+                        }
+                        ((TileEntityLectern) IceAndFire.PROXY.getRefrencedTE()).randomizePages(itemstack, itemstack1);
                     }
                 }
                 if (!playerIn.isCreative() && didEnchant) {
