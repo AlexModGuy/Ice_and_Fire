@@ -20,10 +20,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -117,7 +114,13 @@ public class ItemDragonHorn extends Item {
                 if(EntityType.byKey(id).isPresent()){
                     EntityType type = EntityType.byKey(id).get();
                     tooltip.add(new TranslationTextComponent(type.getTranslationKey()).func_240699_a_(getTextColorForEntityType(type)));
-                    String name = entityTag.getString("CustomName").isEmpty() ? new TranslationTextComponent("dragon.unnamed").getString() : ITextComponent.Serializer.func_240644_b_(entityTag.getString("CustomName")).getString();
+                    String name = new TranslationTextComponent("dragon.unnamed").getString();
+                    if(!entityTag.getString("CustomName").isEmpty()){
+                        IFormattableTextComponent component = ITextComponent.Serializer.func_240644_b_(entityTag.getString("CustomName"));
+                        if(component != null){
+                            name = component.getString();
+                        }
+                    }
                     tooltip.add(new StringTextComponent(name).func_240699_a_(TextFormatting.GRAY));
                     String gender = new TranslationTextComponent("dragon.gender").getString() + " " + new TranslationTextComponent((entityTag.getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female")).getString();
                     tooltip.add(new StringTextComponent(gender).func_240699_a_(TextFormatting.GRAY));
