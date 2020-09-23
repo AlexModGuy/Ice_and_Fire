@@ -201,7 +201,7 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
             double extraY = raiseUp;
             passenger.setPosition(this.getPosX() + extraX, this.getPosY() + extraY, this.getPosZ() + extraZ);
             if (this.getAnimationTick() == 32) {
-                passenger.attackEntityFrom(DamageSource.causeMobDamage(this), passenger instanceof PlayerEntity ? (float) IafConfig.cyclopsBiteStrength : passenger instanceof LivingEntity ? ((LivingEntity) passenger).getMaxHealth() * 2F : (float) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 2F);
+                passenger.attackEntityFrom(DamageSource.causeMobDamage(this), (float) IafConfig.cyclopsBiteStrength);
                 passenger.stopRiding();
             }
         }
