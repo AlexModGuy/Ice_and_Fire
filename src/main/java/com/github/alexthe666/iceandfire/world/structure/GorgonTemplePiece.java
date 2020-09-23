@@ -42,12 +42,11 @@ public class GorgonTemplePiece  {
         private final ResourceLocation field_204756_e;
         private final Random random;
         private final TemplateManager manager;
+        private BlockPos firstPos = null;
 
         public boolean func_230383_a_(ISeedReader world, StructureManager p_230383_2_, ChunkGenerator p_230383_3_, Random p_230383_4_, MutableBoundingBox p_230383_5_, ChunkPos p_230383_6_, BlockPos p_230383_7_) {
-            BlockPos inital = this.templatePosition;
-            int lvt_8_1_ = world.getHeight(Heightmap.Type.WORLD_SURFACE, inital.getX(), inital.getZ());
-            BlockPos pos = new BlockPos(inital.getX(), lvt_8_1_, inital.getZ());
-            this.templatePosition = new BlockPos(this.templatePosition.getX(), pos.getY() - 10, this.templatePosition.getZ());
+            int i = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, firstPos.getX(), firstPos.getZ());
+            this.templatePosition = new BlockPos(this.templatePosition.getX(), i, this.templatePosition.getZ());
             return super.func_230383_a_(world, p_230383_2_, p_230383_3_, p_230383_4_, p_230383_5_, p_230383_6_, p_230383_7_);
         }
 
@@ -83,6 +82,7 @@ public class GorgonTemplePiece  {
             PlacementSettings lvt_3_1_ = (new PlacementSettings()).setRotation(this.rotation).setMirror(Mirror.NONE);
             this.setup(lvt_2_1_, this.templatePosition, lvt_3_1_);
         }
+
 
         protected void handleDataMarker(String function, BlockPos pos, IWorld worldIn, Random rand, MutableBoundingBox sbb) {
             if ("iceandfire:spawn_gorgon".equals(function)) {

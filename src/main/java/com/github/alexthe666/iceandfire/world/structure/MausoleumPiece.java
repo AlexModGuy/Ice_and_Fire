@@ -2,14 +2,19 @@ package com.github.alexthe666.iceandfire.world.structure;
 
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.github.alexthe666.iceandfire.world.gen.processor.DreadRuinProcessor;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -38,12 +43,11 @@ public class MausoleumPiece {
         private final ResourceLocation field_204756_e;
         private final Random random;
         private final TemplateManager manager;
+        private BlockPos firstPos = null;
 
         public boolean func_230383_a_(ISeedReader world, StructureManager p_230383_2_, ChunkGenerator p_230383_3_, Random p_230383_4_, MutableBoundingBox p_230383_5_, ChunkPos p_230383_6_, BlockPos p_230383_7_) {
-            BlockPos inital = this.templatePosition;
-            int lvt_8_1_ = world.getHeight(Heightmap.Type.WORLD_SURFACE, inital.getX(), inital.getZ());
-            BlockPos pos = new BlockPos(inital.getX(), lvt_8_1_, inital.getZ());
-            this.templatePosition = new BlockPos(this.templatePosition.getX(), pos.getY() - 10, this.templatePosition.getZ());
+            int i = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, firstPos.getX(), firstPos.getZ());
+            this.templatePosition = new BlockPos(this.templatePosition.getX(), i, this.templatePosition.getZ());
             return super.func_230383_a_(world, p_230383_2_, p_230383_3_, p_230383_4_, p_230383_5_, p_230383_6_, p_230383_7_);
         }
 
@@ -56,6 +60,7 @@ public class MausoleumPiece {
             this.template = p_i48904_1_.getTemplate(PART_1);
             this.random = new Random();
             this.manager = p_i48904_1_;
+            this.firstPos = new BlockPos(p_i48904_3_);
         }
 
         public Piece(TemplateManager p_i50445_1_, CompoundNBT p_i50445_2_) {
@@ -81,10 +86,42 @@ public class MausoleumPiece {
         }
 
         protected void handleDataMarker(String function, BlockPos pos, IWorld worldIn, Random rand, MutableBoundingBox sbb) {
-                //worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
-            }
+            //worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
         }
 
+        private int func_204035_a(BlockPos templatePos, IBlockReader blockReaderIn, BlockPos templateTransformedPos) {
+            int i = templatePos.getY();
+            int j = 512;
+            int k = i - 1;
+            int l = 0;
 
-    }
+            for(BlockPos blockpos : BlockPos.getAllInBoxMutable(templatePos, templateTransformedPos)) {
+                int i1 = blockpos.getX();
+                int j1 = blockpos.getZ();
+                int k1 = templatePos.getY() - 1;
+                BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(i1, k1, j1);
+                BlockState blockstate = blockReaderIn.getBlockState(blockpos$mutable);
+
+                for(FluidState fluidstate = blockReaderIn.getFluidState(blockpos$mutable); (blockstate.isAir() || fluidstate.isTagged(FluidTags.WATER) || blockstate.getBlock().isIn(BlockTags.ICE)) && k1 > 1; fluidstate = blockReaderIn.getFluidState(blockpos$mutable)) {
+                    --k1;
+                    blockpos$mutable.setPos(i1, k1, j1);
+                    blockstate = blockReaderIn.getBlockState(blockpos$mutable);
+                }
+
+                j = Math.min(j, k1);
+                if (k1 < k - 2) {
+                    ++l;
+                }
+            }
+
+            int l1 = Math.abs(templatePos.getX() - templateTransformedPos.getX());
+            if (k - j > 2 && l > l1 - 2) {
+                i = j + 1;
+            }
+
+            return i;
+        }
+       }
+
+}
 

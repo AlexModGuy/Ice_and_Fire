@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
@@ -18,6 +19,10 @@ public class DreadMausoleumStructure extends Structure<NoFeatureConfig> {
     public DreadMausoleumStructure(Codec<NoFeatureConfig> p_i51440_1_) {
         super(p_i51440_1_);
         this.setRegistryName("iceandfire:mausoleum");
+    }
+
+    public GenerationStage.Decoration func_236396_f_() {
+        return GenerationStage.Decoration.SURFACE_STRUCTURES;
     }
 
     public String getStructureName() {
