@@ -21,4 +21,8 @@ public class ItemDragonArrow extends ArrowItem {
         return arrowentity;
     }
 
+    public boolean isInfinite(ItemStack stack, ItemStack bow, net.minecraft.entity.player.PlayerEntity player) {
+        int enchant = net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(net.minecraft.enchantment.Enchantments.INFINITY, bow);
+        return enchant <= 0 ? false : this.getClass() == ItemDragonArrow.class;
+    }
 }
