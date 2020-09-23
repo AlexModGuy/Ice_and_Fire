@@ -199,7 +199,7 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
             int page1 = selectedPages[0] == null ? -1 : selectedPages[0].ordinal();
             int page2 = selectedPages[1] == null ? -1 : selectedPages[1].ordinal();
             int page3 = selectedPages[2] == null ? -1 : selectedPages[2].ordinal();
-            IceAndFire.sendMSGToAll(new MessageUpdateLectern(pos.toLong(), page1, page2, page3));
+            IceAndFire.sendMSGToAll(new MessageUpdateLectern(pos.toLong(), page1, page2, page3, false, 0));
         }
         return selectedPages;
     }
