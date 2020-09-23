@@ -36,13 +36,11 @@ public class MausoleumPiece {
         private final ResourceLocation field_204756_e;
         private final Random random;
         private final TemplateManager manager;
+        private BlockPos firstPos = null;
 
         public boolean func_225577_a_(IWorld world, ChunkGenerator<?> p_225577_2_, Random p_225577_3_, MutableBoundingBox p_225577_4_, ChunkPos p_225577_5_) {
-            this.placeSettings.addProcessor(new DreadRuinProcessor());
-            BlockPos inital = this.templatePosition;
-            int lvt_8_1_ = world.getHeight(Heightmap.Type.WORLD_SURFACE, inital.getX(), inital.getZ());
-            BlockPos pos = new BlockPos(inital.getX(), lvt_8_1_, inital.getZ());
-            this.templatePosition = new BlockPos(this.templatePosition.getX(), pos.getY() - 10, this.templatePosition.getZ());
+            int i = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, firstPos.getX(), firstPos.getZ());
+            this.templatePosition = new BlockPos(this.templatePosition.getX(), i, this.templatePosition.getZ());
 
             return super.func_225577_a_(world, p_225577_2_, p_225577_3_, p_225577_4_, p_225577_5_);
         }
@@ -56,6 +54,7 @@ public class MausoleumPiece {
             this.template = p_i48904_1_.getTemplate(PART_1);
             this.random = new Random();
             this.manager = p_i48904_1_;
+            this.firstPos = new BlockPos(templatePosition);
         }
 
         public Piece(TemplateManager p_i50445_1_, CompoundNBT p_i50445_2_) {
@@ -66,6 +65,7 @@ public class MausoleumPiece {
             this.template = p_i50445_1_.getTemplate(PART_1);
             this.random = new Random();
             this.manager = p_i50445_1_;
+            this.firstPos = new BlockPos(templatePosition);
         }
 
         protected void readAdditional(CompoundNBT p_143011_1_) {
@@ -78,6 +78,7 @@ public class MausoleumPiece {
             Template lvt_2_1_ = p_204754_1_.getTemplateDefaulted(PART_1);
             PlacementSettings lvt_3_1_ = (new PlacementSettings()).setRotation(this.rotation).setMirror(Mirror.NONE);
             this.setup(lvt_2_1_, this.templatePosition, lvt_3_1_);
+            this.firstPos = new BlockPos(templatePosition);
         }
 
         protected void handleDataMarker(String function, BlockPos pos, IWorld worldIn, Random rand, MutableBoundingBox sbb) {
