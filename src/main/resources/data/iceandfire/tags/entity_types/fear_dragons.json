@@ -1,0 +1,24 @@
+{
+  "__comment": "animals (livestock) that run away from dragons.",
+  "replace": false,
+  "values": [
+    "minecraft:cow",
+    "minecraft:sheep",
+    "minecraft:pig",
+    "minecraft:chicken",
+    "minecraft:cat",
+    "minecraft:fox",
+    "minecraft:horse",
+    "minecraft:mooshroom",
+    "minecraft:ocelot",
+    "minecraft:llama",
+    "minecraft:panda",
+    "minecraft:parrot",
+    "minecraft:polar_bear",
+    "minecraft:rabbit",
+    "minecraft:strider",
+    "minecraft:trader_llama",
+    "minecraft:wolf",
+    "minecraft:hoglin"
+  ]
+}

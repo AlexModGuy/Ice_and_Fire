@@ -10,6 +10,7 @@ import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
+import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateMyrmex;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
@@ -58,7 +59,6 @@ import java.util.UUID;
 
 public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimatedEntity, IMerchant {
 
-    public static final ResourceLocation MYRMEX_HARVESTABLES = new ResourceLocation("iceandfire", "myrmex_harvestables");
     public static final Animation ANIMATION_PUPA_WIGGLE = Animation.create(20);
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(EntityMyrmexBase.class, DataSerializers.BYTE);
     private static final DataParameter<Integer> GROWTH_STAGE = EntityDataManager.createKey(EntityMyrmexBase.class, DataSerializers.VARINT);
@@ -109,7 +109,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public static boolean isEdibleBlock(BlockState blockState) {
-        return BlockTags.getCollection().getOrCreate(MYRMEX_HARVESTABLES).func_230235_a_(blockState.getBlock());
+        return BlockTags.getCollection().getOrCreate(IafTagRegistry.MYRMEX_HARVESTABLES).func_230235_a_(blockState.getBlock());
     }
 
     public static int getRandomCaste(World world, Random random, boolean royal) {
