@@ -124,7 +124,13 @@ public class ItemDragonHorn extends Item {
                 if(EntityType.byKey(id).isPresent()){
                     EntityType type = EntityType.byKey(id).get();
                     tooltip.add(new TranslationTextComponent(type.getTranslationKey()).applyTextStyle(getTextColorForEntityType(type)));
-                    String name = entityTag.getString("CustomName").isEmpty() ? new TranslationTextComponent("dragon.unnamed").getFormattedText() : ITextComponent.Serializer.fromJson(entityTag.getString("CustomName")).getString();
+                    String name = new TranslationTextComponent("dragon.unnamed").getString();
+                    if(!entityTag.getString("CustomName").isEmpty()){
+                        ITextComponent component = ITextComponent.Serializer.fromJson(entityTag.getString("CustomName"));
+                        if(component != null){
+                            name = component.getString();
+                        }
+                    }
                     tooltip.add(new StringTextComponent(name).applyTextStyle(TextFormatting.GRAY));
                     String gender = new TranslationTextComponent("dragon.gender").getFormattedText() + " " + new TranslationTextComponent((entityTag.getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female")).getFormattedText();
                     tooltip.add(new StringTextComponent(gender).applyTextStyle(TextFormatting.GRAY));
