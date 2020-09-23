@@ -13,7 +13,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.lwjgl.opengl.GL11;
 
 import java.util.UUID;
 
@@ -64,7 +63,7 @@ public class PlayerRenderEvents {
             event.getMatrixStack().push();
             float f2 = ((float) event.getEntityLiving().ticksExisted - 1 + event.getPartialRenderTick());
             float f3 = MathHelper.sin(f2 / 10.0F) * 0.1F + 0.1F;
-            GL11.glTranslatef((float) 0, 1.3F * event.getEntityLiving().getHeight(), (float) 0);
+            event.getMatrixStack().translate((float) 0, 1.3F * event.getEntityLiving().getHeight(), (float) 0);
             float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
             event.getMatrixStack().rotate(new Quaternion(Vector3f.YP, f4, true));
             event.getMatrixStack().push();
