@@ -596,7 +596,7 @@
   "dragon.fire": "Fire",
   "dragon.ice": "Ice",
   "dragon.lightning": "Lightning",
-  "dragon": "Name:",
+  "dragon.name": "Name:",
   "dragon.unnamed": "Unnamed",
   "dragon.health": "Health:",
   "dragon.stage": "Stage",
