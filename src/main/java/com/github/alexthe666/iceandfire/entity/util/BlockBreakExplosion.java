@@ -47,7 +47,7 @@ public class BlockBreakExplosion extends Explosion {
     private Mode mode;
 
     public BlockBreakExplosion(World world, MobEntity entity, double x, double y, double z, float size) {
-        super(world, entity, x, y, z, size, false, Mode.DESTROY);
+        super(world, entity, null, null, x, y, z, size, false, Mode.DESTROY);
         this.affectedBlockPositions = Lists.newArrayList();
         this.playerKnockbackMap = Maps.newHashMap();
         this.world = world;
