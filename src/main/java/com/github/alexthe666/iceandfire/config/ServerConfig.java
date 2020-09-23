@@ -278,7 +278,7 @@ public class ServerConfig {
         this.spawnStymphalianBirds = buildBoolean(builder, "Spawn Stymphalian Birds", "all", true, "True if stymphalian birds are allowed to spawn");
         this.stymphalianBirdsDataTagDrops = buildBoolean(builder, "Stymphalian Birds drop ore dict items", "all", true, "True if stymphalian birds can drop items registered in the ore dictionary to ingotCopper, ingotBronze, nuggetCopper, nuggetBronze.");
         this.stympahlianBirdAttackAnimals = buildBoolean(builder, "Stymphalian Birds Target Animals", "all", false, "True if stymphalian birds are allowed to target and attack animals");
-        this.stymphalianBirdSpawnChance = buildInt(builder, "Spawn Stymhphalian Bird Chance", "all", 100, 1, 10000, "1 out of this number chance per chunk for generation");
+        this.stymphalianBirdSpawnChance = buildInt(builder, "Spawn Stymhphalian Bird Chance", "all", 80, 1, 10000, "1 out of this number chance per chunk for generation");
 
         this.spawnTrolls = buildBoolean(builder, "Spawn Trolls", "all", true, "True if trolls are allowed to spawn");
         this.trollsDropWeapon = buildBoolean(builder, "Trolls Drop Weapon", "all", true, "True if trolls are allowed to drop their weapon on death.");
@@ -298,7 +298,7 @@ public class ServerConfig {
         this.experimentalPathFinder = buildBoolean(builder, "Experimental Dragon path Finder", "all", false, "Turning this to true simplifies the dragon's pathfinding process, making them dumber when finding a path, but better for servers with many loaded dragons.");
 
         this.spawnAmphitheres = buildBoolean(builder, "Spawn Amphitheres", "all", true, "True if amphitheres are allowed to spawn");
-        this.amphithereSpawnRate = buildInt(builder, "Amphithere Spawn Weight", "all", 5, 1, 10000, "Amphithere spawn weight. Lower = lower chance to spawn");
+        this.amphithereSpawnRate = buildInt(builder, "Amphithere Spawn Weight", "all", 10, 1, 10000, "Amphithere spawn weight. Lower = lower chance to spawn");
         this.amphithereVillagerSearchLength = buildInt(builder, "Amphithere Villager Search Length", "all", 64, 1, 10000, "How many blocks away can ampitheres detect villagers being hurt. Note that increasing this could cause lag.");
         this.amphithereTameTime = buildInt(builder, "Amphithere Tame Time", "all", 400, 1, 10000, "How many ticks it takes while riding an untamed amphithere to tame it.");
         this.amphithereFlightSpeed = buildDouble(builder, "Amphithere Flight Speed", "all", 1.75F, 0.0F, 3.0F, "How fast amphitheres fly.");
@@ -306,7 +306,7 @@ public class ServerConfig {
         this.amphithereAttackStrength = buildDouble(builder, "Amphithere Attack Strength", "all", 7, 1, 10000, "Amphithere attack strength");
 
         this.spawnSeaSerpents = buildBoolean(builder, "Spawn Sea Serpents", "all", true, "True if sea serpents are allowed to spawn");
-        this.seaSerpentSpawnChance = buildInt(builder, "Spawn Sea Serpent Chance", "all", 300, 1, 10000, "1 out of this number chance per chunk for generation");
+        this.seaSerpentSpawnChance = buildInt(builder, "Spawn Sea Serpent Chance", "all", 280, 1, 10000, "1 out of this number chance per chunk for generation");
         this.seaSerpentGriefing = buildBoolean(builder, "Sea Serpent Griefing", "all", true, "Whether or not sea serpents can break weak blocks in their way");
         this.seaSerpentBaseHealth = buildDouble(builder, "Sea Serpent Base Health", "all", 20, 1, 10000, "Default sea serpent health, this is scaled to the sea serpent's particular size");
         this.seaSerpentAttackStrength = buildDouble(builder, "Sea Serpent Base Attack Strength", "all", 4, 1, 10000, "Default sea serpent attack strength, this is scaled to the sea serpent's particular size");
@@ -325,7 +325,7 @@ public class ServerConfig {
 
         this.hydraMaxHealth = buildDouble(builder, "Hydra Max Health", "all", 250, 1, 10000, "Maximum hydra health");
         this.generateHydraCaves = buildBoolean(builder, "Generate Hydra Caves", "all", true, "True if hydra caves are allowed to generate");
-        this.generateHydraChance = buildInt(builder, "Hydra Caves Gen Chance", "all", 200, 1, 10000, "One out of this number chance per chunk to generate a hydra cave.");
+        this.generateHydraChance = buildInt(builder, "Hydra Caves Gen Chance", "all", 120, 1, 10000, "One out of this number chance per chunk to generate a hydra cave.");
 
         this.chunkLoadSummonCrystal = buildBoolean(builder, "Chunk Load Summon Crystal", "all", true, "True if the summon crystal can load chunks to find dragons.");
         this.dangerousWorldGenDistanceLimit = buildInt(builder, "Dangerous World Gen Dist From Spawn", "all", 1000, 1, 10000, "How far away dangerous structures(dragon roosts, cyclops caves, etc.) must be from spawn(0, 0).");

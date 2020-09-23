@@ -14,6 +14,7 @@ import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -110,8 +111,8 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
         }
         if (IafConfig.spawnHippocampus && BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN) && rand.nextInt(IafConfig.hippocampusSpawnChance + 1) == 0) {
             for (int i = 0; i < rand.nextInt(5); i++) {
-                BlockPos pos =oceanPos.add(rand.nextInt(10) - 5, rand.nextInt(30), rand.nextInt(10) - 5);
-                if (worldIn.getBlockState(pos).getMaterial() == Material.WATER) {
+                BlockPos pos = oceanPos.add(rand.nextInt(2) - 1, rand.nextInt(30), rand.nextInt(2) - 1);
+                if (worldIn.getFluidState(pos).getFluid() == Fluids.WATER) {
                     EntityHippocampus campus = IafEntityRegistry.HIPPOCAMPUS.create(worldIn.getWorld());
                     campus.setVariant(rand.nextInt(5));
                     campus.setLocationAndAngles(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0, 0);
@@ -123,7 +124,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
         }
         if (IafConfig.spawnSeaSerpents && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN) && rand.nextInt(IafConfig.seaSerpentSpawnChance + 1) == 0) {
             BlockPos pos =oceanPos.add(rand.nextInt(10) - 5, rand.nextInt(30), rand.nextInt(10) - 5);
-            if (worldIn.getBlockState(pos).getMaterial() == Material.WATER) {
+            if (worldIn.getFluidState(pos).getFluid() == Fluids.WATER) {
                 EntitySeaSerpent serpent = IafEntityRegistry.SEA_SERPENT.create(worldIn.getWorld());
                 serpent.onWorldSpawn(rand);
                 serpent.setLocationAndAngles(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0, 0);

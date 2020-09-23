@@ -60,10 +60,12 @@ public class GorgonTempleStructure extends ScatteredStructure<NoFeatureConfig> {
         }
 
         public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn) {
-            Rotation rotation = Rotation.values()[this.rand.nextInt(Rotation.values().length)];
-            BlockPos blockpos = new BlockPos(chunkX * 16, 90, chunkZ * 16);
-            GorgonTemplePiece.func_204760_a(templateManagerIn, blockpos, rotation, this.components, this.rand);
-            this.recalculateStructureSize();
+            if(IafConfig.spawnGorgons) {
+                Rotation rotation = Rotation.values()[this.rand.nextInt(Rotation.values().length)];
+                BlockPos blockpos = new BlockPos(chunkX * 16, 90, chunkZ * 16);
+                GorgonTemplePiece.func_204760_a(templateManagerIn, blockpos, rotation, this.components, this.rand);
+                this.recalculateStructureSize();
+            }
         }
     }
 
