@@ -402,6 +402,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         this.getAttribute(Attributes.field_233821_d_).setBaseValue(Math.min(0.25D, 0.15D * this.getSeaSerpentScale() * this.getAncientModifier()));
         this.getAttribute(Attributes.field_233823_f_).setBaseValue(Math.max(4, IafConfig.seaSerpentAttackStrength * this.getSeaSerpentScale() * this.getAncientModifier()));
         this.getAttribute(Attributes.field_233818_a_).setBaseValue(Math.max(10, IafConfig.seaSerpentBaseHealth * this.getSeaSerpentScale() * this.getAncientModifier()));
+        this.getAttribute(Attributes.field_233819_b_).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
         this.heal(30F * this.getSeaSerpentScale());
     }
 

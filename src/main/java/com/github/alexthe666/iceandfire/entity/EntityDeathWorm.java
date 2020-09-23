@@ -526,6 +526,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         this.getAttribute(Attributes.field_233821_d_).setBaseValue(Math.min(0.2D, 0.15D * this.getRenderScale()));
         this.getAttribute(Attributes.field_233823_f_).setBaseValue(Math.max(1, IafConfig.deathWormAttackStrength * this.getRenderScale()));
         this.getAttribute(Attributes.field_233818_a_).setBaseValue(Math.max(6, IafConfig.deathWormMaxHealth * this.getRenderScale()));
+        this.getAttribute(Attributes.field_233819_b_).setBaseValue(IafConfig.deathWormTargetSearchLength);
         this.setHealth((float) this.getAttribute(Attributes.field_233818_a_).getBaseValue());
     }
 

@@ -819,6 +819,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
             this.getAttribute(Attributes.field_233821_d_).setBaseValue(minimumSpeed + (speedStep * this.getAgeInDays()));
             double oldValue = minimumArmor + (armorStep * this.getAgeInDays());
             this.getAttribute(Attributes.field_233826_i_).setBaseValue(oldValue + calculateArmorModifier());
+            this.getAttribute(Attributes.field_233819_b_).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
         }
     }
 
