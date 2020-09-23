@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.message;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.event.ServerEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -67,7 +68,7 @@ public class MessageDragonControl {
             if (player != null) {
                 if (player.world != null) {
                     Entity entity = player.world.getEntityByID(message.dragonId);
-                    if (entity.isRidingOrBeingRiddenBy(player)) {
+                    if (ServerEvents.isRidingOrBeingRiddenBy(entity, player)) {
                         if (entity != null && entity instanceof EntityDragonBase) {
                             EntityDragonBase dragon = (EntityDragonBase) entity;
                             if (dragon.isOwner(player)) {
