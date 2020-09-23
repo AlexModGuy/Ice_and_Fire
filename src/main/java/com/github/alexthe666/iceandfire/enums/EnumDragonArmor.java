@@ -74,23 +74,16 @@ public enum EnumDragonArmor {
                 return IafItemRegistry.DRAGONSCALES_SAPPHIRE;
             case armor_silver:
                 return IafItemRegistry.DRAGONSCALES_SILVER;
+            case armor_electric:
+                return IafItemRegistry.DRAGONSCALES_ELECTRIC;
+            case armor_amythest:
+                return IafItemRegistry.DRAGONSCALES_AMYTHEST;
+            case armor_copper:
+                return IafItemRegistry.DRAGONSCALES_COPPER;
+            case armor_black:
+                return IafItemRegistry.DRAGONSCALES_BLACK;
             default:
                 return IafItemRegistry.DRAGONSCALES_RED;
-        }
-    }
-
-    public static Item getEggItem(EnumDragonArmor armor) {
-        switch (armor) {
-            case armor_red:
-                return IafItemRegistry.DRAGONEGG_RED;
-            case armor_bronze:
-                return IafItemRegistry.DRAGONEGG_BRONZE;
-            case armor_green:
-                return IafItemRegistry.DRAGONEGG_GREEN;
-            case armor_gray:
-                return IafItemRegistry.DRAGONEGG_GRAY;
-            default:
-                return IafItemRegistry.DRAGONEGG_RED;
         }
     }
 }
