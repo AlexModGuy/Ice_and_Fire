@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity.util;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import com.google.common.base.Predicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -17,6 +18,7 @@ import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.passive.horse.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -254,8 +256,7 @@ public class DragonUtils {
     }
 
     public static boolean canTameDragonAttack(TameableEntity dragon, Entity entity) {
-        String className = entity.getClass().getSimpleName();
-        if (className.contains("VillagerMCA") || className.contains("MillVillager") || className.contains("Citizen")) {
+        if (EntityTypeTags.getCollection().getOrCreate(IafTagRegistry.VILLAGERS).contains(entity.getType())) {
             return false;
         }
         if (entity instanceof AbstractVillagerEntity || entity instanceof GolemEntity || entity instanceof PlayerEntity) {
@@ -268,23 +269,15 @@ public class DragonUtils {
     }
 
     public static boolean isVillager(Entity entity) {
-        String className = entity.getClass().getSimpleName();
-        return entity instanceof IMerchant || className.contains("VillagerMCA") || className.contains("MillVillager") || className.contains("Citizen");
+        return EntityTypeTags.getCollection().getOrCreate(IafTagRegistry.VILLAGERS).contains(entity.getType());
     }
 
     public static boolean isAnimaniaMob(Entity entity) {
-        String className = entity.getClass().getCanonicalName().toLowerCase();
-        return className.contains("animania");
+        return false;
     }
 
-    public static boolean isLivestock(Entity entity) {
-        String className = entity.getClass().getSimpleName();
-        return entity instanceof CowEntity || entity instanceof SheepEntity || entity instanceof PigEntity || entity instanceof ChickenEntity
-                || entity instanceof RabbitEntity || entity instanceof AbstractHorseEntity
-                || className.contains("Cow") || className.contains("Sheep") || className.contains("Pig") || className.contains("Chicken")
-                || className.contains("Rabbit") || className.contains("Peacock") || className.contains("Goat") || className.contains("Ferret")
-                || className.contains("Hedgehog") || className.contains("Peahen") || className.contains("Peafowl") || className.contains("Sow")
-                || className.contains("Hog") || className.contains("Hog");
+    public static boolean isDragonTargetable(Entity entity) {
+        return EntityTypeTags.getCollection().getOrCreate(IafTagRegistry.DRAGON_TARGETS).contains(entity.getType());
     }
 
     public static boolean canDragonBreak(Block block) {

@@ -86,7 +86,7 @@ public class EntityLightningDragon extends EntityDragonBase {
         if(entity instanceof EntityDragonBase && !this.isTamed()){
             return entity.getType() != this.getType() && this.getWidth() >= entity.getWidth() && !((EntityDragonBase) entity).isMobDead();
         }
-        return entity instanceof PlayerEntity || DragonUtils.isLivestock(entity) || !this.isTamed() && DragonUtils.isVillager(entity);
+        return entity instanceof PlayerEntity || DragonUtils.isDragonTargetable(entity) || !this.isTamed() && DragonUtils.isVillager(entity);
     }
 
     public boolean isTimeToWake() {

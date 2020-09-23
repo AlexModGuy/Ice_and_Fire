@@ -1,0 +1,31 @@
+{
+  "__comment": "all animal (non villager, non player) mobs that dragons will target.",
+  "replace": false,
+  "values": [
+    "minecraft:cow",
+    "minecraft:sheep",
+    "minecraft:pig",
+    "minecraft:chicken",
+    "minecraft:fox",
+    "minecraft:horse",
+    "minecraft:mooshroom",
+    "minecraft:ocelot",
+    "minecraft:llama",
+    "minecraft:panda",
+    "minecraft:parrot",
+    "minecraft:polar_bear",
+    "minecraft:rabbit",
+    "minecraft:trader_llama",
+    "minecraft:wolf",
+    "minecraft:turtle",
+    "minecraft:dolphin",
+    "minecraft:cod",
+    "minecraft:pufferfish",
+    "minecraft:salmon",
+    "minecraft:tropical_fish",
+    "minecraft:salmon",
+    "minecraft:cat",
+    "minecraft:pillager",
+    "minecraft:cat"
+  ]
+}
