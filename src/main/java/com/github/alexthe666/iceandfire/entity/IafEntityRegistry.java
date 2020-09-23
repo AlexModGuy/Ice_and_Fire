@@ -147,6 +147,7 @@ public class IafEntityRegistry {
         GlobalEntityTypeAttributes.put(LIGHTNING_DRAGON, EntityLightningDragon.bakeAttributes().func_233813_a_());
         GlobalEntityTypeAttributes.put(HIPPOGRYPH, EntityHippogryph.bakeAttributes().func_233813_a_());
         GlobalEntityTypeAttributes.put(GORGON, EntityGorgon.bakeAttributes().func_233813_a_());
+        GlobalEntityTypeAttributes.put(STONE_STATUE, EntityStoneStatue.bakeAttributes().func_233813_a_());
         GlobalEntityTypeAttributes.put(PIXIE, EntityPixie.bakeAttributes().func_233813_a_());
         GlobalEntityTypeAttributes.put(CYCLOPS, EntityCyclops.bakeAttributes().func_233813_a_());
         GlobalEntityTypeAttributes.put(SIREN, EntitySiren.bakeAttributes().func_233813_a_());

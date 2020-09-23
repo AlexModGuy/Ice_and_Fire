@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.IafConfig;
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
@@ -94,6 +95,7 @@ public class WorldGenFireDragonCave extends Feature<NoFeatureConfig> {
         dragon.homePos = position;
         dragon.setHunger(50);
         worldIn.addEntity(dragon);
+
         return false;
     }
 

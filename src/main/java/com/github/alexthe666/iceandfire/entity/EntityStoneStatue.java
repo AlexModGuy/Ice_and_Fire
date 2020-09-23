@@ -1,10 +1,14 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -24,6 +28,15 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
         super(t, worldIn);
     }
 
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, 20)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.0D)
+                //ATTACK
+                .func_233815_a_(Attributes.field_233823_f_, 1.0D);
+    }
 
     @Nullable
     public AxisAlignedBB getCollisionBox(Entity entityIn) {
