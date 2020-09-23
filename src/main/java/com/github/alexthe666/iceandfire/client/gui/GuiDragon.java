@@ -93,7 +93,7 @@ public class GuiDragon extends ContainerScreen<ContainerDragon> {
             int l = (this.field_230709_l_ - this.ySize) / 2;
 
             FontRenderer font = this.getMinecraft().fontRenderer;
-            String s3 = dragon.getCustomName() == null ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + dragon.getCustomName().getString();
+            String s3 = dragon.getCustomName() == null ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + " " + dragon.getCustomName().getString();
             font.func_238421_b_(matrixStack,s3, k + this.xSize / 2 - font.getStringWidth(s3) / 2, l + 75, 0XFFFFFF);
             String s2 = StatCollector.translateToLocal("dragon.health") + " " + Math.floor(Math.min(dragon.getHealth(), dragon.getMaxHealth())) + " / " + dragon.getMaxHealth();
             font.func_238421_b_(matrixStack,s2, k + this.xSize / 2 - font.getStringWidth(s2) / 2, l + 84, 0XFFFFFF);
