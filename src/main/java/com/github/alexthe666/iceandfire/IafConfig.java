@@ -80,7 +80,7 @@ public class IafConfig {
     public static boolean sirenShader = true;
     public static int sirenMaxSingTime = 12000;
     public static int sirenTimeBetweenSongs = 2000;
-    public static int generateSirenChance = 600;
+    public static int generateSirenChance = 400;
     public static boolean spawnHippocampus = true;
     public static int hippocampusSpawnChance = 70;
     public static int deathWormTargetSearchLength = 64;

@@ -165,7 +165,7 @@ public class IafWorldRegistry {
 
     public static boolean isFarEnoughFromSpawn(IWorld world, BlockPos pos) {
         BlockPos spawnRelative = new BlockPos(0, pos.getY(), 0);
-        boolean spawnCheck = spawnRelative.distanceSq(pos) > IafConfig.dangerousWorldGenDistanceLimit * IafConfig.dangerousWorldGenDistanceLimit;
+        boolean spawnCheck = !spawnRelative.withinDistance(pos, IafConfig.dangerousWorldGenDistanceLimit);
         return spawnCheck;
     }
 

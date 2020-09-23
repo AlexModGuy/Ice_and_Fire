@@ -247,7 +247,7 @@ public class ServerConfig {
         this.sirenMaxHealth = buildDouble(builder, "Siren Max Health", "all", 50, 1, 10000, "Maximum siren health");
         this.generateSirenIslands = buildBoolean(builder, "Spawn Sirens", "all", true, "True if siren islands are allowed to spawn");
         this.sirenShader = buildBoolean(builder, "Use Siren Shader", "all", true, "True to make the screen pink when sirens attract players");
-        this.generateSirenChance = buildInt(builder, "Spawn Sirens Chance", "all", 600, 1, 10000, "1 out of this number chance per chunk for generation");
+        this.generateSirenChance = buildInt(builder, "Spawn Sirens Chance", "all", 400, 1, 10000, "1 out of this number chance per chunk for generation");
         this.sirenMaxSingTime = buildInt(builder, "Siren Max Sing Time", "all", 12000, 100, 24000, "how long(in ticks) can a siren use its sing effect on a player, without a cooldown.");
         this.sirenTimeBetweenSongs = buildInt(builder, "Siren Time Between Songs", "all", 2000, 100, 24000, "how long(in ticks) a siren has to wait after failing to lure in a player");
 

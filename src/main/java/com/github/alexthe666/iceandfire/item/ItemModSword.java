@@ -50,6 +50,9 @@ public class ItemModSword extends SwordItem {
             if (target instanceof EntityDeathWorm) {
                 target.attackEntityFrom(DamageSource.GENERIC, this.getAttackDamage() + 5F);
             }
+            if(this == IafItemRegistry.MYRMEX_DESERT_SWORD_VENOM || this == IafItemRegistry.MYRMEX_JUNGLE_SWORD_VENOM){
+                target.addPotionEffect(new EffectInstance(Effects.POISON, 200, 1));
+            }
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_FIRE_TOOL_MATERIAL) {
             target.setFire(15);

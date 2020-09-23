@@ -60,7 +60,7 @@ public class MausoleumPiece {
             this.template = p_i48904_1_.getTemplate(PART_1);
             this.random = new Random();
             this.manager = p_i48904_1_;
-            this.firstPos = new BlockPos(p_i48904_3_);
+            this.firstPos = new BlockPos(templatePosition);
         }
 
         public Piece(TemplateManager p_i50445_1_, CompoundNBT p_i50445_2_) {
@@ -83,6 +83,7 @@ public class MausoleumPiece {
             Template lvt_2_1_ = p_204754_1_.getTemplateDefaulted(PART_1);
             PlacementSettings lvt_3_1_ = (new PlacementSettings()).setRotation(this.rotation).setMirror(Mirror.NONE);
             this.setup(lvt_2_1_, this.templatePosition, lvt_3_1_);
+            this.firstPos = new BlockPos(templatePosition);
         }
 
         protected void handleDataMarker(String function, BlockPos pos, IWorld worldIn, Random rand, MutableBoundingBox sbb) {
