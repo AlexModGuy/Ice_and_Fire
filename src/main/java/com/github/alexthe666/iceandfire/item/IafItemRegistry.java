@@ -35,9 +35,9 @@ public class IafItemRegistry {
     public static CustomArmorMaterial TROLL_MOUNTAIN_ARMOR_MATERIAL = new IafArmorMaterial("mountain troll", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
     public static CustomArmorMaterial TROLL_FOREST_ARMOR_MATERIAL = new IafArmorMaterial("forest troll", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
     public static CustomArmorMaterial TROLL_FROST_ARMOR_MATERIAL = new IafArmorMaterial("frost troll", 20, new int[]{2, 5, 7, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1F);
-    public static CustomArmorMaterial DRAGONSTEEL_FIRE_ARMOR_MATERIAL = new IafArmorMaterial("dragonsteel fire", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
-    public static CustomArmorMaterial DRAGONSTEEL_ICE_ARMOR_MATERIAL = new IafArmorMaterial("dragonsteel_ice", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
-    public static CustomArmorMaterial DRAGONSTEEL_LIGHTNING_ARMOR_MATERIAL = new IafArmorMaterial("dragonsteel_lightning", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
+    public static CustomArmorMaterial DRAGONSTEEL_FIRE_ARMOR_MATERIAL = new DragonsteelArmorMaterial("dragonsteel fire", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
+    public static CustomArmorMaterial DRAGONSTEEL_ICE_ARMOR_MATERIAL = new DragonsteelArmorMaterial("dragonsteel_ice", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
+    public static CustomArmorMaterial DRAGONSTEEL_LIGHTNING_ARMOR_MATERIAL = new DragonsteelArmorMaterial("dragonsteel_lightning", (int) (0.02D * IafConfig.dragonsteelBaseDurability), new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5}, 30, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6.0F);
     public static CustomToolMaterial SILVER_TOOL_MATERIAL = new CustomToolMaterial("silver", 2, 460, 1.0F, 11.0F, 18);
     public static CustomToolMaterial COPPER_TOOL_MATERIAL = new CustomToolMaterial("copper", 2, 300, 0.0F, 0.7F, 10);
     public static CustomToolMaterial DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("Dragonbone", 4, 1660, 4.0F, 10.0F, 22);
@@ -46,16 +46,16 @@ public class IafItemRegistry {
     public static CustomToolMaterial LIGHTNING_DRAGONBONE_TOOL_MATERIAL = new CustomToolMaterial("LightningDragonbone", 4, 2000, 5.5F, 10F, 22);
     public static CustomToolMaterial TROLL_WEAPON_TOOL_MATERIAL = new CustomToolMaterial("trollWeapon", 2, 300, 1F, 10F, 1);
     public static CustomToolMaterial MYRMEX_CHITIN_TOOL_MATERIAL = new CustomToolMaterial("MyrmexChitin", 3, 600, 1.0F, 6.0F, 8);
-    public static CustomToolMaterial DRAGONSTEEL_FIRE_TOOL_MATERIAL = new CustomToolMaterial("DragonsteelFire", 5, IafConfig.dragonsteelBaseDurability, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10F, 10);
-    public static CustomToolMaterial DRAGONSTEEL_ICE_TOOL_MATERIAL = new CustomToolMaterial("DragonsteelIce", 5, IafConfig.dragonsteelBaseDurability, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10F, 10);
-    public static CustomToolMaterial DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL = new CustomToolMaterial("DragonsteelLightning", 5, IafConfig.dragonsteelBaseDurability, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10F, 10);
+    public static CustomToolMaterial DRAGONSTEEL_FIRE_TOOL_MATERIAL = new DragonsteelToolMaterial("DragonsteelFire", 5, IafConfig.dragonsteelBaseDurability, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10F, 10);
+    public static CustomToolMaterial DRAGONSTEEL_ICE_TOOL_MATERIAL = new DragonsteelToolMaterial("DragonsteelIce", 5, IafConfig.dragonsteelBaseDurability, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10F, 10);
+    public static CustomToolMaterial DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL = new DragonsteelToolMaterial("DragonsteelLightning", 5, IafConfig.dragonsteelBaseDurability, (float) IafConfig.dragonsteelBaseDamage - 4.0F, 10F, 10);
     public static CustomToolMaterial HIPPOGRYPH_SWORD_TOOL_MATERIAL = new CustomToolMaterial("HippogryphSword", 2, 500, 2.5F, 10F, 10);
     public static CustomToolMaterial STYMHALIAN_SWORD_TOOL_MATERIAL = new CustomToolMaterial("StymphalianSword", 2, 500, 2, 10.0F, 10);
     public static CustomToolMaterial AMPHITHERE_SWORD_TOOL_MATERIAL = new CustomToolMaterial("AmphithereSword", 2, 500, 1F, 10F, 10);
     public static CustomToolMaterial HIPPOCAMPUS_SWORD_TOOL_MATERIAL = new CustomToolMaterial("HippocampusSword", 0, 500, -2F, 0F, 50);
     public static CustomToolMaterial DREAD_SWORD_TOOL_MATERIAL = new CustomToolMaterial("DreadSword", 0, 100, 1F, 10F, 0);
     public static CustomToolMaterial DREAD_KNIGHT_TOOL_MATERIAL = new CustomToolMaterial("DreadKnightSword", 0, 1200, 13F, 0F, 10);
-    public static CustomToolMaterial DREAD_QUEEN_SWORD_TOOL_MATERIAL = new CustomToolMaterial("DreadQueenSword", 0, IafConfig.dragonsteelBaseDurability, (float) IafConfig.dragonsteelBaseDamage, 10F, 10);
+    public static CustomToolMaterial DREAD_QUEEN_SWORD_TOOL_MATERIAL = new DragonsteelToolMaterial("DreadQueenSword", 0, IafConfig.dragonsteelBaseDurability, (float) IafConfig.dragonsteelBaseDamage, 10F, 10);
 
     public static final Item BESTIARY = new ItemBestiary();
     public static final Item MANUSCRIPT = new ItemGeneric("manuscript");
