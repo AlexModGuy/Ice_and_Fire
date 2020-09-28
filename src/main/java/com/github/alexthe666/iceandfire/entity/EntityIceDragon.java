@@ -484,7 +484,7 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     public boolean isBreedingItem(@Nullable ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.FROST_STEW;
+        return !stack.isEmpty()  && this.getDragonStage() >= 4 && stack.getItem() != null && stack.getItem() == IafItemRegistry.FROST_STEW;
     }
 
     @Override

@@ -405,7 +405,7 @@ public class EntityFireDragon extends EntityDragonBase {
     }
 
     public boolean isBreedingItem(ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.FIRE_STEW;
+        return !stack.isEmpty() && this.getDragonStage() >= 4 && stack.getItem() != null && stack.getItem() == IafItemRegistry.FIRE_STEW;
     }
 
     protected void spawnDeathParticles() {
