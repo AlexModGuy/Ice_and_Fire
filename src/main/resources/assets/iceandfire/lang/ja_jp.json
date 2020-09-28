@@ -596,7 +596,7 @@
   "dragon.fire": "ファイア",
   "dragon.ice": "アイス",
   "dragon.lightning": "ライトニング",
-  "dragon.name": "名前:",
+  "dragon": "名前:",
   "dragon.unnamed": "未命名",
   "dragon.health": "体力:",
   "dragon.stage": "ステージ",
@@ -1013,7 +1013,7 @@
   "block.minecraft.banner.lightning_head.green": "Green Lightning Dragon Head",
   "block.minecraft.banner.lightning_head.red": "Red Lightning Dragon Head",
   "block.minecraft.banner.lightning_head.black": "Black Lightning Dragon Head",
-  
+
   "block.minecraft.banner.gorgon.white": "White Gorgon",
   "block.minecraft.banner.gorgon.orange": "Orange Gorgon",
   "block.minecraft.banner.gorgon.magenta": "Magenta Gorgon",
