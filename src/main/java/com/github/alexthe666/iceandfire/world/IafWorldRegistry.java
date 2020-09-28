@@ -76,8 +76,8 @@ public class IafWorldRegistry {
         GORGON_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece", GorgonTemplePiece.Piece::new);
         GORGON_TEMPLE = Registry.register(Registry.STRUCTURE_FEATURE, "iceandfire:gorgon_temple", GORGON_TEMPLE);
         putStructureOnAList("iceandfire:gorgon_temple", GORGON_TEMPLE);
-        addStructureSeperation(DimensionSettings.Preset.field_236122_b_, GORGON_TEMPLE, new StructureSeparationSettings(15, 7, 34222645));
-        addStructureSeperation(DimensionSettings.Preset.field_236122_b_, MAUSOLEUM, new StructureSeparationSettings(8, 4, 34222645));
+        addStructureSeperation(DimensionSettings.Preset.field_236122_b_, GORGON_TEMPLE, new StructureSeparationSettings(Math.max(IafConfig.spawnGorgonsChance, 2), Math.max(IafConfig.spawnGorgonsChance / 2, 1), 34222645));
+        addStructureSeperation(DimensionSettings.Preset.field_236122_b_, MAUSOLEUM, new StructureSeparationSettings(Math.max(IafConfig.generateMausoleumChance, 2), Math.max(IafConfig.generateMausoleumChance / 2, 1), 34222645));
     }
 
     public static void addStructureSeperation(DimensionSettings.Preset preset, Structure structure, StructureSeparationSettings settings) {
