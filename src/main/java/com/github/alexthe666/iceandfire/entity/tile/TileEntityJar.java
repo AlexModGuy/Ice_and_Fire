@@ -147,7 +147,7 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
     public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
         if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             return downHandler.cast();
-        return null;
+        return super.getCapability(capability, facing);
     }
 
     private float updateRotation(float float1, float float2, float float3) {
