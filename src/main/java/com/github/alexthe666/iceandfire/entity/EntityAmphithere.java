@@ -38,10 +38,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -118,7 +115,23 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
 
     public static boolean canAmphithereSpawnOn(EntityType<EntityAmphithere> p_223317_0_, IWorld p_223317_1_, SpawnReason reason, BlockPos p_223317_3_, Random p_223317_4_) {
         Block block = p_223317_1_.getBlockState(p_223317_3_.down()).getBlock();
-        return (block.isIn(BlockTags.LEAVES) || block == Blocks.GRASS_BLOCK || block.isIn(BlockTags.LOGS) || block == Blocks.AIR) && p_223317_1_.getLightSubtracted(p_223317_3_, 0) > 8;
+        return (block.isIn(BlockTags.LEAVES) || block == Blocks.GRASS_BLOCK || block.isIn(BlockTags.LOGS) || block == Blocks.AIR);
+    }
+
+    public boolean isNotColliding(IWorldReader worldIn) {
+        if (worldIn.checkNoEntityCollision(this) && !worldIn.containsAnyLiquid(this.getBoundingBox())) {
+            BlockPos blockpos = this.func_233580_cy_();
+            if (blockpos.getY() < worldIn.getSeaLevel()) {
+                return false;
+            }
+
+            BlockState blockstate = worldIn.getBlockState(blockpos.down());
+            if (blockstate.isIn(Blocks.GRASS_BLOCK) || blockstate.func_235714_a_(BlockTags.LEAVES)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static BlockPos getPositionInOrbit(EntityAmphithere entity, World world, BlockPos orbit, Random rand) {

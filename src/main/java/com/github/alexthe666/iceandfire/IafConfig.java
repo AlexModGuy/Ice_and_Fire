@@ -82,7 +82,7 @@ public class IafConfig {
     public static int sirenTimeBetweenSongs = 2000;
     public static int generateSirenChance = 400;
     public static boolean spawnHippocampus = true;
-    public static int hippocampusSpawnChance = 60;
+    public static int hippocampusSpawnChance = 40;
     public static int deathWormTargetSearchLength = 64;
     public static double deathWormMaxHealth = 10D;
     public static double deathWormAttackStrength = 3D;
@@ -123,7 +123,7 @@ public class IafConfig {
     public static double myrmexBaseAttackStrength = 3.0D;
     public static boolean experimentalPathFinder;
     public static boolean spawnAmphitheres = true;
-    public static int amphithereSpawnRate = 10;
+    public static int amphithereSpawnRate = 50;
     public static float amphithereVillagerSearchLength = 64;
     public static int amphithereTameTime = 400;
     public static double amphithereFlightSpeed = 1.75F;
