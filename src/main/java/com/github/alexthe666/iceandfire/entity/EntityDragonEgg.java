@@ -53,12 +53,15 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
         super.writeAdditional(tag);
         tag.putInt("Color", (byte) this.getEggType().ordinal());
         tag.putByte("DragonAge", (byte) this.getDragonAge());
-        if (this.getOwnerId() == null) {
-            tag.putString("OwnerUUID", "");
-        } else {
-            tag.putString("OwnerUUID", this.getOwnerId().toString());
-        }
+        try{
+            if (this.getOwnerId() == null) {
+                tag.putString("OwnerUUID", "");
+            } else {
+                tag.putString("OwnerUUID", this.getOwnerId().toString());
+            }
+        }catch (Exception e){
 
+        }
     }
 
     @Override
