@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -67,6 +68,10 @@ public class EntityLightningDragon extends EntityDragonBase {
         ANIMATION_ROAR = Animation.create(40);
         ANIMATION_EPIC_ROAR = Animation.create(60);
         this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
+    }
+
+    public void onStruckByLightning(LightningBoltEntity lightningBolt) {
+        this.heal(15F);
     }
 
     @Override
