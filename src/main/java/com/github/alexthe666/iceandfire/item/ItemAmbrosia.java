@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 public class ItemAmbrosia extends ItemGenericFood {
 
     public ItemAmbrosia() {
-        super(5, 0.6F, false, false, true, "ambrosia");
+        super(5, 0.6F, false, false, true, "ambrosia", 1);
     }
 
     public void onFoodEaten(ItemStack stack, World worldIn, LivingEntity livingEntity) {
