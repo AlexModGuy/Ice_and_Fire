@@ -19,6 +19,13 @@ public class ItemGenericFood extends Item {
         this.saturation = saturation;
     }
 
+    public ItemGenericFood(int amount, float saturation, boolean isWolfFood, boolean eatFast, boolean alwaysEdible, String name, int stackSize) {
+        super(new Item.Properties().food(createFood(amount, saturation, isWolfFood, eatFast, alwaysEdible, null)).maxStackSize(stackSize).group(IceAndFire.TAB_ITEMS));
+        this.setRegistryName(IceAndFire.MODID, name);
+        this.healAmount = amount;
+        this.saturation = saturation;
+    }
+
     public static final Food createFood(int amount, float saturation, boolean isWolfFood, boolean eatFast, boolean alwaysEdible, EffectInstance potion) {
         Food.Builder builder = new Food.Builder();
         builder.hunger(amount);
