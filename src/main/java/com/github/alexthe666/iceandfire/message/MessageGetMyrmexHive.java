@@ -10,13 +10,14 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public class MessageGetMyrmexHive {
 
-    public MyrmexHive hive;
+    public CompoundNBT hive;
 
-    public MessageGetMyrmexHive(MyrmexHive hive) {
+    public MessageGetMyrmexHive(CompoundNBT hive) {
         this.hive = hive;
     }
 
@@ -24,18 +25,11 @@ public class MessageGetMyrmexHive {
     }
 
     public static MessageGetMyrmexHive read(PacketBuffer buf) {
-        MessageGetMyrmexHive mesage = new MessageGetMyrmexHive();
-        mesage.hive = new MyrmexHive();
-        mesage.hive.readVillageDataFromNBT(PacketBufferUtils.readTag(buf));
-        return mesage;
+        return new MessageGetMyrmexHive(buf.readCompoundTag());
     }
 
     public static void write(MessageGetMyrmexHive message, PacketBuffer buf) {
-        CompoundNBT tag = new CompoundNBT();
-        if (message.hive != null) {
-            message.hive.writeVillageDataToNBT(tag);
-        }
-        PacketBufferUtils.writeTag(buf, tag);
+        buf.writeCompoundTag(message.hive);
     }
 
     public static class Handler {
@@ -43,25 +37,22 @@ public class MessageGetMyrmexHive {
         }
 
         public static void handle(MessageGetMyrmexHive message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
             PlayerEntity player = context.get().getSender();
+            MyrmexHive serverHive = MyrmexHive.fromNBT(message.hive);
+            CompoundNBT tag = new CompoundNBT();
+            serverHive.writeVillageDataToNBT(tag);
+            serverHive.readVillageDataFromNBT(tag);
+            IceAndFire.PROXY.setReferencedHive(serverHive);
+            context.get().setPacketHandled(true);
             if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
                 player = IceAndFire.PROXY.getClientSidePlayer();
-            }
-            if (player != null) {
-                IceAndFire.PROXY.setReferencedHive(message.hive);
-                if (player.world != null) {
-                    if(MyrmexWorldData.get(player.world) != null){
-                        MyrmexHive serverHive = MyrmexWorldData.get(player.world).getHiveFromUUID(message.hive.hiveUUID);
-                        if (serverHive != null) {
-                            CompoundNBT tag = new CompoundNBT();
-                            message.hive.writeVillageDataToNBT(tag);
-                            serverHive.readVillageDataFromNBT(tag);
-                        }
-                    }
-
+            }else{
+                if(MyrmexWorldData.get(player.world) != null){
+                    MyrmexHive realHive = MyrmexWorldData.get(player.world).getHiveFromUUID(serverHive.hiveUUID);
+                    realHive.readVillageDataFromNBT(serverHive.toNBT());
                 }
             }
+
         }
     }
 }

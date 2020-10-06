@@ -173,7 +173,7 @@ public class GuiMyrmexStaff extends Screen {
     }
 
     public void onClose() {
-        IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageGetMyrmexHive(ClientProxy.getReferedClientHive()));
+        IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageGetMyrmexHive(ClientProxy.getReferedClientHive().toNBT()));
         super.onClose();
     }
 

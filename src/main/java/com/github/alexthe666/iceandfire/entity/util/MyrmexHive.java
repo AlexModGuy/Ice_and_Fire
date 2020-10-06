@@ -270,7 +270,9 @@ public class MyrmexHive {
         this.numMyrmex = compound.getInt("PopSize");
         this.reproduces = compound.getBoolean("Reproduces");
         this.hasOwner = compound.getBoolean("HasOwner");
-        this.ownerUUID = compound.getUniqueId("OwnerUUID");
+        if(compound.hasUniqueId("OwnerUUID")){
+            this.ownerUUID = compound.getUniqueId("OwnerUUID");
+        }
         this.colonyName = compound.getString("ColonyName");
         this.villageRadius = compound.getInt("Radius");
         this.lastAddDoorTimestamp = compound.getInt("Stable");
@@ -413,7 +415,7 @@ public class MyrmexHive {
 
             try {
                 {
-                    CompoundNBT1.putString("UUID", s.toString());
+                    CompoundNBT1.putUniqueId("UUID", s);
                     CompoundNBT1.putInt("S", this.playerReputation.get(s).intValue());
                     nbttaglist1.add(CompoundNBT1);
                 }
@@ -592,6 +594,19 @@ public class MyrmexHive {
 
     public boolean equals(MyrmexHive hive) {
         return this.hiveUUID.equals(hive.hiveUUID);
+    }
+
+
+    public static MyrmexHive fromNBT(CompoundNBT hive) {
+        MyrmexHive hive1 = new MyrmexHive();
+        hive1.readVillageDataFromNBT(hive);
+        return hive1;
+    }
+
+    public CompoundNBT toNBT() {
+        CompoundNBT tag = new CompoundNBT();
+        this.writeVillageDataToNBT(tag);
+        return tag;
     }
 
     class HiveAggressor {
