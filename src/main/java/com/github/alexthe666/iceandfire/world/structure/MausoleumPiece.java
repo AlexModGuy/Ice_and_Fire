@@ -46,6 +46,7 @@ public class MausoleumPiece {
         private BlockPos firstPos = null;
 
         public boolean func_230383_a_(ISeedReader world, StructureManager p_230383_2_, ChunkGenerator p_230383_3_, Random p_230383_4_, MutableBoundingBox p_230383_5_, ChunkPos p_230383_6_, BlockPos p_230383_7_) {
+            p_230383_5_.expandTo(this.template.getMutableBoundingBox(this.placeSettings, this.templatePosition));
             int i = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, firstPos.getX(), firstPos.getZ());
             this.templatePosition = new BlockPos(this.templatePosition.getX(), i, this.templatePosition.getZ());
             return super.func_230383_a_(world, p_230383_2_, p_230383_3_, p_230383_4_, p_230383_5_, p_230383_6_, p_230383_7_);
@@ -81,7 +82,7 @@ public class MausoleumPiece {
 
         private void func_204754_a(TemplateManager p_204754_1_) {
             Template lvt_2_1_ = p_204754_1_.getTemplateDefaulted(PART_1);
-            PlacementSettings lvt_3_1_ = (new PlacementSettings()).setRotation(this.rotation).setMirror(Mirror.NONE);
+            PlacementSettings lvt_3_1_ = (new PlacementSettings()).setRotation(this.rotation).setMirror(Mirror.NONE).addProcessor(new DreadRuinProcessor());
             this.setup(lvt_2_1_, this.templatePosition, lvt_3_1_);
             this.firstPos = new BlockPos(templatePosition);
         }

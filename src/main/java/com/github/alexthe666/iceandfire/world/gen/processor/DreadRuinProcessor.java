@@ -39,7 +39,7 @@ public class DreadRuinProcessor extends StructureProcessor {
         }
     }
 
-    public Template.BlockInfo process(IWorldReader worldReader, BlockPos pos, Template.BlockInfo infoIn1, Template.BlockInfo infoIn2, PlacementSettings settings) {
+    public Template.BlockInfo func_230386_a_(IWorldReader worldReader, BlockPos pos, BlockPos pos2, Template.BlockInfo infoIn1, Template.BlockInfo infoIn2, PlacementSettings settings) {
         Random random = settings.getRandom(infoIn2.pos);
         if (random.nextFloat() <= integrity) {
             if (infoIn2.state.getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS) {
