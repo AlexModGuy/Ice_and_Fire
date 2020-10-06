@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -79,6 +80,10 @@ public class EntityLightningDragon extends EntityDragonBase {
 
     public int getStartMetaForType() {
         return 8;
+    }
+
+    public void onStruckByLightning(LightningBoltEntity lightningBolt) {
+        this.heal(15F);
     }
 
     @Override
