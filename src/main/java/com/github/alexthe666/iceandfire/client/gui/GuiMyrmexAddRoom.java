@@ -108,7 +108,7 @@ public class GuiMyrmexAddRoom extends Screen {
     }
 
     public void onGuiClosed() {
-        IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageGetMyrmexHive(ClientProxy.getReferedClientHive()));
+        IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageGetMyrmexHive(ClientProxy.getReferedClientHive().toNBT()));
     }
 
     public boolean isPauseScreen() {

@@ -53,7 +53,7 @@ public class ItemMyrmexStaff extends Item {
             MyrmexHive hive = MyrmexWorldData.get(worldIn).getHiveFromUUID(id);
             MyrmexWorldData.get(worldIn).addHive(worldIn, new MyrmexHive());
             if (hive != null) {
-                IceAndFire.sendMSGToAll(new MessageGetMyrmexHive(hive));
+                IceAndFire.sendMSGToAll(new MessageGetMyrmexHive(hive.toNBT()));
             } else {
                 IceAndFire.sendMSGToAll(new MessageSetMyrmexHiveNull());
             }
@@ -73,7 +73,7 @@ public class ItemMyrmexStaff extends Item {
             if (!context.getWorld().isRemote) {
                 MyrmexHive hive = MyrmexWorldData.get(context.getWorld()).getHiveFromUUID(id);
                 if (hive != null) {
-                    IceAndFire.sendMSGToAll(new MessageGetMyrmexHive(hive));
+                    IceAndFire.sendMSGToAll(new MessageGetMyrmexHive(hive.toNBT()));
                 } else {
                     IceAndFire.sendMSGToAll(new MessageSetMyrmexHiveNull());
                 }

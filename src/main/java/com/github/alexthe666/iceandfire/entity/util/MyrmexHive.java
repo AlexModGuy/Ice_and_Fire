@@ -74,6 +74,18 @@ public class MyrmexHive {
         return current;
     }
 
+    public static MyrmexHive fromNBT(CompoundNBT hive) {
+        MyrmexHive hive1 = new MyrmexHive();
+        hive1.readVillageDataFromNBT(hive);
+        return hive1;
+    }
+
+    public CompoundNBT toNBT() {
+        CompoundNBT tag = new CompoundNBT();
+        this.writeVillageDataToNBT(tag);
+        return tag;
+    }
+
     public void setWorld(World worldIn) {
         this.world = worldIn;
     }
@@ -269,7 +281,9 @@ public class MyrmexHive {
         this.numMyrmex = compound.getInt("PopSize");
         this.reproduces = compound.getBoolean("Reproduces");
         this.hasOwner = compound.getBoolean("HasOwner");
-        this.ownerUUID = compound.getUniqueId("OwnerUUID");
+        if(compound.hasUniqueId("OwnerUUID")){
+            this.ownerUUID = compound.getUniqueId("OwnerUUID");
+        }
         this.colonyName = compound.getString("ColonyName");
         this.villageRadius = compound.getInt("Radius");
         this.lastAddDoorTimestamp = compound.getInt("Stable");
@@ -316,11 +330,12 @@ public class MyrmexHive {
         }
         hiveUUID = compound.getUniqueId("HiveUUID");
         ListNBT nbttaglist1 = compound.getList("Players", 10);
+        this.playerReputation.clear();
         for (int j = 0; j < nbttaglist1.size(); ++j) {
             CompoundNBT CompoundNBT1 = nbttaglist1.getCompound(j);
 
             if (CompoundNBT1.hasUniqueId("UUID")) {
-                this.playerReputation.put(UUID.fromString(CompoundNBT1.getString("UUID")), Integer.valueOf(CompoundNBT1.getInt("S")));
+                this.playerReputation.put(CompoundNBT1.getUniqueId("UUID"), Integer.valueOf(CompoundNBT1.getInt("S")));
             } else {
                 //World is never set here, so this will always be offline UUIDs, sadly there is no way to convert this.
                 this.playerReputation.put(findUUID(CompoundNBT1.getString("Name")), Integer.valueOf(CompoundNBT1.getInt("S")));
@@ -412,7 +427,7 @@ public class MyrmexHive {
 
             try {
                 {
-                    CompoundNBT1.putString("UUID", s.toString());
+                    CompoundNBT1.putUniqueId("UUID", s);
                     CompoundNBT1.putInt("S", this.playerReputation.get(s).intValue());
                     nbttaglist1.add(CompoundNBT1);
                 }

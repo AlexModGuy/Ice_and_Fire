@@ -174,7 +174,9 @@ public class GuiMyrmexStaff extends Screen {
     }
 
     public void func_231164_f_() {
-        IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageGetMyrmexHive(ClientProxy.getReferedClientHive()));
+        if(ClientProxy.getReferedClientHive() != null){
+            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageGetMyrmexHive(ClientProxy.getReferedClientHive().toNBT()));
+        }
     }
 
 
