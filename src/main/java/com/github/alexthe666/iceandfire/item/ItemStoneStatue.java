@@ -66,8 +66,8 @@ public class ItemStoneStatue extends Item {
                     statue.smallArms = true;
                     if (!context.getWorld().isRemote) {
                         context.getWorld().addEntity(statue);
+                        statue.readAdditional(stack.getTag());
                     }
-                    statue.readAdditional(stack.getTag());
                     statue.setCrackAmount(0);
                     float yaw = MathHelper.wrapDegrees(context.getPlayer().rotationYaw + 180F);
                     statue.prevRotationYaw = yaw;
@@ -88,7 +88,12 @@ public class ItemStoneStatue extends Item {
                         entity.setLocationAndAngles(context.getPos().getX() + 0.5, context.getPos().getY() + 1, context.getPos().getZ() + 0.5, context.getPlayer().rotationYaw, 0);
                         world.addEntity(entity);
                         if (entity != null && entity instanceof LivingEntity) {
-                            ((LivingEntity) entity).readAdditional(stack.getTag());
+                            try{
+                                if(!world.isRemote){
+                                    ((LivingEntity) entity).readAdditional(stack.getTag());
+                                }
+                            }catch (Exception e){
+                            }
                             StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
                             properties.setStone(true);
                             float yaw = MathHelper.wrapDegrees(context.getPlayer().rotationYaw + 180F);
