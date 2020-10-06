@@ -42,8 +42,10 @@ public class GorgonTemplePiece  {
         private final Random random;
         private final TemplateManager manager;
         private BlockPos firstPos = null;
+        private boolean spawnedGorgon;
 
         public boolean func_225577_a_(IWorld world, ChunkGenerator<?> p_225577_2_, Random p_225577_3_, MutableBoundingBox p_225577_4_, ChunkPos p_225577_5_) {
+            p_225577_4_.expandTo(this.template.getMutableBoundingBox(this.placeSettings, this.templatePosition));
             int i = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, firstPos.getX(), firstPos.getZ());
             this.templatePosition = new BlockPos(this.templatePosition.getX(), i, this.templatePosition.getZ());
             return super.func_225577_a_(world, p_225577_2_, p_225577_3_, p_225577_4_, p_225577_5_);
@@ -88,11 +90,15 @@ public class GorgonTemplePiece  {
         protected void handleDataMarker(String function, BlockPos pos, IWorld worldIn, Random rand, MutableBoundingBox sbb) {
             if ("iceandfire:spawn_gorgon".equals(function)) {
                 worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
-                EntityGorgon gorgon = IafEntityRegistry.GORGON.create(worldIn.getWorld());
-                gorgon.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(pos), SpawnReason.SPAWNER, null, null);
-                gorgon.setPosition(pos.getX(), pos.getY(), pos.getZ());
-                gorgon.enablePersistence();
-                worldIn.addEntity(gorgon);
+                if(!spawnedGorgon){
+                    spawnedGorgon = true;
+                    EntityGorgon gorgon = IafEntityRegistry.GORGON.create(worldIn.getWorld());
+                    gorgon.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(pos), SpawnReason.SPAWNER, null, null);
+                    gorgon.setPosition(pos.getX(), pos.getY(), pos.getZ());
+                    gorgon.enablePersistence();
+                    worldIn.addEntity(gorgon);
+                }
+
             }
         }
     }
