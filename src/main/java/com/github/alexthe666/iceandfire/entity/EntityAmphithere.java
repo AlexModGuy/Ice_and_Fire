@@ -173,9 +173,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
 
     public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
-        if (super.func_230254_b_(player, hand) == ActionResultType.SUCCESS) {
-            return ActionResultType.SUCCESS;
-        }
+
         if (itemstack != null && itemstack.getItem() == Items.COOKIE) {
             if (this.getGrowingAge() == 0 && !isInLove()) {
                 this.setSitting(false);
@@ -195,7 +193,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
             }
             return ActionResultType.SUCCESS;
         }
-        if (super.func_230254_b_(player, hand) == ActionResultType.SUCCESS) {
+        if (super.func_230254_b_(player, hand) == ActionResultType.PASS) {
             if (itemstack != null && itemstack.getItem() == IafItemRegistry.DRAGON_STAFF && this.isOwner(player)) {
                 if (player.isSneaking()) {
                     BlockPos pos = this.func_233580_cy_();
