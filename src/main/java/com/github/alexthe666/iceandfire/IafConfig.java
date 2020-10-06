@@ -123,7 +123,7 @@ public class IafConfig {
     public static double myrmexBaseAttackStrength = 3.0D;
     public static boolean experimentalPathFinder;
     public static boolean spawnAmphitheres = true;
-    public static int amphithereSpawnRate = 10;
+    public static int amphithereSpawnRate = 50;
     public static float amphithereVillagerSearchLength = 64;
     public static int amphithereTameTime = 400;
     public static double amphithereFlightSpeed = 1.75F;

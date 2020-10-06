@@ -116,9 +116,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                     EntityHippocampus campus = IafEntityRegistry.HIPPOCAMPUS.create(worldIn.getWorld());
                     campus.setVariant(rand.nextInt(5));
                     campus.setLocationAndAngles(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0, 0);
-                    if (campus.isNotColliding(worldIn)) {
-                        worldIn.addEntity(campus);
-                    }
+                    worldIn.addEntity(campus);
                 }
             }
         }
@@ -134,12 +132,12 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
         if (IafConfig.spawnStymphalianBirds && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SWAMP) && rand.nextInt(IafConfig.stymphalianBirdSpawnChance + 1) == 0) {
             for (int i = 0; i < 4 + rand.nextInt(4); i++) {
                 BlockPos pos = position.add(rand.nextInt(10) - 5, 0, rand.nextInt(10) - 5);
+                pos = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);
                 if (worldIn.getBlockState(pos.down()).isSolid()) {
                     EntityStymphalianBird bird = IafEntityRegistry.STYMPHALIAN_BIRD.create(worldIn.getWorld());
-                    bird.setLocationAndAngles(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0, 0);
-                    if (bird.isNotColliding(worldIn)) {
-                        worldIn.addEntity(bird);
-                    }
+                    bird.setLocationAndAngles(pos.getX() + 0.5F, pos.getY() + 1.5F, pos.getZ() + 0.5F, 0, 0);
+                    worldIn.addEntity(bird);
+
                 }
             }
         }
