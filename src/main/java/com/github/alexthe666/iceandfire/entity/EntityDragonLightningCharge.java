@@ -62,7 +62,7 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
 
             ++this.ticksInAir;
             Vector3d Vector3d = this.getMotion();
-            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_, RayTraceContext.BlockMode.COLLIDER);
+            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
 
             if (raytraceresult != null) {
                 this.onImpact(raytraceresult);

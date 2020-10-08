@@ -85,7 +85,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
         return EntityGorgon.isStoneMob(this) || super.isAIDisabled();
     }
 
-    public static boolean canTrollSpawnOn(EntityType<? extends MobEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
+    public static boolean canTrollSpawnOn(EntityType<? extends MobEntity> typeIn, IServerWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
         BlockPos blockpos = pos.down();
         return reason == SpawnReason.SPAWNER || randomIn.nextInt(IafConfig.trollSpawnCheckChance) == 0 && worldIn.getBlockState(blockpos).canEntitySpawn(worldIn, blockpos, typeIn)  && isValidLightLevel(worldIn, pos, randomIn) && canSpawnOn(IafEntityRegistry.TROLL, worldIn, reason, pos, randomIn);
     }
@@ -189,7 +189,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
 
     @Override
     @Nullable
-    public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setTrollType(EnumTroll.getBiomeType(world.getBiome(this.func_233580_cy_())));
         this.setWeaponType(EnumTroll.getWeaponForType(this.getTrollType()));

@@ -513,8 +513,8 @@ public class IafDragonLogic {
                     int particle = 2;
                     IceAndFire.sendMSGToAll(new MessageSpawnParticleAt(point.x, point.y, point.z, particle));
                 }
-                if (currentPath.getCurrentPos() != null) {
-                    Vector3d point = Vector3d.func_237489_a_(currentPath.getCurrentPos());
+                if (currentPath.func_242948_g() != null) {
+                    Vector3d point = Vector3d.func_237489_a_(currentPath.func_242948_g());
                     int particle = 1;
                     IceAndFire.sendMSGToAll(new MessageSpawnParticleAt(point.x, point.y, point.z, particle));
 

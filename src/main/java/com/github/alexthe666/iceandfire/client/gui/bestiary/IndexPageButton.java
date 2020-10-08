@@ -30,7 +30,7 @@ public class IndexPageButton extends Button {
             boolean flag = mouseX >= this.field_230690_l_ && mouseY >= this.field_230691_m_ && mouseX < this.field_230690_l_ + this.field_230688_j_ && mouseY < this.field_230691_m_ + this.field_230689_k_;
             this.func_238474_b_(p_230430_1_, this.field_230690_l_, this.field_230691_m_, 0, flag ? 32 : 0, this.field_230688_j_, this.field_230689_k_);
             int j =  flag ? 0XFAE67D : 0X303030;
-            fontrenderer.func_238422_b_(p_230430_1_, this.func_230458_i_(), (this.field_230690_l_ + this.field_230688_j_ / 2  - fontrenderer.getStringWidth(this.func_230458_i_().getString()) / 2), this.field_230691_m_ + (this.field_230689_k_ - 8) / 2, j | MathHelper.ceil(this.field_230695_q_ * 255.0F) << 24);
+            fontrenderer.func_238422_b_(p_230430_1_, this.func_230458_i_().func_241878_f(), (this.field_230690_l_ + this.field_230688_j_ / 2  - fontrenderer.getStringWidth(this.func_230458_i_().getString()) / 2), this.field_230691_m_ + (this.field_230689_k_ - 8) / 2, j | MathHelper.ceil(this.field_230695_q_ * 255.0F) << 24);
         }
     }
 }

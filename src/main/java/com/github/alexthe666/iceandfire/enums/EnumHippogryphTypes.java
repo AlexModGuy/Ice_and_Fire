@@ -1,32 +1,30 @@
 package com.github.alexthe666.iceandfire.enums;
 
+import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public enum EnumHippogryphTypes {
-    BLACK(false, BiomeDictionary.Type.DRY, BiomeDictionary.Type.HOT, BiomeDictionary.Type.SANDY),
-    BROWN(false, BiomeDictionary.Type.MOUNTAIN),
-    GRAY(false, BiomeDictionary.Type.SPOOKY, BiomeDictionary.Type.DENSE, BiomeDictionary.Type.FOREST),
-    CHESTNUT(false, BiomeDictionary.Type.FOREST),
-    CREAMY(false, BiomeDictionary.Type.SAVANNA),
-    DARK_BROWN(false, BiomeDictionary.Type.CONIFEROUS),
-    WHITE(false, BiomeDictionary.Type.SNOWY),
+    BLACK(false),
+    BROWN(false),
+    GRAY(false),
+    CHESTNUT(false),
+    CREAMY(false),
+    DARK_BROWN(false),
+    WHITE(false),
     RAPTOR(true),
     ALEX(true),
     DODO(true);
 
     public boolean developer;
-    public BiomeDictionary.Type[] spawnBiomes;
     public ResourceLocation TEXTURE;
     public ResourceLocation TEXTURE_BLINK;
 
-    EnumHippogryphTypes(boolean developer, BiomeDictionary.Type... biomes) {
-        this.spawnBiomes = biomes;
+    EnumHippogryphTypes(boolean developer) {
         this.developer = developer;
         this.TEXTURE = new ResourceLocation("iceandfire:textures/models/hippogryph/" + name().toLowerCase() + ".png");
         this.TEXTURE_BLINK = new ResourceLocation("iceandfire:textures/models/hippogryph/" + name().toLowerCase() + "_blink.png");
@@ -43,12 +41,26 @@ public enum EnumHippogryphTypes {
 
     public static EnumHippogryphTypes getBiomeType(Biome biome) {
         List<EnumHippogryphTypes> types = new ArrayList<EnumHippogryphTypes>();
-        for (EnumHippogryphTypes type : getWildTypes()) {
-            for (BiomeDictionary.Type biomeTypes : type.spawnBiomes) {
-                if (BiomeDictionary.hasType(biome, biomeTypes)) {
-                    types.add(type);
-                }
-            }
+        if (BiomeConfig.blackHippogryphBiomes.contains(biome.getRegistryName().toString())) {
+            types.add(BLACK);
+        }
+        if (BiomeConfig.brownHippogryphBiomes.contains(biome.getRegistryName().toString())) {
+            types.add(BROWN);
+        }
+        if (BiomeConfig.grayHippogryphBiomes.contains(biome.getRegistryName().toString())) {
+            types.add(BROWN);
+        }
+        if (BiomeConfig.chestnutHippogryphBiomes.contains(biome.getRegistryName().toString())) {
+            types.add(CHESTNUT);
+        }
+        if (BiomeConfig.creamyHippogryphBiomes.contains(biome.getRegistryName().toString())) {
+            types.add(CREAMY);
+        }
+        if (BiomeConfig.darkBrownHippogryphBiomes.contains(biome.getRegistryName().toString())) {
+            types.add(DARK_BROWN);
+        }
+        if (BiomeConfig.whiteHippogryphBiomes.contains(biome.getRegistryName().toString())) {
+            types.add(WHITE);
         }
         if (types.isEmpty()) {
             return getRandomType();

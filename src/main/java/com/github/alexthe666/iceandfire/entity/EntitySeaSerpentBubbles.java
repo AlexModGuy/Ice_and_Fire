@@ -76,7 +76,7 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
         if (this.world.isRemote || (shootingEntity == null || !shootingEntity.isAlive()) && this.world.isBlockLoaded(this.func_233580_cy_())) {
             if (this.world.isRemote || (shootingEntity == null || !shootingEntity.removed) && this.world.isBlockLoaded(this.func_233580_cy_())) {
                 ++this.ticksInAir;
-                RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_, RayTraceContext.BlockMode.COLLIDER);
+                RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
                 if (raytraceresult.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                     this.onImpact(raytraceresult);
                 }
@@ -100,7 +100,7 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
             }
             ++this.ticksInAir;
             Vector3d Vector3d = this.getMotion();
-            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_, RayTraceContext.BlockMode.COLLIDER);
+            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
 
             if (raytraceresult != null) {
                 this.onImpact(raytraceresult);

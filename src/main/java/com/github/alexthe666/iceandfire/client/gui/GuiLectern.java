@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
@@ -220,16 +221,16 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
             int i1 = 3;
 
             if (this.isPointInRegion(60, 14 + 19 * j, 108, 17, mouseX, mouseY) && k > 0) {
-                List<ITextProperties> list = Lists.newArrayList();
+                List<IReorderingProcessor> list = Lists.newArrayList();
 
                 if (enchantment == null) {
-                    list.add(new StringTextComponent(TextFormatting.RED + I18n.format("container.lectern.no_bestiary")));
+                    list.add(new StringTextComponent(TextFormatting.RED + I18n.format("container.lectern.no_bestiary")).func_241878_f());
                 } else if (!flag) {
-                    list.add(new StringTextComponent("" + TextFormatting.WHITE + TextFormatting.ITALIC + I18n.format(enchantment == null ? "" : "bestiary." + enchantment.name().toLowerCase())));
+                    list.add(new StringTextComponent("" + TextFormatting.WHITE + TextFormatting.ITALIC + I18n.format(enchantment == null ? "" : "bestiary." + enchantment.name().toLowerCase())).func_241878_f());
                     TextFormatting textformatting = i >= i1 ? TextFormatting.GRAY : TextFormatting.RED;
-                    list.add(new StringTextComponent(textformatting + "" + I18n.format("container.lectern.costs")));
+                    list.add(new StringTextComponent(textformatting + "" + I18n.format("container.lectern.costs")).func_241878_f());
                     String s = I18n.format("container.lectern.manuscript.many", i1);
-                    list.add(new StringTextComponent(textformatting + "" + s));
+                    list.add(new StringTextComponent(textformatting + "" + s).func_241878_f());
                 }
 
                 this.func_238654_b_(p_230430_1_, list, mouseX, mouseY);

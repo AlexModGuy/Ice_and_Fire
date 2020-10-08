@@ -12,7 +12,6 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.entity.villager.IVillagerDataHolder;
-import net.minecraft.entity.villager.IVillagerType;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
@@ -362,35 +361,6 @@ public class MyrmexTrades {
         }
     }
 
-    static class DesertResinForVillageTypeItemTrade implements VillagerTrades.ITrade {
-        private final Map<IVillagerType, Item> field_221190_a;
-        private final int field_221191_b;
-        private final int field_221192_c;
-        private final int field_221193_d;
-
-        public DesertResinForVillageTypeItemTrade(int p_i50538_1_, int p_i50538_2_, int p_i50538_3_, Map<IVillagerType, Item> p_i50538_4_) {
-            Registry.VILLAGER_TYPE.stream().filter((p_221188_1_) -> {
-                return !p_i50538_4_.containsKey(p_221188_1_);
-            }).findAny().ifPresent((p_221189_0_) -> {
-                throw new IllegalStateException("Missing trade for villager type: " + Registry.VILLAGER_TYPE.getKey(p_221189_0_));
-            });
-            this.field_221190_a = p_i50538_4_;
-            this.field_221191_b = p_i50538_1_;
-            this.field_221192_c = p_i50538_2_;
-            this.field_221193_d = p_i50538_3_;
-        }
-
-        @Nullable
-        public MerchantOffer getOffer(Entity p_221182_1_, Random p_221182_2_) {
-            if (p_221182_1_ instanceof IVillagerDataHolder) {
-                ItemStack lvt_3_1_ = new ItemStack(this.field_221190_a.get(((IVillagerDataHolder) p_221182_1_).getVillagerData().getType()), this.field_221191_b);
-                return new MerchantOffer(lvt_3_1_, new ItemStack(IafItemRegistry.MYRMEX_DESERT_RESIN), this.field_221192_c, this.field_221193_d, 0.05F);
-            } else {
-                return null;
-            }
-        }
-    }
-
     static class DesertResinForItemsTrade implements VillagerTrades.ITrade {
         private final Item field_221183_a;
         private final int field_221184_b;
@@ -541,35 +511,6 @@ public class MyrmexTrades {
             ItemStack cloneStack = new ItemStack(this.stack.getItem(), this.itemCount);
             cloneStack.setTag(this.stack.getTag());
             return new MerchantOffer(new ItemStack(IafItemRegistry.MYRMEX_JUNGLE_RESIN, this.emeraldCount), cloneStack, this.maxUses, this.exp, this.multiplier);
-        }
-    }
-
-    static class JungleResinForVillageTypeItemTrade implements VillagerTrades.ITrade {
-        private final Map<IVillagerType, Item> field_221190_a;
-        private final int field_221191_b;
-        private final int field_221192_c;
-        private final int field_221193_d;
-
-        public JungleResinForVillageTypeItemTrade(int p_i50538_1_, int p_i50538_2_, int p_i50538_3_, Map<IVillagerType, Item> p_i50538_4_) {
-            Registry.VILLAGER_TYPE.stream().filter((p_221188_1_) -> {
-                return !p_i50538_4_.containsKey(p_221188_1_);
-            }).findAny().ifPresent((p_221189_0_) -> {
-                throw new IllegalStateException("Missing trade for villager type: " + Registry.VILLAGER_TYPE.getKey(p_221189_0_));
-            });
-            this.field_221190_a = p_i50538_4_;
-            this.field_221191_b = p_i50538_1_;
-            this.field_221192_c = p_i50538_2_;
-            this.field_221193_d = p_i50538_3_;
-        }
-
-        @Nullable
-        public MerchantOffer getOffer(Entity p_221182_1_, Random p_221182_2_) {
-            if (p_221182_1_ instanceof IVillagerDataHolder) {
-                ItemStack lvt_3_1_ = new ItemStack(this.field_221190_a.get(((IVillagerDataHolder) p_221182_1_).getVillagerData().getType()), this.field_221191_b);
-                return new MerchantOffer(lvt_3_1_, new ItemStack(IafItemRegistry.MYRMEX_JUNGLE_RESIN), this.field_221192_c, this.field_221193_d, 0.05F);
-            } else {
-                return null;
-            }
         }
     }
 

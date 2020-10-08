@@ -36,6 +36,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
@@ -138,7 +139,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     }
 
     @Nullable
-    public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         ILivingEntityData data = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setAnimation(ANIMATION_SPAWN);
         this.setEquipmentBasedOnDifficulty(difficultyIn);
@@ -253,7 +254,9 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
             double y = getHeightFromXZ(x, z);
             minion.setLocationAndAngles(x + 0.5D, y, z + 0.5D, this.rotationYaw, this.rotationPitch);
             minion.setAttackTarget(target);
-            minion.onInitialSpawn(world, world.getDifficultyForLocation(this.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
+            if(world instanceof IServerWorld){
+                minion.onInitialSpawn((IServerWorld)world, world.getDifficultyForLocation(this.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
+            }
             if (minion instanceof EntityDreadMob) {
                 ((EntityDreadMob) minion).setCommanderId(this.getUniqueID());
             }

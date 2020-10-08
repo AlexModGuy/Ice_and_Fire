@@ -16,6 +16,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -24,6 +25,7 @@ import java.util.UUID;
 
 public class EntityDreadMob extends MonsterEntity implements IDreadMob {
     protected static final DataParameter<Optional<UUID>> COMMANDER_UNIQUE_ID = EntityDataManager.createKey(EntityDreadMob.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+
     public EntityDreadMob(EntityType t, World worldIn) {
         super(t, worldIn);
     }
@@ -33,21 +35,27 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
         if (entity.getCreatureAttribute() == CreatureAttribute.ARTHROPOD) {
             lichSummoned = new EntityDreadScuttler(IafEntityRegistry.DREAD_SCUTTLER, entity.world);
             float readInScale = (entity.getWidth() / 1.5F);
-            ((EntityDreadScuttler) lichSummoned).onInitialSpawn(entity.world, entity.world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
+            if (entity.world instanceof IServerWorld) {
+                ((EntityDreadScuttler) lichSummoned).onInitialSpawn((IServerWorld) entity.world, entity.world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
+            }
             ((EntityDreadScuttler) lichSummoned).setScale(readInScale);
             return lichSummoned;
         }
         if (entity instanceof ZombieEntity || entity instanceof IHumanoid) {
             lichSummoned = new EntityDreadGhoul(IafEntityRegistry.DREAD_GHOUL, entity.world);
             float readInScale = (entity.getWidth() / 0.6F);
-            ((EntityDreadGhoul) lichSummoned).onInitialSpawn(entity.world, entity.world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
+            if (entity.world instanceof IServerWorld) {
+                ((EntityDreadGhoul) lichSummoned).onInitialSpawn((IServerWorld) entity.world, entity.world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
+            }
             ((EntityDreadGhoul) lichSummoned).setScale(readInScale);
             return lichSummoned;
         }
         if (entity.getCreatureAttribute() == CreatureAttribute.UNDEAD || entity instanceof AbstractSkeletonEntity || entity instanceof PlayerEntity) {
             lichSummoned = new EntityDreadThrall(IafEntityRegistry.DREAD_THRALL, entity.world);
             EntityDreadThrall thrall = (EntityDreadThrall) lichSummoned;
-            thrall.onInitialSpawn(entity.world, entity.world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
+            if (entity.world instanceof IServerWorld) {
+                thrall.onInitialSpawn((IServerWorld) entity.world, entity.world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
+            }
             thrall.setCustomArmorHead(false);
             thrall.setCustomArmorChest(false);
             thrall.setCustomArmorLegs(false);
@@ -64,7 +72,9 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
         if (entity instanceof AnimalEntity) {
             lichSummoned = new EntityDreadBeast(IafEntityRegistry.DREAD_BEAST, entity.world);
             float readInScale = (entity.getWidth() / 1.2F);
-            ((EntityDreadBeast) lichSummoned).onInitialSpawn(entity.world, entity.world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
+            if (entity.world instanceof IServerWorld) {
+                ((EntityDreadBeast) lichSummoned).onInitialSpawn((IServerWorld) entity.world, entity.world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
+            }
             ((EntityDreadBeast) lichSummoned).setScale(readInScale);
             return lichSummoned;
         }

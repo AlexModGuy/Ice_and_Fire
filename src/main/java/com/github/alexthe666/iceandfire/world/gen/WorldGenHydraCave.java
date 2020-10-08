@@ -19,10 +19,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.DefaultBiomeFeatures;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.BaseTreeFeatureConfig;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 
 import java.util.Random;
@@ -32,7 +29,7 @@ import java.util.stream.Collectors;
 public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
 
     public static final ResourceLocation HYDRA_CHEST = new ResourceLocation("iceandfire", "chest/hydra_cave");
-    protected static final ConfiguredFeature SWAMP_FEATURE = Feature.field_236291_c_.withConfiguration(DefaultBiomeFeatures.SWAMP_TREE_CONFIG);
+    protected static final ConfiguredFeature SWAMP_FEATURE = Features.field_243875_bU;
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
     public WorldGenHydraCave(Codec<NoFeatureConfig> configFactoryIn) {
@@ -40,7 +37,7 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_230362_a_(ISeedReader worldIn, StructureManager structureManager, ChunkGenerator generator, Random rand, BlockPos position, NoFeatureConfig config) {
+    public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
         if (!IafWorldRegistry.isDimensionListed(worldIn)) {
             return false;
         }
@@ -77,7 +74,7 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
                             worldIn.setBlockState(blockpos.up(), Blocks.GRASS.getDefaultState(), 2);
                         }
                         if (rand.nextInt(9) == 0) {
-                            SWAMP_FEATURE.func_236265_a_(worldIn, structureManager, generator, rand, blockpos.up());
+                            SWAMP_FEATURE.func_242765_a(worldIn, p_230362_3_, rand, blockpos.up());
                         }
 
                     }

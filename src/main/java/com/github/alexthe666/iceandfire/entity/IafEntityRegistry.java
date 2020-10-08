@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.entity.props.*;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
@@ -12,9 +13,10 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -95,48 +97,6 @@ public class IafEntityRegistry {
         EntityPropertiesHandler.INSTANCE.registerProperties(SirenEntityProperties.class);
         EntityPropertiesHandler.INSTANCE.registerProperties(ChickenEntityProperties.class);
         EntityPropertiesHandler.INSTANCE.registerProperties(ChainEntityProperties.class);
-        if (IafConfig.spawnHippogryphs) {
-            for (Biome biome : ForgeRegistries.BIOMES) {
-                if (biome != null && (BiomeDictionary.hasType(biome, BiomeDictionary.Type.HILLS) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.PLATEAU))) {
-                    List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.CREATURE);
-                    spawnList.add(new Biome.SpawnListEntry(HIPPOGRYPH, IafConfig.hippogryphSpawnRate, 1, 1));
-                }
-            }
-        }
-        if (IafConfig.spawnTrolls) {
-            for (EnumTroll type : EnumTroll.values()) {
-                for (Biome biome : ForgeRegistries.BIOMES) {
-                    if (biome != null && BiomeDictionary.hasType(biome, type.spawnBiome)) {
-                        List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.MONSTER);
-                        spawnList.add(new Biome.SpawnListEntry(TROLL, IafConfig.trollSpawnRate, 1, 1));
-                    }
-                }
-            }
-        }
-        if (IafConfig.spawnLiches) {
-            for (Biome biome : ForgeRegistries.BIOMES) {
-                if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SNOWY)) {
-                    List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.MONSTER);
-                    spawnList.add(new Biome.SpawnListEntry(DREAD_LICH, IafConfig.lichSpawnRate, 1, 1));
-                }
-            }
-        }
-        if (IafConfig.spawnCockatrices) {
-            for (Biome biome : ForgeRegistries.BIOMES) {
-                if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SAVANNA) && BiomeDictionary.hasType(biome, BiomeDictionary.Type.SPARSE)) {
-                    List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.CREATURE);
-                    spawnList.add(new Biome.SpawnListEntry(COCKATRICE, IafConfig.cockatriceSpawnRate, 1, 2));
-                }
-            }
-        }
-        if (IafConfig.spawnAmphitheres) {
-            for (Biome biome : ForgeRegistries.BIOMES) {
-                if (biome != null && BiomeDictionary.hasType(biome, BiomeDictionary.Type.JUNGLE)) {
-                    List<Biome.SpawnListEntry> spawnList = biome.getSpawns(EntityClassification.CREATURE);
-                    spawnList.add(new Biome.SpawnListEntry(AMPHITHERE, IafConfig.amphithereSpawnRate, 1, 3));
-                }
-            }
-        }
     }
 
     public static void bakeAttributes(){
@@ -202,5 +162,23 @@ public class IafEntityRegistry {
             throw new RuntimeException(e);
         }
         bakeAttributes();
+    }
+
+    public static void onBiomesLoad(BiomeLoadingEvent event) {
+        if (IafConfig.spawnHippogryphs && BiomeConfig.hippogryphBiomes.contains(event.getName().toString())) {
+            event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(HIPPOGRYPH, IafConfig.hippogryphSpawnRate, 1, 1));
+        }
+        if (IafConfig.spawnLiches && BiomeConfig.mausoleumBiomes.contains(event.getName().toString())) {
+            event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(DREAD_LICH, IafConfig.lichSpawnRate, 1, 1));
+        }
+        if (IafConfig.spawnCockatrices && BiomeConfig.cockatriceBiomes.contains(event.getName().toString())) {
+            event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(COCKATRICE, IafConfig.cockatriceSpawnRate, 1, 2));
+        }
+        if (IafConfig.spawnAmphitheres && BiomeConfig.amphithereBiomes.contains(event.getName().toString())) {
+            event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(AMPHITHERE, IafConfig.amphithereSpawnRate, 1, 3));
+        }
+        if (IafConfig.spawnTrolls && (BiomeConfig.forestTrollBiomes.contains(event.getName().toString()) || BiomeConfig.snowyTrollBiomes.contains(event.getName().toString()) || BiomeConfig.mountainTrollBiomes.contains(event.getName().toString()))) {
+            event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(TROLL, IafConfig.trollSpawnRate, 1, 1));
+        }
     }
 }

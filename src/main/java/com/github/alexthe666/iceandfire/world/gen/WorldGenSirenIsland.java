@@ -9,6 +9,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
@@ -43,7 +44,7 @@ public class WorldGenSirenIsland extends Feature<NoFeatureConfig> {
         }
     }
 
-    private void spawnSiren(IWorld worldIn, Random rand, BlockPos position) {
+    private void spawnSiren(IServerWorld worldIn, Random rand, BlockPos position) {
         EntitySiren siren = new EntitySiren(IafEntityRegistry.SIREN, worldIn.getWorld());
         siren.setSinging(true);
         siren.setHairColor(rand.nextInt(2));
@@ -53,7 +54,7 @@ public class WorldGenSirenIsland extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_230362_a_(ISeedReader worldIn, StructureManager structureManager, ChunkGenerator generator, Random rand, BlockPos position, NoFeatureConfig config) {
+    public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
         if(!IafWorldRegistry.isDimensionListed(worldIn)){
             return false;
         }

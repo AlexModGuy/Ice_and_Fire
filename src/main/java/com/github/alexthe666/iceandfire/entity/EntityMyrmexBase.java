@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexBiolight;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexConnectedResin;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
+import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -50,7 +51,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.BiomeDictionary;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -90,7 +90,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     private static boolean isJungleBiome(World world, BlockPos position) {
         Biome biome = world.getBiome(position);
-        return biome.getSurfaceBuilderConfig().getTop().getBlock() != Blocks.SAND && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY);
+        return BiomeConfig.jungleMyrmexBiomes.contains(biome.getRegistryName().toString());
     }
 
     public static boolean haveSameHive(EntityMyrmexBase myrmex, Entity entity) {
@@ -109,7 +109,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public static boolean isEdibleBlock(BlockState blockState) {
-        return BlockTags.getCollection().getOrCreate(IafTagRegistry.MYRMEX_HARVESTABLES).func_230235_a_(blockState.getBlock());
+        return BlockTags.getCollection().func_241834_b(IafTagRegistry.MYRMEX_HARVESTABLES).func_230235_a_(blockState.getBlock());
     }
 
     public static int getRandomCaste(World world, Random random, boolean royal) {
@@ -346,7 +346,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     @Nullable
     @Override
-    public AgeableEntity createChild(AgeableEntity ageable) {
+    public AgeableEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageable) {
         return null;
     }
 
@@ -471,7 +471,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     @Override
     @Nullable
-    public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setHive(MyrmexWorldData.get(world).getNearestHive(this.func_233580_cy_(), 400));
         if (this.getHive() != null) {

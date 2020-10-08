@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationStage;
@@ -56,11 +57,11 @@ public class DreadMausoleumStructure extends Structure<NoFeatureConfig> {
         }
 
         @Override
-        public void func_230364_a_(ChunkGenerator p_230364_1_, TemplateManager p_230364_2_, int p_230364_3_, int p_230364_4_, Biome p_230364_5_, IFeatureConfig p_230364_6_) {
+        public void func_230364_a_(DynamicRegistries p_230364_1_, ChunkGenerator p_230364_2_, TemplateManager p_230364_3_, int x, int z, Biome p_230364_6_, IFeatureConfig p_230364_7_) {
            if(IafConfig.generateMausoleums){
                Rotation rotation = Rotation.values()[this.rand.nextInt(Rotation.values().length)];
-               BlockPos blockpos = new BlockPos(p_230364_3_ * 16, 64, p_230364_4_ * 16);
-               MausoleumPiece.func_204760_a(p_230364_2_, blockpos, rotation, this.components, this.rand);
+               BlockPos blockpos = new BlockPos(x * 16, 64, z * 16);
+               MausoleumPiece.func_204760_a(p_230364_3_, blockpos, rotation, this.components, this.rand);
                this.recalculateStructureSize();
            }
         }

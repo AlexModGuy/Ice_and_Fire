@@ -70,7 +70,7 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
             super.tick();
             ++this.ticksInAir;
             Vector3d Vector3d = this.getMotion();
-            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_, RayTraceContext.BlockMode.COLLIDER);
+            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
 
             if (!world.isRemote && raytraceresult != null) {
                 this.onImpact(raytraceresult);

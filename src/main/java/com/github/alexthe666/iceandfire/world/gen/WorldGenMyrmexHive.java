@@ -18,6 +18,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.ISeedReader;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
@@ -52,7 +53,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         this.jungle = jungle;
     }
 
-    public boolean placeSmallGen(IWorld worldIn, Random rand, BlockPos pos) {
+    public boolean placeSmallGen(ISeedReader worldIn, Random rand, BlockPos pos) {
         hasFoodRoom = false;
         hasNursery = false;
         totalRooms = 0;
@@ -64,7 +65,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_230362_a_(ISeedReader worldIn, StructureManager structureManager, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+    public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos pos, NoFeatureConfig p_230362_6_) {
         if(!small){
             if(!IafWorldRegistry.isDimensionListed(worldIn)){
                 return false;
@@ -92,7 +93,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         return false;
     }
 
-    private void generateMainRoom(IWorld world, Random rand, BlockPos position) {
+    private void generateMainRoom(IServerWorld world, Random rand, BlockPos position) {
         hive = new MyrmexHive(world.getWorld(), position, 100);
         MyrmexWorldData.addHive(world.getWorld(), hive);
         BlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
@@ -442,10 +443,10 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
                     WorldGenMyrmexDecoration.generateSkeleton(world, blockpos, center, size, random);
                 }
                 if (random.nextInt(13) == 0) {
-                    WorldGenMyrmexDecoration.generateLeaves(world, blockpos, center, size, random);
+                    WorldGenMyrmexDecoration.generateLeaves(world, blockpos, center, size, random, jungle);
                 }
                 if (random.nextInt(12) == 0) {
-                    WorldGenMyrmexDecoration.generatePumpkins(world, blockpos, center, size, random);
+                    WorldGenMyrmexDecoration.generatePumpkins(world, blockpos, center, size, random, jungle);
                 }
                 if (random.nextInt(6) == 0) {
                     WorldGenMyrmexDecoration.generateMushrooms(world, blockpos, center, size, random);

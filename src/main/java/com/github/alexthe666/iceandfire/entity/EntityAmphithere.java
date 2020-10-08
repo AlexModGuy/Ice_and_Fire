@@ -39,6 +39,7 @@ import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.*;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -876,7 +877,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
 
     @Nullable
     @Override
-    public AgeableEntity createChild(AgeableEntity ageable) {
+    public AgeableEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageableEntity) {
         EntityAmphithere amphithere = new EntityAmphithere(IafEntityRegistry.AMPHITHERE, world);
         amphithere.setVariant(this.getVariant());
         return amphithere;
@@ -888,11 +889,13 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
 
     @Override
     @Nullable
-    public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setVariant(this.getRNG().nextInt(5));
         return spawnDataIn;
     }
+
+
 
     public void fall(float distance, float damageMultiplier) {
     }

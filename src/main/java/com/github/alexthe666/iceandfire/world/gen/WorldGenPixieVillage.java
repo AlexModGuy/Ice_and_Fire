@@ -24,6 +24,7 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.Features;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import java.util.Random;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 
 public class WorldGenPixieVillage extends Feature<NoFeatureConfig> {
 
-    protected static final ConfiguredFeature SWAMP_FEATURE = Feature.field_236291_c_.withConfiguration(DefaultBiomeFeatures.SWAMP_TREE_CONFIG);
+    protected static final ConfiguredFeature SWAMP_FEATURE = Features.field_243863_bI;
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
     public WorldGenPixieVillage(Codec<NoFeatureConfig> configFactoryIn) {
@@ -40,7 +41,7 @@ public class WorldGenPixieVillage extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_230362_a_(ISeedReader worldIn, StructureManager structureManager, ChunkGenerator generator, Random rand, BlockPos position, NoFeatureConfig config) {
+    public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
         if(!IafWorldRegistry.isDimensionListed(worldIn)){
             return false;
         }

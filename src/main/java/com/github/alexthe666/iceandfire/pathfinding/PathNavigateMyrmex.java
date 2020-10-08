@@ -40,7 +40,7 @@ public class PathNavigateMyrmex extends GroundPathNavigator {
         }
 
         this.maxDistanceToWaypoint = this.entity.getWidth();
-        Vector3d Vector3d1 = Vector3d.func_237489_a_(this.currentPath.getCurrentPos());
+        Vector3d Vector3d1 = Vector3d.func_237489_a_(this.currentPath.func_242948_g());
         float distX = MathHelper.abs((float) (this.entity.getPosX() - (Vector3d1.x + 0.5D)));
         float distZ = MathHelper.abs((float) (this.entity.getPosZ() - (Vector3d1.z + 0.5D)));
         float distY = (float) Math.abs(this.entity.getPosY() - Vector3d1.y);
@@ -71,8 +71,8 @@ public class PathNavigateMyrmex extends GroundPathNavigator {
                     int particle = 1;
                     IceAndFire.sendMSGToAll(new MessageSpawnParticleAt(point.x, point.y, point.z, particle));
                 }
-                if (currentPath.getCurrentPos() != null) {
-                    Vector3d point = Vector3d.func_237489_a_(currentPath.getCurrentPos());
+                if (currentPath.func_242948_g() != null) {
+                    Vector3d point = Vector3d.func_237489_a_(currentPath.func_242948_g());
                     int particle = 0;
                     IceAndFire.sendMSGToAll(new MessageSpawnParticleAt(point.x, point.y, point.z, particle));
 

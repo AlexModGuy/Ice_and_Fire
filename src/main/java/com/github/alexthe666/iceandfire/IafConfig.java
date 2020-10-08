@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
+import com.github.alexthe666.iceandfire.config.DefaultBiomes;
 import com.google.common.collect.Lists;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;

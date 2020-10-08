@@ -86,7 +86,7 @@ public class EntityPixieCharge extends AbstractFireballEntity {
                 }
 
                 ++this.ticksInAir;
-                RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_, RayTraceContext.BlockMode.COLLIDER);
+                RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
                 if (raytraceresult.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                     this.onImpact(raytraceresult);
                 }
@@ -110,7 +110,7 @@ public class EntityPixieCharge extends AbstractFireballEntity {
             this.addVelocity(this.accelerationX, this.accelerationY, this.accelerationZ);
             ++this.ticksInAir;
             Vector3d Vector3d = this.getMotion();
-            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_, RayTraceContext.BlockMode.COLLIDER);
+            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
 
             if (raytraceresult != null) {
                 this.onImpact(raytraceresult);
