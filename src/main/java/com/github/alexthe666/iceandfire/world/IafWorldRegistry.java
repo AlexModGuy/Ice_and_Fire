@@ -207,7 +207,7 @@ public class IafWorldRegistry {
         if (IafConfig.spawnPixies && BiomeConfig.pixieBiomes.contains(event.getName().toString())) {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, PIXIE_VILLAGE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
         }
-        if (IafConfig.generateHydraCaves && BiomeConfig.pixieBiomes.contains(event.getName().toString())) {
+        if (IafConfig.generateHydraCaves && BiomeConfig.hydraBiomes.contains(event.getName().toString())) {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, HYDRA_CAVE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
         }
         if (IafConfig.generateMausoleums && BiomeConfig.mausoleumBiomes.contains(event.getName().toString())) {
@@ -225,5 +225,10 @@ public class IafWorldRegistry {
         if (BiomeConfig.overworldSpawnBiomes.contains(event.getName().toString())) {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, MOB_SPAWNS.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
         }
+    }
+
+    public static String getBiomeName(Biome biome) {
+        ResourceLocation loc = ForgeRegistries.BIOMES.getKey(biome);
+        return loc == null ? "" : loc.toString();
     }
 }

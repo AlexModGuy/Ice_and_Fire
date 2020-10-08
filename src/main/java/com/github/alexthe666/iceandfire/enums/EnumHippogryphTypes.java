@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.enums;
 
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
+import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 
@@ -41,25 +42,25 @@ public enum EnumHippogryphTypes {
 
     public static EnumHippogryphTypes getBiomeType(Biome biome) {
         List<EnumHippogryphTypes> types = new ArrayList<EnumHippogryphTypes>();
-        if (BiomeConfig.blackHippogryphBiomes.contains(biome.getRegistryName().toString())) {
+        if (BiomeConfig.blackHippogryphBiomes.contains(IafWorldRegistry.getBiomeName(biome))) {
             types.add(BLACK);
         }
-        if (BiomeConfig.brownHippogryphBiomes.contains(biome.getRegistryName().toString())) {
+        if (BiomeConfig.brownHippogryphBiomes.contains(IafWorldRegistry.getBiomeName(biome))) {
             types.add(BROWN);
         }
-        if (BiomeConfig.grayHippogryphBiomes.contains(biome.getRegistryName().toString())) {
+        if (BiomeConfig.grayHippogryphBiomes.contains(IafWorldRegistry.getBiomeName(biome))) {
             types.add(BROWN);
         }
-        if (BiomeConfig.chestnutHippogryphBiomes.contains(biome.getRegistryName().toString())) {
+        if (BiomeConfig.chestnutHippogryphBiomes.contains(IafWorldRegistry.getBiomeName(biome))) {
             types.add(CHESTNUT);
         }
-        if (BiomeConfig.creamyHippogryphBiomes.contains(biome.getRegistryName().toString())) {
+        if (BiomeConfig.creamyHippogryphBiomes.contains(IafWorldRegistry.getBiomeName(biome))) {
             types.add(CREAMY);
         }
-        if (BiomeConfig.darkBrownHippogryphBiomes.contains(biome.getRegistryName().toString())) {
+        if (BiomeConfig.darkBrownHippogryphBiomes.contains(IafWorldRegistry.getBiomeName(biome))) {
             types.add(DARK_BROWN);
         }
-        if (BiomeConfig.whiteHippogryphBiomes.contains(biome.getRegistryName().toString())) {
+        if (BiomeConfig.whiteHippogryphBiomes.contains(IafWorldRegistry.getBiomeName(biome))) {
             types.add(WHITE);
         }
         if (types.isEmpty()) {

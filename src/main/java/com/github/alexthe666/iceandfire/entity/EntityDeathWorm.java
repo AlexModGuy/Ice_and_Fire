@@ -603,7 +603,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
                 double d1 = this.getAttackTarget().getPosZ() - this.getPosZ();
                 float leap = MathHelper.sqrt(d0 * d0 + d1 * d1);
                 if ((double) leap >= 1.0E-4D) {
-                    this.setMotion(this.getMotion().add(d0 / (double) leap * 0.800000011920929D, 0.5F, d1 / (double) leap * 0.800000011920929D));
+                    this.setMotion(this.getMotion().add(d0 / (double) leap * 0.5D, 0.15F, d1 / (double) leap * 0.5D));
                 }
                 this.setAnimation(ANIMATION_BITE);
             }
@@ -769,12 +769,11 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
     }
 
     public boolean isInSand() {
-
-        return this.getControllingPassenger() == null && BlockTags.SAND.func_230235_a_(world.getBlockState(func_233580_cy_()).getBlock());
+        return this.getControllingPassenger() == null && (BlockTags.SAND.func_230235_a_(world.getBlockState(func_233580_cy_().up()).getBlock()) ||BlockTags.SAND.func_230235_a_(world.getBlockState(func_233580_cy_()).getBlock()) || BlockTags.SAND.func_230235_a_(world.getBlockState(func_233580_cy_().down()).getBlock()));
     }
 
     public boolean isInSandStrict() {
-        return this.getControllingPassenger() == null && BlockTags.SAND.func_230235_a_(world.getBlockState(func_233580_cy_()).getBlock());
+        return isInSand();
     }
 
     @Override

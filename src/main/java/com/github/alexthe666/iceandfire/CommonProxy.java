@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire;
 
+import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
@@ -36,6 +37,8 @@ public class CommonProxy {
             IafConfig.bakeClient(config);
         } else if (config.getSpec() == ConfigHolder.SERVER_SPEC) {
             IafConfig.bakeServer(config);
+        }else if (config.getSpec() == ConfigHolder.BIOME_SPEC) {
+            BiomeConfig.bake(config);
         }
     }
 

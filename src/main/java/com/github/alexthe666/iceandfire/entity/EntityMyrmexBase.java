@@ -13,6 +13,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateMyrmex;
+import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.google.common.collect.Sets;
@@ -90,7 +91,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     private static boolean isJungleBiome(World world, BlockPos position) {
         Biome biome = world.getBiome(position);
-        return BiomeConfig.jungleMyrmexBiomes.contains(biome.getRegistryName().toString());
+        return BiomeConfig.jungleMyrmexBiomes.contains(IafWorldRegistry.getBiomeName(biome));
     }
 
     public static boolean haveSameHive(EntityMyrmexBase myrmex, Entity entity) {
