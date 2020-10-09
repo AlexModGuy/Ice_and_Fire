@@ -227,6 +227,21 @@ public class DragonUtils {
         return target.func_233580_cy_();
     }
 
+
+    public static BlockPos getBlockInTargetsViewGhost(EntityGhost ghost, LivingEntity target) {
+        float radius = 4 + ghost.getRNG().nextInt(5);
+        float neg = ghost.getRNG().nextBoolean() ? 1 : -1;
+        float angle = (0.01745329251F * (target.rotationYawHead + 90F + ghost.getRNG().nextInt(180)));
+        double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+        double extraZ = radius * MathHelper.cos(angle);
+        BlockPos radialPos = new BlockPos(target.getPosX() + extraX, target.getPosY(), target.getPosZ() + extraZ);
+        BlockPos ground = radialPos;
+        if( ghost.getDistanceSq(Vector3d.func_237489_a_(ground)) > 30) {
+            return ground;
+        }
+        return ghost.func_233580_cy_();
+    }
+
     public static BlockPos getBlockInTargetsViewGorgon(EntityGorgon cockatrice, LivingEntity target) {
         float radius = 6;
         float neg = cockatrice.getRNG().nextBoolean() ? 1 : -1;
