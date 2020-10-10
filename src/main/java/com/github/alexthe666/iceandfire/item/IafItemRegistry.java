@@ -56,6 +56,7 @@ public class IafItemRegistry {
     public static CustomToolMaterial DREAD_SWORD_TOOL_MATERIAL = new CustomToolMaterial("DreadSword", 0, 100, 1F, 10F, 0);
     public static CustomToolMaterial DREAD_KNIGHT_TOOL_MATERIAL = new CustomToolMaterial("DreadKnightSword", 0, 1200, 13F, 0F, 10);
     public static CustomToolMaterial DREAD_QUEEN_SWORD_TOOL_MATERIAL = new DragonsteelToolMaterial("DreadQueenSword", 0, IafConfig.dragonsteelBaseDurability, (float) IafConfig.dragonsteelBaseDamage, 10F, 10);
+    public static CustomToolMaterial GHOST_SWORD_TOOL_MATERIAL = new CustomToolMaterial("GhostSword", 2, 3000, 5, 10.0F, 25);
 
     public static final Item BESTIARY = new ItemBestiary();
     public static final Item MANUSCRIPT = new ItemGeneric("manuscript");
@@ -317,6 +318,9 @@ public class IafItemRegistry {
     public static final Item HYDRA_HEART = new ItemHydraHeart();
     public static final Item HYDRA_ARROW = new ItemHydraArrow();
     public static final Item CANNOLI = new ItemCannoli();
+    public static final Item ECTOPLASM = new ItemGeneric("ectoplasm");
+    public static final Item GHOST_INGOT = new ItemGeneric("ghost_ingot", 1);
+    public static final Item GHOST_SWORD = new ItemGhostSword();
 
     static {
         EnumDragonArmor.initArmors();
