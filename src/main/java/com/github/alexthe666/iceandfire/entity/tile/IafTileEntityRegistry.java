@@ -23,6 +23,7 @@ public class IafTileEntityRegistry {
     public static final TileEntityType<TileEntityDragonforgeInput> DRAGONFORGE_INPUT = registerTileEntity(TileEntityType.Builder.create(TileEntityDragonforgeBrick::new, IafBlockRegistry.DRAGONFORGE_FIRE_INPUT, IafBlockRegistry.DRAGONFORGE_ICE_INPUT, IafBlockRegistry.DRAGONFORGE_LIGHTNING_INPUT), "dragonforge_input");
     public static final TileEntityType<TileEntityDreadPortal> DREAD_PORTAL = registerTileEntity(TileEntityType.Builder.create(TileEntityDreadPortal::new, IafBlockRegistry.DREAD_PORTAL), "dread_portal");
     public static final TileEntityType<TileEntityDreadSpawner> DREAD_SPAWNER = registerTileEntity(TileEntityType.Builder.create(TileEntityDreadSpawner::new, IafBlockRegistry.DREAD_SPAWNER), "dread_spawner");
+    public static final TileEntityType<TileEntityGhostChest> GHOST_CHEST = registerTileEntity(TileEntityType.Builder.create(TileEntityGhostChest::new, IafBlockRegistry.GHOST_CHEST), "ghost_chest");
 
 
     public static TileEntityType registerTileEntity(TileEntityType.Builder builder, String entityName) {

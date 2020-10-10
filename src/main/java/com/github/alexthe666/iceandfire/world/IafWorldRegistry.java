@@ -3,10 +3,7 @@ package com.github.alexthe666.iceandfire.world;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.world.gen.*;
-import com.github.alexthe666.iceandfire.world.structure.DreadMausoleumStructure;
-import com.github.alexthe666.iceandfire.world.structure.GorgonTemplePiece;
-import com.github.alexthe666.iceandfire.world.structure.GorgonTempleStructure;
-import com.github.alexthe666.iceandfire.world.structure.MausoleumPiece;
+import com.github.alexthe666.iceandfire.world.structure.*;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -47,7 +44,39 @@ public class IafWorldRegistry {
     public static IStructurePieceType MAUSOLEUM_PIECE;
     public static Structure<NoFeatureConfig> MAUSOLEUM = new DreadMausoleumStructure(NoFeatureConfig::deserialize);
     public static IStructurePieceType GORGON_PIECE;
+<<<<<<< HEAD
     public static Structure<NoFeatureConfig> GORGON_TEMPLE = new GorgonTempleStructure(NoFeatureConfig::deserialize);
+=======
+    public static Structure<NoFeatureConfig> GORGON_TEMPLE = new GorgonTempleStructure(NoFeatureConfig.field_236558_a_);
+    public static final Structure<NoFeatureConfig> GORGON_TEMPLE_SF = func_236394_a_("iceandfire:gorgon_temple", GORGON_TEMPLE, GenerationStage.Decoration.SURFACE_STRUCTURES);
+    public static IStructurePieceType GRAVEYARD_PIECE;
+    public static Structure<NoFeatureConfig> GRAVEYARD = new GraveyardStructure(NoFeatureConfig.field_236558_a_);
+    public static final Structure<NoFeatureConfig> GRAVEYARD_SF = func_236394_a_("iceandfire:graveyard", GRAVEYARD, GenerationStage.Decoration.SURFACE_STRUCTURES);
+
+    public static ConfiguredFeature FIRE_LILY_CF;
+    public static ConfiguredFeature FROST_LILY_CF;
+    public static ConfiguredFeature LIGHTNING_LILY_CF;
+    public static ConfiguredFeature COPPER_ORE_CF;
+    public static ConfiguredFeature SILVER_ORE_CF;
+    public static ConfiguredFeature SAPPHIRE_ORE_CF;
+    public static ConfiguredFeature AMETHYST_ORE_CF;
+    public static ConfiguredFeature FIRE_DRAGON_ROOST_CF;
+    public static ConfiguredFeature ICE_DRAGON_ROOST_CF;
+    public static ConfiguredFeature LIGHTNING_DRAGON_ROOST_CF;
+    public static ConfiguredFeature FIRE_DRAGON_CAVE_CF;
+    public static ConfiguredFeature ICE_DRAGON_CAVE_CF;
+    public static ConfiguredFeature LIGHTNING_DRAGON_CAVE_CF;
+    public static ConfiguredFeature CYCLOPS_CAVE_CF;
+    public static ConfiguredFeature PIXIE_VILLAGE_CF;
+    public static ConfiguredFeature SIREN_ISLAND_CF;
+    public static ConfiguredFeature HYDRA_CAVE_CF;
+    public static ConfiguredFeature MYRMEX_HIVE_DESERT_CF;
+    public static ConfiguredFeature MYRMEX_HIVE_JUNGLE_CF;
+    public static ConfiguredFeature MOB_SPAWNS_CF;
+    public static StructureFeature GORGON_TEMPLE_CF;
+    public static StructureFeature MAUSOLEUM_CF;
+    public static StructureFeature GRAVEYARD_CF;
+>>>>>>> aff892f7... server stuff... 2
 
     static {
         GLACIER_SURFACE_BUILDER.setRegistryName("iceandfire:glacier_surface");
@@ -72,8 +101,49 @@ public class IafWorldRegistry {
         Registry.register(Registry.STRUCTURE_FEATURE, "iceandfire:mausoleum", MAUSOLEUM);
 
         GORGON_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece", GorgonTemplePiece.Piece::new);
+<<<<<<< HEAD
         GORGON_TEMPLE = Registry.register(Registry.FEATURE, "iceandfire:gorgon_temple", GORGON_TEMPLE);
         Registry.register(Registry.STRUCTURE_FEATURE, "iceandfire:gorgon_temple", GORGON_TEMPLE);
+=======
+        GORGON_TEMPLE = Registry.register(Registry.STRUCTURE_FEATURE, "iceandfire:gorgon_temple", GORGON_TEMPLE);
+        putStructureOnAList("iceandfire:gorgon_temple", GORGON_TEMPLE);
+
+        GRAVEYARD_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:graveyard_piece", GraveyardPiece.Piece::new);
+        GRAVEYARD = Registry.register(Registry.STRUCTURE_FEATURE, "iceandfire:graveyard", GRAVEYARD);
+        putStructureOnAList("iceandfire:graveyard", GRAVEYARD);
+
+        addStructureSeperation(DimensionSettings.field_242734_c, GORGON_TEMPLE, new StructureSeparationSettings(Math.max(IafConfig.spawnGorgonsChance, 2), Math.max(IafConfig.spawnGorgonsChance / 2, 1), 34222645));
+        addStructureSeperation(DimensionSettings.field_242734_c, MAUSOLEUM, new StructureSeparationSettings(Math.max(IafConfig.generateMausoleumChance, 2), Math.max(IafConfig.generateMausoleumChance / 2, 1), 34222645));
+        addStructureSeperation(DimensionSettings.field_242734_c, GRAVEYARD, new StructureSeparationSettings(Math.max(IafConfig.spawnGorgonsChance, 2), Math.max(IafConfig.spawnGorgonsChance / 2, 1), 34222644));
+
+        GORGON_TEMPLE_CF = Registry.register(WorldGenRegistries.field_243654_f, "iceandfire:gorgon_temple", GORGON_TEMPLE.func_236391_a_(IFeatureConfig.NO_FEATURE_CONFIG));
+        MAUSOLEUM_CF = Registry.register(WorldGenRegistries.field_243654_f, "iceandfire:mausoleum", MAUSOLEUM.func_236391_a_(IFeatureConfig.NO_FEATURE_CONFIG));
+        GRAVEYARD_CF = Registry.register(WorldGenRegistries.field_243654_f, "iceandfire:graveyard", GRAVEYARD.func_236391_a_(IFeatureConfig.NO_FEATURE_CONFIG));
+
+
+        COPPER_ORE_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:copper_ore", Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.field_241882_a, IafBlockRegistry.COPPER_ORE.getDefaultState(), 5)).func_242733_d(128).func_242728_a().func_242731_b(5));
+        SILVER_ORE_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:silver_ore", Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.field_241882_a, IafBlockRegistry.SILVER_ORE.getDefaultState(), 8)).func_242733_d(32).func_242728_a().func_242731_b(2));
+        SAPPHIRE_ORE_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:sapphire_ore", Feature.EMERALD_ORE.withConfiguration(new ReplaceBlockConfig(Blocks.STONE.getDefaultState(), IafBlockRegistry.SAPPHIRE_ORE.getDefaultState())).withPlacement(Placement.EMERALD_ORE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+        AMETHYST_ORE_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:amythest_ore", Feature.EMERALD_ORE.withConfiguration(new ReplaceBlockConfig(Blocks.STONE.getDefaultState(), IafBlockRegistry.AMYTHEST_ORE.getDefaultState())).withPlacement(Placement.EMERALD_ORE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+        FIRE_LILY_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:fire_lily", Feature.FLOWER.withConfiguration(new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(IafBlockRegistry.FIRE_LILY.getDefaultState()), new SimpleBlockPlacer()).tries(1).build()).withPlacement(Features.Placements.field_244000_k).withPlacement(Features.Placements.field_244001_l));
+        FROST_LILY_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:frost_lily", Feature.FLOWER.withConfiguration(new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(IafBlockRegistry.FROST_LILY.getDefaultState()), new SimpleBlockPlacer()).tries(1).build()).withPlacement(Features.Placements.field_244000_k).withPlacement(Features.Placements.field_244001_l));
+        LIGHTNING_LILY_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:lightning_lily", Feature.FLOWER.withConfiguration(new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(IafBlockRegistry.LIGHTNING_LILY.getDefaultState()), new SimpleBlockPlacer()).tries(1).build()).withPlacement(Features.Placements.field_244000_k).withPlacement(Features.Placements.field_244001_l));
+        FIRE_DRAGON_ROOST_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:fire_dragon_roost", FIRE_DRAGON_ROOST.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+        ICE_DRAGON_ROOST_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:ice_dragon_roost", ICE_DRAGON_ROOST.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+        LIGHTNING_DRAGON_ROOST_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:lightning_dragon_roost", LIGHTNING_DRAGON_ROOST.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+        FIRE_DRAGON_CAVE_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:fire_dragon_cave", FIRE_DRAGON_CAVE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+        ICE_DRAGON_CAVE_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:ice_dragon_cave", ICE_DRAGON_CAVE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+        LIGHTNING_DRAGON_CAVE_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:lightning_dragon_cave", LIGHTNING_DRAGON_CAVE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+        CYCLOPS_CAVE_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:cyclops_cave", CYCLOPS_CAVE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+        PIXIE_VILLAGE_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:pixie_village", PIXIE_VILLAGE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+        SIREN_ISLAND_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:siren_island", SIREN_ISLAND.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+        HYDRA_CAVE_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:hydra_cave", HYDRA_CAVE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+        MYRMEX_HIVE_DESERT_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:myrmex_hive_desert", MYRMEX_HIVE_DESERT.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+        MYRMEX_HIVE_JUNGLE_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:myrmex_hive_jungle", MYRMEX_HIVE_JUNGLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+        MOB_SPAWNS_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:misc_mob_spawns", MOB_SPAWNS.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+
+    }
+>>>>>>> aff892f7... server stuff... 2
 
     }
 
@@ -214,4 +284,82 @@ public class IafWorldRegistry {
         return canGen;*/
         return true;
     }
+<<<<<<< HEAD
+=======
+
+    public static void onBiomesLoad(BiomeLoadingEvent event) {
+        if (BiomeConfig.fireLilyBiomes.contains(event.getName().toString())) {
+            event.getGeneration().func_242513_a(GenerationStage.Decoration.VEGETAL_DECORATION, FIRE_LILY_CF);
+        }
+        if (BiomeConfig.lightningLilyBiomes.contains(event.getName().toString())) {
+            event.getGeneration().func_242513_a(GenerationStage.Decoration.VEGETAL_DECORATION, LIGHTNING_LILY_CF);
+        }
+        if (BiomeConfig.iceLilyBiomes.contains(event.getName().toString())) {
+            event.getGeneration().func_242513_a(GenerationStage.Decoration.VEGETAL_DECORATION, FROST_LILY_CF);
+        }
+        if (BiomeConfig.oreGenBiomes.contains(event.getName().toString())) {
+            if (IafConfig.generateSilverOre) {
+                event.getGeneration().func_242513_a(GenerationStage.Decoration.UNDERGROUND_ORES, SILVER_ORE_CF);
+            }
+            if (IafConfig.generateCopperOre) {
+                event.getGeneration().func_242513_a(GenerationStage.Decoration.UNDERGROUND_ORES, COPPER_ORE_CF);
+            }
+        }
+        if (IafConfig.generateSapphireOre && BiomeConfig.sapphireBiomes.contains(event.getName().toString())) {
+            event.getGeneration().func_242513_a(GenerationStage.Decoration.UNDERGROUND_ORES, SAPPHIRE_ORE_CF);
+        }
+        if (IafConfig.generateAmythestOre && BiomeConfig.amethystBiomes.contains(event.getName().toString())) {
+            event.getGeneration().func_242513_a(GenerationStage.Decoration.UNDERGROUND_ORES, AMETHYST_ORE_CF);
+        }
+        if (IafConfig.generateDragonRoosts) {
+            if (BiomeConfig.fireDragonBiomes.contains(event.getName().toString())) {
+                event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, FIRE_DRAGON_ROOST_CF);
+                event.getGeneration().func_242513_a(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, FIRE_DRAGON_CAVE_CF);
+            }
+            if (BiomeConfig.lightningDragonBiomes.contains(event.getName().toString())) {
+                event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, LIGHTNING_DRAGON_ROOST_CF);
+                event.getGeneration().func_242513_a(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, LIGHTNING_DRAGON_CAVE_CF);
+            }
+            if (BiomeConfig.iceDragonBiomes.contains(event.getName().toString())) {
+                event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, ICE_DRAGON_ROOST_CF);
+                event.getGeneration().func_242513_a(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, ICE_DRAGON_CAVE_CF);
+            }
+        }
+        if (IafConfig.generateCyclopsCaves && BiomeConfig.cyclopsCaveBiomes.contains(event.getName().toString())) {
+            event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, CYCLOPS_CAVE_CF);
+        }
+        if (IafConfig.spawnGorgons && BiomeConfig.gorgonTempleBiomes.contains(event.getName().toString())) {
+            event.getGeneration().func_242516_a(GORGON_TEMPLE_CF);
+        }
+        if (IafConfig.spawnPixies && BiomeConfig.pixieBiomes.contains(event.getName().toString())) {
+            event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, PIXIE_VILLAGE_CF);
+        }
+        if (IafConfig.generateHydraCaves && BiomeConfig.hydraBiomes.contains(event.getName().toString())) {
+            event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, HYDRA_CAVE_CF);
+        }
+        if (IafConfig.generateMausoleums && BiomeConfig.mausoleumBiomes.contains(event.getName().toString())) {
+            event.getGeneration().func_242516_a(MAUSOLEUM_CF);
+        }
+        if (IafConfig.generateMausoleums && BiomeConfig.graveyardBiomes.contains(event.getName().toString())) {
+            event.getGeneration().func_242516_a(GRAVEYARD_CF);
+        }
+        if (IafConfig.generateMyrmexColonies && BiomeConfig.desertMyrmexBiomes.contains(event.getName().toString())) {
+            event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, MYRMEX_HIVE_DESERT_CF);
+        }
+        if (IafConfig.generateMyrmexColonies && BiomeConfig.jungleMyrmexBiomes.contains(event.getName().toString())) {
+            event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, MYRMEX_HIVE_JUNGLE_CF);
+        }
+        if (IafConfig.generateMyrmexColonies && BiomeConfig.sirenBiomes.contains(event.getName().toString())) {
+            event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SIREN_ISLAND_CF);
+        }
+        if (BiomeConfig.overworldSpawnBiomes.contains(event.getName().toString())) {
+            event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, MOB_SPAWNS_CF);
+        }
+    }
+
+    public static String getBiomeName(Biome biome) {
+        ResourceLocation loc = ForgeRegistries.BIOMES.getKey(biome);
+        return loc == null ? "" : loc.toString();
+    }
+>>>>>>> aff892f7... server stuff... 2
 }
