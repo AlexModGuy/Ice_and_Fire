@@ -4,10 +4,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.world.gen.*;
-import com.github.alexthe666.iceandfire.world.structure.DreadMausoleumStructure;
-import com.github.alexthe666.iceandfire.world.structure.GorgonTemplePiece;
-import com.github.alexthe666.iceandfire.world.structure.GorgonTempleStructure;
-import com.github.alexthe666.iceandfire.world.structure.MausoleumPiece;
+import com.github.alexthe666.iceandfire.world.structure.*;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -54,6 +51,9 @@ public class IafWorldRegistry {
     public static IStructurePieceType GORGON_PIECE;
     public static Structure<NoFeatureConfig> GORGON_TEMPLE = new GorgonTempleStructure(NoFeatureConfig.field_236558_a_);
     public static final Structure<NoFeatureConfig> GORGON_TEMPLE_SF = func_236394_a_("iceandfire:gorgon_temple", GORGON_TEMPLE, GenerationStage.Decoration.SURFACE_STRUCTURES);
+    public static IStructurePieceType GRAVEYARD_PIECE;
+    public static Structure<NoFeatureConfig> GRAVEYARD = new GraveyardStructure(NoFeatureConfig.field_236558_a_);
+    public static final Structure<NoFeatureConfig> GRAVEYARD_SF = func_236394_a_("iceandfire:graveyard", GRAVEYARD, GenerationStage.Decoration.SURFACE_STRUCTURES);
 
     public static ConfiguredFeature FIRE_LILY_CF;
     public static ConfiguredFeature FROST_LILY_CF;
@@ -77,6 +77,7 @@ public class IafWorldRegistry {
     public static ConfiguredFeature MOB_SPAWNS_CF;
     public static StructureFeature GORGON_TEMPLE_CF;
     public static StructureFeature MAUSOLEUM_CF;
+    public static StructureFeature GRAVEYARD_CF;
 
 
     public static void register() {
@@ -100,11 +101,18 @@ public class IafWorldRegistry {
         GORGON_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece", GorgonTemplePiece.Piece::new);
         GORGON_TEMPLE = Registry.register(Registry.STRUCTURE_FEATURE, "iceandfire:gorgon_temple", GORGON_TEMPLE);
         putStructureOnAList("iceandfire:gorgon_temple", GORGON_TEMPLE);
+
+        GRAVEYARD_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:graveyard_piece", GraveyardPiece.Piece::new);
+        GRAVEYARD = Registry.register(Registry.STRUCTURE_FEATURE, "iceandfire:graveyard", GRAVEYARD);
+        putStructureOnAList("iceandfire:graveyard", GRAVEYARD);
+
         addStructureSeperation(DimensionSettings.field_242734_c, GORGON_TEMPLE, new StructureSeparationSettings(Math.max(IafConfig.spawnGorgonsChance, 2), Math.max(IafConfig.spawnGorgonsChance / 2, 1), 34222645));
         addStructureSeperation(DimensionSettings.field_242734_c, MAUSOLEUM, new StructureSeparationSettings(Math.max(IafConfig.generateMausoleumChance, 2), Math.max(IafConfig.generateMausoleumChance / 2, 1), 34222645));
+        addStructureSeperation(DimensionSettings.field_242734_c, GRAVEYARD, new StructureSeparationSettings(Math.max(IafConfig.spawnGorgonsChance, 2), Math.max(IafConfig.spawnGorgonsChance / 2, 1), 34222644));
 
         GORGON_TEMPLE_CF = Registry.register(WorldGenRegistries.field_243654_f, "iceandfire:gorgon_temple", GORGON_TEMPLE.func_236391_a_(IFeatureConfig.NO_FEATURE_CONFIG));
         MAUSOLEUM_CF = Registry.register(WorldGenRegistries.field_243654_f, "iceandfire:mausoleum", MAUSOLEUM.func_236391_a_(IFeatureConfig.NO_FEATURE_CONFIG));
+        GRAVEYARD_CF = Registry.register(WorldGenRegistries.field_243654_f, "iceandfire:graveyard", GRAVEYARD.func_236391_a_(IFeatureConfig.NO_FEATURE_CONFIG));
 
 
         COPPER_ORE_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:copper_ore", Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.field_241882_a, IafBlockRegistry.COPPER_ORE.getDefaultState(), 5)).func_242733_d(128).func_242728_a().func_242731_b(5));
@@ -262,6 +270,9 @@ public class IafWorldRegistry {
         }
         if (IafConfig.generateMausoleums && BiomeConfig.mausoleumBiomes.contains(event.getName().toString())) {
             event.getGeneration().func_242516_a(MAUSOLEUM_CF);
+        }
+        if (IafConfig.generateMausoleums && BiomeConfig.graveyardBiomes.contains(event.getName().toString())) {
+            event.getGeneration().func_242516_a(GRAVEYARD_CF);
         }
         if (IafConfig.generateMyrmexColonies && BiomeConfig.desertMyrmexBiomes.contains(event.getName().toString())) {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, MYRMEX_HIVE_DESERT_CF);

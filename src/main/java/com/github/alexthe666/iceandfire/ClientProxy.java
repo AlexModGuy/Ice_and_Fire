@@ -208,6 +208,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.CYCLOPS_MULTIPART, manager -> new RenderNothing(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA_MULTIPART, manager -> new RenderNothing(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.GHOST, manager -> new RenderGhost(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.GHOST_SWORD, manager -> new RenderGhostSword(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PODIUM, manager -> new RenderPodium(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.IAF_LECTERN, manager -> new RenderLectern(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.EGG_IN_ICE, manager -> new RenderEggInIce(manager));
@@ -215,6 +216,7 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PIXIE_JAR, manager -> new RenderJar(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.DREAD_PORTAL, manager -> new RenderDreadPortal(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.DREAD_SPAWNER, manager -> new RenderDreadSpawner(manager));
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.GHOST_CHEST, manager -> new RenderGhostChest(manager));
         RenderTypeLookup.setRenderLayer(IafBlockRegistry.GOLD_PILE, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(IafBlockRegistry.SILVER_PILE, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(IafBlockRegistry.LECTERN, RenderType.getCutout());
@@ -312,6 +314,9 @@ public class ClientProxy extends CommonProxy {
         }
         if (name.equals("siren_appearance")) {
             particle = new ParticleSirenAppearance(world, x, y, z, (int)motX);
+        }
+        if (name.equals("ghost_appearance")) {
+            particle = new ParticleGhostAppearance(world, x, y, z, (int)motX);
         }
         if (name.equals("siren_music")) {
             particle = new ParticleSirenMusic(world, x, y, z, motX, motY, motZ, 1);

@@ -39,6 +39,7 @@ public class BiomeConfig {
     public static List<? extends String> stymphalianBiomes = Lists.newArrayList(DefaultBiomes.SWAMPS);
     public static List<? extends String> hydraBiomes = Lists.newArrayList(DefaultBiomes.SWAMPS);
     public static List<? extends String> mausoleumBiomes = Lists.newArrayList(DefaultBiomes.VERY_SNOWY);
+    public static List<? extends String> graveyardBiomes = Lists.newArrayList(DefaultBiomes.GRAVEYARD_BIOMES);
     public static List<? extends String> cockatriceBiomes = Lists.newArrayList(DefaultBiomes.SAVANNAS);
     public static List<? extends String> deathwormBiomes = Lists.newArrayList(DefaultBiomes.DESERT);
     public static List<? extends String> wanderingCyclopsBiomes = Lists.newArrayList(DefaultBiomes.PLAINS);

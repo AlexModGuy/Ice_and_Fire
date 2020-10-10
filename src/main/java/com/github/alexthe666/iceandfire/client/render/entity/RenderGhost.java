@@ -34,6 +34,19 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
 
     }
 
+    public static ResourceLocation getGhostOverlayForType(int ghost) {
+        switch (ghost) {
+            default:
+                return TEXTURE_0;
+            case 1:
+                return TEXTURE_1;
+            case 2:
+                return TEXTURE_2;
+            case -1:
+                return TEXTURE_SHOPPING_LIST;
+        }
+    }
+
     @Override
     public void render(EntityGhost entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         shadowSize = 0;

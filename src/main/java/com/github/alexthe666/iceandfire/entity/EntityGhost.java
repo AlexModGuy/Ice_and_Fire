@@ -11,6 +11,7 @@ import com.github.alexthe666.iceandfire.entity.ai.GhostPathNavigator;
 import com.github.alexthe666.iceandfire.entity.ai.GorgonAIStareAttack;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.*;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.*;
@@ -24,6 +25,7 @@ import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -32,10 +34,9 @@ import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -50,6 +51,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
     private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityGhost.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> CHARGING = EntityDataManager.createKey(EntityGhost.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> IS_DAYTIME_MODE = EntityDataManager.createKey(EntityGhost.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> WAS_FROM_CHEST = EntityDataManager.createKey(EntityGhost.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> DAYTIME_COUNTER = EntityDataManager.createKey(EntityGhost.class, DataSerializers.VARINT);
     public static Animation ANIMATION_SCARE;
     public static Animation ANIMATION_HIT;
@@ -64,10 +66,16 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
         this.moveController = new MoveHelper(this);
     }
 
+
+    protected ResourceLocation getLootTable() {
+        return this.wasFromChest() ? LootTables.EMPTY : this.getType().getLootTable();
+    }
+
+
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, 20D)
+                .func_233815_a_(Attributes.field_233818_a_, 30D)
                 //FOLLOW_RANGE
                 .func_233815_a_(Attributes.field_233819_b_, 64D)
                 //SPEED
@@ -75,7 +83,16 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
                 //ATTACK
                 .func_233815_a_(Attributes.field_233823_f_, 3.0D)
                 //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 0.0D);
+                .func_233815_a_(Attributes.field_233826_i_, 1D);
+    }
+
+    public boolean isPotionApplicable(EffectInstance potioneffectIn) {
+        return potioneffectIn.getPotion() != Effects.POISON  && potioneffectIn.getPotion() != Effects.WITHER && super.isPotionApplicable(potioneffectIn);
+    }
+
+    public boolean isInvulnerableTo(DamageSource source) {
+        return super.isInvulnerableTo(source) || source.isFireDamage() || source == DamageSource.IN_WALL || source == DamageSource.CACTUS
+                || source == DamageSource.DROWN || source == DamageSource.FALLING_BLOCK || source == DamageSource.ANVIL || source == DamageSource.SWEET_BERRY_BUSH;
     }
 
     protected PathNavigator createNavigator(World worldIn) {
@@ -96,6 +113,19 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
 
     public void setDaytimeMode(boolean moving) {
         this.dataManager.set(IS_DAYTIME_MODE, moving);
+    }
+
+    public boolean wasFromChest() {
+        return this.dataManager.get(WAS_FROM_CHEST);
+    }
+
+    public void setFromChest(boolean moving) {
+        this.dataManager.set(WAS_FROM_CHEST, moving);
+    }
+
+
+    public CreatureAttribute getCreatureAttribute() {
+        return CreatureAttribute.UNDEAD;
     }
 
     @Override
@@ -151,7 +181,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
         super.livingTick();
         this.noClip = true;
         if(!world.isRemote){
-            boolean day = isInDaylight();
+            boolean day = isInDaylight() && !this.wasFromChest();
             if(day){
                 if(!this.isDaytimeMode()){
                     this.setAnimation(ANIMATION_SCARE);
@@ -170,6 +200,12 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
             }else{
                 this.setInvisible(this.isPotionActive(Effects.INVISIBILITY));
                 this.setDaytimeCounter(0);
+            }
+        }else{
+            if(this.getAnimation() == ANIMATION_SCARE && this.getAnimationTick() == 3 && !this.isHauntedShoppingList() && rand.nextInt(3) == 0){
+                if(world.isRemote){
+                    IceAndFire.PROXY.spawnParticle("ghost_appearance", this.getPosX(), this.getPosY(), this.getPosZ(), this.getEntityId(), 0, 0);
+                }
             }
         }
         if(this.getAnimation() == ANIMATION_HIT && this.getAttackTarget() != null){
@@ -206,7 +242,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
 
     public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
-        if (itemstack != null && itemstack.getItem() == Items.PAPER && !this.isHauntedShoppingList()) {
+        if (itemstack != null && itemstack.getItem() == IafItemRegistry.MANUSCRIPT && !this.isHauntedShoppingList()) {
             this.setColor(-1);
             this.playSound(IafSoundRegistry.BESTIARY_PAGE, 1, 1);
             if (!player.isCreative()) {
@@ -246,6 +282,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
         this.getDataManager().register(COLOR, Integer.valueOf(0));
         this.getDataManager().register(CHARGING, false);
         this.getDataManager().register(IS_DAYTIME_MODE, false);
+        this.getDataManager().register(WAS_FROM_CHEST, false);
         this.getDataManager().register(DAYTIME_COUNTER, Integer.valueOf(0));
     }
 
@@ -270,6 +307,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
         this.setColor(compound.getInt("Color"));
         this.setDaytimeMode(compound.getBoolean("DaytimeMode"));
         this.setDaytimeCounter(compound.getInt("DaytimeCounter"));
+        this.setFromChest(compound.getBoolean("FromChest"));
         super.readAdditional(compound);
     }
 
@@ -278,6 +316,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
         compound.putInt("Color", this.getColor());
         compound.putBoolean("DaytimeMode", this.isDaytimeMode());
         compound.putInt("DaytimeCounter", this.getDaytimeCounter());
+        compound.putBoolean("FromChest", this.wasFromChest());
         super.writeAdditional(compound);
     }
 

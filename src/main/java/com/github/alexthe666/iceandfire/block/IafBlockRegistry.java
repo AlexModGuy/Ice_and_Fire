@@ -140,6 +140,8 @@ public class IafBlockRegistry {
     public static final Block DREAD_SPAWNER = new BlockDreadSpawner();
     public static final Block BURNT_TORCH = new BlockBurntTorch();
     public static final Block BURNT_TORCH_WALL = new BlockBurntTorchWall();
+    public static final Block GHOST_CHEST = new BlockGhostChest();
+    public static final Block GRAVEYARD_SOIL = new BlockGraveyardSoil();
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
