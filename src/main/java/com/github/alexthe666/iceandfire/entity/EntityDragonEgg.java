@@ -28,6 +28,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.UUID;
 
 public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromStatues, IDeadMob {
@@ -88,7 +89,7 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
         super.registerData();
         this.getDataManager().register(DRAGON_TYPE, Integer.valueOf(0));
         this.getDataManager().register(DRAGON_AGE, Integer.valueOf(0));
-        this.dataManager.register(OWNER_UNIQUE_ID, null);
+        this.getDataManager().register(OWNER_UNIQUE_ID, Optional.empty());
     }
 
     @Nullable
