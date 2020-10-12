@@ -1,4 +1,39 @@
 {
+  "ghost_jumpscare": {
+    "category": "hostile",
+    "sounds": [
+      "iceandfire:ghost_jumpscare"
+    ]
+  },
+  "ghost_attack": {
+    "category": "hostile",
+    "sounds": [
+      "iceandfire:ghost_attack_0",
+      "iceandfire:ghost_attack_1"
+    ]
+  },
+  "ghost_idle": {
+    "category": "hostile",
+    "sounds": [
+      "iceandfire:ghost_idle_0",
+      "iceandfire:ghost_idle_1",
+      "iceandfire:ghost_idle_2"
+    ]
+  },
+  "ghost_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "iceandfire:ghost_hurt_0",
+      "iceandfire:ghost_hurt_1"
+    ]
+  },
+  "ghost_die": {
+    "category": "hostile",
+    "sounds": [
+      "iceandfire:ghost_hurt_0",
+      "iceandfire:ghost_hurt_1"
+    ]
+  },
   "lightningdragon_breath_crackle": {
     "category": "hostile",
     "sounds": [

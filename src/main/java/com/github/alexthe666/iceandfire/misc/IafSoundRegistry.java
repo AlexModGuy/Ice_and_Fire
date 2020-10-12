@@ -250,6 +250,16 @@ public final class IafSoundRegistry {
 
     public static final SoundEvent LIGHTNINGDRAGON_BREATH_CRACKLE = createSoundEvent("lightningdragon_breath_crackle");
 
+    public static final SoundEvent GHOST_IDLE = createSoundEvent("ghost_idle");
+
+    public static final SoundEvent GHOST_HURT = createSoundEvent("ghost_hurt");
+
+    public static final SoundEvent GHOST_DIE = createSoundEvent("ghost_die");
+
+    public static final SoundEvent GHOST_ATTACK = createSoundEvent("ghost_attack");
+
+    public static final SoundEvent GHOST_JUMPSCARE = createSoundEvent("ghost_jumpscare");
+
     private static SoundEvent createSoundEvent(final String soundName) {
         final ResourceLocation soundID = new ResourceLocation(MODID, soundName);
         return new SoundEvent(soundID).setRegistryName(soundID);
