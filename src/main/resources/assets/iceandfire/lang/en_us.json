@@ -720,12 +720,11 @@
   "bestiary.dread_mobs": "The Undead",
   "bestiary.lightningdragon": "Lightning Dragon",
   "bestiary.lightningdragonegg": "Lightning Dragon Eggs",
-
+  "bestiary.ghost": "Ghost",
   "lectern.nopages": "No new information can be added.",
   "silvertools.hurt": "+2 damage against undead",
   "myrmextools.hurt": "+4 damage against non-arthropods and deathworms",
   "myrmextools.poison": "poisons for 10 seconds",
-
   "dragon_sword_fire.hurt1": "+8 damage against Ice Dragons",
   "dragon_sword_fire.hurt2": "Ignites and knocks back targets",
   "dragon_sword_ice.hurt1": "+8 damage against Fire Dragons",

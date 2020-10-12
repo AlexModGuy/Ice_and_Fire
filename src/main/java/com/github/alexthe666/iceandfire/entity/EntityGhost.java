@@ -71,17 +71,31 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
         return this.wasFromChest() ? LootTables.EMPTY : this.getType().getLootTable();
     }
 
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        return IafSoundRegistry.GHOST_IDLE;
+    }
+
+    @Nullable
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return IafSoundRegistry.GHOST_HURT;
+    }
+
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        return IafSoundRegistry.GHOST_DIE;
+    }
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, 30D)
+                .func_233815_a_(Attributes.field_233818_a_, IafConfig.ghostMaxHealth)
                 //FOLLOW_RANGE
                 .func_233815_a_(Attributes.field_233819_b_, 64D)
                 //SPEED
                 .func_233815_a_(Attributes.field_233821_d_, 0.15D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, 3.0D)
+                .func_233815_a_(Attributes.field_233823_f_, IafConfig.ghostAttackStrength)
                 //ARMOR
                 .func_233815_a_(Attributes.field_233826_i_, 1D);
     }
@@ -203,6 +217,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
             }
         }else{
             if(this.getAnimation() == ANIMATION_SCARE && this.getAnimationTick() == 3 && !this.isHauntedShoppingList() && rand.nextInt(3) == 0){
+                this.playSound(IafSoundRegistry.GHOST_JUMPSCARE, this.getSoundVolume(), this.getSoundPitch());
                 if(world.isRemote){
                     IceAndFire.PROXY.spawnParticle("ghost_appearance", this.getPosX(), this.getPosY(), this.getPosZ(), this.getEntityId(), 0, 0);
                 }
@@ -210,6 +225,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
         }
         if(this.getAnimation() == ANIMATION_HIT && this.getAttackTarget() != null){
             if(this.getDistance(this.getAttackTarget()) < 1.4D && this.getAnimationTick() >= 4 && this.getAnimationTick() < 6) {
+                this.playSound(IafSoundRegistry.GHOST_ATTACK, this.getSoundVolume(), this.getSoundPitch());
                 this.attackEntityAsMob(this.getAttackTarget());
             }
         }
