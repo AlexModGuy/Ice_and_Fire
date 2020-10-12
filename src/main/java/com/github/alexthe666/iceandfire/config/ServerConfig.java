@@ -148,6 +148,11 @@ public class ServerConfig {
     public ForgeConfigSpec.ConfigValue<List<? extends String>> dragonBlacklistDimensions;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> dragonWhitelistDimensions;
     public final ForgeConfigSpec.DoubleValue dragonFlightSpeedMod;
+    public final ForgeConfigSpec.DoubleValue ghostMaxHealth;
+    public final ForgeConfigSpec.DoubleValue ghostAttackStrength;
+    public final ForgeConfigSpec.BooleanValue generateGraveyards;
+    public final ForgeConfigSpec.IntValue generateGraveyardChance;
+    public final ForgeConfigSpec.BooleanValue ghostSpawnFromPlayerDeaths;
 
     public ServerConfig(final ForgeConfigSpec.Builder builder) {
         builder.push("general");
@@ -332,6 +337,11 @@ public class ServerConfig {
         this.dangerousWorldGenSeparationLimit = buildInt(builder, "Dangerous World Gen Dist Seperation", "all", 300, 1, 10000, "How far away dangerous structures(dragon roosts, cyclops caves, etc.) must be from the last generated structure.");
         this.dragonFlightSpeedMod = buildDouble(builder, "Dragon Flight Speed Modifier", "all", 1F, 0.0F, 2.0F, "Change this to slow down or speed up dragon or amphithere flight.");
 
+        this.generateGraveyards = buildBoolean(builder, "Generate Graveyards", "all", true, "Whether to generate graveyards or not");
+        this.generateGraveyardChance = buildInt(builder, "Ghost Max Health", "all", 16, 2, 10000, "Graveyard rarity.");
+        this.ghostMaxHealth = buildDouble(builder, "Ghost Max Health", "all", 30F, 1.0F, 10000.0F, "Maximum ghost health.");
+        this.ghostAttackStrength = buildDouble(builder, "Ghost Attack Strength", "all", 3F, 0.0F, 10000.0F, "Maximum ghost attack strength.");
+        this.ghostSpawnFromPlayerDeaths = buildBoolean(builder, "Ghost Spawn from PvP deaths", "all", true, "True if ghosts can rarely spawn from brutal PvP deaths.");
     }
 
     private static ForgeConfigSpec.BooleanValue buildBoolean(ForgeConfigSpec.Builder builder, String name, String catagory, boolean defaultValue, String comment){

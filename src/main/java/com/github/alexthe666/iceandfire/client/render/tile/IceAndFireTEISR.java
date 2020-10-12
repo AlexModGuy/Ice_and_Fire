@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.client.render.tile;
 import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadPortal;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityGhostChest;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemDeathwormGauntlet;
@@ -27,6 +28,8 @@ public class IceAndFireTEISR extends ItemStackTileEntityRenderer {
     private RenderGorgonHead renderGorgonHeadDead = new RenderGorgonHead(false);
     private RenderPixieHouse renderPixieHouse = new RenderPixieHouse(TileEntityRendererDispatcher.instance);
     private TileEntityDreadPortal dreadPortalDummy = new TileEntityDreadPortal();
+    private RenderGhostChest renderGhostChest = new RenderGhostChest(TileEntityRendererDispatcher.instance);
+    private TileEntityGhostChest ghostChestDummy = new TileEntityGhostChest();
 
     public void render(ItemStack itemStackIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         if (itemStackIn.getItem() == IafItemRegistry.GORGON_HEAD) {
@@ -36,6 +39,9 @@ public class IceAndFireTEISR extends ItemStackTileEntityRenderer {
                 renderGorgonHeadDead.render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
             }
         }
+        if (itemStackIn.getItem() == IafBlockRegistry.GHOST_CHEST.asItem()) {
+            renderGhostChest.render(ghostChestDummy, 0, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+        }
 
         if (itemStackIn.getItem() instanceof ItemTrollWeapon) {
             ItemTrollWeapon weaponItem = (ItemTrollWeapon) itemStackIn.getItem();
@@ -44,10 +50,10 @@ public class IceAndFireTEISR extends ItemStackTileEntityRenderer {
         if (itemStackIn.getItem() instanceof ItemDeathwormGauntlet) {
             renderDeathWormGauntlet.renderItem(itemStackIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
         }
-        if (itemStackIn.getItem()  instanceof BlockItem && ((BlockItem) itemStackIn.getItem()).getBlock() == IafBlockRegistry.DREAD_PORTAL) {
+        if (itemStackIn.getItem() instanceof BlockItem && ((BlockItem) itemStackIn.getItem()).getBlock() == IafBlockRegistry.DREAD_PORTAL) {
             renderDreadPortal.render(dreadPortalDummy, 0, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
         }
-        if (itemStackIn.getItem()  instanceof BlockItem && ((BlockItem) itemStackIn.getItem()).getBlock() instanceof BlockPixieHouse) {
+        if (itemStackIn.getItem() instanceof BlockItem && ((BlockItem) itemStackIn.getItem()).getBlock() instanceof BlockPixieHouse) {
             renderPixieHouse.metaOverride = (BlockItem) itemStackIn.getItem();
             renderPixieHouse.render(null, 0, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
         }
