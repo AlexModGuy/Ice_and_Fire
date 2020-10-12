@@ -27,7 +27,7 @@ public class DragonAIEscort extends Goal {
             if (dist > this.dragon.getBoundingBox().getAverageEdgeLength() && (!this.dragon.isFlying() && !this.dragon.isHovering() || !dragon.isAllowedToTriggerFlight())) {
                 this.dragon.getNavigator().tryMoveToEntityLiving(this.dragon.getOwner(), 1.5F);
             }
-            if ((dist > 30 || this.dragon.getOwner().getPosY() - this.dragon.getPosY() > 8) && !this.dragon.isFlying() && !this.dragon.isHovering() && dragon.isAllowedToTriggerFlight()) {
+            if ((dist > 30 || Math.abs(this.dragon.getOwner().getPosY() - this.dragon.getPosY()) > 8) && !this.dragon.isFlying() && !this.dragon.isHovering() && dragon.isAllowedToTriggerFlight()) {
                 this.dragon.setHovering(true);
                 this.dragon.setSleeping(false);
                 this.dragon.setSitting(false);

@@ -12,6 +12,8 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 
+import java.util.Random;
+
 public class DragonType {
 
     public static final DragonType FIRE = new DragonType("fire");
@@ -76,7 +78,7 @@ public class DragonType {
                         dragon.setCustomName(egg.getCustomName());
                     }
                     dragon.setVariant(egg.getEggType().ordinal());
-                    dragon.setGender(egg.getRNG().nextBoolean());
+                    dragon.setGender(new Random().nextBoolean());
                     dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                     dragon.setHunger(50);
                     if (!egg.world.isRemote) {
@@ -116,7 +118,7 @@ public class DragonType {
                     dragon.setCustomName(egg.getCustomName());
                 }
                 dragon.setVariant(egg.getEggType().ordinal() - 8);
-                dragon.setGender(egg.getRNG().nextBoolean());
+                dragon.setGender(new Random().nextBoolean());
                 dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                 dragon.setHunger(50);
                 if (!egg.world.isRemote) {
