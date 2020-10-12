@@ -236,10 +236,10 @@ public class DragonUtils {
         double extraZ = radius * MathHelper.cos(angle);
         BlockPos radialPos = new BlockPos(target.getPosX() + extraX, target.getPosY(), target.getPosZ() + extraZ);
         BlockPos ground = radialPos;
-        if( ghost.getDistanceSq(Vector3d.func_237489_a_(ground)) > 30) {
+        if( ghost.getDistanceSq(new Vec3d(ground)) > 30) {
             return ground;
         }
-        return ghost.func_233580_cy_();
+        return ghost.getPosition();
     }
 
     public static BlockPos getBlockInTargetsViewGorgon(EntityGorgon cockatrice, LivingEntity target) {

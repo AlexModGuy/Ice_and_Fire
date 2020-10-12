@@ -43,11 +43,11 @@ public class GorgonTempleStructure extends ScatteredStructure<NoFeatureConfig> {
     }
 
     protected int getBiomeFeatureDistance(ChunkGenerator<?> chunkGenerator) {
-        return 8;// Math.max(IafConfig.spawnGorgonsChance, 2);
+        return Math.max(IafConfig.spawnGorgonsChance, 2);
     }
 
     protected int getBiomeFeatureSeparation(ChunkGenerator<?> chunkGenerator) {
-        return 4; //Math.max(IafConfig.spawnGorgonsChance / 2, 1);
+        return Math.max(IafConfig.spawnGorgonsChance / 2, 1);
     }
 
     public static class Start extends StructureStart {

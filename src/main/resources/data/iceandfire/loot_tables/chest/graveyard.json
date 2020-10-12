@@ -1,7 +1,7 @@
 {
   "pools": [
     {
-      "name": "hydra_cave",
+      "name": "graveayrd",
       "rolls": {
         "min": 1,
         "max": 15
@@ -77,13 +77,13 @@
         },
         {
           "type": "item",
-          "name": "minecraft:chain",
+          "name": "iceandfire:chain",
           "functions": [
             {
               "function": "set_count",
               "count": {
                 "min": 1,
-                "max": 2
+                "max": 1
               }
             }
           ],

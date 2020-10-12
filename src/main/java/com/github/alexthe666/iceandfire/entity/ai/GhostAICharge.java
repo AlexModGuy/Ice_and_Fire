@@ -9,15 +9,15 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.monster.VexEntity;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.EnumSet;
 
 public class GhostAICharge extends Goal {
     private EntityGhost ghost;
     public boolean firstPhase = true;
-    public Vector3d moveToPos = null;
-    public Vector3d offsetOf = Vector3d.ZERO;
+    public Vec3d moveToPos = null;
+    public Vec3d offsetOf = Vec3d.ZERO;
 
     public GhostAICharge(EntityGhost ghost) {
         this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
@@ -51,7 +51,7 @@ public class GhostAICharge extends Goal {
             if(firstPhase){
                 if(this.moveToPos == null){
                     BlockPos moveToPos = DragonUtils.getBlockInTargetsViewGhost(ghost, target);
-                    this.moveToPos = Vector3d.func_237489_a_(moveToPos);
+                    this.moveToPos = new Vec3d(moveToPos);
                 }else{
                     this.ghost.getNavigator().tryMoveToXYZ(this.moveToPos.x + 0.5D, this.moveToPos.y + 0.5D, this.moveToPos.z + 0.5D, 1F);
                     if(this.ghost.getDistanceSq(this.moveToPos.add(0.5D, 0.5D, 0.5D)) < 9D){
@@ -64,8 +64,8 @@ public class GhostAICharge extends Goal {
                     }
                 }
             }else{
-                Vector3d fin = target.getPositionVec();
-                this.moveToPos = new Vector3d(fin.x, target.getPosY() + target.getEyeHeight()/2, fin.z);
+                Vec3d fin = target.getPositionVec();
+                this.moveToPos = new Vec3d(fin.x, target.getPosY() + target.getEyeHeight()/2, fin.z);
                 this.ghost.getNavigator().tryMoveToEntityLiving(target, 1.2F);
                 if(this.ghost.getDistanceSq(this.moveToPos.add(0.5D, 0.5D, 0.5D)) < 3D) {
                     this.resetTask();
@@ -78,7 +78,7 @@ public class GhostAICharge extends Goal {
         } else {
             double lvt_2_1_ = ghost.getDistanceSq(lvt_1_1_);
             if (lvt_2_1_ < 9.0D) {
-                Vector3d lvt_4_1_ = lvt_1_1_.getEyePosition(1.0F);
+                Vec3d lvt_4_1_ = lvt_1_1_.getEyePosition(1.0F);
                 ghost.getMoveHelper().setMoveTo(lvt_4_1_.x, lvt_4_1_.y, lvt_4_1_.z, 1.0D);
             }
         }*/

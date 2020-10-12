@@ -14,19 +14,19 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.settings.PointOfView;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.World;
 
 public class ParticleGhostAppearance extends Particle {
     private final ModelGhost field_228342_a_ = new ModelGhost();
     private int ghost;
     private boolean fromLeft = false;
-    public ParticleGhostAppearance(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int ghost) {
+    public ParticleGhostAppearance(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int ghost) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn);
         this.particleGravity = 0.0F;
         this.maxAge = 15;
@@ -42,7 +42,7 @@ public class ParticleGhostAppearance extends Particle {
         float f = ((float) this.age + partialTicks) / (float) this.maxAge;
         float f1 = 0.05F + 0.5F * MathHelper.sin(f * (float) Math.PI);
         Entity entity = world.getEntityByID(ghost);
-        if(entity instanceof EntityGhost && Minecraft.getInstance().gameSettings.func_243230_g() == PointOfView.FIRST_PERSON){
+        if(entity instanceof EntityGhost && Minecraft.getInstance().gameSettings.thirdPersonView == 0){
             EntityGhost ghostEntity = (EntityGhost)entity;
             MatrixStack matrixstack = new MatrixStack();
             matrixstack.rotate(renderInfo.getRotation());

@@ -6,8 +6,7 @@ import com.github.alexthe666.iceandfire.entity.EntityGhost;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -17,10 +16,6 @@ import net.minecraft.entity.Pose;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Matrix3f;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.fml.common.Mod;
 
 public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
 
@@ -114,7 +109,6 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
         Minecraft minecraft = Minecraft.getInstance();
         boolean flag = this.isVisible(entityIn);
         boolean flag1 = !flag && !entityIn.isInvisibleToPlayer(minecraft.player);
-        boolean flag2 = minecraft.func_238206_b_(entityIn);
         float alphaForRender = this.getAlphaForRender(entityIn, partialTicks);
         RenderType rendertype = entityIn.isDaytimeMode() ? IafRenderType.getGhostDaytime(getEntityTexture(entityIn)) : IafRenderType.getGhost(getEntityTexture(entityIn));//this.func_230496_a_(entityIn, flag, flag1, flag2);
         if (rendertype != null && !entityIn.isInvisible()) {
@@ -162,7 +156,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
         }
 
         matrixStackIn.pop();
-        net.minecraftforge.client.event.RenderNameplateEvent renderNameplateEvent = new net.minecraftforge.client.event.RenderNameplateEvent(entityIn, entityIn.getDisplayName(), this, matrixStackIn, bufferIn, packedLightIn, partialTicks);
+        net.minecraftforge.client.event.RenderNameplateEvent renderNameplateEvent = new net.minecraftforge.client.event.RenderNameplateEvent(entityIn,entityIn.getDisplayName().getFormattedText(), matrixStackIn, bufferIn);
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(renderNameplateEvent);
         if (renderNameplateEvent.getResult() != net.minecraftforge.eventbus.api.Event.Result.DENY && (renderNameplateEvent.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW || this.canRenderName(entityIn))) {
             this.renderName(entityIn, renderNameplateEvent.getContent(), matrixStackIn, bufferIn, packedLightIn);

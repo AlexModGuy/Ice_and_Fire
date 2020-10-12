@@ -20,7 +20,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.*;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -77,27 +76,27 @@ public class EntityGhostSword  extends AbstractArrowEntity {
         if (particleDistSq(x, y, z) < f * f) {
             this.world.addParticle(ParticleTypes.SNEEZE, x, y + 0.5D, z, d0, d1, d2);
         }
-        Vector3d vector3d = this.getMotion();
-        float f3 = MathHelper.sqrt(horizontalMag(vector3d));
-        this.rotationYaw = (float)(MathHelper.atan2(vector3d.x, vector3d.z) * (double)(180F / (float)Math.PI));
-        this.rotationPitch = (float)(MathHelper.atan2(vector3d.y, (double)f3) * (double)(180F / (float)Math.PI));
+        Vec3d Vec3d = this.getMotion();
+        float f3 = MathHelper.sqrt(horizontalMag(Vec3d));
+        this.rotationYaw = (float)(MathHelper.atan2(Vec3d.x, Vec3d.z) * (double)(180F / (float)Math.PI));
+        this.rotationPitch = (float)(MathHelper.atan2(Vec3d.y, (double)f3) * (double)(180F / (float)Math.PI));
         this.prevRotationYaw = this.rotationYaw;
         this.prevRotationPitch = this.rotationPitch;
-        Vector3d vector3d2 = this.getPositionVec();
-        Vector3d vector3d3 = vector3d2.add(vector3d);
-        RayTraceResult raytraceresult = this.world.rayTraceBlocks(new RayTraceContext(vector3d2, vector3d3, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+        Vec3d Vec3d2 = this.getPositionVec();
+        Vec3d Vec3d3 = Vec3d2.add(Vec3d);
+        RayTraceResult raytraceresult = this.world.rayTraceBlocks(new RayTraceContext(Vec3d2, Vec3d3, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
         if (raytraceresult.getType() != RayTraceResult.Type.MISS) {
-            vector3d3 = raytraceresult.getHitVec();
+            Vec3d3 = raytraceresult.getHitVec();
         }
         while(!this.removed) {
-            EntityRayTraceResult entityraytraceresult = this.rayTraceEntities(vector3d2, vector3d3);
+            EntityRayTraceResult entityraytraceresult = this.rayTraceEntities(Vec3d2, Vec3d3);
             if (entityraytraceresult != null) {
                 raytraceresult = entityraytraceresult;
             }
 
             if (raytraceresult != null && raytraceresult.getType() == RayTraceResult.Type.ENTITY) {
                 Entity entity = ((EntityRayTraceResult)raytraceresult).getEntity();
-                Entity entity1 = this.func_234616_v_();
+                Entity entity1 = this.getShooter();
                 if (entity instanceof PlayerEntity && entity1 instanceof PlayerEntity && !((PlayerEntity)entity1).canAttackPlayer((PlayerEntity)entity)) {
                     raytraceresult = null;
                     entityraytraceresult = null;
@@ -106,7 +105,7 @@ public class EntityGhostSword  extends AbstractArrowEntity {
 
             if (raytraceresult != null && raytraceresult.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                 if(raytraceresult.getType() != RayTraceResult.Type.BLOCK){
-                    this.onImpact(raytraceresult);
+                    this.onHit(raytraceresult);
 
                 }
                 this.isAirBorne = true;
@@ -136,7 +135,7 @@ public class EntityGhostSword  extends AbstractArrowEntity {
 
     protected void arrowHit(LivingEntity living) {
         super.arrowHit(living);
-        if (living != null && (this.func_234616_v_() == null || !living.isEntityEqual(this.func_234616_v_()))) {
+        if (living != null && (this.getShooter() == null || !living.isEntityEqual(this.getShooter()))) {
             if (living instanceof PlayerEntity) {
                 this.damageShield((PlayerEntity) living, (float) this.getDamage());
             }
@@ -221,7 +220,7 @@ public class EntityGhostSword  extends AbstractArrowEntity {
             i += this.rand.nextInt(i / 2 + 2);
         }
 
-        Entity entity1 = this.func_234616_v_();
+        Entity entity1 = this.getShooter();
         DamageSource damagesource = DamageSource.MAGIC;
         if (entity1 != null) {
             if (entity1 instanceof LivingEntity) {
@@ -250,7 +249,7 @@ public class EntityGhostSword  extends AbstractArrowEntity {
                 }
 
                 if (this.knockbackStrength > 0) {
-                    Vector3d vec3d = this.getMotion().mul(1.0D, 0.0D, 1.0D).normalize().scale((double)this.knockbackStrength * 0.6D);
+                    Vec3d vec3d = this.getMotion().mul(1.0D, 0.0D, 1.0D).normalize().scale((double)this.knockbackStrength * 0.6D);
                     if (vec3d.lengthSquared() > 0.0D) {
                         livingentity.addVelocity(vec3d.x, 0.1D, vec3d.z);
                     }
@@ -258,7 +257,7 @@ public class EntityGhostSword  extends AbstractArrowEntity {
 
                 this.arrowHit(livingentity);
                 if (entity1 != null && livingentity != entity1 && livingentity instanceof PlayerEntity && entity1 instanceof ServerPlayerEntity) {
-                    ((ServerPlayerEntity)entity1).connection.sendPacket(new SChangeGameStatePacket(SChangeGameStatePacket.field_241770_g_, 0.0F));
+                    ((ServerPlayerEntity)entity1).connection.sendPacket(new SChangeGameStatePacket(6, 0.0F));
                 }
 
                 if (!entity.isAlive() && this.hitEntities != null) {

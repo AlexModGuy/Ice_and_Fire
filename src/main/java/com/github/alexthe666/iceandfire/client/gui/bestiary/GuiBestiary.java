@@ -1061,16 +1061,9 @@ public class GuiBestiary extends Screen {
         net.minecraft.client.gui.FontRenderer font = null;
         if (!stack.isEmpty()) font = stack.getItem().getFontRenderer(stack);
         if (font == null) font = getFont();
-<<<<<<< HEAD
         GL11.glScalef(scale, scale, scale);
         this.itemRenderer.zLevel = -100;
         this.itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
-=======
-        RenderSystem.scalef(scale, scale, scale);
-        this.field_230707_j_.zLevel = -100;
-        RenderSystem.depthMask(true);
-        this.field_230707_j_.renderItemAndEffectIntoGUI(stack, x, y);
->>>>>>> 9febb8d3... mob complete
         zLevel = 0.0F;
         this.itemRenderer.zLevel = 0.0F;
         GL11.glPopMatrix();

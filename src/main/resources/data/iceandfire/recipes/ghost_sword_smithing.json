@@ -1,11 +1,13 @@
 {
-  "type": "minecraft:smithing",
-  "base": {
-    "item": "iceandfire:dragonbone_sword"
-  },
-  "addition": {
-    "item": "iceandfire:ghost_ingot"
-  },
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "iceandfire:dragonbone_sword"
+    },
+    {
+      "item": "iceandfire:ghost_ingot"
+    }
+  ],
   "result": {
     "item": "iceandfire:ghost_sword"
   }

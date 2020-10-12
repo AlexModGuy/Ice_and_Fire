@@ -23,14 +23,6 @@ public class TileEntityGhostChest extends ChestTileEntity {
         super(IafTileEntityRegistry.GHOST_CHEST);
     }
 
-    public void func_230337_a_(BlockState p_230337_1_, CompoundNBT p_230337_2_) {
-        super.func_230337_a_(p_230337_1_, p_230337_2_);
-    }
-
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
-        return compound;
-    }
     public void openInventory(PlayerEntity player) {
         super.openInventory(player);
         if(this.world.getDifficulty() != Difficulty.PEACEFUL){
@@ -38,7 +30,7 @@ public class TileEntityGhostChest extends ChestTileEntity {
             Random random = new Random();
             ghost.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 0.5F, this.pos.getZ() + 0.5F, random.nextFloat() * 360F, 0);
             if(!this.world.isRemote){
-                ghost.onInitialSpawn((ServerWorld)world, world.getDifficultyForLocation(this.pos), SpawnReason.SPAWNER, null, null);
+                ghost.onInitialSpawn(world, world.getDifficultyForLocation(this.pos), SpawnReason.SPAWNER, null, null);
                 if(!player.isCreative()){
                     ghost.setAttackTarget(player);
                 }

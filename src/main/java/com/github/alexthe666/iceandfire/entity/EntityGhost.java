@@ -14,9 +14,8 @@ import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
+import net.minecraft.client.renderer.Vector3d;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.BoatEntity;
@@ -25,7 +24,6 @@ import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -39,10 +37,11 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTables;
 
 import javax.annotation.Nullable;
 
@@ -86,18 +85,14 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
         return IafSoundRegistry.GHOST_DIE;
     }
 
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-                //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, IafConfig.ghostMaxHealth)
-                //FOLLOW_RANGE
-                .func_233815_a_(Attributes.field_233819_b_, 64D)
-                //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.15D)
-                //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, IafConfig.ghostAttackStrength)
-                //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 1D);
+
+    protected void registerAttributes() {
+        super.registerAttributes();
+        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.15D);
+        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IafConfig.ghostAttackStrength);
+        this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
+        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IafConfig.ghostMaxHealth);
+        this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
     }
 
     public boolean isPotionApplicable(EffectInstance potioneffectIn) {
@@ -206,7 +201,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
                 this.setDaytimeCounter(0);
             }
             if(isDaytimeMode()){
-                this.setMotion(Vector3d.ZERO);
+                this.setMotion(Vec3d.ZERO);
                 this.setDaytimeCounter(this.getDaytimeCounter() + 1);
                 if(getDaytimeCounter() >= 100){
                     this.setInvisible(true);
@@ -256,7 +251,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
         return true;
     }
 
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
+    public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         if (itemstack != null && itemstack.getItem() == IafItemRegistry.MANUSCRIPT && !this.isHauntedShoppingList()) {
             this.setColor(-1);
@@ -264,16 +259,16 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
             if (!player.isCreative()) {
                 itemstack.shrink(1);
             }
-            return ActionResultType.SUCCESS;
+            return true;
         }
-        return super.func_230254_b_(player, hand);
+        return super.processInteract(player, hand);
     }
 
     @Override
-    public void travel(Vector3d vec) {
+    public void travel(Vec3d vec) {
         float f4;
         if (this.isDaytimeMode()) {
-            super.travel(Vector3d.ZERO);
+            super.travel(Vec3d.ZERO);
             return;
         }
         super.travel(vec);
@@ -281,7 +276,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
 
     @Override
     @Nullable
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setColor(this.rand.nextInt(3));
         if (rand.nextInt(200) == 0) {
@@ -381,7 +376,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
 
         public void tick() {
             if (this.action == Action.MOVE_TO) {
-                Vector3d vec3d = new Vector3d(this.getX() - ghost.getPosX(), this.getY() - ghost.getPosY(), this.getZ() - ghost.getPosZ());
+                Vec3d vec3d = new Vec3d(this.getX() - ghost.getPosX(), this.getY() - ghost.getPosY(), this.getZ() - ghost.getPosZ());
                 double d0 = vec3d.length();
                 double edgeLength = ghost.getBoundingBox().getAverageEdgeLength();
                 if (d0 < edgeLength) {
@@ -390,7 +385,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
                 } else {
                     ghost.setMotion(ghost.getMotion().add(vec3d.scale(this.speed * 0.5D * 0.05D / d0)));
                     if (ghost.getAttackTarget() == null) {
-                        Vector3d vec3d1 = ghost.getMotion();
+                        Vec3d vec3d1 = ghost.getMotion();
                         ghost.rotationYaw = -((float) MathHelper.atan2(vec3d1.x, vec3d1.z)) * (180F / (float) Math.PI);
                         ghost.renderYawOffset = ghost.rotationYaw;
                     } else {

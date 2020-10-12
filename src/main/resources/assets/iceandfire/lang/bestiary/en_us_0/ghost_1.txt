@@ -30,7 +30,7 @@ Ghosts also have a chance
 to drop a Phantasmal Ingot,
 which can be used to upgrade
 a dragonbone sword in the
-smithing table into a
+crafting table into a
 Phantasmal Blade.
 <item><iceandfire:ghost_sword 10 110 55 1.25>
 

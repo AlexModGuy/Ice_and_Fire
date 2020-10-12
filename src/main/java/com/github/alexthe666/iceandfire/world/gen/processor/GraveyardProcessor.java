@@ -3,6 +3,8 @@ package com.github.alexthe666.iceandfire.world.gen.processor;
 import com.github.alexthe666.iceandfire.block.BlockGhostChest;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.types.DynamicOps;
 import net.minecraft.block.AbstractChestBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -51,7 +53,7 @@ public class GraveyardProcessor extends StructureProcessor {
         }
     }
 
-    public Template.BlockInfo func_230386_a_(IWorldReader worldReader, BlockPos pos, BlockPos pos2, Template.BlockInfo infoIn1, Template.BlockInfo infoIn2, PlacementSettings settings) {
+    public Template.BlockInfo process(IWorldReader worldReader, BlockPos pos, Template.BlockInfo infoIn1, Template.BlockInfo infoIn2, PlacementSettings settings) {
         Random random = settings.getRandom(infoIn2.pos);
         if (infoIn2.state.getBlock() == Blocks.STONE_BRICKS) {
             BlockState state = getRandomCrackedBlock(null, random);
@@ -113,6 +115,11 @@ public class GraveyardProcessor extends StructureProcessor {
     @Override
     protected IStructureProcessorType getType() {
         return IStructureProcessorType.BLOCK_ROT;
+    }
+
+    @Override
+    protected <T> Dynamic<T> serialize0(DynamicOps<T> ops) {
+        return null;
     }
 
     private EntityType getRandomMobForMobSpawner(Random random) {

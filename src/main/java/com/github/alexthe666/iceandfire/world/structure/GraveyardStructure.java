@@ -2,23 +2,25 @@ package com.github.alexthe666.iceandfire.world.structure;
 
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.mojang.serialization.Codec;
+import com.mojang.datafixers.Dynamic;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.structure.ScatteredStructure;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
-public class GraveyardStructure extends Structure<NoFeatureConfig> {
+import java.util.function.Function;
 
-    public GraveyardStructure(Codec<NoFeatureConfig> p_i51440_1_) {
+public class GraveyardStructure extends ScatteredStructure<NoFeatureConfig> {
+
+    public GraveyardStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> p_i51440_1_) {
         super(p_i51440_1_);
         this.setRegistryName("iceandfire:graveyard");
     }
@@ -39,17 +41,17 @@ public class GraveyardStructure extends Structure<NoFeatureConfig> {
         return GraveyardStructure.Start::new;
     }
 
-   /* protected int getSeedModifier() {
+    protected int getSeedModifier() {
         return 123456789;
     }
 
     protected int getBiomeFeatureDistance(ChunkGenerator<?> chunkGenerator) {
-        return 8;// Math.max(IafConfig.spawnGorgonsChance, 2);
+        return Math.max(IafConfig.generateGraveyardChance, 2);
     }
 
     protected int getBiomeFeatureSeparation(ChunkGenerator<?> chunkGenerator) {
-        return 4; //Math.max(IafConfig.spawnGorgonsChance / 2, 1);
-    }*/
+        return Math.max(IafConfig.generateGraveyardChance / 2, 1);
+    }
 
     public static class Start extends StructureStart {
         public Start(Structure<?> p_i225817_1_, int p_i225817_2_, int p_i225817_3_, MutableBoundingBox p_i225817_4_, int p_i225817_5_, long p_i225817_6_) {
@@ -57,10 +59,10 @@ public class GraveyardStructure extends Structure<NoFeatureConfig> {
         }
 
         @Override
-        public void func_230364_a_(DynamicRegistries p_230364_1_, ChunkGenerator p_230364_2_, TemplateManager p_230364_3_, int x, int z, Biome p_230364_6_, IFeatureConfig p_230364_7_) {
+        public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn) {
             Rotation rotation = Rotation.values()[this.rand.nextInt(Rotation.values().length)];
-            BlockPos blockpos = new BlockPos(x * 16, 90, z * 16);
-            GraveyardPiece.func_204760_a(p_230364_3_, blockpos, rotation, this.components, this.rand);
+            BlockPos blockpos = new BlockPos(chunkX * 16, 90, chunkZ * 16);
+            GraveyardPiece.func_204760_a(templateManagerIn, blockpos, rotation, this.components, this.rand);
             this.recalculateStructureSize();
         }
     }
