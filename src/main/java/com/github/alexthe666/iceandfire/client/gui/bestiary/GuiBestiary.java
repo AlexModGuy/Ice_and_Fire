@@ -40,7 +40,9 @@ import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -961,6 +963,7 @@ public class GuiBestiary extends Screen {
         if (font == null) font = getFont();
         RenderSystem.scalef(scale, scale, scale);
         this.field_230707_j_.zLevel = -100;
+        RenderSystem.depthMask(true);
         this.field_230707_j_.renderItemAndEffectIntoGUI(stack, x, y);
         zLevel = 0.0F;
         this.field_230707_j_.zLevel = 0.0F;

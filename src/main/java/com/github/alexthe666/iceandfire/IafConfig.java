@@ -159,6 +159,11 @@ public class IafConfig {
     public static double dangerousWorldGenDistanceLimit = 1000;
     public static double dangerousWorldGenSeparationLimit = 300;
     public static double dragonFlightSpeedMod = 1F;
+    public static boolean generateGraveyards = true;
+    public static int generateGraveyardChance = 16;
+    public static double ghostMaxHealth = 30;
+    public static double ghostAttackStrength = 3;
+    public static boolean ghostsFromPlayerDeaths = true;
 
     public static void bakeClient(final ModConfig config) {
         try {
@@ -312,6 +317,11 @@ public class IafConfig {
             whitelistedDimensions = ConfigHolder.SERVER.whitelistDimensions.get();
             blacklistedDimensions = ConfigHolder.SERVER.blacklistDimensions.get();
             dragonFlightSpeedMod = ConfigHolder.SERVER.dragonFlightSpeedMod.get();
+            generateGraveyards = ConfigHolder.SERVER.generateGraveyards.get();
+            generateGraveyardChance = ConfigHolder.SERVER.generateGraveyardChance.get();
+            ghostMaxHealth = ConfigHolder.SERVER.ghostMaxHealth.get();
+            ghostAttackStrength = ConfigHolder.SERVER.ghostAttackStrength.get();
+            ghostsFromPlayerDeaths = ConfigHolder.SERVER.ghostSpawnFromPlayerDeaths.get();
         } catch (Exception e) {
             IceAndFire.LOGGER.warn("An exception was caused trying to load the common config for Ice and Fire.");
             e.printStackTrace();
