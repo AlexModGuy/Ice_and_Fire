@@ -121,6 +121,9 @@
   "block.iceandfire.dreadwood_planks_lock": "드레드 나무 열쇠구멍",
   "block.iceandfire.dread_portal": "드레드 랜드 포탈",
   "block.iceandfire.dread_spawner": "드레드  몹 생성기",
+  "block.iceandfire.ghost_chest": "저주받은 상자",
+  "block.iceandfire.graveyard_soil": "무덤 흙",
+  "block.iceandfire.graveyard_soil.desc": "스폰 유령과 밤",
   "item.iceandfire.bestiary": "베스티아리",
   "item.iceandfire.manuscript": "사본",
   "item.iceandfire.sapphire_gem": "사파이어",
@@ -434,6 +437,12 @@
   "item.iceandfire.summoning_crystal.desc_0": "마우스 오른쪽 클릭으로 드래곤 결속",
   "item.iceandfire.summoning_crystal.desc_1": "드래곤을 순간이동 시킬때 사용",
   "item.iceandfire.summoning_crystal.bound": "%s에 얽매여 있습니다.",
+  "item.iceandfire.ectoplasm": "심령체",
+  "item.iceandfire.ghost_ingot": "환영의 주괴",
+  "item.iceandfire.ghost_ingot.desc_0": "§6레어 드랍§r",
+  "item.iceandfire.ghost_sword": "환영의 검",
+  "item.iceandfire.ghost_sword.desc_0": "블록을 통과하는 검을 발사한다",
+  "item.iceandfire.ghost_sword.desc_1": "발사된 검이 추가 데미지를 입힌다",
   "item.iceandfire.spawn_egg_fire_dragon": "스폰 파이어 드래곤",
   "item.iceandfire.spawn_egg_ice_dragon": "스폰 아이스 드래곤",
   "item.iceandfire.spawn_egg_lightning_dragon": "스폰 라이트닝 드래곤",
@@ -462,6 +471,7 @@
   "item.iceandfire.spawn_egg_dread_knight": "스폰 드레드 기사",
   "item.iceandfire.spawn_egg_dread_horse": "스폰 드레드 기사의 말",
   "item.iceandfire.spawn_egg_hydra": "스폰 히드라",
+  "item.iceandfire.spawn_egg_ghost": "스폰 유령",
   "item.iceandfire.banner_pattern_fire": "현수막 패턴",
   "item.iceandfire.banner_pattern_fire.desc": "파이어 드래곤",
   "item.iceandfire.banner_pattern_ice": "현수막 패턴",
@@ -573,6 +583,7 @@
   "entity.iceandfire.hydra": "히드라",
   "entity.iceandfire.hydra_breath": "히드라의 숨결",
   "entity.iceandfire.hydra_arrow": "히드라 화살",
+  "entity.iceandfire.ghost": "유령",
   "sea_serpent.blue": "파란색",
   "sea_serpent.bronze": "청동색",
   "sea_serpent.deepblue": "짙은 청색",
@@ -710,6 +721,7 @@
   "bestiary.dread_mobs": "그 언데드",
   "bestiary.lightningdragon": "라이트닝 드래곤",
   "bestiary.lightningdragonegg": "라이트닝 드래곤의 알",
+  "bestiary.ghost": "유령",
 
   "lectern.nopages": "새로운 자료가 추가되지 않았다.",
   "silvertools.hurt": "언데드에게 데미지 +2 추가",
@@ -831,6 +843,8 @@
   "advancements.iceandfire.dragonarmor.description": "드래곤 갑옷을 얻으십시오",
   "advancements.iceandfire.kill_hydra.title": "헤라클레스의 12가지 과업",
   "advancements.iceandfire.kill_hydra.description": "히드라를 물리치십시오.",
+  "advancements.iceandfire.kill_ghost.title": "Who You Gonna Call?",
+  "advancements.iceandfire.kill_ghost.description": "유령을 물리치십시오."
   "iceandfire.fire_dragon_forge": "파이어 드래곤 용광로",
   "iceandfire.ice_dragon_forge": "아이스 드래곤 용광로",
   "iceandfire.lightning_dragon_forge": "라이트닝 드래곤 용광로",
@@ -838,7 +852,9 @@
   "item.iceandfire.fire_dragon_blood.jei_desc": "빈 병을 들고있는채로 드래곤 시체를 우클릭하면 얻을 수 있습니다..",
   "item.iceandfire.ice_dragon_blood.jei_desc": "빈 병을 들고있는채로 드래곤 시체를 우클릭하면 얻을 수 있습니다..",
   "item.iceandfire.lightning_dragon_blood.jei_desc": "빈 병을 들고있는채로 드래곤 시체를 우클릭하면 얻을 수 있습니다..",
-  "item.iceandfire.dragonegg.jei_desc": "파이어 드래곤은 불속에 알을 넣고 오래 기다리면 부화하고 아이스 드래곤은 물속에 오래 넣어두면 부화합니다 또한 라이트닝 드래곤은 빗속에서 오랫동안 기다리면 부화할것입니다. 용은 가장 가까운 플레이어에게 각인할것입니다.",.",
+  "item.iceandfire.dragonegg.jei_desc": "파이어 드래곤은 불속에 알을 넣고 오래 기다리면 부화하고 아이스 드래곤은 물속에 오래 넣어두면 부화합니다 또한 라이트닝 드래곤은 빗속에서 오랫동안 기다리면 부화할것입니다. 용은 가장 가까운 플레이어에게 
+
+각인할것입니다.",.",
   "item.iceandfire.dragon_skull_fire.jei_desc": "트로피로서 땅이나 벽에 놓을 수 있습니다",
   "item.iceandfire.dragon_skull_ice.jei_desc": "트로피로서 땅이나 벽에 놓을 수 있습니다.",
   "item.iceandfire.dragon_skull_lightning.jei_desc": "트로피로서 땅이나 벽에 놓을 수 있습니다.",
@@ -1213,3 +1229,6 @@
   "block.minecraft.banner.dread.blue": "Blue Dread Skull",
   "block.minecraft.banner.dread.brown": "Brown Dread Skull",
   "block.minecraft.banner.dread.green": "Green Dread Skull",
+  "block.minecraft.banner.dread.red": "Red Dread Skull",
+  "block.minecraft.banner.dread.black": "Black Dread Skull"
+}
