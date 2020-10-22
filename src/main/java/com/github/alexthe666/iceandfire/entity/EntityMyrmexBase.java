@@ -13,6 +13,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateMyrmex;
+import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
@@ -46,6 +47,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.*;
 import net.minecraft.world.biome.Biome;
@@ -90,8 +92,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     private static boolean isJungleBiome(World world, BlockPos position) {
-        Biome biome = world.getBiome(position);
-        return BiomeConfig.jungleMyrmexBiomes.contains(IafWorldRegistry.getBiomeName(biome));
+        return IAFBiomeUtil.biomeMeetsListConditions(world.getBiome(position), BiomeConfig.jungleMyrmexBiomes);
     }
 
     public static boolean haveSameHive(EntityMyrmexBase myrmex, Entity entity) {

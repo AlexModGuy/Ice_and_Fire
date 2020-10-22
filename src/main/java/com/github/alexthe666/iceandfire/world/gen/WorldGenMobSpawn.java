@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.Blocks;
@@ -19,8 +20,10 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
@@ -37,8 +40,6 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.github.alexthe666.iceandfire.world.IafWorldRegistry.getBiomeName;
-
 public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
 
     public WorldGenMobSpawn(Codec<NoFeatureConfig> configFactoryIn) {
@@ -52,19 +53,18 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
         }
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position.add(8, 0, 8));
         BlockPos oceanPos = worldIn.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, position.add(8, 0, 8));
-        Biome biome = worldIn.getBiome(position);
+        Biome biome = worldIn.getWorld().getBiome(position);
 
-        if (IafConfig.spawnDeathWorm && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && BiomeConfig.deathwormBiomes.contains(getBiomeName(biome))) {
+        if (IafConfig.spawnDeathWorm && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.deathwormBiomes)) {
             if (rand.nextInt(IafConfig.deathWormSpawnRate + 1) == 0) {
                 EntityDeathWorm deathWorm = IafEntityRegistry.DEATH_WORM.create(worldIn.getWorld());
                 deathWorm.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                 deathWorm.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(position), SpawnReason.CHUNK_GENERATION, null, null);
                 worldIn.addEntity(deathWorm);
             }
-
         }
 
-        if (IafConfig.generateWanderingCyclops && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && BiomeConfig.wanderingCyclopsBiomes.contains(getBiomeName(biome))) {
+        if (IafConfig.generateWanderingCyclops && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.wanderingCyclopsBiomes)) {
             if (rand.nextInt(IafConfig.spawnWanderingCyclopsChance + 1) == 0) {
                 EntityCyclops cyclops = IafEntityRegistry.CYCLOPS.create(worldIn.getWorld());
                 cyclops.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
@@ -80,7 +80,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
         }
 
         if (IafConfig.generateDragonSkeletons) {
-            if (BiomeConfig.lightningDragonSkeletonBiomes.contains(getBiomeName(biome)) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
+            if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.lightningDragonSkeletonBiomes) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
                 EntityLightningDragon firedragon = IafEntityRegistry.LIGHTNING_DRAGON.create(worldIn.getWorld());
                 firedragon.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                 int dragonage = 10 + rand.nextInt(100);
@@ -90,7 +90,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                 firedragon.setDeathStage((dragonage / 5) / 2);
                 firedragon.rotationYaw = rand.nextInt(360);
                 worldIn.addEntity(firedragon);
-            }else if (BiomeConfig.fireDragonSkeletonBiomes.contains(getBiomeName(biome)) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
+            }else if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.fireDragonSkeletonBiomes) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
                 EntityFireDragon firedragon = IafEntityRegistry.FIRE_DRAGON.create(worldIn.getWorld());
                 firedragon.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                 int dragonage = 10 + rand.nextInt(100);
@@ -101,7 +101,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                 firedragon.rotationYaw = rand.nextInt(360);
                 worldIn.addEntity(firedragon);
             }
-            if (BiomeConfig.iceDragonSkeletonBiomes.contains(getBiomeName(biome)) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
+            if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.iceDragonSkeletonBiomes) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
                 EntityIceDragon icedragon = IafEntityRegistry.ICE_DRAGON.create(worldIn.getWorld());
                 icedragon.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                 int dragonage = 10 + rand.nextInt(100);
@@ -113,7 +113,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                 worldIn.addEntity(icedragon);
             }
         }
-        if (IafConfig.spawnHippocampus && BiomeConfig.hippocampusBiomes.contains(getBiomeName(biome)) && rand.nextInt(IafConfig.hippocampusSpawnChance + 1) == 0) {
+        if (IafConfig.spawnHippocampus && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.hippocampusBiomes) && rand.nextInt(IafConfig.hippocampusSpawnChance + 1) == 0) {
             for (int i = 0; i < rand.nextInt(5); i++) {
                 BlockPos pos = oceanPos.add(rand.nextInt(10) - 5, rand.nextInt(30), rand.nextInt(10) - 5);
                 if (worldIn.getFluidState(pos).getFluid() == Fluids.WATER) {
@@ -124,7 +124,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                 }
             }
         }
-        if (IafConfig.spawnSeaSerpents && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && BiomeConfig.seaSerpentBiomes.contains(getBiomeName(biome)) && rand.nextInt(IafConfig.seaSerpentSpawnChance + 1) == 0) {
+        if (IafConfig.spawnSeaSerpents && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.seaSerpentBiomes) && rand.nextInt(IafConfig.seaSerpentSpawnChance + 1) == 0) {
             BlockPos pos =oceanPos.add(rand.nextInt(10) - 5, rand.nextInt(30), rand.nextInt(10) - 5);
             if (worldIn.getFluidState(pos).getFluid() == Fluids.WATER) {
                 EntitySeaSerpent serpent = IafEntityRegistry.SEA_SERPENT.create(worldIn.getWorld());
@@ -133,7 +133,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                 worldIn.addEntity(serpent);
             }
         }
-        if (IafConfig.spawnStymphalianBirds && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && BiomeConfig.stymphalianBiomes.contains(getBiomeName(biome)) && rand.nextInt(IafConfig.stymphalianBirdSpawnChance + 1) == 0) {
+        if (IafConfig.spawnStymphalianBirds && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.stymphalianBiomes) && rand.nextInt(IafConfig.stymphalianBirdSpawnChance + 1) == 0) {
             for (int i = 0; i < 4 + rand.nextInt(4); i++) {
                 BlockPos pos = position.add(rand.nextInt(10) - 5, 0, rand.nextInt(10) - 5);
                 pos = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);
@@ -141,7 +141,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                     EntityStymphalianBird bird = IafEntityRegistry.STYMPHALIAN_BIRD.create(worldIn.getWorld());
                     bird.setLocationAndAngles(pos.getX() + 0.5F, pos.getY() + 1.5F, pos.getZ() + 0.5F, 0, 0);
                     worldIn.addEntity(bird);
-
+                    
                 }
             }
         }

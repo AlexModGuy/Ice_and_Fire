@@ -6,10 +6,12 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
 import com.github.alexthe666.iceandfire.item.ItemTrollLeather;
 import com.github.alexthe666.iceandfire.item.ItemTrollWeapon;
+import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.Item;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import java.util.ArrayList;
@@ -49,13 +51,13 @@ public enum EnumTroll {
 
     public static EnumTroll getBiomeType(Biome biome) {
         List<EnumTroll> types = new ArrayList<EnumTroll>();
-        if(BiomeConfig.snowyTrollBiomes.contains(IafWorldRegistry.getBiomeName(biome))){
+        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.snowyTrollBiomes)) {
             types.add(EnumTroll.FROST);
         }
-        if(BiomeConfig.forestTrollBiomes.contains(IafWorldRegistry.getBiomeName(biome))){
+        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.forestTrollBiomes)) {
             types.add(EnumTroll.FOREST);
         }
-        if(BiomeConfig.mountainTrollBiomes.contains(IafWorldRegistry.getBiomeName(biome))){
+        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.mountainTrollBiomes)) {
             types.add(EnumTroll.MOUNTAIN);
         }
         if (types.isEmpty()) {

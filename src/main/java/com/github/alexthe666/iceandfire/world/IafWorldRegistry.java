@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.world;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
+import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
 import com.github.alexthe666.iceandfire.world.gen.*;
 import com.github.alexthe666.iceandfire.world.structure.*;
 import net.minecraft.block.Blocks;
@@ -25,9 +26,14 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 public class IafWorldRegistry {
@@ -219,16 +225,18 @@ public class IafWorldRegistry {
     }
 
     public static void onBiomesLoad(BiomeLoadingEvent event) {
-        if (BiomeConfig.fireLilyBiomes.contains(event.getName().toString())) {
+    	Biome biome = ForgeRegistries.BIOMES.getValue(event.getName());
+
+    	if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.fireLilyBiomes)) {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.VEGETAL_DECORATION, FIRE_LILY_CF);
         }
-        if (BiomeConfig.lightningLilyBiomes.contains(event.getName().toString())) {
+    	if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.lightningLilyBiomes)) {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.VEGETAL_DECORATION, LIGHTNING_LILY_CF);
         }
-        if (BiomeConfig.iceLilyBiomes.contains(event.getName().toString())) {
+    	if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.iceLilyBiomes)) {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.VEGETAL_DECORATION, FROST_LILY_CF);
         }
-        if (BiomeConfig.oreGenBiomes.contains(event.getName().toString())) {
+    	if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.oreGenBiomes)) {
             if (IafConfig.generateSilverOre) {
                 event.getGeneration().func_242513_a(GenerationStage.Decoration.UNDERGROUND_ORES, SILVER_ORE_CF);
             }
@@ -236,60 +244,55 @@ public class IafWorldRegistry {
                 event.getGeneration().func_242513_a(GenerationStage.Decoration.UNDERGROUND_ORES, COPPER_ORE_CF);
             }
         }
-        if (IafConfig.generateSapphireOre && BiomeConfig.sapphireBiomes.contains(event.getName().toString())) {
+        if (IafConfig.generateSapphireOre && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.sapphireBiomes)) {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.UNDERGROUND_ORES, SAPPHIRE_ORE_CF);
         }
-        if (IafConfig.generateAmythestOre && BiomeConfig.amethystBiomes.contains(event.getName().toString())) {
+        if (IafConfig.generateAmythestOre && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.amethystBiomes)) {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.UNDERGROUND_ORES, AMETHYST_ORE_CF);
         }
         if (IafConfig.generateDragonRoosts) {
-            if (BiomeConfig.fireDragonBiomes.contains(event.getName().toString())) {
+            if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.fireDragonBiomes)) {
                 event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, FIRE_DRAGON_ROOST_CF);
                 event.getGeneration().func_242513_a(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, FIRE_DRAGON_CAVE_CF);
             }
-            if (BiomeConfig.lightningDragonBiomes.contains(event.getName().toString())) {
+            if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.lightningDragonBiomes)) {
                 event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, LIGHTNING_DRAGON_ROOST_CF);
                 event.getGeneration().func_242513_a(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, LIGHTNING_DRAGON_CAVE_CF);
             }
-            if (BiomeConfig.iceDragonBiomes.contains(event.getName().toString())) {
+            if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.iceDragonBiomes)) {
                 event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, ICE_DRAGON_ROOST_CF);
                 event.getGeneration().func_242513_a(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, ICE_DRAGON_CAVE_CF);
             }
         }
-        if (IafConfig.generateCyclopsCaves && BiomeConfig.cyclopsCaveBiomes.contains(event.getName().toString())) {
+        if (IafConfig.generateCyclopsCaves && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.cyclopsCaveBiomes)) {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, CYCLOPS_CAVE_CF);
         }
-        if (IafConfig.spawnGorgons && BiomeConfig.gorgonTempleBiomes.contains(event.getName().toString())) {
+        if (IafConfig.spawnGorgons && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.gorgonTempleBiomes)) {
             event.getGeneration().func_242516_a(GORGON_TEMPLE_CF);
         }
-        if (IafConfig.spawnPixies && BiomeConfig.pixieBiomes.contains(event.getName().toString())) {
+        if (IafConfig.spawnPixies && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.pixieBiomes)) {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, PIXIE_VILLAGE_CF);
         }
-        if (IafConfig.generateHydraCaves && BiomeConfig.hydraBiomes.contains(event.getName().toString())) {
+        if (IafConfig.generateHydraCaves && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.hydraBiomes)) {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, HYDRA_CAVE_CF);
         }
-        if (IafConfig.generateMausoleums && BiomeConfig.mausoleumBiomes.contains(event.getName().toString())) {
+        if (IafConfig.generateMausoleums && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.mausoleumBiomes)) {
             event.getGeneration().func_242516_a(MAUSOLEUM_CF);
         }
-        if (IafConfig.generateGraveyards && BiomeConfig.graveyardBiomes.contains(event.getName().toString())) {
+        if (IafConfig.generateGraveyards && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.graveyardBiomes)) {
             event.getGeneration().func_242516_a(GRAVEYARD_CF);
         }
-        if (IafConfig.generateMyrmexColonies && BiomeConfig.desertMyrmexBiomes.contains(event.getName().toString())) {
+        if (IafConfig.generateMyrmexColonies && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.desertMyrmexBiomes)) {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, MYRMEX_HIVE_DESERT_CF);
         }
-        if (IafConfig.generateMyrmexColonies && BiomeConfig.jungleMyrmexBiomes.contains(event.getName().toString())) {
+        if (IafConfig.generateMyrmexColonies && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.jungleMyrmexBiomes)) {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, MYRMEX_HIVE_JUNGLE_CF);
         }
-        if (IafConfig.generateMyrmexColonies && BiomeConfig.sirenBiomes.contains(event.getName().toString())) {
+        if (IafConfig.generateMyrmexColonies && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.sirenBiomes)) {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SIREN_ISLAND_CF);
         }
-        if (BiomeConfig.overworldSpawnBiomes.contains(event.getName().toString())) {
+        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.overworldSpawnBiomes)) {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, MOB_SPAWNS_CF);
         }
-    }
-
-    public static String getBiomeName(Biome biome) {
-        ResourceLocation loc = ForgeRegistries.BIOMES.getKey(biome);
-        return loc == null ? "" : loc.toString();
     }
 }

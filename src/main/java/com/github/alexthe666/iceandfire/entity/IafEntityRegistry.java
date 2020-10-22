@@ -7,11 +7,15 @@ import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.entity.props.*;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
+
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.Heightmap;
@@ -168,20 +172,26 @@ public class IafEntityRegistry {
     }
 
     public static void onBiomesLoad(BiomeLoadingEvent event) {
-        if (IafConfig.spawnHippogryphs && BiomeConfig.hippogryphBiomes.contains(event.getName().toString())) {
-            event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(HIPPOGRYPH, IafConfig.hippogryphSpawnRate, 1, 1));
+    	Biome biome = ForgeRegistries.BIOMES.getValue(event.getName());
+
+    	if (IafConfig.spawnHippogryphs && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.hippogryphBiomes)) {
+            event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(IafEntityRegistry.HIPPOGRYPH, IafConfig.hippogryphSpawnRate, 1, 1));
         }
-        if (IafConfig.spawnLiches && BiomeConfig.mausoleumBiomes.contains(event.getName().toString())) {
-            event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(DREAD_LICH, IafConfig.lichSpawnRate, 1, 1));
+        if (IafConfig.spawnLiches && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.mausoleumBiomes)) {
+            event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(IafEntityRegistry.DREAD_LICH, IafConfig.lichSpawnRate, 1, 1));
         }
-        if (IafConfig.spawnCockatrices && BiomeConfig.cockatriceBiomes.contains(event.getName().toString())) {
-            event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(COCKATRICE, IafConfig.cockatriceSpawnRate, 1, 2));
+        if (IafConfig.spawnCockatrices && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.cockatriceBiomes)) {
+            event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(IafEntityRegistry.COCKATRICE, IafConfig.cockatriceSpawnRate, 1, 2));
         }
-        if (IafConfig.spawnAmphitheres && BiomeConfig.amphithereBiomes.contains(event.getName().toString())) {
-            event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(AMPHITHERE, IafConfig.amphithereSpawnRate, 1, 3));
+        if (IafConfig.spawnAmphitheres && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.amphithereBiomes)) {
+            event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(IafEntityRegistry.AMPHITHERE, IafConfig.amphithereSpawnRate, 1, 3));
         }
-        if (IafConfig.spawnTrolls && (BiomeConfig.forestTrollBiomes.contains(event.getName().toString()) || BiomeConfig.snowyTrollBiomes.contains(event.getName().toString()) || BiomeConfig.mountainTrollBiomes.contains(event.getName().toString()))) {
-            event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(TROLL, IafConfig.trollSpawnRate, 1, 1));
+        if (IafConfig.spawnTrolls && (
+    		IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.forestTrollBiomes) ||
+    		IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.snowyTrollBiomes) ||
+    		IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.mountainTrollBiomes)
+		)) {
+            event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(IafEntityRegistry.TROLL, IafConfig.trollSpawnRate, 1, 1));
         }
     }
 }

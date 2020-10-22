@@ -1,7 +1,10 @@
 package com.github.alexthe666.iceandfire.enums;
 
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
+import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
+
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 
@@ -42,25 +45,25 @@ public enum EnumHippogryphTypes {
 
     public static EnumHippogryphTypes getBiomeType(Biome biome) {
         List<EnumHippogryphTypes> types = new ArrayList<EnumHippogryphTypes>();
-        if (BiomeConfig.blackHippogryphBiomes.contains(IafWorldRegistry.getBiomeName(biome))) {
+        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.blackHippogryphBiomes)) {
             types.add(BLACK);
         }
-        if (BiomeConfig.brownHippogryphBiomes.contains(IafWorldRegistry.getBiomeName(biome))) {
+        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.brownHippogryphBiomes)) {
             types.add(BROWN);
         }
-        if (BiomeConfig.grayHippogryphBiomes.contains(IafWorldRegistry.getBiomeName(biome))) {
+        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.grayHippogryphBiomes)) {
             types.add(BROWN);
         }
-        if (BiomeConfig.chestnutHippogryphBiomes.contains(IafWorldRegistry.getBiomeName(biome))) {
+        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.chestnutHippogryphBiomes)) {
             types.add(CHESTNUT);
         }
-        if (BiomeConfig.creamyHippogryphBiomes.contains(IafWorldRegistry.getBiomeName(biome))) {
+        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.creamyHippogryphBiomes)) {
             types.add(CREAMY);
         }
-        if (BiomeConfig.darkBrownHippogryphBiomes.contains(IafWorldRegistry.getBiomeName(biome))) {
+        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.darkBrownHippogryphBiomes)) {
             types.add(DARK_BROWN);
         }
-        if (BiomeConfig.whiteHippogryphBiomes.contains(IafWorldRegistry.getBiomeName(biome))) {
+        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.whiteHippogryphBiomes)) {
             types.add(WHITE);
         }
         if (types.isEmpty()) {
