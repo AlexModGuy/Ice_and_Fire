@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeBricks;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeCore;
@@ -9,9 +11,9 @@ import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
 import com.github.alexthe666.iceandfire.message.MessageUpdateDragonforge;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -32,8 +34,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-
-import javax.annotation.Nullable;
 
 public class TileEntityDragonforge extends LockableTileEntity implements ITickableTileEntity, ISidedInventory {
     private static final int[] SLOTS_TOP = new int[]{0, 1};

@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.misc;
 
+import static com.github.alexthe666.iceandfire.IceAndFire.MODID;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-
-import static com.github.alexthe666.iceandfire.IceAndFire.MODID;
 
 @SuppressWarnings("WeakerAccess")
 public final class IafSoundRegistry {

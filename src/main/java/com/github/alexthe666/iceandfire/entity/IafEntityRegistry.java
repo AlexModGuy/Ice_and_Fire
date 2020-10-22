@@ -1,21 +1,24 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import java.lang.reflect.Field;
+
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
-import com.github.alexthe666.iceandfire.entity.props.*;
-import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
-import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.ChickenEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.SirenEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
 
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
-import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.Heightmap;
@@ -24,9 +27,6 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.lang.reflect.Field;
-import java.util.List;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafEntityRegistry {
@@ -38,9 +38,9 @@ public class IafEntityRegistry {
     public static final EntityType<EntityDragonEgg> DRAGON_EGG = registerEntity(EntityType.Builder.create(EntityDragonEgg::new, EntityClassification.MISC).size(0.45F, 0.55F).immuneToFire(), "dragon_egg");
     public static final EntityType<EntityDragonArrow> DRAGON_ARROW = registerEntity(EntityType.Builder.create(EntityDragonArrow::new, EntityClassification.MISC).size(0.5F, 0.5F).setCustomClientFactory(EntityDragonArrow::new), "dragon_arrow");
     public static final EntityType<EntityDragonSkull> DRAGON_SKULL = registerEntity(EntityType.Builder.create(EntityDragonSkull::new, EntityClassification.MISC).size(0.9F, 0.65F), "dragon_skull");
-    public static final EntityType<EntityFireDragon> FIRE_DRAGON = registerEntity(EntityType.Builder.create(EntityFireDragon::new, EntityClassification.CREATURE).size(0.78F, 1.2F).immuneToFire().setTrackingRange(256), "fire_dragon");
-    public static final EntityType<EntityIceDragon> ICE_DRAGON = registerEntity(EntityType.Builder.create(EntityIceDragon::new, EntityClassification.CREATURE).size(0.78F, 1.2F).setTrackingRange(256), "ice_dragon");
-    public static final EntityType<EntityLightningDragon> LIGHTNING_DRAGON = registerEntity(EntityType.Builder.create(EntityLightningDragon::new, EntityClassification.CREATURE).size(0.78F, 1.2F).setTrackingRange(256), "lightning_dragon");
+    public static final EntityType<EntityDragonBase> FIRE_DRAGON = registerEntity(EntityType.Builder.create(EntityFireDragon::new, EntityClassification.CREATURE).size(0.78F, 1.2F).immuneToFire().setTrackingRange(256), "fire_dragon");
+    public static final EntityType<EntityDragonBase> ICE_DRAGON = registerEntity(EntityType.Builder.create(EntityIceDragon::new, EntityClassification.CREATURE).size(0.78F, 1.2F).setTrackingRange(256), "ice_dragon");
+    public static final EntityType<EntityDragonBase> LIGHTNING_DRAGON = registerEntity(EntityType.Builder.create(EntityLightningDragon::new, EntityClassification.CREATURE).size(0.78F, 1.2F).setTrackingRange(256), "lightning_dragon");
     public static final EntityType<EntityDragonFireCharge> FIRE_DRAGON_CHARGE = registerEntity(EntityType.Builder.create(EntityDragonFireCharge::new, EntityClassification.MISC).size(0.9F, 0.9F).setCustomClientFactory(EntityDragonFireCharge::new), "fire_dragon_charge");
     public static final EntityType<EntityDragonIceCharge> ICE_DRAGON_CHARGE = registerEntity(EntityType.Builder.create(EntityDragonIceCharge::new, EntityClassification.MISC).size(0.9F, 0.9F).setCustomClientFactory(EntityDragonIceCharge::new), "ice_dragon_charge");
     public static final EntityType<EntityDragonLightningCharge> LIGHTNING_DRAGON_CHARGE = registerEntity(EntityType.Builder.create(EntityDragonLightningCharge::new, EntityClassification.MISC).size(0.9F, 0.9F).setCustomClientFactory(EntityDragonLightningCharge::new), "lightning_dragon_charge");

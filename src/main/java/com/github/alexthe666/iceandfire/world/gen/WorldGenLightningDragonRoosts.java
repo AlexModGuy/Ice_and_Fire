@@ -1,13 +1,16 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import java.util.Random;
+import java.util.stream.Collectors;
+
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
-import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.event.WorldGenUtils;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
@@ -23,11 +26,6 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.StructureManager;
-
-import java.util.Random;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class WorldGenLightningDragonRoosts extends Feature<NoFeatureConfig> {
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
@@ -54,7 +52,7 @@ public class WorldGenLightningDragonRoosts extends Feature<NoFeatureConfig> {
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
         worldIn.setBlockState(position, Blocks.AIR.getDefaultState(), 2);
         if(!worldIn.isRemote()){
-            EntityLightningDragon dragon = IafEntityRegistry.LIGHTNING_DRAGON.create(worldIn.getWorld());
+        	EntityDragonBase dragon = IafEntityRegistry.LIGHTNING_DRAGON.create(worldIn.getWorld());
             dragon.enablePersistence();
             dragon.growDragon(40 + radius);
             dragon.setAgingDisabled(true);

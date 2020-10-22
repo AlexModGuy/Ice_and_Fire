@@ -1,7 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.item.ItemHippogryphEgg;
+
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -10,10 +15,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
 
 public class HippogryphAIMate extends Goal {
     private final EntityHippogryph hippo;

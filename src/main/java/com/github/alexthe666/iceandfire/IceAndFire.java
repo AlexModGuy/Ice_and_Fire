@@ -1,28 +1,46 @@
 package com.github.alexthe666.iceandfire;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.loot.CustomizeToDragon;
-import com.github.alexthe666.iceandfire.loot.CustomizeToSeaSerpent;
 import com.github.alexthe666.iceandfire.loot.IafLootRegistry;
-import com.github.alexthe666.iceandfire.message.*;
+import com.github.alexthe666.iceandfire.message.MessageAddChainedEntity;
+import com.github.alexthe666.iceandfire.message.MessageDaytime;
+import com.github.alexthe666.iceandfire.message.MessageDeathWormHitbox;
+import com.github.alexthe666.iceandfire.message.MessageDragonControl;
+import com.github.alexthe666.iceandfire.message.MessageDragonSetBurnBlock;
+import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
+import com.github.alexthe666.iceandfire.message.MessageGetMyrmexHive;
+import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
+import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
+import com.github.alexthe666.iceandfire.message.MessageMyrmexSettings;
+import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
+import com.github.alexthe666.iceandfire.message.MessageRemoveChainedEntity;
+import com.github.alexthe666.iceandfire.message.MessageSetMyrmexHiveNull;
+import com.github.alexthe666.iceandfire.message.MessageSirenSong;
+import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
+import com.github.alexthe666.iceandfire.message.MessageStartRidingMob;
+import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
+import com.github.alexthe666.iceandfire.message.MessageSwingArm;
+import com.github.alexthe666.iceandfire.message.MessageUpdateDragonforge;
+import com.github.alexthe666.iceandfire.message.MessageUpdateLectern;
+import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
+import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
+import com.github.alexthe666.iceandfire.message.MessageUpdatePixieJar;
+import com.github.alexthe666.iceandfire.message.MessageUpdatePodium;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
+
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.functions.LootFunctionManager;
-import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -36,15 +54,6 @@ import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Collection;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @Mod(IceAndFire.MODID)
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)

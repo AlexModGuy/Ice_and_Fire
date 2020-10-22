@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import java.util.Random;
+
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
@@ -9,6 +11,7 @@ import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -26,12 +29,13 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-
-import java.util.Random;
 
 public class EntityLightningDragon extends EntityDragonBase {
 

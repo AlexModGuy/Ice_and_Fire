@@ -1,5 +1,9 @@
 package com.github.alexthe666.iceandfire.event;
 
+import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.Random;
+
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.IafConfig;
@@ -17,12 +21,15 @@ import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.SirenEntityProperties;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.MainMenuScreen;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -49,11 +56,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import org.lwjgl.opengl.GL11;
-
-import java.lang.reflect.Field;
-import java.util.Map;
-import java.util.Random;
 
 public class ClientEvents {
 

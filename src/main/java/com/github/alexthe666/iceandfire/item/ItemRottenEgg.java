@@ -3,10 +3,15 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityCockatriceEgg;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
 public class ItemRottenEgg extends Item {

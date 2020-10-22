@@ -1,11 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityGhost;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.pathfinding.FlyingPathNavigator;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class GhostPathNavigator extends FlyingPathNavigator {

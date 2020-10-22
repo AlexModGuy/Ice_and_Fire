@@ -1,8 +1,13 @@
 package com.github.alexthe666.iceandfire.block;
 
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
@@ -16,9 +21,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class BlockPixieHouse extends ContainerBlock implements ICustomRendered {
     public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);

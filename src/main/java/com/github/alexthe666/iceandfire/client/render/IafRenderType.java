@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.client.render;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderDreadPortal;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;

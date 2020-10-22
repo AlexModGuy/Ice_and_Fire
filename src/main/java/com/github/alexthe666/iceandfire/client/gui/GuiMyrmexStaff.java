@@ -1,28 +1,25 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
+import java.util.List;
+
 import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.gui.bestiary.ChangePageButton;
-import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageGetMyrmexHive;
-import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
-import com.github.alexthe666.iceandfire.message.MessageMyrmexSettings;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
-
-import java.util.List;
 
 public class GuiMyrmexStaff extends Screen {
     private static final ResourceLocation JUNGLE_TEXTURE = new ResourceLocation("iceandfire:textures/gui/myrmex_staff_jungle.png");

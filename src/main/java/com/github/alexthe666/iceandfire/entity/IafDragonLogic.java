@@ -6,9 +6,9 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.util.IDeadMob;
 import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;

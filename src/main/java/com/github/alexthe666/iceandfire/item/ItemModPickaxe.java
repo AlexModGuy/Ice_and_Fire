@@ -1,10 +1,15 @@
 package com.github.alexthe666.iceandfire.item;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.citadel.server.item.CustomToolMaterial;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
@@ -21,10 +26,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemModPickaxe extends PickaxeItem {
 

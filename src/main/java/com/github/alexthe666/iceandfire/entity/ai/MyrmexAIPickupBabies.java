@@ -1,20 +1,22 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexEgg;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.google.common.base.Predicate;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.util.math.AxisAlignedBB;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
 
 public class MyrmexAIPickupBabies<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;

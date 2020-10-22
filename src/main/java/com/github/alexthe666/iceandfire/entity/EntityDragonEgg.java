@@ -1,11 +1,16 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IafConfig;
+import java.util.Optional;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.entity.util.IDeadMob;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.google.common.collect.ImmutableList;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -24,12 +29,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.UUID;
 
 public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromStatues, IDeadMob {
 

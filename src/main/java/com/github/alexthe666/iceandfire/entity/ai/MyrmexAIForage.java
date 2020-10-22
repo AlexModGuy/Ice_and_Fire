@@ -1,10 +1,16 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
+
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.ItemEntity;
@@ -14,12 +20,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MyrmexAIForage extends Goal {
     private static final int RADIUS = 8;

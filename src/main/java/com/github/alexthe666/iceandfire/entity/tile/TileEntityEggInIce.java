@@ -1,23 +1,24 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import java.util.Random;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-
-import javax.annotation.Nullable;
-import java.util.Random;
-import java.util.UUID;
 
 public class TileEntityEggInIce extends TileEntity implements ITickableTileEntity {
     public EnumDragonEgg type;

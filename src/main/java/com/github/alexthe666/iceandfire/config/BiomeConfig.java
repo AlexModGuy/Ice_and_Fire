@@ -1,15 +1,15 @@
 package com.github.alexthe666.iceandfire.config;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.google.common.collect.Lists;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
-
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.google.common.collect.Lists;
+
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.config.ModConfig;
 
 public class BiomeConfig {
     public static List<? extends String> overworldSpawnBiomes = Lists.newArrayList(DefaultBiomes.OVERWORLD_BIOMES);

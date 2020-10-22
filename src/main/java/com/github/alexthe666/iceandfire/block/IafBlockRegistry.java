@@ -1,11 +1,18 @@
 package com.github.alexthe666.iceandfire.block;
 
+import java.lang.reflect.Field;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import net.minecraft.block.*;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.SlabBlock;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.WallTorchBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -13,8 +20,6 @@ import net.minecraft.item.WallOrFloorItem;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import java.lang.reflect.Field;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafBlockRegistry {

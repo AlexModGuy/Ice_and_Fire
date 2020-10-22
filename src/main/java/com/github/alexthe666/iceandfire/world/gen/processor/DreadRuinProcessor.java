@@ -1,7 +1,12 @@
 package com.github.alexthe666.iceandfire.world.gen.processor;
 
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+
 import net.minecraft.block.AbstractChestBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -10,15 +15,11 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.StructureProcessor;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class DreadRuinProcessor extends StructureProcessor {
 

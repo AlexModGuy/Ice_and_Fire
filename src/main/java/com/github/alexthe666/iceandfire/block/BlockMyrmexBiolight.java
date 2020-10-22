@@ -1,19 +1,22 @@
 package com.github.alexthe666.iceandfire.block;
 
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.block.*;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.BushBlock;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-
-import java.util.Random;
 
 public class BlockMyrmexBiolight extends BushBlock {
 

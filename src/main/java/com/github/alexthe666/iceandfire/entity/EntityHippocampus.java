@@ -1,12 +1,18 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
-import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.entity.ai.AquaticAIFindWaterTarget;
+import com.github.alexthe666.iceandfire.entity.ai.AquaticAIGetInWater;
+import com.github.alexthe666.iceandfire.entity.ai.AquaticAITempt;
+import com.github.alexthe666.iceandfire.entity.ai.HippocampusAIRide;
+import com.github.alexthe666.iceandfire.entity.ai.HippocampusAIWander;
 import com.github.alexthe666.iceandfire.entity.util.ChainBuffer;
 import com.github.alexthe666.iceandfire.entity.util.IDropArmor;
 import com.github.alexthe666.iceandfire.entity.util.ISyncMount;
@@ -15,11 +21,19 @@ import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateAmphibious;
+
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.*;
+import net.minecraft.entity.AgeableEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
@@ -44,7 +58,11 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -52,14 +70,11 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
-
-import javax.annotation.Nullable;
 
 public class EntityHippocampus extends TameableEntity implements ISyncMount, IAnimatedEntity, IDropArmor {
 

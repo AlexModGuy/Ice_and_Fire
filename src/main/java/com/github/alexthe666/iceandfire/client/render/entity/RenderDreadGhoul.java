@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.client.model.ModelDreadGhoul;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
 import com.github.alexthe666.iceandfire.entity.EntityDreadGhoul;
 import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;

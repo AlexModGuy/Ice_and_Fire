@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
@@ -9,20 +11,33 @@ import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.google.common.base.Predicate;
-import net.minecraft.entity.*;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.*;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerBossInfo;
-
-import javax.annotation.Nullable;
 
 public class EntityDreadQueen extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
 

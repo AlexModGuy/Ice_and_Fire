@@ -1,5 +1,14 @@
 package com.github.alexthe666.iceandfire.entity.util;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
@@ -9,6 +18,7 @@ import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,9 +32,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 public class MyrmexHive {
     private final List<BlockPos> foodRooms = Lists.newArrayList();

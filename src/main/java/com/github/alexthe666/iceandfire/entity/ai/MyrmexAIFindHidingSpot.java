@@ -1,18 +1,20 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSentinel;
 import com.google.common.base.Predicate;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.gen.Heightmap;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
 
 public class MyrmexAIFindHidingSpot extends Goal {
     private static final int RADIUS = 32;

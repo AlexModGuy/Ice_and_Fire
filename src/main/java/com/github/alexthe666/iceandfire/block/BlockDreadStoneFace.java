@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
@@ -10,8 +11,6 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 
 public class BlockDreadStoneFace extends HorizontalBlock implements IDreadBlock, IDragonProof {

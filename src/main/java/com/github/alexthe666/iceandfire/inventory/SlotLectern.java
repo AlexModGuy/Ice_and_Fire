@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.inventory;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;

@@ -1,11 +1,23 @@
 package com.github.alexthe666.iceandfire.recipe;
 
-import com.github.alexthe666.iceandfire.entity.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.github.alexthe666.iceandfire.entity.EntityAmphithereArrow;
+import com.github.alexthe666.iceandfire.entity.EntityCockatriceEgg;
+import com.github.alexthe666.iceandfire.entity.EntityDeathWormEgg;
+import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
+import com.github.alexthe666.iceandfire.entity.EntityHippogryphEgg;
+import com.github.alexthe666.iceandfire.entity.EntityHydraArrow;
+import com.github.alexthe666.iceandfire.entity.EntitySeaSerpentArrow;
+import com.github.alexthe666.iceandfire.entity.EntityStymphalianArrow;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.IPosition;
@@ -17,9 +29,6 @@ import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class IafRecipeRegistry {
 

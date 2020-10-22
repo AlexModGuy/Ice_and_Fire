@@ -1,8 +1,11 @@
 package com.github.alexthe666.iceandfire.block;
 
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
+
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
@@ -17,14 +20,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof, INoTab {
     private static boolean keepInventory;

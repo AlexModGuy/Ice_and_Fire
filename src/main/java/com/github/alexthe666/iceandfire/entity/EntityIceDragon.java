@@ -1,5 +1,9 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
@@ -9,6 +13,7 @@ import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -20,14 +25,18 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.*;
-import net.minecraft.util.math.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.IItemProvider;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class EntityIceDragon extends EntityDragonBase {
 

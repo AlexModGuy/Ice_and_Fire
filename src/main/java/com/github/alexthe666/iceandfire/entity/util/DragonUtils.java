@@ -1,10 +1,22 @@
 package com.github.alexthe666.iceandfire.entity.util;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.EntityGhost;
+import com.github.alexthe666.iceandfire.entity.EntityGorgon;
+import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
+import com.github.alexthe666.iceandfire.entity.EntityMutlipartPart;
+import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
+import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import com.google.common.base.Predicate;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -13,10 +25,9 @@ import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.merchant.IMerchant;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.passive.*;
-import net.minecraft.entity.passive.horse.AbstractHorseEntity;
+import net.minecraft.entity.passive.GolemEntity;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -25,9 +36,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.gen.Heightmap;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class DragonUtils {
 

@@ -1,7 +1,10 @@
 package com.github.alexthe666.iceandfire.block;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityMyrmexCocoon;
+
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
@@ -18,8 +21,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
 
 public class BlockMyrmexCocoon extends ContainerBlock {
 

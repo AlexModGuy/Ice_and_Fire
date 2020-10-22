@@ -1,14 +1,15 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import com.google.common.collect.Sets;
+
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import java.util.EnumSet;
-import java.util.Set;
 
 public class AquaticAITempt extends Goal {
     private final MobEntity temptedEntity;

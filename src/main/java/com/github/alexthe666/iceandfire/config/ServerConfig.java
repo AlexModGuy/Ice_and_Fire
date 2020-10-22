@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.config;
 
-import com.github.alexthe666.iceandfire.world.DragonPosWorldData;
-import com.google.common.collect.Lists;
-import net.minecraftforge.common.ForgeConfigSpec;
-
 import java.util.List;
+
+import com.google.common.collect.Lists;
+
+import net.minecraftforge.common.ForgeConfigSpec;
 
 public class ServerConfig {
 

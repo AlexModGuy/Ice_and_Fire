@@ -1,9 +1,12 @@
 package com.github.alexthe666.iceandfire.world.structure;
 
+import java.util.List;
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.github.alexthe666.iceandfire.world.gen.processor.DreadRuinProcessor;
+
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.BlockTags;
@@ -17,19 +20,14 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.structure.TemplateStructurePiece;
-import net.minecraft.world.gen.feature.template.BlockIgnoreStructureProcessor;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-
-import java.util.List;
-import java.util.Random;
 
 public class MausoleumPiece {
     private static final BlockPos STRUCTURE_OFFSET = new BlockPos(0, 0, 0);

@@ -1,44 +1,31 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
-import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.entity.EntityCyclops;
+import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
+import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
+import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.SkullBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.CreatureEntity;
+
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.DefaultBiomeFeatures;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.StructureManager;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Random;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
 
@@ -81,7 +68,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
 
         if (IafConfig.generateDragonSkeletons) {
             if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.lightningDragonSkeletonBiomes) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
-                EntityLightningDragon firedragon = IafEntityRegistry.LIGHTNING_DRAGON.create(worldIn.getWorld());
+            	EntityDragonBase firedragon = IafEntityRegistry.LIGHTNING_DRAGON.create(worldIn.getWorld());
                 firedragon.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                 int dragonage = 10 + rand.nextInt(100);
                 firedragon.growDragon(dragonage);
@@ -91,7 +78,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                 firedragon.rotationYaw = rand.nextInt(360);
                 worldIn.addEntity(firedragon);
             }else if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.fireDragonSkeletonBiomes) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
-                EntityFireDragon firedragon = IafEntityRegistry.FIRE_DRAGON.create(worldIn.getWorld());
+            	EntityDragonBase firedragon = IafEntityRegistry.FIRE_DRAGON.create(worldIn.getWorld());
                 firedragon.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                 int dragonage = 10 + rand.nextInt(100);
                 firedragon.growDragon(dragonage);
@@ -102,7 +89,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                 worldIn.addEntity(firedragon);
             }
             if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.iceDragonSkeletonBiomes) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
-                EntityIceDragon icedragon = IafEntityRegistry.ICE_DRAGON.create(worldIn.getWorld());
+            	EntityDragonBase icedragon = IafEntityRegistry.ICE_DRAGON.create(worldIn.getWorld());
                 icedragon.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                 int dragonage = 10 + rand.nextInt(100);
                 icedragon.growDragon(dragonage);

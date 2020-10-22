@@ -1,34 +1,32 @@
 package com.github.alexthe666.iceandfire.entity.util;
 
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.google.common.collect.ImmutableMap;
+
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
-import net.minecraft.entity.villager.IVillagerDataHolder;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.MerchantOffer;
+import net.minecraft.item.SuspiciousStewItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionBrewing;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 public class MyrmexTrades {
     public static final Int2ObjectMap<VillagerTrades.ITrade[]> DESERT_WORKER;

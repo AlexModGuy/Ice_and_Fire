@@ -1,20 +1,17 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
 import com.github.alexthe666.iceandfire.client.model.ModelGhost;
-import com.github.alexthe666.iceandfire.client.model.ModelSiren;
 import com.github.alexthe666.iceandfire.client.render.IafRenderType;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderGhost;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderSiren;
 import com.github.alexthe666.iceandfire.entity.EntityGhost;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.settings.PointOfView;
 import net.minecraft.client.world.ClientWorld;

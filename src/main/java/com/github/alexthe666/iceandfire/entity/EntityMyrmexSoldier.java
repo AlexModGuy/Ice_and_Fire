@@ -1,18 +1,35 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIAttackPlayers;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIDefendHive;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIEscortEntity;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIFindGaurdingEntity;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAILeaveHive;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAILookAtTradePlayer;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIMoveThroughHive;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIReEnterHive;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAITradePlayer;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIWander;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexTrades;
 import com.google.common.base.Predicate;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,8 +40,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
 
 public class EntityMyrmexSoldier extends EntityMyrmexBase {
 

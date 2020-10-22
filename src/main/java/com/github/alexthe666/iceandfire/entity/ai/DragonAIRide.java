@@ -1,13 +1,14 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.util.IFlyingMount;
+
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.vector.Vector3d;
-
-import java.util.EnumSet;
 
 public class DragonAIRide<T extends MobEntity & IFlyingMount> extends Goal {
 

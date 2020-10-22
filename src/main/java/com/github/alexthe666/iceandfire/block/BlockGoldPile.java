@@ -1,6 +1,9 @@
 package com.github.alexthe666.iceandfire.block;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -25,8 +28,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
 
 public class BlockGoldPile extends Block {
     public static final IntegerProperty LAYERS = IntegerProperty.create("layers", 1, 8);

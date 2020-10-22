@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
 import com.github.alexthe666.iceandfire.client.model.util.LegArticulator;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;

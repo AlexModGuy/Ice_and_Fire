@@ -1,5 +1,9 @@
 package com.github.alexthe666.iceandfire.enums;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
@@ -7,16 +11,12 @@ import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
 import com.github.alexthe666.iceandfire.item.ItemTrollLeather;
 import com.github.alexthe666.iceandfire.item.ItemTrollWeapon;
 import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
-import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
+
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.Item;
-import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 
 public enum EnumTroll {

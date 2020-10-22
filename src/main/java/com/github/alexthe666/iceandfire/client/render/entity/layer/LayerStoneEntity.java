@@ -8,8 +8,8 @@ import com.github.alexthe666.iceandfire.client.model.ModelHorseStatue;
 import com.github.alexthe666.iceandfire.client.render.IafRenderType;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingRenderer;
@@ -18,9 +18,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.GuardianEntity;
-import net.minecraft.entity.passive.horse.AbstractHorseEntity;
-import net.minecraft.entity.passive.horse.LlamaEntity;
-import net.minecraft.util.ResourceLocation;
 
 public class LayerStoneEntity extends LayerRenderer {
 

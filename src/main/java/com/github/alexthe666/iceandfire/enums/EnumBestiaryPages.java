@@ -1,14 +1,16 @@
 package com.github.alexthe666.iceandfire.enums;
 
-import com.github.alexthe666.iceandfire.item.ItemBestiary;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
+import javax.annotation.Nullable;
+
+import com.github.alexthe666.iceandfire.item.ItemBestiary;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 
 public enum EnumBestiaryPages {
 

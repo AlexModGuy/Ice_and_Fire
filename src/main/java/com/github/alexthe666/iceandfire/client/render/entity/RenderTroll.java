@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerTrollEye
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerTrollStone;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerTrollWeapon;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
+
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;

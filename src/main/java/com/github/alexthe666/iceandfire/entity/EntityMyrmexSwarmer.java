@@ -1,7 +1,16 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.entity.ai.*;
+import java.util.Optional;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIAttackMeleeNoCooldown;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIFollowSummoner;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAISummonerHurtByTarget;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAISummonerHurtTarget;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIWander;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -26,10 +35,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.UUID;
 
 public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 

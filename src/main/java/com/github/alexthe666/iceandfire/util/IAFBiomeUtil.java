@@ -1,23 +1,14 @@
 package com.github.alexthe666.iceandfire.util;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biome.Category;
-import net.minecraft.world.biome.BiomeRegistry;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class IAFBiomeUtil {

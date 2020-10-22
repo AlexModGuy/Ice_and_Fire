@@ -1,17 +1,23 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import java.util.stream.Collectors;
+
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.api.event.DragonFireDamageWorldEvent;
-import com.github.alexthe666.iceandfire.block.*;
+import com.github.alexthe666.iceandfire.block.BlockCharedPath;
+import com.github.alexthe666.iceandfire.block.BlockFallingReturningState;
+import com.github.alexthe666.iceandfire.block.BlockReturningState;
+import com.github.alexthe666.iceandfire.block.IDragonProof;
+import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.entity.util.BlockLaunchExplosion;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.GrassBlock;
 import net.minecraft.block.SpreadableSnowyDirtBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
@@ -19,8 +25,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-
-import java.util.stream.Collectors;
 
 public class IafDragonDestructionManager {
 

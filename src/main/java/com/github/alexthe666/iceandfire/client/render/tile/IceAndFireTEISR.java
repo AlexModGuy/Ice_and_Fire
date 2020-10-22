@@ -4,17 +4,16 @@ import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadPortal;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityGhostChest;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemDeathwormGauntlet;
 import com.github.alexthe666.iceandfire.item.ItemTrollWeapon;
 import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

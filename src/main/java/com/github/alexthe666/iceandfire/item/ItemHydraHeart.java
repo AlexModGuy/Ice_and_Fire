@@ -1,6 +1,11 @@
 package com.github.alexthe666.iceandfire.item;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,9 +17,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemHydraHeart extends Item {
 

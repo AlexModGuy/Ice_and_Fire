@@ -1,9 +1,18 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import java.util.Random;
+import java.util.stream.Collectors;
+
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
-import net.minecraft.block.*;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.ChestBlock;
+import net.minecraft.block.LeavesBlock;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -11,9 +20,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-
-import java.util.Random;
-import java.util.stream.Collectors;
 
 public class WorldGenMyrmexDecoration {
 

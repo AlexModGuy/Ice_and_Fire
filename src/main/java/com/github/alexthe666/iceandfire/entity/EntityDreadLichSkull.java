@@ -1,6 +1,9 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import java.util.List;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -23,8 +26,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
-
-import java.util.List;
 
 public class EntityDreadLichSkull extends AbstractArrowEntity {
 

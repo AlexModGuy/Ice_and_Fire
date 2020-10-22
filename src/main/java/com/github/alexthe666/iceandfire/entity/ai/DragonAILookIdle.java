@@ -1,9 +1,10 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import net.minecraft.entity.ai.goal.Goal;
-
 import java.util.EnumSet;
+
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+
+import net.minecraft.entity.ai.goal.Goal;
 
 public class DragonAILookIdle extends Goal {
     private EntityDragonBase dragon;

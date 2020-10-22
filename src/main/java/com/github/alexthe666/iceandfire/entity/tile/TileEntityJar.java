@@ -1,5 +1,10 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import java.util.Random;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
@@ -7,8 +12,8 @@ import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieJar;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
+
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -21,10 +26,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
-
-import javax.annotation.Nullable;
-import java.util.Random;
-import java.util.UUID;
 
 public class TileEntityJar extends TileEntity implements ITickableTileEntity {
 

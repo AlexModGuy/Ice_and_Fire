@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BreakableBlock;
@@ -9,7 +10,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;

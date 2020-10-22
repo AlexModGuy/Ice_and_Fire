@@ -1,35 +1,27 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import com.github.alexthe666.iceandfire.entity.EntityHydra;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.*;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.biome.DefaultBiomeFeatures;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.Features;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.StructureManager;
-import java.util.Random;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class WorldGenPixieVillage extends Feature<NoFeatureConfig> {
 

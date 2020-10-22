@@ -1,11 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
+
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
-
-import java.util.EnumSet;
 
 public class MyrmexAISummonerHurtTarget extends TargetGoal {
     EntityMyrmexSwarmer tameable;

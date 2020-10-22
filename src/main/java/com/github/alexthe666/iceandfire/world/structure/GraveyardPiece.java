@@ -1,11 +1,11 @@
 package com.github.alexthe666.iceandfire.world.structure;
 
-import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import java.util.List;
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.github.alexthe666.iceandfire.world.gen.processor.GraveyardProcessor;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.SpawnReason;
+
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
@@ -23,9 +23,6 @@ import net.minecraft.world.gen.feature.structure.TemplateStructurePiece;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-
-import java.util.List;
-import java.util.Random;
 
 public class GraveyardPiece  {
     private static final BlockPos STRUCTURE_OFFSET = new BlockPos(0, 0, 0);

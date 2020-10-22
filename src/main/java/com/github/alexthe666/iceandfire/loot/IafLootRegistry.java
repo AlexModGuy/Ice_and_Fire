@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.loot;
 import net.minecraft.loot.ILootSerializer;
 import net.minecraft.loot.LootFunctionType;
 import net.minecraft.loot.functions.ILootFunction;
-import net.minecraft.loot.functions.SetStewEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 

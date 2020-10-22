@@ -1,13 +1,11 @@
 package com.github.alexthe666.iceandfire;
 
-import com.github.alexthe666.iceandfire.config.ConfigHolder;
-import com.github.alexthe666.iceandfire.config.DefaultBiomes;
-import com.google.common.collect.Lists;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
-
-import java.util.ArrayList;
 import java.util.List;
+
+import com.github.alexthe666.iceandfire.config.ConfigHolder;
+import com.google.common.collect.Lists;
+
+import net.minecraftforge.fml.config.ModConfig;
 
 public class IafConfig {
     public static boolean customMainMenu = true;

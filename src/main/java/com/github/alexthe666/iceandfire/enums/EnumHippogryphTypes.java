@@ -1,16 +1,14 @@
 package com.github.alexthe666.iceandfire.enums;
 
-import com.github.alexthe666.iceandfire.config.BiomeConfig;
-import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
-import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
-
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import com.github.alexthe666.iceandfire.config.BiomeConfig;
+import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
+
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
 
 public enum EnumHippogryphTypes {
     BLACK(false),

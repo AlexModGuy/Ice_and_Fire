@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
+import java.util.List;
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
@@ -9,10 +12,12 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.Minecraft;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.model.BookModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.I18n;
@@ -24,14 +29,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.List;
-import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiLectern extends ContainerScreen<ContainerLectern> {

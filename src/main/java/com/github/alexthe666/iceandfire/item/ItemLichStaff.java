@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDreadLichSkull;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

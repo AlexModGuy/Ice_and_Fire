@@ -1,20 +1,19 @@
 package com.github.alexthe666.iceandfire.block;
 
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.TorchBlock;
 import net.minecraft.block.WallTorchBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.Random;
 
 public class BlockDreadTorchWall extends WallTorchBlock implements IDreadBlock {
 

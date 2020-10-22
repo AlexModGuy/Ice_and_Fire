@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.world.structure;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.mojang.serialization.Codec;
+
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;

@@ -1,8 +1,10 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import java.util.List;
+
 import com.google.common.collect.Lists;
+
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -14,20 +16,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.play.server.SChangeGameStatePacket;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
-
-import java.util.List;
 
 public class EntityGhostSword  extends AbstractArrowEntity {
 

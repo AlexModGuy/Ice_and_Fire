@@ -1,8 +1,19 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.google.common.collect.Lists;
-import net.minecraft.entity.*;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntitySpawnPlacementRegistry;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.particles.ParticleTypes;
@@ -18,11 +29,6 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.spawner.AbstractSpawner;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
 
 public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
 

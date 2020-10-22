@@ -1,15 +1,26 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexBiolight;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexConnectedResin;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexQueen;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexSentinel;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexSoldier;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.mojang.serialization.Codec;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.SpawnReason;
@@ -24,13 +35,6 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.StructureManager;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
 

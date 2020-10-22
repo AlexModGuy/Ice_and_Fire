@@ -1,11 +1,18 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.message.MessageUpdateDragonforge;
 import com.github.alexthe666.iceandfire.message.MessageUpdateLectern;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -24,12 +31,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 
 public class TileEntityLectern extends LockableTileEntity implements ITickableTileEntity, ISidedInventory {
     private static final int[] slotsTop = new int[]{0};
