@@ -61,7 +61,7 @@ public class GorgonTempleStructure extends Structure<NoFeatureConfig> {
         public void func_230364_a_(DynamicRegistries p_230364_1_, ChunkGenerator p_230364_2_, TemplateManager p_230364_3_, int x, int z, Biome p_230364_6_, IFeatureConfig p_230364_7_) {
             if(IafConfig.spawnGorgons) {
                 Rotation rotation = Rotation.values()[this.rand.nextInt(Rotation.values().length)];
-                BlockPos blockpos = new BlockPos(x * 16, 90, z * 16);
+                BlockPos blockpos = new BlockPos(x * 16, 15, z * 16);
                 GorgonTemplePiece.func_204760_a(p_230364_3_, blockpos, rotation, this.components, this.rand);
                 this.recalculateStructureSize();
             }
