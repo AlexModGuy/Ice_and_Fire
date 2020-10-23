@@ -49,6 +49,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -100,6 +101,7 @@ public class IceAndFire {
         modLoadingContext.registerConfig(ModConfig.Type.COMMON, ConfigHolder.SERVER_SPEC);
         modLoadingContext.registerConfig(ModConfig.Type.COMMON, ConfigHolder.BIOME_SPEC, "iceandfire-biomes.toml");
         MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadFromJSON);
+        MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
         PROXY.init();
         IafWorldRegistry.register();
     }
@@ -109,8 +111,14 @@ public class IceAndFire {
     }
 
     @SubscribeEvent
+    public void onServerStarted(FMLServerStartedEvent event) {
+    	LOGGER.info(IafWorldRegistry.LOADED_FEATURES);
+    	LOGGER.info(IafEntityRegistry.LOADED_ENTITIES);
+    }
+    
+    @SubscribeEvent
     public void onBiomeLoadFromJSON(BiomeLoadingEvent event) {
-        IafWorldRegistry.onBiomesLoad(event);
+    	IafWorldRegistry.onBiomesLoad(event);
         IafEntityRegistry.onBiomesLoad(event);
     }
 

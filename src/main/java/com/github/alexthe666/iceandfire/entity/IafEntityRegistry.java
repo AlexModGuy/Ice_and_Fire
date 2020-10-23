@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
@@ -171,27 +172,45 @@ public class IafEntityRegistry {
         bakeAttributes();
     }
 
+    public static HashMap<String, Boolean> LOADED_ENTITIES;
+    static {
+    	LOADED_ENTITIES = new HashMap<String, Boolean>();
+    	LOADED_ENTITIES.put("HIPPOGRYPH", false);
+    	LOADED_ENTITIES.put("DREAD_LICH", false);
+    	LOADED_ENTITIES.put("COCKATRICE", false);
+    	LOADED_ENTITIES.put("AMPHITHERE", false);
+    	LOADED_ENTITIES.put("TROLL_F", false);
+    	LOADED_ENTITIES.put("TROLL_S", false);
+    	LOADED_ENTITIES.put("TROLL_M", false);
+    }
     public static void onBiomesLoad(BiomeLoadingEvent event) {
     	Biome biome = ForgeRegistries.BIOMES.getValue(event.getName());
 
-    	if (IafConfig.spawnHippogryphs && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.hippogryphBiomes)) {
+    	if (IafConfig.spawnHippogryphs && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.hippogryphBiomes, biome)) {
             event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(IafEntityRegistry.HIPPOGRYPH, IafConfig.hippogryphSpawnRate, 1, 1));
+            LOADED_ENTITIES.put("HIPPOGRYPH", true);
         }
-        if (IafConfig.spawnLiches && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.mausoleumBiomes)) {
+        if (IafConfig.spawnLiches && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.mausoleumBiomes, biome)) {
             event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(IafEntityRegistry.DREAD_LICH, IafConfig.lichSpawnRate, 1, 1));
+            LOADED_ENTITIES.put("DREAD_LICH", true);
         }
-        if (IafConfig.spawnCockatrices && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.cockatriceBiomes)) {
+        if (IafConfig.spawnCockatrices && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.cockatriceBiomes, biome)) {
             event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(IafEntityRegistry.COCKATRICE, IafConfig.cockatriceSpawnRate, 1, 2));
+            LOADED_ENTITIES.put("COCKATRICE", true);
         }
-        if (IafConfig.spawnAmphitheres && IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.amphithereBiomes)) {
+        if (IafConfig.spawnAmphitheres && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.amphithereBiomes, biome)) {
             event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(IafEntityRegistry.AMPHITHERE, IafConfig.amphithereSpawnRate, 1, 3));
+            LOADED_ENTITIES.put("AMPHITHERE", true);
         }
         if (IafConfig.spawnTrolls && (
-    		IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.forestTrollBiomes) ||
-    		IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.snowyTrollBiomes) ||
-    		IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.mountainTrollBiomes)
+    		IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.forestTrollBiomes, biome) ||
+    		IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.snowyTrollBiomes, biome) ||
+    		IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.mountainTrollBiomes, biome)
 		)) {
             event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(IafEntityRegistry.TROLL, IafConfig.trollSpawnRate, 1, 1));
+    		if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.forestTrollBiomes, biome)) LOADED_ENTITIES.put("TROLL_F", true);
+    		if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.snowyTrollBiomes, biome)) LOADED_ENTITIES.put("TROLL_S", true); 
+    		if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.mountainTrollBiomes, biome)) LOADED_ENTITIES.put("TROLL_M", true);
         }
     }
 }

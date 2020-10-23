@@ -43,25 +43,25 @@ public enum EnumHippogryphTypes {
 
     public static EnumHippogryphTypes getBiomeType(Biome biome) {
         List<EnumHippogryphTypes> types = new ArrayList<EnumHippogryphTypes>();
-        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.blackHippogryphBiomes)) {
+        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.blackHippogryphBiomes, biome)) {
             types.add(BLACK);
         }
-        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.brownHippogryphBiomes)) {
+        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.brownHippogryphBiomes, biome)) {
             types.add(BROWN);
         }
-        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.grayHippogryphBiomes)) {
+        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.grayHippogryphBiomes, biome)) {
             types.add(BROWN);
         }
-        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.chestnutHippogryphBiomes)) {
+        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.chestnutHippogryphBiomes, biome)) {
             types.add(CHESTNUT);
         }
-        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.creamyHippogryphBiomes)) {
+        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.creamyHippogryphBiomes, biome)) {
             types.add(CREAMY);
         }
-        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.darkBrownHippogryphBiomes)) {
+        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.darkBrownHippogryphBiomes, biome)) {
             types.add(DARK_BROWN);
         }
-        if (IAFBiomeUtil.biomeMeetsListConditions(biome, BiomeConfig.whiteHippogryphBiomes)) {
+        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.whiteHippogryphBiomes, biome)) {
             types.add(WHITE);
         }
         if (types.isEmpty()) {
