@@ -16,6 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class IAFBiomeUtil {
 	// ! - Must exclude this
 	// & - Must include this
+	// | - Or this
 	public static final String OPERATORS = "!&|";
 	
 	// # - For BiomeDictionary entries
@@ -84,6 +85,7 @@ public class IAFBiomeUtil {
 			.map(s -> s.substring(1))
 			.collect(Collectors.toList());
     	
+    	// Biome Dictionary
     	RegistryKey<Biome> biomeKey = RegistryKey.func_240903_a_(Registry.field_239720_u_, biome.getRegistryName());
     	List<? extends String> biomeTypes = BiomeDictionary.getTypes(biomeKey).stream()
 			.map(t -> t.toString().toLowerCase(Locale.ROOT))
@@ -98,12 +100,14 @@ public class IAFBiomeUtil {
     public static boolean parseListForBiomeCheck(List<? extends String> list, Biome biome) {
     	if (list == null || list.size() == 0 || biome == null || biome.getRegistryName() == null) return false;
     	
+    	// Lower case all of the entries and replace all the whitespace
     	List<? extends String> lcList = list.stream()
 			.map(s -> s.toLowerCase(Locale.ROOT).replaceAll("\\s", ""))
 			.collect(Collectors.toList());
 
     	if(list.size() == 1 && list.contains("*")) return true;
     	
+    	// Get an entries that are an expression and evaluate them
     	boolean reducedAconditionals = lcList.stream()
     		.filter(s -> s.indexOf('+') > 0)
     		.map(e -> biomeMeetsListConditions(biome, Lists.newArrayList(e.split("\\+"))) )
