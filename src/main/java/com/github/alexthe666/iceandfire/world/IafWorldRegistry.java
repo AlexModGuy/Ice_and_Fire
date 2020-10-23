@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.world;
 
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
@@ -60,7 +59,6 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -78,7 +76,6 @@ public class IafWorldRegistry {
     public static Feature<NoFeatureConfig> HYDRA_CAVE;
     public static Feature<NoFeatureConfig> MYRMEX_HIVE_DESERT;
     public static Feature<NoFeatureConfig> MYRMEX_HIVE_JUNGLE;
-    //public static Feature<NoFeatureConfig> MOB_SPAWNS;
     public static Feature<NoFeatureConfig> SPAWN_DEATH_WORM;
     public static Feature<NoFeatureConfig> SPAWN_DRAGON_SKELETON_L;
     public static Feature<NoFeatureConfig> SPAWN_DRAGON_SKELETON_F;
@@ -116,7 +113,6 @@ public class IafWorldRegistry {
     public static ConfiguredFeature HYDRA_CAVE_CF;
     public static ConfiguredFeature MYRMEX_HIVE_DESERT_CF;
     public static ConfiguredFeature MYRMEX_HIVE_JUNGLE_CF;
-    //public static ConfiguredFeature MOB_SPAWNS_CF;
     public static ConfiguredFeature SPAWN_DEATH_WORM_CF;
     public static ConfiguredFeature SPAWN_DRAGON_SKELETON_L_CF;
     public static ConfiguredFeature SPAWN_DRAGON_SKELETON_F_CF;
@@ -143,7 +139,6 @@ public class IafWorldRegistry {
         MYRMEX_HIVE_DESERT = Registry.register(Registry.FEATURE, "iceandfire:myrmex_hive_desert", new WorldGenMyrmexHive(false, false, NoFeatureConfig.field_236558_a_));
         MYRMEX_HIVE_JUNGLE = Registry.register(Registry.FEATURE, "iceandfire:myrmex_hive_jungle", new WorldGenMyrmexHive(false, true, NoFeatureConfig.field_236558_a_));
 
-        //MOB_SPAWNS = Registry.register(Registry.FEATURE, "iceandfire:mob_spawns", new WorldGenMobSpawn(NoFeatureConfig.field_236558_a_));
         SPAWN_DEATH_WORM = Registry.register(Registry.FEATURE, "iceandfire:spawn_death_worm", new SpawnDeathWorm(NoFeatureConfig.field_236558_a_));
         SPAWN_DRAGON_SKELETON_L = Registry.register(Registry.FEATURE, "iceandfire:spawn_dragon_skeleton_l", new SpawnDragonSkeleton(IafEntityRegistry.LIGHTNING_DRAGON, NoFeatureConfig.field_236558_a_));
         SPAWN_DRAGON_SKELETON_F = Registry.register(Registry.FEATURE, "iceandfire:spawn_dragon_skeleton_f", new SpawnDragonSkeleton(IafEntityRegistry.FIRE_DRAGON, NoFeatureConfig.field_236558_a_));
@@ -193,7 +188,6 @@ public class IafWorldRegistry {
         MYRMEX_HIVE_DESERT_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:myrmex_hive_desert", MYRMEX_HIVE_DESERT.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
         MYRMEX_HIVE_JUNGLE_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:myrmex_hive_jungle", MYRMEX_HIVE_JUNGLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
         
-        //MOB_SPAWNS_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:misc_mob_spawns", MOB_SPAWNS.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
         SPAWN_DEATH_WORM_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:spawn_death_worm_misc", SPAWN_DEATH_WORM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
         SPAWN_DRAGON_SKELETON_L_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:spawn_dragon_skeleton_l_misc", SPAWN_DRAGON_SKELETON_L.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
         SPAWN_DRAGON_SKELETON_F_CF = Registry.register(WorldGenRegistries.field_243653_e, "iceandfire:spawn_dragon_skeleton_f_misc", SPAWN_DRAGON_SKELETON_F.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
@@ -406,43 +400,39 @@ public class IafWorldRegistry {
             event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SIREN_ISLAND_CF);
         	LOADED_FEATURES.put("SIREN_ISLAND_CF", true);
         }
-
-        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.overworldSpawnBiomes, biome)) {
-            //event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, MOB_SPAWNS_CF);
-        	if (IafConfig.spawnDeathWorm && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.deathwormBiomes, biome)) {
-        		event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SPAWN_DEATH_WORM_CF);
-            	LOADED_FEATURES.put("SPAWN_DEATH_WORM_CF", true);
-        	}
-            if (IafConfig.generateWanderingCyclops && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.wanderingCyclopsBiomes, biome)) {
-            	event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SPAWN_WANDERING_CYCLOPS_CF);
-            	LOADED_FEATURES.put("SPAWN_WANDERING_CYCLOPS_CF", true);
+    	if (IafConfig.spawnDeathWorm && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.deathwormBiomes, biome)) {
+    		event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SPAWN_DEATH_WORM_CF);
+        	LOADED_FEATURES.put("SPAWN_DEATH_WORM_CF", true);
+    	}
+        if (IafConfig.generateWanderingCyclops && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.wanderingCyclopsBiomes, biome)) {
+        	event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SPAWN_WANDERING_CYCLOPS_CF);
+        	LOADED_FEATURES.put("SPAWN_WANDERING_CYCLOPS_CF", true);
+        }
+        if (IafConfig.generateDragonSkeletons) {
+            if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.lightningDragonSkeletonBiomes, biome)) {
+        		event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SPAWN_DRAGON_SKELETON_L_CF);
+            	LOADED_FEATURES.put("SPAWN_DRAGON_SKELETON_L_CF", true);
             }
-            if (IafConfig.generateDragonSkeletons) {
-                if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.lightningDragonSkeletonBiomes, biome)) {
-            		event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SPAWN_DRAGON_SKELETON_L_CF);
-                	LOADED_FEATURES.put("SPAWN_DRAGON_SKELETON_L_CF", true);
-                }
-                if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.fireDragonSkeletonBiomes, biome)) {
-            		event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SPAWN_DRAGON_SKELETON_F_CF);
-                	LOADED_FEATURES.put("SPAWN_DRAGON_SKELETON_F_CF", true);
-                }
-                if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.iceDragonSkeletonBiomes, biome)) {
-                	event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SPAWN_DRAGON_SKELETON_I_CF);
-                	LOADED_FEATURES.put("SPAWN_DRAGON_SKELETON_I_CF", true);
-                }
+            if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.fireDragonSkeletonBiomes, biome)) {
+        		event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SPAWN_DRAGON_SKELETON_F_CF);
+            	LOADED_FEATURES.put("SPAWN_DRAGON_SKELETON_F_CF", true);
             }
-        	if (IafConfig.spawnHippocampus && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.hippocampusBiomes, biome)) {
-        		event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SPAWN_HIPPOCAMPUS_CF);
-            	LOADED_FEATURES.put("SPAWN_HIPPOCAMPUS_CF", true);
-        	}
-            if (IafConfig.spawnSeaSerpents && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.seaSerpentBiomes, biome)) {
-            	event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SPAWN_SEA_SERPENT_CF);
-            	LOADED_FEATURES.put("SPAWN_SEA_SERPENT_CF", true);
+            if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.iceDragonSkeletonBiomes, biome)) {
+            	event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SPAWN_DRAGON_SKELETON_I_CF);
+            	LOADED_FEATURES.put("SPAWN_DRAGON_SKELETON_I_CF", true);
             }
-            if (IafConfig.spawnStymphalianBirds && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.stymphalianBiomes, biome)) {
-            	event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SPAWN_STYMPHALIAN_BIRD_CF);
-            	LOADED_FEATURES.put("SPAWN_STYMPHALIAN_BIRD_CF", true);
-            }
+        }
+    	if (IafConfig.spawnHippocampus && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.hippocampusBiomes, biome)) {
+    		event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SPAWN_HIPPOCAMPUS_CF);
+        	LOADED_FEATURES.put("SPAWN_HIPPOCAMPUS_CF", true);
+    	}
+        if (IafConfig.spawnSeaSerpents && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.seaSerpentBiomes, biome)) {
+        	event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SPAWN_SEA_SERPENT_CF);
+        	LOADED_FEATURES.put("SPAWN_SEA_SERPENT_CF", true);
+        }
+        if (IafConfig.spawnStymphalianBirds && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.stymphalianBiomes, biome)) {
+        	event.getGeneration().func_242513_a(GenerationStage.Decoration.SURFACE_STRUCTURES, SPAWN_STYMPHALIAN_BIRD_CF);
+        	LOADED_FEATURES.put("SPAWN_STYMPHALIAN_BIRD_CF", true);
         }
     }
 }
