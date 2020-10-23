@@ -15,7 +15,7 @@ public class DefaultBiomes {
     public static final String[] WOODLAND = new String[] { "|#forest" };
     public static final String[] SAVANNAS = new String[] { "|#savanna" };
     public static final String[] BEACHES = new String[] { "|#beach" };
-    public static final String[] SWAMPS = new String[] { "|#swamp" };
+    public static final String[] SWAMPS = new String[] { "|#swamp+|#hot+&#wet+!#cold+!#dry+!#ocean" };
     public static final String[] DESERT = new String[] { "|@desert" };
     public static final String[] OCEANS = new String[] { "|#ocean" };
     public static final String[] PIXIES = new String[] { "|#magical+|#dense+&#forest+!@taiga+!#hills+!#mountain+!#wet+!#hot+!#cold+!#dry" };
