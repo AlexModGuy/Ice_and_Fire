@@ -35,7 +35,6 @@ public class GraveyardPiece  {
     public static class Piece extends TemplateStructurePiece {
         private final Rotation rotation;
         private final ResourceLocation field_204756_e;
-        private BlockPos firstPos = null;
         private boolean offsetOnce = false;
 
         public boolean func_230383_a_(ISeedReader world, StructureManager p_230383_2_, ChunkGenerator p_230383_3_, Random p_230383_4_, MutableBoundingBox p_230383_5_, ChunkPos p_230383_6_, BlockPos p_230383_7_) {
@@ -54,7 +53,6 @@ public class GraveyardPiece  {
             this.field_204756_e = p_i48904_2_;
             this.func_204754_a(p_i48904_1_);
             this.template = p_i48904_1_.getTemplate(PART_1);
-            this.firstPos = new BlockPos(templatePosition);
         }
 
         public Piece(TemplateManager p_i50445_1_, CompoundNBT p_i50445_2_) {
@@ -75,7 +73,6 @@ public class GraveyardPiece  {
             Template lvt_2_1_ = p_204754_1_.getTemplateDefaulted(PART_1);
             PlacementSettings lvt_3_1_ = (new PlacementSettings()).setRotation(this.rotation).setMirror(Mirror.NONE).addProcessor(new GraveyardProcessor());
             this.setup(lvt_2_1_, this.templatePosition, lvt_3_1_);
-            this.firstPos = new BlockPos(templatePosition);
         }
 
 
