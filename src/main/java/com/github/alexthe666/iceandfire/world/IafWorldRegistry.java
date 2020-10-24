@@ -89,6 +89,7 @@ public class IafWorldRegistry {
     public static Structure<NoFeatureConfig> MAUSOLEUM = new DreadMausoleumStructure(NoFeatureConfig.field_236558_a_);
     public static final Structure<NoFeatureConfig> MAUSOLEUM_SF = func_236394_a_("iceandfire:mausoleum", MAUSOLEUM, GenerationStage.Decoration.SURFACE_STRUCTURES);
     public static IStructurePieceType GORGON_PIECE;
+    public static IStructurePieceType GORGON_EMPTY_PIECE;
     public static Structure<NoFeatureConfig> GORGON_TEMPLE = new GorgonTempleStructure(NoFeatureConfig.field_236558_a_);
     public static final Structure<NoFeatureConfig> GORGON_TEMPLE_SF = func_236394_a_("iceandfire:gorgon_temple", GORGON_TEMPLE, GenerationStage.Decoration.SURFACE_STRUCTURES);
     public static IStructurePieceType GRAVEYARD_PIECE;
@@ -154,6 +155,7 @@ public class IafWorldRegistry {
         putStructureOnAList("iceandfire:mausoleum", MAUSOLEUM);
 
         GORGON_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece", GorgonTemplePiece.Piece::new);
+        GORGON_EMPTY_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece_empty", GorgonTemplePiece.EmptyPiece::new);
         GORGON_TEMPLE = Registry.register(Registry.STRUCTURE_FEATURE, "iceandfire:gorgon_temple", GORGON_TEMPLE);
         putStructureOnAList("iceandfire:gorgon_temple", GORGON_TEMPLE);
 
@@ -161,9 +163,9 @@ public class IafWorldRegistry {
         GRAVEYARD = Registry.register(Registry.STRUCTURE_FEATURE, "iceandfire:graveyard", GRAVEYARD);
         putStructureOnAList("iceandfire:graveyard", GRAVEYARD);
 
-        addStructureSeperation(DimensionSettings.field_242734_c, GORGON_TEMPLE, new StructureSeparationSettings(Math.max(IafConfig.spawnGorgonsChance, 2), Math.max(IafConfig.spawnGorgonsChance / 2, 1), 34222645));
-        addStructureSeperation(DimensionSettings.field_242734_c, MAUSOLEUM, new StructureSeparationSettings(Math.max(IafConfig.generateMausoleumChance, 2), Math.max(IafConfig.generateMausoleumChance / 2, 1), 34222645));
-        addStructureSeperation(DimensionSettings.field_242734_c, GRAVEYARD, new StructureSeparationSettings(Math.max(IafConfig.generateGraveyardChance, 2), Math.max(IafConfig.generateGraveyardChance / 2, 1), 34222644));
+        addStructureSeperation(DimensionSettings.field_242734_c, GORGON_TEMPLE, new StructureSeparationSettings(Math.max(IafConfig.spawnGorgonsChance, 2), Math.max(IafConfig.spawnGorgonsChance / 2, 1), 342226450));
+        addStructureSeperation(DimensionSettings.field_242734_c, MAUSOLEUM, new StructureSeparationSettings(Math.max(IafConfig.generateMausoleumChance, 2), Math.max(IafConfig.generateMausoleumChance / 2, 1), 342226451));
+        addStructureSeperation(DimensionSettings.field_242734_c, GRAVEYARD, new StructureSeparationSettings(Math.max(IafConfig.generateGraveyardChance, 2), Math.max(IafConfig.generateGraveyardChance / 2, 1), 342226440));
 
         GORGON_TEMPLE_CF = Registry.register(WorldGenRegistries.field_243654_f, "iceandfire:gorgon_temple", GORGON_TEMPLE.func_236391_a_(IFeatureConfig.NO_FEATURE_CONFIG));
         MAUSOLEUM_CF = Registry.register(WorldGenRegistries.field_243654_f, "iceandfire:mausoleum", MAUSOLEUM.func_236391_a_(IFeatureConfig.NO_FEATURE_CONFIG));
