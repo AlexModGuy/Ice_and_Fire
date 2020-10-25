@@ -697,7 +697,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         if (world.isRemote) {
             this.updateClientControls();
         }
-        if (this.up() && !world.isRemote) {
+        if (this.isGoingUp() && !world.isRemote) {
             if (!this.isFlying()) {
                 this.setMotion(this.getMotion().add(0, 1, 0));
                 this.setFlying(true);
@@ -808,11 +808,11 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         this.dataManager.set(VARIANT, Integer.valueOf(variant));
     }
 
-    public boolean up() {
+    public boolean isGoingUp() {
         return (dataManager.get(CONTROL_STATE).byteValue() & 1) == 1;
     }
 
-    public boolean down() {
+    public boolean isGoingDown() {
         return (dataManager.get(CONTROL_STATE).byteValue() >> 1 & 1) == 1;
     }
 

@@ -34,26 +34,26 @@ public class IafDragonLogic {
     */
     public void updateDragonServer() {
         PlayerEntity ridingPlayer = dragon.getRidingPlayer();
-        if (dragon.up()) {
+        if (dragon.isGoingUp()) {
             if (!dragon.isFlying() && !dragon.isHovering()) {
                 dragon.spacebarTicks += 2;
             }
-        } else if (dragon.dismount()) {
+        } else if (dragon.isDismounting()) {
             if (dragon.isFlying() || dragon.isHovering()) {
                 dragon.setMotion(dragon.getMotion().add(0, -0.04, 0));
                 dragon.setFlying(false);
                 dragon.setHovering(false);
             }
         }
-        if (!dragon.dismount() && (dragon.isFlying() || dragon.isHovering())) {
+        if (!dragon.isDismounting() && (dragon.isFlying() || dragon.isHovering())) {
             dragon.setMotion(dragon.getMotion().add(0, 0.01, 0));
         }
-        if (dragon.attack() && dragon.getControllingPassenger() != null && dragon.getDragonStage() > 1) {
+        if (dragon.isAttacking() && dragon.getControllingPassenger() != null && dragon.getDragonStage() > 1) {
             dragon.setBreathingFire(true);
             dragon.riderShootFire(dragon.getControllingPassenger());
             dragon.fireStopTicks = 10;
         }
-        if (dragon.strike() && dragon.getControllingPassenger() != null && dragon.getControllingPassenger() instanceof PlayerEntity) {
+        if (dragon.isStriking() && dragon.getControllingPassenger() != null && dragon.getControllingPassenger() instanceof PlayerEntity) {
             LivingEntity target = DragonUtils.riderLookingAtEntity(dragon, (PlayerEntity) dragon.getControllingPassenger(), dragon.getDragonStage() + (dragon.getBoundingBox().maxX - dragon.getBoundingBox().minX));
             if (dragon.getAnimation() != EntityDragonBase.ANIMATION_BITE) {
                 dragon.setAnimation(EntityDragonBase.ANIMATION_BITE);

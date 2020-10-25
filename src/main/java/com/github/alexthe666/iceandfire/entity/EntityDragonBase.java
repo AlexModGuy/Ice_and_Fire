@@ -614,43 +614,43 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         this.dataManager.register(CRYSTAL_BOUND, Boolean.valueOf(false));
     }
 
-    public boolean up() {
+    public boolean isGoingUp() {
         return (dataManager.get(CONTROL_STATE).byteValue() & 1) == 1;
     }
 
-    public boolean down() {
+    public boolean isGoingDown() {
         return (dataManager.get(CONTROL_STATE).byteValue() >> 1 & 1) == 1;
     }
 
-    public boolean attack() {
+    public boolean isAttacking() {
         return (dataManager.get(CONTROL_STATE).byteValue() >> 2 & 1) == 1;
     }
 
-    public boolean strike() {
+    public boolean isStriking() {
         return (dataManager.get(CONTROL_STATE).byteValue() >> 3 & 1) == 1;
     }
 
-    public boolean dismount() {
+    public boolean isDismounting() {
         return (dataManager.get(CONTROL_STATE).byteValue() >> 4 & 1) == 1;
     }
 
-    public void up(boolean up) {
+    public void goUp(boolean up) {
         setStateField(0, up);
     }
 
-    public void down(boolean down) {
+    public void goDown(boolean down) {
         setStateField(1, down);
     }
 
-    public void attack(boolean attack) {
+    public void goAttack(boolean attack) {
         setStateField(2, attack);
     }
 
-    public void strike(boolean strike) {
+    public void goStrike(boolean strike) {
         setStateField(3, strike);
     }
 
-    public void dismount(boolean dismount) {
+    public void goDismount(boolean dismount) {
         setStateField(4, dismount);
     }
 
@@ -1450,7 +1450,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
 
     public boolean doesWantToLand() {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone() || this.isChained() && flyTicks > 100 || this.airAttack == IafDragonAttacks.Air.TACKLE && this.getAttackTarget() != null;
+        return this.flyTicks > 6000 || isGoingDown() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone() || this.isChained() && flyTicks > 100 || this.airAttack == IafDragonAttacks.Air.TACKLE && this.getAttackTarget() != null;
     }
 
     public abstract String getVariantName(int variant);
@@ -1882,11 +1882,11 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         Minecraft mc = Minecraft.getInstance();
         if (this.isRidingPlayer(mc.player)) {
             byte previousState = getControlState();
-            up(mc.gameSettings.keyBindJump.isKeyDown());
-            down(IafKeybindRegistry.dragon_down.isKeyDown());
-            attack(IafKeybindRegistry.dragon_fireAttack.isKeyDown());
-            strike(IafKeybindRegistry.dragon_strike.isKeyDown());
-            dismount(mc.gameSettings.keyBindSneak.isKeyDown());
+            goUp(mc.gameSettings.keyBindJump.isKeyDown());
+            goDown(IafKeybindRegistry.dragon_down.isKeyDown());
+            goAttack(IafKeybindRegistry.dragon_fireAttack.isKeyDown());
+            goStrike(IafKeybindRegistry.dragon_strike.isKeyDown());
+            goDismount(mc.gameSettings.keyBindSneak.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, getPosX(), getPosY(), getPosZ()));
@@ -1894,7 +1894,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         }
         if (this.getRidingEntity() != null && this.getRidingEntity() == mc.player) {
             byte previousState = getControlState();
-            dismount(mc.gameSettings.keyBindSneak.isKeyDown());
+            goDismount(mc.gameSettings.keyBindSneak.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, getPosX(), getPosY(), getPosZ()));

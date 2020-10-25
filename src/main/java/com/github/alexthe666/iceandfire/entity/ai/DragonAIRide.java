@@ -54,17 +54,17 @@ public class DragonAIRide<T extends MobEntity & IFlyingMount> extends Goal {
         if (player.moveForward < 0.0) {
             speed *= 0.15D;
         }
-        if (dragon.up()) {
+        if (dragon.isGoingUp()) {
             lookVec = lookVec.add(0, 1, 0);
         }
-        if (dragon.down()) {
+        if (dragon.isGoingDown()) {
             lookVec = lookVec.add(0, -1, 0);
         }
         if (player.moveStrafing != 0 || player.moveForward != 0 || (dragon.fliesLikeElytra())) {
             x += lookVec.x * 10;
             z += lookVec.z * 10;
         }
-        if ((dragon.isFlying() || hovering()) && (dragon.fliesLikeElytra() || dragon.up() || dragon.down())) {
+        if ((dragon.isFlying() || hovering()) && (dragon.fliesLikeElytra() || dragon.isGoingUp() || dragon.isGoingDown())) {
             y += lookVec.y * 10;
         }
         if (dragon.fliesLikeElytra() && lookVec.y == -1 || !(dragon.isFlying() || hovering()) && !dragon.func_233570_aj_()) {

@@ -408,11 +408,11 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         IceAndFire.PROXY.setReferencedMob(this);
     }
 
-    public boolean up() {
+    public boolean isGoingUp() {
         return (dataManager.get(CONTROL_STATE).byteValue() & 1) == 1;
     }
 
-    public boolean down() {
+    public boolean isGoingDown() {
         return (dataManager.get(CONTROL_STATE).byteValue() >> 1 & 1) == 1;
     }
 
@@ -999,7 +999,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     public boolean doesWantToLand() {
-        return this.flyTicks > 2000 || down() || flyTicks > 40 && this.flyProgress == 0;
+        return this.flyTicks > 2000 || isGoingDown() || flyTicks > 40 && this.flyProgress == 0;
     }
 
     @Override
@@ -1009,7 +1009,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         if (world.isRemote) {
             this.updateClientControls();
         }
-        if (this.up()) {
+        if (this.isGoingUp()) {
             if (this.airBorneCounter == 0) {
                 this.setMotion(this.getMotion().add(0, 1D, 0));
             }
