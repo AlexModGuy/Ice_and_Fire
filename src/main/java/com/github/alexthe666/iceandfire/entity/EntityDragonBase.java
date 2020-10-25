@@ -1390,9 +1390,17 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                 if (IafConfig.dragonGriefing != 2 && (!this.isTamed() || IafConfig.tamedDragonGriefing)) {
                     float hardness = IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
                     if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
-                        for (BlockPos pos : BlockPos.getAllInBox((int) Math.floor(this.getBoundingBox().minX) - bounds, (int) Math.floor(this.getBoundingBox().minY) + 1, (int) Math.floor(this.getBoundingBox().minZ) - bounds, (int) Math.floor(this.getBoundingBox().maxX) + bounds, (int) Math.floor(this.getBoundingBox().maxY) + bounds + flightModifier, (int) Math.floor(this.getBoundingBox().maxZ) + bounds).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
+                    	BlockPos.getAllInBox(
+                			(int) Math.floor(this.getBoundingBox().minX) - bounds,
+                			(int) Math.floor(this.getBoundingBox().minY) + 1,
+                			(int) Math.floor(this.getBoundingBox().minZ) - bounds,
+                			(int) Math.floor(this.getBoundingBox().maxX) + bounds,
+                			(int) Math.floor(this.getBoundingBox().maxY) + bounds + flightModifier,
+                			(int) Math.floor(this.getBoundingBox().maxZ) + bounds
+            			).forEach(pos -> {
                             if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, pos.getX(), pos.getY(), pos.getZ())))
-                                continue;
+                                return;
+
                             BlockState state = world.getBlockState(pos);
                             if (state.getMaterial().blocksMovement() && !state.isAir() && !state.getShape(world, pos).isEmpty() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos)) {
                                 this.setMotion(this.getMotion().mul(0.6F, 1, 0.6F));
@@ -1404,7 +1412,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                                     }
                                 }
                             }
-                        }
+            			});
                     }
                 }
             }
