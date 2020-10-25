@@ -38,7 +38,7 @@ public class IafDragonDestructionManager {
         float dmgScale = (float) IafConfig.dragonAttackDamageFire;
 
         if (stage <= 3) {
-        	BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1)).map(BlockPos::toImmutable).parallel().forEach(pos -> {
+        	BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1)).forEach(pos -> {
                 if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityDragonforgeInput) {
                     ((TileEntityDragonforgeInput) world.getTileEntity(pos)).onHitWithFlame();
                 }
@@ -64,7 +64,7 @@ public class IafDragonDestructionManager {
             final double ffDouble = (double) ff;
 
             damageRadius = 2.5F + f * 1.2F;
-            BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).parallel().forEach(blockpos -> {
+            BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(blockpos -> {
                 if (world.getTileEntity(blockpos) != null && world.getTileEntity(blockpos) instanceof TileEntityDragonforgeInput) {
                     ((TileEntityDragonforgeInput) world.getTileEntity(blockpos)).onHitWithFlame();
                 }
@@ -101,7 +101,7 @@ public class IafDragonDestructionManager {
         float dmgScale = (float) IafConfig.dragonAttackDamageIce;
 
         if (stage <= 3) {
-        	BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1)).map(BlockPos::toImmutable).parallel().forEach(pos -> {
+        	BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1)).forEach(pos -> {
                 if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityDragonforgeInput) {
                     ((TileEntityDragonforgeInput) world.getTileEntity(pos)).onHitWithFlame();
                 }
@@ -127,7 +127,7 @@ public class IafDragonDestructionManager {
             final double ffDouble = (double) ff;
 
             damageRadius = 2.5F + f * 1.2F;
-            BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).parallel().forEach(blockpos -> {
+            BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(blockpos -> {
                 if (world.getTileEntity(blockpos) != null && world.getTileEntity(blockpos) instanceof TileEntityDragonforgeInput) {
                     ((TileEntityDragonforgeInput) world.getTileEntity(blockpos)).onHitWithFlame();
                 }
@@ -169,7 +169,7 @@ public class IafDragonDestructionManager {
             int l = 2;
 
             if (stage <= 3) {
-            	Set<BlockPos> allInBlock = BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet());
+            	Set<BlockPos> allInBlock = BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).collect(Collectors.toSet());
                 for (BlockPos pos : allInBlock) {
                     if (world.rand.nextFloat() > pos.distanceSq(center) && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
                         world.setBlockState(pos, Blocks.AIR.getDefaultState());
@@ -195,7 +195,7 @@ public class IafDragonDestructionManager {
                 final float ff = f * f;
                 final double ffDouble = (double) ff;
 
-                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).forEach(blockpos -> {
+                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(blockpos -> {
                     if (blockpos.distanceSq(center) <= ffDouble) {
                         if (world.rand.nextFloat() > (float) blockpos.distanceSq(center) / ff && !(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
                             world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
@@ -206,7 +206,7 @@ public class IafDragonDestructionManager {
                 j++;
                 k++;
                 l++;
-                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).forEach(blockpos -> {
+                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(blockpos -> {
                     if (blockpos.distanceSq(center) <= ffDouble) {
                         if (!(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
                             BlockState transformState = transformBlockFire(world.getBlockState(blockpos));
@@ -247,7 +247,7 @@ public class IafDragonDestructionManager {
             int l = 2;
 
             if (stage <= 3) {
-            	Set<BlockPos> allInBox = BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet());
+            	Set<BlockPos> allInBox = BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).collect(Collectors.toSet());
                 for (BlockPos pos : allInBox) {
                     if (world.rand.nextFloat() > pos.distanceSq(center) && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
                         world.setBlockState(pos, Blocks.AIR.getDefaultState());
@@ -273,7 +273,7 @@ public class IafDragonDestructionManager {
                 final float ff = f * f;
                 final double ffDouble = (double) ff;
 
-                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).forEach(blockpos -> {
+                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(blockpos -> {
                     if (blockpos.distanceSq(center) <= ffDouble) {
                         if (world.rand.nextFloat() > (float) blockpos.distanceSq(center) / ff && !(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
                             world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
@@ -284,7 +284,7 @@ public class IafDragonDestructionManager {
                 j++;
                 k++;
                 l++;
-                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).forEach(blockpos -> {
+                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(blockpos -> {
                     if (blockpos.distanceSq(center) <= ffDouble) {
                         if (!(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
                             BlockState transformState = transformBlockIce(world.getBlockState(blockpos));
@@ -326,7 +326,7 @@ public class IafDragonDestructionManager {
         float dmgScale = (float) IafConfig.dragonAttackDamageLightning;
 
         if (stage <= 3) {
-        	BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1)).map(BlockPos::toImmutable).forEach(pos -> {
+        	BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1)).forEach(pos -> {
                 if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityDragonforgeInput) {
                     ((TileEntityDragonforgeInput) world.getTileEntity(pos)).onHitWithFlame();
                 }
@@ -349,7 +349,7 @@ public class IafDragonDestructionManager {
             final double ffDouble = (double) ff;
 
             damageRadius = 2.5F + f * 1.2F;
-            BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).forEach(blockpos -> {
+            BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(blockpos -> {
                 if (world.getTileEntity(blockpos) != null && world.getTileEntity(blockpos) instanceof TileEntityDragonforgeInput) {
                     ((TileEntityDragonforgeInput) world.getTileEntity(blockpos)).onHitWithFlame();
                 }
@@ -386,7 +386,7 @@ public class IafDragonDestructionManager {
             int l = 2;
 
             if (stage <= 3) {
-            	Set<BlockPos> allInBox = BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet());
+            	Set<BlockPos> allInBox = BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).collect(Collectors.toSet());
                 for (BlockPos pos : allInBox) {
                     if (world.rand.nextFloat() * 7F > Math.sqrt(center.distanceSq(pos)) && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
                         world.setBlockState(pos, Blocks.AIR.getDefaultState());
@@ -407,7 +407,7 @@ public class IafDragonDestructionManager {
                 final float ff = f * f;
                 final double ffDouble = (double) ff;
 
-                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).forEach(blockpos -> {
+                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(blockpos -> {
                     if (blockpos.distanceSq(center) <= ffDouble) {
                         if (world.rand.nextFloat() > (float) blockpos.distanceSq(center) / ff && !(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
                             world.setBlockState(blockpos, Blocks.AIR.getDefaultState());
@@ -418,7 +418,7 @@ public class IafDragonDestructionManager {
                 j++;
                 k++;
                 l++;
-                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).map(BlockPos::toImmutable).forEach(blockpos -> {
+                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(blockpos -> {
                     if (blockpos.distanceSq(center) <= ffDouble) {
                         if (!(world.getBlockState(blockpos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(blockpos).getBlock())) {
                             BlockState transformState = transformBlockLightning(world.getBlockState(blockpos));
