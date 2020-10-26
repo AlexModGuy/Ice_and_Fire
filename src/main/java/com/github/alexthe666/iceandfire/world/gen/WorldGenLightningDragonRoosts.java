@@ -46,13 +46,14 @@ public class WorldGenLightningDragonRoosts extends Feature<NoFeatureConfig> {
         if(!worldIn.getFluidState(worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position).down()).isEmpty()){
             return false;
         }
-        isMale = rand.nextBoolean();
+        isMale = new Random().nextBoolean();
         int boulders = 0;
         int radius = 12 + rand.nextInt(8);
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
         worldIn.setBlockState(position, Blocks.AIR.getDefaultState(), 2);
         if(!worldIn.isRemote()){
         	EntityDragonBase dragon = IafEntityRegistry.LIGHTNING_DRAGON.create(worldIn.getWorld());
+        	dragon.setGender(isMale);
             dragon.enablePersistence();
             dragon.growDragon(40 + radius);
             dragon.setAgingDisabled(true);

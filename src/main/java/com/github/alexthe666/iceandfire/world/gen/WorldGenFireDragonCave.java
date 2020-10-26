@@ -69,7 +69,7 @@ public class WorldGenFireDragonCave extends Feature<NoFeatureConfig> {
         }
         List<SphereInfo> sphereList = new ArrayList<SphereInfo>();
         position = new BlockPos(position.getX(), 20 + rand.nextInt(20), position.getZ());
-        isMale = rand.nextBoolean();
+        isMale = new Random().nextBoolean();
         int dragonAge = 75 + rand.nextInt(50);
         int radius = (int) (dragonAge * 0.2F) + rand.nextInt(8);
         createShell(worldIn, rand, position, radius, sphereList);

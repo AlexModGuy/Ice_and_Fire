@@ -47,13 +47,14 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
             return false;
         }
 
-        isMale = rand.nextBoolean();
+        isMale = new Random().nextBoolean();
         int boulders = 0;
         int radius = 12 + rand.nextInt(8);
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
         worldIn.setBlockState(position, Blocks.AIR.getDefaultState(), 2);
         if(!worldIn.isRemote()){
         	EntityDragonBase dragon = IafEntityRegistry.FIRE_DRAGON.create(worldIn.getWorld());
+        	dragon.setGender(isMale);
             dragon.enablePersistence();
             dragon.growDragon(40 + radius);
             dragon.setAgingDisabled(true);

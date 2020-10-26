@@ -74,7 +74,7 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
             return false;
         }
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
-        isMale = rand.nextBoolean();
+        isMale = new Random().nextBoolean();
         int boulders = 0;
         int radius = 12 + rand.nextInt(8);
         {
