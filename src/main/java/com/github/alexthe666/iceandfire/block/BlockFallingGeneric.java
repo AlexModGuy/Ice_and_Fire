@@ -16,14 +16,31 @@ public class BlockFallingGeneric extends FallingBlock {
     public Item itemBlock;
 
     public BlockFallingGeneric(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound) {
-        super(Block.Properties.create(materialIn).sound(sound).hardnessAndResistance(hardness, resistance).harvestTool(ToolType.get(toolUsed)).harvestLevel(toolStrength));
+        super(
+    		Block.Properties
+    			.create(materialIn)
+				.sound(sound)
+				.hardnessAndResistance(hardness, resistance)
+				.harvestTool(ToolType.get(toolUsed))
+				.harvestLevel(toolStrength)
+		);
+
         setRegistryName(IceAndFire.MODID, name);
 
     }
 
     @SuppressWarnings("deprecation")
     public BlockFallingGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery) {
-        super(Block.Properties.create(materialIn).sound(sound).hardnessAndResistance(hardness, resistance).harvestTool(ToolType.get(toolUsed)).harvestLevel(toolStrength).slipperiness(0.98F));
+        super(
+    		Block.Properties
+    			.create(materialIn)
+    			.sound(sound)
+    			.hardnessAndResistance(hardness, resistance)
+    			.harvestTool(ToolType.get(toolUsed))
+    			.harvestLevel(toolStrength)
+    			.slipperiness(0.98F)
+		);
+
         setRegistryName(IceAndFire.MODID, name);
     }
 

@@ -16,9 +16,16 @@ public class BlockIafOre extends Block {
     public Item itemBlock;
 
     public BlockIafOre(int toollevel, float hardness, float resistance, String name, String gameName) {
-        super(Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).harvestLevel(toollevel).hardnessAndResistance(hardness, resistance));
-        setRegistryName(IceAndFire.MODID, gameName);
+        super(
+    		Properties
+    			.create(Material.ROCK)
+    			.harvestTool(ToolType.PICKAXE)
+    			.harvestLevel(toollevel)
+    			.hardnessAndResistance(hardness, resistance)
+    			.func_235861_h_()
+		);
 
+        setRegistryName(IceAndFire.MODID, gameName);
     }
 
     @Override

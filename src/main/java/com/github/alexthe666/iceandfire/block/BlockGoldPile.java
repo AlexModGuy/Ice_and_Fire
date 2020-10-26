@@ -35,7 +35,14 @@ public class BlockGoldPile extends Block {
     public Item itemBlock;
 
     public BlockGoldPile(String name) {
-        super(Properties.create(Material.EARTH).hardnessAndResistance(0.3F, 1).tickRandomly().sound(IafBlockRegistry.SOUND_TYPE_GOLD));
+        super(
+    		Properties
+    			.create(Material.EARTH)
+    			.hardnessAndResistance(0.3F, 1)
+    			.tickRandomly()
+    			.sound(IafBlockRegistry.SOUND_TYPE_GOLD)
+		);
+
         this.setDefaultState(this.stateContainer.getBaseState().with(LAYERS, Integer.valueOf(1)));
         setRegistryName(IceAndFire.MODID, name);
     }

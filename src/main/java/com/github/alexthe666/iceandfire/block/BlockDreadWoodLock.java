@@ -25,7 +25,13 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
     public static final BooleanProperty PLAYER_PLACED = BooleanProperty.create("player_placed");
 
     public BlockDreadWoodLock() {
-        super(Properties.create(Material.WOOD).hardnessAndResistance(4, 1000000F).sound(SoundType.WOOD));
+        super(
+    		Properties
+    			.create(Material.WOOD)
+    			.hardnessAndResistance(4, 1000000F)
+    			.sound(SoundType.WOOD)
+		);
+
         this.setRegistryName(IceAndFire.MODID, "dreadwood_planks_lock");
         this.setDefaultState(this.getStateContainer().getBaseState().with(PLAYER_PLACED, Boolean.valueOf(false)));
     }

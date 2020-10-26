@@ -33,7 +33,15 @@ public class BlockLectern extends ContainerBlock {
     protected static final VoxelShape AABB = Block.makeCuboidShape(4, 0, 4, 12, 19, 12);
 
     public BlockLectern() {
-        super(Properties.create(Material.WOOD).notSolid().variableOpacity().hardnessAndResistance(2, 5).sound(SoundType.WOOD));
+        super(
+    		Properties
+    			.create(Material.WOOD)
+    			.notSolid()
+    			.variableOpacity()
+    			.hardnessAndResistance(2, 5)
+    			.sound(SoundType.WOOD)
+		);
+
         this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
         this.setRegistryName(IceAndFire.MODID, "lectern");
     }

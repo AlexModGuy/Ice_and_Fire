@@ -21,7 +21,16 @@ public class BlockReturningState extends Block {
     private BlockState returnState;
 
     public BlockReturningState(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, BlockState returnToState) {
-        super(Block.Properties.create(materialIn).sound(sound).hardnessAndResistance(hardness, resistance).harvestTool(ToolType.get(toolUsed)).harvestLevel(toolStrength).tickRandomly());
+        super(
+    		Block.Properties
+    			.create(materialIn)
+    			.sound(sound)
+    			.hardnessAndResistance(hardness, resistance)
+    			.harvestTool(ToolType.get(toolUsed))
+    			.harvestLevel(toolStrength)
+    			.tickRandomly()
+		);
+
         setRegistryName(IceAndFire.MODID, name);
         this.returnState = returnToState;
         this.setDefaultState(this.stateContainer.getBaseState().with(REVERTS, Boolean.valueOf(false)));

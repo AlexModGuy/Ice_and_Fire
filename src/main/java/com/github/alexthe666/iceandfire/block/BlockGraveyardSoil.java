@@ -19,7 +19,16 @@ import net.minecraftforge.common.ToolType;
 public class BlockGraveyardSoil extends Block {
 
     public BlockGraveyardSoil() {
-        super(Properties.create(Material.EARTH).sound(SoundType.GROUND).hardnessAndResistance(5, 15).harvestTool(ToolType.SHOVEL).harvestLevel(0).tickRandomly());
+        super(
+    		Properties
+    			.create(Material.EARTH)
+    			.sound(SoundType.GROUND)
+    			.hardnessAndResistance(5, 15)
+    			.harvestTool(ToolType.SHOVEL)
+    			.harvestLevel(0)
+    			.tickRandomly()
+		);
+
         setRegistryName(IceAndFire.MODID, "graveyard_soil");
     }
 

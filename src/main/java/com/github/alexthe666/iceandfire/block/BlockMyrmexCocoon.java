@@ -26,9 +26,16 @@ public class BlockMyrmexCocoon extends ContainerBlock {
 
 
     public BlockMyrmexCocoon(boolean jungle) {
-        super(Properties.create(Material.EARTH).hardnessAndResistance(2.5F).notSolid().variableOpacity().sound(SoundType.SLIME));
-        this.setRegistryName(IceAndFire.MODID, jungle ? "jungle_myrmex_cocoon" : "desert_myrmex_cocoon");
+        super(
+    		Properties
+    			.create(Material.EARTH)
+    			.hardnessAndResistance(2.5F)
+    			.notSolid()
+    			.variableOpacity()
+    			.sound(SoundType.SLIME)
+		);
 
+        this.setRegistryName(IceAndFire.MODID, jungle ? "jungle_myrmex_cocoon" : "desert_myrmex_cocoon");
     }
 
     public BlockRenderType getRenderType(BlockState state) {

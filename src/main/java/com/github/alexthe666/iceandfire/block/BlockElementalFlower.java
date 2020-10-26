@@ -22,7 +22,16 @@ public class BlockElementalFlower extends BushBlock {
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 13.0D, 14.0D);
 
     public BlockElementalFlower(String name) {
-        super(Properties.create(Material.TALL_PLANTS).notSolid().doesNotBlockMovement().variableOpacity().tickRandomly().sound(SoundType.PLANT));
+        super(
+			Properties
+				.create(Material.TALL_PLANTS)
+				.notSolid()
+				.doesNotBlockMovement()
+				.variableOpacity()
+				.tickRandomly()
+				.sound(SoundType.PLANT)
+		);
+
         setRegistryName(IceAndFire.MODID, name);
     }
 

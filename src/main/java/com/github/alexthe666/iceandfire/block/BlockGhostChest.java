@@ -22,9 +22,16 @@ import net.minecraft.world.IBlockReader;
 public class BlockGhostChest extends ChestBlock implements ICustomRendered {
 
     public BlockGhostChest() {
-        super(Properties.create(Material.WOOD).hardnessAndResistance(2.5F).sound(SoundType.WOOD), () -> {
-            return IafTileEntityRegistry.GHOST_CHEST;
-        });
+        super(
+    		Properties
+    			.create(Material.WOOD)
+    			.hardnessAndResistance(2.5F)
+    			.sound(SoundType.WOOD),
+			() -> {
+	            return IafTileEntityRegistry.GHOST_CHEST;
+	        }
+		);
+
         setRegistryName(IceAndFire.MODID, "ghost_chest");
     }
 

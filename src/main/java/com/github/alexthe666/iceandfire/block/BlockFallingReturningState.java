@@ -24,7 +24,16 @@ public class BlockFallingReturningState extends FallingBlock {
     private BlockState returnState;
 
     public BlockFallingReturningState(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, BlockState revertState) {
-        super(Block.Properties.create(materialIn).sound(sound).hardnessAndResistance(hardness, resistance).harvestTool(ToolType.get(toolUsed)).harvestLevel(toolStrength).tickRandomly());
+        super(
+    		Block.Properties
+    			.create(materialIn)
+    			.sound(sound)
+    			.hardnessAndResistance(hardness, resistance)
+    			.harvestTool(ToolType.get(toolUsed))
+    			.harvestLevel(toolStrength)
+    			.tickRandomly()
+		);
+
         setRegistryName(IceAndFire.MODID, name);
         this.returnState = revertState;
         this.setDefaultState(this.stateContainer.getBaseState().with(REVERTS, Boolean.valueOf(false)));
@@ -32,7 +41,16 @@ public class BlockFallingReturningState extends FallingBlock {
 
     @SuppressWarnings("deprecation")
     public BlockFallingReturningState(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery, BlockState revertState) {
-        super(Block.Properties.create(materialIn).sound(sound).hardnessAndResistance(hardness, resistance).harvestTool(ToolType.get(toolUsed)).harvestLevel(toolStrength).tickRandomly());
+        super(
+    		Block.Properties
+    			.create(materialIn)
+    			.sound(sound)
+    			.hardnessAndResistance(hardness, resistance)
+    			.harvestTool(ToolType.get(toolUsed))
+    			.harvestLevel(toolStrength)
+    			.tickRandomly()
+		);
+
         setRegistryName(IceAndFire.MODID, name);
         this.returnState = revertState;
         this.setDefaultState(this.stateContainer.getBaseState().with(REVERTS, Boolean.valueOf(false)));

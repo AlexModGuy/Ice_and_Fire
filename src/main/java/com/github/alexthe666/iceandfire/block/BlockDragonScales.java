@@ -22,7 +22,17 @@ public class BlockDragonScales extends Block implements IDragonProof {
     EnumDragonEgg type;
 
     public BlockDragonScales(String name, EnumDragonEgg type) {
-        super(Properties.create(Material.ROCK).variableOpacity().hardnessAndResistance(30F, 500).harvestTool(ToolType.PICKAXE).harvestLevel(2).sound(SoundType.STONE));
+        super(
+    		Properties
+    			.create(Material.ROCK)
+    			.variableOpacity()
+    			.hardnessAndResistance(30F, 500)
+    			.harvestTool(ToolType.PICKAXE)
+    			.harvestLevel(2)
+    			.sound(SoundType.STONE)
+    			.func_235861_h_()
+		);
+
         this.setRegistryName("iceandfire:" + name);
         this.type = type;
     }

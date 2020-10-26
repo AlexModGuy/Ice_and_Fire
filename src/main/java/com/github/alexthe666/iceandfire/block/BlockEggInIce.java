@@ -23,7 +23,16 @@ public class BlockEggInIce extends ContainerBlock {
 
     @SuppressWarnings("deprecation")
     public BlockEggInIce() {
-        super(Properties.create(Material.ICE).notSolid().variableOpacity().hardnessAndResistance(0.5F).variableOpacity().sound(SoundType.GLASS));
+        super(
+    		Properties
+    			.create(Material.ICE)
+    			.notSolid()
+    			.variableOpacity()
+    			.hardnessAndResistance(0.5F)
+    			.variableOpacity()
+    			.sound(SoundType.GLASS)
+		);
+
         setRegistryName(IceAndFire.MODID, "egginice");
     }
 

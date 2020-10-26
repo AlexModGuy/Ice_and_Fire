@@ -17,8 +17,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockBurntTorchWall extends WallTorchBlock implements IDreadBlock {
 
     public BlockBurntTorchWall() {
-        super(Properties.create(Material.WOOD).func_235838_a_((p_235454_0_) -> {  return 0;
-        }).sound(SoundType.WOOD).notSolid().variableOpacity().lootFrom(IafBlockRegistry.BURNT_TORCH), RedstoneParticleData.REDSTONE_DUST);
+        super(
+    		Properties.create(Material.WOOD)
+        		.func_235838_a_((p_235454_0_) -> { return 0; })
+        		.sound(SoundType.WOOD).notSolid().variableOpacity()
+        		.lootFrom(IafBlockRegistry.BURNT_TORCH),
+    		RedstoneParticleData.REDSTONE_DUST
+		);
+
         setRegistryName(IceAndFire.MODID, "burnt_torch_wall");
     }
 

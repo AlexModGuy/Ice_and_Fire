@@ -13,12 +13,30 @@ import net.minecraftforge.common.ToolType;
 
 public class BlockGeneric extends Block {
     public BlockGeneric(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound) {
-        super(Block.Properties.create(materialIn).sound(sound).hardnessAndResistance(hardness, resistance).harvestTool(ToolType.get(toolUsed)).harvestLevel(toolStrength));
+        super(
+    		Block.Properties
+    			.create(materialIn)
+    			.sound(sound)
+    			.hardnessAndResistance(hardness, resistance)
+    			.harvestTool(ToolType.get(toolUsed))
+    			.harvestLevel(toolStrength)
+    			.func_235861_h_()
+		);
+
         this.setRegistryName(IceAndFire.MODID, name);
     }
 
     public BlockGeneric(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery) {
-        super(Block.Properties.create(materialIn).sound(sound).hardnessAndResistance(hardness, resistance).harvestTool(ToolType.get(toolUsed)).harvestLevel(toolStrength).slipperiness(0.98F));
+        super(
+    		Block.Properties
+    			.create(materialIn)
+    			.sound(sound)
+    			.hardnessAndResistance(hardness, resistance)
+    			.harvestTool(ToolType.get(toolUsed))
+    			.harvestLevel(toolStrength)
+    			.slipperiness(0.98F)
+		);
+
         this.setRegistryName(IceAndFire.MODID, name);
     }
 
@@ -35,5 +53,10 @@ public class BlockGeneric extends Block {
     @Deprecated
     public boolean canEntitySpawn(BlockState state, Entity entityIn) {
         return entityIn instanceof EntityDreadMob || !DragonUtils.isDreadBlock(state);
+    }
+    
+    public BlockGeneric setRequiresTool() {
+    	this.field_235684_aB_.func_235861_h_();
+    	return this;
     }
 }

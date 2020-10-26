@@ -25,7 +25,17 @@ public class BlockCharedPath extends GrassPathBlock {
 
     @SuppressWarnings("deprecation")
     public BlockCharedPath(int dragonType) {
-        super(Block.Properties.create(Material.PLANTS).sound(dragonType != 1 ? SoundType.GROUND : SoundType.GLASS).hardnessAndResistance(0.6F).harvestTool(ToolType.SHOVEL).harvestLevel(0).slipperiness(dragonType != 1 ? 0.6F : 0.98F).tickRandomly());
+        super(
+    		Block.Properties
+    			.create(Material.PLANTS)
+    			.sound(dragonType != 1 ? SoundType.GROUND : SoundType.GLASS)
+    			.hardnessAndResistance(0.6F).harvestTool(ToolType.SHOVEL)
+    			.harvestLevel(0)
+    			.slipperiness(dragonType != 1 ? 0.6F : 0.98F)
+    			.tickRandomly()
+    			.func_235861_h_()
+		);
+
         this.dragonType = dragonType;
         setRegistryName(IceAndFire.MODID, getNameFromType(dragonType));
         this.setDefaultState(stateContainer.getBaseState().with(REVERTS, Boolean.valueOf(false)));

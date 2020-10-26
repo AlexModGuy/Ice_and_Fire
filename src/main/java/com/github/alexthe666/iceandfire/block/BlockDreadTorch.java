@@ -18,8 +18,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BlockDreadTorch extends TorchBlock implements IDreadBlock, IWallBlock {
 
     public BlockDreadTorch() {
-        super(Properties.create(Material.WOOD).func_235838_a_((p_235454_0_) -> {  return 5;
-        }).sound(SoundType.STONE).notSolid().variableOpacity(), RedstoneParticleData.REDSTONE_DUST);
+        super(
+    		Properties
+    			.create(Material.WOOD)
+    			.func_235838_a_((p_235454_0_) -> { return 5; })
+    			.sound(SoundType.STONE)
+    			.notSolid()
+    			.variableOpacity(),
+    		RedstoneParticleData.REDSTONE_DUST
+		);
+
         setRegistryName(IceAndFire.MODID, "dread_torch");
     }
 

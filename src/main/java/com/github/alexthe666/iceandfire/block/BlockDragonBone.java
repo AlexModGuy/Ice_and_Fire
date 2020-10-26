@@ -13,7 +13,16 @@ import net.minecraftforge.common.ToolType;
 public class BlockDragonBone extends RotatedPillarBlock implements IDragonProof {
 
     public BlockDragonBone() {
-        super(Block.Properties.create(Material.ROCK).sound(SoundType.WOOD).hardnessAndResistance(30F, 500F).harvestTool(ToolType.PICKAXE).harvestLevel(1));
+        super(
+    		Block.Properties
+	    		.create(Material.ROCK)
+	    		.sound(SoundType.WOOD)
+	    		.hardnessAndResistance(30F, 500F)
+	    		.harvestTool(ToolType.PICKAXE)
+	    		.harvestLevel(1)
+	    		.func_235861_h_()
+		);
+
         this.setRegistryName(IceAndFire.MODID, "dragon_bone_block");
     }
 

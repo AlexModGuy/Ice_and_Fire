@@ -9,7 +9,13 @@ import net.minecraft.block.material.Material;
 public class BlockDreadWoodLog extends RotatedPillarBlock implements IDragonProof, IDreadBlock {
 
     public BlockDreadWoodLog() {
-        super(Properties.create(Material.WOOD).hardnessAndResistance(2F, 10000F).sound(SoundType.WOOD));
+        super(
+    		Properties
+    			.create(Material.WOOD)
+    			.hardnessAndResistance(2F, 10000F)
+    			.sound(SoundType.WOOD)
+		);
+
         this.setRegistryName(IceAndFire.MODID, "dreadwood_log");
     }
 }

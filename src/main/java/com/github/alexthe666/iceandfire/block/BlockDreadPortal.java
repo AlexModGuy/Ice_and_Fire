@@ -26,8 +26,16 @@ import net.minecraftforge.common.ToolType;
 public class BlockDreadPortal extends ContainerBlock implements IDreadBlock, ICustomRendered {
 
     public BlockDreadPortal() {
-        super(Properties.create(Material.PORTAL).variableOpacity().hardnessAndResistance(-1, 100000).harvestTool(ToolType.PICKAXE).func_235838_a_((p_235454_0_) -> {  return 1;
-        }).tickRandomly());
+        super(
+    		Properties
+    			.create(Material.PORTAL)
+    			.variableOpacity()
+    			.hardnessAndResistance(-1, 100000)
+    			.harvestTool(ToolType.PICKAXE)
+    			.func_235838_a_((p_235454_0_) -> { return 1; })
+    			.tickRandomly()
+		);
+
         this.setRegistryName(IceAndFire.MODID, "dread_portal");
     }
 

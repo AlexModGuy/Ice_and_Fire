@@ -32,7 +32,13 @@ public class BlockDragonforgeInput extends ContainerBlock implements IDragonProo
     private int dragonType;
 
     public BlockDragonforgeInput(int dragonType) {
-        super(Properties.create(Material.ROCK).variableOpacity().hardnessAndResistance(40, 500).sound(SoundType.METAL));
+        super(
+    		Properties
+    			.create(Material.ROCK)
+    			.variableOpacity()
+    			.hardnessAndResistance(40, 500)
+    			.sound(SoundType.METAL)
+		);
 
         this.setRegistryName(IceAndFire.MODID, "dragonforge_" + DragonType.getNameFromInt(dragonType) + "_input");
         this.dragonType = dragonType;

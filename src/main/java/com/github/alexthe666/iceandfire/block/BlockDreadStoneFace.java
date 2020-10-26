@@ -17,7 +17,15 @@ public class BlockDreadStoneFace extends HorizontalBlock implements IDreadBlock,
     public static final BooleanProperty PLAYER_PLACED = BooleanProperty.create("player_placed");
 
     public BlockDreadStoneFace() {
-        super(Block.Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(20F, 10000F).harvestTool(ToolType.PICKAXE).harvestLevel(3));
+        super(
+    		Block.Properties
+    			.create(Material.ROCK)
+    			.sound(SoundType.STONE)
+    			.hardnessAndResistance(20F, 10000F)
+    			.harvestTool(ToolType.PICKAXE)
+    			.harvestLevel(3)
+		);
+
         this.setDefaultState(this.getStateContainer().getBaseState().with(HORIZONTAL_FACING, Direction.NORTH).with(PLAYER_PLACED, Boolean.valueOf(false)));
         setRegistryName(IceAndFire.MODID, "dread_stone_face");
     }

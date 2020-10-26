@@ -24,7 +24,16 @@ public class BlockSeaSerpentScales extends Block {
     String name;
 
     public BlockSeaSerpentScales(String name, TextFormatting color) {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(30F, 500F).sound(SoundType.STONE).harvestTool(ToolType.PICKAXE).harvestLevel(2));
+        super(
+    		Properties
+    			.create(Material.ROCK)
+    			.hardnessAndResistance(30F, 500F)
+    			.sound(SoundType.STONE)
+    			.harvestTool(ToolType.PICKAXE)
+    			.harvestLevel(2)
+    			.func_235861_h_()
+		);
+
         this.color = color;
         this.name = name;
         this.setRegistryName(IceAndFire.MODID, "sea_serpent_scale_block_" + name);

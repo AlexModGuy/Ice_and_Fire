@@ -19,7 +19,13 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
     private boolean sticky;
 
     public BlockMyrmexResin(boolean sticky, String suffix) {
-        super(Properties.create(Material.CLAY).hardnessAndResistance(2.5F).sound(sticky ? SoundType.SLIME : SoundType.GROUND));
+        super(
+    		Properties
+    			.create(Material.CLAY)
+    			.hardnessAndResistance(2.5F)
+    			.sound(sticky ? SoundType.SLIME : SoundType.GROUND)
+		);
+
         this.setRegistryName(IceAndFire.MODID, sticky ? "myrmex_resin_sticky_" + suffix : "myrmex_resin_" + suffix);
         this.sticky = sticky;
     }
