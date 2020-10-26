@@ -43,10 +43,12 @@ public class ItemSirenFlute extends Item {
         ItemStack itemStackIn = player.getHeldItem(hand);
         player.setActiveHand(hand);
         player.getCooldownTracker().setCooldown(this, 900);
+
         double dist = 32;
         Vector3d Vector3d = player.getEyePosition(1.0F);
         Vector3d Vector3d1 = player.getLook(1.0F);
         Vector3d Vector3d2 = Vector3d.add(Vector3d1.x * dist, Vector3d1.y * dist, Vector3d1.z * dist);
+
         double d1 = dist;
         Entity pointedEntity = null;
         List<Entity> list = player.world.getEntitiesInAABBexcluding(player, player.getBoundingBox().expand(Vector3d1.x * dist, Vector3d1.y * dist, Vector3d1.z * dist).grow(1.0D, 1.0D, 1.0D), new Predicate<Entity>() {
@@ -56,6 +58,7 @@ public class ItemSirenFlute extends Item {
                 return entity != null && entity.canBeCollidedWith() && !blindness && (entity instanceof PlayerEntity || (entity instanceof LivingEntity && EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class) != null && !EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class).isStone()));
             }
         });
+
         double d2 = d1;
         for (int j = 0; j < list.size(); ++j) {
             Entity entity1 = list.get(j);
