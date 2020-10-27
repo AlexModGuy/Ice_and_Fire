@@ -20,6 +20,6 @@ public class DefaultBiomes {
     public static final String[] JUNGLE = new String[] { "&#overworld+|#jungle" };
     public static final String[] HILLS = new String[] { "&#overworld+|#mesa+|#mountains+|#hills+|@extreme_hills" };
     public static final String[] PLAINS = new String[] { "&#overworld+|@plains+|#plains" };
-    public static final String[] GRAVEYARD_BIOMES = new String[] { "&#overworld+!#ocean+!#mountains+!@beach" };
+    public static final String[] GRAVEYARD_BIOMES = new String[] { "&#overworld+!@ocean+!#ocean+!@beach+!#beach" };
 
 }
