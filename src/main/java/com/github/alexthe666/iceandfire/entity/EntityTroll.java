@@ -104,12 +104,22 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
 
     public static boolean canTrollSpawnOn(EntityType<? extends MobEntity> typeIn, IServerWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
         BlockPos blockpos = pos.down();
-        return reason == SpawnReason.SPAWNER || randomIn.nextInt(IafConfig.trollSpawnCheckChance) == 0 && worldIn.getBlockState(blockpos).canEntitySpawn(worldIn, blockpos, typeIn)  && isValidLightLevel(worldIn, pos, randomIn) && canSpawnOn(IafEntityRegistry.TROLL, worldIn, reason, pos, randomIn);
+        return reason == SpawnReason.SPAWNER || worldIn.getBlockState(blockpos).canEntitySpawn(worldIn, blockpos, typeIn)  && isValidLightLevel(worldIn, pos, randomIn) && canSpawnOn(IafEntityRegistry.TROLL, worldIn, reason, pos, randomIn);
     }
 
     public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn) {
         BlockPos pos = this.func_233580_cy_();
-        return this.getRNG().nextInt(IafConfig.trollSpawnCheckChance) == 0 && !this.world.canSeeSky(pos.up()) && super.canSpawn(worldIn, spawnReasonIn);
+
+        boolean rngCheck = true;
+        if (IafConfig.trollSpawnCheckChance != 0) {
+        	rngCheck = this.getRNG().nextInt(IafConfig.trollSpawnCheckChance) == 0;
+        }
+
+        System.out.println("----- TROLL CAN SPAWN CHECK -----");
+        System.out.println(rngCheck);
+        System.out.println(pos);
+        System.out.println(this.world.canSeeSky(pos.up()));
+        return rngCheck && !this.world.canSeeSky(pos.up()) && super.canSpawn(worldIn, spawnReasonIn);
     }
 
     protected void registerGoals() {
