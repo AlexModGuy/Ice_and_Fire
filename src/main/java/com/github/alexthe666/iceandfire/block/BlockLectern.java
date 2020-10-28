@@ -1,8 +1,15 @@
 package com.github.alexthe666.iceandfire.block;
 
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
-import net.minecraft.block.*;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ContainerBlock;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
@@ -21,14 +28,20 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import java.util.Random;
-
 public class BlockLectern extends ContainerBlock {
     public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
     protected static final VoxelShape AABB = Block.makeCuboidShape(4, 0, 4, 12, 19, 12);
 
     public BlockLectern() {
-        super(Properties.create(Material.WOOD).notSolid().variableOpacity().hardnessAndResistance(2, 5).sound(SoundType.WOOD));
+        super(
+    		Properties
+    			.create(Material.WOOD)
+    			.notSolid()
+    			.variableOpacity()
+    			.hardnessAndResistance(2, 5)
+    			.sound(SoundType.WOOD)
+		);
+
         this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
         this.setRegistryName(IceAndFire.MODID, "lectern");
     }

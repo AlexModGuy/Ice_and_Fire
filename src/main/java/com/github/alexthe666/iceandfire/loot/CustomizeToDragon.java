@@ -1,20 +1,24 @@
 package com.github.alexthe666.iceandfire.loot;
 
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.item.*;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
+import com.github.alexthe666.iceandfire.item.ItemDragonFlesh;
+import com.github.alexthe666.iceandfire.item.ItemDragonScales;
+import com.github.alexthe666.iceandfire.item.ItemDragonSkull;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootFunction;
 import net.minecraft.loot.LootFunctionType;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.ResourceLocation;
-
-import java.util.Random;
 
 public class CustomizeToDragon extends LootFunction {
 

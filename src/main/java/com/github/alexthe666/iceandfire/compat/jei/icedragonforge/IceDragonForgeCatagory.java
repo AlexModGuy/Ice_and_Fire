@@ -1,7 +1,11 @@
 package com.github.alexthe666.iceandfire.compat.jei.icedragonforge;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.alexthe666.iceandfire.compat.jei.IceAndFireJEIPlugin;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
+
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -11,9 +15,6 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class IceDragonForgeCatagory implements IRecipeCategory<DragonForgeRecipe> {
 

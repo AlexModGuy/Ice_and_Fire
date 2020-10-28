@@ -1,5 +1,11 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
@@ -11,11 +17,31 @@ import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
-import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.entity.ai.AquaticAITempt;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIAttackMelee;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIEscort;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAILookIdle;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIMate;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIRide;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAITarget;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetItems;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetNonTamed;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIWander;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIWatchClosest;
 import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
-import com.github.alexthe666.iceandfire.entity.util.*;
+import com.github.alexthe666.iceandfire.entity.util.ChainBuffer;
+import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
+import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
+import com.github.alexthe666.iceandfire.entity.util.IDeadMob;
+import com.github.alexthe666.iceandfire.entity.util.IDragonFlute;
+import com.github.alexthe666.iceandfire.entity.util.IDropArmor;
+import com.github.alexthe666.iceandfire.entity.util.IFlyingMount;
+import com.github.alexthe666.iceandfire.entity.util.IMultipartEntity;
+import com.github.alexthe666.iceandfire.entity.util.ISyncMount;
+import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
+import com.github.alexthe666.iceandfire.entity.util.ReversedBuffer;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragon;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
@@ -29,11 +55,21 @@ import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDragon;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
 import com.github.alexthe666.iceandfire.world.DragonPosWorldData;
 import com.google.common.base.Predicate;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.*;
+import net.minecraft.entity.AgeableEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
@@ -67,22 +103,30 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.*;
-import net.minecraft.util.math.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
+import net.minecraft.util.IItemProvider;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.*;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 public abstract class EntityDragonBase extends TameableEntity implements ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor {
 
@@ -570,43 +614,43 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         this.dataManager.register(CRYSTAL_BOUND, Boolean.valueOf(false));
     }
 
-    public boolean up() {
+    public boolean isGoingUp() {
         return (dataManager.get(CONTROL_STATE).byteValue() & 1) == 1;
     }
 
-    public boolean down() {
+    public boolean isGoingDown() {
         return (dataManager.get(CONTROL_STATE).byteValue() >> 1 & 1) == 1;
     }
 
-    public boolean attack() {
+    public boolean isAttacking() {
         return (dataManager.get(CONTROL_STATE).byteValue() >> 2 & 1) == 1;
     }
 
-    public boolean strike() {
+    public boolean isStriking() {
         return (dataManager.get(CONTROL_STATE).byteValue() >> 3 & 1) == 1;
     }
 
-    public boolean dismount() {
+    public boolean isDismounting() {
         return (dataManager.get(CONTROL_STATE).byteValue() >> 4 & 1) == 1;
     }
 
-    public void up(boolean up) {
+    public void goUp(boolean up) {
         setStateField(0, up);
     }
 
-    public void down(boolean down) {
+    public void goDown(boolean down) {
         setStateField(1, down);
     }
 
-    public void attack(boolean attack) {
+    public void goAttack(boolean attack) {
         setStateField(2, attack);
     }
 
-    public void strike(boolean strike) {
+    public void goStrike(boolean strike) {
         setStateField(3, strike);
     }
 
-    public void dismount(boolean dismount) {
+    public void goDismount(boolean dismount) {
         setStateField(4, dismount);
     }
 
@@ -1346,9 +1390,17 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                 if (IafConfig.dragonGriefing != 2 && (!this.isTamed() || IafConfig.tamedDragonGriefing)) {
                     float hardness = IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
                     if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
-                        for (BlockPos pos : BlockPos.getAllInBox((int) Math.floor(this.getBoundingBox().minX) - bounds, (int) Math.floor(this.getBoundingBox().minY) + 1, (int) Math.floor(this.getBoundingBox().minZ) - bounds, (int) Math.floor(this.getBoundingBox().maxX) + bounds, (int) Math.floor(this.getBoundingBox().maxY) + bounds + flightModifier, (int) Math.floor(this.getBoundingBox().maxZ) + bounds).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
+                    	BlockPos.getAllInBox(
+                			(int) Math.floor(this.getBoundingBox().minX) - bounds,
+                			(int) Math.floor(this.getBoundingBox().minY) + 1,
+                			(int) Math.floor(this.getBoundingBox().minZ) - bounds,
+                			(int) Math.floor(this.getBoundingBox().maxX) + bounds,
+                			(int) Math.floor(this.getBoundingBox().maxY) + bounds + flightModifier,
+                			(int) Math.floor(this.getBoundingBox().maxZ) + bounds
+            			).forEach(pos -> {
                             if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, pos.getX(), pos.getY(), pos.getZ())))
-                                continue;
+                                return;
+
                             BlockState state = world.getBlockState(pos);
                             if (state.getMaterial().blocksMovement() && !state.isAir() && !state.getShape(world, pos).isEmpty() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos)) {
                                 this.setMotion(this.getMotion().mul(0.6F, 1, 0.6F));
@@ -1360,7 +1412,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                                     }
                                 }
                             }
-                        }
+            			});
                     }
                 }
             }
@@ -1406,7 +1458,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
 
     public boolean doesWantToLand() {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone() || this.isChained() && flyTicks > 100 || this.airAttack == IafDragonAttacks.Air.TACKLE && this.getAttackTarget() != null;
+        return this.flyTicks > 6000 || isGoingDown() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone() || this.isChained() && flyTicks > 100 || this.airAttack == IafDragonAttacks.Air.TACKLE && this.getAttackTarget() != null;
     }
 
     public abstract String getVariantName(int variant);
@@ -1838,11 +1890,11 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         Minecraft mc = Minecraft.getInstance();
         if (this.isRidingPlayer(mc.player)) {
             byte previousState = getControlState();
-            up(mc.gameSettings.keyBindJump.isKeyDown());
-            down(IafKeybindRegistry.dragon_down.isKeyDown());
-            attack(IafKeybindRegistry.dragon_fireAttack.isKeyDown());
-            strike(IafKeybindRegistry.dragon_strike.isKeyDown());
-            dismount(mc.gameSettings.keyBindSneak.isKeyDown());
+            goUp(mc.gameSettings.keyBindJump.isKeyDown());
+            goDown(IafKeybindRegistry.dragon_down.isKeyDown());
+            goAttack(IafKeybindRegistry.dragon_fireAttack.isKeyDown());
+            goStrike(IafKeybindRegistry.dragon_strike.isKeyDown());
+            goDismount(mc.gameSettings.keyBindSneak.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, getPosX(), getPosY(), getPosZ()));
@@ -1850,7 +1902,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         }
         if (this.getRidingEntity() != null && this.getRidingEntity() == mc.player) {
             byte previousState = getControlState();
-            dismount(mc.gameSettings.keyBindSneak.isKeyDown());
+            goDismount(mc.gameSettings.keyBindSneak.isKeyDown());
             byte controlState = getControlState();
             if (controlState != previousState) {
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, getPosX(), getPosY(), getPosZ()));

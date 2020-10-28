@@ -28,7 +28,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '2.1.0-1.16.3'
+version = '2.1.0-1.16.3-custom'
 group = 'com.github.alexthe666' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'iceandfire'
 
@@ -101,7 +101,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.3-34.0.9'
+    minecraft 'net.minecraftforge:forge:1.16.3-34.1.21'
     compileOnly fg.deobf("mezz.jei:jei-1.16.2:7.1.3.19:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.2:7.1.3.19")
     compile 'citadel:citadel:1.4.0:deobf'

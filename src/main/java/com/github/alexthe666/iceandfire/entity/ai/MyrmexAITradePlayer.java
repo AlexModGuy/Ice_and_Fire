@@ -1,10 +1,11 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
+
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
-
-import java.util.EnumSet;
 
 public class MyrmexAITradePlayer extends Goal {
     private final EntityMyrmexBase myrmex;

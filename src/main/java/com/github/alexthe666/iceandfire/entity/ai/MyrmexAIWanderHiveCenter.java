@@ -1,13 +1,14 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
+
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.EnumSet;
 
 public class MyrmexAIWanderHiveCenter extends Goal {
     private final EntityMyrmexBase myrmex;

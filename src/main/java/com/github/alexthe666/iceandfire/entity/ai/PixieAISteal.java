@@ -1,17 +1,17 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
+
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.Hand;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.Random;
 
 public class PixieAISteal extends Goal {
     private final EntityPixie temptedEntity;

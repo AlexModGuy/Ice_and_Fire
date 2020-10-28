@@ -1,13 +1,14 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
+
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.player.PlayerEntity;
-
-import javax.annotation.Nullable;
 
 public class CockatriceAIAggroLook extends NearestAttackableTargetGoal<PlayerEntity> {
     private final EntityCockatrice cockatrice;

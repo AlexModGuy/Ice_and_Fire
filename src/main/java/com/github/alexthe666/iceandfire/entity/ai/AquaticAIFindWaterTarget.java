@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.Comparator;
+import java.util.EnumSet;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
@@ -9,9 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
-
-import java.util.Comparator;
-import java.util.EnumSet;
 
 public class AquaticAIFindWaterTarget extends Goal {
     protected AquaticAIFindWaterTarget.Sorter fleePosSorter;

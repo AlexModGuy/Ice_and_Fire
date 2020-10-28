@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.config;
 
-import com.github.alexthe666.iceandfire.world.DragonPosWorldData;
-import com.google.common.collect.Lists;
-import net.minecraftforge.common.ForgeConfigSpec;
-
 import java.util.List;
+
+import com.google.common.collect.Lists;
+
+import net.minecraftforge.common.ForgeConfigSpec;
 
 public class ServerConfig {
 
@@ -238,10 +238,10 @@ public class ServerConfig {
         this.pixiesStealItems = buildBoolean(builder, "Pixies Steal Items", "all", true, "True if pixies are allowed to steal from players");
 
         this.generateCyclopsCaves = buildBoolean(builder, "Spawn Cyclopes Caves", "all", true, "True if cyclops caves are allowed to spawn");
-        this.spawnCyclopsCaveChance = buildInt(builder, "Spawn Cyclops Cave Chance", "all", 170, 1, 10000, "1 out of this number chance per chunk for generation");
+        this.spawnCyclopsCaveChance = buildInt(builder, "Spawn Cyclops Cave Chance", "all", 100, 1, 10000, "1 out of this number chance per chunk for generation");
 
         this.generateWanderingCyclops = buildBoolean(builder, "Spawn Wandering Cyclopes", "all", true, "True if wandering cyclopes are allowed to spawn");
-        this.spawnWanderingCyclopsChance = buildInt(builder, "Spawn Wandering Cyclops Chance", "all", 900, 1, 10000, "1 out of this number chance per chunk for generation");
+        this.spawnWanderingCyclopsChance = buildInt(builder, "Spawn Wandering Cyclops Chance", "all", 100, 1, 10000, "1 out of this number chance per chunk for generation");
 
         this.cyclopsMaxHealth = buildDouble(builder, "Cyclops Max Health", "all", 150, 1, 10000, "Maximum cyclops health");
         this.cyclopesSheepSearchLength = buildInt(builder, "Cyclopes Sheep Search Length", "all", 17, 1, 10000, "How many blocks away can cyclopes detect sheep. Note that increasing this could cause lag.");
@@ -287,8 +287,8 @@ public class ServerConfig {
 
         this.spawnTrolls = buildBoolean(builder, "Spawn Trolls", "all", true, "True if trolls are allowed to spawn");
         this.trollsDropWeapon = buildBoolean(builder, "Trolls Drop Weapon", "all", true, "True if trolls are allowed to drop their weapon on death.");
-        this.trollSpawnRate = buildInt(builder, "Troll Spawn Weight", "all", 60, 1, 10000, "Troll spawn weight. Lower = lower chance to spawn");
-        this.trollSpawnCheckChance = buildInt(builder, "Troll Spawn Check Chance", "all", 30, 1, 10000, "A double check to see if the game can spawn trolls. Higher number = lower chance to spawn.");
+        this.trollSpawnRate = buildInt(builder, "Troll Spawn Weight", "all", 4, 1, 10000, "Troll spawn weight. Lower = lower chance to spawn");
+        this.trollSpawnCheckChance = buildInt(builder, "Troll Spawn Check Chance", "all", 0, 0, 10000, "A double check to see if the game can spawn trolls. Higher number = lower chance to spawn.");
         this.trollMaxHealth = buildDouble(builder, "Troll Max Health", "all", 50, 1, 10000, "Maximum troll health");
         this.trollAttackStrength = buildDouble(builder, "Troll Attack Strength", "all", 10, 1, 10000, "Troll attack strength");
 
@@ -330,10 +330,10 @@ public class ServerConfig {
 
         this.hydraMaxHealth = buildDouble(builder, "Hydra Max Health", "all", 250, 1, 10000, "Maximum hydra health");
         this.generateHydraCaves = buildBoolean(builder, "Generate Hydra Caves", "all", true, "True if hydra caves are allowed to generate");
-        this.generateHydraChance = buildInt(builder, "Hydra Caves Gen Chance", "all", 120, 1, 10000, "One out of this number chance per chunk to generate a hydra cave.");
+        this.generateHydraChance = buildInt(builder, "Hydra Caves Gen Chance", "all", 100, 1, 10000, "One out of this number chance per chunk to generate a hydra cave.");
 
         this.chunkLoadSummonCrystal = buildBoolean(builder, "Chunk Load Summon Crystal", "all", true, "True if the summon crystal can load chunks to find dragons.");
-        this.dangerousWorldGenDistanceLimit = buildInt(builder, "Dangerous World Gen Dist From Spawn", "all", 1000, 1, 10000, "How far away dangerous structures(dragon roosts, cyclops caves, etc.) must be from spawn(0, 0).");
+        this.dangerousWorldGenDistanceLimit = buildInt(builder, "Dangerous World Gen Dist From Spawn", "all", 800, 1, 10000, "How far away dangerous structures(dragon roosts, cyclops caves, etc.) must be from spawn(0, 0).");
         this.dangerousWorldGenSeparationLimit = buildInt(builder, "Dangerous World Gen Dist Seperation", "all", 300, 1, 10000, "How far away dangerous structures(dragon roosts, cyclops caves, etc.) must be from the last generated structure.");
         this.dragonFlightSpeedMod = buildDouble(builder, "Dragon Flight Speed Modifier", "all", 1F, 0.0F, 2.0F, "Change this to slow down or speed up dragon or amphithere flight.");
 

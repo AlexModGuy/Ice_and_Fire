@@ -1,6 +1,9 @@
 package com.github.alexthe666.iceandfire.block;
 
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -9,15 +12,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.ToolType;
 
-import java.util.Random;
-
 public class BlockIafOre extends Block {
     public Item itemBlock;
 
     public BlockIafOre(int toollevel, float hardness, float resistance, String name, String gameName) {
-        super(Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).harvestLevel(toollevel).hardnessAndResistance(hardness, resistance));
-        setRegistryName(IceAndFire.MODID, gameName);
+        super(
+    		Properties
+    			.create(Material.ROCK)
+    			.harvestTool(ToolType.PICKAXE)
+    			.harvestLevel(toollevel)
+    			.hardnessAndResistance(hardness, resistance)
+    			.func_235861_h_()
+		);
 
+        setRegistryName(IceAndFire.MODID, gameName);
     }
 
     @Override

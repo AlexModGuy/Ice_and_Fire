@@ -2,15 +2,14 @@ package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
-import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.google.common.collect.ImmutableList;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.BlockPos;
 
 public class ModelDragonEgg<T extends LivingEntity> extends AdvancedEntityModel<T> {
 

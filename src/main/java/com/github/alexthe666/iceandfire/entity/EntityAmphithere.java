@@ -1,5 +1,9 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
@@ -8,21 +12,48 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
-import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.entity.ai.AmphithereAIAttackMelee;
+import com.github.alexthe666.iceandfire.entity.ai.AmphithereAIFleePlayer;
+import com.github.alexthe666.iceandfire.entity.ai.AmphithereAIFollowOwner;
+import com.github.alexthe666.iceandfire.entity.ai.AmphithereAIHurtByTarget;
+import com.github.alexthe666.iceandfire.entity.ai.AmphithereAITargetItems;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIRide;
+import com.github.alexthe666.iceandfire.entity.ai.EntityAIWatchClosestIgnoreRider;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
-import com.github.alexthe666.iceandfire.entity.util.*;
+import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
+import com.github.alexthe666.iceandfire.entity.util.IDragonFlute;
+import com.github.alexthe666.iceandfire.entity.util.IFlapable;
+import com.github.alexthe666.iceandfire.entity.util.IFlyingMount;
+import com.github.alexthe666.iceandfire.entity.util.IPhasesThroughBlock;
+import com.github.alexthe666.iceandfire.entity.util.ISyncMount;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
-import net.minecraft.block.*;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.LeavesBlock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.*;
+import net.minecraft.entity.AgeableEntity;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.passive.ParrotEntity;
+import net.minecraft.entity.ai.goal.BreedGoal;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.OwnerHurtByTargetGoal;
+import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
+import net.minecraft.entity.ai.goal.SitGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -34,17 +65,26 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.ClimberPathNavigator;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.*;
-import net.minecraft.util.math.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.*;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class EntityAmphithere extends TameableEntity implements ISyncMount, IAnimatedEntity, IPhasesThroughBlock, IFlapable, IDragonFlute, IFlyingMount {
 
@@ -657,7 +697,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         if (world.isRemote) {
             this.updateClientControls();
         }
-        if (this.up() && !world.isRemote) {
+        if (this.isGoingUp() && !world.isRemote) {
             if (!this.isFlying()) {
                 this.setMotion(this.getMotion().add(0, 1, 0));
                 this.setFlying(true);
@@ -768,11 +808,11 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         this.dataManager.set(VARIANT, Integer.valueOf(variant));
     }
 
-    public boolean up() {
+    public boolean isGoingUp() {
         return (dataManager.get(CONTROL_STATE).byteValue() & 1) == 1;
     }
 
-    public boolean down() {
+    public boolean isGoingDown() {
         return (dataManager.get(CONTROL_STATE).byteValue() >> 1 & 1) == 1;
     }
 

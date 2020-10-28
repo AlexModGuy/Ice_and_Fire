@@ -8,7 +8,14 @@ import net.minecraftforge.common.ToolType;
 public class BlockGenericStairs extends StairsBlock {
 
     public BlockGenericStairs(BlockState modelState, String name) {
-        super(modelState, Block.Properties.create(modelState.getMaterial()).harvestTool(ToolType.PICKAXE).hardnessAndResistance(20F));
+        super(
+    		modelState,
+    		Block.Properties
+    			.create(modelState.getMaterial())
+    			.harvestTool(ToolType.PICKAXE)
+    			.hardnessAndResistance(20F)
+		);
+        
         this.setRegistryName(name);
     }
 }

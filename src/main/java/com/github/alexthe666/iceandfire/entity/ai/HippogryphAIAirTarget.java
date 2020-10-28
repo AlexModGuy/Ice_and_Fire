@@ -1,15 +1,16 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.Random;
+
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-
-import java.util.Random;
 
 public class HippogryphAIAirTarget extends Goal {
     private EntityHippogryph hippogryph;

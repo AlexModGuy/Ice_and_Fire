@@ -1,6 +1,9 @@
 package com.github.alexthe666.iceandfire.block;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -26,15 +29,20 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-
 public class BlockGoldPile extends Block {
     public static final IntegerProperty LAYERS = IntegerProperty.create("layers", 1, 8);
     protected static final VoxelShape[] SHAPES = new VoxelShape[]{VoxelShapes.empty(), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
     public Item itemBlock;
 
     public BlockGoldPile(String name) {
-        super(Properties.create(Material.EARTH).hardnessAndResistance(0.3F, 1).tickRandomly().sound(IafBlockRegistry.SOUND_TYPE_GOLD));
+        super(
+    		Properties
+    			.create(Material.EARTH)
+    			.hardnessAndResistance(0.3F, 1)
+    			.tickRandomly()
+    			.sound(IafBlockRegistry.SOUND_TYPE_GOLD)
+		);
+
         this.setDefaultState(this.stateContainer.getBaseState().with(LAYERS, Integer.valueOf(1)));
         setRegistryName(IceAndFire.MODID, name);
     }

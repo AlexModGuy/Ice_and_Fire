@@ -1,17 +1,5 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.MainMenuScreen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.client.ForgeHooksClient;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +11,18 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.screen.MainMenuScreen;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.ForgeHooksClient;
 
 public class IceAndFireMainMenu extends MainMenuScreen {
     public static final int LAYER_COUNT = 2;

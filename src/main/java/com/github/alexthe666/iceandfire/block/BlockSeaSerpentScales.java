@@ -1,6 +1,11 @@
 package com.github.alexthe666.iceandfire.block;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -14,15 +19,21 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
 public class BlockSeaSerpentScales extends Block {
     TextFormatting color;
     String name;
 
     public BlockSeaSerpentScales(String name, TextFormatting color) {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(30F, 500F).sound(SoundType.STONE).harvestTool(ToolType.PICKAXE).harvestLevel(2));
+        super(
+    		Properties
+    			.create(Material.ROCK)
+    			.hardnessAndResistance(30F, 500F)
+    			.sound(SoundType.STONE)
+    			.harvestTool(ToolType.PICKAXE)
+    			.harvestLevel(2)
+    			.func_235861_h_()
+		);
+
         this.color = color;
         this.name = name;
         this.setRegistryName(IceAndFire.MODID, "sea_serpent_scale_block_" + name);

@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.block.BlockSeaSerpentScales;
 import com.github.alexthe666.iceandfire.item.IafArmorMaterial;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentScales;
+
 import net.minecraft.block.Block;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;

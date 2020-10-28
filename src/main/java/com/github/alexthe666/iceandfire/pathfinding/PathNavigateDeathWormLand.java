@@ -1,17 +1,23 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
+import java.util.stream.Collectors;
+
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.pathfinding.*;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathFinder;
+import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.pathfinding.WalkNodeProcessor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-
-import java.util.stream.Collectors;
 
 public class PathNavigateDeathWormLand extends PathNavigator {
     private boolean shouldAvoidSun;

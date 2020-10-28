@@ -1,17 +1,15 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.entity.EntityGhost;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import net.minecraft.block.Blocks;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.monster.VexEntity;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-
-import java.util.EnumSet;
 
 public class GhostAICharge extends Goal {
     private EntityGhost ghost;

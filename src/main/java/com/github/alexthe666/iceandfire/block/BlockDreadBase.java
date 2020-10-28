@@ -7,8 +7,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
 
 public class BlockDreadBase extends BlockGeneric implements IDragonProof, IDreadBlock {
     public static final BooleanProperty PLAYER_PLACED = BooleanProperty.create("player_placed");

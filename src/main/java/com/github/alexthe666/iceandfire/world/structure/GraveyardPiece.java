@@ -1,11 +1,11 @@
 package com.github.alexthe666.iceandfire.world.structure;
 
-import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import java.util.List;
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.github.alexthe666.iceandfire.world.gen.processor.GraveyardProcessor;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.SpawnReason;
+
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
@@ -24,9 +24,6 @@ import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
-import java.util.List;
-import java.util.Random;
-
 public class GraveyardPiece  {
     private static final BlockPos STRUCTURE_OFFSET = new BlockPos(0, 0, 0);
     private static final ResourceLocation PART_1 = new ResourceLocation("iceandfire:graveyard");
@@ -38,15 +35,14 @@ public class GraveyardPiece  {
     public static class Piece extends TemplateStructurePiece {
         private final Rotation rotation;
         private final ResourceLocation field_204756_e;
-        private final Random random;
-        private final TemplateManager manager;
-        private BlockPos firstPos = null;
-        private boolean spawnedGorgon = false;
+        private boolean offsetOnce = false;
 
         public boolean func_230383_a_(ISeedReader world, StructureManager p_230383_2_, ChunkGenerator p_230383_3_, Random p_230383_4_, MutableBoundingBox p_230383_5_, ChunkPos p_230383_6_, BlockPos p_230383_7_) {
-            p_230383_5_.expandTo(this.template.getMutableBoundingBox(this.placeSettings, this.templatePosition));
-            int i = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, firstPos.getX(), firstPos.getZ());
-            this.templatePosition = new BlockPos(this.templatePosition.getX(), i - 4, this.templatePosition.getZ());
+            if (!offsetOnce) {
+                p_230383_5_.expandTo(this.template.getMutableBoundingBox(this.placeSettings, this.templatePosition));
+            	this.offset(0, -4, 0);
+            	offsetOnce = true;
+            }
             return super.func_230383_a_(world, p_230383_2_, p_230383_3_, p_230383_4_, p_230383_5_, p_230383_6_, p_230383_7_);
         }
 
@@ -57,9 +53,6 @@ public class GraveyardPiece  {
             this.field_204756_e = p_i48904_2_;
             this.func_204754_a(p_i48904_1_);
             this.template = p_i48904_1_.getTemplate(PART_1);
-            this.random = new Random();
-            this.manager = p_i48904_1_;
-            this.firstPos = new BlockPos(templatePosition);
         }
 
         public Piece(TemplateManager p_i50445_1_, CompoundNBT p_i50445_2_) {
@@ -68,8 +61,6 @@ public class GraveyardPiece  {
             this.rotation = Rotation.valueOf(p_i50445_2_.getString("Rot"));
             this.func_204754_a(p_i50445_1_);
             this.template = p_i50445_1_.getTemplate(PART_1);
-            this.random = new Random();
-            this.manager = p_i50445_1_;
         }
 
         protected void readAdditional(CompoundNBT p_143011_1_) {
@@ -82,7 +73,6 @@ public class GraveyardPiece  {
             Template lvt_2_1_ = p_204754_1_.getTemplateDefaulted(PART_1);
             PlacementSettings lvt_3_1_ = (new PlacementSettings()).setRotation(this.rotation).setMirror(Mirror.NONE).addProcessor(new GraveyardProcessor());
             this.setup(lvt_2_1_, this.templatePosition, lvt_3_1_);
-            this.firstPos = new BlockPos(templatePosition);
         }
 
 

@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 
 public class ItemDragonFlesh extends ItemGenericFood {
 

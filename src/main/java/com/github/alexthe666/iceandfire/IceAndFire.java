@@ -1,21 +1,44 @@
 package com.github.alexthe666.iceandfire;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.loot.CustomizeToDragon;
-import com.github.alexthe666.iceandfire.loot.CustomizeToSeaSerpent;
 import com.github.alexthe666.iceandfire.loot.IafLootRegistry;
-import com.github.alexthe666.iceandfire.message.*;
+import com.github.alexthe666.iceandfire.message.MessageAddChainedEntity;
+import com.github.alexthe666.iceandfire.message.MessageDaytime;
+import com.github.alexthe666.iceandfire.message.MessageDeathWormHitbox;
+import com.github.alexthe666.iceandfire.message.MessageDragonControl;
+import com.github.alexthe666.iceandfire.message.MessageDragonSetBurnBlock;
+import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
+import com.github.alexthe666.iceandfire.message.MessageGetMyrmexHive;
+import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
+import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
+import com.github.alexthe666.iceandfire.message.MessageMyrmexSettings;
+import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
+import com.github.alexthe666.iceandfire.message.MessageRemoveChainedEntity;
+import com.github.alexthe666.iceandfire.message.MessageSetMyrmexHiveNull;
+import com.github.alexthe666.iceandfire.message.MessageSirenSong;
+import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
+import com.github.alexthe666.iceandfire.message.MessageStartRidingMob;
+import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
+import com.github.alexthe666.iceandfire.message.MessageSwingArm;
+import com.github.alexthe666.iceandfire.message.MessageUpdateDragonforge;
+import com.github.alexthe666.iceandfire.message.MessageUpdateLectern;
+import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
+import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
+import com.github.alexthe666.iceandfire.message.MessageUpdatePixieJar;
+import com.github.alexthe666.iceandfire.message.MessageUpdatePodium;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
+
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.functions.LootFunctionManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,13 +49,12 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @Mod(IceAndFire.MODID)
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)
@@ -79,6 +101,7 @@ public class IceAndFire {
         modLoadingContext.registerConfig(ModConfig.Type.COMMON, ConfigHolder.SERVER_SPEC);
         modLoadingContext.registerConfig(ModConfig.Type.COMMON, ConfigHolder.BIOME_SPEC, "iceandfire-biomes.toml");
         MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadFromJSON);
+        MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
         PROXY.init();
         IafWorldRegistry.register();
     }
@@ -88,8 +111,14 @@ public class IceAndFire {
     }
 
     @SubscribeEvent
+    public void onServerStarted(FMLServerStartedEvent event) {
+    	LOGGER.info(IafWorldRegistry.LOADED_FEATURES);
+    	LOGGER.info(IafEntityRegistry.LOADED_ENTITIES);
+    }
+    
+    @SubscribeEvent
     public void onBiomeLoadFromJSON(BiomeLoadingEvent event) {
-        IafWorldRegistry.onBiomesLoad(event);
+    	IafWorldRegistry.onBiomesLoad(event);
         IafEntityRegistry.onBiomesLoad(event);
     }
 

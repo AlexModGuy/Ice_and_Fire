@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -26,7 +27,19 @@ public class BlockIceSpikes extends Block {
     public Item itemBlock;
 
     public BlockIceSpikes() {
-        super(Properties.create(Material.PACKED_ICE).notSolid().variableOpacity().tickRandomly().sound(SoundType.GLASS).hardnessAndResistance(2.5F).harvestLevel(1).harvestTool(ToolType.PICKAXE));
+        super(
+    		Properties
+    			.create(Material.PACKED_ICE)
+    			.notSolid()
+    			.variableOpacity()
+    			.tickRandomly()
+    			.sound(SoundType.GLASS)
+    			.hardnessAndResistance(2.5F)
+    			.harvestLevel(1)
+    			.harvestTool(ToolType.PICKAXE)
+    			.func_235861_h_()
+		);
+
         this.setRegistryName(IceAndFire.MODID, "dragon_ice_spikes");
     }
 

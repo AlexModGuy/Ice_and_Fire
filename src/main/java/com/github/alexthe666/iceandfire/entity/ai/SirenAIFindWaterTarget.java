@@ -1,14 +1,15 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SirenAIFindWaterTarget extends Goal {
     private EntitySiren mob;

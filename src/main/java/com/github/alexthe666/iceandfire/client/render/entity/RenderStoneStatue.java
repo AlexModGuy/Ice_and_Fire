@@ -1,14 +1,15 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.client.model.ModelStonePlayer;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
+
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderStoneStatue extends LivingRenderer<EntityStoneStatue, ModelStonePlayer> {

@@ -1,14 +1,14 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-
-import java.util.EnumSet;
 
 public class DragonAIAttackMelee extends Goal {
     protected EntityDragonBase dragon;

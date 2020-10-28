@@ -1,7 +1,14 @@
 package com.github.alexthe666.iceandfire.block;
 
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.block.*;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.GrassPathBlock;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.state.BooleanProperty;
@@ -11,8 +18,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
 
-import java.util.Random;
-
 public class BlockCharedPath extends GrassPathBlock {
     public static final BooleanProperty REVERTS = BooleanProperty.create("revert");
     public Item itemBlock;
@@ -20,7 +25,17 @@ public class BlockCharedPath extends GrassPathBlock {
 
     @SuppressWarnings("deprecation")
     public BlockCharedPath(int dragonType) {
-        super(Block.Properties.create(Material.PLANTS).sound(dragonType != 1 ? SoundType.GROUND : SoundType.GLASS).hardnessAndResistance(0.6F).harvestTool(ToolType.SHOVEL).harvestLevel(0).slipperiness(dragonType != 1 ? 0.6F : 0.98F).tickRandomly());
+        super(
+    		Block.Properties
+    			.create(Material.PLANTS)
+    			.sound(dragonType != 1 ? SoundType.GROUND : SoundType.GLASS)
+    			.hardnessAndResistance(0.6F).harvestTool(ToolType.SHOVEL)
+    			.harvestLevel(0)
+    			.slipperiness(dragonType != 1 ? 0.6F : 0.98F)
+    			.tickRandomly()
+    			.func_235861_h_()
+		);
+
         this.dragonType = dragonType;
         setRegistryName(IceAndFire.MODID, getNameFromType(dragonType));
         this.setDefaultState(stateContainer.getBaseState().with(REVERTS, Boolean.valueOf(false)));

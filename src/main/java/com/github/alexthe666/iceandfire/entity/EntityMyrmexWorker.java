@@ -1,24 +1,43 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIAttackPlayers;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIDefendHive;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIForage;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIForageForItems;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAILeaveHive;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAILookAtTradePlayer;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIMoveThroughHive;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIPickupBabies;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIReEnterHive;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIStoreBabies;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIStoreItems;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAITradePlayer;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIWander;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexTrades;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemMyrmexEgg;
 import com.google.common.base.Predicate;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
@@ -35,8 +54,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
 
 public class EntityMyrmexWorker extends EntityMyrmexBase {
 

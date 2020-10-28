@@ -4,14 +4,15 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityGhostChest;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
-import net.minecraft.block.*;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ChestBlock;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.tileentity.TrappedChestTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -21,9 +22,16 @@ import net.minecraft.world.IBlockReader;
 public class BlockGhostChest extends ChestBlock implements ICustomRendered {
 
     public BlockGhostChest() {
-        super(Properties.create(Material.WOOD).hardnessAndResistance(2.5F).sound(SoundType.WOOD), () -> {
-            return IafTileEntityRegistry.GHOST_CHEST;
-        });
+        super(
+    		Properties
+    			.create(Material.WOOD)
+    			.hardnessAndResistance(2.5F)
+    			.sound(SoundType.WOOD),
+			() -> {
+	            return IafTileEntityRegistry.GHOST_CHEST;
+	        }
+		);
+
         setRegistryName(IceAndFire.MODID, "ghost_chest");
     }
 

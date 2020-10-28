@@ -1,9 +1,14 @@
 package com.github.alexthe666.iceandfire.block;
 
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadPortal;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -18,14 +23,19 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
-import javax.annotation.Nullable;
-import java.util.Random;
-
 public class BlockDreadPortal extends ContainerBlock implements IDreadBlock, ICustomRendered {
 
     public BlockDreadPortal() {
-        super(Properties.create(Material.PORTAL).variableOpacity().hardnessAndResistance(-1, 100000).harvestTool(ToolType.PICKAXE).func_235838_a_((p_235454_0_) -> {  return 1;
-        }).tickRandomly());
+        super(
+    		Properties
+    			.create(Material.PORTAL)
+    			.variableOpacity()
+    			.hardnessAndResistance(-1, 100000)
+    			.harvestTool(ToolType.PICKAXE)
+    			.func_235838_a_((p_235454_0_) -> { return 1; })
+    			.tickRandomly()
+		);
+
         this.setRegistryName(IceAndFire.MODID, "dread_portal");
     }
 

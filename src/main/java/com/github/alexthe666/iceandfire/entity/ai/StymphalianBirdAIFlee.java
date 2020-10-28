@@ -1,17 +1,19 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.EnumSet;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.google.common.base.Predicate;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.vector.Vector3d;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.List;
 
 public class StymphalianBirdAIFlee extends Goal {
     private final Predicate<Entity> canBeSeenSelector;

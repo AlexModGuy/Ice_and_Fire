@@ -1,21 +1,22 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.github.alexthe666.iceandfire.block.BlockMyrmexCocoon;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityMyrmexCocoon;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
+
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MyrmexAIStoreItems extends Goal {
     private final EntityMyrmexBase myrmex;

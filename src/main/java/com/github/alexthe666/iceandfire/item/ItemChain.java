@@ -1,9 +1,14 @@
 package com.github.alexthe666.iceandfire.item;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityChainTie;
 import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.WallBlock;
 import net.minecraft.client.util.ITooltipFlag;
@@ -20,9 +25,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemChain extends Item {
 

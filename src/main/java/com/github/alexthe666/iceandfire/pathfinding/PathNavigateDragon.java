@@ -1,7 +1,10 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
+import java.util.stream.Collectors;
+
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.Path;
@@ -11,8 +14,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-
-import java.util.stream.Collectors;
 
 public class PathNavigateDragon extends GroundPathNavigator {
     public BlockPos targetPosition;

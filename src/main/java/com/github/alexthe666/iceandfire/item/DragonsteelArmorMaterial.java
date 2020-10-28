@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IafConfig;
+
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.SoundEvent;
 

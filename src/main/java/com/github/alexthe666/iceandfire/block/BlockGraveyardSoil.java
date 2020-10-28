@@ -1,27 +1,34 @@
 package com.github.alexthe666.iceandfire.block;
 
+import java.util.Random;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityGhost;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.item.Item;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
 
-import java.util.Random;
-
 public class BlockGraveyardSoil extends Block {
 
     public BlockGraveyardSoil() {
-        super(Properties.create(Material.EARTH).sound(SoundType.GROUND).hardnessAndResistance(5, 15).harvestTool(ToolType.SHOVEL).harvestLevel(0).tickRandomly());
+        super(
+    		Properties
+    			.create(Material.EARTH)
+    			.sound(SoundType.GROUND)
+    			.hardnessAndResistance(5, 15)
+    			.harvestTool(ToolType.SHOVEL)
+    			.harvestLevel(0)
+    			.tickRandomly()
+		);
+
         setRegistryName(IceAndFire.MODID, "graveyard_soil");
     }
 

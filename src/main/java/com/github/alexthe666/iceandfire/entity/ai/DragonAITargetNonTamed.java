@@ -1,14 +1,15 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.google.common.base.Predicate;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.util.math.AxisAlignedBB;
-
-import java.util.EnumSet;
 
 public class DragonAITargetNonTamed<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
     private EntityDragonBase dragon;

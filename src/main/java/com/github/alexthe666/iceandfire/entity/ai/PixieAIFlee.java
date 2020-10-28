@@ -1,18 +1,19 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.EnumSet;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.google.common.base.Predicate;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.vector.Vector3d;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.List;
 
 public class PixieAIFlee<T extends Entity> extends Goal {
     private final Predicate<Entity> canBeSeenSelector;
