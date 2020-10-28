@@ -1132,7 +1132,7 @@
     "sounds": [
       {
         "name": "iceandfire:gold_pile_step",
-        "volume": 0.4
+        "volume": 0.8
       }
     ],
     "subtitle": "iceandfire.sound.subtitle.gold_pile_step"
@@ -1142,7 +1142,7 @@
     "sounds": [
       {
         "name": "iceandfire:gold_pile_break",
-        "volume": 0.4
+        "volume": 0.8
       }
     ],
     "subtitle": "iceandfire.sound.subtitle.gold_pile_break"
