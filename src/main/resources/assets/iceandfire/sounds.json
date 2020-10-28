@@ -4,7 +4,7 @@
     "sounds": [
       {
         "name": "iceandfire:ghost_jumpscare",
-        "volume": 0.4
+        "volume": 0.8
       }
     ]
   },
@@ -13,11 +13,11 @@
     "sounds": [
       {
         "name": "iceandfire:ghost_attack_0",
-        "volume": 0.4
+        "volume": 0.8
       },
       {
         "name": "iceandfire:ghost_attack_1",
-        "volume": 0.4
+        "volume": 0.8
       }
     ],
     "subtitle": "iceandfire.sound.subtitle.ghost_attack"
@@ -27,15 +27,15 @@
     "sounds": [
       {
         "name": "iceandfire:ghost_idle_0",
-        "volume": 0.4
+        "volume": 0.8
       },
       {
         "name": "iceandfire:ghost_idle_1",
-        "volume": 0.4
+        "volume": 0.8
       },
       {
         "name": "iceandfire:ghost_idle_2",
-        "volume": 0.4
+        "volume": 0.8
       }
     ],
     "subtitle": "iceandfire.sound.subtitle.ghost_idle"
@@ -45,11 +45,11 @@
     "sounds": [
       {
         "name": "iceandfire:ghost_hurt_0",
-        "volume": 0.4
+        "volume": 0.8
       },
       {
         "name": "iceandfire:ghost_hurt_1",
-        "volume": 0.4
+        "volume": 0.8
       }
     ],
     "subtitle": "iceandfire.sound.subtitle.ghost_hurt"
@@ -59,11 +59,11 @@
     "sounds": [
       {
         "name": "iceandfire:ghost_hurt_0",
-        "volume": 0.4
+        "volume": 0.8
       },
       {
         "name": "iceandfire:ghost_hurt_1",
-        "volume": 0.4
+        "volume": 0.8
       }
     ],
     "subtitle": "iceandfire.sound.subtitle.ghost_die"
@@ -73,7 +73,7 @@
     "sounds": [
       {
         "name": "iceandfire:lightningdragon_breath_crackle",
-        "volume": 0.4
+        "volume": 0.8
       }
     ]
   },
@@ -1292,27 +1292,27 @@
     "sounds": [
       {
         "name": "iceandfire:hippogryph_idle_0",
-        "volume": 0.4
+        "volume": 0.6
       },
       {
         "name": "iceandfire:hippogryph_idle_1",
-        "volume": 0.4
+        "volume": 0.6
       },
       {
         "name": "iceandfire:hippogryph_idle_2",
-        "volume": 0.4
+        "volume": 0.6
       },
       {
         "name": "iceandfire:hippogryph_idle_3",
-        "volume": 0.4
+        "volume": 0.6
       },
       {
         "name": "iceandfire:hippogryph_idle_4",
-        "volume": 0.4
+        "volume": 0.6
       },
       {
         "name": "iceandfire:hippogryph_idle_5",
-        "volume": 0.4
+        "volume": 0.6
       }
     ],
     "subtitle": "iceandfire.sound.subtitle.hippogryph_idle"
@@ -1322,15 +1322,15 @@
     "sounds": [
       {
         "name": "iceandfire:hippogryph_hurt_0",
-        "volume": 0.4
+        "volume": 0.6
       },
       {
         "name": "iceandfire:hippogryph_hurt_1",
-        "volume": 0.4
+        "volume": 0.6
       },
       {
         "name": "iceandfire:hippogryph_hurt_2",
-        "volume": 0.4
+        "volume": 0.6
       }
     ],
     "subtitle": "iceandfire.sound.subtitle.hippogryph_hurt"
@@ -1340,11 +1340,11 @@
     "sounds": [
       {
         "name": "iceandfire:hippogryph_die_0",
-        "volume": 0.4
+        "volume": 0.6
       },
       {
         "name": "iceandfire:hippogryph_die_1",
-        "volume": 0.4
+        "volume": 0.6
       }
     ],
     "subtitle": "iceandfire.sound.subtitle.hippogryph_die"
