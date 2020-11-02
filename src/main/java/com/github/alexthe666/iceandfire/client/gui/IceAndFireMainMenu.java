@@ -56,7 +56,7 @@ public class IceAndFireMainMenu extends MainMenuScreen {
         BufferedReader reader = null;
         try {
             List<String> list = new ArrayList<>();
-            String branch = "1.15.2";
+            String branch = "1.16.3";
             reader = getURLContents("https://raw.githubusercontent.com/Alex-the-666/Ice_and_Fire/" + branch + "/src/main/resources/assets/iceandfire/splashes.txt", "assets/iceandfire/splashes.txt");
             String s;
 

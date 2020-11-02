@@ -64,11 +64,10 @@ public class PlayerRenderEvents {
             event.getMatrixStack().push();
             float f2 = ((float) event.getEntityLiving().ticksExisted - 1 + event.getPartialRenderTick());
             float f3 = MathHelper.sin(f2 / 10.0F) * 0.1F + 0.1F;
-            event.getMatrixStack().translate((float) 0, 1.3F * event.getEntityLiving().getHeight(), (float) 0);
+            event.getMatrixStack().translate((float) 0, event.getEntityLiving().getHeight() * 1.25F, (float) 0);
             float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
             event.getMatrixStack().rotate(new Quaternion(Vector3f.YP, f4, true));
             event.getMatrixStack().push();
-            event.getMatrixStack().translate(0, 2, 0);
             Minecraft.getInstance().getItemRenderer().renderItem(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM), ItemCameraTransforms.TransformType.GROUND, false, event.getMatrixStack(), event.getBuffers(), event.getEntityLiving().world, event.getLight(), OverlayTexture.NO_OVERLAY);
             event.getMatrixStack().pop();
             event.getMatrixStack().pop();
