@@ -64,8 +64,16 @@ public class IAFBiomeUtil {
     
     protected static boolean biomeMeetsListConditions(Biome biome, List<? extends String> list) {
     	if (list.size() == 0) return false;
-    	
-    	List<? extends String> trimmed = list.stream()
+
+    	for(String str : list){
+    		if(str.equals(biome.getRegistryName().toString())){
+    			return true;
+			}
+		}
+    	return false;
+    	//TODO: proper reimplementation of biome dictionary. This version returns true for all biomes for many
+		// features and entity spawns.
+    	/*List<? extends String> trimmed = list.stream()
 			.map(String::trim)
 			.collect(Collectors.toList());
 
@@ -94,7 +102,7 @@ public class IAFBiomeUtil {
     	return (anyBiomeInfoInList(biome, biomeTypes, aconditional))
 			|| ((exclude.size() == 0 || !anyBiomeInfoInList(biome, biomeTypes, exclude))
 			&& (mustInclude.size() == 0 || anyBiomeInfoInList(biome, biomeTypes, mustInclude, true))
-			&& (include.size() == 0 || anyBiomeInfoInList(biome, biomeTypes, include)));
+			&& (include.size() == 0 || anyBiomeInfoInList(biome, biomeTypes, include)));*/
     }
 
     public static boolean parseListForBiomeCheck(List<? extends String> list, Biome biome) {
