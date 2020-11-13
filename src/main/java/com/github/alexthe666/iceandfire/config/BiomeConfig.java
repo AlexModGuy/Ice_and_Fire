@@ -61,13 +61,11 @@ public class BiomeConfig {
         builder.comment(
     		"Biome config",
     		"To filter biomes by registry name \"mod_id:biome_id\"",
-    	//	"To filter biomes by category \"@category\"",
-    	//	"To filter biomes by tags \"#tag\"",
+    		"To filter biomes by category \"@category\"",
+    		"To filter biomes by tags \"#tag\"",
     		"\tExamples:",
                 "\t\t\"minecraft:plains\"",
-                "\t\t\"minecraft:desert\"",
-                "\t\t\"rats:ratlantis_biome\""
-    	/*	"\t\t\"@desert\"",
+    		"\t\t\"@desert\"",
     		"\t\t\"#overworld\"",
     		"",
     		"If you want to exclude biomes put a ! before the biome identifier",
@@ -106,7 +104,7 @@ public class BiomeConfig {
     		"We just put them as separate values in the list and that'll work out",
     		"\t[\"!#dry+!#sandy\",\"#hot+#wet\"]",
     		"",
-    		"NOTE: Any entry that's an expression will not be affected by anything else in the list")*/)
+    		"NOTE: Any entry that's an expression will not be affected by anything else in the list")
         	.push("biome_configs");
         try {
             for (Field f : BiomeConfig.class.getDeclaredFields()) {
