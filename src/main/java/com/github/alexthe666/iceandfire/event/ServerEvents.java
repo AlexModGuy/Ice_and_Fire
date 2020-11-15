@@ -11,20 +11,7 @@ import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
-import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
-import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntityGhost;
-import com.github.alexthe666.iceandfire.entity.EntityGhostSword;
-import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import com.github.alexthe666.iceandfire.entity.EntityHydra;
-import com.github.alexthe666.iceandfire.entity.EntityHydraHead;
-import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
-import com.github.alexthe666.iceandfire.entity.EntityMutlipartPart;
-import com.github.alexthe666.iceandfire.entity.EntitySiren;
-import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
-import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
 import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
@@ -79,6 +66,7 @@ import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.loot.ItemLootEntry;
 import net.minecraft.loot.LootEntry;
 import net.minecraft.loot.LootPool;
@@ -118,6 +106,7 @@ import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -137,13 +126,13 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onPlayerLeftClick(PlayerInteractEvent.LeftClickEmpty event) {
         onLeftClick(event.getPlayer(), event.getItemStack());
-        if(event.getWorld().isRemote){
+        if (event.getWorld().isRemote) {
             IceAndFire.sendMSGToServer(new MessageSwingArm());
         }
     }
 
-    public static void onLeftClick(PlayerEntity living, ItemStack stack){
-        if(stack.getItem() == IafItemRegistry.GHOST_SWORD){
+    public static void onLeftClick(PlayerEntity living, ItemStack stack) {
+        if (stack.getItem() == IafItemRegistry.GHOST_SWORD) {
             if (living.swingProgress == 0) {
                 Multimap<Attribute, AttributeModifier> dmg = stack.getAttributeModifiers(EquipmentSlotType.MAINHAND);
                 double totalDmg = 0;
@@ -154,7 +143,7 @@ public class ServerEvents {
                 EntityGhostSword shot = new EntityGhostSword(IafEntityRegistry.GHOST_SWORD, living.world, living, totalDmg * 0.5F);
                 Vector3d vector3d = living.getLook(1.0F);
                 Vector3f vector3f = new Vector3f(vector3d);
-                shot.shoot((double)vector3f.getX(), (double)vector3f.getY(), (double)vector3f.getZ(), 1.0F, 0.5F);
+                shot.shoot(vector3f.getX(), vector3f.getY(), vector3f.getZ(), 1.0F, 0.5F);
                 living.world.addEntity(shot);
 
             }
@@ -241,6 +230,20 @@ public class ServerEvents {
         return EntityTypeTags.getCollection().func_241834_b(IafTagRegistry.SCARES_COCKATRICES).func_230235_a_(entity.getType());
     }
 
+    public static boolean isRidingOrBeingRiddenBy(Entity first, Entity entityIn) {
+        for (Entity entity : first.getPassengers()) {
+            if (entity.equals(entityIn)) {
+                return true;
+            }
+
+            if (isRidingOrBeingRiddenBy(entity, entityIn)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @SubscribeEvent
     public void onArrowCollide(ProjectileImpactEvent event) {
         if (event.getEntity() instanceof AbstractArrowEntity && ((AbstractArrowEntity) event.getEntity()).func_234616_v_() != null) {
@@ -256,28 +259,14 @@ public class ServerEvents {
         }
     }
 
-    public static boolean isRidingOrBeingRiddenBy(Entity first, Entity entityIn) {
-        for(Entity entity : first.getPassengers()) {
-            if (entity.equals(entityIn)) {
-                return true;
-            }
-
-            if (isRidingOrBeingRiddenBy(entity, entityIn)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     @SubscribeEvent
     public void onPlayerAttackMob(AttackEntityEvent event) {
         if (event.getTarget() instanceof EntityMutlipartPart && event.getEntity() instanceof PlayerEntity) {
             event.setCanceled(true);
             LivingEntity parent = ((EntityMutlipartPart) event.getTarget()).getParent();
-            try{
+            try {
                 ((PlayerEntity) event.getEntity()).attackTargetEntityWithCurrentItem(parent);
-            }catch(Exception e){
+            } catch (Exception e) {
                 IceAndFire.LOGGER.warn("Exception thrown while interacting with entity");
             }
             int extraData = 0;
@@ -285,7 +274,7 @@ public class ServerEvents {
                 extraData = ((EntityHydraHead) event.getTarget()).headIndex;
                 ((EntityHydra) parent).triggerHeadFlags(extraData);
             }
-            if(event.getTarget().world.isRemote && parent != null){
+            if (event.getTarget().world.isRemote && parent != null) {
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessagePlayerHitMultipart(parent.getEntityId(), extraData));
             }
         }
@@ -510,23 +499,23 @@ public class ServerEvents {
         if (event.getEntityLiving().getUniqueID().equals(ServerEvents.ALEX_UUID)) {
             event.getEntityLiving().entityDropItem(new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM), 1);
         }
-        if(event.getEntityLiving() instanceof PlayerEntity && IafConfig.ghostsFromPlayerDeaths){
+        if (event.getEntityLiving() instanceof PlayerEntity && IafConfig.ghostsFromPlayerDeaths) {
             CombatTracker combat = event.getEntityLiving().getCombatTracker();
             CombatEntry entry = combat.getBestCombatEntry();
             Entity attacker = event.getEntityLiving().getRevengeTarget();
-            if(attacker instanceof PlayerEntity && event.getEntityLiving().getRNG().nextInt(3) == 0){
+            if (attacker instanceof PlayerEntity && event.getEntityLiving().getRNG().nextInt(3) == 0) {
                 boolean flag = false;
-                if(entry != null && (entry.getDamageSrc() == DamageSource.FALL || entry.getDamageSrc() == DamageSource.DROWN || entry.getDamageSrc() == DamageSource.LAVA)){
+                if (entry != null && (entry.getDamageSrc() == DamageSource.FALL || entry.getDamageSrc() == DamageSource.DROWN || entry.getDamageSrc() == DamageSource.LAVA)) {
                     flag = true;
                 }
-                if(event.getEntityLiving().isPotionActive(Effects.POISON)){
+                if (event.getEntityLiving().isPotionActive(Effects.POISON)) {
                     flag = true;
                 }
                 World world = event.getEntityLiving().world;
-                if(flag){
+                if (flag) {
                     EntityGhost ghost = IafEntityRegistry.GHOST.create(world);
                     ghost.copyLocationAndAnglesFrom(event.getEntityLiving());
-                    if(!world.isRemote){
+                    if (!world.isRemote) {
                         ghost.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(event.getEntityLiving().func_233580_cy_()), SpawnReason.SPAWNER, null, null);
                         world.addEntity(ghost);
                     }
@@ -548,9 +537,9 @@ public class ServerEvents {
         if (event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().rotationPitch > 87 && event.getEntityLiving().getRidingEntity() != null && event.getEntityLiving().getRidingEntity() instanceof EntityDragonBase) {
             ((EntityDragonBase) event.getEntityLiving().getRidingEntity()).func_230254_b_((PlayerEntity) event.getEntityLiving(), event.getHand());
         }
-        if(event.getEntityLiving() instanceof EntityDragonBase && !event.getEntityLiving().isAlive()){
+        if (event.getEntityLiving() instanceof EntityDragonBase && !event.getEntityLiving().isAlive()) {
             event.setResult(Event.Result.DENY);
-            ((EntityDragonBase)event.getEntityLiving()).func_230254_b_(event.getPlayer(), event.getHand());
+            ((EntityDragonBase) event.getEntityLiving()).func_230254_b_(event.getPlayer(), event.getHand());
         }
     }
 
@@ -574,7 +563,7 @@ public class ServerEvents {
                 }
             }
         }
-        try{
+        try {
             if (event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.FEET).getItem() instanceof ItemSeaSerpentArmor) {
                 event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 50, 0, false, false));
                 if (event.getEntityLiving().isWet()) {
@@ -585,11 +574,11 @@ public class ServerEvents {
                     event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.STRENGTH, 50, headMod + chestMod + legMod + footMod - 1, false, false));
                 }
             }
-            if (event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemBlindfold){
+            if (event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemBlindfold) {
                 event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.BLINDNESS, 50, 0, false, false));
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         if (IafConfig.chickensLayRottenEggs && !event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving()) && !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof AnimalEntity) {
@@ -729,7 +718,7 @@ public class ServerEvents {
                 living.setMotion(living.getMotion().add(0, -0.1D, 0));
                 living.swingProgress = 0;
                 living.limbSwing = 0;
-                if(living.world.isRemote){
+                if (living.world.isRemote) {
                     living.setInvisible(!stonePlayer);
                 }
                 living.hurtTime = 0;
@@ -842,9 +831,9 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onProjectileImpact(ProjectileImpactEvent event) {
-        if(event.getRayTraceResult() != null && event.getRayTraceResult() instanceof EntityRayTraceResult){
-            EntityRayTraceResult entityResult = (EntityRayTraceResult)event.getRayTraceResult();
-            if(entityResult.getEntity() != null && entityResult.getEntity() instanceof EntityGhost){
+        if (event.getRayTraceResult() != null && event.getRayTraceResult() instanceof EntityRayTraceResult) {
+            EntityRayTraceResult entityResult = (EntityRayTraceResult) event.getRayTraceResult();
+            if (entityResult.getEntity() != null && entityResult.getEntity() instanceof EntityGhost) {
                 event.setCanceled(true);
             }
         }
@@ -979,6 +968,13 @@ public class ServerEvents {
             }
         } catch (Exception e) {
             IceAndFire.LOGGER.warn("Tried to add unique behaviors to vanilla mobs and encountered an error");
+        }
+    }
+
+    @SubscribeEvent
+    public void onVillagerTrades(VillagerTradesEvent event) {
+        if (event.getType() == IafVillagerRegistry.SCRIBE) {
+            IafVillagerRegistry.addScribeTrades(event.getTrades());
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire;
 
 
+import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -165,6 +166,7 @@ public class IceAndFire {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSwingArm.class, MessageSwingArm::write, MessageSwingArm::read, MessageSwingArm.Handler::handle);
         PROXY.setup();
         IafWorldRegistry.setup();
+        IafVillagerRegistry.setup();
     }
 
     private void setupComplete(final FMLLoadCompleteEvent event) {

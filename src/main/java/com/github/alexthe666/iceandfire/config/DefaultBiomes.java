@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.config;
 public class DefaultBiomes {
     public static final String[] ALL_BIOMES = new String[] { "*" };
     public static final String[] OVERWORLD_BIOMES = new String[] { "|#overworld" };
-    public static final String[] FIREDRAGON_ROOST = new String[] { "&#overworld+|#hot+|#plains+!#wet+!#cold+!#forest+" };
+    public static final String[] FIREDRAGON_ROOST = new String[] { "&#overworld+|#hot+|#plains+!#wet+!#cold+!#forest+!#jungle+!#mesa+!#savanna" };
     public static final String[] ICEDRAGON_ROOST = new String[] { "&#overworld+|@icy+|#snowy+|#cold+" };
     public static final String[] LIGHTNING_ROOSTS = new String[] { "&#overworld+|#jungle+|#mesa+|#savanna+"};
     public static final String[] VERY_HOT = new String[] { "&#overworld+|#hot+" };
