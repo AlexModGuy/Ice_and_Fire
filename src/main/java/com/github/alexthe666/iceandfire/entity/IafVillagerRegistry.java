@@ -29,6 +29,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -39,9 +40,14 @@ public class IafVillagerRegistry {
     public static PointOfInterestType LECTERN_POI;
     public static VillagerProfession SCRIBE;
     private static final String[] VILLAGE_TYPES = new String[]{"plains", "desert", "snowy", "savanna", "taiga"};
+    private static final ResourceLocation EMPTY_STRUCTURE = new ResourceLocation("empty");
 
     public static void setup() {
-        VillagesPools.func_244194_a();
+        PlainsVillagePools.init();
+        SnowyVillagePools.init();
+        SavannaVillagePools.init();
+        DesertVillagePools.init();
+        TaigaVillagePools.init();
         for (String type : VILLAGE_TYPES) {
             addStructureToPool(new ResourceLocation("village/" + type + "/houses"), new ResourceLocation("iceandfire:villager_house/" + type + "_scriber_1"), 100);
         }
@@ -90,8 +96,9 @@ public class IafVillagerRegistry {
     }
 
     private static void addStructureToPool(ResourceLocation pool, ResourceLocation toAdd, int weight) {
+        JigsawPatternRegistry.func_244094_a(new JigsawPattern(toAdd, EMPTY_STRUCTURE, Collections.emptyList(), JigsawPattern.PlacementBehaviour.RIGID));
         JigsawPattern old = WorldGenRegistries.field_243656_h.getOrDefault(pool);
-        SingleJigsawPiece  addToList = SingleJigsawPiece.func_242861_b(toAdd.toString(), ProcessorLists.field_244107_g).apply(JigsawPattern.PlacementBehaviour.RIGID);
+        SingleJigsawPiece addToList = SingleJigsawPiece.func_242859_b(toAdd.toString()).apply(JigsawPattern.PlacementBehaviour.RIGID);
         old.rawTemplates = ImmutableList.<Pair<JigsawPiece, Integer>>builder().addAll(old.rawTemplates).add(Pair.of(addToList, weight)).build();
         old.jigsawPieces.add(addToList);
     }
