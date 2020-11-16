@@ -32,6 +32,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -40,7 +41,6 @@ public class IafVillagerRegistry {
     public static PointOfInterestType LECTERN_POI;
     public static VillagerProfession SCRIBE;
     private static final String[] VILLAGE_TYPES = new String[]{"plains", "desert", "snowy", "savanna", "taiga"};
-    private static final ResourceLocation EMPTY_STRUCTURE = new ResourceLocation("empty");
 
     public static void setup() {
         PlainsVillagePools.init();
@@ -49,7 +49,9 @@ public class IafVillagerRegistry {
         DesertVillagePools.init();
         TaigaVillagePools.init();
         for (String type : VILLAGE_TYPES) {
-            addStructureToPool(new ResourceLocation("village/" + type + "/houses"), new ResourceLocation("iceandfire:villager_house/" + type + "_scriber_1"), 100);
+            addStructureToPool(new ResourceLocation("village/" + type + "/houses"),
+                    new ResourceLocation("village/" + type + "/terminators"),
+                    new ResourceLocation("iceandfire", "villager_house/" + type + "_scriber_1"), 100);
         }
     }
 
@@ -95,12 +97,12 @@ public class IafVillagerRegistry {
         trades.get(5).add((entity, random) -> new MerchantOffer(new ItemStack(IafItemRegistry.ECTOPLASM, 6), new ItemStack(Items.EMERALD, 1), 7, 3, 0F));
     }
 
-    private static void addStructureToPool(ResourceLocation pool, ResourceLocation toAdd, int weight) {
-        JigsawPatternRegistry.func_244094_a(new JigsawPattern(toAdd, EMPTY_STRUCTURE, Collections.emptyList(), JigsawPattern.PlacementBehaviour.RIGID));
+    private static void addStructureToPool(ResourceLocation pool, ResourceLocation terminatorPool, ResourceLocation toAdd, int weight) {
         JigsawPattern old = WorldGenRegistries.field_243656_h.getOrDefault(pool);
-        SingleJigsawPiece addToList = SingleJigsawPiece.func_242859_b(toAdd.toString()).apply(JigsawPattern.PlacementBehaviour.RIGID);
-        old.rawTemplates = ImmutableList.<Pair<JigsawPiece, Integer>>builder().addAll(old.rawTemplates).add(Pair.of(addToList, weight)).build();
-        old.jigsawPieces.add(addToList);
+        List<JigsawPiece> shuffled = old != null ? old.getShuffledPieces(new Random()) : ImmutableList.of();
+        List<Pair<JigsawPiece, Integer>> newPieces = shuffled.stream().map(p -> new Pair<>(p, 1)).collect(Collectors.toList());
+        newPieces.add(new Pair<>(new LegacySingleJigsawPiece(Either.left(toAdd), () -> ProcessorLists.field_244101_a, JigsawPattern.PlacementBehaviour.RIGID), weight));
+        JigsawPatternRegistry.func_244094_a(new JigsawPattern(pool, old.getName(), newPieces));
     }
 
 }
