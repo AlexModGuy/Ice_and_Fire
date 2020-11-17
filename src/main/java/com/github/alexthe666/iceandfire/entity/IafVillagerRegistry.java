@@ -22,6 +22,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.village.PointOfInterestType;
+import net.minecraft.world.gen.feature.Features;
 import net.minecraft.world.gen.feature.jigsaw.*;
 import net.minecraft.world.gen.feature.structure.*;
 import net.minecraft.world.gen.feature.template.ProcessorLists;
@@ -49,9 +50,7 @@ public class IafVillagerRegistry {
         DesertVillagePools.init();
         TaigaVillagePools.init();
         for (String type : VILLAGE_TYPES) {
-            addStructureToPool(new ResourceLocation("village/" + type + "/houses"),
-                    new ResourceLocation("village/" + type + "/terminators"),
-                    new ResourceLocation("iceandfire", "villager_house/" + type + "_scriber_1"), 100);
+            addStructureToPool(new ResourceLocation("village/" + type + "/houses"), new ResourceLocation("village/" + type + "/terminators"), new ResourceLocation("iceandfire", "village/" + type + "/houses/" + type + "_scriber_1"), 300);
         }
     }
 
@@ -102,7 +101,7 @@ public class IafVillagerRegistry {
         List<JigsawPiece> shuffled = old != null ? old.getShuffledPieces(new Random()) : ImmutableList.of();
         List<Pair<JigsawPiece, Integer>> newPieces = shuffled.stream().map(p -> new Pair<>(p, 1)).collect(Collectors.toList());
         newPieces.add(new Pair<>(new LegacySingleJigsawPiece(Either.left(toAdd), () -> ProcessorLists.field_244101_a, JigsawPattern.PlacementBehaviour.RIGID), weight));
-        JigsawPatternRegistry.func_244094_a(new JigsawPattern(pool, old.getName(), newPieces));
+        Registry.register(WorldGenRegistries.field_243656_h, pool, new JigsawPattern(pool, terminatorPool, newPieces));
     }
 
 }
