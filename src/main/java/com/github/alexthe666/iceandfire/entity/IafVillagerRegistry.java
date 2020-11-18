@@ -50,8 +50,19 @@ public class IafVillagerRegistry {
         DesertVillagePools.init();
         TaigaVillagePools.init();
         for (String type : VILLAGE_TYPES) {
-            addStructureToPool(new ResourceLocation("village/" + type + "/houses"), new ResourceLocation("village/" + type + "/terminators"), new ResourceLocation("iceandfire", "village/" + type + "/houses/" + type + "_scriber_1"), 300);
+            addStructureToPool(new ResourceLocation("village/" + type + "/houses"), new ResourceLocation("village/" + type + "/terminators"), new ResourceLocation("iceandfire", "village/" + type + "/houses/" + type + "_scriber_1"), 10);
         }
+        JigsawPatternRegistry.func_244094_a(new JigsawPattern(
+                new ResourceLocation("iceandfire", "village/workstations"),
+                new ResourceLocation("empty"),
+                ImmutableList.of(new Pair<>(createWorkstation("village/workstations/scriber"), 1))
+        ));
+
+    }
+
+    private static JigsawPiece createWorkstation(String name)
+    {
+        return new LegacySingleJigsawPiece(Either.left(new ResourceLocation(name)), () -> ProcessorLists.field_244101_a, JigsawPattern.PlacementBehaviour.RIGID);
     }
 
     @SubscribeEvent
