@@ -175,7 +175,7 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
             if (movingObject.getType() == RayTraceResult.Type.ENTITY) {
                 Entity entity = ((EntityRayTraceResult) movingObject).getEntity();
 
-                if (entity != null && entity instanceof EntityDeathwormPart) {
+                if (entity != null && entity instanceof EntitSlowPart) {
                     return;
                 }
                 Entity shootingEntity = this.func_234616_v_();

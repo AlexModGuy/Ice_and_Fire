@@ -1,16 +1,20 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -19,20 +23,25 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.HandSide;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public abstract class EntityMutlipartPart extends Entity {
+import javax.annotation.Nullable;
 
-    private static final DataParameter<Integer> PARENT_ID = EntityDataManager.createKey(EntityMutlipartPart.class, DataSerializers.VARINT);
+public abstract class EntityMutlipartPart extends LivingEntity {
+
+    private static final DataParameter<Optional<UUID>> PARENT_UUID = EntityDataManager.createKey(EntityMutlipartPart.class, DataSerializers.OPTIONAL_UNIQUE_ID);
     private static final DataParameter<Float> SCALE_WIDTH = EntityDataManager.createKey(EntityMutlipartPart.class, DataSerializers.FLOAT);
     private static final DataParameter<Float> SCALE_HEIGHT = EntityDataManager.createKey(EntityMutlipartPart.class, DataSerializers.FLOAT);
+    private static final DataParameter<Float> PART_YAW = EntityDataManager.createKey(EntityMutlipartPart.class, DataSerializers.FLOAT);
     public EntitySize multipartSize;
     protected float radius;
     protected float angleYaw;
     protected float offsetY;
     protected float damageMultiplier;
-
 
     public EntityMutlipartPart(EntityType t, World world) {
         super(t, world);
@@ -57,6 +66,36 @@ public abstract class EntityMutlipartPart extends Entity {
         this.damageMultiplier = damageMultiplier;
     }
 
+
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .func_233815_a_(Attributes.field_233818_a_, 2D)
+                //SPEED
+                .func_233815_a_(Attributes.field_233821_d_, 0.1D);
+    }
+
+
+    @Override
+    public HandSide getPrimaryHand() {
+        return HandSide.RIGHT;
+    }
+
+    @Override
+    public Iterable<ItemStack> getArmorInventoryList() {
+        return ImmutableList.of();
+    }
+
+    @Override
+    public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
+    }
+
+
     @Override
     public EntitySize getSize(Pose poseIn) {
         return new EntitySize(getScaleX(), getScaleY(), false);
@@ -64,17 +103,20 @@ public abstract class EntityMutlipartPart extends Entity {
 
     @Override
     protected void registerData() {
-        this.dataManager.register(PARENT_ID, Integer.valueOf(0));
+        super.registerData();
+        this.dataManager.register(PARENT_UUID, Optional.empty());
         this.dataManager.register(SCALE_WIDTH, 0.5F);
         this.dataManager.register(SCALE_HEIGHT, 0.5F);
+        this.dataManager.register(PART_YAW, 0F);
     }
 
-    private int getParentId() {
-        return this.dataManager.get(PARENT_ID).intValue();
+    @Nullable
+    public UUID getParentId() {
+        return this.dataManager.get(PARENT_UUID).orElse(null);
     }
 
-    private void setParentId(int parentId) {
-        this.dataManager.set(PARENT_ID, parentId);
+    public void setParentId(@Nullable UUID uniqueId) {
+        this.dataManager.set(PARENT_UUID, Optional.ofNullable(uniqueId));
     }
 
     private float getScaleX() {
@@ -93,14 +135,45 @@ public abstract class EntityMutlipartPart extends Entity {
         this.dataManager.set(SCALE_HEIGHT, scale);
     }
 
+    public float getPartYaw() {
+        return this.dataManager.get(PART_YAW).floatValue();
+    }
+
+    private void setPartYaw(float yaw) {
+        this.dataManager.set(PART_YAW, yaw % 360);
+    }
+
     @Override
     public void tick() {
         if(this.ticksExisted > 10){
             LivingEntity parent = getParent();
             recalculateSize();
             if (parent != null && !world.isRemote) {
-                this.setPosition(parent.getPosX() + this.radius * Math.cos(parent.renderYawOffset * (Math.PI / 180.0F) + this.angleYaw), parent.getPosY() + this.offsetY, parent.getPosZ() + this.radius * Math.sin(parent.renderYawOffset * (Math.PI / 180.0F) + this.angleYaw));
-                this.markVelocityChanged();
+                if(isSlowFollow()){
+                    this.setPosition(parent.prevPosX + this.radius * Math.cos(parent.renderYawOffset * (Math.PI / 180.0F) + this.angleYaw), parent.prevPosY + this.offsetY, parent.prevPosZ + this.radius * Math.sin(parent.renderYawOffset * (Math.PI / 180.0F) + this.angleYaw));
+                    double d0 = parent.getPosX() - this.getPosX();
+                    double d1 = parent.getPosY() - this.getPosY();
+                    double d2 = parent.getPosZ() - this.getPosZ();
+                    double d3 = d0 * d0 + d1 * d1 + d2 * d2;
+                    float f = (float)(MathHelper.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F;
+                    float f2 = -((float) (MathHelper.atan2(d1, MathHelper.sqrt(d0 * d0 + d2 * d2)) * (double) (180F / (float) Math.PI)));
+                    this.rotationPitch = this.limitAngle(this.rotationPitch, f2, 5.0F);
+                    this.markVelocityChanged();
+                    this.rotationYaw = parent.renderYawOffset;
+                    this.setPartYaw(parent.renderYawOffset);
+                    this.rotationYawHead = this.rotationYaw;
+                    this.renderYawOffset = this.rotationYaw;
+                    if(parent instanceof LivingEntity){
+                        this.hurtTime = ((LivingEntity)parent).hurtTime;
+                        this.deathTime = ((LivingEntity)parent).deathTime;
+                    }
+                    if (!this.world.isRemote) {
+                        this.collideWithNearbyEntities();
+                    }
+                }else{
+                    this.setPosition(parent.getPosX() + this.radius * Math.cos(parent.renderYawOffset * (Math.PI / 180.0F) + this.angleYaw), parent.getPosY() + this.offsetY, parent.getPosZ() + this.radius * Math.sin(parent.renderYawOffset * (Math.PI / 180.0F) + this.angleYaw));
+                    this.markVelocityChanged();
+                }
                 if (!this.world.isRemote) {
                     this.collideWithNearbyEntities();
                 }
@@ -114,18 +187,46 @@ public abstract class EntityMutlipartPart extends Entity {
         super.tick();
     }
 
+    protected boolean isSlowFollow(){
+        return false;
+    }
+
+    protected float limitAngle(float sourceAngle, float targetAngle, float maximumChange) {
+        float f = MathHelper.wrapDegrees(targetAngle - sourceAngle);
+        if (f > maximumChange) {
+            f = maximumChange;
+        }
+
+        if (f < -maximumChange) {
+            f = -maximumChange;
+        }
+
+        float f1 = sourceAngle + f;
+        if (f1 < 0.0F) {
+            f1 += 360.0F;
+        } else if (f1 > 360.0F) {
+            f1 -= 360.0F;
+        }
+
+        return f1;
+    }
+
+
     public void remove() {
         this.remove(false);
     }
 
     public LivingEntity getParent() {
-        int id = getParentId();
-        Entity rawEntity = world.getEntityByID(id);
-        return rawEntity instanceof LivingEntity ? (LivingEntity)rawEntity : null;
+        UUID id = getParentId();
+        if (id != null && !world.isRemote) {
+            Entity e = ((ServerWorld) world).getEntityByUuid(id);
+            return e instanceof LivingEntity ? (LivingEntity) e : null;
+        }
+        return null;
     }
 
-    public void setParent(LivingEntity entity) {
-        this.setParentId(entity.getEntityId());
+    public void setParent(Entity entity) {
+        this.setParentId(entity.getUniqueID());
     }
 
     @Override
@@ -136,15 +237,6 @@ public abstract class EntityMutlipartPart extends Entity {
     @Override
     public boolean canBeCollidedWith() {
         return true;
-    }
-
-    @Override
-    protected void readAdditional(CompoundNBT compound) {
-
-    }
-
-    @Override
-    protected void writeAdditional(CompoundNBT compound) {
     }
 
     @Override
@@ -177,6 +269,11 @@ public abstract class EntityMutlipartPart extends Entity {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(parent.getEntityId(), damage * damageMultiplier));
         }
         return parent != null && parent.attackEntityFrom(source, damage * this.damageMultiplier);
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource source) {
+        return source == DamageSource.FALL || source == DamageSource.DROWN || source == DamageSource.IN_WALL || source == DamageSource.FALLING_BLOCK || source == DamageSource.LAVA || source.isFireDamage() || super.isInvulnerableTo(source);
     }
 
     public boolean shouldNotExist() {

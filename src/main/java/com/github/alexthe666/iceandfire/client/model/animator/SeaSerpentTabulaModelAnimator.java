@@ -35,11 +35,13 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
         }
         TabulaModel prevPosition = swimPose[prevIndex];
         TabulaModel currentPosition = swimPose[currentIndex];
-        float delta = ((entity.swimCycle) / 10.0F) % 1.0F + (Minecraft.getInstance().getRenderPartialTicks() / 10.0F);
+        float partialTicks = Minecraft.getInstance().getRenderPartialTicks();
+        float delta = ((entity.swimCycle) / 10.0F) % 1.0F + (partialTicks / 10.0F);
         AdvancedModelBox[] tailParts = {model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4"), model.getCube("Tail5"), model.getCube("Tail6")};
         AdvancedModelBox[] neckParts = {model.getCube("Neck1"), model.getCube("Neck2"), model.getCube("Neck3"), model.getCube("Head")};
 
         for (AdvancedModelBox cube : model.getCubes().values()) {
+           /*
             if (entity.jumpProgress > 0.0F) {
                 if (!isPartEqual(cube, EnumSeaSerpentAnimations.JUMPING2.seaserpent_model.getCube(cube.boxName))) {
                     transitionTo(cube, EnumSeaSerpentAnimations.JUMPING2.seaserpent_model.getCube(cube.boxName), entity.jumpProgress, 5, false);
@@ -50,13 +52,14 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
                     transitionTo(cube, EnumSeaSerpentAnimations.JUMPING1.seaserpent_model.getCube(cube.boxName), entity.wantJumpProgress, 10, false);
                 }
             }
+            */
             float prevX = prevPosition.getCube(cube.boxName).rotateAngleX;
             float prevY = prevPosition.getCube(cube.boxName).rotateAngleY;
             float prevZ = prevPosition.getCube(cube.boxName).rotateAngleZ;
             float x = currentPosition.getCube(cube.boxName).rotateAngleX;
             float y = currentPosition.getCube(cube.boxName).rotateAngleY;
             float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
-            this.addToRotateAngle(cube, limbSwingAmount, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
+          //  this.addToRotateAngle(cube, limbSwingAmount, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
 
         }
         if (entity.breathProgress > 0.0F) {
@@ -72,12 +75,12 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
             model.getCube("Tail3").rotateAngleX -= (float) Math.toRadians(turn) * entity.jumpRot;
             model.getCube("Tail4").rotateAngleX -= (float) Math.toRadians(turn) * entity.jumpRot;
         }
-        if(entity.isInWater()){
-            entity.roll_buffer.applyChainFlapBuffer(model.getCube("BodyUpper"));
-            entity.pitch_buffer.applyChainWaveBuffer(model.getCube("BodyUpper"));
-            entity.head_buffer.applyChainSwingBufferReverse(neckParts);
-        }
-        entity.tail_buffer.applyChainSwingBuffer(tailParts);
+
+        model.getCube("Tail1").rotateAngleY += ( entity.getPieceYaw(7, partialTicks) - 0) * ((float)Math.PI / 180F);
+        //model.getCube("Tail2").rotateAngleY += (entity.getPieceYaw(5, partialTicks) - 0) * ((float)Math.PI / 180F);
+        //model.getCube("Tail3").rotateAngleY += (entity.getPieceYaw(6, partialTicks) - 0) * ((float)Math.PI / 180F);
+        //model.getCube("Tail4").rotateAngleY += (entity.getPieceYaw(7, partialTicks) - 0) * ((float)Math.PI / 180F);
+
 
     }
 

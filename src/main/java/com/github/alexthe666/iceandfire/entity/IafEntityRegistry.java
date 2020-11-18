@@ -33,7 +33,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class IafEntityRegistry {
 
     public static final EntityType<EntityDragonPart> DRAGON_MULTIPART = registerEntity(EntityType.Builder.create(EntityDragonPart::new, EntityClassification.MISC).size(0.5F, 0.5F).immuneToFire().setCustomClientFactory(EntityDragonPart::new), "dragon_multipart");
-    public static final EntityType<EntityDeathwormPart> DEATHWORM_MULTIPART = registerEntity(EntityType.Builder.create(EntityDeathwormPart::new, EntityClassification.MISC).size(0.5F, 0.5F).immuneToFire().setCustomClientFactory(EntityDeathwormPart::new), "multipart");
+    public static final EntityType<EntitSlowPart> SLOW_MULTIPART = registerEntity(EntityType.Builder.create(EntitSlowPart::new, EntityClassification.MISC).size(0.5F, 0.5F).immuneToFire().setCustomClientFactory(EntitSlowPart::new), "multipart");
     public static final EntityType<EntityHydraHead> HYDRA_MULTIPART = registerEntity(EntityType.Builder.create(EntityHydraHead::new, EntityClassification.MISC).size(0.5F, 0.5F).immuneToFire().setCustomClientFactory(EntityHydraHead::new), "hydra_multipart");
     public static final EntityType<EntityCyclopsEye> CYCLOPS_MULTIPART = registerEntity(EntityType.Builder.create(EntityCyclopsEye::new, EntityClassification.MISC).size(0.5F, 0.5F).immuneToFire().setCustomClientFactory(EntityCyclopsEye::new), "cylcops_multipart");
     public static final EntityType<EntityDragonEgg> DRAGON_EGG = registerEntity(EntityType.Builder.create(EntityDragonEgg::new, EntityClassification.MISC).size(0.45F, 0.55F).immuneToFire(), "dragon_egg");
@@ -107,6 +107,10 @@ public class IafEntityRegistry {
     }
 
     public static void bakeAttributes(){
+        GlobalEntityTypeAttributes.put(DRAGON_MULTIPART, EntityMutlipartPart.bakeAttributes().func_233813_a_());
+        GlobalEntityTypeAttributes.put(SLOW_MULTIPART, EntityMutlipartPart.bakeAttributes().func_233813_a_());
+        GlobalEntityTypeAttributes.put(HYDRA_MULTIPART, EntityMutlipartPart.bakeAttributes().func_233813_a_());
+        GlobalEntityTypeAttributes.put(CYCLOPS_MULTIPART, EntityMutlipartPart.bakeAttributes().func_233813_a_());
         GlobalEntityTypeAttributes.put(DRAGON_EGG, EntityDragonEgg.bakeAttributes().func_233813_a_());
         GlobalEntityTypeAttributes.put(DRAGON_SKULL, EntityDragonSkull.bakeAttributes().func_233813_a_());
         GlobalEntityTypeAttributes.put(FIRE_DRAGON, EntityFireDragon.bakeAttributes().func_233813_a_());
