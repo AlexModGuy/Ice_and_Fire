@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
@@ -20,7 +21,7 @@ public class EntitSlowPart extends EntityMutlipartPart{
         super(t, parent, radius, angleYaw, offsetY, sizeX, sizeY, damageMultiplier);
     }
 
-    public EntitSlowPart(LivingEntity parent, float radius, float angleYaw, float offsetY, float sizeX, float sizeY, float damageMultiplier) {
+    public EntitSlowPart(Entity parent, float radius, float angleYaw, float offsetY, float sizeX, float sizeY, float damageMultiplier) {
         super(IafEntityRegistry.SLOW_MULTIPART, parent, radius, angleYaw, offsetY, sizeX, sizeY, damageMultiplier);
     }
 

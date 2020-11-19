@@ -211,10 +211,10 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         segments = new EntityMutlipartPart[9];
         for (int i = 0; i < segments.length; i++) {
             if (i > 3) {
-                LivingEntity parentToSet = i <= 4 ? this : segments[i-1];
+                Entity parentToSet = i <= 4 ? this : segments[i-1];
                 segments[i] = new EntitSlowPart(parentToSet, 0.5F * scale, 180, 0, 0.5F * scale, 0.5F * scale, 1);
             } else {
-                LivingEntity parentToSet = i == 0 ? this : segments[i-1];
+                Entity parentToSet = i == 0 ? this : segments[i-1];
                 segments[i] = new EntitSlowPart(parentToSet, -0.4F * scale, 180, 0, 0.45F * scale, 0.4F * scale, 1);
             }
             segments[i].copyLocationAndAnglesFrom(this);

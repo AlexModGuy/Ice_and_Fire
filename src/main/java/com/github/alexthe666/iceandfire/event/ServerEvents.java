@@ -263,7 +263,7 @@ public class ServerEvents {
     public void onPlayerAttackMob(AttackEntityEvent event) {
         if (event.getTarget() instanceof EntityMutlipartPart && event.getEntity() instanceof PlayerEntity) {
             event.setCanceled(true);
-            LivingEntity parent = ((EntityMutlipartPart) event.getTarget()).getParent();
+            Entity parent = ((EntityMutlipartPart) event.getTarget()).getParent();
             try {
                 ((PlayerEntity) event.getEntity()).attackTargetEntityWithCurrentItem(parent);
             } catch (Exception e) {

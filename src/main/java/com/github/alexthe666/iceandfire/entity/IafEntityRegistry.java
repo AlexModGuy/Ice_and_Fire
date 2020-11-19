@@ -107,10 +107,6 @@ public class IafEntityRegistry {
     }
 
     public static void bakeAttributes(){
-        GlobalEntityTypeAttributes.put(DRAGON_MULTIPART, EntityMutlipartPart.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(SLOW_MULTIPART, EntityMutlipartPart.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(HYDRA_MULTIPART, EntityMutlipartPart.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(CYCLOPS_MULTIPART, EntityMutlipartPart.bakeAttributes().func_233813_a_());
         GlobalEntityTypeAttributes.put(DRAGON_EGG, EntityDragonEgg.bakeAttributes().func_233813_a_());
         GlobalEntityTypeAttributes.put(DRAGON_SKULL, EntityDragonSkull.bakeAttributes().func_233813_a_());
         GlobalEntityTypeAttributes.put(FIRE_DRAGON, EntityFireDragon.bakeAttributes().func_233813_a_());
