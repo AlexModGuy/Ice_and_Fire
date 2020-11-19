@@ -78,14 +78,21 @@ public class PixieAISteal extends Goal {
                     slotlist.add(i);
                 }
             }
-            int slot = slotlist.get(new Random().nextInt(slotlist.size()));
-            ItemStack randomItem = this.temptingPlayer.inventory.getStackInSlot(slot);
-            this.temptedEntity.setHeldItem(Hand.MAIN_HAND, randomItem);
-            this.temptingPlayer.inventory.removeStackFromSlot(slot);
-            this.temptedEntity.flipAI(true);
-            this.temptedEntity.playSound(IafSoundRegistry.PIXIE_TAUNT, 1F, 1F);
-            if (temptingPlayer != null) {
-                this.temptingPlayer.addPotionEffect(new EffectInstance(this.temptedEntity.negativePotions[this.temptedEntity.getColor()], 100));
+            if(slotlist.size() >= 1){
+                int slot;
+                if(slotlist.size() == 1){
+                    slot = slotlist.get(0);
+                }else{
+                     slot = slotlist.get(new Random().nextInt(slotlist.size()));
+                }
+                ItemStack randomItem = this.temptingPlayer.inventory.getStackInSlot(slot);
+                this.temptedEntity.setHeldItem(Hand.MAIN_HAND, randomItem);
+                this.temptingPlayer.inventory.removeStackFromSlot(slot);
+                this.temptedEntity.flipAI(true);
+                this.temptedEntity.playSound(IafSoundRegistry.PIXIE_TAUNT, 1F, 1F);
+                if (temptingPlayer != null) {
+                    this.temptingPlayer.addPotionEffect(new EffectInstance(this.temptedEntity.negativePotions[this.temptedEntity.getColor()], 100));
+                }
             }
 
         } else {
