@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.Hand;
@@ -31,10 +32,10 @@ public class PixieAISteal extends Goal {
     }
 
     public boolean shouldExecute() {
-        if (!IafConfig.pixiesStealItems || !temptedEntity.getHeldItemMainhand().isEmpty()) {
+        if (!IafConfig.pixiesStealItems || !temptedEntity.getHeldItemMainhand().isEmpty() || temptedEntity.stealCooldown > 0) {
             return false;
         }
-        if (temptedEntity.getRNG().nextInt(3) == 0) {
+        if (temptedEntity.getRNG().nextInt(15) == 0) {
             return false;
         }
         if (temptedEntity.isTamed()) {
@@ -69,9 +70,11 @@ public class PixieAISteal extends Goal {
     public void tick() {
         this.temptedEntity.getLookController().setLookPositionWithEntity(this.temptingPlayer, (float) (this.temptedEntity.getHorizontalFaceSpeed() + 20), (float) this.temptedEntity.getVerticalFaceSpeed());
         ArrayList<Integer> slotlist = new ArrayList<Integer>();
-        if (this.temptedEntity.getDistanceSq(this.temptingPlayer) < 6.25D && !this.temptingPlayer.inventory.isEmpty()) {
+        if (this.temptedEntity.getDistanceSq(this.temptingPlayer) < 3D && !this.temptingPlayer.inventory.isEmpty()) {
+            //9 so pixies don't steal from hotbar
             for (int i = 0; i < this.temptingPlayer.inventory.getSizeInventory(); i++) {
-                if (this.temptingPlayer.inventory.getStackInSlot(i) != ItemStack.EMPTY) {
+                ItemStack targetStack = this.temptingPlayer.inventory.getStackInSlot(i);
+                if (!PlayerInventory.isHotbar(i) && !targetStack.isEmpty() && targetStack.isStackable()) {
                     slotlist.add(i);
                 }
             }

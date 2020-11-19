@@ -9,6 +9,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.LightType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -29,8 +31,8 @@ public class RenderDeathWorm extends MobRenderer<EntityDeathWorm, ModelDeathWorm
     }
 
 
-    protected int getBlockLight(EntityDeathWorm entityIn, float partialTicks) {
-        return entityIn.isBurning() ? 15 : entityIn.getWormBrightness(partialTicks);
+    protected int getBlockLight(EntityDeathWorm entityIn, BlockPos partialTicks) {
+        return entityIn.isBurning() ? 15 : entityIn.getWormBrightness(entityIn.world.getLightFor(LightType.BLOCK, partialTicks));
     }
 
     @Nullable

@@ -69,7 +69,9 @@ public class EntityPixie extends TameableEntity {
     public Effect[] negativePotions = new Effect[]{Effects.WEAKNESS, Effects.NAUSEA, Effects.SLOWNESS, Effects.UNLUCK, Effects.MINING_FATIGUE};
     public boolean slowSpeed = false;
     public int ticksUntilHouseAI;
+    public int ticksHeldItemFor;
     private BlockPos housePos;
+    public int stealCooldown = 0;
     public EntityPixie(EntityType type, World worldIn) {
         super(type, worldIn);
         this.moveController = new EntityPixie.AIMoveControl(this);
@@ -121,6 +123,7 @@ public class EntityPixie extends TameableEntity {
         if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(Hand.MAIN_HAND) != ItemStack.EMPTY && !properties.isStone()) {
             this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0);
             this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+            this.stealCooldown = 6000;
             return true;
         }
         if (this.isOwnerClose() && (source == DamageSource.FALLING_BLOCK || source == DamageSource.IN_WALL || this.getOwner() != null && source.getTrueSource() == this.getOwner())) {
@@ -133,6 +136,7 @@ public class EntityPixie extends TameableEntity {
         if (!this.world.isRemote && !this.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
             this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0);
             this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+            this.stealCooldown = 6000;
         }
         super.onDeath(cause);
         //if (cause.getTrueSource() instanceof PlayerEntity) {
@@ -192,6 +196,7 @@ public class EntityPixie extends TameableEntity {
             if (!world.isRemote) {
                 if (!this.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
                     this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0.0F);
+                    this.stealCooldown = 6000;
                 }
                 this.entityDropItem(stack, 0.0F);
             }
@@ -244,7 +249,14 @@ public class EntityPixie extends TameableEntity {
 
     public void livingTick() {
         super.livingTick();
-
+        if(stealCooldown > 0){
+            stealCooldown--;
+        }
+        if(!this.getHeldItemMainhand().isEmpty() && !this.isTamed()){
+            ticksHeldItemFor++;
+        }else{
+            ticksHeldItemFor = 0;
+        }
         if (!this.func_233684_eK_() && !this.isBeyondHeight()) {
             this.setMotion(this.getMotion().add(0, 0.08, 0));
         } else {
@@ -291,12 +303,16 @@ public class EntityPixie extends TameableEntity {
     @Override
     public void readAdditional(CompoundNBT compound) {
         this.setColor(compound.getInt("Color"));
+        this.stealCooldown = compound.getInt("StealCooldown");
+        this.ticksHeldItemFor = compound.getInt("HoldingTicks");
         super.readAdditional(compound);
     }
 
     @Override
     public void writeAdditional(CompoundNBT compound) {
         compound.putInt("Color", this.getColor());
+        compound.putInt("StealCooldown", this.stealCooldown);
+        compound.putInt("HoldingTicks", this.ticksHeldItemFor);
         super.writeAdditional(compound);
     }
 
@@ -332,17 +348,17 @@ public class EntityPixie extends TameableEntity {
     class AIMoveControl extends MovementController {
         public AIMoveControl(EntityPixie pixie) {
             super(pixie);
-            this.speed = 0.75F;
         }
 
         public void tick() {
+            float speedMod = 1;
             if (EntityPixie.this.slowSpeed) {
-                this.speed = 2F;
+                speedMod = 2F;
             }
             if (this.action == MovementController.Action.MOVE_TO) {
                 if (EntityPixie.this.collidedHorizontally) {
                     EntityPixie.this.rotationYaw += 180.0F;
-                    this.speed = 0.1F;
+                    speedMod = 0.1F;
                     BlockPos target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.getPosX() + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.getPosZ() + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
                     this.posX = target.getX();
                     this.posY = target.getY();
@@ -358,7 +374,7 @@ public class EntityPixie extends TameableEntity {
                     this.action = MovementController.Action.WAIT;
                     EntityPixie.this.setMotion(EntityPixie.this.getMotion().mul(0.5D, 0.5D, 0.5D));
                 } else {
-                    EntityPixie.this.setMotion(EntityPixie.this.getMotion().add(d0 / d3 * 0.05D * this.speed, d1 / d3 * 0.05D * this.speed, d2 / d3 * 0.05D * this.speed));
+                    EntityPixie.this.setMotion(EntityPixie.this.getMotion().add(d0 / d3 * 0.05D * this.speed * speedMod, d1 / d3 * 0.05D * this.speed * speedMod, d2 / d3 * 0.05D * this.speed * speedMod));
 
                     if (EntityPixie.this.getAttackTarget() == null) {
                         EntityPixie.this.rotationYaw = -((float) MathHelper.atan2(EntityPixie.this.getMotion().x, EntityPixie.this.getMotion().z)) * (180F / (float) Math.PI);

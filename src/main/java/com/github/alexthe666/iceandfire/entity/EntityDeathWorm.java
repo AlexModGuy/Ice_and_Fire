@@ -149,7 +149,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
                 if (EntityDeathWorm.this.isTamed()) {
                     return input instanceof MonsterEntity;
                 } else {
-                    return (IafConfig.deathWormAttackMonsters ? input instanceof LivingEntity : (input instanceof AnimalEntity || input instanceof PlayerEntity)) && DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase && ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwner(input);
+                    return (IafConfig.deathWormAttackMonsters ? input instanceof LivingEntity && DragonUtils.isAlive(input) : (input instanceof AnimalEntity || input instanceof PlayerEntity)) && DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase && ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwner(input);
                 }
             }
         }));
@@ -576,6 +576,9 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         if (world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }
+        if(this.getAttackTarget() != null &&( !this.getAttackTarget().isAlive() || !DragonUtils.isAlive(this.getAttackTarget()))){
+            this.setAttackTarget(null);
+        }
         if (this.willExplode) {
             if (this.ticksTillExplosion == 0) {
                 boolean b = !MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, this.getPosX(), this.getPosY(), this.getPosZ()));
@@ -591,8 +594,8 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         }
         noClip = this.isInSand();
         this.setNoGravity(this.isInSandStrict());
-        if(!isInSand() && this.isEntityInsideOpaqueBlock()){
-            this.setMotion(this.getMotion().add(0, 0.4D, 0));
+        if(!isInSand() && (this.isEntityInsideOpaqueBlock() || this.isInWater())){
+            this.setMotion(this.getMotion().add(0, 0.1D, 0));
         }
         if (growthCounter > 1000 && this.getWormAge() < 5) {
             growthCounter = 0;
@@ -649,7 +652,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         }
     }
 
-    public int getWormBrightness(float partialTicks) {
+    public int getWormBrightness(int lightIn) {
         BlockPos eyePos = new BlockPos(this.getEyePosition(1.0F));
         while(eyePos.getY() < 256 && BlockTags.SAND.func_230235_a_(world.getBlockState(eyePos).getBlock())){
             eyePos = eyePos.up();
