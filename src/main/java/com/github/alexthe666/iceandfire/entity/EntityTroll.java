@@ -114,11 +114,6 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
         if (IafConfig.trollSpawnCheckChance != 0) {
         	rngCheck = this.getRNG().nextInt(IafConfig.trollSpawnCheckChance) == 0;
         }
-
-        System.out.println("----- TROLL CAN SPAWN CHECK -----");
-        System.out.println(rngCheck);
-        System.out.println(pos);
-        System.out.println(this.world.canSeeSky(pos.up()));
         return rngCheck && !this.world.canSeeSky(pos.up()) && super.canSpawn(worldIn, spawnReasonIn);
     }
 
