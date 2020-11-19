@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
@@ -19,7 +20,7 @@ public class SeaSerpentAIRandomSwimming  extends RandomWalkingGoal {
     }
 
     public boolean shouldExecute() {
-        if (this.creature.isBeingRidden() || creature.getAttackTarget() != null) {
+        if (this.creature.isBeingRidden() || this.creature.getAttackTarget() != null) {
             return false;
         } else {
             if (!this.mustUpdate) {
@@ -42,18 +43,18 @@ public class SeaSerpentAIRandomSwimming  extends RandomWalkingGoal {
 
     @Nullable
     protected Vector3d getPosition() {
-        if(((EntitySeaSerpent)this.creature).jumpCooldown == 0){
+        if(((EntitySeaSerpent)this.creature).jumpCooldown <= 0){
             Vector3d vector3d = findSurfaceTarget(this.creature, 32, 16);
             if(vector3d != null){
-                return vector3d;
+                return vector3d.add(0, 1, 0);
             }
         }else{
             BlockPos blockpos = null;
             Random random = new Random();
             int range = 16;
             for(int i = 0; i < 15; i++){
-                BlockPos blockpos1 = this.creature.func_233580_cy_().add(random.nextInt(range) - range/2, 3, random.nextInt(range) - range/2);
-                while(this.creature.world.isAirBlock(blockpos1) && blockpos1.getY() > 1){
+                BlockPos blockpos1 = this.creature.func_233580_cy_().add(random.nextInt(range) - range/2, random.nextInt(range) - range/2, random.nextInt(range) - range/2);
+                while(this.creature.world.isAirBlock(blockpos1) && this.creature.world.getFluidState(blockpos1).isEmpty() && blockpos1.getY() > 1){
                     blockpos1 = blockpos1.down();
                 }
                 if(this.creature.world.getFluidState(blockpos1).isTagged(FluidTags.WATER)){
@@ -75,7 +76,6 @@ public class SeaSerpentAIRandomSwimming  extends RandomWalkingGoal {
     }
 
     private Vector3d findSurfaceTarget(CreatureEntity creature, int i, int i1) {
-        Vector3d creaturePos = creature.getPositionVec();
         BlockPos upPos = creature.func_233580_cy_();
         while(creature.world.getFluidState(upPos).isTagged(FluidTags.WATER)){
             upPos = upPos.up();

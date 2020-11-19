@@ -12,7 +12,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 
 public class SeaSerpentAIJump  extends JumpGoal {
-    private static final int[] JUMP_DISTANCES = new int[]{0, 1, 4, 5, 6, 7};
+    private static final int[] JUMP_DISTANCES = new int[]{0, 2, 4, 5, 6, 7};
     private final EntitySeaSerpent serpent;
     private final int field_220712_c;
     private boolean inWater;
@@ -65,16 +65,18 @@ public class SeaSerpentAIJump  extends JumpGoal {
      */
     public void startExecuting() {
         Direction direction = this.serpent.getAdjustedHorizontalFacing();
-        float up = 0.7F + serpent.getRNG().nextFloat() * 0.8F;
+        float up = 1F + serpent.getRNG().nextFloat() * 0.8F;
         this.serpent.setMotion(this.serpent.getMotion().add((double) direction.getXOffset() * 0.6D, up, (double) direction.getZOffset() * 0.6D));
+        this.serpent.setJumpingOutOfWater(true);
         this.serpent.getNavigator().clearPath();
-        this.serpent.jumpCooldown = serpent.getRNG().nextInt(256) + 15;
+        this.serpent.jumpCooldown = serpent.getRNG().nextInt(100) + 100;
     }
 
     /**
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
     public void resetTask() {
+        this.serpent.setJumpingOutOfWater(false);
         this.serpent.rotationPitch = 0.0F;
     }
 

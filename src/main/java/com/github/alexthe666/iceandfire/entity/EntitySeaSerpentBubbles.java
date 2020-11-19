@@ -136,18 +136,26 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
         }
     }
 
+    protected boolean func_230298_a_(Entity p_230298_1_) {
+        return super.func_230298_a_(p_230298_1_) && !(p_230298_1_ instanceof EntityMutlipartPart) && !(p_230298_1_ instanceof EntitySeaSerpentBubbles);
+    }
+
 
     public void autoTarget() {
-        Entity shootingEntity = this.func_234616_v_();
-        if (shootingEntity instanceof EntitySeaSerpent && ((EntitySeaSerpent) shootingEntity).getAttackTarget() != null) {
-            Entity target = ((EntitySeaSerpent) shootingEntity).getAttackTarget();
-            double d2 = target.getPosX() - this.getPosX();
-            double d3 = target.getPosY() - this.getPosY();
-            double d4 = target.getPosZ() - this.getPosZ();
-            double d0 = MathHelper.sqrt(d2 * d2 + d3 * d3 + d4 * d4);
-            this.accelerationX = d2 / d0 * 0.1D;
-            this.accelerationY = d3 / d0 * 0.1D;
-            this.accelerationZ = d4 / d0 * 0.1D;
+        if(!world.isRemote){
+            Entity shootingEntity = this.func_234616_v_();
+            if (shootingEntity instanceof EntitySeaSerpent && ((EntitySeaSerpent) shootingEntity).getAttackTarget() != null) {
+                Entity target = ((EntitySeaSerpent) shootingEntity).getAttackTarget();
+                double d2 = target.getPosX() - this.getPosX();
+                double d3 = target.getPosY() - this.getPosY();
+                double d4 = target.getPosZ() - this.getPosZ();
+                double d0 = MathHelper.sqrt(d2 * d2 + d3 * d3 + d4 * d4);
+                this.accelerationX = d2 / d0 * 0.1D;
+                this.accelerationY = d3 / d0 * 0.1D;
+                this.accelerationZ = d4 / d0 * 0.1D;
+            }else if(ticksExisted > 20){
+                this.remove();
+            }
         }
     }
 

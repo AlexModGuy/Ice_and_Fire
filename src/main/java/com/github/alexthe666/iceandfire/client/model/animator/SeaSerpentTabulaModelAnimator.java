@@ -41,7 +41,6 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
         AdvancedModelBox[] neckParts = {model.getCube("Neck1"), model.getCube("Neck2"), model.getCube("Neck3"), model.getCube("Head")};
 
         for (AdvancedModelBox cube : model.getCubes().values()) {
-           /*
             if (entity.jumpProgress > 0.0F) {
                 if (!isPartEqual(cube, EnumSeaSerpentAnimations.JUMPING2.seaserpent_model.getCube(cube.boxName))) {
                     transitionTo(cube, EnumSeaSerpentAnimations.JUMPING2.seaserpent_model.getCube(cube.boxName), entity.jumpProgress, 5, false);
@@ -52,14 +51,13 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
                     transitionTo(cube, EnumSeaSerpentAnimations.JUMPING1.seaserpent_model.getCube(cube.boxName), entity.wantJumpProgress, 10, false);
                 }
             }
-            */
             float prevX = prevPosition.getCube(cube.boxName).rotateAngleX;
             float prevY = prevPosition.getCube(cube.boxName).rotateAngleY;
             float prevZ = prevPosition.getCube(cube.boxName).rotateAngleZ;
             float x = currentPosition.getCube(cube.boxName).rotateAngleX;
             float y = currentPosition.getCube(cube.boxName).rotateAngleY;
             float z = currentPosition.getCube(cube.boxName).rotateAngleZ;
-          //  this.addToRotateAngle(cube, limbSwingAmount, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
+            this.addToRotateAngle(cube, limbSwingAmount, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
 
         }
         if (entity.breathProgress > 0.0F) {
@@ -68,20 +66,27 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
             progressRotation(model.getCube("Jaw"), entity.breathProgress, (float) Math.toRadians(60F), 0, 0);
         }
         if (entity.jumpRot > 0.0F) {
+            float jumpRot = entity.prevJumpRot + (entity.jumpRot - entity.prevJumpRot) * partialTicks;
             float turn = (float) entity.getMotion().y * -4F;
-            model.getCube("BodyUpper").rotateAngleX += (float) Math.toRadians(22.5F * turn) * entity.jumpRot;
-            model.getCube("Tail1").rotateAngleX -= (float) Math.toRadians(turn) * entity.jumpRot;
-            model.getCube("Tail2").rotateAngleX -= (float) Math.toRadians(turn) * entity.jumpRot;
-            model.getCube("Tail3").rotateAngleX -= (float) Math.toRadians(turn) * entity.jumpRot;
-            model.getCube("Tail4").rotateAngleX -= (float) Math.toRadians(turn) * entity.jumpRot;
+            model.getCube("BodyUpper").rotateAngleX += (float) Math.toRadians(22.5F * turn) * jumpRot;
+            model.getCube("Tail1").rotateAngleX -= (float) Math.toRadians(turn) * jumpRot;
+            model.getCube("Tail2").rotateAngleX -= (float) Math.toRadians(turn) * jumpRot;
+            model.getCube("Tail3").rotateAngleX -= (float) Math.toRadians(turn) * jumpRot;
+            model.getCube("Tail4").rotateAngleX -= (float) Math.toRadians(turn) * jumpRot;
         }
+        float prevRenderOffset = entity.prevRenderYawOffset + (entity.renderYawOffset - entity.prevRenderYawOffset) * partialTicks;
 
-        model.getCube("Tail1").rotateAngleY += ( entity.getPieceYaw(7, partialTicks) - 0) * ((float)Math.PI / 180F);
-        //model.getCube("Tail2").rotateAngleY += (entity.getPieceYaw(5, partialTicks) - 0) * ((float)Math.PI / 180F);
-        //model.getCube("Tail3").rotateAngleY += (entity.getPieceYaw(6, partialTicks) - 0) * ((float)Math.PI / 180F);
-        //model.getCube("Tail4").rotateAngleY += (entity.getPieceYaw(7, partialTicks) - 0) * ((float)Math.PI / 180F);
-
-
+        model.getCube("Tail1").rotateAngleY += (entity.getPieceYaw(1, partialTicks) - prevRenderOffset) * ((float)Math.PI / 180F);
+        model.getCube("Tail2").rotateAngleY += (entity.getPieceYaw(2, partialTicks) - prevRenderOffset) * ((float)Math.PI / 180F);
+        model.getCube("Tail3").rotateAngleY += (entity.getPieceYaw(3, partialTicks) - prevRenderOffset) * ((float)Math.PI / 180F);
+        model.getCube("Tail4").rotateAngleY += (entity.getPieceYaw(4, partialTicks) - prevRenderOffset) * ((float)Math.PI / 180F);
+        model.getCube("BodyUpper").rotateAngleX -= rotationPitch * ((float)Math.PI / 180F);
+        if(!entity.isJumpingOutOfWater() || entity.isInWater()){
+            model.getCube("Tail1").rotateAngleX -= (entity.getPiecePitch(1, partialTicks) - 0) * ((float)Math.PI / 180F);
+            model.getCube("Tail2").rotateAngleX -= (entity.getPiecePitch(2, partialTicks) - 0) * ((float)Math.PI / 180F);
+            model.getCube("Tail3").rotateAngleX -= (entity.getPiecePitch(3, partialTicks) - 0) * ((float)Math.PI / 180F);
+            model.getCube("Tail4").rotateAngleX -= (entity.getPiecePitch(4, partialTicks) - 0) * ((float)Math.PI / 180F);
+        }
     }
 
     public void progressRotation(AdvancedModelBox model, float progress, float rotX, float rotY, float rotZ) {

@@ -53,6 +53,10 @@ public abstract class EntityMutlipartPart extends LivingEntity {
         return this;
     }
 
+    @Override
+    protected void doWaterSplashEffect() {
+
+    }
 
     public EntityMutlipartPart(EntityType t, LivingEntity parent, float radius, float angleYaw, float offsetY, float sizeX, float sizeY, float damageMultiplier) {
         super(t, parent.world);
@@ -145,6 +149,7 @@ public abstract class EntityMutlipartPart extends LivingEntity {
 
     @Override
     public void tick() {
+        inWater = false;
         if(this.ticksExisted > 10){
             LivingEntity parent = getParent();
             recalculateSize();

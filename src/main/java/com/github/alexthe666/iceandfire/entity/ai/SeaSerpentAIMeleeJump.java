@@ -22,7 +22,7 @@ public class SeaSerpentAIMeleeJump  extends JumpGoal {
     }
 
     public boolean shouldExecute() {
-        if (this.dolphin.getAttackTarget() == null || !dolphin.shouldUseJumpAttack(this.dolphin.getAttackTarget()) || this.dolphin.func_233570_aj_() || !dolphin.isInWater() || dolphin.jumpCooldown > 0) {
+        if (this.dolphin.getAttackTarget() == null || !dolphin.shouldUseJumpAttack(this.dolphin.getAttackTarget()) || this.dolphin.func_233570_aj_() ) {
             return false;
         } else {
             BlockPos blockpos = this.dolphin.func_233580_cy_();
@@ -42,7 +42,7 @@ public class SeaSerpentAIMeleeJump  extends JumpGoal {
         LivingEntity target = this.dolphin.getAttackTarget();
         if(target != null){
             double distanceXZ = dolphin.getDistanceSq(target.getPosX(), dolphin.getPosY(), target.getPosZ());
-            if(distanceXZ < 150){
+            if(distanceXZ < 300){
                 dolphin.faceEntity(target, 260, 30);
                 double smoothX = MathHelper.clamp(Math.abs(target.getPosX() - dolphin.getPosX()), 0, 1);
                 double smoothY = MathHelper.clamp(Math.abs(target.getPosY() - dolphin.getPosY()), 0, 1);
@@ -53,7 +53,7 @@ public class SeaSerpentAIMeleeJump  extends JumpGoal {
                 float up = 1F + dolphin.getRNG().nextFloat() * 0.8F;
                 this.dolphin.setMotion(this.dolphin.getMotion().add((double) d0 * 0.3D, up, (double) d2 * 0.3D));
                 this.dolphin.getNavigator().clearPath();
-                this.dolphin.jumpCooldown = dolphin.getRNG().nextInt(32) + 64;
+                this.dolphin.jumpCooldown = dolphin.getRNG().nextInt(32) + 32;
             }else{
                 dolphin.getNavigator().tryMoveToEntityLiving(target, 1.0F);
             }

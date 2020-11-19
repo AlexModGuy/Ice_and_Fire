@@ -284,7 +284,7 @@ public class ServerEvents {
     public void onEntityFall(LivingFallEvent event) {
         if (event.getEntityLiving() instanceof PlayerEntity) {
             MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), MiscEntityProperties.class);
-            if (properties.hasDismountedDragon) {
+            if (properties != null && properties.hasDismountedDragon) {
                 event.setDamageMultiplier(0);
                 properties.hasDismountedDragon = false;
             }

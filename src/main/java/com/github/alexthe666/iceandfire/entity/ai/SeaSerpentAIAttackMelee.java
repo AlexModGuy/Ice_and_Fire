@@ -52,7 +52,7 @@ public class SeaSerpentAIAttackMelee extends Goal {
     public boolean shouldExecute() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
 
-        if (LivingEntity == null || !this.attacker.func_233570_aj_() || this.attacker.shouldUseJumpAttack(LivingEntity)) {
+        if (LivingEntity == null || this.attacker.shouldUseJumpAttack(LivingEntity) && this.attacker.jumpCooldown <= 0) {
             return false;
         } else if (!LivingEntity.isAlive()) {
             return false;
@@ -163,7 +163,7 @@ public class SeaSerpentAIAttackMelee extends Goal {
 
     protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
         double d0 = this.getAttackReachSqr(enemy);
-        if (distToEnemySqr <= d0) {
+        if (this.attacker.isTouchingMob(enemy)) {
             this.attackTick = 20;
             this.attacker.swingArm(Hand.MAIN_HAND);
             this.attacker.attackEntityAsMob(enemy);

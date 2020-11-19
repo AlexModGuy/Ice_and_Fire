@@ -33,7 +33,7 @@ public class SeaSerpentAIGetInWater  extends Goal {
 
     public void startExecuting() {
         if(targetPos != null){
-            this.creature.getNavigator().tryMoveToXYZ(targetPos.getX(), targetPos.getY(), targetPos.getZ(), 0.5D);
+            this.creature.getNavigator().tryMoveToXYZ(targetPos.getX(), targetPos.getY(), targetPos.getZ(), 1.5D);
         }
     }
 
