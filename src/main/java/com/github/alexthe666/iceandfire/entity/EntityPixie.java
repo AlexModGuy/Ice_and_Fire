@@ -120,7 +120,7 @@ public class EntityPixie extends TameableEntity {
     public boolean attackEntityFrom(DamageSource source, float amount) {
         StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
 
-        if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(Hand.MAIN_HAND) != ItemStack.EMPTY && !properties.isStone()) {
+        if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && !this.getHeldItem(Hand.MAIN_HAND).isEmpty() && properties != null && !properties.isStone()) {
             this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0);
             this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
             this.stealCooldown = 6000;
