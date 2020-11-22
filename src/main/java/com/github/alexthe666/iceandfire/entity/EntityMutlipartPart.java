@@ -235,6 +235,9 @@ public abstract class EntityMutlipartPart extends Entity {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
+    public boolean canBreatheUnderwater() {
+        return true;
+    }
 
     public void collideWithNearbyEntities() {
         List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));

@@ -80,12 +80,15 @@ public class IafDragonFlightManager {
             }
 
         } else if (target == null || dragon.getDistanceSq(target.x, target.y, target.z) < 4 || !dragon.world.isAirBlock(new BlockPos(target)) && (dragon.isHovering() || dragon.isFlying()) || dragon.getCommand() == 2 && dragon.shouldTPtoOwner()) {
-            BlockPos viewBlock = DragonUtils.getBlockInView(dragon);
-            if (dragon instanceof EntityIceDragon && !(dragon.isHovering() || dragon.isFlying())) {
+            BlockPos viewBlock = null;
+            if (dragon instanceof EntityIceDragon && dragon.isInWater()) {
                 viewBlock = DragonUtils.getWaterBlockInView(dragon);
             }
             if (dragon.getCommand() == 2 && dragon.isFlying()) {
                 viewBlock = DragonUtils.getBlockInViewEscort(dragon);
+            }
+            if(viewBlock == null){
+                viewBlock = DragonUtils.getBlockInView(dragon);
             }
             if (viewBlock != null) {
                 target = new Vector3d(viewBlock.getX() + 0.5, viewBlock.getY() + 0.5, viewBlock.getZ() + 0.5);

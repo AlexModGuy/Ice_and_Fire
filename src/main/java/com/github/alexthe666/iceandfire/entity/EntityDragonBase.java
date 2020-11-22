@@ -1386,7 +1386,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
             --this.blockBreakCounter;
             int bounds = 1;//(int)Math.ceil(this.getRenderSize() * 0.1);
             int flightModifier = isFlying() && this.getAttackTarget() != null ? -1 : 1;
-            if ((this.blockBreakCounter == 0 || IafConfig.dragonBreakBlockCooldown == 0) && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
+            if (!this.isIceInWater() && (this.blockBreakCounter == 0 || IafConfig.dragonBreakBlockCooldown == 0) && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
                 if (IafConfig.dragonGriefing != 2 && (!this.isTamed() || IafConfig.tamedDragonGriefing)) {
                     float hardness = IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
                     if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
@@ -1402,7 +1402,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                                 return;
 
                             BlockState state = world.getBlockState(pos);
-                            if (state.getMaterial().blocksMovement() && !state.isAir() && !state.getShape(world, pos).isEmpty() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos)) {
+                            if (state.getMaterial().blocksMovement() && !state.isAir() && state.getFluidState().isEmpty() && !state.getShape(world, pos).isEmpty() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos)) {
                                 this.setMotion(this.getMotion().mul(0.6F, 1, 0.6F));
                                 if (!world.isRemote) {
                                     if(rand.nextFloat() <= IafConfig.dragonBlockBreakingDropChance && DragonUtils.canDropFromDragonBlockBreak(state)){
@@ -1417,6 +1417,10 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                 }
             }
         }
+    }
+
+    protected boolean isIceInWater() {
+        return false;
     }
 
     public void spawnGroundEffects() {

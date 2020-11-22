@@ -30,6 +30,7 @@ import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -97,8 +98,8 @@ public class DragonUtils {
         int distFromGround = (int) dragon.getPosY() - ground.getY();
         BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, dragon.getPosY() + dragon.getRNG().nextInt(16) - 8) : (int) dragon.getPosY() + dragon.getRNG().nextInt(16) + 1);
         BlockPos pos = dragon.doesWantToLand() ? ground : newPos;
-        BlockPos surface = dragon.world.getBlockState(newPos.down(2)).getMaterial() != Material.WATER ? newPos.down(dragon.getRNG().nextInt(10) + 1) : newPos;
-        if (dragon.getDistanceSquared(Vector3d.func_237489_a_(surface)) > 6 && dragon.world.getBlockState(surface).getMaterial() == Material.WATER) {
+        BlockPos surface = dragon.world.getFluidState(newPos.down(2)).isTagged(FluidTags.WATER) ? newPos.down(dragon.getRNG().nextInt(10) + 1) : newPos;
+        if (dragon.getDistanceSquared(Vector3d.func_237489_a_(surface)) > 6 && dragon.world.getFluidState(surface).isTagged(FluidTags.WATER)) {
             return surface;
         }
         return null;

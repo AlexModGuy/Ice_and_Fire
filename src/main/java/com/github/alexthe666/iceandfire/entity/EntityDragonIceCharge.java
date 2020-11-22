@@ -164,7 +164,7 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
             }
         }
         if(movingObject.getType() != RayTraceResult.Type.MISS) {
-            if (shootingEntity instanceof EntityDragonBase && IafConfig.dragonGriefing != 2) {
+            if (shootingEntity instanceof EntityDragonBase && IafConfig.dragonGriefing != 2 && !this.isInWater()) {
                 IafDragonDestructionManager.destroyAreaIceCharge(world, this.func_233580_cy_(), ((EntityDragonBase) shootingEntity));
             }
             this.remove();
