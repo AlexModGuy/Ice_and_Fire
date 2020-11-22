@@ -452,7 +452,10 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public void onStaffInteract(PlayerEntity player, ItemStack itemstack) {
-        UUID staffUUID = itemstack.getTag().getUniqueId("HiveUUID");
+        if(itemstack.getTag() == null){
+            return;
+        }
+        UUID staffUUID = itemstack.getTag().hasUniqueId("HiveUUID") ? itemstack.getTag().getUniqueId("HiveUUID") : null;
         if (world.isRemote) {
             return;
         }
