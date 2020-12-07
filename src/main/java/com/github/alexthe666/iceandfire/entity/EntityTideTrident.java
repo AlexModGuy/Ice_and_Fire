@@ -19,8 +19,12 @@ import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
+
+import java.lang.reflect.Field;
 
 public class EntityTideTrident extends TridentEntity {
 
@@ -65,7 +69,14 @@ public class EntityTideTrident extends TridentEntity {
 
         Entity entity1 = this.func_234616_v_();
         DamageSource damagesource = DamageSource.causeTridentDamage(this, entity1 == null ? this : entity1);
-        //this.dealtDamage = true;
+        try {
+            Field dealtDamageField = ObfuscationReflectionHelper.findField(EntityTideTrident.class, "field_226571_aq_");
+            Field modifier = Field.class.getDeclaredField("modifiers");
+            modifier.setAccessible(true);
+            dealtDamageField.set(this, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         SoundEvent soundevent = SoundEvents.ITEM_TRIDENT_HIT;
         if (entity.attackEntityFrom(damagesource, f)) {
             if (entity.getType() == EntityType.ENDERMAN) {

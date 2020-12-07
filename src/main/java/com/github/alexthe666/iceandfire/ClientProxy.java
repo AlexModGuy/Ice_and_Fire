@@ -106,6 +106,7 @@ import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.event.ClientEvents;
 import com.github.alexthe666.iceandfire.event.PlayerRenderEvents;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.item.ItemDragonBow;
 import com.github.alexthe666.iceandfire.item.ItemDragonHorn;
 import com.github.alexthe666.iceandfire.item.ItemSummoningCrystal;
 
@@ -119,9 +120,7 @@ import net.minecraft.client.util.InputMappings;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -328,6 +327,17 @@ public class ClientProxy extends CommonProxy {
         RenderTypeLookup.setRenderLayer(IafBlockRegistry.DREAD_SPAWNER, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(IafBlockRegistry.DREAD_TORCH_WALL, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(IafBlockRegistry.BURNT_TORCH_WALL, RenderType.getCutout());
+        IItemPropertyGetter pulling = ItemModelsProperties.func_239417_a_(Items.BOW, new ResourceLocation("pulling"));
+        IItemPropertyGetter pull = (stack, worldIn, entity) -> {
+            if (entity == null) {
+                return 0.0F;
+            } else {
+                ItemDragonBow item = ((ItemDragonBow) stack.getItem());
+                return entity.getActiveItemStack() != stack ? 0.0F : (stack.getUseDuration() - entity.getItemInUseCount()) / 20.0F;
+            }
+        };
+        ItemModelsProperties.func_239418_a_(IafItemRegistry.DRAGON_BOW.asItem(), new ResourceLocation("pulling"), pulling);
+        ItemModelsProperties.func_239418_a_(IafItemRegistry.DRAGON_BOW.asItem(), new ResourceLocation("pull"), pull);
         ItemModelsProperties.func_239418_a_(IafItemRegistry.DRAGON_HORN, new ResourceLocation("iceorfire"), (p_239428_0_, p_239428_1_, p_239428_2_) -> {
             return ItemDragonHorn.getDragonType(p_239428_0_) * 0.25F;
         });
@@ -386,10 +396,10 @@ public class ClientProxy extends CommonProxy {
             particle = new ParticlePixieDust(world, x, y, z, (float) motX, (float) motY, (float) motZ);
         }
         if (name.equals("siren_appearance")) {
-            particle = new ParticleSirenAppearance(world, x, y, z, (int)motX);
+            particle = new ParticleSirenAppearance(world, x, y, z, (int) motX);
         }
         if (name.equals("ghost_appearance")) {
-            particle = new ParticleGhostAppearance(world, x, y, z, (int)motX);
+            particle = new ParticleGhostAppearance(world, x, y, z, (int) motX);
         }
         if (name.equals("siren_music")) {
             particle = new ParticleSirenMusic(world, x, y, z, motX, motY, motZ, 1);
@@ -526,7 +536,7 @@ public class ClientProxy extends CommonProxy {
         return group.setISTER(ClientProxy::getTEISR);
     }
 
-    public PlayerEntity getClientSidePlayer(){
+    public PlayerEntity getClientSidePlayer() {
         return Minecraft.getInstance().player;
     }
 }
