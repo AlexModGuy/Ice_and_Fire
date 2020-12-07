@@ -19,4 +19,7 @@ public class IafArmorMaterial extends CustomArmorMaterial {
         return MAX_DAMAGE_ARRAY[slotIn.getIndex()] * this.maxDamageFactor;
     }
 
+    public float func_230304_f_(){
+        return super.getKnockbackResistance();
+    }
 }

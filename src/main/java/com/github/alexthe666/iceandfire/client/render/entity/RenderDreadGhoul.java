@@ -34,7 +34,8 @@ public class RenderDreadGhoul extends MobRenderer<EntityDreadGhoul, ModelDreadGh
 
     @Override
     protected void preRenderCallback(EntityDreadGhoul entity, MatrixStack matrixStackIn, float partialTickTime) {
-        matrixStackIn.scale(entity.getScale(), entity.getScale(), entity.getScale());
+        float scale = entity.getScale() < 0.01F ? 1F : entity.getScale();
+        matrixStackIn.scale(scale, scale, scale);
     }
 
 

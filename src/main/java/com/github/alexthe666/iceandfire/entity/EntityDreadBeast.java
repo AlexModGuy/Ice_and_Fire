@@ -150,14 +150,14 @@ public class EntityDreadBeast extends EntityDreadMob implements IAnimatedEntity,
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
         compound.putInt("Variant", this.getVariant());
-        compound.putFloat("Scale", this.getScale());
+        compound.putFloat("DreadScale", this.getScale());
     }
 
     @Override
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
         this.setVariant(compound.getInt("Variant"));
-        this.setScale(compound.getFloat("Scale"));
+        this.setScale(compound.getFloat("DreadScale"));
     }
 
     public int getVariant() {

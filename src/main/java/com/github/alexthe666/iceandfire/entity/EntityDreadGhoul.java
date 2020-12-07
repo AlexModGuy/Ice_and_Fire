@@ -176,7 +176,7 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
         super.writeAdditional(compound);
         compound.putInt("Variant", this.getVariant());
         compound.putInt("ScreamStage", this.getScreamStage());
-        compound.putFloat("Scale", this.getScale());
+        compound.putFloat("DreadScale", this.getScale());
     }
 
     @Override
@@ -184,7 +184,7 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
         super.readAdditional(compound);
         this.setVariant(compound.getInt("Variant"));
         this.setScreamStage(compound.getInt("ScreamStage"));
-        this.setScale(compound.getFloat("Scale"));
+        this.setScale(compound.getFloat("DreadScale"));
     }
 
     public int getVariant() {
@@ -203,6 +203,9 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
         this.dataManager.set(SCREAMS, screamStage);
     }
 
+    public float getRenderScale() {
+        return getScale();
+    }
 
     @Nullable
     public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
