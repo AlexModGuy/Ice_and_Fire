@@ -688,7 +688,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     @Nullable
     public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         ILivingEntityData data = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setEnumVariant(EnumHippogryphTypes.getBiomeType(world.getBiome(this.func_233580_cy_())));
+        this.setEnumVariant(EnumHippogryphTypes.getBiomeType(worldIn.getBiome(this.func_233580_cy_())));
         return data;
     }
 
