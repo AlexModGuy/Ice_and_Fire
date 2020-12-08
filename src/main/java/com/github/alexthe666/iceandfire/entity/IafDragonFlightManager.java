@@ -190,7 +190,7 @@ public class IafDragonFlightManager {
                 }
                 this.mob.rotationYaw = this.limitAngle(this.mob.rotationYaw, targetDegree, changeRange);
                 this.mob.setAIMoveSpeed((float) (this.speed * this.mob.getAttribute(Attributes.field_233821_d_).getValue()));
-                if (d2 > (double) this.mob.stepHeight && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.mob.getWidth())) {
+                if (d2 > (double) this.mob.stepHeight && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.mob.getWidth() / 2)) {
                     this.mob.getJumpController().setJumping();
                     this.action = Action.JUMPING;
                 }

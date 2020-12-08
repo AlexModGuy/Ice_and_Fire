@@ -63,7 +63,7 @@ public class IceAndFire {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "iceandfire";
     public static final SimpleChannel NETWORK_WRAPPER;
-    public static final boolean DEBUG = false;
+    public static boolean DEBUG = false;
     public static final String VERSION = "2.1.3-1.16.4";
     private static final String PROTOCOL_VERSION = Integer.toString(1);
     public static ItemGroup TAB_ITEMS = new ItemGroup(MODID) {
