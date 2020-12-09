@@ -17,7 +17,8 @@ import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
-import com.github.alexthe666.iceandfire.pathfinding.PathNavigateMyrmex;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.DragonAdvancedPathNavigate;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.ICustomSizeNavigator;
 import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
@@ -72,7 +73,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimatedEntity, IMerchant {
+public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimatedEntity, IMerchant, ICustomSizeNavigator {
 
     public static final Animation ANIMATION_PUPA_WIGGLE = Animation.create(20);
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(EntityMyrmexBase.class, DataSerializers.BYTE);
@@ -99,7 +100,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     public EntityMyrmexBase(EntityType t, World worldIn) {
         super(t, worldIn);
-        this.stepHeight = 2;
+       // this.stepHeight = 2;
         //this.moveController = new GroundMoveHelper(this);
     }
 
@@ -203,7 +204,11 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     protected PathNavigator createNavigator(World worldIn) {
-        return new PathNavigateMyrmex(this, worldIn);
+        DragonAdvancedPathNavigate newNavigator = new DragonAdvancedPathNavigate(this, world);
+        this.navigator = newNavigator;
+        newNavigator.setCanSwim(true);
+        newNavigator.getNodeProcessor().setCanOpenDoors(true);
+        return newNavigator;
     }
 
     protected void registerData() {
@@ -824,5 +829,16 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                 merchantoffers.add(merchantoffer3);
             }
         }
+    }
+
+    public boolean isSmallerThanBlock(){
+        return false;
+    }
+
+    public int getXZNavSize(){
+        return (int)getWidth() / 2;
+    }
+    public int getYNavSize(){
+        return (int)getHeight() / 2;
     }
 }

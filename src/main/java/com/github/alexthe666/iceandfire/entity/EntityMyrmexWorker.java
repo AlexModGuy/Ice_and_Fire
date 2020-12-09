@@ -78,6 +78,10 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         return 3;
     }
 
+    public boolean isSmallerThanBlock(){
+        return true;
+    }
+
     public void livingTick() {
         super.livingTick();
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
@@ -173,7 +177,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
                 //ATTACK
                 .func_233815_a_(Attributes.field_233823_f_, IafConfig.myrmexBaseAttackStrength)
                 //FOLLOW RANGE
-                .func_233815_a_(Attributes.field_233819_b_, 32.0D)
+                .func_233815_a_(Attributes.field_233819_b_, 128)
                 //ARMOR
                 .func_233815_a_(Attributes.field_233826_i_, 4D);
     }

@@ -46,7 +46,7 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
         } else {
             Collections.sort(list, this.theNearestAttackableTargetSorter);
             this.targetEntity = list.get(0);
-            return true;
+            return false;
         }
     }
 

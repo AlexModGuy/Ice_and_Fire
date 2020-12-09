@@ -6,8 +6,11 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexQueen;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.DragonAdvancedPathNavigate;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.Hand;
@@ -16,8 +19,9 @@ import net.minecraft.util.math.BlockPos;
 public class MyrmexAILeaveHive extends Goal {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;
-    private Path path;
+    private PathResult path;
     private BlockPos nextEntrance = BlockPos.ZERO;
+    private BlockPos inProgPos = BlockPos.ZERO;
 
     public MyrmexAILeaveHive(EntityMyrmexBase entityIn, double movementSpeedIn) {
         this.myrmex = entityIn;
@@ -41,25 +45,32 @@ public class MyrmexAILeaveHive extends Goal {
             return false;
         } else {
             nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, village.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), true));
-            this.path = this.myrmex.getNavigator().getPathToPos(nextEntrance, 0);
-            return this.path != null;
+            this.path = ((DragonAdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY(),  nextEntrance.getZ(), movementSpeed);
+            inProgPos = new BlockPos(this.myrmex.func_233580_cy_());
+            return true;
         }
     }
 
     public boolean shouldContinueExecuting() {
-
         if (this.myrmex.getDistanceSq(nextEntrance.getX() + 0.5D, nextEntrance.getY() + 0.5D, nextEntrance.getZ() + 0.5D) <= 3 || this.myrmex.shouldEnterHive()) {
             return false;
         }
-        return !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(nextEntrance.getX() + 0.5D, nextEntrance.getY() + 0.5D, nextEntrance.getZ() + 0.5D) > 3 && this.myrmex.shouldLeaveHive();
+        return this.myrmex.getDistanceSq(nextEntrance.getX() + 0.5D, nextEntrance.getY() + 0.5D, nextEntrance.getZ() + 0.5D) > 3 && this.myrmex.shouldLeaveHive();
     }
 
+    public void tick() {
+        if(path.isPathReachingDestination()){
+            path = ((DragonAdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY() + 1,  nextEntrance.getZ(), movementSpeed);
+        }
+    }
+
+
     public void startExecuting() {
-        this.myrmex.getNavigator().setPath(this.path, this.movementSpeed);
+        myrmex.world.setBlockState(nextEntrance.down(), Blocks.GLOWSTONE.getDefaultState());
     }
 
     public void resetTask() {
         nextEntrance = BlockPos.ZERO;
-        this.myrmex.getNavigator().setPath(null, this.movementSpeed);
+        this.myrmex.getNavigator().clearPath();
     }
 }

@@ -484,7 +484,7 @@ public class DragonAdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         }
 
         Vector3d vec3d = this.getEntityPosition();
-        this.maxDistanceToWaypoint = this.entity.getWidth() / 2.0F;
+        this.maxDistanceToWaypoint = Math.max(this.entity.getWidth() / 2.0F, 1.3F);
         double maxYDistance = 0;
         // Look at multiple points, incase we're too fast
         for (int i = this.currentPath.getCurrentPathIndex(); i < Math.min(this.currentPath.getCurrentPathLength(), this.currentPath.getCurrentPathIndex() + 4); i++) {
@@ -492,7 +492,7 @@ public class DragonAdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             double yDist = Math.abs(this.entity.getPosY() - vec3d2.y);
             if (Math.abs(this.entity.getPosX() - vec3d2.x) < (double) this.maxDistanceToWaypoint
                     && Math.abs(this.entity.getPosZ() - vec3d2.z) < (double) this.maxDistanceToWaypoint &&
-                    yDist < Math.ceil(this.entity.getHeight() / 2.0F)) {
+                    yDist < Math.min(1.0F, Math.ceil(this.entity.getHeight() / 2.0F))) {
                 this.currentPath.incrementPathIndex();
                 // Mark reached nodes for debug path drawing
                 if (AbstractPathJob.lastDebugNodesPath != null) {

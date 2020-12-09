@@ -184,7 +184,7 @@ public class IafDragonFlightManager {
                 }
                 float targetDegree = (float) (MathHelper.atan2(d1, d0) * (180D / Math.PI)) - 90.0F;
                 float changeRange = 70F;
-                if (dragonBase.getWidth() > 2F) {
+                if (Math.ceil(dragonBase.getWidth()) > 2F) {
                     float ageMod = 1F - Math.min(dragonBase.getAgeInDays(), 125) / 125F;
                     changeRange = 5 + ageMod * 10;
                 }

@@ -4,6 +4,8 @@ import java.util.EnumSet;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.DragonAdvancedPathNavigate;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 
 import net.minecraft.entity.ai.goal.Goal;
@@ -13,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 public class MyrmexAIReEnterHive extends Goal {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;
-    private Path path;
+    private PathResult path;
     private BlockPos nextEntrance = BlockPos.ZERO;
     private boolean first = true;
     private MyrmexHive hive;
@@ -37,7 +39,7 @@ public class MyrmexAIReEnterHive extends Goal {
         } else {
             this.hive = village;
             nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, hive.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), false));
-            this.path = this.myrmex.getNavigator().getPathToPos(nextEntrance, 0);
+            this.path = ((DragonAdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY(),  nextEntrance.getZ(), 1);
             first = true;
             return this.path != null;
         }
@@ -48,15 +50,12 @@ public class MyrmexAIReEnterHive extends Goal {
             hive.setWorld(this.myrmex.world);
             nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, hive.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), false));
         }
-        this.path = this.myrmex.getNavigator().getPathToPos(nextEntrance, 0);
-        this.myrmex.getNavigator().setPath(this.path, this.movementSpeed);
+        ((DragonAdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY(),  nextEntrance.getZ(), movementSpeed);
         if (this.myrmex.getDistanceSq(nextEntrance.getX() + 0.5D, nextEntrance.getY() + 0.5D, nextEntrance.getZ() + 0.5D) < 9 && first) {
             if (hive != null) {
                 nextEntrance = hive.getClosestEntranceBottomToEntity(this.myrmex, this.myrmex.getRNG());
                 first = false;
-                this.myrmex.getNavigator().clearPath();
-                this.path = this.myrmex.getNavigator().getPathToPos(nextEntrance, 0);
-                this.myrmex.getNavigator().setPath(this.path, this.movementSpeed);
+                this.path = ((DragonAdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY(),  nextEntrance.getZ(), 1);
             }
         }
         this.myrmex.isEnteringHive = !(this.myrmex.getDistanceSq(nextEntrance.getX() + 0.5D, nextEntrance.getY() + 0.5D, nextEntrance.getZ() + 0.5D) < 15) || first;
@@ -66,12 +65,12 @@ public class MyrmexAIReEnterHive extends Goal {
         if (this.myrmex.getDistanceSq(nextEntrance.getX() + 0.5D, nextEntrance.getY() + 0.5D, nextEntrance.getZ() + 0.5D) < 15 && !first) {
             return false;
         }
-        return this.myrmex.shouldEnterHive();
+        return true;
     }
 
     public void resetTask() {
         nextEntrance = BlockPos.ZERO;
-        this.myrmex.getNavigator().setPath(null, this.movementSpeed);
+        this.myrmex.getNavigator().clearPath();
         first = true;
     }
 }

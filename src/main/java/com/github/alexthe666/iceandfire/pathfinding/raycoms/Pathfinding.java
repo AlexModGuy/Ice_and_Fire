@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 /*
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.AbstractPathJob;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -47,7 +48,7 @@ public final class Pathfinding {
      */
     public static ThreadPoolExecutor getExecutor() {
         if (executor == null) {
-            executor = new ThreadPoolExecutor(1, Integer.MAX_VALUE, 10, TimeUnit.SECONDS, jobQueue, new MinecoloniesThreadFactory());
+            executor = new ThreadPoolExecutor(1, IafConfig.dragonPathfindingThreads, 10, TimeUnit.SECONDS, jobQueue, new MinecoloniesThreadFactory());
         }
         return executor;
     }
@@ -114,7 +115,7 @@ public final class Pathfinding {
             }
 
             for (final Node n : debugNodesVisited) {
-                debugDrawNode(n, 0F, 0F, 1.0F, matrixStack);
+            //    debugDrawNode(n, 0F, 0F, 1.0F, matrixStack);
             }
 
             for (final Node n : debugNodesPath) {

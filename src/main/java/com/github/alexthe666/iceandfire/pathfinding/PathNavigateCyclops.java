@@ -143,13 +143,8 @@ public class PathNavigateCyclops extends GroundPathNavigator {
             double d3 = 1.0D / Math.sqrt(d2);
             d0 = d0 * d3;
             d1 = d1 * d3;
-            if (IafConfig.completeDragonPathfinding) {
-                sizeX = sizeX + 2;
-                sizeZ = sizeZ + 2;
-            } else {
-                sizeX = 1;
-                sizeZ = 1;
-            }
+            sizeX = sizeX + 2;
+            sizeZ = sizeZ + 2;
             if (!this.isSafeToStandAt(i, (int) posVec31.y, j, sizeX, sizeY, sizeZ, posVec31, d0, d1)) {
                 return false;
             } else {

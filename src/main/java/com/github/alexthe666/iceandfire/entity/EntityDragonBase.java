@@ -52,6 +52,7 @@ import com.github.alexthe666.iceandfire.message.MessageStartRidingMob;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.DragonAdvancedPathNavigate;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.IPassabilityNavigator;
 import com.github.alexthe666.iceandfire.world.DragonPosWorldData;
 import com.google.common.base.Predicate;
 
@@ -99,7 +100,9 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.ActionResultType;
@@ -127,7 +130,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 
-public abstract class EntityDragonBase extends TameableEntity implements ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor {
+public abstract class EntityDragonBase extends TameableEntity implements IPassabilityNavigator, ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor {
 
     public static final int FLIGHT_CHANCE_PER_TICK = 1500;
     private static final DataParameter<Integer> HUNGER = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.VARINT);
@@ -1383,10 +1386,21 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         return this.getPosY() > IafConfig.maxDragonFlight;
     }
 
+    private int calculateDownY(){
+        if(this.getNavigator().getPath() != null){
+            Path path = this.getNavigator().getPath();
+            Vector3d p = path.getVectorFromIndex(this, Math.min(path.getCurrentPathLength() - 1, path.getCurrentPathIndex() + 1));
+            if(p.y < this.getPosY() - 1){
+                return -1;
+            }
+        }
+        return 1;
+    }
     public void breakBlock() {
         if (this.blockBreakCounter > 0 || IafConfig.dragonBreakBlockCooldown == 0) {
             --this.blockBreakCounter;
             int bounds = 1;//(int)Math.ceil(this.getRenderSize() * 0.1);
+            int yMinus = calculateDownY();
             int flightModifier = isFlying() && this.getAttackTarget() != null ? -1 : 1;
             if (!this.isIceInWater() && (this.blockBreakCounter == 0 || IafConfig.dragonBreakBlockCooldown == 0) && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
                 if (IafConfig.dragonGriefing != 2 && (!this.isTamed() || IafConfig.tamedDragonGriefing)) {
@@ -1394,7 +1408,7 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                     if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
                         BlockPos.getAllInBox(
                                 (int) Math.floor(this.getBoundingBox().minX) - bounds,
-                                (int) Math.floor(this.getBoundingBox().minY) + 1,
+                                (int) Math.floor(this.getBoundingBox().minY) + yMinus,
                                 (int) Math.floor(this.getBoundingBox().minZ) - bounds,
                                 (int) Math.floor(this.getBoundingBox().maxX) + bounds,
                                 (int) Math.floor(this.getBoundingBox().maxY) + bounds + flightModifier,
@@ -1402,9 +1416,8 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
                         ).forEach(pos -> {
                             if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, pos.getX(), pos.getY(), pos.getZ())))
                                 return;
-
                             BlockState state = world.getBlockState(pos);
-                            if (state.getMaterial().blocksMovement() && !state.isAir() && state.getFluidState().isEmpty() && !state.getShape(world, pos).isEmpty() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos)) {
+                            if (isBreakable(pos, state, hardness)) {
                                 this.setMotion(this.getMotion().mul(0.6F, 1, 0.6F));
                                 if (!world.isRemote) {
                                     if (rand.nextFloat() <= IafConfig.dragonBlockBreakingDropChance && DragonUtils.canDropFromDragonBlockBreak(state)) {
@@ -1421,6 +1434,16 @@ public abstract class EntityDragonBase extends TameableEntity implements ISyncMo
         }
     }
 
+    protected boolean isBreakable(BlockPos pos, BlockState state, float hardness){
+        return state.getMaterial().blocksMovement() && !state.isAir() && state.getFluidState().isEmpty() && !state.getShape(world, pos).isEmpty() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos);
+    }
+
+    public boolean isBlockPassable(BlockState state, BlockPos pos, BlockPos entityPos){
+        if(IafConfig.dragonGriefing != 2 && (!this.isTamed() || IafConfig.tamedDragonGriefing)){
+            return isBreakable(pos, state, IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F);
+        }
+        return false;
+    }
     protected boolean isIceInWater() {
         return false;
     }

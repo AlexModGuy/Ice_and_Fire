@@ -120,7 +120,6 @@ public class IafConfig {
     public static int myrmexColonyGenChance = 150;
     public static int myrmexColonySize = 80;
     public static double myrmexBaseAttackStrength = 3.0D;
-    public static boolean experimentalPathFinder;
     public static boolean spawnAmphitheres = true;
     public static int amphithereSpawnRate = 50;
     public static float amphithereVillagerSearchLength = 64;
@@ -141,7 +140,6 @@ public class IafConfig {
     public static int dreadlandsDimensionId = -12;
     public static boolean weezerTinkers = true;
     public static double dragonBlockBreakingDropChance = 0.1D;
-    public static boolean completeDragonPathfinding = false;
     public static boolean dragonAuto3rdPerson = true;
     public static double dreadQueenMaxHealth = 750;
     public static boolean generateMausoleums = true;
@@ -162,6 +160,9 @@ public class IafConfig {
     public static double ghostMaxHealth = 30;
     public static double ghostAttackStrength = 3;
     public static boolean ghostsFromPlayerDeaths = true;
+
+    public static int dragonPathfindingThreads = 3;
+    public static int maxDragonPathingNodes = 5000;
 
     public static void bakeClient(final ModConfig config) {
         try {
@@ -276,7 +277,6 @@ public class IafConfig {
             myrmexColonyGenChance = ConfigHolder.SERVER.myrmexColonyGenChance.get();
             myrmexColonySize = ConfigHolder.SERVER.myrmexColonySize.get();
             myrmexBaseAttackStrength = ConfigHolder.SERVER.myrmexBaseAttackStrength.get();
-            experimentalPathFinder = ConfigHolder.SERVER.experimentalPathFinder.get();
             spawnAmphitheres = ConfigHolder.SERVER.spawnAmphitheres.get();
             amphithereSpawnRate = ConfigHolder.SERVER.amphithereSpawnRate.get();
             amphithereVillagerSearchLength = ConfigHolder.SERVER.amphithereVillagerSearchLength.get();

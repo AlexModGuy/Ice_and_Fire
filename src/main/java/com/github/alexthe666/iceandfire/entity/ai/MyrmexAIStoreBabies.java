@@ -41,11 +41,11 @@ public class MyrmexAIStoreBabies extends Goal {
     }
 
     public void startExecuting() {
+        this.myrmex.getNavigator().tryMoveToXYZ(this.nextRoom.getX(), this.nextRoom.getY(), this.nextRoom.getZ(), 1.5F);
     }
 
     @Override
     public void tick() {
-        this.myrmex.getNavigator().tryMoveToXYZ(this.nextRoom.getX(), this.nextRoom.getY(), this.nextRoom.getZ(), 1.5F);
         if (nextRoom != null && this.myrmex.getDistanceSq(nextRoom.getX() + 0.5D, nextRoom.getY() + 0.5D, nextRoom.getZ() + 0.5D) < 4 && this.myrmex.holdingBaby()) {
             if (!this.myrmex.getPassengers().isEmpty()) {
                 for (Entity entity : this.myrmex.getPassengers()) {
@@ -59,7 +59,7 @@ public class MyrmexAIStoreBabies extends Goal {
 
     public void resetTask() {
         nextRoom = BlockPos.ZERO;
-        this.myrmex.getNavigator().setPath(null, this.movementSpeed);
+        this.myrmex.getNavigator().clearPath();
     }
 
 }
