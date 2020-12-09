@@ -48,14 +48,14 @@ public class IafBlockRegistry {
     public static final Block COPPER_BLOCK = new BlockGeneric(Material.IRON, "copper_block", "pickaxe", 0, 4.0F, 10.0F, SoundType.METAL);
     public static final Block AMYTHEST_BLOCK = new BlockGeneric(Material.IRON, "amythest_block", "pickaxe", 2, 5.0F, 15.0F, SoundType.METAL);
     public static final Block CHARRED_DIRT = new BlockReturningState(Material.EARTH, "chared_dirt", "shovel", 0, 0.5F, 0.0F, SoundType.GROUND, Blocks.DIRT.getDefaultState());
-    public static final Block CHARRED_GRASS = new BlockReturningState(Material.PLANTS, "chared_grass", "shovel", 0, 0.6F, 0.0F, SoundType.GROUND, Blocks.GRASS_BLOCK.getDefaultState());
+    public static final Block CHARRED_GRASS = new BlockReturningState(Material.ORGANIC, "chared_grass", "shovel", 0, 0.6F, 0.0F, SoundType.GROUND, Blocks.GRASS_BLOCK.getDefaultState());
     public static final Block CHARRED_STONE = new BlockReturningState(Material.ROCK, "chared_stone", "pickaxe", 0, 1.5F, 10.0F, SoundType.STONE, Blocks.STONE.getDefaultState());
     public static final Block CHARRED_COBBLESTONE = new BlockReturningState(Material.ROCK, "chared_cobblestone", "pickaxe", 0, 2F, 10.0F, SoundType.STONE, Blocks.COBBLESTONE.getDefaultState());
     public static final Block CHARRED_GRAVEL = new BlockFallingReturningState(Material.EARTH, "chared_gravel", "pickaxe", 0, 0.6F, 0F, SoundType.GROUND, Blocks.GRAVEL.getDefaultState());
     public static final Block CHARRED_GRASS_PATH = new BlockCharedPath(0);
     public static final Block ASH = new BlockFallingGeneric(Material.SAND, "ash", "shovel", 0, 0.5F, 0F, SoundType.SAND);
     public static final Block FROZEN_DIRT = new BlockReturningState(Material.EARTH, "frozen_dirt", "shovel", 0, 0.5F, 0.0F, SoundType.GLASS, true, Blocks.DIRT.getDefaultState());
-    public static final Block FROZEN_GRASS = new BlockReturningState(Material.PLANTS, "frozen_grass", "shovel", 0, 0.6F, 0.0F, SoundType.GLASS, true, Blocks.GRASS_BLOCK.getDefaultState());
+    public static final Block FROZEN_GRASS = new BlockReturningState(Material.ORGANIC, "frozen_grass", "shovel", 0, 0.6F, 0.0F, SoundType.GLASS, true, Blocks.GRASS_BLOCK.getDefaultState());
     public static final Block FROZEN_STONE = new BlockReturningState(Material.ROCK, "frozen_stone", "pickaxe", 0, 1.5F, 10.0F, SoundType.GLASS, true, Blocks.STONE.getDefaultState());
     public static final Block FROZEN_COBBLESTONE = new BlockReturningState(Material.ROCK, "frozen_cobblestone", "pickaxe", 0, 2F, 10.0F, SoundType.GLASS, true, Blocks.COBBLESTONE.getDefaultState());
     public static final Block FROZEN_GRAVEL = new BlockFallingReturningState(Material.EARTH, "frozen_gravel", "pickaxe", 0, 0.6F, 0F, SoundType.GLASS, true, Blocks.GRAVEL.getDefaultState());
@@ -64,7 +64,7 @@ public class IafBlockRegistry {
     public static final Block DRAGON_ICE = new BlockGeneric(Material.PACKED_ICE, "dragon_ice", "pickaxe", 0, 0.5F, 0F, SoundType.GLASS, true);
     public static final Block DRAGON_ICE_SPIKES = new BlockIceSpikes();
     public static final Block CRACKLED_DIRT = new BlockReturningState(Material.EARTH, "crackled_dirt", "shovel", 0, 0.5F, 0.0F, SoundType.GROUND, Blocks.DIRT.getDefaultState());
-    public static final Block CRACKLED_GRASS = new BlockReturningState(Material.PLANTS, "crackled_grass", "shovel", 0, 0.6F, 0.0F, SoundType.GROUND, Blocks.GRASS_BLOCK.getDefaultState());
+    public static final Block CRACKLED_GRASS = new BlockReturningState(Material.ORGANIC, "crackled_grass", "shovel", 0, 0.6F, 0.0F, SoundType.GROUND, Blocks.GRASS_BLOCK.getDefaultState());
     public static final Block CRACKLED_STONE = new BlockReturningState(Material.ROCK, "crackled_stone", "pickaxe", 0, 1.5F, 10.0F, SoundType.STONE, Blocks.STONE.getDefaultState());
     public static final Block CRACKLED_COBBLESTONE = new BlockReturningState(Material.ROCK, "crackled_cobblestone", "pickaxe", 0, 2F, 10.0F, SoundType.STONE, Blocks.COBBLESTONE.getDefaultState());
     public static final Block CRACKLED_GRAVEL = new BlockFallingReturningState(Material.EARTH, "crackled_gravel", "pickaxe", 0, 0.6F, 0F, SoundType.GROUND, Blocks.GRAVEL.getDefaultState());

@@ -2203,8 +2203,8 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     public abstract void stimulateFire(double burnX, double burnY, double burnZ, int syncType);
 
     public void randomizeAttacks() {
-        this.airAttack = IafDragonAttacks.Air.values()[getRNG().nextInt(IafDragonAttacks.Air.values().length)];
-        this.groundAttack = IafDragonAttacks.Ground.values()[getRNG().nextInt(IafDragonAttacks.Ground.values().length)];
+        this.airAttack = IafDragonAttacks.Air.SCORCH_STREAM; // IafDragonAttacks.Air.values()[getRNG().nextInt(IafDragonAttacks.Air.values().length)];
+        this.groundAttack = IafDragonAttacks.Ground.FIRE;// IafDragonAttacks.Ground.values()[getRNG().nextInt(IafDragonAttacks.Ground.values().length)];
 
     }
 
