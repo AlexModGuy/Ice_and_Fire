@@ -1444,6 +1444,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         }
         return false;
     }
+
     protected boolean isIceInWater() {
         return false;
     }
@@ -2249,7 +2250,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean isAllowedToTriggerFlight() {
-        return this.hasFlightClearance() && !this.isSitting() && this.getPassengers().isEmpty() && !this.isChild() && !this.isSleeping() && this.canMove() && this.onGround;
+        return (this.hasFlightClearance() && this.onGround || this.isInWater()) && !this.isSitting() && this.getPassengers().isEmpty() && !this.isChild() && !this.isSleeping() && this.canMove();
     }
 
     public BlockPos getEscortPosition() {

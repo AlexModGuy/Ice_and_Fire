@@ -48,7 +48,7 @@ public final class Pathfinding {
      */
     public static ThreadPoolExecutor getExecutor() {
         if (executor == null) {
-            executor = new ThreadPoolExecutor(1, IafConfig.dragonPathfindingThreads, 10, TimeUnit.SECONDS, jobQueue, new MinecoloniesThreadFactory());
+            executor = new ThreadPoolExecutor(1, IafConfig.dragonPathfindingThreads, 10, TimeUnit.SECONDS, jobQueue, new IafThreadFactory());
         }
         return executor;
     }
@@ -115,7 +115,7 @@ public final class Pathfinding {
             }
 
             for (final Node n : debugNodesVisited) {
-            //    debugDrawNode(n, 0F, 0F, 1.0F, matrixStack);
+               debugDrawNode(n, 0F, 0F, 1.0F, matrixStack);
             }
 
             for (final Node n : debugNodesPath) {
@@ -265,7 +265,7 @@ public final class Pathfinding {
     /**
      * Minecolonies specific thread factory.
      */
-    public static class MinecoloniesThreadFactory implements ThreadFactory {
+    public static class IafThreadFactory implements ThreadFactory {
         /**
          * Ongoing thread IDs.
          */
@@ -273,10 +273,10 @@ public final class Pathfinding {
 
         @Override
         public Thread newThread(final Runnable runnable) {
-            final Thread thread = new Thread(runnable, "Minecolonies Pathfinding Worker #" + (id++));
+            final Thread thread = new Thread(runnable, "Ice and Fire Pathfinding Worker #" + (id++));
             thread.setDaemon(true);
 
-            thread.setUncaughtExceptionHandler((thread1, throwable) -> IceAndFire.LOGGER.error("Minecolonies Pathfinding Thread errored! ", throwable));
+            thread.setUncaughtExceptionHandler((thread1, throwable) -> IceAndFire.LOGGER.error("Ice and Fire Pathfinding Thread errored! ", throwable));
             return thread;
         }
     }

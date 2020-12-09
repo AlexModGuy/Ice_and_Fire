@@ -71,7 +71,6 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void renderWorldLastEvent(RenderWorldLastEvent event) {
-        IceAndFire.DEBUG = true;
         if(IceAndFire.DEBUG){
             Pathfinding.debugDraw(event.getPartialTicks(), event.getMatrixStack());
         }

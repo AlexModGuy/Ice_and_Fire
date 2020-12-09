@@ -262,7 +262,7 @@ public class IafDragonLogic {
         }
         if ((properties == null || properties != null && !properties.isStone()) && !dragon.isFlying() && !dragon.isHovering()) {
             if (dragon.isAllowedToTriggerFlight() || dragon.getPosY() < -1) {
-                if (dragon.getRNG().nextInt(dragon.getFlightChancePerTick()) == 0 || dragon.getPosY() < -1 || dragon.getAttackTarget() != null && dragon.getAttackTarget().getPosY() + 5 < dragon.getPosY()) {
+                if (dragon.getRNG().nextInt(dragon.getFlightChancePerTick()) == 0 || dragon.getPosY() < -1 || dragon.getAttackTarget() != null && dragon.getAttackTarget().getPosY() + 5 < dragon.getPosY() || dragon.isInWater() && !dragon.isIceInWater()) {
                     dragon.setHovering(true);
                     dragon.setSleeping(false);
                     dragon.setSitting(false);

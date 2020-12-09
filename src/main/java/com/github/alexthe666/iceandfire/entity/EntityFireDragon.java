@@ -342,6 +342,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 if (!world.isRemote) {
                     world.addEntity(entitylargefireball);
                 }
+                this.randomizeAttacks();
             }
             return;
         }

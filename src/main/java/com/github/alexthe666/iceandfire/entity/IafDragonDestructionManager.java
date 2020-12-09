@@ -249,7 +249,7 @@ public class IafDragonDestructionManager {
 				)
     		).stream().forEach(LivingEntity -> {
                 if (!destroyer.isOnSameTeam(LivingEntity) && !destroyer.isEntityEqual(LivingEntity) && destroyer.canEntityBeSeen(LivingEntity)) {
-                    LivingEntity.attackEntityFrom(IafDamageRegistry.DRAGON_ICE, stageDmg);
+                    LivingEntity.attackEntityFrom(IafDamageRegistry.DRAGON_FIRE, stageDmg);
                     LivingEntity.setFire(statusDuration);
                 }
             });

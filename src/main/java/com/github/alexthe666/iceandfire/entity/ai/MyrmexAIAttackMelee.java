@@ -46,6 +46,7 @@ public class MyrmexAIAttackMelee extends Goal {
         } else if (!myrmex.canMove()) {
             return false;
         } else {
+
             attackPath = ((DragonAdvancedPathNavigate) this.myrmex.getNavigator()).moveToLivingEntity(LivingEntity, speedTowardsTarget);
             if (this.attackPath != null) {
                 return true;
@@ -82,7 +83,7 @@ public class MyrmexAIAttackMelee extends Goal {
     @Override
     public void tick() {
         LivingEntity entity = this.myrmex.getAttackTarget();
-        ((DragonAdvancedPathNavigate) this.myrmex.getNavigator()).moveToLivingEntity(entity, speedTowardsTarget);
+        ((DragonAdvancedPathNavigate) this.myrmex.getNavigator()).tryMoveToEntityLiving(entity, speedTowardsTarget);
         if (entity != null) {
             double d0 = this.myrmex.getDistanceSq(entity.getPosX(), entity.getBoundingBox().minY, entity.getPosZ());
             double d1 = this.getAttackReachSqr(entity);
