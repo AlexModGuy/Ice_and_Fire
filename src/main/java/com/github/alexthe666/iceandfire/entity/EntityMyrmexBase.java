@@ -100,7 +100,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     public EntityMyrmexBase(EntityType t, World worldIn) {
         super(t, worldIn);
-       // this.stepHeight = 2;
+       this.stepHeight = 2;
         //this.moveController = new GroundMoveHelper(this);
     }
 
@@ -200,7 +200,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public float getBlockPathWeight(BlockPos pos) {
-        return this.world.getBlockState(pos.down()).getBlock() instanceof BlockMyrmexResin ? 10.0F : this.world.getLight(pos) - 0.5F;
+        return this.world.getBlockState(pos.down()).getBlock() instanceof BlockMyrmexResin ? 10.0F : super.getBlockPathWeight(pos);
     }
 
     protected PathNavigator createNavigator(World worldIn) {
@@ -220,6 +220,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     public void tick() {
         super.tick();
+        this.stepHeight = 2;
         if (world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }
@@ -835,8 +836,8 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         return false;
     }
 
-    public int getXZNavSize(){
-        return (int)getWidth() / 2;
+    public float getXZNavSize(){
+        return getWidth() / 2;
     }
     public int getYNavSize(){
         return (int)getHeight() / 2;

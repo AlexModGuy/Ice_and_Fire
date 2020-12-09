@@ -55,20 +55,18 @@ public class MyrmexAIStoreItems extends Goal {
     @Override
     public void tick() {
         if (first && mainRoom != null) {
-            if (this.myrmex.getNavigator().noPath()) {
-                this.myrmex.getNavigator().tryMoveToXYZ(mainRoom.getX() + 0.5D, mainRoom.getY() + 0.5D, mainRoom.getZ() + 0.5D, this.movementSpeed);
-
-            }
+            this.myrmex.getNavigator().tryMoveToXYZ(mainRoom.getX() + 0.5D, mainRoom.getY() + 0.5D, mainRoom.getZ() + 0.5D, this.movementSpeed);
             if (this.myrmex.getDistanceSq(mainRoom.getX() + 0.5D, mainRoom.getY() + 0.5D, mainRoom.getZ() + 0.5D) < 10D) {
                 first = false;
                 return;
             }
         }
         if (!first && nextCocoon != null) {
-            if (this.myrmex.getNavigator().noPath()) {
+            if(myrmex.getNavigator().noPath()){
                 this.myrmex.getNavigator().tryMoveToXYZ(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D, this.movementSpeed);
             }
-            if (this.myrmex.getDistanceSq(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D) < 5.5D && !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
+            double dist = 3 * 3;
+            if (this.myrmex.getDistanceSq(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D) < dist && !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
                 TileEntityMyrmexCocoon cocoon = (TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(nextCocoon);
                 ItemStack itemstack = this.myrmex.getHeldItem(Hand.MAIN_HAND);
                 if (!itemstack.isEmpty()) {

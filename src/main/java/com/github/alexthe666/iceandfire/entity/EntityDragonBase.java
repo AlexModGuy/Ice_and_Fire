@@ -1439,7 +1439,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean isBlockPassable(BlockState state, BlockPos pos, BlockPos entityPos){
-        if(IafConfig.dragonGriefing != 2 && (!this.isTamed() || IafConfig.tamedDragonGriefing)){
+        if(IafConfig.dragonGriefing != 2 && (!this.isTamed() || IafConfig.tamedDragonGriefing) && !isModelDead() && this.getDragonStage() >= 3){
             return isBreakable(pos, state, IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F);
         }
         return false;

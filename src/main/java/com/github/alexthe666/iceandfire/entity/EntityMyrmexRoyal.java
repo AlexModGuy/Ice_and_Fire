@@ -7,17 +7,7 @@ import javax.annotation.Nullable;
 
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIAttackPlayers;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIDefendHive;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIFindMate;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAILeaveHive;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAILookAtTradePlayer;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIMoveThroughHive;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIMoveToMate;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIReEnterHive;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAITradePlayer;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIWander;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIWanderHiveCenter;
+import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexTrades;
 import com.google.common.base.Predicate;
@@ -123,11 +113,11 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     protected void switchNavigator(boolean onLand) {
         if (onLand) {
             this.moveController = new MovementController(this);
-            this.navigator = new ClimberPathNavigator(this, world);
+            this.navigator = createNavigator(world);
             this.isLandNavigator = true;
         } else {
             this.moveController = new EntityMyrmexRoyal.FlyMoveHelper(this);
-            this.navigator = new FlyingPathNavigator(this, world);
+            this.navigator = createNavigator(world);
             this.isLandNavigator = false;
         }
     }
@@ -251,7 +241,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         this.goalSelector.addGoal(0, new MyrmexAIMoveToMate(this, 1.0D));
         this.goalSelector.addGoal(1, new AIFlyAtTarget());
         this.goalSelector.addGoal(2, new AIFlyRandom());
-        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(3, new MyrmexAIAttackMelee(this, 1.0D, true));
         this.goalSelector.addGoal(4, new MyrmexAILeaveHive(this, 1.0D));
         this.goalSelector.addGoal(4, new MyrmexAIReEnterHive(this, 1.0D));
         this.goalSelector.addGoal(5, new MyrmexAIMoveThroughHive(this, 1.0D));

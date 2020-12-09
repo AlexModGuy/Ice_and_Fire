@@ -58,7 +58,7 @@ public class MyrmexAIReEnterHive extends Goal {
                 this.path = ((DragonAdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY(),  nextEntrance.getZ(), 1);
             }
         }
-        this.myrmex.isEnteringHive = !(this.myrmex.getDistanceSq(nextEntrance.getX() + 0.5D, nextEntrance.getY() + 0.5D, nextEntrance.getZ() + 0.5D) < 15) || first;
+        this.myrmex.isEnteringHive = this.myrmex.getDistanceSq(nextEntrance.getX() + 0.5D, nextEntrance.getY() + 0.5D, nextEntrance.getZ() + 0.5D) > 14 && !first;
     }
 
     public boolean shouldContinueExecuting() {
@@ -70,7 +70,6 @@ public class MyrmexAIReEnterHive extends Goal {
 
     public void resetTask() {
         nextEntrance = BlockPos.ZERO;
-        this.myrmex.getNavigator().clearPath();
         first = true;
     }
 }

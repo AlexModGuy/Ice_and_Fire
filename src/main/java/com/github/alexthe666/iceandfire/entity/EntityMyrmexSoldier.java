@@ -4,16 +4,7 @@ import javax.annotation.Nullable;
 
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIAttackPlayers;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIDefendHive;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIEscortEntity;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIFindGaurdingEntity;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAILeaveHive;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAILookAtTradePlayer;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIMoveThroughHive;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIReEnterHive;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAITradePlayer;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIWander;
+import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexTrades;
 import com.google.common.base.Predicate;
@@ -106,7 +97,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(0, new MyrmexAITradePlayer(this));
         this.goalSelector.addGoal(0, new MyrmexAILookAtTradePlayer(this));
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(1, new MyrmexAIAttackMelee(this, 1.0D, true));
         this.goalSelector.addGoal(2, new MyrmexAIEscortEntity(this, 1.0D));
         this.goalSelector.addGoal(2, new MyrmexAIReEnterHive(this, 1.0D));
         this.goalSelector.addGoal(4, new MyrmexAILeaveHive(this, 1.0D));

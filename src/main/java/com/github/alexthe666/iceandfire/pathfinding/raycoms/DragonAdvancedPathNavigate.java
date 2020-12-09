@@ -492,7 +492,7 @@ public class DragonAdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             double yDist = Math.abs(this.entity.getPosY() - vec3d2.y);
             if (Math.abs(this.entity.getPosX() - vec3d2.x) < (double) this.maxDistanceToWaypoint
                     && Math.abs(this.entity.getPosZ() - vec3d2.z) < (double) this.maxDistanceToWaypoint &&
-                    yDist < Math.min(1.0F, Math.ceil(this.entity.getHeight() / 2.0F))) {
+                    yDist <= Math.min(1.0F, Math.ceil(this.entity.getHeight() / 2.0F))) {
                 this.currentPath.incrementPathIndex();
                 // Mark reached nodes for debug path drawing
                 if (AbstractPathJob.lastDebugNodesPath != null) {

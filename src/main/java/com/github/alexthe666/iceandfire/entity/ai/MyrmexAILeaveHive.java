@@ -36,7 +36,6 @@ public class MyrmexAILeaveHive extends Goal {
         if (this.myrmex.isChild()) {
             return false;
         }
-
         if (!this.myrmex.canMove() || !this.myrmex.shouldLeaveHive() || this.myrmex.shouldEnterHive() || this.myrmex.canSeeSky() || this.myrmex instanceof EntityMyrmexWorker && (((EntityMyrmexWorker) this.myrmex).holdingSomething() || !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty()) || this.myrmex.isEnteringHive) {
             return false;
         }
@@ -52,21 +51,20 @@ public class MyrmexAILeaveHive extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        if (this.myrmex.getDistanceSq(nextEntrance.getX() + 0.5D, nextEntrance.getY() + 0.5D, nextEntrance.getZ() + 0.5D) <= 3 || this.myrmex.shouldEnterHive()) {
+        if (this.myrmex.getDistanceSq(nextEntrance.getX() + 0.5D, nextEntrance.getY() + 0.5D, nextEntrance.getZ() + 0.5D) <= 9 || this.myrmex.shouldEnterHive()) {
             return false;
         }
-        return this.myrmex.getDistanceSq(nextEntrance.getX() + 0.5D, nextEntrance.getY() + 0.5D, nextEntrance.getZ() + 0.5D) > 3 && this.myrmex.shouldLeaveHive();
+        return this.myrmex.getDistanceSq(nextEntrance.getX() + 0.5D, nextEntrance.getY() + 0.5D, nextEntrance.getZ() + 0.5D) > 9 && this.myrmex.shouldLeaveHive();
     }
 
     public void tick() {
         if(path.isPathReachingDestination()){
-            path = ((DragonAdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY() + 1,  nextEntrance.getZ(), movementSpeed);
+             path = ((DragonAdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY() + 1,  nextEntrance.getZ(), movementSpeed);
         }
     }
 
 
     public void startExecuting() {
-        myrmex.world.setBlockState(nextEntrance.down(), Blocks.GLOWSTONE.getDefaultState());
     }
 
     public void resetTask() {

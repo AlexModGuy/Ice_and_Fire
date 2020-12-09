@@ -5,13 +5,7 @@ import javax.annotation.Nullable;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIAttackPlayers;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIDefendHive;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIFindHidingSpot;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAILeaveHive;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAILookAtTradePlayer;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAITradePlayer;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIWander;
+import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexTrades;
@@ -158,7 +152,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         this.goalSelector.addGoal(0, new MyrmexAIFindHidingSpot(this));
         this.goalSelector.addGoal(0, new MyrmexAITradePlayer(this));
         this.goalSelector.addGoal(0, new MyrmexAILookAtTradePlayer(this));
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(1, new MyrmexAIAttackMelee(this, 1.0D, true));
         this.goalSelector.addGoal(3, new MyrmexAILeaveHive(this, 1.0D));
         this.goalSelector.addGoal(5, new MyrmexAIWander(this, 1D));
         this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F));
@@ -313,7 +307,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
 
     @Override
     public int getXp() {
-        return 0;
+        return 4;
     }
 
     @Override
