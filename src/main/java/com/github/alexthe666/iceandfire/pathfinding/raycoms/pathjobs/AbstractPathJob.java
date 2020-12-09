@@ -45,7 +45,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
     protected final IWorldReader world;
     protected final PathResult result;
-    private final int maxRange;
+    private int maxRange;
     private final Queue<Node> nodesOpen = new PriorityQueue<>(500);
     private final Map<Integer, Node> nodesVisited = new HashMap<>();
     //  Debug Rendering
@@ -99,6 +99,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
         setEntitySizes(entity);
         if (entity instanceof IPassabilityNavigator) {
             passabilityNavigator = (IPassabilityNavigator) entity;
+            maxRange = passabilityNavigator.maxSearchNodes();
         }
         jumpHeight = (float) Math.floor(entity.stepHeight - 0.2F) + 1.3F;
     }
@@ -488,7 +489,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
         }
 
         // Walk downwards node if passable
-        if (currentNode.parent != null && isPassableBB(currentNode.parent.pos, currentNode.pos.down())) {
+        if (currentNode.parent != null && isPassableBBDown(currentNode.parent.pos, currentNode.pos.down())) {
             walk(currentNode, BLOCKPOS_DOWN);
         }
 
@@ -1019,7 +1020,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
         } else {
             Direction facingDir = getXZFacing(parentPos, pos).rotateY();
             for (int i = 0; i <= entitySizeXZ; i++) {
-                for (int j = 0; j < entitySizeY; j++) {
+                for (int j = 0; j <= entitySizeY; j++) {
                     if (!isPassable(pos.offset(facingDir, i).up(j), false)) {
                         return false;
                     }
@@ -1028,6 +1029,26 @@ public abstract class AbstractPathJob implements Callable<Path> {
         }
         return true;
     }
+
+    /*
+        Mobs that break blocks may consider the ground passable.
+     */
+    protected boolean isPassableBBDown(final BlockPos parentPos, final BlockPos pos) {
+        if (circumventSizeCheck) {
+            return isPassable(pos, false) && isPassable(pos.up(), true);
+        } else {
+            Direction facingDir = getXZFacing(parentPos, pos).rotateY();
+            for (int i = 0; i <= entitySizeXZ; i++) {
+                for (int j = 0; j <= entitySizeY; j++) {
+                    if (!isPassable(pos.offset(facingDir, i).up(j), false) || pos.getY() <= parentPos.getY()) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
 
     protected boolean isPassable(final BlockPos pos, final boolean head) {
         final BlockState state = world.getBlockState(pos);

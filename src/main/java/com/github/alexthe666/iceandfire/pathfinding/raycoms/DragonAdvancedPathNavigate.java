@@ -189,7 +189,7 @@ public class DragonAdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             isSneaking = false;
             entity.setSneaking(false);
         }
-        this.ourEntity.setMoveVertical(0);
+        //this.ourEntity.setMoveVertical(0);
         if (handleLadders(oldIndex)) {
             pathFollow();
             return;

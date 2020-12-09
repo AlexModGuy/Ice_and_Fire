@@ -73,7 +73,7 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
             super.tick();
             ++this.ticksInAir;
             Vector3d Vector3d = this.getMotion();
-            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
+            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::canHitMob);
 
             if (!world.isRemote && raytraceresult != null) {
                 this.onImpact(raytraceresult);
@@ -117,6 +117,11 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
         } else {
             this.remove();
         }
+    }
+
+    protected boolean canHitMob(Entity hitMob) {
+        Entity shooter = func_234616_v_();
+        return hitMob != this && super.func_230298_a_(hitMob) && !(shooter == null || hitMob.isOnSameTeam(shooter)) && !(hitMob instanceof EntityDragonPart);
     }
 
     @Override
