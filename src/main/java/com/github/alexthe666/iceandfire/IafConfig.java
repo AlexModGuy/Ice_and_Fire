@@ -324,6 +324,8 @@ public class IafConfig {
             ghostMaxHealth = ConfigHolder.SERVER.ghostMaxHealth.get();
             ghostAttackStrength = ConfigHolder.SERVER.ghostAttackStrength.get();
             ghostsFromPlayerDeaths = ConfigHolder.SERVER.ghostSpawnFromPlayerDeaths.get();
+            dragonPathfindingThreads = ConfigHolder.SERVER.dragonPathfindingThreads.get();
+            maxDragonPathingNodes = ConfigHolder.SERVER.maxDragonPathingNodes.get();
         } catch (Exception e) {
             IceAndFire.LOGGER.warn("An exception was caused trying to load the common config for Ice and Fire.");
             e.printStackTrace();

@@ -33,15 +33,17 @@ public class IafDragonLogic {
     */
     public void updateDragonServer() {
         PlayerEntity ridingPlayer = dragon.getRidingPlayer();
-        if (dragon.isGoingUp()) {
-            if (!dragon.isFlying() && !dragon.isHovering()) {
-                dragon.spacebarTicks += 2;
-            }
-        } else if (dragon.isDismounting()) {
-            if (dragon.isFlying() || dragon.isHovering()) {
-                dragon.setMotion(dragon.getMotion().add(0, -0.04, 0));
-                dragon.setFlying(false);
-                dragon.setHovering(false);
+        if(ridingPlayer != null){
+            if (dragon.isGoingUp()) {
+                if (!dragon.isFlying() && !dragon.isHovering()) {
+                    dragon.spacebarTicks += 2;
+                }
+            } else if (dragon.isDismounting()) {
+                if (dragon.isFlying() || dragon.isHovering()) {
+                    dragon.setMotion(dragon.getMotion().add(0, -0.04, 0));
+                    dragon.setFlying(false);
+                    dragon.setHovering(false);
+                }
             }
         }
         if (!dragon.isDismounting() && (dragon.isFlying() || dragon.isHovering())) {
