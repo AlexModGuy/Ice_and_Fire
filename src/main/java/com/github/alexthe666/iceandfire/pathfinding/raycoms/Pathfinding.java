@@ -48,7 +48,7 @@ public final class Pathfinding {
      */
     public static ThreadPoolExecutor getExecutor() {
         if (executor == null) {
-            executor = new ThreadPoolExecutor(1, IafConfig.dragonPathfindingThreads, 2, TimeUnit.SECONDS, jobQueue, new IafThreadFactory());
+            executor = new ThreadPoolExecutor(1, IafConfig.dragonPathfindingThreads, 10, TimeUnit.SECONDS, jobQueue, new IafThreadFactory());
         }
         return executor;
     }
@@ -263,7 +263,7 @@ public final class Pathfinding {
     }
 
     /**
-     * Minecolonies specific thread factory.
+     * Ice and Fire specific thread factory.
      */
     public static class IafThreadFactory implements ThreadFactory {
         /**

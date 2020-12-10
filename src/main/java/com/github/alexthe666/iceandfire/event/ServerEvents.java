@@ -438,46 +438,39 @@ public class ServerEvents {
                 }
             }
         }
-        if (event.getTarget() instanceof LivingEntity) {
-            boolean stonePlayer = event.getTarget() instanceof EntityStoneStatue;
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), StoneEntityProperties.class);
-            if (properties != null && properties.isStone() || stonePlayer) {
-                ((LivingEntity) event.getTarget()).setHealth(((LivingEntity) event.getTarget()).getMaxHealth());
-                if (event.getPlayer() != null) {
-                    ItemStack stack = event.getPlayer().getHeldItemMainhand();
-                    event.getTarget().playSound(SoundEvents.BLOCK_STONE_HIT, 1, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 0.5F);
-                    if (stack.getItem() != null && (stack.getItem().canHarvestBlock(Blocks.STONE.getDefaultState()) || stack.getItem().getTranslationKey().contains("pickaxe"))) {
-                        boolean silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0;
-                        boolean ready = false;
-                        if (properties != null && !stonePlayer) {
-                            properties.setBreakLevel(properties.getBreakLevel() + 1);
-                            ready = properties.getBreakLevel() > 9;
-                        }
-                        event.setCanceled(true);
-                        if (stonePlayer) {
-                            EntityStoneStatue statue = (EntityStoneStatue) event.getTarget();
-                            statue.setCrackAmount(statue.getCrackAmount() + 1);
-                            ready = statue.getCrackAmount() > 9;
-                        }
-                        if (ready) {
-                            event.getTarget().playSound(SoundEvents.BLOCK_STONE_BREAK, 1, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 0.5F);
-                            event.getTarget().remove();
-                            if (silkTouch) {
-                                ItemStack statuette = new ItemStack(IafItemRegistry.STONE_STATUE);
-                                statuette.setTag(new CompoundNBT());
-                                statuette.getTag().putBoolean("IAFStoneStatuePlayerEntity", stonePlayer);
-                                statuette.getTag().putString("IAFStoneStatueEntityID", Registry.ENTITY_TYPE.getKey(event.getTarget().getType()).toString());
-                                ((LivingEntity) event.getTarget()).writeAdditional(statuette.getTag());
-                                if (!event.getTarget().world.isRemote) {
-                                    event.getTarget().entityDropItem(statuette, 1);
-                                }
-                            } else {
-                                if (!((LivingEntity) event.getTarget()).world.isRemote) {
-                                    event.getTarget().entityDropItem(Item.getItemFromBlock(Blocks.COBBLESTONE), 2 + event.getEntityLiving().getRNG().nextInt(4));
-                                }
+        if (event.getTarget() instanceof EntityStoneStatue) {
+            ((LivingEntity) event.getTarget()).setHealth(((LivingEntity) event.getTarget()).getMaxHealth());
+            if (event.getPlayer() != null) {
+                ItemStack stack = event.getPlayer().getHeldItemMainhand();
+                event.getTarget().playSound(SoundEvents.BLOCK_STONE_HIT, 1, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 0.5F);
+                if (stack.getItem() != null && (stack.getItem().canHarvestBlock(Blocks.STONE.getDefaultState()) || stack.getItem().getTranslationKey().contains("pickaxe"))) {
+                    boolean silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0;
+                    boolean ready = false;
+                    event.setCanceled(true);
+                    EntityStoneStatue statue = (EntityStoneStatue) event.getTarget();
+                    statue.setCrackAmount(statue.getCrackAmount() + 1);
+                    ready = statue.getCrackAmount() > 9;
+                    if (ready) {
+                        CompoundNBT writtenTag = new CompoundNBT();
+                        event.getTarget().writeWithoutTypeId(writtenTag);
+                        event.getTarget().playSound(SoundEvents.BLOCK_STONE_BREAK, 1, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 0.5F);
+                        event.getTarget().remove();
+                        if (silkTouch) {
+                            ItemStack statuette = new ItemStack(IafItemRegistry.STONE_STATUE);
+                            statuette.setTag(new CompoundNBT());
+                            statuette.getTag().putBoolean("IAFStoneStatuePlayerEntity", statue.getTrappedEntityTypeString().equalsIgnoreCase("minecraft:player"));
+                            statuette.getTag().putString("IAFStoneStatueEntityID", statue.getTrappedEntityTypeString());
+                            statuette.getTag().put("IAFStoneStatueNBT", writtenTag);
+                            ((LivingEntity) event.getTarget()).writeAdditional(statuette.getTag());
+                            if (!event.getTarget().world.isRemote) {
+                                event.getTarget().entityDropItem(statuette, 1);
                             }
-                            event.getTarget().remove();
+                        } else {
+                            if (!((LivingEntity) event.getTarget()).world.isRemote) {
+                                event.getTarget().entityDropItem(Item.getItemFromBlock(Blocks.COBBLESTONE), 2 + event.getEntityLiving().getRNG().nextInt(4));
+                            }
                         }
+                        event.getTarget().remove();
                     }
                 }
             }

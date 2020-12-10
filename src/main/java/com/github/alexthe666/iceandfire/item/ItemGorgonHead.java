@@ -103,46 +103,20 @@ public class ItemGorgonHead extends Item implements IUsesTEISR, ICustomRendered 
             }
         }
         if (pointedEntity != null) {
-            if (pointedEntity instanceof LivingEntity || pointedEntity instanceof PlayerEntity) {
-                if (pointedEntity instanceof PlayerEntity) {
-                    pointedEntity.playSound(IafSoundRegistry.GORGON_TURN_STONE, 1, 1);
+            if (pointedEntity instanceof LivingEntity) {
+                pointedEntity.playSound(IafSoundRegistry.GORGON_TURN_STONE, 1, 1);
+                EntityStoneStatue statue = EntityStoneStatue.buildStatueEntity((LivingEntity) pointedEntity);
+                if(pointedEntity instanceof PlayerEntity){
                     pointedEntity.attackEntityFrom(IafDamageRegistry.GORGON_DMG, Integer.MAX_VALUE);
-                    EntityStoneStatue statue = new EntityStoneStatue(IafEntityRegistry.STONE_STATUE, worldIn);
-                    statue.setPositionAndRotation(pointedEntity.getPosX(), pointedEntity.getPosY(), pointedEntity.getPosZ(), pointedEntity.rotationYaw, pointedEntity.rotationPitch);
-                    statue.smallArms = true;
-                    if (!worldIn.isRemote) {
-                        worldIn.addEntity(statue);
-                    }
-                } else {
-                    StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(pointedEntity, StoneEntityProperties.class);
-                    if (properties != null) {
-                        properties.setStone(true);
-                    }
-                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageStoneStatue(pointedEntity.getEntityId(), true));
-                    if (pointedEntity instanceof EntityDragonBase) {
-                        EntityDragonBase dragon = (EntityDragonBase) pointedEntity;
-                        dragon.setFlying(false);
-                        dragon.setHovering(false);
-                    }
-                    if (pointedEntity instanceof EntityHippogryph) {
-                        EntityHippogryph dragon = (EntityHippogryph) pointedEntity;
-                        dragon.setFlying(false);
-                        dragon.setHovering(false);
-                        dragon.airTarget = null;
-                    }
-                    if (pointedEntity instanceof IDropArmor) {
-                        ((IDropArmor) pointedEntity).dropArmor();
-                    }
+                }else{
+                    pointedEntity.remove();
+                }
+                statue.setPositionAndRotation(pointedEntity.getPosX(), pointedEntity.getPosY(), pointedEntity.getPosZ(), pointedEntity.rotationYaw, pointedEntity.rotationPitch);
+                statue.renderYawOffset = pointedEntity.rotationYaw;
+                if (!worldIn.isRemote) {
+                    worldIn.addEntity(statue);
                 }
 
-                if (pointedEntity instanceof EntityGorgon) {
-                    entity.playSound(IafSoundRegistry.GORGON_PETRIFY, 1, 1);
-                } else {
-                    entity.playSound(IafSoundRegistry.GORGON_TURN_STONE, 1, 1);
-                }
-                if (!(entity instanceof PlayerEntity && ((PlayerEntity) entity).isCreative())) {
-                    stack.shrink(1);
-                }
             }
         }
         stack.getTag().putBoolean("Active", false);

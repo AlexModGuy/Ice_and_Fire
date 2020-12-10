@@ -60,55 +60,29 @@ public class ItemStoneStatue extends Item {
         } else {
             ItemStack stack = context.getPlayer().getHeldItem(context.getHand());
             if (stack.getTag() != null) {
-
-                if (stack.getTag().getBoolean("IAFStoneStatuePlayerEntity")) {
-                    EntityStoneStatue statue = new EntityStoneStatue(IafEntityRegistry.STONE_STATUE, context.getWorld());
-                    statue.setPositionAndRotation(context.getPos().getX() + 0.5, context.getPos().getY() + 1, context.getPos().getZ() + 0.5, context.getPlayer().rotationYaw, 0);
-                    statue.smallArms = true;
-                    if (!context.getWorld().isRemote) {
-                        context.getWorld().addEntity(statue);
-                        statue.readAdditional(stack.getTag());
-                    }
-                    statue.setCrackAmount(0);
-                    float yaw = MathHelper.wrapDegrees(context.getPlayer().rotationYaw + 180F);
-                    statue.prevRotationYaw = yaw;
-                    statue.rotationYaw = yaw;
-                    statue.rotationYawHead = yaw;
-                    statue.renderYawOffset = yaw;
-                    statue.prevRenderYawOffset = yaw;
-                    if (!context.getPlayer().isCreative()) {
-                        stack.shrink(1);
-                    }
-                    return ActionResultType.SUCCESS;
-                } else {
-                    World world = context.getWorld();
-                    String id = stack.getTag().getString("IAFStoneStatueEntityID");
-                    EntityType type = EntityType.byKey(id).orElse(null);
-                    if(type != null) {
-                        Entity entity = type.create(world);
-                        entity.setLocationAndAngles(context.getPos().getX() + 0.5, context.getPos().getY() + 1, context.getPos().getZ() + 0.5, context.getPlayer().rotationYaw, 0);
-                        world.addEntity(entity);
-                        if (entity != null && entity instanceof LivingEntity) {
-                            try{
-                                if(!world.isRemote){
-                                    ((LivingEntity) entity).readAdditional(stack.getTag());
-                                }
-                            }catch (Exception e){
-                            }
-                            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-                            properties.setStone(true);
-                            float yaw = MathHelper.wrapDegrees(context.getPlayer().rotationYaw + 180F);
-                            entity.prevRotationYaw = yaw;
-                            entity.rotationYaw = yaw;
-                            ((LivingEntity) entity).rotationYawHead = yaw;
-                            ((LivingEntity) entity).renderYawOffset = yaw;
-                            ((LivingEntity) entity).prevRenderYawOffset = yaw;
-                        }
-                        if (!context.getPlayer().isCreative()) {
-                            stack.shrink(1);
-                        }
-                    }
+                String id = stack.getTag().getString("IAFStoneStatueEntityID");
+                CompoundNBT statueNBT = stack.getTag().getCompound("IAFStoneStatueNBT");
+                EntityStoneStatue statue = new EntityStoneStatue(IafEntityRegistry.STONE_STATUE, context.getWorld());
+                statue.readAdditional(statueNBT);
+                statue.setTrappedEntityTypeString(id);
+                statue.setPositionAndRotation(context.getPos().getX() + 0.5, context.getPos().getY() + 1, context.getPos().getZ() + 0.5, context.getPlayer().rotationYaw, 0);
+                if (!context.getWorld().isRemote) {
+                    context.getWorld().addEntity(statue);
+                    statue.readAdditional(stack.getTag());
                 }
+                statue.setCrackAmount(0);
+                double d1 = context.getPlayer().getPosX() - statue.getPosX();
+                double d2 = context.getPlayer().getPosZ() - statue.getPosZ();
+                float yaw = (float)(MathHelper.atan2(d1, d2) * (double)(180F / (float)Math.PI)) - 90.0F;
+                statue.prevRotationYaw = yaw;
+                statue.rotationYaw = yaw;
+                statue.rotationYawHead = yaw;
+                statue.renderYawOffset = yaw;
+                statue.prevRenderYawOffset = yaw;
+                if (!context.getPlayer().isCreative()) {
+                    stack.shrink(1);
+                }
+                return ActionResultType.SUCCESS;
             }
         }
         return ActionResultType.SUCCESS;
