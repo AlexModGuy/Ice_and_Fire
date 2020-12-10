@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import java.util.EnumSet;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -65,6 +66,10 @@ public class EntityPixie extends TameableEntity {
 
     public static final float[][] PARTICLE_RGB = new float[][]{new float[]{1F, 0.752F, 0.792F}, new float[]{0.831F, 0.662F, 1F}, new float[]{0.513F, 0.843F, 1F}, new float[]{0.654F, 0.909F, 0.615F}, new float[]{0.996F, 0.788F, 0.407F}};
     private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityPixie.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> COMMAND = EntityDataManager.createKey(EntityHippogryph.class, DataSerializers.VARINT);
+
+    public static final int STEAL_COOLDOWN = 3000;
+
     public Effect[] positivePotions = new Effect[]{Effects.STRENGTH, Effects.JUMP_BOOST, Effects.SPEED, Effects.LUCK, Effects.HASTE};
     public Effect[] negativePotions = new Effect[]{Effects.WEAKNESS, Effects.NAUSEA, Effects.SLOWNESS, Effects.UNLUCK, Effects.MINING_FATIGUE};
     public boolean slowSpeed = false;
@@ -72,6 +77,8 @@ public class EntityPixie extends TameableEntity {
     public int ticksHeldItemFor;
     private BlockPos housePos;
     public int stealCooldown = 0;
+    private boolean isSitting;
+
     public EntityPixie(EntityType type, World worldIn) {
         super(type, worldIn);
         this.moveController = new EntityPixie.AIMoveControl(this);
@@ -105,6 +112,34 @@ public class EntityPixie extends TameableEntity {
         return entity.func_233580_cy_();
     }
 
+    public boolean isSitting() {
+        if (world.isRemote) {
+            boolean isSitting = (this.dataManager.get(TAMED).byteValue() & 1) != 0;
+            this.isSitting = isSitting;
+            this.func_233687_w_(isSitting);
+            return isSitting;
+        }
+        return this.isSitting;
+    }
+
+    public void setSitting(boolean sitting) {
+        if (!world.isRemote) {
+            this.isSitting = sitting;
+            this.func_233687_w_(sitting);
+        }
+        byte b0 = this.dataManager.get(TAMED).byteValue();
+        if (sitting) {
+            this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 | 1)));
+        } else {
+            this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 & -2)));
+        }
+    }
+
+    @Override
+    public boolean func_233684_eK_() {
+        return this.isSitting();
+    }
+
     protected int getExperiencePoints(PlayerEntity player) {
         return 3;
     }
@@ -123,7 +158,7 @@ public class EntityPixie extends TameableEntity {
         if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && !this.getHeldItem(Hand.MAIN_HAND).isEmpty() && properties != null && !properties.isStone()) {
             this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0);
             this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
-            this.stealCooldown = 6000;
+            this.stealCooldown = STEAL_COOLDOWN;
             return true;
         }
         if (this.isOwnerClose() && (source == DamageSource.FALLING_BLOCK || source == DamageSource.IN_WALL || this.getOwner() != null && source.getTrueSource() == this.getOwner())) {
@@ -132,11 +167,22 @@ public class EntityPixie extends TameableEntity {
         return super.attackEntityFrom(source, amount);
     }
 
+    @Override
+    public boolean isInvulnerableTo(DamageSource source) {
+        boolean invulnerable = super.isInvulnerableTo(source);
+        if(!invulnerable) {
+            Entity owner = this.getOwner();
+            if(owner != null && source.getTrueSource() == owner) {
+                return true;
+            }
+        }
+        return invulnerable;
+    }
+
     public void onDeath(DamageSource cause) {
         if (!this.world.isRemote && !this.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
             this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0);
             this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
-            this.stealCooldown = 6000;
         }
         super.onDeath(cause);
         //if (cause.getTrueSource() instanceof PlayerEntity) {
@@ -147,7 +193,8 @@ public class EntityPixie extends TameableEntity {
     @Override
     protected void registerData() {
         super.registerData();
-        this.getDataManager().register(COLOR, Integer.valueOf(0));
+        this.dataManager.register(COLOR, Integer.valueOf(0));
+        this.dataManager.register(COMMAND, Integer.valueOf(0));
     }
 
     protected void collideWithEntity(Entity entityIn) {
@@ -161,13 +208,20 @@ public class EntityPixie extends TameableEntity {
 
     public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         if (this.isOwner(player)) {
+
             if (player.getHeldItem(hand).getItem() == Items.SUGAR && this.getHealth() < this.getMaxHealth()) {
                 this.heal(5);
                 player.getHeldItem(hand).shrink(1);
                 this.playSound(IafSoundRegistry.PIXIE_TAUNT, 1F, 1F);
                 return ActionResultType.SUCCESS;
             } else {
-                this.func_233686_v_(!this.func_233684_eK_());
+
+                // make pixie sit via a check in livingTick() like Hippogryphs work
+                this.setCommand(this.getCommand() + 1);
+                if (this.getCommand() > 1) {
+                    this.setCommand(0);
+                }
+
                 return ActionResultType.SUCCESS;
             }
         } else if (player.getHeldItem(hand).getItem() == Item.getItemFromBlock(IafBlockRegistry.JAR_EMPTY) && !this.isTamed()) {
@@ -196,8 +250,9 @@ public class EntityPixie extends TameableEntity {
             if (!world.isRemote) {
                 if (!this.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
                     this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0.0F);
-                    this.stealCooldown = 6000;
+                    this.stealCooldown = STEAL_COOLDOWN;
                 }
+
                 this.entityDropItem(stack, 0.0F);
             }
             //player.addStat(ModAchievements.jarPixie);
@@ -215,7 +270,7 @@ public class EntityPixie extends TameableEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new PixieAIFollowOwner(this, 1.0D, 2.0F, 4.0F));
-        this.goalSelector.addGoal(1, new PixieAIPickupItem(this, false));
+        this.goalSelector.addGoal(4, new PixieAIPickupItem(this, false));  // NOTE: tweakbsd priority changed!
         this.goalSelector.addGoal(2, new PixieAIFlee(this, PlayerEntity.class, 10, new Predicate<PlayerEntity>() {
             @Override
             public boolean apply(@Nullable PlayerEntity entity) {
@@ -235,6 +290,11 @@ public class EntityPixie extends TameableEntity {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setColor(this.rand.nextInt(5));
         this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+
+        if(dataTag != null) {
+            System.out.println("EntityPixie spawned with dataTag: " + dataTag.toString());
+        }
+
         return spawnDataIn;
     }
 
@@ -247,8 +307,37 @@ public class EntityPixie extends TameableEntity {
         return this.getPosY() > maxY;
     }
 
+    public int getCommand() {
+        return Integer.valueOf(this.dataManager.get(COMMAND).intValue());
+    }
+
+    public void setCommand(int command) {
+        this.dataManager.set(COMMAND, Integer.valueOf(command));
+        if (command == 1) {
+            this.setSitting(true);
+        } else {
+            this.setSitting(false);
+        }
+    }
+
+
     public void livingTick() {
         super.livingTick();
+
+        if (!this.world.isRemote) {
+
+            // NOTE: This code was taken from EntityHippogryph basically same idea
+            if (this.isSitting() && this.getCommand() != 1) {
+                this.setSitting(false);
+            }
+            if (!this.isSitting() && this.getCommand() == 1) {
+                this.setSitting(true);
+            }
+            if (this.isSitting()) {
+                this.getNavigator().clearPath();
+            }
+        }
+
         if(stealCooldown > 0){
             stealCooldown--;
         }
@@ -257,6 +346,8 @@ public class EntityPixie extends TameableEntity {
         }else{
             ticksHeldItemFor = 0;
         }
+
+
         if (!this.func_233684_eK_() && !this.isBeyondHeight()) {
             this.setMotion(this.getMotion().add(0, 0.08, 0));
         } else {
@@ -300,19 +391,30 @@ public class EntityPixie extends TameableEntity {
         this.getDataManager().set(COLOR, color);
     }
 
+
+
     @Override
     public void readAdditional(CompoundNBT compound) {
         this.setColor(compound.getInt("Color"));
+
         this.stealCooldown = compound.getInt("StealCooldown");
         this.ticksHeldItemFor = compound.getInt("HoldingTicks");
+
+        this.setSitting(compound.getBoolean("PixieSitting"));
+        this.setCommand(compound.getInt("Command"));
+
         super.readAdditional(compound);
     }
 
     @Override
     public void writeAdditional(CompoundNBT compound) {
         compound.putInt("Color", this.getColor());
+        compound.putInt("Command", this.getCommand());
+
         compound.putInt("StealCooldown", this.stealCooldown);
         compound.putInt("HoldingTicks", this.ticksHeldItemFor);
+        compound.putBoolean("PixieSitting", this.isSitting());
+
         super.writeAdditional(compound);
     }
 
@@ -390,6 +492,7 @@ public class EntityPixie extends TameableEntity {
         }
     }
 
+    // TODO: Put into PixieAIMoveRandom
     class AIMoveRandom extends Goal {
         BlockPos target;
 
@@ -430,7 +533,7 @@ public class EntityPixie extends TameableEntity {
         }
 
         public boolean shouldExecute() {
-            if (EntityPixie.this.isOwnerClose() || EntityPixie.this.getMoveHelper().isUpdating() || EntityPixie.this.func_233684_eK_() || EntityPixie.this.rand.nextInt(20) != 0 || EntityPixie.this.ticksUntilHouseAI != 0) {
+            if (EntityPixie.this.isOwnerClose() || EntityPixie.this.getMoveHelper().isUpdating() || EntityPixie.this.func_233684_eK_()/*isSiting() */ || EntityPixie.this.rand.nextInt(20) != 0 || EntityPixie.this.ticksUntilHouseAI != 0) {
                 return false;
             }
 
