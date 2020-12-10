@@ -2,11 +2,9 @@ package com.github.alexthe666.iceandfire.entity;
 
 import java.util.EnumSet;
 import java.util.Random;
-import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.PixieAIFlee;
@@ -111,7 +109,7 @@ public class EntityPixie extends TameableEntity {
         return entity.func_233580_cy_();
     }
 
-    public boolean isSitting() {
+    public boolean isPixieSitting() {
         if (world.isRemote) {
             boolean isSitting = (this.dataManager.get(TAMED).byteValue() & 1) != 0;
             this.isSitting = isSitting;
@@ -121,10 +119,10 @@ public class EntityPixie extends TameableEntity {
         return this.isSitting;
     }
 
-    public void setSitting(boolean sitting) {
+    public void setPixieSitting(boolean sitting) {
         if (!world.isRemote) {
             this.isSitting = sitting;
-            this.func_233687_w_(sitting);
+            this.func_233686_v_(sitting);
         }
         byte b0 = this.dataManager.get(TAMED).byteValue();
         if (sitting) {
@@ -136,7 +134,7 @@ public class EntityPixie extends TameableEntity {
 
     @Override
     public boolean func_233684_eK_() {
-        return this.isSitting();
+        return this.isPixieSitting();
     }
 
     protected int getExperiencePoints(PlayerEntity player) {
@@ -311,9 +309,9 @@ public class EntityPixie extends TameableEntity {
     public void setCommand(int command) {
         this.dataManager.set(COMMAND, Integer.valueOf(command));
         if (command == 1) {
-            this.setSitting(true);
+            this.setPixieSitting(true);
         } else {
-            this.setSitting(false);
+            this.setPixieSitting(false);
         }
     }
 
@@ -324,13 +322,13 @@ public class EntityPixie extends TameableEntity {
         if (!this.world.isRemote) {
 
             // NOTE: This code was taken from EntityHippogryph basically same idea
-            if (this.isSitting() && this.getCommand() != 1) {
-                this.setSitting(false);
+            if (this.isPixieSitting() && this.getCommand() != 1) {
+                this.setPixieSitting(false);
             }
-            if (!this.isSitting() && this.getCommand() == 1) {
-                this.setSitting(true);
+            if (!this.isPixieSitting() && this.getCommand() == 1) {
+                this.setPixieSitting(true);
             }
-            if (this.isSitting()) {
+            if (this.isPixieSitting()) {
                 this.getNavigator().clearPath();
             }
         }
@@ -397,7 +395,7 @@ public class EntityPixie extends TameableEntity {
         this.stealCooldown = compound.getInt("StealCooldown");
         this.ticksHeldItemFor = compound.getInt("HoldingTicks");
 
-        this.setSitting(compound.getBoolean("PixieSitting"));
+        this.setPixieSitting(compound.getBoolean("PixieSitting"));
         this.setCommand(compound.getInt("Command"));
 
         super.readAdditional(compound);
@@ -410,7 +408,7 @@ public class EntityPixie extends TameableEntity {
 
         compound.putInt("StealCooldown", this.stealCooldown);
         compound.putInt("HoldingTicks", this.ticksHeldItemFor);
-        compound.putBoolean("PixieSitting", this.isSitting());
+        compound.putBoolean("PixieSitting", this.isPixieSitting());
 
         super.writeAdditional(compound);
     }
