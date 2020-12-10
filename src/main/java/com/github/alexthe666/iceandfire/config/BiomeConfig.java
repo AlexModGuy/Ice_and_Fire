@@ -55,7 +55,6 @@ public class BiomeConfig {
     public static List<? extends String> darkBrownHippogryphBiomes = Lists.newArrayList("minecraft:taiga_mountains", "minecraft:taiga_hills");
     public static List<? extends String> whiteHippogryphBiomes = Lists.newArrayList("minecraft:snowy_mountains", "minecraft:snowy_taiga_mountains", "minecraft:snowy_taiga_hills");
     public static Map<String, ForgeConfigSpec.ConfigValue<List<? extends String>>> biomeConfigValues = new HashMap<>();
-
     public BiomeConfig(final ForgeConfigSpec.Builder builder) {
         //TODO reimplement biome dictionary
         builder.comment(

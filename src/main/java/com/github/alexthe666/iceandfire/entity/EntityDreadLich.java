@@ -16,6 +16,7 @@ import com.github.alexthe666.iceandfire.entity.util.IDreadMob;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
+import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.google.common.base.Predicate;
 
 import net.minecraft.block.Block;
@@ -79,6 +80,12 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
         return reason == SpawnReason.SPAWNER || worldIn.getBlockState(blockpos).canEntitySpawn(worldIn, blockpos, typeIn) && randomIn.nextInt(40) == 0;
     }
 
+    public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn) {
+        if(!IafWorldRegistry.isDimensionListedForMobs(world)){
+            return false;
+        }
+        return super.canSpawn(worldIn, spawnReasonIn);
+    }
 
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new SwimGoal(this));

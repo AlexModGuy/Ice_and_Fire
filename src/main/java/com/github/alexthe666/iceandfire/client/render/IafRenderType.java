@@ -62,7 +62,7 @@ public class IafRenderType extends RenderType {
     public static RenderType getStoneCrackRenderType(ResourceLocation crackTex, float xSize, float ySize) {
         RenderState.TextureState renderstate$texturestate = new RenderState.TextureState(crackTex, false, false);
         RenderType.State rendertype$state = RenderType.State.getBuilder().texture(renderstate$texturestate).texturing(new StoneTexturingState(crackTex, xSize, ySize)).diffuseLighting(DIFFUSE_LIGHTING_ENABLED).alpha(RenderState.HALF_ALPHA).transparency(TRANSLUCENT_TRANSPARENCY).depthTest(DEPTH_EQUAL).cull(CULL_DISABLED).lightmap(LIGHTMAP_ENABLED).overlay(OVERLAY_ENABLED).build(false);
-        return makeType("stone_entity_type", DefaultVertexFormats.ENTITY, 7, 256, rendertype$state);
+        return makeType("stone_entity_type_crack", DefaultVertexFormats.ENTITY, 7, 256, rendertype$state);
     }
 
     @OnlyIn(Dist.CLIENT)

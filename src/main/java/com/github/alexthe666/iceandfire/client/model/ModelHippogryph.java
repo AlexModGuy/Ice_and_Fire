@@ -390,10 +390,7 @@ public class ModelHippogryph extends ModelDragonBase<EntityHippogryph> {
     }
 
     public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
-        this.resetToDefaultPose();
         this.render(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-
-        this.resetToDefaultPose();
         if (this.isChild) {
             this.Body.setShouldScaleChildren(true);
             this.Head.setShouldScaleChildren(false);

@@ -19,7 +19,6 @@ import com.github.alexthe666.iceandfire.entity.props.ChickenEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.SirenEntityProperties;
-import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
 import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
@@ -66,7 +65,6 @@ import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.loot.ItemLootEntry;
 import net.minecraft.loot.LootEntry;
 import net.minecraft.loot.LootPool;
@@ -88,7 +86,6 @@ import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.event.LootTableLoadEvent;
@@ -368,24 +365,6 @@ public class ServerEvents {
             event.getDrops().add(new ItemEntity(event.getEntity().world, event.getEntity().getPosX(), event.getEntity().getPosY(), event.getEntity().getPosZ(),
                     new ItemStack(IafItemRegistry.WITHERBONE, event.getEntityLiving().getRNG().nextInt(2))));
         }
-
-        if (event.getEntityLiving() instanceof LivingEntity) {
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
-            if (properties != null && properties.isStone()) {
-                event.setCanceled(true);
-            }
-        }
-
-    }
-
-    @SubscribeEvent
-    public void onEntityDespawn(LivingSpawnEvent.AllowDespawn event) {
-        if (event.getEntityLiving() instanceof LivingEntity) {
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
-            if (properties != null && properties.isStone()) {
-                event.setResult(Event.Result.DENY);
-            }
-        }
     }
 
     @SubscribeEvent
@@ -442,7 +421,7 @@ public class ServerEvents {
             ((LivingEntity) event.getTarget()).setHealth(((LivingEntity) event.getTarget()).getMaxHealth());
             if (event.getPlayer() != null) {
                 ItemStack stack = event.getPlayer().getHeldItemMainhand();
-                event.getTarget().playSound(SoundEvents.BLOCK_STONE_HIT, 1, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 0.5F);
+                event.getTarget().playSound(SoundEvents.BLOCK_STONE_BREAK, 2, 0.5F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 0.5F);
                 if (stack.getItem() != null && (stack.getItem().canHarvestBlock(Blocks.STONE.getDefaultState()) || stack.getItem().getTranslationKey().contains("pickaxe"))) {
                     boolean silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0;
                     boolean ready = false;
@@ -453,7 +432,7 @@ public class ServerEvents {
                     if (ready) {
                         CompoundNBT writtenTag = new CompoundNBT();
                         event.getTarget().writeWithoutTypeId(writtenTag);
-                        event.getTarget().playSound(SoundEvents.BLOCK_STONE_BREAK, 1, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 0.5F);
+                        event.getTarget().playSound(SoundEvents.BLOCK_STONE_BREAK, 2, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 0.5F);
                         event.getTarget().remove();
                         if (silkTouch) {
                             ItemStack statuette = new ItemStack(IafItemRegistry.STONE_STATUE);
@@ -696,47 +675,6 @@ public class ServerEvents {
                 }
             }
         }
-
-        if (event.getEntityLiving() instanceof LivingEntity) {
-            boolean stonePlayer = event.getEntityLiving() instanceof EntityStoneStatue;
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), StoneEntityProperties.class);
-            if (properties != null && properties.isStone() || stonePlayer) {
-                LivingEntity living = event.getEntityLiving();
-                if (!living.getPassengers().isEmpty()) {
-                    for (Entity e : living.getPassengers()) {
-                        e.stopRiding();
-                    }
-                }
-                living.setMotion(living.getMotion().mul(0, 0, 0));
-                living.setMotion(living.getMotion().add(0, -0.1D, 0));
-                living.swingProgress = 0;
-                living.limbSwing = 0;
-                if (living.world.isRemote) {
-                    living.setInvisible(!stonePlayer);
-                }
-                living.hurtTime = 0;
-                living.setSilent(true);
-                living.hurtResistantTime = living.maxHurtResistantTime - 1;
-                living.extinguish();
-                if (living instanceof AnimalEntity) {
-                    ((AnimalEntity) living).resetInLove();
-                }
-                if (living instanceof MobEntity) {
-                    MobEntity mob = (MobEntity) living;
-                    if (!mob.isAIDisabled()) {
-                        mob.setNoAI(true);
-                    }
-                    if (mob.getAttackTarget() != null) {
-                        mob.setAttackTarget(null);
-                    }
-                }
-                if (living instanceof AbstractHorseEntity) {
-                    AbstractHorseEntity horse = (AbstractHorseEntity) living;
-                    horse.tailCounter = 0;
-                    horse.setEatingHaystack(false);
-                }
-            }
-        }
         MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), MiscEntityProperties.class);
         if (properties != null && properties.entitiesWeAreGlaringAt.size() > 0) {
             Iterator<Entity> itr = properties.entitiesWeAreGlaringAt.iterator();
@@ -792,12 +730,6 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
-        if (event.getTarget() instanceof LivingEntity) {
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), StoneEntityProperties.class);
-            if (properties != null && properties.isStone()) {
-                event.setCanceled(true);
-            }
-        }
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), ChainEntityProperties.class);
         if (chainProperties != null) {
             //chainProperties.debug();
@@ -809,17 +741,6 @@ public class ServerEvents {
                 }
             }
         }
-    }
-
-    @SubscribeEvent
-    public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-        if (event.getTarget() instanceof LivingEntity) {
-            StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), StoneEntityProperties.class);
-            if (properties != null && properties.isStone()) {
-                event.setCanceled(true);
-            }
-        }
-
     }
 
     @SubscribeEvent

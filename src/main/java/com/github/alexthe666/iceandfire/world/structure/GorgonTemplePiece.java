@@ -7,6 +7,8 @@ import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 
+import com.github.alexthe666.iceandfire.world.gen.processor.GorgonTempleProcessor;
+import com.github.alexthe666.iceandfire.world.gen.processor.GraveyardProcessor;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.SpawnReason;
@@ -37,8 +39,7 @@ public class GorgonTemplePiece  {
     	GorgonTemplePiece.Piece gt = new GorgonTemplePiece.Piece(p_204760_0_, PART_1, p_204760_1_, p_204760_2_, p_204760_4_);
     	EmptyPiece empty = new GorgonTemplePiece.EmptyPiece(p_204760_0_, EMPTY, p_204760_1_, p_204760_2_, p_204760_4_);
     	gt.offset(0, -10, 0);
-    	
-    	p_204760_3_.add(empty);
+        p_204760_3_.add(empty);
     	p_204760_3_.add(gt);
     }
     
@@ -107,7 +108,7 @@ public class GorgonTemplePiece  {
 
         private void func_204754_a(TemplateManager p_204754_1_) {
             Template lvt_2_1_ = p_204754_1_.getTemplateDefaulted(PART_1);
-            PlacementSettings lvt_3_1_ = (new PlacementSettings()).setRotation(this.rotation).setMirror(Mirror.NONE);
+            PlacementSettings lvt_3_1_ = (new PlacementSettings()).setRotation(this.rotation).setMirror(Mirror.NONE).addProcessor(new GorgonTempleProcessor());
             this.setup(lvt_2_1_, this.templatePosition, lvt_3_1_);
         }
 

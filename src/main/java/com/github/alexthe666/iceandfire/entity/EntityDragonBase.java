@@ -28,7 +28,6 @@ import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetNonTamed;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAIWander;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAIWatchClosest;
 import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
-import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.entity.util.ChainBuffer;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
@@ -102,7 +101,6 @@ import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.ActionResultType;
@@ -604,8 +602,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     @Override
     public boolean isAIDisabled() {
-        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        return this.isModelDead() || properties != null && properties.isStone() || super.isAIDisabled();
+        return this.isModelDead() || super.isAIDisabled();
     }
 
     @Override
@@ -929,7 +926,6 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public void setHovering(boolean hovering) {
-        System.out.println( Thread.currentThread().getStackTrace());
         this.dataManager.set(HOVERING, hovering);
     }
 
@@ -1029,10 +1025,6 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean canMove() {
-        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        if (properties != null && properties.isStone()) {
-            return false;
-        }
         return !this.isSitting() && !this.isSleeping() && this.getControllingPassenger() == null && !this.isModelDead() && sleepProgress == 0 && this.getAnimation() != ANIMATION_SHAKEPREY;
     }
 
@@ -1132,8 +1124,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                     return ActionResultType.SUCCESS;
                 }
                 this.setTamedBy(player);
-                StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-                if (stack.getItem() == IafItemRegistry.DRAGON_HORN && (properties == null || !properties.isStone())) {
+                if (stack.getItem() == IafItemRegistry.DRAGON_HORN) {
                     return super.func_230254_b_(player, hand);
                 }
                 if (stack.isEmpty() && !player.isSneaking()) {
@@ -1451,8 +1442,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean doesWantToLand() {
-        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        return this.flyTicks > 6000 || isGoingDown() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone() || this.isChained() && flyTicks > 100;
+        return this.flyTicks > 6000 || isGoingDown() || flyTicks > 40 && this.flyProgress == 0 || this.isChained() && flyTicks > 100;
     }
 
     public abstract String getVariantName(int variant);
@@ -1607,10 +1597,6 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         if (world.isRemote) {
             this.updateClientControls();
         }
-        if (!world.isRemote) {
-            logic.debug();
-        }
-
         world.getProfiler().startSection("dragonLogic");
         this.stepHeight = 1.2F;
         isOverAir = isOverAirLogic();

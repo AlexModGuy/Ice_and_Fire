@@ -114,9 +114,7 @@ public class ModelGhost extends ModelDragonBase<EntityGhost> {
 
     @Override
     public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
-        this.resetToDefaultPose();
         this.render(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        this.resetToDefaultPose();
     }
 
     public void setRotationAngles(EntityGhost entity, float f, float f1, float f2, float f3, float f4) {

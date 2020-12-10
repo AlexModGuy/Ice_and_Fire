@@ -4,7 +4,6 @@ import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
-import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -72,9 +71,6 @@ public class IafDragonLogic {
         if (dragon.isFlying() && !dragon.isHovering() && dragon.getControllingPassenger() != null && !dragon.func_233570_aj_() && Math.max(Math.abs(dragon.getMotion().getX()), Math.abs(dragon.getMotion().getZ())) < 0.1F) {
             dragon.setHovering(true);
             dragon.setFlying(false);
-        }
-        if ((dragon.isFlying() || dragon.isHovering()) && dragon.isInWater()) {
-            //this.motionY += 0.2;
         }
         if (dragon.isHovering() && !dragon.isFlying() && dragon.getControllingPassenger() != null && !dragon.func_233570_aj_() && Math.max(Math.abs(dragon.getMotion().getX()), Math.abs(dragon.getMotion().getZ())) > 0.1F) {
             dragon.setFlying(true);
@@ -175,8 +171,7 @@ public class IafDragonLogic {
             dragon.setTackling(false);
             dragon.randomizeAttacks();
         }
-        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(dragon, StoneEntityProperties.class);
-        if ((properties != null && properties.isStone() || dragon.isPassenger())) {
+        if (dragon.isPassenger()) {
             dragon.setFlying(false);
             dragon.setHovering(false);
             dragon.setSleeping(false);
@@ -263,7 +258,7 @@ public class IafDragonLogic {
             dragon.setFlying(false);
             dragon.setHovering(false);
         }
-        if ((properties == null || properties != null && !properties.isStone()) && !dragon.isFlying() && !dragon.isHovering()) {
+        if (!dragon.isFlying() && !dragon.isHovering()) {
             if (dragon.isAllowedToTriggerFlight() || dragon.getPosY() < -1) {
                 if (dragon.getRNG().nextInt(dragon.getFlightChancePerTick()) == 0 || dragon.getPosY() < -1 || dragon.getAttackTarget() != null && dragon.getAttackTarget().getPosY() + 5 < dragon.getPosY() || dragon.isInWater() && !dragon.isIceInWater()) {
                     dragon.setHovering(true);

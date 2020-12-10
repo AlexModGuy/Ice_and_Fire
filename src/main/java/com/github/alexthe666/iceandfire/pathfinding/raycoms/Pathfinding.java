@@ -41,6 +41,9 @@ public final class Pathfinding {
         //Hides default constructor.
     }
 
+    public static boolean isDebug(){
+        return false;
+    }
     /**
      * Creates a new thread pool for pathfinding jobs
      *

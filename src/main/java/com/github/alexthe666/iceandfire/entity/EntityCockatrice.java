@@ -20,6 +20,7 @@ import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
+import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.google.common.base.Predicate;
 
 import net.minecraft.entity.AgeableEntity;
@@ -66,10 +67,7 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -149,6 +147,13 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
 
     public SoundCategory getSoundCategory() {
         return SoundCategory.HOSTILE;
+    }
+
+    public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn) {
+        if(!IafWorldRegistry.isDimensionListedForMobs(world)){
+            return false;
+        }
+        return super.canSpawn(worldIn, spawnReasonIn);
     }
 
     public BlockPos getHomePosition() {

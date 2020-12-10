@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.event;
 
-import java.lang.reflect.Field;
-import java.util.Map;
 import java.util.Random;
 
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
@@ -10,10 +8,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.client.gui.IceAndFireMainMenu;
-import com.github.alexthe666.iceandfire.client.render.entity.ICustomStoneLayer;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderCockatrice;
-import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntity;
-import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntityCrack;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
@@ -31,14 +26,10 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.LivingRenderer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.PointOfView;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -55,9 +46,6 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public class ClientEvents {
 
@@ -71,56 +59,8 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void renderWorldLastEvent(RenderWorldLastEvent event) {
-        if(IceAndFire.DEBUG){
+        if(Pathfinding.isDebug()){
             Pathfinding.debugDraw(event.getPartialTicks(), event.getMatrixStack());
-        }
-    }
-
-    public static void initializeStoneLayer() {
-        for (Map.Entry<EntityType<?>, EntityRenderer<?>> entry : Minecraft.getInstance().getRenderManager().renderers.entrySet()) {
-            EntityRenderer render = entry.getValue();
-            if (render instanceof LivingRenderer) {
-                LayerRenderer stoneLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getStoneLayer((LivingRenderer)render) : new LayerStoneEntity((LivingRenderer) render);
-                ((LivingRenderer) render).addLayer(stoneLayer);
-                ((LivingRenderer) render).addLayer(new LayerStoneEntityCrack((LivingRenderer) render));
-            }
-        }
-        Field renderingRegistryField = ObfuscationReflectionHelper.findField(RenderingRegistry.class, "INSTANCE");
-        Field entityRendersField = ObfuscationReflectionHelper.findField(RenderingRegistry.class, "entityRenderers");
-        RenderingRegistry registry = null;
-        try {
-            Field modifier = Field.class.getDeclaredField("modifiers");
-            modifier.setAccessible(true);
-            registry = (RenderingRegistry) renderingRegistryField.get(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (registry != null) {
-            Map<EntityType<? extends Entity>, IRenderFactory<? extends Entity>> entityRenders = null;
-            try {
-                Field modifier1 = Field.class.getDeclaredField("modifiers");
-                modifier1.setAccessible(true);
-                entityRenders = (Map<EntityType<? extends Entity>, IRenderFactory<? extends Entity>>) entityRendersField.get(registry);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (entityRenders != null) {
-                for (Map.Entry<EntityType<? extends Entity>, IRenderFactory<? extends Entity>> entry : entityRenders.entrySet()) {
-                    if (entry.getValue() != null) {
-                        try {
-                            EntityRenderer render = entry.getValue().createRenderFor(Minecraft.getInstance().getRenderManager());
-                            if (render != null && render instanceof LivingRenderer) {
-                                LayerRenderer stoneLayer = render instanceof ICustomStoneLayer ? ((ICustomStoneLayer) render).getStoneLayer((LivingRenderer)render) : new LayerStoneEntity((LivingRenderer) render);
-                                ((LivingRenderer) render).addLayer(stoneLayer);
-                                ((LivingRenderer) render).addLayer(new LayerStoneEntityCrack((LivingRenderer) render));
-                            }
-                        } catch (NullPointerException exp) {
-                            IceAndFire.LOGGER.warn("Ice and Fire could not apply stone render layer to " + entry.getKey().getTranslationKey() + ", someone isn't registering their renderer properly... <.<");
-                        }
-                    }
-
-                }
-            }
         }
     }
 

@@ -169,7 +169,7 @@ public class IafWorldRegistry {
 
         addStructureSeperation(DimensionSettings.field_242734_c, GORGON_TEMPLE, new StructureSeparationSettings(Math.max(IafConfig.spawnGorgonsChance, 2), Math.max(IafConfig.spawnGorgonsChance / 2, 1), 342226450));
         addStructureSeperation(DimensionSettings.field_242734_c, MAUSOLEUM, new StructureSeparationSettings(Math.max(IafConfig.generateMausoleumChance, 2), Math.max(IafConfig.generateMausoleumChance / 2, 1), 342226451));
-        addStructureSeperation(DimensionSettings.field_242734_c, GRAVEYARD, new StructureSeparationSettings(Math.max(IafConfig.generateGraveyardChance, 2), Math.max(IafConfig.generateGraveyardChance / 2, 1), 342226440));
+        addStructureSeperation(DimensionSettings.field_242734_c, GRAVEYARD, new StructureSeparationSettings(Math.max(IafConfig.generateGraveyardChance * 3, 2), Math.max(IafConfig.generateGraveyardChance * 3 / 2, 1), 342226440));
 
         GORGON_TEMPLE_CF = Registry.register(WorldGenRegistries.field_243654_f, "iceandfire:gorgon_temple", GORGON_TEMPLE.func_236391_a_(IFeatureConfig.NO_FEATURE_CONFIG));
         MAUSOLEUM_CF = Registry.register(WorldGenRegistries.field_243654_f, "iceandfire:mausoleum", MAUSOLEUM.func_236391_a_(IFeatureConfig.NO_FEATURE_CONFIG));
@@ -279,7 +279,27 @@ public class IafWorldRegistry {
         }
     }
 
-
+    public static boolean isDimensionListedForMobs(IWorld world) {
+        ResourceLocation name = world.func_230315_m_().func_242725_p();
+        if (name == null) {
+            return false;
+        }
+        if (IafConfig.useDimensionBlackList) {
+            for (String blacklisted : IafConfig.mobBlacklistedDimensions) {
+                if (name.toString().equals(blacklisted)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            for (String whitelist : IafConfig.mobWhitelistedDimensions) {
+                if (name.toString().equals(whitelist)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
     public static boolean isFarEnoughFromDangerousGen(IWorld world, BlockPos pos) {
         /*boolean canGen = true;
         IafWorldData data = IafWorldData.get(world.getWorld());

@@ -31,6 +31,7 @@ import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
 
+import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -152,6 +153,13 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
             }
         }
         return pos;
+    }
+
+    public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn) {
+        if(!IafWorldRegistry.isDimensionListedForMobs(world)){
+            return false;
+        }
+        return super.canSpawn(worldIn, spawnReasonIn);
     }
 
     public static boolean canAmphithereSpawnOn(EntityType<EntityAmphithere> p_223317_0_, IWorld p_223317_1_, SpawnReason reason, BlockPos p_223317_3_, Random p_223317_4_) {

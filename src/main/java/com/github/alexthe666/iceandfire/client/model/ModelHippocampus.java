@@ -316,7 +316,6 @@ public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
 
     @Override
     public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
-        this.resetToDefaultPose();
         this.render(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         this.NoseBand.showModel = false;
         this.ReinL.showModel = false;

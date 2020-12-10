@@ -7,19 +7,16 @@ import javax.annotation.Nullable;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
-import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.entity.ai.TrollAIFleeSun;
-import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.BlockBreakExplosion;
 import com.github.alexthe666.iceandfire.entity.util.IHumanoid;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
-import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 
+import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -109,10 +106,12 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
 
     public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn) {
         BlockPos pos = this.func_233580_cy_();
-
         boolean rngCheck = true;
         if (IafConfig.trollSpawnCheckChance != 0) {
         	rngCheck = this.getRNG().nextInt(IafConfig.trollSpawnCheckChance) == 0;
+        }
+        if(!IafWorldRegistry.isDimensionListedForMobs(world)){
+            return false;
         }
         return rngCheck && !this.world.canSeeSky(pos.up()) && super.canSpawn(worldIn, spawnReasonIn);
     }
@@ -327,14 +326,22 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
             float f = this.getBrightness();
             BlockPos blockpos = this.getRidingEntity() instanceof BoatEntity ? (new BlockPos(this.getPosX(), (double) Math.round(this.getPosY()), this.getPosZ())).up() : new BlockPos(this.getPosX(), (double) Math.round(this.getPosY()), this.getPosZ());
             if (f > 0.5F && this.world.canSeeSky(blockpos)) {
-                StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-                if (properties != null && !properties.isStone()) {
-                    properties.setStone(true);
-                    IceAndFire.sendMSGToAll(new MessageStoneStatue(this.getEntityId(), true));
-                    this.setMotion(0, 0, 0);
-                    this.setAnimation(NO_ANIMATION);
-                    this.playSound(IafSoundRegistry.GORGON_TURN_STONE, 1, 1);
+                this.setMotion(0, 0, 0);
+                this.setAnimation(NO_ANIMATION);
+                this.playSound(IafSoundRegistry.GORGON_TURN_STONE, 1, 1);
+                this.stoneProgress = 20;
+                EntityStoneStatue statue = EntityStoneStatue.buildStatueEntity(this);
+                statue.getTrappedTag().putFloat("StoneProgress", 20);
+                statue.setPositionAndRotation(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, this.rotationPitch);
+                if (!world.isRemote) {
+                    world.addEntity(statue);
                 }
+                statue.prevRotationYaw = this.rotationYaw;
+                statue.rotationYaw = this.rotationYaw;
+                statue.rotationYawHead = this.rotationYaw;
+                statue.renderYawOffset = this.rotationYaw;
+                statue.prevRenderYawOffset = this.rotationYaw;
+                this.remove();
             }
         }
         if (this.getAnimation() == ANIMATION_STRIKE_VERTICAL && this.getAnimationTick() == 10) {

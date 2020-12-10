@@ -147,6 +147,9 @@ public class ServerConfig {
     public ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistDimensions;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> dragonBlacklistDimensions;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> dragonWhitelistDimensions;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> mobBlacklistDimensions;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> mobWhitelistDimensions;
+
     public final ForgeConfigSpec.DoubleValue dragonFlightSpeedMod;
     public final ForgeConfigSpec.DoubleValue ghostMaxHealth;
     public final ForgeConfigSpec.DoubleValue ghostAttackStrength;
@@ -175,6 +178,12 @@ public class ServerConfig {
                 .defineList("blacklistDimensions", Lists.newArrayList("minecraft:the_nether", "minecraft:the_end"), o -> o instanceof String);
         dragonWhitelistDimensions = builder
                 .comment("Whitelist structure gen dimensions. Use the format like \"minecraft:the_nether\" or \"rats:ratlantis\" ")
+                .defineList("blacklistDimensions", Lists.newArrayList("minecraft:overworld"), o -> o instanceof String);
+        mobBlacklistDimensions = builder
+                .comment("Blacklisted mob spawn (troll, hippogryph, etc) dimensions. Use the format like \"minecraft:the_nether\" or \"rats:ratlantis\" ")
+                .defineList("blacklistDimensions", Lists.newArrayList("minecraft:the_nether", "minecraft:the_end"), o -> o instanceof String);
+        mobWhitelistDimensions = builder
+                .comment("Whitelist mob spawn (troll, hippogryph, etc) dimensions. Use the format like \"minecraft:the_nether\" or \"rats:ratlantis\" ")
                 .defineList("blacklistDimensions", Lists.newArrayList("minecraft:overworld"), o -> o instanceof String);
         this.generateCopperOre = buildBoolean(builder, "Generate Copper Ore", "all", true, "Whether to generate copper ore or not");
         this.generateSapphireOre = buildBoolean(builder, "Generate Sapphire Ore", "all", true, "Whether to generate sapphire ore or not");

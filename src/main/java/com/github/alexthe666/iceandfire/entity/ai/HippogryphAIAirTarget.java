@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
-import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 
 import net.minecraft.block.material.Material;
@@ -54,7 +53,6 @@ public class HippogryphAIAirTarget extends Goal {
     }
 
     public boolean continueExecuting() {
-        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(hippogryph, StoneEntityProperties.class);
         if (!hippogryph.isFlying() && !hippogryph.isHovering()) {
             return false;
         }
@@ -65,9 +63,6 @@ public class HippogryphAIAirTarget extends Goal {
             return false;
         }
         if (hippogryph.isChild()) {
-            return false;
-        }
-        if (properties != null && properties.isStone()) {
             return false;
         }
         return hippogryph.airTarget != null;

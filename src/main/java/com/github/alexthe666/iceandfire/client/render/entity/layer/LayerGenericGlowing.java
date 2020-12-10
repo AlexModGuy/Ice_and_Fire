@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
-import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
@@ -33,11 +32,8 @@ public class LayerGenericGlowing<T extends LivingEntity, M extends EntityModel<T
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-        if (properties == null || !properties.isStone()) {
-            RenderType eyes = RenderType.getEyes(texture);
-            IVertexBuilder ivertexbuilder = bufferIn.getBuffer(eyes);
-            this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        }
+        RenderType eyes = RenderType.getEyes(texture);
+        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(eyes);
+        this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

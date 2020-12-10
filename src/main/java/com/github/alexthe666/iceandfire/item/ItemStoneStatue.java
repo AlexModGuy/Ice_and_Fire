@@ -4,16 +4,12 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import com.github.alexthe666.iceandfire.entity.props.StoneEntityProperties;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -65,20 +61,21 @@ public class ItemStoneStatue extends Item {
                 EntityStoneStatue statue = new EntityStoneStatue(IafEntityRegistry.STONE_STATUE, context.getWorld());
                 statue.readAdditional(statueNBT);
                 statue.setTrappedEntityTypeString(id);
-                statue.setPositionAndRotation(context.getPos().getX() + 0.5, context.getPos().getY() + 1, context.getPos().getZ() + 0.5, context.getPlayer().rotationYaw, 0);
-                if (!context.getWorld().isRemote) {
-                    context.getWorld().addEntity(statue);
-                    statue.readAdditional(stack.getTag());
-                }
-                statue.setCrackAmount(0);
-                double d1 = context.getPlayer().getPosX() - statue.getPosX();
-                double d2 = context.getPlayer().getPosZ() - statue.getPosZ();
-                float yaw = (float)(MathHelper.atan2(d1, d2) * (double)(180F / (float)Math.PI)) - 90.0F;
+                double d1 = context.getPlayer().getPosX() - (context.getPos().getX() + 0.5);
+                double d2 = context.getPlayer().getPosZ() - (context.getPos().getZ() + 0.5);
+                float yaw = (float)(MathHelper.atan2(d2, d1) * (double)(180F / (float)Math.PI)) - 90;
                 statue.prevRotationYaw = yaw;
                 statue.rotationYaw = yaw;
                 statue.rotationYawHead = yaw;
                 statue.renderYawOffset = yaw;
                 statue.prevRenderYawOffset = yaw;
+                statue.setPositionAndRotation(context.getPos().getX() + 0.5, context.getPos().getY() + 1, context.getPos().getZ() + 0.5, yaw, 0);
+                if (!context.getWorld().isRemote) {
+                    context.getWorld().addEntity(statue);
+                    statue.readAdditional(stack.getTag());
+                }
+                statue.setCrackAmount(0);
+
                 if (!context.getPlayer().isCreative()) {
                     stack.shrink(1);
                 }

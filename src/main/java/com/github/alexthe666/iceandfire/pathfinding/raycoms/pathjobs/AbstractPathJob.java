@@ -130,7 +130,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
         allowJumpPointSearchTypeWalk = false;
 
-        if (IceAndFire.DEBUG) {
+        if (Pathfinding.isDebug()) {
             debugDrawEnabled = true;
             debugNodesVisited = new HashSet<>();
             debugNodesNotVisited = new HashSet<>();
@@ -169,7 +169,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
         allowJumpPointSearchTypeWalk = false;
 
-        if (IceAndFire.DEBUG) {
+        if (Pathfinding.isDebug()) {
             debugDrawEnabled = true;
             debugNodesVisited = new HashSet<>();
             debugNodesNotVisited = new HashSet<>();
@@ -450,7 +450,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
             addNodeToDebug(currentNode);
         }
 
-        if (IceAndFire.DEBUG) {
+        if (Pathfinding.isDebug()) {
             IceAndFire.LOGGER.info(String.format("Examining node [%d,%d,%d] ; g=%f ; f=%f",
                     currentNode.pos.getX(), currentNode.pos.getY(), currentNode.pos.getZ(), currentNode.getCost(), currentNode.getScore()));
         }
@@ -629,7 +629,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
      * @param points the points to print.
      */
     private void doDebugPrinting(final PathPoint[] points) {
-        if (IceAndFire.DEBUG) {
+        if (Pathfinding.isDebug()) {
             IceAndFire.LOGGER.info("Path found:");
 
             for (final PathPoint p : points) {

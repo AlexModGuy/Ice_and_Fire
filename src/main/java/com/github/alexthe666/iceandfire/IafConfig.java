@@ -28,6 +28,8 @@ public class IafConfig {
     public static List<? extends String> blacklistedDimensions = Lists.newArrayList("minecraft:nether", "minecraft:the_end");
     public static List<? extends String> dragonWhitelistedDimensions = Lists.newArrayList("minecraft:overworld");
     public static List<? extends String> dragonBlacklistedDimensions = Lists.newArrayList("minecraft:the_nether", "minecraft:the_end");
+    public static List<? extends String> mobWhitelistedDimensions = Lists.newArrayList("minecraft:overworld");
+    public static List<? extends String> mobBlacklistedDimensions = Lists.newArrayList("minecraft:the_nether", "minecraft:the_end");
     public static List<? extends String> blacklistedBreakBlocks = Lists.newArrayList();
     public static List<? extends String> noDropBreakBlocks = Lists.newArrayList("minecraft:stone", "minecraft:dirt", "minecraft:grass_block");
     public static boolean blacklistBreakBlocksIsWhiteList = false;
@@ -314,6 +316,8 @@ public class IafConfig {
             dragonBlacklistedDimensions = ConfigHolder.SERVER.dragonBlacklistDimensions.get();
             whitelistedDimensions = ConfigHolder.SERVER.whitelistDimensions.get();
             blacklistedDimensions = ConfigHolder.SERVER.blacklistDimensions.get();
+            mobWhitelistedDimensions = ConfigHolder.SERVER.dragonWhitelistDimensions.get();
+            mobBlacklistedDimensions = ConfigHolder.SERVER.dragonBlacklistDimensions.get();
             dragonFlightSpeedMod = ConfigHolder.SERVER.dragonFlightSpeedMod.get();
             generateGraveyards = ConfigHolder.SERVER.generateGraveyards.get();
             generateGraveyardChance = ConfigHolder.SERVER.generateGraveyardChance.get();
