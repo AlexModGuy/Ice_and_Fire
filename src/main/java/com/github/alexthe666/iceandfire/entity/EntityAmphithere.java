@@ -156,7 +156,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     }
 
     public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn) {
-        if(!IafWorldRegistry.isDimensionListedForMobs(world)){
+        if(worldIn instanceof IServerWorld && !IafWorldRegistry.isDimensionListedForMobs((IServerWorld)world)){
             return false;
         }
         return super.canSpawn(worldIn, spawnReasonIn);

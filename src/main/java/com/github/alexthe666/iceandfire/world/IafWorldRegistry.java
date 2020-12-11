@@ -279,8 +279,8 @@ public class IafWorldRegistry {
         }
     }
 
-    public static boolean isDimensionListedForMobs(IWorld world) {
-        ResourceLocation name = world.func_230315_m_().func_242725_p();
+    public static boolean isDimensionListedForMobs(IServerWorld world) {
+        ResourceLocation name = world.getWorld().func_234923_W_().func_240901_a_();
         if (name == null) {
             return false;
         }

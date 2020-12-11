@@ -150,7 +150,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     }
 
     public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn) {
-        if(!IafWorldRegistry.isDimensionListedForMobs(world)){
+        if(worldIn instanceof IServerWorld && !IafWorldRegistry.isDimensionListedForMobs((IServerWorld)world)){
             return false;
         }
         return super.canSpawn(worldIn, spawnReasonIn);
