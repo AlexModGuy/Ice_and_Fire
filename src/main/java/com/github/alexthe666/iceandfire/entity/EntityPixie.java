@@ -11,6 +11,8 @@ import com.github.alexthe666.iceandfire.entity.ai.PixieAIFlee;
 import com.github.alexthe666.iceandfire.entity.ai.PixieAIFollowOwner;
 import com.github.alexthe666.iceandfire.entity.ai.PixieAIPickupItem;
 import com.github.alexthe666.iceandfire.entity.ai.PixieAISteal;
+import com.github.alexthe666.iceandfire.entity.ai.PixieAIMoveRandom;
+import com.github.alexthe666.iceandfire.entity.ai.PixieAIEnterHouse;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -265,7 +267,7 @@ public class EntityPixie extends TameableEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new PixieAIFollowOwner(this, 1.0D, 2.0F, 4.0F));
-        this.goalSelector.addGoal(4, new PixieAIPickupItem(this, false));  // NOTE: tweakbsd priority changed!
+        this.goalSelector.addGoal(2, new PixieAIPickupItem(this, false));
         this.goalSelector.addGoal(2, new PixieAIFlee(this, PlayerEntity.class, 10, new Predicate<PlayerEntity>() {
             @Override
             public boolean apply(@Nullable PlayerEntity entity) {
@@ -273,8 +275,8 @@ public class EntityPixie extends TameableEntity {
             }
         }));
         this.goalSelector.addGoal(2, new PixieAISteal(this, 1.0D));
-        this.goalSelector.addGoal(3, new AIMoveRandom());
-        this.goalSelector.addGoal(4, new AIEnterHouse());
+        this.goalSelector.addGoal(3, new PixieAIMoveRandom(this));
+        this.goalSelector.addGoal(4, new PixieAIEnterHouse(this));
         this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
     }
@@ -333,7 +335,7 @@ public class EntityPixie extends TameableEntity {
             }
         }
 
-        if(stealCooldown > 0){
+        if(stealCooldown > 0) {
             stealCooldown--;
         }
         if(!this.getHeldItemMainhand().isEmpty() && !this.isTamed()){
@@ -343,7 +345,7 @@ public class EntityPixie extends TameableEntity {
         }
 
 
-        if (!this.func_233684_eK_() && !this.isBeyondHeight()) {
+        if (!this.isPixieSitting() && !this.isBeyondHeight()) {
             this.setMotion(this.getMotion().add(0, 0.08, 0));
         } else {
         }
@@ -419,6 +421,10 @@ public class EntityPixie extends TameableEntity {
         return null;
     }
 
+    public void setHousePosition(BlockPos blockPos) {
+        this.housePos = blockPos;
+    }
+
     public BlockPos getHousePos() {
         return housePos;
     }
@@ -487,74 +493,5 @@ public class EntityPixie extends TameableEntity {
         }
     }
 
-    // TODO: Put into PixieAIMoveRandom
-    class AIMoveRandom extends Goal {
-        BlockPos target;
 
-        public AIMoveRandom() {
-            this.setMutexFlags(EnumSet.of(Flag.MOVE));
-        }
-
-        public boolean shouldExecute() {
-            target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.getPosX() + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.getPosZ() + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
-            return !EntityPixie.this.isOwnerClose() && !EntityPixie.this.func_233684_eK_() && isDirectPathBetweenPoints(EntityPixie.this.func_233580_cy_(), target) && !EntityPixie.this.getMoveHelper().isUpdating() && EntityPixie.this.rand.nextInt(4) == 0 && EntityPixie.this.housePos == null;
-        }
-
-        protected boolean isDirectPathBetweenPoints(BlockPos posVec31, BlockPos posVec32) {
-            return EntityPixie.this.world.rayTraceBlocks(new RayTraceContext(new Vector3d(posVec31.getX() + 0.5D, posVec31.getY() + 0.5D, posVec31.getZ() + 0.5D), new Vector3d(posVec32.getX() + 0.5D, posVec32.getY() + (double) EntityPixie.this.getHeight() * 0.5D, posVec32.getZ() + 0.5D), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, EntityPixie.this)).getType() == RayTraceResult.Type.MISS;
-        }
-
-        public boolean shouldContinueExecuting() {
-            return false;
-        }
-
-        public void tick() {
-            if (!isDirectPathBetweenPoints(EntityPixie.this.func_233580_cy_(), target)) {
-                target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.getPosX() + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.getPosZ() + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
-            }
-            if (EntityPixie.this.world.isAirBlock(target)) {
-                EntityPixie.this.moveController.setMoveTo((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 0.25D);
-                if (EntityPixie.this.getAttackTarget() == null) {
-                    EntityPixie.this.getLookController().setLookPosition((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 180.0F, 20.0F);
-
-                }
-            }
-        }
-    }
-
-    class AIEnterHouse extends Goal {
-        public AIEnterHouse() {
-            this.setMutexFlags(EnumSet.of(Flag.MOVE));
-        }
-
-        public boolean shouldExecute() {
-            if (EntityPixie.this.isOwnerClose() || EntityPixie.this.getMoveHelper().isUpdating() || EntityPixie.this.func_233684_eK_()/*isSiting() */ || EntityPixie.this.rand.nextInt(20) != 0 || EntityPixie.this.ticksUntilHouseAI != 0) {
-                return false;
-            }
-
-            BlockPos blockpos1 = findAHouse(EntityPixie.this, EntityPixie.this.world);
-            return !blockpos1.toString().equals(EntityPixie.this.func_233580_cy_().toString());
-        }
-
-        public boolean shouldContinueExecuting() {
-            return false;
-        }
-
-        public void tick() {
-            BlockPos blockpos = EntityPixie.this.getHousePos() == null ? EntityPixie.this.func_233580_cy_() : EntityPixie.this.getHousePos();
-
-            if (blockpos == null) {
-                blockpos = EntityPixie.this.func_233580_cy_();
-            }
-
-            for (int i = 0; i < 3; ++i) {
-                BlockPos blockpos1 = findAHouse(EntityPixie.this, EntityPixie.this.world);
-                EntityPixie.this.moveController.setMoveTo((double) blockpos1.getX() + 0.5D, (double) blockpos1.getY() + 0.5D, (double) blockpos1.getZ() + 0.5D, 0.25D);
-                EntityPixie.this.housePos = blockpos1;
-                if (EntityPixie.this.getAttackTarget() == null) {
-                    EntityPixie.this.getLookController().setLookPosition((double) blockpos1.getX() + 0.5D, (double) blockpos1.getY() + 0.5D, (double) blockpos1.getZ() + 0.5D, 180.0F, 20.0F);
-                }
-            }
-        }
-    }
 }

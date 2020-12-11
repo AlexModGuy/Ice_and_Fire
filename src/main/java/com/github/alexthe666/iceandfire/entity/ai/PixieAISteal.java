@@ -32,6 +32,7 @@ public class PixieAISteal extends Goal {
     }
 
     public boolean shouldExecute() {
+
         if (!IafConfig.pixiesStealItems || !temptedEntity.getHeldItemMainhand().isEmpty() || temptedEntity.stealCooldown > 0) {
             return false;
         }
@@ -71,18 +72,18 @@ public class PixieAISteal extends Goal {
         this.temptedEntity.getLookController().setLookPositionWithEntity(this.temptingPlayer, (float) (this.temptedEntity.getHorizontalFaceSpeed() + 20), (float) this.temptedEntity.getVerticalFaceSpeed());
         ArrayList<Integer> slotlist = new ArrayList<Integer>();
         if (this.temptedEntity.getDistanceSq(this.temptingPlayer) < 3D && !this.temptingPlayer.inventory.isEmpty()) {
-            //9 so pixies don't steal from hotbar
+
             for (int i = 0; i < this.temptingPlayer.inventory.getSizeInventory(); i++) {
                 ItemStack targetStack = this.temptingPlayer.inventory.getStackInSlot(i);
                 if (!PlayerInventory.isHotbar(i) && !targetStack.isEmpty() && targetStack.isStackable()) {
                     slotlist.add(i);
                 }
             }
-            if(slotlist.size() >= 1){
+            if(slotlist.size() >= 1) {
                 int slot;
-                if(slotlist.size() == 1){
+                if(slotlist.size() == 1) {
                     slot = slotlist.get(0);
-                }else{
+                } else {
                      slot = slotlist.get(new Random().nextInt(slotlist.size()));
                 }
                 ItemStack randomItem = this.temptingPlayer.inventory.getStackInSlot(slot);

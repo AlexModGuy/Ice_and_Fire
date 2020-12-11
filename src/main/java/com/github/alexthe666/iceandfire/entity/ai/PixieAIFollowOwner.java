@@ -40,7 +40,7 @@ public class PixieAIFollowOwner extends Goal {
             return false;
         } else if (LivingEntity instanceof PlayerEntity && LivingEntity.isSpectator()) {
             return false;
-        } else if (this.tameable.func_233684_eK_()) {
+        } else if (this.tameable.isPixieSitting()) {
             return false;
         } else if (this.tameable.getDistanceSq(LivingEntity) < (double) (this.minDist * this.minDist)) {
             return false;
@@ -51,7 +51,8 @@ public class PixieAIFollowOwner extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return this.tameable.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist) && !this.tameable.func_233684_eK_();
+        // first check sitting to save distance calculation in case pixie indeed is
+        return !this.tameable.isPixieSitting() && this.tameable.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist);
     }
 
     public void startExecuting() {
@@ -75,7 +76,7 @@ public class PixieAIFollowOwner extends Goal {
     public void tick() {
         this.tameable.getLookController().setLookPositionWithEntity(this.owner, 10.0F, (float) this.tameable.getVerticalFaceSpeed());
 
-        if (!this.tameable.func_233684_eK_()) {
+        if (!this.tameable.isPixieSitting()) {
             if (--this.timeToRecalcPath <= 0) {
                 this.timeToRecalcPath = 10;
 
