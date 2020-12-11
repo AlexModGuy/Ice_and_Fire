@@ -20,6 +20,6 @@ public class IafArmorMaterial extends CustomArmorMaterial {
     }
 
     public float func_230304_f_(){
-        return super.getKnockbackResistance();
+        return 0;
     }
 }

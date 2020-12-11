@@ -16,6 +16,9 @@ public class DragonsteelArmorMaterial extends IafArmorMaterial {
         return damageReduction[slotIn.getIndex()];
     }
 
+    public float func_230304_f_(){
+        return 0;
+    }
 
     public int getDurability(EquipmentSlotType slotIn) {
         return (int) (MAX_DAMAGE_ARRAY[slotIn.getIndex()] * 0.02D * IafConfig.dragonsteelBaseDurability);
