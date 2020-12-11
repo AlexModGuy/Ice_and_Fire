@@ -32,6 +32,7 @@ public class IafDragonLogic {
     logic done exclusively on server.
     */
     public void updateDragonServer() {
+
         PlayerEntity ridingPlayer = dragon.getRidingPlayer();
         if(ridingPlayer != null){
             if (dragon.isGoingUp()) {

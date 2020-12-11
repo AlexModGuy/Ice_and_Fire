@@ -51,6 +51,9 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
                 .func_233815_a_(Attributes.field_233823_f_, 1.0D);
     }
 
+    public void applyEntityCollision(Entity entityIn) {
+    }
+
     @Override
     protected void registerData() {
         super.registerData();
