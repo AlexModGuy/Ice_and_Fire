@@ -304,7 +304,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         String s = TextFormatting.getTextWithoutFormattingCodes(player.getName().getUnformattedComponentText());
-        boolean isDev = s.equals("Alexthe666") || s.equals("Raptorfarian");
+        boolean isDev = s.equals("Alexthe666") || s.equals("Raptorfarian") || s.equals("tweakbsd");
         if (this.isTamed() && this.isOwner(player)) {
             if (itemstack != null && itemstack.getItem() == Items.RED_DYE && this.getEnumVariant() != EnumHippogryphTypes.ALEX && isDev) {
                 this.setEnumVariant(EnumHippogryphTypes.ALEX);
@@ -547,6 +547,10 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             homePos = new BlockPos(compound.getInt("HomeAreaX"), compound.getInt("HomeAreaY"), compound.getInt("HomeAreaZ"));
         }
         this.setCommand(compound.getInt("Command"));
+
+        if(this.isSitting()) {
+            this.sitProgress = 20.0F;
+        }
     }
 
     public int getVariant() {
