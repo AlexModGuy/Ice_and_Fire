@@ -295,11 +295,11 @@ public class TileEntityDragonforge extends TileEntity implements ITickable, ISid
         if (index == 2) {
             return false;
         } else if (index == 1) {
-            DragonForgeRecipe forgeRecipe = null;
+            DragonForgeRecipe forgeRecipe;
             if (this.isFire) {
-                forgeRecipe = IafRecipeRegistry.getFireForgeRecipeForBlood(this.forgeItemStacks.get(0));
+                forgeRecipe = IafRecipeRegistry.getFireForgeRecipeForBlood(stack);
             } else {
-                forgeRecipe = IafRecipeRegistry.getIceForgeRecipeForBlood(this.forgeItemStacks.get(0));
+                forgeRecipe = IafRecipeRegistry.getIceForgeRecipeForBlood(stack);
             }
             if (forgeRecipe != null) {
                 return true;
