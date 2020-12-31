@@ -74,11 +74,11 @@ public class DragonAdvancedPathNavigate extends AbstractAdvancedPathNavigate {
      * @param entity the ourEntity.
      * @param world  the world it is in.
      */
-    public DragonAdvancedPathNavigate(final MobEntity entity, final World world, final boolean canFly) {
+    public DragonAdvancedPathNavigate(final MobEntity entity, final World world, final boolean isFlying) {
         super(entity, world);
-        if(canFly) {
+        if(isFlying) {
             this.nodeProcessor = new NodeProcessorDragonFly();
-            getPathingOptions().setCanFly(true);
+            getPathingOptions().setIsFlying(true);
         }
         else{
             this.nodeProcessor = new NodeProcessorDragonWalk();
