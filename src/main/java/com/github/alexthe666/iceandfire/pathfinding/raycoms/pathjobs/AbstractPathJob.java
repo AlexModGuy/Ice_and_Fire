@@ -811,11 +811,10 @@ public abstract class AbstractPathJob implements Callable<Path> {
     protected int getGroundHeight(final Node parent, final BlockPos pos) {
         //  Check (y+1) first, as it's always needed, either for the upper body (level),
         //  lower body (headroom drop) or lower body (jump up)
-        if(!pathingOptions.isFlying()) {
-            if (checkHeadBlock(parent, pos)) {
-                return handleTargetNotPassable(parent, pos.up(), world.getBlockState(pos.up()));
-            }
+        if (checkHeadBlock(parent, pos)) {
+            return handleTargetNotPassable(parent, pos.up(), world.getBlockState(pos.up()));
         }
+
         //  Now check the block we want to move to
         final BlockState target = world.getBlockState(pos);
         if (parent != null && !isPassableBB(parent.pos, pos)) {
@@ -842,12 +841,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
                 return -1;
             }
         }
-        if (!pathingOptions.isFlying()) {
-            return handleNotStanding(parent, pos, below);
-        }
-        else{
-            return pos.getY();
-        }
+        return handleNotStanding(parent, pos, below);
     }
 
     private int handleNotStanding(@Nullable final Node parent, final BlockPos pos, final BlockState below) {
