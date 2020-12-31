@@ -521,7 +521,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
     }
     //TODO: Adjust possible nodes
     //Since I'm not too familiar with which way a flying dragon should be able to take this might not be the most
-    //optimal way/best way,
+    //optimal/best way,
     private void flyCurrentNode(final Node currentNode){
         BlockPos dPos = BLOCKPOS_IDENTITY;
         if (currentNode.parent != null) {
@@ -530,9 +530,12 @@ public abstract class AbstractPathJob implements Callable<Path> {
         if (dPos.getY() >= 0) {
             fly(currentNode, BLOCKPOS_UP);
         }
-        if (currentNode.parent != null && isPassableBBDown(currentNode.parent.pos, currentNode.pos.down())) {
+        if (dPos.getY() <= 0) {
             fly(currentNode, BLOCKPOS_DOWN);
         }
+        /*if (currentNode.parent != null && isPassableBBDown(currentNode.parent.pos, currentNode.pos.down())) {
+            fly(currentNode, BLOCKPOS_DOWN);
+        }*/
 
 
         // Walk downwards node if passable
