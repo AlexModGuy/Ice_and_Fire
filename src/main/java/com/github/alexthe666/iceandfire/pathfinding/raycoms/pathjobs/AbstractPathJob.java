@@ -22,7 +22,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import sun.java2d.Surface;
 
 import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
@@ -43,6 +42,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
     public static Set<Node> lastDebugNodesPath;
 
     protected final BlockPos start;
+    protected final BlockPos end;
 
     protected final IWorldReader world;
     protected final PathResult result;
@@ -125,12 +125,12 @@ public abstract class AbstractPathJob implements Callable<Path> {
         this.world = new ChunkCache(world, new BlockPos(minX, MIN_Y, minZ), new BlockPos(maxX, MAX_Y, maxZ), range);
 
         this.start = new BlockPos(start);
+        this.end = new BlockPos(end);
         this.maxRange = range;
 
         this.result = result;
 
         allowJumpPointSearchTypeWalk = false;
-
         if (Pathfinding.isDebug()) {
             debugDrawEnabled = true;
             debugNodesVisited = new HashSet<>();
@@ -164,12 +164,12 @@ public abstract class AbstractPathJob implements Callable<Path> {
         this.world = new ChunkCache(world, new BlockPos(minX, MIN_Y, minZ), new BlockPos(maxX, MAX_Y, maxZ), range);
 
         this.start = startRestriction;
+        this.end = new BlockPos(endRestriction);
         this.maxRange = range;
 
         this.result = result;
 
         allowJumpPointSearchTypeWalk = false;
-
         if (Pathfinding.isDebug()) {
             debugDrawEnabled = true;
             debugNodesVisited = new HashSet<>();
@@ -435,12 +435,8 @@ public abstract class AbstractPathJob implements Callable<Path> {
             }
 
             if (!xzRestricted || (currentNode.pos.getX() >= minX && currentNode.pos.getX() <= maxX && currentNode.pos.getZ() >= minZ && currentNode.pos.getZ() <= maxZ)) {
-                if(pathingOptions.canFly()) {
-                    flyCurrentNode(currentNode);
-                }
-                else{
-                    walkCurrentNode(currentNode);
-                }
+                walkCurrentNode(currentNode);
+
             }
         }
 
@@ -519,47 +515,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
             walk(currentNode, BLOCKPOS_WEST);
         }
     }
-    //TODO: Adjust possible nodes
-    //Since I'm not too familiar with which way a flying dragon should be able to take this might not be the most
-    //optimal way/best way,
-    private void flyCurrentNode(final Node currentNode){
-        BlockPos dPos = BLOCKPOS_IDENTITY;
-        if (currentNode.parent != null) {
-            dPos = currentNode.pos.subtract(currentNode.parent.pos);
-        }
-        if (dPos.getY() >= 0) {
-            fly(currentNode, BLOCKPOS_UP);
-        }
-        if (currentNode.parent != null && isPassableBBDown(currentNode.parent.pos, currentNode.pos.down())) {
-            fly(currentNode, BLOCKPOS_DOWN);
-        }
-
-
-        // Walk downwards node if passable
-        /*if (currentNode.parent != null && isPassableBBDown(currentNode.parent.pos, currentNode.pos.down())) {
-            fly(currentNode, BLOCKPOS_DOWN);
-        }*/
-
-        // N
-        if (dPos.getZ() <= 0) {
-            fly(currentNode, BLOCKPOS_NORTH);
-        }
-
-        // E
-        if (dPos.getX() >= 0) {
-            fly(currentNode, BLOCKPOS_EAST);
-        }
-
-        // S
-        if (dPos.getZ() >= 0) {
-            fly(currentNode, BLOCKPOS_SOUTH);
-        }
-
-        // W
-        if (dPos.getX() <= 0) {
-            fly(currentNode, BLOCKPOS_WEST);
-        }
-    }
     private boolean onLadderGoingDown(final Node currentNode, final BlockPos dPos) {
         return (dPos.getY() <= 0 || dPos.getX() != 0 || dPos.getZ() != 0) && isLadder(currentNode.pos.down());
     }
@@ -575,7 +530,11 @@ public abstract class AbstractPathJob implements Callable<Path> {
     }
 
     private Node getAndSetupStartNode() {
-        final Node startNode = new Node(start, computeHeuristic(start));
+        Node startNode = new Node(start, computeHeuristic(start));
+        if (pathingOptions.isFlying()){
+            startNode = new Node(end, computeHeuristic(end));
+        }
+
 
         if (isLadder(start)) {
             startNode.setLadder();
@@ -794,91 +753,11 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
         return true;
     }
-    /**
-     * "Fly" from the parent in the direction specified by the delta, determining the new x,y,z position for such a move and adding or updating a node, as appropriate.
-     *
-     * @param parent Node being walked from.
-     * @param dPos   Delta from parent, expected in range of [-1..1].
-     * @return true if a node was added or updated when attempting to move in the given direction.
-     */
-    protected final boolean fly(final Node parent, BlockPos dPos) {
-        BlockPos pos = parent.pos.add(dPos);
-
-        //  Can we traverse into this node?  Fix the y up
-        final int newY = getGroundHeight(parent, pos);
-
-        if (newY < 0) {
-            return false;
-        }
-
-        boolean corner = false;
-        if (pos.getY() != newY) {
-            // if the new position is above the current node, we're taking the node directly above
-            if (!parent.isCornerNode() && newY - pos.getY() > 0 && (parent.parent == null || !parent.parent.pos.equals(parent.pos.add(new BlockPos(0, newY - pos.getY(), 0))))) {
-                dPos = new BlockPos(0, newY - pos.getY(), 0);
-                pos = parent.pos.add(dPos);
-                corner = true;
-            }
-            // If we're going down, take the air-corner before going to the lower node
-            else if (!parent.isCornerNode() && newY - pos.getY() < 0 && (dPos.getX() != 0 || dPos.getZ() != 0) && (parent.parent == null || !parent.pos.down()
-                    .equals(parent.parent.pos))) {
-                dPos = new BlockPos(dPos.getX(), 0, dPos.getZ());
-                pos = parent.pos.add(dPos);
-                corner = true;
-            }
-            // Fix up normal y
-            else {
-                dPos = dPos.add(0, newY - pos.getY(), 0);
-                pos = new BlockPos(pos.getX(), newY, pos.getZ());
-            }
-        }
-
-        int nodeKey = computeNodeKey(pos);
-        Node node = nodesVisited.get(nodeKey);
-        if (nodeClosed(node)) {
-            //  Early out on closed nodes (closed = expanded from)
-            return false;
-        }
-
-        final boolean isSwimming = calculateSwimming(world, pos, node);
-
-        if (isSwimming && !pathingOptions.canSwim()) {
-            return false;
-        }
-
-        final boolean swimStart = isSwimming && !parent.isSwimming();
-        final boolean onRoad = false;
-        final boolean onRails = pathingOptions.canUseRails() && world.getBlockState(pos).getBlock() instanceof AbstractRailBlock;
-        final boolean railsExit = !onRails && parent != null && parent.isOnRails();
-        //  Cost may have changed due to a jump up or drop
-        final double stepCost = computeCost(dPos, isSwimming, onRoad, onRails, railsExit, swimStart, pos);
-        final double heuristic = computeHeuristic(pos);
-        final double cost = parent.getCost() + stepCost;
-        final double score = cost + heuristic;
-
-        if (node == null) {
-            node = createNode(parent, pos, nodeKey, isSwimming, heuristic, cost, score);
-            node.setOnRails(onRails);
-            node.setCornerNode(corner);
-        } else if (updateCurrentNode(parent, node, heuristic, cost, score)) {
-            return false;
-        }
-
-        nodesOpen.offer(node);
-
-        //  Jump Point Search-ish optimization:
-        // If this node was a (heuristic-based) improvement on our parent,
-        // lets go another step in the same direction...
-        performJumpPointSearch(parent, dPos, node);
-
-        return true;
-    }
     private void performJumpPointSearch(final Node parent, final BlockPos dPos, final Node node) {
         if (allowJumpPointSearchTypeWalk && node.getHeuristic() <= parent.getHeuristic()) {
             walk(node, dPos);
         }
     }
-
     private Node createNode(
             final Node parent, final BlockPos pos, final int nodeKey,
             final boolean isSwimming, final double heuristic, final double cost, final double score) {
@@ -940,7 +819,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
         //  Do we have something to stand on in the target space?
         final BlockState below = world.getBlockState(pos.down());
-        if(pathingOptions.canFly()){
+        if(pathingOptions.isFlying()){
              final SurfaceType flyability = isFlyable(below, pos);
              if (flyability == SurfaceType.FLYABLE){
                  return pos.getY();
@@ -948,7 +827,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
              else if(flyability == SurfaceType.NOT_PASSABLE){
                  return -1;
              }
-            return handleNotStanding(parent, pos, below);
         }
         else{
             final SurfaceType walkability = isWalkableSurface(below, pos);
@@ -959,8 +837,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
                 return -1;
             }
         }
-
-
         return handleNotStanding(parent, pos, below);
     }
 
@@ -1223,7 +1099,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
         if (fluid != null && !fluid.isEmpty() && (fluid.getFluid() == Fluids.LAVA || fluid.getFluid() == Fluids.FLOWING_LAVA)) {
             return SurfaceType.NOT_PASSABLE;
         }
-        if (!blockState.getMaterial().isSolid()){
+        if (isPassable(blockState,pos)){
             return SurfaceType.FLYABLE;
         }
         return SurfaceType.DROPABLE;

@@ -50,7 +50,7 @@ public class PathingOptions {
      */
     private boolean canOpenDoors = false;
 
-    private boolean canFly = false;
+    private boolean flying = false;
 
     public PathingOptions() {
     }
@@ -87,9 +87,9 @@ public class PathingOptions {
         this.enterDoors = enterDoors;
     }
 
-    public boolean canFly(){return this.canFly;}
+    public boolean isFlying(){return this.flying;}
 
-    public void setCanFly(final boolean canFly){this.canFly = canFly;}
+    public void setIsFlying(final boolean flying){this.flying = flying;}
 
     public PathingOptions withStartSwimCost(final double startSwimCost) {
         swimCostEnter = startSwimCost;
