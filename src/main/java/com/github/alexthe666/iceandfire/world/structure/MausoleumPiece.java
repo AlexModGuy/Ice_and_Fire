@@ -43,11 +43,14 @@ public class MausoleumPiece {
         private final Random random;
         private final TemplateManager manager;
         private BlockPos firstPos = null;
-
+        private boolean offsetOnce = false;
         public boolean func_230383_a_(ISeedReader world, StructureManager p_230383_2_, ChunkGenerator p_230383_3_, Random p_230383_4_, MutableBoundingBox p_230383_5_, ChunkPos p_230383_6_, BlockPos p_230383_7_) {
-            p_230383_5_.expandTo(this.template.getMutableBoundingBox(this.placeSettings, this.templatePosition));
-            int i = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, firstPos.getX(), firstPos.getZ());
-            this.templatePosition = new BlockPos(this.templatePosition.getX(), i, this.templatePosition.getZ());
+            if(!offsetOnce) {
+                p_230383_5_.expandTo(this.template.getMutableBoundingBox(this.placeSettings, this.templatePosition));
+                int i = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, firstPos.getX(), firstPos.getZ());
+                this.templatePosition = new BlockPos(this.templatePosition.getX(), i, this.templatePosition.getZ());
+                offsetOnce = true;
+            }
             return super.func_230383_a_(world, p_230383_2_, p_230383_3_, p_230383_4_, p_230383_5_, p_230383_6_, p_230383_7_);
         }
 
