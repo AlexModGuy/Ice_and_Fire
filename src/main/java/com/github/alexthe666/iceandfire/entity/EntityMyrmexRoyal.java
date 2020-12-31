@@ -113,11 +113,11 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     protected void switchNavigator(boolean onLand) {
         if (onLand) {
             this.moveController = new MovementController(this);
-            this.navigator = createNavigator(world);
+            this.navigator = createNavigator(world,false);
             this.isLandNavigator = true;
         } else {
             this.moveController = new EntityMyrmexRoyal.FlyMoveHelper(this);
-            this.navigator = createNavigator(world);
+            this.navigator = createNavigator(world,true);
             this.isLandNavigator = false;
         }
     }

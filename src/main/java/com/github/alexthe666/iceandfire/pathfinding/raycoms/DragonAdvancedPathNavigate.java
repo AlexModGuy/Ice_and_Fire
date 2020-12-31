@@ -3,7 +3,8 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.pathfinding.NodeProcessorDragon;
+import com.github.alexthe666.iceandfire.pathfinding.NodeProcessorDragonFly;
+import com.github.alexthe666.iceandfire.pathfinding.NodeProcessorDragonWalk;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.*;
 
 import net.minecraft.entity.Entity;
@@ -66,22 +67,29 @@ public class DragonAdvancedPathNavigate extends AbstractAdvancedPathNavigate {
      */
     private boolean isSneaking = true;
 
+    private boolean canFly = false;
     /**
      * Instantiates the navigation of an ourEntity.
      *
      * @param entity the ourEntity.
      * @param world  the world it is in.
      */
-    public DragonAdvancedPathNavigate(final MobEntity entity, final World world) {
+    public DragonAdvancedPathNavigate(final MobEntity entity, final World world, final boolean canFly) {
         super(entity, world);
-
-        this.nodeProcessor = new NodeProcessorDragon();
+        if(canFly) {
+            this.nodeProcessor = new NodeProcessorDragonFly();
+            getPathingOptions().setCanFly(true);
+        }
+        else{
+            this.nodeProcessor = new NodeProcessorDragonWalk();
+        }
         this.nodeProcessor.setCanEnterDoors(true);
         getPathingOptions().setEnterDoors(true);
         this.nodeProcessor.setCanOpenDoors(true);
         getPathingOptions().setCanOpenDoors(true);
         this.nodeProcessor.setCanSwim(true);
         getPathingOptions().setCanSwim(true);
+
 
         stuckHandler = PathingStuckHandler.createStuckHandler().withTakeDamageOnStuck(0.2f).withTeleportSteps(6).withTeleportOnFullStuck();
     }
@@ -160,7 +168,12 @@ public class DragonAdvancedPathNavigate extends AbstractAdvancedPathNavigate {
 
     @Override
     public void tick() {
-        ((NodeProcessorDragon)nodeProcessor).setEntitySize(4, 4);
+        if (nodeProcessor instanceof  NodeProcessorDragonWalk){
+            ((NodeProcessorDragonWalk)nodeProcessor).setEntitySize(4, 4);
+        }
+        else{
+            ((NodeProcessorDragonFly)nodeProcessor).setEntitySize(4, 4);
+        }
         if (desiredPosTimeout > 0) {
             if (desiredPosTimeout-- <= 0) {
                 desiredPos = null;

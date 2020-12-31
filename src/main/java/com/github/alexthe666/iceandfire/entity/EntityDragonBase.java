@@ -473,8 +473,8 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     protected abstract void breathFireAtPos(BlockPos burningTarget);
 
-    protected PathNavigator createNavigator(World worldIn) {
-        DragonAdvancedPathNavigate newNavigator = new DragonAdvancedPathNavigate(this, world);
+    protected PathNavigator createNavigator(World worldIn, boolean canFly) {
+        DragonAdvancedPathNavigate newNavigator = new DragonAdvancedPathNavigate(this, world,canFly);
         this.navigator = newNavigator;
         newNavigator.setCanSwim(true);
         newNavigator.getNodeProcessor().setCanOpenDoors(true);
@@ -484,17 +484,17 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     protected void switchNavigator(int navigatorType) {
         if (navigatorType == 0) {
             this.moveController = new IafDragonFlightManager.GroundMoveHelper(this);
-            this.navigator = createNavigator(world);
+            this.navigator = createNavigator(world,false);
             this.navigatorType = 0;
             this.setFlying(false);
             this.setHovering(false);
         } else if (navigatorType == 1) {
             this.moveController = new IafDragonFlightManager.FlightMoveHelper(this);
-            this.navigator = new PathNavigateFlyingCreature(this, world);
+            this.navigator = createNavigator(world,true);
             this.navigatorType = 1;
         } else {
             this.moveController = new IafDragonFlightManager.PlayerFlightMoveHelper(this);
-            this.navigator = new PathNavigateFlyingCreature(this, world);
+            this.navigator = createNavigator(world,true);
             this.navigatorType = 2;
         }
     }
