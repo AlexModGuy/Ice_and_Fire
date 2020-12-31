@@ -63,7 +63,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
     protected WeakReference<LivingEntity> entity;
     //  May be faster, but can produce strange results
     private boolean allowJumpPointSearchTypeWalk;
-    private boolean allowJumpPointSearchTypeFly;
     private int totalNodesAdded = 0;
     private int totalNodesVisited = 0;
     private float entitySizeXZ = 1;
@@ -132,7 +131,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
         this.result = result;
 
         allowJumpPointSearchTypeWalk = false;
-        allowJumpPointSearchTypeFly = false;
         if (Pathfinding.isDebug()) {
             debugDrawEnabled = true;
             debugNodesVisited = new HashSet<>();
@@ -172,7 +170,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
         this.result = result;
 
         allowJumpPointSearchTypeWalk = false;
-        allowJumpPointSearchTypeFly = false;
         if (Pathfinding.isDebug()) {
             debugDrawEnabled = true;
             debugNodesVisited = new HashSet<>();
@@ -321,7 +318,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
         entitySizeXZ = entity.getWidth() / 2.0F;
         entitySizeY = MathHelper.ceil(entity.getHeight());
         allowJumpPointSearchTypeWalk = true;
-        allowJumpPointSearchTypeFly = true;
     }
 
     /**
