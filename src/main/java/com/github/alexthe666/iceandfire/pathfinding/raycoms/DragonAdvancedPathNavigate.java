@@ -67,13 +67,26 @@ public class DragonAdvancedPathNavigate extends AbstractAdvancedPathNavigate {
      */
     private boolean isSneaking = true;
 
-    private boolean canFly = false;
     /**
      * Instantiates the navigation of an ourEntity.
      *
      * @param entity the ourEntity.
      * @param world  the world it is in.
      */
+    public DragonAdvancedPathNavigate(final MobEntity entity, final World world) {
+        super(entity, world);
+        this.nodeProcessor = new NodeProcessorDragonWalk();
+
+        this.nodeProcessor.setCanEnterDoors(true);
+        getPathingOptions().setEnterDoors(true);
+        this.nodeProcessor.setCanOpenDoors(true);
+        getPathingOptions().setCanOpenDoors(true);
+        this.nodeProcessor.setCanSwim(true);
+        getPathingOptions().setCanSwim(true);
+
+
+        stuckHandler = PathingStuckHandler.createStuckHandler().withTakeDamageOnStuck(0.2f).withTeleportSteps(6).withTeleportOnFullStuck();
+    }
     public DragonAdvancedPathNavigate(final MobEntity entity, final World world, final boolean isFlying) {
         super(entity, world);
         if(isFlying) {

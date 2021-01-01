@@ -202,7 +202,13 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     public float getBlockPathWeight(BlockPos pos) {
         return this.world.getBlockState(pos.down()).getBlock() instanceof BlockMyrmexResin ? 10.0F : super.getBlockPathWeight(pos);
     }
-
+    protected PathNavigator createNavigator(World worldIn) {
+        DragonAdvancedPathNavigate newNavigator = new DragonAdvancedPathNavigate(this, world);
+        this.navigator = newNavigator;
+        newNavigator.setCanSwim(true);
+        newNavigator.getNodeProcessor().setCanOpenDoors(true);
+        return newNavigator;
+    }
     protected PathNavigator createNavigator(World worldIn,boolean isFlying) {
         DragonAdvancedPathNavigate newNavigator = new DragonAdvancedPathNavigate(this, world,isFlying);
         this.navigator = newNavigator;
