@@ -24,11 +24,18 @@ import net.minecraft.dispenser.IPosition;
 import net.minecraft.dispenser.ProjectileDispenseBehavior;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionUtils;
+import net.minecraft.potion.Potions;
+
 import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.world.World;
+
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 
 public class IafRecipeRegistry {
 
@@ -234,11 +241,10 @@ public class IafRecipeRegistry {
 
         OreDictionary.registerOre("dragonSkull",  new ItemStack(IafItemRegistry.DRAGON_SKULL, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("mythicalSkull",  new ItemStack(IafItemRegistry.DRAGON_SKULL, 1, OreDictionary.WILDCARD_VALUE));
-        for(EnumSkullType skullType : EnumSkullType.values()){
+        for(EnumSkullType skullType : EnumSkullType.values()) {
             OreDictionary.registerOre("mythicalSkull", skullType.skull_item);
         }
-
-         */
+        */
 
         IafItemRegistry.BLINDFOLD_ARMOR_MATERIAL.setRepairMaterial(Ingredient.fromStacks(new ItemStack(Items.STRING)));
         IafItemRegistry.SILVER_ARMOR_MATERIAL.setRepairMaterial(Ingredient.fromStacks(new ItemStack(IafItemRegistry.SILVER_INGOT)));
@@ -276,13 +282,12 @@ public class IafRecipeRegistry {
         for (EnumSeaSerpent serpent : EnumSeaSerpent.values()) {
             serpent.armorMaterial.setRepairMaterial(Ingredient.fromStacks(new ItemStack(serpent.scale)));
         }
-        /*
-        ItemStack waterBreathingPotion = new ItemStack(Items.POTIONITEM, 1, 0);
-        CompoundNBT tag = new CompoundNBT();
-        tag.setString("Potion", "water_breathing");
-        waterBreathingPotion.setTagCompound(tag);
-        BrewingRecipeRegistry.addRecipe(new ItemStack(Items.POTIONITEM, 1, 0), new ItemStack(IafItemRegistry.SHINY_SCALES), waterBreathingPotion);
-        */
+
+        BrewingRecipeRegistry.addRecipe(Ingredient.fromItems(createPotion(Potions.WATER).getItem()), Ingredient.fromItems(IafItemRegistry.SHINY_SCALES), createPotion(Potions.WATER_BREATHING));
+    }
+
+    public static ItemStack createPotion(Potion potion) {
+        return PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), potion);
     }
 
     public static BannerPattern addBanner(String name, ItemStack craftingStack) {
