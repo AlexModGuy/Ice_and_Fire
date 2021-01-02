@@ -5,13 +5,11 @@ import java.util.EnumSet;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
-import com.github.alexthe666.iceandfire.pathfinding.raycoms.DragonAdvancedPathNavigate;
-import com.github.alexthe666.iceandfire.pathfinding.raycoms.FlexibleAdvancedPathNavigate;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 
 public class MyrmexAIMoveThroughHive extends Goal {
@@ -38,7 +36,7 @@ public class MyrmexAIMoveThroughHive extends Goal {
             return false;
         } else {
             nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(this.myrmex.getRNG(), this.myrmex.func_233580_cy_()));
-            this.path = ((FlexibleAdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextRoom.getX(), nextRoom.getY(),  nextRoom.getZ(), movementSpeed);
+            this.path = ((AdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextRoom.getX(), nextRoom.getY(),  nextRoom.getZ(), movementSpeed);
             return this.path != null;
         }
     }

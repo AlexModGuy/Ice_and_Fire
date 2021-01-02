@@ -475,12 +475,12 @@ public abstract class AbstractPathJob implements Callable<Path> {
         }
 
         //  On a ladder, we can go 1 straight-up
-        if (onLadderGoingUp(currentNode, dPos)) {
+        if (onLadderGoingUp(currentNode, dPos)||pathingOptions.canClimb()) {
             walk(currentNode, BLOCKPOS_UP);
         }
 
         //  We can also go down 1, if the lower block is a ladder
-        if (onLadderGoingDown(currentNode, dPos)) {
+        if (onLadderGoingDown(currentNode, dPos)||pathingOptions.canClimb()) {
             walk(currentNode, BLOCKPOS_DOWN);
         }
 
@@ -531,7 +531,9 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
     private Node getAndSetupStartNode() {
         Node startNode = new Node(start, computeHeuristic(start));
-        if (pathingOptions.isFlying() || pathingOptions.canClimb()){
+        //If the entity is Flying set the start node to the end node
+        //Basically letting it's pathfinder do the pathfinding
+        if (pathingOptions.isFlying()){
             startNode = new Node(end, computeHeuristic(end));
         }
 
@@ -1143,6 +1145,18 @@ public abstract class AbstractPathJob implements Callable<Path> {
      * @return true if the block is a ladder.
      */
     protected boolean isLadder(final Block block, final BlockPos pos) {
+        //If the entity can climb treat every block like a ladder that's adjacent to a solid block
+        /*if (pathingOptions.canClimb()){
+            if(world.getBlockState(pos.offset(Direction.NORTH)).getBlock().getDefaultState().isSolid())
+                return true;
+            if(world.getBlockState(pos.offset(Direction.EAST)).getBlock().getDefaultState().isSolid())
+                return true;
+            if(world.getBlockState(pos.offset(Direction.SOUTH)).getBlock().getDefaultState().isSolid())
+                return true;
+            if(world.getBlockState(pos.offset(Direction.WEST)).getBlock().getDefaultState().isSolid())
+                return true;
+            return false;
+        }*/
         return block.isLadder(this.world.getBlockState(pos), world, pos, entity.get());
     }
 

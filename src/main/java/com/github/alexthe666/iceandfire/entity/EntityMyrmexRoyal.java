@@ -10,7 +10,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexTrades;
-import com.github.alexthe666.iceandfire.pathfinding.raycoms.FlexibleAdvancedPathNavigate;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import com.google.common.base.Predicate;
 
 import net.minecraft.block.BlockState;
@@ -25,7 +25,6 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
@@ -37,8 +36,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.ClimberPathNavigator;
-import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
@@ -114,11 +111,11 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     protected void switchNavigator(boolean onLand) {
         if (onLand) {
             this.moveController = new MovementController(this);
-            this.navigator = createNavigator(world, FlexibleAdvancedPathNavigate.MovementType.CLIMBING);
+            this.navigator = createNavigator(world, AdvancedPathNavigate.MovementType.CLIMBING);
             this.isLandNavigator = true;
         } else {
             this.moveController = new EntityMyrmexRoyal.FlyMoveHelper(this);
-            this.navigator = createNavigator(world,FlexibleAdvancedPathNavigate.MovementType.FLYING);
+            this.navigator = createNavigator(world, AdvancedPathNavigate.MovementType.FLYING);
             this.isLandNavigator = false;
         }
     }
