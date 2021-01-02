@@ -367,7 +367,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public boolean isOnLadder() {
-        return super.isOnLadder();
+        return isBesideClimbableBlock();
     }
 
     @Nullable
