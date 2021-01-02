@@ -18,6 +18,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.DragonAdvancedPathNavigate;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.FlexibleAdvancedPathNavigate;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.ICustomSizeNavigator;
 import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
@@ -203,14 +204,14 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         return this.world.getBlockState(pos.down()).getBlock() instanceof BlockMyrmexResin ? 10.0F : super.getBlockPathWeight(pos);
     }
     protected PathNavigator createNavigator(World worldIn) {
-        DragonAdvancedPathNavigate newNavigator = new DragonAdvancedPathNavigate(this, world);
+        FlexibleAdvancedPathNavigate newNavigator = new FlexibleAdvancedPathNavigate(this, world);
         this.navigator = newNavigator;
         newNavigator.setCanSwim(true);
         newNavigator.getNodeProcessor().setCanOpenDoors(true);
         return newNavigator;
     }
-    protected PathNavigator createNavigator(World worldIn,boolean isFlying) {
-        DragonAdvancedPathNavigate newNavigator = new DragonAdvancedPathNavigate(this, world,isFlying);
+    protected PathNavigator createNavigator(World worldIn, FlexibleAdvancedPathNavigate.MovementType type) {
+        FlexibleAdvancedPathNavigate newNavigator = new FlexibleAdvancedPathNavigate(this, world, type);
         this.navigator = newNavigator;
         newNavigator.setCanSwim(true);
         newNavigator.getNodeProcessor().setCanOpenDoors(true);
@@ -367,7 +368,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public boolean isOnLadder() {
-        return super.isOnLadder();
+        return isBesideClimbableBlock();
     }
 
     @Nullable

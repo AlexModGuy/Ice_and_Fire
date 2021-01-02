@@ -531,7 +531,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
     private Node getAndSetupStartNode() {
         Node startNode = new Node(start, computeHeuristic(start));
-        if (pathingOptions.isFlying()){
+        if (pathingOptions.isFlying() || pathingOptions.canClimb()){
             startNode = new Node(end, computeHeuristic(end));
         }
 

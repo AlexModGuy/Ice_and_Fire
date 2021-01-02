@@ -10,6 +10,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexTrades;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.FlexibleAdvancedPathNavigate;
 import com.google.common.base.Predicate;
 
 import net.minecraft.block.BlockState;
@@ -113,11 +114,11 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     protected void switchNavigator(boolean onLand) {
         if (onLand) {
             this.moveController = new MovementController(this);
-            this.navigator = createNavigator(world,false);
+            this.navigator = createNavigator(world, FlexibleAdvancedPathNavigate.MovementType.CLIMBING);
             this.isLandNavigator = true;
         } else {
             this.moveController = new EntityMyrmexRoyal.FlyMoveHelper(this);
-            this.navigator = createNavigator(world,true);
+            this.navigator = createNavigator(world,FlexibleAdvancedPathNavigate.MovementType.FLYING);
             this.isLandNavigator = false;
         }
     }
@@ -383,7 +384,6 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         Vector3d vector3d1 = Vector3d.func_237489_a_(posVec32);
         return world.rayTraceBlocks(new RayTraceContext(vector3d, vector3d1, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
     }
-
     class FlyMoveHelper extends MovementController {
         public FlyMoveHelper(EntityMyrmexRoyal pixie) {
             super(pixie);
