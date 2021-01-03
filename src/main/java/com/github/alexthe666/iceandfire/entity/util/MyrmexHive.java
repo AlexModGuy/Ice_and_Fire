@@ -56,6 +56,7 @@ public class MyrmexHive {
     private int tickCounter;
     private int numMyrmex;
     private int noBreedTicks;
+    private int wanderRadius = 16;
 
     public MyrmexHive() {
         this.hiveUUID = UUID.randomUUID();
@@ -142,6 +143,13 @@ public class MyrmexHive {
 
     public int getNumMyrmex() {
         return this.numMyrmex;
+    }
+
+    public int getWanderRadius(){
+        return this.wanderRadius;
+    }
+    public void setWanderRadius(int wanderRadius){
+        this.wanderRadius = wanderRadius;
     }
 
     public boolean isBlockPosWithinSqVillageRadius(BlockPos pos) {
@@ -293,6 +301,9 @@ public class MyrmexHive {
         }
         this.colonyName = compound.getString("ColonyName");
         this.villageRadius = compound.getInt("Radius");
+        if (compound.hasUniqueId("WanderRadius")) {
+            this.wanderRadius = compound.getInt("WanderRadius");
+        }
         this.lastAddDoorTimestamp = compound.getInt("Stable");
         this.tickCounter = compound.getInt("Tick");
         this.noBreedTicks = compound.getInt("MTick");
@@ -362,6 +373,7 @@ public class MyrmexHive {
         }
         compound.putString("ColonyName", this.colonyName);
         compound.putInt("Radius", this.villageRadius);
+        compound.putInt("WanderRadius",this.wanderRadius);
         compound.putInt("Stable", this.lastAddDoorTimestamp);
         compound.putInt("Tick", this.tickCounter);
         compound.putInt("MTick", this.noBreedTicks);
