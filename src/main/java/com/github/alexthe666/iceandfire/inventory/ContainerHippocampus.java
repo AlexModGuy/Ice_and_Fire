@@ -114,6 +114,7 @@ public class ContainerHippocampus extends Container {
         for (int j1 = 0; j1 < 9; ++j1) {
             this.addSlot(new Slot(player.inventory, j1, 8 + j1 * 18, 142));
         }
+
     }
 
     @Override
