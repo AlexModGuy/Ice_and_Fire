@@ -100,7 +100,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     public EntityMyrmexBase(EntityType t, World worldIn) {
         super(t, worldIn);
-       this.stepHeight = 2;
+        this.stepHeight = 2;
         //this.moveController = new GroundMoveHelper(this);
     }
 
@@ -289,7 +289,6 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                 listnbt.add(itemstack.write(new CompoundNBT()));
             }
         }
-
         tag.put("Inventory", listnbt);
     }
 
@@ -367,7 +366,10 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public boolean isOnLadder() {
-        return super.isOnLadder();
+        if(!isBesideClimbableBlock()){
+            return super.isOnLadder();
+        }
+        return true;
     }
 
     @Nullable

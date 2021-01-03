@@ -22,13 +22,13 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 
 public class MyrmexAIForage extends Goal {
-    private static final int RADIUS = 8;
+    private static final int RADIUS = 16;
 
     private final EntityMyrmexWorker myrmex;
     private final BlockSorter targetSorter;
     private BlockPos targetBlock = null;
-    private int wanderRadius = RADIUS * 2;
-
+    private int wanderRadius;
+    private int maximumWanderRadius = 5000;
     public MyrmexAIForage(EntityMyrmexWorker myrmex) {
         super();
         this.myrmex = myrmex;
@@ -52,12 +52,25 @@ public class MyrmexAIForage extends Goal {
         }
         if (allBlocks.isEmpty()) {
             this.myrmex.keepSearching = true;
-            this.wanderRadius += RADIUS;
-            Vector3d vec = RandomPositionGenerator.findRandomTarget(this.myrmex, wanderRadius, 7);
-            if (vec != null) {
-                this.targetBlock = new BlockPos(vec);
+            if (myrmex.getHive() != null) {
+                wanderRadius = myrmex.getHive().getWanderRadius();
             }
-            return this.targetBlock != null;
+            if (wanderRadius < maximumWanderRadius) {
+                if (myrmex.getHive() != null){
+                    wanderRadius *= 10;
+                    myrmex.getHive().setWanderRadius(wanderRadius);
+                }
+                else {
+                    this.wanderRadius *= 10;
+                }
+                Vector3d vec = RandomPositionGenerator.findRandomTarget(this.myrmex, wanderRadius, 7);
+
+                if (vec != null) {
+                    this.targetBlock = new BlockPos(vec);
+                }
+                return this.targetBlock != null;
+            }
+            return false;
         }
         allBlocks.sort(this.targetSorter);
         this.targetBlock = allBlocks.get(0);
