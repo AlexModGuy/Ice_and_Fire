@@ -56,6 +56,7 @@ public class MyrmexHive {
     private int tickCounter;
     private int numMyrmex;
     private int noBreedTicks;
+    private int wanderRadius = 16;
 
     public MyrmexHive() {
         this.hiveUUID = UUID.randomUUID();
@@ -144,6 +145,13 @@ public class MyrmexHive {
         return this.numMyrmex;
     }
 
+    public int getWanderRadius(){
+        return this.wanderRadius;
+    }
+    public void setWanderRadius(int wanderRadius){
+        this.wanderRadius = wanderRadius;
+    }
+
     public boolean isBlockPosWithinSqVillageRadius(BlockPos pos) {
         return this.center.distanceSq(pos) < (double) (this.villageRadius * this.villageRadius);
     }
@@ -188,7 +196,7 @@ public class MyrmexHive {
         PlayerEntity PlayerEntity = null;
 
         for (UUID s : this.playerReputation.keySet()) {
-            if (this.isPlayerReputationTooLowToFight(s)) {
+            if (this.isPlayerReputationTooHighToFight(s)) {
                 PlayerEntity PlayerEntity1 = world.getPlayerByUuid(s);
 
                 if (PlayerEntity1 != null) {
@@ -277,8 +285,8 @@ public class MyrmexHive {
         return this.getPlayerReputation(uuid) >= 75;
     }
 
-    public boolean isPlayerReputationTooLowToFight(UUID uuid) {
-        return this.getPlayerReputation(uuid) < 25;
+    public boolean isPlayerReputationTooHighToFight(UUID uuid) {
+        return this.getPlayerReputation(uuid) >= 25;
     }
 
     /**
@@ -293,6 +301,9 @@ public class MyrmexHive {
         }
         this.colonyName = compound.getString("ColonyName");
         this.villageRadius = compound.getInt("Radius");
+        if (compound.hasUniqueId("WanderRadius")) {
+            this.wanderRadius = compound.getInt("WanderRadius");
+        }
         this.lastAddDoorTimestamp = compound.getInt("Stable");
         this.tickCounter = compound.getInt("Tick");
         this.noBreedTicks = compound.getInt("MTick");
@@ -362,6 +373,7 @@ public class MyrmexHive {
         }
         compound.putString("ColonyName", this.colonyName);
         compound.putInt("Radius", this.villageRadius);
+        compound.putInt("WanderRadius",this.wanderRadius);
         compound.putInt("Stable", this.lastAddDoorTimestamp);
         compound.putInt("Tick", this.tickCounter);
         compound.putInt("MTick", this.noBreedTicks);

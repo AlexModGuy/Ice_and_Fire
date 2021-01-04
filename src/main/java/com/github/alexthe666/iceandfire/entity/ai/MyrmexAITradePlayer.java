@@ -29,12 +29,15 @@ public class MyrmexAITradePlayer extends Goal {
             return false;
         } else {
             PlayerEntity PlayerEntity = this.myrmex.getCustomer();
-
             if (PlayerEntity == null) {
                 return false;
             } else if (this.myrmex.getDistanceSq(PlayerEntity) > 16.0D) {
                 return false;
-            } else {
+            }
+            else if (this.myrmex.getHive() != null && !this.myrmex.getHive().isPlayerReputationTooLowToTrade(PlayerEntity.getUniqueID())){
+                return false;
+            }
+            else {
                 return PlayerEntity.openContainer != null;
             }
         }

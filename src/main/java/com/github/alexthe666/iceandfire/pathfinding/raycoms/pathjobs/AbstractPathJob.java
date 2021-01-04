@@ -536,8 +536,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
         if (pathingOptions.isFlying()){
             startNode = new Node(end, computeHeuristic(end));
         }
-
-
         if (isLadder(start)) {
             startNode.setLadder();
         } else if (world.getBlockState(start.down()).getMaterial().isLiquid()) {

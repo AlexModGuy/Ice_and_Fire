@@ -100,10 +100,9 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     public EntityMyrmexBase(EntityType t, World worldIn) {
         super(t, worldIn);
-       this.stepHeight = 2;
+        this.stepHeight = 2;
         //this.moveController = new GroundMoveHelper(this);
     }
-
     private static boolean isJungleBiome(World world, BlockPos position) {
         return IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.jungleMyrmexBiomes, world.getBiome(position));
     }
@@ -256,7 +255,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         }
         if (this.getAttackTarget() != null && (haveSameHive(this, this.getAttackTarget()) ||
                 this.getAttackTarget() instanceof TameableEntity && !canAttackTamable((TameableEntity) this.getAttackTarget()) ||
-                this.getAttackTarget() instanceof PlayerEntity && this.getHive() != null && !this.getHive().isPlayerReputationTooLowToFight(this.getAttackTarget().getUniqueID()))) {
+                this.getAttackTarget() instanceof PlayerEntity && this.getHive() != null && !this.getHive().isPlayerReputationTooHighToFight(this.getAttackTarget().getUniqueID()))) {
             this.setAttackTarget(null);
         }
 
@@ -289,7 +288,6 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                 listnbt.add(itemstack.write(new CompoundNBT()));
             }
         }
-
         tag.put("Inventory", listnbt);
     }
 
@@ -317,7 +315,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     public boolean canAttackTamable(TameableEntity tameable) {
         if (tameable.getOwner() != null && this.getHive() != null) {
-            return this.getHive().isPlayerReputationTooLowToFight(tameable.getOwnerId());
+            return this.getHive().isPlayerReputationTooHighToFight(tameable.getOwnerId());
         }
         return true;
     }
@@ -405,7 +403,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public void setRevengeTarget(@Nullable LivingEntity livingBase) {
-        if (this.getHive() == null || livingBase == null || livingBase instanceof PlayerEntity && this.getHive().isPlayerReputationTooLowToFight(livingBase.getUniqueID())) {
+        if (this.getHive() == null || livingBase == null || livingBase instanceof PlayerEntity && this.getHive().isPlayerReputationTooHighToFight(livingBase.getUniqueID())) {
             super.setRevengeTarget(livingBase);
         }
         if (this.getHive() != null && livingBase != null) {
@@ -455,8 +453,10 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                 return super.func_230254_b_(player, hand);
             } else {
                 if (!this.world.isRemote && (this.getAttackTarget() == null || !this.getAttackTarget().equals(player))) {
-                    this.setCustomer(player);
-                    this.openMerchantContainer(player, this.getDisplayName(), 1);
+                    if (this.getHive()!=null && !this.getHive().isPlayerReputationTooLowToTrade(player.getUniqueID())) {
+                        this.setCustomer(player);
+                        this.openMerchantContainer(player, this.getDisplayName(), 1);
+                    }
                 }
 
                 return ActionResultType.SUCCESS;
