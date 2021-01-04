@@ -103,7 +103,6 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         this.stepHeight = 2;
         //this.moveController = new GroundMoveHelper(this);
     }
-
     private static boolean isJungleBiome(World world, BlockPos position) {
         return IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.jungleMyrmexBiomes, world.getBiome(position));
     }
@@ -454,8 +453,10 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                 return super.func_230254_b_(player, hand);
             } else {
                 if (!this.world.isRemote && (this.getAttackTarget() == null || !this.getAttackTarget().equals(player))) {
-                    this.setCustomer(player);
-                    this.openMerchantContainer(player, this.getDisplayName(), 1);
+                    if (this.getHive()!=null && !this.getHive().isPlayerReputationTooLowToTrade(player.getUniqueID())) {
+                        this.setCustomer(player);
+                        this.openMerchantContainer(player, this.getDisplayName(), 1);
+                    }
                 }
 
                 return ActionResultType.SUCCESS;

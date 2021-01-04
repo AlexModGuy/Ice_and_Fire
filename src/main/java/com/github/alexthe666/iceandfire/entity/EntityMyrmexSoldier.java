@@ -44,6 +44,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
 
     public EntityMyrmexSoldier(EntityType t, World worldIn) {
         super(t, worldIn);
+
     }
 
     @Override
@@ -67,7 +68,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
 
     public void livingTick() {
         super.livingTick();
-        if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
+        /*if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
@@ -81,7 +82,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue() * 2));
                 this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 200, 2));
             }
-        }
+        }*/
         if (this.guardingEntity != null) {
             this.guardingEntity.isBeingGuarded = true;
             this.isEnteringHive = this.guardingEntity.isEnteringHive;
@@ -160,6 +161,19 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         }
         if (this.getAnimation() != ANIMATION_STING && this.getAnimation() != ANIMATION_BITE) {
             this.setAnimation(this.getRNG().nextBoolean() ? ANIMATION_STING : ANIMATION_BITE);
+            float f = (float)this.func_233637_b_(Attributes.field_233823_f_);
+            this.setLastAttackedEntity(entityIn);
+            boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), f);
+            if (this.getAnimation() == ANIMATION_STING && flag){
+                this.playStingSound();
+                if(entityIn.isLiving()) {
+                    ((LivingEntity)entityIn).addPotionEffect(new EffectInstance(Effects.POISON, 200, 2));
+                    this.setAttackTarget((LivingEntity)entityIn);
+                }
+            }
+            else{
+                this.playBiteSound();
+            }
             if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(Hand.MAIN_HAND) != ItemStack.EMPTY) {
                 this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0);
                 this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
@@ -182,7 +196,6 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     public Animation[] getAnimations() {
         return new Animation[]{ANIMATION_PUPA_WIGGLE, ANIMATION_BITE, ANIMATION_STING};
     }
-
     @Override
     public int getXp() {
         return 0;
