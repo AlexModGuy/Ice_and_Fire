@@ -46,7 +46,8 @@ public class MyrmexWorldData extends WorldSavedData {
             }
             return data;
         }
-        return null;
+        //If the world is ClientLevel just return empty non significant data object
+        return new MyrmexWorldData();
     }
 
     public static void addHive(World world, MyrmexHive hive) {
