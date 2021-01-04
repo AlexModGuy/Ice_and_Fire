@@ -124,7 +124,15 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
             this.playStingSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue() / 2));
-                this.getAttackTarget().startRiding(this);
+                //Make sure it doesn't grab a dead dragon
+                if (this.getAttackTarget() instanceof EntityDragonBase) {
+                    if(!((EntityDragonBase) this.getAttackTarget()).isMobDead()){
+                        this.getAttackTarget().startRiding(this);
+                    }
+                }
+                else {
+                    this.getAttackTarget().startRiding(this);
+                }
             }
         }
         if (this.getAnimation() == ANIMATION_SLASH && this.getAttackTarget() != null && this.getAnimationTick() % 5 == 0 && this.getAnimationTick() <= 20) {
