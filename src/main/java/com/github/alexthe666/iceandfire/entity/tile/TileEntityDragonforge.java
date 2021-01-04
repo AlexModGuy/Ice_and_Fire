@@ -248,6 +248,16 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         return null;
     }
 
+    private DragonForgeRecipe getRecipeForBlood(ItemStack bloodStack) {
+        switch (this.isFire) {
+            case 0: return IafRecipeRegistry.getFireForgeRecipeForBlood(bloodStack);
+            case 1: return IafRecipeRegistry.getIceForgeRecipeForBlood(bloodStack);
+            case 2: return IafRecipeRegistry.getLightningForgeRecipeForBlood(bloodStack);
+        }
+
+        return null;
+    }
+
     private Block getDefaultOutput() {
         if (this.isFire == 1) {
             return IafBlockRegistry.DRAGON_ICE;
@@ -348,19 +358,12 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         if (index == 2) {
             return false;
-        } else if (index == 1) {
-            DragonForgeRecipe forgeRecipe = null;
-            if (this.isFire == 0) {
-                forgeRecipe = IafRecipeRegistry.getFireForgeRecipeForBlood(this.forgeItemStacks.get(0));
-            } else if (this.isFire == 1) {
-                forgeRecipe = IafRecipeRegistry.getIceForgeRecipeForBlood(this.forgeItemStacks.get(0));
-            } else {
-                forgeRecipe = IafRecipeRegistry.getLightningForgeRecipe(this.forgeItemStacks.get(0));
-            }
-            if (forgeRecipe != null) {
-                return true;
-            }
         }
+
+        if (index == 1) {
+            return getRecipeForBlood(stack) != null;
+        }
+
         return index == 0;
     }
 
