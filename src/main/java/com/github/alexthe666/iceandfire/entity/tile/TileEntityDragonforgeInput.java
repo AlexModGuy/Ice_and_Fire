@@ -30,9 +30,8 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
     }
 
     public void onHitWithFlame() {
-        TileEntityDragonforge forge = getConnectedTileEntity();
-        if (forge != null) {
-            forge.transferPower(1);
+        if (core != null) {
+            core.transferPower(1);
         }
     }
 
@@ -180,8 +179,8 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
     @Override
     @javax.annotation.Nullable
     public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-        if (getConnectedTileEntity() != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return getConnectedTileEntity().getCapability(capability, facing);
+        if (core != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return core.getCapability(capability, facing);
         }
         return super.getCapability(capability, facing);
     }
