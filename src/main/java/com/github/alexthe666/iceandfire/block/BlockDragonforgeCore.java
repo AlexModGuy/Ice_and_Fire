@@ -130,11 +130,13 @@ public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof
         return new TileEntityDragonforge(isFire);
     }
 
+    @Override
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         TileEntity tileentity = worldIn.getTileEntity(pos);
         if (tileentity instanceof TileEntityDragonforge) {
             InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityDragonforge) tileentity);
             worldIn.updateComparatorOutputLevel(pos, this);
+            worldIn.removeTileEntity(pos);
         }
     }
 
