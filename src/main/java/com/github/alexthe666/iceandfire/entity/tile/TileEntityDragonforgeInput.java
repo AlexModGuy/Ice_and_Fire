@@ -72,7 +72,7 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
 
     protected void lureDragons() {
         boolean flag = false;
-        if (core != null && core.canSmelt()) {
+        if (core != null && core.assembled() && core.canSmelt()) {
             for (EntityDragonBase dragon : world.getEntitiesWithinAABB(EntityDragonBase.class, new AxisAlignedBB((double) pos.getX() - LURE_DISTANCE, (double) pos.getY() - LURE_DISTANCE, (double) pos.getZ() - LURE_DISTANCE, (double) pos.getX() + LURE_DISTANCE, (double) pos.getY() + LURE_DISTANCE, (double) pos.getZ() + LURE_DISTANCE))) {
                 if (getDragonType() == DragonType.getIntFromType(dragon.dragonType) && (dragon.isChained() || dragon.isTamed()) && canSeeInput(dragon, new Vector3d(this.getPos().getX() + 0.5F, this.getPos().getY() + 0.5F, this.getPos().getZ() + 0.5F))) {
                     dragon.burningTarget = this.pos;
