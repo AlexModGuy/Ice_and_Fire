@@ -102,6 +102,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     public EntityMyrmexBase(EntityType t, World worldIn) {
         super(t, worldIn);
         this.stepHeight = 2;
+        this.navigator = createNavigator(worldIn, AdvancedPathNavigate.MovementType.CLIMBING);
         //this.moveController = new GroundMoveHelper(this);
     }
     private static boolean isJungleBiome(World world, BlockPos position) {
@@ -203,20 +204,18 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         return this.world.getBlockState(pos.down()).getBlock() instanceof BlockMyrmexResin ? 10.0F : super.getBlockPathWeight(pos);
     }
     protected PathNavigator createNavigator(World worldIn) {
-        AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, world);
-        this.navigator = newNavigator;
-        newNavigator.setCanSwim(true);
-        newNavigator.getNodeProcessor().setCanOpenDoors(true);
-        return newNavigator;
+        return createNavigator(worldIn, AdvancedPathNavigate.MovementType.CLIMBING);
     }
     protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type) {
-        AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, world, type);
+        return createNavigator(worldIn,type,1,1);
+    }
+    protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type,float width, float height) {
+        AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, world, type,width,height);
         this.navigator = newNavigator;
         newNavigator.setCanSwim(true);
         newNavigator.getNodeProcessor().setCanOpenDoors(true);
         return newNavigator;
     }
-
     protected void registerData() {
         super.registerData();
         this.dataManager.register(CLIMBING, Byte.valueOf((byte) 0));

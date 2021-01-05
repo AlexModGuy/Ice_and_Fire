@@ -473,20 +473,18 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     protected abstract void breathFireAtPos(BlockPos burningTarget);
     protected PathNavigator createNavigator(World worldIn) {
-        AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, world);
-        this.navigator = newNavigator;
-        newNavigator.setCanSwim(true);
-        newNavigator.getNodeProcessor().setCanOpenDoors(true);
-        return newNavigator;
+        return createNavigator(worldIn, AdvancedPathNavigate.MovementType.WALKING);
     }
     protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type) {
-        AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, world,type);
+        return createNavigator(worldIn,type,4f,4f);
+    }
+    protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type,float width,float height) {
+        AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, world,type,width,height);
         this.navigator = newNavigator;
         newNavigator.setCanSwim(true);
         newNavigator.getNodeProcessor().setCanOpenDoors(true);
         return newNavigator;
     }
-
     protected void switchNavigator(int navigatorType) {
         if (navigatorType == 0) {
             this.moveController = new IafDragonFlightManager.GroundMoveHelper(this);
