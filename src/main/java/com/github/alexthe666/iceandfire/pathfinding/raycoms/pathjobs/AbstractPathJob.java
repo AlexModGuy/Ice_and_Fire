@@ -1192,18 +1192,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
      * @return true if the block is a ladder.
      */
     protected boolean isLadder(final Block block, final BlockPos pos) {
-        //If the entity can climb treat every block like a ladder that's adjacent to a solid block
-        /*if (pathingOptions.canClimb()){
-            if(world.getBlockState(pos.offset(Direction.NORTH)).getBlock().getDefaultState().isSolid())
-                return true;
-            if(world.getBlockState(pos.offset(Direction.EAST)).getBlock().getDefaultState().isSolid())
-                return true;
-            if(world.getBlockState(pos.offset(Direction.SOUTH)).getBlock().getDefaultState().isSolid())
-                return true;
-            if(world.getBlockState(pos.offset(Direction.WEST)).getBlock().getDefaultState().isSolid())
-                return true;
-            return false;
-        }*/
         return block.isLadder(this.world.getBlockState(pos), world, pos, entity.get());
     }
 
