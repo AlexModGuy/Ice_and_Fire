@@ -31,6 +31,10 @@ public class MyrmexAILeaveHive extends Goal {
         if (this.myrmex instanceof EntityMyrmexQueen) {
             return false;
         }
+        //If it's riding something don't execute
+        if (this.myrmex.isPassenger()){
+            return false;
+        }
         if (this.myrmex.isChild()) {
             return false;
         }
@@ -42,7 +46,7 @@ public class MyrmexAILeaveHive extends Goal {
             return false;
         } else {
             nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, village.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), true));
-            this.path = ((AdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY(),  nextEntrance.getZ(), movementSpeed);
+            this.path = ((AdvancedPathNavigate) this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY(), nextEntrance.getZ(), movementSpeed);
             inProgPos = new BlockPos(this.myrmex.func_233580_cy_());
             return true;
         }

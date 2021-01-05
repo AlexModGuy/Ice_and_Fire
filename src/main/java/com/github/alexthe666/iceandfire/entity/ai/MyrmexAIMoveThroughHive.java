@@ -32,6 +32,9 @@ public class MyrmexAIMoveThroughHive extends Goal {
         if (village == null) {
             village = this.myrmex.getHive();
         }
+        if (this.myrmex.isPassenger()){
+            return false;
+        }
         if (village == null) {
             return false;
         } else {

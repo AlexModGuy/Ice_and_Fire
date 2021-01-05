@@ -87,6 +87,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     public boolean isEnteringHive = false;
     public boolean isBeingGuarded = false;
     protected int growthTicks = 1;
+    private int waitTicks = 0;
     @Nullable
     protected MerchantOffers offers;
     private int animationTick;
@@ -297,7 +298,9 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         this.setGrowthStage(tag.getInt("GrowthStage"));
         this.growthTicks = tag.getInt("GrowthTicks");
         this.setJungleVariant(tag.getBoolean("Variant"));
-        this.setHive(MyrmexWorldData.get(world).getHiveFromUUID(tag.getUniqueId("HiveUUID")));
+        if (tag.hasUniqueId("HiveUUID")) {
+            this.setHive(MyrmexWorldData.get(world).getHiveFromUUID(tag.getUniqueId("HiveUUID")));
+        }
         if (tag.contains("Offers", 10)) {
             this.offers = new MerchantOffers(tag.getCompound("Offers"));
         }
@@ -334,6 +337,14 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     public void setGrowthStage(int stage) {
         this.dataManager.set(GROWTH_STAGE, stage);
+    }
+
+    public void setWaitTicks(int waitTicks) {
+        this.waitTicks = waitTicks;
+    }
+
+    public int getWaitTicks() {
+        return waitTicks;
     }
 
     public boolean isJungle() {

@@ -1,9 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
@@ -42,6 +39,10 @@ public class MyrmexAIForage extends Goal {
             return false;
         }
         List<BlockPos> allBlocks = new ArrayList<BlockPos>();
+        if (this.myrmex.getWaitTicks()>0){
+            this.myrmex.setWaitTicks(this.myrmex.getWaitTicks()-1);
+            return false;
+        }
         for (BlockPos pos : BlockPos.getAllInBox(this.myrmex.func_233580_cy_().add(-RADIUS, -RADIUS/2, -RADIUS), this.myrmex.func_233580_cy_().add(RADIUS, RADIUS/2, RADIUS)).map(BlockPos::toImmutable).collect(Collectors.toList())) {
             if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this.myrmex, pos.getX(), pos.getY(), pos.getZ())))
                 continue;
@@ -50,6 +51,7 @@ public class MyrmexAIForage extends Goal {
                 this.myrmex.keepSearching = false;
             }
         }
+
         if (allBlocks.isEmpty()) {
             this.myrmex.keepSearching = true;
             if (myrmex.getHive() != null) {
@@ -70,6 +72,7 @@ public class MyrmexAIForage extends Goal {
                 }
                 return this.targetBlock != null;
             }
+            this.myrmex.setWaitTicks(1000+ new Random().nextInt(200));
             return false;
         }
         allBlocks.sort(this.targetSorter);
