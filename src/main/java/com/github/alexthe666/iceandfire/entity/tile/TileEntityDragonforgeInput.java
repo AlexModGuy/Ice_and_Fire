@@ -71,20 +71,42 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
     }
 
     protected void lureDragons() {
-        boolean flag = false;
-        if (core != null && core.assembled() && core.canSmelt()) {
-            for (EntityDragonBase dragon : world.getEntitiesWithinAABB(EntityDragonBase.class, new AxisAlignedBB((double) pos.getX() - LURE_DISTANCE, (double) pos.getY() - LURE_DISTANCE, (double) pos.getZ() - LURE_DISTANCE, (double) pos.getX() + LURE_DISTANCE, (double) pos.getY() + LURE_DISTANCE, (double) pos.getZ() + LURE_DISTANCE))) {
-                if (getDragonType() == DragonType.getIntFromType(dragon.dragonType) && (dragon.isChained() || dragon.isTamed()) && canSeeInput(dragon, new Vector3d(this.getPos().getX() + 0.5F, this.getPos().getY() + 0.5F, this.getPos().getZ() + 0.5F))) {
-                    dragon.burningTarget = this.pos;
-                    flag = true;
-                }
-            }
-        } else {
-            for (EntityDragonBase dragon : world.getEntitiesWithinAABB(EntityDragonBase.class, new AxisAlignedBB((double) pos.getX() - LURE_DISTANCE, (double) pos.getY() - LURE_DISTANCE, (double) pos.getZ() - LURE_DISTANCE, (double) pos.getX() + LURE_DISTANCE, (double) pos.getY() + LURE_DISTANCE, (double) pos.getZ() + LURE_DISTANCE))) {
-                if (dragon.burningTarget == this.pos || flag) {
-                    dragon.burningTarget = null;
-                    dragon.setBreathingFire(false);
-                }
+        Vector3d targetPosition = new Vector3d(
+            this.getPos().getX() + 0.5F,
+            this.getPos().getY() + 0.5F,
+            this.getPos().getZ() + 0.5F
+        );
+
+        AxisAlignedBB searchArea = new AxisAlignedBB(
+            (double) pos.getX() - LURE_DISTANCE,
+            (double) pos.getY() - LURE_DISTANCE,
+            (double) pos.getZ() - LURE_DISTANCE,
+            (double) pos.getX() + LURE_DISTANCE,
+            (double) pos.getY() + LURE_DISTANCE,
+            (double) pos.getZ() + LURE_DISTANCE
+        );
+
+        boolean dragonSelected = false;
+        for (EntityDragonBase dragon : world.getEntitiesWithinAABB(EntityDragonBase.class, searchArea)) {
+            if (
+                !dragonSelected &&
+
+                // Forge Core Checks
+                core != null &&
+                core.assembled() &&
+                core.canSmelt() &&
+
+                // Dragon Checks
+                getDragonType() == DragonType.getIntFromType(dragon.dragonType) &&
+                (dragon.isChained() || dragon.isTamed()) &&
+                canSeeInput(dragon, targetPosition)
+            ) {
+                dragon.burningTarget = this.pos;
+                dragonSelected = true;
+
+            } else if(dragon.burningTarget == this.pos) {
+                dragon.burningTarget = null;
+                dragon.setBreathingFire(false);
             }
         }
     }
