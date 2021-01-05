@@ -46,7 +46,7 @@ public class HippogryphAIMate extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return !this.targetMate.isAlive() && this.targetMate.isInLove() && this.spawnBabyDelay < 60;
+        return this.targetMate.isAlive() && this.targetMate.isInLove() && this.spawnBabyDelay < 60;
     }
 
     public void resetTask() {

@@ -436,7 +436,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
             if (!xzRestricted || (currentNode.pos.getX() >= minX && currentNode.pos.getX() <= maxX && currentNode.pos.getZ() >= minZ && currentNode.pos.getZ() <= maxZ)) {
                 walkCurrentNode(currentNode);
-
             }
         }
 
@@ -483,7 +482,21 @@ public abstract class AbstractPathJob implements Callable<Path> {
         if (onLadderGoingDown(currentNode, dPos)) {
             walk(currentNode, BLOCKPOS_DOWN);
         }
-
+        //If the entity can climb and it's need to climb a block higher than 1 block
+        if (pathingOptions.canClimb()&&getHighest(currentNode.pos)>1){
+            walk(currentNode,BLOCKPOS_UP);
+            walk(currentNode,BLOCKPOS_DOWN);
+        }
+        //After entity has climbed something step forward
+        if (currentNode.parent != null &&
+            currentNode.parent.pos.getX() == currentNode.pos.getX() &&
+            currentNode.parent.pos.getZ() == currentNode.pos.getZ() &&
+            currentNode.pos.getY() - currentNode.parent.pos.getY() > 1
+            &&pathingOptions.canClimb()){
+            if (currentNode.parent.parent != null) {
+                walk(currentNode, currentNode.parent.pos.subtract(currentNode.parent.parent.pos));
+            }
+        }
         // Only explore downwards when dropping
         if ((currentNode.parent == null || !currentNode.parent.pos.equals(currentNode.pos.down())) && currentNode.isCornerNode()) {
             walk(currentNode, BLOCKPOS_DOWN);
@@ -531,6 +544,8 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
     private Node getAndSetupStartNode() {
         Node startNode = new Node(start, computeHeuristic(start));
+        //If the entity is Flying set the start node to the end node
+        //Basically letting it's pathfinder do the pathfinding
         if (pathingOptions.isFlying()){
             startNode = new Node(end, computeHeuristic(end));
         }
@@ -911,6 +926,9 @@ public abstract class AbstractPathJob implements Callable<Path> {
         double parentMaxY = parentY + parent.pos.down().getY();
         final double targetMaxY = target.getCollisionShape(world, pos).getEnd(Direction.Axis.Y) + pos.getY();
         if (targetMaxY - parentMaxY < jumpHeight) {
+            if (pathingOptions.canClimb()){
+                return pos.getY()+ getHighest(pos);
+            }
             return pos.getY() + 1;
         }
         if (target.getBlock() instanceof StairsBlock
@@ -921,7 +939,40 @@ public abstract class AbstractPathJob implements Callable<Path> {
         }
         return -1;
     }
-
+    private int getHighest(BlockPos pos){
+        int max = 1;
+        if (world.getBlockState(pos.north()).isSolid()) {
+            if(properTop(pos.north())>max){
+                max = properTop(pos.north());
+            }
+        }
+        if (world.getBlockState(pos.east()).isSolid()) {
+            if(properTop(pos.east())>max){
+                max = properTop(pos.east());
+            }
+        }
+        if (world.getBlockState(pos.south()).isSolid()) {
+            if(properTop(pos.south())>max){
+                max = properTop(pos.south());
+            }
+        }
+        if (world.getBlockState(pos.west()).isSolid()) {
+            if(properTop(pos.west())>max){
+                max = properTop(pos.west());
+            }
+        }
+        return max;
+    }
+    private int properTop(BlockPos pos){
+        BlockState target = world.getBlockState(pos);
+        int i = 0;
+        while (target.isSolid()){
+            pos = pos.up();
+            target = world.getBlockState(pos);
+            i++;
+        }
+        return i-1;
+    }
     private boolean checkHeadBlock(@Nullable final Node parent, final BlockPos pos) {
         BlockPos localPos = pos;
         final VoxelShape bb = world.getBlockState(localPos).getCollisionShape(world, localPos);
@@ -1141,6 +1192,18 @@ public abstract class AbstractPathJob implements Callable<Path> {
      * @return true if the block is a ladder.
      */
     protected boolean isLadder(final Block block, final BlockPos pos) {
+        //If the entity can climb treat every block like a ladder that's adjacent to a solid block
+        /*if (pathingOptions.canClimb()){
+            if(world.getBlockState(pos.offset(Direction.NORTH)).getBlock().getDefaultState().isSolid())
+                return true;
+            if(world.getBlockState(pos.offset(Direction.EAST)).getBlock().getDefaultState().isSolid())
+                return true;
+            if(world.getBlockState(pos.offset(Direction.SOUTH)).getBlock().getDefaultState().isSolid())
+                return true;
+            if(world.getBlockState(pos.offset(Direction.WEST)).getBlock().getDefaultState().isSolid())
+                return true;
+            return false;
+        }*/
         return block.isLadder(this.world.getBlockState(pos), world, pos, entity.get());
     }
 
