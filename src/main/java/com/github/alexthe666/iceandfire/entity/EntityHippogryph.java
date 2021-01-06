@@ -1137,6 +1137,8 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     public void refreshInventory() {
+        //This isn't needed (anymore) since it's already being handled by minecraft
+        /*
         ItemStack saddle = this.hippogryphInventory.getStackInSlot(0);
         ItemStack chest = this.hippogryphInventory.getStackInSlot(1);
         this.setSaddled(saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty());
@@ -1147,6 +1149,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 1, chest != null && chest.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !chest.isEmpty() ? 1 : 0));
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 2, this.getIntFromArmor(this.hippogryphInventory.getStackInSlot(2))));
         }
+         */
     }
 
     @Override
