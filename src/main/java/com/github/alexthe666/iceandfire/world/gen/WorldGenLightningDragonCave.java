@@ -93,7 +93,7 @@ public class WorldGenLightningDragonCave extends Feature<NoFeatureConfig> {
         dragon.homePos = position;
         dragon.setHunger(50);
         worldIn.addEntity(dragon);
-        return false;
+        return true;
     }
 
     private void decorateCave(IWorld worldIn, Random rand, BlockPos pos, int radius) {

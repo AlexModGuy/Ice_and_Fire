@@ -155,7 +155,7 @@ public class WorldGenLightningDragonRoosts extends Feature<NoFeatureConfig> {
                 }
             }
         }
-        return false;
+        return true;
     }
 
     private void transformState(IWorld world, BlockPos blockpos, BlockState state) {
