@@ -32,7 +32,7 @@ public class MyrmexAIMoveThroughHive extends Goal {
         if (village == null) {
             village = this.myrmex.getHive();
         }
-        if (this.myrmex.isPassenger()){
+        if (!(this.myrmex.getNavigator() instanceof AdvancedPathNavigate) ||this.myrmex.isPassenger()){
             return false;
         }
         if (village == null) {

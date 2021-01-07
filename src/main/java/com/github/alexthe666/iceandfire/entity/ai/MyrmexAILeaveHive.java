@@ -32,7 +32,7 @@ public class MyrmexAILeaveHive extends Goal {
             return false;
         }
         //If it's riding something don't execute
-        if (this.myrmex.isPassenger()){
+        if (!(this.myrmex.getNavigator() instanceof AdvancedPathNavigate) ||this.myrmex.isPassenger()){
             return false;
         }
         if (this.myrmex.isChild()) {
