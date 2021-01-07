@@ -93,7 +93,9 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
         hasProduced = compound.getBoolean("HasProduced");
         ticksExisted = compound.getInt("TicksExisted");
         tamedPixie = compound.getBoolean("TamedPixie");
-        pixieOwnerUUID = compound.getUniqueId("PixieOwnerUUID");
+        if (compound.hasUniqueId("PixieOwnerUUID")){
+            pixieOwnerUUID = compound.getUniqueId("PixieOwnerUUID");
+        }
         this.pixieItems = NonNullList.withSize(1, ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, pixieItems);
         super.func_230337_a_(state, compound);
