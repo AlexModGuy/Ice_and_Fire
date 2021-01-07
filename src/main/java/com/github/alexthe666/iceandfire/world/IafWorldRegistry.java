@@ -64,6 +64,7 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -301,15 +302,16 @@ public class IafWorldRegistry {
             return false;
         }
     }
-    public static boolean isFarEnoughFromDangerousGen(IWorld world, BlockPos pos) {
+    public static boolean isFarEnoughFromDangerousGen(IServerWorld world, BlockPos pos) {
         boolean canGen = true;
-        IafWorldData data = IafWorldData.get(((WorldGenRegion) world).getWorld());
+        IafWorldData data = IafWorldData.get(world.getWorld());
         if (data != null) {
             BlockPos last = data.lastGeneratedDangerousStructure;
             canGen = last.distanceSq(pos) > IafConfig.dangerousWorldGenSeparationLimit * IafConfig.dangerousWorldGenSeparationLimit;
             if (canGen) {
                 data.setLastGeneratedDangerousStructure(pos);
             }
+
         }
         return canGen;
     }
