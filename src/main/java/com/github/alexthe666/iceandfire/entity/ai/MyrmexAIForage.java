@@ -25,7 +25,6 @@ public class MyrmexAIForage extends Goal {
     private final BlockSorter targetSorter;
     private BlockPos targetBlock = null;
     private int wanderRadius;
-    private int maximumWanderRadius = 5000;
     public MyrmexAIForage(EntityMyrmexWorker myrmex) {
         super();
         this.myrmex = myrmex;
@@ -56,24 +55,15 @@ public class MyrmexAIForage extends Goal {
             this.myrmex.keepSearching = true;
             if (myrmex.getHive() != null) {
                 wanderRadius = myrmex.getHive().getWanderRadius();
+                myrmex.getHive().setWanderRadius(wanderRadius*2);
             }
-            if (wanderRadius < maximumWanderRadius) {
-                if (myrmex.getHive() != null){
-                    wanderRadius *= 10;
-                    myrmex.getHive().setWanderRadius(wanderRadius);
-                }
-                else {
-                    this.wanderRadius *= 10;
-                }
-                Vector3d vec = RandomPositionGenerator.findRandomTarget(this.myrmex, wanderRadius, 7);
-
-                if (vec != null) {
-                    this.targetBlock = new BlockPos(vec);
-                }
-                return this.targetBlock != null;
+            wanderRadius *= 2;
+            this.myrmex.setWaitTicks(new Random().nextInt(10));
+            Vector3d vec = RandomPositionGenerator.findRandomTarget(this.myrmex, wanderRadius, 7);
+            if (vec != null) {
+                this.targetBlock = new BlockPos(vec);
             }
-            this.myrmex.setWaitTicks(1000+ new Random().nextInt(200));
-            return false;
+            return this.targetBlock != null;
         }
         allBlocks.sort(this.targetSorter);
         this.targetBlock = allBlocks.get(0);

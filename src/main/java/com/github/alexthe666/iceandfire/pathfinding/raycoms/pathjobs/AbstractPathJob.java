@@ -482,12 +482,12 @@ public abstract class AbstractPathJob implements Callable<Path> {
         if (onLadderGoingDown(currentNode, dPos)) {
             walk(currentNode, BLOCKPOS_DOWN);
         }
-        //If the entity can climb and it's need to climb a block higher than 1 block
+        //If the entity can climb and it needs to climb a block higher than 1 block
         if (pathingOptions.canClimb()&&getHighest(currentNode.pos)>1){
             walk(currentNode,BLOCKPOS_UP);
             walk(currentNode,BLOCKPOS_DOWN);
         }
-        //After entity has climbed something step forward
+        //After entity has climbed something step forward TODO if parent.parent !=null which direction?
         if (currentNode.parent != null &&
             currentNode.parent.pos.getX() == currentNode.pos.getX() &&
             currentNode.parent.pos.getZ() == currentNode.pos.getZ() &&
@@ -942,33 +942,39 @@ public abstract class AbstractPathJob implements Callable<Path> {
     private int getHighest(BlockPos pos){
         int max = 1;
         if (world.getBlockState(pos.north()).isSolid()) {
-            if(properTop(pos.north())>max){
-                max = properTop(pos.north());
+            if(climbableTop(pos.north(),Direction.SOUTH)>max){
+                max = climbableTop(pos.north(),Direction.SOUTH);
             }
         }
         if (world.getBlockState(pos.east()).isSolid()) {
-            if(properTop(pos.east())>max){
-                max = properTop(pos.east());
+            if(climbableTop(pos.east(),Direction.WEST)>max){
+                max = climbableTop(pos.east(),Direction.WEST);
             }
         }
         if (world.getBlockState(pos.south()).isSolid()) {
-            if(properTop(pos.south())>max){
-                max = properTop(pos.south());
+            if(climbableTop(pos.south(),Direction.NORTH)>max){
+                max = climbableTop(pos.south(),Direction.NORTH);
             }
         }
         if (world.getBlockState(pos.west()).isSolid()) {
-            if(properTop(pos.west())>max){
-                max = properTop(pos.west());
+            if(climbableTop(pos.west(),Direction.EAST)>max){
+                max = climbableTop(pos.west(),Direction.EAST);
             }
         }
         return max;
     }
-    private int properTop(BlockPos pos){
+    private int climbableTop(BlockPos pos, Direction direction){
         BlockState target = world.getBlockState(pos);
+        BlockState origin;
         int i = 0;
         while (target.isSolid()){
             pos = pos.up();
             target = world.getBlockState(pos);
+            origin = world.getBlockState(pos.offset(direction));
+            if(!isPassable(origin,pos.offset(direction))){
+                i = 1;
+                break;
+            }
             i++;
         }
         return i-1;

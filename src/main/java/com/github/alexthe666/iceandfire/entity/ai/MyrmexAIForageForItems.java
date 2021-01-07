@@ -42,7 +42,7 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
         }
         List<ItemEntity> list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(32), this.targetEntitySelector);
         if (list.isEmpty()) {
-            this.myrmex.setWaitTicks(1000+ new Random().nextInt(200));
+            this.myrmex.setWaitTicks(new Random().nextInt(10));
             return false;
         } else {
             Collections.sort(list, this.theNearestAttackableTargetSorter);
