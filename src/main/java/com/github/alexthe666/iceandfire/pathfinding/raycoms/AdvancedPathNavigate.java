@@ -9,18 +9,21 @@ import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.pathfinding.*;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.Region;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Minecolonies async PathNavigate.
@@ -112,7 +115,6 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         this.height = height;
         stuckHandler = PathingStuckHandler.createStuckHandler().withTakeDamageOnStuck(0.2f).withTeleportSteps(6).withTeleportOnFullStuck();
     }
-
 
     public static boolean isEqual(final BlockPos coords, final int x, final int y, final int z) {
         return coords.getX() == x && coords.getY() == y && coords.getZ() == z;
@@ -273,10 +275,11 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         moveToXYZ(pos.getX(), pos.getY(), pos.getZ(), speedFactor);
         return true;
     }
-
+    //Return a new WalkNodeProcessor for safety reasons eg if the entity
+    //has a passenger this method get's called and returning null is not a great idea
     @Override
     protected PathFinder getPathFinder(final int p_179679_1_) {
-        return null;
+        return new PathFinder(new WalkNodeProcessor(),p_179679_1_);
     }
 
     @Override
