@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import java.util.Locale;
 import java.util.Map;
 
 import com.github.alexthe666.citadel.client.model.TabulaModel;
@@ -150,7 +151,7 @@ public class RenderMobSkull extends EntityRenderer<EntityMobSkull> {
     }
 
     public ResourceLocation getSkullTexture(EnumSkullType skull) {
-        String s = "iceandfire:textures/models/skulls/skull_" + skull.name().toLowerCase() + ".png";
+        String s = "iceandfire:textures/models/skulls/skull_" + skull.name().toLowerCase(Locale.ROOT) + ".png";
         ResourceLocation resourcelocation = SKULL_TEXTURE_CACHE.get(s);
         if (resourcelocation == null) {
             resourcelocation = new ResourceLocation(s);

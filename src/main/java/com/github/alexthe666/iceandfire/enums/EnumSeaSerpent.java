@@ -12,6 +12,8 @@ import net.minecraft.item.Item;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.TextFormatting;
 
+import java.util.Locale;
+
 public enum EnumSeaSerpent {
     BLUE(TextFormatting.BLUE),
     BRONZE(TextFormatting.GOLD),
@@ -32,7 +34,7 @@ public enum EnumSeaSerpent {
     public Block scaleBlock;
 
     EnumSeaSerpent(TextFormatting color) {
-        this.resourceName = this.name().toLowerCase();
+        this.resourceName = this.name().toLowerCase(Locale.ROOT);
         this.color = color;
         this.scaleBlock = new BlockSeaSerpentScales(this.resourceName, this.color);
     }

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import java.lang.reflect.Field;
+import java.util.Locale;
 
 import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.citadel.server.item.CustomToolMaterial;
@@ -387,7 +388,7 @@ public class IafItemRegistry {
                 Object obj = f.get(null);
                 if (obj instanceof BannerPattern) {
                     BannerPattern pattern = (BannerPattern)obj;
-                    String name = f.getName().replace("PATTERN_", "").toLowerCase();
+                    String name = f.getName().replace("PATTERN_", "").toLowerCase(Locale.ROOT);
                     event.getRegistry().register(new BannerPatternItem(pattern, (new Item.Properties()).maxStackSize(1).group(IceAndFire.TAB_ITEMS)).setRegistryName("iceandfire:banner_pattern_" + name));
 
                 }

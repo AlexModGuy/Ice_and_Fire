@@ -1,10 +1,7 @@
 package com.github.alexthe666.iceandfire.client.gui.bestiary;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
@@ -793,7 +790,7 @@ public class GuiBestiary extends Screen {
     }
 
     public void imageFromTxt(MatrixStack ms) {
-        String fileName = this.pageType.toString().toLowerCase() + "_" + this.bookPages + ".txt";
+        String fileName = this.pageType.toString().toLowerCase(Locale.ROOT) + "_" + this.bookPages + ".txt";
         ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + Minecraft.getInstance().gameSettings.language + "_0/" + fileName);
         ResourceLocation backupLoc = new ResourceLocation("iceandfire:lang/bestiary/en_us_0/" + fileName);
         IResource resource = null;
@@ -891,7 +888,7 @@ public class GuiBestiary extends Screen {
     }
 
     public void writeFromTxt(MatrixStack ms) {
-        String fileName = this.pageType.toString().toLowerCase() + "_" + this.bookPages + ".txt";
+        String fileName = this.pageType.toString().toLowerCase(Locale.ROOT) + "_" + this.bookPages + ".txt";
         ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + Minecraft.getInstance().gameSettings.language + "_0/" + fileName);
         ResourceLocation backupLoc = new ResourceLocation("iceandfire:lang/bestiary/en_us_0/" + fileName);
         IResource resource = null;
@@ -931,7 +928,7 @@ public class GuiBestiary extends Screen {
             e.printStackTrace();
         }
         ms.push();
-        String s = StatCollector.translateToLocal("bestiary." + this.pageType.toString().toLowerCase());
+        String s = StatCollector.translateToLocal("bestiary." + this.pageType.toString().toLowerCase(Locale.ROOT));
         float scale = font.getStringWidth(s) <= 100 ? 2 : font.getStringWidth(s) * 0.0125F;
         ms.scale(scale, scale, scale);
         font.func_238421_b_(ms, s, 10, 2, 0X7A756A);

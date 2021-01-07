@@ -4,6 +4,8 @@ import com.github.alexthe666.iceandfire.item.ItemMobSkull;
 
 import net.minecraft.item.Item;
 
+import java.util.Locale;
+
 public enum EnumSkullType {
     HIPPOGRYPH,
     CYCLOPS,
@@ -18,7 +20,7 @@ public enum EnumSkullType {
     public Item skull_item;
 
     EnumSkullType() {
-        itemResourceName = this.name().toLowerCase() + "_skull";
+        itemResourceName = this.name().toLowerCase(Locale.ROOT) + "_skull";
     }
 
     public static void initItems() {
