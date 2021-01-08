@@ -9,8 +9,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
@@ -19,9 +19,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class EntityDeathWormEgg extends ProjectileItemEntity {
+public class EntityDeathWormEgg extends ProjectileItemEntity implements IEntityAdditionalSpawnData {
 
     private boolean giant;
 
@@ -44,30 +45,23 @@ public class EntityDeathWormEgg extends ProjectileItemEntity {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
+    @Override
+    public void writeSpawnData(PacketBuffer buffer) {
+        buffer.writeBoolean(this.giant);
+    }
 
     @Override
-    protected void registerData() {
-
+    public void readSpawnData(PacketBuffer additionalData) {
+        this.giant = additionalData.readBoolean();
     }
 
     @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {
         if (id == 3) {
-            double d0 = 0.08D;
-
             for (int i = 0; i < 8; ++i) {
                 this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, this.getItem()), this.getPosX(), this.getPosY(), this.getPosZ(), ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D);
             }
         }
-
-    }
-
-    protected Item getDefaultItem() {
-        return giant ? IafItemRegistry.DEATHWORM_EGG_GIGANTIC : IafItemRegistry.DEATHWORM_EGG;
-    }
-
-    protected ItemStack func_213882_k() {
-        return new ItemStack(getDefaultItem());
     }
 
     /**
@@ -93,5 +87,10 @@ public class EntityDeathWormEgg extends ProjectileItemEntity {
             this.world.setEntityState(this, (byte) 3);
             this.remove();
         }
+    }
+
+    @Override
+    protected Item getDefaultItem() {
+        return giant ? IafItemRegistry.DEATHWORM_EGG_GIGANTIC : IafItemRegistry.DEATHWORM_EGG;
     }
 }
