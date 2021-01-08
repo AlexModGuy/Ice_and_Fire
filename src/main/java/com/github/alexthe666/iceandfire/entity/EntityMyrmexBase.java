@@ -18,6 +18,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathingStuckHandler;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.ICustomSizeNavigator;
 import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
@@ -373,12 +374,12 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
         this.dataManager.set(CLIMBING, Byte.valueOf(b0));
     }
-    //Returns true if the entity has the CLIMBING tag otherwise returns isOnLadder
+    //Returns true if the entity can climb otherwise returns if it's on a ladder
     public boolean isOnLadder() {
-        if(!isBesideClimbableBlock()){
-            return super.isOnLadder();
+        if (this.getNavigator() instanceof AdvancedPathNavigate){
+            return ((AdvancedPathNavigate)this.navigator).getPathingOptions().canClimb();
         }
-        return true;
+        return super.isOnLadder();
     }
 
     @Nullable

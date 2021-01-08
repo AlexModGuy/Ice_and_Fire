@@ -5,6 +5,7 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs;
 
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.*;
 
 import net.minecraft.block.*;
@@ -482,21 +483,23 @@ public abstract class AbstractPathJob implements Callable<Path> {
         if (onLadderGoingDown(currentNode, dPos)) {
             walk(currentNode, BLOCKPOS_DOWN);
         }
-        //If the entity can climb and it needs to climb a block higher than 1 block
-        if (pathingOptions.canClimb()&&getHighest(currentNode.pos)>1){
-            walk(currentNode,BLOCKPOS_UP);
-            walk(currentNode,BLOCKPOS_DOWN);
-        }
-        //After entity has climbed something step forward TODO if parent.parent !=null which direction?
-        if (currentNode.parent != null &&
-            currentNode.parent.pos.getX() == currentNode.pos.getX() &&
-            currentNode.parent.pos.getZ() == currentNode.pos.getZ() &&
-            currentNode.pos.getY() - currentNode.parent.pos.getY() > 1
-            &&pathingOptions.canClimb()){
-            if (currentNode.parent.parent != null) {
-                walk(currentNode, currentNode.parent.pos.subtract(currentNode.parent.parent.pos));
+        if (pathingOptions.canClimb()){
+            //If the entity can climb and it needs to climb a block higher than 1 block
+            if (getHighest(currentNode.pos)>1){
+                walk(currentNode,BLOCKPOS_UP);
+                walk(currentNode,BLOCKPOS_DOWN);
+            }
+            //After entity has climbed something step forward TODO if parent.parent !=null which direction?
+            if (currentNode.parent != null &&
+                    currentNode.parent.pos.getX() == currentNode.pos.getX() &&
+                    currentNode.parent.pos.getZ() == currentNode.pos.getZ() &&
+                    currentNode.pos.getY() - currentNode.parent.pos.getY() > 1){
+                if (currentNode.parent.parent != null) {
+                    walk(currentNode, currentNode.parent.pos.subtract(currentNode.parent.parent.pos));
+                }
             }
         }
+
         // Only explore downwards when dropping
         if ((currentNode.parent == null || !currentNode.parent.pos.equals(currentNode.pos.down())) && currentNode.isCornerNode()) {
             walk(currentNode, BLOCKPOS_DOWN);
@@ -527,6 +530,8 @@ public abstract class AbstractPathJob implements Callable<Path> {
         if (dPos.getX() <= 0) {
             walk(currentNode, BLOCKPOS_WEST);
         }
+
+
     }
     private boolean onLadderGoingDown(final Node currentNode, final BlockPos dPos) {
         return (dPos.getY() <= 0 || dPos.getX() != 0 || dPos.getZ() != 0) && isLadder(currentNode.pos.down());
