@@ -64,6 +64,9 @@ public class MyrmexAIAttackMelee extends Goal {
     @Override
     public boolean shouldContinueExecuting() {
         LivingEntity LivingEntity = this.myrmex.getAttackTarget();
+        if (this.myrmex.getLastAttackedEntity() != null && this.myrmex.getLastAttackedEntity().isAlive()){
+            LivingEntity = this.myrmex.getLastAttackedEntity();
+        }
         if (LivingEntity != null && !LivingEntity.isAlive() || !(this.myrmex.getNavigator() instanceof AdvancedPathNavigate)) {
             this.resetTask();
             return false;
@@ -82,14 +85,15 @@ public class MyrmexAIAttackMelee extends Goal {
         LivingEntity LivingEntity = this.myrmex.getAttackTarget();
         if (LivingEntity instanceof PlayerEntity && (LivingEntity.isSpectator() || ((PlayerEntity) LivingEntity).isCreative())) {
             this.myrmex.setAttackTarget(null);
+            this.myrmex.setLastAttackedEntity(null);
         }
     }
 
     @Override
     public void tick() {
         LivingEntity entity = this.myrmex.getAttackTarget();
-        ((AdvancedPathNavigate) this.myrmex.getNavigator()).tryMoveToEntityLiving(entity, speedTowardsTarget);
         if (entity != null) {
+            ((AdvancedPathNavigate) this.myrmex.getNavigator()).tryMoveToEntityLiving(entity, speedTowardsTarget);
             double d0 = this.myrmex.getDistanceSq(entity.getPosX(), entity.getBoundingBox().minY, entity.getPosZ());
             double d1 = this.getAttackReachSqr(entity);
             --this.delayCounter;

@@ -38,10 +38,6 @@ public class MyrmexAIForage extends Goal {
             return false;
         }
         List<BlockPos> allBlocks = new ArrayList<BlockPos>();
-        if (this.myrmex.getWaitTicks()>0){
-            this.myrmex.setWaitTicks(this.myrmex.getWaitTicks()-1);
-            return false;
-        }
         for (BlockPos pos : BlockPos.getAllInBox(this.myrmex.func_233580_cy_().add(-RADIUS, -RADIUS/2, -RADIUS), this.myrmex.func_233580_cy_().add(RADIUS, RADIUS/2, RADIUS)).map(BlockPos::toImmutable).collect(Collectors.toList())) {
             if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this.myrmex, pos.getX(), pos.getY(), pos.getZ())))
                 continue;
@@ -52,13 +48,17 @@ public class MyrmexAIForage extends Goal {
         }
 
         if (allBlocks.isEmpty()) {
+            if (this.myrmex.getWaitTicks()>0){
+                this.myrmex.setWaitTicks(this.myrmex.getWaitTicks()-1);
+                return false;
+            }
             this.myrmex.keepSearching = true;
             if (myrmex.getHive() != null) {
                 wanderRadius = myrmex.getHive().getWanderRadius();
                 myrmex.getHive().setWanderRadius(wanderRadius*2);
             }
             wanderRadius *= 2;
-            this.myrmex.setWaitTicks(new Random().nextInt(10));
+            this.myrmex.setWaitTicks(40+new Random().nextInt(40));
             Vector3d vec = RandomPositionGenerator.findRandomTarget(this.myrmex, wanderRadius, 7);
             if (vec != null) {
                 this.targetBlock = new BlockPos(vec);

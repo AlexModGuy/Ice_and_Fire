@@ -33,16 +33,15 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
 
     @Override
     public boolean shouldExecute() {
-        if (this.myrmex.getWaitTicks()>0){
-            this.myrmex.setWaitTicks(this.myrmex.getWaitTicks()-1);
+        if (!this.myrmex.canMove() || this.myrmex.holdingSomething() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching || this.myrmex.getAttackTarget() != null) {
             return false;
         }
-        if (!this.myrmex.canMove() || this.myrmex.holdingSomething() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching || this.myrmex.getAttackTarget() != null) {
+        if (this.myrmex.getWaitTicks()>0){
             return false;
         }
         List<ItemEntity> list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(32), this.targetEntitySelector);
         if (list.isEmpty()) {
-            this.myrmex.setWaitTicks(new Random().nextInt(10));
+            this.myrmex.setWaitTicks(40+new Random().nextInt(40));
             return false;
         } else {
             Collections.sort(list, this.theNearestAttackableTargetSorter);
