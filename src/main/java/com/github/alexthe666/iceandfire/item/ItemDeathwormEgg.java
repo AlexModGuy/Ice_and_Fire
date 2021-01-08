@@ -15,7 +15,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
 public class ItemDeathwormEgg extends Item implements ICustomRendered {
-    private boolean gigantic;
+    private final boolean gigantic;
 
     public ItemDeathwormEgg(boolean gigantic) {
         super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
@@ -39,6 +39,6 @@ public class ItemDeathwormEgg extends Item implements ICustomRendered {
             worldIn.addEntity(entityegg);
         }
 
-        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, itemstack);
+        return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
     }
 }

@@ -75,7 +75,7 @@ public class ItemHippogryphEgg extends Item implements ICustomRendered {
             worldIn.addEntity(entityegg);
         }
 
-        return new ActionResult(ActionResultType.SUCCESS, itemstack);
+        return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
     }
 
     @Override
