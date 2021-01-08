@@ -94,8 +94,8 @@ public class BlockDragonforgeInput extends ContainerBlock implements IDragonProo
         builder.add(ACTIVE);
     }
 
-    @Deprecated
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+    @Override
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         if (worldIn.getTileEntity(pos) instanceof TileEntityDragonforgeInput) {
             ((TileEntityDragonforgeInput) worldIn.getTileEntity(pos)).resetCore();
         }
