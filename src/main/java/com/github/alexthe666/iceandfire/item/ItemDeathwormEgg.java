@@ -35,7 +35,7 @@ public class ItemDeathwormEgg extends Item implements ICustomRendered {
 
         if (!worldIn.isRemote) {
             EntityDeathWormEgg entityegg = new EntityDeathWormEgg(IafEntityRegistry.DEATH_WORM_EGG, playerIn, worldIn, gigantic);
-            entityegg.shoot( playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
+            entityegg.func_234612_a_(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
             worldIn.addEntity(entityegg);
         }
 
