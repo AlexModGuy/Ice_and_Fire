@@ -255,7 +255,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         }
         if (this.getAttackTarget() != null && (haveSameHive(this, this.getAttackTarget()) ||
                 this.getAttackTarget() instanceof TameableEntity && !canAttackTamable((TameableEntity) this.getAttackTarget()) ||
-                this.getAttackTarget() instanceof PlayerEntity && this.getHive() != null && !this.getHive().isPlayerReputationTooHighToFight(this.getAttackTarget().getUniqueID()))) {
+                this.getAttackTarget() instanceof PlayerEntity && this.getHive() != null && !this.getHive().isPlayerReputationLowEnoughToFight(this.getAttackTarget().getUniqueID()))) {
             this.setAttackTarget(null);
         }
 
@@ -317,7 +317,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     public boolean canAttackTamable(TameableEntity tameable) {
         if (tameable.getOwner() != null && this.getHive() != null) {
-            return this.getHive().isPlayerReputationTooHighToFight(tameable.getOwnerId());
+            return this.getHive().isPlayerReputationLowEnoughToFight(tameable.getOwnerId());
         }
         return true;
     }
@@ -413,7 +413,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public void setRevengeTarget(@Nullable LivingEntity livingBase) {
-        if (this.getHive() == null || livingBase == null || livingBase instanceof PlayerEntity && this.getHive().isPlayerReputationTooHighToFight(livingBase.getUniqueID())) {
+        if (this.getHive() == null || livingBase == null || livingBase instanceof PlayerEntity && this.getHive().isPlayerReputationLowEnoughToFight(livingBase.getUniqueID())) {
             super.setRevengeTarget(livingBase);
         }
         if (this.getHive() != null && livingBase != null) {
