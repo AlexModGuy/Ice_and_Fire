@@ -75,12 +75,14 @@ public class EntityDeathWormEgg extends ProjectileItemEntity implements IEntityA
         }
 
         if (!this.world.isRemote) {
+            float wormSize = 0.25F + (float) (Math.random() * 0.35F);
+
             EntityDeathWorm deathworm = new EntityDeathWorm(IafEntityRegistry.DEATH_WORM, this.world);
             deathworm.setVariant(new Random().nextInt(3));
             deathworm.setTamed(true);
             deathworm.setWormHome(func_233580_cy_());
             deathworm.setWormAge(1);
-            deathworm.setDeathWormScale(giant ? (0.25F + (float) (Math.random() * 0.35F)) * 4 : 0.25F + (float) (Math.random() * 0.35F));
+            deathworm.setDeathWormScale(giant ? (wormSize * 4) : wormSize);
             deathworm.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
             if (thrower instanceof PlayerEntity) {
                 deathworm.setOwnerId(thrower.getUniqueID());

@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.EggEntity;
@@ -54,8 +55,9 @@ public class EntityHippogryphEgg extends EggEntity {
     }
 
     protected void onImpact(RayTraceResult result) {
+        Entity thrower = func_234616_v_();
         if (result.getType() == RayTraceResult.Type.ENTITY) {
-            ((EntityRayTraceResult) result).getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()), 0.0F);
+            ((EntityRayTraceResult) result).getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, thrower), 0.0F);
         }
 
         if (!this.world.isRemote) {
