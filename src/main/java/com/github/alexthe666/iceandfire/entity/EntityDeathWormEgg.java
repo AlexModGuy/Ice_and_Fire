@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.network.IPacket;
@@ -70,20 +71,22 @@ public class EntityDeathWormEgg extends ProjectileItemEntity implements IEntityA
     protected void onImpact(RayTraceResult result) {
         Entity thrower = func_234616_v_();
         if (result.getType() == RayTraceResult.Type.ENTITY) {
-
             ((EntityRayTraceResult) result).getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, thrower), 0.0F);
         }
 
-        if (!this.world.isRemote && thrower != null) {
+        if (!this.world.isRemote) {
             EntityDeathWorm deathworm = new EntityDeathWorm(IafEntityRegistry.DEATH_WORM, this.world);
             deathworm.setVariant(new Random().nextInt(3));
             deathworm.setTamed(true);
             deathworm.setWormHome(func_233580_cy_());
             deathworm.setWormAge(1);
             deathworm.setDeathWormScale(giant ? (0.25F + (float) (Math.random() * 0.35F)) * 4 : 0.25F + (float) (Math.random() * 0.35F));
-            deathworm.setOwnerId(thrower.getUniqueID());
             deathworm.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
+            if (thrower instanceof PlayerEntity) {
+                deathworm.setOwnerId(thrower.getUniqueID());
+            }
             this.world.addEntity(deathworm);
+
             this.world.setEntityState(this, (byte) 3);
             this.remove();
         }
