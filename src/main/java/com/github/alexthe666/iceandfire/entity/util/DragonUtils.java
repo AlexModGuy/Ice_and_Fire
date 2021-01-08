@@ -31,6 +31,7 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -300,8 +301,8 @@ public class DragonUtils {
         return false;
     }
 
-    public static boolean isDragonTargetable(Entity entity) {
-        return EntityTypeTags.getCollection().func_241834_b(IafTagRegistry.DRAGON_TARGETS).func_230235_a_(entity.getType());
+    public static boolean isDragonTargetable(Entity entity, ResourceLocation tag) {
+        return EntityTypeTags.getCollection().func_241834_b(tag).func_230235_a_(entity.getType());
 
     }
 
