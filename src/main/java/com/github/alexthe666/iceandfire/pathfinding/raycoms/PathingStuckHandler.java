@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 /*
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LadderBlock;
@@ -274,6 +275,7 @@ public class PathingStuckHandler implements IStuckHandler
             stuckLevel++;
             delayToNextUnstuckAction = 100;
             navigator.clearPath();
+            navigator.getPathingOptions().setCanClimb(false);
             return;
         }
 

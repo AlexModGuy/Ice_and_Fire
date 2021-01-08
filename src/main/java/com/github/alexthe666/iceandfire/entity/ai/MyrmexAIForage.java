@@ -1,9 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
@@ -28,7 +25,6 @@ public class MyrmexAIForage extends Goal {
     private final BlockSorter targetSorter;
     private BlockPos targetBlock = null;
     private int wanderRadius;
-    private int maximumWanderRadius = 5000;
     public MyrmexAIForage(EntityMyrmexWorker myrmex) {
         super();
         this.myrmex = myrmex;
@@ -50,27 +46,24 @@ public class MyrmexAIForage extends Goal {
                 this.myrmex.keepSearching = false;
             }
         }
+
         if (allBlocks.isEmpty()) {
+            if (this.myrmex.getWaitTicks()>0){
+                this.myrmex.setWaitTicks(this.myrmex.getWaitTicks()-1);
+                return false;
+            }
             this.myrmex.keepSearching = true;
             if (myrmex.getHive() != null) {
                 wanderRadius = myrmex.getHive().getWanderRadius();
+                myrmex.getHive().setWanderRadius(wanderRadius*2);
             }
-            if (wanderRadius < maximumWanderRadius) {
-                if (myrmex.getHive() != null){
-                    wanderRadius *= 10;
-                    myrmex.getHive().setWanderRadius(wanderRadius);
-                }
-                else {
-                    this.wanderRadius *= 10;
-                }
-                Vector3d vec = RandomPositionGenerator.findRandomTarget(this.myrmex, wanderRadius, 7);
-
-                if (vec != null) {
-                    this.targetBlock = new BlockPos(vec);
-                }
-                return this.targetBlock != null;
+            wanderRadius *= 2;
+            this.myrmex.setWaitTicks(40+new Random().nextInt(40));
+            Vector3d vec = RandomPositionGenerator.findRandomTarget(this.myrmex, wanderRadius, 7);
+            if (vec != null) {
+                this.targetBlock = new BlockPos(vec);
             }
-            return false;
+            return this.targetBlock != null;
         }
         allBlocks.sort(this.targetSorter);
         this.targetBlock = allBlocks.get(0);

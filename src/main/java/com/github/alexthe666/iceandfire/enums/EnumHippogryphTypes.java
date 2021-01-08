@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.enums;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
@@ -28,8 +29,8 @@ public enum EnumHippogryphTypes {
 
     EnumHippogryphTypes(boolean developer) {
         this.developer = developer;
-        this.TEXTURE = new ResourceLocation("iceandfire:textures/models/hippogryph/" + name().toLowerCase() + ".png");
-        this.TEXTURE_BLINK = new ResourceLocation("iceandfire:textures/models/hippogryph/" + name().toLowerCase() + "_blink.png");
+        this.TEXTURE = new ResourceLocation("iceandfire:textures/models/hippogryph/" + name().toLowerCase(Locale.ROOT) + ".png");
+        this.TEXTURE_BLINK = new ResourceLocation("iceandfire:textures/models/hippogryph/" + name().toLowerCase(Locale.ROOT) + "_blink.png");
 
     }
 

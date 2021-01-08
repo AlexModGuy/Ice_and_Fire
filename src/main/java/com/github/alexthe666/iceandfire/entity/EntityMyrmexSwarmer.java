@@ -11,6 +11,7 @@ import com.github.alexthe666.iceandfire.entity.ai.MyrmexAISummonerHurtByTarget;
 import com.github.alexthe666.iceandfire.entity.ai.MyrmexAISummonerHurtTarget;
 import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIWander;
 
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -44,7 +45,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     public EntityMyrmexSwarmer(EntityType type, World worldIn) {
         super(type, worldIn);
         this.moveController = new EntityMyrmexRoyal.FlyMoveHelper(this);
-        this.navigator = new FlyingPathNavigator(this, world);
+        this.navigator = createNavigator(world, AdvancedPathNavigate.MovementType.FLYING);
         switchNavigator(false);
     }
 

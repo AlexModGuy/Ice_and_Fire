@@ -6,13 +6,11 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexQueen;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
-import com.github.alexthe666.iceandfire.pathfinding.raycoms.DragonAdvancedPathNavigate;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.Path;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 
@@ -33,6 +31,10 @@ public class MyrmexAILeaveHive extends Goal {
         if (this.myrmex instanceof EntityMyrmexQueen) {
             return false;
         }
+        //If it's riding something don't execute
+        if (!(this.myrmex.getNavigator() instanceof AdvancedPathNavigate) ||this.myrmex.isPassenger()){
+            return false;
+        }
         if (this.myrmex.isChild()) {
             return false;
         }
@@ -44,7 +46,7 @@ public class MyrmexAILeaveHive extends Goal {
             return false;
         } else {
             nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, village.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), true));
-            this.path = ((DragonAdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY(),  nextEntrance.getZ(), movementSpeed);
+            this.path = ((AdvancedPathNavigate) this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY(), nextEntrance.getZ(), movementSpeed);
             inProgPos = new BlockPos(this.myrmex.func_233580_cy_());
             return true;
         }
@@ -59,7 +61,7 @@ public class MyrmexAILeaveHive extends Goal {
 
     public void tick() {
         if(path.isPathReachingDestination()){
-             path = ((DragonAdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY() + 1,  nextEntrance.getZ(), movementSpeed);
+             path = ((AdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY() + 1,  nextEntrance.getZ(), movementSpeed);
         }
     }
 

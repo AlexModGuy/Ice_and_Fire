@@ -3,30 +3,32 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.pathfinding.NodeProcessorDragonFly;
-import com.github.alexthe666.iceandfire.pathfinding.NodeProcessorDragonWalk;
+import com.github.alexthe666.iceandfire.pathfinding.*;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.*;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.pathfinding.*;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.Region;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Minecolonies async PathNavigate.
  */
-public class DragonAdvancedPathNavigate extends AbstractAdvancedPathNavigate {
+public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     public static final double MIN_Y_DISTANCE = 0.001;
     public static final int MAX_SPEED_ALLOWED = 2;
     public static final double MIN_SPEED_ALLOWED = 0.1;
@@ -67,34 +69,41 @@ public class DragonAdvancedPathNavigate extends AbstractAdvancedPathNavigate {
      */
     private boolean isSneaking = true;
 
+    private float width = 1;
+
+    private float height = 1;
+
+    public enum MovementType {
+        WALKING,
+        FLYING,
+        CLIMBING
+    }
     /**
      * Instantiates the navigation of an ourEntity.
      *
      * @param entity the ourEntity.
      * @param world  the world it is in.
      */
-    public DragonAdvancedPathNavigate(final MobEntity entity, final World world) {
-        super(entity, world);
-        this.nodeProcessor = new NodeProcessorDragonWalk();
-
-        this.nodeProcessor.setCanEnterDoors(true);
-        getPathingOptions().setEnterDoors(true);
-        this.nodeProcessor.setCanOpenDoors(true);
-        getPathingOptions().setCanOpenDoors(true);
-        this.nodeProcessor.setCanSwim(true);
-        getPathingOptions().setCanSwim(true);
-
-
-        stuckHandler = PathingStuckHandler.createStuckHandler().withTakeDamageOnStuck(0.2f).withTeleportSteps(6).withTeleportOnFullStuck();
+    public AdvancedPathNavigate(final MobEntity entity, final World world) {
+        this(entity,world,MovementType.WALKING);
     }
-    public DragonAdvancedPathNavigate(final MobEntity entity, final World world, final boolean isFlying) {
+    public AdvancedPathNavigate(final MobEntity entity, final World world, MovementType type) {
+       this(entity, world, type,1,1);
+    }
+    public AdvancedPathNavigate(final MobEntity entity, final World world, MovementType type, float width, float height) {
         super(entity, world);
-        if(isFlying) {
-            this.nodeProcessor = new NodeProcessorDragonFly();
-            getPathingOptions().setIsFlying(true);
-        }
-        else{
-            this.nodeProcessor = new NodeProcessorDragonWalk();
+        switch (type){
+            case FLYING:
+                this.nodeProcessor = new NodeProcessorFly();
+                getPathingOptions().setIsFlying(true);
+                break;
+            case WALKING:
+                this.nodeProcessor = new NodeProcessorWalk();
+                break;
+            case CLIMBING:
+                this.nodeProcessor = new NodeProcessorWalk();
+                getPathingOptions().setCanClimb(true);
+                break;
         }
         this.nodeProcessor.setCanEnterDoors(true);
         getPathingOptions().setEnterDoors(true);
@@ -102,8 +111,8 @@ public class DragonAdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         getPathingOptions().setCanOpenDoors(true);
         this.nodeProcessor.setCanSwim(true);
         getPathingOptions().setCanSwim(true);
-
-
+        this.width = width;
+        this.height = height;
         stuckHandler = PathingStuckHandler.createStuckHandler().withTakeDamageOnStuck(0.2f).withTeleportSteps(6).withTeleportOnFullStuck();
     }
 
@@ -181,11 +190,11 @@ public class DragonAdvancedPathNavigate extends AbstractAdvancedPathNavigate {
 
     @Override
     public void tick() {
-        if (nodeProcessor instanceof  NodeProcessorDragonWalk){
-            ((NodeProcessorDragonWalk)nodeProcessor).setEntitySize(4, 4);
+        if (nodeProcessor instanceof  NodeProcessorWalk){
+            ((NodeProcessorWalk)nodeProcessor).setEntitySize(width, height);
         }
         else{
-            ((NodeProcessorDragonFly)nodeProcessor).setEntitySize(4, 4);
+            ((NodeProcessorFly)nodeProcessor).setEntitySize(width, height);
         }
         if (desiredPosTimeout > 0) {
             if (desiredPosTimeout-- <= 0) {
@@ -266,10 +275,11 @@ public class DragonAdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         moveToXYZ(pos.getX(), pos.getY(), pos.getZ(), speedFactor);
         return true;
     }
-
+    //Return a new WalkNodeProcessor for safety reasons eg if the entity
+    //has a passenger this method get's called and returning null is not a great idea
     @Override
     protected PathFinder getPathFinder(final int p_179679_1_) {
-        return null;
+        return new PathFinder(new WalkNodeProcessor(),p_179679_1_);
     }
 
     @Override
@@ -285,7 +295,6 @@ public class DragonAdvancedPathNavigate extends AbstractAdvancedPathNavigate {
 
     @Override
     public Path getPathToPos(final BlockPos pos, final int p_179680_2_) {
-        //Because this directly returns Path we can't do it async.
         return null;
     }
 

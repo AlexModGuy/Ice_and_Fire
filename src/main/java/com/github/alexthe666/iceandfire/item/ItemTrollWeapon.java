@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nullable;
 
@@ -25,7 +26,7 @@ public class ItemTrollWeapon extends SwordItem implements ICustomRendered {
 
     public ItemTrollWeapon(EnumTroll.Weapon weapon) {
         super(IafItemRegistry.TROLL_WEAPON_TOOL_MATERIAL, 15, -3.5F, IceAndFire.PROXY.setupISTER(new Item.Properties().group(IceAndFire.TAB_ITEMS)));
-        this.setRegistryName(IceAndFire.MODID, "troll_weapon_" + weapon.name().toLowerCase());
+        this.setRegistryName(IceAndFire.MODID, "troll_weapon_" + weapon.name().toLowerCase(Locale.ROOT));
         this.weapon = weapon;
     }
 

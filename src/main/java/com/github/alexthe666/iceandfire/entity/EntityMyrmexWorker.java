@@ -205,7 +205,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
             boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), f);
             if (this.getAnimation() == ANIMATION_STING && flag){
                 this.playStingSound();
-                if(entityIn.isLiving()) {
+                if(entityIn instanceof LivingEntity) {
                     ((LivingEntity)entityIn).addPotionEffect(new EffectInstance(Effects.POISON, 200, 2));
                     this.setAttackTarget((LivingEntity)entityIn);
                 }

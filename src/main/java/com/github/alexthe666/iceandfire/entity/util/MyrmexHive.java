@@ -196,7 +196,7 @@ public class MyrmexHive {
         PlayerEntity PlayerEntity = null;
 
         for (UUID s : this.playerReputation.keySet()) {
-            if (this.isPlayerReputationTooHighToFight(s)) {
+            if (this.isPlayerReputationLowEnoughToFight(s)) {
                 PlayerEntity PlayerEntity1 = world.getPlayerByUuid(s);
 
                 if (PlayerEntity1 != null) {
@@ -285,8 +285,8 @@ public class MyrmexHive {
         return this.getPlayerReputation(uuid) >= 75;
     }
 
-    public boolean isPlayerReputationTooHighToFight(UUID uuid) {
-        return this.getPlayerReputation(uuid) >= 25;
+    public boolean isPlayerReputationLowEnoughToFight(UUID uuid) {
+        return this.getPlayerReputation(uuid) < 25;
     }
 
     /**

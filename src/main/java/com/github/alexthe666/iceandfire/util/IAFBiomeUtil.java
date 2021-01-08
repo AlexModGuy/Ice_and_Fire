@@ -102,7 +102,9 @@ public class IAFBiomeUtil {
         return (anyBiomeInfoInList(biome, biomeTypes, aconditional))
                 || ((exclude.size() == 0 || !anyBiomeInfoInList(biome, biomeTypes, exclude))
                 && (mustInclude.size() == 0 || anyBiomeInfoInList(biome, biomeTypes, mustInclude, true))
-                && (include.size() == 0 || anyBiomeInfoInList(biome, biomeTypes, include)));
+                && (include.size() == 0 || anyBiomeInfoInList(biome, biomeTypes, include)))
+                && !(exclude.size() == 0 && mustInclude.size()== 0 && include.size() == 0);
+        //If only specific biomes got provided exclude are all 0.  ^
     }
 
     public static boolean parseListForBiomeCheck(List<? extends String> list, Biome biome) {

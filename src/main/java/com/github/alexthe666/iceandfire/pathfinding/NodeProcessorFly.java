@@ -2,12 +2,10 @@ package com.github.alexthe666.iceandfire.pathfinding;
 
 import net.minecraft.entity.MobEntity;
 import net.minecraft.pathfinding.FlyingNodeProcessor;
-import net.minecraft.pathfinding.WalkNodeProcessor;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Region;
 
-public class NodeProcessorDragonFly extends FlyingNodeProcessor {
+public class NodeProcessorFly extends FlyingNodeProcessor {
 
     public void func_225578_a_(Region p_225578_1_, MobEntity p_225578_2_) {
         super.func_225578_a_(p_225578_1_, p_225578_2_);

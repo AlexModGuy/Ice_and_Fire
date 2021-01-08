@@ -52,6 +52,8 @@ public class PathingOptions {
 
     private boolean flying = false;
 
+    private boolean canClimb = false;
+
     public PathingOptions() {
     }
 
@@ -90,6 +92,10 @@ public class PathingOptions {
     public boolean isFlying(){return this.flying;}
 
     public void setIsFlying(final boolean flying){this.flying = flying;}
+
+    public boolean canClimb(){return this.canClimb;}
+
+    public void setCanClimb(final boolean canClimb){this.canClimb = canClimb;}
 
     public PathingOptions withStartSwimCost(final double startSwimCost) {
         swimCostEnter = startSwimCost;
