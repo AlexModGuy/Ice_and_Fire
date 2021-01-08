@@ -696,13 +696,14 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
 
     public void refreshInventory() {
         //This isn't needed (anymore) since it's already being handled by minecraft
-
-        /*ItemStack saddle = this.hippocampusInventory.getStackInSlot(0);
-        ItemStack chest = this.hippocampusInventory.getStackInSlot(1);
-        this.setSaddled(saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty());
-        this.setChested(chest != null && chest.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !chest.isEmpty());
-        this.setArmor(getIntFromArmor(this.hippocampusInventory.getStackInSlot(2)));
-        if (this.world.isRemote) {
+        if (!this.world.isRemote) {
+            ItemStack saddle = this.hippocampusInventory.getStackInSlot(0);
+            ItemStack chest = this.hippocampusInventory.getStackInSlot(1);
+            this.setSaddled(saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty());
+            this.setChested(chest != null && chest.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !chest.isEmpty());
+            this.setArmor(getIntFromArmor(this.hippocampusInventory.getStackInSlot(2)));
+        }
+        /*if (this.world.isRemote) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 0, saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty() ? 1 : 0));
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 1, chest != null && chest.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !chest.isEmpty() ? 1 : 0));
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 2, this.getIntFromArmor(this.hippocampusInventory.getStackInSlot(2))));
