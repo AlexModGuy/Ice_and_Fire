@@ -14,6 +14,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 
+import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -83,7 +84,7 @@ public class EntityIceDragon extends EntityDragonBase {
         if(entity instanceof EntityDragonBase && !this.isTamed()){
             return entity.getType() != this.getType() && this.getWidth() >= entity.getWidth() && !((EntityDragonBase) entity).isMobDead();
         }
-        return entity instanceof PlayerEntity || DragonUtils.isDragonTargetable(entity)  || entity instanceof WaterMobEntity || !this.isTamed() && DragonUtils.isVillager(entity);
+        return entity instanceof PlayerEntity || DragonUtils.isDragonTargetable(entity, IafTagRegistry.ICE_DRAGON_TARGETS)  || entity instanceof WaterMobEntity || !this.isTamed() && DragonUtils.isVillager(entity);
     }
 
     @Override

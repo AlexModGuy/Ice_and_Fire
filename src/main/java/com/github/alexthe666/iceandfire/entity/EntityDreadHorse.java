@@ -35,11 +35,12 @@ public class EntityDreadHorse extends SkeletonHorseEntity implements IDreadMob {
 
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
+        return func_234237_fg_()
                 //HEALTH
                 .func_233815_a_(Attributes.field_233818_a_, 25.0D)
                 //SPEED
                 .func_233815_a_(Attributes.field_233821_d_, 0.3D)
+                //ARMOR
                 .func_233815_a_(Attributes.field_233826_i_, 4.0D);
     }
 

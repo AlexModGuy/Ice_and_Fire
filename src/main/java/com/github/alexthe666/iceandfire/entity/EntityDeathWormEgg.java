@@ -7,10 +7,11 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
@@ -19,9 +20,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class EntityDeathWormEgg extends ProjectileItemEntity {
+public class EntityDeathWormEgg extends ProjectileItemEntity implements IEntityAdditionalSpawnData {
 
     private boolean giant;
 
@@ -44,30 +46,23 @@ public class EntityDeathWormEgg extends ProjectileItemEntity {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
+    @Override
+    public void writeSpawnData(PacketBuffer buffer) {
+        buffer.writeBoolean(this.giant);
+    }
 
     @Override
-    protected void registerData() {
-
+    public void readSpawnData(PacketBuffer additionalData) {
+        this.giant = additionalData.readBoolean();
     }
 
     @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {
         if (id == 3) {
-            double d0 = 0.08D;
-
             for (int i = 0; i < 8; ++i) {
                 this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, this.getItem()), this.getPosX(), this.getPosY(), this.getPosZ(), ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D);
             }
         }
-
-    }
-
-    protected Item getDefaultItem() {
-        return giant ? IafItemRegistry.DEATHWORM_EGG_GIGANTIC : IafItemRegistry.DEATHWORM_EGG;
-    }
-
-    protected ItemStack func_213882_k() {
-        return new ItemStack(getDefaultItem());
     }
 
     /**
@@ -76,22 +71,31 @@ public class EntityDeathWormEgg extends ProjectileItemEntity {
     protected void onImpact(RayTraceResult result) {
         Entity thrower = func_234616_v_();
         if (result.getType() == RayTraceResult.Type.ENTITY) {
-
             ((EntityRayTraceResult) result).getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, thrower), 0.0F);
         }
 
-        if (!this.world.isRemote && thrower != null) {
+        if (!this.world.isRemote) {
+            float wormSize = 0.25F + (float) (Math.random() * 0.35F);
+
             EntityDeathWorm deathworm = new EntityDeathWorm(IafEntityRegistry.DEATH_WORM, this.world);
             deathworm.setVariant(new Random().nextInt(3));
             deathworm.setTamed(true);
             deathworm.setWormHome(func_233580_cy_());
             deathworm.setWormAge(1);
-            deathworm.setDeathWormScale(giant ? (0.25F + (float) (Math.random() * 0.35F)) * 4 : 0.25F + (float) (Math.random() * 0.35F));
-            deathworm.setOwnerId(thrower.getUniqueID());
+            deathworm.setDeathWormScale(giant ? (wormSize * 4) : wormSize);
             deathworm.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
+            if (thrower instanceof PlayerEntity) {
+                deathworm.setOwnerId(thrower.getUniqueID());
+            }
             this.world.addEntity(deathworm);
+
             this.world.setEntityState(this, (byte) 3);
             this.remove();
         }
+    }
+
+    @Override
+    protected Item getDefaultItem() {
+        return giant ? IafItemRegistry.DEATHWORM_EGG_GIGANTIC : IafItemRegistry.DEATHWORM_EGG;
     }
 }
