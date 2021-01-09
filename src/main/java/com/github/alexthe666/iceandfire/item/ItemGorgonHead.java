@@ -18,6 +18,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
@@ -109,6 +110,11 @@ public class ItemGorgonHead extends Item implements IUsesTEISR, ICustomRendered 
                 statue.renderYawOffset = pointedEntity.rotationYaw;
                 if (!worldIn.isRemote) {
                     worldIn.addEntity(statue);
+                }
+                if (entity instanceof PlayerEntity && !((PlayerEntity) entity).isCreative()) {
+                    stack.damageItem(1, entity, (p_220045_0_) -> {
+                        p_220045_0_.sendBreakAnimation(EquipmentSlotType.MAINHAND);
+                    });
                 }
 
             }
