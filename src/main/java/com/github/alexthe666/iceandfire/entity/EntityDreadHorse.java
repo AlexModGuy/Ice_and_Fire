@@ -48,7 +48,7 @@ public class EntityDreadHorse extends SkeletonHorseEntity implements IDreadMob {
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(COMMANDER_UNIQUE_ID, null);
+        this.dataManager.register(COMMANDER_UNIQUE_ID, Optional.empty());
     }
 
     @Override
@@ -93,10 +93,7 @@ public class EntityDreadHorse extends SkeletonHorseEntity implements IDreadMob {
 
     @Nullable
     public UUID getCommanderId() {
-        if (this.dataManager.get(COMMANDER_UNIQUE_ID) != null) {
-            return this.dataManager.get(COMMANDER_UNIQUE_ID).orElse(null);
-        }
-        return null;
+        return this.dataManager.get(COMMANDER_UNIQUE_ID).orElse(null);
     }
 
     public void setCommanderId(@Nullable UUID uuid) {
