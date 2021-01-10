@@ -62,7 +62,7 @@ public class EntityLightningDragon extends EntityDragonBase {
     public EntityLightningDragon(EntityType t, World worldIn) {
         super(t, worldIn, DragonType.LIGHTNING, 1, 1 + IafConfig.dragonAttackDamage, IafConfig.dragonHealth * 0.04, IafConfig.dragonHealth, 0.15F, 0.4F);
         this.setPathPriority(PathNodeType.DANGER_FIRE, 0.0F);
-        this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);
+        this.setPathPriority(PathNodeType.DAMAGE_FIRE, 1.0F);
         this.setPathPriority(PathNodeType.LAVA, 8.0F);
         ANIMATION_SPEAK = Animation.create(20);
         ANIMATION_BITE = Animation.create(35);
@@ -122,7 +122,14 @@ public class EntityLightningDragon extends EntityDragonBase {
                 return "black_";
         }
     }
-
+    @Override
+    public boolean isInvulnerableTo(DamageSource i) {
+        if(i.damageType.equals("lightningBolt")) {
+            this.heal(15F);
+            return true;
+        }
+        return super.isInvulnerableTo(i);
+    }
     public Item getVariantScale(int variant) {
         switch (variant) {
             default:
