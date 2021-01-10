@@ -93,7 +93,10 @@ public class EntityDreadHorse extends SkeletonHorseEntity implements IDreadMob {
 
     @Nullable
     public UUID getCommanderId() {
-        return this.dataManager.get(COMMANDER_UNIQUE_ID).orElse(null);
+        if (this.dataManager.get(COMMANDER_UNIQUE_ID) != null) {
+            return this.dataManager.get(COMMANDER_UNIQUE_ID).orElse(null);
+        }
+        return null;
     }
 
     public void setCommanderId(@Nullable UUID uuid) {
