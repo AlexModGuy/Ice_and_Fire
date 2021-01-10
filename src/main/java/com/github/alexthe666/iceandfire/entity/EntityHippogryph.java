@@ -852,7 +852,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         }
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             double dist = this.getDistanceSq(this.getAttackTarget());
-            if (dist < 8) {
+            if (dist < 8 && this.getAttribute(Attributes.field_233823_f_) != null) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
             }
         }
@@ -860,7 +860,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         if (this.getAnimation() == ANIMATION_SCRATCH && attackTarget != null && this.getAnimationTick() == 6) {
             double dist = this.getDistanceSq(this.getAttackTarget());
 
-            if (dist < 8) {
+            if (dist < 8 && this.getAttribute(Attributes.field_233823_f_) != null) {
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
                 this.getAttackTarget().isAirBorne = true;
                 float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
