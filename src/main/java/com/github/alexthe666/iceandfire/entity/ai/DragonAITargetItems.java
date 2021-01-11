@@ -63,7 +63,7 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
             return false;
         } else {
 
-            List<ItemEntity> list = this.goalOwner.world.getLoadedEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+            List<ItemEntity> list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
             if (list.isEmpty()) {
                 return false;

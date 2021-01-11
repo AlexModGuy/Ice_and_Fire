@@ -52,19 +52,17 @@ public class MessageStartRidingMob {
                     Entity entity = player.world.getEntityByID(message.dragonId);
                     if (entity != null && entity instanceof ISyncMount && entity instanceof TameableEntity) {
                         TameableEntity dragon = (TameableEntity) entity;
-                        if (dragon.isOwner(player)) {
-                            if (message.ride) {
-                                if (message.baby) {
-                                    dragon.startRiding(player, true);
-                                } else {
-                                    player.startRiding(dragon, true);
-                                }
-                            } else {
-                                if (message.baby) {
-                                    dragon.stopRiding();
-                                } else {
-                                    player.stopRiding();
-                                }
+                        if (message.ride) {
+                            if(message.baby){
+                                dragon.startRiding(player, true);
+                            }else{
+                                player.startRiding(dragon, true);
+                            }
+                        } else {
+                            if(message.baby){
+                                dragon.stopRiding();
+                            }else{
+                                player.stopRiding();
                             }
                         }
                     }
