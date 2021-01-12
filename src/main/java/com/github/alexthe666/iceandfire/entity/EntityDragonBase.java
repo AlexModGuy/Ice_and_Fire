@@ -1135,13 +1135,13 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                     if (!world.isRemote) {
                         if (this.getDragonStage() < 2) {
                             this.startRiding(player, true);
-                            IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, true));
+                            //IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, true));
                             return ActionResultType.SUCCESS;
                         }
                         if (this.getDragonStage() > 2 && !player.isPassenger()) {
                             player.setSneaking(false);
                             player.startRiding(this, true);
-                            IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, false));
+                            //IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, false));
 
                             this.setSleeping(false);
                         }
@@ -1717,7 +1717,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
             if ((this.getControlState() == 1 << 4 || ((PlayerEntity) riding).isElytraFlying()) && !riding.isPassenger()) {
                 this.stopRiding();
                 if (world.isRemote) {
-                    IceAndFire.sendMSGToServer(new MessageStartRidingMob(this.getEntityId(), false, true));
+                    //IceAndFire.sendMSGToServer(new MessageStartRidingMob(this.getEntityId(), false, true));
                 }
 
             }

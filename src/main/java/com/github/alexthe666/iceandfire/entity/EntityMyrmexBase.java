@@ -467,10 +467,11 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                     if (this.getHive()!=null && !this.getHive().isPlayerReputationTooLowToTrade(player.getUniqueID())) {
                         this.setCustomer(player);
                         this.openMerchantContainer(player, this.getDisplayName(), 1);
+                        return ActionResultType.SUCCESS;
                     }
                 }
 
-                return ActionResultType.SUCCESS;
+                return ActionResultType.PASS;
             }
         } else {
             return super.func_230254_b_(player, hand);
