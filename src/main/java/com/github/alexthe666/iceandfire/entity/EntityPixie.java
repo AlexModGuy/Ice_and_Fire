@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import java.util.EnumSet;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
