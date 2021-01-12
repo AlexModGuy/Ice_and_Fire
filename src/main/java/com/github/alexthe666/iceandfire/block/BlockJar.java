@@ -109,6 +109,7 @@ public class BlockJar extends ContainerBlock implements ICustomRendered {
             } else {
                 ((TileEntityJar) world.getTileEntity(pos)).hasPixie = false;
             }
+            world.getTileEntity(pos).markDirty();
         }
     }
 
