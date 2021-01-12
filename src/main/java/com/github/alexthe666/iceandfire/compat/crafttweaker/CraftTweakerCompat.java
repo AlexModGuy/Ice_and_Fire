@@ -25,14 +25,14 @@ public class CraftTweakerCompat {
         addDragonForgeRecipe(IafRecipeRegistry.ICE_FORGE_RECIPES, input, blood, output);
     }
 
-
-    private static void removeDragonForgeRecipe(List<DragonForgeRecipe> recipeList, IItemStack output) {
-        recipeList.removeIf(recipe -> recipe.getOutput().isItemEqual(output.getInternal()));
-    }
-
     @ZenCodeType.Method
     public static void addLightningDragonForgeRecipe(IItemStack input, IItemStack blood, IItemStack output) {
         addDragonForgeRecipe(IafRecipeRegistry.LIGHTNING_FORGE_RECIPES, input, blood, output);
+    }
+
+
+    private static void removeDragonForgeRecipe(List<DragonForgeRecipe> recipeList, IItemStack output) {
+        recipeList.removeIf(recipe -> recipe.getOutput().isItemEqual(output.getInternal()));
     }
 
     @ZenCodeType.Method
