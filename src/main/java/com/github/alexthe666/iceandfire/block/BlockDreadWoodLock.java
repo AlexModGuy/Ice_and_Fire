@@ -28,7 +28,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
         super(
     		Properties
     			.create(Material.WOOD)
-    			.hardnessAndResistance(4, 1000000F)
+    			.hardnessAndResistance(-1.0F, 1000000F)
     			.sound(SoundType.WOOD)
 		);
 
