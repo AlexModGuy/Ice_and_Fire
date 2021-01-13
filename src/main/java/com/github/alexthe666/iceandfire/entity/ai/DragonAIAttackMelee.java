@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -36,18 +37,21 @@ public class DragonAIAttackMelee extends Goal {
 
     @Override
     public boolean shouldExecute() {
-        LivingEntity LivingEntity = this.dragon.getAttackTarget();
+        LivingEntity livingEntity = this.dragon.getAttackTarget();
         if (!(this.dragon.getNavigator() instanceof AdvancedPathNavigate)) {
             return false;
         }
-        if (LivingEntity == null) {
+        if (livingEntity == null) {
             return false;
-        } else if (!LivingEntity.isAlive()) {
+        } else if (!livingEntity.isAlive()) {
             return false;
         } else if (!dragon.canMove() || dragon.isHovering() || dragon.isFlying()) {
             return false;
+        }
+        else if (livingEntity instanceof TameableEntity && this.dragon.isTamed() && ((TameableEntity)livingEntity).isTamed()){
+            return false;
         } else {
-            attackPath = ((AdvancedPathNavigate) this.dragon.getNavigator()).moveToLivingEntity(LivingEntity, speedTowardsTarget);
+            attackPath = ((AdvancedPathNavigate) this.dragon.getNavigator()).moveToLivingEntity(livingEntity, speedTowardsTarget);
             return true;
         }
     }
