@@ -79,7 +79,7 @@ public class ItemGorgonHead extends Item implements IUsesTEISR, ICustomRendered 
 
             if (axisalignedbb.contains(Vector3d)) {
                 if (d2 >= 0.0D) {
-                    pointedEntity = entity1;
+                    //pointedEntity = entity1;
                     d2 = 0.0D;
                 }
             } else if (optional.isPresent()) {
