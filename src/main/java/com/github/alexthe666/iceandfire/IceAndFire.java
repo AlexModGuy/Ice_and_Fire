@@ -2,6 +2,11 @@ package com.github.alexthe666.iceandfire;
 
 
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
+import net.minecraftforge.client.model.CompositeModel;
+import net.minecraftforge.client.model.SeparatePerspectiveModel;
+import net.minecraftforge.fml.DeferredWorkQueue;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.event.lifecycle.ParallelDispatchEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -79,7 +84,7 @@ public class IceAndFire {
     };
     public static CommonProxy PROXY = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
     private static int packetsRegistered = 0;
-
+    ParallelDispatchEvent test = new ParallelDispatchEvent(ModLoadingContext.get().getActiveContainer());
     static {
         NetworkRegistry.ChannelBuilder channel = NetworkRegistry.ChannelBuilder.named(new ResourceLocation("iceandfire", "main_channel"));
         String version = PROTOCOL_VERSION;
@@ -163,6 +168,7 @@ public class IceAndFire {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageUpdateLectern.class, MessageUpdateLectern::write, MessageUpdateLectern::read, MessageUpdateLectern.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSwingArm.class, MessageSwingArm::write, MessageSwingArm::read, MessageSwingArm.Handler::handle);
         PROXY.setup();
+        event.enqueueWork(IafEntityRegistry::bakeAttributes);
         IafWorldRegistry.setup();
         IafVillagerRegistry.setup();
     }
