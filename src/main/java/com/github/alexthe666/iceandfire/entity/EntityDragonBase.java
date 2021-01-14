@@ -1678,6 +1678,9 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         if (this.isTackling()) {
             return false;
         }
+        if (this.isTamed() && entityIn instanceof TameableEntity && ((TameableEntity) entityIn).isTamed()){
+            return false;
+        }
         if (this.isModelDead()) {
             return false;
         }

@@ -18,6 +18,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.effect.LightningBoltEntity;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,8 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
@@ -126,6 +129,7 @@ public class EntityLightningDragon extends EntityDragonBase {
     public boolean isInvulnerableTo(DamageSource i) {
         if(i.damageType.equals("lightningBolt")) {
             this.heal(15F);
+            this.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 20, 1));
             return true;
         }
         return super.isInvulnerableTo(i);
@@ -227,7 +231,8 @@ public class EntityLightningDragon extends EntityDragonBase {
     public void livingTick() {
         super.livingTick();
 
-        if (!world.isRemote && this.getAttackTarget() != null) {
+        if (!world.isRemote && this.getAttackTarget() != null &&
+                !(this.getAttackTarget() instanceof TameableEntity && this.isTamed() && ((TameableEntity) this.getAttackTarget()).isTamed())) {
             if (this.getBoundingBox().grow(2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F).intersects(this.getAttackTarget().getBoundingBox())) {
                 attackEntityAsMob(this.getAttackTarget());
             }

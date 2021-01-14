@@ -17,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -164,7 +165,8 @@ public class EntityFireDragon extends EntityDragonBase {
     @Override
     public void livingTick() {
         super.livingTick();
-        if (!world.isRemote && this.getAttackTarget() != null) {
+        if (!world.isRemote && this.getAttackTarget() != null &&
+                !(this.getAttackTarget() instanceof TameableEntity && this.isTamed() && ((TameableEntity) this.getAttackTarget()).isTamed())) {
             if (this.getBoundingBox().grow(2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F).intersects(this.getAttackTarget().getBoundingBox())) {
                 attackEntityAsMob(this.getAttackTarget());
             }

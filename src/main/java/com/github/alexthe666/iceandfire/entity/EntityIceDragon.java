@@ -19,6 +19,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.WaterMobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -202,7 +203,8 @@ public class EntityIceDragon extends EntityDragonBase {
             this.flyHovering = 0;
             this.flyTicks = 0;
         }
-        if (!world.isRemote && this.getAttackTarget() != null) {
+        if (!world.isRemote && this.getAttackTarget() != null &&
+                !(this.getAttackTarget() instanceof TameableEntity && this.isTamed() && ((TameableEntity) this.getAttackTarget()).isTamed())) {
             float growSize = this.isInMaterialWater() ? 1.0F : 0.5F;
             if (this.getBoundingBox().grow(0 + this.getRenderSize() * 0.33F, 0 + this.getRenderSize() * 0.33F, 0 + this.getRenderSize() * 0.33F).intersects(this.getAttackTarget().getBoundingBox())) {
                 attackEntityAsMob(this.getAttackTarget());
