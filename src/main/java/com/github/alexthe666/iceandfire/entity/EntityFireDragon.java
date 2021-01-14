@@ -165,8 +165,7 @@ public class EntityFireDragon extends EntityDragonBase {
     @Override
     public void livingTick() {
         super.livingTick();
-        if (!world.isRemote && this.getAttackTarget() != null &&
-                !(this.getAttackTarget() instanceof TameableEntity && this.isTamed() && ((TameableEntity) this.getAttackTarget()).isTamed())) {
+        if (!world.isRemote && this.getAttackTarget() != null) {
             if (this.getBoundingBox().grow(2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F).intersects(this.getAttackTarget().getBoundingBox())) {
                 attackEntityAsMob(this.getAttackTarget());
             }
