@@ -502,7 +502,11 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
             this.navigatorType = 2;
         }
     }
-
+    @Override
+    public boolean canBeRiddenInWater(Entity rider)
+    {
+        return true;
+    }
     protected void updateAITasks() {
         super.updateAITasks();
         breakBlock();
