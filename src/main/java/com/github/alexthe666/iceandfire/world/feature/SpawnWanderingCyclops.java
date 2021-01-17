@@ -40,7 +40,7 @@ public class SpawnWanderingCyclops extends Feature<NoFeatureConfig> {
                 worldIn.addEntity(cyclops);
                 for (int i = 0; i < 3 + rand.nextInt(3); i++) {
                     SheepEntity sheep = EntityType.SHEEP.create(worldIn.getWorld());
-                    sheep.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ());
+                    sheep.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                     sheep.setFleeceColor(SheepEntity.getRandomSheepColor(rand));
                     worldIn.addEntity(sheep);
                 }
