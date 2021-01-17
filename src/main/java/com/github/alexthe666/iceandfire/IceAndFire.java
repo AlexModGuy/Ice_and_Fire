@@ -84,7 +84,6 @@ public class IceAndFire {
     };
     public static CommonProxy PROXY = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
     private static int packetsRegistered = 0;
-    ParallelDispatchEvent test = new ParallelDispatchEvent(ModLoadingContext.get().getActiveContainer());
     static {
         NetworkRegistry.ChannelBuilder channel = NetworkRegistry.ChannelBuilder.named(new ResourceLocation("iceandfire", "main_channel"));
         String version = PROTOCOL_VERSION;
