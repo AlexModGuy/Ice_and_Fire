@@ -49,10 +49,6 @@ public class IafDragonFlightManager {
 
     public void update() {
         if (dragon.getAttackTarget() != null && dragon.getAttackTarget().isAlive() ) {
-            if (dragon.getAttackTarget() instanceof TameableEntity && ((TameableEntity) dragon.getAttackTarget()).isTamed()){
-                dragon.setAttackTarget(null);
-                return;
-            }
             if (dragon instanceof EntityIceDragon && dragon.isInWater()) {
                 if (dragon.getAttackTarget() == null) {
                     dragon.airAttack = IafDragonAttacks.Air.SCORCH_STREAM;

@@ -47,9 +47,6 @@ public class DragonAIAttackMelee extends Goal {
             return false;
         } else if (!dragon.canMove() || dragon.isHovering() || dragon.isFlying()) {
             return false;
-        }
-        else if (livingEntity instanceof TameableEntity && this.dragon.isTamed() && ((TameableEntity)livingEntity).isTamed()){
-            return false;
         } else {
             attackPath = ((AdvancedPathNavigate) this.dragon.getNavigator()).moveToLivingEntity(livingEntity, speedTowardsTarget);
             return true;
