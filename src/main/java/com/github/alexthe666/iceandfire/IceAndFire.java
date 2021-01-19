@@ -2,11 +2,6 @@ package com.github.alexthe666.iceandfire;
 
 
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
-import net.minecraftforge.client.model.CompositeModel;
-import net.minecraftforge.client.model.SeparatePerspectiveModel;
-import net.minecraftforge.fml.DeferredWorkQueue;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.event.lifecycle.ParallelDispatchEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -127,7 +127,7 @@ public class EntityLightningDragon extends EntityDragonBase {
     }
     @Override
     public boolean isInvulnerableTo(DamageSource i) {
-        if(i.damageType.equals("lightningBolt")) {
+        if(i.damageType.equals(DamageSource.LIGHTNING_BOLT.damageType)) {
             this.heal(15F);
             this.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 20, 1));
             return true;

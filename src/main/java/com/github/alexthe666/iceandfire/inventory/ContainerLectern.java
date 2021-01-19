@@ -147,6 +147,15 @@ public class ContainerLectern extends Container {
         ItemStack itemstack = this.tileFurnace.getStackInSlot(0);
         ItemStack itemstack1 = this.tileFurnace.getStackInSlot(1);
         int i = 3;
+
+        if (!playerIn.world.isRemote && !playerIn.isCreative()){
+            itemstack1.shrink(i);
+            if (itemstack1.isEmpty()) {
+                this.tileFurnace.setInventorySlotContents(1, ItemStack.EMPTY);
+            }
+            return false;
+        }
+
         boolean didEnchant = false;
         if ((itemstack1.isEmpty() || itemstack1.getCount() < i) && !playerIn.isCreative()) {
             return false;
@@ -163,12 +172,7 @@ public class ContainerLectern extends Container {
                         ((TileEntityLectern) IceAndFire.PROXY.getRefrencedTE()).randomizePages(itemstack, itemstack1);
                     }
                 }
-                if (!playerIn.isCreative()) {
-                    itemstack1.shrink(i);
-                    if (itemstack1.isEmpty()) {
-                        this.tileFurnace.setInventorySlotContents(1, ItemStack.EMPTY);
-                    }
-                }
+
                 this.tileFurnace.markDirty();
                 //this.xpSeed = playerIn.getXPSeed();
                 this.onCraftMatrixChanged(this.tileFurnace);
