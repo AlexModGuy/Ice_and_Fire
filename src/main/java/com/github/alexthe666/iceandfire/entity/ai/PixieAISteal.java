@@ -64,7 +64,8 @@ public class PixieAISteal extends Goal {
 
     public void resetTask() {
         this.temptingPlayer = null;
-        this.delayTemptCounter += 10;
+        if (this.delayTemptCounter < 10)
+            this.delayTemptCounter += 10;
         this.isRunning = false;
     }
 
