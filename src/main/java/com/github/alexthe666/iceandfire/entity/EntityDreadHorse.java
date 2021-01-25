@@ -48,7 +48,7 @@ public class EntityDreadHorse extends SkeletonHorseEntity implements IDreadMob {
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(COMMANDER_UNIQUE_ID, null);
+        this.dataManager.register(COMMANDER_UNIQUE_ID, Optional.empty());
     }
 
     @Override

@@ -23,7 +23,7 @@ public class PixieAISteal extends Goal {
     private double pitch;
     private double yaw;
     private PlayerEntity temptingPlayer;
-    private int delayTemptCounter;
+    private int delayTemptCounter = 0;
     private boolean isRunning;
 
     public PixieAISteal(EntityPixie temptedEntityIn, double speedIn) {
@@ -52,7 +52,7 @@ public class PixieAISteal extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return !temptedEntity.isTamed() && temptedEntity.getHeldItemMainhand().isEmpty();
+        return !temptedEntity.isTamed() && temptedEntity.getHeldItemMainhand().isEmpty() && this.delayTemptCounter == 0;
     }
 
     public void startExecuting() {
@@ -64,7 +64,8 @@ public class PixieAISteal extends Goal {
 
     public void resetTask() {
         this.temptingPlayer = null;
-        this.delayTemptCounter = 10;
+        if (this.delayTemptCounter < 10)
+            this.delayTemptCounter += 10;
         this.isRunning = false;
     }
 
@@ -95,7 +96,11 @@ public class PixieAISteal extends Goal {
                     this.temptingPlayer.addPotionEffect(new EffectInstance(this.temptedEntity.negativePotions[this.temptedEntity.getColor()], 100));
                 }
             }
-
+            //If the pixie couldn't steal anything
+            else{
+                this.temptedEntity.flipAI(true);
+                this.delayTemptCounter = 10 *20;
+            }
         } else {
             this.temptedEntity.getMoveHelper().setMoveTo(this.temptingPlayer.getPosX(), this.temptingPlayer.getPosY() + 1.5F, this.temptingPlayer.getPosZ(), 1D);
         }

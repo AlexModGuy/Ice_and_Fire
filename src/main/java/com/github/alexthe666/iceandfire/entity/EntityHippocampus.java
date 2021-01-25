@@ -247,11 +247,12 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
                 //ATTACK
                 .func_233815_a_(Attributes.field_233823_f_, 1.0D);
     }
-
-    public boolean shouldDismountInWater(Entity rider) {
-        return false;
+    
+    @Override
+    public boolean canBeRiddenInWater(Entity rider)
+    {
+        return true;
     }
-
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
@@ -769,7 +770,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     public double getRideSpeedModifier() {
-        return this.isInWater() ? 1.2F * IafConfig.dragonFlightSpeedMod : 0.55F;
+        return this.isInWater() ? 0.8F * IafConfig.dragonFlightSpeedMod : 0.55F;
     }
 
     class SwimmingMoveHelper extends MovementController {

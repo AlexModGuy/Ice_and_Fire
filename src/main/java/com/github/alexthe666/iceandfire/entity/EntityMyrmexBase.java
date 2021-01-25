@@ -376,7 +376,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
     //Returns true if the entity can climb otherwise returns if it's on a ladder
     public boolean isOnLadder() {
-        if (this.getNavigator() instanceof AdvancedPathNavigate){
+        if (this.getNavigator() instanceof AdvancedPathNavigate && this.getMotion().getY() >=0){
             return ((AdvancedPathNavigate)this.navigator).getPathingOptions().canClimb();
         }
         return super.isOnLadder();
@@ -467,10 +467,11 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                     if (this.getHive()!=null && !this.getHive().isPlayerReputationTooLowToTrade(player.getUniqueID())) {
                         this.setCustomer(player);
                         this.openMerchantContainer(player, this.getDisplayName(), 1);
+                        return ActionResultType.SUCCESS;
                     }
                 }
 
-                return ActionResultType.SUCCESS;
+                return ActionResultType.PASS;
             }
         } else {
             return super.func_230254_b_(player, hand);

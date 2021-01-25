@@ -76,7 +76,7 @@ public class ItemChain extends Item {
                 chainProperties.wasJustDisconnected = false;
                 return ActionResultType.SUCCESS;
             } else {
-                if (!sticky) {//for some reason, this is false for sticky ones
+                if (sticky) {//Old comment: for some reason, this is false for sticky ones
                     double d0 = 60.0D;
                     double i = playerIn.getPosX();
                     double j = playerIn.getPosY();

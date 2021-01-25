@@ -27,6 +27,7 @@ public class BlockDreadBase extends BlockGeneric implements IDragonProof, IDread
         return blockState.get(PLAYER_PLACED) ? super.getHarvestLevel(blockState, worldIn, pos) : -1;
     }*/
     //TODO ^^^^
+    //This currently seems to be impossible without creating a different class for breakable dreadstone
 
     public BlockState getStateFromMeta(int meta) {
         return this.getDefaultState().with(PLAYER_PLACED, Boolean.valueOf(meta > 0));

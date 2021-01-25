@@ -167,7 +167,7 @@ public class IafEntityRegistry {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-        bakeAttributes();
+        //bakeAttributes();
     }
 
     public static HashMap<String, Boolean> LOADED_ENTITIES;

@@ -276,7 +276,7 @@ public class ServerConfig {
         this.deathWormAttackStrength = buildDouble(builder, "Death Worm Base Attack Strength", "all", 3, 1, 10000, "Default deathworm attack strength, this is scaled to the worm's particular size");
         this.spawnDeathWorm = buildBoolean(builder, "Spawn Death Worms", "all", true, "True if deathworms are allowed to spawn");
         this.deathWormAttackMonsters = buildBoolean(builder, "Death Worms Target Monsters", "all", true, "True if wild deathworms are allowed to target and attack monsters");
-        this.deathWormSpawnRate = buildInt(builder, "Death Worm Spawn Weight", "all", 30, 1, 10000, "Deathworm spawn weight. Lower = lower chance to spawn");
+        this.deathWormSpawnRate = buildInt(builder, "Death Worm Spawn Weight", "all", 30, 1, 10000, "Deathworm spawn weight. Higher = lower chance to spawn");
         this.deathWormSpawnCheckChance = buildInt(builder, "Death Worm Spawn Check Chance", "all", 3, 0, 10000, "A double check to see if the game can spawn death worms. Higher number = lower chance to spawn.");
 
         this.cockatriceMaxHealth = buildDouble(builder, "Cockatrice Health", "all", 40, 1, 10000, "Maximum cockatrice health");

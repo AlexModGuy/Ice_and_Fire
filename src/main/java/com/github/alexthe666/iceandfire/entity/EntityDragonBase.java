@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -47,9 +48,7 @@ import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import com.github.alexthe666.iceandfire.item.ItemSummoningCrystal;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageDragonSetBurnBlock;
-import com.github.alexthe666.iceandfire.message.MessageStartRidingMob;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.IPassabilityNavigator;
 import com.github.alexthe666.iceandfire.world.DragonPosWorldData;
@@ -502,7 +501,11 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
             this.navigatorType = 2;
         }
     }
-
+    @Override
+    public boolean canBeRiddenInWater(Entity rider)
+    {
+        return true;
+    }
     protected void updateAITasks() {
         super.updateAITasks();
         breakBlock();
@@ -1135,13 +1138,13 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                     if (!world.isRemote) {
                         if (this.getDragonStage() < 2) {
                             this.startRiding(player, true);
-                            IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, true));
+                            //IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, true));
                             return ActionResultType.SUCCESS;
                         }
                         if (this.getDragonStage() > 2 && !player.isPassenger()) {
                             player.setSneaking(false);
                             player.startRiding(this, true);
-                            IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, false));
+                            //IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, false));
 
                             this.setSleeping(false);
                         }
@@ -1717,7 +1720,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
             if ((this.getControlState() == 1 << 4 || ((PlayerEntity) riding).isElytraFlying()) && !riding.isPassenger()) {
                 this.stopRiding();
                 if (world.isRemote) {
-                    IceAndFire.sendMSGToServer(new MessageStartRidingMob(this.getEntityId(), false, true));
+                    //IceAndFire.sendMSGToServer(new MessageStartRidingMob(this.getEntityId(), false, true));
                 }
 
             }
@@ -2181,7 +2184,17 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         super.setAttackTarget(LivingEntityIn);
         this.flightManager.onSetAttackTarget(LivingEntityIn);
     }
-
+    @Override
+    public boolean shouldAttackEntity(LivingEntity target, LivingEntity owner) {
+        if (this.isTamed() && target instanceof TameableEntity) {
+            TameableEntity tamableTarget = (TameableEntity) target;
+            UUID targetOwner = tamableTarget.getOwnerId();
+            if (targetOwner != null && targetOwner.equals(this.getOwnerId())) {
+                return false;
+            }
+        }
+        return super.shouldAttackEntity(target, owner);
+    }
     public boolean canAttack(LivingEntity target) {
         return super.canAttack(target) && DragonUtils.isAlive(target);
     }

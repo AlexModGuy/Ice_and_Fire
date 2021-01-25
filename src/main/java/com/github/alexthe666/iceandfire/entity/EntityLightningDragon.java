@@ -26,6 +26,8 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
@@ -122,7 +124,15 @@ public class EntityLightningDragon extends EntityDragonBase {
                 return "black_";
         }
     }
-
+    @Override
+    public boolean isInvulnerableTo(DamageSource i) {
+        if(i.damageType.equals(DamageSource.LIGHTNING_BOLT.damageType)) {
+            this.heal(15F);
+            this.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 20, 1));
+            return true;
+        }
+        return super.isInvulnerableTo(i);
+    }
     public Item getVariantScale(int variant) {
         switch (variant) {
             default:

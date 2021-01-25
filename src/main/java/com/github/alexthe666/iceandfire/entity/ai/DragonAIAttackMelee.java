@@ -36,18 +36,18 @@ public class DragonAIAttackMelee extends Goal {
 
     @Override
     public boolean shouldExecute() {
-        LivingEntity LivingEntity = this.dragon.getAttackTarget();
+        LivingEntity livingEntity = this.dragon.getAttackTarget();
         if (!(this.dragon.getNavigator() instanceof AdvancedPathNavigate)) {
             return false;
         }
-        if (LivingEntity == null) {
+        if (livingEntity == null) {
             return false;
-        } else if (!LivingEntity.isAlive()) {
+        } else if (!livingEntity.isAlive()) {
             return false;
         } else if (!dragon.canMove() || dragon.isHovering() || dragon.isFlying()) {
             return false;
         } else {
-            attackPath = ((AdvancedPathNavigate) this.dragon.getNavigator()).moveToLivingEntity(LivingEntity, speedTowardsTarget);
+            attackPath = ((AdvancedPathNavigate) this.dragon.getNavigator()).moveToLivingEntity(livingEntity, speedTowardsTarget);
             return true;
         }
     }
