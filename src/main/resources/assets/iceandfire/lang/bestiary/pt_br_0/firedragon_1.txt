@@ -5,7 +5,7 @@ Eles também possuem ataques
 diferentes.
 
 
-
+<image><drawings_firedragon_attacks.png 20 110 0 106 264 77 0.65>
 
 
 
@@ -20,7 +20,7 @@ infligirem quantidades massivas de
 dano.
 
 
-
+<image><drawings_firedragon_attacks.png 280 10 0 0 210 81 0.75>
 
 
 
@@ -35,7 +35,7 @@ fazer este ataque.
 
 
 
-
+<image><drawings_firedragon_attacks.png 360 242 262 220 213 78 0.6>
 
 Um dos ataques mais comuns dos 
 dragões de fogo é a mordida do 
