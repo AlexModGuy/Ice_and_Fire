@@ -6,7 +6,7 @@ como elas são e também suas
 atividades.
 
 
-
+<image><drawings_icedragon.png 0 80 0 0 194 93 1>
 
 
 
@@ -31,9 +31,12 @@ usadas na aviação. Essas feras
 parecem lerdas no começo, mas não 
 se engane, elas podem levantar voo 
 e atacar rapidamente uma presa.
-
     Talvez o maior perigo seja o
 aspecto deles terem a habilidade
 de produzir gelo pela boca. Eles 
 usam esse poder para congelarem
 suas presas vivas.
+
+     Dragões de gelo machos têm asas
+padronizadas e coletam itens mais valiosos, 
+já as fêmeas tem chifres curvados.

@@ -30,7 +30,11 @@ inimigos em chamas e fornecem um
 dano adicional contra Dragões 
 de Gelo. Espadas gélidas desaceleram 
 oponentes, e aplicam um dano extra 
-contra Dragões de Fogo.
+contra Dragões de Fogo. Ambas espadas 
+tem um grande efeito de empurrão.
 
-Ambas espadas tem um grande
-efeito de empurrão.
+
+
+
+Sangue de Dragão também pode ser
+usado para preservar dragões.
