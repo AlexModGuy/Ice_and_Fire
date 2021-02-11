@@ -673,7 +673,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     }
 
     public void onWorldSpawn(Random random) {
-        this.setVariant(random.nextInt(6));
+        this.setVariant(random.nextInt(7));
         boolean ancient = random.nextInt(15) == 1;
         if (ancient) {
             this.setAncient(true);
