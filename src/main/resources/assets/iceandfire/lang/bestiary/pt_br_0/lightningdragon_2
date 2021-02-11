@@ -1,11 +1,11 @@
-Este é o principal ataque do Dragão 
-de Gelo. É poderoso, é rápido, mas 
+Este é o principal ataque do Dragão
+Elétrico. É poderoso, é rápido, mas 
 geralmente não causa uma morte
 instantânea. No entanto, o dragão 
 tem um raro ataque corpo a corpo: 
-sacudir apresa até a morte.
+sacudir a presa até a morte.
 
-<image><drawings_icedragon_attacks.png 40 120 290 124 186 69 0.7>
+<image><drawings_lightningdragon_attacks.png 40 112 290 124 186 69 0.7>
 
 
 
@@ -16,8 +16,7 @@ rapidamente com o intuito de
 de provocar graves ferimentos.
 
 
-<image><drawings_icedragon_attacks.png 80 240 330 20 130 77 0.7>
-
+<image><drawings_lightningdragon_attacks.png 80 234 330 20 117 77 0.7>
 
 
 
@@ -36,8 +35,8 @@ usarão ataques de longa distância, por
 esse motivo é mais prudente atacá-los 
 com armas de longo alcance e poções 
 protetoras. Se você quer abater uma 
-dessas feras, tente evitar as explosões 
-de gelo, e observe o comportamento 
-de seus ataques. Quando conseguir 
-derrotar um, você terá acesso á 
-algumas comodidades valiosas.
+dessas feras, tente evitar os raios, 
+e observe o comportamento de seus 
+ataques. Quando conseguir derrotar
+um, você terá acesso á algumas
+comodidades valiosas.
