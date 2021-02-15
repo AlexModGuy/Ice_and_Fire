@@ -57,6 +57,7 @@ public class CommonProxy {
     
     @SubscribeEvent
     public static void registerVillagers(RegistryEvent.Register<VillagerRegistry.VillagerProfession> event) {
+    	IafVillagerRegistry.INSTANCE.init();
         event.getRegistry().register(IafVillagerRegistry.INSTANCE.fisherman);
         event.getRegistry().register(IafVillagerRegistry.INSTANCE.craftsman);
         event.getRegistry().register(IafVillagerRegistry.INSTANCE.shaman);
