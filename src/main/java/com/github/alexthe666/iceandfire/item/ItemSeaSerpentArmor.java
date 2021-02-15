@@ -60,8 +60,8 @@ public class ItemSeaSerpentArmor extends ArmorItem {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 
-        tooltip.add(new TranslationTextComponent("sea_serpent." + armor_type.resourceName).func_240699_a_(armor_type.color));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.sea_serpent_armor.desc_0").func_240699_a_(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.sea_serpent_armor.desc_1").func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("sea_serpent." + armor_type.resourceName).mergeStyle(armor_type.color));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.sea_serpent_armor.desc_0").mergeStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.sea_serpent_armor.desc_1").mergeStyle(TextFormatting.GRAY));
     }
 }

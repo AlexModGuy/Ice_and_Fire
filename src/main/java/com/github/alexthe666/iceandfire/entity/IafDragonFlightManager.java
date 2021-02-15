@@ -140,7 +140,7 @@ public class IafDragonFlightManager {
 
         public void tick() {
             if (this.action == Action.STRAFE) {
-                float f = (float) this.mob.getAttribute(Attributes.field_233821_d_).getValue();
+                float f = (float) this.mob.getAttribute(Attributes.MOVEMENT_SPEED).getValue();
                 float f1 = (float) this.speed * f;
                 float f2 = this.moveForward;
                 float f3 = this.moveStrafe;
@@ -189,15 +189,15 @@ public class IafDragonFlightManager {
                     changeRange = 5 + ageMod * 10;
                 }
                 this.mob.rotationYaw = this.limitAngle(this.mob.rotationYaw, targetDegree, changeRange);
-                this.mob.setAIMoveSpeed((float) (this.speed * this.mob.getAttribute(Attributes.field_233821_d_).getValue()));
+                this.mob.setAIMoveSpeed((float) (this.speed * this.mob.getAttribute(Attributes.MOVEMENT_SPEED).getValue()));
                 if (d2 > (double) this.mob.stepHeight && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.mob.getWidth() / 2)) {
                     this.mob.getJumpController().setJumping();
                     this.action = Action.JUMPING;
                 }
             } else if (this.action == Action.JUMPING) {
-                this.mob.setAIMoveSpeed((float) (this.speed * this.mob.getAttribute(Attributes.field_233821_d_).getValue()));
+                this.mob.setAIMoveSpeed((float) (this.speed * this.mob.getAttribute(Attributes.MOVEMENT_SPEED).getValue()));
 
-                if (this.mob.func_233570_aj_()) {
+                if (this.mob.isOnGround()) {
                     this.action = Action.WAIT;
                 }
             } else {

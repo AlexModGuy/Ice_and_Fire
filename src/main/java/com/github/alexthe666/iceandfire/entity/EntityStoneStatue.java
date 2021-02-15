@@ -44,11 +44,11 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, 20)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 20)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.0D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.0D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, 1.0D);
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 1.0D);
     }
 
     public void applyEntityCollision(Entity entityIn) {

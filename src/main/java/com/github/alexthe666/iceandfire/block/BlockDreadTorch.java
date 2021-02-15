@@ -21,7 +21,7 @@ public class BlockDreadTorch extends TorchBlock implements IDreadBlock, IWallBlo
         super(
     		Properties
     			.create(Material.WOOD)
-    			.func_235838_a_((p_235454_0_) -> { return 5; })
+    			.setLightLevel((p_235454_0_) -> { return 5; })
     			.sound(SoundType.STONE)
     			.notSolid()
     			.variableOpacity(),

@@ -32,7 +32,7 @@ public class ItemStymphalianArrow extends ArrowItem {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.stymphalian_arrow.desc").func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.stymphalian_arrow.desc").mergeStyle(TextFormatting.GRAY));
     }
 
 }

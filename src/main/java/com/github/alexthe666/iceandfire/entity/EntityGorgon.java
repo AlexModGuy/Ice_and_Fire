@@ -273,13 +273,13 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, IafConfig.gorgonMaxHealth)
+                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.gorgonMaxHealth)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.25D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, 3.0D)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 3.0D)
                 //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 1.0D);
+                .createMutableAttribute(Attributes.ARMOR, 1.0D);
     }
 
     @Override

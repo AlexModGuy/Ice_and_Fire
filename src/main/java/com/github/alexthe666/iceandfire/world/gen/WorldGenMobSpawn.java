@@ -42,7 +42,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
         BlockPos oceanPos = worldIn.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, position.add(8, 0, 8));
         Biome biome = worldIn.getWorld().getBiome(position);
 
-        if (IafConfig.spawnDeathWorm && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.deathwormBiomes, biome)) {
+        if (IafConfig.spawnDeathWorm && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && BiomeConfig.test(BiomeConfig.deathwormBiomes, biome)) {
             if (rand.nextInt(IafConfig.deathWormSpawnRate + 1) == 0) {
                 EntityDeathWorm deathWorm = IafEntityRegistry.DEATH_WORM.create(worldIn.getWorld());
                 deathWorm.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
@@ -51,7 +51,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
             }
         }
 
-        if (IafConfig.generateWanderingCyclops && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.wanderingCyclopsBiomes, biome)) {
+        if (IafConfig.generateWanderingCyclops && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && BiomeConfig.test(BiomeConfig.wanderingCyclopsBiomes, biome)) {
             if (rand.nextInt(IafConfig.spawnWanderingCyclopsChance + 1) == 0) {
                 EntityCyclops cyclops = IafEntityRegistry.CYCLOPS.create(worldIn.getWorld());
                 cyclops.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
@@ -67,7 +67,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
         }
 
         if (IafConfig.generateDragonSkeletons) {
-            if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.lightningDragonSkeletonBiomes, biome) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
+            if (BiomeConfig.test(BiomeConfig.lightningDragonSkeletonBiomes, biome) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
             	EntityDragonBase firedragon = IafEntityRegistry.LIGHTNING_DRAGON.create(worldIn.getWorld());
                 firedragon.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                 int dragonage = 10 + rand.nextInt(100);
@@ -77,7 +77,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                 firedragon.setDeathStage((dragonage / 5) / 2);
                 firedragon.rotationYaw = rand.nextInt(360);
                 worldIn.addEntity(firedragon);
-            }else if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.fireDragonSkeletonBiomes, biome) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
+            }else if (BiomeConfig.test(BiomeConfig.fireDragonSkeletonBiomes, biome) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
             	EntityDragonBase firedragon = IafEntityRegistry.FIRE_DRAGON.create(worldIn.getWorld());
                 firedragon.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                 int dragonage = 10 + rand.nextInt(100);
@@ -88,7 +88,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                 firedragon.rotationYaw = rand.nextInt(360);
                 worldIn.addEntity(firedragon);
             }
-            if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.iceDragonSkeletonBiomes, biome) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
+            if (BiomeConfig.test(BiomeConfig.iceDragonSkeletonBiomes, biome) && rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
             	EntityDragonBase icedragon = IafEntityRegistry.ICE_DRAGON.create(worldIn.getWorld());
                 icedragon.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                 int dragonage = 10 + rand.nextInt(100);
@@ -100,7 +100,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                 worldIn.addEntity(icedragon);
             }
         }
-        if (IafConfig.spawnHippocampus && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.hippocampusBiomes, biome) && rand.nextInt(IafConfig.hippocampusSpawnChance + 1) == 0) {
+        if (IafConfig.spawnHippocampus && BiomeConfig.test(BiomeConfig.hippocampusBiomes, biome) && rand.nextInt(IafConfig.hippocampusSpawnChance + 1) == 0) {
             for (int i = 0; i < rand.nextInt(5); i++) {
                 BlockPos pos = oceanPos.add(rand.nextInt(10) - 5, rand.nextInt(30), rand.nextInt(10) - 5);
                 if (worldIn.getFluidState(pos).getFluid() == Fluids.WATER) {
@@ -111,7 +111,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                 }
             }
         }
-        if (IafConfig.spawnSeaSerpents && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.seaSerpentBiomes, biome) && rand.nextInt(IafConfig.seaSerpentSpawnChance + 1) == 0) {
+        if (IafConfig.spawnSeaSerpents && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && BiomeConfig.test(BiomeConfig.seaSerpentBiomes, biome) && rand.nextInt(IafConfig.seaSerpentSpawnChance + 1) == 0) {
             BlockPos pos =oceanPos.add(rand.nextInt(10) - 5, rand.nextInt(30), rand.nextInt(10) - 5);
             if (worldIn.getFluidState(pos).getFluid() == Fluids.WATER) {
                 EntitySeaSerpent serpent = IafEntityRegistry.SEA_SERPENT.create(worldIn.getWorld());
@@ -120,7 +120,7 @@ public class WorldGenMobSpawn extends Feature<NoFeatureConfig> {
                 worldIn.addEntity(serpent);
             }
         }
-        if (IafConfig.spawnStymphalianBirds && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.stymphalianBiomes, biome) && rand.nextInt(IafConfig.stymphalianBirdSpawnChance + 1) == 0) {
+        if (IafConfig.spawnStymphalianBirds && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && BiomeConfig.test(BiomeConfig.stymphalianBiomes, biome) && rand.nextInt(IafConfig.stymphalianBirdSpawnChance + 1) == 0) {
             for (int i = 0; i < 4 + rand.nextInt(4); i++) {
                 BlockPos pos = position.add(rand.nextInt(10) - 5, 0, rand.nextInt(10) - 5);
                 pos = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);

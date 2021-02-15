@@ -103,15 +103,15 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, IafConfig.ghostMaxHealth)
+                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.ghostMaxHealth)
                 //FOLLOW_RANGE
-                .func_233815_a_(Attributes.field_233819_b_, 64D)
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, 64D)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.15D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.15D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, IafConfig.ghostAttackStrength)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, IafConfig.ghostAttackStrength)
                 //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 1D);
+                .createMutableAttribute(Attributes.ARMOR, 1D);
     }
 
     public boolean isPotionApplicable(EffectInstance potioneffectIn) {

@@ -343,7 +343,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                         player.sendStatusMessage(new TranslationTextComponent("hippogryph.command.remove_home"), true);
                         return ActionResultType.SUCCESS;
                     } else {
-                        BlockPos pos = this.func_233580_cy_();
+                        BlockPos pos = this.getPosition();
                         this.homePos = pos;
                         this.hasHomePosition = true;
                         player.sendStatusMessage(new TranslationTextComponent("hippogryph.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
@@ -670,19 +670,19 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             case 3:
                 armorValue = 30;
         }
-        this.getAttribute(Attributes.field_233826_i_).setBaseValue(armorValue);
+        this.getAttribute(Attributes.ARMOR).setBaseValue(armorValue);
     }
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, 40.0D)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 40.0D)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.3D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, 5.0D)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0D)
                 //FOLLOW RANGE
-                .func_233815_a_(Attributes.field_233819_b_, 32.0D);
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, 32.0D);
     }
 
     public boolean canMove() {
@@ -692,7 +692,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     @Nullable
     public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         ILivingEntityData data = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setEnumVariant(EnumHippogryphTypes.getBiomeType(worldIn.getBiome(this.func_233580_cy_())));
+        this.setEnumVariant(EnumHippogryphTypes.getBiomeType(worldIn.getBiome(this.getPosition())));
         return data;
     }
 
@@ -853,7 +853,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 8) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         LivingEntity attackTarget = this.getAttackTarget();
@@ -861,13 +861,13 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             double dist = this.getDistanceSq(this.getAttackTarget());
 
             if (dist < 8) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
                 this.getAttackTarget().isAirBorne = true;
                 float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
                 attackTarget.setMotion(attackTarget.getMotion().add(-0.5 / (double) f, 1, -0.5 / (double) f));
                 attackTarget.setMotion(attackTarget.getMotion().mul(0.5D, 1, 0.5D));
 
-                if (this.getAttackTarget().func_233570_aj_()) {
+                if (this.getAttackTarget().isOnGround()) {
                     attackTarget.setMotion(attackTarget.getMotion().add(0, 0.3, 0));
                 }
             }
@@ -1028,7 +1028,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 this.setAnimation(this.getRNG().nextBoolean() ? ANIMATION_SCRATCH : ANIMATION_BITE);
             }
             if (target != null && this.getAnimationTick() >= 10 && this.getAnimationTick() < 13) {
-                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
+                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getControllingPassenger() != null && this.getControllingPassenger().isSneaking()) {

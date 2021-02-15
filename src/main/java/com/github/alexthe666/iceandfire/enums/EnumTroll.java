@@ -52,13 +52,13 @@ public enum EnumTroll {
 
     public static EnumTroll getBiomeType(Biome biome) {
         List<EnumTroll> types = new ArrayList<EnumTroll>();
-        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.snowyTrollBiomes, biome)) {
+        if (BiomeConfig.test(BiomeConfig.snowyTrollBiomes, biome)) {
             types.add(EnumTroll.FROST);
         }
-        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.forestTrollBiomes, biome)) {
+        if (BiomeConfig.test(BiomeConfig.forestTrollBiomes, biome)) {
             types.add(EnumTroll.FOREST);
         }
-        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.mountainTrollBiomes, biome)) {
+        if (BiomeConfig.test(BiomeConfig.mountainTrollBiomes, biome)) {
             types.add(EnumTroll.MOUNTAIN);
         }
         if (types.isEmpty()) {

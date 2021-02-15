@@ -38,7 +38,7 @@ public class ItemStoneStatue extends Item {
             if (EntityType.byKey(id).orElse(null) != null) {
                 EntityType type = EntityType.byKey(id).orElse(null);
                 TranslationTextComponent untranslated = isPlayer ? new TranslationTextComponent("entity.player.name") : new TranslationTextComponent(type.getTranslationKey());
-                tooltip.add(untranslated.func_240699_a_(TextFormatting.GRAY));
+                tooltip.add(untranslated.mergeStyle(TextFormatting.GRAY));
             }
         }
     }

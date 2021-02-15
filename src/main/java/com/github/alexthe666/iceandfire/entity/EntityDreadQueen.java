@@ -69,15 +69,15 @@ public class EntityDreadQueen extends EntityDreadMob implements IAnimatedEntity,
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, IafConfig.dreadQueenMaxHealth)
+                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.dreadQueenMaxHealth)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.3D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, 5.0D)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0D)
                 //FOLLOW RANGE
-                .func_233815_a_(Attributes.field_233819_b_, 256.0D)
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, 256.0D)
                 //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 30.0D);
+                .createMutableAttribute(Attributes.ARMOR, 30.0D);
     }
 
     public void readAdditional(CompoundNBT compound) {

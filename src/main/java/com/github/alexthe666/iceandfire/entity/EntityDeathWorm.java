@@ -168,7 +168,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         int j = MathHelper.floor(this.getBoundingBox().minY);
         int k = MathHelper.floor(this.getPosZ());
         BlockPos blockpos = new BlockPos(i, j, k);
-        return BlockTags.SAND.func_230235_a_(this.world.getBlockState(blockpos.down()).getBlock()) && this.getRNG().nextInt(1 + IafConfig.deathWormSpawnCheckChance) == 0 && this.world.getLight(blockpos) > 8;
+        return BlockTags.SAND.contains(this.world.getBlockState(blockpos.down()).getBlock()) && this.getRNG().nextInt(1 + IafConfig.deathWormSpawnCheckChance) == 0 && this.world.getLight(blockpos) > 8;
     }
 
     public void onUpdateParts() {
@@ -372,15 +372,15 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, IafConfig.deathWormMaxHealth)
+                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.deathWormMaxHealth)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.15D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.15D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, IafConfig.deathWormAttackStrength)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, IafConfig.deathWormAttackStrength)
                 //FOLLOW RANGE
-                .func_233815_a_(Attributes.field_233819_b_, IafConfig.deathWormTargetSearchLength)
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, IafConfig.deathWormTargetSearchLength)
                 //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 3);
+                .createMutableAttribute(Attributes.ARMOR, 3);
     }
 
     public void updatePassenger(Entity passenger) {
@@ -459,7 +459,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         if(this.isInSand() || this.isSandBelow()){
             return Vector3d;
         }
-        boolean flag3 = this.func_233570_aj_() || flag1 && vec.y < 0.0D;
+        boolean flag3 = this.isOnGround() || flag1 && vec.y < 0.0D;
         if (this.stepHeight > 0.0F && flag3 && (flag || flag2)) {
             Vector3d Vector3d1 = collideBoundingBoxHeuristically(this, new Vector3d(vec.x, (double)this.stepHeight, vec.z), axisalignedbb, this.world, iselectioncontext, reuseablestream);
             Vector3d Vector3d2 = collideBoundingBoxHeuristically(this, new Vector3d(0.0D, (double)this.stepHeight, 0.0D), axisalignedbb.expand(vec.x, 0.0D, vec.z), this.world, iselectioncontext, reuseablestream);
@@ -531,7 +531,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
 
         for(Direction direction1 : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.UP}) {
             blockpos$mutable.func_239622_a_(blockpos, direction1);
-            if (!this.world.getBlockState(blockpos$mutable).func_235785_r_(this.world, blockpos$mutable) || BlockTags.SAND.func_230235_a_(world.getBlockState(blockpos$mutable).getBlock())) {
+            if (!this.world.getBlockState(blockpos$mutable).func_235785_r_(this.world, blockpos$mutable) || BlockTags.SAND.contains(world.getBlockState(blockpos$mutable).getBlock())) {
                 double d1 = vector3d.getCoordinate(direction1.getAxis());
                 double d2 = direction1.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 1.0D - d1 : d1;
                 if (d2 < d0) {
@@ -558,11 +558,11 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
     }
 
     private void updateAttributes() {
-        this.getAttribute(Attributes.field_233821_d_).setBaseValue(Math.min(0.2D, 0.15D * this.getRenderScale()));
-        this.getAttribute(Attributes.field_233823_f_).setBaseValue(Math.max(1, IafConfig.deathWormAttackStrength * this.getRenderScale()));
-        this.getAttribute(Attributes.field_233818_a_).setBaseValue(Math.max(6, IafConfig.deathWormMaxHealth * this.getRenderScale()));
-        this.getAttribute(Attributes.field_233819_b_).setBaseValue(IafConfig.deathWormTargetSearchLength);
-        this.setHealth((float) this.getAttribute(Attributes.field_233818_a_).getBaseValue());
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(Math.min(0.2D, 0.15D * this.getRenderScale()));
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Math.max(1, IafConfig.deathWormAttackStrength * this.getRenderScale()));
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Math.max(6, IafConfig.deathWormMaxHealth * this.getRenderScale()));
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(IafConfig.deathWormTargetSearchLength);
+        this.setHealth((float) this.getAttribute(Attributes.MAX_HEALTH).getBaseValue());
     }
 
     public void onKillEntity(LivingEntity LivingEntityIn) {
@@ -645,7 +645,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
                 this.setAnimation(ANIMATION_BITE);
             }
             if (dist < Math.min(4, 4D * getRenderScale()) && this.getAnimation() == ANIMATION_BITE) {
-                float f = (float) this.getAttribute(Attributes.field_233823_f_).getValue();
+                float f = (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
                 this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
                 this.setMotion(this.getMotion().add(0, -0.4F, 0));
             }
@@ -654,7 +654,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
 
     public int getWormBrightness(int lightIn) {
         BlockPos eyePos = new BlockPos(this.getEyePosition(1.0F));
-        while(eyePos.getY() < 256 && BlockTags.SAND.func_230235_a_(world.getBlockState(eyePos).getBlock())){
+        while(eyePos.getY() < 256 && BlockTags.SAND.contains(world.getBlockState(eyePos).getBlock())){
             eyePos = eyePos.up();
         }
         int light = this.world.getLightFor(LightType.BLOCK, eyePos);
@@ -706,7 +706,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
                 }
             }
             if (target != null) {
-                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
+                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (!this.isInSand()) {
@@ -806,7 +806,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
     }
 
     public boolean isInSand() {
-        return this.getControllingPassenger() == null && (BlockTags.SAND.func_230235_a_(world.getBlockState(func_233580_cy_().up()).getBlock()) ||BlockTags.SAND.func_230235_a_(world.getBlockState(func_233580_cy_()).getBlock()) || BlockTags.SAND.func_230235_a_(world.getBlockState(func_233580_cy_().down()).getBlock()));
+        return this.getControllingPassenger() == null && (BlockTags.SAND.contains(world.getBlockState(getPosition().up()).getBlock()) ||BlockTags.SAND.contains(world.getBlockState(getPosition()).getBlock()) || BlockTags.SAND.contains(world.getBlockState(getPosition().down()).getBlock()));
     }
 
     public boolean isInSandStrict() {

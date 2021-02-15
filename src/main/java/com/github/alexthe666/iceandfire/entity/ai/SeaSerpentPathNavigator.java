@@ -101,7 +101,7 @@ public class SeaSerpentPathNavigator  extends PathNavigator {
                 this.timeoutTimer += Util.milliTime() - this.lastTimeoutCheck;
             } else {
                 this.timeoutCachedNode = lvt_2_1_;
-                double lvt_3_1_ = p_179677_1_.distanceTo(Vector3d.func_237489_a_(this.timeoutCachedNode));
+                double lvt_3_1_ = p_179677_1_.distanceTo(Vector3d.copyCentered(this.timeoutCachedNode));
                 this.timeoutLimit = this.entity.getAIMoveSpeed() > 0.0F ? lvt_3_1_ / (double)this.entity.getAIMoveSpeed() * 100.0D : 0.0D;
             }
 

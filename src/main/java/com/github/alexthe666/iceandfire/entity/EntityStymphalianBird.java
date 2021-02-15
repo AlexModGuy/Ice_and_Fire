@@ -104,15 +104,15 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, 24.0D)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 24.0D)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.3D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, IafConfig.myrmexBaseAttackStrength * 2D)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, IafConfig.myrmexBaseAttackStrength * 2D)
                 //FOLLOW RANGE
-                .func_233815_a_(Attributes.field_233819_b_, Math.min(2048, IafConfig.stymphalianBirdTargetSearchLength))
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, Math.min(2048, IafConfig.stymphalianBirdTargetSearchLength))
                 //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 4.0D);
+                .createMutableAttribute(Attributes.ARMOR, 4.0D);
     }
 
     @Override
@@ -260,7 +260,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
                     this.airTarget = null;
                     this.aiFlightLaunch = false;
                 }
-                if (this.func_233570_aj_() && dist < 40 && this.getAnimation() != ANIMATION_SHOOT_ARROWS) {
+                if (this.isOnGround() && dist < 40 && this.getAnimation() != ANIMATION_SHOOT_ARROWS) {
                     this.setFlying(false);
                 }
             }
@@ -270,7 +270,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (this.getAnimation() == ANIMATION_PECK && this.getAnimationTick() == 7) {
                 if (dist < 1.5F) {
-                    this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
+                    this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
                 }
                 if (onGround) {
                     this.setFlying(false);
@@ -306,13 +306,13 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
                 }
             }
         }
-        boolean flying = this.isFlying() && !this.func_233570_aj_() || airBorneCounter > 10 || this.getAnimation() == ANIMATION_SHOOT_ARROWS;
+        boolean flying = this.isFlying() && !this.isOnGround() || airBorneCounter > 10 || this.getAnimation() == ANIMATION_SHOOT_ARROWS;
         if (flying && flyProgress < 20.0F) {
             flyProgress += 1F;
         } else if (!flying && flyProgress > 0.0F) {
             flyProgress -= 1F;
         }
-        if (!this.isFlying() && this.airTarget != null && this.func_233570_aj_() && !world.isRemote) {
+        if (!this.isFlying() && this.airTarget != null && this.isOnGround() && !world.isRemote) {
             this.airTarget = null;
         }
         if (this.isFlying() && getAttackTarget() == null) {
@@ -330,7 +330,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
             this.flyTicks = 0;
             this.aiFlightLaunch = true;
         }
-        if (!world.isRemote && this.func_233570_aj_() && this.isFlying() && !aiFlightLaunch && this.getAnimation() != ANIMATION_SHOOT_ARROWS) {
+        if (!world.isRemote && this.isOnGround() && this.isFlying() && !aiFlightLaunch && this.getAnimation() != ANIMATION_SHOOT_ARROWS) {
             this.setFlying(false);
             this.airTarget = null;
         }
@@ -457,7 +457,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     @Nullable
     public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.getAttribute(Attributes.field_233819_b_).setBaseValue(IafConfig.stymphalianBirdTargetSearchLength);
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(IafConfig.stymphalianBirdTargetSearchLength);
         return spawnDataIn;
     }
 

@@ -53,12 +53,12 @@ public class MyrmexAIFindHidingSpot extends Goal {
        if(targetBlock != null){
            this.myrmex.getNavigator().tryMoveToXYZ(this.targetBlock.getX() + 0.5D, this.targetBlock.getY(), this.targetBlock.getZ() + 0.5D, 1D);
            if (areMyrmexNear(5) || this.myrmex.isOnResin()) {
-               if (this.myrmex.getDistanceSq(Vector3d.func_237489_a_(this.targetBlock)) < 9) {
+               if (this.myrmex.getDistanceSq(Vector3d.copyCentered(this.targetBlock)) < 9) {
                    this.wanderRadius += RADIUS;
                    this.targetBlock = getTargetPosition(wanderRadius);
                }
            } else {
-               if (this.myrmex.getDistanceSq(Vector3d.func_237489_a_(this.targetBlock)) < 9 && this.myrmex.getAttackTarget() == null && this.myrmex.getCustomer() == null && myrmex.visibleTicks == 0) {
+               if (this.myrmex.getDistanceSq(Vector3d.copyCentered(this.targetBlock)) < 9 && this.myrmex.getAttackTarget() == null && this.myrmex.getCustomer() == null && myrmex.visibleTicks == 0) {
                    myrmex.setHiding(true);
                    myrmex.getNavigator().clearPath();
                }

@@ -69,7 +69,7 @@ public class HippogryphAIAirTarget extends Goal {
     }
 
     public Vector3d findAirTarget() {
-        return Vector3d.func_237489_a_(getNearbyAirTarget());
+        return Vector3d.copyCentered(getNearbyAirTarget());
     }
 
     public BlockPos getNearbyAirTarget() {
@@ -88,7 +88,7 @@ public class HippogryphAIAirTarget extends Goal {
                 return pos;
             }
         }
-        return hippogryph.func_233580_cy_();
+        return hippogryph.getPosition();
     }
 
 }

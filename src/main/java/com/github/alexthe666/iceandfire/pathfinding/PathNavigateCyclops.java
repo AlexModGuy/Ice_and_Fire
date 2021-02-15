@@ -44,7 +44,7 @@ public class PathNavigateCyclops extends GroundPathNavigator {
     }
 
     public Path getPathToEntity(Entity entityIn, int i) {
-        this.targetPosition = entityIn.func_233580_cy_();
+        this.targetPosition = entityIn.getPosition();
         return super.getPathToEntity(entityIn, i);
     }
 
@@ -53,7 +53,7 @@ public class PathNavigateCyclops extends GroundPathNavigator {
         if (path != null) {
             return this.setPath(path, speedIn);
         } else {
-            this.targetPosition = entityIn.func_233580_cy_();
+            this.targetPosition = entityIn.getPosition();
             this.speed = speedIn;
             return true;
         }
@@ -70,7 +70,7 @@ public class PathNavigateCyclops extends GroundPathNavigator {
         }
 
         this.maxDistanceToWaypoint = this.entity.getWidth();
-        Vector3d Vector3d1 = Vector3d.func_237489_a_(this.currentPath.func_242948_g());
+        Vector3d Vector3d1 = Vector3d.copyCentered(this.currentPath.func_242948_g());
         float distX = MathHelper.abs((float) (this.entity.getPosX() - (Vector3d1.x + 0.5D)));
         float distZ = MathHelper.abs((float) (this.entity.getPosZ() - (Vector3d1.z + 0.5D)));
         float distY = (float) Math.abs(this.entity.getPosY() - Vector3d1.y);
@@ -104,7 +104,7 @@ public class PathNavigateCyclops extends GroundPathNavigator {
         }
 
         if (this.currentPath != null && !this.currentPath.isFinished()) {
-            Vector3d vector3d = Vector3d.func_237489_a_(this.currentPath.func_242948_g());
+            Vector3d vector3d = Vector3d.copyCentered(this.currentPath.func_242948_g());
 
             if (vector3d.equals(this.timeoutCachedNode)) {
                 this.timeoutTimer += System.currentTimeMillis() - this.lastTimeoutCheck;

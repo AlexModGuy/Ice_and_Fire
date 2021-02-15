@@ -22,16 +22,16 @@ public class SeaSerpentAIMeleeJump  extends JumpGoal {
     }
 
     public boolean shouldExecute() {
-        if (this.dolphin.getAttackTarget() == null || !dolphin.shouldUseJumpAttack(this.dolphin.getAttackTarget()) || this.dolphin.func_233570_aj_() ) {
+        if (this.dolphin.getAttackTarget() == null || !dolphin.shouldUseJumpAttack(this.dolphin.getAttackTarget()) || this.dolphin.isOnGround() ) {
             return false;
         } else {
-            BlockPos blockpos = this.dolphin.func_233580_cy_();
+            BlockPos blockpos = this.dolphin.getPosition();
             return true;
         }
     }
     public boolean shouldContinueExecuting() {
         double d0 = this.dolphin.getMotion().y;
-        return dolphin.getAttackTarget() != null && dolphin.jumpCooldown > 0 && (!(d0 * d0 < (double) 0.03F) || this.dolphin.rotationPitch == 0.0F || !(Math.abs(this.dolphin.rotationPitch) < 10.0F) || !this.dolphin.isInWater()) && !this.dolphin.func_233570_aj_();
+        return dolphin.getAttackTarget() != null && dolphin.jumpCooldown > 0 && (!(d0 * d0 < (double) 0.03F) || this.dolphin.rotationPitch == 0.0F || !(Math.abs(this.dolphin.rotationPitch) < 10.0F) || !this.dolphin.isInWater()) && !this.dolphin.isOnGround();
     }
 
     public boolean isPreemptible() {
@@ -69,7 +69,7 @@ public class SeaSerpentAIMeleeJump  extends JumpGoal {
     public void tick() {
         boolean flag = this.inWater;
         if (!flag) {
-            FluidState fluidstate = this.dolphin.world.getFluidState(this.dolphin.func_233580_cy_());
+            FluidState fluidstate = this.dolphin.world.getFluidState(this.dolphin.getPosition());
             this.inWater = fluidstate.isTagged(FluidTags.WATER);
         }
         if(attackCooldown > 0){

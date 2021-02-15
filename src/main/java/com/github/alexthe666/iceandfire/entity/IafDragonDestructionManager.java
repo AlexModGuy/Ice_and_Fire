@@ -415,7 +415,7 @@ public class IafDragonDestructionManager {
                 LivingEntity.attackEntityFrom(IafDamageRegistry.DRAGON_LIGHTNING, stageDmg);
                 double d1 = destroyer.getPosX() - LivingEntity.getPosX();
                 double d0 = destroyer.getPosZ() - LivingEntity.getPosZ();
-                LivingEntity.func_233627_a_(0.3F, d1, d0);
+                LivingEntity.applyKnockback(0.3F, d1, d0);
             }
 		});
     }
@@ -488,7 +488,7 @@ public class IafDragonDestructionManager {
                     LivingEntity.attackEntityFrom(IafDamageRegistry.DRAGON_LIGHTNING, stageDmg);
                     double d1 = destroyer.getPosX() - LivingEntity.getPosX();
                     double d0 = destroyer.getPosZ() - LivingEntity.getPosZ();
-                    LivingEntity.func_233627_a_(0.9F, d1, d0);
+                    LivingEntity.applyKnockback(0.9F, d1, d0);
                 }
     		});
 

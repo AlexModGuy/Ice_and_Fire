@@ -30,7 +30,7 @@ public class BlockMyrmexBiolight extends BushBlock {
 				.doesNotBlockMovement()
 				.variableOpacity()
 				.hardnessAndResistance(0)
-				.func_235838_a_((p_235454_0_) -> { return 7; })
+				.setLightLevel((p_235454_0_) -> { return 7; })
 				.sound(SoundType.PLANT).tickRandomly()
 		);
 

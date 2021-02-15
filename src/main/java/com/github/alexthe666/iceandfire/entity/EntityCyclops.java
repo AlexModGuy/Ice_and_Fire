@@ -159,15 +159,15 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, IafConfig.cyclopsMaxHealth)
+                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.cyclopsMaxHealth)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.35D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, IafConfig.cyclopsAttackStrength)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, IafConfig.cyclopsAttackStrength)
                 //FOLLOW RANGE
-                .func_233815_a_(Attributes.field_233819_b_, 32D)
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, 32D)
                 //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 20.0D);
+                .createMutableAttribute(Attributes.ARMOR, 20.0D);
     }
 
     @Override
@@ -267,11 +267,11 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
             this.playSound(IafSoundRegistry.CYCLOPS_BITE, 1, 1);
         }
         if (this.getAnimation() == ANIMATION_STOMP && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 12D && this.getAnimationTick() == 14) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.field_233823_f_).getValue());
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
         }
         if (this.getAnimation() == ANIMATION_KICK && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 14D && this.getAnimationTick() == 12) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.field_233823_f_).getValue());
-            this.getAttackTarget().func_233627_a_(2, this.getPosX() - this.getAttackTarget().getPosX(), this.getPosZ() - this.getAttackTarget().getPosZ());
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+            this.getAttackTarget().applyKnockback(2, this.getPosX() - this.getAttackTarget().getPosX(), this.getPosZ() - this.getAttackTarget().getPosZ());
 
         }
         if (this.getAnimation() != ANIMATION_EATPLAYER && this.getAttackTarget() != null && !this.getPassengers().isEmpty() && this.getPassengers().contains(this.getAttackTarget())) {
@@ -323,7 +323,7 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
                         BlockPos pos = new BlockPos(a, b, c);
                         BlockState state = world.getBlockState(pos);
                         Block block = state.getBlock();
-                        if (!state.isAir() && !state.getShape(world, pos).isEmpty() && !(block instanceof BushBlock) && block != Blocks.BEDROCK && (state.getBlock() instanceof LeavesBlock || BlockTags.LOGS.func_230235_a_(state.getBlock()))) {
+                        if (!state.isAir() && !state.getShape(world, pos).isEmpty() && !(block instanceof BushBlock) && block != Blocks.BEDROCK && (state.getBlock() instanceof LeavesBlock || BlockTags.LOGS.contains(state.getBlock()))) {
                             this.getMotion().scale(0.6D);
                             if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, a, b, c))) continue;
                             if (block != Blocks.AIR) {
@@ -378,8 +378,8 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
     public void onHitEye(DamageSource source, float damage) {
         if (!this.isBlinded()) {
             this.setBlinded(true);
-            this.getAttribute(Attributes.field_233819_b_).setBaseValue(6F);
-            this.getAttribute(Attributes.field_233821_d_).setBaseValue(0.35D);
+            this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(6F);
+            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.35D);
             this.setAnimation(ANIMATION_ROAR);
             this.attackEntityFrom(source, damage * 3);
         }

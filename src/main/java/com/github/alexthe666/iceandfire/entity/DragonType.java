@@ -107,7 +107,7 @@ public class DragonType {
             boolean flag;
             BlockPos.Mutable blockpos$pooledmutable = new BlockPos.Mutable(egg.getPosX(), egg.getPosY(), egg.getPosZ()) ;
             flag = egg.world.isRainingAt(blockpos$pooledmutable) || egg.world.isRainingAt(blockpos$pooledmutable.setPos(egg.getPosX(), egg.getPosY() + (double)egg.size.height, egg.getPosZ()));
-            if (egg.world.canSeeSky(egg.func_233580_cy_().up()) && flag) {
+            if (egg.world.canSeeSky(egg.getPosition().up()) && flag) {
                 egg.setDragonAge(egg.getDragonAge() + 1);
             }
             if (egg.getDragonAge() > IafConfig.dragonEggTime) {
@@ -125,7 +125,7 @@ public class DragonType {
                 dragon.setTamed(true);
                 dragon.setOwnerId(egg.getOwnerId());
                 LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(egg.world);
-                lightningboltentity.func_233576_c_(egg.getPositionVec());
+                lightningboltentity.setPosition(egg.getPosX(), egg.getPosY(), egg.getPosZ());
                 if(!egg.world.isRemote){
                     egg.world.addEntity(lightningboltentity);
                 }

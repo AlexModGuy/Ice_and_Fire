@@ -26,6 +26,6 @@ public class ItemCannoli extends ItemGenericFood {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.cannoli.desc").func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.cannoli.desc").mergeStyle(TextFormatting.GRAY));
     }
 }

@@ -83,7 +83,7 @@ public class PathNavigateDeathWormLand extends PathNavigator {
      * Returns the path to the given LivingEntity. Args : entity
      */
     public Path getPathToEntity(Entity entityIn, int i) {
-        return this.getPathToPos(entityIn.func_233580_cy_(), i);
+        return this.getPathToPos(entityIn.getPosition(), i);
     }
 
     /**

@@ -133,7 +133,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
                 start,
                 avoid,
                 (int) range,
-                (int) ourEntity.getAttribute(Attributes.field_233819_b_).getValue(),
+                (int) ourEntity.getAttribute(Attributes.FOLLOW_RANGE).getValue(),
                 ourEntity), null, speedFactor);
     }
 
@@ -149,7 +149,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         return (RandomPathResult) setPathJob(new PathJobRandomPos(ourEntity.world,
                 start,
                 theRange,
-                (int) ourEntity.getAttribute(Attributes.field_233819_b_).getValue(),
+                (int) ourEntity.getAttribute(Attributes.FOLLOW_RANGE).getValue(),
                 ourEntity), null, speedFactor);
     }
 
@@ -265,7 +265,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
                 new PathJobMoveToLocation(ourEntity.world,
                         start,
                         desiredPos,
-                        (int) ourEntity.getAttribute(Attributes.field_233819_b_).getValue(),
+                        (int) ourEntity.getAttribute(Attributes.FOLLOW_RANGE).getValue(),
                         ourEntity),
                 desiredPos, speedFactor);
     }
@@ -334,7 +334,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
 
     @Override
     public boolean tryMoveToEntityLiving(final Entity entityIn, final double speedFactor) {
-        return tryMoveToBlockPos(entityIn.func_233580_cy_(), speedFactor);
+        return tryMoveToBlockPos(entityIn.getPosition(), speedFactor);
     }
 
     // Removes stupid vanilla stuff, causing our pathpoints to occasionally be replaced by vanilla ones.
@@ -580,7 +580,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     @Nullable
     @Override
     public PathResult moveAwayFromLivingEntity(final Entity e, final double distance, final double speed) {
-        return moveAwayFromXYZ(e.func_233580_cy_(), distance, speed);
+        return moveAwayFromXYZ(e.getPosition(), distance, speed);
     }
 
     @Override

@@ -20,7 +20,7 @@ public class BlockGeneric extends Block {
     			.hardnessAndResistance(hardness, resistance)
     			.harvestTool(ToolType.get(toolUsed))
     			.harvestLevel(toolStrength)
-    			.func_235861_h_()
+    			.setRequiresTool()
 		);
 
         this.setRegistryName(IceAndFire.MODID, name);
@@ -54,9 +54,5 @@ public class BlockGeneric extends Block {
     public boolean canEntitySpawn(BlockState state, Entity entityIn) {
         return entityIn instanceof EntityDreadMob || !DragonUtils.isDreadBlock(state);
     }
-    
-    public BlockGeneric setRequiresTool() {
-    	this.field_235684_aB_.func_235861_h_();
-    	return this;
-    }
+
 }

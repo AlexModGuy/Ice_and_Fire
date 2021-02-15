@@ -207,24 +207,24 @@ public class ServerEvents {
     }
 
     public static boolean isLivestock(Entity entity) {
-        return EntityTypeTags.getCollection().func_241834_b(IafTagRegistry.FEAR_DRAGONS).func_230235_a_(entity.getType());
+        return EntityTypeTags.getCollection().func_241834_b(IafTagRegistry.FEAR_DRAGONS).contains(entity.getType());
 
     }
 
     public static boolean isVillager(Entity entity) {
-        return EntityTypeTags.getCollection().func_241834_b(IafTagRegistry.VILLAGERS).func_230235_a_(entity.getType());
+        return EntityTypeTags.getCollection().func_241834_b(IafTagRegistry.VILLAGERS).contains(entity.getType());
     }
 
     public static boolean isAnimaniaSheep(Entity entity) {
-        return EntityTypeTags.getCollection().func_241834_b(IafTagRegistry.SHEEP).func_230235_a_(entity.getType());
+        return EntityTypeTags.getCollection().func_241834_b(IafTagRegistry.SHEEP).contains(entity.getType());
     }
 
     public static boolean isAnimaniaChicken(Entity entity) {
-        return EntityTypeTags.getCollection().func_241834_b(IafTagRegistry.CHICKENS).func_230235_a_(entity.getType());
+        return EntityTypeTags.getCollection().func_241834_b(IafTagRegistry.CHICKENS).contains(entity.getType());
     }
 
     public static boolean isAnimaniaFerret(Entity entity) {
-        return EntityTypeTags.getCollection().func_241834_b(IafTagRegistry.SCARES_COCKATRICES).func_230235_a_(entity.getType());
+        return EntityTypeTags.getCollection().func_241834_b(IafTagRegistry.SCARES_COCKATRICES).contains(entity.getType());
     }
 
     public static boolean isRidingOrBeingRiddenBy(Entity first, Entity entityIn) {
@@ -488,7 +488,7 @@ public class ServerEvents {
                     EntityGhost ghost = IafEntityRegistry.GHOST.create(world);
                     ghost.copyLocationAndAnglesFrom(event.getEntityLiving());
                     if (!world.isRemote) {
-                        ghost.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(event.getEntityLiving().func_233580_cy_()), SpawnReason.SPAWNER, null, null);
+                        ghost.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(event.getEntityLiving().getPosition()), SpawnReason.SPAWNER, null, null);
                         world.addEntity(ghost);
                     }
                     ghost.setDaytimeMode(true);

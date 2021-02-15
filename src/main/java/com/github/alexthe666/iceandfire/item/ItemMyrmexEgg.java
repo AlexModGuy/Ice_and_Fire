@@ -70,9 +70,9 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
                 caste = "queen";
         }
         if (eggOrdinal == 4) {
-            tooltip.add(new TranslationTextComponent("myrmex.caste_" + caste + ".name").func_240699_a_(TextFormatting.LIGHT_PURPLE));
+            tooltip.add(new TranslationTextComponent("myrmex.caste_" + caste + ".name").mergeStyle(TextFormatting.LIGHT_PURPLE));
         } else {
-            tooltip.add(new TranslationTextComponent("myrmex.caste_" + caste + ".name").func_240699_a_(TextFormatting.GRAY));
+            tooltip.add(new TranslationTextComponent("myrmex.caste_" + caste + ".name").mergeStyle(TextFormatting.GRAY));
         }
     }
 

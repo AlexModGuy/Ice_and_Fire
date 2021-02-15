@@ -63,7 +63,7 @@ public class DragonAITarget<T extends LivingEntity> extends NearestAttackableTar
     }
 
     protected double getTargetDistance() {
-        ModifiableAttributeInstance iattributeinstance = this.goalOwner.getAttribute(Attributes.field_233819_b_);
+        ModifiableAttributeInstance iattributeinstance = this.goalOwner.getAttribute(Attributes.FOLLOW_RANGE);
         return iattributeinstance == null ? 64.0D : iattributeinstance.getValue();
     }
 }

@@ -29,7 +29,7 @@ public class SeaSerpentAIJump  extends JumpGoal {
             Direction direction = this.serpent.getAdjustedHorizontalFacing();
             int i = direction.getXOffset();
             int j = direction.getZOffset();
-            BlockPos blockpos = this.serpent.func_233580_cy_();
+            BlockPos blockpos = this.serpent.getPosition();
             for (int k : JUMP_DISTANCES) {
                 if (!this.canJumpTo(blockpos, i, j, k) || !this.isAirAbove(blockpos, i, j, k)) {
                     return false;
@@ -53,7 +53,7 @@ public class SeaSerpentAIJump  extends JumpGoal {
      */
     public boolean shouldContinueExecuting() {
         double d0 = this.serpent.getMotion().y;
-        return serpent.jumpCooldown > 0 && (!(d0 * d0 < (double) 0.03F) || this.serpent.rotationPitch == 0.0F || !(Math.abs(this.serpent.rotationPitch) < 10.0F) || !this.serpent.isInWater()) && !this.serpent.func_233570_aj_();
+        return serpent.jumpCooldown > 0 && (!(d0 * d0 < (double) 0.03F) || this.serpent.rotationPitch == 0.0F || !(Math.abs(this.serpent.rotationPitch) < 10.0F) || !this.serpent.isInWater()) && !this.serpent.isOnGround();
     }
 
     public boolean isPreemptible() {
@@ -86,7 +86,7 @@ public class SeaSerpentAIJump  extends JumpGoal {
     public void tick() {
         boolean flag = this.inWater;
         if (!flag) {
-            FluidState fluidstate = this.serpent.world.getFluidState(this.serpent.func_233580_cy_());
+            FluidState fluidstate = this.serpent.world.getFluidState(this.serpent.getPosition());
             this.inWater = fluidstate.isTagged(FluidTags.WATER);
         }
 

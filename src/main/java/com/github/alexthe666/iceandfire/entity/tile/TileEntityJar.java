@@ -77,7 +77,7 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        func_230337_a_(this.getBlockState(), packet.getNbtCompound());
+        read(this.getBlockState(), packet.getNbtCompound());
         if (!world.isRemote) {
             IceAndFire.sendMSGToAll(new MessageUpdatePixieHouseModel(pos.toLong(), packet.getNbtCompound().getInt("PixieType")));
         }
@@ -87,7 +87,7 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
         return this.write(new CompoundNBT());
     }
 
-    public void func_230337_a_(BlockState state, CompoundNBT compound) {
+    public void read(BlockState state, CompoundNBT compound) {
         hasPixie = compound.getBoolean("HasPixie");
         pixieType = compound.getInt("PixieType");
         hasProduced = compound.getBoolean("HasProduced");
@@ -98,7 +98,7 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
         }
         this.pixieItems = NonNullList.withSize(1, ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, pixieItems);
-        super.func_230337_a_(state, compound);
+        super.read(state, compound);
     }
 
     @Override

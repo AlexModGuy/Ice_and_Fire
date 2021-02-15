@@ -134,7 +134,7 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
                             }
 
                             if (this.spawnData.getNbt().size() == 1 && this.spawnData.getNbt().contains("id", 8)){
-                                ((MobEntity) entity).onInitialSpawn(serverworld, world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.SPAWNER, null, null);
+                                ((MobEntity) entity).onInitialSpawn(serverworld, world.getDifficultyForLocation(entity.getPosition()), SpawnReason.SPAWNER, null, null);
                             }
                         }
 

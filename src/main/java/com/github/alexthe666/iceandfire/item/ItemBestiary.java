@@ -74,13 +74,13 @@ public class ItemBestiary extends Item {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (stack.getTag() != null) {
             if (IceAndFire.PROXY.shouldSeeBestiaryContents()) {
-                tooltip.add(new TranslationTextComponent("bestiary.contains").func_240699_a_(TextFormatting.GRAY));
+                tooltip.add(new TranslationTextComponent("bestiary.contains").mergeStyle(TextFormatting.GRAY));
                 List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(stack.getTag().getIntArray("Pages")));
                 for (EnumBestiaryPages page : pages) {
-                    tooltip.add(new StringTextComponent(TextFormatting.WHITE + "-").func_230529_a_(new TranslationTextComponent("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase())).func_240699_a_(TextFormatting.GRAY));
+                    tooltip.add(new StringTextComponent(TextFormatting.WHITE + "-").func_230529_a_(new TranslationTextComponent("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase())).mergeStyle(TextFormatting.GRAY));
                 }
             } else {
-                tooltip.add(new TranslationTextComponent("bestiary.hold_shift").func_240699_a_(TextFormatting.GRAY));
+                tooltip.add(new TranslationTextComponent("bestiary.hold_shift").mergeStyle(TextFormatting.GRAY));
             }
 
         }

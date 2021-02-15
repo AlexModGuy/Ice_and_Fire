@@ -105,7 +105,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn) {
-        BlockPos pos = this.func_233580_cy_();
+        BlockPos pos = this.getPosition();
         boolean rngCheck = true;
         if (IafConfig.trollSpawnCheckChance != 0) {
         	rngCheck = this.getRNG().nextInt(IafConfig.trollSpawnCheckChance) == 0;
@@ -132,15 +132,15 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, IafConfig.trollMaxHealth)
+                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.trollMaxHealth)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.35D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, IafConfig.trollAttackStrength)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, IafConfig.trollAttackStrength)
                 //KNOCKBACK RESIST
-                .func_233815_a_(Attributes.field_233820_c_, 1.0D)
+                .createMutableAttribute(Attributes.field_233820_c_, 1.0D)
                 //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 9.0D);
+                .createMutableAttribute(Attributes.ARMOR, 9.0D);
     }
 
     public boolean attackEntityAsMob(Entity entityIn) {
@@ -212,7 +212,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
     @Nullable
     public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setTrollType(EnumTroll.getBiomeType(world.getBiome(this.func_233580_cy_())));
+        this.setTrollType(EnumTroll.getBiomeType(world.getBiome(this.getPosition())));
         this.setWeaponType(EnumTroll.getWeaponForType(this.getTrollType()));
         return spawnDataIn;
     }
@@ -359,10 +359,10 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
             }
         }
         if (this.getAnimation() == ANIMATION_STRIKE_VERTICAL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 4D && this.getAnimationTick() == 10 && this.deathTime <= 0) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.field_233823_f_).getValue());
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
         }
         if (this.getAnimation() == ANIMATION_STRIKE_HORIZONTAL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 4D && this.getAnimationTick() == 10 && this.deathTime <= 0) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.field_233823_f_).getValue());
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
             float f1 = 0.5F;
             float f2 = this.getAttackTarget().moveForward;
             float f3 = 0.6F;

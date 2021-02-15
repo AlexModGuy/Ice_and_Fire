@@ -271,15 +271,15 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, 20.0D)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 20.0D)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.3D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, 1)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 1)
                 //FOLLOW RANGE
-                .func_233815_a_(Attributes.field_233819_b_, Math.min(2048, IafConfig.dragonTargetSearchLength))
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, Math.min(2048, IafConfig.dragonTargetSearchLength))
                 //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 4);
+                .createMutableAttribute(Attributes.ARMOR, 4);
     }
 
     @Override
@@ -807,7 +807,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         }
         this.setCrystalBound(compound.getBoolean("CrystalBound"));
         if (compound.contains("CustomName", 8) && !compound.getString("CustomName").startsWith("TextComponent")) {
-            this.setCustomName(ITextComponent.Serializer.func_240643_a_(compound.getString("CustomName")));
+            this.setCustomName(ITextComponent.Serializer.getComponentFromJson(compound.getString("CustomName")));
         }
     }
 
@@ -861,12 +861,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         double speedStep = (maximumSpeed - minimumSpeed) / 125F;
         double armorStep = (maximumArmor - minimumArmor) / 125F;
         if (this.getAgeInDays() <= 125) {
-            this.getAttribute(Attributes.field_233818_a_).setBaseValue(Math.round(minimumHealth + (healthStep * this.getAgeInDays())));
-            this.getAttribute(Attributes.field_233823_f_).setBaseValue(Math.round(minimumDamage + (attackStep * this.getAgeInDays())));
-            this.getAttribute(Attributes.field_233821_d_).setBaseValue(minimumSpeed + (speedStep * this.getAgeInDays()));
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Math.round(minimumHealth + (healthStep * this.getAgeInDays())));
+            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Math.round(minimumDamage + (attackStep * this.getAgeInDays())));
+            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * this.getAgeInDays()));
             double oldValue = minimumArmor + (armorStep * this.getAgeInDays());
-            this.getAttribute(Attributes.field_233826_i_).setBaseValue(oldValue + calculateArmorModifier());
-            this.getAttribute(Attributes.field_233819_b_).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
+            this.getAttribute(Attributes.ARMOR).setBaseValue(oldValue + calculateArmorModifier());
+            this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
         }
     }
 
@@ -1204,7 +1204,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                                 player.sendStatusMessage(new TranslationTextComponent("dragon.command.remove_home"), true);
                                 return ActionResultType.SUCCESS;
                             } else {
-                                BlockPos pos = this.func_233580_cy_();
+                                BlockPos pos = this.getPosition();
                                 this.homePos = pos;
                                 this.hasHomePosition = true;
                                 player.sendStatusMessage(new TranslationTextComponent("dragon.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
@@ -1486,7 +1486,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     protected void updatePreyInMouth(Entity prey) {
         this.setAnimation(ANIMATION_SHAKEPREY);
         if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null) {
-            prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof PlayerEntity ? 17F : (float) this.getAttribute(Attributes.field_233823_f_).getValue() * 4);
+            prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof PlayerEntity ? 17F : (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 4);
             prey.stopRiding();
         }
         renderYawOffset = rotationYaw;
@@ -1684,7 +1684,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         if (this.isModelDead()) {
             return false;
         }
-        boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
+        boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
 
         if (flag) {
             this.applyEnchantments(this, entityIn);
@@ -2216,7 +2216,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public BlockPos getEscortPosition() {
-        return this.getOwner() != null ? new BlockPos(this.getOwner().getPositionVec()) : this.func_233580_cy_();
+        return this.getOwner() != null ? new BlockPos(this.getOwner().getPositionVec()) : this.getPosition();
     }
 
     public boolean shouldTPtoOwner() {
@@ -2320,7 +2320,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
             if (this.isBoundToCrystal()) {
                 DragonPosWorldData data = DragonPosWorldData.get(world);
                 if (data != null) {
-                    data.addDragon(this.getUniqueID(), this.func_233580_cy_());
+                    data.addDragon(this.getUniqueID(), this.getPosition());
                 }
             }
         }

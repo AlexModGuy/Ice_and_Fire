@@ -149,9 +149,9 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
             if (striking && strikingProgress[i] > 9) {
                 isStriking[i] = false;
                 if (this.getAttackTarget() != null && this.getDistance(this.getAttackTarget()) < 6) {
-                    this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.field_233823_f_).getValue());
+                    this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
                     this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 100, 3, false, false));
-                    this.getAttackTarget().func_233627_a_(0.25F, this.getPosX() - this.getAttackTarget().getPosX(), this.getPosZ() - this.getAttackTarget().getPosZ());
+                    this.getAttackTarget().applyKnockback(0.25F, this.getPosX() - this.getAttackTarget().getPosX(), this.getPosZ() - this.getAttackTarget().getPosZ());
                 }
             }
             if (breathing) {
@@ -351,13 +351,13 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, IafConfig.hydraMaxHealth)
+                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.hydraMaxHealth)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.3D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, 3.0D)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 3.0D)
                 //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 1.0D);
+                .createMutableAttribute(Attributes.ARMOR, 1.0D);
     }
 
     @Override
