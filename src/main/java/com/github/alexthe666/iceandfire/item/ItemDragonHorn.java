@@ -118,7 +118,7 @@ public class ItemDragonHorn extends Item {
                     tooltip.add(new TranslationTextComponent(type.getTranslationKey()).mergeStyle(getTextColorForEntityType(type)));
                     String name = new TranslationTextComponent("dragon.unnamed").getString();
                     if(!entityTag.getString("CustomName").isEmpty()){
-                        IFormattableTextComponent component = ITextComponent.Serializer.func_240644_b_(entityTag.getString("CustomName"));
+                        IFormattableTextComponent component = ITextComponent.Serializer.getComponentFromJson(entityTag.getString("CustomName"));
                         if(component != null){
                             name = component.getString();
                         }

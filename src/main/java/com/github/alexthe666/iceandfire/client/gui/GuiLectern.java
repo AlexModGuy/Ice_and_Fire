@@ -73,8 +73,8 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
     }
 
     public boolean func_231044_a_(double mouseX, double mouseY, int mouseButton) {
-        int i = (this.field_230708_k_ - this.xSize) / 2;
-        int j = (this.field_230709_l_ - this.ySize) / 2;
+        int i = (this.width - this.xSize) / 2;
+        int j = (this.height - this.ySize) / 2;
 
         for (int k = 0; k < 3; ++k) {
             double l = mouseX - (i + 60);
@@ -93,14 +93,14 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
         RenderHelper.setupGuiFlatDiffuseLighting();
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.getMinecraft().getTextureManager().bindTexture(ENCHANTMENT_TABLE_GUI_TEXTURE);
-        int i = (this.field_230708_k_ - this.xSize) / 2;
-        int j = (this.field_230709_l_ - this.ySize) / 2;
+        int i = (this.width - this.xSize) / 2;
+        int j = (this.height - this.ySize) / 2;
         this.func_238474_b_(p_230450_1_, i, j, 0, 0, this.xSize, this.ySize);
         RenderSystem.matrixMode(5889);
         RenderSystem.pushMatrix();
         RenderSystem.loadIdentity();
         int k = (int) this.getMinecraft().getMainWindow().getGuiScaleFactor();
-        RenderSystem.viewport((this.field_230708_k_ - 320) / 2 * k, (this.field_230709_l_ - 240) / 2 * k, 320 * k, 240 * k);
+        RenderSystem.viewport((this.width - 320) / 2 * k, (this.height - 240) / 2 * k, 320 * k, 240 * k);
         RenderSystem.translatef(-0.34F, 0.23F, 0.0F);
         RenderSystem.multMatrix(Matrix4f.perspective(90.0D, 1.3333334F, 9.0F, 80.0F));
         RenderSystem.matrixMode(5888);
@@ -192,7 +192,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
 
                         this.func_238474_b_(p_230450_1_, j1 + 1, j + 15 + 19 * i1, 16 * i1, 223, 16, 16);
                         RenderSystem.pushMatrix();
-                        RenderSystem.translatef(field_230708_k_ / 2F - 10, field_230709_l_ / 2F - 83 + (1.0F - textScale) * 55, 2);
+                        RenderSystem.translatef(width / 2F - 10, height / 2F - 83 + (1.0F - textScale) * 55, 2);
                         RenderSystem.scalef(textScale, textScale, 1);
                         fontrenderer.func_238421_b_(p_230450_1_,s1, 0, 20 + 19 * i1, j2);
                         RenderSystem.popMatrix();

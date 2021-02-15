@@ -53,8 +53,8 @@ public class GuiHippocampus extends ContainerScreen<ContainerHippocampus> {
     protected void func_230450_a_(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.getMinecraft().getTextureManager().bindTexture(TEXTURE);
-        int i = (this.field_230708_k_ - this.xSize) / 2;
-        int j = (this.field_230709_l_ - this.ySize) / 2;
+        int i = (this.width - this.xSize) / 2;
+        int j = (this.height - this.ySize) / 2;
         this.func_238474_b_(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
         Entity entity = IceAndFire.PROXY.getReferencedMob();
         if (entity instanceof EntityHippocampus) {

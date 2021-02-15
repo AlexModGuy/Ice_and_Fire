@@ -37,10 +37,6 @@ public class GuiDragon extends ContainerScreen<ContainerDragon> {
         this.ySize = 214;
     }
 
-    protected void func_230451_b_(MatrixStack p_230451_1_, int p_230451_2_, int p_230451_3_) {
-        this.field_230712_o_.func_238422_b_(p_230451_1_, this.field_230704_d_.func_241878_f(), (float)this.field_238742_p_, (float)this.field_238743_q_, 4210752);
-    }
-
 
     public static void drawEntityOnScreen(int posX, int posY, float scale, float mouseX, float mouseY, LivingEntity p_228187_5_) {
         float f = (float) Math.atan((double) (mouseX / 40.0F));
@@ -89,40 +85,40 @@ public class GuiDragon extends ContainerScreen<ContainerDragon> {
         if (entity instanceof EntityDragonBase) {
             EntityDragonBase dragon = (EntityDragonBase) entity;
             String s1 = dragon.getName().getString();
-            int k = (this.field_230708_k_ - this.xSize) / 2;
-            int l = (this.field_230709_l_ - this.ySize) / 2;
+            int k = (this.width - this.xSize) / 2;
+            int l = (this.height - this.ySize) / 2;
 
             FontRenderer font = this.getMinecraft().fontRenderer;
             String s3 = dragon.getCustomName() == null ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + " " + dragon.getCustomName().getString();
-            font.func_238421_b_(matrixStack,s3, k + this.xSize / 2 - font.getStringWidth(s3) / 2, l + 75, 0XFFFFFF);
+            font.drawString(matrixStack,s3, k + this.xSize / 2 - font.getStringWidth(s3) / 2, l + 75, 0XFFFFFF);
             String s2 = StatCollector.translateToLocal("dragon.health") + " " + Math.floor(Math.min(dragon.getHealth(), dragon.getMaxHealth())) + " / " + dragon.getMaxHealth();
-            font.func_238421_b_(matrixStack,s2, k + this.xSize / 2 - font.getStringWidth(s2) / 2, l + 84, 0XFFFFFF);
+            font.drawString(matrixStack,s2, k + this.xSize / 2 - font.getStringWidth(s2) / 2, l + 84, 0XFFFFFF);
             String s5 = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((dragon.isMale() ? "dragon.gender.male" : "dragon.gender.female"));
-            font.func_238421_b_(matrixStack,s5, k + this.xSize / 2 - font.getStringWidth(s5) / 2, l + 93, 0XFFFFFF);
+            font.drawString(matrixStack,s5, k + this.xSize / 2 - font.getStringWidth(s5) / 2, l + 93, 0XFFFFFF);
             String s6 = StatCollector.translateToLocal("dragon.hunger") + dragon.getHunger() + "/100";
-            font.func_238421_b_(matrixStack,s6, k + this.xSize / 2 - font.getStringWidth(s6) / 2, l + 102, 0XFFFFFF);
+            font.drawString(matrixStack,s6, k + this.xSize / 2 - font.getStringWidth(s6) / 2, l + 102, 0XFFFFFF);
             String s4 = StatCollector.translateToLocal("dragon.stage")  + " " + dragon.getDragonStage()  + " " + StatCollector.translateToLocal("dragon.days.front") + dragon.getAgeInDays() + " " + StatCollector.translateToLocal("dragon.days.back");
-            font.func_238421_b_(matrixStack,s4, k + this.xSize / 2 - font.getStringWidth(s4) / 2, l + 111, 0XFFFFFF);
+            font.drawString(matrixStack,s4, k + this.xSize / 2 - font.getStringWidth(s4) / 2, l + 111, 0XFFFFFF);
             String s7 = dragon.getOwner() != null ? StatCollector.translateToLocal("dragon.owner") + dragon.getOwner().getName().getString() : StatCollector.translateToLocal("dragon.untamed");
-            font.func_238421_b_(matrixStack,s7, k + this.xSize / 2 - font.getStringWidth(s7) / 2, l + 120, 0XFFFFFF);
+            font.drawString(matrixStack,s7, k + this.xSize / 2 - font.getStringWidth(s7) / 2, l + 120, 0XFFFFFF);
         }
     }
 
-    public void func_230430_a_(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
-        this.func_230446_a_(p_230430_1_);
+    public void render(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
+        this.renderBackground(p_230430_1_);
         this.mousePosx = (float)p_230430_2_;
         this.mousePosY = (float)p_230430_3_;
-        super.func_230430_a_(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
-        this.func_230459_a_(p_230430_1_, p_230430_2_, p_230430_3_);
+        super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
+        this.renderHoveredTooltip(p_230430_1_, p_230430_2_, p_230430_3_);
     }
 
     @Override
-    protected void func_230450_a_(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.getMinecraft().getTextureManager().bindTexture(texture);
-        int k = (this.field_230708_k_ - this.xSize) / 2;
-        int l = (this.field_230709_l_ - this.ySize) / 2;
-        this.func_238474_b_(matrixStack, k, l, 0, 0, this.xSize, this.ySize);
+        int k = (this.width - this.xSize) / 2;
+        int l = (this.height - this.ySize) / 2;
+        this.blit(matrixStack, k, l, 0, 0, this.xSize, this.ySize);
         Entity entity = IceAndFire.PROXY.getReferencedMob();
         if (entity instanceof EntityDragonBase) {
             EntityDragonBase dragon = (EntityDragonBase) entity;

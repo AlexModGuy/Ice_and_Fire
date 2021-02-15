@@ -69,7 +69,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos pos, NoFeatureConfig p_230362_6_) {
+    public boolean generate(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos pos, NoFeatureConfig p_230362_6_) {
         if(!small){
             if(!IafWorldRegistry.isDimensionListed(worldIn)){
                 return false;

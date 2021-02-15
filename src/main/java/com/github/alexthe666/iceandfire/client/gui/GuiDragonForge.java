@@ -54,8 +54,8 @@ public class GuiDragonForge extends ContainerScreen<ContainerDragonForge> {
         } else{
             this.getMinecraft().getTextureManager().bindTexture(TEXTURE_LIGHTNING);
         }
-        int k = (this.field_230708_k_ - this.xSize) / 2;
-        int l = (this.field_230709_l_ - this.ySize) / 2;
+        int k = (this.width - this.xSize) / 2;
+        int l = (this.height - this.ySize) / 2;
         this.func_238474_b_(matrixStack, k, l, 0, 0, this.xSize, this.ySize);
         int i1 = this.func_175381_h(126);
         this.func_238474_b_(matrixStack, k + 12, l + 23, 0, 166, i1, 38);
