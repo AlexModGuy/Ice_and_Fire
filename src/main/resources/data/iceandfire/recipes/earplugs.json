@@ -1,15 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "minecraft:planks"
-    },
-    {
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "B B"
+  ],
+  "key": {
+    "B": {
       "tag": "minecraft:planks"
     }
-  ],
+  },
   "result": {
-    "item": "iceandfire:earplugs",
-    "count": 1
+    "item": "iceandfire:earplugs"
   }
 }
