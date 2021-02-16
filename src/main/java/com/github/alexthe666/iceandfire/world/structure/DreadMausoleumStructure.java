@@ -25,7 +25,7 @@ public class DreadMausoleumStructure extends Structure<NoFeatureConfig> {
         this.setRegistryName("iceandfire:mausoleum");
     }
 
-    public GenerationStage.Decoration func_236396_f_() {
+    public GenerationStage.Decoration getDecorationStage() {
         return GenerationStage.Decoration.SURFACE_STRUCTURES;
     }
 

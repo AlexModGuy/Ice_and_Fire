@@ -181,7 +181,6 @@ public class IceAndFireMainMenu extends MainMenuScreen {
 
     @Override
     public void render(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
-      //  FontRenderer fontrenderer = this.getMinecraft().fontResourceMananger.getFontRenderer(Minecraft.standardGalacticFontRenderer);
         GlStateManager.enableTexture();
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.enableBlend();
@@ -229,7 +228,7 @@ public class IceAndFireMainMenu extends MainMenuScreen {
         f1 = f1 * 100.0F / (float) (this.getMinecraft().fontRenderer.getStringWidth(this.splashText) + 32);
         GlStateManager.translatef(0, f1 * 10, 0.0F);
         GlStateManager.scalef(f1, f1, f1);
-        this.drawCenteredString(ms, this.getMinecraft().fontRenderer, this.splashText, 0, -40, 0xFFFFFF);
+        this.drawCenteredString(ms, this.getMinecraft().fontRenderer, this.splashText, 0, -40, TextFormatting.YELLOW.getColor());
         GlStateManager.popMatrix();
 
         ForgeHooksClient.renderMainMenu(this, ms, this.getMinecraft().fontRenderer, width, height);
