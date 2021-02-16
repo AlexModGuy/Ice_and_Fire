@@ -124,7 +124,7 @@ public class EntityPixie extends TameableEntity {
     public void setPixieSitting(boolean sitting) {
         if (!world.isRemote) {
             this.isSitting = sitting;
-            this.func_233686_v_(sitting);
+            this.setSleeping(sitting);
         }
         byte b0 = this.dataManager.get(TAMED).byteValue();
         if (sitting) {
@@ -135,7 +135,7 @@ public class EntityPixie extends TameableEntity {
     }
 
     @Override
-    public boolean func_233684_eK_() {
+    public boolean isSitting() {
         return this.isPixieSitting();
     }
 

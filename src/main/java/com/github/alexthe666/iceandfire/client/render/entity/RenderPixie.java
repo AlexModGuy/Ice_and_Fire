@@ -32,7 +32,7 @@ public class RenderPixie extends MobRenderer<EntityPixie, ModelPixie> {
     @Override
     public void preRenderCallback(EntityPixie LivingEntityIn, MatrixStack stack, float partialTickTime) {
         stack.scale(0.55F, 0.55F, 0.55F);
-        if (LivingEntityIn.func_233684_eK_()) {
+        if (LivingEntityIn.isSitting()) {
             stack.translate(0F, 0.5F, 0F);
 
         }

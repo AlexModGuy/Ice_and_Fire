@@ -109,9 +109,9 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
                     double d0 = j >= 1 ? listnbt.getDouble(0) : (double) blockpos.getX() + (world.rand.nextDouble() - world.rand.nextDouble()) * (double) this.spawnRange + 0.5D;
                     double d1 = j >= 2 ? listnbt.getDouble(1) : (double) (blockpos.getY() + world.rand.nextInt(3) - 1);
                     double d2 = j >= 3 ? listnbt.getDouble(2) : (double) blockpos.getZ() + (world.rand.nextDouble() - world.rand.nextDouble()) * (double) this.spawnRange + 0.5D;
-                    if (world.hasNoCollisions(optional.get().func_220328_a(d0, d1, d2)) && EntitySpawnPlacementRegistry.func_223515_a(optional.get(), (IServerWorld)world, SpawnReason.SPAWNER, new BlockPos(d0, d1, d2), world.getRandom())) {
+                    if (world.hasNoCollisions(optional.get().getBoundingBoxWithSizeApplied(d0, d1, d2)) && EntitySpawnPlacementRegistry.canSpawnEntity(optional.get(), (IServerWorld)world, SpawnReason.SPAWNER, new BlockPos(d0, d1, d2), world.getRandom())) {
                         ServerWorld serverworld = (ServerWorld)world;
-                        Entity entity = EntityType.func_220335_a(compoundnbt, world, (p_221408_6_) -> {
+                        Entity entity = EntityType.loadEntityAndExecute(compoundnbt, world, (p_221408_6_) -> {
                             p_221408_6_.setLocationAndAngles(d0, d1, d2, p_221408_6_.rotationYaw, p_221408_6_.rotationPitch);
                             return p_221408_6_;
                         });
@@ -259,7 +259,7 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
     @OnlyIn(Dist.CLIENT)
     public Entity getCachedEntity() {
         if (this.cachedEntity == null) {
-            this.cachedEntity = EntityType.func_220335_a(this.spawnData.getNbt(), this.getWorld(), Function.identity());
+            this.cachedEntity = EntityType.loadEntityAndExecute(this.spawnData.getNbt(), this.getWorld(), Function.identity());
             if (this.spawnData.getNbt().size() == 1 && this.spawnData.getNbt().contains("id", 8) && this.cachedEntity instanceof MobEntity) {
             }
         }

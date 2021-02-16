@@ -12,8 +12,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderGorgonHead {
 
-    private static final RenderType ACTIVE_TEXTURE = RenderType.func_230167_a_(new ResourceLocation("iceandfire:textures/models/gorgon/head_active.png"), false);
-    private static final RenderType INACTIVE_TEXTURE = RenderType.func_230167_a_(new ResourceLocation("iceandfire:textures/models/gorgon/head_inactive.png"), false);
+    private static final RenderType ACTIVE_TEXTURE = RenderType.getEntityCutoutNoCull(new ResourceLocation("iceandfire:textures/models/gorgon/head_active.png"), false);
+    private static final RenderType INACTIVE_TEXTURE = RenderType.getEntityCutoutNoCull(new ResourceLocation("iceandfire:textures/models/gorgon/head_inactive.png"), false);
     private static final SegmentedModel ACTIVE_MODEL = new ModelGorgonHeadActive();
     private static final SegmentedModel INACTIVE_MODEL = new ModelGorgonHead();
     private final boolean active;

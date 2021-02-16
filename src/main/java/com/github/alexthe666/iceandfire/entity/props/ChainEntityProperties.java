@@ -120,7 +120,7 @@ public class ChainEntityProperties extends EntityProperties<LivingEntity> {
                 minimizeLists();
                 for (UUID uuid : connectedEntityUUID) {
                     if (world.getServer() != null) {
-                        Entity entity = world.getServer().getWorld(world.func_234923_W_()).getEntityByUuid(uuid);
+                        Entity entity = world.getServer().getWorld(world.getDimensionKey()).getEntityByUuid(uuid);
                         if (entity != null) {
                             if (!addedUUIDs.contains(entity.getUniqueID())) {
                                 addedUUIDs.add(entity.getUniqueID());

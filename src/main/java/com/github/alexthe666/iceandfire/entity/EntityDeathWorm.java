@@ -530,8 +530,8 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         double d0 = Double.MAX_VALUE;
 
         for(Direction direction1 : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.UP}) {
-            blockpos$mutable.func_239622_a_(blockpos, direction1);
-            if (!this.world.getBlockState(blockpos$mutable).func_235785_r_(this.world, blockpos$mutable) || BlockTags.SAND.contains(world.getBlockState(blockpos$mutable).getBlock())) {
+            blockpos$mutable.setAndMove(blockpos, direction1);
+            if (!this.world.getBlockState(blockpos$mutable).hasOpaqueCollisionShape(this.world, blockpos$mutable) || BlockTags.SAND.contains(world.getBlockState(blockpos$mutable).getBlock())) {
                 double d1 = vector3d.getCoordinate(direction1.getAxis());
                 double d2 = direction1.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 1.0D - d1 : d1;
                 if (d2 < d0) {
@@ -776,7 +776,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         return (dataManager.get(CONTROL_STATE).byteValue() & 1) == 1;
     }
 
-    public boolean dismount() {
+    public boolean dismountIAF() {
         return (dataManager.get(CONTROL_STATE).byteValue() >> 1 & 1) == 1;
     }
 

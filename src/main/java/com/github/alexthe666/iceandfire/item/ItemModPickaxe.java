@@ -41,26 +41,26 @@ public class ItemModPickaxe extends PickaxeItem {
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (toolMaterial == IafItemRegistry.SILVER_TOOL_MATERIAL) {
             if (target.getCreatureAttribute() == CreatureAttribute.UNDEAD) {
-                target.attackEntityFrom(DamageSource.MAGIC, func_234675_d_() + 3.0F);
+                target.attackEntityFrom(DamageSource.MAGIC, getAttackDamage() + 3.0F);
             }
         }
         if (this.toolMaterial == IafItemRegistry.MYRMEX_CHITIN_TOOL_MATERIAL) {
             if (target.getCreatureAttribute() != CreatureAttribute.ARTHROPOD) {
-                target.attackEntityFrom(DamageSource.GENERIC, func_234675_d_() + 5.0F);
+                target.attackEntityFrom(DamageSource.GENERIC, getAttackDamage() + 5.0F);
             }
             if (target instanceof EntityDeathWorm) {
-                target.attackEntityFrom(DamageSource.GENERIC, func_234675_d_() + 5.0F);
+                target.attackEntityFrom(DamageSource.GENERIC, getAttackDamage() + 5.0F);
             }
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_FIRE_TOOL_MATERIAL) {
             target.setFire(15);
-            target.func_233627_a_( 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
+            target.applyKnockback( 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_ICE_TOOL_MATERIAL) {
             FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(target, FrozenEntityProperties.class);
             frozenProps.setFrozenFor(300);
             target.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 300, 2));
-            target.func_233627_a_( 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
+            target.applyKnockback( 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL) {
             boolean flag = true;
@@ -71,12 +71,12 @@ public class ItemModPickaxe extends PickaxeItem {
             }
             if(!attacker.world.isRemote && flag){
                 LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(target.world);
-                lightningboltentity.func_233576_c_(target.getPositionVec());
+                lightningboltentity.moveForced(target.getPositionVec());
                 if(!target.world.isRemote){
                     target.world.addEntity(lightningboltentity);
                 }
             }
-            target.func_233627_a_( 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
+            target.applyKnockback( 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
         }
         return super.hitEntity(stack, target, attacker);
     }

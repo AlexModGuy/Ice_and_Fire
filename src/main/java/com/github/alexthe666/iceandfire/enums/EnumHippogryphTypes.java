@@ -6,7 +6,6 @@ import java.util.Locale;
 import java.util.Random;
 
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
-import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;

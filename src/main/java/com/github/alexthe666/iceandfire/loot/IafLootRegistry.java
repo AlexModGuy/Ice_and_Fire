@@ -12,7 +12,7 @@ public class IafLootRegistry {
     public static LootFunctionType CUSTOMIZE_TO_SERPENT;
 
     private static LootFunctionType register(String p_237451_0_, ILootSerializer<? extends ILootFunction> p_237451_1_) {
-        return Registry.register(Registry.field_239694_aZ_, new ResourceLocation(p_237451_0_), new LootFunctionType(p_237451_1_));
+        return Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(p_237451_0_), new LootFunctionType(p_237451_1_));
     }
 
     public static void init(){

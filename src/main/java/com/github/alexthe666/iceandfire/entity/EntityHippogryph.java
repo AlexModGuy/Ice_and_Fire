@@ -424,7 +424,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         return (dataManager.get(CONTROL_STATE).byteValue() >> 2 & 1) == 1;
     }
 
-    public boolean dismount() {
+    public boolean dismountIAF() {
         return (dataManager.get(CONTROL_STATE).byteValue() >> 3 & 1) == 1;
     }
 
@@ -1015,7 +1015,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             if (!this.isFlying() && !this.isHovering()) {
                 this.spacebarTicks += 2;
             }
-        } else if (this.dismount()) {
+        } else if (this.dismountIAF()) {
             if (this.isFlying() || this.isHovering()) {
                 this.setFlying(false);
                 this.setHovering(false);

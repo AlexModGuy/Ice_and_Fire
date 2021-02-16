@@ -87,7 +87,7 @@ public class ItemTideTrident extends TridentItem {
                         lvt_12_1_ *= lvt_14_1_ / lvt_13_1_;
                         lvt_5_1_.addVelocity((double)lvt_10_1_, (double)lvt_11_1_, (double)lvt_12_1_);
                         lvt_5_1_.startSpinAttack(20);
-                        if (lvt_5_1_.func_233570_aj_()) {
+                        if (lvt_5_1_.isOnGround()) {
                             float lvt_15_1_ = 1.1999999F;
                             lvt_5_1_.move(MoverType.SELF, new Vector3d(0.0D, 1.1999999284744263D, 0.0D));
                         }
@@ -113,8 +113,8 @@ public class ItemTideTrident extends TridentItem {
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         if (equipmentSlot == EquipmentSlotType.MAINHAND) {
-            builder.put(Attributes.field_233823_f_, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)12.0D, AttributeModifier.Operation.ADDITION));
-            builder.put(Attributes.field_233825_h_, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", (double)-2.9F, AttributeModifier.Operation.ADDITION));
+            builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)12.0D, AttributeModifier.Operation.ADDITION));
+            builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", (double)-2.9F, AttributeModifier.Operation.ADDITION));
         }
 
         return builder.build();

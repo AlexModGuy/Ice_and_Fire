@@ -109,11 +109,11 @@ public class IafVillagerRegistry {
     }
 
     private static void addStructureToPool(ResourceLocation pool, ResourceLocation terminatorPool, ResourceLocation toAdd, int weight) {
-        JigsawPattern old = WorldGenRegistries.field_243656_h.getOrDefault(pool);
+        JigsawPattern old = WorldGenRegistries.JIGSAW_POOL.getOrDefault(pool);
         List<JigsawPiece> shuffled = old != null ? old.getShuffledPieces(new Random()) : ImmutableList.of();
         List<Pair<JigsawPiece, Integer>> newPieces = shuffled.stream().map(p -> new Pair<>(p, 1)).collect(Collectors.toList());
         newPieces.add(new Pair<>(new LegacySingleJigsawPiece(Either.left(toAdd), () -> ProcessorLists.field_244101_a, JigsawPattern.PlacementBehaviour.RIGID), weight));
-        Registry.register(WorldGenRegistries.field_243656_h, pool, new JigsawPattern(pool, terminatorPool, newPieces));
+        Registry.register(WorldGenRegistries.JIGSAW_POOL, pool, new JigsawPattern(pool, terminatorPool, newPieces));
     }
 
 }

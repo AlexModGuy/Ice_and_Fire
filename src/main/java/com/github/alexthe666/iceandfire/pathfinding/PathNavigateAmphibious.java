@@ -34,7 +34,7 @@ public class PathNavigateAmphibious extends PathNavigator {
     }
 
     protected boolean canNavigate() {
-        return this.entity.func_233570_aj_() || this.getCanSwim() && this.isInLiquid() || this.entity.isPassenger();
+        return this.entity.isOnGround() || this.getCanSwim() && this.isInLiquid() || this.entity.isPassenger();
     }
 
     protected Vector3d getEntityPosition() {

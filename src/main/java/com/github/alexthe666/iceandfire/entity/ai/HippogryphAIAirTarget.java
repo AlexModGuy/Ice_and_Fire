@@ -23,7 +23,7 @@ public class HippogryphAIAirTarget extends Goal {
             if (!hippogryph.isFlying() && !hippogryph.isHovering()) {
                 return false;
             }
-            if (hippogryph.func_233684_eK_()) {
+            if (hippogryph.isSitting()) {
                 return false;
             }
             if (hippogryph.isChild()) {
@@ -56,7 +56,7 @@ public class HippogryphAIAirTarget extends Goal {
         if (!hippogryph.isFlying() && !hippogryph.isHovering()) {
             return false;
         }
-        if (hippogryph.func_233684_eK_()) {
+        if (hippogryph.isSitting()) {
             return false;
         }
         if (hippogryph.isChild()) {

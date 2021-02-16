@@ -39,7 +39,7 @@ public class PathNavigateDeathWormLand extends PathNavigator {
      * If on ground or swimming and can swim
      */
     protected boolean canNavigate() {
-        return this.entity.func_233570_aj_() || this.worm.isInSand() || this.entity.isPassenger();
+        return this.entity.isOnGround() || this.worm.isInSand() || this.entity.isPassenger();
     }
 
     protected Vector3d getEntityPosition() {

@@ -106,7 +106,7 @@ public class ItemSummoningCrystal extends Item {
                         if (id != null) {
                             if (!context.getWorld().isRemote) {
                                 try {
-                                    Entity entity = context.getWorld().getServer().getWorld(context.getPlayer().world.func_234923_W_()).getEntityByUuid(id);
+                                    Entity entity = context.getWorld().getServer().getWorld(context.getPlayer().world.getDimensionKey()).getEntityByUuid(id);
                                     if (entity != null) {
                                         flag = true;
                                         summonEntity(entity, context.getWorld(), offsetPos, yaw);
@@ -145,7 +145,7 @@ public class ItemSummoningCrystal extends Item {
                                         }
                                         if (flag2) {
                                             try {
-                                                Entity entity = context.getWorld().getServer().getWorld(context.getPlayer().world.func_234923_W_()).getEntityByUuid(id);
+                                                Entity entity = context.getWorld().getServer().getWorld(context.getPlayer().world.getDimensionKey()).getEntityByUuid(id);
                                                 if (entity != null) {
                                                     flag = true;
                                                     summonEntity(entity, context.getWorld(), offsetPos, yaw);

@@ -76,10 +76,10 @@ public class DreadMausoleumStructure extends Structure<NoFeatureConfig> {
 
                int k = (x << 4) + 7;
                int l = (z << 4) + 7;
-               int i1 = p_230364_2_.func_222531_c(k, l, Heightmap.Type.WORLD_SURFACE_WG);
-               int j1 = p_230364_2_.func_222531_c(k, l + j, Heightmap.Type.WORLD_SURFACE_WG);
-               int k1 = p_230364_2_.func_222531_c(k + i, l, Heightmap.Type.WORLD_SURFACE_WG);
-               int l1 = p_230364_2_.func_222531_c(k + i, l + j, Heightmap.Type.WORLD_SURFACE_WG);
+               int i1 = p_230364_2_.getNoiseHeightMinusOne(k, l, Heightmap.Type.WORLD_SURFACE_WG);
+               int j1 = p_230364_2_.getNoiseHeightMinusOne(k, l + j, Heightmap.Type.WORLD_SURFACE_WG);
+               int k1 = p_230364_2_.getNoiseHeightMinusOne(k + i, l, Heightmap.Type.WORLD_SURFACE_WG);
+               int l1 = p_230364_2_.getNoiseHeightMinusOne(k + i, l + j, Heightmap.Type.WORLD_SURFACE_WG);
                int i2 = Math.min(Math.min(i1, j1), Math.min(k1, l1));
                if (i2 >= 60) {
                    BlockPos blockpos = new BlockPos(x * 16 + 8, i2 + 1, z * 16 + 8);

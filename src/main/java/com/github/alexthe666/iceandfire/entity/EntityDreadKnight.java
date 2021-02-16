@@ -69,11 +69,25 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     private static ItemStack generateShield() {
         ItemStack itemstack = new ItemStack(Items.CYAN_BANNER);
         CompoundNBT compoundnbt = itemstack.getOrCreateChildTag("BlockEntityTag");
-        ListNBT listnbt = (new BannerPattern.Builder()).setPatternWithColor(BannerPattern.BASE, DyeColor.CYAN).setPatternWithColor(IafRecipeRegistry.PATTERN_DREAD, DyeColor.WHITE).func_222476_a();
+        ListNBT listnbt = (new BannerPattern.Builder()).setPatternWithColor(BannerPattern.BASE, DyeColor.CYAN).setPatternWithColor(IafRecipeRegistry.PATTERN_DREAD, DyeColor.WHITE).buildNBT();
         compoundnbt.put("Patterns", listnbt);
         ItemStack shield = new ItemStack(Items.SHIELD, 1);
         shield.setTag(itemstack.getTag());
         return shield;
+    }
+
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .createMutableAttribute(Attributes.MAX_HEALTH, 40.0D)
+                //SPEED
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25D)
+                //ATTACK
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2.0D)
+                //FOLLOW RANGE
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, 128.0D)
+                //ARMOR
+                .createMutableAttribute(Attributes.ARMOR, 20.0D);
     }
 
     protected void registerGoals() {
@@ -91,20 +105,6 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
                 return entity instanceof LivingEntity && DragonUtils.canHostilesTarget(entity);
             }
         }));
-    }
-
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-                //HEALTH
-                .createMutableAttribute(Attributes.MAX_HEALTH, 40.0D)
-                //SPEED
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25D)
-                //ATTACK
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2.0D)
-                //FOLLOW RANGE
-                .createMutableAttribute(Attributes.FOLLOW_RANGE, 128.0D)
-                //ARMOR
-                .createMutableAttribute(Attributes.ARMOR, 20.0D);
     }
 
     @Override

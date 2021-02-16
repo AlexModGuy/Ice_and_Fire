@@ -281,7 +281,7 @@ public class DragonUtils {
     }
 
     public static boolean canTameDragonAttack(TameableEntity dragon, Entity entity) {
-        if (EntityTypeTags.getCollection().func_241834_b(IafTagRegistry.VILLAGERS).contains(entity.getType())) {
+        if (EntityTypeTags.getCollection().get(IafTagRegistry.VILLAGERS).contains(entity.getType())) {
             return false;
         }
         if (entity instanceof AbstractVillagerEntity || entity instanceof GolemEntity || entity instanceof PlayerEntity) {
@@ -294,7 +294,7 @@ public class DragonUtils {
     }
 
     public static boolean isVillager(Entity entity) {
-        return EntityTypeTags.getCollection().func_241834_b(IafTagRegistry.VILLAGERS).contains(entity.getType());
+        return EntityTypeTags.getCollection().get(IafTagRegistry.VILLAGERS).contains(entity.getType());
     }
 
     public static boolean isAnimaniaMob(Entity entity) {
@@ -302,7 +302,7 @@ public class DragonUtils {
     }
 
     public static boolean isDragonTargetable(Entity entity, ResourceLocation tag) {
-        return EntityTypeTags.getCollection().func_241834_b(tag).contains(entity.getType());
+        return EntityTypeTags.getCollection().get(tag).contains(entity.getType());
 
     }
 

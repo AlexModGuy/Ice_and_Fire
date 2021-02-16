@@ -68,7 +68,7 @@ public class SeaSerpentPathNavigator  extends PathNavigator {
             if (Math.abs(lvt_4_1_.x) > 0.2D || Math.abs(lvt_4_1_.z) > 0.2D) {
                 lvt_3_1_ = (float)((double)lvt_3_1_ * lvt_4_1_.length() * 6.0D);
             }
-            Vector3d lvt_6_1_ = Vector3d.func_237492_c_(this.currentPath.func_242948_g());
+            Vector3d lvt_6_1_ = Vector3d.copyCentered(this.currentPath.func_242948_g());
             if (Math.abs(this.entity.getPosX() - lvt_6_1_.x) < (double)lvt_3_1_ && Math.abs(this.entity.getPosZ() - lvt_6_1_.z) < (double)lvt_3_1_ && Math.abs(this.entity.getPosY() - lvt_6_1_.y) < (double)(lvt_3_1_ * 2.0F)) {
                 this.currentPath.incrementPathIndex();
             }

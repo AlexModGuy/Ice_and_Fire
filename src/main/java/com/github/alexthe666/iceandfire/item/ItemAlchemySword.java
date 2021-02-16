@@ -41,7 +41,7 @@ public class ItemAlchemySword extends SwordItem {
                 target.attackEntityFrom(DamageSource.IN_FIRE, 13.5F);
             }
             target.setFire(5);
-            target.func_233627_a_( 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
+            target.applyKnockback( 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
         }
         if (this == IafItemRegistry.DRAGONBONE_SWORD_ICE) {
             if (target instanceof EntityFireDragon) {
@@ -51,7 +51,7 @@ public class ItemAlchemySword extends SwordItem {
             frozenProps.setFrozenFor(200);
             target.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 2));
             target.addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, 100, 2));
-            target.func_233627_a_(1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
+            target.applyKnockback(1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
         }
         if (this == IafItemRegistry.DRAGONBONE_SWORD_LIGHTNING) {
             boolean flag = true;
@@ -62,7 +62,7 @@ public class ItemAlchemySword extends SwordItem {
             }
             if(!attacker.world.isRemote && flag){
                 LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(target.world);
-                lightningboltentity.func_233576_c_(target.getPositionVec());
+                lightningboltentity.moveForced(target.getPositionVec());
                 if(!target.world.isRemote){
                     target.world.addEntity(lightningboltentity);
                 }
@@ -70,7 +70,7 @@ public class ItemAlchemySword extends SwordItem {
             if (target instanceof EntityFireDragon || target instanceof EntityIceDragon) {
                 target.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 9.5F);
             }
-            target.func_233627_a_(1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
+            target.applyKnockback(1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
         }
         return super.hitEntity(stack, target, attacker);
     }

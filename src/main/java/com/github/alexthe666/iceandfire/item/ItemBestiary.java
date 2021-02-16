@@ -77,7 +77,7 @@ public class ItemBestiary extends Item {
                 tooltip.add(new TranslationTextComponent("bestiary.contains").mergeStyle(TextFormatting.GRAY));
                 List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(stack.getTag().getIntArray("Pages")));
                 for (EnumBestiaryPages page : pages) {
-                    tooltip.add(new StringTextComponent(TextFormatting.WHITE + "-").func_230529_a_(new TranslationTextComponent("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase())).mergeStyle(TextFormatting.GRAY));
+                    tooltip.add(new StringTextComponent(TextFormatting.WHITE + "-").append(new TranslationTextComponent("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase())).mergeStyle(TextFormatting.GRAY));
                 }
             } else {
                 tooltip.add(new TranslationTextComponent("bestiary.hold_shift").mergeStyle(TextFormatting.GRAY));

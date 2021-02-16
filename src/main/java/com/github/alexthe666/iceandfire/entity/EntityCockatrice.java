@@ -357,7 +357,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     }
 
     public void setSitting(boolean sitting) {
-        super.func_233686_v_(sitting);
+        super.setSwimming(sitting);
         if (!world.isRemote) {
             this.isSitting = sitting;
         }

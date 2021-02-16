@@ -66,8 +66,8 @@ public class BlockBreakExplosion extends Explosion {
         for (int j = 0; j < i; ++j) {
             Pair<ItemStack, BlockPos> pair = p_229976_0_.get(j);
             ItemStack itemstack = pair.getFirst();
-            if (ItemEntity.func_226532_a_(itemstack, p_229976_1_)) {
-                ItemStack itemstack1 = ItemEntity.func_226533_a_(itemstack, p_229976_1_, 16);
+            if (ItemEntity.canMergeStacks(itemstack, p_229976_1_)) {
+                ItemStack itemstack1 = ItemEntity.mergeStacks(itemstack, p_229976_1_, 16);
                 p_229976_0_.set(j, Pair.of(itemstack1, pair.getSecond()));
                 if (p_229976_1_.isEmpty()) {
                     return;

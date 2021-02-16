@@ -117,7 +117,7 @@ public class MyrmexHive {
     public EntityMyrmexQueen getQueen() {
         List<EntityMyrmexQueen> ourQueens = new ArrayList<>();
         if (!world.isRemote) {
-            ServerWorld serverWorld = world.getServer().getWorld(world.func_234923_W_());
+            ServerWorld serverWorld = world.getServer().getWorld(world.getDimensionKey());
             List<Entity> allQueens = serverWorld.getEntities(IafEntityRegistry.MYRMEX_QUEEN, EntityPredicates.NOT_SPECTATING);
             for (Entity queen : allQueens) {
                 if (queen instanceof EntityMyrmexQueen && ((EntityMyrmexQueen) queen).getHive().equals(this)) {

@@ -100,7 +100,7 @@ public class EntityTideTrident extends TridentEntity {
             BlockPos blockpos = entity.getPosition();
             if (this.world.canSeeSky(blockpos)) {
                 LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.world);
-                lightningboltentity.func_233576_c_(Vector3d.func_237492_c_(blockpos));
+                lightningboltentity.moveForced(Vector3d.copyCentered(blockpos));
                 lightningboltentity.setCaster(entity1 instanceof ServerPlayerEntity ? (ServerPlayerEntity)entity1 : null);
                 this.world.addEntity(lightningboltentity);
                 soundevent = SoundEvents.ITEM_TRIDENT_THUNDER;

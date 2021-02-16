@@ -129,7 +129,7 @@ public class ItemDeathwormGauntlet extends Item implements ICustomRendered {
                             if (canSee) {
                                 properties.specialWeaponDmg++;
                                 LivingEntity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity) entity), 3F);
-                                LivingEntity.func_233627_a_( 0.5F, LivingEntity.getPosX() - player.getPosX(), LivingEntity.getPosZ() - player.getPosZ());
+                                LivingEntity.applyKnockback( 0.5F, LivingEntity.getPosX() - player.getPosX(), LivingEntity.getPosZ() - player.getPosZ());
                             }
                         }
                     }

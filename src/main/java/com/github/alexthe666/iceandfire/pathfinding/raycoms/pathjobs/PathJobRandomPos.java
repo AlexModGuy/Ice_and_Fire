@@ -61,7 +61,7 @@ public class PathJobRandomPos extends AbstractPathJob
     }
 
     private Tuple<Direction, Direction> getRandomDirectionTuple(Random random) {
-        return new Tuple<Direction, Direction>(Direction.func_239631_a_(random), Direction.func_239631_a_(random));
+        return new Tuple<Direction, Direction>(Direction.getRandomDirection(random), Direction.getRandomDirection(random));
     }
 
     @Nullable

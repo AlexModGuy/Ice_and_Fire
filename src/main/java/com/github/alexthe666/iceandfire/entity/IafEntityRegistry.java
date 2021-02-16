@@ -12,7 +12,6 @@ import com.github.alexthe666.iceandfire.entity.props.ChickenEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.SirenEntityProperties;
-import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
 
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
@@ -105,41 +104,41 @@ public class IafEntityRegistry {
     }
 
     public static void bakeAttributes(){
-        GlobalEntityTypeAttributes.put(DRAGON_EGG, EntityDragonEgg.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(DRAGON_SKULL, EntityDragonSkull.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(FIRE_DRAGON, EntityFireDragon.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(ICE_DRAGON, EntityIceDragon.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(LIGHTNING_DRAGON, EntityLightningDragon.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(HIPPOGRYPH, EntityHippogryph.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(GORGON, EntityGorgon.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(STONE_STATUE, EntityStoneStatue.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(PIXIE, EntityPixie.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(CYCLOPS, EntityCyclops.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(SIREN, EntitySiren.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(HIPPOCAMPUS, EntityHippocampus.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(DEATH_WORM, EntityDeathWorm.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(COCKATRICE, EntityCockatrice.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(STYMPHALIAN_BIRD, EntityStymphalianBird.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(TROLL, EntityTroll.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(MYRMEX_WORKER, EntityMyrmexWorker.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(MYRMEX_SOLDIER, EntityMyrmexSoldier.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(MYRMEX_SENTINEL, EntityMyrmexSentinel.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(MYRMEX_ROYAL, EntityMyrmexRoyal.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(MYRMEX_QUEEN, EntityMyrmexQueen.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(MYRMEX_EGG, EntityMyrmexEgg.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(MYRMEX_SWARMER, EntityMyrmexSwarmer.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(AMPHITHERE, EntityAmphithere.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(SEA_SERPENT, EntitySeaSerpent.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(MOB_SKULL, EntityMobSkull.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(DREAD_THRALL, EntityDreadThrall.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(DREAD_LICH, EntityDreadLich.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(DREAD_BEAST, EntityDreadBeast.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(DREAD_HORSE, EntityDreadHorse.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(DREAD_GHOUL, EntityDreadGhoul.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(DREAD_KNIGHT, EntityDreadKnight.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(DREAD_SCUTTLER, EntityDreadScuttler.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(HYDRA, EntityHydra.bakeAttributes().func_233813_a_());
-        GlobalEntityTypeAttributes.put(GHOST, EntityGhost.bakeAttributes().func_233813_a_());
+        GlobalEntityTypeAttributes.put(DRAGON_EGG, EntityDragonEgg.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(DRAGON_SKULL, EntityDragonSkull.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(FIRE_DRAGON, EntityFireDragon.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(ICE_DRAGON, EntityIceDragon.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(LIGHTNING_DRAGON, EntityLightningDragon.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(HIPPOGRYPH, EntityHippogryph.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(GORGON, EntityGorgon.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(STONE_STATUE, EntityStoneStatue.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(PIXIE, EntityPixie.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(CYCLOPS, EntityCyclops.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(SIREN, EntitySiren.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(HIPPOCAMPUS, EntityHippocampus.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(DEATH_WORM, EntityDeathWorm.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(COCKATRICE, EntityCockatrice.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(STYMPHALIAN_BIRD, EntityStymphalianBird.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(TROLL, EntityTroll.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(MYRMEX_WORKER, EntityMyrmexWorker.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(MYRMEX_SOLDIER, EntityMyrmexSoldier.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(MYRMEX_SENTINEL, EntityMyrmexSentinel.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(MYRMEX_ROYAL, EntityMyrmexRoyal.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(MYRMEX_QUEEN, EntityMyrmexQueen.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(MYRMEX_EGG, EntityMyrmexEgg.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(MYRMEX_SWARMER, EntityMyrmexSwarmer.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(AMPHITHERE, EntityAmphithere.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(SEA_SERPENT, EntitySeaSerpent.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(MOB_SKULL, EntityMobSkull.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(DREAD_THRALL, EntityDreadThrall.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(DREAD_LICH, EntityDreadLich.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(DREAD_BEAST, EntityDreadBeast.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(DREAD_HORSE, EntityDreadHorse.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(DREAD_GHOUL, EntityDreadGhoul.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(DREAD_KNIGHT, EntityDreadKnight.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(DREAD_SCUTTLER, EntityDreadScuttler.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(HYDRA, EntityHydra.bakeAttributes().create());
+        GlobalEntityTypeAttributes.put(GHOST, EntityGhost.bakeAttributes().create());
     }
 
 

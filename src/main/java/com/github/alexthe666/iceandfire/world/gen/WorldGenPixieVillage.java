@@ -25,7 +25,6 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 public class WorldGenPixieVillage extends Feature<NoFeatureConfig> {
 
-    protected static final ConfiguredFeature SWAMP_FEATURE = Features.field_243863_bI;
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
     public WorldGenPixieVillage(Codec<NoFeatureConfig> configFactoryIn) {

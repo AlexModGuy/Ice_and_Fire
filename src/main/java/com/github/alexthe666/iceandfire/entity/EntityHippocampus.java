@@ -335,7 +335,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         return (Byte.valueOf(dataManager.get(CONTROL_STATE).byteValue()) >> 1 & 1) == 1;
     }
 
-    public boolean dismount() {
+    public boolean dismountIAF() {
         return (Byte.valueOf(dataManager.get(CONTROL_STATE).byteValue()) >> 2 & 1) == 1;
     }
 

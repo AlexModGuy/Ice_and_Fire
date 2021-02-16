@@ -18,9 +18,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
-import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathingStuckHandler;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.ICustomSizeNavigator;
-import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.google.common.collect.Sets;
@@ -126,7 +124,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public static boolean isEdibleBlock(BlockState blockState) {
-        return BlockTags.getCollection().func_241834_b(IafTagRegistry.MYRMEX_HARVESTABLES).contains(blockState.getBlock());
+        return BlockTags.getCollection().get(IafTagRegistry.MYRMEX_HARVESTABLES).contains(blockState.getBlock());
     }
 
     public static int getRandomCaste(World world, Random random, boolean royal) {

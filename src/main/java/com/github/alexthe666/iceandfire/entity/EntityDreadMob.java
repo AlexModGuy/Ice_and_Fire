@@ -155,7 +155,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
                 return player;
             } else {
                 if (!world.isRemote) {
-                    Entity entity = world.getServer().getWorld(this.world.func_234923_W_()).getEntityByUuid(uuid);
+                    Entity entity = world.getServer().getWorld(this.world.getDimensionKey()).getEntityByUuid(uuid);
                     if (entity instanceof LivingEntity) {
                         return entity;
                     }

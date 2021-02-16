@@ -138,7 +138,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
                 //ATTACK
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, IafConfig.trollAttackStrength)
                 //KNOCKBACK RESIST
-                .createMutableAttribute(Attributes.field_233820_c_, 1.0D)
+                .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 //ARMOR
                 .createMutableAttribute(Attributes.ARMOR, 9.0D);
     }

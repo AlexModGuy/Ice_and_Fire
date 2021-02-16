@@ -36,31 +36,31 @@ public class GuiHippogryph extends ContainerScreen<ContainerHippogryph> {
         FontRenderer font = this.getMinecraft().fontRenderer;
         if (entity instanceof EntityHippogryph) {
             EntityHippogryph hippo = (EntityHippogryph) entity;
-            font.func_238421_b_(matrixStack, hippo.getDisplayName().getString(), 8,  6, 4210752);
+            font.drawString(matrixStack, hippo.getDisplayName().getString(), 8,  6, 4210752);
         }
-        font.func_238421_b_(matrixStack, this.playerInventory.getDisplayName().getString(),  8,  this.ySize - 96 + 2, 4210752);
+        font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(),  8,  this.ySize - 96 + 2, 4210752);
     }
 
-    public void func_230430_a_(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
-        this.func_230446_a_(p_230430_1_);
+    public void render(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
+        this.renderBackground(p_230430_1_);
         this.mousePosx = (float)p_230430_2_;
         this.mousePosY = (float)p_230430_3_;
-        super.func_230430_a_(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
-        this.func_230459_a_(p_230430_1_, p_230430_2_, p_230430_3_);
+        super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
+        this.renderHoveredTooltip(p_230430_1_, p_230430_2_, p_230430_3_);
     }
 
     @Override
-    protected void func_230450_a_(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.getMinecraft().getTextureManager().bindTexture(TEXTURE);
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
-        this.func_238474_b_(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+        this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
         Entity entity = IceAndFire.PROXY.getReferencedMob();
         if (entity instanceof EntityHippogryph) {
             EntityHippogryph hippo = (EntityHippogryph) entity;
             if (hippo.isChested()) {
-                this.func_238474_b_(matrixStack, i + 79, j + 17, 0, this.ySize, 5 * 18, 54);
+                this.blit(matrixStack, i + 79, j + 17, 0, this.ySize, 5 * 18, 54);
             }
             GuiDragon.drawEntityOnScreen(i + 51, j + 60, 17, (float) (i + 51) - this.mousePosx, (float) (j + 75 - 50) - this.mousePosY, hippo);
         }
