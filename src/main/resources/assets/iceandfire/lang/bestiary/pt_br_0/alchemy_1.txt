@@ -1,7 +1,7 @@
 Quando combinar um diamante, uma
 pérola do fim com uma esmeralda ou 
-safira, é criado um cristal de invocação.
-
+safira, é criado um cristal de 
+invocação.
 <item><iceandfire:summoning_crystal_fire 0 15 22 1.25>
 <item><iceandfire:summoning_crystal_ice 0 45 22 1.25>
 
@@ -18,7 +18,6 @@ e liberar o seu dragão.
 Se o dragão for morto, ou de alguma
 forma não poder ser localizado, o 
 cristal não irá desvincula-lo.
-
 
 
 Para desvincular o cristal

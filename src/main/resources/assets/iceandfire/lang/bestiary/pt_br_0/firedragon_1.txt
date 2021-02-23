@@ -24,6 +24,7 @@ dano.
 
 
 
+
 A explosão de fogo não é o único
 ataque elemental. O dragão também 
 pode criar uma explosão de chamas 
@@ -34,8 +35,9 @@ dragões experientes são capazes de
 fazer este ataque.
 
 
-
 <image><drawings_firedragon_attacks.png 360 242 262 220 213 78 0.6>
+
+
 
 Um dos ataques mais comuns dos 
 dragões de fogo é a mordida do 
