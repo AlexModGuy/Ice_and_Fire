@@ -47,6 +47,7 @@ public class IafDragonFlightManager {
     }
 
     public void update() {
+
         if (dragon.getAttackTarget() != null && dragon.getAttackTarget().isAlive() ) {
             if (dragon instanceof EntityIceDragon && dragon.isInWater()) {
                 if (dragon.getAttackTarget() == null) {
@@ -81,13 +82,23 @@ public class IafDragonFlightManager {
 
         } else if (target == null || dragon.getDistanceSq(target.x, target.y, target.z) < 4 || !dragon.world.isAirBlock(new BlockPos(target)) && (dragon.isHovering() || dragon.isFlying()) || dragon.getCommand() == 2 && dragon.shouldTPtoOwner()) {
             BlockPos viewBlock = null;
+
             if (dragon instanceof EntityIceDragon && dragon.isInWater()) {
                 viewBlock = DragonUtils.getWaterBlockInView(dragon);
             }
             if (dragon.getCommand() == 2 && dragon.isFlying()) {
                 viewBlock = DragonUtils.getBlockInViewEscort(dragon);
-            }
-            if(viewBlock == null){
+            }else if(dragon.lookingForRoostAIFlag){
+                double xDist = Math.abs(dragon.getPosX() - dragon.getHomePosition().getX() - 0.5F);
+                double zDist = Math.abs(dragon.getPosZ() - dragon.getHomePosition().getZ() - 0.5F);
+                double xzDist = Math.sqrt(xDist * xDist + zDist * zDist);
+                BlockPos upPos = dragon.getHomePosition();
+                if(dragon.getDistanceSquared(Vector3d.copyCentered(dragon.getHomePosition())) > 200){
+                    upPos = upPos.up(30);
+                }
+                viewBlock = upPos;
+
+            }else if(viewBlock == null){
                 viewBlock = DragonUtils.getBlockInView(dragon);
             }
             if (viewBlock != null) {
@@ -109,6 +120,10 @@ public class IafDragonFlightManager {
 
     public Vector3d getFlightTarget() {
         return target == null ? Vector3d.ZERO : target;
+    }
+
+    public void setFlightTarget(Vector3d target){
+        this.target = target;
     }
 
     private float getDistanceXZ(double x, double z) {

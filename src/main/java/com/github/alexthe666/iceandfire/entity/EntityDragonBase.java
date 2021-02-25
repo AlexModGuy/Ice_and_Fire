@@ -17,17 +17,7 @@ import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
-import com.github.alexthe666.iceandfire.entity.ai.AquaticAITempt;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIAttackMelee;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIEscort;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAILookIdle;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIMate;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIRide;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAITarget;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetItems;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetNonTamed;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIWander;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIWatchClosest;
+import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.entity.util.ChainBuffer;
@@ -218,6 +208,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     public String prevArmorResLoc = "0|0|0|0";
     public String armorResLoc = "0|0|0|0";
     public IafDragonFlightManager flightManager;
+    public boolean lookingForRoostAIFlag = false;
     protected int flyHovering;
     protected boolean hasHadHornUse = false;
     protected int fireTicks;
@@ -283,17 +274,22 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                 .createMutableAttribute(Attributes.ARMOR, 4);
     }
 
+    public BlockPos getHomePosition() {
+        return this.homePos == null ? super.getHomePosition() : homePos;
+    }
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new DragonAIRide<>(this));
         this.goalSelector.addGoal(1, new SitGoal(this));
         this.goalSelector.addGoal(2, new DragonAIMate(this, 1.0D));
-        this.goalSelector.addGoal(3, new DragonAIEscort(this, 1.0D));
-        this.goalSelector.addGoal(4, new DragonAIAttackMelee(this, 1.5D, false));
-        this.goalSelector.addGoal(5, new AquaticAITempt(this, 1.0D, IafItemRegistry.FIRE_STEW, false));
-        this.goalSelector.addGoal(6, new DragonAIWander(this, 1.0D));
-        this.goalSelector.addGoal(7, new DragonAIWatchClosest(this, LivingEntity.class, 6.0F));
-        this.goalSelector.addGoal(7, new DragonAILookIdle(this));
+        this.goalSelector.addGoal(3, new DragonAIReturnToRoost(this, 1.0D));
+        this.goalSelector.addGoal(4, new DragonAIEscort(this, 1.0D));
+        this.goalSelector.addGoal(5, new DragonAIAttackMelee(this, 1.5D, false));
+        this.goalSelector.addGoal(6, new AquaticAITempt(this, 1.0D, IafItemRegistry.FIRE_STEW, false));
+        this.goalSelector.addGoal(7, new DragonAIWander(this, 1.0D));
+        this.goalSelector.addGoal(8, new DragonAIWatchClosest(this, LivingEntity.class, 6.0F));
+        this.goalSelector.addGoal(8, new DragonAILookIdle(this));
         this.targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
@@ -472,19 +468,23 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     protected abstract void breathFireAtPos(BlockPos burningTarget);
+
     protected PathNavigator createNavigator(World worldIn) {
         return createNavigator(worldIn, AdvancedPathNavigate.MovementType.WALKING);
     }
+
     protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type) {
-        return createNavigator(worldIn,type,4f,4f);
+        return createNavigator(worldIn, type, 4f, 4f);
     }
-    protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type,float width,float height) {
-        AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, world,type,width,height);
+
+    protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type, float width, float height) {
+        AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, world, type, width, height);
         this.navigator = newNavigator;
         newNavigator.setCanSwim(true);
         newNavigator.getNodeProcessor().setCanOpenDoors(true);
         return newNavigator;
     }
+
     protected void switchNavigator(int navigatorType) {
         if (navigatorType == 0) {
             this.moveController = new IafDragonFlightManager.GroundMoveHelper(this);
@@ -498,15 +498,16 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
             this.navigatorType = 1;
         } else {
             this.moveController = new IafDragonFlightManager.PlayerFlightMoveHelper(this);
-            this.navigator = createNavigator(world,AdvancedPathNavigate.MovementType.FLYING);
+            this.navigator = createNavigator(world, AdvancedPathNavigate.MovementType.FLYING);
             this.navigatorType = 2;
         }
     }
+
     @Override
-    public boolean canBeRiddenInWater(Entity rider)
-    {
+    public boolean canBeRiddenInWater(Entity rider) {
         return true;
     }
+
     protected void updateAITasks() {
         super.updateAITasks();
         breakBlock();
@@ -2184,6 +2185,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         super.setAttackTarget(LivingEntityIn);
         this.flightManager.onSetAttackTarget(LivingEntityIn);
     }
+
     @Override
     public boolean shouldAttackEntity(LivingEntity target, LivingEntity owner) {
         if (this.isTamed() && target instanceof TameableEntity) {
@@ -2195,6 +2197,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         }
         return super.shouldAttackEntity(target, owner);
     }
+
     public boolean canAttack(LivingEntity target) {
         return super.canAttack(target) && DragonUtils.isAlive(target);
     }

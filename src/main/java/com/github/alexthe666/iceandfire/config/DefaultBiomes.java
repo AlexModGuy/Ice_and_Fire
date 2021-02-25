@@ -44,9 +44,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "snowy", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "icy", 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 2)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "cold", 2);
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "icy", 1);
 
     public static final SpawnBiomeData SNOWY = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 0)

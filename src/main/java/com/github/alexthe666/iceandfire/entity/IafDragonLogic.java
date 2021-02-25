@@ -116,8 +116,18 @@ public class IafDragonLogic {
         } else {
             dragon.setDragonPitch(0);
         }
-        if (IafConfig.doDragonsSleep && !dragon.isInWater() && !dragon.isSleeping() && dragon.isOnGround() && !dragon.isFlying() && !dragon.isHovering() && dragon.getAttackTarget() == null && !dragon.isTimeToWake() && dragon.getRNG().nextInt(250) == 0 && dragon.getAttackTarget() == null && dragon.getPassengers().isEmpty()) {
-            dragon.setSleeping(true);
+        if(dragon.lookingForRoostAIFlag && dragon.getRevengeTarget() != null || dragon.isSleeping()){
+            dragon.lookingForRoostAIFlag = false;
+        }
+        if (IafConfig.doDragonsSleep && !dragon.isSleeping() && !dragon.isTimeToWake() && dragon.getPassengers().isEmpty()) {
+            if(dragon.hasHomePosition && dragon.getHomePosition() != null && dragon.getDistanceSquared(Vector3d.copyCentered(dragon.getHomePosition())) > dragon.getWidth() * 10){
+                dragon.lookingForRoostAIFlag = true;
+            }else{
+                dragon.lookingForRoostAIFlag = false;
+                if(!dragon.isInWater() && dragon.isOnGround() && !dragon.isFlying() && !dragon.isHovering() && dragon.getAttackTarget() == null){
+                    dragon.setSleeping(true);
+                }
+            }
         }
         if (dragon.isSleeping() && (dragon.isFlying() || dragon.isHovering() || dragon.isInWater() || (dragon.world.canBlockSeeSky(dragon.getPosition()) && dragon.isTimeToWake() && !dragon.isTamed() || dragon.isTimeToWake() && dragon.isTamed()) || dragon.getAttackTarget() != null || !dragon.getPassengers().isEmpty())) {
             dragon.setSleeping(false);
