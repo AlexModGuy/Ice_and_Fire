@@ -112,9 +112,7 @@ public class ItemGorgonHead extends Item implements IUsesTEISR, ICustomRendered 
                     worldIn.addEntity(statue);
                 }
                 if (entity instanceof PlayerEntity && !((PlayerEntity) entity).isCreative()) {
-                    stack.damageItem(1, entity, (p_220045_0_) -> {
-                        p_220045_0_.sendBreakAnimation(EquipmentSlotType.MAINHAND);
-                    });
+                    stack.shrink(1);
                 }
 
             }
