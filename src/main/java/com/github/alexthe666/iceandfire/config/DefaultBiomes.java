@@ -18,7 +18,10 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, true, "jungle", 1)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, true, "mesa", 1)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, true, "savanna", 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, true, "forest", 1);
+            .addBiomeEntry(BiomeEntryType.BIOME_DICT, true, "forest", 1)
+            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 2)
+            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "mountain", 2)
+            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "snowy", 2);
 
     public static final SpawnBiomeData ICEDRAGON_ROOST = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 0)

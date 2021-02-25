@@ -55,6 +55,10 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0D);
     }
 
+    public boolean canBreatheUnderwater() {
+        return true;
+    }
+
     @Override
     public boolean isInvulnerableTo(DamageSource i) {
         return i.getTrueSource() != null && super.isInvulnerableTo(i);

@@ -44,6 +44,10 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.0D);
     }
 
+    public boolean canBreatheUnderwater() {
+        return true;
+    }
+
     @Override
     public boolean isInvulnerableTo(DamageSource i) {
         return i.getTrueSource() != null;
