@@ -58,7 +58,7 @@ public class IafEntityRegistry {
     public static final EntityType<EntityStymphalianBird> STYMPHALIAN_BIRD = registerEntity(EntityType.Builder.create(EntityStymphalianBird::new, EntityClassification.CREATURE).size(1.3F, 1.2F).setTrackingRange(128), "stymphalian_bird");
     public static final EntityType<EntityStymphalianFeather> STYMPHALIAN_FEATHER = registerEntity(EntityType.Builder.create(EntityStymphalianFeather::new, EntityClassification.MISC).size(0.5F, 0.5F).setCustomClientFactory(EntityStymphalianFeather::new), "stymphalian_feather");
     public static final EntityType<EntityStymphalianArrow> STYMPHALIAN_ARROW = registerEntity(EntityType.Builder.create(EntityStymphalianArrow::new, EntityClassification.MISC).size(0.5F, 0.5F).setCustomClientFactory(EntityStymphalianArrow::new), "stymphalian_arrow");
-    public static final EntityType<EntityTroll> TROLL = registerEntity(EntityType.Builder.create(EntityTroll::new, EntityClassification.CREATURE).size(1.2F, 3.5F), "troll");
+    public static final EntityType<EntityTroll> TROLL = registerEntity(EntityType.Builder.create(EntityTroll::new, EntityClassification.MONSTER).size(1.2F, 3.5F), "troll");
     public static final EntityType<EntityMyrmexWorker> MYRMEX_WORKER = registerEntity(EntityType.Builder.create(EntityMyrmexWorker::new, EntityClassification.CREATURE).size(0.9F, 0.9F), "myrmex_worker");
     public static final EntityType<EntityMyrmexSoldier> MYRMEX_SOLDIER = registerEntity(EntityType.Builder.create(EntityMyrmexSoldier::new, EntityClassification.CREATURE).size(0.9F, 0.95F), "myrmex_soldier");
     public static final EntityType<EntityMyrmexSentinel> MYRMEX_SENTINEL = registerEntity(EntityType.Builder.create(EntityMyrmexSentinel::new, EntityClassification.CREATURE).size(1.3F, 1.95F), "myrmex_sentinel");
@@ -204,7 +204,7 @@ public class IafEntityRegistry {
     		BiomeConfig.test(BiomeConfig.snowyTrollBiomes, biome) ||
     		BiomeConfig.test(BiomeConfig.mountainTrollBiomes, biome)
 		)) {
-            event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(IafEntityRegistry.TROLL, IafConfig.trollSpawnRate, 1, 1));
+            event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(IafEntityRegistry.TROLL, IafConfig.trollSpawnRate, 1, 3));
     		if (BiomeConfig.test(BiomeConfig.forestTrollBiomes, biome)) LOADED_ENTITIES.put("TROLL_F", true);
     		if (BiomeConfig.test(BiomeConfig.snowyTrollBiomes, biome)) LOADED_ENTITIES.put("TROLL_S", true); 
     		if (BiomeConfig.test(BiomeConfig.mountainTrollBiomes, biome)) LOADED_ENTITIES.put("TROLL_M", true);

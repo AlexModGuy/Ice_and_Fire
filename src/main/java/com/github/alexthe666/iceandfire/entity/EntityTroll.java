@@ -55,12 +55,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.common.MinecraftForge;
 
 public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVillagerFear, IHumanoid {
@@ -83,50 +79,8 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
         super(t, worldIn);
     }
 
-    private void setAvoidSun(boolean day) {
-        if (day && !avoidSun) {
-            ((GroundPathNavigator) this.getNavigator()).setAvoidSun(true);
-            avoidSun = true;
-        }
-        if (!day && avoidSun) {
-            ((GroundPathNavigator) this.getNavigator()).setAvoidSun(false);
-            avoidSun = false;
-        }
-    }
-
-    @Override
-    public boolean isAIDisabled() {
-        return EntityGorgon.isStoneMob(this) || super.isAIDisabled();
-    }
-
     public static boolean canTrollSpawnOn(EntityType<? extends MobEntity> typeIn, IServerWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
-        BlockPos blockpos = pos.down();
-        return reason == SpawnReason.SPAWNER || worldIn.getBlockState(blockpos).canEntitySpawn(worldIn, blockpos, typeIn)  && isValidLightLevel(worldIn, pos, randomIn) && canSpawnOn(IafEntityRegistry.TROLL, worldIn, reason, pos, randomIn);
-    }
-
-    public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn) {
-        BlockPos pos = this.getPosition();
-        boolean rngCheck = true;
-        if (IafConfig.trollSpawnCheckChance != 0) {
-        	rngCheck = this.getRNG().nextInt(IafConfig.trollSpawnCheckChance) == 0;
-        }
-        if(worldIn instanceof IServerWorld && !IafWorldRegistry.isDimensionListedForMobs((IServerWorld)world)){
-            return false;
-        }
-        return rngCheck && !this.world.canSeeSky(pos.up()) && super.canSpawn(worldIn, spawnReasonIn);
-    }
-
-    protected void registerGoals() {
-        this.goalSelector.addGoal(1, new SwimGoal(this));
-        this.goalSelector.addGoal(2, new TrollAIFleeSun(this, 1.0D));
-        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(4, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 8.0F, 1.0F));
-        this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, AbstractVillagerEntity.class, false));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, PlayerEntity.class, false));
-        setAvoidSun(true);
+        return worldIn.getDifficulty() != Difficulty.PEACEFUL && isValidLightLevel(worldIn, pos, randomIn) && canSpawnOn(IafEntityRegistry.TROLL, worldIn, reason, pos, randomIn);
     }
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
@@ -141,6 +95,50 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
                 .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 //ARMOR
                 .createMutableAttribute(Attributes.ARMOR, 9.0D);
+    }
+
+    private void setAvoidSun(boolean day) {
+        if (day && !avoidSun) {
+            ((GroundPathNavigator) this.getNavigator()).setAvoidSun(true);
+            avoidSun = true;
+        }
+        if (!day && avoidSun) {
+            ((GroundPathNavigator) this.getNavigator()).setAvoidSun(false);
+            avoidSun = false;
+        }
+    }
+
+    public boolean isNotColliding(IWorldReader worldIn) {
+        return worldIn.checkNoEntityCollision(this);
+    }
+
+    public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn) {
+        BlockPos pos = this.getPosition();
+        BlockPos heightAt = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE, pos);
+        boolean rngCheck = true;
+        if (IafConfig.trollSpawnCheckChance > 0) {
+            rngCheck = this.getRNG().nextInt(IafConfig.trollSpawnCheckChance) == 0;
+        }
+        if (worldIn instanceof IServerWorld && !IafWorldRegistry.isDimensionListedForMobs((IServerWorld) world)) {
+            return false;
+        }
+        if (rngCheck && pos.getY() < heightAt.getY() - 10 && super.canSpawn(worldIn, spawnReasonIn)) {
+            System.out.println(pos);
+        }
+        return rngCheck && pos.getY() < heightAt.getY() - 10 && super.canSpawn(worldIn, spawnReasonIn);
+    }
+
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new SwimGoal(this));
+        this.goalSelector.addGoal(2, new TrollAIFleeSun(this, 1.0D));
+        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 8.0F, 1.0F));
+        this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, AbstractVillagerEntity.class, false));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, PlayerEntity.class, false));
+        setAvoidSun(true);
     }
 
     public boolean attackEntityAsMob(Entity entityIn) {

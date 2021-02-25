@@ -24,7 +24,8 @@ public class BlockDreadTorch extends TorchBlock implements IDreadBlock, IWallBlo
     			.setLightLevel((p_235454_0_) -> { return 5; })
     			.sound(SoundType.STONE)
     			.notSolid()
-    			.variableOpacity(),
+    			.variableOpacity()
+                    .doesNotBlockMovement(),
     		RedstoneParticleData.REDSTONE_DUST
 		);
 

@@ -25,6 +25,7 @@ public class BlockDreadTorchWall extends WallTorchBlock implements IDreadBlock {
     			.sound(SoundType.STONE)
     			.notSolid()
     			.variableOpacity()
+                .doesNotBlockMovement()
     			.lootFrom(IafBlockRegistry.DREAD_TORCH),
 			RedstoneParticleData.REDSTONE_DUST
 		);

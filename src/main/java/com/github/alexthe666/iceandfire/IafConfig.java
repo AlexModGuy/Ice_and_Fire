@@ -109,7 +109,7 @@ public class IafConfig {
     public static int stymphalianBirdSpawnChance = 80;
     public static boolean spawnTrolls = true;
     public static int trollSpawnRate = 60;
-    public static int trollSpawnCheckChance = 40;
+    public static int trollSpawnCheckChance = 10;
     public static boolean trollsDropWeapon = true;
     public static double trollMaxHealth = 50;
     public static double trollAttackStrength = 10;
