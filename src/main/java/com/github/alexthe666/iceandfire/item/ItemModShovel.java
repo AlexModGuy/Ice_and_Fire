@@ -6,16 +6,23 @@ import javax.annotation.Nullable;
 
 import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.citadel.server.item.CustomToolMaterial;
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShovelItem;
@@ -35,6 +42,27 @@ public class ItemModShovel extends ShovelItem {
         super(toolmaterial, 1.5F, -3.0F, new Item.Properties().group(IceAndFire.TAB_ITEMS));
         this.toolMaterial = toolmaterial;
         this.setRegistryName(IceAndFire.MODID, gameName);
+    }
+
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType p_111205_1_) {
+        return p_111205_1_ == EquipmentSlotType.MAINHAND && this.toolMaterial instanceof DragonsteelToolMaterial ? this.bakeDragonsteel() : super.getAttributeModifiers(p_111205_1_);
+    }
+
+    private Multimap<Attribute, AttributeModifier> dragonsteelModifiers;
+    private Multimap<Attribute, AttributeModifier> bakeDragonsteel() {
+        if(toolMaterial.getAttackDamage() != IafConfig.dragonsteelBaseDamage || dragonsteelModifiers == null){
+            ImmutableMultimap.Builder<Attribute, AttributeModifier> lvt_5_1_ = ImmutableMultimap.builder();
+            lvt_5_1_.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double) IafConfig.dragonsteelBaseDamage - 1F + 1.5F, AttributeModifier.Operation.ADDITION));
+            lvt_5_1_.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", (double)-3.0, AttributeModifier.Operation.ADDITION));
+            this.dragonsteelModifiers = lvt_5_1_.build();
+            return this.dragonsteelModifiers;
+        }else{
+            return dragonsteelModifiers;
+        }
+    }
+
+    public float getAttackDamage() {
+        return this.toolMaterial instanceof DragonsteelToolMaterial ? (float) IafConfig.dragonsteelBaseDamage : super.getAttackDamage();
     }
 
     @Override
