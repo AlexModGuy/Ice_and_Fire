@@ -276,7 +276,10 @@ public class ModelDeathWorm extends ModelDragonBase<EntityDeathWorm> {
         this.chainSwing(WORM, speed_walk, degree_walk * 0.1F, -3, f2, 1);
         this.chainSwing(WORM, speed_walk, degree_walk, -3, f, f1);
         this.chainFlap(WORM, speed_walk, degree_walk * 0.75F, -3, f, f1);
-        worm.tail_buffer.applyChainSwingBuffer(WORM);
+
+        if(worm.tail_buffer != null)
+            worm.tail_buffer.applyChainSwingBuffer(WORM);
+
         float pitchAmount = f4 / (180.0F / (float) Math.PI);
         this.Body.rotationPointX += pitchAmount;
 
