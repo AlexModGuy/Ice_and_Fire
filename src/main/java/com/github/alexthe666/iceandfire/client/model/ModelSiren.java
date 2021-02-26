@@ -251,8 +251,9 @@ public class ModelSiren extends ModelDragonBase<EntitySiren> {
         }else{
             this.faceTarget(f3, f4, 2, Neck, Head);
         }
-        entity.tail_buffer.applyChainSwingBuffer(TAIL_NO_BASE);
-
+        if(entity.tail_buffer != null){
+            entity.tail_buffer.applyChainSwingBuffer(TAIL_NO_BASE);
+        }
     }
 
     @Override
