@@ -40,31 +40,31 @@ public class GuiMyrmexStaff extends Screen {
         super(new TranslationTextComponent("myrmex_staff_screen"));
         this.staff = staff;
         this.jungle = staff.getItem() == IafItemRegistry.MYRMEX_JUNGLE_STAFF;
-        func_231160_c_();
+        init();
     }
 
-    protected void func_231160_c_() {
-        super.func_231160_c_();
-        this.field_230710_m_.clear();
+    protected void init() {
+        super.init();
+        this.buttons.clear();
         this.allRoomButtonPos.clear();
-        int i = (this.field_230708_k_ - 248) / 2;
-        int j = (this.field_230709_l_ - 166) / 2;
+        int i = (this.width - 248) / 2;
+        int j = (this.height - 166) / 2;
         int x_translate = 193;
         int y_translate = 37;
         if (ClientProxy.getReferedClientHive() == null) {
             return;
         }
         populateRoomMap();
-        this.func_230480_a_(new Button(i + 124, j + 15, 120, 20, ClientProxy.getReferedClientHive().reproduces ? new TranslationTextComponent("myrmex.message.disablebreeding") : new TranslationTextComponent("myrmex.message.enablebreeding"), (p_214132_1_) -> {
+        this.addButton(new Button(i + 124, j + 15, 120, 20, ClientProxy.getReferedClientHive().reproduces ? new TranslationTextComponent("myrmex.message.disablebreeding") : new TranslationTextComponent("myrmex.message.enablebreeding"), (p_214132_1_) -> {
             boolean opposite = !ClientProxy.getReferedClientHive().reproduces;
             ClientProxy.getReferedClientHive().reproduces = opposite;
         }));
-        this.func_230480_a_(this.previousPage = new ChangePageButton(i + 5, j + 150, false, 0, this.jungle ? 2 : 1, (p_214132_1_) -> {
+        this.addButton(this.previousPage = new ChangePageButton(i + 5, j + 150, false, 0, this.jungle ? 2 : 1, (p_214132_1_) -> {
             if (this.currentPage > 0) {
                 this.currentPage--;
             }
         }));
-        this.func_230480_a_(this.nextPage = new ChangePageButton(i + 225, j + 150, true, 0, this.jungle ? 2 : 1, (p_214132_1_) -> {
+        this.addButton(this.nextPage = new ChangePageButton(i + 225, j + 150, true, 0, this.jungle ? 2 : 1, (p_214132_1_) -> {
             if (this.currentPage < this.allRoomButtonPos.size() / ROOMS_PER_PAGE) {
                 this.currentPage++;
             }
@@ -80,8 +80,8 @@ public class GuiMyrmexStaff extends Screen {
                     ticksSinceDeleted = 5;
                 }
             });
-            button.field_230693_o_ = rooms < ROOMS_PER_PAGE * (this.currentPage + 1) && rooms >= ROOMS_PER_PAGE * this.currentPage;
-            this.func_230480_a_(button);
+            button.visible = rooms < ROOMS_PER_PAGE * (this.currentPage + 1) && rooms >= ROOMS_PER_PAGE * this.currentPage;
+            this.addButton(button);
             this.allRoomButtonPos.add(button);
         }
         if (totalRooms <= ROOMS_PER_PAGE * (this.currentPage) && this.currentPage > 0) {
@@ -115,20 +115,20 @@ public class GuiMyrmexStaff extends Screen {
     }
 
     public void func_230446_a_(MatrixStack ms) {
-        super.func_230446_a_(ms);
+        super.renderBackground(ms);
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.getMinecraft().getTextureManager().bindTexture(jungle ? JUNGLE_TEXTURE : DESERT_TEXTURE);
-        int i = (this.field_230708_k_ - 248) / 2;
-        int j = (this.field_230709_l_ - 166) / 2;
-        this.func_238474_b_(ms, i, j, 0, 0, 248, 166);
+        int i = (this.width - 248) / 2;
+        int j = (this.height - 166) / 2;
+        this.blit(ms, i, j, 0, 0, 248, 166);
     }
 
-    public void func_230430_a_(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+    public void render(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
         this.func_230446_a_(ms);
-        func_231160_c_();
-        int i = (this.field_230708_k_ - 248) / 2 + 10;
-        int j = (this.field_230709_l_ - 166) / 2 + 8;
-        super.func_230430_a_(ms, mouseX, mouseY, partialTicks);
+        init();
+        int i = (this.width - 248) / 2 + 10;
+        int j = (this.height - 166) / 2 + 8;
+        super.render(ms, mouseX, mouseY, partialTicks);
         int color = this.jungle ? 0X35EA15 : 0XFFBF00;
         if (ticksSinceDeleted > 0) {
             ticksSinceDeleted--;
@@ -142,13 +142,13 @@ public class GuiMyrmexStaff extends Screen {
         if (ClientProxy.getReferedClientHive() != null) {
             if (!ClientProxy.getReferedClientHive().colonyName.isEmpty()) {
                 String title = I18n.format("myrmex.message.colony_named", ClientProxy.getReferedClientHive().colonyName);
-                this.getMinecraft().fontRenderer.func_238405_a_(ms, title, i + 40 - title.length() / 2, j - 3, color);
+                this.getMinecraft().fontRenderer.drawString(ms, title, i + 40 - title.length() / 2, j - 3, color);
             } else {
-                this.getMinecraft().fontRenderer.func_238405_a_(ms, I18n.format("myrmex.message.colony"), i + 80, j - 3, color);
+                this.getMinecraft().fontRenderer.drawString(ms, I18n.format("myrmex.message.colony"), i + 80, j - 3, color);
             }
             int opinion = ClientProxy.getReferedClientHive().getPlayerReputation(Minecraft.getInstance().player.getUniqueID());
-            this.getMinecraft().fontRenderer.func_238405_a_(ms, I18n.format("myrmex.message.hive_opinion", opinion), i, j + 12, color);
-            this.getMinecraft().fontRenderer.func_238405_a_(ms, I18n.format("myrmex.message.rooms"), i, j + 25, color);
+            this.getMinecraft().fontRenderer.drawString(ms, I18n.format("myrmex.message.hive_opinion", opinion), i, j + 12, color);
+            this.getMinecraft().fontRenderer.drawString(ms, I18n.format("myrmex.message.rooms"), i, j + 25, color);
             /*int hiveCount = 0;
             for (WorldGenMyrmexHive.RoomType type : ROOMS) {
                 List<BlockPos> roomPos = ClientProxy.getReferedClientHive().getRooms(type);
@@ -179,7 +179,7 @@ public class GuiMyrmexStaff extends Screen {
 
     private void drawRoomInfo(MatrixStack ms, String type, BlockPos pos, int i, int j, int color) {
         String translate = "myrmex.message.room." + type;
-        this.getMinecraft().fontRenderer.func_238405_a_(ms, I18n.format(translate, pos.getX(), pos.getY(), pos.getZ()), i, j + 36 + hiveCount * 22, color);
+        this.getMinecraft().fontRenderer.drawString(ms, I18n.format(translate, pos.getX(), pos.getY(), pos.getZ()), i, j + 36 + hiveCount * 22, color);
         hiveCount++;
     }
 

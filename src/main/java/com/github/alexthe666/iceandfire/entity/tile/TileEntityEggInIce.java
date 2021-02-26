@@ -49,8 +49,8 @@ public class TileEntityEggInIce extends TileEntity implements ITickableTileEntit
     }
 
     @Override
-    public void func_230337_a_(BlockState state, CompoundNBT tag) {
-        super.func_230337_a_(state,tag);
+    public void read(BlockState state, CompoundNBT tag) {
+        super.read(state,tag);
         type = EnumDragonEgg.values()[tag.getByte("Color")];
         age = tag.getByte("Age");
         UUID s;
@@ -73,7 +73,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickableTileEntit
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        func_230337_a_(this.getBlockState(), packet.getNbtCompound());
+        read(this.getBlockState(), packet.getNbtCompound());
     }
 
     public CompoundNBT getUpdateTag() {

@@ -61,7 +61,7 @@ public class ItemModArmor extends ArmorItem {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             if (calendar.get(2) + 1 == 4 && calendar.get(5) == 1) {
-                tooltip.add(new TranslationTextComponent("item.iceandfire.air_pods.desc").func_240699_a_(TextFormatting.GREEN));
+                tooltip.add(new TranslationTextComponent("item.iceandfire.air_pods.desc").mergeStyle(TextFormatting.GREEN));
             }
         }
         super.addInformation(stack, worldIn, tooltip, flagIn);

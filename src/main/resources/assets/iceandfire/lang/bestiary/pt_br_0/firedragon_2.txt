@@ -5,13 +5,15 @@ instantânea. No entanto, o dragão
 tem um raro ataque corpo a corpo: 
 sacudir a presa até a morte.
 
-<image><drawings_firedragon_attacks.png 40 100 290 124 186 69 0.7>
 
+
+<image><drawings_firedragon_attacks.png 40 100 290 124 186 69 0.7>
 
 Nesse ataque, o dragão pega a
 presa com sua boca, e à agita 
 rapidamente com o intuito de
 de provocar graves ferimentos.
+
 
 
 

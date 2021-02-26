@@ -41,7 +41,7 @@ public class ItemDragonEgg extends Item {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("dragon." + type.toString().toLowerCase()).func_240699_a_(type.color));
+        tooltip.add(new TranslationTextComponent("dragon." + type.toString().toLowerCase()).mergeStyle(type.color));
     }
 
     public ActionResultType onItemUse(ItemUseContext context) {

@@ -45,9 +45,9 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, 10.0D)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 10.0D)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.0D);
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.0D);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     public boolean canSeeSky() {
-        return world.canBlockSeeSky(this.func_233580_cy_());
+        return world.canBlockSeeSky(this.getPosition());
     }
 
     @Override
@@ -135,7 +135,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
             myrmex.setGrowthStage(0);
             myrmex.setPositionAndRotation(this.getPosX(), this.getPosY(), this.getPosZ(), 0, 0);
             if (myrmex instanceof EntityMyrmexQueen) {
-                MyrmexHive hive = new MyrmexHive(world, this.func_233580_cy_(), 100);
+                MyrmexHive hive = new MyrmexHive(world, this.getPosition(), 100);
                 PlayerEntity player = world.getClosestPlayer(this, 30);
                 if (player != null) {
                     hive.hasOwner = true;
@@ -152,7 +152,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
                 if(MyrmexWorldData.get(world) != null) {
                     MyrmexHive hive;
                     if(this.hiveUUID == null){
-                        hive = MyrmexWorldData.get(world).getNearestHive(this.func_233580_cy_(), 400);
+                        hive = MyrmexWorldData.get(world).getNearestHive(this.getPosition(), 400);
                     }else {
                         hive = MyrmexWorldData.get(world).getHiveFromUUID(hiveUUID);
                     }
@@ -237,12 +237,12 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     public boolean isInNursery() {
-        MyrmexHive hive = MyrmexWorldData.get(this.world).getNearestHive(this.func_233580_cy_(), 100);
-        if (hive != null && hive.getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty() && hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.func_233580_cy_()) != null) {
+        MyrmexHive hive = MyrmexWorldData.get(this.world).getNearestHive(this.getPosition(), 100);
+        if (hive != null && hive.getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty() && hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition()) != null) {
             return false;
         }
         if (hive != null) {
-            BlockPos nursery = hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.func_233580_cy_());
+            BlockPos nursery = hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition());
             return this.getDistanceSq(nursery.getX(), nursery.getY(), nursery.getZ()) < 2025;
         }
         return false;

@@ -87,6 +87,6 @@ public class ItemHippogryphEgg extends Item implements ICustomRendered {
         }
 
         String type = EnumHippogryphTypes.values()[MathHelper.clamp(eggOrdinal, 0, EnumHippogryphTypes.values().length - 1)].name().toLowerCase();
-        tooltip.add(new TranslationTextComponent("entity.iceandfire.hippogryph." + type).func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("entity.iceandfire.hippogryph." + type).mergeStyle(TextFormatting.GRAY));
     }
 }

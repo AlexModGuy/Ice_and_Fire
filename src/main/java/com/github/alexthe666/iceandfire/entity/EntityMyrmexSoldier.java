@@ -71,7 +71,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         /*if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAnimationTick() == 0) {
@@ -79,7 +79,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue() * 2));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 2));
                 this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 200, 2));
             }
         }*/
@@ -120,15 +120,15 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, 40)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 40)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.35D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, IafConfig.myrmexBaseAttackStrength * 2D)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, IafConfig.myrmexBaseAttackStrength * 2D)
                 //FOLLOW RANGE
-                .func_233815_a_(Attributes.field_233819_b_, 64.0D)
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, 64.0D)
                 //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 6.0D);
+                .createMutableAttribute(Attributes.ARMOR, 6.0D);
     }
 
     @Override
@@ -161,7 +161,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         }
         if (this.getAnimation() != ANIMATION_STING && this.getAnimation() != ANIMATION_BITE) {
             this.setAnimation(this.getRNG().nextBoolean() ? ANIMATION_STING : ANIMATION_BITE);
-            float f = (float)this.func_233637_b_(Attributes.field_233823_f_);
+            float f = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
             this.setLastAttackedEntity(entityIn);
             boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), f);
             if (this.getAnimation() == ANIMATION_STING && flag){
@@ -202,7 +202,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     }
 
     @Override
-    public boolean func_213705_dZ() {
+    public boolean hasXPBar() {
         return false;
     }
 }

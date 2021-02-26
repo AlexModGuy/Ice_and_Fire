@@ -24,7 +24,7 @@ public class PixieAIEnterHouse extends Goal {
         }
 
         BlockPos blockpos1 = EntityPixie.findAHouse(this.pixie, this.pixie.world);
-        return !blockpos1.toString().equals(this.pixie.func_233580_cy_().toString());
+        return !blockpos1.toString().equals(this.pixie.getPosition().toString());
     }
 
     public boolean shouldContinueExecuting() {
@@ -34,7 +34,7 @@ public class PixieAIEnterHouse extends Goal {
     public void tick() {
         BlockPos blockpos = this.pixie.getHousePos();
         if (blockpos == null) {
-            blockpos = this.pixie.func_233580_cy_();
+            blockpos = this.pixie.getPosition();
         }
 
         for (int i = 0; i < 3; ++i) {

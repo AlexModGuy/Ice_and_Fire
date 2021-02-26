@@ -38,7 +38,7 @@ public class MyrmexAIForage extends Goal {
             return false;
         }
         List<BlockPos> allBlocks = new ArrayList<BlockPos>();
-        for (BlockPos pos : BlockPos.getAllInBox(this.myrmex.func_233580_cy_().add(-RADIUS, -RADIUS/2, -RADIUS), this.myrmex.func_233580_cy_().add(RADIUS, RADIUS/2, RADIUS)).map(BlockPos::toImmutable).collect(Collectors.toList())) {
+        for (BlockPos pos : BlockPos.getAllInBox(this.myrmex.getPosition().add(-RADIUS, -RADIUS/2, -RADIUS), this.myrmex.getPosition().add(RADIUS, RADIUS/2, RADIUS)).map(BlockPos::toImmutable).collect(Collectors.toList())) {
             if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this.myrmex, pos.getX(), pos.getY(), pos.getZ())))
                 continue;
             if (EntityMyrmexBase.isEdibleBlock(this.myrmex.world.getBlockState(pos))) {

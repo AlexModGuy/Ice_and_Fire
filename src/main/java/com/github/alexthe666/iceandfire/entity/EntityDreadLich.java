@@ -105,15 +105,15 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, 50.0D)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 50.0D)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.3D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, 1.0D)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 1.0D)
                 //FOLLOW RANGE
-                .func_233815_a_(Attributes.field_233819_b_, 128.0D)
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, 128.0D)
                 //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 2.0D);
+                .createMutableAttribute(Attributes.ARMOR, 2.0D);
     }
 
     @Override
@@ -126,7 +126,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     public void livingTick() {
         super.livingTick();
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
-            BlockState belowBlock = world.getBlockState(this.func_233580_cy_().down());
+            BlockState belowBlock = world.getBlockState(this.getPosition().down());
             if (belowBlock.getBlock() != Blocks.AIR) {
                 for (int i = 0; i < 5; i++) {
                     this.world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, belowBlock), this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getBoundingBox().minY, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
@@ -276,7 +276,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
             minion.setLocationAndAngles(x + 0.5D, y, z + 0.5D, this.rotationYaw, this.rotationPitch);
             minion.setAttackTarget(target);
             if(world instanceof IServerWorld){
-                minion.onInitialSpawn((IServerWorld)world, world.getDifficultyForLocation(this.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
+                minion.onInitialSpawn((IServerWorld)world, world.getDifficultyForLocation(this.getPosition()), SpawnReason.MOB_SUMMONED, null, null);
             }
             if (minion instanceof EntityDreadMob) {
                 ((EntityDreadMob) minion).setCommanderId(this.getUniqueID());

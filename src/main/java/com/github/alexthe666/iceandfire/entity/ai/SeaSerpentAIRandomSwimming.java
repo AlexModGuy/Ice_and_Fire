@@ -53,7 +53,7 @@ public class SeaSerpentAIRandomSwimming  extends RandomWalkingGoal {
             Random random = new Random();
             int range = 16;
             for(int i = 0; i < 15; i++){
-                BlockPos blockpos1 = this.creature.func_233580_cy_().add(random.nextInt(range) - range/2, random.nextInt(range) - range/2, random.nextInt(range) - range/2);
+                BlockPos blockpos1 = this.creature.getPosition().add(random.nextInt(range) - range/2, random.nextInt(range) - range/2, random.nextInt(range) - range/2);
                 while(this.creature.world.isAirBlock(blockpos1) && this.creature.world.getFluidState(blockpos1).isEmpty() && blockpos1.getY() > 1){
                     blockpos1 = blockpos1.down();
                 }
@@ -76,7 +76,7 @@ public class SeaSerpentAIRandomSwimming  extends RandomWalkingGoal {
     }
 
     private Vector3d findSurfaceTarget(CreatureEntity creature, int i, int i1) {
-        BlockPos upPos = creature.func_233580_cy_();
+        BlockPos upPos = creature.getPosition();
         while(creature.world.getFluidState(upPos).isTagged(FluidTags.WATER)){
             upPos = upPos.up();
         }

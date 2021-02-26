@@ -81,8 +81,8 @@ public class EntityPixieCharge extends AbstractFireballEntity {
         if (this.ticksExisted > 30) {
             this.remove();
         }
-        if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.func_233580_cy_())) {
-            if (this.world.isRemote || (shootingEntity == null || !shootingEntity.removed) && this.world.isBlockLoaded(this.func_233580_cy_())) {
+        if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.getPosition())) {
+            if (this.world.isRemote || (shootingEntity == null || !shootingEntity.removed) && this.world.isBlockLoaded(this.getPosition())) {
                 if (this.isFireballFiery()) {
                     this.setFire(1);
                 }

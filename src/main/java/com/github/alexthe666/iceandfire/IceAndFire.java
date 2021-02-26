@@ -63,7 +63,7 @@ public class IceAndFire {
     public static final String MODID = "iceandfire";
     public static final SimpleChannel NETWORK_WRAPPER;
     public static boolean DEBUG = true;
-    public static final String VERSION = "2.1.5-1.16.4";
+    public static final String VERSION = "2.1.6-1.16.4";
     private static final String PROTOCOL_VERSION = Integer.toString(1);
     public static ItemGroup TAB_ITEMS = new ItemGroup(MODID) {
         @Override
@@ -98,7 +98,6 @@ public class IceAndFire {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupComplete);
         modLoadingContext.registerConfig(ModConfig.Type.CLIENT, ConfigHolder.CLIENT_SPEC);
         modLoadingContext.registerConfig(ModConfig.Type.COMMON, ConfigHolder.SERVER_SPEC);
-        modLoadingContext.registerConfig(ModConfig.Type.COMMON, ConfigHolder.BIOME_SPEC, "iceandfire-biomes.toml");
         MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadFromJSON);
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
         PROXY.init();

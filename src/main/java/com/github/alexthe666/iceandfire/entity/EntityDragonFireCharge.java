@@ -64,7 +64,7 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
             remove();
         }
 
-        if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.func_233580_cy_())) {
+        if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.getPosition())) {
             super.tick();
 
             if (this.isFireballFiery()) {
@@ -172,7 +172,7 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
         }
         if(movingObject.getType() != RayTraceResult.Type.MISS) {
             if (shootingEntity instanceof EntityDragonBase && IafConfig.dragonGriefing != 2) {
-                IafDragonDestructionManager.destroyAreaFireCharge(world, this.func_233580_cy_(), ((EntityDragonBase) shootingEntity));
+                IafDragonDestructionManager.destroyAreaFireCharge(world, this.getPosition(), ((EntityDragonBase) shootingEntity));
             }
             this.remove();
         }

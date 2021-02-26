@@ -60,7 +60,7 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
     public void tick() {
         Entity shootingEntity = this.func_234616_v_();
         this.extinguish();
-        if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.func_233580_cy_())) {
+        if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.getPosition())) {
             super.tick();
             this.extinguish();
 

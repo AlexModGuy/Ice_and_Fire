@@ -31,7 +31,7 @@ public class MyrmexAIReEnterHive extends Goal {
         }
         MyrmexHive village = this.myrmex.getHive();
         if (village == null) {
-            village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(this.myrmex.func_233580_cy_(), 500);
+            village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(this.myrmex.getPosition(), 500);
         }
         if (!(this.myrmex.getNavigator() instanceof AdvancedPathNavigate) ||this.myrmex.isPassenger()){
             return false;

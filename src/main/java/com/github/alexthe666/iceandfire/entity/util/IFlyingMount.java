@@ -25,4 +25,6 @@ public interface IFlyingMount {
     default boolean isHovering() {
         return false;
     }
+
+    default double getYSpeedMod(){ return 10; }
 }

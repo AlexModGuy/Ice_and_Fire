@@ -113,7 +113,6 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
         Minecraft minecraft = Minecraft.getInstance();
         boolean flag = this.isVisible(entityIn);
         boolean flag1 = !flag && !entityIn.isInvisibleToPlayer(minecraft.player);
-        boolean flag2 = minecraft.func_238206_b_(entityIn);
         float alphaForRender = this.getAlphaForRender(entityIn, partialTicks);
         RenderType rendertype = entityIn.isDaytimeMode() ? IafRenderType.getGhostDaytime(getEntityTexture(entityIn)) : IafRenderType.getGhost(getEntityTexture(entityIn));//this.func_230496_a_(entityIn, flag, flag1, flag2);
         if (rendertype != null && !entityIn.isInvisible()) {

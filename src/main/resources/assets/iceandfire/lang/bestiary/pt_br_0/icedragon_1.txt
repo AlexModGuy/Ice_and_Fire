@@ -24,6 +24,7 @@ dano.
 
 
 
+
 A explosão de gelo não é o único
 ataque elemental. O dragão também
 pode criar um jato que congela
@@ -36,6 +37,8 @@ fazer este ataque.
 
 
 <image><drawings_icedragon_attacks.png 360 242 262 211 213 78 0.6>
+
+
 
 Um dos ataques mais comuns dos
 dragões de gelo é a mordida do 

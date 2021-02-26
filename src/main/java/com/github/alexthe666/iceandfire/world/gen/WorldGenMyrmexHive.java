@@ -69,9 +69,9 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos pos, NoFeatureConfig p_230362_6_) {
+    public boolean generate(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos pos, NoFeatureConfig p_230362_6_) {
         if(!small){
-            if(!IafWorldRegistry.isDimensionListed(worldIn)){
+            if(!IafWorldRegistry.isDimensionListedForFeatures(worldIn)){
                 return false;
             }
             if(!IafConfig.generateMyrmexColonies || rand.nextInt(IafConfig.myrmexColonyGenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, pos) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, pos)){
@@ -219,7 +219,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
     private void generateEntrance(IWorld world, Random rand, BlockPos position, int size, int height, Direction direction) {
         BlockPos up = position.up();
         hive.getEntranceBottoms().put(up, direction);
-        while (up.getY() < world.getHeight(small ? Heightmap.Type.MOTION_BLOCKING_NO_LEAVES : Heightmap.Type.WORLD_SURFACE_WG, up).getY() && !BlockTags.LOGS.func_230235_a_(world.getBlockState(up).getBlock())) {
+        while (up.getY() < world.getHeight(small ? Heightmap.Type.MOTION_BLOCKING_NO_LEAVES : Heightmap.Type.WORLD_SURFACE_WG, up).getY() && !BlockTags.LOGS.contains(world.getBlockState(up).getBlock())) {
             generateCircleRespectSky(world, rand, up, size, height, direction);
             up = up.up().offset(direction);
         }

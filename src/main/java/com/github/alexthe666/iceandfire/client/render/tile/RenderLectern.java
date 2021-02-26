@@ -54,7 +54,7 @@ public class RenderLectern<T extends TileEntityLectern> extends TileEntityRender
         }
         float f6 = 1.29F;
 
-        this.book.func_228247_a_(partialTicks, MathHelper.clamp(f4, 0.0F, 1.0F), MathHelper.clamp(f5, 0.0F, 1.0F), f6);
+        this.book.setBookState(partialTicks, MathHelper.clamp(f4, 0.0F, 1.0F), MathHelper.clamp(f5, 0.0F, 1.0F), f6);
         this.book.render(matrixStackIn, bufferIn.getBuffer(ENCHANTMENT_TABLE_BOOK_TEXTURE), combinedLightIn, combinedOverlayIn, 1, 1F, 1, 1);
         matrixStackIn.pop();
     }

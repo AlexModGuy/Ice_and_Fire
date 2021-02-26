@@ -41,7 +41,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
             lichSummoned = new EntityDreadScuttler(IafEntityRegistry.DREAD_SCUTTLER, entity.world);
             float readInScale = (entity.getWidth() / 1.5F);
             if (entity.world instanceof IServerWorld) {
-                ((EntityDreadScuttler) lichSummoned).onInitialSpawn((IServerWorld) entity.world, entity.world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
+                ((EntityDreadScuttler) lichSummoned).onInitialSpawn((IServerWorld) entity.world, entity.world.getDifficultyForLocation(entity.getPosition()), SpawnReason.MOB_SUMMONED, null, null);
             }
             ((EntityDreadScuttler) lichSummoned).setScale(readInScale);
             return lichSummoned;
@@ -50,7 +50,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
             lichSummoned = new EntityDreadGhoul(IafEntityRegistry.DREAD_GHOUL, entity.world);
             float readInScale = (entity.getWidth() / 0.6F);
             if (entity.world instanceof IServerWorld) {
-                ((EntityDreadGhoul) lichSummoned).onInitialSpawn((IServerWorld) entity.world, entity.world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
+                ((EntityDreadGhoul) lichSummoned).onInitialSpawn((IServerWorld) entity.world, entity.world.getDifficultyForLocation(entity.getPosition()), SpawnReason.MOB_SUMMONED, null, null);
             }
             ((EntityDreadGhoul) lichSummoned).setScale(readInScale);
             return lichSummoned;
@@ -59,7 +59,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
             lichSummoned = new EntityDreadThrall(IafEntityRegistry.DREAD_THRALL, entity.world);
             EntityDreadThrall thrall = (EntityDreadThrall) lichSummoned;
             if (entity.world instanceof IServerWorld) {
-                thrall.onInitialSpawn((IServerWorld) entity.world, entity.world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
+                thrall.onInitialSpawn((IServerWorld) entity.world, entity.world.getDifficultyForLocation(entity.getPosition()), SpawnReason.MOB_SUMMONED, null, null);
             }
             thrall.setCustomArmorHead(false);
             thrall.setCustomArmorChest(false);
@@ -78,7 +78,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
             lichSummoned = new EntityDreadBeast(IafEntityRegistry.DREAD_BEAST, entity.world);
             float readInScale = (entity.getWidth() / 1.2F);
             if (entity.world instanceof IServerWorld) {
-                ((EntityDreadBeast) lichSummoned).onInitialSpawn((IServerWorld) entity.world, entity.world.getDifficultyForLocation(entity.func_233580_cy_()), SpawnReason.MOB_SUMMONED, null, null);
+                ((EntityDreadBeast) lichSummoned).onInitialSpawn((IServerWorld) entity.world, entity.world.getDifficultyForLocation(entity.getPosition()), SpawnReason.MOB_SUMMONED, null, null);
             }
             ((EntityDreadBeast) lichSummoned).setScale(readInScale);
             return lichSummoned;
@@ -155,7 +155,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
                 return player;
             } else {
                 if (!world.isRemote) {
-                    Entity entity = world.getServer().getWorld(this.world.func_234923_W_()).getEntityByUuid(uuid);
+                    Entity entity = world.getServer().getWorld(this.world.getDimensionKey()).getEntityByUuid(uuid);
                     if (entity instanceof LivingEntity) {
                         return entity;
                     }

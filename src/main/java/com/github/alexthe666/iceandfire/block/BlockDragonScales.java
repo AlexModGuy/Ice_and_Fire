@@ -30,7 +30,7 @@ public class BlockDragonScales extends Block implements IDragonProof {
     			.harvestTool(ToolType.PICKAXE)
     			.harvestLevel(2)
     			.sound(SoundType.STONE)
-    			.func_235861_h_()
+    			.setRequiresTool()
 		);
 
         this.setRegistryName("iceandfire:" + name);
@@ -41,6 +41,6 @@ public class BlockDragonScales extends Block implements IDragonProof {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("dragon." + type.toString().toLowerCase()).func_240699_a_(type.color));
+        tooltip.add(new TranslationTextComponent("dragon." + type.toString().toLowerCase()).mergeStyle(type.color));
     }
 }

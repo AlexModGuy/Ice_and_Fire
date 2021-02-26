@@ -38,7 +38,7 @@ public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof
     			.variableOpacity()
     			.hardnessAndResistance(40, 500)
     			.sound(SoundType.METAL)
-    			.func_235838_a_((p_235454_0_) -> { return activated ? 15 : 0; })
+    			.setLightLevel((p_235454_0_) -> { return activated ? 15 : 0; })
 		);
 
         String disabled = activated ? "" : "_disabled";

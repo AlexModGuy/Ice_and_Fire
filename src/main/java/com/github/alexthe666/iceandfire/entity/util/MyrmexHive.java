@@ -117,7 +117,7 @@ public class MyrmexHive {
     public EntityMyrmexQueen getQueen() {
         List<EntityMyrmexQueen> ourQueens = new ArrayList<>();
         if (!world.isRemote) {
-            ServerWorld serverWorld = world.getServer().getWorld(world.func_234923_W_());
+            ServerWorld serverWorld = world.getServer().getWorld(world.getDimensionKey());
             List<Entity> allQueens = serverWorld.getEntities(IafEntityRegistry.MYRMEX_QUEEN, EntityPredicates.NOT_SPECTATING);
             for (Entity queen : allQueens) {
                 if (queen instanceof EntityMyrmexQueen && ((EntityMyrmexQueen) queen).getHive().equals(this)) {
@@ -555,7 +555,7 @@ public class MyrmexHive {
                 return closest.getKey().offset(closest.getValue(), 3);
             }
         }
-        return entity.func_233580_cy_();
+        return entity.getPosition();
     }
 
     public BlockPos getClosestEntranceBottomToEntity(Entity entity, Random random) {
@@ -565,7 +565,7 @@ public class MyrmexHive {
                 closest = entry;
             }
         }
-        return closest != null ? closest.getKey() : entity.func_233580_cy_();
+        return closest != null ? closest.getKey() : entity.getPosition();
     }
 
     public PlayerEntity getOwner(World world) {

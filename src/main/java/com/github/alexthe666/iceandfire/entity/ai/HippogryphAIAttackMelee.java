@@ -75,7 +75,7 @@ public class HippogryphAIAttackMelee extends Goal {
             return false;
         } else if (!this.longMemory) {
             return !this.attacker.getNavigator().noPath();
-        } else if (!this.attacker.isWithinHomeDistanceFromPosition(LivingEntity.func_233580_cy_())) {
+        } else if (!this.attacker.isWithinHomeDistanceFromPosition(LivingEntity.getPosition())) {
             return false;
         } else {
             return !(LivingEntity instanceof PlayerEntity) || !LivingEntity.isSpectator() && !((PlayerEntity) LivingEntity).isCreative();

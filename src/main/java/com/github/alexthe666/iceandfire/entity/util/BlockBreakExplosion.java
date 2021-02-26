@@ -66,8 +66,8 @@ public class BlockBreakExplosion extends Explosion {
         for (int j = 0; j < i; ++j) {
             Pair<ItemStack, BlockPos> pair = p_229976_0_.get(j);
             ItemStack itemstack = pair.getFirst();
-            if (ItemEntity.func_226532_a_(itemstack, p_229976_1_)) {
-                ItemStack itemstack1 = ItemEntity.func_226533_a_(itemstack, p_229976_1_, 16);
+            if (ItemEntity.canMergeStacks(itemstack, p_229976_1_)) {
+                ItemStack itemstack1 = ItemEntity.mergeStacks(itemstack, p_229976_1_, 16);
                 p_229976_0_.set(j, Pair.of(itemstack1, pair.getSecond()));
                 if (p_229976_1_.isEmpty()) {
                     return;
@@ -201,7 +201,7 @@ public class BlockBreakExplosion extends Explosion {
                     this.world.getProfiler().startSection("explosion_blocks");
                     if (blockstate.canDropFromExplosion(this.world, blockpos, this) && this.world instanceof ServerWorld) {
                         TileEntity tileentity = blockstate.hasTileEntity() ? this.world.getTileEntity(blockpos) : null;
-                        LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld) this.world)).withRandom(this.world.rand).withParameter(LootParameters.field_237457_g_,  Vector3d.func_237489_a_(blockpos)).withParameter(LootParameters.TOOL, ItemStack.EMPTY).withNullableParameter(LootParameters.BLOCK_ENTITY, tileentity).withNullableParameter(LootParameters.THIS_ENTITY, this.exploder);
+                        LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld) this.world)).withRandom(this.world.rand).withParameter(LootParameters.field_237457_g_,  Vector3d.copyCentered(blockpos)).withParameter(LootParameters.TOOL, ItemStack.EMPTY).withNullableParameter(LootParameters.BLOCK_ENTITY, tileentity).withNullableParameter(LootParameters.THIS_ENTITY, this.exploder);
                         if (this.mode == Explosion.Mode.DESTROY) {
                             lootcontext$builder.withParameter(LootParameters.EXPLOSION_RADIUS, this.size);
                         }

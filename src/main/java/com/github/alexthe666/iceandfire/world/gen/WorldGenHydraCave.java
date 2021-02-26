@@ -30,7 +30,7 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
 
     public static final ResourceLocation HYDRA_CHEST = new ResourceLocation("iceandfire", "chest/hydra_cave");
-    protected static final ConfiguredFeature SWAMP_FEATURE = Features.field_243875_bU;
+    protected static final ConfiguredFeature SWAMP_FEATURE = Features.SWAMP_TREE;
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
     public WorldGenHydraCave(Codec<NoFeatureConfig> configFactoryIn) {
@@ -38,8 +38,8 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
-        if (!IafWorldRegistry.isDimensionListed(worldIn)) {
+    public boolean generate(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
+        if (!IafWorldRegistry.isDimensionListedForFeatures(worldIn)) {
             return false;
         }
         if (!IafConfig.generateHydraCaves || rand.nextInt(IafConfig.generateHydraChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
@@ -75,7 +75,7 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
                             worldIn.setBlockState(blockpos.up(), Blocks.GRASS.getDefaultState(), 2);
                         }
                         if (rand.nextInt(9) == 0) {
-                            SWAMP_FEATURE.func_242765_a(worldIn, p_230362_3_, rand, blockpos.up());
+                            SWAMP_FEATURE.generate(worldIn, p_230362_3_, rand, blockpos.up());
                         }
 
                     }

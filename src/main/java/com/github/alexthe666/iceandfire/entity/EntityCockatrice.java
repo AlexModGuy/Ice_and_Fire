@@ -220,15 +220,15 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, IafConfig.cockatriceMaxHealth)
+                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.cockatriceMaxHealth)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.4D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, 5.0D)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0D)
                 //FOLLOW RANGE
-                .func_233815_a_(Attributes.field_233819_b_, 64.0D)
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, 64.0D)
                 //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 2.0D);
+                .createMutableAttribute(Attributes.ARMOR, 2.0D);
     }
 
     public boolean canMove() {
@@ -357,7 +357,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     }
 
     public void setSitting(boolean sitting) {
-        super.func_233686_v_(sitting);
+        super.setSwimming(sitting);
         if (!world.isRemote) {
             this.isSitting = sitting;
         }
@@ -446,7 +446,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
                         player.sendStatusMessage(new TranslationTextComponent("cockatrice.command.remove_home"), true);
                         return ActionResultType.SUCCESS;
                     } else {
-                        this.homePos = this.func_233580_cy_();
+                        this.homePos = this.getPosition();
                         this.hasHomePosition = true;
                         player.sendStatusMessage(new TranslationTextComponent("cockatrice.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
                         return ActionResultType.SUCCESS;
@@ -491,7 +491,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 7) {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 8) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_JUMPAT && this.getAttackTarget() != null) {
@@ -499,7 +499,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
             double d0 = this.getAttackTarget().getPosX() - this.getPosX();
             double d1 = this.getAttackTarget().getPosZ() - this.getPosZ();
             float leap = MathHelper.sqrt(d0 * d0 + d1 * d1);
-            if (dist <= 16.0D && this.func_233570_aj_() && this.getAnimationTick() > 7 && this.getAnimationTick() < 12) {
+            if (dist <= 16.0D && this.isOnGround() && this.getAnimationTick() > 7 && this.getAnimationTick() < 12) {
                 Vector3d Vector3d = this.getMotion();
                 Vector3d Vector3d1 = new Vector3d(this.getAttackTarget().getPosX() - this.getPosX(), 0.0D, this.getAttackTarget().getPosZ() - this.getPosZ());
                 if (Vector3d1.lengthSquared() > 1.0E-7D) {
@@ -507,7 +507,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
                 }
             }
             if (dist < 4 && this.getAnimationTick() > 10) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
                 if ((double) leap >= 1.0E-4D) {
                     this.getAttackTarget().setMotion(this.getAttackTarget().getMotion().add(d0 / (double) leap * 0.800000011920929D + this.getMotion().x * 0.20000000298023224D, 0, d1 / (double) leap * 0.800000011920929D + this.getMotion().z * 0.20000000298023224D));
                 }

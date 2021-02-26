@@ -39,7 +39,7 @@ public class ParticleGhostAppearance extends Particle {
         float f = ((float) this.age + partialTicks) / (float) this.maxAge;
         float f1 = 0.05F + 0.5F * MathHelper.sin(f * (float) Math.PI);
         Entity entity = world.getEntityByID(ghost);
-        if(entity instanceof EntityGhost && Minecraft.getInstance().gameSettings.func_243230_g() == PointOfView.FIRST_PERSON){
+        if(entity instanceof EntityGhost && Minecraft.getInstance().gameSettings.getPointOfView() == PointOfView.FIRST_PERSON){
             EntityGhost ghostEntity = (EntityGhost)entity;
             MatrixStack matrixstack = new MatrixStack();
             matrixstack.rotate(renderInfo.getRotation());

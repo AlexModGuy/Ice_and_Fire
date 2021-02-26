@@ -62,7 +62,7 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        func_230337_a_(this.getBlockState(), packet.getNbtCompound());
+        read(this.getBlockState(), packet.getNbtCompound());
     }
 
     public CompoundNBT getUpdateTag() {

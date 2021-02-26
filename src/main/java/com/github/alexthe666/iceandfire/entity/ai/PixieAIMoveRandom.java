@@ -24,7 +24,7 @@ public class PixieAIMoveRandom extends Goal {
 
     public boolean shouldExecute() {
         target = EntityPixie.getPositionRelativetoGround(this.pixie, this.pixie.world, this.pixie.getPosX() + this.random.nextInt(15) - 7, this.pixie.getPosZ() + this.random.nextInt(15) - 7, this.random);
-        return !this.pixie.isOwnerClose() && !this.pixie.isPixieSitting() && isDirectPathBetweenPoints(this.pixie.func_233580_cy_(), target) && !this.pixie.getMoveHelper().isUpdating() && this.random.nextInt(4) == 0 && this.pixie.getHousePos() == null;
+        return !this.pixie.isOwnerClose() && !this.pixie.isPixieSitting() && isDirectPathBetweenPoints(this.pixie.getPosition(), target) && !this.pixie.getMoveHelper().isUpdating() && this.random.nextInt(4) == 0 && this.pixie.getHousePos() == null;
     }
 
     protected boolean isDirectPathBetweenPoints(BlockPos posVec31, BlockPos posVec32) {
@@ -36,7 +36,7 @@ public class PixieAIMoveRandom extends Goal {
     }
 
     public void tick() {
-        if (!isDirectPathBetweenPoints(this.pixie.func_233580_cy_(), target)) {
+        if (!isDirectPathBetweenPoints(this.pixie.getPosition(), target)) {
             target = EntityPixie.getPositionRelativetoGround(this.pixie, this.pixie.world, this.pixie.getPosX() + this.random.nextInt(15) - 7, this.pixie.getPosZ() + this.random.nextInt(15) - 7, this.random);
         }
         if (this.pixie.world.isAirBlock(target)) {

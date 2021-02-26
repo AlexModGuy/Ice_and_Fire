@@ -40,9 +40,9 @@ public class CommonProxy {
             IafConfig.bakeClient(config);
         } else if (config.getSpec() == ConfigHolder.SERVER_SPEC) {
             IafConfig.bakeServer(config);
-        }else if (config.getSpec() == ConfigHolder.BIOME_SPEC) {
-            BiomeConfig.bake(config);
         }
+        BiomeConfig.init();
+
     }
 
     @SubscribeEvent

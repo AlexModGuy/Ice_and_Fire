@@ -33,7 +33,7 @@ public class BlockCharedPath extends GrassPathBlock {
     			.harvestLevel(0)
     			.slipperiness(dragonType != 1 ? 0.6F : 0.98F)
     			.tickRandomly()
-    			.func_235861_h_()
+    			.setRequiresTool()
 		);
 
         this.dragonType = dragonType;

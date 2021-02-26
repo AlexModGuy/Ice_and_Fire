@@ -17,17 +17,7 @@ import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
-import com.github.alexthe666.iceandfire.entity.ai.AquaticAITempt;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIAttackMelee;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIEscort;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAILookIdle;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIMate;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIRide;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAITarget;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetItems;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetNonTamed;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIWander;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIWatchClosest;
+import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.entity.util.ChainBuffer;
@@ -48,6 +38,7 @@ import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import com.github.alexthe666.iceandfire.item.ItemSummoningCrystal;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageDragonSetBurnBlock;
+import com.github.alexthe666.iceandfire.message.MessageStartRidingMob;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.IPassabilityNavigator;
@@ -217,6 +208,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     public String prevArmorResLoc = "0|0|0|0";
     public String armorResLoc = "0|0|0|0";
     public IafDragonFlightManager flightManager;
+    public boolean lookingForRoostAIFlag = false;
     protected int flyHovering;
     protected boolean hasHadHornUse = false;
     protected int fireTicks;
@@ -271,15 +263,19 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, 20.0D)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 20.0D)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.3D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, 1)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 1)
                 //FOLLOW RANGE
-                .func_233815_a_(Attributes.field_233819_b_, Math.min(2048, IafConfig.dragonTargetSearchLength))
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, Math.min(2048, IafConfig.dragonTargetSearchLength))
                 //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 4);
+                .createMutableAttribute(Attributes.ARMOR, 4);
+    }
+
+    public BlockPos getHomePosition() {
+        return this.homePos == null ? super.getHomePosition() : homePos;
     }
 
     @Override
@@ -287,12 +283,13 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         this.goalSelector.addGoal(0, new DragonAIRide<>(this));
         this.goalSelector.addGoal(1, new SitGoal(this));
         this.goalSelector.addGoal(2, new DragonAIMate(this, 1.0D));
-        this.goalSelector.addGoal(3, new DragonAIEscort(this, 1.0D));
-        this.goalSelector.addGoal(4, new DragonAIAttackMelee(this, 1.5D, false));
-        this.goalSelector.addGoal(5, new AquaticAITempt(this, 1.0D, IafItemRegistry.FIRE_STEW, false));
-        this.goalSelector.addGoal(6, new DragonAIWander(this, 1.0D));
-        this.goalSelector.addGoal(7, new DragonAIWatchClosest(this, LivingEntity.class, 6.0F));
-        this.goalSelector.addGoal(7, new DragonAILookIdle(this));
+        this.goalSelector.addGoal(3, new DragonAIReturnToRoost(this, 1.0D));
+        this.goalSelector.addGoal(4, new DragonAIEscort(this, 1.0D));
+        this.goalSelector.addGoal(5, new DragonAIAttackMelee(this, 1.5D, false));
+        this.goalSelector.addGoal(6, new AquaticAITempt(this, 1.0D, IafItemRegistry.FIRE_STEW, false));
+        this.goalSelector.addGoal(7, new DragonAIWander(this, 1.0D));
+        this.goalSelector.addGoal(8, new DragonAIWatchClosest(this, LivingEntity.class, 6.0F));
+        this.goalSelector.addGoal(8, new DragonAILookIdle(this));
         this.targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
@@ -471,19 +468,23 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     protected abstract void breathFireAtPos(BlockPos burningTarget);
+
     protected PathNavigator createNavigator(World worldIn) {
         return createNavigator(worldIn, AdvancedPathNavigate.MovementType.WALKING);
     }
+
     protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type) {
-        return createNavigator(worldIn,type,4f,4f);
+        return createNavigator(worldIn, type, 4f, 4f);
     }
-    protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type,float width,float height) {
-        AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, world,type,width,height);
+
+    protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type, float width, float height) {
+        AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, world, type, width, height);
         this.navigator = newNavigator;
         newNavigator.setCanSwim(true);
         newNavigator.getNodeProcessor().setCanOpenDoors(true);
         return newNavigator;
     }
+
     protected void switchNavigator(int navigatorType) {
         if (navigatorType == 0) {
             this.moveController = new IafDragonFlightManager.GroundMoveHelper(this);
@@ -497,15 +498,16 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
             this.navigatorType = 1;
         } else {
             this.moveController = new IafDragonFlightManager.PlayerFlightMoveHelper(this);
-            this.navigator = createNavigator(world,AdvancedPathNavigate.MovementType.FLYING);
+            this.navigator = createNavigator(world, AdvancedPathNavigate.MovementType.FLYING);
             this.navigatorType = 2;
         }
     }
+
     @Override
-    public boolean canBeRiddenInWater(Entity rider)
-    {
+    public boolean canBeRiddenInWater(Entity rider) {
         return true;
     }
+
     protected void updateAITasks() {
         super.updateAITasks();
         breakBlock();
@@ -807,7 +809,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         }
         this.setCrystalBound(compound.getBoolean("CrystalBound"));
         if (compound.contains("CustomName", 8) && !compound.getString("CustomName").startsWith("TextComponent")) {
-            this.setCustomName(ITextComponent.Serializer.func_240643_a_(compound.getString("CustomName")));
+            this.setCustomName(ITextComponent.Serializer.getComponentFromJson(compound.getString("CustomName")));
         }
     }
 
@@ -861,12 +863,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         double speedStep = (maximumSpeed - minimumSpeed) / 125F;
         double armorStep = (maximumArmor - minimumArmor) / 125F;
         if (this.getAgeInDays() <= 125) {
-            this.getAttribute(Attributes.field_233818_a_).setBaseValue(Math.round(minimumHealth + (healthStep * this.getAgeInDays())));
-            this.getAttribute(Attributes.field_233823_f_).setBaseValue(Math.round(minimumDamage + (attackStep * this.getAgeInDays())));
-            this.getAttribute(Attributes.field_233821_d_).setBaseValue(minimumSpeed + (speedStep * this.getAgeInDays()));
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Math.round(minimumHealth + (healthStep * this.getAgeInDays())));
+            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Math.round(minimumDamage + (attackStep * this.getAgeInDays())));
+            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * this.getAgeInDays()));
             double oldValue = minimumArmor + (armorStep * this.getAgeInDays());
-            this.getAttribute(Attributes.field_233826_i_).setBaseValue(oldValue + calculateArmorModifier());
-            this.getAttribute(Attributes.field_233819_b_).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
+            this.getAttribute(Attributes.ARMOR).setBaseValue(oldValue + calculateArmorModifier());
+            this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
         }
     }
 
@@ -1138,14 +1140,13 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                     if (!world.isRemote) {
                         if (this.getDragonStage() < 2) {
                             this.startRiding(player, true);
-                            //IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, true));
+                            IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, true));
                             return ActionResultType.SUCCESS;
                         }
                         if (this.getDragonStage() > 2 && !player.isPassenger()) {
                             player.setSneaking(false);
                             player.startRiding(this, true);
-                            //IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, false));
-
+                            IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, false));
                             this.setSleeping(false);
                         }
                     }
@@ -1204,7 +1205,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                                 player.sendStatusMessage(new TranslationTextComponent("dragon.command.remove_home"), true);
                                 return ActionResultType.SUCCESS;
                             } else {
-                                BlockPos pos = this.func_233580_cy_();
+                                BlockPos pos = this.getPosition();
                                 this.homePos = pos;
                                 this.hasHomePosition = true;
                                 player.sendStatusMessage(new TranslationTextComponent("dragon.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
@@ -1486,7 +1487,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     protected void updatePreyInMouth(Entity prey) {
         this.setAnimation(ANIMATION_SHAKEPREY);
         if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null) {
-            prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof PlayerEntity ? 17F : (float) this.getAttribute(Attributes.field_233823_f_).getValue() * 4);
+            prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof PlayerEntity ? 17F : (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 4);
             prey.stopRiding();
         }
         renderYawOffset = rotationYaw;
@@ -1558,10 +1559,9 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
             return false;
         }
 
-        if (dmg == DamageSource.IN_WALL || dmg == DamageSource.FALLING_BLOCK) {
+        if (dmg == DamageSource.IN_WALL || dmg == DamageSource.FALLING_BLOCK || dmg == DamageSource.CRAMMING) {
             return false;
         }
-
         if (!world.isRemote && dmg.getTrueSource() != null && this.getRNG().nextInt(4) == 0) {
             this.roar();
         }
@@ -1684,7 +1684,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         if (this.isModelDead()) {
             return false;
         }
-        boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
+        boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
 
         if (flag) {
             this.applyEnchantments(this, entityIn);
@@ -1720,7 +1720,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
             if ((this.getControlState() == 1 << 4 || ((PlayerEntity) riding).isElytraFlying()) && !riding.isPassenger()) {
                 this.stopRiding();
                 if (world.isRemote) {
-                    //IceAndFire.sendMSGToServer(new MessageStartRidingMob(this.getEntityId(), false, true));
+                    IceAndFire.sendMSGToServer(new MessageStartRidingMob(this.getEntityId(), false, true));
                 }
 
             }
@@ -2184,6 +2184,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         super.setAttackTarget(LivingEntityIn);
         this.flightManager.onSetAttackTarget(LivingEntityIn);
     }
+
     @Override
     public boolean shouldAttackEntity(LivingEntity target, LivingEntity owner) {
         if (this.isTamed() && target instanceof TameableEntity) {
@@ -2195,6 +2196,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         }
         return super.shouldAttackEntity(target, owner);
     }
+
     public boolean canAttack(LivingEntity target) {
         return super.canAttack(target) && DragonUtils.isAlive(target);
     }
@@ -2216,7 +2218,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public BlockPos getEscortPosition() {
-        return this.getOwner() != null ? new BlockPos(this.getOwner().getPositionVec()) : this.func_233580_cy_();
+        return this.getOwner() != null ? new BlockPos(this.getOwner().getPositionVec()) : this.getPosition();
     }
 
     public boolean shouldTPtoOwner() {
@@ -2320,7 +2322,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
             if (this.isBoundToCrystal()) {
                 DragonPosWorldData data = DragonPosWorldData.get(world);
                 if (data != null) {
-                    data.addDragon(this.getUniqueID(), this.func_233580_cy_());
+                    data.addDragon(this.getUniqueID(), this.getPosition());
                 }
             }
         }

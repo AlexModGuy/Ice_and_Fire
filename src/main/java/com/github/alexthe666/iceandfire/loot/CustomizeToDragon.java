@@ -66,7 +66,7 @@ public class CustomizeToDragon extends LootFunction {
     }
 
     @Override
-    public LootFunctionType func_230425_b_() {
+    public LootFunctionType getFunctionType() {
         return IafLootRegistry.CUSTOMIZE_TO_DRAGON;
     }
 

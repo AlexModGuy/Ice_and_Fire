@@ -52,8 +52,8 @@ public class WorldGenSirenIsland extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
-        if(!IafWorldRegistry.isDimensionListed(worldIn)){
+    public boolean generate(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
+        if(!IafWorldRegistry.isDimensionListedForFeatures(worldIn)){
             return false;
         }
         if(!IafConfig.generateSirenIslands || rand.nextInt(IafConfig.generateSirenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)  || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)){

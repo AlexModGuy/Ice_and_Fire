@@ -241,11 +241,11 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, 40.0D)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 40.0D)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.3D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, 1.0D);
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 1.0D);
     }
     
     @Override
@@ -335,7 +335,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         return (Byte.valueOf(dataManager.get(CONTROL_STATE).byteValue()) >> 1 & 1) == 1;
     }
 
-    public boolean dismount() {
+    public boolean dismountIAF() {
         return (Byte.valueOf(dataManager.get(CONTROL_STATE).byteValue()) >> 2 & 1) == 1;
     }
 
@@ -462,7 +462,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
             case 3:
                 armorValue = 30;
         }
-        this.getAttribute(Attributes.field_233826_i_).setBaseValue(armorValue);
+        this.getAttribute(Attributes.ARMOR).setBaseValue(armorValue);
     }
 
     public int getVariant() {
@@ -814,7 +814,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
                 }
                 this.hippo.setMotion(this.hippo.getMotion().add(f1, this.hippo.getAIMoveSpeed() * distanceY * 0.1D, f2));
             } else if (this.action == MovementController.Action.JUMPING) {
-                this.hippo.setAIMoveSpeed((float) (this.speed * this.hippo.getAttribute(Attributes.field_233821_d_).getValue()));
+                this.hippo.setAIMoveSpeed((float) (this.speed * this.hippo.getAttribute(Attributes.MOVEMENT_SPEED).getValue()));
                 if (this.hippo.onGround) {
                     this.action = MovementController.Action.WAIT;
                 }

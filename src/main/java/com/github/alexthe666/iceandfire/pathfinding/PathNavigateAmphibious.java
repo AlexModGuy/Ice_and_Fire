@@ -34,7 +34,7 @@ public class PathNavigateAmphibious extends PathNavigator {
     }
 
     protected boolean canNavigate() {
-        return this.entity.func_233570_aj_() || this.getCanSwim() && this.isInLiquid() || this.entity.isPassenger();
+        return this.entity.isOnGround() || this.getCanSwim() && this.isInLiquid() || this.entity.isPassenger();
     }
 
     protected Vector3d getEntityPosition() {
@@ -72,7 +72,7 @@ public class PathNavigateAmphibious extends PathNavigator {
     }
 
     public Path getPathToEntity(Entity entityIn, int i) {
-        return this.getPathToPos(entityIn.func_233580_cy_(), i);
+        return this.getPathToPos(entityIn.getPosition(), i);
     }
 
     private int getPathablePosY() {

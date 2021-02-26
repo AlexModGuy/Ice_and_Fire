@@ -21,10 +21,11 @@ public class BlockDreadTorchWall extends WallTorchBlock implements IDreadBlock {
         super(
     		Properties
     			.create(Material.WOOD)
-    			.func_235838_a_((p_235454_0_) -> { return 5; })
+    			.setLightLevel((p_235454_0_) -> { return 5; })
     			.sound(SoundType.STONE)
     			.notSolid()
     			.variableOpacity()
+                .doesNotBlockMovement()
     			.lootFrom(IafBlockRegistry.DREAD_TORCH),
 			RedstoneParticleData.REDSTONE_DUST
 		);

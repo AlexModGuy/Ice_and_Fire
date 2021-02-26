@@ -43,8 +43,8 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
     }
 
 
-    public void func_230337_a_(BlockState bs, CompoundNBT compound) {
-        super.func_230337_a_(bs, compound);
+    public void read(BlockState bs, CompoundNBT compound) {
+        super.read(bs, compound);
         this.chestContents = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
 
         if (!this.checkLootAndRead(compound)) {
@@ -109,7 +109,7 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        func_230337_a_(this.getBlockState(), packet.getNbtCompound());
+        read(this.getBlockState(), packet.getNbtCompound());
     }
 
     public CompoundNBT getUpdateTag() {

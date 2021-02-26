@@ -31,7 +31,7 @@ public class BlockSeaSerpentScales extends Block {
     			.sound(SoundType.STONE)
     			.harvestTool(ToolType.PICKAXE)
     			.harvestLevel(2)
-    			.func_235861_h_()
+    			.setRequiresTool()
 		);
 
         this.color = color;
@@ -43,6 +43,6 @@ public class BlockSeaSerpentScales extends Block {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("sea_serpent." + name).func_240699_a_(color));
+        tooltip.add(new TranslationTextComponent("sea_serpent." + name).mergeStyle(color));
     }
 }

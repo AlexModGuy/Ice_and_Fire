@@ -83,7 +83,7 @@ public class WorldGenDreadRuin extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
+    public boolean generate(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
         ResourceLocation structure = getRandomStructure(rand);
         Direction facing = HORIZONTALS[rand.nextInt(3)];
         MinecraftServer server = worldIn.getWorld().getServer();

@@ -52,7 +52,7 @@ public class DragonUtils {
             BlockPos pos = new BlockPos(escortPos.getX() + dragon.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance) - IafConfig.dragonWanderFromHomeDistance / 2,
                     (distFromGround > 16 ? escortPos.getY() : escortPos.getY() + 8 + dragon.getRNG().nextInt(16)),
                     (escortPos.getZ() + dragon.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance) - IafConfig.dragonWanderFromHomeDistance / 2));
-            if (!dragon.isTargetBlocked(Vector3d.func_237489_a_(pos)) && dragon.getDistanceSquared(Vector3d.func_237489_a_(pos)) > 6) {
+            if (!dragon.isTargetBlocked(Vector3d.copyCentered(pos)) && dragon.getDistanceSquared(Vector3d.copyCentered(pos)) > 6) {
                 return pos;
             }
         }
@@ -64,12 +64,12 @@ public class DragonUtils {
         float neg = dragon.getRNG().nextBoolean() ? 1 : -1;
         float renderYawOffset = dragon.renderYawOffset;
         if (dragon.hasHomePosition && dragon.homePos != null) {
-            BlockPos dragonPos = dragon.func_233580_cy_();
+            BlockPos dragonPos = dragon.getPosition();
             BlockPos ground = dragon.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, dragonPos);
             int distFromGround = (int) dragon.getPosY() - ground.getY();
             for (int i = 0; i < 10; i++) {
                 BlockPos pos = new BlockPos(dragon.homePos.getX() + dragon.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance * 2) - IafConfig.dragonWanderFromHomeDistance, (distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, dragon.getPosY() + dragon.getRNG().nextInt(16) - 8) : (int) dragon.getPosY() + dragon.getRNG().nextInt(16) + 1), (dragon.homePos.getZ() + dragon.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance * 2) - IafConfig.dragonWanderFromHomeDistance));
-                if (!dragon.isTargetBlocked(Vector3d.func_237489_a_(pos)) && dragon.getDistanceSquared(Vector3d.func_237489_a_(pos)) > 6) {
+                if (!dragon.isTargetBlocked(Vector3d.copyCentered(pos)) && dragon.getDistanceSquared(Vector3d.copyCentered(pos)) > 6) {
                     return pos;
                 }
             }
@@ -82,7 +82,7 @@ public class DragonUtils {
         int distFromGround = (int) dragon.getPosY() - ground.getY();
         BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, dragon.getPosY() + dragon.getRNG().nextInt(16) - 8) : (int) dragon.getPosY() + dragon.getRNG().nextInt(16) + 1);
         BlockPos pos = dragon.doesWantToLand() ? ground : newPos;
-        if (!dragon.isTargetBlocked(Vector3d.func_237489_a_(newPos)) && dragon.getDistanceSquared(Vector3d.func_237489_a_(newPos)) > 6) {
+        if (!dragon.isTargetBlocked(Vector3d.copyCentered(newPos)) && dragon.getDistanceSquared(Vector3d.copyCentered(newPos)) > 6) {
             return pos;
         }
         return null;
@@ -100,7 +100,7 @@ public class DragonUtils {
         BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, dragon.getPosY() + dragon.getRNG().nextInt(16) - 8) : (int) dragon.getPosY() + dragon.getRNG().nextInt(16) + 1);
         BlockPos pos = dragon.doesWantToLand() ? ground : newPos;
         BlockPos surface = dragon.world.getFluidState(newPos.down(2)).isTagged(FluidTags.WATER) ? newPos.down(dragon.getRNG().nextInt(10) + 1) : newPos;
-        if (dragon.getDistanceSquared(Vector3d.func_237489_a_(surface)) > 6 && dragon.world.getFluidState(surface).isTagged(FluidTags.WATER)) {
+        if (dragon.getDistanceSquared(Vector3d.copyCentered(surface)) > 6 && dragon.world.getFluidState(surface).isTagged(FluidTags.WATER)) {
             return surface;
         }
         return null;
@@ -149,19 +149,19 @@ public class DragonUtils {
         return (LivingEntity) pointedEntity;
     }
 
-    public static BlockPos getBlockInViewHippogryph(EntityHippogryph hippo) {
+    public static BlockPos getBlockInViewHippogryph(EntityHippogryph hippo, float yawAddition) {
         float radius = 0.75F * (0.7F * 8) * -3 - hippo.getRNG().nextInt(48);
         float neg = hippo.getRNG().nextBoolean() ? 1 : -1;
-        float angle = (0.01745329251F * hippo.renderYawOffset) + 3.15F + (hippo.getRNG().nextFloat() * neg);
+        float angle = (0.01745329251F * (hippo.renderYawOffset + yawAddition)) + 3.15F + (hippo.getRNG().nextFloat() * neg);
         double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
         double extraZ = radius * MathHelper.cos(angle);
         if (hippo.hasHomePosition && hippo.homePos != null) {
-            BlockPos dragonPos = hippo.func_233580_cy_();
+            BlockPos dragonPos = hippo.getPosition();
             BlockPos ground = hippo.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, dragonPos);
             int distFromGround = (int) hippo.getPosY() - ground.getY();
             for (int i = 0; i < 10; i++) {
                 BlockPos pos = new BlockPos(hippo.homePos.getX() + hippo.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance) - IafConfig.dragonWanderFromHomeDistance, (distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, hippo.getPosY() + hippo.getRNG().nextInt(16) - 8) : (int) hippo.getPosY() + hippo.getRNG().nextInt(16) + 1), (hippo.homePos.getZ() + hippo.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance * 2) - IafConfig.dragonWanderFromHomeDistance));
-                if (!hippo.isTargetBlocked(Vector3d.func_237489_a_(pos)) && hippo.getDistanceSquared(Vector3d.func_237489_a_(pos)) > 6) {
+                if (!hippo.isTargetBlocked(Vector3d.copyCentered(pos)) && hippo.getDistanceSquared(Vector3d.copyCentered(pos)) > 6) {
                     return pos;
                 }
             }
@@ -171,7 +171,7 @@ public class DragonUtils {
         int distFromGround = (int) hippo.getPosY() - ground.getY();
         BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, hippo.getPosY() + hippo.getRNG().nextInt(16) - 8) : (int) hippo.getPosY() + hippo.getRNG().nextInt(16) + 1);
         BlockPos pos = hippo.doesWantToLand() ? ground : newPos;
-        if (!hippo.isTargetBlocked(Vector3d.func_237489_a_(newPos)) && hippo.getDistanceSquared(Vector3d.func_237489_a_(newPos)) > 6) {
+        if (!hippo.isTargetBlocked(Vector3d.copyCentered(newPos)) && hippo.getDistanceSquared(Vector3d.copyCentered(newPos)) > 6) {
             return newPos;
         }
         return null;
@@ -190,7 +190,7 @@ public class DragonUtils {
         int flightHeight = Math.min(IafConfig.stymphalianBirdFlightHeight, bird.flock != null && !bird.flock.isLeader(bird) ? ground.getY() + bird.getRNG().nextInt(16) : ground.getY() + bird.getRNG().nextInt(16));
         BlockPos newPos = radialPos.up(distFromGround > 16 ? flightHeight : (int) bird.getPosY() + bird.getRNG().nextInt(16) + 1);
         BlockPos pos = bird.doesWantToLand() ? ground : newPos;
-        if (!bird.isTargetBlocked(Vector3d.func_237489_a_(newPos)) && bird.getDistanceSquared(Vector3d.func_237489_a_(newPos)) > 6) {
+        if (!bird.isTargetBlocked(Vector3d.copyCentered(newPos)) && bird.getDistanceSquared(Vector3d.copyCentered(newPos)) > 6) {
             return newPos;
         }
         return null;
@@ -231,10 +231,10 @@ public class DragonUtils {
         double extraZ = radius * MathHelper.cos(angle);
         BlockPos radialPos = new BlockPos(target.getPosX() + extraX, 0, target.getPosZ() + extraZ);
         BlockPos ground = target.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, radialPos);
-        if (!cockatrice.isTargetBlocked(Vector3d.func_237489_a_(ground)) && cockatrice.getDistanceSq(Vector3d.func_237489_a_(ground)) > 30) {
+        if (!cockatrice.isTargetBlocked(Vector3d.copyCentered(ground)) && cockatrice.getDistanceSq(Vector3d.copyCentered(ground)) > 30) {
             return ground;
         }
-        return target.func_233580_cy_();
+        return target.getPosition();
     }
 
 
@@ -246,10 +246,10 @@ public class DragonUtils {
         double extraZ = radius * MathHelper.cos(angle);
         BlockPos radialPos = new BlockPos(target.getPosX() + extraX, target.getPosY(), target.getPosZ() + extraZ);
         BlockPos ground = radialPos;
-        if( ghost.getDistanceSq(Vector3d.func_237489_a_(ground)) > 30) {
+        if( ghost.getDistanceSq(Vector3d.copyCentered(ground)) > 30) {
             return ground;
         }
-        return ghost.func_233580_cy_();
+        return ghost.getPosition();
     }
 
     public static BlockPos getBlockInTargetsViewGorgon(EntityGorgon cockatrice, LivingEntity target) {
@@ -259,10 +259,10 @@ public class DragonUtils {
         double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
         double extraZ = radius * MathHelper.cos(angle);
         BlockPos radialPos = new BlockPos(target.getPosX() + extraX, target.getPosY(), target.getPosZ() + extraZ);
-        if (!cockatrice.isTargetBlocked(Vector3d.func_237489_a_(radialPos).add(0, 0.75, 0)) && cockatrice.getDistanceSq(Vector3d.func_237489_a_(radialPos)) < 300) {
+        if (!cockatrice.isTargetBlocked(Vector3d.copyCentered(radialPos).add(0, 0.75, 0)) && cockatrice.getDistanceSq(Vector3d.copyCentered(radialPos)) < 300) {
             return radialPos;
         }
-        return target.func_233580_cy_();
+        return target.getPosition();
     }
 
 
@@ -274,14 +274,14 @@ public class DragonUtils {
         double extraZ = radius * MathHelper.cos(angle);
         BlockPos radialPos = new BlockPos(target.getPosX() + extraX, 0, target.getPosZ() + extraZ);
         BlockPos ground = target.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, radialPos);
-        if (serpent.getDistanceSq(Vector3d.func_237489_a_(ground)) > 30) {
+        if (serpent.getDistanceSq(Vector3d.copyCentered(ground)) > 30) {
             return ground;
         }
-        return target.func_233580_cy_();
+        return target.getPosition();
     }
 
     public static boolean canTameDragonAttack(TameableEntity dragon, Entity entity) {
-        if (EntityTypeTags.getCollection().func_241834_b(IafTagRegistry.VILLAGERS).func_230235_a_(entity.getType())) {
+        if (EntityTypeTags.getCollection().get(IafTagRegistry.VILLAGERS).contains(entity.getType())) {
             return false;
         }
         if (entity instanceof AbstractVillagerEntity || entity instanceof GolemEntity || entity instanceof PlayerEntity) {
@@ -294,7 +294,7 @@ public class DragonUtils {
     }
 
     public static boolean isVillager(Entity entity) {
-        return EntityTypeTags.getCollection().func_241834_b(IafTagRegistry.VILLAGERS).func_230235_a_(entity.getType());
+        return EntityTypeTags.getCollection().get(IafTagRegistry.VILLAGERS).contains(entity.getType());
     }
 
     public static boolean isAnimaniaMob(Entity entity) {
@@ -302,7 +302,7 @@ public class DragonUtils {
     }
 
     public static boolean isDragonTargetable(Entity entity, ResourceLocation tag) {
-        return EntityTypeTags.getCollection().func_241834_b(tag).func_230235_a_(entity.getType());
+        return EntityTypeTags.getCollection().get(tag).contains(entity.getType());
 
     }
 

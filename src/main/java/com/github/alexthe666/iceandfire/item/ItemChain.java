@@ -61,11 +61,11 @@ public class ItemChain extends Item {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.chain.desc_0").func_240699_a_(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.chain.desc_1").func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.chain.desc_0").mergeStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.chain.desc_1").mergeStyle(TextFormatting.GRAY));
         if (sticky) {
-            tooltip.add(new TranslationTextComponent("item.iceandfire.chain_sticky.desc_2").func_240699_a_(TextFormatting.GREEN));
-            tooltip.add(new TranslationTextComponent("item.iceandfire.chain_sticky.desc_3").func_240699_a_(TextFormatting.GREEN));
+            tooltip.add(new TranslationTextComponent("item.iceandfire.chain_sticky.desc_2").mergeStyle(TextFormatting.GREEN));
+            tooltip.add(new TranslationTextComponent("item.iceandfire.chain_sticky.desc_3").mergeStyle(TextFormatting.GREEN));
         }
     }
 
