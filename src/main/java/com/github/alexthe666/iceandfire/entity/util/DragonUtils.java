@@ -149,10 +149,10 @@ public class DragonUtils {
         return (LivingEntity) pointedEntity;
     }
 
-    public static BlockPos getBlockInViewHippogryph(EntityHippogryph hippo) {
+    public static BlockPos getBlockInViewHippogryph(EntityHippogryph hippo, float yawAddition) {
         float radius = 0.75F * (0.7F * 8) * -3 - hippo.getRNG().nextInt(48);
         float neg = hippo.getRNG().nextBoolean() ? 1 : -1;
-        float angle = (0.01745329251F * hippo.renderYawOffset) + 3.15F + (hippo.getRNG().nextFloat() * neg);
+        float angle = (0.01745329251F * (hippo.renderYawOffset + yawAddition)) + 3.15F + (hippo.getRNG().nextFloat() * neg);
         double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
         double extraZ = radius * MathHelper.cos(angle);
         if (hippo.hasHomePosition && hippo.homePos != null) {
