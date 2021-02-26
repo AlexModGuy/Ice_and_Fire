@@ -4,7 +4,7 @@ issueTrackerURL="https://github.com/Alex-the-666/ice-and-fire/issues" #optional
 license="GNU LESSER GENERAL PUBLIC LICENSE"
 [[mods]] #mandatory
 modId="iceandfire" #mandatory
-version="2.1.5-1.16.4" #mandatory
+version="2.1.6-1.16.4" #mandatory
 displayName="Ice and Fire" #mandatory
 displayURL="https://www.curseforge.com/minecraft/mc-mods/ice-and-fire-dragons" #optional
 authors="Alexthe666" #optional

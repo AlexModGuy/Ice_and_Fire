@@ -1559,10 +1559,9 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
             return false;
         }
 
-        if (dmg == DamageSource.IN_WALL || dmg == DamageSource.FALLING_BLOCK) {
+        if (dmg == DamageSource.IN_WALL || dmg == DamageSource.FALLING_BLOCK || dmg == DamageSource.CRAMMING) {
             return false;
         }
-
         if (!world.isRemote && dmg.getTrueSource() != null && this.getRNG().nextInt(4) == 0) {
             this.roar();
         }
