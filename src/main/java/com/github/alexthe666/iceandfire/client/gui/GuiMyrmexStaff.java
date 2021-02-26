@@ -110,10 +110,6 @@ public class GuiMyrmexStaff extends Screen {
         }
     }
 
-    public boolean func_231177_au__() {
-        return false;
-    }
-
     public void func_230446_a_(MatrixStack ms) {
         super.renderBackground(ms);
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);

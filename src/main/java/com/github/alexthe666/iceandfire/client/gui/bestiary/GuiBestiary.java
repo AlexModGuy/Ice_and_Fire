@@ -90,10 +90,6 @@ public class GuiBestiary extends Screen {
         return font;
     }
 
-    public boolean func_231177_au__() {
-        return false;
-    }
-
     protected void init() {
         super.init();
         int centerX = (width - X) / 2;
