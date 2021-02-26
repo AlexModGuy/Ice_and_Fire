@@ -126,6 +126,7 @@ public class DragonType {
                 dragon.setOwnerId(egg.getOwnerId());
                 LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(egg.world);
                 lightningboltentity.setPosition(egg.getPosX(), egg.getPosY(), egg.getPosZ());
+                lightningboltentity.setEffectOnly(true);
                 if(!egg.world.isRemote){
                     egg.world.addEntity(lightningboltentity);
                 }
