@@ -18,9 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.Features;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 public class WorldGenPixieVillage extends Feature<NoFeatureConfig> {
@@ -33,7 +31,7 @@ public class WorldGenPixieVillage extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean generate(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
-        if(!IafWorldRegistry.isDimensionListed(worldIn)){
+        if(!IafWorldRegistry.isDimensionListedForFeatures(worldIn)){
             return false;
         }
         if(!IafConfig.spawnPixies || rand.nextInt(IafConfig.spawnPixiesChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)){

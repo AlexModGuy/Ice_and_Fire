@@ -71,7 +71,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
     @Override
     public boolean generate(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos pos, NoFeatureConfig p_230362_6_) {
         if(!small){
-            if(!IafWorldRegistry.isDimensionListed(worldIn)){
+            if(!IafWorldRegistry.isDimensionListedForFeatures(worldIn)){
                 return false;
             }
             if(!IafConfig.generateMyrmexColonies || rand.nextInt(IafConfig.myrmexColonyGenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, pos) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, pos)){

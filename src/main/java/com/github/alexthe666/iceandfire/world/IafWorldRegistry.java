@@ -231,20 +231,20 @@ public class IafWorldRegistry {
         return spawnCheck;
     }
 
-    public static boolean isDimensionListed(IServerWorld world) {
+    public static boolean isDimensionListedForFeatures(IServerWorld world) {
         ResourceLocation name = world.getWorld().getDimensionKey().getLocation();
         if (name == null) {
             return false;
         }
         if (IafConfig.useDimensionBlackList) {
-            for (String blacklisted : IafConfig.blacklistedDimensions) {
+            for (String blacklisted : IafConfig.featureBlacklistedDimensions) {
                 if (name.toString().equals(blacklisted)) {
                     return false;
                 }
             }
             return true;
         } else {
-            for (String whitelist : IafConfig.whitelistedDimensions) {
+            for (String whitelist : IafConfig.featureWhitelistedDimensions) {
                 if (name.toString().equals(whitelist)) {
                     return true;
                 }

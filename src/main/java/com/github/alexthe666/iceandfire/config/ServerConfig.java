@@ -144,8 +144,8 @@ public class ServerConfig {
     public ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBreakBlocks;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> noDropBreakBlocks;
     public final ForgeConfigSpec.BooleanValue useDimensionBlackList;
-    public ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistDimensions;
-    public ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistDimensions;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> featureBlacklistDimensions;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> featureWhitelistDimensions;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> dragonBlacklistDimensions;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> dragonWhitelistDimensions;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> mobBlacklistDimensions;
@@ -170,17 +170,17 @@ public class ServerConfig {
                 .defineList("noDropBreakBlocks", Lists.newArrayList("minecraft:stone", "minecraft:dirt", "minecraft:grass_block"), o -> o instanceof String);
         this.generateSilverOre = buildBoolean(builder, "Generate Silver Ore", "all", true, "Whether to generate silver ore or not");
         this.useDimensionBlackList = buildBoolean(builder, "Use Dimension Blacklist", "all", false, "True if using blacklists, false if using whitelists for dragons and structure gen.");
-        blacklistDimensions = builder
-                .comment("Blacklisted structure gen dimensions. Use the format like \"minecraft:the_nether\" or \"rats:ratlantis\" ")
+        featureBlacklistDimensions = builder
+                .comment("Blacklisted feature(cyclops caves, hydra dens, etc) gen dimensions. Use the format like \"minecraft:the_nether\" or \"rats:ratlantis\" ")
                 .defineList("blacklistDimensions", Lists.newArrayList("minecraft:the_nether", "minecraft:the_end"), o -> o instanceof String);
-        whitelistDimensions = builder
-                .comment("Whitelist structure gen dimensions. Use the format like \"minecraft:the_nether\" or \"rats:ratlantis\" ")
+        featureWhitelistDimensions = builder
+                .comment("Whitelisted feature(cyclops caves, hydra dens, etc) gen dimensions. Use the format like \"minecraft:the_nether\" or \"rats:ratlantis\" ")
                 .defineList("blacklistDimensions", Lists.newArrayList("minecraft:overworld"), o -> o instanceof String);
         dragonBlacklistDimensions = builder
-                .comment("Blacklisted structure gen dimensions. Use the format like \"minecraft:the_nether\" or \"rats:ratlantis\" ")
+                .comment("Blacklisted dragon gen dimensions. Use the format like \"minecraft:the_nether\" or \"rats:ratlantis\" ")
                 .defineList("blacklistDimensions", Lists.newArrayList("minecraft:the_nether", "minecraft:the_end"), o -> o instanceof String);
         dragonWhitelistDimensions = builder
-                .comment("Whitelist structure gen dimensions. Use the format like \"minecraft:the_nether\" or \"rats:ratlantis\" ")
+                .comment("Whitelist dragon gen dimensions. Use the format like \"minecraft:the_nether\" or \"rats:ratlantis\" ")
                 .defineList("blacklistDimensions", Lists.newArrayList("minecraft:overworld"), o -> o instanceof String);
         mobBlacklistDimensions = builder
                 .comment("Blacklisted mob spawn (troll, hippogryph, etc) dimensions. Use the format like \"minecraft:the_nether\" or \"rats:ratlantis\" ")
