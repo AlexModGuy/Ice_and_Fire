@@ -122,9 +122,6 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
         if (worldIn instanceof IServerWorld && !IafWorldRegistry.isDimensionListedForMobs((IServerWorld) world)) {
             return false;
         }
-        if (rngCheck && pos.getY() < heightAt.getY() - 10 && super.canSpawn(worldIn, spawnReasonIn)) {
-            System.out.println(pos);
-        }
         return rngCheck && pos.getY() < heightAt.getY() - 10 && super.canSpawn(worldIn, spawnReasonIn);
     }
 
