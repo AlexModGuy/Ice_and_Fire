@@ -1,9 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 
 import javax.annotation.Nullable;
 
@@ -21,7 +18,6 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
     protected final Predicate<? super ItemEntity> targetEntitySelector;
     public EntityMyrmexWorker myrmex;
     protected ItemEntity targetEntity;
-
     public MyrmexAIForageForItems(EntityMyrmexWorker myrmex) {
         super(myrmex, false, false);
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(myrmex);
@@ -40,13 +36,17 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
         if (!this.myrmex.canMove() || this.myrmex.holdingSomething() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching || this.myrmex.getAttackTarget() != null) {
             return false;
         }
+        if (this.myrmex.getWaitTicks()>0){
+            return false;
+        }
         List<ItemEntity> list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(32), this.targetEntitySelector);
         if (list.isEmpty()) {
+            this.myrmex.setWaitTicks(40+new Random().nextInt(40));
             return false;
         } else {
             Collections.sort(list, this.theNearestAttackableTargetSorter);
             this.targetEntity = list.get(0);
-            return false;
+            return true;
         }
     }
 

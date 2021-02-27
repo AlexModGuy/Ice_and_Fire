@@ -31,7 +31,7 @@ public class GorgonTempleProcessor extends StructureProcessor {
         if(infoIn2.state.getBlock() instanceof StairsBlock) {
             return new Template.BlockInfo(infoIn2.pos, infoIn2.state.with(StairsBlock.WATERLOGGED, false), null);
         }else if(infoIn2.state.getBlock() instanceof WallBlock) {
-            return new Template.BlockInfo(infoIn2.pos, infoIn2.state.with(WallBlock.field_235616_f_, false), null);
+            return new Template.BlockInfo(infoIn2.pos, infoIn2.state.with(WallBlock.WATERLOGGED, false), null);
         }else if(infoIn2.state.getBlock() instanceof IWaterLoggable){
             return new Template.BlockInfo(infoIn2.pos, infoIn2.state.with(BlockStateProperties.WATERLOGGED, false), null);
         }else{

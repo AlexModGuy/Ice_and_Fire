@@ -38,7 +38,7 @@ public class ItemStymphalianFeatherBundle extends Item {
         for (int i = 0; i < 8; i++) {
             EntityStymphalianFeather feather = new EntityStymphalianFeather(IafEntityRegistry.STYMPHALIAN_FEATHER, worldIn, player);
             rotation += 45;
-            feather.shoot(0, rotation, 0.0F, 1.5F, 1.0F);
+            feather.func_234612_a_(player,0, rotation, 0.0F, 1.5F, 1.0F);
             if (!worldIn.isRemote) {
                 worldIn.addEntity(feather);
             }
@@ -53,7 +53,7 @@ public class ItemStymphalianFeatherBundle extends Item {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 
-        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").func_240699_a_(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.stymphalian_feather_bundle.desc_0").func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").mergeStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.stymphalian_feather_bundle.desc_0").mergeStyle(TextFormatting.GRAY));
     }
 }

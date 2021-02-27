@@ -195,15 +195,15 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, IafConfig.seaSerpentBaseHealth)
+                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.seaSerpentBaseHealth)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.15D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.15D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, 1.0D)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 1.0D)
                 //FALLOW RANGE
-                .func_233815_a_(Attributes.field_233819_b_, Math.min(2048, IafConfig.dragonTargetSearchLength))
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, Math.min(2048, IafConfig.dragonTargetSearchLength))
                 //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 3.0D);
+                .createMutableAttribute(Attributes.ARMOR, 3.0D);
     }
 
     public void resetParts(float scale) {
@@ -389,10 +389,10 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     }
 
     private void updateAttributes() {
-        this.getAttribute(Attributes.field_233821_d_).setBaseValue(Math.min(0.25D, 0.15D * this.getSeaSerpentScale() * this.getAncientModifier()));
-        this.getAttribute(Attributes.field_233823_f_).setBaseValue(Math.max(4, IafConfig.seaSerpentAttackStrength * this.getSeaSerpentScale() * this.getAncientModifier()));
-        this.getAttribute(Attributes.field_233818_a_).setBaseValue(Math.max(10, IafConfig.seaSerpentBaseHealth * this.getSeaSerpentScale() * this.getAncientModifier()));
-        this.getAttribute(Attributes.field_233819_b_).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(Math.min(0.25D, 0.15D * this.getSeaSerpentScale() * this.getAncientModifier()));
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Math.max(4, IafConfig.seaSerpentAttackStrength * this.getSeaSerpentScale() * this.getAncientModifier()));
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Math.max(10, IafConfig.seaSerpentBaseHealth * this.getSeaSerpentScale() * this.getAncientModifier()));
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
         this.heal(30F * this.getSeaSerpentScale());
     }
 
@@ -460,7 +460,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
             }
         }
         boolean breathing = isBreathing() && this.getAnimation() != ANIMATION_BITE && this.getAnimation() != ANIMATION_ROAR;
-        boolean jumping = !this.isInWater() && !this.func_233570_aj_() && this.getMotion().y >= 0;
+        boolean jumping = !this.isInWater() && !this.isOnGround() && this.getMotion().y >= 0;
         boolean wantJumping = false; //(ticksSinceJump > TIME_BETWEEN_JUMPS) && this.isInWater();
         boolean ground = !isInWater() && this.onGround;
         boolean prevJumping = this.isJumpingOutOfWater();
@@ -477,7 +477,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         if (this.getAnimation() == ANIMATION_BITE && this.getAnimationTick() == 5) {
             this.playSound(IafSoundRegistry.SEA_SERPENT_BITE, this.getSoundVolume(), 1);
         }
-        if (isJumpingOutOfWater() && isWaterBlock(world, this.func_233580_cy_().up(2))) {
+        if (isJumpingOutOfWater() && isWaterBlock(world, this.getPosition().up(2))) {
             setJumpingOutOfWater(false);
         }
         if (this.swimCycle < 38) {
@@ -553,7 +553,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     }
 
     private boolean isAtSurface() {
-        BlockPos pos = this.func_233580_cy_();
+        BlockPos pos = this.getPosition();
         return isWaterBlock(world, pos.down()) && !isWaterBlock(world, pos.up());
     }
 
@@ -562,7 +562,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         List<Entity> list = world.getEntitiesInAABBexcluding(this, this.getBoundingBox().grow(getWidth, getWidth * 0.5D, getWidth), NOT_SEA_SERPENT);
         for (Entity entity : list) {
             if (entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity)) {
-                entity.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
+                entity.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
                 destroyBoat(entity);
                 double xRatio = this.getPosX() - entity.getPosX();
                 double zRatio = this.getPosZ() - entity.getPosZ();
@@ -592,7 +592,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
 
     private boolean isPreyAtSurface() {
         if (this.getAttackTarget() != null) {
-            BlockPos pos = this.getAttackTarget().func_233580_cy_();
+            BlockPos pos = this.getAttackTarget().getPosition();
             return !isWaterBlock(world, pos.up((int) Math.ceil(this.getAttackTarget().getHeight())));
         }
         return false;
@@ -600,7 +600,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
 
     private void hurtMob(LivingEntity entity) {
         if (this.getAnimation() == ANIMATION_BITE && entity != null && this.getAnimationTick() == 6) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             EntitySeaSerpent.this.attackDecision = this.getRNG().nextBoolean();
         }
     }
@@ -673,7 +673,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     }
 
     public void onWorldSpawn(Random random) {
-        this.setVariant(random.nextInt(6));
+        this.setVariant(random.nextInt(7));
         boolean ancient = random.nextInt(15) == 1;
         if (ancient) {
             this.setAncient(true);

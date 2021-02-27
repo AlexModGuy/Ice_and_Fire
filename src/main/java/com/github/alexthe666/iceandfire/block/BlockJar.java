@@ -44,7 +44,7 @@ public class BlockJar extends ContainerBlock implements ICustomRendered {
 					.variableOpacity()
 					.hardnessAndResistance(1, 2)
 					.sound(SoundType.GLASS)
-					.func_235838_a_((p_235454_0_) -> { return pixieType == -1 ? 0 : 10; })
+					.setLightLevel((p_235454_0_) -> { return pixieType == -1 ? 0 : 10; })
 					.lootFrom(IafBlockRegistry.JAR_EMPTY)
 				: Properties
 					.create(Material.GLASS)
@@ -109,6 +109,7 @@ public class BlockJar extends ContainerBlock implements ICustomRendered {
             } else {
                 ((TileEntityJar) world.getTileEntity(pos)).hasPixie = false;
             }
+            world.getTileEntity(pos).markDirty();
         }
     }
 

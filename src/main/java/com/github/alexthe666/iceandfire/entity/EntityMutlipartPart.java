@@ -84,9 +84,9 @@ public abstract class EntityMutlipartPart extends Entity {
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, 2D)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 2D)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.1D);
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.1D);
     }
 
     @Override

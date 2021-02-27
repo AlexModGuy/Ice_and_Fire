@@ -31,13 +31,13 @@ public class ItemHippogryphSword extends SwordItem {
 
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity targetEntity, LivingEntity attacker) {
-        float f = (float) attacker.getAttribute(Attributes.field_233823_f_).getValue();
+        float f = (float) attacker.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
         float f3 = 1.0F + EnchantmentHelper.getSweepingDamageRatio(attacker) * f;
         if (attacker instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) attacker;
             for (LivingEntity LivingEntity : attacker.world.getEntitiesWithinAABB(LivingEntity.class, targetEntity.getBoundingBox().grow(1.0D, 0.25D, 1.0D))) {
                 if (LivingEntity != player && LivingEntity != targetEntity && !attacker.isOnSameTeam(LivingEntity) && attacker.getDistanceSq(LivingEntity) < 9.0D) {
-                    LivingEntity.func_233627_a_(0.4F, MathHelper.sin(attacker.rotationYaw * 0.017453292F), -MathHelper.cos(attacker.rotationYaw * 0.017453292F));
+                    LivingEntity.applyKnockback(0.4F, MathHelper.sin(attacker.rotationYaw * 0.017453292F), -MathHelper.cos(attacker.rotationYaw * 0.017453292F));
                     LivingEntity.attackEntityFrom(DamageSource.causePlayerDamage(player), f3);
                 }
             }
@@ -49,8 +49,8 @@ public class ItemHippogryphSword extends SwordItem {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").func_240699_a_(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.hippogryph_sword.desc_0").func_240699_a_(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.hippogryph_sword.desc_1").func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").mergeStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.hippogryph_sword.desc_0").mergeStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.hippogryph_sword.desc_1").mergeStyle(TextFormatting.GRAY));
     }
 }

@@ -43,9 +43,9 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, 10.0D)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 10.0D)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0D);
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0D);
     }
 
     @Override

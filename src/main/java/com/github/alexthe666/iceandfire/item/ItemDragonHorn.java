@@ -73,7 +73,7 @@ public class ItemDragonHorn extends Item {
                 newTag.put("EntityTag", entityTag);
                 trueStack.setTag(newTag);
                 playerIn.swingArm(hand);
-                playerIn.world.playSound(playerIn, playerIn.func_233580_cy_(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3, 0.75F);
+                playerIn.world.playSound(playerIn, playerIn.getPosition(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3, 0.75F);
                 target.remove();
                 return ActionResultType.SUCCESS;
             }
@@ -115,17 +115,17 @@ public class ItemDragonHorn extends Item {
                 String id = stack.getTag().getString("DragonHornEntityID");
                 if(EntityType.byKey(id).isPresent()){
                     EntityType type = EntityType.byKey(id).get();
-                    tooltip.add(new TranslationTextComponent(type.getTranslationKey()).func_240699_a_(getTextColorForEntityType(type)));
+                    tooltip.add(new TranslationTextComponent(type.getTranslationKey()).mergeStyle(getTextColorForEntityType(type)));
                     String name = new TranslationTextComponent("dragon.unnamed").getString();
                     if(!entityTag.getString("CustomName").isEmpty()){
-                        IFormattableTextComponent component = ITextComponent.Serializer.func_240644_b_(entityTag.getString("CustomName"));
+                        IFormattableTextComponent component = ITextComponent.Serializer.getComponentFromJson(entityTag.getString("CustomName"));
                         if(component != null){
                             name = component.getString();
                         }
                     }
-                    tooltip.add(new StringTextComponent(name).func_240699_a_(TextFormatting.GRAY));
+                    tooltip.add(new StringTextComponent(name).mergeStyle(TextFormatting.GRAY));
                     String gender = new TranslationTextComponent("dragon.gender").getString() + " " + new TranslationTextComponent((entityTag.getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female")).getString();
-                    tooltip.add(new StringTextComponent(gender).func_240699_a_(TextFormatting.GRAY));
+                    tooltip.add(new StringTextComponent(gender).mergeStyle(TextFormatting.GRAY));
                     int stagenumber = entityTag.getInt("AgeTicks") / 24000;
                     int stage1 = 0;
                     if (stagenumber >= 100) {
@@ -140,7 +140,7 @@ public class ItemDragonHorn extends Item {
                         stage1 = 1;
                     }
                     String stage = new TranslationTextComponent("dragon.stage").getString() + " " + stage1 + " " + new TranslationTextComponent("dragon.days.front").getString() + stagenumber + " " + new TranslationTextComponent("dragon.days.back").getString();
-                    tooltip.add(new StringTextComponent(stage).func_240699_a_(TextFormatting.GRAY));
+                    tooltip.add(new StringTextComponent(stage).mergeStyle(TextFormatting.GRAY));
                 }
             }
 

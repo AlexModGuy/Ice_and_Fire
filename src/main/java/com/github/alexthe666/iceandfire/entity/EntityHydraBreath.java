@@ -76,8 +76,8 @@ public class EntityHydraBreath extends AbstractFireballEntity implements IDragon
             this.remove();
         }
         Entity shootingEntity = this.func_234616_v_();
-        if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.func_233580_cy_())) {
-            if (this.world.isRemote || (shootingEntity == null || !shootingEntity.removed) && this.world.isBlockLoaded(this.func_233580_cy_())) {
+        if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.getPosition())) {
+            if (this.world.isRemote || (shootingEntity == null || !shootingEntity.removed) && this.world.isBlockLoaded(this.getPosition())) {
                 if (this.isFireballFiery()) {
                     this.setFire(1);
                 }

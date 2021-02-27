@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.enums;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
@@ -10,7 +11,6 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
 import com.github.alexthe666.iceandfire.item.ItemTrollLeather;
 import com.github.alexthe666.iceandfire.item.ItemTrollWeapon;
-import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
 
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;
@@ -38,9 +38,9 @@ public enum EnumTroll {
     EnumTroll(CustomArmorMaterial material, Weapon... weapons) {
         this.weapons = weapons;
         this.material = material;
-        TEXTURE = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase() + ".png");
-        TEXTURE_STONE = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase() + "_stone.png");
-        TEXTURE_EYES = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase() + "_eyes.png");
+        TEXTURE = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase(Locale.ROOT) + ".png");
+        TEXTURE_STONE = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase(Locale.ROOT) + "_stone.png");
+        TEXTURE_EYES = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase(Locale.ROOT) + "_eyes.png");
         leather = new ItemTrollLeather(this);
         helmet = new ItemTrollArmor(this, material, EquipmentSlotType.HEAD);
         chestplate = new ItemTrollArmor(this, material, EquipmentSlotType.CHEST);
@@ -51,13 +51,13 @@ public enum EnumTroll {
 
     public static EnumTroll getBiomeType(Biome biome) {
         List<EnumTroll> types = new ArrayList<EnumTroll>();
-        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.snowyTrollBiomes, biome)) {
+        if (BiomeConfig.test(BiomeConfig.snowyTrollBiomes, biome)) {
             types.add(EnumTroll.FROST);
         }
-        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.forestTrollBiomes, biome)) {
+        if (BiomeConfig.test(BiomeConfig.forestTrollBiomes, biome)) {
             types.add(EnumTroll.FOREST);
         }
-        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.mountainTrollBiomes, biome)) {
+        if (BiomeConfig.test(BiomeConfig.mountainTrollBiomes, biome)) {
             types.add(EnumTroll.MOUNTAIN);
         }
         if (types.isEmpty()) {
@@ -78,7 +78,7 @@ public enum EnumTroll {
         public Item item;
 
         Weapon() {
-            TEXTURE = new ResourceLocation("iceandfire:textures/models/troll/weapon/weapon_" + this.name().toLowerCase() + ".png");
+            TEXTURE = new ResourceLocation("iceandfire:textures/models/troll/weapon/weapon_" + this.name().toLowerCase(Locale.ROOT) + ".png");
             item = new ItemTrollWeapon(this);
         }
 

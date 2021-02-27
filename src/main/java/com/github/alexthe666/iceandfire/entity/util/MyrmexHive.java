@@ -56,6 +56,7 @@ public class MyrmexHive {
     private int tickCounter;
     private int numMyrmex;
     private int noBreedTicks;
+    private int wanderRadius = 16;
 
     public MyrmexHive() {
         this.hiveUUID = UUID.randomUUID();
@@ -116,7 +117,7 @@ public class MyrmexHive {
     public EntityMyrmexQueen getQueen() {
         List<EntityMyrmexQueen> ourQueens = new ArrayList<>();
         if (!world.isRemote) {
-            ServerWorld serverWorld = world.getServer().getWorld(world.func_234923_W_());
+            ServerWorld serverWorld = world.getServer().getWorld(world.getDimensionKey());
             List<Entity> allQueens = serverWorld.getEntities(IafEntityRegistry.MYRMEX_QUEEN, EntityPredicates.NOT_SPECTATING);
             for (Entity queen : allQueens) {
                 if (queen instanceof EntityMyrmexQueen && ((EntityMyrmexQueen) queen).getHive().equals(this)) {
@@ -142,6 +143,13 @@ public class MyrmexHive {
 
     public int getNumMyrmex() {
         return this.numMyrmex;
+    }
+
+    public int getWanderRadius(){
+        return this.wanderRadius;
+    }
+    public void setWanderRadius(int wanderRadius){
+        this.wanderRadius = wanderRadius;
     }
 
     public boolean isBlockPosWithinSqVillageRadius(BlockPos pos) {
@@ -188,7 +196,7 @@ public class MyrmexHive {
         PlayerEntity PlayerEntity = null;
 
         for (UUID s : this.playerReputation.keySet()) {
-            if (this.isPlayerReputationTooLowToFight(s)) {
+            if (this.isPlayerReputationLowEnoughToFight(s)) {
                 PlayerEntity PlayerEntity1 = world.getPlayerByUuid(s);
 
                 if (PlayerEntity1 != null) {
@@ -277,7 +285,7 @@ public class MyrmexHive {
         return this.getPlayerReputation(uuid) >= 75;
     }
 
-    public boolean isPlayerReputationTooLowToFight(UUID uuid) {
+    public boolean isPlayerReputationLowEnoughToFight(UUID uuid) {
         return this.getPlayerReputation(uuid) < 25;
     }
 
@@ -293,6 +301,9 @@ public class MyrmexHive {
         }
         this.colonyName = compound.getString("ColonyName");
         this.villageRadius = compound.getInt("Radius");
+        if (compound.hasUniqueId("WanderRadius")) {
+            this.wanderRadius = compound.getInt("WanderRadius");
+        }
         this.lastAddDoorTimestamp = compound.getInt("Stable");
         this.tickCounter = compound.getInt("Tick");
         this.noBreedTicks = compound.getInt("MTick");
@@ -362,6 +373,7 @@ public class MyrmexHive {
         }
         compound.putString("ColonyName", this.colonyName);
         compound.putInt("Radius", this.villageRadius);
+        compound.putInt("WanderRadius",this.wanderRadius);
         compound.putInt("Stable", this.lastAddDoorTimestamp);
         compound.putInt("Tick", this.tickCounter);
         compound.putInt("MTick", this.noBreedTicks);
@@ -543,7 +555,7 @@ public class MyrmexHive {
                 return closest.getKey().offset(closest.getValue(), 3);
             }
         }
-        return entity.func_233580_cy_();
+        return entity.getPosition();
     }
 
     public BlockPos getClosestEntranceBottomToEntity(Entity entity, Random random) {
@@ -553,7 +565,7 @@ public class MyrmexHive {
                 closest = entry;
             }
         }
-        return closest != null ? closest.getKey() : entity.func_233580_cy_();
+        return closest != null ? closest.getKey() : entity.getPosition();
     }
 
     public PlayerEntity getOwner(World world) {

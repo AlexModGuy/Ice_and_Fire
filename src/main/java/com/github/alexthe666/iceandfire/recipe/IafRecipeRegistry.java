@@ -24,11 +24,18 @@ import net.minecraft.dispenser.IPosition;
 import net.minecraft.dispenser.ProjectileDispenseBehavior;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionUtils;
+import net.minecraft.potion.Potions;
+
 import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.world.World;
+
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 
 public class IafRecipeRegistry {
 
@@ -117,8 +124,7 @@ public class IafRecipeRegistry {
              * Return the projectile entity spawned by this dispense behavior.
              */
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-                EntityHippogryphEgg entityarrow = new EntityHippogryphEgg(IafEntityRegistry.HIPPOGRYPH_EGG, worldIn, position.getX(), position.getY(), position.getZ(), stackIn);
-                return entityarrow;
+                return new EntityHippogryphEgg(IafEntityRegistry.HIPPOGRYPH_EGG, worldIn, position.getX(), position.getY(), position.getZ(), stackIn);
             }
         });
         DispenserBlock.registerDispenseBehavior(IafItemRegistry.ROTTEN_EGG, new ProjectileDispenseBehavior() {
@@ -126,8 +132,7 @@ public class IafRecipeRegistry {
              * Return the projectile entity spawned by this dispense behavior.
              */
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-                EntityCockatriceEgg entityarrow = new EntityCockatriceEgg(IafEntityRegistry.COCKATRICE_EGG, position.getX(), position.getY(), position.getZ(), worldIn);
-                return entityarrow;
+                return new EntityCockatriceEgg(IafEntityRegistry.COCKATRICE_EGG, position.getX(), position.getY(), position.getZ(), worldIn);
             }
         });
         DispenserBlock.registerDispenseBehavior(IafItemRegistry.DEATHWORM_EGG, new ProjectileDispenseBehavior() {
@@ -135,8 +140,7 @@ public class IafRecipeRegistry {
              * Return the projectile entity spawned by this dispense behavior.
              */
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-                EntityDeathWormEgg entityarrow = new EntityDeathWormEgg(IafEntityRegistry.DEATH_WORM_EGG, position.getX(), position.getY(), position.getZ(), worldIn, false);
-                return entityarrow;
+                return new EntityDeathWormEgg(IafEntityRegistry.DEATH_WORM_EGG, position.getX(), position.getY(), position.getZ(), worldIn, false);
             }
         });
         DispenserBlock.registerDispenseBehavior(IafItemRegistry.DEATHWORM_EGG_GIGANTIC, new ProjectileDispenseBehavior() {
@@ -144,8 +148,7 @@ public class IafRecipeRegistry {
              * Return the projectile entity spawned by this dispense behavior.
              */
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-                EntityDeathWormEgg entityarrow = new EntityDeathWormEgg(IafEntityRegistry.DEATH_WORM_EGG, position.getX(), position.getY(), position.getZ(), worldIn, true);
-                return entityarrow;
+                return new EntityDeathWormEgg(IafEntityRegistry.DEATH_WORM_EGG, position.getX(), position.getY(), position.getZ(), worldIn, true);
             }
         });
         /*
@@ -234,11 +237,10 @@ public class IafRecipeRegistry {
 
         OreDictionary.registerOre("dragonSkull",  new ItemStack(IafItemRegistry.DRAGON_SKULL, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("mythicalSkull",  new ItemStack(IafItemRegistry.DRAGON_SKULL, 1, OreDictionary.WILDCARD_VALUE));
-        for(EnumSkullType skullType : EnumSkullType.values()){
+        for(EnumSkullType skullType : EnumSkullType.values()) {
             OreDictionary.registerOre("mythicalSkull", skullType.skull_item);
         }
-
-         */
+        */
 
         IafItemRegistry.BLINDFOLD_ARMOR_MATERIAL.setRepairMaterial(Ingredient.fromStacks(new ItemStack(Items.STRING)));
         IafItemRegistry.SILVER_ARMOR_MATERIAL.setRepairMaterial(Ingredient.fromStacks(new ItemStack(IafItemRegistry.SILVER_INGOT)));
@@ -276,13 +278,12 @@ public class IafRecipeRegistry {
         for (EnumSeaSerpent serpent : EnumSeaSerpent.values()) {
             serpent.armorMaterial.setRepairMaterial(Ingredient.fromStacks(new ItemStack(serpent.scale)));
         }
-        /*
-        ItemStack waterBreathingPotion = new ItemStack(Items.POTIONITEM, 1, 0);
-        CompoundNBT tag = new CompoundNBT();
-        tag.setString("Potion", "water_breathing");
-        waterBreathingPotion.setTagCompound(tag);
-        BrewingRecipeRegistry.addRecipe(new ItemStack(Items.POTIONITEM, 1, 0), new ItemStack(IafItemRegistry.SHINY_SCALES), waterBreathingPotion);
-        */
+
+        BrewingRecipeRegistry.addRecipe(Ingredient.fromItems(createPotion(Potions.WATER).getItem()), Ingredient.fromItems(IafItemRegistry.SHINY_SCALES), createPotion(Potions.WATER_BREATHING));
+    }
+
+    public static ItemStack createPotion(Potion potion) {
+        return PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), potion);
     }
 
     public static BannerPattern addBanner(String name, ItemStack craftingStack) {

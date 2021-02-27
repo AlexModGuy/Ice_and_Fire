@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nullable;
 
@@ -31,7 +32,7 @@ public class ItemTrollArmor extends ArmorItem {
     public ItemTrollArmor(EnumTroll troll, CustomArmorMaterial material, EquipmentSlotType slot) {
         super(material, slot, new Item.Properties().group(IceAndFire.TAB_ITEMS));
         this.troll = troll;
-        this.setRegistryName(troll.name().toLowerCase() + "_troll_leather_" + getArmorPart(slot));
+        this.setRegistryName(troll.name().toLowerCase(Locale.ROOT) + "_troll_leather_" + getArmorPart(slot));
     }
 
     public IArmorMaterial getArmorMaterial() {
@@ -60,11 +61,11 @@ public class ItemTrollArmor extends ArmorItem {
     }
 
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
-        return "iceandfire:textures/models/armor/armor_troll_" + troll.name().toLowerCase() + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
+        return "iceandfire:textures/models/armor/armor_troll_" + troll.name().toLowerCase(Locale.ROOT) + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
     }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.troll_leather_armor_" + getArmorPart(slot) + ".desc").func_240699_a_(TextFormatting.GREEN));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.troll_leather_armor_" + getArmorPart(slot) + ".desc").mergeStyle(TextFormatting.GREEN));
     }
 }

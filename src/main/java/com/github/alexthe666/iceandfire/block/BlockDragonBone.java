@@ -20,7 +20,7 @@ public class BlockDragonBone extends RotatedPillarBlock implements IDragonProof 
 	    		.hardnessAndResistance(30F, 500F)
 	    		.harvestTool(ToolType.PICKAXE)
 	    		.harvestLevel(1)
-	    		.func_235861_h_()
+	    		.setRequiresTool()
 		);
 
         this.setRegistryName(IceAndFire.MODID, "dragon_bone_block");

@@ -31,6 +31,6 @@ public class ItemAmphithereArrow extends ArrowItem {
     }
 
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.amphithere_arrow.desc").func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.amphithere_arrow.desc").mergeStyle(TextFormatting.GRAY));
     }
 }

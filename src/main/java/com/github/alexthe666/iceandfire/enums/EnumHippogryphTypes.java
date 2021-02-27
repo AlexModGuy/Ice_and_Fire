@@ -2,10 +2,10 @@ package com.github.alexthe666.iceandfire.enums;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
-import com.github.alexthe666.iceandfire.util.IAFBiomeUtil;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
@@ -28,8 +28,8 @@ public enum EnumHippogryphTypes {
 
     EnumHippogryphTypes(boolean developer) {
         this.developer = developer;
-        this.TEXTURE = new ResourceLocation("iceandfire:textures/models/hippogryph/" + name().toLowerCase() + ".png");
-        this.TEXTURE_BLINK = new ResourceLocation("iceandfire:textures/models/hippogryph/" + name().toLowerCase() + "_blink.png");
+        this.TEXTURE = new ResourceLocation("iceandfire:textures/models/hippogryph/" + name().toLowerCase(Locale.ROOT) + ".png");
+        this.TEXTURE_BLINK = new ResourceLocation("iceandfire:textures/models/hippogryph/" + name().toLowerCase(Locale.ROOT) + "_blink.png");
 
     }
 
@@ -43,25 +43,25 @@ public enum EnumHippogryphTypes {
 
     public static EnumHippogryphTypes getBiomeType(Biome biome) {
         List<EnumHippogryphTypes> types = new ArrayList<EnumHippogryphTypes>();
-        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.blackHippogryphBiomes, biome)) {
+        if (BiomeConfig.test(BiomeConfig.blackHippogryphBiomes, biome)) {
             types.add(BLACK);
         }
-        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.brownHippogryphBiomes, biome)) {
+        if (BiomeConfig.test(BiomeConfig.brownHippogryphBiomes, biome)) {
             types.add(BROWN);
         }
-        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.grayHippogryphBiomes, biome)) {
+        if (BiomeConfig.test(BiomeConfig.grayHippogryphBiomes, biome)) {
             types.add(BROWN);
         }
-        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.chestnutHippogryphBiomes, biome)) {
+        if (BiomeConfig.test(BiomeConfig.chestnutHippogryphBiomes, biome)) {
             types.add(CHESTNUT);
         }
-        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.creamyHippogryphBiomes, biome)) {
+        if (BiomeConfig.test(BiomeConfig.creamyHippogryphBiomes, biome)) {
             types.add(CREAMY);
         }
-        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.darkBrownHippogryphBiomes, biome)) {
+        if (BiomeConfig.test(BiomeConfig.darkBrownHippogryphBiomes, biome)) {
             types.add(DARK_BROWN);
         }
-        if (IAFBiomeUtil.parseListForBiomeCheck(BiomeConfig.whiteHippogryphBiomes, biome)) {
+        if (BiomeConfig.test(BiomeConfig.whiteHippogryphBiomes, biome)) {
             types.add(WHITE);
         }
         if (types.isEmpty()) {

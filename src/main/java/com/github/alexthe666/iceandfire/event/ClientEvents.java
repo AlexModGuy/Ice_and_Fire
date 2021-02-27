@@ -134,7 +134,7 @@ public class ClientEvents {
                 int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
                 EntityDragonBase dragon = (EntityDragonBase) player.getRidingEntity();
                 float scale = ((EntityDragonBase) player.getRidingEntity()).getRenderSize() / 3;
-                if (Minecraft.getInstance().gameSettings.func_243230_g() == PointOfView.THIRD_PERSON_BACK) {
+                if (Minecraft.getInstance().gameSettings.getPointOfView() == PointOfView.THIRD_PERSON_BACK) {
                     if (currentView == 0) {
                     } else if (currentView == 1) {
                         event.getInfo().movePosition(-scale * 1.2F, 0F, 0);
@@ -144,7 +144,7 @@ public class ClientEvents {
                         event.getInfo().movePosition(-scale * 5F, 0F, 0);
                     }
                 }
-                if (Minecraft.getInstance().gameSettings.func_243230_g() == PointOfView.THIRD_PERSON_FRONT) {
+                if (Minecraft.getInstance().gameSettings.getPointOfView() == PointOfView.THIRD_PERSON_FRONT) {
                     if (currentView == 0) {
                     } else if (currentView == 1) {
                         event.getInfo().movePosition(-scale * 1.2F, 0F, 0);
@@ -204,7 +204,7 @@ public class ClientEvents {
     @SubscribeEvent
     public void onPreRenderLiving(RenderLivingEvent.Pre event) {
         if (event.getEntity().getRidingEntity() != null && event.getEntity().getRidingEntity() instanceof EntityDragonBase) {
-            if (ClientProxy.currentDragonRiders.contains(event.getEntity().getUniqueID()) || event.getEntity() == Minecraft.getInstance().player && Minecraft.getInstance().gameSettings.func_243230_g().func_243192_a()) {
+            if (ClientProxy.currentDragonRiders.contains(event.getEntity().getUniqueID()) || event.getEntity() == Minecraft.getInstance().player && Minecraft.getInstance().gameSettings.getPointOfView().func_243192_a()) {
                 event.setCanceled(true);
                 net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post(event.getEntity(), event.getRenderer(), event.getPartialRenderTick(), event.getMatrixStack(), event.getBuffers(), event.getLight()));
             }
@@ -420,10 +420,10 @@ public class ClientEvents {
                 EntityDragonBase dragon = (EntityDragonBase) event.getEntityBeingMounted();
                 if (dragon.isTamed() && dragon.isOwner(Minecraft.getInstance().player)) {
                     if (event.isDismounting()) {
-                        Minecraft.getInstance().gameSettings.func_243229_a(PointOfView.values()[IceAndFire.PROXY.getPreviousViewType()]);
+                        Minecraft.getInstance().gameSettings.setPointOfView(PointOfView.values()[IceAndFire.PROXY.getPreviousViewType()]);
                     } else {
-                        IceAndFire.PROXY.setPreviousViewType(Minecraft.getInstance().gameSettings.func_243230_g().ordinal());
-                        Minecraft.getInstance().gameSettings.func_243229_a(PointOfView.values()[1]);
+                        IceAndFire.PROXY.setPreviousViewType(Minecraft.getInstance().gameSettings.getPointOfView().ordinal());
+                        Minecraft.getInstance().gameSettings.setPointOfView(PointOfView.values()[1]);
                         IceAndFire.PROXY.setDragon3rdPersonView(2);
                     }
                 }

@@ -63,11 +63,11 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
+    public boolean generate(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
         if (!IafWorldRegistry.isDimensionListedForDragons(worldIn)) {
             return false;
         }
-        if (!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)) {
+        if (!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)||!IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
             return false;
         }
         if (!worldIn.getFluidState(worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position).down()).isEmpty()) {
@@ -77,6 +77,19 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
         isMale = new Random().nextBoolean();
         int boulders = 0;
         int radius = 12 + rand.nextInt(8);
+        {
+            EntityDragonBase dragon = IafEntityRegistry.ICE_DRAGON.create(worldIn.getWorld());
+            dragon.setGender(isMale);
+            dragon.growDragon(40 + radius);
+            dragon.setAgingDisabled(true);
+            dragon.setHealth(dragon.getMaxHealth());
+            dragon.setVariant(new Random().nextInt(4));
+            dragon.setPositionAndRotation(position.getX() + 0.5, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position).getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
+            dragon.homePos = position;
+            dragon.hasHomePosition = true;
+            dragon.setHunger(50);
+            worldIn.addEntity(dragon);
+        }
         {
             int j = radius;
             int k = 2;
@@ -161,19 +174,6 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
                     }
                 }
             }
-        }
-        {
-        	EntityDragonBase dragon = IafEntityRegistry.ICE_DRAGON.create(worldIn.getWorld());
-            dragon.setGender(isMale);
-            dragon.growDragon(40 + radius);
-            dragon.setAgingDisabled(true);
-            dragon.setHealth(dragon.getMaxHealth());
-            dragon.setVariant(new Random().nextInt(4));
-            dragon.setPositionAndRotation(position.getX() + 0.5, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position).getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
-            dragon.homePos = position;
-            dragon.hasHomePosition = true;
-            dragon.setHunger(50);
-            worldIn.addEntity(dragon);
         }
         return true;
     }

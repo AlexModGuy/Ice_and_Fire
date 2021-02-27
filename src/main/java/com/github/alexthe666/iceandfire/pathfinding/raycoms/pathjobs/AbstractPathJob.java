@@ -5,6 +5,7 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs;
 
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.*;
 
 import net.minecraft.block.*;
@@ -436,7 +437,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
             if (!xzRestricted || (currentNode.pos.getX() >= minX && currentNode.pos.getX() <= maxX && currentNode.pos.getZ() >= minZ && currentNode.pos.getZ() <= maxZ)) {
                 walkCurrentNode(currentNode);
-
             }
         }
 
@@ -483,6 +483,22 @@ public abstract class AbstractPathJob implements Callable<Path> {
         if (onLadderGoingDown(currentNode, dPos)) {
             walk(currentNode, BLOCKPOS_DOWN);
         }
+        if (pathingOptions.canClimb()){
+            //If the entity can climb and it needs to climb a block higher than 1 block
+            if (getHighest(currentNode.pos)>1){
+                walk(currentNode,BLOCKPOS_UP);
+                walk(currentNode,BLOCKPOS_DOWN);
+            }
+            //After entity has climbed something step forward TODO if parent.parent !=null which direction?
+            if (currentNode.parent != null &&
+                    currentNode.parent.pos.getX() == currentNode.pos.getX() &&
+                    currentNode.parent.pos.getZ() == currentNode.pos.getZ() &&
+                    currentNode.pos.getY() - currentNode.parent.pos.getY() > 1){
+                if (currentNode.parent.parent != null) {
+                    walk(currentNode, currentNode.parent.pos.subtract(currentNode.parent.parent.pos));
+                }
+            }
+        }
 
         // Only explore downwards when dropping
         if ((currentNode.parent == null || !currentNode.parent.pos.equals(currentNode.pos.down())) && currentNode.isCornerNode()) {
@@ -514,6 +530,8 @@ public abstract class AbstractPathJob implements Callable<Path> {
         if (dPos.getX() <= 0) {
             walk(currentNode, BLOCKPOS_WEST);
         }
+
+
     }
     private boolean onLadderGoingDown(final Node currentNode, final BlockPos dPos) {
         return (dPos.getY() <= 0 || dPos.getX() != 0 || dPos.getZ() != 0) && isLadder(currentNode.pos.down());
@@ -531,11 +549,11 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
     private Node getAndSetupStartNode() {
         Node startNode = new Node(start, computeHeuristic(start));
+        //If the entity is Flying set the start node to the end node
+        //Basically letting it's pathfinder do the pathfinding
         if (pathingOptions.isFlying()){
             startNode = new Node(end, computeHeuristic(end));
         }
-
-
         if (isLadder(start)) {
             startNode.setLadder();
         } else if (world.getBlockState(start.down()).getMaterial().isLiquid()) {
@@ -913,6 +931,9 @@ public abstract class AbstractPathJob implements Callable<Path> {
         double parentMaxY = parentY + parent.pos.down().getY();
         final double targetMaxY = target.getCollisionShape(world, pos).getEnd(Direction.Axis.Y) + pos.getY();
         if (targetMaxY - parentMaxY < jumpHeight) {
+            if (pathingOptions.canClimb()){
+                return pos.getY()+ getHighest(pos);
+            }
             return pos.getY() + 1;
         }
         if (target.getBlock() instanceof StairsBlock
@@ -923,7 +944,46 @@ public abstract class AbstractPathJob implements Callable<Path> {
         }
         return -1;
     }
-
+    private int getHighest(BlockPos pos){
+        int max = 1;
+        if (world.getBlockState(pos.north()).isSolid()) {
+            if(climbableTop(pos.north(),Direction.SOUTH)>max){
+                max = climbableTop(pos.north(),Direction.SOUTH);
+            }
+        }
+        if (world.getBlockState(pos.east()).isSolid()) {
+            if(climbableTop(pos.east(),Direction.WEST)>max){
+                max = climbableTop(pos.east(),Direction.WEST);
+            }
+        }
+        if (world.getBlockState(pos.south()).isSolid()) {
+            if(climbableTop(pos.south(),Direction.NORTH)>max){
+                max = climbableTop(pos.south(),Direction.NORTH);
+            }
+        }
+        if (world.getBlockState(pos.west()).isSolid()) {
+            if(climbableTop(pos.west(),Direction.EAST)>max){
+                max = climbableTop(pos.west(),Direction.EAST);
+            }
+        }
+        return max;
+    }
+    private int climbableTop(BlockPos pos, Direction direction){
+        BlockState target = world.getBlockState(pos);
+        BlockState origin;
+        int i = 0;
+        while (target.isSolid()){
+            pos = pos.up();
+            target = world.getBlockState(pos);
+            origin = world.getBlockState(pos.offset(direction));
+            if(!isPassable(origin,pos.offset(direction))){
+                i = 1;
+                break;
+            }
+            i++;
+        }
+        return i-1;
+    }
     private boolean checkHeadBlock(@Nullable final Node parent, final BlockPos pos) {
         BlockPos localPos = pos;
         final VoxelShape bb = world.getBlockState(localPos).getCollisionShape(world, localPos);

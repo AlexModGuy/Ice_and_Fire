@@ -99,16 +99,16 @@ public class EntityPixie extends TameableEntity {
         for (int xSearch = -10; xSearch < 10; xSearch++) {
             for (int ySearch = -10; ySearch < 10; ySearch++) {
                 for (int zSearch = -10; zSearch < 10; zSearch++) {
-                    if (world.getTileEntity(entity.func_233580_cy_().add(xSearch, ySearch, zSearch)) != null && world.getTileEntity(entity.func_233580_cy_().add(xSearch, ySearch, zSearch)) instanceof TileEntityPixieHouse) {
-                        TileEntityPixieHouse house = (TileEntityPixieHouse) world.getTileEntity(entity.func_233580_cy_().add(xSearch, ySearch, zSearch));
+                    if (world.getTileEntity(entity.getPosition().add(xSearch, ySearch, zSearch)) != null && world.getTileEntity(entity.getPosition().add(xSearch, ySearch, zSearch)) instanceof TileEntityPixieHouse) {
+                        TileEntityPixieHouse house = (TileEntityPixieHouse) world.getTileEntity(entity.getPosition().add(xSearch, ySearch, zSearch));
                         if (!house.hasPixie) {
-                            return entity.func_233580_cy_().add(xSearch, ySearch, zSearch);
+                            return entity.getPosition().add(xSearch, ySearch, zSearch);
                         }
                     }
                 }
             }
         }
-        return entity.func_233580_cy_();
+        return entity.getPosition();
     }
 
     public boolean isPixieSitting() {
@@ -124,7 +124,7 @@ public class EntityPixie extends TameableEntity {
     public void setPixieSitting(boolean sitting) {
         if (!world.isRemote) {
             this.isSitting = sitting;
-            this.func_233686_v_(sitting);
+            this.setSleeping(sitting);
         }
         byte b0 = this.dataManager.get(TAMED).byteValue();
         if (sitting) {
@@ -135,7 +135,7 @@ public class EntityPixie extends TameableEntity {
     }
 
     @Override
-    public boolean func_233684_eK_() {
+    public boolean isSitting() {
         return this.isPixieSitting();
     }
 
@@ -146,9 +146,9 @@ public class EntityPixie extends TameableEntity {
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, 10D)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 10D)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.25D);
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25D);
     }
 
     public boolean attackEntityFrom(DamageSource source, float amount) {
@@ -299,7 +299,7 @@ public class EntityPixie extends TameableEntity {
         if (this.getPosY() > this.world.getHeight()) {
             return true;
         }
-        BlockPos height = this.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, this.func_233580_cy_());
+        BlockPos height = this.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, this.getPosition());
         int maxY = 20 + height.getY();
         return this.getPosY() > maxY;
     }
@@ -356,7 +356,7 @@ public class EntityPixie extends TameableEntity {
             ticksUntilHouseAI--;
         }
         if (!world.isRemote) {
-            if (housePos != null && this.getDistanceSq(Vector3d.func_237489_a_(housePos)) < 1.5F && world.getTileEntity(housePos) != null && world.getTileEntity(housePos) instanceof TileEntityPixieHouse) {
+            if (housePos != null && this.getDistanceSq(Vector3d.copyCentered(housePos)) < 1.5F && world.getTileEntity(housePos) != null && world.getTileEntity(housePos) instanceof TileEntityPixieHouse) {
                 TileEntityPixieHouse house = (TileEntityPixieHouse) world.getTileEntity(housePos);
                 if (house.hasPixie) {
                     this.housePos = null;

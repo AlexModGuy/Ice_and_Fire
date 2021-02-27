@@ -193,10 +193,10 @@ public class LightningTabulaDragonAnimator extends IceAndFireTabulaModelAnimator
             }
         }
         if (!entity.isModelDead()) {
-            if (entity.turn_buffer != null && !entity.isBeingRidden() && !entity.isBreathingFire()) {
+            if (entity.turn_buffer != null && !entity.isBeingRidden() && !entity.isPassenger() && !entity.isBreathingFire()) {
                 entity.turn_buffer.applyChainSwingBuffer(neckParts);
             }
-            if (entity.tail_buffer != null) {
+            if (entity.tail_buffer != null && !entity.isPassenger()) {
                 entity.tail_buffer.applyChainSwingBuffer(tailPartsWBody);
             }
             if (entity.roll_buffer != null && entity.pitch_buffer_body != null && entity.pitch_buffer != null) {

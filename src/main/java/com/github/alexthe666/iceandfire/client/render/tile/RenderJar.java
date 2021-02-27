@@ -15,12 +15,12 @@ import net.minecraft.util.math.vector.Vector3f;
 
 public class RenderJar<T extends TileEntityJar> extends TileEntityRenderer<T> {
 
-    public static final RenderType TEXTURE_0 = RenderType.func_230167_a_(RenderPixie.TEXTURE_0, false);
-    public static final RenderType TEXTURE_1 = RenderType.func_230167_a_(RenderPixie.TEXTURE_1, false);
-    public static final RenderType TEXTURE_2 = RenderType.func_230167_a_(RenderPixie.TEXTURE_2, false);
-    public static final RenderType TEXTURE_3 = RenderType.func_230167_a_(RenderPixie.TEXTURE_3, false);
-    public static final RenderType TEXTURE_4 = RenderType.func_230167_a_(RenderPixie.TEXTURE_4, false);
-    public static final RenderType TEXTURE_5 = RenderType.func_230167_a_(RenderPixie.TEXTURE_5, false);
+    public static final RenderType TEXTURE_0 = RenderType.getEntityCutoutNoCull(RenderPixie.TEXTURE_0, false);
+    public static final RenderType TEXTURE_1 = RenderType.getEntityCutoutNoCull(RenderPixie.TEXTURE_1, false);
+    public static final RenderType TEXTURE_2 = RenderType.getEntityCutoutNoCull(RenderPixie.TEXTURE_2, false);
+    public static final RenderType TEXTURE_3 = RenderType.getEntityCutoutNoCull(RenderPixie.TEXTURE_3, false);
+    public static final RenderType TEXTURE_4 = RenderType.getEntityCutoutNoCull(RenderPixie.TEXTURE_4, false);
+    public static final RenderType TEXTURE_5 = RenderType.getEntityCutoutNoCull(RenderPixie.TEXTURE_5, false);
     public static final RenderType TEXTURE_0_GLO = RenderType.getEyes(RenderPixie.TEXTURE_0);
     public static final RenderType TEXTURE_1_GLO = RenderType.getEyes(RenderPixie.TEXTURE_1);
     public static final RenderType TEXTURE_2_GLO = RenderType.getEyes(RenderPixie.TEXTURE_2);

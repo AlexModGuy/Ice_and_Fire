@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
-import com.github.alexthe666.iceandfire.pathfinding.raycoms.DragonAdvancedPathNavigate;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -22,7 +22,7 @@ public class MyrmexAIAttackMelee extends Goal {
     private int failedPathFindingPenalty = 0;
     private boolean canPenalize = false;
     private PathResult attackPath;
-    private DragonAdvancedPathNavigate pathNavigate;
+    private AdvancedPathNavigate pathNavigate;
 
     public MyrmexAIAttackMelee(EntityMyrmexBase dragon, double speedIn, boolean useLongMemory) {
         this.myrmex = dragon;
@@ -34,10 +34,15 @@ public class MyrmexAIAttackMelee extends Goal {
     @Override
     public boolean shouldExecute() {
         LivingEntity LivingEntity = this.myrmex.getAttackTarget();
-        if (this.myrmex.getNavigator() instanceof DragonAdvancedPathNavigate) {
-            pathNavigate = (DragonAdvancedPathNavigate) this.myrmex.getNavigator();
+        if (this.myrmex.getNavigator() instanceof AdvancedPathNavigate) {
+            pathNavigate = (AdvancedPathNavigate) this.myrmex.getNavigator();
         } else {
             return false;
+        }
+        if (LivingEntity instanceof PlayerEntity&& this.myrmex.getHive()!=null){
+            if(!this.myrmex.getHive().isPlayerReputationLowEnoughToFight(LivingEntity.getUniqueID())){
+                return false;
+            }
         }
         if (LivingEntity == null) {
             return false;
@@ -47,7 +52,7 @@ public class MyrmexAIAttackMelee extends Goal {
             return false;
         } else {
 
-            attackPath = ((DragonAdvancedPathNavigate) this.myrmex.getNavigator()).moveToLivingEntity(LivingEntity, speedTowardsTarget);
+            attackPath = ((AdvancedPathNavigate) this.myrmex.getNavigator()).moveToLivingEntity(LivingEntity, speedTowardsTarget);
             if (this.attackPath != null) {
                 return true;
             } else {
@@ -59,7 +64,10 @@ public class MyrmexAIAttackMelee extends Goal {
     @Override
     public boolean shouldContinueExecuting() {
         LivingEntity LivingEntity = this.myrmex.getAttackTarget();
-        if (LivingEntity != null && !LivingEntity.isAlive() || !(this.myrmex.getNavigator() instanceof DragonAdvancedPathNavigate)) {
+        if (this.myrmex.getLastAttackedEntity() != null && this.myrmex.getLastAttackedEntity().isAlive()){
+            LivingEntity = this.myrmex.getLastAttackedEntity();
+        }
+        if (LivingEntity != null && !LivingEntity.isAlive() || !(this.myrmex.getNavigator() instanceof AdvancedPathNavigate)) {
             this.resetTask();
             return false;
         }
@@ -77,14 +85,15 @@ public class MyrmexAIAttackMelee extends Goal {
         LivingEntity LivingEntity = this.myrmex.getAttackTarget();
         if (LivingEntity instanceof PlayerEntity && (LivingEntity.isSpectator() || ((PlayerEntity) LivingEntity).isCreative())) {
             this.myrmex.setAttackTarget(null);
+            this.myrmex.setLastAttackedEntity(null);
         }
     }
 
     @Override
     public void tick() {
         LivingEntity entity = this.myrmex.getAttackTarget();
-        ((DragonAdvancedPathNavigate) this.myrmex.getNavigator()).tryMoveToEntityLiving(entity, speedTowardsTarget);
         if (entity != null) {
+            ((AdvancedPathNavigate) this.myrmex.getNavigator()).tryMoveToEntityLiving(entity, speedTowardsTarget);
             double d0 = this.myrmex.getDistanceSq(entity.getPosX(), entity.getBoundingBox().minY, entity.getPosZ());
             double d1 = this.getAttackReachSqr(entity);
             --this.delayCounter;

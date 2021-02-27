@@ -97,7 +97,7 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
                     pixie.setTamed(true);
                     pixie.setOwnerId(owner.getUniqueID());
                     pixie.setPixieSitting(true);
-                    pixie.func_230245_c_(true);  //  Entity.onGround = true
+                    pixie.setOnGround(true);  //  Entity.onGround = true
                 }
             }
 

@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 /*
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LadderBlock;
@@ -131,10 +132,10 @@ public class PathingStuckHandler implements IStuckHandler
             return;
         }
 
-        if (navigator.getOurEntity() instanceof IStuckHandlerEntity && !((IStuckHandlerEntity) navigator.getOurEntity()).canBeStuck())
+        /*if (navigator.getOurEntity() instanceof IStuckHandlerEntity && !((IStuckHandlerEntity) navigator.getOurEntity()).canBeStuck())
         {
             return;
-        }
+        }*/
 
         final double distanceToGoal =
                 navigator.getOurEntity().getPositionVec().distanceTo(new Vector3d(navigator.getDesiredPos().getX(), navigator.getDesiredPos().getY(), navigator.getDesiredPos().getZ()));
@@ -242,13 +243,13 @@ public class PathingStuckHandler implements IStuckHandler
 
         if (completeStuckBlockBreakRange > 0)
         {
-            final Direction facing = getFacing(entity.func_233580_cy_(), navigator.getDesiredPos());
+            final Direction facing = getFacing(entity.getPosition(), navigator.getDesiredPos());
 
             for (int i = 1; i <= completeStuckBlockBreakRange; i++)
             {
-                if (!world.isAirBlock(entity.func_233580_cy_().offset(facing, i)) || !world.isAirBlock(entity.func_233580_cy_().offset(facing, i).up()))
+                if (!world.isAirBlock(entity.getPosition().offset(facing, i)) || !world.isAirBlock(entity.getPosition().offset(facing, i).up()))
                 {
-                    breakBlocksAhead(world, entity.func_233580_cy_().offset(facing, i - 1), facing);
+                    breakBlocksAhead(world, entity.getPosition().offset(facing, i - 1), facing);
                     break;
                 }
             }
@@ -274,6 +275,7 @@ public class PathingStuckHandler implements IStuckHandler
             stuckLevel++;
             delayToNextUnstuckAction = 100;
             navigator.clearPath();
+            navigator.getPathingOptions().setCanClimb(false);
             return;
         }
 
@@ -283,7 +285,7 @@ public class PathingStuckHandler implements IStuckHandler
             stuckLevel++;
             delayToNextUnstuckAction = 200;
             navigator.clearPath();
-            navigator.moveAwayFromXYZ(new BlockPos(navigator.getOurEntity().func_233580_cy_()), 10, 1.0f);
+            navigator.moveAwayFromXYZ(new BlockPos(navigator.getOurEntity().getPosition()), 10, 1.0f);
             return;
         }
 
@@ -388,7 +390,7 @@ public class PathingStuckHandler implements IStuckHandler
         final World world = navigator.getOurEntity().world;
         final MobEntity entity = navigator.getOurEntity();
 
-        BlockPos entityPos = entity.func_233580_cy_();
+        BlockPos entityPos = entity.getPosition();
 
         while (world.getBlockState(entityPos).getBlock() == Blocks.LADDER)
         {
@@ -410,7 +412,7 @@ public class PathingStuckHandler implements IStuckHandler
         final World world = navigator.getOurEntity().world;
         final MobEntity entity = navigator.getOurEntity();
 
-        final Direction badFacing = getFacing(entity.func_233580_cy_(), navigator.getDesiredPos()).getOpposite();
+        final Direction badFacing = getFacing(entity.getPosition(), navigator.getDesiredPos()).getOpposite();
 
         for (final Direction dir : directions)
         {
@@ -419,9 +421,9 @@ public class PathingStuckHandler implements IStuckHandler
                 continue;
             }
 
-            if (world.isAirBlock(entity.func_233580_cy_().down().offset(dir)))
+            if (world.isAirBlock(entity.getPosition().down().offset(dir)))
             {
-                world.setBlockState(entity.func_233580_cy_().down().offset(dir), Blocks.ACACIA_LEAVES.getDefaultState());
+                world.setBlockState(entity.getPosition().down().offset(dir), Blocks.ACACIA_LEAVES.getDefaultState());
             }
         }
     }
@@ -442,9 +444,9 @@ public class PathingStuckHandler implements IStuckHandler
         final World world = navigator.getOurEntity().world;
         final MobEntity entity = navigator.getOurEntity();
 
-        final Direction facing = getFacing(entity.func_233580_cy_(), navigator.getDesiredPos());
+        final Direction facing = getFacing(entity.getPosition(), navigator.getDesiredPos());
 
-        breakBlocksAhead(world, entity.func_233580_cy_(), facing);
+        breakBlocksAhead(world, entity.getPosition(), facing);
     }
 
     /**

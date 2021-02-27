@@ -178,7 +178,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     private boolean isPathOnHighGround() {
         if (this.navigator != null && this.navigator.getPath() != null && this.navigator.getPath().getFinalPathPoint() != null) {
             BlockPos target = new BlockPos(this.navigator.getPath().getFinalPathPoint().x, this.navigator.getPath().getFinalPathPoint().y, this.navigator.getPath().getFinalPathPoint().z);
-            BlockPos siren = this.func_233580_cy_();
+            BlockPos siren = this.getPosition();
             return world.isAirBlock(siren.up()) && world.isAirBlock(target.up()) && target.getY() >= siren.getY();
         }
         return false;
@@ -201,10 +201,10 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
             this.setSinging(true);
         }
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 7D && this.getAnimationTick() == 5) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.field_233823_f_).getValue());
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
         }
         if (this.getAnimation() == ANIMATION_PULL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 16D && this.getAnimationTick() == 5) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.field_233823_f_).getValue());
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
             double attackmotionX = (Math.signum(this.getPosX() - this.getAttackTarget().getPosX()) * 0.5D - this.getAttackTarget().getMotion().z) * 0.100000000372529 * 5;
             double attackmotionY = (Math.signum(this.getPosY() - this.getAttackTarget().getPosY() + 1) * 0.5D - this.getAttackTarget().getMotion().y) * 0.100000000372529 * 5;
             double attackmotionZ = (Math.signum(this.getPosZ() - this.getAttackTarget().getPosZ()) * 0.5D - this.getAttackTarget().getMotion().z) * 0.100000000372529 * 5;
@@ -435,11 +435,11 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, IafConfig.sirenMaxHealth)
+                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.sirenMaxHealth)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.25D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, 6.0D);
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 6.0D);
     }
 
     @Override
@@ -551,7 +551,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
                 }
                 siren.setMotion(siren.getMotion().add(f1, siren.getAIMoveSpeed() * distanceY * 0.1D, f2));
             } else if (this.action == MovementController.Action.JUMPING) {
-                siren.setAIMoveSpeed((float) (this.speed * siren.getAttribute(Attributes.field_233821_d_).getValue()));
+                siren.setAIMoveSpeed((float) (this.speed * siren.getAttribute(Attributes.MOVEMENT_SPEED).getValue()));
                 if (siren.onGround) {
                     this.action = MovementController.Action.WAIT;
                 }

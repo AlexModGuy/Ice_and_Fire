@@ -81,7 +81,7 @@ public class RenderGhostChest extends TileEntityRenderer<TileEntityGhostChest> {
         World world = tileEntityIn.getWorld();
         boolean flag = world != null;
         BlockState blockstate = flag ? tileEntityIn.getBlockState() : Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.SOUTH);
-        ChestType chesttype = blockstate.func_235901_b_(ChestBlock.TYPE) ? blockstate.get(ChestBlock.TYPE) : ChestType.SINGLE;
+        ChestType chesttype = blockstate.hasProperty(ChestBlock.TYPE) ? blockstate.get(ChestBlock.TYPE) : ChestType.SINGLE;
         Block block = blockstate.getBlock();
         if (block instanceof AbstractChestBlock) {
             AbstractChestBlock<?> abstractchestblock = (AbstractChestBlock)block;
@@ -93,12 +93,12 @@ public class RenderGhostChest extends TileEntityRenderer<TileEntityGhostChest> {
             matrixStackIn.translate(-0.5D, -0.5D, -0.5D);
             TileEntityMerger.ICallbackWrapper<? extends ChestTileEntity> icallbackwrapper;
             if (flag) {
-                icallbackwrapper = abstractchestblock.func_225536_a_(blockstate, world, tileEntityIn.getPos(), true);
+                icallbackwrapper = abstractchestblock.combine(blockstate, world, tileEntityIn.getPos(), true);
             } else {
                 icallbackwrapper = TileEntityMerger.ICallback::func_225537_b_;
             }
 
-            float f1 = icallbackwrapper.<Float2FloatFunction>apply(ChestBlock.func_226917_a_(tileEntityIn)).get(partialTicks);
+            float f1 = icallbackwrapper.<Float2FloatFunction>apply(ChestBlock.getLidRotationCallback(tileEntityIn)).get(partialTicks);
             f1 = 1.0F - f1;
             f1 = 1.0F - f1 * f1 * f1;
             int i = icallbackwrapper.<Int2IntFunction>apply(new DualBrightnessCallback<>()).applyAsInt(combinedLightIn);

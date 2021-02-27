@@ -49,7 +49,7 @@ public class GhostAICharge extends Goal {
             if(firstPhase){
                 if(this.moveToPos == null){
                     BlockPos moveToPos = DragonUtils.getBlockInTargetsViewGhost(ghost, target);
-                    this.moveToPos = Vector3d.func_237489_a_(moveToPos);
+                    this.moveToPos = Vector3d.copyCentered(moveToPos);
                 }else{
                     this.ghost.getNavigator().tryMoveToXYZ(this.moveToPos.x + 0.5D, this.moveToPos.y + 0.5D, this.moveToPos.z + 0.5D, 1F);
                     if(this.ghost.getDistanceSq(this.moveToPos.add(0.5D, 0.5D, 0.5D)) < 9D){

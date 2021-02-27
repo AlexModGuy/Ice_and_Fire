@@ -169,13 +169,13 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
 
     public boolean isNotColliding(IWorldReader worldIn) {
         if (worldIn.checkNoEntityCollision(this) && !worldIn.containsAnyLiquid(this.getBoundingBox())) {
-            BlockPos blockpos = this.func_233580_cy_();
+            BlockPos blockpos = this.getPosition();
             if (blockpos.getY() < worldIn.getSeaLevel()) {
                 return false;
             }
 
             BlockState blockstate = worldIn.getBlockState(blockpos.down());
-            if (blockstate.isIn(Blocks.GRASS_BLOCK) || blockstate.func_235714_a_(BlockTags.LEAVES)) {
+            if (blockstate.isIn(Blocks.GRASS_BLOCK) || blockstate.isIn(BlockTags.LEAVES)) {
                 return true;
             }
         }
@@ -188,7 +188,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         float radius = 10;
         if (entity.getCommand() == 2) {
             if (entity.getOwner() != null) {
-                orbit = entity.getOwner().func_233580_cy_().up(7);
+                orbit = entity.getOwner().getPosition().up(7);
                 radius = 5;
             }
         } else if (entity.hasHomePosition) {
@@ -245,7 +245,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         if (super.func_230254_b_(player, hand) == ActionResultType.PASS) {
             if (itemstack != null && itemstack.getItem() == IafItemRegistry.DRAGON_STAFF && this.isOwner(player)) {
                 if (player.isSneaking()) {
-                    BlockPos pos = this.func_233580_cy_();
+                    BlockPos pos = this.getPosition();
                     this.homePos = pos;
                     this.hasHomePosition = true;
                     player.sendStatusMessage(new TranslationTextComponent("amphithere.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
@@ -312,13 +312,13 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     }
 
     public boolean onLeaves() {
-        BlockState state = world.getBlockState(this.func_233580_cy_().down());
+        BlockState state = world.getBlockState(this.getPosition().down());
         return state.getBlock() instanceof LeavesBlock;
     }
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (!this.isTamed() && this.isFlying() && !func_233570_aj_() && source.isProjectile() && !world.isRemote) {
+        if (!this.isTamed() && this.isFlying() && !isOnGround() && source.isProjectile() && !world.isRemote) {
             this.isFallen = true;
         }
         if (source.getTrueSource() instanceof LivingEntity && source.getTrueSource().isRidingSameEntity(this) && this.isTamed() && this.isOwner((LivingEntity) source.getTrueSource())) {
@@ -435,7 +435,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         } else {
             this.ticksStill = 0;
         }
-        if (!this.isFlying() && !this.isChild() && ((this.func_233570_aj_() && this.rand.nextInt(200) == 0 && flightCooldown == 0 && this.getPassengers().isEmpty() && !this.isAIDisabled() && canMove()) || this.getPosY() < -1)) {
+        if (!this.isFlying() && !this.isChild() && ((this.isOnGround() && this.rand.nextInt(200) == 0 && flightCooldown == 0 && this.getPassengers().isEmpty() && !this.isAIDisabled() && canMove()) || this.getPosY() < -1)) {
             this.setMotion(this.getMotion().x, this.getMotion().y + 0.5D, this.getMotion().z);
             this.setFlying(true);
         }
@@ -470,7 +470,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         if (this.flightBehavior == FlightBehavior.NONE && this.getControllingPassenger() == null && this.isFlying()) {
             this.setMotion(this.getMotion().x, this.getMotion().y - 0.3D, this.getMotion().z);
         }
-        if (this.isFlying() && !this.func_233570_aj_() && this.isFallen && this.getControllingPassenger() == null) {
+        if (this.isFlying() && !this.isOnGround() && this.isFallen && this.getControllingPassenger() == null) {
             this.setMotion(this.getMotion().x, this.getMotion().y - 0.2D, this.getMotion().z);
             this.rotationPitch = Math.max(this.rotationPitch + 5, 75);
         }
@@ -590,13 +590,13 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, IafConfig.amphithereMaxHealth)
+                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.amphithereMaxHealth)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.4D)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4D)
                 //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, IafConfig.amphithereAttackStrength)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, IafConfig.amphithereAttackStrength)
                 //FOLLOW RANGE
-                .func_233815_a_(Attributes.field_233819_b_, 32.0D);
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, 32.0D);
     }
 
     @Override
@@ -654,8 +654,8 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 7) {
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 10) {
-                this.getAttackTarget().func_233627_a_(0.6F, MathHelper.sin(this.rotationYaw * 0.017453292F), -MathHelper.cos(this.rotationYaw * 0.017453292F));
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
+                this.getAttackTarget().applyKnockback(0.6F, MathHelper.sin(this.rotationYaw * 0.017453292F), -MathHelper.cos(this.rotationYaw * 0.017453292F));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_WING_BLAST && this.getAnimationTick() == 5) {
@@ -668,9 +668,9 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
             LivingEntity target = this.getAttackTarget();
             double dist = this.getDistanceSq(target);
             if (dist < 25) {
-                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue() / 2));
+                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() / 2));
                 target.isAirBorne = true;
-                if (!(this.rand.nextDouble() < this.getAttribute(Attributes.field_233820_c_).getValue())) {
+                if (!(this.rand.nextDouble() < this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).getValue())) {
                     this.isAirBorne = true;
                     double d1 = target.getPosX() - this.getPosX();
 
@@ -680,7 +680,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
                     }
                     Vector3d Vector3d = this.getMotion();
                     Vector3d Vector3d1 = (new Vector3d(d0, 0.0D, d1)).normalize().scale(0.5);
-                    this.setMotion(Vector3d.x / 2.0D - Vector3d1.x, this.func_233570_aj_() ? Math.min(0.4D, Vector3d.y / 2.0D + 0.5) : Vector3d.y, Vector3d.z / 2.0D - Vector3d1.z);
+                    this.setMotion(Vector3d.x / 2.0D - Vector3d1.x, this.isOnGround() ? Math.min(0.4D, Vector3d.y / 2.0D + 0.5) : Vector3d.y, Vector3d.z / 2.0D - Vector3d1.z);
                 }
             }
         }
@@ -688,7 +688,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
             LivingEntity target = this.getAttackTarget();
             double dist = this.getDistanceSq(this.getAttackTarget());
             if (dist < 10) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
                 this.getAttackTarget().isAirBorne = true;
                 float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
                 double d0;
@@ -698,7 +698,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
                 }
                 Vector3d Vector3d = this.getMotion();
                 Vector3d Vector3d1 = (new Vector3d(d0, 0.0D, d1)).normalize().scale(0.5);
-                this.setMotion(Vector3d.x / 2.0D - Vector3d1.x, this.func_233570_aj_() ? Math.min(0.4D, Vector3d.y / 2.0D + 0.5) : Vector3d.y, Vector3d.z / 2.0D - Vector3d1.z);
+                this.setMotion(Vector3d.x / 2.0D - Vector3d1.x, this.isOnGround() ? Math.min(0.4D, Vector3d.y / 2.0D + 0.5) : Vector3d.y, Vector3d.z / 2.0D - Vector3d1.z);
 
             }
         }
@@ -714,7 +714,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         if (!this.isOverAir() && this.isFlying() && ticksFlying > 25) {
             this.setFlying(false);
         }
-        if (this.dismount()) {
+        if (this.dismountIAF()) {
             if (this.isFlying()) {
                 if (this.onGround) {
                     this.setFlying(false);
@@ -734,13 +734,13 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
                 this.setAnimation(ANIMATION_BITE);
             }
             if (target != null) {
-                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.field_233823_f_).getValue()));
+                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getAttackTarget() != null && this.isOwner(this.getAttackTarget())) {
             this.setAttackTarget(null);
         }
-        if (this.getAttackTarget() != null && this.func_233570_aj_() && this.isFlying() && ticksFlying > 40) {
+        if (this.getAttackTarget() != null && this.isOnGround() && this.isFlying() && ticksFlying > 40) {
             this.setFlying(false);
         }
     }
@@ -828,7 +828,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         return (dataManager.get(CONTROL_STATE).byteValue() >> 2 & 1) == 1;
     }
 
-    public boolean dismount() {
+    public boolean dismountIAF() {
         return (dataManager.get(CONTROL_STATE).byteValue() >> 3 & 1) == 1;
     }
 
@@ -986,7 +986,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
 
     @Override
     public void onHearFlute(PlayerEntity player) {
-        if (!this.func_233570_aj_() && this.isTamed()) {
+        if (!this.isOnGround() && this.isTamed()) {
             this.isFallen = true;
         }
     }
@@ -1022,7 +1022,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     }
 
     private boolean isOverAir() {
-        return world.isAirBlock(this.func_233580_cy_().down());
+        return world.isAirBlock(this.getPosition().down());
     }
 
     public boolean canBlockPosBeSeen(BlockPos pos) {
@@ -1043,7 +1043,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         }
 
         public boolean shouldExecute() {
-            return this.creature.func_233570_aj_() && super.shouldExecute() && ((EntityAmphithere) this.creature).canMove();
+            return this.creature.isOnGround() && super.shouldExecute() && ((EntityAmphithere) this.creature).canMove();
         }
     }
 

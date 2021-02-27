@@ -18,6 +18,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
@@ -78,7 +79,7 @@ public class ItemGorgonHead extends Item implements IUsesTEISR, ICustomRendered 
 
             if (axisalignedbb.contains(Vector3d)) {
                 if (d2 >= 0.0D) {
-                    pointedEntity = entity1;
+                    //pointedEntity = entity1;
                     d2 = 0.0D;
                 }
             } else if (optional.isPresent()) {
@@ -110,6 +111,9 @@ public class ItemGorgonHead extends Item implements IUsesTEISR, ICustomRendered 
                 if (!worldIn.isRemote) {
                     worldIn.addEntity(statue);
                 }
+                if (entity instanceof PlayerEntity && !((PlayerEntity) entity).isCreative()) {
+                    stack.shrink(1);
+                }
 
             }
         }
@@ -130,6 +134,6 @@ public class ItemGorgonHead extends Item implements IUsesTEISR, ICustomRendered 
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").mergeStyle(TextFormatting.GRAY));
     }
 }

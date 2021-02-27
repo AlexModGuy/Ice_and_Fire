@@ -22,7 +22,7 @@ public class BlockIafOre extends Block {
     			.harvestTool(ToolType.PICKAXE)
     			.harvestLevel(toollevel)
     			.hardnessAndResistance(hardness, resistance)
-    			.func_235861_h_()
+    			.setRequiresTool()
 		);
 
         setRegistryName(IceAndFire.MODID, gameName);

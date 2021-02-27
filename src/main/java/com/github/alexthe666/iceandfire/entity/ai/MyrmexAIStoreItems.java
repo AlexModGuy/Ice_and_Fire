@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.github.alexthe666.iceandfire.block.BlockMyrmexCocoon;
@@ -36,14 +37,21 @@ public class MyrmexAIStoreItems extends Goal {
         if (!this.myrmex.canMove() || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky() || this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
             return false;
         }
+        if (this.myrmex.getWaitTicks()>0){
+            this.myrmex.setWaitTicks(this.myrmex.getWaitTicks()-1);
+            return false;
+        }
         MyrmexHive village = this.myrmex.getHive();
         if (village == null) {
             return false;
         } else {
             first = true;
             mainRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getCenter());
-            nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(WorldGenMyrmexHive.RoomType.FOOD, this.myrmex.getRNG(), this.myrmex.func_233580_cy_()));
+            nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(WorldGenMyrmexHive.RoomType.FOOD, this.myrmex.getRNG(), this.myrmex.getPosition()));
             nextCocoon = getNearbyCocoon(nextRoom);
+            if(nextCocoon == null){
+                this.myrmex.setWaitTicks(new Random().nextInt(40));
+            }
             return nextCocoon != null;
         }
     }
@@ -113,14 +121,14 @@ public class MyrmexAIStoreItems extends Goal {
         int RADIUS_XZ = 15;
         int RADIUS_Y = 7;
         List<BlockPos> closeCocoons = new ArrayList<BlockPos>();
-        for (BlockPos blockpos : BlockPos.getAllInBox(roomCenter.add(-RADIUS_XZ, -RADIUS_Y, -RADIUS_XZ), roomCenter.add(RADIUS_XZ, RADIUS_Y, RADIUS_XZ)).map(BlockPos::toImmutable).collect(Collectors.toList())) {
+        BlockPos.getAllInBox(roomCenter.add(-RADIUS_XZ, -RADIUS_Y, -RADIUS_XZ), roomCenter.add(RADIUS_XZ, RADIUS_Y, RADIUS_XZ)).forEach(blockpos -> {
             TileEntity te = this.myrmex.world.getTileEntity(blockpos);
             if (te != null && te instanceof TileEntityMyrmexCocoon) {
                 if (!((TileEntityMyrmexCocoon) te).isFull(this.myrmex.getHeldItem(Hand.MAIN_HAND))) {
                     closeCocoons.add(blockpos);
                 }
             }
-        }
+        });
         if (closeCocoons.isEmpty()) {
             return null;
         }

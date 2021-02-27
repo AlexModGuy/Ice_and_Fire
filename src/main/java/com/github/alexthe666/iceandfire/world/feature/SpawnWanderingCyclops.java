@@ -25,8 +25,8 @@ public class SpawnWanderingCyclops extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_241855_a(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
-        if(!IafWorldRegistry.isDimensionListed(worldIn)){
+    public boolean generate(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
+        if(!IafWorldRegistry.isDimensionListedForMobs(worldIn)){
             return false;
         }
         position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position.add(8, 0, 8));
@@ -37,6 +37,7 @@ public class SpawnWanderingCyclops extends Feature<NoFeatureConfig> {
                 cyclops.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                 cyclops.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(position), SpawnReason.SPAWNER, null, null);
                 cyclops.setVariant(rand.nextInt(3));
+                worldIn.addEntity(cyclops);
                 for (int i = 0; i < 3 + rand.nextInt(3); i++) {
                     SheepEntity sheep = EntityType.SHEEP.create(worldIn.getWorld());
                     sheep.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);

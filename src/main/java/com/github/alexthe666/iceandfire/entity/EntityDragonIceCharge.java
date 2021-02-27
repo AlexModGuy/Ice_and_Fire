@@ -69,7 +69,7 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
                 IceAndFire.PROXY.spawnParticle("dragonice", this.getPosX() + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.getPosY() + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.getPosZ() + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
             }
         }
-        if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.func_233580_cy_())) {
+        if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.getPosition())) {
             super.tick();
             ++this.ticksInAir;
             Vector3d Vector3d = this.getMotion();
@@ -170,7 +170,7 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
         }
         if(movingObject.getType() != RayTraceResult.Type.MISS) {
             if (shootingEntity instanceof EntityDragonBase && IafConfig.dragonGriefing != 2 && !this.isInWater()) {
-                IafDragonDestructionManager.destroyAreaIceCharge(world, this.func_233580_cy_(), ((EntityDragonBase) shootingEntity));
+                IafDragonDestructionManager.destroyAreaIceCharge(world, this.getPosition(), ((EntityDragonBase) shootingEntity));
             }
             this.remove();
         }

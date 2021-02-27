@@ -140,8 +140,8 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         }
     }
 
-    public void func_230337_a_(BlockState state, CompoundNBT compound) {
-        super.func_230337_a_(state, compound);
+    public void read(BlockState state, CompoundNBT compound) {
+        super.read(state, compound);
         this.forgeItemStacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, this.forgeItemStacks);
         this.cookTime = compound.getInt("CookTime");
@@ -238,55 +238,86 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         return 1000;
     }
 
+    private DragonForgeRecipe getRecipeForInput(ItemStack cookStack) {
+        switch (this.isFire) {
+            case 0: return IafRecipeRegistry.getFireForgeRecipe(cookStack);
+            case 1: return IafRecipeRegistry.getIceForgeRecipe(cookStack);
+            case 2: return IafRecipeRegistry.getLightningForgeRecipe(cookStack);
+        }
+
+        return null;
+    }
+
+    private DragonForgeRecipe getRecipeForBlood(ItemStack bloodStack) {
+        switch (this.isFire) {
+            case 0: return IafRecipeRegistry.getFireForgeRecipeForBlood(bloodStack);
+            case 1: return IafRecipeRegistry.getIceForgeRecipeForBlood(bloodStack);
+            case 2: return IafRecipeRegistry.getLightningForgeRecipeForBlood(bloodStack);
+        }
+
+        return null;
+    }
+
+    private Block getDefaultOutput() {
+        if (this.isFire == 1) {
+            return IafBlockRegistry.DRAGON_ICE;
+        }
+
+        return IafBlockRegistry.ASH;
+    }
+
+    private DragonForgeRecipe getCurrentRecipe(ItemStack cookStack, ItemStack bloodStack) {
+        DragonForgeRecipe forgeRecipe = getRecipeForInput(cookStack);
+        if (
+            forgeRecipe != null &&
+            // Item input and quantity match
+            cookStack.isItemEqual(forgeRecipe.getInput()) &&
+            cookStack.getCount() >= forgeRecipe.getInput().getCount() &&
+            // Blood item and quantity match
+            bloodStack.isItemEqual(forgeRecipe.getBlood()) &&
+            bloodStack.getCount() >= forgeRecipe.getBlood().getCount()
+        ) {
+            return forgeRecipe;
+        }
+
+        return new DragonForgeRecipe(
+            new ItemStack(cookStack.getItem()),
+            new ItemStack(bloodStack.getItem()),
+            new ItemStack(getDefaultOutput())
+        );
+    }
+
     private ItemStack getCurrentResult(ItemStack cookStack, ItemStack bloodStack) {
-        DragonForgeRecipe forgeRecipe = null;
-        if (this.isFire == 0) {
-            forgeRecipe = IafRecipeRegistry.getFireForgeRecipe(cookStack);
-        } else if (this.isFire == 1) {
-            forgeRecipe = IafRecipeRegistry.getIceForgeRecipe(cookStack);
-        } else {
-            forgeRecipe = IafRecipeRegistry.getLightningForgeRecipe(cookStack);
-        }
-        ItemStack itemstack = ItemStack.EMPTY;
-        if (forgeRecipe != null) {
-            if(bloodStack.isItemEqual(forgeRecipe.getBlood())){
-                itemstack = forgeRecipe.getOutput();
-            }
-        }
-        if (itemstack.isEmpty()) {
-            if (this.isFire == 0) {
-                itemstack = new ItemStack(IafBlockRegistry.ASH);
-            } else if (this.isFire == 1) {
-                itemstack = new ItemStack(IafBlockRegistry.DRAGON_ICE);
-            } else if (this.isFire == 2) {
-                itemstack = new ItemStack(IafBlockRegistry.ASH);
-            }
-        }
-        return itemstack;
+        return getCurrentRecipe(cookStack, bloodStack).getOutput();
     }
 
     public boolean canSmelt() {
-        if (this.forgeItemStacks.get(0).isEmpty()) {
+        ItemStack cookStack = this.forgeItemStacks.get(0);
+        if (cookStack.isEmpty()) {
             return false;
-        } else {
-            ItemStack itemstack = getCurrentResult(forgeItemStacks.get(0), forgeItemStacks.get(1));
-            if (itemstack.isEmpty()) {
-                return false;
-            } else {
-                ItemStack itemstack1 = this.forgeItemStacks.get(2);
-
-                if (itemstack1.isEmpty()) {
-                    return true;
-                } else if (!itemstack1.isItemEqual(itemstack)) {
-                    return false;
-                } else if (itemstack1.getCount() + itemstack.getCount() <= this.getInventoryStackLimit() && itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize())  // Forge fix: make furnace respect stack sizes in furnace recipes
-                {
-                    return true;
-                } else {
-                    return itemstack1.getCount() + itemstack.getCount() <= itemstack.getMaxStackSize(); // Forge fix: make furnace respect stack sizes in furnace recipes
-                }
-            }
         }
+
+        ItemStack bloodStack = this.forgeItemStacks.get(1);
+        DragonForgeRecipe forgeRecipe = getCurrentRecipe(cookStack, bloodStack);
+        ItemStack forgeRecipeOutput = forgeRecipe.getOutput();
+
+        if (forgeRecipeOutput.isEmpty()) {
+            return false;
+        }
+
+        ItemStack outputStack = this.forgeItemStacks.get(2);
+        if (
+            !outputStack.isEmpty() &&
+            !outputStack.isItemEqual(forgeRecipeOutput)
+        ) {
+            return false;
+        }
+
+        int calculatedOutputCount = outputStack.getCount() + forgeRecipeOutput.getCount();
+        return (
+            calculatedOutputCount <= this.getInventoryStackLimit() &&
+            calculatedOutputCount <= outputStack.getMaxStackSize()
+        );
     }
 
     public boolean isUsableByPlayer(PlayerEntity player) {
@@ -298,22 +329,24 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     public void smeltItem() {
-        if (this.canSmelt()) {
-            ItemStack itemstack = this.forgeItemStacks.get(0);
-            ItemStack bloodStack = this.forgeItemStacks.get(1);
-            ItemStack itemstack1 = getCurrentResult(forgeItemStacks.get(0), forgeItemStacks.get(1));
-            ItemStack itemstack2 = this.forgeItemStacks.get(2);
-
-            if (itemstack2.isEmpty()) {
-                this.forgeItemStacks.set(2, itemstack1.copy());
-            } else if (itemstack2.getItem() == itemstack1.getItem()) {
-                itemstack2.grow(itemstack1.getCount());
-            }
-            if (!bloodStack.isEmpty() && this.cookTime == 0) {
-                bloodStack.shrink(1);
-            }
-            itemstack.shrink(1);
+        if (!this.canSmelt()) {
+            return;
         }
+
+        ItemStack cookStack = this.forgeItemStacks.get(0);
+        ItemStack bloodStack = this.forgeItemStacks.get(1);
+        ItemStack outputStack = this.forgeItemStacks.get(2);
+
+        DragonForgeRecipe forgeRecipe = getCurrentRecipe(cookStack, bloodStack);
+
+        if (outputStack.isEmpty()) {
+            this.forgeItemStacks.set(2, forgeRecipe.getOutput().copy());
+        } else {
+            outputStack.grow(forgeRecipe.getOutput().getCount());
+        }
+
+        cookStack.shrink(forgeRecipe.getInput().getCount());
+        bloodStack.shrink(forgeRecipe.getBlood().getCount());
     }
 
     public void openInventory(PlayerEntity player) {
@@ -325,19 +358,12 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         if (index == 2) {
             return false;
-        } else if (index == 1) {
-            DragonForgeRecipe forgeRecipe = null;
-            if (this.isFire == 0) {
-                forgeRecipe = IafRecipeRegistry.getFireForgeRecipeForBlood(this.forgeItemStacks.get(0));
-            } else if (this.isFire == 1) {
-                forgeRecipe = IafRecipeRegistry.getIceForgeRecipeForBlood(this.forgeItemStacks.get(0));
-            } else {
-                forgeRecipe = IafRecipeRegistry.getLightningForgeRecipe(this.forgeItemStacks.get(0));
-            }
-            if (forgeRecipe != null) {
-                return true;
-            }
         }
+
+        if (index == 1) {
+            return getRecipeForBlood(stack) != null;
+        }
+
         return index == 0;
     }
 
@@ -445,7 +471,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        func_230337_a_(this.getBlockState(), packet.getNbtCompound());
+        read(this.getBlockState(), packet.getNbtCompound());
     }
 
     public CompoundNBT getUpdateTag() {

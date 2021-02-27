@@ -69,11 +69,25 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     private static ItemStack generateShield() {
         ItemStack itemstack = new ItemStack(Items.CYAN_BANNER);
         CompoundNBT compoundnbt = itemstack.getOrCreateChildTag("BlockEntityTag");
-        ListNBT listnbt = (new BannerPattern.Builder()).setPatternWithColor(BannerPattern.BASE, DyeColor.CYAN).setPatternWithColor(IafRecipeRegistry.PATTERN_DREAD, DyeColor.WHITE).func_222476_a();
+        ListNBT listnbt = (new BannerPattern.Builder()).setPatternWithColor(BannerPattern.BASE, DyeColor.CYAN).setPatternWithColor(IafRecipeRegistry.PATTERN_DREAD, DyeColor.WHITE).buildNBT();
         compoundnbt.put("Patterns", listnbt);
         ItemStack shield = new ItemStack(Items.SHIELD, 1);
         shield.setTag(itemstack.getTag());
         return shield;
+    }
+
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .createMutableAttribute(Attributes.MAX_HEALTH, 40.0D)
+                //SPEED
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25D)
+                //ATTACK
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2.0D)
+                //FOLLOW RANGE
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, 128.0D)
+                //ARMOR
+                .createMutableAttribute(Attributes.ARMOR, 20.0D);
     }
 
     protected void registerGoals() {
@@ -93,20 +107,6 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         }));
     }
 
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-                //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, 40.0D)
-                //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0.25D)
-                //ATTACK
-                .func_233815_a_(Attributes.field_233823_f_, 2.0D)
-                //FOLLOW RANGE
-                .func_233815_a_(Attributes.field_233819_b_, 128.0D)
-                //ARMOR
-                .func_233815_a_(Attributes.field_233826_i_, 20.0D);
-    }
-
     @Override
     protected void registerData() {
         super.registerData();
@@ -116,7 +116,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     public void livingTick() {
         super.livingTick();
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
-            BlockState belowBlock = world.getBlockState(this.func_233580_cy_().down());
+            BlockState belowBlock = world.getBlockState(this.getPosition().down());
             if (belowBlock.getBlock() != Blocks.AIR) {
                 for (int i = 0; i < 5; i++) {
                     this.world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, belowBlock), this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getBoundingBox().minY, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);

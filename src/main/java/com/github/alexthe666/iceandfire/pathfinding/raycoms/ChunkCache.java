@@ -136,7 +136,7 @@ public class ChunkCache implements IWorldReader
     @Override
     public Biome getBiome(BlockPos pos)
     {
-        return BiomeRegistry.field_244200_a;
+        return BiomeRegistry.PLAINS;
     }
 
     @Override
@@ -229,7 +229,7 @@ public class ChunkCache implements IWorldReader
     }
 
     @Override
-    public DimensionType func_230315_m_() {
+    public DimensionType getDimensionType() {
         return null;
     }
 

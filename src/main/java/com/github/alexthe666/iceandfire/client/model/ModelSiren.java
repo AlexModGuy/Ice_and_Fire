@@ -209,7 +209,7 @@ public class ModelSiren extends ModelDragonBase<EntitySiren> {
                     this.progressPosition(Head, entity.singProgress, 0, -12.0F, -0.5F);
                     this.walk(Right_Arm, speed_idle * 1.5F, degree_idle * 0.6F, false, 2, 0F, f2, 1);
                     this.flap(Right_Arm, speed_idle * 1.5F, degree_idle * 0.6F, false, 2, 0F, f2, 1);
-                    if (entity.func_233570_aj_()) {
+                    if (entity.isOnGround()) {
                         this.chainFlap(TAIL_NO_BASE, speed_idle, degree_idle, 0, f2, 1);
                         this.swing(Tail_2, speed_idle, degree_idle * 0.4F, false, 0F, -0.4F, f2, 1);
                         this.swing(Tail_3, speed_idle, degree_idle * 0.4F, false, 0F, 0.6F, f2, 1);
@@ -226,7 +226,7 @@ public class ModelSiren extends ModelDragonBase<EntitySiren> {
                     this.progressPosition(Tail_1, entity.singProgress, 0.0F, 18.9F, -0.2F);
                     this.walk(Right_Arm, speed_idle * 1.5F, degree_idle * 0.6F, false, 2, 0F, f2, 1);
                     this.walk(Left_Arm, speed_idle * 1.5F, degree_idle * 0.6F, true, 2, 0F, f2, 1);
-                    if (entity.func_233570_aj_()) {
+                    if (entity.isOnGround()) {
                         this.chainFlap(TAIL_NO_BASE, speed_idle, degree_idle, 0, f2, 1);
                     }
                     break;
@@ -243,7 +243,7 @@ public class ModelSiren extends ModelDragonBase<EntitySiren> {
                     this.walk(Left_Arm, speed_idle * 1.5F, degree_idle * 0.6F, true, 2, 0F, f2, 1);
                     this.flap(Right_Arm, speed_idle * 1.5F, degree_idle * 0.6F, false, 2, 0F, f2, 1);
                     this.flap(Left_Arm, speed_idle * 1.5F, degree_idle * 0.6F, true, 2, 0F, f2, 1);
-                    if (entity.func_233570_aj_()) {
+                    if (entity.isOnGround()) {
                         this.chainFlap(TAIL_NO_BASE, speed_idle, degree_idle * 0.5F, -1, f2, 1);
                     }
                     break;
@@ -251,8 +251,9 @@ public class ModelSiren extends ModelDragonBase<EntitySiren> {
         }else{
             this.faceTarget(f3, f4, 2, Neck, Head);
         }
-        entity.tail_buffer.applyChainSwingBuffer(TAIL_NO_BASE);
-
+        if(entity.tail_buffer != null){
+            entity.tail_buffer.applyChainSwingBuffer(TAIL_NO_BASE);
+        }
     }
 
     @Override

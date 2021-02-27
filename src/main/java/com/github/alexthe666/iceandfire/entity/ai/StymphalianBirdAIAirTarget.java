@@ -31,7 +31,7 @@ public class StymphalianBirdAIAirTarget extends Goal {
         } else {
             return new BlockPos((int) bird.getAttackTarget().getPosX(), (int) bird.getAttackTarget().getPosY() + bird.getAttackTarget().getEyeHeight(), (int) bird.getAttackTarget().getPosZ());
         }
-        return bird.func_233580_cy_();
+        return bird.getPosition();
     }
 
     public boolean shouldExecute() {
@@ -45,7 +45,7 @@ public class StymphalianBirdAIAirTarget extends Goal {
             if (bird.doesWantToLand()) {
                 return false;
             }
-            if (bird.airTarget != null && (bird.isTargetBlocked(Vector3d.func_237489_a_(bird.airTarget)))) {
+            if (bird.airTarget != null && (bird.isTargetBlocked(Vector3d.copyCentered(bird.airTarget)))) {
                 bird.airTarget = null;
             }
 
@@ -76,6 +76,6 @@ public class StymphalianBirdAIAirTarget extends Goal {
     }
 
     public Vector3d findAirTarget() {
-        return Vector3d.func_237489_a_(getNearbyAirTarget(bird));
+        return Vector3d.copyCentered(getNearbyAirTarget(bird));
     }
 }

@@ -50,9 +50,13 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
                 //HEALTH
-                .func_233815_a_(Attributes.field_233818_a_, 10)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 10)
                 //SPEED
-                .func_233815_a_(Attributes.field_233821_d_, 0D);
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0D);
+    }
+
+    public boolean canBreatheUnderwater() {
+        return true;
     }
 
     @Override
@@ -66,7 +70,7 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
     }
 
     public boolean isOnWall() {
-        return this.world.isAirBlock(this.func_233580_cy_().down());
+        return this.world.isAirBlock(this.getPosition().down());
     }
 
     public void onUpdate() {

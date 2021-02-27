@@ -37,7 +37,7 @@ public class HippogryphAIMate extends Goal {
     }
 
     public boolean shouldExecute() {
-        if (!this.hippo.isInLove() || this.hippo.func_233684_eK_()) {
+        if (!this.hippo.isInLove() || this.hippo.isSitting()) {
             return false;
         } else {
             this.targetMate = this.getNearbyMate();
@@ -46,7 +46,7 @@ public class HippogryphAIMate extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return !this.targetMate.isAlive() && this.targetMate.isInLove() && this.spawnBabyDelay < 60;
+        return this.targetMate.isAlive() && this.targetMate.isInLove() && this.spawnBabyDelay < 60;
     }
 
     public void resetTask() {

@@ -206,8 +206,8 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
     }
 
     @Override
-    public void func_230337_a_(BlockState blockstate, CompoundNBT compound) {
-        super.func_230337_a_(blockstate, compound);
+    public void read(BlockState blockstate, CompoundNBT compound) {
+        super.read(blockstate, compound);
         this.stacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, this.stacks);
 
@@ -288,7 +288,7 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        func_230337_a_(this.getBlockState(), packet.getNbtCompound());
+        read(this.getBlockState(), packet.getNbtCompound());
     }
 
     public CompoundNBT getUpdateTag() {

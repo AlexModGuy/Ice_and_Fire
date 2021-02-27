@@ -22,6 +22,9 @@ public class DragonAITargetNonTamed<T extends LivingEntity> extends NearestAttac
 
     @Override
     public boolean shouldExecute() {
+        if(!dragon.isTamed() && dragon.lookingForRoostAIFlag){
+            return false;
+        }
         return !dragon.isTamed() && !dragon.isSleeping() && super.shouldExecute();
     }
 
@@ -30,7 +33,7 @@ public class DragonAITargetNonTamed<T extends LivingEntity> extends NearestAttac
     }
 
     protected double getTargetDistance() {
-        ModifiableAttributeInstance iattributeinstance = this.goalOwner.getAttribute(Attributes.field_233819_b_);
+        ModifiableAttributeInstance iattributeinstance = this.goalOwner.getAttribute(Attributes.FOLLOW_RANGE);
         return iattributeinstance == null ? 128.0D : iattributeinstance.getValue();
     }
 }
