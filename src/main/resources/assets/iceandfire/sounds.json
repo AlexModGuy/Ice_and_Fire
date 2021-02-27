@@ -902,7 +902,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/deathworm/giant/dle_0",
+        "name": "iceandfire:mobs/deathworm/giant/idle_0",
         "volume": 0.4
       },
       {
