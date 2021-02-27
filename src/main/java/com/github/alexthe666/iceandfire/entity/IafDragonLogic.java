@@ -129,6 +129,8 @@ public class IafDragonLogic {
                     dragon.setSleeping(true);
                 }
             }
+        } else{
+            dragon.lookingForRoostAIFlag = false;
         }
         if (dragon.isSleeping() && (dragon.isFlying() || dragon.isHovering() || dragon.isInWater() || (dragon.world.canBlockSeeSky(dragon.getPosition()) && dragon.isTimeToWake() && !dragon.isTamed() || dragon.isTimeToWake() && dragon.isTamed()) || dragon.getAttackTarget() != null || !dragon.getPassengers().isEmpty())) {
             dragon.setSleeping(false);
