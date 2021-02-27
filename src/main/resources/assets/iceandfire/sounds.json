@@ -3,7 +3,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/ghost/ghost_jumpscare",
+        "name": "iceandfire:mobs/ghost/jumpscare",
         "volume": 0.8
       }
     ]
@@ -12,11 +12,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/ghost/ghost_attack_0",
+        "name": "iceandfire:mobs/ghost/attack_0",
         "volume": 0.8
       },
       {
-        "name": "iceandfire:mobs/ghost/ghost_attack_1",
+        "name": "iceandfire:mobs/ghost/attack_1",
         "volume": 0.8
       }
     ],
@@ -26,15 +26,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/ghost/ghost_idle_0",
+        "name": "iceandfire:mobs/ghost/idle_0",
         "volume": 0.8
       },
       {
-        "name": "iceandfire:mobs/ghost/ghost_idle_1",
+        "name": "iceandfire:mobs/ghost/idle_1",
         "volume": 0.8
       },
       {
-        "name": "iceandfire:mobs/ghost/ghost_idle_2",
+        "name": "iceandfire:mobs/ghost/idle_2",
         "volume": 0.8
       }
     ],
@@ -44,11 +44,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/ghost/ghost_hurt_0",
+        "name": "iceandfire:mobs/ghost/hurt_0",
         "volume": 0.8
       },
       {
-        "name": "iceandfire:mobs/ghost/ghost_hurt_1",
+        "name": "iceandfire:mobs/ghost/hurt_1",
         "volume": 0.8
       }
     ],
@@ -58,11 +58,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/ghost/ghost_hurt_0",
+        "name": "iceandfire:mobs/ghost/hurt_0",
         "volume": 0.8
       },
       {
-        "name": "iceandfire:mobs/ghost/ghost_hurt_1",
+        "name": "iceandfire:mobs/ghost/hurt_1",
         "volume": 0.8
       }
     ],
@@ -72,7 +72,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_breath_crackle",
+        "name": "iceandfire:mobs/dragon/lightning/breath_crackle",
         "volume": 0.8
       }
     ]
@@ -81,7 +81,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_breath",
+        "name": "iceandfire:mobs/dragon/lightning/breath",
         "volume": 0.4
       }
     ],
@@ -91,15 +91,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_adult_roar_0",
+        "name": "iceandfire:mobs/dragon/lightning/adult_roar_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_adult_roar_1",
+        "name": "iceandfire:mobs/dragon/lightning/adult_roar_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_adult_roar_2",
+        "name": "iceandfire:mobs/dragon/lightning/adult_roar_2",
         "volume": 0.4
       }
     ],
@@ -109,15 +109,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_teen_roar_0",
+        "name": "iceandfire:mobs/dragon/lightning/teen_roar_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_teen_roar_1",
+        "name": "iceandfire:mobs/dragon/lightning/teen_roar_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_teen_roar_2",
+        "name": "iceandfire:mobs/dragon/lightning/teen_roar_2",
         "volume": 0.4
       }
     ],
@@ -127,7 +127,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_child_die_0",
+        "name": "iceandfire:mobs/dragon/lightning/child_die_0",
         "volume": 0.4
       }
     ],
@@ -137,15 +137,15 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_child_idle_0",
+        "name": "iceandfire:mobs/dragon/lightning/child_idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_child_idle_1",
+        "name": "iceandfire:mobs/dragon/lightning/child_idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_child_idle_2",
+        "name": "iceandfire:mobs/dragon/lightning/child_idle_2",
         "volume": 0.4
       }
     ],
@@ -155,15 +155,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_child_hurt_0",
+        "name": "iceandfire:mobs/dragon/lightning/child_hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_child_hurt_1",
+        "name": "iceandfire:mobs/dragon/lightning/child_hurt_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_child_hurt_2",
+        "name": "iceandfire:mobs/dragon/lightning/child_hurt_2",
         "volume": 0.4
       }
     ],
@@ -173,7 +173,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_child_die_0",
+        "name": "iceandfire:mobs/dragon/lightning/child_die_0",
         "volume": 0.4
       }
     ],
@@ -183,15 +183,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_teen_idle_0",
+        "name": "iceandfire:mobs/dragon/lightning/teen_idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_teen_idle_1",
+        "name": "iceandfire:mobs/dragon/lightning/teen_idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_teen_idle_2",
+        "name": "iceandfire:mobs/dragon/lightning/teen_idle_2",
         "volume": 0.4
       }
     ],
@@ -201,15 +201,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_teen_hurt_0",
+        "name": "iceandfire:mobs/dragon/lightning/teen_hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_teen_hurt_1",
+        "name": "iceandfire:mobs/dragon/lightning/teen_hurt_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_teen_hurt_2",
+        "name": "iceandfire:mobs/dragon/lightning/teen_hurt_2",
         "volume": 0.4
       }
     ],
@@ -219,7 +219,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_teen_die_0",
+        "name": "iceandfire:mobs/dragon/lightning/teen_die_0",
         "volume": 0.4
       }
     ],
@@ -229,15 +229,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_adult_idle_0",
+        "name": "iceandfire:mobs/dragon/lightning/adult_idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_adult_idle_1",
+        "name": "iceandfire:mobs/dragon/lightning/adult_idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_adult_idle_2",
+        "name": "iceandfire:mobs/dragon/lightning/adult_idle_2",
         "volume": 0.4
       }
     ],
@@ -247,15 +247,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_adult_hurt_0",
+        "name": "iceandfire:mobs/dragon/lightning/adult_hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_adult_hurt_1",
+        "name": "iceandfire:mobs/dragon/lightning/adult_hurt_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_adult_hurt_2",
+        "name": "iceandfire:mobs/dragon/lightning/adult_hurt_2",
         "volume": 0.4
       }
     ],
@@ -265,7 +265,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/lightning/lightningdragon_adult_die_0",
+        "name": "iceandfire:mobs/dragon/lightning/adult_die_0",
         "volume": 0.4
       }
     ],
@@ -275,11 +275,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dread/dread_ghoul_idle_0",
+        "name": "iceandfire:mobs/dread/ghoul_idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dread/dread_ghoul_idle_1",
+        "name": "iceandfire:mobs/dread/ghoul_idle_1",
         "volume": 0.4
       }
     ],
@@ -289,11 +289,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dread/dread_lich_summon_0",
+        "name": "iceandfire:mobs/dread/lich_summon_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dread/dread_lich_summon_1",
+        "name": "iceandfire:mobs/dread/lich_summon_1",
         "volume": 0.4
       }
     ],
@@ -303,7 +303,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/hydra/hydra_regen_head",
+        "name": "iceandfire:mobs/hydra/regen_head",
         "volume": 0.4
       }
     ]
@@ -312,11 +312,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/hydra/hydra_spit_0",
+        "name": "iceandfire:mobs/hydra/spit_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/hydra/hydra_spit_1",
+        "name": "iceandfire:mobs/hydra/spit_1",
         "volume": 0.4
       }
     ],
@@ -326,15 +326,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/hydra/hydra_idle_0",
+        "name": "iceandfire:mobs/hydra/idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/hydra/hydra_idle_1",
+        "name": "iceandfire:mobs/hydra/idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/hydra/hydra_idle_2",
+        "name": "iceandfire:mobs/hydra/idle_2",
         "volume": 0.4
       }
     ],
@@ -344,15 +344,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/hydra/hydra_hurt_0",
+        "name": "iceandfire:mobs/hydra/hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/hydra/hydra_hurt_1",
+        "name": "iceandfire:mobs/hydra/hurt_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/hydra/hydra_hurt_2",
+        "name": "iceandfire:mobs/hydra/hurt_2",
         "volume": 0.4
       }
     ],
@@ -362,7 +362,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/hydra/hydra_die",
+        "name": "iceandfire:mobs/hydra/die",
         "volume": 0.4
       }
     ],
@@ -404,7 +404,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/sea_serpent/sea_serpent_breath",
+        "name": "iceandfire:mobs/sea_serpent/breath",
         "volume": 0.4
       }
     ],
@@ -414,7 +414,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/sea_serpent/sea_serpent_bite",
+        "name": "iceandfire:mobs/sea_serpent/bite",
         "volume": 0.4
       }
     ],
@@ -424,7 +424,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/sea_serpent/sea_serpent_splash",
+        "name": "iceandfire:mobs/sea_serpent/splash",
         "volume": 0.4
       }
     ]
@@ -433,7 +433,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/sea_serpent/sea_serpent_roar",
+        "name": "iceandfire:mobs/sea_serpent/roar",
         "volume": 0.4
       }
     ],
@@ -443,11 +443,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/sea_serpent/sea_serpent_idle_0",
+        "name": "iceandfire:mobs/sea_serpent/idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/sea_serpent/sea_serpent_idle_1",
+        "name": "iceandfire:mobs/sea_serpent/idle_1",
         "volume": 0.4
       }
     ],
@@ -457,15 +457,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/sea_serpent/sea_serpent_hurt_0",
+        "name": "iceandfire:mobs/sea_serpent/hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/sea_serpent/sea_serpent_hurt_1",
+        "name": "iceandfire:mobs/sea_serpent/hurt_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/sea_serpent/sea_serpent_hurt_2",
+        "name": "iceandfire:mobs/sea_serpent/hurt_2",
         "volume": 0.4
       }
     ],
@@ -475,7 +475,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/sea_serpent/sea_serpent_die",
+        "name": "iceandfire:mobs/sea_serpent/die",
         "volume": 0.4
       }
     ],
@@ -485,23 +485,23 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/amphithere/amphithere_idle_0",
+        "name": "iceandfire:mobs/amphithere/idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/amphithere/amphithere_idle_1",
+        "name": "iceandfire:mobs/amphithere/idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/amphithere/amphithere_idle_2",
+        "name": "iceandfire:mobs/amphithere/idle_2",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/amphithere/amphithere_idle_3",
+        "name": "iceandfire:mobs/amphithere/idle_3",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/amphithere/amphithere_idle_4",
+        "name": "iceandfire:mobs/amphithere/idle_4",
         "volume": 0.4
       }
     ],
@@ -511,15 +511,15 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/amphithere/amphithere_hurt_0",
+        "name": "iceandfire:mobs/amphithere/hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/amphithere/amphithere_hurt_1",
+        "name": "iceandfire:mobs/amphithere/hurt_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/amphithere/amphithere_hurt_2",
+        "name": "iceandfire:mobs/amphithere/hurt_2",
         "volume": 0.4
       }
     ],
@@ -529,11 +529,11 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/amphithere/amphithere_die_0",
+        "name": "iceandfire:mobs/amphithere/die_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/amphithere/amphithere_die_1",
+        "name": "iceandfire:mobs/amphithere/die_1",
         "volume": 0.4
       }
     ],
@@ -543,7 +543,7 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/amphithere/amphithere_gust",
+        "name": "iceandfire:mobs/amphithere/gust",
         "volume": 0.4
       }
     ]
@@ -552,7 +552,7 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/amphithere/amphithere_bite",
+        "name": "iceandfire:mobs/amphithere/bite",
         "volume": 0.4
       }
     ],
@@ -562,11 +562,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/myrmex/myrmex_bite_0",
+        "name": "iceandfire:mobs/myrmex/bite_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/myrmex/myrmex_bite_1",
+        "name": "iceandfire:mobs/myrmex/bite_1",
         "volume": 0.4
       }
     ],
@@ -576,11 +576,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/myrmex/myrmex_sting_0",
+        "name": "iceandfire:mobs/myrmex/sting_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/myrmex/myrmex_sting_1",
+        "name": "iceandfire:mobs/myrmex/sting_1",
         "volume": 0.4
       }
     ],
@@ -590,15 +590,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/myrmex/myrmex_idle_0",
+        "name": "iceandfire:mobs/myrmex/idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/myrmex/myrmex_idle_1",
+        "name": "iceandfire:mobs/myrmex/idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/myrmex/myrmex_idle_2",
+        "name": "iceandfire:mobs/myrmex/idle_2",
         "volume": 0.4
       }
     ],
@@ -608,7 +608,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/myrmex/myrmex_walk",
+        "name": "iceandfire:mobs/myrmex/walk",
         "volume": 0.4
       }
     ],
@@ -618,11 +618,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/myrmex/myrmex_hurt_0",
+        "name": "iceandfire:mobs/myrmex/hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/myrmex/myrmex_hurt_1",
+        "name": "iceandfire:mobs/myrmex/hurt_1",
         "volume": 0.4
       }
     ],
@@ -632,7 +632,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/myrmex/myrmex_die",
+        "name": "iceandfire:mobs/myrmex/die",
         "volume": 0.4
       }
     ],
@@ -642,15 +642,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/stymphalian/stymphalian_bird_idle_0",
+        "name": "iceandfire:mobs/stymphalian_bird/idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/stymphalian/stymphalian_bird_idle_1",
+        "name": "iceandfire:mobs/stymphalian_bird/idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/stymphalian/stymphalian_bird_idle_2",
+        "name": "iceandfire:mobs/stymphalian_bird/idle_2",
         "volume": 0.4
       }
     ],
@@ -660,7 +660,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/stymphalian/stymphalian_bird_attack",
+        "name": "iceandfire:mobs/stymphalian_bird/attack",
         "volume": 0.4
       }
     ],
@@ -670,11 +670,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/stymphalian/stymphalian_bird_hurt_0",
+        "name": "iceandfire:mobs/stymphalian_bird/hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/stymphalian/stymphalian_bird_hurt_1",
+        "name": "iceandfire:mobs/stymphalian_bird/hurt_1",
         "volume": 0.4
       }
     ],
@@ -684,7 +684,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/stymphalian/stymphalian_bird_die",
+        "name": "iceandfire:mobs/stymphalian_bird/die",
         "volume": 0.4
       }
     ],
@@ -694,7 +694,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/cockatrice/cockatrice_cry",
+        "name": "iceandfire:mobs/cockatrice/cry",
         "volume": 0.4
       }
     ],
@@ -704,11 +704,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/cockatrice/cockatrice_hurt_0",
+        "name": "iceandfire:mobs/cockatrice/hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/cockatrice/cockatrice_hurt_1",
+        "name": "iceandfire:mobs/cockatrice/hurt_1",
         "volume": 0.4
       }
     ],
@@ -718,15 +718,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/cockatrice/cockatrice_idle_0",
+        "name": "iceandfire:mobs/cockatrice/idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/cockatrice/cockatrice_idle_1",
+        "name": "iceandfire:mobs/cockatrice/idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/cockatrice/cockatrice_idle_2",
+        "name": "iceandfire:mobs/cockatrice/idle_2",
         "volume": 0.4
       }
     ],
@@ -736,11 +736,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/cockatrice/cockatrice_die_0",
+        "name": "iceandfire:mobs/cockatrice/die_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/cockatrice/cockatrice_die_1",
+        "name": "iceandfire:mobs/cockatrice/die_1",
         "volume": 0.4
       }
     ],
@@ -750,11 +750,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/troll/troll_idle_0",
+        "name": "iceandfire:mobs/troll/idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/troll/troll_idle_1",
+        "name": "iceandfire:mobs/troll/idle_1",
         "volume": 0.4
       }
     ],
@@ -764,7 +764,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/troll/troll_roar",
+        "name": "iceandfire:mobs/troll/roar",
         "volume": 0.4
       }
     ],
@@ -774,11 +774,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/troll/troll_hurt_0",
+        "name": "iceandfire:mobs/troll/hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/troll/troll_hurt_1",
+        "name": "iceandfire:mobs/troll/hurt_1",
         "volume": 0.4
       }
     ],
@@ -788,7 +788,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/troll/troll_die",
+        "name": "iceandfire:mobs/troll/die",
         "volume": 0.4
       }
     ],
@@ -798,7 +798,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/naga/naga_idle",
+        "name": "iceandfire:mobs/naga/idle",
         "volume": 0.4
       }
     ],
@@ -808,7 +808,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/naga/naga_idle",
+        "name": "iceandfire:mobs/naga/idle",
         "volume": 0.4
       }
     ],
@@ -818,11 +818,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/naga/naga_hurt_0",
+        "name": "iceandfire:mobs/naga/hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/naga/naga_hurt_1",
+        "name": "iceandfire:mobs/naga/hurt_1",
         "volume": 0.4
       }
     ],
@@ -832,7 +832,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/naga/naga_die",
+        "name": "iceandfire:mobs/naga/die",
         "volume": 0.4
       }
     ],
@@ -842,23 +842,23 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/mermaid/mermaid_idle_0",
+        "name": "iceandfire:mobs/mermaid/idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/mermaid/mermaid_idle_1",
+        "name": "iceandfire:mobs/mermaid/idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/mermaid/mermaid_idle_2",
+        "name": "iceandfire:mobs/mermaid/idle_2",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/mermaid/mermaid_idle_3",
+        "name": "iceandfire:mobs/mermaid/idle_3",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/mermaid/mermaid_idle_4",
+        "name": "iceandfire:mobs/mermaid/idle_4",
         "volume": 0.4
       }
     ],
@@ -868,11 +868,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/mermaid/mermaid_hurt_0",
+        "name": "iceandfire:mobs/mermaid/hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/mermaid/mermaid_hurt_1",
+        "name": "iceandfire:mobs/mermaid/hurt_1",
         "volume": 0.4
       }
     ],
@@ -882,7 +882,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/mermaid/mermaid_die",
+        "name": "iceandfire:mobs/mermaid/die",
         "volume": 0.4
       }
     ],
@@ -902,11 +902,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/deathworm/deathworm_giant_idle_0",
+        "name": "iceandfire:mobs/deathworm/giant/dle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/deathworm/deathworm_giant_idle_1",
+        "name": "iceandfire:mobs/deathworm/giant/idle_1",
         "volume": 0.4
       }
     ],
@@ -916,11 +916,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/deathworm/deathworm_giant_attack_0",
+        "name": "iceandfire:mobs/deathworm/giant/attack_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/deathworm/deathworm_giant_attack_1",
+        "name": "iceandfire:mobs/deathworm/giant/attack_1",
         "volume": 0.4
       }
     ],
@@ -930,11 +930,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/deathworm/deathworm_giant_hurt_0",
+        "name": "iceandfire:mobs/deathworm/giant/hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/deathworm/deathworm_giant_hurt_1",
+        "name": "iceandfire:mobs/deathworm/giant/hurt_1",
         "volume": 0.4
       }
     ],
@@ -944,7 +944,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/deathworm/deathworm_giant_die",
+        "name": "iceandfire:mobs/deathworm/giant/die",
         "volume": 0.4
       }
     ],
@@ -954,11 +954,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/deathworm/deathworm_idle_0",
+        "name": "iceandfire:mobs/deathworm/idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/deathworm/deathworm_idle_1",
+        "name": "iceandfire:mobs/deathworm/idle_1",
         "volume": 0.4
       }
     ],
@@ -968,11 +968,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/deathworm/deathworm_attack_0",
+        "name": "iceandfire:mobs/deathworm/attack_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/deathworm/deathworm_attack_1",
+        "name": "iceandfire:mobs/deathworm/attack_1",
         "volume": 0.4
       }
     ],
@@ -982,11 +982,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/deathworm/deathworm_hurt_0",
+        "name": "iceandfire:mobs/deathworm/hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/deathworm/deathworm_hurt_1",
+        "name": "iceandfire:mobs/deathworm/hurt_1",
         "volume": 0.4
       }
     ],
@@ -996,7 +996,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/deathworm/deathworm_die",
+        "name": "iceandfire:mobs/deathworm/die",
         "volume": 0.4
       }
     ],
@@ -1006,19 +1006,19 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/hippocampus/hippocampus_idle_0",
+        "name": "iceandfire:mobs/hippocampus/idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/hippocampus/hippocampus_idle_1",
+        "name": "iceandfire:mobs/hippocampus/idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/hippocampus/hippocampus_idle_2",
+        "name": "iceandfire:mobs/hippocampus/idle_2",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/hippocampus/hippocampus_idle_3",
+        "name": "iceandfire:mobs/hippocampus/idle_3",
         "volume": 0.4
       }
     ],
@@ -1028,15 +1028,15 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/hippocampus/hippocampus_hurt_0",
+        "name": "iceandfire:mobs/hippocampus/hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/hippocampus/hippocampus_hurt_1",
+        "name": "iceandfire:mobs/hippocampus/hurt_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/hippocampus/hippocampus_hurt_2",
+        "name": "iceandfire:mobs/hippocampus/hurt_2",
         "volume": 0.4
       }
     ],
@@ -1046,7 +1046,7 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/hippocampus/hippocampus_die",
+        "name": "iceandfire:mobs/hippocampus/die",
         "volume": 0.4
       }
     ],
@@ -1056,7 +1056,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/cyclops/cyclops_idle",
+        "name": "iceandfire:mobs/cyclops/idle",
         "volume": 0.4
       }
     ],
@@ -1066,11 +1066,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/cyclops/cyclops_hurt_0",
+        "name": "iceandfire:mobs/cyclops/hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/cyclops/cyclops_hurt_1",
+        "name": "iceandfire:mobs/cyclops/hurt_1",
         "volume": 0.4
       }
     ],
@@ -1080,11 +1080,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/cyclops/cyclops_hurt_0",
+        "name": "iceandfire:mobs/cyclops/hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/cyclops/cyclops_hurt_1",
+        "name": "iceandfire:mobs/cyclops/hurt_1",
         "volume": 0.4
       }
     ],
@@ -1094,7 +1094,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/cyclops/cyclops_bite",
+        "name": "iceandfire:mobs/cyclops/bite",
         "volume": 0.4
       }
     ],
@@ -1104,7 +1104,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/cyclops/cyclops_blinded",
+        "name": "iceandfire:mobs/cyclops/blinded",
         "volume": 0.4
       }
     ],
@@ -1114,15 +1114,19 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/dragon_flight_0",
+        "name": "iceandfire:mobs/dragon/flight_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/dragon_flight_1",
+        "name": "iceandfire:mobs/dragon/flight_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/dragon_flight_2",
+        "name": "iceandfire:mobs/dragon/flight_2",
+        "volume": 0.4
+      },
+      {
+        "name": "iceandfire:mobs/dragon/flight_3",
         "volume": 0.4
       }
     ]
@@ -1151,23 +1155,23 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/pixie/pixie_idle_0",
+        "name": "iceandfire:mobs/pixie/idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/pixie/pixie_idle_1",
+        "name": "iceandfire:mobs/pixie/idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/pixie/pixie_idle_2",
+        "name": "iceandfire:mobs/pixie/idle_2",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/pixie/pixie_idle_3",
+        "name": "iceandfire:mobs/pixie/idle_3",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/pixie/pixie_idle_4",
+        "name": "iceandfire:mobs/pixie/idle_4",
         "volume": 0.4
       }
     ],
@@ -1177,19 +1181,19 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/pixie/pixie_hurt_0",
+        "name": "iceandfire:mobs/pixie/hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/pixie/pixie_hurt_1",
+        "name": "iceandfire:mobs/pixie/hurt_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/pixie/pixie_hurt_2",
+        "name": "iceandfire:mobs/pixie/hurt_2",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/pixie/pixie_hurt_3",
+        "name": "iceandfire:mobs/pixie/hurt_3",
         "volume": 0.4
       }
     ],
@@ -1199,7 +1203,7 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/pixie/pixie_death_0",
+        "name": "iceandfire:mobs/pixie/death_0",
         "volume": 0.4
       }
     ],
@@ -1209,11 +1213,11 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/pixie/pixie_taunt_0",
+        "name": "iceandfire:mobs/pixie/taunt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/pixie/pixie_taunt_1",
+        "name": "iceandfire:mobs/pixie/taunt_1",
         "volume": 0.4
       }
     ],
@@ -1223,11 +1227,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/gorgon/gorgon_idle_0",
+        "name": "iceandfire:mobs/gorgon/idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/gorgon/gorgon_idle_1",
+        "name": "iceandfire:mobs/gorgon/idle_1",
         "volume": 0.4
       }
     ],
@@ -1237,11 +1241,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/gorgon/gorgon_hurt_0",
+        "name": "iceandfire:mobs/gorgon/hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/gorgon/gorgon_hurt_1",
+        "name": "iceandfire:mobs/gorgon/hurt_1",
         "volume": 0.4
       }
     ],
@@ -1251,7 +1255,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/gorgon/gorgon_die",
+        "name": "iceandfire:mobs/gorgon/die",
         "volume": 0.4
       }
     ],
@@ -1261,7 +1265,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/gorgon/gorgon_attack",
+        "name": "iceandfire:mobs/gorgon/attack",
         "volume": 0.4
       }
     ],
@@ -1271,7 +1275,7 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/gorgon/gorgon_petrify",
+        "name": "iceandfire:mobs/gorgon/petrify",
         "volume": 0.4
       }
     ],
@@ -1291,27 +1295,27 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/hippogryph/hippogryph_idle_0",
+        "name": "iceandfire:mobs/hippogryph/idle_0",
         "volume": 0.6
       },
       {
-        "name": "iceandfire:mobs/hippogryph/hippogryph_idle_1",
+        "name": "iceandfire:mobs/hippogryph/idle_1",
         "volume": 0.6
       },
       {
-        "name": "iceandfire:mobs/hippogryph/hippogryph_idle_2",
+        "name": "iceandfire:mobs/hippogryph/idle_2",
         "volume": 0.6
       },
       {
-        "name": "iceandfire:mobs/hippogryph/hippogryph_idle_3",
+        "name": "iceandfire:mobs/hippogryph/idle_3",
         "volume": 0.6
       },
       {
-        "name": "iceandfire:mobs/hippogryph/hippogryph_idle_4",
+        "name": "iceandfire:mobs/hippogryph/idle_4",
         "volume": 0.6
       },
       {
-        "name": "iceandfire:mobs/hippogryph/hippogryph_idle_5",
+        "name": "iceandfire:mobs/hippogryph/idle_5",
         "volume": 0.6
       }
     ],
@@ -1321,15 +1325,15 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/hippogryph/hippogryph_hurt_0",
+        "name": "iceandfire:mobs/hippogryph/hurt_0",
         "volume": 0.6
       },
       {
-        "name": "iceandfire:mobs/hippogryph/hippogryph_hurt_1",
+        "name": "iceandfire:mobs/hippogryph/hurt_1",
         "volume": 0.6
       },
       {
-        "name": "iceandfire:mobs/hippogryph/hippogryph_hurt_2",
+        "name": "iceandfire:mobs/hippogryph/hurt_2",
         "volume": 0.6
       }
     ],
@@ -1339,11 +1343,11 @@
     "category": "neutral",
     "sounds": [
       {
-        "name": "iceandfire:mobs/hippogryph/hippogryph_die_0",
+        "name": "iceandfire:mobs/hippogryph/die_0",
         "volume": 0.6
       },
       {
-        "name": "iceandfire:mobs/hippogryph/hippogryph_die_1",
+        "name": "iceandfire:mobs/hippogryph/die_1",
         "volume": 0.6
       }
     ],
@@ -1363,35 +1367,25 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_breath",
+        "name": "iceandfire:mobs/dragon/fire/breath",
         "volume": 0.4
       }
     ],
     "subtitle": "iceandfire.sound.subtitle.firedragon_breath"
   },
-  "icedragon_breath": {
-    "category": "hostile",
-    "sounds": [
-      {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_breath",
-        "volume": 0.4
-      }
-    ],
-    "subtitle": "iceandfire.sound.subtitle.icedragon_breath"
-  },
   "firedragon_child_idle": {
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_child_idle_0",
+        "name": "iceandfire:mobs/dragon/fire/child_idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_child_idle_1",
+        "name": "iceandfire:mobs/dragon/fire/child_idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_child_idle_2",
+        "name": "iceandfire:mobs/dragon/fire/child_idle_2",
         "volume": 0.4
       }
     ],
@@ -1401,11 +1395,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_child_hurt_0",
+        "name": "iceandfire:mobs/dragon/fire/child_hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_child_hurt_1",
+        "name": "iceandfire:mobs/dragon/fire/child_hurt_1",
         "volume": 0.4
       }
     ],
@@ -1415,7 +1409,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_child_die_0",
+        "name": "iceandfire:mobs/dragon/fire/child_die_0",
         "volume": 0.4
       }
     ],
@@ -1425,7 +1419,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_child_die_0",
+        "name": "iceandfire:mobs/dragon/fire/child_die_0",
         "volume": 0.4
       }
     ],
@@ -1435,27 +1429,27 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_teen_idle_0",
+        "name": "iceandfire:mobs/dragon/fire/teen_idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_teen_idle_1",
+        "name": "iceandfire:mobs/dragon/fire/teen_idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_teen_idle_2",
+        "name": "iceandfire:mobs/dragon/fire/teen_idle_2",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_teen_idle_3",
+        "name": "iceandfire:mobs/dragon/fire/teen_idle_3",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_teen_idle_4",
+        "name": "iceandfire:mobs/dragon/fire/teen_idle_4",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_teen_idle_5",
+        "name": "iceandfire:mobs/dragon/fire/teen_idle_5",
         "volume": 0.4
       }
     ],
@@ -1465,11 +1459,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_teen_hurt_0",
+        "name": "iceandfire:mobs/dragon/fire/teen_hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_teen_hurt_1",
+        "name": "iceandfire:mobs/dragon/fire/teen_hurt_1",
         "volume": 0.4
       }
     ],
@@ -1479,7 +1473,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_teen_die_0",
+        "name": "iceandfire:mobs/dragon/fire/teen_die_0",
         "volume": 0.4
       }
     ],
@@ -1489,11 +1483,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_teen_roar_0",
+        "name": "iceandfire:mobs/dragon/fire/teen_roar_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_teen_roar_1",
+        "name": "iceandfire:mobs/dragon/fire/teen_roar_1",
         "volume": 0.4
       }
     ],
@@ -1503,19 +1497,19 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_adult_idle_0",
+        "name": "iceandfire:mobs/dragon/fire/adult_idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_adult_idle_1",
+        "name": "iceandfire:mobs/dragon/fire/adult_idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_adult_idle_2",
+        "name": "iceandfire:mobs/dragon/fire/adult_idle_2",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_adult_idle_3",
+        "name": "iceandfire:mobs/dragon/fire/adult_idle_3",
         "volume": 0.4
       }
     ],
@@ -1525,15 +1519,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_adult_hurt_0",
+        "name": "iceandfire:mobs/dragon/fire/adult_hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_adult_hurt_1",
+        "name": "iceandfire:mobs/dragon/fire/adult_hurt_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_adult_hurt_2",
+        "name": "iceandfire:mobs/dragon/fire/adult_hurt_2",
         "volume": 0.4
       }
     ],
@@ -1543,15 +1537,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_adult_hurt_0",
+        "name": "iceandfire:mobs/dragon/fire/adult_hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_adult_hurt_1",
+        "name": "iceandfire:mobs/dragon/fire/adult_hurt_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_adult_hurt_2",
+        "name": "iceandfire:mobs/dragon/fire/adult_hurt_2",
         "volume": 0.4
       }
     ],
@@ -1561,11 +1555,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_adult_roar_0",
+        "name": "iceandfire:mobs/dragon/fire/adult_roar_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/fire/firedragon_adult_roar_1",
+        "name": "iceandfire:mobs/dragon/fire/adult_roar_1",
         "volume": 0.4
       }
     ],
@@ -1575,25 +1569,35 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_adult_roar_0",
+        "name": "iceandfire:mobs/dragon/ice/adult_roar_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_adult_roar_1",
+        "name": "iceandfire:mobs/dragon/ice/adult_roar_1",
         "volume": 0.4
       }
     ],
     "subtitle": "iceandfire.sound.subtitle.icedragon_roar"
   },
+  "icedragon_breath": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "iceandfire:mobs/dragon/ice/breath",
+        "volume": 0.4
+      }
+    ],
+    "subtitle": "iceandfire.sound.subtitle.icedragon_breath"
+  },
   "icedragon_teen_roar": {
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_teen_roar_0",
+        "name": "iceandfire:mobs/dragon/ice/teen_roar_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_teen_roar_1",
+        "name": "iceandfire:mobs/dragon/ice/teen_roar_1",
         "volume": 0.4
       }
     ],
@@ -1603,7 +1607,7 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_child_die_0",
+        "name": "iceandfire:mobs/dragon/ice/child_die_0",
         "volume": 0.4
       }
     ],
@@ -1613,15 +1617,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_child_idle_0",
+        "name": "iceandfire:mobs/dragon/ice/child_idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_child_idle_1",
+        "name": "iceandfire:mobs/dragon/ice/child_idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_child_idle_2",
+        "name": "iceandfire:mobs/dragon/ice/child_idle_2",
         "volume": 0.4
       }
     ],
@@ -1631,19 +1635,19 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_child_hurt_0",
+        "name": "iceandfire:mobs/dragon/ice/child_hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_child_hurt_1",
+        "name": "iceandfire:mobs/dragon/ice/child_hurt_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_child_hurt_2",
+        "name": "iceandfire:mobs/dragon/ice/child_hurt_2",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_child_hurt_3",
+        "name": "iceandfire:mobs/dragon/ice/child_hurt_3",
         "volume": 0.4
       }
     ],
@@ -1653,19 +1657,19 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_child_hurt_0",
+        "name": "iceandfire:mobs/dragon/ice/child_hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_child_hurt_1",
+        "name": "iceandfire:mobs/dragon/ice/child_hurt_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_child_hurt_2",
+        "name": "iceandfire:mobs/dragon/ice/child_hurt_2",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_child_hurt_3",
+        "name": "iceandfire:mobs/dragon/ice/child_hurt_3",
         "volume": 0.4
       }
     ],
@@ -1675,19 +1679,19 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_teen_idle_0",
+        "name": "iceandfire:mobs/dragon/ice/teen_idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_teen_idle_1",
+        "name": "iceandfire:mobs/dragon/ice/teen_idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_teen_idle_2",
+        "name": "iceandfire:mobs/dragon/ice/teen_idle_2",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_teen_idle_3",
+        "name": "iceandfire:mobs/dragon/ice/teen_idle_3",
         "volume": 0.4
       }
     ],
@@ -1697,15 +1701,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_teen_hurt_0",
+        "name": "iceandfire:mobs/dragon/ice/teen_hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_teen_hurt_1",
+        "name": "iceandfire:mobs/dragon/ice/teen_hurt_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_teen_hurt_2",
+        "name": "iceandfire:mobs/dragon/ice/teen_hurt_2",
         "volume": 0.4
       }
     ],
@@ -1715,11 +1719,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_teen_die_0",
+        "name": "iceandfire:mobs/dragon/ice/teen_die_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_teen_die_1",
+        "name": "iceandfire:mobs/dragon/ice/teen_die_1",
         "volume": 0.4
       }
     ],
@@ -1729,15 +1733,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_adult_idle_0",
+        "name": "iceandfire:mobs/dragon/ice/adult_idle_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_adult_idle_1",
+        "name": "iceandfire:mobs/dragon/ice/adult_idle_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_adult_idle_2",
+        "name": "iceandfire:mobs/dragon/ice/adult_idle_2",
         "volume": 0.4
       }
     ],
@@ -1747,15 +1751,15 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_adult_hurt_0",
+        "name": "iceandfire:mobs/dragon/ice/adult_hurt_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_adult_hurt_1",
+        "name": "iceandfire:mobs/dragon/ice/adult_hurt_1",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_adult_hurt_2",
+        "name": "iceandfire:mobs/dragon/ice/adult_hurt_2",
         "volume": 0.4
       }
     ],
@@ -1765,11 +1769,11 @@
     "category": "hostile",
     "sounds": [
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_adult_die_0",
+        "name": "iceandfire:mobs/dragon/ice/adult_die_0",
         "volume": 0.4
       },
       {
-        "name": "iceandfire:mobs/dragon/ice/icedragon_adult_die_1",
+        "name": "iceandfire:mobs/dragon/ice/adult_die_1",
         "volume": 0.4
       }
     ],
