@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
@@ -18,7 +17,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
@@ -99,7 +97,7 @@ public class ItemGorgonHead extends Item implements IUsesTEISR, ICustomRendered 
         }
         if (pointedEntity != null) {
             if (pointedEntity instanceof LivingEntity) {
-                pointedEntity.playSound(IafSoundRegistry.GORGON_TURN_STONE, 1, 1);
+                pointedEntity.playSound(IafSoundRegistry.TURN_STONE, 1, 1);
                 EntityStoneStatue statue = EntityStoneStatue.buildStatueEntity((LivingEntity) pointedEntity);
                 if(pointedEntity instanceof PlayerEntity){
                     pointedEntity.attackEntityFrom(IafDamageRegistry.GORGON_DMG, Integer.MAX_VALUE);

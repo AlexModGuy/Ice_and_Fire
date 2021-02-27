@@ -86,7 +86,7 @@ public class DragonType {
                     dragon.setTamed(true);
                     dragon.setOwnerId(egg.getOwnerId());
                     egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, egg.getSoundCategory(), 2.5F, 1.0F, false);
-                    egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), IafSoundRegistry.DRAGON_HATCH, egg.getSoundCategory(), 2.5F, 1.0F, false);
+                    egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), IafSoundRegistry.EGG_HATCH, egg.getSoundCategory(), 2.5F, 1.0F, false);
                     egg.remove();
                 }
 
@@ -131,7 +131,7 @@ public class DragonType {
                     egg.world.addEntity(lightningboltentity);
                 }
                 egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, egg.getSoundCategory(), 2.5F, 1.0F, false);
-                egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), IafSoundRegistry.DRAGON_HATCH, egg.getSoundCategory(), 2.5F, 1.0F, false);
+                egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), IafSoundRegistry.EGG_HATCH, egg.getSoundCategory(), 2.5F, 1.0F, false);
                 egg.remove();
 
 

@@ -10,7 +10,7 @@ public final class IafSoundRegistry {
 
     public static final SoundEvent BESTIARY_PAGE = createSoundEvent("bestiary_page");
 
-    public static final SoundEvent DRAGON_HATCH = createSoundEvent("dragon_hatch");
+    public static final SoundEvent EGG_HATCH = createSoundEvent("egg_hatch");
 
     public static final SoundEvent FIREDRAGON_BREATH = createSoundEvent("firedragon_breath");
 
@@ -82,7 +82,7 @@ public final class IafSoundRegistry {
 
     public static final SoundEvent GORGON_PETRIFY = createSoundEvent("gorgon_petrify");
 
-    public static final SoundEvent GORGON_TURN_STONE = createSoundEvent("gorgon_turn_stone");
+    public static final SoundEvent TURN_STONE = createSoundEvent("turn_stone");
 
     public static final SoundEvent PIXIE_IDLE = createSoundEvent("pixie_idle");
 
