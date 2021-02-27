@@ -120,7 +120,8 @@ public class IafDragonLogic {
             dragon.lookingForRoostAIFlag = false;
         }
         if (IafConfig.doDragonsSleep && !dragon.isSleeping() && !dragon.isTimeToWake() && dragon.getPassengers().isEmpty()) {
-            if(dragon.hasHomePosition && dragon.getHomePosition() != null && dragon.getDistanceSquared(Vector3d.copyCentered(dragon.getHomePosition())) > dragon.getWidth() * 10){
+            if(dragon.hasHomePosition && dragon.getHomePosition() != null && dragon.getDistanceSquared(Vector3d.copyCentered(dragon.getHomePosition())) > dragon.getWidth() * 10
+                    && this.dragon.getCommand() != 2 && this.dragon.getCommand() != 1){
                 dragon.lookingForRoostAIFlag = true;
             }else{
                 dragon.lookingForRoostAIFlag = false;
