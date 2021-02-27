@@ -165,7 +165,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
             if (!world.isRemote) {
                 world.addEntity(myrmex);
             }
-            this.world.playSound(this.getPosX(), this.getPosY() + this.getEyeHeight(), this.getPosZ(), IafSoundRegistry.DRAGON_HATCH, this.getSoundCategory(), 2.5F, 1.0F, false);
+            this.world.playSound(this.getPosX(), this.getPosY() + this.getEyeHeight(), this.getPosZ(), IafSoundRegistry.EGG_HATCH, this.getSoundCategory(), 2.5F, 1.0F, false);
         }
     }
 
