@@ -36,10 +36,6 @@ public class GuiMyrmexAddRoom extends Screen {
         init();
     }
 
-    public boolean func_231177_au__() {
-        return false;
-    }
-
     protected void init() {
         super.init();
         this.buttons.clear();

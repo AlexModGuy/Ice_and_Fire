@@ -323,7 +323,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
             if (f > 0.5F && this.world.canSeeSky(blockpos)) {
                 this.setMotion(0, 0, 0);
                 this.setAnimation(NO_ANIMATION);
-                this.playSound(IafSoundRegistry.GORGON_TURN_STONE, 1, 1);
+                this.playSound(IafSoundRegistry.TURN_STONE, 1, 1);
                 this.stoneProgress = 20;
                 EntityStoneStatue statue = EntityStoneStatue.buildStatueEntity(this);
                 statue.getTrappedTag().putFloat("StoneProgress", 20);
