@@ -438,8 +438,6 @@ public class GuiBestiary extends Screen {
                     ms.pop();
 
                     drawItemStack(ms, new ItemStack(IafItemRegistry.PIXIE_DUST), 180, 131, 1.35F);
-                    drawItemStack(ms, new ItemStack(Items.GOLDEN_CARROT), 160, 131, 1.35F);
-                    drawItemStack(ms, new ItemStack(Items.GLISTERING_MELON_SLICE), 199, 131, 1.35F);
                     drawItemStack(ms, new ItemStack(Items.BOWL), 180, 150, 1.35F);
                     drawItemStack(ms, new ItemStack(IafItemRegistry.AMBROSIA), 171, 85, 2F);
                 }
