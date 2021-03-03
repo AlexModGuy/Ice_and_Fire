@@ -18,10 +18,11 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, true, "jungle", 1)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, true, "mesa", 1)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, true, "savanna", 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, true, "forest", 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 2)
+            .addBiomeEntry(BiomeEntryType.BIOME_DICT, true, "forest", 1);
+            //Not sure if firedragons should generate in mountainous terrain or not
+            /*.addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 2)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "mountain", 2)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "snowy", 2);
+            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "snowy", 2);*/
 
     public static final SpawnBiomeData ICEDRAGON_ROOST = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 0)
@@ -116,7 +117,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "mesa", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "mountains", 1)
+            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "mountain", 1)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 2)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "hills", 2)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 3)
