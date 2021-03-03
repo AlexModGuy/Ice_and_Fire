@@ -38,7 +38,6 @@ public class MyrmexAIStoreItems extends Goal {
             return false;
         }
         if (this.myrmex.getWaitTicks()>0){
-            this.myrmex.setWaitTicks(this.myrmex.getWaitTicks()-1);
             return false;
         }
         MyrmexHive village = this.myrmex.getHive();
@@ -50,7 +49,7 @@ public class MyrmexAIStoreItems extends Goal {
             nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(WorldGenMyrmexHive.RoomType.FOOD, this.myrmex.getRNG(), this.myrmex.getPosition()));
             nextCocoon = getNearbyCocoon(nextRoom);
             if(nextCocoon == null){
-                this.myrmex.setWaitTicks(new Random().nextInt(40));
+                this.myrmex.setWaitTicks(20 + new Random().nextInt(40));
             }
             return nextCocoon != null;
         }
@@ -125,7 +124,7 @@ public class MyrmexAIStoreItems extends Goal {
             TileEntity te = this.myrmex.world.getTileEntity(blockpos);
             if (te != null && te instanceof TileEntityMyrmexCocoon) {
                 if (!((TileEntityMyrmexCocoon) te).isFull(this.myrmex.getHeldItem(Hand.MAIN_HAND))) {
-                    closeCocoons.add(blockpos);
+                    closeCocoons.add(te.getPos());
                 }
             }
         });

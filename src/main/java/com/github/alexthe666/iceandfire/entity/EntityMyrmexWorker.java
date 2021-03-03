@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.entity;
 import javax.annotation.Nullable;
 
 import com.github.alexthe666.citadel.animation.Animation;
-import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.ai.*;
@@ -19,11 +18,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
@@ -40,6 +35,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class EntityMyrmexWorker extends EntityMyrmexBase {
 
@@ -145,6 +143,19 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     public boolean shouldWander() {
         return super.shouldWander() && this.canSeeSky();
     }
+
+    /*public void debugStuff(){
+        List<String> goals = this.goalSelector.getRunningGoals().map(goal -> goal.getGoal().toString()).collect(Collectors.toList());
+        List<String> targets = this.targetSelector.getRunningGoals().map(goal ->goal.getGoal().toString()).collect(Collectors.toList());
+        if (!goals.isEmpty())
+            LOGGER.info("GOALS: "+ goals);
+        if(!targets.isEmpty())
+            LOGGER.info("TARGET: " + targets);
+        if (this.getWaitTicks() != 0){
+            LOGGER.info(this.getWaitTicks());
+            LOGGER.info(this.lastGoal.toString());
+        }
+    }*/
 
     @Override
     protected VillagerTrades.ITrade[] getLevel1Trades() {

@@ -32,6 +32,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.merchant.IMerchant;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
@@ -257,7 +258,9 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                 this.getAttackTarget() instanceof PlayerEntity && this.getHive() != null && !this.getHive().isPlayerReputationLowEnoughToFight(this.getAttackTarget().getUniqueID()))) {
             this.setAttackTarget(null);
         }
-
+        if (this.getWaitTicks() > 0){
+            this.setWaitTicks(this.getWaitTicks()-1);
+        }
         if (this.getHealth() < this.getMaxHealth() && this.ticksExisted % 500 == 0 && this.isOnResin()) {
             this.heal(1);
             this.world.setEntityState(this, (byte) 76);
@@ -374,8 +377,10 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
     //Returns true if the entity can climb otherwise returns if it's on a ladder
     public boolean isOnLadder() {
-        if (this.getNavigator() instanceof AdvancedPathNavigate && this.getMotion().getY() >=0){
-            return ((AdvancedPathNavigate)this.navigator).getPathingOptions().canClimb();
+        if (this.getNavigator() instanceof AdvancedPathNavigate && this.getMotion().getY() >=-0.1){
+            if (((AdvancedPathNavigate)this.navigator).getPathingOptions().canClimb()){
+                return true;
+            }
         }
         return super.isOnLadder();
     }

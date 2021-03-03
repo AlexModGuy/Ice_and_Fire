@@ -49,17 +49,19 @@ public class ItemMyrmexStaff extends Item {
         if (playerIn.isSneaking()) {
             return super.onItemRightClick(worldIn, playerIn, hand);
         }
-        UUID id = itemStackIn.getTag().getUniqueId("HiveUUID");
-        if (!worldIn.isRemote) {
-            MyrmexHive hive = MyrmexWorldData.get(worldIn).getHiveFromUUID(id);
-            MyrmexWorldData.get(worldIn).addHive(worldIn, new MyrmexHive());
-            if (hive != null) {
-                IceAndFire.sendMSGToAll(new MessageGetMyrmexHive(hive.toNBT()));
-            } else {
-                IceAndFire.sendMSGToAll(new MessageSetMyrmexHiveNull());
+        if (itemStackIn.getTag() != null) {
+            UUID id = itemStackIn.getTag().getUniqueId("HiveUUID");
+            if (!worldIn.isRemote) {
+                MyrmexHive hive = MyrmexWorldData.get(worldIn).getHiveFromUUID(id);
+                MyrmexWorldData.get(worldIn).addHive(worldIn, new MyrmexHive());
+                if (hive != null) {
+                    IceAndFire.sendMSGToAll(new MessageGetMyrmexHive(hive.toNBT()));
+                } else {
+                    IceAndFire.sendMSGToAll(new MessageSetMyrmexHiveNull());
+                }
+            } else if (id != null && !id.equals(new UUID(0, 0))) {
+                IceAndFire.PROXY.openMyrmexStaffGui(itemStackIn);
             }
-        } else if (id != null && !id.equals(new UUID(0, 0))) {
-            IceAndFire.PROXY.openMyrmexStaffGui(itemStackIn);
         }
         playerIn.swingArm(hand);
         return new ActionResult<ItemStack>(ActionResultType.PASS, itemStackIn);
