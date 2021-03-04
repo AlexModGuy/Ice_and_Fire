@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.pathfinding.*;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.*;
 
@@ -238,8 +239,12 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             pathResult.setStatus(PathFindingStatus.COMPLETE);
             pathResult = null;
         }
+        //Make sure the entity isn't sleeping or chained when checking if it's stuck
+        if (!(this.entity instanceof EntityDragonBase && ((EntityDragonBase) this.entity).isEntitySleeping())
+            &&!((EntityDragonBase) this.entity).isChained()){
+            stuckHandler.checkStuck(this);
+        }
 
-        stuckHandler.checkStuck(this);
     }
 
     @Nullable
