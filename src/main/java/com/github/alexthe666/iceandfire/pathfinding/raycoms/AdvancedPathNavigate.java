@@ -240,8 +240,12 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             pathResult = null;
         }
         //Make sure the entity isn't sleeping or chained when checking if it's stuck
-        if (!(this.entity instanceof EntityDragonBase && ((EntityDragonBase) this.entity).isEntitySleeping())
-            &&!((EntityDragonBase) this.entity).isChained()){
+        if (this.entity instanceof EntityDragonBase){
+            if (!((EntityDragonBase) this.entity).isEntitySleeping() && !((EntityDragonBase) this.entity).isChained()){
+                stuckHandler.checkStuck(this);
+            }
+        }
+        else{
             stuckHandler.checkStuck(this);
         }
 
