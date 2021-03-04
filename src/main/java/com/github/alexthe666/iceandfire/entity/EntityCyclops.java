@@ -85,9 +85,6 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
         this.setPathPriority(PathNodeType.WATER, -1.0F);
         this.setPathPriority(PathNodeType.FENCE, 0.0F);
 
-        eyeEntity = new EntityCyclopsEye(this, 0.2F, 0, 7.4F, 1.2F, 0.5F, 1);
-        eyeEntity.copyLocationAndAnglesFrom(this);
-        eyeEntity.setParent(this);
         ANIMATION_STOMP = Animation.create(27);
         ANIMATION_EATPLAYER = Animation.create(40);
         ANIMATION_KICK = Animation.create(20);
@@ -254,6 +251,10 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
 
     public void livingTick() {
         super.livingTick();
+        if (eyeEntity == null){
+            eyeEntity = new EntityCyclopsEye(this, 0.2F, 0, 7.4F, 1.2F, 0.6F, 1);
+            eyeEntity.copyLocationAndAnglesFrom(this);
+        }
         if (world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }
@@ -300,7 +301,6 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
             }
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
-        eyeEntity.setParent(this);
         if(!eyeEntity.shouldContinuePersisting()){
             world.addEntity(eyeEntity);
         }
