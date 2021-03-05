@@ -54,7 +54,7 @@ public class BlockDragonforgeInput extends ContainerBlock implements IDragonProo
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult resultIn) {
         if (this.getConnectedTileEntity(worldIn, resultIn.getPos()) != null) {
             TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, resultIn.getPos());
-            if (forge.isFire == dragonType) {
+            if (forge != null && forge.isFire == dragonType) {
                 if (worldIn.isRemote) {
                     IceAndFire.PROXY.setRefrencedTE(worldIn.getTileEntity(forge.getPos()));
                 } else {
