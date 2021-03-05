@@ -104,11 +104,11 @@ public class WorldGenLightningDragonCave extends Feature<NoFeatureConfig> {
         int k = radius / 2;
         int l = radius;
         float f = (float) (j + k + l) * 0.333F + 0.5F;
-        for (BlockPos blockpos : BlockPos.getAllInBox(pos.add(-j, -k, -l), pos.add(j, k / 2, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
-            if (blockpos.distanceSq(pos) <= (double) (f * f) && worldIn.getBlockState(blockpos.down()).getMaterial() == Material.ROCK && worldIn.getBlockState(blockpos).getMaterial() != Material.ROCK) {
-                setGoldPile(worldIn, blockpos, rand);
+        BlockPos.getAllInBox(pos.add(-j, -k, -l), pos.add(j, k / 2, l)).map(BlockPos::toImmutable).forEach(blockPos -> {
+            if (blockPos.distanceSq(pos) <= (double) (f * f) && worldIn.getBlockState(blockPos.down()).getMaterial() == Material.ROCK && worldIn.getBlockState(blockPos).getMaterial() != Material.ROCK) {
+                setGoldPile(worldIn, blockPos, rand);
             }
-        }
+        });
 
     }
 
@@ -125,45 +125,45 @@ public class WorldGenLightningDragonCave extends Feature<NoFeatureConfig> {
         int k = radius / 2;
         int l = radius;
         float f = (float) (j + k + l) * 0.333F + 0.5F;
-        for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
-            if (blockpos.distanceSq(position) <= (double) (f * f)) {
+        BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).forEach(blockPos ->  {
+            if (blockPos.distanceSq(position) <= (double) (f * f)) {
                 if (!(worldIn.getBlockState(position).getBlock() instanceof ContainerBlock) && worldIn.getBlockState(position).getBlockHardness(worldIn, position) >= 0) {
                     boolean doOres = rand.nextInt(IafConfig.oreToStoneRatioForDragonCaves + 1) == 0;
                     if (doOres) {
                         int chance = rand.nextInt(199) + 1;
                         if (chance < 30) {
-                            worldIn.setBlockState(blockpos, Blocks.IRON_ORE.getDefaultState(), 3);
+                            worldIn.setBlockState(blockPos, Blocks.IRON_ORE.getDefaultState(), 3);
                         }
                         if (chance > 30 && chance < 40) {
-                            worldIn.setBlockState(blockpos, Blocks.GOLD_ORE.getDefaultState(), 3);
+                            worldIn.setBlockState(blockPos, Blocks.GOLD_ORE.getDefaultState(), 3);
                         }
                         if (chance > 40 && chance < 45) {
-                            worldIn.setBlockState(blockpos, IafConfig.generateCopperOre ? IafBlockRegistry.COPPER_ORE.getDefaultState() : IafBlockRegistry.CRACKLED_STONE.getDefaultState(), 3);
+                            worldIn.setBlockState(blockPos, IafConfig.generateCopperOre ? IafBlockRegistry.COPPER_ORE.getDefaultState() : IafBlockRegistry.CRACKLED_STONE.getDefaultState(), 3);
                         }
                         if (chance > 45 && chance < 50) {
-                            worldIn.setBlockState(blockpos, IafConfig.generateSilverOre ? IafBlockRegistry.SILVER_ORE.getDefaultState() : IafBlockRegistry.CRACKLED_STONE.getDefaultState(), 3);
+                            worldIn.setBlockState(blockPos, IafConfig.generateSilverOre ? IafBlockRegistry.SILVER_ORE.getDefaultState() : IafBlockRegistry.CRACKLED_STONE.getDefaultState(), 3);
                         }
                         if (chance > 50 && chance < 60) {
-                            worldIn.setBlockState(blockpos, Blocks.COAL_ORE.getDefaultState(), 3);
+                            worldIn.setBlockState(blockPos, Blocks.COAL_ORE.getDefaultState(), 3);
                         }
                         if (chance > 60 && chance < 70) {
-                            worldIn.setBlockState(blockpos, Blocks.REDSTONE_ORE.getDefaultState(), 3);
+                            worldIn.setBlockState(blockPos, Blocks.REDSTONE_ORE.getDefaultState(), 3);
                         }
                         if (chance > 70 && chance < 80) {
-                            worldIn.setBlockState(blockpos, Blocks.LAPIS_ORE.getDefaultState(), 3);
+                            worldIn.setBlockState(blockPos, Blocks.LAPIS_ORE.getDefaultState(), 3);
                         }
                         if (chance > 80 && chance < 90) {
-                            worldIn.setBlockState(blockpos, Blocks.DIAMOND_ORE.getDefaultState(), 3);
+                            worldIn.setBlockState(blockPos, Blocks.DIAMOND_ORE.getDefaultState(), 3);
                         }
                         if (chance > 90 && chance < 1000) {
-                            worldIn.setBlockState(blockpos, IafConfig.generateAmythestOre ? IafBlockRegistry.AMYTHEST_ORE.getDefaultState() : Blocks.EMERALD_ORE.getDefaultState(), 3);
+                            worldIn.setBlockState(blockPos, IafConfig.generateAmythestOre ? IafBlockRegistry.AMYTHEST_ORE.getDefaultState() : Blocks.EMERALD_ORE.getDefaultState(), 3);
                         }
                     } else {
-                        worldIn.setBlockState(blockpos, rand.nextBoolean() ? IafBlockRegistry.CRACKLED_COBBLESTONE.getDefaultState() : IafBlockRegistry.CRACKLED_STONE.getDefaultState(), 2);
+                        worldIn.setBlockState(blockPos, rand.nextBoolean() ? IafBlockRegistry.CRACKLED_COBBLESTONE.getDefaultState() : IafBlockRegistry.CRACKLED_STONE.getDefaultState(), 2);
                     }
                 }
             }
-        }
+        });
         sphereList.add(new SphereInfo(radius, position));
     }
 
@@ -172,13 +172,13 @@ public class WorldGenLightningDragonCave extends Feature<NoFeatureConfig> {
         int k = radius / 2;
         int l = radius;
         float f = (float) (j + k + l) * 0.333F + 0.5F;
-        for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
-            if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F))) {
+        BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).forEach(blockPos ->  {
+            if (blockPos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F))) {
                 if (!(worldIn.getBlockState(position).getBlock() instanceof ContainerBlock)) {
-                    worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 2);
+                    worldIn.setBlockState(blockPos, Blocks.AIR.getDefaultState(), 2);
                 }
             }
-        }
+        });
     }
 
 
