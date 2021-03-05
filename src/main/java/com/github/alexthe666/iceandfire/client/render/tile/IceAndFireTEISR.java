@@ -34,10 +34,12 @@ public class IceAndFireTEISR extends ItemStackTileEntityRenderer {
     @Override
     public void func_239207_a_(ItemStack itemStackIn, ItemCameraTransforms.TransformType p_239207_2_, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         if (itemStackIn.getItem() == IafItemRegistry.GORGON_HEAD) {
-            if (itemStackIn.getTag().getBoolean("Active")) {
-                renderGorgonHead.render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
-            } else {
-                renderGorgonHeadDead.render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+            if (itemStackIn.getTag() != null) {
+                if (itemStackIn.getTag().getBoolean("Active")) {
+                    renderGorgonHead.render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+                } else {
+                    renderGorgonHeadDead.render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+                }
             }
         }
         if (itemStackIn.getItem() == IafBlockRegistry.GHOST_CHEST.asItem()) {
