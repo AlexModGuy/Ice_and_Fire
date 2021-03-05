@@ -1,7 +1,7 @@
- "itemGroup.iceandfire": "얼음과 불 모드 아이템",
+{
+  "itemGroup.iceandfire": "얼음과 불 모드 아이템",
   "itemGroup.iceandfire.blocks": "얼음과 불 모드 블럭",
   "iceandfire.empty": "Ram",
-
   "block.iceandfire.lectern": "베스티아리 독서대",
   "block.iceandfire.podium": "단상",
   "block.iceandfire.podium_oak": "참나무 단상",
@@ -66,7 +66,7 @@
   "block.iceandfire.dragonscale_gray": "드래곤 비늘 블록",
   "block.iceandfire.dragonscale_blue": "드래곤 비늘 블록",
   "block.iceandfire.dragonscale_white": "드래곤 비늘 블록",
-  "block.iceandfire.dragonscale_sapphire": 드래곤 비늘 블록",
+  "block.iceandfire.dragonscale_sapphire": "드래곤비늘블록",
   "block.iceandfire.dragonscale_silver": "드래곤 비늘 블록",
   "block.iceandfire.dragonscale_electric": "드래곤 비늘 블록",
   "block.iceandfire.dragonscale_amythest": "드래곤 비늘 블록",
@@ -390,7 +390,7 @@
   "item.iceandfire.siren_flute.desc_1": "사랑에 빠진 몹들은 공격을 할 수 없을 것이다.",
   "item.iceandfire.hippocampus_fin": "해마의 지느러미",
   "item.iceandfire.hippocampus_fin.desc_0": "§6레어드랍§r",
-  "item.iceandfire.hippocampus_slapper": "해마의 찰싹대"
+  "item.iceandfire.hippocampus_slapper": "해마의 찰싹대",
   "item.iceandfire.hippocampus_slapper.desc_0": "§d특이한 무기§r",
   "item.iceandfire.hippocampus_slapper.desc_1": "목표물이 물고기 꼬리로 가격당하면 느려지고 현혹되어 혼란스러워진다.",
   "item.iceandfire.stymphalian_feather_bundle": "스팀팔로스의 새의 깃털묶음",
@@ -509,7 +509,6 @@
   "item.iceandfire.banner_pattern_troll.desc": "트롤의 두개골",
   "item.iceandfire.banner_pattern_dread": "배너 패턴",
   "item.iceandfire.banner_pattern_dread.desc": "드레드",
-
   "entity.iceandfire.dragon_multipart": "드래곤 파트",
   "entity.iceandfire.multipart": "파트",
   "entity.iceandfire.hydra_multipart": "히드라의 송곳니",
@@ -609,7 +608,6 @@
   "dragon": "이름:",
   "dragon.unnamed": "익명의",
   "dragon.health": "체력:",
-  "dragon.stage": "단계",
   "dragon.gender": "성별:",
   "dragon.gender.male": "수컷",
   "dragon.gender.female": "암컷",
@@ -670,7 +668,7 @@
   "myrmex.message.establishroom_misc": "잡동사니 방을 만듭니다",
   "myrmex.message.establishroom_enterance_surface": "입구를 만듭니다.(표면)",
   "myrmex.message.establishroom_enterance_bottom": "입구를 만듭니다.(바닥)",
-  "myrmex.message.create_new_room": "새로운 방을 (%d, %d, %d)",에 만듭니다
+  "myrmex.message.create_new_room": "에만듭니다 새로운 방을 (%d, %d, %d)",
   "myrmex.message.dupe_room": "§c이 위치에는 방이 이미 있습니다.§r(%d, %d, %d)!",
   "myrmex.message.added_food_room": "이 위치에 식량창고를 추가합니다.(%d, %d, %d)",
   "myrmex.message.added_nursery_room": "이 위치에 유아실을 추가합니다.(%d, %d, %d)",
@@ -686,7 +684,6 @@
   "amphithere.command.0": "이 엠피데어는 방황하고 있습니다.",
   "amphithere.command.1": "이 엠피데어는 앉아 있습니다.",
   "amphithere.command.2": "이 엠피데어는 당신을 따라오고 있습니다.",
-
   "container.lectern.no_bestiary": "페이지를 추가할 수 없음",
   "container.lectern.costs": "값:",
   "container.lectern.manuscript.many": "%s 사본",
@@ -721,12 +718,10 @@
   "bestiary.lightningdragon": "라이트닝 드래곤",
   "bestiary.lightningdragonegg": "라이트닝 드래곤의 알",
   "bestiary.ghost": "유령",
-
   "lectern.nopages": "새로운 자료가 추가되지 않았다.",
   "silvertools.hurt": "언데드에게 데미지 +2 추가",
   "myrmextools.hurt": "비절지동물과 데스웜에게 데미지 +4 추가",
   "myrmextools.poison": "10초간 독 데미지",
-
   "dragon_sword_fire.hurt1": "아이스 드래곤에게 +8 데미지 추가",
   "dragon_sword_fire.hurt2": "대상을 불태우고 넉백시킨다",
   "dragon_sword_ice.hurt1": "파이어 드래곤에게 +8 데미지 추가",
@@ -747,7 +742,6 @@
   "message.iceandfire.dragonGrown": "이 용의 단계가 상승 했습니다.",
   "message.iceandfire.dragonGrownEnd": "!",
   "message.iceandfire.dragonGrownName": "단계가 상승 했습니다.",
-
   "death.attack.dragon.player_0": "드래곤에 의해 반으로 갈라졌습니다.",
   "death.attack.dragon.player_1": "드래곤에 의해 갈기갈기 찣겨졌습니다!",
   "death.attack.dragon.player_2": "드래곤에게 잡아먹혔습니다!",
@@ -764,10 +758,8 @@
   "key.dragon_fireAttack": "드래곤 브래스",
   "key.dragon_down": "드래곤 다운/아기 드래곤 오프",
   "key.dragon_change_view": "올라타면 3인칭 카메라로 변경",
-
   "tc.aspect.mythus": "신화적 존재,전설적인 존재,미확인된 존재,공포스러운 생명체",
   "tc.aspect.draco": "드래곤",
-
   "advancements.iceandfire.root.title": "Ice and Fire",
   "advancements.iceandfire.root.description": "마법의 생명체들의 세계에 합류하십시오",
   "advancements.iceandfire.bestiary.title": "몬스터들의 책",
@@ -804,7 +796,7 @@
   "advancements.iceandfire.gorgon_head.description": "모든 생명체를 돌로 만들수있는 무기인 고르곤의 머리를 얻으십시오.",
   "advancements.iceandfire.tame_pixie.title": "여기 당신의 남자가 가요",
   "advancements.iceandfire.tame_pixie.description": "픽시 근처에 케이크를 떨어뜨려서 친구가 되십시오.",
-  "advancements.iceandfire.jar_pixie.title": "서퍼 로사",,
+  "advancements.iceandfire.jar_pixie.title": "서퍼 로사",
   "advancements.iceandfire.jar_pixie.description": "픽시를 유리병에 가둬서 가루를 생산하십시오.",
   "advancements.iceandfire.pixie_wand.title": "내 마음은 어디에?",
   "advancements.iceandfire.pixie_wand.description": "전설적인 픽시의 무기를 만드십시오.",
@@ -843,7 +835,7 @@
   "advancements.iceandfire.kill_hydra.title": "헤라클레스의 12가지 과업",
   "advancements.iceandfire.kill_hydra.description": "히드라를 물리치십시오.",
   "advancements.iceandfire.kill_ghost.title": "Who You Gonna Call?",
-  "advancements.iceandfire.kill_ghost.description": "유령을 물리치십시오."
+  "advancements.iceandfire.kill_ghost.description": "유령을 물리치십시오.",
   "iceandfire.fire_dragon_forge": "파이어 드래곤 용광로",
   "iceandfire.ice_dragon_forge": "아이스 드래곤 용광로",
   "iceandfire.lightning_dragon_forge": "라이트닝 드래곤 용광로",
@@ -851,9 +843,7 @@
   "item.iceandfire.fire_dragon_blood.jei_desc": "빈 병을 들고있는채로 드래곤 시체를 우클릭하면 얻을 수 있습니다..",
   "item.iceandfire.ice_dragon_blood.jei_desc": "빈 병을 들고있는채로 드래곤 시체를 우클릭하면 얻을 수 있습니다..",
   "item.iceandfire.lightning_dragon_blood.jei_desc": "빈 병을 들고있는채로 드래곤 시체를 우클릭하면 얻을 수 있습니다..",
-  "item.iceandfire.dragonegg.jei_desc": "파이어 드래곤은 불속에 알을 넣고 오래 기다리면 부화하고 아이스 드래곤은 물속에 오래 넣어두면 부화합니다 또한 라이트닝 드래곤은 빗속에서 오랫동안 기다리면 부화할것입니다. 용은 가장 가까운 플레이어에게 
-
-각인할것입니다.",.",
+  "item.iceandfire.dragonegg.jei_desc": "파이어 드래곤은 불속에 알을 넣고 오래 기다리면 부화하고 아이스 드래곤은 물속에 오래 넣어두면 부화합니다 또한 라이트닝 드래곤은 빗속에서 오랫동안 기다리면 부화할것입니다. 용은 가장 가까운 플레이어에게 각인할것입니다.",
   "item.iceandfire.dragon_skull_fire.jei_desc": "트로피로서 땅이나 벽에 놓을 수 있습니다",
   "item.iceandfire.dragon_skull_ice.jei_desc": "트로피로서 땅이나 벽에 놓을 수 있습니다.",
   "item.iceandfire.dragon_skull_lightning.jei_desc": "트로피로서 땅이나 벽에 놓을 수 있습니다.",
@@ -875,8 +865,6 @@
   "modifier.fractured2.desc": "부상! §r\n의 %만큼 장비손상이 증가.",
   "modifier.splitting2": "분혈 II",
   "modifier.splitting2.desc": "애석하게도 갑자기 가속하며 발사된 화살은 둘로 쪼개집니다.",
-  "modifier.splitting2": "분혈 II",
-  "modifier.splitting2.desc": "셋중하나 화살은 갑자기 가속되는 화살은 세개로 쪼개집니다.",
   "material.desert_myrmex": "사막 미르멕스 껍질",
   "material.jungle_myrmex": "정글 미르멕스 껍질",
   "material.dragonsteel_fire": "파이어 드래곤 스틸",
@@ -906,9 +894,9 @@
   "modifier.surf_wax_america": "Surf Wax America",
   "modifier.surf_wax_america.desc": "\"당신은 당신의 차로 출근을 하고, 나는 내 보드를 타고... 마운트를 탄 플레이어는 추가적으로 5의 데미지를 준다..",
   "modifier.in_the_garage": "In The Garage",
-  "modifier.in_the_garage.desc": "\"내가 있는 차고에서..."플레이어가 직사광선을 쬐지 않을 때 추가적으로 5의 데미지를 준다.",
+  "modifier.in_the_garage.desc": "\"내가 있는 차고에서...\"플레이어가 직사광선을 쬐지 않을 때 추가적으로 5의 데미지를 준다.",
   "_comment": "BANNERS",
-    "block.minecraft.banner.fire.white": "하얀색 파이어 드래곤",
+  "block.minecraft.banner.fire.white": "하얀색 파이어 드래곤",
   "block.minecraft.banner.fire.orange": "주황색 파이어 드래곤",
   "block.minecraft.banner.fire.magenta": "자홍색 파이어 드래곤",
   "block.minecraft.banner.fire.light_blue": "하늘색 파이어 드래곤",
@@ -924,7 +912,6 @@
   "block.minecraft.banner.fire.green": "초록색 파이어 드래곤",
   "block.minecraft.banner.fire.red": "빨간색 파이어 드래곤",
   "block.minecraft.banner.fire.black": "검은색 파이어 드래곤",
-
   "block.minecraft.banner.ice.white": "하얀색 아이스 드래곤",
   "block.minecraft.banner.ice.orange": "주황색 아이스 드래곤",
   "block.minecraft.banner.ice.magenta": "자홍색 아이스 드래곤",
@@ -941,7 +928,6 @@
   "block.minecraft.banner.ice.green": "초록색 아이스 드래곤",
   "block.minecraft.banner.ice.red": "빨간색 아이스 드래곤",
   "block.minecraft.banner.ice.black": "검은색 아이스 드래곤",
-
   "block.minecraft.banner.lightning.white": "하얀색 라이트닝 드래곤",
   "block.minecraft.banner.lightning.orange": "주황색 라이트닝 드래곤",
   "block.minecraft.banner.lightning.magenta": "자홍색 라이트닝 드래곤",
@@ -958,7 +944,6 @@
   "block.minecraft.banner.lightning.green": "초록색 라이트닝 드래곤",
   "block.minecraft.banner.lightning.red": "빨간색 라이트닝 드래곤",
   "block.minecraft.banner.lightning.black": "검은색 라이트닝 드래곤",
-
   "block.minecraft.banner.fire_head.white": "하얀색 파이어 드래곤의 머리",
   "block.minecraft.banner.fire_head.orange": "주황색 파이어 드래곤의 머리",
   "block.minecraft.banner.fire_head.magenta": "자홍색 파이어 드래곤의 머리",
@@ -975,7 +960,6 @@
   "block.minecraft.banner.fire_head.green": "초록색 파이어 드래곤의 머리",
   "block.minecraft.banner.fire_head.red": "빨간색 파이어 드래곤의 머리",
   "block.minecraft.banner.fire_head.black": "검은색 파이어 드래곤의 머리",
-
   "block.minecraft.banner.ice_head.white": "하얀색 아이스 드래곤의 머리",
   "block.minecraft.banner.ice_head.orange": "주황색 아이스 드래곤의 머리",
   "block.minecraft.banner.ice_head.magenta": "자홍색 아이스 드래곤의 머리",
@@ -992,7 +976,6 @@
   "block.minecraft.banner.ice_head.green": "초록색 아이스 드래곤의 머리",
   "block.minecraft.banner.ice_head.red": "빨간색 아이스 드래곤의 머리",
   "block.minecraft.banner.ice_head.black": "검은색 아이스 드래곤의 머리",
-
   "block.minecraft.banner.lightning_head.white": "하얀색 라이트닝 드래곤의 머리",
   "block.minecraft.banner.lightning_head.orange": "주황색 라이트닝 드래곤의 머리",
   "block.minecraft.banner.lightning_head.magenta": "자홍색 라이트닝 드래곤의 머리",
@@ -1009,7 +992,6 @@
   "block.minecraft.banner.lightning_head.green": "초록색 라이트닝 드래곤의 머리",
   "block.minecraft.banner.lightning_head.red": "빨간색 라이트닝 드래곤의 머리",
   "block.minecraft.banner.lightning_head.black": "검은색 라이트닝 드래곤의 머리",
-  
   "block.minecraft.banner.gorgon.white": "하얀색 고르곤",
   "block.minecraft.banner.gorgon.orange": "주황색 고르곤",
   "block.minecraft.banner.gorgon.magenta": "자홍색 고르곤",
@@ -1026,7 +1008,6 @@
   "block.minecraft.banner.gorgon.green": "초록색 고르곤",
   "block.minecraft.banner.gorgon.red": "빨간색 고르곤",
   "block.minecraft.banner.gorgon.black": "검은색 고르곤",
-
   "block.minecraft.banner.fae.white": "하얀색 어린 요정",
   "block.minecraft.banner.fae.orange": "주황색 어린 요정",
   "block.minecraft.banner.fae.magenta": "자홍색 어린 요정",
@@ -1043,7 +1024,6 @@
   "block.minecraft.banner.fae.green": "초록색 어린 요정",
   "block.minecraft.banner.fae.red": "빨간색 어린 요정",
   "block.minecraft.banner.fae.black": "검은색 어린 요정",
-
   "block.minecraft.banner.hippogryph_head.white": "하얀색 히포그리프의 머리",
   "block.minecraft.banner.hippogryph_head.orange": "주황색 히포그리프의 머리",
   "block.minecraft.banner.hippogryph_head.magenta": "자홍색 히포그리프의 머리",
@@ -1060,7 +1040,6 @@
   "block.minecraft.banner.hippogryph_head.green": "초록색 히포그리프의 머리",
   "block.minecraft.banner.hippogryph_head.red": "빨간색 히포그리프의 머리",
   "block.minecraft.banner.hippogryph_head.black": "검은색 히포그리프의 머리",
-
   "block.minecraft.banner.hippocampus.white": "하얀색 해마",
   "block.minecraft.banner.hippocampus.orange": "주황색 해마",
   "block.minecraft.banner.hippocampus.magenta": "자홍색 해마",
@@ -1077,7 +1056,6 @@
   "block.minecraft.banner.hippocampus.green": "초록색 해마",
   "block.minecraft.banner.hippocampus.red": "빨간색 해마",
   "block.minecraft.banner.hippocampus.black": "검은색 해마",
-
   "block.minecraft.banner.mermaid.white": "하얀색 인어",
   "block.minecraft.banner.mermaid.orange": "주황색 인어",
   "block.minecraft.banner.mermaid.magenta": "자홍색 인어",
@@ -1094,7 +1072,6 @@
   "block.minecraft.banner.mermaid.green": "초록색 인어",
   "block.minecraft.banner.mermaid.red": "빨간색 인어",
   "block.minecraft.banner.mermaid.black": "검은색 인어",
-
   "block.minecraft.banner.troll.white": "하얀색 트롤",
   "block.minecraft.banner.troll.orange": "주황색 트롤",
   "block.minecraft.banner.troll.magenta": "자홍색 트롤",
@@ -1111,7 +1088,6 @@
   "block.minecraft.banner.troll.green": "초록색 트롤",
   "block.minecraft.banner.troll.red": "빨간색 트롤",
   "block.minecraft.banner.troll.black": "검은색 트롤",
-
   "block.minecraft.banner.eye.white": "하얀색 눈",
   "block.minecraft.banner.eye.orange": "주황색 눈",
   "block.minecraft.banner.eye.magenta": "자홍색 눈",
@@ -1128,7 +1104,6 @@
   "block.minecraft.banner.eye.green": "초록색 눈",
   "block.minecraft.banner.eye.red": "빨간색 눈",
   "block.minecraft.banner.eye.black": "검은색 눈",
-
   "block.minecraft.banner.feather.white": "하얀색 깃털",
   "block.minecraft.banner.feather.orange": "주황색 깃털",
   "block.minecraft.banner.feather.magenta": "자홍색 깃털",
@@ -1145,7 +1120,6 @@
   "block.minecraft.banner.feather.green": "초록색 깃털",
   "block.minecraft.banner.feather.red": "빨간색 깃털",
   "block.minecraft.banner.feather.black": "검은색 깃털",
-
   "block.minecraft.banner.bird.white": "하얀색 새",
   "block.minecraft.banner.bird.orange": "주황색 새",
   "block.minecraft.banner.bird.magenta": "자홍색 새",
@@ -1162,7 +1136,6 @@
   "block.minecraft.banner.bird.green": "초록색 새",
   "block.minecraft.banner.bird.red": "빨간색 새",
   "block.minecraft.banner.bird.black": "검은색 새",
-
   "block.minecraft.banner.amphithere.white": "하얀색 엠피데어",
   "block.minecraft.banner.amphithere.orange": "주황색 엠피데어",
   "block.minecraft.banner.amphithere.magenta": "자홍색 엠피데어",
@@ -1173,13 +1146,12 @@
   "block.minecraft.banner.amphithere.gray": "회색 엠피데어",
   "block.minecraft.banner.amphithere.silver": "은색 엠피데어",
   "block.minecraft.banner.amphithere.cyan": "청록색 엠피데어",
-  "block.minecraft.banner.amphithere.purple": "보라색 엠피데어"
+  "block.minecraft.banner.amphithere.purple": "보라색 엠피데어",
   "block.minecraft.banner.amphithere.blue": "파란색 엠피데어",
   "block.minecraft.banner.amphithere.brown": "갈색 엠피데어",
   "block.minecraft.banner.amphithere.green": "초록색 엠피데어",
   "block.minecraft.banner.amphithere.red": "빨간색 엠피데어",
   "block.minecraft.banner.amphithere.black": "검은색 엠피데어",
-
   "block.minecraft.banner.sea_serpent.white": "하얀색 씨 서펀트",
   "block.minecraft.banner.sea_serpent.orange": "주황색 씨 서펀트",
   "block.minecraft.banner.sea_serpent.magenta": "자홍색 씨 서펀트",
@@ -1196,7 +1168,6 @@
   "block.minecraft.banner.sea_serpent.green": "초록색 씨 서펀트",
   "block.minecraft.banner.sea_serpent.red": "빨간색 씨 서펀트",
   "block.minecraft.banner.sea_serpent.black": "검은색 씨 서펀트",
-
   "block.minecraft.banner.weezer.white": "하얀색 위저",
   "block.minecraft.banner.weezer.orange": "주황색 위저",
   "block.minecraft.banner.weezer.magenta": "자홍색 위저",
@@ -1213,7 +1184,6 @@
   "block.minecraft.banner.weezer.green": "초록색 위저",
   "block.minecraft.banner.weezer.red": "빨간색 위저",
   "block.minecraft.banner.weezer.black": "검은색 위저",
-
   "block.minecraft.banner.dread.white": "하얀색 드레드 스컬",
   "block.minecraft.banner.dread.orange": "주황색 드레드 스컬",
   "block.minecraft.banner.dread.magenta": "자홍색 드레드 스컬",
@@ -1230,7 +1200,6 @@
   "block.minecraft.banner.dread.green": "초록색 드레드 스컬",
   "block.minecraft.banner.dread.red": "빨간색 드레드 스컬",
   "block.minecraft.banner.dread.black": "검은색 드레드 스컬",
-
   "iceandfire.sound.subtitle.ghost_attack": "유령이 공격함",
   "iceandfire.sound.subtitle.ghost_idle": "유령이 숨소리를 냄",
   "iceandfire.sound.subtitle.ghost_hurt": "유령이 상처를 입음",
@@ -1324,3 +1293,4 @@
   "iceandfire.sound.subtitle.icedragon_death": "아이스 드래곤이 죽음",
   "iceandfire.sound.subtitle.dragonegg_hatch": "드래곤 알이 부화함",
   "iceandfire.sound.subtitle.dragonflute": "드래곤 피리를 연주함"
+}
