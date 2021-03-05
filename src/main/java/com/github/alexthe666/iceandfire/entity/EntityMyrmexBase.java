@@ -466,7 +466,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
             if (this.getOffers().isEmpty()) {
                 return super.func_230254_b_(player, hand);
             } else {
-                if (!this.world.isRemote && (this.getAttackTarget() == null || !this.getAttackTarget().equals(player))) {
+                if (!this.world.isRemote && (this.getAttackTarget() == null || !this.getAttackTarget().equals(player))&& hand == Hand.MAIN_HAND) {
                     if (this.getHive()!=null && !this.getHive().isPlayerReputationTooLowToTrade(player.getUniqueID())) {
                         this.setCustomer(player);
                         this.openMerchantContainer(player, this.getDisplayName(), 1);
