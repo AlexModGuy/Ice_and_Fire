@@ -488,18 +488,13 @@ public abstract class AbstractPathJob implements Callable<Path> {
         if (pathingOptions.canClimb()){
             //If the entity can climb and it needs to climb a block higher than 1 block
             if (getHighest(currentNode.pos).getKey()>1){
-                walk(currentNode,BLOCKPOS_UP);
-                walk(currentNode,BLOCKPOS_DOWN);
+                walk(currentNode,BLOCKPOS_IDENTITY.up(getHighest(currentNode.pos).getKey()));
             }
             //After entity has climbed something step forward
-            if (currentNode.parent != null &&
-                    currentNode.parent.pos.getX() == currentNode.pos.getX() &&
-                    currentNode.parent.pos.getZ() == currentNode.pos.getZ() &&
-                    currentNode.pos.getY() - currentNode.parent.pos.getY() > 1){
-                    //Step forwards into the direction the parents node came from
+            if (currentNode.parent != null && dPos.getX() == 0 && dPos.getZ() == 0 && dPos.getY() > 1){
+                    //Step forwards into the direction we climbed from
                 if (getHighest(currentNode.parent.pos).getValue() != null)
                     walk(currentNode, getHighest(currentNode.parent.pos).getValue());
-
             }
         }
 
@@ -510,7 +505,8 @@ public abstract class AbstractPathJob implements Callable<Path> {
         }
 
         // Walk downwards node if passable
-        if (currentNode.parent != null && isPassableBBDown(currentNode.parent.pos, currentNode.pos.down())) {
+        if ((circumventSizeCheck && isPassable(currentNode.pos.down(),true))
+                ||currentNode.parent != null && isPassableBBDown(currentNode.parent.pos, currentNode.pos.down())) {
             walk(currentNode, BLOCKPOS_DOWN);
         }
 
@@ -727,8 +723,8 @@ public abstract class AbstractPathJob implements Callable<Path> {
                 pos = parent.pos.add(dPos);
                 corner = true;
             }
-            // Fix up normal y
-            else {
+            // Fix up normal y but only if we aren't climbing
+            else if (!(pathingOptions.canClimb() && dPos.getY() > 1)){
                 dPos = dPos.add(0, newY - pos.getY(), 0);
                 pos = new BlockPos(pos.getX(), newY, pos.getZ());
             }
@@ -767,6 +763,10 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
         nodesOpen.offer(node);
 
+        //If we climbed something skip jumpPointSearch
+        //This is a workaround so that the path generated doesn't go through blocks
+        if (pathingOptions.canClimb() && dPos.getY() >1)
+            return true;
         //  Jump Point Search-ish optimization:
         // If this node was a (heuristic-based) improvement on our parent,
         // lets go another step in the same direction...
@@ -878,6 +878,10 @@ public abstract class AbstractPathJob implements Callable<Path> {
     private int checkDrop(@Nullable final Node parent, final BlockPos pos, final boolean isSwimming) {
         final boolean canDrop = parent != null && !parent.isLadder();
         boolean isChonker = true;
+
+        if (pathingOptions.canClimb() && parent != null && pos.getY() > parent.pos.getY()+1){
+                return pos.getY();
+        }
         //  Nothing to stand on
         if(!isChonker){
             if (!canDrop || isSwimming || ((parent.pos.getX() != pos.getX() || parent.pos.getZ() != pos.getZ()) && isPassableBBFull(parent.pos.down())
@@ -934,9 +938,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
         double parentMaxY = parentY + parent.pos.down().getY();
         final double targetMaxY = target.getCollisionShape(world, pos).getEnd(Direction.Axis.Y) + pos.getY();
         if (targetMaxY - parentMaxY < jumpHeight) {
-            if (pathingOptions.canClimb() && getHighest(pos).getKey() >0){
-                return pos.getY()+ getHighest(pos).getKey();
-            }
             return pos.getY() + 1;
         }
         if (target.getBlock() instanceof StairsBlock
@@ -947,8 +948,11 @@ public abstract class AbstractPathJob implements Callable<Path> {
         }
         return -1;
     }
+    /*
+    Get's the maximum height of a climbable column and the direction the column can be climbed from
+     */
     private Pair<Integer, BlockPos> getHighest(BlockPos pos){
-        int max = 0;
+        int max = 1;
         BlockPos direction = null;
         if (world.getBlockState(pos.north()).isSolid()) {
             if(climbableTop(pos.north(),Direction.SOUTH)>max){
@@ -976,6 +980,9 @@ public abstract class AbstractPathJob implements Callable<Path> {
         }
         return new Pair<>(max,direction);
     }
+    /*
+    Keeps going up a column centered at pos checking if in the direction there's free space
+     */
     private int climbableTop(BlockPos pos, Direction direction){
         BlockState target = world.getBlockState(pos);
         BlockState origin;
@@ -984,13 +991,14 @@ public abstract class AbstractPathJob implements Callable<Path> {
             pos = pos.up();
             target = world.getBlockState(pos);
             origin = world.getBlockState(pos.offset(direction));
+            //If the climbable side can't be passed reset height to 0
             if(!isPassable(origin,pos.offset(direction))){
-                i = 1;
+                i = 0;
                 break;
             }
             i++;
         }
-        return i-1;
+        return i;
     }
     private boolean checkHeadBlock(@Nullable final Node parent, final BlockPos pos) {
         BlockPos localPos = pos;
@@ -1116,7 +1124,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
      */
     protected boolean isPassableBBDown(final BlockPos parentPos, final BlockPos pos) {
         if (circumventSizeCheck) {
-            return isPassable(pos, false) && isPassable(pos.up(), true);
+            return isPassable(pos, true);
         } else {
             Direction facingDir = getXZFacing(parentPos, pos).rotateY();
             for (int i = 0; i <= entitySizeXZ; i++) {
