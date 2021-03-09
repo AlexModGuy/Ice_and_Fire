@@ -564,6 +564,42 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         // Do nothing, unstuck is checked on tick, not just when we have a path
     }
 
+    public boolean entityOnOrBelowPath(Entity entity, Vector3d slack){
+        Path path = getPath();
+        if (path == null){
+            return false;
+        }
+        //getIndex doesn't return an 0-indexed index
+        int closest = path.getCurrentPathIndex() - 1;
+        if (closest < 0) {
+            return true;
+        }
+        //Search through path from the current index outwards to improve performance
+        for (int i = 0; i < path.getCurrentPathLength(); i++) {
+            if (closest + i < path.getCurrentPathLength()) {
+                PathPoint currentPoint = path.getPathPointFromIndex(closest + i);
+                if (entityNearOrBelowPoint(currentPoint, entity, slack)) {
+                    return true;
+                }
+            }
+            if (closest - i >= 0) {
+                PathPoint currentPoint = path.getPathPointFromIndex(closest - i);
+                if (entityNearOrBelowPoint(currentPoint, entity, slack)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean entityNearOrBelowPoint(PathPoint currentPoint, Entity entity, Vector3d slack) {
+        return Math.abs(currentPoint.x - entity.getPosX()) < slack.getX()
+                && currentPoint.y - entity.getPosY() > -slack.getY()
+                && Math.abs(currentPoint.z - entity.getPosZ()) < slack.getZ();
+    }
+
+
+
     @Override
     public void clearPath() {
         if (calculationFuture != null) {

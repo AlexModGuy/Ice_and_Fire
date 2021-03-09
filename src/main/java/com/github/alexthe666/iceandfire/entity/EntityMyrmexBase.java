@@ -101,7 +101,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     public EntityMyrmexBase(EntityType t, World worldIn) {
         super(t, worldIn);
-        this.stepHeight = 2;
+        this.stepHeight = 1;
         this.navigator = createNavigator(worldIn, AdvancedPathNavigate.MovementType.CLIMBING);
         //this.moveController = new GroundMoveHelper(this);
     }
@@ -225,7 +225,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     public void tick() {
         super.tick();
-        this.stepHeight = 2;
+        this.stepHeight = 1;
         if (world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }
@@ -375,12 +375,12 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
         this.dataManager.set(CLIMBING, Byte.valueOf(b0));
     }
-    //Returns true if the entity can climb otherwise returns if it's on a ladder
+
     public boolean isOnLadder() {
-        if (this.getNavigator() instanceof AdvancedPathNavigate && this.getMotion().getY() >=-0.1){
-            if (((AdvancedPathNavigate)this.navigator).getPathingOptions().canClimb()){
+        if (this.getNavigator() instanceof AdvancedPathNavigate ){
+            //Make sure the entity can only climb when it's on or below the path. This prevents the entity from getting stuck
+            if(((AdvancedPathNavigate) this.getNavigator()).entityOnOrBelowPath(this, new Vector3d(1,1.5,1)))
                 return true;
-            }
         }
         return super.isOnLadder();
     }
