@@ -513,8 +513,8 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         breakBlock();
     }
 
-    public boolean canDestroyBlock(BlockPos pos) {
-        return world.getBlockState(pos).getBlock().canEntityDestroy(world.getBlockState(pos), world, pos, this);
+    public boolean canDestroyBlock(BlockPos pos,BlockState state) {
+        return state.getBlock().canEntityDestroy(state, world, pos, this);
     }
 
     public boolean isMobDead() {
@@ -1396,7 +1396,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     protected boolean isBreakable(BlockPos pos, BlockState state, float hardness) {
-        return state.getMaterial().blocksMovement() && !state.isAir() && state.getFluidState().isEmpty() && !state.getShape(world, pos).isEmpty() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos);
+        return state.getMaterial().blocksMovement() && !state.isAir() && state.getFluidState().isEmpty() && !state.getShape(world, pos).isEmpty() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos,state);
     }
 
     public boolean isBlockPassable(BlockState state, BlockPos pos, BlockPos entityPos) {
