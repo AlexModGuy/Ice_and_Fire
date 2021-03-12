@@ -5,7 +5,14 @@ import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.iceandfire.util.IAFMath;
 
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import javafx.scene.control.Tab;
 import net.minecraft.util.math.MathHelper;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class IceAndFireTabulaModelAnimator {
 
@@ -66,18 +73,54 @@ public class IceAndFireTabulaModelAnimator {
         animator.rotate(model, (float) Math.toRadians(x), (float) Math.toRadians(y), (float) Math.toRadians(z));
     }
 
+    public void moveToPoseSameModel(TabulaModel model, TabulaModel modelTo){
+        Map<String, AdvancedModelBox> modelMap = model.getCubes();
+        Map<String, AdvancedModelBox> modelToMap = modelTo.getCubes();
+        Map<String, AdvancedModelBox> baseModelMap = baseModel.getCubes();
+        //Just in case check if the sizes are the same
+        if (modelMap.size() == modelToMap.size() && modelToMap.size() == baseModelMap.size()) {
+            Iterator<Map.Entry<String, AdvancedModelBox>> modelIter = modelMap.entrySet().iterator();
+            Iterator<Map.Entry<String, AdvancedModelBox>> modelToIter = modelToMap.entrySet().iterator();
+            Iterator<Map.Entry<String, AdvancedModelBox>> baseModelIter = baseModelMap.entrySet().iterator();
+            while (modelIter.hasNext()) {
+                AdvancedModelBox cube = modelToIter.next().getValue();
+                AdvancedModelBox modelToCube = modelIter.next().getValue();
+                AdvancedModelBox baseCube = baseModelIter.next().getValue();
+
+                if (!isPartEqual(baseCube, modelToCube)) {
+                    float toX = modelToCube.rotateAngleX;
+                    float toY = modelToCube.rotateAngleY;
+                    float toZ = modelToCube.rotateAngleZ;
+                    model.llibAnimator.rotate(cube, distance(cube.rotateAngleX, toX), distance(cube.rotateAngleY, toY), distance(cube.rotateAngleZ, toZ));
+                }
+                if (!isPositionEqual(baseCube, modelToCube)) {
+                    float toX = modelToCube.rotationPointX;
+                    float toY = modelToCube.rotationPointY;
+                    float toZ = modelToCube.rotationPointZ;
+                    model.llibAnimator.move(cube, distance(cube.rotationPointX, toX), distance(cube.rotationPointY, toY), distance(cube.rotationPointZ, toZ));
+                }
+            }
+        }
+        else {
+            //fallback function
+            moveToPose(model,modelTo);
+        }
+    }
+
     public void moveToPose(TabulaModel model, TabulaModel modelTo) {
+        Map<String, AdvancedModelBox> allCubes = modelTo.getCubes();
         for (AdvancedModelBox cube : model.getCubes().values()) {
-            if (!isPartEqual(baseModel.getCube(cube.boxName), modelTo.getCube(cube.boxName))) {
-                float toX = modelTo.getCube(cube.boxName).rotateAngleX;
-                float toY = modelTo.getCube(cube.boxName).rotateAngleY;
-                float toZ = modelTo.getCube(cube.boxName).rotateAngleZ;
+            AdvancedModelBox modelToCube = allCubes.get(cube.boxName);
+            if (!isPartEqual(baseModel.getCube(cube.boxName), modelToCube)) {
+                float toX = modelToCube.rotateAngleX;
+                float toY = modelToCube.rotateAngleY;
+                float toZ = modelToCube.rotateAngleZ;
                 model.llibAnimator.rotate(cube, distance(cube.rotateAngleX, toX), distance(cube.rotateAngleY, toY), distance(cube.rotateAngleZ, toZ));
             }
-            if (!isPositionEqual(baseModel.getCube(cube.boxName), modelTo.getCube(cube.boxName))) {
-                float toX = modelTo.getCube(cube.boxName).rotationPointX;
-                float toY = modelTo.getCube(cube.boxName).rotationPointY;
-                float toZ = modelTo.getCube(cube.boxName).rotationPointZ;
+            if (!isPositionEqual(baseModel.getCube(cube.boxName), modelToCube)) {
+                float toX = modelToCube.rotationPointX;
+                float toY = modelToCube.rotationPointY;
+                float toZ = modelToCube.rotationPointZ;
                 model.llibAnimator.move(cube, distance(cube.rotationPointX, toX), distance(cube.rotationPointY, toY), distance(cube.rotationPointZ, toZ));
             }
         }
