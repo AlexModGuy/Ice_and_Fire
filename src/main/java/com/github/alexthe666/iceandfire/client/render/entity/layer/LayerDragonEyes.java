@@ -117,10 +117,6 @@ public class LayerDragonEyes extends LayerRenderer<EntityDragonBase, SegmentedMo
     public void copyPositions(TabulaModel model, TabulaModel modelTo) {
         for (AdvancedModelBox cube : model.getCubes().values()) {
             AdvancedModelBox modelToCube = modelTo.getCube(cube.boxName);
-            //Reduce texture overlaying issues
-            if (cube.boxName.equals("Head")||cube.boxName.equals("HeadFront")){
-                cube.scaleX += 0.0000025;
-            }
             if (!isPartEqual(cube,modelToCube)) {
                 cube.rotateAngleX = modelToCube.rotateAngleX;
                 cube.rotateAngleY = modelToCube.rotateAngleY;
