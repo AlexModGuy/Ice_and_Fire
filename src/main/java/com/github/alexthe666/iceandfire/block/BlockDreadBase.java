@@ -4,9 +4,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 
 public class BlockDreadBase extends BlockGeneric implements IDragonProof, IDreadBlock {
     public static final BooleanProperty PLAYER_PLACED = BooleanProperty.create("player_placed");
@@ -21,20 +24,15 @@ public class BlockDreadBase extends BlockGeneric implements IDragonProof, IDread
         this.setDefaultState(this.stateContainer.getBaseState().with(PLAYER_PLACED, Boolean.valueOf(false)));
     }
 
-
-    /*@Override
-    public float getBlockHardness(BlockState blockState, IBlockReader worldIn, BlockPos pos) {
-        return blockState.get(PLAYER_PLACED) ? super.getHarvestLevel(blockState, worldIn, pos) : -1;
-    }*/
-    //TODO ^^^^
-    //This currently seems to be impossible without creating a different class for breakable dreadstone
-
-    public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().with(PLAYER_PLACED, Boolean.valueOf(meta > 0));
-    }
-
-    public int getMetaFromState(BlockState state) {
-        return state.get(PLAYER_PLACED) ? 1 : 0;
+    @SuppressWarnings("deprecation")
+    @Override
+    public float getPlayerRelativeBlockHardness(BlockState state, PlayerEntity player, IBlockReader worldIn, BlockPos pos) {
+        if (state.get(PLAYER_PLACED)) {
+            float f = 8f;
+            //Code from super method
+            return player.getDigSpeed(state, pos) / f / (float) 30;
+        }
+        return super.getPlayerRelativeBlockHardness(state,player,worldIn,pos);
     }
 
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {

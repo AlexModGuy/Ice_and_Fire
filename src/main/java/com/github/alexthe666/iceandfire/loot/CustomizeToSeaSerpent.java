@@ -26,6 +26,9 @@ public class CustomizeToSeaSerpent extends LootFunction {
         if (!stack.isEmpty() && context.get(LootParameters.THIS_ENTITY) instanceof EntitySeaSerpent) {
             Random random = new Random();
             EntitySeaSerpent seaSerpent = (EntitySeaSerpent) context.get(LootParameters.THIS_ENTITY);
+            if (seaSerpent == null){
+                return stack;
+            }
             int ancientModifier = seaSerpent.isAncient() ? 2 : 1;
             if (stack.getItem() instanceof ItemSeaSerpentScales) {
                 stack.setCount(1 + random.nextInt(1 + (int) Math.ceil(seaSerpent.getSeaSerpentScale() * 3 * ancientModifier)));

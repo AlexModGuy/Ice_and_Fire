@@ -30,6 +30,9 @@ public class CustomizeToDragon extends LootFunction {
         if (!stack.isEmpty() && context.get(LootParameters.THIS_ENTITY) instanceof EntityDragonBase) {
             Random random = new Random();
             EntityDragonBase dragon = (EntityDragonBase) context.get(LootParameters.THIS_ENTITY);
+            if (dragon == null){
+                return stack;
+            }
             if (stack.getItem() == IafItemRegistry.DRAGON_BONE) {
                 stack.setCount(1 + random.nextInt(1 + (dragon.getAgeInDays() / 25)));
                 return stack;

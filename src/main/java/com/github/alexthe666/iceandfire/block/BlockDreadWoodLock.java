@@ -19,6 +19,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlock {
@@ -36,11 +37,16 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
         this.setDefaultState(this.getStateContainer().getBaseState().with(PLAYER_PLACED, Boolean.valueOf(false)));
     }
 
-    /*@Override
-    public float getBlockHardness(BlockState blockState, IBlockReader worldIn, BlockPos pos) {
-        return blockState.get(PLAYER_PLACED) ? super.getBlockHardness(blockState, worldIn, pos) : -1;
-    }*/
-    //TODOs
+    @SuppressWarnings("deprecation")
+    @Override
+    public float getPlayerRelativeBlockHardness(BlockState state, PlayerEntity player, IBlockReader worldIn, BlockPos pos) {
+        if (state.get(PLAYER_PLACED)) {
+            float f = 8f;
+            //Code from super method
+            return player.getDigSpeed(state, pos) / f / (float) 30;
+        }
+        return super.getPlayerRelativeBlockHardness(state,player,worldIn,pos);
+    }
 
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult resultIn) {
         ItemStack stack = player.getHeldItem(handIn);
@@ -66,13 +72,6 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
         }
     }
 
-    public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().with(PLAYER_PLACED, Boolean.valueOf(meta > 0));
-    }
-
-    public int getMetaFromState(BlockState state) {
-        return state.get(PLAYER_PLACED).booleanValue() ? 1 : 0;
-    }
 
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(PLAYER_PLACED);

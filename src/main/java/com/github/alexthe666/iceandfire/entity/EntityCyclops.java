@@ -250,6 +250,10 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
 
     public void livingTick() {
         super.livingTick();
+        if (eyeEntity == null){
+            eyeEntity = new EntityCyclopsEye(this, 0.2F, 0, 7.4F, 1.2F, 0.6F, 1);
+            eyeEntity.copyLocationAndAnglesFrom(this);
+        }
         if (world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }

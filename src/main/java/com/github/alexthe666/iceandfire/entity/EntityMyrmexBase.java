@@ -32,6 +32,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.merchant.IMerchant;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
@@ -100,7 +101,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     public EntityMyrmexBase(EntityType t, World worldIn) {
         super(t, worldIn);
-        this.stepHeight = 2;
+        this.stepHeight = 1;
         this.navigator = createNavigator(worldIn, AdvancedPathNavigate.MovementType.CLIMBING);
         //this.moveController = new GroundMoveHelper(this);
     }
@@ -224,7 +225,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     public void tick() {
         super.tick();
-        this.stepHeight = 2;
+        this.stepHeight = 1;
         if (world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }
@@ -257,7 +258,9 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                 this.getAttackTarget() instanceof PlayerEntity && this.getHive() != null && !this.getHive().isPlayerReputationLowEnoughToFight(this.getAttackTarget().getUniqueID()))) {
             this.setAttackTarget(null);
         }
-
+        if (this.getWaitTicks() > 0){
+            this.setWaitTicks(this.getWaitTicks()-1);
+        }
         if (this.getHealth() < this.getMaxHealth() && this.ticksExisted % 500 == 0 && this.isOnResin()) {
             this.heal(1);
             this.world.setEntityState(this, (byte) 76);
@@ -372,10 +375,12 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
         this.dataManager.set(CLIMBING, Byte.valueOf(b0));
     }
-    //Returns true if the entity can climb otherwise returns if it's on a ladder
+
     public boolean isOnLadder() {
-        if (this.getNavigator() instanceof AdvancedPathNavigate && this.getMotion().getY() >=0){
-            return ((AdvancedPathNavigate)this.navigator).getPathingOptions().canClimb();
+        if (this.getNavigator() instanceof AdvancedPathNavigate ){
+            //Make sure the entity can only climb when it's on or below the path. This prevents the entity from getting stuck
+            if(((AdvancedPathNavigate) this.getNavigator()).entityOnOrBelowPath(this, new Vector3d(1,1.5,1)))
+                return true;
         }
         return super.isOnLadder();
     }
@@ -461,7 +466,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
             if (this.getOffers().isEmpty()) {
                 return super.func_230254_b_(player, hand);
             } else {
-                if (!this.world.isRemote && (this.getAttackTarget() == null || !this.getAttackTarget().equals(player))) {
+                if (!this.world.isRemote && (this.getAttackTarget() == null || !this.getAttackTarget().equals(player))&& hand == Hand.MAIN_HAND) {
                     if (this.getHive()!=null && !this.getHive().isPlayerReputationTooLowToTrade(player.getUniqueID())) {
                         this.setCustomer(player);
                         this.openMerchantContainer(player, this.getDisplayName(), 1);

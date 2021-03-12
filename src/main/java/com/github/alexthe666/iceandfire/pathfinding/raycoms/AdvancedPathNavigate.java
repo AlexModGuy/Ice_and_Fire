@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.pathfinding.*;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.*;
 
@@ -238,8 +239,16 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             pathResult.setStatus(PathFindingStatus.COMPLETE);
             pathResult = null;
         }
+        //Make sure the entity isn't sleeping or chained when checking if it's stuck
+        if (this.entity instanceof EntityDragonBase){
+            if (!((EntityDragonBase) this.entity).isEntitySleeping() && !((EntityDragonBase) this.entity).isChained()){
+                stuckHandler.checkStuck(this);
+            }
+        }
+        else{
+            stuckHandler.checkStuck(this);
+        }
 
-        stuckHandler.checkStuck(this);
     }
 
     @Nullable
@@ -554,6 +563,42 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     protected void checkForStuck(final Vector3d positionVec3) {
         // Do nothing, unstuck is checked on tick, not just when we have a path
     }
+
+    public boolean entityOnOrBelowPath(Entity entity, Vector3d slack){
+        Path path = getPath();
+        if (path == null){
+            return false;
+        }
+        //getIndex doesn't return an 0-indexed index
+        int closest = path.getCurrentPathIndex() - 1;
+        if (closest < 0) {
+            return true;
+        }
+        //Search through path from the current index outwards to improve performance
+        for (int i = 0; i < path.getCurrentPathLength(); i++) {
+            if (closest + i < path.getCurrentPathLength()) {
+                PathPoint currentPoint = path.getPathPointFromIndex(closest + i);
+                if (entityNearOrBelowPoint(currentPoint, entity, slack)) {
+                    return true;
+                }
+            }
+            if (closest - i >= 0) {
+                PathPoint currentPoint = path.getPathPointFromIndex(closest - i);
+                if (entityNearOrBelowPoint(currentPoint, entity, slack)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean entityNearOrBelowPoint(PathPoint currentPoint, Entity entity, Vector3d slack) {
+        return Math.abs(currentPoint.x - entity.getPosX()) < slack.getX()
+                && currentPoint.y - entity.getPosY() > -slack.getY()
+                && Math.abs(currentPoint.z - entity.getPosZ()) < slack.getZ();
+    }
+
+
 
     @Override
     public void clearPath() {

@@ -7,10 +7,13 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 
 public class BlockDreadStoneFace extends HorizontalBlock implements IDreadBlock, IDragonProof {
@@ -21,7 +24,7 @@ public class BlockDreadStoneFace extends HorizontalBlock implements IDreadBlock,
     		Block.Properties
     			.create(Material.ROCK)
     			.sound(SoundType.STONE)
-    			.hardnessAndResistance(20F, 10000F)
+    			.hardnessAndResistance(-1F, 10000F)
     			.harvestTool(ToolType.PICKAXE)
     			.harvestLevel(3)
 		);
@@ -30,13 +33,19 @@ public class BlockDreadStoneFace extends HorizontalBlock implements IDreadBlock,
         setRegistryName(IceAndFire.MODID, "dread_stone_face");
     }
 
-    /*@Override
-    public float getBlockHardness(BlockState blockState, IBlockReader worldIn, BlockPos pos) {
-        return blockState.get(PLAYER_PLACED) ? super.getBlockHardness(blockState, worldIn, pos) : -1;
-    }*/
+    @SuppressWarnings("deprecation")
+    @Override
+    public float getPlayerRelativeBlockHardness(BlockState state, PlayerEntity player, IBlockReader worldIn, BlockPos pos) {
+        if (state.get(PLAYER_PLACED)) {
+            float f = 8f;
+            //Code from super method
+            return player.getDigSpeed(state, pos) / f / (float) 30;
+        }
+        return super.getPlayerRelativeBlockHardness(state,player,worldIn,pos);
+    }
 
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(HORIZONTAL_FACING, context.getPlacementHorizontalFacing().getOpposite());
+        return this.getDefaultState().with(HORIZONTAL_FACING, context.getPlacementHorizontalFacing().getOpposite()).with(PLAYER_PLACED, true);
     }
 
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {

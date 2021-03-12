@@ -34,7 +34,6 @@ import com.google.common.base.Predicate;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
@@ -829,7 +828,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     @Override
     public void livingTick() {
         super.livingTick();
-        switchNavigator();
+        //switchNavigator();
         if (world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }
@@ -914,7 +913,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         } else if (!hovering && hoverProgress > 0.0F) {
             hoverProgress -= 0.5F;
         }
-        boolean flying = this.isFlying() || !this.isHovering() && airBorneCounter > 10;
+        boolean flying = this.isFlying() || this.isHovering() && airBorneCounter > 10;
         if (flying && flyProgress < 20.0F) {
             flyProgress += 0.5F;
         } else if (!flying && flyProgress > 0.0F) {
@@ -961,16 +960,15 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         if (this.isSitting()) {
             this.getNavigator().clearPath();
         }
-        if (!this.isOnGround() && flyTicks != 0) {
+        if (this.isOnGround() && flyTicks != 0) {
             flyTicks = 0;
         }
         if (this.isFlying() && this.doesWantToLand() && this.getControllingPassenger() == null) {
-            this.setFlying(false);
             this.setHovering(false);
-            if (!this.isOnGround()) {
+            if (this.isOnGround()) {
                 flyTicks = 0;
-                this.setFlying(false);
             }
+            this.setFlying(false);
         }
         if (this.isFlying()) {
             this.flyTicks++;
@@ -1030,11 +1028,14 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         if (this.getControllingPassenger() != null && this.getControllingPassenger().isSneaking()) {
             this.getControllingPassenger().stopRiding();
         }
-        if (this.isFlying() && !this.isHovering() && this.getControllingPassenger() != null && this.isOverAir() && Math.max(Math.abs(this.getMotion().x), Math.abs(this.getMotion().z)) < 0.1F) {
+        
+        double motion = this.getMotion().x*this.getMotion().x+this.getMotion().z*this.getMotion().z;//Use squared norm2
+
+        if (this.isFlying() && !this.isHovering() && this.getControllingPassenger() != null && this.isOverAir() &&  motion < 0.01F) {
             this.setHovering(true);
             this.setFlying(false);
         }
-        if (this.isHovering() && !this.isFlying() && this.getControllingPassenger() != null && this.isOverAir() && Math.max(Math.abs(this.getMotion().x), Math.abs(this.getMotion().z)) > 0.1F) {
+        if (this.isHovering() && !this.isFlying() && this.getControllingPassenger() != null && this.isOverAir() && motion > 0.01F) {
             this.setFlying(true);
             this.setHovering(false);
         }
