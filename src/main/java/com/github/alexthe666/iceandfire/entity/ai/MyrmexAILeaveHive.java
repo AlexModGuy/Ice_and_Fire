@@ -38,7 +38,7 @@ public class MyrmexAILeaveHive extends Goal {
         if (this.myrmex.isChild()) {
             return false;
         }
-        if (!this.myrmex.canMove() || !this.myrmex.shouldLeaveHive() || this.myrmex.shouldEnterHive() || this.myrmex.canSeeSky() || this.myrmex instanceof EntityMyrmexWorker && (((EntityMyrmexWorker) this.myrmex).holdingSomething() || !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty()) || this.myrmex.isEnteringHive) {
+        if (!this.myrmex.canMove() || !this.myrmex.shouldLeaveHive() || this.myrmex.shouldEnterHive() || !this.myrmex.isInHive() || this.myrmex instanceof EntityMyrmexWorker && (((EntityMyrmexWorker) this.myrmex).holdingSomething() || !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty()) || this.myrmex.isEnteringHive) {
             return false;
         }
         MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(this.myrmex.getPosition(), 1000);
@@ -53,15 +53,23 @@ public class MyrmexAILeaveHive extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        if (this.myrmex.getDistanceSq(nextEntrance.getX() + 0.5D, nextEntrance.getY() + 0.5D, nextEntrance.getZ() + 0.5D) <= 9 || this.myrmex.shouldEnterHive()) {
+        if (this.myrmex.isCloseEnoughToTarget(nextEntrance,12)) {
             return false;
         }
-        return this.myrmex.getDistanceSq(nextEntrance.getX() + 0.5D, nextEntrance.getY() + 0.5D, nextEntrance.getZ() + 0.5D) > 9 && this.myrmex.shouldLeaveHive();
+        if(this.myrmex.shouldEnterHive()){
+            return false;
+        }
+
+        return this.myrmex.shouldLeaveHive();
     }
 
     public void tick() {
-        if(path.isPathReachingDestination()){
-             path = ((AdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY() + 1,  nextEntrance.getZ(), movementSpeed);
+        //If the path has been created but the destination couldn't be reached
+        //or if the myrmex has reached the end of the path but isn't close enough to the entrance for some reason
+        if(!this.myrmex.pathReachesTarget(path,nextEntrance,12)){
+            MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(this.myrmex.getPosition(), 1000);
+            nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, village.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), true));
+            path = ((AdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY() + 1,  nextEntrance.getZ(), movementSpeed);
         }
     }
 

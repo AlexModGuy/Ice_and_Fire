@@ -18,6 +18,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.ICustomSizeNavigator;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
@@ -379,7 +380,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     public boolean isOnLadder() {
         if (this.getNavigator() instanceof AdvancedPathNavigate ){
             //Make sure the entity can only climb when it's on or below the path. This prevents the entity from getting stuck
-            if(((AdvancedPathNavigate) this.getNavigator()).entityOnOrBelowPath(this, new Vector3d(1,1.5,1)))
+            if(((AdvancedPathNavigate) this.getNavigator()).entityOnOrBelowPath(this, new Vector3d(1.1,1.5,1.1)))
                 return true;
         }
         return super.isOnLadder();
@@ -590,6 +591,14 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         if (getHive() != null) {
             BlockPos nursery = getHive().getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition());
             return MathHelper.sqrt(this.getDistanceSq(nursery.getX(), nursery.getY(), nursery.getZ())) < 45;
+        }
+        return false;
+    }
+
+    public boolean isInHive(){
+        for (BlockPos pos : getHive().getAllRooms()){
+            if (isCloseEnoughToTarget(MyrmexHive.getGroundedPos(getWorld(),pos),20))
+                return true;
         }
         return false;
     }
@@ -855,6 +864,23 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
             }
         }
     }
+
+    public boolean isCloseEnoughToTarget(BlockPos target, double distanceSquared) {
+        if (target != null) {
+            return this.getDistanceSq(target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D) <= distanceSquared;
+        }
+        return false;
+    }
+    //if the path created couldn't reach the destination or if the entity isn't close enough to the targetBlock
+    public boolean pathReachesTarget(PathResult path, BlockPos target, double distanceSquared){
+        if((!path.isInProgress() && !path.isPathReachingDestination())
+                || (!this.isCloseEnoughToTarget(target,distanceSquared) && this.getNavigator().getPath() != null && this.getNavigator().getPath().isFinished())) {
+            return false;
+        }
+        return true;
+    }
+
+
 
     public boolean isSmallerThanBlock(){
         return false;
