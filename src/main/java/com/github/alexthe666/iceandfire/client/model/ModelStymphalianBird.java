@@ -310,38 +310,39 @@ public class ModelStymphalianBird extends ModelDragonBase<EntityStymphalianBird>
         this.BackLegL2.addChild(this.ToeL4);
         this.HeadFront.setScale(1.01F, 1.01F, 1.01F);
         this.updateDefaultPose();
-        animator = ModelAnimator.create();
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        this.resetToDefaultPose();
-        animator.update(entity);
-        animator.setAnimation(EntityStymphalianBird.ANIMATION_PECK);
-        animator.startKeyframe(5);
-        this.rotate(animator, Neck1, -47, 0, 0);
-        this.rotate(animator, NeckPivot, 17, 0, 0);
-        this.rotate(animator, HeadPivot, 46, 0, 0);
-        this.rotate(animator, Jaw, 10, 0, 0);
-        animator.endKeyframe();
-        animator.startKeyframe(5);
-        this.rotate(animator, Neck1, 26, 0, 0);
-        this.rotate(animator, NeckPivot, -18, 0, 0);
-        this.rotate(animator, HeadPivot, 2, 0, 0);
-        this.rotate(animator, Jaw, 33, 0, 0);
-        this.rotate(animator, HeadFront, -20, 0, 0);
-        animator.endKeyframe();
-        animator.resetKeyframe(5);
-        animator.setAnimation(EntityStymphalianBird.ANIMATION_SPEAK);
-        animator.startKeyframe(5);
-        this.rotate(animator, Jaw, 35, 0, 0);
-        animator.startKeyframe(5);
-        this.rotate(animator, Jaw, 0, 0, 0);
-        animator.endKeyframe();
-        animator.setAnimation(EntityStymphalianBird.ANIMATION_SHOOT_ARROWS);
-        animator.startKeyframe(20);
-        shootPosture();
-        animator.endKeyframe();
-        animator.resetKeyframe(10);
+        if (animator == null) {
+            animator = ModelAnimator.create();
+            animator.update(entity);
+            animator.setAnimation(EntityStymphalianBird.ANIMATION_PECK);
+            animator.startKeyframe(5);
+            this.rotate(animator, Neck1, -47, 0, 0);
+            this.rotate(animator, NeckPivot, 17, 0, 0);
+            this.rotate(animator, HeadPivot, 46, 0, 0);
+            this.rotate(animator, Jaw, 10, 0, 0);
+            animator.endKeyframe();
+            animator.startKeyframe(5);
+            this.rotate(animator, Neck1, 26, 0, 0);
+            this.rotate(animator, NeckPivot, -18, 0, 0);
+            this.rotate(animator, HeadPivot, 2, 0, 0);
+            this.rotate(animator, Jaw, 33, 0, 0);
+            this.rotate(animator, HeadFront, -20, 0, 0);
+            animator.endKeyframe();
+            animator.resetKeyframe(5);
+            animator.setAnimation(EntityStymphalianBird.ANIMATION_SPEAK);
+            animator.startKeyframe(5);
+            this.rotate(animator, Jaw, 35, 0, 0);
+            animator.startKeyframe(5);
+            this.rotate(animator, Jaw, 0, 0, 0);
+            animator.endKeyframe();
+            animator.setAnimation(EntityStymphalianBird.ANIMATION_SHOOT_ARROWS);
+            animator.startKeyframe(20);
+            shootPosture();
+            animator.endKeyframe();
+            animator.resetKeyframe(10);
+        }
     }
 
     private void shootPosture() {
@@ -373,6 +374,7 @@ public class ModelStymphalianBird extends ModelDragonBase<EntityStymphalianBird>
     }
 
     public void setRotationAngles(EntityStymphalianBird entity, float f, float f1, float f2, float f3, float f4) {
+        this.resetToDefaultPose();
         animate(entity, f, f1, f2, f3, f4, 1);
         float speed_walk = 0.3F;
         float speed_idle = 0.05F;
