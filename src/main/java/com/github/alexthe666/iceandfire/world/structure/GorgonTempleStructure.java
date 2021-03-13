@@ -85,7 +85,7 @@ public class GorgonTempleStructure extends Structure<NoFeatureConfig> {
                 int l1 = chunkGenerator.getNoiseHeightMinusOne(k + i, l + j, Heightmap.Type.WORLD_SURFACE_WG);
                 int i2 = Math.min(Math.min(i1, j1), Math.min(k1, l1));
                 if (i2 >= 60) {
-                    BlockPos blockpos = new BlockPos(x * 16 + 8, i2 + 1, z * 16 + 8);
+                    BlockPos blockpos = new BlockPos(x * 16 + 8, i2 + 2, z * 16 + 8);
 
                     // All a structure has to do is call this method to turn it into a jigsaw based structure!
                     // No manual pieces class needed.
@@ -103,9 +103,8 @@ public class GorgonTempleStructure extends Structure<NoFeatureConfig> {
                             false,
                             false);
 
-                    // Raise the overall structure up 1 but lowers the bounding box down by 1.
+                    // Lowers the bounding box down by 1.
                     // This is done so that the land terraforming code places land at the right height for the temple.
-                    this.components.forEach(piece -> piece.offset(0, 1, 0));
                     this.components.forEach(piece -> piece.getBoundingBox().minY -= 1);
 
                     this.recalculateStructureSize();

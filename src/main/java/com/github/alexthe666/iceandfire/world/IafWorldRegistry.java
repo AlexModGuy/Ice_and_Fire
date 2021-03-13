@@ -6,7 +6,10 @@ import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.feature.*;
 import com.github.alexthe666.iceandfire.world.gen.*;
-import com.github.alexthe666.iceandfire.world.structure.*;
+import com.github.alexthe666.iceandfire.world.structure.DreadMausoleumStructure;
+import com.github.alexthe666.iceandfire.world.structure.DummyPiece;
+import com.github.alexthe666.iceandfire.world.structure.GorgonTempleStructure;
+import com.github.alexthe666.iceandfire.world.structure.GraveyardStructure;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.RegistryKey;
@@ -57,11 +60,9 @@ public class IafWorldRegistry {
     public static Feature<NoFeatureConfig> SPAWN_SEA_SERPENT;
     public static Feature<NoFeatureConfig> SPAWN_STYMPHALIAN_BIRD;
     public static Feature<NoFeatureConfig> SPAWN_WANDERING_CYCLOPS;
-    public static IStructurePieceType MAUSOLEUM_PIECE;
-    public static Structure<NoFeatureConfig> MAUSOLEUM = new DreadMausoleumStructure(NoFeatureConfig.field_236558_a_);
     public static IStructurePieceType DUMMY_PIECE;
+    public static Structure<NoFeatureConfig> MAUSOLEUM = new DreadMausoleumStructure(NoFeatureConfig.field_236558_a_);
     public static Structure<NoFeatureConfig> GORGON_TEMPLE = new GorgonTempleStructure(NoFeatureConfig.field_236558_a_);
-    public static IStructurePieceType GRAVEYARD_PIECE;
     public static Structure<NoFeatureConfig> GRAVEYARD = new GraveyardStructure(NoFeatureConfig.field_236558_a_);
     public static ConfiguredFeature FIRE_LILY_CF;
     public static ConfiguredFeature FROST_LILY_CF;
@@ -119,19 +120,20 @@ public class IafWorldRegistry {
         SPAWN_SEA_SERPENT = registerFeature("iceandfire:spawn_sea_serpent", new SpawnSeaSerpent(NoFeatureConfig.field_236558_a_));
         SPAWN_STYMPHALIAN_BIRD = registerFeature("iceandfire:spawn_stymphalian_bird", new SpawnStymphalianBird(NoFeatureConfig.field_236558_a_));
         SPAWN_WANDERING_CYCLOPS = registerFeature("iceandfire:spawn_wandering_cyclops", new SpawnWanderingCyclops(NoFeatureConfig.field_236558_a_));
-        
-        MAUSOLEUM_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:mausoleum_piece", MausoleumPiece.Piece::new);
+
+        // Technically we don't need the piece classes anymore but we should register dummy pieces
+        // under the same registry name or else player's will get logspammed by Minecraft in existing worlds.
+        DUMMY_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece", DummyPiece::new);
+        Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:mausoleum_piece", DummyPiece::new);
+        Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece_empty", DummyPiece::new);
+        Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:graveyard_piece", DummyPiece::new);
+
         MAUSOLEUM = registerStructureFeature( "iceandfire:mausoleum", MAUSOLEUM);
         putStructureOnAList("iceandfire:mausoleum", MAUSOLEUM);
 
-        // Technically we don't need the Gorgon Temple piece classes anymore but we should register dummy pieces
-        // under the same registry name or else player's will get logspammed by Minecraft in existing worlds.
-        DUMMY_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece", DummyPiece::new);
-        Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece_empty", DummyPiece::new);
         GORGON_TEMPLE = registerStructureFeature( "iceandfire:gorgon_temple", GORGON_TEMPLE);
         putStructureOnAList("iceandfire:gorgon_temple", GORGON_TEMPLE);
 
-        GRAVEYARD_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:graveyard_piece", GraveyardPiece.Piece::new);
         GRAVEYARD = registerStructureFeature( "iceandfire:graveyard", GRAVEYARD);
         putStructureOnAList("iceandfire:graveyard", GRAVEYARD);
 
