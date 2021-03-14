@@ -31,10 +31,9 @@ public class DragonAITarget<T extends LivingEntity> extends NearestAttackableTar
         if(!dragon.isTamed() && dragon.lookingForRoostAIFlag){
             return false;
         }
-        boolean b = super.shouldExecute();
-        if (b && nearestTarget != null && !nearestTarget.getClass().equals(this.dragon.getClass())) {
+        if (nearestTarget != null && !nearestTarget.getClass().equals(this.dragon.getClass())) {
             float dragonSize = Math.max(this.dragon.getWidth(), this.dragon.getWidth() * dragon.getRenderSize());
-            if (dragonSize >= nearestTarget.getWidth()) {
+            if (dragonSize >= nearestTarget.getWidth() && super.shouldExecute()) {
                 if (nearestTarget instanceof PlayerEntity && !dragon.isTamed()) {
                     return true;
                 }
