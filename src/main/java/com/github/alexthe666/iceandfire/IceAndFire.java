@@ -165,8 +165,8 @@ public class IceAndFire {
         event.enqueueWork(() ->{
             IafEntityRegistry.bakeAttributes();
             IafProcessors.registerProcessors();
-            IafWorldRegistry.setup();
         });
+        IafWorldRegistry.setup();
         IafVillagerRegistry.setup();
     }
 
