@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 
+import com.github.alexthe666.iceandfire.world.IafProcessors;
+import com.mojang.serialization.Codec;
 import net.minecraft.block.AbstractChestBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -25,7 +27,8 @@ public class DreadRuinProcessor extends StructureProcessor {
 
     public static final ResourceLocation DREAD_CHEST_LOOT = new ResourceLocation("iceandfire", "chest/mausoleum_chest");
     private float integrity = 1.0F;
-
+    public static final DreadRuinProcessor INSTANCE = new DreadRuinProcessor();
+    public static final Codec<DreadRuinProcessor> CODEC = Codec.unit(() -> INSTANCE);
     public DreadRuinProcessor() {
     }
 
@@ -40,7 +43,7 @@ public class DreadRuinProcessor extends StructureProcessor {
         }
     }
 
-    public Template.BlockInfo func_230386_a_(IWorldReader worldReader, BlockPos pos, BlockPos pos2, Template.BlockInfo infoIn1, Template.BlockInfo infoIn2, PlacementSettings settings) {
+    public Template.BlockInfo process(IWorldReader worldReader, BlockPos pos, BlockPos pos2, Template.BlockInfo infoIn1, Template.BlockInfo infoIn2, PlacementSettings settings,@Nullable Template template) {
         Random random = settings.getRandom(infoIn2.pos);
         if (random.nextFloat() <= integrity) {
             if (infoIn2.state.getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS) {
@@ -112,7 +115,7 @@ public class DreadRuinProcessor extends StructureProcessor {
 
     @Override
     protected IStructureProcessorType getType() {
-        return IStructureProcessorType.BLOCK_ROT;
+        return IafProcessors.DREADRUINPROCESSOR;
     }
 
     private EntityType getRandomMobForMobSpawner(Random random) {

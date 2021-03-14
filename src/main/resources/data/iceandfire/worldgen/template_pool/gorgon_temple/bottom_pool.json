@@ -6,7 +6,7 @@
       "weight": 1,
       "element": {
         "location": "iceandfire:gorgon_temple/basement",
-        "processors": "minecraft:empty",
+        "processors": "iceandfire:gorgon_temple_processors",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }

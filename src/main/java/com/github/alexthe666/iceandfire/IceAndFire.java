@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire;
 
 
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
+import com.github.alexthe666.iceandfire.world.IafProcessors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -161,8 +162,11 @@ public class IceAndFire {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageUpdateLectern.class, MessageUpdateLectern::write, MessageUpdateLectern::read, MessageUpdateLectern.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSwingArm.class, MessageSwingArm::write, MessageSwingArm::read, MessageSwingArm.Handler::handle);
         PROXY.setup();
-        event.enqueueWork(IafEntityRegistry::bakeAttributes);
-        IafWorldRegistry.setup();
+        event.enqueueWork(() ->{
+            IafEntityRegistry.bakeAttributes();
+            IafProcessors.registerProcessors();
+            IafWorldRegistry.setup();
+        });
         IafVillagerRegistry.setup();
     }
 
