@@ -25,7 +25,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class DreadRuinProcessor extends StructureProcessor {
 
-    public static final ResourceLocation DREAD_CHEST_LOOT = new ResourceLocation("iceandfire", "chest/mausoleum_chest");
     private float integrity = 1.0F;
     public static final DreadRuinProcessor INSTANCE = new DreadRuinProcessor();
     public static final Codec<DreadRuinProcessor> CODEC = Codec.unit(() -> INSTANCE);
@@ -50,14 +49,6 @@ public class DreadRuinProcessor extends StructureProcessor {
                 BlockState state = getRandomCrackedBlock(null, random);
                 return new Template.BlockInfo(infoIn2.pos, state, null);
             }
-            if (infoIn2.state.getBlock() instanceof AbstractChestBlock) {
-                ResourceLocation loot = DREAD_CHEST_LOOT;
-                CompoundNBT tag = new CompoundNBT();
-                tag.putString("LootTable", loot.toString());
-                tag.putLong("LootTableSeed", random.nextLong());
-                Template.BlockInfo newInfo = new Template.BlockInfo(infoIn2.pos, Blocks.CHEST.getDefaultState(), tag);
-                return newInfo;
-            }
             if (infoIn2.state.getBlock() == IafBlockRegistry.DREAD_SPAWNER) {
                 CompoundNBT tag = new CompoundNBT();
                 CompoundNBT spawnData = new CompoundNBT();
@@ -75,43 +66,6 @@ public class DreadRuinProcessor extends StructureProcessor {
         }
         return infoIn2;
     }
-
-
-   /* @Nullable
-    @Override
-    public Template.BlockInfo process(IWorldReader worldIn, BlockPos pos, Template.BlockInfo blockInfoIn, Template.BlockInfo blockInfoIn2, PlacementSettings settings) {
-        Random random = settings.getRandom(pos);
-        if (random.nextFloat() <= integrity) {
-            if (blockInfoIn.state.getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS) {
-                BlockState state = getRandomCrackedBlock(null, random);
-                return new Template.BlockInfo(pos, state, null);
-            }
-            if (blockInfoIn.state.getBlock() instanceof AbstractChestBlock) {
-                ResourceLocation loot = DREAD_CHEST_LOOT;
-                CompoundNBT tag = new CompoundNBT();
-                tag.putString("LootTable", loot.toString());
-                tag.putLong("LootTableSeed", random.nextLong());
-                Template.BlockInfo newInfo = new Template.BlockInfo(pos, Blocks.CHEST.getDefaultState(), tag);
-                return newInfo;
-            }
-            if (blockInfoIn.state.getBlock() == IafBlockRegistry.DREAD_SPAWNER) {
-                CompoundNBT tag = new CompoundNBT();
-                CompoundNBT spawnData = new CompoundNBT();
-                ResourceLocation spawnerMobId = ForgeRegistries.ENTITIES.getKey(getRandomMobForMobSpawner(random));
-                if (spawnerMobId != null) {
-                    spawnData.putString("id", spawnerMobId.toString());
-                    tag.remove("SpawnPotentials");
-                    tag.put("SpawnData", spawnData.copy());
-                }
-                Template.BlockInfo newInfo = new Template.BlockInfo(pos, IafBlockRegistry.DREAD_SPAWNER.getDefaultState(), tag);
-                return newInfo;
-
-            }
-            return blockInfoIn;
-        }
-        return blockInfoIn;
-
-    }*/
 
     @Override
     protected IStructureProcessorType getType() {

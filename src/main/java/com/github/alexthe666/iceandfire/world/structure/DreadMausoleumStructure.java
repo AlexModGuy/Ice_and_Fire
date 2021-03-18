@@ -84,29 +84,26 @@ public class DreadMausoleumStructure extends Structure<NoFeatureConfig> {
                int k1 = chunkGenerator.getNoiseHeightMinusOne(k + i, l, Heightmap.Type.WORLD_SURFACE_WG);
                int l1 = chunkGenerator.getNoiseHeightMinusOne(k + i, l + j, Heightmap.Type.WORLD_SURFACE_WG);
                int i2 = Math.min(Math.min(i1, j1), Math.min(k1, l1));
-               if (i2 >= 60) {
-                   BlockPos blockpos = new BlockPos(x * 16 + 8, i2 + 1, z * 16 + 8);
+               BlockPos blockpos = new BlockPos(x * 16 + 8, i2 + 1, z * 16 + 8);
 
-                   // All a structure has to do is call this method to turn it into a jigsaw based structure!
-                   // No manual pieces class needed.
-                   JigsawManager.func_242837_a(
-                           dynamicRegistries,
-                           new VillageConfig(() -> dynamicRegistries.getRegistry(Registry.JIGSAW_POOL_KEY)
-                                   .getOrDefault(new ResourceLocation(IceAndFire.MODID, "dread_mausoleum/start_pool")),
-                                   5), // Depth of jigsaw branches. Can be set to any number greater than 1 but won't change anything as this is a single piece Jigsaw Structure.
-                           AbstractVillagePiece::new,
-                           chunkGenerator,
-                           templateManager,
-                           blockpos,
-                           this.components,
-                           this.rand,
-                           false,
-                           false);
+               // All a structure has to do is call this method to turn it into a jigsaw based structure!
+               // No manual pieces class needed.
+               JigsawManager.func_242837_a(
+                       dynamicRegistries,
+                       new VillageConfig(() -> dynamicRegistries.getRegistry(Registry.JIGSAW_POOL_KEY)
+                               .getOrDefault(new ResourceLocation(IceAndFire.MODID, "dread_mausoleum/start_pool")),
+                               5), // Depth of jigsaw branches. Can be set to any number greater than 1 but won't change anything as this is a single piece Jigsaw Structure.
+                       AbstractVillagePiece::new,
+                       chunkGenerator,
+                       templateManager,
+                       blockpos,
+                       this.components,
+                       this.rand,
+                       false,
+                       false);
 
-	               this.recalculateStructureSize();
-               }
+               this.recalculateStructureSize();
            }
         }
     }
-
 }

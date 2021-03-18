@@ -25,7 +25,6 @@ import net.minecraft.world.gen.feature.template.Template;
 
 public class GraveyardProcessor extends StructureProcessor {
 
-    public static final ResourceLocation GRAVEYARD_CHEST_LOOT = new ResourceLocation("iceandfire", "chest/graveyard");
     private float integrity = 1.0F;
     public static final GraveyardProcessor INSTANCE = new GraveyardProcessor();
     public static final Codec<GraveyardProcessor> CODEC = Codec.unit(() -> INSTANCE);
@@ -63,15 +62,6 @@ public class GraveyardProcessor extends StructureProcessor {
         if (infoIn2.state.getBlock() == Blocks.COBBLESTONE) {
             BlockState state = getRandomCobblestone(null, random);
             return new Template.BlockInfo(infoIn2.pos, state, null);
-        }
-        if (infoIn2.state.getBlock() == IafBlockRegistry.GHOST_CHEST) {
-            ResourceLocation loot = GRAVEYARD_CHEST_LOOT;
-            CompoundNBT tag = new CompoundNBT();
-            tag.putString("LootTable", loot.toString());
-            tag.putLong("LootTableSeed", random.nextLong());
-            Direction facing = infoIn2.state.get(BlockGhostChest.FACING);
-            Template.BlockInfo newInfo = new Template.BlockInfo(infoIn2.pos, IafBlockRegistry.GHOST_CHEST.getDefaultState().with(BlockGhostChest.FACING, facing), tag);
-            return newInfo;
         }
         return infoIn2;
     }
