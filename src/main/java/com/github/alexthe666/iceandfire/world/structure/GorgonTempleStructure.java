@@ -84,33 +84,26 @@ public class GorgonTempleStructure extends Structure<NoFeatureConfig> {
                 int k1 = chunkGenerator.getNoiseHeightMinusOne(k + i, l, Heightmap.Type.WORLD_SURFACE_WG);
                 int l1 = chunkGenerator.getNoiseHeightMinusOne(k + i, l + j, Heightmap.Type.WORLD_SURFACE_WG);
                 int i2 = Math.min(Math.min(i1, j1), Math.min(k1, l1));
-                if (i2 >= 60) {
-                    BlockPos blockpos = new BlockPos(x * 16 + 8, i2 + 2, z * 16 + 8);
+                BlockPos blockpos = new BlockPos(x * 16 + 8, i2 + 2, z * 16 + 8);
 
-                    // All a structure has to do is call this method to turn it into a jigsaw based structure!
-                    // No manual pieces class needed.
-                    JigsawManager.func_242837_a(
-                            dynamicRegistries,
-                            new VillageConfig(() -> dynamicRegistries.getRegistry(Registry.JIGSAW_POOL_KEY)
-                                    .getOrDefault(new ResourceLocation(IceAndFire.MODID, "gorgon_temple/top_pool")),
-                                    3), // Depth of jigsaw branches. Gorgon temple has a depth of 3. (start top -> bottom -> gorgon)
-                            AbstractVillagePiece::new,
-                            chunkGenerator,
-                            templateManager,
-                            blockpos,
-                            this.components,
-                            this.rand,
-                            false,
-                            false);
-
-                    // Lowers the bounding box down by 1.
-                    // This is done so that the land terraforming code places land at the right height for the temple.
-                    this.components.forEach(piece -> piece.getBoundingBox().minY -= 1);
-
-                    this.recalculateStructureSize();
-                }
+                // All a structure has to do is call this method to turn it into a jigsaw based structure!
+                // No manual pieces class needed.
+                JigsawManager.func_242837_a(
+                        dynamicRegistries,
+                        new VillageConfig(() -> dynamicRegistries.getRegistry(Registry.JIGSAW_POOL_KEY)
+                                .getOrDefault(new ResourceLocation(IceAndFire.MODID, "gorgon_temple/top_pool")),
+                                3), // Depth of jigsaw branches. Gorgon temple has a depth of 3. (start top -> bottom -> gorgon)
+                        AbstractVillagePiece::new,
+                        chunkGenerator,
+                        templateManager,
+                        blockpos,
+                        this.components,
+                        this.rand,
+                        false,
+                        false);
+                
+                this.recalculateStructureSize();
             }
         }
     }
-
 }

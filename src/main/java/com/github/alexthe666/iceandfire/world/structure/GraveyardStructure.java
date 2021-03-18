@@ -84,30 +84,27 @@ public class GraveyardStructure extends Structure<NoFeatureConfig> {
             int k1 = chunkGenerator.getNoiseHeightMinusOne(k + i, l, Heightmap.Type.WORLD_SURFACE_WG);
             int l1 = chunkGenerator.getNoiseHeightMinusOne(k + i, l + j, Heightmap.Type.WORLD_SURFACE_WG);
             int i2 = Math.min(Math.min(i1, j1), Math.min(k1, l1));
-            if (i2 >= 60) {
-                BlockPos blockpos = new BlockPos(x * 16 + 8, i2 - 2, z * 16 + 8);
-                // All a structure has to do is call this method to turn it into a jigsaw based structure!
-                // No manual pieces class needed.
-                JigsawManager.func_242837_a(
-                        dynamicRegistries,
-                        new VillageConfig(() -> dynamicRegistries.getRegistry(Registry.JIGSAW_POOL_KEY)
-                                .getOrDefault(new ResourceLocation(IceAndFire.MODID, "graveyard/start_pool")),
-                                5), // Depth of jigsaw branches. Can be set to any number greater than 1 but won't change anything as this is a single piece Jigsaw Structure.
-                        AbstractVillagePiece::new,
-                        chunkGenerator,
-                        templateManager,
-                        blockpos,
-                        this.components,
-                        this.rand,
-                        false,
-                        false);
+            BlockPos blockpos = new BlockPos(x * 16 + 8, i2 - 2, z * 16 + 8);
+            // All a structure has to do is call this method to turn it into a jigsaw based structure!
+            // No manual pieces class needed.
+            JigsawManager.func_242837_a(
+                    dynamicRegistries,
+                    new VillageConfig(() -> dynamicRegistries.getRegistry(Registry.JIGSAW_POOL_KEY)
+                            .getOrDefault(new ResourceLocation(IceAndFire.MODID, "graveyard/start_pool")),
+                            5), // Depth of jigsaw branches. Can be set to any number greater than 1 but won't change anything as this is a single piece Jigsaw Structure.
+                    AbstractVillagePiece::new,
+                    chunkGenerator,
+                    templateManager,
+                    blockpos,
+                    this.components,
+                    this.rand,
+                    false,
+                    false);
 
-                // Raises the bounding box down up by 3.
-                // This is done so that the land terraforming code places land at the right height for the graveyard.
-                this.components.forEach(piece -> piece.getBoundingBox().minY += 3);
-                this.recalculateStructureSize();
-            }
+            // Raises the bounding box down up by 3.
+            // This is done so that the land terraforming code places land at the right height for the graveyard.
+            this.components.forEach(piece -> piece.getBoundingBox().minY += 3);
+            this.recalculateStructureSize();
         }
     }
-
 }
