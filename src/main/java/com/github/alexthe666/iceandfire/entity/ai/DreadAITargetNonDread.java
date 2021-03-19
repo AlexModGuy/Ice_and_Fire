@@ -18,14 +18,6 @@ public class DreadAITargetNonDread extends NearestAttackableTargetGoal {
         super(entityIn, classTarget, 0, checkSight, false, targetSelector);
     }
 
-    @Override
-    public boolean shouldContinueExecuting() {
-        if (this.goalOwner.getAttackTarget() instanceof EntityDragonBase && ((EntityDragonBase)this.goalOwner.getAttackTarget()).isMobDead()){
-            return false;
-        }
-        return super.shouldContinueExecuting();
-    }
-
     protected boolean isSuitableTarget(@Nullable LivingEntity target, EntityPredicate targetPredicate) {
         if (super.isSuitableTarget(target, targetPredicate)) {
             return !(target instanceof IDreadMob) && DragonUtils.isAlive(target);

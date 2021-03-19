@@ -1038,14 +1038,11 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean isAlive() {
-        if (isModelDead()) {
-            return true;
-        }
-        return !this.removed && this.getHealth() > 0.0F;
+        return super.isAlive();
     }
 
     @Override
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
+    public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         int lastDeathStage = this.getAgeInDays() / 5;
         if (stack.getItem() == IafItemRegistry.DRAGON_DEBUG_STICK) {
@@ -1090,6 +1087,17 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                     }
                 }
             }
+            return ActionResultType.SUCCESS;
+        }
+        return super.applyPlayerInteraction(player, vec, hand);
+    }
+
+    @Override
+    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        int lastDeathStage = this.getAgeInDays() / 5;
+        if (stack.getItem() == IafItemRegistry.DRAGON_DEBUG_STICK) {
+            logic.debug();
             return ActionResultType.SUCCESS;
         }
         if (!this.isModelDead()) {
