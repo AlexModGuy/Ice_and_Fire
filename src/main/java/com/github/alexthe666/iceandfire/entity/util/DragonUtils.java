@@ -330,8 +330,10 @@ public class DragonUtils {
     }
 
     public static boolean isAlive(LivingEntity entity) {
-        boolean alive = (!(entity instanceof IDeadMob) || !((IDeadMob) entity).isMobDead()) && !EntityGorgon.isStoneMob(entity);
-        return alive;
+        if (entity instanceof EntityDragonBase && ((EntityDragonBase) entity).isMobDead()){
+            return false;
+        }
+        return (!(entity instanceof IDeadMob) || !((IDeadMob) entity).isMobDead()) && !EntityGorgon.isStoneMob(entity);
     }
 
 
@@ -362,9 +364,13 @@ public class DragonUtils {
     }
 
     public static boolean canHostilesTarget(Entity entity) {
-        if (entity instanceof PlayerEntity && entity.world.getDifficulty() == Difficulty.PEACEFUL) {
+        if (entity instanceof PlayerEntity && (entity.world.getDifficulty() == Difficulty.PEACEFUL || ((PlayerEntity)entity).isCreative())) {
             return false;
-        } else {
+        }
+        if (entity instanceof EntityDragonBase && ((EntityDragonBase)entity).isMobDead()){
+            return false;
+        }
+        else {
             return entity instanceof LivingEntity && isAlive((LivingEntity) entity);
         }
     }

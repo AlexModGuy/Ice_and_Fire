@@ -45,7 +45,7 @@ public class MyrmexAIMoveThroughHive extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return  !myrmex.shouldLeaveHive() && this.myrmex.getDistanceSq(nextRoom.getX() + 0.5D, nextRoom.getY() + 0.5D, nextRoom.getZ() + 0.5D) > 3 && this.myrmex.shouldEnterHive() && !(this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby());
+        return  !myrmex.shouldLeaveHive() && !this.myrmex.isCloseEnoughToTarget(nextRoom,3) && this.myrmex.shouldEnterHive() && !(this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby());
     }
 
     public void startExecuting() {

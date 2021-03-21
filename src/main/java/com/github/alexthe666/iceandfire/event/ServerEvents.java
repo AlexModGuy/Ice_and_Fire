@@ -12,6 +12,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.entity.ai.AiDebug;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
 import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
@@ -35,6 +36,8 @@ import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
 import com.github.alexthe666.iceandfire.message.MessageSwingArm;
 import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenFireDragonCave;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenIceDragonCave;
 import com.google.common.base.Predicate;
@@ -65,6 +68,7 @@ import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.loot.ItemLootEntry;
 import net.minecraft.loot.LootEntry;
 import net.minecraft.loot.LootPool;
@@ -726,6 +730,9 @@ public class ServerEvents {
                 }
             }
         }
+        if (AiDebug.isEnabled() && event.getEntityLiving() instanceof MobEntity && AiDebug.contains((MobEntity) event.getEntityLiving())){
+            AiDebug.logData();
+        }
     }
 
     @SubscribeEvent
@@ -740,6 +747,9 @@ public class ServerEvents {
                     event.getTarget().entityDropItem(IafItemRegistry.CHAIN, 1);
                 }
             }
+        }
+        if (AiDebug.isEnabled() && !event.getWorld().isRemote() && event.getTarget() instanceof MobEntity && event.getItemStack().getItem() == Items.STICK ){
+            AiDebug.addEntity((MobEntity) event.getTarget());
         }
     }
 

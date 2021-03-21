@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.google.common.base.Predicate;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.util.Hand;
@@ -47,7 +48,7 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.goalOwner.getBoundingBox().grow(targetDistance, targetDistance, targetDistance);
+        return this.goalOwner.getBoundingBox().grow(targetDistance, 5, targetDistance);
     }
 
     @Override
@@ -68,6 +69,12 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
             this.targetEntity.remove();
             resetTask();
         }
+    }
+
+    @Override
+    public void resetTask() {
+        this.myrmex.getNavigator().clearPath();
+        super.resetTask();
     }
 
     @Override
