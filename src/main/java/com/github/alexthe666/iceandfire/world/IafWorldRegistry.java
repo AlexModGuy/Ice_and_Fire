@@ -1,39 +1,16 @@
 package com.github.alexthe666.iceandfire.world;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import com.github.alexthe666.iceandfire.world.feature.SpawnDeathWorm;
-import com.github.alexthe666.iceandfire.world.feature.SpawnDragonSkeleton;
-import com.github.alexthe666.iceandfire.world.feature.SpawnHippocampus;
-import com.github.alexthe666.iceandfire.world.feature.SpawnSeaSerpent;
-import com.github.alexthe666.iceandfire.world.feature.SpawnStymphalianBird;
-import com.github.alexthe666.iceandfire.world.feature.SpawnWanderingCyclops;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenCyclopsCave;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenFireDragonCave;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenFireDragonRoosts;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenHydraCave;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenIceDragonCave;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenIceDragonRoosts;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenLightningDragonCave;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenLightningDragonRoosts;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenPixieVillage;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenSirenIsland;
+import com.github.alexthe666.iceandfire.world.feature.*;
+import com.github.alexthe666.iceandfire.world.gen.*;
 import com.github.alexthe666.iceandfire.world.structure.DreadMausoleumStructure;
-import com.github.alexthe666.iceandfire.world.structure.GorgonTemplePiece;
+import com.github.alexthe666.iceandfire.world.structure.DummyPiece;
 import com.github.alexthe666.iceandfire.world.structure.GorgonTempleStructure;
-import com.github.alexthe666.iceandfire.world.structure.GraveyardPiece;
 import com.github.alexthe666.iceandfire.world.structure.GraveyardStructure;
-import com.github.alexthe666.iceandfire.world.structure.MausoleumPiece;
 import com.google.common.collect.ImmutableList;
-
 import net.minecraft.block.Blocks;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -47,15 +24,7 @@ import net.minecraft.world.gen.DimensionSettings;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
-import net.minecraft.world.gen.feature.BlockClusterFeatureConfig;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.Features;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.feature.ReplaceBlockConfig;
-import net.minecraft.world.gen.feature.StructureFeature;
+import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.IPlacementConfig;
@@ -63,6 +32,11 @@ import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 public class IafWorldRegistry {
 
@@ -86,12 +60,9 @@ public class IafWorldRegistry {
     public static Feature<NoFeatureConfig> SPAWN_SEA_SERPENT;
     public static Feature<NoFeatureConfig> SPAWN_STYMPHALIAN_BIRD;
     public static Feature<NoFeatureConfig> SPAWN_WANDERING_CYCLOPS;
-    public static IStructurePieceType MAUSOLEUM_PIECE;
+    public static IStructurePieceType DUMMY_PIECE;
     public static Structure<NoFeatureConfig> MAUSOLEUM = new DreadMausoleumStructure(NoFeatureConfig.field_236558_a_);
-    public static IStructurePieceType GORGON_PIECE;
-    public static IStructurePieceType GORGON_EMPTY_PIECE;
     public static Structure<NoFeatureConfig> GORGON_TEMPLE = new GorgonTempleStructure(NoFeatureConfig.field_236558_a_);
-    public static IStructurePieceType GRAVEYARD_PIECE;
     public static Structure<NoFeatureConfig> GRAVEYARD = new GraveyardStructure(NoFeatureConfig.field_236558_a_);
     public static ConfiguredFeature FIRE_LILY_CF;
     public static ConfiguredFeature FROST_LILY_CF;
@@ -149,17 +120,20 @@ public class IafWorldRegistry {
         SPAWN_SEA_SERPENT = registerFeature("iceandfire:spawn_sea_serpent", new SpawnSeaSerpent(NoFeatureConfig.field_236558_a_));
         SPAWN_STYMPHALIAN_BIRD = registerFeature("iceandfire:spawn_stymphalian_bird", new SpawnStymphalianBird(NoFeatureConfig.field_236558_a_));
         SPAWN_WANDERING_CYCLOPS = registerFeature("iceandfire:spawn_wandering_cyclops", new SpawnWanderingCyclops(NoFeatureConfig.field_236558_a_));
-        
-        MAUSOLEUM_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:mausoleum_piece", MausoleumPiece.Piece::new);
+
+        // Technically we don't need the piece classes anymore but we should register dummy pieces
+        // under the same registry name or else player's will get logspammed by Minecraft in existing worlds.
+        DUMMY_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece", DummyPiece::new);
+        Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:mausoleum_piece", DummyPiece::new);
+        Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece_empty", DummyPiece::new);
+        Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:graveyard_piece", DummyPiece::new);
+
         MAUSOLEUM = registerStructureFeature( "iceandfire:mausoleum", MAUSOLEUM);
         putStructureOnAList("iceandfire:mausoleum", MAUSOLEUM);
 
-        GORGON_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece", GorgonTemplePiece.Piece::new);
-        GORGON_EMPTY_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece_empty", GorgonTemplePiece.EmptyPiece::new);
         GORGON_TEMPLE = registerStructureFeature( "iceandfire:gorgon_temple", GORGON_TEMPLE);
         putStructureOnAList("iceandfire:gorgon_temple", GORGON_TEMPLE);
 
-        GRAVEYARD_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:graveyard_piece", GraveyardPiece.Piece::new);
         GRAVEYARD = registerStructureFeature( "iceandfire:graveyard", GRAVEYARD);
         putStructureOnAList("iceandfire:graveyard", GRAVEYARD);
 
