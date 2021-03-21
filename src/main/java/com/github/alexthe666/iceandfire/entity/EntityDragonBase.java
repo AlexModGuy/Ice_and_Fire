@@ -1805,7 +1805,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         int k = MathHelper.floor(this.getPosZ());
         BlockPos pos = new BlockPos(i, j, k);
         EntityDragonEgg dragon = new EntityDragonEgg(IafEntityRegistry.DRAGON_EGG, this.world);
-        dragon.setEggType(EnumDragonEgg.byMetadata(new Random().nextInt(3) + getStartMetaForType()));
+        dragon.setEggType(EnumDragonEgg.byMetadata(new Random().nextInt(4) + getStartMetaForType()));
         dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
         return dragon;
     }
