@@ -50,6 +50,10 @@ public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
         if (!((EntityAmphithere) this.goalOwner).canMove()) {
             return false;
         }
+        //If the target entity already is what we want skip AABB
+        if (targetEntitySelector.apply(this.targetEntity)){
+            return true;
+        }
         List<ItemEntity> list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
         if (list.isEmpty()) {
@@ -69,6 +73,12 @@ public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
     public void startExecuting() {
         this.goalOwner.getNavigator().tryMoveToXYZ(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 1);
         super.startExecuting();
+    }
+
+    @Override
+    public void resetTask() {
+        this.targetEntity = null;
+        super.resetTask();
     }
 
     @Override

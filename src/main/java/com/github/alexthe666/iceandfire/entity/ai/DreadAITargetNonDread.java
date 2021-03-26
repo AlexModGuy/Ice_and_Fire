@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import javax.annotation.Nullable;
 
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IDreadMob;
 import com.google.common.base.Predicate;
