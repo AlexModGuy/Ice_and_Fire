@@ -11,6 +11,8 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityMyrmexCocoon;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 
 import net.minecraft.entity.ai.goal.Goal;
@@ -26,7 +28,7 @@ public class MyrmexAIStoreItems extends Goal {
     private BlockPos nextCocoon = null;
     private BlockPos mainRoom = null;
     private boolean first = true; //first stage - enter the main hive room then storage room
-
+    private PathResult path;
     public MyrmexAIStoreItems(EntityMyrmexBase entityIn, double movementSpeedIn) {
         this.myrmex = entityIn;
         this.movementSpeed = movementSpeedIn;
@@ -34,7 +36,10 @@ public class MyrmexAIStoreItems extends Goal {
     }
 
     public boolean shouldExecute() {
-        if (!this.myrmex.canMove() || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky() || this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+        if (!this.myrmex.canMove() || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath()  || this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+            return false;
+        }
+        if (!(this.myrmex.getNavigator() instanceof AdvancedPathNavigate) || this.myrmex.isPassenger()){
             return false;
         }
         if (this.myrmex.getWaitTicks()>0){
@@ -43,37 +48,44 @@ public class MyrmexAIStoreItems extends Goal {
         MyrmexHive village = this.myrmex.getHive();
         if (village == null) {
             return false;
-        } else {
-            first = true;
-            mainRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getCenter());
-            nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(WorldGenMyrmexHive.RoomType.FOOD, this.myrmex.getRNG(), this.myrmex.getPosition()));
-            nextCocoon = getNearbyCocoon(nextRoom);
-            if(nextCocoon == null){
-                this.myrmex.setWaitTicks(20 + new Random().nextInt(40));
-            }
-            return nextCocoon != null;
         }
+        if(!this.myrmex.isInHive()){
+            if(!this.myrmex.isCloseEnoughToTarget(MyrmexHive.getGroundedPos(this.myrmex.world, village.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), false)),100)) {
+                return false;
+            }
+        }
+        first = true;
+        mainRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getCenter());
+
+        nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(WorldGenMyrmexHive.RoomType.FOOD, this.myrmex.getRNG(), this.myrmex.getPosition()));
+        nextCocoon = getNearbyCocoon(nextRoom);
+        if(nextCocoon == null){
+            this.myrmex.setWaitTicks(20 + new Random().nextInt(40));
+        }
+        this.path = ((AdvancedPathNavigate) this.myrmex.getNavigator()).moveToXYZ(mainRoom.getX() + 0.5D, mainRoom.getY() + 0.5D, mainRoom.getZ() + 0.5D, this.movementSpeed);
+        return nextCocoon != null;
+
     }
 
     public boolean shouldContinueExecuting() {
-        return !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && nextCocoon != null && isUseableCocoon(nextCocoon) && this.myrmex.getDistanceSq(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D) > 3 && this.myrmex.shouldEnterHive();
+        return !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && nextCocoon != null && isUseableCocoon(nextCocoon) && !this.myrmex.isCloseEnoughToTarget(nextCocoon,3) && this.myrmex.shouldEnterHive();
     }
 
     @Override
     public void tick() {
         if (first && mainRoom != null) {
-            this.myrmex.getNavigator().tryMoveToXYZ(mainRoom.getX() + 0.5D, mainRoom.getY() + 0.5D, mainRoom.getZ() + 0.5D, this.movementSpeed);
-            if (this.myrmex.getDistanceSq(mainRoom.getX() + 0.5D, mainRoom.getY() + 0.5D, mainRoom.getZ() + 0.5D) < 10D) {
+            if (this.myrmex.isCloseEnoughToTarget(mainRoom,10)) {
                 first = false;
-                return;
+            }
+            else if (!this.myrmex.pathReachesTarget(path,mainRoom, 9)) {
+                //Simple way to stop executing this task
+                nextCocoon = null;
             }
         }
+
         if (!first && nextCocoon != null) {
-            if(myrmex.getNavigator().noPath()){
-                this.myrmex.getNavigator().tryMoveToXYZ(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D, this.movementSpeed);
-            }
             double dist = 3 * 3;
-            if (this.myrmex.getDistanceSq(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D) < dist && !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
+            if (this.myrmex.isCloseEnoughToTarget(nextCocoon,dist) && !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
                 TileEntityMyrmexCocoon cocoon = (TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(nextCocoon);
                 ItemStack itemstack = this.myrmex.getHeldItem(Hand.MAIN_HAND);
                 if (!itemstack.isEmpty()) {
@@ -105,6 +117,16 @@ public class MyrmexAIStoreItems extends Goal {
                         }
                     }
                 }
+            }
+            //In case the myrmex isn't close enough to the cocoon and walked to it's destination try a different one
+            else if(!this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && !this.myrmex.pathReachesTarget(path,nextCocoon,dist)){
+                nextCocoon = getNearbyCocoon(nextRoom);
+                if (nextCocoon !=null) {
+                    this.path = ((AdvancedPathNavigate) this.myrmex.getNavigator()).moveToXYZ(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D, this.movementSpeed);
+                }
+            }
+            else if(this.myrmex.pathReachesTarget(path,nextCocoon,dist) && this.path.isCancelled()){
+                resetTask();
             }
         }
     }

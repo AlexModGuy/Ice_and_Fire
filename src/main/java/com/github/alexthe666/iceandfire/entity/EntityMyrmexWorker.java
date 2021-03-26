@@ -122,7 +122,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         this.goalSelector.addGoal(3, new MyrmexAIStoreItems(this, 1.0D));
         this.goalSelector.addGoal(4, new MyrmexAIReEnterHive(this, 1.0D));
         this.goalSelector.addGoal(4, new MyrmexAILeaveHive(this, 1.0D));
-        this.goalSelector.addGoal(6, new MyrmexAIForage(this));
+        this.goalSelector.addGoal(6, new MyrmexAIForage(this,2));
         this.goalSelector.addGoal(7, new MyrmexAIMoveThroughHive(this, 1.0D));
         this.goalSelector.addGoal(8, new MyrmexAIWander(this, 1D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 6.0F));
@@ -138,24 +138,12 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
             }
         }));
 
+
     }
 
     public boolean shouldWander() {
         return super.shouldWander() && this.canSeeSky();
     }
-
-    /*public void debugStuff(){
-        List<String> goals = this.goalSelector.getRunningGoals().map(goal -> goal.getGoal().toString()).collect(Collectors.toList());
-        List<String> targets = this.targetSelector.getRunningGoals().map(goal ->goal.getGoal().toString()).collect(Collectors.toList());
-        if (!goals.isEmpty())
-            LOGGER.info("GOALS: "+ goals);
-        if(!targets.isEmpty())
-            LOGGER.info("TARGET: " + targets);
-        if (this.getWaitTicks() != 0){
-            LOGGER.info(this.getWaitTicks());
-            LOGGER.info(this.lastGoal.toString());
-        }
-    }*/
 
     @Override
     protected VillagerTrades.ITrade[] getLevel1Trades() {
@@ -196,7 +184,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     }
 
     public boolean shouldEnterHive() {
-        return holdingSomething();
+        return holdingSomething() || !world.isDaytime();
     }
 
     public boolean shouldMoveThroughHive() {
