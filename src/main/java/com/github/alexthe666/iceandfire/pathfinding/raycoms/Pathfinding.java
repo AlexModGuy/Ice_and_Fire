@@ -18,10 +18,13 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.pathfinding.Path;
+import net.minecraft.util.concurrent.ThreadTaskExecutor;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.LogicalSidedProvider;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ConcurrentModificationException;
@@ -34,6 +37,7 @@ import static com.github.alexthe666.iceandfire.pathfinding.raycoms.PathfindingCo
  * Static class the handles all the Pathfinding.
  */
 public final class Pathfinding {
+    private static final Set<Class<?>> loadedJobs = new CopyOnWriteArraySet<>();
     private static final BlockingQueue<Runnable> jobQueue = new LinkedBlockingDeque<>();
     private static ThreadPoolExecutor executor;
 
@@ -72,6 +76,17 @@ public final class Pathfinding {
      * @return a Future containing the Path
      */
     public static Future<Path> enqueue(final AbstractPathJob job) {
+        if (!loadedJobs.contains(job.getClass())) {
+            ThreadTaskExecutor<?> workqueue = LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER);
+            CompletableFuture<Path> result = workqueue.isOnExecutionThread() ? CompletableFuture.completedFuture(job.call()) : CompletableFuture.supplyAsync(job::call, workqueue);
+            return result.thenApply(path -> {
+                loadedJobs.add(job.getClass());
+                return path;
+            });
+        }
+        if(getExecutor().isShutdown() || getExecutor().isTerminating() || getExecutor().isTerminated()){
+            return null;
+        }
         return getExecutor().submit(job);
     }
 
@@ -274,11 +289,26 @@ public final class Pathfinding {
          */
         public static int id;
 
+
+        private static final ClassLoader classLoader;
+
+        static {
+            ThreadTaskExecutor<?> workqueue = LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER);
+            if (workqueue.isOnExecutionThread())
+                classLoader = Thread.currentThread().getContextClassLoader();
+            else
+                classLoader = CompletableFuture.supplyAsync(() -> Thread.currentThread().getContextClassLoader(), workqueue).join();
+        }
+
         @Override
         public Thread newThread(final Runnable runnable) {
             final Thread thread = new Thread(runnable, "Ice and Fire Pathfinding Worker #" + (id++));
             thread.setDaemon(true);
-
+            thread.setPriority(Thread.MAX_PRIORITY);
+            if (thread.getContextClassLoader() != classLoader) {
+                IceAndFire.LOGGER.info("Corrected CCL of new Ice and Fire Pathfinding Thread, was: " + thread.getContextClassLoader().toString());
+                thread.setContextClassLoader(classLoader);
+            }
             thread.setUncaughtExceptionHandler((thread1, throwable) -> IceAndFire.LOGGER.error("Ice and Fire Pathfinding Thread errored! ", throwable));
             return thread;
         }
