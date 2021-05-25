@@ -770,7 +770,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
         //  Jump Point Search-ish optimization:
         // If this node was a (heuristic-based) improvement on our parent,
         // lets go another step in the same direction...
-        performJumpPointSearch(parent, dPos, node);
+        //performJumpPointSearch(parent, dPos, node);//this line should be disabled until we can gurantee that infinite recursion won't happen due to walk and performJumpPointSearch calling each other.
 
         return true;
     }
