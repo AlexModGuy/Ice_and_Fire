@@ -7,6 +7,8 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexSoldier;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class MyrmexAIEscortEntity extends Goal {
     private final EntityMyrmexSoldier myrmex;
     private final double movementSpeed;

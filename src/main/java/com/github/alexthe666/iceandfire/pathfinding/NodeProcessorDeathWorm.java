@@ -27,12 +27,12 @@ public class NodeProcessorDeathWorm extends NodeProcessor {
     }
 
     @Override
-    public PathNodeType getPathNodeType(IBlockReader blockaccessIn, int x, int y, int z, MobEntity entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
+    public PathNodeType determineNodeType(IBlockReader blockaccessIn, int x, int y, int z, MobEntity entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
         return null;
     }
 
     @Override
-    public PathNodeType getPathNodeType(IBlockReader blockaccessIn, int x, int y, int z) {
+    public PathNodeType getFloorNodeType(IBlockReader blockaccessIn, int x, int y, int z) {
         return null;
     }
 

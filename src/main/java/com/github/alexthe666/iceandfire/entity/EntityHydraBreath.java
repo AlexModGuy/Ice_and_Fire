@@ -75,7 +75,7 @@ public class EntityHydraBreath extends AbstractFireballEntity implements IDragon
         if(this.ticksExisted > 30){
             this.remove();
         }
-        Entity shootingEntity = this.func_234616_v_();
+        Entity shootingEntity = this.getShooter();
         if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.getPosition())) {
             if (this.world.isRemote || (shootingEntity == null || !shootingEntity.removed) && this.world.isBlockLoaded(this.getPosition())) {
                 if (this.isFireballFiery()) {
@@ -162,7 +162,7 @@ public class EntityHydraBreath extends AbstractFireballEntity implements IDragon
     @Override
     protected void onImpact(RayTraceResult movingObject) {
         boolean flag = this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING);
-        Entity shootingEntity = this.func_234616_v_();
+        Entity shootingEntity = this.getShooter();
         if (!this.world.isRemote) {
             if (movingObject.getType() == RayTraceResult.Type.ENTITY) {
                 Entity entity = ((EntityRayTraceResult) movingObject).getEntity();

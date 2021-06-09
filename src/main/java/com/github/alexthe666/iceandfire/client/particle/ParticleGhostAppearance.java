@@ -20,7 +20,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class ParticleGhostAppearance extends Particle {
-    private final ModelGhost field_228342_a_ = new ModelGhost();
+    private final ModelGhost model = new ModelGhost();
     private int ghost;
     private boolean fromLeft = false;
     public ParticleGhostAppearance(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int ghost) {
@@ -57,8 +57,8 @@ public class ParticleGhostAppearance extends Particle {
             IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
 
             IVertexBuilder ivertexbuilder = irendertypebuffer$impl.getBuffer(IafRenderType.getGhost(RenderGhost.getGhostOverlayForType(ghostEntity.getColor())));
-            this.field_228342_a_.setRotationAngles(ghostEntity, 0, 0, entity.ticksExisted + partialTicks, 0, 0);
-            this.field_228342_a_.render(matrixstack, ivertexbuilder, 240, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, f1);
+            this.model.setRotationAngles(ghostEntity, 0, 0, entity.ticksExisted + partialTicks, 0, 0);
+            this.model.render(matrixstack, ivertexbuilder, 240, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, f1);
             irendertypebuffer$impl.finish();
         }
 

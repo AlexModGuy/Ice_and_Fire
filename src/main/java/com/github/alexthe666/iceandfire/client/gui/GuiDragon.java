@@ -38,7 +38,7 @@ public class GuiDragon extends ContainerScreen<ContainerDragon> {
     }
 
 
-    public static void drawEntityOnScreen(int posX, int posY, float scale, float mouseX, float mouseY, LivingEntity p_228187_5_) {
+    public static void drawEntityOnScreen(int posX, int posY, float scale, float mouseX, float mouseY, LivingEntity livingEntity) {
         float f = (float) Math.atan((double) (mouseX / 40.0F));
         float f1 = (float) Math.atan((double) (mouseY / 40.0F));
         RenderSystem.pushMatrix();
@@ -51,31 +51,31 @@ public class GuiDragon extends ContainerScreen<ContainerDragon> {
         Quaternion quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);
         quaternion.multiply(quaternion1);
         matrixstack.rotate(quaternion);
-        float f2 = p_228187_5_.renderYawOffset;
-        float f3 = p_228187_5_.rotationYaw;
-        float f4 = p_228187_5_.rotationPitch;
-        float f5 = p_228187_5_.prevRotationYawHead;
-        float f6 = p_228187_5_.rotationYawHead;
-        p_228187_5_.renderYawOffset = 180.0F + f * 20.0F;
-        p_228187_5_.rotationYaw = 180.0F + f * 40.0F;
-        p_228187_5_.rotationPitch = -f1 * 20.0F;
-        p_228187_5_.rotationYawHead = p_228187_5_.rotationYaw;
-        p_228187_5_.prevRotationYawHead = p_228187_5_.rotationYaw;
+        float f2 = livingEntity.renderYawOffset;
+        float f3 = livingEntity.rotationYaw;
+        float f4 = livingEntity.rotationPitch;
+        float f5 = livingEntity.prevRotationYawHead;
+        float f6 = livingEntity.rotationYawHead;
+        livingEntity.renderYawOffset = 180.0F + f * 20.0F;
+        livingEntity.rotationYaw = 180.0F + f * 40.0F;
+        livingEntity.rotationPitch = -f1 * 20.0F;
+        livingEntity.rotationYawHead = livingEntity.rotationYaw;
+        livingEntity.prevRotationYawHead = livingEntity.rotationYaw;
         EntityRendererManager entityrenderermanager = Minecraft.getInstance().getRenderManager();
         quaternion1.conjugate();
         entityrenderermanager.setCameraOrientation(quaternion1);
         entityrenderermanager.setRenderShadow(false);
         IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
         RenderSystem.runAsFancy(() -> {
-            entityrenderermanager.renderEntityStatic(p_228187_5_, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixstack, irendertypebuffer$impl, 15728880);
+            entityrenderermanager.renderEntityStatic(livingEntity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixstack, irendertypebuffer$impl, 15728880);
         });
         irendertypebuffer$impl.finish();
         entityrenderermanager.setRenderShadow(true);
-        p_228187_5_.renderYawOffset = f2;
-        p_228187_5_.rotationYaw = f3;
-        p_228187_5_.rotationPitch = f4;
-        p_228187_5_.prevRotationYawHead = f5;
-        p_228187_5_.rotationYawHead = f6;
+        livingEntity.renderYawOffset = f2;
+        livingEntity.rotationYaw = f3;
+        livingEntity.rotationPitch = f4;
+        livingEntity.prevRotationYawHead = f5;
+        livingEntity.rotationYawHead = f6;
         RenderSystem.popMatrix();
     }
 
@@ -84,12 +84,12 @@ public class GuiDragon extends ContainerScreen<ContainerDragon> {
 
     }
 
-    public void render(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
-        this.renderBackground(p_230430_1_);
-        this.mousePosx = (float)p_230430_2_;
-        this.mousePosY = (float)p_230430_3_;
-        super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
-        this.renderHoveredTooltip(p_230430_1_, p_230430_2_, p_230430_3_);
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(matrixStack);
+        this.mousePosx = (float)mouseX;
+        this.mousePosY = (float)mouseY;
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
+        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override

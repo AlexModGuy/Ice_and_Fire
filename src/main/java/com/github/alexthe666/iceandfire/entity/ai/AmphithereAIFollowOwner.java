@@ -13,6 +13,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class AmphithereAIFollowOwner extends Goal {
     private final EntityAmphithere ampithere;
     private final double followSpeed;
@@ -41,7 +43,7 @@ public class AmphithereAIFollowOwner extends Goal {
             return false;
         } else if (LivingEntity instanceof PlayerEntity && LivingEntity.isSpectator()) {
             return false;
-        } else if (this.ampithere.isSitting()) {
+        } else if (this.ampithere.isQueuedToSit()) {
             return false;
         } else if (this.ampithere.getDistanceSq(LivingEntity) < (double) (this.minDist * this.minDist)) {
             return false;
@@ -52,7 +54,7 @@ public class AmphithereAIFollowOwner extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return !noPath() && this.ampithere.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist) && !this.ampithere.isSitting();
+        return !noPath() && this.ampithere.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist) && !this.ampithere.isQueuedToSit();
     }
 
     private boolean noPath() {
@@ -78,7 +80,7 @@ public class AmphithereAIFollowOwner extends Goal {
     public void tick() {
         this.ampithere.getLookController().setLookPositionWithEntity(this.owner, 10.0F, (float) this.ampithere.getVerticalFaceSpeed());
 
-        if (!this.ampithere.isSitting()) {
+        if (!this.ampithere.isQueuedToSit()) {
             if (--this.timeToRecalcPath <= 0) {
                 this.timeToRecalcPath = 10;
                 tryMoveTo();

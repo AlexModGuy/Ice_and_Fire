@@ -59,8 +59,8 @@ public class ItemPixieWand extends Item {
                 worldIn.addEntity(charge);
             }
             playerIn.playSound(IafSoundRegistry.PIXIE_WAND, 1F, 0.75F + 0.5F * playerIn.getRNG().nextFloat());
-            itemstack.damageItem(1, playerIn, (p_219999_1_) -> {
-                p_219999_1_.sendBreakAnimation(playerIn.getActiveHand());
+            itemstack.damageItem(1, playerIn, (player) -> {
+                player.sendBreakAnimation(playerIn.getActiveHand());
             });
             playerIn.getCooldownTracker().setCooldown(this, 5);
         }

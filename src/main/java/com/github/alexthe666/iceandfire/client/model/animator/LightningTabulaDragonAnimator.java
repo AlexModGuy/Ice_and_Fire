@@ -182,7 +182,7 @@ public class LightningTabulaDragonAnimator extends IceAndFireTabulaModelAnimator
                 model.chainSwing(neckParts, speed_walk, degree_walk * 0.15F, 2, limbSwing, limbSwingAmount);
                 model.chainWave(neckParts, speed_walk, degree_walk * 0.05F, -2, limbSwing, limbSwingAmount);
                 model.chainSwing(tailParts, speed_idle, degree_idle * 0.25F, -2, ageInTicks, 1);
-                float sitMod = entity.isSitting() ? 0.15F : 1F;
+                float sitMod = entity.isQueuedToSit() ? 0.15F : 1F;
                 model.chainWave(tailParts, speed_idle, degree_idle * 0.15F * sitMod, -2, ageInTicks, 1);
                 model.chainWave(neckParts, speed_idle, degree_idle * -0.15F, -3, ageInTicks, 1);
                 model.walk(model.getCube("Neck1"), speed_idle, degree_idle * 0.05F, false, 0, 0, ageInTicks, 1);

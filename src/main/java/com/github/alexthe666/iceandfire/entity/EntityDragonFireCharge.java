@@ -56,7 +56,7 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
     }
 
     public void tick() {
-        Entity shootingEntity = this.func_234616_v_();
+        Entity shootingEntity = this.getShooter();
         for (int i = 0; i < 4; ++i) {
             this.world.addParticle(ParticleTypes.FLAME, this.getPosX() + ((this.rand.nextDouble() - 0.5D) * getWidth()), this.getPosY() + ((this.rand.nextDouble() - 0.5D) * getWidth()), this.getPosZ() + ((this.rand.nextDouble() - 0.5D) * getWidth()), 0.0D, 0.0D, 0.0D);
         }
@@ -120,7 +120,7 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
     }
 
     protected boolean canHitMob(Entity hitMob) {
-        Entity shooter = func_234616_v_();
+        Entity shooter = getShooter();
         return hitMob != this && super.func_230298_a_(hitMob) && !(shooter == null || hitMob.isOnSameTeam(shooter)) && !(hitMob instanceof EntityDragonPart);
     }
 
@@ -128,7 +128,7 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
     @Override
     protected void onImpact(RayTraceResult movingObject) {
         boolean flag = this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING);
-        Entity shootingEntity = this.func_234616_v_();
+        Entity shootingEntity = this.getShooter();
         if (!this.world.isRemote) {
             if (movingObject.getType() == RayTraceResult.Type.ENTITY) {
                 Entity entity = ((EntityRayTraceResult) movingObject).getEntity();

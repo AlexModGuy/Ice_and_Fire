@@ -7,6 +7,8 @@ import net.minecraft.util.math.BlockPos;
 import java.util.EnumSet;
 import java.util.Random;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class PixieAIEnterHouse extends Goal {
 
     EntityPixie pixie;

@@ -18,6 +18,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
+import net.minecraft.block.AbstractBlock;
+
 public class BlockFallingReturningState extends FallingBlock {
     public static final BooleanProperty REVERTS = BooleanProperty.create("revert");
     public Item itemBlock;
@@ -25,7 +27,7 @@ public class BlockFallingReturningState extends FallingBlock {
 
     public BlockFallingReturningState(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, BlockState revertState) {
         super(
-    		Block.Properties
+    		AbstractBlock.Properties
     			.create(materialIn)
     			.sound(sound)
     			.hardnessAndResistance(hardness, resistance)
@@ -42,7 +44,7 @@ public class BlockFallingReturningState extends FallingBlock {
     @SuppressWarnings("deprecation")
     public BlockFallingReturningState(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery, BlockState revertState) {
         super(
-    		Block.Properties
+    		AbstractBlock.Properties
     			.create(materialIn)
     			.sound(sound)
     			.hardnessAndResistance(hardness, resistance)

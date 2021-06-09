@@ -26,8 +26,8 @@ public class TileEntityDreadSpawner extends TileEntity implements ITickableTileE
             return TileEntityDreadSpawner.this.pos;
         }
 
-        public void setNextSpawnData(WeightedSpawnerEntity p_184993_1_) {
-            super.setNextSpawnData(p_184993_1_);
+        public void setNextSpawnData(WeightedSpawnerEntity nextSpawnData) {
+            super.setNextSpawnData(nextSpawnData);
 
             if (this.getWorld() != null) {
                 BlockState BlockState = this.getWorld().getBlockState(this.getSpawnerPosition());

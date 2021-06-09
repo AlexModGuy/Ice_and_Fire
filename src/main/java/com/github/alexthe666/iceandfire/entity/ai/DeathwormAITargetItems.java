@@ -16,6 +16,8 @@ import net.minecraft.item.Item;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super ItemEntity> targetEntitySelector;

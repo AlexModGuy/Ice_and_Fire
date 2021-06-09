@@ -70,7 +70,7 @@ public class TileEntityDreadPortal extends TileEntity implements ITickableTileEn
     }
 
     @OnlyIn(Dist.CLIENT)
-    public boolean shouldRenderFace(Direction p_184313_1_) {
+    public boolean shouldRenderFace(Direction face) {
         return true;
     }
 }

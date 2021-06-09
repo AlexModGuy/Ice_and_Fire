@@ -11,6 +11,8 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class CockatriceAIStareAttack extends Goal {
     private final EntityCockatrice entity;
     private final double moveSpeedAmp;

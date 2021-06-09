@@ -494,7 +494,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return this.isAgressive() ? IafSoundRegistry.NAGA_HURT : IafSoundRegistry.MERMAID_HURT;
     }
 

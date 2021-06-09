@@ -17,6 +17,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.util.math.AxisAlignedBB;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super Entity> targetEntitySelector;

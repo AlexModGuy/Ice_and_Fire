@@ -313,7 +313,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
     }
 
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return IafSoundRegistry.GORGON_HURT;
     }
 

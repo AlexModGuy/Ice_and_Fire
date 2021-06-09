@@ -16,7 +16,7 @@ public class DragonsteelArmorMaterial extends IafArmorMaterial {
         return damageReduction[slotIn.getIndex()];
     }
 
-    public float func_230304_f_(){
+    public float getKnockbackResistance(){
         return 0;
     }
 

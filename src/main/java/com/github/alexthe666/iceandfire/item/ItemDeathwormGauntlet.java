@@ -77,8 +77,8 @@ public class ItemDeathwormGauntlet extends Item implements ICustomRendered {
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity LivingEntity, int timeLeft) {
         MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntity, MiscEntityProperties.class);
         if (properties != null && properties.specialWeaponDmg > 0) {
-            stack.damageItem(properties.specialWeaponDmg, LivingEntity, (p_219999_1_) -> {
-                p_219999_1_.sendBreakAnimation(LivingEntity.getActiveHand());
+            stack.damageItem(properties.specialWeaponDmg, LivingEntity, (player) -> {
+                player.sendBreakAnimation(LivingEntity.getActiveHand());
             });
             properties.specialWeaponDmg = 0;
         }

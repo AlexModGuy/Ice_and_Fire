@@ -199,7 +199,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
         BlockState bs = entity.world.getBlockState(pos);
 
         // 1 Up when we're standing within this collision shape
-        final VoxelShape collisionShape = bs.getCollisionShape(entity.world, pos);
+        final VoxelShape collisionShape = bs.getCollisionShapeUncached(entity.world, pos);
         if (bs.getMaterial().blocksMovement() && collisionShape.getEnd(Direction.Axis.Y) > 0) {
             final double relPosX = Math.abs(entity.getPosX() % 1);
             final double relPosZ = Math.abs(entity.getPosZ() % 1);
@@ -932,11 +932,11 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
 
         final BlockState parentBelow = world.getBlockState(parent.pos.down());
-        final VoxelShape parentBB = parentBelow.getCollisionShape(world, parent.pos.down());
+        final VoxelShape parentBB = parentBelow.getCollisionShapeUncached(world, parent.pos.down());
 
         double parentY = parentBB.getEnd(Direction.Axis.Y);
         double parentMaxY = parentY + parent.pos.down().getY();
-        final double targetMaxY = target.getCollisionShape(world, pos).getEnd(Direction.Axis.Y) + pos.getY();
+        final double targetMaxY = target.getCollisionShapeUncached(world, pos).getEnd(Direction.Axis.Y) + pos.getY();
         if (targetMaxY - parentMaxY < jumpHeight) {
             return pos.getY() + 1;
         }
@@ -1002,19 +1002,19 @@ public abstract class AbstractPathJob implements Callable<Path> {
     }
     private boolean checkHeadBlock(@Nullable final Node parent, final BlockPos pos) {
         BlockPos localPos = pos;
-        final VoxelShape bb = world.getBlockState(localPos).getCollisionShape(world, localPos);
+        final VoxelShape bb = world.getBlockState(localPos).getCollisionShapeUncached(world, localPos);
         if (bb.getEnd(Direction.Axis.Y) < 1) {
             localPos = pos.up();
         }
 
         if (parent == null || !isPassableBB(parent.pos, pos.up())) {
-            final VoxelShape bb1 = world.getBlockState(pos.down()).getCollisionShape(world, pos.down());
-            final VoxelShape bb2 = world.getBlockState(pos.up()).getCollisionShape(world, pos.up());
+            final VoxelShape bb1 = world.getBlockState(pos.down()).getCollisionShapeUncached(world, pos.down());
+            final VoxelShape bb2 = world.getBlockState(pos.up()).getCollisionShapeUncached(world, pos.up());
             if ((pos.up().getY() + getStartY(bb2, 1)) - (pos.down().getY() + getEndY(bb1, 0)) < entitySizeY) {
                 return true;
             }
             if (parent != null) {
-                final VoxelShape bb3 = world.getBlockState(parent.pos.down()).getCollisionShape(world, pos.down());
+                final VoxelShape bb3 = world.getBlockState(parent.pos.down()).getCollisionShapeUncached(world, pos.down());
                 if ((pos.up().getY() + getStartY(bb2, 1)) - (parent.pos.down().getY() + getEndY(bb3, 0)) < 1.75) {
                     return true;
                 }
@@ -1023,8 +1023,8 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
         if (parent != null) {
             final BlockState hereState = world.getBlockState(localPos.down());
-            final VoxelShape bb1 = world.getBlockState(pos).getCollisionShape(world, pos);
-            final VoxelShape bb2 = world.getBlockState(localPos.up()).getCollisionShape(world, localPos.up());
+            final VoxelShape bb1 = world.getBlockState(pos).getCollisionShapeUncached(world, pos);
+            final VoxelShape bb2 = world.getBlockState(localPos.up()).getCollisionShapeUncached(world, localPos.up());
             if ((localPos.up().getY() + getStartY(bb2, 1)) - (pos.getY() + getEndY(bb1, 0)) >= 2) {
                 return false;
             }
@@ -1074,7 +1074,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
             } else if (block.getBlock() instanceof FireBlock) {
                 return false;
             } else {
-                final VoxelShape shape = block.getCollisionShape(world, pos);
+                final VoxelShape shape = block.getCollisionShapeUncached(world, pos);
                 return isLadder(block.getBlock(), pos) ||
                         ((shape.isEmpty() || shape.getEnd(Direction.Axis.Y) <= 0.1)
                                 && !block.getMaterial().isLiquid()
@@ -1141,7 +1141,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
     protected boolean isPassable(final BlockPos pos, final boolean head) {
         final BlockState state = world.getBlockState(pos);
-        final VoxelShape shape = state.getCollisionShape(world, pos);
+        final VoxelShape shape = state.getCollisionShapeUncached(world, pos);
         if (!shape.isEmpty() && passabilityNavigator != null && passabilityNavigator.isBlockPassable(state, pos, pos)) {
             return true;
         }

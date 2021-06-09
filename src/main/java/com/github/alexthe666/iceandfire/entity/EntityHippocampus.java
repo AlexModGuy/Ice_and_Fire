@@ -306,7 +306,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         } else if (!inWater && onLandProgress > 0.0F) {
             onLandProgress -= 1F;
         }
-        boolean sitting = isSitting();
+        boolean sitting = isQueuedToSit();
         if (sitting && sitProgress < 20.0F) {
             sitProgress += 0.5F;
         } else if (!sitting && sitProgress > 0.0F) {
@@ -422,7 +422,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         this.hasChestVarChanged = true;
     }
 
-    public boolean isSitting() {
+    public boolean isQueuedToSit() {
         if (world.isRemote) {
             boolean isSitting = (this.dataManager.get(TAMED).byteValue() & 1) != 0;
             this.isSitting = isSitting;
@@ -505,7 +505,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
 
     @Nullable
     @Override
-    public AgeableEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageable) {
+    public AgeableEntity createChild(ServerWorld serverWorld, AgeableEntity ageable) {
         if (ageable instanceof EntityHippocampus) {
             EntityHippocampus hippo = new EntityHippocampus(IafEntityRegistry.HIPPOCAMPUS, this.world);
             hippo.setVariant(this.getRNG().nextBoolean() ? this.getVariant() : ((EntityHippocampus) ageable).getVariant());
@@ -527,7 +527,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     @Override
     public void travel(Vector3d vec) {
         float f4;
-        if (this.isSitting()) {
+        if (this.isQueuedToSit()) {
             super.travel(Vector3d.ZERO);
             return;
         }
@@ -583,7 +583,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         super.playHurtSound(source);
     }
 
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
+    public ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         if (itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
             this.setSitting(false);
@@ -624,7 +624,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
             return ActionResultType.SUCCESS;
         }
         if (isOwner(player) && itemstack != null && itemstack.getItem() == Items.STICK) {
-            this.setSitting(!this.isSitting());
+            this.setSitting(!this.isQueuedToSit());
             return ActionResultType.SUCCESS;
         }
         if (isOwner(player) && itemstack.isEmpty()) {
@@ -636,7 +636,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
                 return ActionResultType.SUCCESS;
             }
         }
-        return super.func_230254_b_(player, hand);
+        return super.getEntityInteractionResult(player, hand);
     }
 
     public void openGUI(PlayerEntity playerEntity) {
@@ -715,7 +715,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return IafSoundRegistry.HIPPOCAMPUS_HURT;
     }
 

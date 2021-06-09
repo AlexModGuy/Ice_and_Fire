@@ -303,7 +303,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     }
 
     @Override
-    public Path getPathToPos(final BlockPos pos, final int p_179680_2_) {
+    public Path getPathToPos(final BlockPos pos, final int accuracy) {
         return null;
     }
 

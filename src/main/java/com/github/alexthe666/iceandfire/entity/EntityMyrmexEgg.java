@@ -170,7 +170,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    public SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return null;
     }
 

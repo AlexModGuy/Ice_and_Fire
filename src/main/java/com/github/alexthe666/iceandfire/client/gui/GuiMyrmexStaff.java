@@ -110,7 +110,7 @@ public class GuiMyrmexStaff extends Screen {
         }
     }
 
-    public void func_230446_a_(MatrixStack ms) {
+    public void renderBackground(MatrixStack ms) {
         super.renderBackground(ms);
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.getMinecraft().getTextureManager().bindTexture(jungle ? JUNGLE_TEXTURE : DESERT_TEXTURE);
@@ -120,7 +120,7 @@ public class GuiMyrmexStaff extends Screen {
     }
 
     public void render(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
-        this.func_230446_a_(ms);
+        this.renderBackground(ms);
         init();
         int i = (this.width - 248) / 2 + 10;
         int j = (this.height - 166) / 2 + 8;
@@ -166,7 +166,7 @@ public class GuiMyrmexStaff extends Screen {
         }
     }
 
-    public void func_231164_f_() {
+    public void onClose() {
         if(ClientProxy.getReferedClientHive() != null){
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageGetMyrmexHive(ClientProxy.getReferedClientHive().toNBT()));
         }

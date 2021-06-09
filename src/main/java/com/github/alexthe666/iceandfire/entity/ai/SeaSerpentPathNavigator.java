@@ -17,8 +17,8 @@ import net.minecraft.world.World;
 
 public class SeaSerpentPathNavigator  extends PathNavigator {
 
-    public SeaSerpentPathNavigator(MobEntity p_i45873_1_, World p_i45873_2_) {
-        super(p_i45873_1_, p_i45873_2_);
+    public SeaSerpentPathNavigator(MobEntity entitylivingIn, World worldIn) {
+        super(entitylivingIn, worldIn);
     }
 
     protected PathFinder getPathFinder(int p_179679_1_) {
@@ -85,14 +85,14 @@ public class SeaSerpentPathNavigator  extends PathNavigator {
         }
     }
 
-    protected void checkForStuck(Vector3d p_179677_1_) {
+    protected void checkForStuck(Vector3d positionVec3) {
         if (this.totalTicks - this.ticksAtLastPos > 100) {
-            if (p_179677_1_.squareDistanceTo(this.lastPosCheck) < 2.25D) {
+            if (positionVec3.squareDistanceTo(this.lastPosCheck) < 2.25D) {
                 this.clearPath();
             }
 
             this.ticksAtLastPos = this.totalTicks;
-            this.lastPosCheck = p_179677_1_;
+            this.lastPosCheck = positionVec3;
         }
 
         if (this.currentPath != null && !this.currentPath.isFinished()) {
@@ -101,7 +101,7 @@ public class SeaSerpentPathNavigator  extends PathNavigator {
                 this.timeoutTimer += Util.milliTime() - this.lastTimeoutCheck;
             } else {
                 this.timeoutCachedNode = lvt_2_1_;
-                double lvt_3_1_ = p_179677_1_.distanceTo(Vector3d.copyCentered(this.timeoutCachedNode));
+                double lvt_3_1_ = positionVec3.distanceTo(Vector3d.copyCentered(this.timeoutCachedNode));
                 this.timeoutLimit = this.entity.getAIMoveSpeed() > 0.0F ? lvt_3_1_ / (double)this.entity.getAIMoveSpeed() * 100.0D : 0.0D;
             }
 
@@ -117,15 +117,15 @@ public class SeaSerpentPathNavigator  extends PathNavigator {
 
     }
 
-    protected boolean isDirectPathBetweenPoints(Vector3d p_75493_1_, Vector3d p_75493_2_, int p_75493_3_, int p_75493_4_, int p_75493_5_) {
-        Vector3d lvt_6_1_ = new Vector3d(p_75493_2_.x, p_75493_2_.y + (double)this.entity.getHeight() * 0.5D, p_75493_2_.z);
-        return this.world.rayTraceBlocks(new RayTraceContext(p_75493_1_, lvt_6_1_, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this.entity)).getType() == RayTraceResult.Type.MISS;
+    protected boolean isDirectPathBetweenPoints(Vector3d posVec31, Vector3d posVec32, int sizeX, int sizeY, int sizeZ) {
+        Vector3d lvt_6_1_ = new Vector3d(posVec32.x, posVec32.y + (double)this.entity.getHeight() * 0.5D, posVec32.z);
+        return this.world.rayTraceBlocks(new RayTraceContext(posVec31, lvt_6_1_, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this.entity)).getType() == RayTraceResult.Type.MISS;
     }
 
-    public boolean canEntityStandOnPos(BlockPos p_188555_1_) {
-        return !this.world.getBlockState(p_188555_1_).isOpaqueCube(this.world, p_188555_1_);
+    public boolean canEntityStandOnPos(BlockPos pos) {
+        return !this.world.getBlockState(pos).isOpaqueCube(this.world, pos);
     }
 
-    public void setCanSwim(boolean p_212239_1_) {
+    public void setCanSwim(boolean canSwim) {
     }
 }

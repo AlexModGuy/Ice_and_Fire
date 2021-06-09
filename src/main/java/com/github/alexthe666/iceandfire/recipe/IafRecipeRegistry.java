@@ -37,6 +37,8 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 
+import net.minecraft.entity.projectile.AbstractArrowEntity;
+
 public class IafRecipeRegistry {
 
     public static final BannerPattern PATTERN_FIRE = addBanner("fire", new ItemStack(IafItemRegistry.FIRE_DRAGON_HEART));
@@ -75,7 +77,7 @@ public class IafRecipeRegistry {
              */
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityStymphalianArrow entityarrow = new EntityStymphalianArrow(IafEntityRegistry.STYMPHALIAN_ARROW, worldIn, position.getX(), position.getY(), position.getZ());
-                entityarrow.pickupStatus = ArrowEntity.PickupStatus.ALLOWED;
+                entityarrow.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
                 return entityarrow;
             }
         });
@@ -85,7 +87,7 @@ public class IafRecipeRegistry {
              */
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityAmphithereArrow entityarrow = new EntityAmphithereArrow(IafEntityRegistry.AMPHITHERE_ARROW, worldIn, position.getX(), position.getY(), position.getZ());
-                entityarrow.pickupStatus = EntityAmphithereArrow.PickupStatus.ALLOWED;
+                entityarrow.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
                 return entityarrow;
             }
         });
@@ -95,7 +97,7 @@ public class IafRecipeRegistry {
              */
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntitySeaSerpentArrow entityarrow = new EntitySeaSerpentArrow(IafEntityRegistry.SEA_SERPENT_ARROW, worldIn, position.getX(), position.getY(), position.getZ());
-                entityarrow.pickupStatus = EntitySeaSerpentArrow.PickupStatus.ALLOWED;
+                entityarrow.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
                 return entityarrow;
             }
         });
@@ -105,7 +107,7 @@ public class IafRecipeRegistry {
              */
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityDragonArrow entityarrow = new EntityDragonArrow(IafEntityRegistry.DRAGON_ARROW, position.getX(), position.getY(), position.getZ(), worldIn);
-                entityarrow.pickupStatus = EntityDragonArrow.PickupStatus.ALLOWED;
+                entityarrow.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
                 return entityarrow;
             }
         });
@@ -115,7 +117,7 @@ public class IafRecipeRegistry {
              */
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
                 EntityHydraArrow entityarrow = new EntityHydraArrow(IafEntityRegistry.HYDRA_ARROW, worldIn, position.getX(), position.getY(), position.getZ());
-                entityarrow.pickupStatus = EntityHydraArrow.PickupStatus.ALLOWED;
+                entityarrow.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
                 return entityarrow;
             }
         });

@@ -7,6 +7,8 @@ import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class DragonAIReturnToRoost  extends Goal {
     private final EntityDragonBase dragon;
     private final double movementSpeed;

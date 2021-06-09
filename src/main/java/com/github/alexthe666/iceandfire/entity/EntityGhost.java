@@ -60,6 +60,8 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 
+import net.minecraft.entity.ai.controller.MovementController.Action;
+
 public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVillagerFear, IAnimalFear, IHumanoid, IBlacklistedFromStatues {
 
     private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityGhost.class, DataSerializers.VARINT);
@@ -270,7 +272,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
         return true;
     }
 
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
+    public ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         if (itemstack != null && itemstack.getItem() == IafItemRegistry.MANUSCRIPT && !this.isHauntedShoppingList()) {
             this.setColor(-1);
@@ -280,7 +282,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
             }
             return ActionResultType.SUCCESS;
         }
-        return super.func_230254_b_(player, hand);
+        return super.getEntityInteractionResult(player, hand);
     }
 
     @Override

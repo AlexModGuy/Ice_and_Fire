@@ -247,9 +247,9 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onArrowCollide(ProjectileImpactEvent event) {
-        if (event.getEntity() instanceof AbstractArrowEntity && ((AbstractArrowEntity) event.getEntity()).func_234616_v_() != null) {
+        if (event.getEntity() instanceof AbstractArrowEntity && ((AbstractArrowEntity) event.getEntity()).getShooter() != null) {
             if (event.getRayTraceResult() instanceof EntityRayTraceResult && ((EntityRayTraceResult) event.getRayTraceResult()).getEntity() != null) {
-                Entity shootingEntity = ((AbstractArrowEntity) event.getEntity()).func_234616_v_();
+                Entity shootingEntity = ((AbstractArrowEntity) event.getEntity()).getShooter();
                 Entity shotEntity = ((EntityRayTraceResult) event.getRayTraceResult()).getEntity();
                 if (shootingEntity instanceof LivingEntity && isRidingOrBeingRiddenBy(shootingEntity, shotEntity)) {
                     if (shotEntity instanceof TameableEntity && ((TameableEntity) shotEntity).isTamed() && shotEntity.isOnSameTeam(shootingEntity)) {
@@ -511,11 +511,11 @@ public class ServerEvents {
     @SubscribeEvent
     public void onEntityUseItem(PlayerInteractEvent.RightClickItem event) {
         if (event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().rotationPitch > 87 && event.getEntityLiving().getRidingEntity() != null && event.getEntityLiving().getRidingEntity() instanceof EntityDragonBase) {
-            ((EntityDragonBase) event.getEntityLiving().getRidingEntity()).func_230254_b_((PlayerEntity) event.getEntityLiving(), event.getHand());
+            ((EntityDragonBase) event.getEntityLiving().getRidingEntity()).getEntityInteractionResult((PlayerEntity) event.getEntityLiving(), event.getHand());
         }
         if (event.getEntityLiving() instanceof EntityDragonBase && !event.getEntityLiving().isAlive()) {
             event.setResult(Event.Result.DENY);
-            ((EntityDragonBase) event.getEntityLiving()).func_230254_b_(event.getPlayer(), event.getHand());
+            ((EntityDragonBase) event.getEntityLiving()).getEntityInteractionResult(event.getPlayer(), event.getHand());
         }
     }
 
@@ -775,7 +775,7 @@ public class ServerEvents {
                     if (entity instanceof EntityDragonBase) {
                         EntityDragonBase dragon = (EntityDragonBase) entity;
                         if (!dragon.isTamed() && !dragon.isModelDead() && !dragon.isOwner(event.getPlayer()) && !event.getPlayer().isCreative()) {
-                            dragon.setSleeping(false);
+                            dragon.setQueuedToSit(false);
                             dragon.setSitting(false);
                             dragon.setAttackTarget(event.getPlayer());
                         }
@@ -800,7 +800,7 @@ public class ServerEvents {
                     if (entity instanceof EntityDragonBase) {
                         EntityDragonBase dragon = (EntityDragonBase) entity;
                         if (!dragon.isTamed() && !dragon.isModelDead() && !dragon.isOwner(event.getPlayer()) && !event.getPlayer().isCreative()) {
-                            dragon.setSleeping(false);
+                            dragon.setQueuedToSit(false);
                             dragon.setSitting(false);
                             dragon.setAttackTarget(event.getPlayer());
                         }

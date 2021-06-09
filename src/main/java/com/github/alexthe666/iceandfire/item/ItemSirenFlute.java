@@ -90,8 +90,8 @@ public class ItemSirenFlute extends Item {
                 if (theirProperties != null) {
                     theirProperties.inLoveTicks = 600;
                 }
-                itemStackIn.damageItem(2, player, (p_220046_0_) -> {
-                    p_220046_0_.sendBreakAnimation(EquipmentSlotType.MAINHAND);
+                itemStackIn.damageItem(2, player, (entity) -> {
+                    entity.sendBreakAnimation(EquipmentSlotType.MAINHAND);
                 });
             }
         }

@@ -47,28 +47,28 @@ public class ItemTideTrident extends TridentItem {
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack p_77615_1_, World p_77615_2_, LivingEntity p_77615_3_, int p_77615_4_) {
-        if (p_77615_3_ instanceof PlayerEntity) {
-            PlayerEntity lvt_5_1_ = (PlayerEntity)p_77615_3_;
-            int lvt_6_1_ = this.getUseDuration(p_77615_1_) - p_77615_4_;
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+        if (entityLiving instanceof PlayerEntity) {
+            PlayerEntity lvt_5_1_ = (PlayerEntity)entityLiving;
+            int lvt_6_1_ = this.getUseDuration(stack) - timeLeft;
             if (lvt_6_1_ >= 10) {
-                int lvt_7_1_ = EnchantmentHelper.getRiptideModifier(p_77615_1_);
+                int lvt_7_1_ = EnchantmentHelper.getRiptideModifier(stack);
                 if (lvt_7_1_ <= 0 || lvt_5_1_.isWet()) {
-                    if (!p_77615_2_.isRemote) {
-                        p_77615_1_.damageItem(1, lvt_5_1_, (p_220047_1_) -> {
-                            p_220047_1_.sendBreakAnimation(p_77615_3_.getActiveHand());
+                    if (!worldIn.isRemote) {
+                        stack.damageItem(1, lvt_5_1_, (player) -> {
+                            player.sendBreakAnimation(entityLiving.getActiveHand());
                         });
                         if (lvt_7_1_ == 0) {
-                            EntityTideTrident lvt_8_1_ = new EntityTideTrident(p_77615_2_, lvt_5_1_, p_77615_1_);
-                            lvt_8_1_.func_234612_a_(lvt_5_1_, lvt_5_1_.rotationPitch, lvt_5_1_.rotationYaw, 0.0F, 2.5F + (float)lvt_7_1_ * 0.5F, 1.0F);
+                            EntityTideTrident lvt_8_1_ = new EntityTideTrident(worldIn, lvt_5_1_, stack);
+                            lvt_8_1_.setDirectionAndMovement(lvt_5_1_, lvt_5_1_.rotationPitch, lvt_5_1_.rotationYaw, 0.0F, 2.5F + (float)lvt_7_1_ * 0.5F, 1.0F);
                             if (lvt_5_1_.abilities.isCreativeMode) {
                                 lvt_8_1_.pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
                             }
 
-                            p_77615_2_.addEntity(lvt_8_1_);
-                            p_77615_2_.playMovingSound((PlayerEntity)null, lvt_8_1_, SoundEvents.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                            worldIn.addEntity(lvt_8_1_);
+                            worldIn.playMovingSound((PlayerEntity)null, lvt_8_1_, SoundEvents.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F);
                             if (!lvt_5_1_.abilities.isCreativeMode) {
-                                lvt_5_1_.inventory.deleteStack(p_77615_1_);
+                                lvt_5_1_.inventory.deleteStack(stack);
                             }
                         }
                     }
@@ -101,7 +101,7 @@ public class ItemTideTrident extends TridentItem {
                             lvt_15_4_ = SoundEvents.ITEM_TRIDENT_RIPTIDE_1;
                         }
 
-                        p_77615_2_.playMovingSound((PlayerEntity)null, lvt_5_1_, lvt_15_4_, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                        worldIn.playMovingSound((PlayerEntity)null, lvt_5_1_, lvt_15_4_, SoundCategory.PLAYERS, 1.0F, 1.0F);
                     }
 
                 }

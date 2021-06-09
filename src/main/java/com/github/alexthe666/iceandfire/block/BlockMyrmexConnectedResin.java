@@ -16,6 +16,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockMyrmexConnectedResin extends BreakableBlock {
 
     public static final BooleanProperty UP = BooleanProperty.create("up");
@@ -105,8 +107,8 @@ public class BlockMyrmexConnectedResin extends BreakableBlock {
         builder.add(NORTH, EAST, WEST, SOUTH, DOWN, UP);
     }
 
-    public boolean canFenceConnectTo(BlockState p_220111_1_, boolean p_220111_2_, Direction p_220111_3_) {
-        return p_220111_1_.getBlock() == this;
+    public boolean canFenceConnectTo(BlockState state, boolean isSideSolid, Direction direction) {
+        return state.getBlock() == this;
     }
 
     public boolean isOpaqueCube(BlockState state) {

@@ -49,6 +49,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
     public static final Animation ANIMATION_BITE = Animation.create(15);

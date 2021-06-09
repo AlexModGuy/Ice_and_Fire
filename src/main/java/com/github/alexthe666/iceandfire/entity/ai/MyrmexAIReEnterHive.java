@@ -11,6 +11,8 @@ import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class MyrmexAIReEnterHive extends Goal {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;

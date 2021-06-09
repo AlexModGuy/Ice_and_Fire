@@ -10,11 +10,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.material.PushReaction;
 import net.minecraftforge.common.ToolType;
 
+import net.minecraft.block.AbstractBlock;
+
 public class BlockDragonBone extends RotatedPillarBlock implements IDragonProof {
 
     public BlockDragonBone() {
         super(
-    		Block.Properties
+    		AbstractBlock.Properties
 	    		.create(Material.ROCK)
 	    		.sound(SoundType.WOOD)
 	    		.hardnessAndResistance(30F, 500F)

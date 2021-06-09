@@ -197,7 +197,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
         if (!world.isRemote && this.isInLava() && this.isAllowedToTriggerFlight() && !this.isModelDead()) {
             this.setHovering(true);
-            this.setSleeping(false);
+            this.setQueuedToSit(false);
             this.setSitting(false);
             this.flyHovering = 0;
             this.flyTicks = 0;
@@ -504,7 +504,7 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     @Override
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return this.isTeen() ? IafSoundRegistry.ICEDRAGON_TEEN_HURT : this.isAdult() ? IafSoundRegistry.ICEDRAGON_ADULT_HURT : IafSoundRegistry.ICEDRAGON_CHILD_HURT;
     }
 

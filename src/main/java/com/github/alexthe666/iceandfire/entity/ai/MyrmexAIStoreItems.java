@@ -21,6 +21,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class MyrmexAIStoreItems extends Goal {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;

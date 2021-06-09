@@ -8,6 +8,8 @@ import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class MyrmexAISummonerHurtByTarget extends TargetGoal {
     EntityMyrmexSwarmer tameable;
     LivingEntity attacker;

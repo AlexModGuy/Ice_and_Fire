@@ -12,6 +12,8 @@ import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class DeathWormAITarget<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
     private EntityDeathWorm deathworm;
 

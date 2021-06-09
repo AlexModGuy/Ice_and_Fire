@@ -44,8 +44,8 @@ public class ItemModAxe extends AxeItem {
         this.setRegistryName(IceAndFire.MODID, gameName);
     }
 
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType p_111205_1_) {
-        return p_111205_1_ == EquipmentSlotType.MAINHAND && this.toolMaterial instanceof DragonsteelToolMaterial ? this.bakeDragonsteel() : super.getAttributeModifiers(p_111205_1_);
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
+        return equipmentSlot == EquipmentSlotType.MAINHAND && this.toolMaterial instanceof DragonsteelToolMaterial ? this.bakeDragonsteel() : super.getAttributeModifiers(equipmentSlot);
     }
 
     private Multimap<Attribute, AttributeModifier> dragonsteelModifiers;

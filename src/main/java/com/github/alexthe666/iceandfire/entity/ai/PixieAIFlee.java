@@ -16,6 +16,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class PixieAIFlee<T extends Entity> extends Goal {
     private final Predicate<Entity> canBeSeenSelector;
     private final float avoidDistance;

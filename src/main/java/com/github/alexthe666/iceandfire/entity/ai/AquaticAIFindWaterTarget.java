@@ -13,6 +13,8 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class AquaticAIFindWaterTarget extends Goal {
     protected AquaticAIFindWaterTarget.Sorter fleePosSorter;
     private MobEntity mob;

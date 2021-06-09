@@ -138,7 +138,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 int down = Math.max(15, this.getPosition().getY() - 20 + this.getRNG().nextInt(10));
                 BlockPos genPos = new BlockPos(this.getPosX(), down, this.getPosZ());
                 if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, genPos.getX(), genPos.getY(), genPos.getZ()))) {
-                    WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true, this.isJungle(), NoFeatureConfig.field_236558_a_);
+                    WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true, this.isJungle(), NoFeatureConfig.CODEC);
                     if (!world.isRemote && world instanceof ServerWorld) {
                         hiveGen.placeSmallGen((ServerWorld)world, this.getRNG(), genPos);
                     }

@@ -13,6 +13,8 @@ import net.minecraft.util.Util;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import net.minecraft.client.renderer.RenderState.TextureState;
+
 public class IafRenderType extends RenderType {
 
     private static final ResourceLocation STONE_TEXTURE = new ResourceLocation("textures/block/stone.png");
@@ -25,17 +27,17 @@ public class IafRenderType extends RenderType {
         RenderSystem.defaultBlendFunc();
     });
 
-    public IafRenderType(String p_i225992_1_, VertexFormat p_i225992_2_, int p_i225992_3_, int p_i225992_4_, boolean p_i225992_5_, boolean p_i225992_6_, Runnable p_i225992_7_, Runnable p_i225992_8_) {
-        super(p_i225992_1_, p_i225992_2_, p_i225992_3_, p_i225992_4_, p_i225992_5_, p_i225992_6_, p_i225992_7_, p_i225992_8_);
+    public IafRenderType(String nameIn, VertexFormat formatIn, int drawModeIn, int bufferSizeIn, boolean useDelegateIn, boolean needsSortingIn, Runnable setupTaskIn, Runnable clearTaskIn) {
+        super(nameIn, formatIn, drawModeIn, bufferSizeIn, useDelegateIn, needsSortingIn, setupTaskIn, clearTaskIn);
     }
 
-    public static RenderType getGhost(ResourceLocation p_228652_0_) {
-        TextureState lvt_1_1_ = new TextureState(p_228652_0_, false, false);
+    public static RenderType getGhost(ResourceLocation locationIn) {
+        TextureState lvt_1_1_ = new TextureState(locationIn, false, false);
         return makeType("ghost_iaf", DefaultVertexFormats.ENTITY, 7, 262144, false, true, RenderType.State.getBuilder().texture(lvt_1_1_).writeMask(COLOR_DEPTH_WRITE).depthTest(DEPTH_LEQUAL).alpha(DEFAULT_ALPHA).diffuseLighting(DIFFUSE_LIGHTING_ENABLED).lightmap(LIGHTMAP_DISABLED).overlay(OVERLAY_ENABLED).transparency(GHOST_TRANSPARANCY).fog(FOG).cull(RenderState.CULL_ENABLED).build(true));
     }
 
-    public static RenderType getGhostDaytime(ResourceLocation p_228652_0_) {
-        TextureState lvt_1_1_ = new TextureState(p_228652_0_, false, false);
+    public static RenderType getGhostDaytime(ResourceLocation locationIn) {
+        TextureState lvt_1_1_ = new TextureState(locationIn, false, false);
         return makeType("ghost_iaf_day", DefaultVertexFormats.ENTITY, 7, 262144, false, true, RenderType.State.getBuilder().texture(lvt_1_1_).writeMask(COLOR_DEPTH_WRITE).depthTest(DEPTH_LEQUAL).alpha(DEFAULT_ALPHA).diffuseLighting(DIFFUSE_LIGHTING_ENABLED).lightmap(LIGHTMAP_DISABLED).overlay(OVERLAY_ENABLED).transparency(TRANSLUCENT_TRANSPARENCY).fog(FOG).cull(RenderState.CULL_ENABLED).build(true));
     }
 
@@ -105,15 +107,15 @@ public class IafRenderType extends RenderType {
     public static final class DreadlandsPortalTexturingState extends RenderState.TexturingState {
         private final int iteration;
 
-        public DreadlandsPortalTexturingState(int p_i225986_1_) {
+        public DreadlandsPortalTexturingState(int iteration) {
             super("portal_texturing", () -> {
                 RenderSystem.matrixMode(5890);
                 RenderSystem.pushMatrix();
                 RenderSystem.loadIdentity();
                 RenderSystem.translatef(0.5F, 0.5F, 0.0F);
                 RenderSystem.scalef(0.5F, -0.5F, 1.0F);
-                float yDist = p_i225986_1_  <= 1 ? 1 : ((float) (Util.milliTime() % 80000L) / 80000.0F);
-                RenderSystem.translatef(17.0F / (float) p_i225986_1_, (2.0F + (float) p_i225986_1_ / 0.5F) * yDist, 0.0F);
+                float yDist = iteration  <= 1 ? 1 : ((float) (Util.milliTime() % 80000L) / 80000.0F);
+                RenderSystem.translatef(17.0F / (float) iteration, (2.0F + (float) iteration / 0.5F) * yDist, 0.0F);
                 RenderSystem.mulTextureByProjModelView();
                 RenderSystem.matrixMode(5888);
                 RenderSystem.setupEndPortalTexGen();
@@ -123,7 +125,7 @@ public class IafRenderType extends RenderType {
                 RenderSystem.matrixMode(5888);
                 RenderSystem.clearTexGen();
             });
-            this.iteration = p_i225986_1_;
+            this.iteration = iteration;
         }
 
         public boolean equals(Object p_equals_1_) {

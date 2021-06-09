@@ -772,7 +772,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         this.setAgeInTicks(compound.getInt("AgeTicks"));
         this.setGender(compound.getBoolean("Gender"));
         this.setVariant(compound.getInt("Variant"));
-        this.setSleeping(compound.getBoolean("Sleeping"));
+        this.setQueuedToSit(compound.getBoolean("Sleeping"));
         this.setTamed(compound.getBoolean("TamedDragon"));
         this.setBreathingFire(compound.getBoolean("FireBreathing"));
         this.usingGroundAttack = compound.getBoolean("AttackDecision");
@@ -958,7 +958,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return this.dataManager.get(SLEEPING).booleanValue();
     }
 
-    public void setSleeping(boolean sleeping) {
+    public void setQueuedToSit(boolean sleeping) {
         this.dataManager.set(SLEEPING, sleeping);
     }
 
@@ -978,7 +978,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return this.getPassengers().size() < 2;
     }
 
-    public boolean isSitting() {
+    public boolean isQueuedToSit() {
         return (this.dataManager.get(TAMED).byteValue() & 1) != 0;
     }
 
@@ -995,7 +995,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     @Override
-    public void func_241847_a(ServerWorld world, LivingEntity entity) {
+    public void onKillEntity(ServerWorld world, LivingEntity entity) {
         this.setHunger(this.getHunger() + FoodUtils.getFoodPoints(entity));
     }
 
@@ -1034,7 +1034,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean canMove() {
-        return !this.isSitting() && !this.isSleeping() && this.getControllingPassenger() == null && !this.isModelDead() && sleepProgress == 0 && this.getAnimation() != ANIMATION_SHAKEPREY;
+        return !this.isQueuedToSit() && !this.isSleeping() && this.getControllingPassenger() == null && !this.isModelDead() && sleepProgress == 0 && this.getAnimation() != ANIMATION_SHAKEPREY;
     }
 
     public boolean isAlive() {
@@ -1093,7 +1093,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     @Override
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
+    public ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         int lastDeathStage = this.getAgeInDays() / 5;
         if (stack.getItem() == IafItemRegistry.DRAGON_DEBUG_STICK) {
@@ -1142,7 +1142,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                 }
                 this.setTamedBy(player);
                 if (stack.getItem() == IafItemRegistry.DRAGON_HORN) {
-                    return super.func_230254_b_(player, hand);
+                    return super.getEntityInteractionResult(player, hand);
                 }
                 if (stack.isEmpty() && !player.isSneaking()) {
                     if (!world.isRemote) {
@@ -1155,7 +1155,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                             player.setSneaking(false);
                             player.startRiding(this, true);
                             IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, false));
-                            this.setSleeping(false);
+                            this.setQueuedToSit(false);
                         }
                     }
                     return ActionResultType.SUCCESS;
@@ -1241,7 +1241,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                 }
             }
         }
-        return super.func_230254_b_(player, hand);
+        return super.getEntityInteractionResult(player, hand);
 
     }
 
@@ -1545,7 +1545,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         int age = this.getRNG().nextInt(80) + 1;
         this.growDragon(age);
         this.setVariant(new Random().nextInt(4));
-        this.setSleeping(false);
+        this.setQueuedToSit(false);
         this.updateAttributes();
         double healthStep = (maximumHealth - minimumHealth) / (125);
         this.heal((Math.round(minimumHealth + (healthStep * age))));
@@ -1575,7 +1575,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         }
         if (i > 0) {
             if (this.isSleeping()) {
-                this.setSleeping(false);
+                this.setQueuedToSit(false);
                 if (!this.isTamed()) {
                     if (dmg.getTrueSource() instanceof PlayerEntity) {
                         this.setAttackTarget((PlayerEntity) dmg.getTrueSource());
@@ -1786,7 +1786,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     @Override
-    public AgeableEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageable) {
+    public AgeableEntity createChild(ServerWorld serverWorld, AgeableEntity ageable) {
         return null;
     }
 
@@ -1911,12 +1911,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     @Override
     public boolean isMovementBlocked() {
-        return this.getHealth() <= 0.0F || isSitting() && !this.isBeingRidden() || this.isModelDead();
+        return this.getHealth() <= 0.0F || isQueuedToSit() && !this.isBeingRidden() || this.isModelDead();
     }
 
     @Override
     public void travel(Vector3d Vector3d) {
-        if (this.getAnimation() == ANIMATION_SHAKEPREY || !this.canMove() && !this.isBeingRidden() || this.isSitting()) {
+        if (this.getAnimation() == ANIMATION_SHAKEPREY || !this.canMove() && !this.isBeingRidden() || this.isQueuedToSit()) {
             if (this.getNavigator().getPath() != null) {
                 this.getNavigator().clearPath();
             }
@@ -1927,7 +1927,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     @Override
     public void move(MoverType typeIn, Vector3d pos) {
-        if (this.isSitting() && !this.isBeingRidden()) {
+        if (this.isQueuedToSit() && !this.isBeingRidden()) {
             pos = new Vector3d(0, pos.getY(), 0);
         }
         super.move(typeIn, pos);
@@ -1939,7 +1939,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         PlayerEntity player = world.getClosestPlayer(this, checklength);
         if (this.isSleeping()) {
             if (player != null && !this.isOwner(player) && !player.isCreative()) {
-                this.setSleeping(false);
+                this.setQueuedToSit(false);
                 this.setSitting(false);
                 this.setAttackTarget(player);
             }
@@ -2222,7 +2222,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean isAllowedToTriggerFlight() {
-        return (this.hasFlightClearance() && this.onGround || this.isInWater()) && !this.isSitting() && this.getPassengers().isEmpty() && !this.isChild() && !this.isSleeping() && this.canMove();
+        return (this.hasFlightClearance() && this.onGround || this.isInWater()) && !this.isQueuedToSit() && this.getPassengers().isEmpty() && !this.isChild() && !this.isSleeping() && this.canMove();
     }
 
     public BlockPos getEscortPosition() {

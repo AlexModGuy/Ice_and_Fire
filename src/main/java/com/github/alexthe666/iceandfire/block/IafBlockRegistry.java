@@ -21,6 +21,8 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import net.minecraft.block.AbstractBlock;
+
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafBlockRegistry {
 
@@ -86,7 +88,7 @@ public class IafBlockRegistry {
     public static final Block DRAGON_SCALE_BLACK = new BlockDragonScales("dragonscale_black", EnumDragonEgg.BLACK);
 
     public static final Block DRAGON_BONE_BLOCK = new BlockDragonBone();
-    public static final Block DRAGON_BONE_BLOCK_WALL = new BlockDragonBoneWall(Block.Properties.from(IafBlockRegistry.DRAGON_BONE_BLOCK));
+    public static final Block DRAGON_BONE_BLOCK_WALL = new BlockDragonBoneWall(AbstractBlock.Properties.from(IafBlockRegistry.DRAGON_BONE_BLOCK));
     public static final Block DRAGONFORGE_FIRE_BRICK = new BlockDragonforgeBricks(0);
     public static final Block DRAGONFORGE_ICE_BRICK = new BlockDragonforgeBricks(1);
     public static final Block DRAGONFORGE_LIGHTNING_BRICK = new BlockDragonforgeBricks(2);
@@ -137,7 +139,7 @@ public class IafBlockRegistry {
     public static final Block DREAD_TORCH = new BlockDreadTorch();
     public static final Block DREAD_TORCH_WALL = new BlockDreadTorchWall();
     public static final Block DREAD_STONE_BRICKS_STAIRS = new BlockGenericStairs(DREAD_STONE_BRICKS.getDefaultState(), "dread_stone_stairs");
-    public static final Block DREAD_STONE_BRICKS_SLAB = new SlabBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(10F, 10000F)).setRegistryName("iceandfire:dread_stone_slab");
+    public static final Block DREAD_STONE_BRICKS_SLAB = new SlabBlock(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(10F, 10000F)).setRegistryName("iceandfire:dread_stone_slab");
     public static final Block DREADWOOD_LOG = new BlockDreadWoodLog();
     public static final BlockDreadBase DREADWOOD_PLANKS = new BlockDreadBase(Material.WOOD, "dreadwood_planks", "axe", 3, -1.0F, 100000.0F, SoundType.WOOD);
     public static final Block DREADWOOD_PLANKS_LOCK = new BlockDreadWoodLock();

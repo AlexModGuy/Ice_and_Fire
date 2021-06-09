@@ -11,6 +11,8 @@ import net.minecraft.util.math.vector.Vector3d;
 import java.util.EnumSet;
 import java.util.Random;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class PixieAIMoveRandom extends Goal {
     BlockPos target;
     EntityPixie pixie;

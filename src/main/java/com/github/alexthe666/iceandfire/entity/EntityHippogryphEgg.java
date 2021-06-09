@@ -55,7 +55,7 @@ public class EntityHippogryphEgg extends EggEntity {
     }
 
     protected void onImpact(RayTraceResult result) {
-        Entity thrower = func_234616_v_();
+        Entity thrower = getShooter();
         if (result.getType() == RayTraceResult.Type.ENTITY) {
             ((EntityRayTraceResult) result).getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, thrower), 0.0F);
         }

@@ -10,6 +10,8 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class MyrmexAIWanderHiveCenter extends Goal {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;

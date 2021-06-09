@@ -19,6 +19,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockReader;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockGhostChest extends ChestBlock implements ICustomRendered {
 
     public BlockGhostChest() {
@@ -35,7 +37,7 @@ public class BlockGhostChest extends ChestBlock implements ICustomRendered {
         setRegistryName(IceAndFire.MODID, "ghost_chest");
     }
 
-    public TileEntity createNewTileEntity(IBlockReader p_196283_1_) {
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TileEntityGhostChest();
     }
 
@@ -43,15 +45,15 @@ public class BlockGhostChest extends ChestBlock implements ICustomRendered {
         return Stats.CUSTOM.get(Stats.TRIGGER_TRAPPED_CHEST);
     }
 
-    public boolean canProvidePower(BlockState p_149744_1_) {
+    public boolean canProvidePower(BlockState state) {
         return true;
     }
 
-    public int getWeakPower(BlockState p_180656_1_, IBlockReader p_180656_2_, BlockPos p_180656_3_, Direction p_180656_4_) {
-        return MathHelper.clamp(ChestTileEntity.getPlayersUsing(p_180656_2_, p_180656_3_), 0, 15);
+    public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+        return MathHelper.clamp(ChestTileEntity.getPlayersUsing(blockAccess, pos), 0, 15);
     }
 
-    public int getStrongPower(BlockState p_176211_1_, IBlockReader p_176211_2_, BlockPos p_176211_3_, Direction p_176211_4_) {
-        return p_176211_4_ == Direction.UP ? p_176211_1_.getWeakPower(p_176211_2_, p_176211_3_, p_176211_4_) : 0;
+    public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+        return side == Direction.UP ? blockState.getWeakPower(blockAccess, pos, side) : 0;
     }
 }

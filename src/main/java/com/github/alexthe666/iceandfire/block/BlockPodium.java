@@ -23,6 +23,8 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockPodium extends ContainerBlock implements ICustomRendered {
 
     protected static final VoxelShape AABB = Block.makeCuboidShape(2, 0, 2, 14, 23, 14);

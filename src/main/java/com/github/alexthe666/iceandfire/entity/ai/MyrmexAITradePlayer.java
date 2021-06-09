@@ -7,6 +7,8 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class MyrmexAITradePlayer extends Goal {
     private final EntityMyrmexBase myrmex;
 

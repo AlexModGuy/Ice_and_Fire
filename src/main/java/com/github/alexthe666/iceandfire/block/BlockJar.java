@@ -29,6 +29,8 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockJar extends ContainerBlock implements ICustomRendered {
     protected static final VoxelShape AABB = Block.makeCuboidShape(3, 0, 3, 13, 16, 13);
     public Item itemBlock;
@@ -44,7 +46,7 @@ public class BlockJar extends ContainerBlock implements ICustomRendered {
 					.variableOpacity()
 					.hardnessAndResistance(1, 2)
 					.sound(SoundType.GLASS)
-					.setLightLevel((p_235454_0_) -> { return pixieType == -1 ? 0 : 10; })
+					.setLightLevel((state) -> { return pixieType == -1 ? 0 : 10; })
 					.lootFrom(IafBlockRegistry.JAR_EMPTY)
 				: Properties
 					.create(Material.GLASS)

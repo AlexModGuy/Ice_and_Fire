@@ -14,6 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class PixieAIFollowOwner extends Goal {
     private final EntityPixie tameable;
     private final double followSpeed;

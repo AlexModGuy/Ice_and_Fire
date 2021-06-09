@@ -14,6 +14,8 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class MyrmexAILeaveHive extends Goal {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;

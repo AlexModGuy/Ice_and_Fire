@@ -61,7 +61,7 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
 
     public void tick() {
         super.tick();
-        Entity shootingEntity = this.func_234616_v_();
+        Entity shootingEntity = this.getShooter();
         if(this.ticksExisted > 400 ){
             this.remove();
         }
@@ -136,14 +136,14 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
         }
     }
 
-    protected boolean func_230298_a_(Entity p_230298_1_) {
-        return super.func_230298_a_(p_230298_1_) && !(p_230298_1_ instanceof EntityMutlipartPart) && !(p_230298_1_ instanceof EntitySeaSerpentBubbles);
+    protected boolean func_230298_a_(Entity entityIn) {
+        return super.func_230298_a_(entityIn) && !(entityIn instanceof EntityMutlipartPart) && !(entityIn instanceof EntitySeaSerpentBubbles);
     }
 
 
     public void autoTarget() {
         if(!world.isRemote){
-            Entity shootingEntity = this.func_234616_v_();
+            Entity shootingEntity = this.getShooter();
             if (shootingEntity instanceof EntitySeaSerpent && ((EntitySeaSerpent) shootingEntity).getAttackTarget() != null) {
                 Entity target = ((EntitySeaSerpent) shootingEntity).getAttackTarget();
                 double d2 = target.getPosX() - this.getPosX();
@@ -186,7 +186,7 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
                 if (entity != null && entity instanceof EntitSlowPart) {
                     return;
                 }
-                Entity shootingEntity = this.func_234616_v_();
+                Entity shootingEntity = this.getShooter();
                 if (shootingEntity != null && shootingEntity instanceof EntitySeaSerpent) {
                     EntitySeaSerpent dragon = (EntitySeaSerpent) shootingEntity;
                     if (dragon.isOnSameTeam(entity) || dragon.isEntityEqual(entity)) {

@@ -42,7 +42,7 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'snapshot', version: '20201028-1.16.3'
+    mappings channel: 'snapshot', version: '20210309-1.16.5'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -121,7 +121,7 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.0.46'
     compileOnly fg.deobf("mezz.jei:jei-1.16.2:7.1.3.19:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.2:7.1.3.19")
-    implementation fg.deobf("curse.maven:citadel-331936:3345333") //citadel 1.7.0 fileid: 3345333
+    compile "curse.maven:citadel-331936:3345389" //citadel 1.7.0 fileid: 3345333
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

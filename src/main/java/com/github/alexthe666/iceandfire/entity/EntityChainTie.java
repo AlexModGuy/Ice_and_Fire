@@ -127,9 +127,9 @@ public class EntityChainTie extends HangingEntity {
         }
     }
 
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
+    public ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand) {
         if (this.world.isRemote) {
-            return func_230254_b_(player, hand);
+            return getEntityInteractionResult(player, hand);
         } else {
             boolean flag = false;
             double d0 = 30D;

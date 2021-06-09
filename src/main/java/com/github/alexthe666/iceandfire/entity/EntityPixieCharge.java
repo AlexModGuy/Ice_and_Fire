@@ -71,7 +71,7 @@ public class EntityPixieCharge extends AbstractFireballEntity {
     }
 
     public void tick() {
-        Entity shootingEntity = this.func_234616_v_();
+        Entity shootingEntity = this.getShooter();
         if (this.world.isRemote) {
             for (int i = 0; i < 5; ++i) {
                 IceAndFire.PROXY.spawnParticle("if_pixie", this.getPosX() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.getPosY() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.getPosZ() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
@@ -158,7 +158,7 @@ public class EntityPixieCharge extends AbstractFireballEntity {
     @Override
     protected void onImpact(RayTraceResult movingObject) {
         boolean flag = false;
-        Entity shootingEntity = this.func_234616_v_();
+        Entity shootingEntity = this.getShooter();
         if (!this.world.isRemote) {
             if (movingObject.getType() == RayTraceResult.Type.ENTITY && !((EntityRayTraceResult) movingObject).getEntity().isEntityEqual(shootingEntity)) {
                 Entity entity = ((EntityRayTraceResult) movingObject).getEntity();

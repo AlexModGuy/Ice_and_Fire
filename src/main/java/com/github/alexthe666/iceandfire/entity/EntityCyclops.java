@@ -397,7 +397,7 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
     }
 
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return IafSoundRegistry.CYCLOPS_HURT;
     }
 

@@ -43,7 +43,7 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
         // setScale(this.getDragonAge());
     }
 
-    public boolean isBreedingItem(ItemStack p_70877_1_) {
+    public boolean isBreedingItem(ItemStack stack) {
         return false;
     }
 
@@ -122,7 +122,7 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    public SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return null;
     }
 
@@ -160,16 +160,16 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
 
     @Nullable
     @Override
-    public AgeableEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageable) {
+    public AgeableEntity createChild(ServerWorld serverWorld, AgeableEntity ageable) {
         return null;
     }
 
     @Override
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
+    public ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand) {
         if (player.isSneaking()) {
             this.setYaw(player.rotationYaw);
         }
-        return super.func_230254_b_(player, hand);
+        return super.getEntityInteractionResult(player, hand);
     }
 
     @Override

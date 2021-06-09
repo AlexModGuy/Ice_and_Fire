@@ -63,7 +63,7 @@ public class IafVillagerRegistry {
 
     private static JigsawPiece createWorkstation(String name)
     {
-        return new LegacySingleJigsawPiece(Either.left(new ResourceLocation("iceandfire", name)), () -> ProcessorLists.field_244101_a, JigsawPattern.PlacementBehaviour.RIGID);
+        return new LegacySingleJigsawPiece(Either.left(new ResourceLocation("iceandfire", name)), () -> ProcessorLists.EMPTY, JigsawPattern.PlacementBehaviour.RIGID);
     }
 
     @SubscribeEvent
@@ -115,7 +115,7 @@ public class IafVillagerRegistry {
         JigsawPattern old = WorldGenRegistries.JIGSAW_POOL.getOrDefault(pool);
         List<JigsawPiece> shuffled = old != null ? old.getShuffledPieces(new Random()) : ImmutableList.of();
         List<Pair<JigsawPiece, Integer>> newPieces = shuffled.stream().map(p -> new Pair<>(p, 1)).collect(Collectors.toList());
-        newPieces.add(new Pair<>(new LegacySingleJigsawPiece(Either.left(toAdd), () -> ProcessorLists.field_244101_a, JigsawPattern.PlacementBehaviour.RIGID), weight));
+        newPieces.add(new Pair<>(new LegacySingleJigsawPiece(Either.left(toAdd), () -> ProcessorLists.EMPTY, JigsawPattern.PlacementBehaviour.RIGID), weight));
         Registry.register(WorldGenRegistries.JIGSAW_POOL, pool, new JigsawPattern(pool, terminatorPool, newPieces));
     }
 

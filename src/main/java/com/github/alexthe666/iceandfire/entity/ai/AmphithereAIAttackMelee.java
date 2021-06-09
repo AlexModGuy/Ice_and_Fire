@@ -11,6 +11,8 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class AmphithereAIAttackMelee extends Goal {
     protected final int attackInterval = 20;
     protected EntityAmphithere attacker;
@@ -61,14 +63,14 @@ public class AmphithereAIAttackMelee extends Goal {
         } else {
             if (canPenalize) {
                 if (--this.delayCounter <= 0) {
-                    this.path = this.attacker.getNavigator().getPathToEntity(LivingEntity, 0);
+                    this.path = this.attacker.getNavigator().pathfind(LivingEntity, 0);
                     this.delayCounter = 4 + this.attacker.getRNG().nextInt(7);
                     return this.path != null;
                 } else {
                     return true;
                 }
             }
-            this.path = this.attacker.getNavigator().getPathToEntity(LivingEntity, 0);
+            this.path = this.attacker.getNavigator().pathfind(LivingEntity, 0);
 
             if (this.path != null) {
                 return true;

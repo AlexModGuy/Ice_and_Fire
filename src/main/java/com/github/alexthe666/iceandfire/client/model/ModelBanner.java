@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelBanner extends SegmentedModel {
-    public final ModelRenderer field_228833_a_ = func_228836_a_();
+    public final ModelRenderer field_228833_a_ = getModelRender();
     public final ModelRenderer field_228834_c_ = new ModelRenderer(64, 64, 44, 0);
     public final ModelRenderer field_228835_d_;
 
@@ -19,7 +19,7 @@ public class ModelBanner extends SegmentedModel {
         this.field_228835_d_.addBox(-10.0F, -32.0F, -1.0F, 20.0F, 2.0F, 2.0F, 0.0F);
     }
 
-    public static ModelRenderer func_228836_a_() {
+    public static ModelRenderer getModelRender() {
         ModelRenderer modelrenderer = new ModelRenderer(64, 64, 0, 0);
         modelrenderer.addBox(-10.0F, 0.0F, -2.0F, 20.0F, 40.0F, 1.0F, 0.0F);
         return modelrenderer;

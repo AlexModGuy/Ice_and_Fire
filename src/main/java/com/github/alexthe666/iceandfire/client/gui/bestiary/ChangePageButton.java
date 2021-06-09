@@ -9,6 +9,8 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import net.minecraft.client.gui.widget.button.Button.IPressable;
+
 @OnlyIn(Dist.CLIENT)
 public class ChangePageButton extends Button {
     private final boolean right;
@@ -24,7 +26,7 @@ public class ChangePageButton extends Button {
     }
 
     @Override
-    public void renderButton(MatrixStack p_230430_1_,  int mouseX, int mouseY, float partial) {
+    public void renderWidget(MatrixStack matrixStack,  int mouseX, int mouseY, float partial) {
         if (this.active) {
             boolean flag = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             Minecraft.getInstance().getTextureManager().bindTexture(new ResourceLocation("iceandfire:textures/gui/bestiary/widgets.png"));
@@ -39,7 +41,7 @@ public class ChangePageButton extends Button {
             }
             j += color * 23;
 
-            this.blit(p_230430_1_, this.x, this.y, i, j, width, height);
+            this.blit(matrixStack, this.x, this.y, i, j, width, height);
         }
     }
 }

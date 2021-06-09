@@ -262,7 +262,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
 
     @Nullable
     @Override
-    public AgeableEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageable) {
+    public AgeableEntity createChild(ServerWorld serverWorld, AgeableEntity ageable) {
         return null;
     }
 
@@ -407,13 +407,13 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         return null;
     }
 
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
+    public ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         if (this.getWormAge() > 4 && player.getRidingEntity() == null && player.getHeldItemMainhand().getItem() == Items.FISHING_ROD && player.getHeldItemOffhand().getItem() == Items.FISHING_ROD && !this.world.isRemote) {
             player.startRiding(this);
             return ActionResultType.SUCCESS;
         }
-        return super.func_230254_b_(player, hand);
+        return super.getEntityInteractionResult(player, hand);
     }
 
     private void switchNavigator(boolean inSand) {
@@ -448,7 +448,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         ISelectionContext iselectioncontext = ISelectionContext.forEntity(this);
         VoxelShape voxelshape = this.world.getWorldBorder().getShape();
         Stream<VoxelShape> stream = VoxelShapes.compare(voxelshape, VoxelShapes.create(axisalignedbb.shrink(1.0E-7D)), IBooleanFunction.AND) ? Stream.empty() : Stream.of(voxelshape);
-        Stream<VoxelShape> stream1 = this.world.func_230318_c_(this, axisalignedbb.expand(vec), (p_233561_0_) -> {
+        Stream<VoxelShape> stream1 = this.world.func_230318_c_(this, axisalignedbb.expand(vec), (entity) -> {
             return true;
         });
         ReuseableStream<VoxelShape> reuseablestream = new ReuseableStream<>(Stream.concat(stream1, stream));
@@ -676,7 +676,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
 
 
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return this.getRenderScale() > 3 ? IafSoundRegistry.DEATHWORM_GIANT_HURT : IafSoundRegistry.DEATHWORM_HURT;
     }
 
@@ -876,7 +876,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         return world.getBlockState(pos).getMaterial() == Material.SAND;
     }
 
-    public boolean canExplosionDestroyBlock(Explosion explosionIn, World worldIn, BlockPos pos, BlockState blockStateIn, float p_174816_5_) {
+    public boolean canExplosionDestroyBlock(Explosion explosionIn, World worldIn, BlockPos pos, BlockState blockStateIn, float explosionPower) {
         float hardness = blockStateIn.getBlockHardness(worldIn, pos);
         return hardness != -1.0F && hardness < 1.5F;
     }

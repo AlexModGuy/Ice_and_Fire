@@ -29,7 +29,7 @@ public class GuiHippogryph extends ContainerScreen<ContainerHippogryph> {
         this.hippogryphInv = dragonInv;
     }
 
-    protected void func_230451_b_(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
         int k = (this.width - this.xSize) / 2;
         int l = (this.height - this.ySize) / 2;
         Entity entity = IceAndFire.PROXY.getReferencedMob();
@@ -41,12 +41,12 @@ public class GuiHippogryph extends ContainerScreen<ContainerHippogryph> {
         font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(),  8,  this.ySize - 96 + 2, 4210752);
     }
 
-    public void render(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
-        this.renderBackground(p_230430_1_);
-        this.mousePosx = (float)p_230430_2_;
-        this.mousePosY = (float)p_230430_3_;
-        super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
-        this.renderHoveredTooltip(p_230430_1_, p_230430_2_, p_230430_3_);
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(matrixStack);
+        this.mousePosx = (float)mouseX;
+        this.mousePosY = (float)mouseY;
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
+        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override

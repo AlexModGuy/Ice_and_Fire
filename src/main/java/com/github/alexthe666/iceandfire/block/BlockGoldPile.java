@@ -29,6 +29,8 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockGoldPile extends Block {
     public static final IntegerProperty LAYERS = IntegerProperty.create("layers", 1, 8);
     protected static final VoxelShape[] SHAPES = new VoxelShape[]{VoxelShapes.empty(), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
@@ -77,7 +79,7 @@ public class BlockGoldPile extends Block {
         Block block = blockstate.getBlock();
         if (block != Blocks.ICE && block != Blocks.PACKED_ICE && block != Blocks.BARRIER) {
             if (block != Blocks.HONEY_BLOCK && block != Blocks.SOUL_SAND) {
-                return Block.doesSideFillSquare(blockstate.getCollisionShape(worldIn, pos.down()), Direction.UP) || block instanceof BlockGoldPile && blockstate.get(LAYERS) == 8;
+                return Block.doesSideFillSquare(blockstate.getCollisionShapeUncached(worldIn, pos.down()), Direction.UP) || block instanceof BlockGoldPile && blockstate.get(LAYERS) == 8;
             } else {
                 return true;
             }

@@ -23,9 +23,9 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
 public class ItemDragonBow extends BowItem implements ICustomRendered {
-    public static final Predicate<ItemStack> DRAGON_ARROWS = (p_220002_0_) -> {
+    public static final Predicate<ItemStack> DRAGON_ARROWS = (stack) -> {
         ITag<Item> tag = ItemTags.getCollection().get(  IafTagRegistry.DRAGON_ARROWS);
-        return p_220002_0_.getItem().isIn(tag);
+        return stack.getItem().isIn(tag);
     };
 
     public ItemDragonBow() {

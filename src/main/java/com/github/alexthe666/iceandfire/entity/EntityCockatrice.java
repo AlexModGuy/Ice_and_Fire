@@ -232,7 +232,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     }
 
     public boolean canMove() {
-        return !this.isSitting() && !(this.getAnimation() == ANIMATION_JUMPAT && this.getAnimationTick() < 7);
+        return !this.isQueuedToSit() && !(this.getAnimation() == ANIMATION_JUMPAT && this.getAnimationTick() < 7);
     }
 
 
@@ -347,7 +347,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
         }
     }
 
-    public boolean isSitting() {
+    public boolean isQueuedToSit() {
         if (world.isRemote) {
             boolean isSitting = (this.dataManager.get(TAMED).byteValue() & 1) != 0;
             this.isSitting = isSitting;
@@ -423,13 +423,13 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     }
 
     @Override
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
+    public ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand) {
         boolean flag = player.getHeldItem(hand).getItem() == Items.NAME_TAG || player.getHeldItem(hand).getItem() == Items.LEAD;
         if (flag) {
-            return super.func_230254_b_(player, hand);
+            return super.getEntityInteractionResult(player, hand);
         }
         if (player.getHeldItem(hand).getItem() == Items.POISONOUS_POTATO) {
-            return super.func_230254_b_(player, hand);
+            return super.getEntityInteractionResult(player, hand);
         }
         if (this.isTamed() && this.isOwner(player)) {
             if (FoodUtils.isSeeds(player.getHeldItem(hand)) || player.getHeldItem(hand).getItem() == Items.ROTTEN_FLESH) {
@@ -472,10 +472,10 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
         if (this.world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() != null && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }
-        if (this.isSitting() && this.getCommand() != 1) {
+        if (this.isQueuedToSit() && this.getCommand() != 1) {
             this.setSitting(false);
         }
-        if (this.isSitting() && this.getAttackTarget() != null) {
+        if (this.isQueuedToSit() && this.getAttackTarget() != null) {
             this.setAttackTarget(null);
         }
         if (this.getAttackTarget() != null && this.isOnSameTeam(this.getAttackTarget())) {
@@ -513,7 +513,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
                 }
             }
         }
-        boolean sitting = isSitting();
+        boolean sitting = isQueuedToSit();
         if (sitting && sitProgress < 20.0F) {
             sitProgress += 0.5F;
         } else if (!sitting && sitProgress > 0.0F) {
@@ -685,7 +685,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
 
     @Nullable
     @Override
-    public AgeableEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageable) {
+    public AgeableEntity createChild(ServerWorld serverWorld, AgeableEntity ageable) {
         return null;
     }
 

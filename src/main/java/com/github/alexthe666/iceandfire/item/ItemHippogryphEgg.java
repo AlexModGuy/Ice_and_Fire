@@ -71,7 +71,7 @@ public class ItemHippogryphEgg extends Item implements ICustomRendered {
 
         if (!worldIn.isRemote) {
             EntityHippogryphEgg entityegg = new EntityHippogryphEgg(IafEntityRegistry.HIPPOGRYPH_EGG, worldIn, playerIn, itemstack);
-            entityegg.func_234612_a_(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
+            entityegg.setDirectionAndMovement(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
             worldIn.addEntity(entityegg);
         }
 

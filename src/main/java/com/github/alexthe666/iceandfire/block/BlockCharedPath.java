@@ -18,6 +18,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
 
+import net.minecraft.block.AbstractBlock;
+
 public class BlockCharedPath extends GrassPathBlock {
     public static final BooleanProperty REVERTS = BooleanProperty.create("revert");
     public Item itemBlock;
@@ -26,7 +28,7 @@ public class BlockCharedPath extends GrassPathBlock {
     @SuppressWarnings("deprecation")
     public BlockCharedPath(int dragonType) {
         super(
-    		Block.Properties
+    		AbstractBlock.Properties
     			.create(Material.PLANTS)
     			.sound(dragonType != 1 ? SoundType.GROUND : SoundType.GLASS)
     			.hardnessAndResistance(0.6F).harvestTool(ToolType.SHOVEL)
