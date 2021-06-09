@@ -7,7 +7,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.*;
 
-import javafx.util.Pair;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
@@ -487,14 +487,14 @@ public abstract class AbstractPathJob implements Callable<Path> {
         }
         if (pathingOptions.canClimb()){
             //If the entity can climb and it needs to climb a block higher than 1 block
-            if (getHighest(currentNode.pos).getKey()>1){
-                walk(currentNode,BLOCKPOS_IDENTITY.up(getHighest(currentNode.pos).getKey()));
+            if (getHighest(currentNode.pos).getFirst()>1){
+                walk(currentNode,BLOCKPOS_IDENTITY.up(getHighest(currentNode.pos).getFirst()));
             }
             //After entity has climbed something step forward
             if (currentNode.parent != null && dPos.getX() == 0 && dPos.getZ() == 0 && dPos.getY() > 1){
                     //Step forwards into the direction we climbed from
-                if (getHighest(currentNode.parent.pos).getValue() != null)
-                    walk(currentNode, getHighest(currentNode.parent.pos).getValue());
+                if (getHighest(currentNode.parent.pos).getSecond() != null)
+                    walk(currentNode, getHighest(currentNode.parent.pos).getSecond());
             }
         }
 
