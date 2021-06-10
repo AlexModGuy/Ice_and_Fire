@@ -41,7 +41,7 @@ public class CockatriceAIStareAttack extends Goal {
         double d0 = Vector3d1.length();
         Vector3d1 = Vector3d1.normalize();
         double d1 = Vector3d.dotProduct(Vector3d1);
-        return d1 > 1.0D - degree / d0;
+        return d1 > 1.0D - degree / d0 && !looker.isSpectator();
     }
 
     public void setAttackCooldown(int cooldown) {

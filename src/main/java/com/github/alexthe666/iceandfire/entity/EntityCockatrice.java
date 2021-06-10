@@ -131,7 +131,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
             @Override
             public boolean apply(@Nullable Entity entity) {
                 if (entity instanceof PlayerEntity ) {
-                    return !((PlayerEntity) entity).isCreative();
+                    return !((PlayerEntity) entity).isCreative() && !entity.isSpectator();
                 }else{
                     return ((entity instanceof IMob) && EntityCockatrice.this.isTamed() && !(entity instanceof CreeperEntity) && !(entity instanceof ZombifiedPiglinEntity) && !(entity instanceof EndermanEntity) ||
                             ServerEvents.isAnimaniaFerret(entity) && !ServerEvents.isAnimaniaChicken(entity));
