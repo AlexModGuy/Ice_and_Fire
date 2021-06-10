@@ -98,7 +98,9 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
                 if (!pixie.isTamed() && this.targetEntity.getThrowerId() != null && this.goalOwner.world.getPlayerByUuid(this.targetEntity.getThrowerId()) != null) {
                     PlayerEntity owner = this.goalOwner.world.getPlayerByUuid(this.targetEntity.getThrowerId());
                     pixie.setTamed(true);
-                    pixie.setOwnerId(owner.getUniqueID());
+                    if(owner != null){
+                        pixie.setTamedBy(owner);
+                    }
                     pixie.setPixieSitting(true);
                     pixie.setOnGround(true);  //  Entity.onGround = true
                 }
