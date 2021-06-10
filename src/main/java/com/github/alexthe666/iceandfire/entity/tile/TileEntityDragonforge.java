@@ -22,6 +22,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -175,6 +176,18 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         return 0;
     }
 
+    public String getTypeID(){
+        switch (getFireType(this.getBlockState().getBlock())){
+            case 0:
+                return "fire";
+            case 1:
+                return "ice";
+            case 2:
+                return "lightning";
+        }
+        return "";
+    }
+
     public void tick() {
         boolean flag = this.isBurning();
         boolean flag1 = false;
@@ -271,19 +284,18 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         if (
             forgeRecipe != null &&
             // Item input and quantity match
-            cookStack.isItemEqual(forgeRecipe.getInput()) &&
-            cookStack.getCount() >= forgeRecipe.getInput().getCount() &&
+                    forgeRecipe.getInput().test(cookStack) && cookStack.getCount() > 0 &&
             // Blood item and quantity match
-            bloodStack.isItemEqual(forgeRecipe.getBlood()) &&
-            bloodStack.getCount() >= forgeRecipe.getBlood().getCount()
+                    forgeRecipe.getBlood().test(bloodStack) && bloodStack.getCount() > 0
         ) {
             return forgeRecipe;
         }
 
         return new DragonForgeRecipe(
-            new ItemStack(cookStack.getItem()),
-            new ItemStack(bloodStack.getItem()),
-            new ItemStack(getDefaultOutput())
+            Ingredient.fromStacks(cookStack),
+                Ingredient.fromStacks(bloodStack),
+            new ItemStack(getDefaultOutput()),
+                getTypeID()
         );
     }
 
@@ -345,8 +357,8 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
             outputStack.grow(forgeRecipe.getOutput().getCount());
         }
 
-        cookStack.shrink(forgeRecipe.getInput().getCount());
-        bloodStack.shrink(forgeRecipe.getBlood().getCount());
+        cookStack.shrink(1);
+        bloodStack.shrink(1);
     }
 
     public void openInventory(PlayerEntity player) {
