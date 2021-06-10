@@ -407,11 +407,9 @@ public class EntityPixie extends TameableEntity {
     public void writeAdditional(CompoundNBT compound) {
         compound.putInt("Color", this.getColor());
         compound.putInt("Command", this.getCommand());
-
         compound.putInt("StealCooldown", this.stealCooldown);
         compound.putInt("HoldingTicks", this.ticksHeldItemFor);
         compound.putBoolean("PixieSitting", this.isPixieSitting());
-
         super.writeAdditional(compound);
     }
 
