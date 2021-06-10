@@ -80,7 +80,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
     }
 
     public static boolean isBlindfolded(LivingEntity attackTarget) {
-        return attackTarget != null && attackTarget.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == IafItemRegistry.BLINDFOLD;
+        return attackTarget != null && (attackTarget.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == IafItemRegistry.BLINDFOLD || attackTarget.isPotionActive(Effects.BLINDNESS));
     }
 
     public boolean isTargetBlocked(Vector3d target) {
