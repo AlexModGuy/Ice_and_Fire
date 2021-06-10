@@ -1,56 +1,30 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import java.util.stream.Stream;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import com.github.alexthe666.citadel.server.entity.collision.ICustomCollisions;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
-import com.github.alexthe666.iceandfire.entity.ai.DeathWormAIFindSandTarget;
-import com.github.alexthe666.iceandfire.entity.ai.DeathWormAIGetInSand;
-import com.github.alexthe666.iceandfire.entity.ai.DeathWormAITarget;
-import com.github.alexthe666.iceandfire.entity.ai.DeathWormAIWander;
-import com.github.alexthe666.iceandfire.entity.ai.DeathwormAITargetItems;
-import com.github.alexthe666.iceandfire.entity.ai.EntityGroundAIRide;
-import com.github.alexthe666.iceandfire.entity.ai.IAFLookHelper;
-import com.github.alexthe666.iceandfire.entity.util.BlockLaunchExplosion;
-import com.github.alexthe666.iceandfire.entity.util.ChainBuffer;
-import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
-import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
-import com.github.alexthe666.iceandfire.entity.util.IGroundMount;
-import com.github.alexthe666.iceandfire.entity.util.IPhasesThroughBlock;
-import com.github.alexthe666.iceandfire.entity.util.ISyncMount;
-import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
+import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.message.MessageDeathWormHitbox;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDeathWormLand;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDeathWormSand;
 import com.google.common.base.Predicate;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.LookController;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.OwnerHurtByTargetGoal;
 import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
@@ -67,37 +41,20 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.ReuseableStream;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.LightType;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 
-public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlacklistedFromStatues, IAnimatedEntity, IVillagerFear, IAnimalFear, IPhasesThroughBlock, IGroundMount {
+import javax.annotation.Nullable;
+
+public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICustomCollisions, IBlacklistedFromStatues, IAnimatedEntity, IVillagerFear, IAnimalFear, IGroundMount {
 
     public static final ResourceLocation TAN_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_tan");
     public static final ResourceLocation WHITE_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_white");
@@ -107,12 +64,15 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
     public static final ResourceLocation RED_GIANT_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_red_giant");
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.VARINT);
     private static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.FLOAT);
+    private static final DataParameter<Integer> JUMP_TICKS = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.VARINT);
     private static final DataParameter<Byte> CONTROL_STATE = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.BYTE);
     private static final DataParameter<Integer> WORM_AGE = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.VARINT);
     private static final DataParameter<BlockPos> HOME = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.BLOCK_POS);
     public static Animation ANIMATION_BITE = Animation.create(10);
     @OnlyIn(Dist.CLIENT)
     public ChainBuffer tail_buffer;
+    public float jumpProgress;
+    public float prevJumpProgress;
     private int animationTick;
     private boolean willExplode = false;
     private int ticksTillExplosion = 60;
@@ -122,7 +82,6 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
     private float prevScale = 0.0F;
     private LookController lookHelper;
     private int growthCounter = 0;
-    private float nextStepDistance;
 
     public EntityDeathWorm(EntityType type, World worldIn) {
         super(type, worldIn);
@@ -135,10 +94,11 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         this.switchNavigator(false);
         this.goalSelector.addGoal(0, new EntityGroundAIRide<>(this));
         this.goalSelector.addGoal(1, new SwimGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.5D, true));
-        this.goalSelector.addGoal(3, new DeathWormAIFindSandTarget(this, 10));
-        this.goalSelector.addGoal(4, new DeathWormAIGetInSand(this, 1.0D));
-        this.goalSelector.addGoal(5, new DeathWormAIWander(this, 1));
+        this.goalSelector.addGoal(2, new DeathWormAIAttack(this));
+        this.goalSelector.addGoal(3, new DeathWormAIJump(this, 12));
+        this.goalSelector.addGoal(4, new DeathWormAIFindSandTarget(this, 10));
+        this.goalSelector.addGoal(5, new DeathWormAIGetInSand(this, 1.0D));
+        this.goalSelector.addGoal(6, new DeathWormAIWander(this, 1));
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(4, new HurtByTargetGoal(this));
@@ -153,6 +113,20 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
                 }
             }
         }));
+    }
+
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+                //HEALTH
+                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.deathWormMaxHealth)
+                //SPEED
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.15D)
+                //ATTACK
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, IafConfig.deathWormAttackStrength)
+                //FOLLOW RANGE
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, IafConfig.deathWormTargetSearchLength)
+                //ARMOR
+                .createMutableAttribute(Attributes.ARMOR, 3);
     }
 
     public LookController getLookController() {
@@ -181,7 +155,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
             BlockState BlockState = this.world.getBlockState(blockpos);
 
             if (world.isRemote) {
-               // world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, BlockState), this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getSurface((int) Math.floor(this.getPosX()), (int) Math.floor(this.getPosY()), (int) Math.floor(this.getPosZ())) + 0.5F, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
+                // world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, BlockState), this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getSurface((int) Math.floor(this.getPosX()), (int) Math.floor(this.getPosY()), (int) Math.floor(this.getPosZ())) + 0.5F, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
             }
         }
     }
@@ -201,8 +175,8 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
 
     private void addSegmentsToWorld() {
         for (Entity entity : segments) {
-            if(entity != null){
-                if(!((EntityMutlipartPart)entity).shouldContinuePersisting()){
+            if (entity != null) {
+                if (!((EntityMutlipartPart) entity).shouldContinuePersisting()) {
                     world.addEntity(entity);
                 }
                 ((EntityMutlipartPart) entity).setParent(this);
@@ -274,6 +248,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         this.dataManager.register(CONTROL_STATE, Byte.valueOf((byte) 0));
         this.dataManager.register(WORM_AGE, Integer.valueOf(10));
         this.dataManager.register(HOME, BlockPos.ZERO);
+        this.dataManager.register(JUMP_TICKS, 0);
     }
 
     @Override
@@ -323,6 +298,14 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         this.dataManager.set(VARIANT, Integer.valueOf(variant));
     }
 
+    public int getWormJumping() {
+        return this.dataManager.get(JUMP_TICKS);
+    }
+
+    public void setWormJumping(int jump) {
+        this.dataManager.set(JUMP_TICKS, jump);
+    }
+
     public BlockPos getWormHome() {
         return this.dataManager.get(HOME);
     }
@@ -367,20 +350,6 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         float size = 0.25F + (float) (Math.random() * 0.35F);
         this.setDeathWormScale(this.getRNG().nextInt(20) == 0 ? size * 4 : size);
         return spawnDataIn;
-    }
-
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-                //HEALTH
-                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.deathWormMaxHealth)
-                //SPEED
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.15D)
-                //ATTACK
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, IafConfig.deathWormAttackStrength)
-                //FOLLOW RANGE
-                .createMutableAttribute(Attributes.FOLLOW_RANGE, IafConfig.deathWormTargetSearchLength)
-                //ARMOR
-                .createMutableAttribute(Attributes.ARMOR, 3);
     }
 
     public void updatePassenger(Entity passenger) {
@@ -442,94 +411,29 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         super.move(typeIn, pos);
     }
 
-
-    private Vector3d getAllowedMovement(Vector3d vec) {
-        AxisAlignedBB axisalignedbb = this.getBoundingBox();
-        ISelectionContext iselectioncontext = ISelectionContext.forEntity(this);
-        VoxelShape voxelshape = this.world.getWorldBorder().getShape();
-        Stream<VoxelShape> stream = VoxelShapes.compare(voxelshape, VoxelShapes.create(axisalignedbb.shrink(1.0E-7D)), IBooleanFunction.AND) ? Stream.empty() : Stream.of(voxelshape);
-        Stream<VoxelShape> stream1 = this.world.func_230318_c_(this, axisalignedbb.expand(vec), (entity) -> {
-            return true;
-        });
-        ReuseableStream<VoxelShape> reuseablestream = new ReuseableStream<>(Stream.concat(stream1, stream));
-        Vector3d Vector3d = vec.lengthSquared() == 0.0D ? vec : collideBoundingBoxHeuristically(this, vec, axisalignedbb, this.world, iselectioncontext, reuseablestream);
-        boolean flag = vec.x != Vector3d.x;
-        boolean flag1 = vec.y != Vector3d.y;
-        boolean flag2 = vec.z != Vector3d.z;
-        if(this.isInSand() || this.isSandBelow()){
-            return Vector3d;
-        }
-        boolean flag3 = this.isOnGround() || flag1 && vec.y < 0.0D;
-        if (this.stepHeight > 0.0F && flag3 && (flag || flag2)) {
-            Vector3d Vector3d1 = collideBoundingBoxHeuristically(this, new Vector3d(vec.x, (double)this.stepHeight, vec.z), axisalignedbb, this.world, iselectioncontext, reuseablestream);
-            Vector3d Vector3d2 = collideBoundingBoxHeuristically(this, new Vector3d(0.0D, (double)this.stepHeight, 0.0D), axisalignedbb.expand(vec.x, 0.0D, vec.z), this.world, iselectioncontext, reuseablestream);
-            if (Vector3d2.y < (double)this.stepHeight) {
-                Vector3d Vector3d3 = collideBoundingBoxHeuristically(this, new Vector3d(vec.x, 0.0D, vec.z), axisalignedbb.offset(Vector3d2), this.world, iselectioncontext, reuseablestream).add(Vector3d2);
-                if (horizontalMag(Vector3d3) > horizontalMag(Vector3d1)) {
-                    Vector3d1 = Vector3d3;
-                }
-            }
-
-            if (horizontalMag(Vector3d1) > horizontalMag(Vector3d)) {
-                return Vector3d1.add(collideBoundingBoxHeuristically(this, new Vector3d(0.0D, -Vector3d1.y + vec.y, 0.0D), axisalignedbb.offset(Vector3d1), this.world, iselectioncontext, reuseablestream));
-            }
-        }
-
-        return Vector3d;
-    }
-
-
-    public boolean checkBlockCollision(AxisAlignedBB bb) {
-        int j2 = MathHelper.floor(bb.minX);
-        int k2 = MathHelper.ceil(bb.maxX);
-        int l2 = MathHelper.floor(bb.minY);
-        int i3 = MathHelper.ceil(bb.maxY);
-        int j3 = MathHelper.floor(bb.minZ);
-        int k3 = MathHelper.ceil(bb.maxZ);
-        BlockPos.Mutable blockpos$pooledmutableblockpos = new BlockPos.Mutable();
-
-        for (int l3 = j2; l3 < k2; ++l3) {
-            for (int i4 = l2; i4 < i3; ++i4) {
-                for (int j4 = j3; j4 < k3; ++j4) {
-                    BlockState BlockState1 = this.world.getBlockState(blockpos$pooledmutableblockpos.setPos(l3, i4, j4));
-                    if (BlockState1.getMaterial() != Material.AIR && BlockState1.getMaterial() != Material.SAND) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+    @Override
+    public Vector3d getAllowedMovement(Vector3d vec) {
+        return ICustomCollisions.getAllowedMovementForEntity(this, vec);
     }
 
     @Override
     public boolean isEntityInsideOpaqueBlock() {
-        BlockPos.Mutable blockpos$pooledmutableblockpos = new BlockPos.Mutable();
-
-        for (int i = 0; i < 8; ++i) {
-            int j = MathHelper.floor(this.getPosY() + (double) (((float) ((i >> 0) % 2) - 0.5F) * 0.1F) + (double) this.getEyeHeight());
-            int k = MathHelper.floor(this.getPosX() + (double) (((float) ((i >> 1) % 2) - 0.5F) * this.getWidth() * 0.8F));
-            int l = MathHelper.floor(this.getPosZ() + (double) (((float) ((i >> 2) % 2) - 0.5F) * this.getWidth() * 0.8F));
-
-            if (blockpos$pooledmutableblockpos.getX() != k || blockpos$pooledmutableblockpos.getY() != j || blockpos$pooledmutableblockpos.getZ() != l) {
-                blockpos$pooledmutableblockpos.setPos(k, j, l);
-
-                if (this.world.getBlockState(blockpos$pooledmutableblockpos).isSuffocating(world, blockpos$pooledmutableblockpos) && this.world.getBlockState(blockpos$pooledmutableblockpos).getMaterial() != Material.SAND) {
-                    return true;
-                }
-            }
+        if (this.isInSand()) {
+            return false;
+        } else {
+            return super.isEntityInsideOpaqueBlock();
         }
-        return false;
     }
 
 
     protected void pushOutOfBlocks(double x, double y, double z) {
         BlockPos blockpos = new BlockPos(x, y, z);
-        Vector3d vector3d = new Vector3d(x - (double)blockpos.getX(), y - (double)blockpos.getY(), z - (double)blockpos.getZ());
+        Vector3d vector3d = new Vector3d(x - (double) blockpos.getX(), y - (double) blockpos.getY(), z - (double) blockpos.getZ());
         BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
         Direction direction = Direction.UP;
         double d0 = Double.MAX_VALUE;
 
-        for(Direction direction1 : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.UP}) {
+        for (Direction direction1 : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.UP}) {
             blockpos$mutable.setAndMove(blockpos, direction1);
             if (!this.world.getBlockState(blockpos$mutable).hasOpaqueCollisionShape(this.world, blockpos$mutable) || BlockTags.SAND.contains(world.getBlockState(blockpos$mutable).getBlock())) {
                 double d1 = vector3d.getCoordinate(direction1.getAxis());
@@ -542,19 +446,15 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         }
 
         float f = this.rand.nextFloat() * 0.2F + 0.1F;
-        float f1 = (float)direction.getAxisDirection().getOffset();
+        float f1 = (float) direction.getAxisDirection().getOffset();
         Vector3d vector3d1 = this.getMotion().scale(0.75D);
         if (direction.getAxis() == Direction.Axis.X) {
-            this.setMotion((double)(f1 * f), vector3d1.y, vector3d1.z);
+            this.setMotion(f1 * f, vector3d1.y, vector3d1.z);
         } else if (direction.getAxis() == Direction.Axis.Y) {
-            this.setMotion(vector3d1.x, (double)(f1 * f), vector3d1.z);
+            this.setMotion(vector3d1.x, f1 * f, vector3d1.z);
         } else if (direction.getAxis() == Direction.Axis.Z) {
-            this.setMotion(vector3d1.x, vector3d1.y, (double)(f1 * f));
+            this.setMotion(vector3d1.x, vector3d1.y, f1 * f);
         }
-    }
-
-    private boolean isBlockFullCube(BlockPos pos) {
-        return world.getBlockState(pos).getMaterial() != Material.SAND && world.getBlockState(pos).isSolid();
     }
 
     private void updateAttributes() {
@@ -565,7 +465,8 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         this.setHealth((float) this.getAttribute(Attributes.MAX_HEALTH).getBaseValue());
     }
 
-    public void onKillEntity(LivingEntity LivingEntityIn) {
+    @Override
+    public void onKillEntity(ServerWorld world, LivingEntity entity) {
         if (this.isTamed()) {
             this.heal(14);
         }
@@ -573,10 +474,24 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
 
     public void livingTick() {
         super.livingTick();
+        prevJumpProgress = jumpProgress;
+        if (this.getWormJumping() > 0 && jumpProgress < 5F) {
+            jumpProgress++;
+        }
+        if (this.getWormJumping() == 0 && jumpProgress > 0F) {
+            jumpProgress--;
+        }
+        if (this.getWormJumping() > 0) {
+            float f2 = (float) -((float) this.getMotion().y * (double) (180F / (float) Math.PI));
+            this.rotationPitch = f2;
+            if (this.isInSand() || this.isOnGround()) {
+                this.setWormJumping(this.getWormJumping() - 1);
+            }
+        }
         if (world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }
-        if(this.getAttackTarget() != null &&( !this.getAttackTarget().isAlive() || !DragonUtils.isAlive(this.getAttackTarget()))){
+        if (this.getAttackTarget() != null && (!this.getAttackTarget().isAlive() || !DragonUtils.isAlive(this.getAttackTarget()))) {
             this.setAttackTarget(null);
         }
         if (this.willExplode) {
@@ -592,10 +507,8 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         if (this.ticksExisted == 1) {
             initSegments(this.getRenderScale());
         }
-        noClip = this.isInSand();
-        this.setNoGravity(this.isInSandStrict());
-        if(!isInSand() && (this.isEntityInsideOpaqueBlock() || this.isInWater())){
-            this.setMotion(this.getMotion().add(0, 0.1D, 0));
+        if (isInSandStrict()) {
+            this.setMotion(this.getMotion().add(0, 0.08D, 0));
         }
         if (growthCounter > 1000 && this.getWormAge() < 5) {
             growthCounter = 0;
@@ -619,23 +532,16 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
         }
         if (this.getControllingPassenger() != null) {
             if (this.isEntityInsideOpaqueBlock()) {
-                this.setMotion(this.getMotion().add(0, 2, 0));
-                this.noClip = true;
-            } else {
-                this.noClip = false;
+                this.setMotion(this.getMotion().add(0, 0.4F, 0));
             }
-
         }
         if (this.getControllingPassenger() != null && this.getAttackTarget() != null) {
             this.getNavigator().clearPath();
             this.setAttackTarget(null);
         }
-        if (this.getAttackTarget() == null) {
-            this.rotationPitch = 0;
-        } else {
-            this.faceEntity(this.getAttackTarget(), 10.0F, 10.0F);
-            double dist = this.getDistanceSq(this.getAttackTarget());
-            if (dist >= 4.0D * getRenderScale() && dist <= 16.0D * getRenderScale() && (this.isInSand() || this.onGround)) {
+        //this.faceEntity(this.getAttackTarget(), 10.0F, 10.0F);
+           /* if (dist >= 4.0D * getRenderScale() && dist <= 16.0D * getRenderScale() && (this.isInSand() || this.onGround)) {
+                this.setWormJumping(true);
                 double d0 = this.getAttackTarget().getPosX() - this.getPosX();
                 double d1 = this.getAttackTarget().getPosZ() - this.getPosZ();
                 float leap = MathHelper.sqrt(d0 * d0 + d1 * d1);
@@ -643,21 +549,21 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
                     this.setMotion(this.getMotion().add(d0 / (double) leap * 0.5D, 0.15F, d1 / (double) leap * 0.5D));
                 }
                 this.setAnimation(ANIMATION_BITE);
-            }
-            if (dist < Math.min(4, 4D * getRenderScale()) && this.getAnimation() == ANIMATION_BITE) {
-                float f = (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
-                this.setMotion(this.getMotion().add(0, -0.4F, 0));
-            }
+            }*/
+        if (this.getAttackTarget() != null && this.getDistance(this.getAttackTarget()) < Math.min(4, 4D * getRenderScale()) && this.getAnimation() == ANIMATION_BITE && this.getAnimationTick() == 5) {
+            float f = (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), f);
+            this.setMotion(this.getMotion().add(0, -0.4F, 0));
         }
+
     }
 
-    public int getWormBrightness(int lightIn) {
+    public int getWormBrightness(boolean sky) {
         BlockPos eyePos = new BlockPos(this.getEyePosition(1.0F));
-        while(eyePos.getY() < 256 && BlockTags.SAND.contains(world.getBlockState(eyePos).getBlock())){
+        while (eyePos.getY() < 256 && !world.isAirBlock(eyePos)) {
             eyePos = eyePos.up();
         }
-        int light = this.world.getLightFor(LightType.BLOCK, eyePos);
+        int light = this.world.getLightFor(sky ? LightType.SKY : LightType.BLOCK, eyePos.up());
         return light;
     }
 
@@ -722,9 +628,6 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
             if (this.ticksExisted % 10 == 0) {
                 this.playSound(SoundEvents.BLOCK_SAND_BREAK, 1, 0.5F);
             }
-            if(this.getAttackTarget() != null){
-                this.getMoveHelper().setMoveTo(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY(), this.getAttackTarget().getPosZ(), 1);
-            }
         }
         if (this.up() && this.onGround) {
             this.jump();
@@ -740,7 +643,6 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
             tail_buffer.calculateChainSwingBuffer(90, 20, 5F, this);
         }
         if (this.getControllingPassenger() != null) {
-            this.noClip = false;
             this.pushOutOfBlocks(this.getPosX(), (this.getBoundingBox().minY + this.getBoundingBox().maxY) / 2.0D, this.getPosZ());
         }
         if (world.isRemote) {
@@ -798,7 +700,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
 
     public boolean isSandBelow() {
         int i = MathHelper.floor(this.getPosX());
-        int j = MathHelper.floor(this.getPosY() - 1);
+        int j = MathHelper.floor(this.getPosY() + 1);
         int k = MathHelper.floor(this.getPosZ());
         BlockPos blockpos = new BlockPos(i, j, k);
         BlockState BlockState = this.world.getBlockState(blockpos);
@@ -806,11 +708,11 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
     }
 
     public boolean isInSand() {
-        return this.getControllingPassenger() == null && (BlockTags.SAND.contains(world.getBlockState(getPosition().up()).getBlock()) ||BlockTags.SAND.contains(world.getBlockState(getPosition()).getBlock()) || BlockTags.SAND.contains(world.getBlockState(getPosition().down()).getBlock()));
+        return this.getControllingPassenger() == null && isInSandStrict();
     }
 
     public boolean isInSandStrict() {
-        return isInSand();
+        return world.getBlockState(getPosition()).isIn(BlockTags.SAND);
     }
 
     @Override
@@ -872,13 +774,8 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
     }
 
     @Override
-    public boolean canPhaseThroughBlock(IWorld world, BlockPos pos) {
+    public boolean canPassThrough(BlockPos pos, BlockState state, VoxelShape shape) {
         return world.getBlockState(pos).getMaterial() == Material.SAND;
-    }
-
-    public boolean canExplosionDestroyBlock(Explosion explosionIn, World worldIn, BlockPos pos, BlockState blockStateIn, float explosionPower) {
-        float hardness = blockStateIn.getBlockHardness(worldIn, pos);
-        return hardness != -1.0F && hardness < 1.5F;
     }
 
     @Override
@@ -926,16 +823,9 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, IBlac
                 } else {
                     this.speed = 1.0F;
                     EntityDeathWorm.this.setMotion(EntityDeathWorm.this.getMotion().add(Vector3d.scale(this.speed * 0.05D / d0)));
-                    if (EntityDeathWorm.this.getAttackTarget() == null) {
-                        Vector3d Vector3d1 = EntityDeathWorm.this.getMotion();
-                        EntityDeathWorm.this.rotationYaw = -((float)MathHelper.atan2(Vector3d1.x, Vector3d1.z)) * (180F / (float)Math.PI);
-                        EntityDeathWorm.this.renderYawOffset = EntityDeathWorm.this.rotationYaw;
-                    } else {
-                        double d2 = EntityDeathWorm.this.getAttackTarget().getPosX() - EntityDeathWorm.this.getPosX();
-                        double d1 = EntityDeathWorm.this.getAttackTarget().getPosZ() - EntityDeathWorm.this.getPosZ();
-                        EntityDeathWorm.this.rotationYaw = -((float)MathHelper.atan2(d2, d1)) * (180F / (float)Math.PI);
-                        EntityDeathWorm.this.renderYawOffset = EntityDeathWorm.this.rotationYaw;
-                    }
+                    Vector3d Vector3d1 = EntityDeathWorm.this.getMotion();
+                    EntityDeathWorm.this.rotationYaw = -((float) MathHelper.atan2(Vector3d1.x, Vector3d1.z)) * (180F / (float) Math.PI);
+                    EntityDeathWorm.this.renderYawOffset = EntityDeathWorm.this.rotationYaw;
                 }
 
             }

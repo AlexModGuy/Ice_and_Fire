@@ -139,7 +139,7 @@ public class BlockLaunchExplosion extends Explosion {
 
         for (int k2 = 0; k2 < list.size(); ++k2) {
             Entity entity = list.get(k2);
-            if (!entity.isImmuneToExplosions()) {
+            if (!entity.isImmuneToExplosions() &&(exploder == null || !entity.isEntityEqual(exploder))) {
                 double d12 = MathHelper.sqrt(entity.getDistanceSq(Vector3d)) / f3;
                 if (d12 <= 1.0D) {
                     double d5 = entity.getPosX() - this.x;

@@ -23,7 +23,6 @@ public class DeathWormAIFindSandTarget extends Goal {
     public DeathWormAIFindSandTarget(EntityDeathWorm mob, int range) {
         this.mob = mob;
         this.range = range;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
