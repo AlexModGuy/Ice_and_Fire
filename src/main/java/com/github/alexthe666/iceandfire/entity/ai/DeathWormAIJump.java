@@ -70,7 +70,7 @@ public class DeathWormAIJump extends JumpGoal {
      */
     public void startExecuting() {
         Direction direction = this.dolphin.getAdjustedHorizontalFacing();
-        float up = 0.4F + dolphin.getRNG().nextFloat() * 0.4F;
+        float up = (dolphin.getRenderScale() > 3 ? 0.7F : 0.4F) + dolphin.getRNG().nextFloat() * 0.4F;
         this.dolphin.setMotion(this.dolphin.getMotion().add((double) direction.getXOffset() * 0.6D, up, (double) direction.getZOffset() * 0.6D));
         this.dolphin.getNavigator().clearPath();
         this.dolphin.setWormJumping(30);

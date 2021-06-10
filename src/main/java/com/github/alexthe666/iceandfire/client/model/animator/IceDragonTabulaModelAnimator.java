@@ -94,7 +94,7 @@ public class IceDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator 
             }
             if (entity.modelDeadProgress > 0.0F) {
                 if (!isPartEqual(cube, EnumDragonAnimations.DEAD.icedragon_model.getCube(cube.boxName))) {
-                    transitionTo(cube, EnumDragonAnimations.DEAD.icedragon_model.getCube(cube.boxName), entity.modelDeadProgress, 20, cube.boxName.equals("ThighR") || cube.boxName.equals("ThighL"));
+                    transitionTo(cube, EnumDragonAnimations.DEAD.icedragon_model.getCube(cube.boxName), entity.prevModelDeadProgress + (entity.modelDeadProgress - entity.prevModelDeadProgress) * Minecraft.getInstance().getRenderPartialTicks(), 20, cube.boxName.equals("ThighR") || cube.boxName.equals("ThighL"));
                 }
                 if (cube.boxName.equals("BodyUpper")) {
                     cube.rotationPointY += 0.35F * entity.modelDeadProgress;

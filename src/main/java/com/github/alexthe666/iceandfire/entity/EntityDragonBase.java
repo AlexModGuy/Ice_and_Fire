@@ -165,6 +165,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     public int fireStopTicks;
     public int flyTicks;
     public float modelDeadProgress;
+    public float prevModelDeadProgress;
     public float ridingProgress;
     public float tackleProgress;
     public boolean isDaytime;
@@ -1640,6 +1641,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     @Override
     public void livingTick() {
         super.livingTick();
+        this.prevModelDeadProgress = this.modelDeadProgress;
         if (world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }

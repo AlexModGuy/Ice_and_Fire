@@ -322,7 +322,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     @Override
     public void setSpeed(final double speedFactor) {
         if (speedFactor > MAX_SPEED_ALLOWED || speedFactor < MIN_SPEED_ALLOWED) {
-            IceAndFire.LOGGER.error("Tried to set a bad speed:" + speedFactor + " for entity:" + ourEntity, new Exception());
+            IceAndFire.LOGGER.debug("Tried to set a bad speed:" + speedFactor + " for entity:" + ourEntity);
             return;
         }
         walkSpeedFactor = speedFactor;
