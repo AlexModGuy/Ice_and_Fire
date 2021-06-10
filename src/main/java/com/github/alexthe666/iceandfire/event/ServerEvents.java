@@ -231,7 +231,7 @@ public class ServerEvents {
     }
 
     public static boolean isAnimaniaChicken(Entity entity) {
-        return EntityTypeTags.getCollection().get(IafTagRegistry.CHICKENS).contains(entity.getType());
+        return entity != null && EntityTypeTags.getCollection().get(IafTagRegistry.CHICKENS).contains(entity.getType());
     }
 
     public static boolean isAnimaniaFerret(Entity entity) {
@@ -380,7 +380,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onLivingAttacked(LivingAttackEvent event) {
-        if (event.getSource().getTrueSource() != null) {
+        if (event.getSource() != null && event.getSource().getTrueSource() != null) {
             Entity attacker = event.getSource().getTrueSource();
             MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(attacker, MiscEntityProperties.class);
             if (properties != null && properties.inLoveTicks > 0) {
