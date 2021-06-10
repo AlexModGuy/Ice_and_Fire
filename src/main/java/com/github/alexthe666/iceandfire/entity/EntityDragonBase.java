@@ -1328,7 +1328,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean isTimeToWake() {
-        return this.world.isDaytime();
+        return this.world.isDaytime() || this.getCommand() == 2;
     }
 
     private boolean isStuck() {
