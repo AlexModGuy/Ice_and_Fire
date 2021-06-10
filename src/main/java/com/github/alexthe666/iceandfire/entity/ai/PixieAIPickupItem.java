@@ -38,11 +38,12 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
     public PixieAIPickupItem(EntityPixie creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
         super(creature, checkSight, onlyNearby);
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
+
         this.targetEntitySelector = new Predicate<ItemEntity>() {
             @Override
             public boolean apply(@Nullable ItemEntity item) {
 
-                return item instanceof ItemEntity && !item.getItem().isEmpty() && (item.getItem().getItem() == Items.CAKE && !creature.isTamed() || item.getItem().getItem() == Items.SUGAR && creature.isTamed() && creature.getHealth() < creature.getMaxHealth());
+                return item != null && !item.getItem().isEmpty() && (item.getItem().getItem() == Items.CAKE && !creature.isTamed() || item.getItem().getItem() == Items.SUGAR && creature.isTamed() && creature.getHealth() < creature.getMaxHealth());
             }
         };
         this.setMutexFlags(EnumSet.of(Flag.TARGET));
