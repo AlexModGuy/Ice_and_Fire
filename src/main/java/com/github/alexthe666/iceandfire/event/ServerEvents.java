@@ -218,16 +218,16 @@ public class ServerEvents {
     }
 
     public static boolean isLivestock(Entity entity) {
-        return EntityTypeTags.getCollection().get(IafTagRegistry.FEAR_DRAGONS).contains(entity.getType());
+        return entity != null && EntityTypeTags.getCollection().get(IafTagRegistry.FEAR_DRAGONS).contains(entity.getType());
 
     }
 
     public static boolean isVillager(Entity entity) {
-        return EntityTypeTags.getCollection().get(IafTagRegistry.VILLAGERS).contains(entity.getType());
+        return entity != null && EntityTypeTags.getCollection().get(IafTagRegistry.VILLAGERS).contains(entity.getType());
     }
 
     public static boolean isAnimaniaSheep(Entity entity) {
-        return EntityTypeTags.getCollection().get(IafTagRegistry.SHEEP).contains(entity.getType());
+        return entity != null && EntityTypeTags.getCollection().get(IafTagRegistry.SHEEP).contains(entity.getType());
     }
 
     public static boolean isAnimaniaChicken(Entity entity) {
@@ -235,7 +235,7 @@ public class ServerEvents {
     }
 
     public static boolean isAnimaniaFerret(Entity entity) {
-        return EntityTypeTags.getCollection().get(IafTagRegistry.SCARES_COCKATRICES).contains(entity.getType());
+        return entity != null && EntityTypeTags.getCollection().get(IafTagRegistry.SCARES_COCKATRICES).contains(entity.getType());
     }
 
     public static boolean isRidingOrBeingRiddenBy(Entity first, Entity entityIn) {
