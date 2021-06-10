@@ -71,6 +71,7 @@ public class ItemDragonHorn extends Item {
                 CompoundNBT newTag = new CompoundNBT();
                 newTag.putString("DragonHornEntityID", Registry.ENTITY_TYPE.getKey(target.getType()).toString());
                 newTag.put("EntityTag", entityTag);
+                newTag.putUniqueId("EntityUUID", target.getUniqueID());
                 trueStack.setTag(newTag);
                 playerIn.swingArm(hand);
                 playerIn.world.playSound(playerIn, playerIn.getPosition(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3, 0.75F);
@@ -96,6 +97,9 @@ public class ItemDragonHorn extends Item {
                     if (entity instanceof EntityDragonBase) {
                         EntityDragonBase dragon = (EntityDragonBase) entity;
                         dragon.readAdditional(stack.getTag().getCompound("EntityTag"));
+                    }
+                    if(stack.getTag().hasUniqueId("EntityUUID")){
+                        entity.setUniqueId(stack.getTag().getUniqueId("EntityUUID"));
                     }
                     entity.setLocationAndAngles(context.getPos().getX() + 0.5, context.getPos().getY() + 1, context.getPos().getZ() + 0.5, context.getPlayer().rotationYaw, 0);
                     if (world.addEntity(entity)) {
