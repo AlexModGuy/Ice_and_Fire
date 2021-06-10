@@ -52,7 +52,7 @@ public class PixieAISteal extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return !temptedEntity.isTamed() && temptedEntity.getHeldItemMainhand().isEmpty() && this.delayTemptCounter == 0;
+        return !temptedEntity.isTamed() && temptedEntity.getHeldItemMainhand().isEmpty() && this.delayTemptCounter == 0 && temptedEntity.stealCooldown == 0;
     }
 
     public void startExecuting() {
