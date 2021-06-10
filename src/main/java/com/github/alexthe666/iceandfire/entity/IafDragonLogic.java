@@ -425,7 +425,6 @@ public class IafDragonLogic {
             dragon.hoverProgress -= 2F;
         }
         boolean diving = dragon.isDiving();
-        dragon.prevDiveProgress = dragon.diveProgress;
         if (diving && dragon.diveProgress < 10.0F) {
             dragon.diveProgress += 1F;
         } else if (!diving && dragon.diveProgress > 0.0F) {

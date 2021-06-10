@@ -54,6 +54,7 @@ public class EntityIceDragon extends EntityDragonBase {
     private static final DataParameter<Boolean> SWIMMING = EntityDataManager.createKey(EntityIceDragon.class, DataSerializers.BOOLEAN);
     public static Animation ANIMATION_FIRECHARGE;
     public boolean isSwimming;
+    public float prevSwimProgress;
     public float swimProgress;
     public int ticksSwiming;
     public int swimCycle;
@@ -226,6 +227,7 @@ public class EntityIceDragon extends EntityDragonBase {
             }
         }
         boolean swimming = isInMaterialWater();
+        this.prevSwimProgress = swimProgress;
         if (swimming && swimProgress < 20.0F) {
             swimProgress += 0.5F;
         } else if (!swimming && swimProgress > 0.0F) {
