@@ -363,9 +363,6 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
             aiFlightLaunch = true;
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
-        if (this.getPosY() > IafConfig.stymphalianBirdFlightHeight) {
-            this.setPosition(this.getPosX(), IafConfig.stymphalianBirdFlightHeight, this.getPosZ());
-        }
     }
 
     public boolean isDirectPathBetweenPoints(Entity entity, Vector3d vec1, Vector3d vec2) {
