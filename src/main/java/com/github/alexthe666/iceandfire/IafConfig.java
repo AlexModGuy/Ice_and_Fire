@@ -157,6 +157,8 @@ public class IafConfig {
     public static double dangerousWorldGenDistanceLimit = 1000;
     public static double dangerousWorldGenSeparationLimit = 300;
     public static double dragonFlightSpeedMod = 1F;
+    public static double hippogryphFlightSpeedMod = 1F;
+    public static double hippocampusSwimSpeedMod = 1F;
     public static boolean generateGraveyards = true;
     public static int generateGraveyardChance = 16;
     public static double ghostMaxHealth = 30;
@@ -319,6 +321,8 @@ public class IafConfig {
             mobWhitelistedDimensions = ConfigHolder.SERVER.mobWhitelistDimensions.get();
             mobBlacklistedDimensions = ConfigHolder.SERVER.mobBlacklistDimensions.get();
             dragonFlightSpeedMod = ConfigHolder.SERVER.dragonFlightSpeedMod.get();
+            hippogryphFlightSpeedMod = ConfigHolder.SERVER.hippogryphFlightSpeedMod.get();
+            hippocampusSwimSpeedMod = ConfigHolder.SERVER.hippocampusSwimSpeedMod.get();
             generateGraveyards = ConfigHolder.SERVER.generateGraveyards.get();
             generateGraveyardChance = ConfigHolder.SERVER.generateGraveyardChance.get();
             ghostMaxHealth = ConfigHolder.SERVER.ghostMaxHealth.get();

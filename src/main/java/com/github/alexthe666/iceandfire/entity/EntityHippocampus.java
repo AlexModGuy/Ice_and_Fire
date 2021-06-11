@@ -768,7 +768,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     public double getRideSpeedModifier() {
-        return this.isInWater() ? 0.8F * IafConfig.dragonFlightSpeedMod : 0.55F;
+        return this.isInWater() ? 0.7F * IafConfig.hippocampusSwimSpeedMod : 0.55F;
     }
 
     class SwimmingMoveHelper extends MovementController {

@@ -646,7 +646,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
 
     @Override
     public double getFlightSpeedModifier() {
-        return 1;
+        return IafConfig.hippogryphFlightSpeedMod * 0.9F;
     }
 
     public boolean isFlying() {

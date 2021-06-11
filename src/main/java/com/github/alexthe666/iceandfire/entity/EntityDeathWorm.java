@@ -481,6 +481,9 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
         if (this.getWormJumping() == 0 && jumpProgress > 0F) {
             jumpProgress--;
         }
+        if(this.isInSand() && this.collidedHorizontally){
+            this.setMotion(this.getMotion().add(0, 0.05, 0));
+        }
         if (this.getWormJumping() > 0) {
             float f2 = (float) -((float) this.getMotion().y * (double) (180F / (float) Math.PI));
             this.rotationPitch = f2;
