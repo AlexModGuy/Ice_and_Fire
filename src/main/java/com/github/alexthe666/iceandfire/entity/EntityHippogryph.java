@@ -89,6 +89,8 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class EntityHippogryph extends TameableEntity implements ISyncMount, IAnimatedEntity, IDragonFlute, IVillagerFear, IAnimalFear, IDropArmor, IFlyingMount {
 
     private static final int FLIGHT_CHANCE_PER_TICK = 1200;
@@ -311,7 +313,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         return this.ticksExisted % 50 > 43;
     }
 
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
+    public ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         String s = TextFormatting.getTextWithoutFormattingCodes(player.getName().getUnformattedComponentText());
         boolean isDev = s.equals("Alexthe666") || s.equals("Raptorfarian") || s.equals("tweakbsd");
@@ -401,7 +403,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 }
             }
         }
-        return super.func_230254_b_(player, hand);
+        return super.getEntityInteractionResult(player, hand);
     }
 
     public void openGUI(PlayerEntity playerEntity) {
@@ -557,7 +559,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         }
         this.setCommand(compound.getInt("Command"));
 
-        if (this.isSitting()) {
+        if (this.isQueuedToSit()) {
             this.sitProgress = 20.0F;
         }
     }
@@ -595,7 +597,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         this.hasChestVarChanged = true;
     }
 
-    public boolean isSitting() {
+    public boolean isQueuedToSit() {
         if (world.isRemote) {
             boolean isSitting = (this.dataManager.get(TAMED).byteValue() & 1) != 0;
             this.isSitting = isSitting;
@@ -644,7 +646,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
 
     @Override
     public double getFlightSpeedModifier() {
-        return 1;
+        return IafConfig.hippogryphFlightSpeedMod * 0.9F;
     }
 
     public boolean isFlying() {
@@ -682,7 +684,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     public boolean canMove() {
-        return !this.isSitting() && this.getControllingPassenger() == null && sitProgress == 0;
+        return !this.isQueuedToSit() && this.getControllingPassenger() == null && sitProgress == 0;
     }
 
     @Nullable
@@ -702,7 +704,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
 
     @Nullable
     @Override
-    public AgeableEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageable) {
+    public AgeableEntity createChild(ServerWorld serverWorld, AgeableEntity ageable) {
         return null;
     }
 
@@ -746,7 +748,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return IafSoundRegistry.HIPPOGRYPH_HURT;
     }
 
@@ -833,13 +835,13 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             this.setAttackTarget(null);
         }
         if (!this.world.isRemote) {
-            if (this.isSitting() && (this.getCommand() != 1 || this.getControllingPassenger() != null)) {
+            if (this.isQueuedToSit() && (this.getCommand() != 1 || this.getControllingPassenger() != null)) {
                 this.setSitting(false);
             }
-            if (!this.isSitting() && this.getCommand() == 1 && this.getControllingPassenger() == null) {
+            if (!this.isQueuedToSit() && this.getCommand() == 1 && this.getControllingPassenger() == null) {
                 this.setSitting(true);
             }
-            if (this.isSitting()) {
+            if (this.isQueuedToSit()) {
                 this.getNavigator().clearPath();
             }
             if (this.rand.nextInt(900) == 0 && this.deathTime == 0) {
@@ -889,7 +891,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             }
             hasChestVarChanged = false;
         }
-        if (this.isFlying() && this.ticksExisted % 40 == 0 || this.isFlying() && this.isSitting()) {
+        if (this.isFlying() && this.ticksExisted % 40 == 0 || this.isFlying() && this.isQueuedToSit()) {
             this.setFlying(true);
         }
         if (!this.canMove() && this.getAttackTarget() != null) {
@@ -900,7 +902,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
 
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
-        boolean sitting = isSitting() && !isHovering() && !isFlying();
+        boolean sitting = isQueuedToSit() && !isHovering() && !isFlying();
         if (sitting && sitProgress < 20.0F) {
             sitProgress += 0.5F;
         } else if (!sitting && sitProgress > 0.0F) {
@@ -937,7 +939,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             this.setHovering(false);
         }
         if (this.isHovering()) {
-            if (this.isSitting()) {
+            if (this.isQueuedToSit()) {
                 this.setHovering(false);
             }
             this.hoverTicks++;
@@ -957,7 +959,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 }
             }
         }
-        if (this.isSitting()) {
+        if (this.isQueuedToSit()) {
             this.getNavigator().clearPath();
         }
         if (this.isOnGround() && flyTicks != 0) {
@@ -973,7 +975,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         if (this.isFlying()) {
             this.flyTicks++;
         }
-        if ((this.isHovering() || this.isFlying()) && this.isSitting()) {
+        if ((this.isHovering() || this.isFlying()) && this.isQueuedToSit()) {
             this.setFlying(false);
             this.setHovering(false);
         }
@@ -981,7 +983,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             this.setHovering(false);
             this.setFlying(false);
         }
-        if ((!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSitting() && this.canMove() && !this.isOverAir() || this.getPosY() < -1)) {
+        if ((!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isQueuedToSit() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isQueuedToSit() && this.canMove() && !this.isOverAir() || this.getPosY() < -1)) {
             this.setHovering(true);
             this.hoverTicks = 0;
             this.flyTicks = 0;

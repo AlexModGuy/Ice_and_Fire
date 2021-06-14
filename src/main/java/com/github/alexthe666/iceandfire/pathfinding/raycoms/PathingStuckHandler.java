@@ -236,10 +236,10 @@ public class PathingStuckHandler implements IStuckHandler
                 }
             }
         }
-        if (takeDamageOnCompleteStuck)
+        /*if (takeDamageOnCompleteStuck)
         {
             entity.attackEntityFrom(new EntityDamageSource("Stuck-damage", entity), entity.getMaxHealth() * damagePct);
-        }
+        }*/
 
         if (completeStuckBlockBreakRange > 0)
         {

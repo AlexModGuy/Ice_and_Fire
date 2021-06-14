@@ -41,8 +41,8 @@ public class RenderGhostChest extends TileEntityRenderer<TileEntityGhostChest> {
     private final ModelRenderer leftLatch;
 
 
-    public RenderGhostChest(TileEntityRendererDispatcher p_i226008_1_) {
-        super(p_i226008_1_);
+    public RenderGhostChest(TileEntityRendererDispatcher rendererDispatcherIn) {
+        super(rendererDispatcherIn);
         this.singleBottom = new ModelRenderer(64, 64, 0, 19);
         this.singleBottom.addBox(1.0F, 0.0F, 1.0F, 14.0F, 10.0F, 14.0F, 0.0F);
         this.singleLid = new ModelRenderer(64, 64, 0, 0);
@@ -125,15 +125,15 @@ public class RenderGhostChest extends TileEntityRenderer<TileEntityGhostChest> {
         chestBottom.render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
     }
 
-    private static ResourceLocation getChestMaterial(ChestType p_228772_0_, ResourceLocation p_228772_1_, ResourceLocation p_228772_2_, ResourceLocation p_228772_3_) {
-        switch(p_228772_0_) {
+    private static ResourceLocation getChestMaterial(ChestType chestType, ResourceLocation doubleMaterial, ResourceLocation leftMaterial, ResourceLocation rightMaterial) {
+        switch(chestType) {
             case LEFT:
-                return p_228772_2_;
+                return leftMaterial;
             case RIGHT:
-                return p_228772_3_;
+                return rightMaterial;
             case SINGLE:
             default:
-                return p_228772_1_;
+                return doubleMaterial;
         }
     }
 

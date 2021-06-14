@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.AxisAlignedBB;
 
 public class PixieAISteal extends Goal {
     private final EntityPixie temptedEntity;
@@ -32,11 +33,10 @@ public class PixieAISteal extends Goal {
     }
 
     public boolean shouldExecute() {
-
         if (!IafConfig.pixiesStealItems || !temptedEntity.getHeldItemMainhand().isEmpty() || temptedEntity.stealCooldown > 0) {
             return false;
         }
-        if (temptedEntity.getRNG().nextInt(15) == 0) {
+        if (temptedEntity.getRNG().nextInt(200) == 0) {
             return false;
         }
         if (temptedEntity.isTamed()) {
@@ -52,7 +52,7 @@ public class PixieAISteal extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
-        return !temptedEntity.isTamed() && temptedEntity.getHeldItemMainhand().isEmpty() && this.delayTemptCounter == 0;
+        return !temptedEntity.isTamed() && temptedEntity.getHeldItemMainhand().isEmpty() && this.delayTemptCounter == 0 && temptedEntity.stealCooldown == 0;
     }
 
     public void startExecuting() {
@@ -92,6 +92,10 @@ public class PixieAISteal extends Goal {
                 this.temptingPlayer.inventory.removeStackFromSlot(slot);
                 this.temptedEntity.flipAI(true);
                 this.temptedEntity.playSound(IafSoundRegistry.PIXIE_TAUNT, 1F, 1F);
+
+                for (EntityPixie pixie : this.temptingPlayer.world.getEntitiesWithinAABB(EntityPixie.class, temptedEntity.getBoundingBox().grow(40))) {
+                    pixie.stealCooldown = 1000 + pixie.getRNG().nextInt(3000);
+                }
                 if (temptingPlayer != null) {
                     this.temptingPlayer.addPotionEffect(new EffectInstance(this.temptedEntity.negativePotions[this.temptedEntity.getColor()], 100));
                 }

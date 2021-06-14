@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import javax.annotation.Nullable;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.google.common.collect.ImmutableList;
 
@@ -114,7 +115,11 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     public static EntityStoneStatue buildStatueEntity(LivingEntity parent){
         EntityStoneStatue statue = IafEntityRegistry.STONE_STATUE.create(parent.world);
         CompoundNBT entityTag = new CompoundNBT();
-        parent.writeWithoutTypeId(entityTag);
+        try{
+            parent.writeWithoutTypeId(entityTag);
+        }catch (Exception e){
+            IceAndFire.LOGGER.debug("Encountered issue creating stone statue from {}", parent);
+        }
         statue.setTrappedTag(entityTag);
         statue.setTrappedEntityTypeString(Registry.ENTITY_TYPE.getKey(parent.getType()).toString());
         statue.setTrappedEntityWidth(parent.getWidth());

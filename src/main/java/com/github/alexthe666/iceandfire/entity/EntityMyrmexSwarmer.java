@@ -37,6 +37,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexRoyal.AIFlyAtTarget;
+import com.github.alexthe666.iceandfire.entity.EntityMyrmexRoyal.AIFlyRandom;
+
 public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 
     private static final DataParameter<Optional<UUID>> SUMMONER_ID = EntityDataManager.createKey(EntityMyrmexSwarmer.class, DataSerializers.OPTIONAL_UNIQUE_ID);

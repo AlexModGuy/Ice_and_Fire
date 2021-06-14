@@ -10,11 +10,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockReader;
 
+import net.minecraft.block.AbstractBlock;
+
 public class BlockDreadSpawner extends SpawnerBlock implements IDreadBlock {
 
     public BlockDreadSpawner() {
         super(
-    		Block.Properties
+    		AbstractBlock.Properties
     			.create(Material.ROCK)
     			.hardnessAndResistance(10.0F, 10000F)
     			.sound(SoundType.METAL)

@@ -115,7 +115,7 @@ public class EntityPixie extends TameableEntity {
         if (world.isRemote) {
             boolean isSitting = (this.dataManager.get(TAMED).byteValue() & 1) != 0;
             this.isSitting = isSitting;
-            this.func_233687_w_(isSitting);
+            this.setSitting(isSitting);
             return isSitting;
         }
         return this.isSitting;
@@ -124,7 +124,7 @@ public class EntityPixie extends TameableEntity {
     public void setPixieSitting(boolean sitting) {
         if (!world.isRemote) {
             this.isSitting = sitting;
-            this.setSleeping(sitting);
+            this.setQueuedToSit(sitting);
         }
         byte b0 = this.dataManager.get(TAMED).byteValue();
         if (sitting) {
@@ -135,7 +135,7 @@ public class EntityPixie extends TameableEntity {
     }
 
     @Override
-    public boolean isSitting() {
+    public boolean isQueuedToSit() {
         return this.isPixieSitting();
     }
 
@@ -203,7 +203,7 @@ public class EntityPixie extends TameableEntity {
     protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
+    public ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand) {
         if (this.isOwner(player)) {
 
             if (player.getHeldItem(hand).getItem() == Items.SUGAR && this.getHealth() < this.getMaxHealth()) {
@@ -255,7 +255,7 @@ public class EntityPixie extends TameableEntity {
             //player.addStat(ModAchievements.jarPixie);
             this.remove();
         }
-        return super.func_230254_b_(player, hand);
+        return super.getEntityInteractionResult(player, hand);
     }
 
     public void flipAI(boolean flee) {
@@ -407,17 +407,15 @@ public class EntityPixie extends TameableEntity {
     public void writeAdditional(CompoundNBT compound) {
         compound.putInt("Color", this.getColor());
         compound.putInt("Command", this.getCommand());
-
         compound.putInt("StealCooldown", this.stealCooldown);
         compound.putInt("HoldingTicks", this.ticksHeldItemFor);
         compound.putBoolean("PixieSitting", this.isPixieSitting());
-
         super.writeAdditional(compound);
     }
 
     @Nullable
     @Override
-    public AgeableEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageable) {
+    public AgeableEntity createChild(ServerWorld serverWorld, AgeableEntity ageable) {
         return null;
     }
 
@@ -439,7 +437,7 @@ public class EntityPixie extends TameableEntity {
     }
 
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return IafSoundRegistry.PIXIE_HURT;
     }
 

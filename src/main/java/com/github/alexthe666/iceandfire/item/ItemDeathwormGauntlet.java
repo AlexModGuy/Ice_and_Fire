@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -77,8 +77,8 @@ public class ItemDeathwormGauntlet extends Item implements ICustomRendered {
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity LivingEntity, int timeLeft) {
         MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(LivingEntity, MiscEntityProperties.class);
         if (properties != null && properties.specialWeaponDmg > 0) {
-            stack.damageItem(properties.specialWeaponDmg, LivingEntity, (p_219999_1_) -> {
-                p_219999_1_.sendBreakAnimation(LivingEntity.getActiveHand());
+            stack.damageItem(properties.specialWeaponDmg, LivingEntity, (player) -> {
+                player.sendBreakAnimation(LivingEntity.getActiveHand());
             });
             properties.specialWeaponDmg = 0;
         }

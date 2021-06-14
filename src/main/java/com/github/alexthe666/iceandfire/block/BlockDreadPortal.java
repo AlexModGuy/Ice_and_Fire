@@ -23,6 +23,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockDreadPortal extends ContainerBlock implements IDreadBlock, ICustomRendered {
 
     public BlockDreadPortal() {
@@ -32,7 +34,7 @@ public class BlockDreadPortal extends ContainerBlock implements IDreadBlock, ICu
     			.variableOpacity()
     			.hardnessAndResistance(-1, 100000)
     			.harvestTool(ToolType.PICKAXE)
-    			.setLightLevel((p_235454_0_) -> { return 1; })
+    			.setLightLevel((state) -> { return 1; })
     			.tickRandomly()
 		);
 
@@ -124,7 +126,7 @@ public class BlockDreadPortal extends ContainerBlock implements IDreadBlock, ICu
         return false;
     }
 
-    public BlockRenderType getRenderType(BlockState p_149645_1_) {
+    public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 

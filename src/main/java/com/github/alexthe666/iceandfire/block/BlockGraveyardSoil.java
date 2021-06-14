@@ -17,6 +17,8 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockGraveyardSoil extends Block {
 
     public BlockGraveyardSoil() {

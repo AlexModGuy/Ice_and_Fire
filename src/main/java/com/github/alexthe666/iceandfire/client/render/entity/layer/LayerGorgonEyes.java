@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
-import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.client.model.ModelGorgon;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderGorgon;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;

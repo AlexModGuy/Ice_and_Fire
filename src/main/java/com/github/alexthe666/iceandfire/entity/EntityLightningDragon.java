@@ -466,7 +466,7 @@ public class EntityLightningDragon extends EntityDragonBase {
     }
 
     @Override
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return this.isTeen() ? IafSoundRegistry.LIGHTNINGDRAGON_TEEN_HURT : this.isAdult() ? IafSoundRegistry.LIGHTNINGDRAGON_ADULT_HURT : IafSoundRegistry.LIGHTNINGDRAGON_CHILD_HURT;
     }
 
@@ -529,7 +529,7 @@ public class EntityLightningDragon extends EntityDragonBase {
         } else {
             tick = 10;
         }
-        float epicRoarProg = this.getAnimation() == ANIMATION_EPIC_ROAR && !this.isSitting() ? tick * 0.1F : 0;
+        float epicRoarProg = this.getAnimation() == ANIMATION_EPIC_ROAR && !this.isQueuedToSit() ? tick * 0.1F : 0;
         float sleepProg = this.sleepProgress * 0.025F;
         float pitchY = 0;
         float pitchAdjustment = 0;

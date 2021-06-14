@@ -12,12 +12,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
+import net.minecraft.block.AbstractBlock;
+
 public class BlockFallingGeneric extends FallingBlock {
     public Item itemBlock;
 
     public BlockFallingGeneric(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound) {
         super(
-    		Block.Properties
+    		AbstractBlock.Properties
     			.create(materialIn)
 				.sound(sound)
 				.hardnessAndResistance(hardness, resistance)
@@ -32,7 +34,7 @@ public class BlockFallingGeneric extends FallingBlock {
     @SuppressWarnings("deprecation")
     public BlockFallingGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery) {
         super(
-    		Block.Properties
+    		AbstractBlock.Properties
     			.create(materialIn)
     			.sound(sound)
     			.hardnessAndResistance(hardness, resistance)

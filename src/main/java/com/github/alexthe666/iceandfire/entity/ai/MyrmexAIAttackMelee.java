@@ -10,6 +10,8 @@ import net.minecraft.util.Hand;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class MyrmexAIAttackMelee extends Goal {
     protected EntityMyrmexBase myrmex;
     private int attackTick;

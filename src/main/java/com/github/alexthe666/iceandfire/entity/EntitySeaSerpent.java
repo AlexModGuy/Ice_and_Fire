@@ -681,7 +681,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
 
     @Nullable
     @Override
-    public AgeableEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageable) {
+    public AgeableEntity createChild(ServerWorld serverWorld, AgeableEntity ageable) {
         return null;
     }
 
@@ -825,7 +825,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     }
 
     @Override
-    public void func_241847_a(ServerWorld world, LivingEntity entity) {
+    public void onKillEntity(ServerWorld world, LivingEntity entity) {
         this.attackDecision = this.getRNG().nextBoolean();
     }
 

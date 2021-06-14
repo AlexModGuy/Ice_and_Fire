@@ -6,6 +6,8 @@ import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockDreadWoodLog extends RotatedPillarBlock implements IDragonProof, IDreadBlock {
 
     public BlockDreadWoodLog() {

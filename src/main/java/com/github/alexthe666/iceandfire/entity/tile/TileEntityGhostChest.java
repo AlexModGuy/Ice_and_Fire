@@ -19,8 +19,8 @@ public class TileEntityGhostChest extends ChestTileEntity {
         super(IafTileEntityRegistry.GHOST_CHEST);
     }
 
-    public void read(BlockState p_230337_1_, CompoundNBT p_230337_2_) {
-        super.read(p_230337_1_, p_230337_2_);
+    public void read(BlockState state, CompoundNBT nbt) {
+        super.read(state, nbt);
     }
 
     public CompoundNBT write(CompoundNBT compound) {

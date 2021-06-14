@@ -19,6 +19,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class DragonAIMate extends Goal {
     private static final BlockState NEST = IafBlockRegistry.NEST.getDefaultState();
     private final EntityDragonBase dragon;

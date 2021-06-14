@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.props;
 
-import com.github.alexthe666.citadel.server.entity.EntityProperties;
+import com.github.alexthe666.citadel.server.entity.datatracker.EntityProperties;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 
 import net.minecraft.entity.LivingEntity;

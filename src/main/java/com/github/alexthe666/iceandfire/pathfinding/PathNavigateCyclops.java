@@ -43,13 +43,13 @@ public class PathNavigateCyclops extends GroundPathNavigator {
         return super.getPathToPos(pos, i);
     }
 
-    public Path getPathToEntity(Entity entityIn, int i) {
+    public Path pathfind(Entity entityIn, int i) {
         this.targetPosition = entityIn.getPosition();
-        return super.getPathToEntity(entityIn, i);
+        return super.pathfind(entityIn, i);
     }
 
     public boolean tryMoveToEntityLiving(Entity entityIn, double speedIn) {
-        Path path = this.getPathToEntity(entityIn, 0);
+        Path path = this.pathfind(entityIn, 0);
         if (path != null) {
             return this.setPath(path, speedIn);
         } else {
@@ -206,7 +206,7 @@ public class PathNavigateCyclops extends GroundPathNavigator {
                     double d1 = (double) l + 0.5D - vec31.z;
 
                     if (d0 * p_179683_8_ + d1 * p_179683_10_ >= 0.0D) {
-                        PathNodeType pathnodetype = this.nodeProcessor.getPathNodeType(this.world, k, y - 1, l, this.entity, sizeX, sizeY, sizeZ, true, true);
+                        PathNodeType pathnodetype = this.nodeProcessor.determineNodeType(this.world, k, y - 1, l, this.entity, sizeX, sizeY, sizeZ, true, true);
 
                         if (pathnodetype == PathNodeType.WATER) {
                             return false;
@@ -220,7 +220,7 @@ public class PathNavigateCyclops extends GroundPathNavigator {
                             return false;
                         }
 
-                        pathnodetype = this.nodeProcessor.getPathNodeType(this.world, k, y, l, this.entity, sizeX, sizeY, sizeZ, true, true);
+                        pathnodetype = this.nodeProcessor.determineNodeType(this.world, k, y, l, this.entity, sizeX, sizeY, sizeZ, true, true);
                         float f = this.entity.getPathPriority(pathnodetype);
 
                         if (f < 0.0F || f >= 8.0F) {

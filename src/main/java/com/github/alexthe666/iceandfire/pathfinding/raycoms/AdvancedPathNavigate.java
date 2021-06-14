@@ -303,7 +303,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     }
 
     @Override
-    public Path getPathToPos(final BlockPos pos, final int p_179680_2_) {
+    public Path getPathToPos(final BlockPos pos, final int accuracy) {
         return null;
     }
 
@@ -322,7 +322,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     @Override
     public void setSpeed(final double speedFactor) {
         if (speedFactor > MAX_SPEED_ALLOWED || speedFactor < MIN_SPEED_ALLOWED) {
-            IceAndFire.LOGGER.error("Tried to set a bad speed:" + speedFactor + " for entity:" + ourEntity, new Exception());
+            IceAndFire.LOGGER.debug("Tried to set a bad speed:" + speedFactor + " for entity:" + ourEntity);
             return;
         }
         walkSpeedFactor = speedFactor;

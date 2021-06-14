@@ -11,6 +11,8 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class MyrmexAIStoreBabies extends Goal {
     private final EntityMyrmexWorker myrmex;
     private final double movementSpeed;

@@ -54,6 +54,7 @@ public class EntityIceDragon extends EntityDragonBase {
     private static final DataParameter<Boolean> SWIMMING = EntityDataManager.createKey(EntityIceDragon.class, DataSerializers.BOOLEAN);
     public static Animation ANIMATION_FIRECHARGE;
     public boolean isSwimming;
+    public float prevSwimProgress;
     public float swimProgress;
     public int ticksSwiming;
     public int swimCycle;
@@ -197,7 +198,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
         if (!world.isRemote && this.isInLava() && this.isAllowedToTriggerFlight() && !this.isModelDead()) {
             this.setHovering(true);
-            this.setSleeping(false);
+            this.setQueuedToSit(false);
             this.setSitting(false);
             this.flyHovering = 0;
             this.flyTicks = 0;
@@ -226,6 +227,7 @@ public class EntityIceDragon extends EntityDragonBase {
             }
         }
         boolean swimming = isInMaterialWater();
+        this.prevSwimProgress = swimProgress;
         if (swimming && swimProgress < 20.0F) {
             swimProgress += 0.5F;
         } else if (!swimming && swimProgress > 0.0F) {
@@ -504,7 +506,7 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     @Override
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return this.isTeen() ? IafSoundRegistry.ICEDRAGON_TEEN_HURT : this.isAdult() ? IafSoundRegistry.ICEDRAGON_ADULT_HURT : IafSoundRegistry.ICEDRAGON_CHILD_HURT;
     }
 

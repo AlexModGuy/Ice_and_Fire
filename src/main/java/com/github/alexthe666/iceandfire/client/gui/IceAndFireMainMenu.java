@@ -202,7 +202,7 @@ public class IceAndFireMainMenu extends MainMenuScreen {
                 float f2 = (float) 60 - partialTicks;
                 int color = 0X9C8B7B;
                 int opacity = 10 + (int) (255 * enscription.alpha * globalAlpha);
-            //    fontrenderer.func_238405_a_(ms, enscription.text, (int) (enscription.x * widthScale) + middleX, (int) (enscription.y * widthScale) + middleY, color | (opacity << 24));
+            //    fontrenderer.drawStringWithShadow(ms, enscription.text, (int) (enscription.x * widthScale) + middleX, (int) (enscription.y * widthScale) + middleY, color | (opacity << 24));
             }
             for (Picture picture : drawnPictures) {
                 float alpha = (picture.alpha * globalAlpha + 0.01F);

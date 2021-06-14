@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
-import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
@@ -162,8 +162,8 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         return super.canSpawn(worldIn, spawnReasonIn);
     }
 
-    public static boolean canAmphithereSpawnOn(EntityType<EntityAmphithere> p_223317_0_, IWorld p_223317_1_, SpawnReason reason, BlockPos p_223317_3_, Random p_223317_4_) {
-        Block block = p_223317_1_.getBlockState(p_223317_3_.down()).getBlock();
+    public static boolean canAmphithereSpawnOn(EntityType<EntityAmphithere> parrotIn, IWorld worldIn, SpawnReason reason, BlockPos p_223317_3_, Random random) {
+        Block block = worldIn.getBlockState(p_223317_3_.down()).getBlock();
         return (block.isIn(BlockTags.LEAVES) || block == Blocks.GRASS_BLOCK || block.isIn(BlockTags.LOGS) || block == Blocks.AIR);
     }
 
@@ -175,7 +175,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
             }
 
             BlockState blockstate = worldIn.getBlockState(blockpos.down());
-            if (blockstate.isIn(Blocks.GRASS_BLOCK) || blockstate.isIn(BlockTags.LEAVES)) {
+            if (blockstate.matchesBlock(Blocks.GRASS_BLOCK) || blockstate.isIn(BlockTags.LEAVES)) {
                 return true;
             }
         }
@@ -220,7 +220,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         }
     }
 
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
+    public ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
 
         if (itemstack != null && itemstack.getItem() == Items.COOKIE) {
@@ -242,7 +242,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
             }
             return ActionResultType.SUCCESS;
         }
-        if (super.func_230254_b_(player, hand) == ActionResultType.PASS) {
+        if (super.getEntityInteractionResult(player, hand) == ActionResultType.PASS) {
             if (itemstack != null && itemstack.getItem() == IafItemRegistry.DRAGON_STAFF && this.isOwner(player)) {
                 if (player.isSneaking()) {
                     BlockPos pos = this.getPosition();
@@ -373,22 +373,22 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         if (this.isInLove()) {
             this.setFlying(false);
         }
-        if (this.isSitting() && this.getAttackTarget() != null) {
+        if (this.isQueuedToSit() && this.getAttackTarget() != null) {
             this.setAttackTarget(null);
         }
         boolean flapping = this.isFlapping();
         boolean flying = this.isFlying() && this.isOverAir() || (this.isOverAir() && !onLeaves());
         boolean diving = flying && this.getMotion().y <= -0.1F || this.isFallen;
-        boolean sitting = isSitting() && !isFlying();
+        boolean sitting = isQueuedToSit() && !isFlying();
         boolean notGrounded = flying || this.getAnimation() == ANIMATION_WING_BLAST;
         if (!world.isRemote) {
-            if (this.isSitting() && (this.getCommand() != 1 || this.getControllingPassenger() != null)) {
+            if (this.isQueuedToSit() && (this.getCommand() != 1 || this.getControllingPassenger() != null)) {
                 this.setSitting(false);
             }
-            if (!this.isSitting() && this.getCommand() == 1 && this.getControllingPassenger() == null) {
+            if (!this.isQueuedToSit() && this.getCommand() == 1 && this.getControllingPassenger() == null) {
                 this.setSitting(true);
             }
-            if (this.isSitting()) {
+            if (this.isQueuedToSit()) {
                 this.getNavigator().clearPath();
                 //TODO
                 //this.getMoveHelper().action = MovementController.Action.WAIT;
@@ -543,7 +543,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         this.flapTicks = 20;
     }
 
-    public boolean isSitting() {
+    public boolean isQueuedToSit() {
         if (world.isRemote) {
             boolean isSitting = (this.dataManager.get(TAMED).byteValue() & 1) != 0;
             this.isSitting = isSitting;
@@ -925,7 +925,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
 
     @Nullable
     @Override
-    public AgeableEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageableEntity) {
+    public AgeableEntity createChild(ServerWorld serverWorld, AgeableEntity ageableEntity) {
         EntityAmphithere amphithere = new EntityAmphithere(IafEntityRegistry.AMPHITHERE, world);
         amphithere.setVariant(this.getVariant());
         return amphithere;
@@ -954,16 +954,16 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
-    public void travel(Vector3d p_213352_1_) {
+    public void travel(Vector3d travelVector) {
         if (!this.canMove() && !this.isBeingRidden()) {
-            super.travel(p_213352_1_.mul(0, 1, 0));
+            super.travel(travelVector.mul(0, 1, 0));
             return;
         }
-        super.travel(p_213352_1_);
+        super.travel(travelVector);
     }
 
     public boolean canMove() {
-        return this.getControllingPassenger() == null && sitProgress == 0 && !this.isSitting();
+        return this.getControllingPassenger() == null && sitProgress == 0 && !this.isQueuedToSit();
     }
 
     @OnlyIn(Dist.CLIENT)

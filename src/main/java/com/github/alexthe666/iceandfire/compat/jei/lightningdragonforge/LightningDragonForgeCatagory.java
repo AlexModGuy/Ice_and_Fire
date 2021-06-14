@@ -14,6 +14,7 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
 public class LightningDragonForgeCatagory implements IRecipeCategory<DragonForgeRecipe> {
@@ -53,12 +54,11 @@ public class LightningDragonForgeCatagory implements IRecipeCategory<DragonForge
 
     @Override
     public void setIngredients(DragonForgeRecipe dragonForgeRecipe, IIngredients iIngredients) {
-        List<ItemStack> ingredientsList = new ArrayList<>();
+        List<Ingredient> ingredientsList = new ArrayList<>();
         ingredientsList.add(dragonForgeRecipe.getInput());
         ingredientsList.add(dragonForgeRecipe.getBlood());
-        iIngredients.setInputs(VanillaTypes.ITEM, ingredientsList);
+        iIngredients.setInputIngredients(ingredientsList);
         iIngredients.setOutput(VanillaTypes.ITEM, dragonForgeRecipe.getOutput());
-
     }
 
     @Override

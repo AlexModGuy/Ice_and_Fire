@@ -16,9 +16,9 @@ public class CockatriceAIAggroLook extends NearestAttackableTargetGoal<PlayerEnt
     private int aggroTime;
     private int teleportTime;
 
-    public CockatriceAIAggroLook(EntityCockatrice p_i45842_1_) {
-        super(p_i45842_1_, PlayerEntity.class, false);
-        this.cockatrice = p_i45842_1_;
+    public CockatriceAIAggroLook(EntityCockatrice endermanIn) {
+        super(endermanIn, PlayerEntity.class, false);
+        this.cockatrice = endermanIn;
     }
 
     /**

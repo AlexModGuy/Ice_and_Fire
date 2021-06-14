@@ -11,6 +11,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class AquaticAITempt extends Goal {
     private final MobEntity temptedEntity;
     private final double speed;

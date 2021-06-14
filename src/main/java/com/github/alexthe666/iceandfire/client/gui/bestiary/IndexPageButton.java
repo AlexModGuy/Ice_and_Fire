@@ -23,15 +23,15 @@ public class IndexPageButton extends Button {
         this.height = 32;
     }
 
-    public void renderButton(MatrixStack p_230430_1_, int mouseX, int mouseY, float partial) {
+    public void renderWidget(MatrixStack matrixStack, int mouseX, int mouseY, float partial) {
         if (this.active) {
             FontRenderer fontrenderer = IafConfig.useVanillaFont ? Minecraft.getInstance().fontRenderer : (FontRenderer) IceAndFire.PROXY.getFontRenderer();
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             Minecraft.getInstance().getTextureManager().bindTexture(new ResourceLocation("iceandfire:textures/gui/bestiary/widgets.png"));
             boolean flag = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-            this.blit(p_230430_1_, this.x, this.y, 0, flag ? 32 : 0, this.width, this.height  );
+            this.blit(matrixStack, this.x, this.y, 0, flag ? 32 : 0, this.width, this.height  );
             int j =  flag ? 0XFAE67D : 0X303030;
-            fontrenderer.func_238422_b_(p_230430_1_, this.getMessage().func_241878_f(), (this.x + this.width / 2  - fontrenderer.getStringWidth(this.getMessage().getString()) / 2), this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
+            fontrenderer.func_238422_b_(matrixStack, this.getMessage().func_241878_f(), (this.x + this.width / 2  - fontrenderer.getStringWidth(this.getMessage().getString()) / 2), this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
         }
     }
 }

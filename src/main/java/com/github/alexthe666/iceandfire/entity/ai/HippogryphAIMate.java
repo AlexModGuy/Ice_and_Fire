@@ -16,6 +16,8 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class HippogryphAIMate extends Goal {
     private final EntityHippogryph hippo;
     private final Class<? extends AnimalEntity> mateClass;
@@ -37,7 +39,7 @@ public class HippogryphAIMate extends Goal {
     }
 
     public boolean shouldExecute() {
-        if (!this.hippo.isInLove() || this.hippo.isSitting()) {
+        if (!this.hippo.isInLove() || this.hippo.isQueuedToSit()) {
             return false;
         } else {
             this.targetMate = this.getNearbyMate();

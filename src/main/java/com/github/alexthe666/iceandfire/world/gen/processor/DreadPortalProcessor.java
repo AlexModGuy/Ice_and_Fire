@@ -36,7 +36,7 @@ public class DreadPortalProcessor extends StructureProcessor {
 
     @Nullable
     @Override
-    public Template.BlockInfo process(IWorldReader p_230386_1_, BlockPos pos, BlockPos p_230386_3_, Template.BlockInfo blockInfoIn, Template.BlockInfo p_230386_5_, PlacementSettings settings, @Nullable Template template) {
+    public Template.BlockInfo process(IWorldReader world, BlockPos pos, BlockPos p_230386_3_, Template.BlockInfo blockInfoIn, Template.BlockInfo p_230386_5_, PlacementSettings settings, @Nullable Template template) {
         Random random = settings.getRandom(pos);
         if (random.nextFloat() <= integrity) {
             if (blockInfoIn.state.getBlock() == Blocks.DIAMOND_BLOCK) {

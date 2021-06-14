@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
-import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIAirTarget;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIFlee;
@@ -363,9 +363,6 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
             aiFlightLaunch = true;
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
-        if (this.getPosY() > IafConfig.stymphalianBirdFlightHeight) {
-            this.setPosition(this.getPosX(), IafConfig.stymphalianBirdFlightHeight, this.getPosZ());
-        }
     }
 
     public boolean isDirectPathBetweenPoints(Entity entity, Vector3d vec1, Vector3d vec2) {

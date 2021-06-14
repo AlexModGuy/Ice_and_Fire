@@ -267,8 +267,8 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
         return this.cachedEntity;
     }
 
-    public void setNextSpawnData(WeightedSpawnerEntity p_184993_1_) {
-        this.spawnData = p_184993_1_;
+    public void setNextSpawnData(WeightedSpawnerEntity nextSpawnData) {
+        this.spawnData = nextSpawnData;
     }
 
     public abstract void broadcastEvent(int id);

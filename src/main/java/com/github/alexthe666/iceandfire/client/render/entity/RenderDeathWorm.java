@@ -32,7 +32,11 @@ public class RenderDeathWorm extends MobRenderer<EntityDeathWorm, ModelDeathWorm
 
 
     protected int getBlockLight(EntityDeathWorm entityIn, BlockPos partialTicks) {
-        return entityIn.isBurning() ? 15 : entityIn.getWormBrightness(entityIn.world.getLightFor(LightType.BLOCK, partialTicks));
+        return entityIn.isBurning() ? 15 : entityIn.getWormBrightness(false);
+    }
+
+    protected int getSkyLight(EntityDeathWorm entity, BlockPos pos) {
+        return entity.getWormBrightness(true);
     }
 
     @Nullable

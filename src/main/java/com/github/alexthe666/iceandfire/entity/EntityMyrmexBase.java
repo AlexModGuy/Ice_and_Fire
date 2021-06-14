@@ -388,7 +388,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
 
     @Nullable
     @Override
-    public AgeableEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageable) {
+    public AgeableEntity createChild(ServerWorld serverWorld, AgeableEntity ageable) {
         return null;
     }
 
@@ -448,7 +448,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         super.onDeath(cause);
     }
 
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
+    public ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         if (!shouldHaveNormalAI()) {
             return ActionResultType.PASS;
@@ -462,10 +462,10 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         }
         boolean flag = itemstack.getItem() == Items.NAME_TAG || itemstack.getItem() == Items.LEAD;
         if (flag) {
-            return super.func_230254_b_(player, hand);
+            return super.getEntityInteractionResult(player, hand);
         } else if (this.getGrowthStage() >= 2 && this.isAlive() && !this.isChild() && !player.isSneaking()) {
             if (this.getOffers().isEmpty()) {
-                return super.func_230254_b_(player, hand);
+                return super.getEntityInteractionResult(player, hand);
             } else {
                 if (!this.world.isRemote && (this.getAttackTarget() == null || !this.getAttackTarget().equals(player))&& hand == Hand.MAIN_HAND) {
                     if (this.getHive()!=null && !this.getHive().isPlayerReputationTooLowToTrade(player.getUniqueID())) {
@@ -478,7 +478,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
                 return ActionResultType.PASS;
             }
         } else {
-            return super.func_230254_b_(player, hand);
+            return super.getEntityInteractionResult(player, hand);
         }
     }
 
@@ -773,9 +773,9 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     @Nullable
-    public Entity changeDimension(ServerWorld p_241206_1_, net.minecraftforge.common.util.ITeleporter teleporter) {
+    public Entity changeDimension(ServerWorld server, net.minecraftforge.common.util.ITeleporter teleporter) {
         this.resetCustomer();
-        return super.changeDimension(p_241206_1_, teleporter);
+        return super.changeDimension(server, teleporter);
     }
 
     public Inventory getVillagerInventory() {

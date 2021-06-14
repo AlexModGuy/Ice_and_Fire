@@ -82,7 +82,7 @@ public class PathNavigateDeathWormLand extends PathNavigator {
     /**
      * Returns the path to the given LivingEntity. Args : entity
      */
-    public Path getPathToEntity(Entity entityIn, int i) {
+    public Path pathfind(Entity entityIn, int i) {
         return this.getPathToPos(entityIn.getPosition(), i);
     }
 
@@ -212,12 +212,12 @@ public class PathNavigateDeathWormLand extends PathNavigator {
                     double d1 = (double) l + 0.5D - vec31.z;
 
                     if (d0 * p_179683_8_ + d1 * p_179683_10_ >= 0.0D) {
-                        PathNodeType pathnodetype = this.nodeProcessor.getPathNodeType(this.world, k, y - 1, l, this.entity, sizeX, sizeY, sizeZ, true, true);
+                        PathNodeType pathnodetype = this.nodeProcessor.determineNodeType(this.world, k, y - 1, l, this.entity, sizeX, sizeY, sizeZ, true, true);
                         if (pathnodetype == PathNodeType.LAVA) {
                             return false;
                         }
 
-                        pathnodetype = this.nodeProcessor.getPathNodeType(this.world, k, y, l, this.entity, sizeX, sizeY, sizeZ, true, true);
+                        pathnodetype = this.nodeProcessor.determineNodeType(this.world, k, y, l, this.entity, sizeX, sizeY, sizeZ, true, true);
                         float f = this.entity.getPathPriority(pathnodetype);
 
                         if (f < 0.0F || f >= 8.0F) {

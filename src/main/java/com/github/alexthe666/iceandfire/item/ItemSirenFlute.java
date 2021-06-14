@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
-import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
@@ -90,8 +90,8 @@ public class ItemSirenFlute extends Item {
                 if (theirProperties != null) {
                     theirProperties.inLoveTicks = 600;
                 }
-                itemStackIn.damageItem(2, player, (p_220046_0_) -> {
-                    p_220046_0_.sendBreakAnimation(EquipmentSlotType.MAINHAND);
+                itemStackIn.damageItem(2, player, (entity) -> {
+                    entity.sendBreakAnimation(EquipmentSlotType.MAINHAND);
                 });
             }
         }

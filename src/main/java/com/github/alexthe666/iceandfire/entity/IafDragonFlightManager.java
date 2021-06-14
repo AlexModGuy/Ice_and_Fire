@@ -19,6 +19,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 
+import net.minecraft.entity.ai.controller.MovementController.Action;
+
 public class IafDragonFlightManager {
     private EntityDragonBase dragon;
     private Vector3d target;
@@ -175,7 +177,7 @@ public class IafDragonFlightManager {
                 PathNavigator pathnavigate = this.mob.getNavigator();
                 if (pathnavigate != null) {
                     NodeProcessor nodeprocessor = pathnavigate.getNodeProcessor();
-                    if (nodeprocessor != null && nodeprocessor.getPathNodeType(this.mob.world, MathHelper.floor(this.mob.getPosX() + (double) f7), MathHelper.floor(this.mob.getPosY()), MathHelper.floor(this.mob.getPosZ() + (double) f8)) != PathNodeType.WALKABLE) {
+                    if (nodeprocessor != null && nodeprocessor.getFloorNodeType(this.mob.world, MathHelper.floor(this.mob.getPosX() + (double) f7), MathHelper.floor(this.mob.getPosY()), MathHelper.floor(this.mob.getPosZ() + (double) f8)) != PathNodeType.WALKABLE) {
                         this.moveForward = 1.0F;
                         this.moveStrafe = 0.0F;
                         f1 = f;

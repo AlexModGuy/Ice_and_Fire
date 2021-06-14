@@ -14,16 +14,16 @@ import net.minecraft.util.math.vector.Vector3d;
 public class SeaSerpentAIJump  extends JumpGoal {
     private static final int[] JUMP_DISTANCES = new int[]{0, 2, 4, 5, 6, 7};
     private final EntitySeaSerpent serpent;
-    private final int field_220712_c;
+    private final int chance;
     private boolean inWater;
 
-    public SeaSerpentAIJump(EntitySeaSerpent dolphin, int p_i50329_2_) {
+    public SeaSerpentAIJump(EntitySeaSerpent dolphin, int chance) {
         this.serpent = dolphin;
-        this.field_220712_c = p_i50329_2_;
+        this.chance = chance;
     }
 
     public boolean shouldExecute() {
-        if (this.serpent.getRNG().nextInt(this.field_220712_c) != 0 || serpent.getAttackTarget() != null || serpent.jumpCooldown != 0) {
+        if (this.serpent.getRNG().nextInt(this.chance) != 0 || serpent.getAttackTarget() != null || serpent.jumpCooldown != 0) {
             return false;
         } else {
             Direction direction = this.serpent.getAdjustedHorizontalFacing();

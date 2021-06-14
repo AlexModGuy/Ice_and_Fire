@@ -64,7 +64,7 @@ public class WorldGenLightningDragonRoosts extends Feature<NoFeatureConfig> {
             dragon.homePos = position;
             dragon.hasHomePosition = true;
             dragon.setHunger(50);
-            dragon.setSleeping(true);
+            dragon.setQueuedToSit(true);
             worldIn.addEntity(dragon);
         }
         {

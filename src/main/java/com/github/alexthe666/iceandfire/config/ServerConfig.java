@@ -151,6 +151,8 @@ public class ServerConfig {
     public ForgeConfigSpec.ConfigValue<List<? extends String>> mobWhitelistDimensions;
 
     public final ForgeConfigSpec.DoubleValue dragonFlightSpeedMod;
+    public final ForgeConfigSpec.DoubleValue hippogryphFlightSpeedMod;
+    public final ForgeConfigSpec.DoubleValue hippocampusSwimSpeedMod;
     public final ForgeConfigSpec.DoubleValue ghostMaxHealth;
     public final ForgeConfigSpec.DoubleValue ghostAttackStrength;
     public final ForgeConfigSpec.BooleanValue generateGraveyards;
@@ -235,6 +237,8 @@ public class ServerConfig {
         this.dragonAttackDamageIce = buildDouble(builder, "Dragon Attack Damage(Ice breath)", "all", 2.5F, 0, 10000, "Damage dealt from a successful ice breath attack. Attack Damage is scaled to by age, so a stage 5 dragon will deal 5x as much as this number");
         this.dragonAttackDamageLightning = buildDouble(builder, "Dragon Attack Damage(Lightning breath)", "all", 3.5F, 0, 10000, "Damage dealt from a successful lightning breath attack. Attack Damage is scaled to by age, so a stage 5 dragon will deal 5x as much as this number");
         this.dragonFlightSpeedMod = buildDouble(builder, "Dragon Flight Speed Modifier", "all", 1F, 0.0F, 2.0F, "Change this to slow down or speed up dragon or amphithere flight.");
+        this.hippogryphFlightSpeedMod = buildDouble(builder, "Hippogryph Flight Speed Modifier", "all", 1F, 0.0F, 2.0F, "Change this to slow down or speed up hippogryph flight.");
+        this.hippocampusSwimSpeedMod = buildDouble(builder, "Hippocampus Swim Speed Modifier", "all", 1F, 0.0F, 2.0F, "Change this to slow down or speed up hippocampus swimming.");
         this.dragonMovedWronglyFix = buildBoolean(builder, "Dragon Moved Wrongly Error Fix", "all", false, "Enable this if your server is being bombarded with moved wrongly or moved too fast console messages. REQUIRES RESTART!");
         builder.pop();
         builder.push("Behaviour");

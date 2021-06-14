@@ -52,9 +52,9 @@ public class RenderDragonBase extends MobRenderer<EntityDragonBase, SegmentedMod
     @Override
     protected void preRenderCallback(EntityDragonBase entity, MatrixStack matrixStackIn, float partialTickTime) {
         this.shadowSize = entity.getRenderSize() / 3;
-        matrixStackIn.scale(shadowSize, shadowSize, shadowSize);
         float f7 = entity.prevDragonPitch + (entity.getDragonPitch() - entity.prevDragonPitch) * partialTickTime;
         matrixStackIn.rotate(new Quaternion(Vector3f.XP, f7, true));
+        matrixStackIn.scale(shadowSize, shadowSize, shadowSize);
     }
 
 

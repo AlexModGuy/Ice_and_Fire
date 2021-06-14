@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity.props;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.alexthe666.citadel.server.entity.EntityProperties;
+import com.github.alexthe666.citadel.server.entity.datatracker.EntityProperties;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

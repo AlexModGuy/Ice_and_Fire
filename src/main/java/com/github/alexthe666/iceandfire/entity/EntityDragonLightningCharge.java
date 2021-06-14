@@ -58,7 +58,7 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
     }
 
     public void tick() {
-        Entity shootingEntity = this.func_234616_v_();
+        Entity shootingEntity = this.getShooter();
         this.extinguish();
         if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.getPosition())) {
             super.tick();
@@ -110,13 +110,13 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
     }
 
     protected boolean canHitMob(Entity hitMob) {
-        Entity shooter = func_234616_v_();
+        Entity shooter = getShooter();
         return hitMob != this && super.func_230298_a_(hitMob) && !(shooter == null || hitMob.isOnSameTeam(shooter)) && !(hitMob instanceof EntityDragonPart);
     }
 
     @Override
     protected void onImpact(RayTraceResult movingObject) {
-        Entity shootingEntity = this.func_234616_v_();
+        Entity shootingEntity = this.getShooter();
         boolean flag = this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING);
         if (!this.world.isRemote) {
             if (movingObject.getType() == RayTraceResult.Type.ENTITY) {

@@ -8,6 +8,8 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class DragonAIEscort extends Goal {
     private final EntityDragonBase dragon;
     private final double movementSpeed;
@@ -35,7 +37,7 @@ public class DragonAIEscort extends Goal {
             }
             if ((dist > 30 || this.dragon.getOwner().getPosY() - this.dragon.getPosY() > 8) && !this.dragon.isFlying() && !this.dragon.isHovering() && dragon.isAllowedToTriggerFlight()) {
                 this.dragon.setHovering(true);
-                this.dragon.setSleeping(false);
+                this.dragon.setQueuedToSit(false);
                 this.dragon.setSitting(false);
                 this.dragon.flyTicks = 0;
             }

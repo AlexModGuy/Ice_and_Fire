@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.github.alexthe666.citadel.server.entity.EntityProperties;
+import com.github.alexthe666.citadel.server.entity.datatracker.EntityProperties;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.message.MessageAddChainedEntity;
 import com.github.alexthe666.iceandfire.message.MessageRemoveChainedEntity;

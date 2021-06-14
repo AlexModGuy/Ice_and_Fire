@@ -59,15 +59,15 @@ public class EntityTideTrident extends TridentEntity {
 
 
     @Override
-    protected void onEntityHit(EntityRayTraceResult p_213868_1_) {
-        Entity entity = p_213868_1_.getEntity();
+    protected void onEntityHit(EntityRayTraceResult result) {
+        Entity entity = result.getEntity();
         float f = 12.0F;
         if (entity instanceof LivingEntity) {
             LivingEntity livingentity = (LivingEntity) entity;
             f += EnchantmentHelper.getModifierForCreature(this.thrownStack, livingentity.getCreatureAttribute());
         }
 
-        Entity entity1 = this.func_234616_v_();
+        Entity entity1 = this.getShooter();
         DamageSource damagesource = DamageSource.causeTridentDamage(this, entity1 == null ? this : entity1);
         try {
             Field dealtDamageField = ObfuscationReflectionHelper.findField(EntityTideTrident.class, "field_226571_aq_");

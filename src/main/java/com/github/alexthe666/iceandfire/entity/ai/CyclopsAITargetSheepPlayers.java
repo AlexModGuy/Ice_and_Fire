@@ -8,6 +8,8 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class CyclopsAITargetSheepPlayers<T extends LivingEntity> extends NearestAttackableTargetGoal {
 
     public CyclopsAITargetSheepPlayers(MobEntity goalOwnerIn, Class targetClassIn, boolean checkSight) {

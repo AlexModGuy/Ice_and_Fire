@@ -18,7 +18,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class ParticleSirenAppearance extends Particle {
-    private final Model field_228342_a_ = new ModelSiren();
+    private final Model model = new ModelSiren();
     private int sirenType;
     public ParticleSirenAppearance(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int sirenType) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn);
@@ -41,7 +41,7 @@ public class ParticleSirenAppearance extends Particle {
         matrixstack.translate(0.0D, -1.101F, 1.5D);
         IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
         IVertexBuilder ivertexbuilder = irendertypebuffer$impl.getBuffer(RenderType.getEntityTranslucent(RenderSiren.getSirenOverlayTexture(sirenType)));
-        this.field_228342_a_.render(matrixstack, ivertexbuilder, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, f1);
+        this.model.render(matrixstack, ivertexbuilder, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, f1);
         irendertypebuffer$impl.finish();
     }
 }

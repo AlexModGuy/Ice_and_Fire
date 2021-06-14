@@ -20,6 +20,8 @@ import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super ItemEntity> targetEntitySelector;
@@ -36,11 +38,12 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
     public PixieAIPickupItem(EntityPixie creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
         super(creature, checkSight, onlyNearby);
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
+
         this.targetEntitySelector = new Predicate<ItemEntity>() {
             @Override
             public boolean apply(@Nullable ItemEntity item) {
 
-                return item instanceof ItemEntity && !item.getItem().isEmpty() && (item.getItem().getItem() == Items.CAKE && !creature.isTamed() || item.getItem().getItem() == Items.SUGAR && creature.isTamed() && creature.getHealth() < creature.getMaxHealth());
+                return item != null && !item.getItem().isEmpty() && (item.getItem().getItem() == Items.CAKE && !creature.isTamed() || item.getItem().getItem() == Items.SUGAR && creature.isTamed() && creature.getHealth() < creature.getMaxHealth());
             }
         };
         this.setMutexFlags(EnumSet.of(Flag.TARGET));
@@ -95,7 +98,9 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
                 if (!pixie.isTamed() && this.targetEntity.getThrowerId() != null && this.goalOwner.world.getPlayerByUuid(this.targetEntity.getThrowerId()) != null) {
                     PlayerEntity owner = this.goalOwner.world.getPlayerByUuid(this.targetEntity.getThrowerId());
                     pixie.setTamed(true);
-                    pixie.setOwnerId(owner.getUniqueID());
+                    if(owner != null){
+                        pixie.setTamedBy(owner);
+                    }
                     pixie.setPixieSitting(true);
                     pixie.setOnGround(true);  //  Entity.onGround = true
                 }

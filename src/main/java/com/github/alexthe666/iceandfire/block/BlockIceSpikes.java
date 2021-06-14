@@ -22,6 +22,8 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockIceSpikes extends Block {
     protected static final VoxelShape AABB = Block.makeCuboidShape(1, 0, 1, 15, 8, 15);
     public Item itemBlock;

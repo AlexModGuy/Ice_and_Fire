@@ -82,7 +82,7 @@ public class LegSolver {
 
         private float getDistance(World world, BlockPos pos) {
             BlockState state = world.getBlockState(pos);
-            VoxelShape aabb = state.getCollisionShape(world, pos);
+            VoxelShape aabb = state.getCollisionShapeUncached(world, pos);
             return aabb.isEmpty() ? 1 : 1 - Math.min((float) aabb.max(Direction.Axis.Y, 0.5D, 0.5D), 1);
         }
 

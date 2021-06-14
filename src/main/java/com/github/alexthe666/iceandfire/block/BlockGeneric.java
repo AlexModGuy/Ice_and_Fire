@@ -11,10 +11,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.common.ToolType;
 
+import net.minecraft.block.AbstractBlock;
+
 public class BlockGeneric extends Block {
     public BlockGeneric(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound) {
         super(
-    		Block.Properties
+    		AbstractBlock.Properties
     			.create(materialIn)
     			.sound(sound)
     			.hardnessAndResistance(hardness, resistance)
@@ -28,7 +30,7 @@ public class BlockGeneric extends Block {
 
     public BlockGeneric(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery) {
         super(
-    		Block.Properties
+    		AbstractBlock.Properties
     			.create(materialIn)
     			.sound(sound)
     			.hardnessAndResistance(hardness, resistance)

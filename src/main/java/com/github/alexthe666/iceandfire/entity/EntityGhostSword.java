@@ -99,7 +99,7 @@ public class EntityGhostSword  extends AbstractArrowEntity {
 
             if (raytraceresult != null && raytraceresult.getType() == RayTraceResult.Type.ENTITY) {
                 Entity entity = ((EntityRayTraceResult)raytraceresult).getEntity();
-                Entity entity1 = this.func_234616_v_();
+                Entity entity1 = this.getShooter();
                 if (entity instanceof PlayerEntity && entity1 instanceof PlayerEntity && !((PlayerEntity)entity1).canAttackPlayer((PlayerEntity)entity)) {
                     raytraceresult = null;
                     entityraytraceresult = null;
@@ -138,7 +138,7 @@ public class EntityGhostSword  extends AbstractArrowEntity {
 
     protected void arrowHit(LivingEntity living) {
         super.arrowHit(living);
-        if (living != null && (this.func_234616_v_() == null || !living.isEntityEqual(this.func_234616_v_()))) {
+        if (living != null && (this.getShooter() == null || !living.isEntityEqual(this.getShooter()))) {
             if (living instanceof PlayerEntity) {
                 this.damageShield((PlayerEntity) living, (float) this.getDamage());
             }
@@ -198,8 +198,8 @@ public class EntityGhostSword  extends AbstractArrowEntity {
         this.knockbackStrength = knockbackStrengthIn;
     }
 
-    protected void onEntityHit(EntityRayTraceResult p_213868_1_) {
-        Entity entity = p_213868_1_.getEntity();
+    protected void onEntityHit(EntityRayTraceResult result) {
+        Entity entity = result.getEntity();
         float f = (float)this.getMotion().length();
         int i = MathHelper.ceil(Math.max((double)f * this.getDamage(), 0.0D));
         if (this.getPierceLevel() > 0) {
@@ -223,7 +223,7 @@ public class EntityGhostSword  extends AbstractArrowEntity {
             i += this.rand.nextInt(i / 2 + 2);
         }
 
-        Entity entity1 = this.func_234616_v_();
+        Entity entity1 = this.getShooter();
         DamageSource damagesource = DamageSource.MAGIC;
         if (entity1 != null) {
             if (entity1 instanceof LivingEntity) {
@@ -260,7 +260,7 @@ public class EntityGhostSword  extends AbstractArrowEntity {
 
                 this.arrowHit(livingentity);
                 if (entity1 != null && livingentity != entity1 && livingentity instanceof PlayerEntity && entity1 instanceof ServerPlayerEntity) {
-                    ((ServerPlayerEntity)entity1).connection.sendPacket(new SChangeGameStatePacket(SChangeGameStatePacket.field_241770_g_, 0.0F));
+                    ((ServerPlayerEntity)entity1).connection.sendPacket(new SChangeGameStatePacket(SChangeGameStatePacket.HIT_PLAYER_ARROW, 0.0F));
                 }
 
                 if (!entity.isAlive() && this.hitEntities != null) {

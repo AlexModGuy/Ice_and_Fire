@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.message;
 
 import java.util.function.Supplier;
 
-import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
 
 import net.minecraft.entity.Entity;

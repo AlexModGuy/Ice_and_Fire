@@ -9,6 +9,8 @@ import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class MyrmexAIDefendHive extends TargetGoal {
     EntityMyrmexBase myrmex;
     LivingEntity villageAgressorTarget;

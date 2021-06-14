@@ -18,6 +18,8 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockMyrmexBiolight extends BushBlock {
 
     public static final BooleanProperty CONNECTED_DOWN = BooleanProperty.create("down");
@@ -30,7 +32,7 @@ public class BlockMyrmexBiolight extends BushBlock {
 				.doesNotBlockMovement()
 				.variableOpacity()
 				.hardnessAndResistance(0)
-				.setLightLevel((p_235454_0_) -> { return 7; })
+				.setLightLevel((state) -> { return 7; })
 				.sound(SoundType.PLANT).tickRandomly()
 		);
 

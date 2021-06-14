@@ -15,12 +15,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockBurntTorch extends TorchBlock implements IDreadBlock, IWallBlock {
 
     public BlockBurntTorch() {
         super(
     		Properties.create(Material.WOOD)
-	    		.setLightLevel((p_235454_0_) -> { return 0; })
+	    		.setLightLevel((state) -> { return 0; })
 	    		.sound(SoundType.WOOD)
 	    		.notSolid()
 	    		.variableOpacity()

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import com.github.alexthe666.citadel.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
@@ -38,6 +38,7 @@ import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
+import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenFireDragonCave;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenIceDragonCave;
 import com.google.common.base.Predicate;
@@ -92,6 +93,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
@@ -123,6 +125,11 @@ public class ServerEvents {
         }
     };
     private Random rand = new Random();
+
+    @SubscribeEvent
+    public static void onAddReloadListener(AddReloadListenerEvent event) {
+        event.addListener(new IafRecipeRegistry());
+    }
 
     @SubscribeEvent
     public static void onPlayerLeftClick(PlayerInteractEvent.LeftClickEmpty event) {
@@ -211,24 +218,24 @@ public class ServerEvents {
     }
 
     public static boolean isLivestock(Entity entity) {
-        return EntityTypeTags.getCollection().get(IafTagRegistry.FEAR_DRAGONS).contains(entity.getType());
+        return entity != null && EntityTypeTags.getCollection().get(IafTagRegistry.FEAR_DRAGONS).contains(entity.getType());
 
     }
 
     public static boolean isVillager(Entity entity) {
-        return EntityTypeTags.getCollection().get(IafTagRegistry.VILLAGERS).contains(entity.getType());
+        return entity != null && EntityTypeTags.getCollection().get(IafTagRegistry.VILLAGERS).contains(entity.getType());
     }
 
     public static boolean isAnimaniaSheep(Entity entity) {
-        return EntityTypeTags.getCollection().get(IafTagRegistry.SHEEP).contains(entity.getType());
+        return entity != null && EntityTypeTags.getCollection().get(IafTagRegistry.SHEEP).contains(entity.getType());
     }
 
     public static boolean isAnimaniaChicken(Entity entity) {
-        return EntityTypeTags.getCollection().get(IafTagRegistry.CHICKENS).contains(entity.getType());
+        return entity != null && EntityTypeTags.getCollection().get(IafTagRegistry.CHICKENS).contains(entity.getType());
     }
 
     public static boolean isAnimaniaFerret(Entity entity) {
-        return EntityTypeTags.getCollection().get(IafTagRegistry.SCARES_COCKATRICES).contains(entity.getType());
+        return entity != null && EntityTypeTags.getCollection().get(IafTagRegistry.SCARES_COCKATRICES).contains(entity.getType());
     }
 
     public static boolean isRidingOrBeingRiddenBy(Entity first, Entity entityIn) {
@@ -247,9 +254,9 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onArrowCollide(ProjectileImpactEvent event) {
-        if (event.getEntity() instanceof AbstractArrowEntity && ((AbstractArrowEntity) event.getEntity()).func_234616_v_() != null) {
+        if (event.getEntity() instanceof AbstractArrowEntity && ((AbstractArrowEntity) event.getEntity()).getShooter() != null) {
             if (event.getRayTraceResult() instanceof EntityRayTraceResult && ((EntityRayTraceResult) event.getRayTraceResult()).getEntity() != null) {
-                Entity shootingEntity = ((AbstractArrowEntity) event.getEntity()).func_234616_v_();
+                Entity shootingEntity = ((AbstractArrowEntity) event.getEntity()).getShooter();
                 Entity shotEntity = ((EntityRayTraceResult) event.getRayTraceResult()).getEntity();
                 if (shootingEntity instanceof LivingEntity && isRidingOrBeingRiddenBy(shootingEntity, shotEntity)) {
                     if (shotEntity instanceof TameableEntity && ((TameableEntity) shotEntity).isTamed() && shotEntity.isOnSameTeam(shootingEntity)) {
@@ -373,7 +380,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onLivingAttacked(LivingAttackEvent event) {
-        if (event.getSource().getTrueSource() != null) {
+        if (event.getSource() != null && event.getSource().getTrueSource() != null) {
             Entity attacker = event.getSource().getTrueSource();
             MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(attacker, MiscEntityProperties.class);
             if (properties != null && properties.inLoveTicks > 0) {
@@ -511,11 +518,11 @@ public class ServerEvents {
     @SubscribeEvent
     public void onEntityUseItem(PlayerInteractEvent.RightClickItem event) {
         if (event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().rotationPitch > 87 && event.getEntityLiving().getRidingEntity() != null && event.getEntityLiving().getRidingEntity() instanceof EntityDragonBase) {
-            ((EntityDragonBase) event.getEntityLiving().getRidingEntity()).func_230254_b_((PlayerEntity) event.getEntityLiving(), event.getHand());
+            ((EntityDragonBase) event.getEntityLiving().getRidingEntity()).getEntityInteractionResult((PlayerEntity) event.getEntityLiving(), event.getHand());
         }
         if (event.getEntityLiving() instanceof EntityDragonBase && !event.getEntityLiving().isAlive()) {
             event.setResult(Event.Result.DENY);
-            ((EntityDragonBase) event.getEntityLiving()).func_230254_b_(event.getPlayer(), event.getHand());
+            ((EntityDragonBase) event.getEntityLiving()).getEntityInteractionResult(event.getPlayer(), event.getHand());
         }
     }
 
@@ -775,7 +782,7 @@ public class ServerEvents {
                     if (entity instanceof EntityDragonBase) {
                         EntityDragonBase dragon = (EntityDragonBase) entity;
                         if (!dragon.isTamed() && !dragon.isModelDead() && !dragon.isOwner(event.getPlayer()) && !event.getPlayer().isCreative()) {
-                            dragon.setSleeping(false);
+                            dragon.setQueuedToSit(false);
                             dragon.setSitting(false);
                             dragon.setAttackTarget(event.getPlayer());
                         }
@@ -800,7 +807,7 @@ public class ServerEvents {
                     if (entity instanceof EntityDragonBase) {
                         EntityDragonBase dragon = (EntityDragonBase) entity;
                         if (!dragon.isTamed() && !dragon.isModelDead() && !dragon.isOwner(event.getPlayer()) && !event.getPlayer().isCreative()) {
-                            dragon.setSleeping(false);
+                            dragon.setQueuedToSit(false);
                             dragon.setSitting(false);
                             dragon.setAttackTarget(event.getPlayer());
                         }

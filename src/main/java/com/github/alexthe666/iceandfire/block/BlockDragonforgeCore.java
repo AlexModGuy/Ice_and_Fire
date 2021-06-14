@@ -26,6 +26,8 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof, INoTab {
     private static boolean keepInventory;
     private int isFire;
@@ -38,7 +40,7 @@ public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof
     			.variableOpacity()
     			.hardnessAndResistance(40, 500)
     			.sound(SoundType.METAL)
-    			.setLightLevel((p_235454_0_) -> { return activated ? 15 : 0; })
+    			.setLightLevel((state) -> { return activated ? 15 : 0; })
 		);
 
         String disabled = activated ? "" : "_disabled";

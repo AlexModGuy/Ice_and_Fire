@@ -7,6 +7,8 @@ import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.GroundPathNavigator;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class SirenAIVanillaSwimming extends Goal {
     private final EntitySiren entity;
 

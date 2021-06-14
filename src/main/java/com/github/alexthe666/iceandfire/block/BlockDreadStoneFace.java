@@ -16,12 +16,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 
+import net.minecraft.block.AbstractBlock;
+
 public class BlockDreadStoneFace extends HorizontalBlock implements IDreadBlock, IDragonProof {
     public static final BooleanProperty PLAYER_PLACED = BooleanProperty.create("player_placed");
 
     public BlockDreadStoneFace() {
         super(
-    		Block.Properties
+    		AbstractBlock.Properties
     			.create(Material.ROCK)
     			.sound(SoundType.STONE)
     			.hardnessAndResistance(-1F, 10000F)
