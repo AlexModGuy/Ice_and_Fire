@@ -107,28 +107,25 @@ public class LayerDragonEyes extends LayerRenderer<EntityDragonBase, SegmentedMo
         });
     }
 
-    public boolean isPartEqual(AdvancedModelBox original, AdvancedModelBox pose) {
-        return pose != null && pose.rotateAngleX == original.defaultRotationX && pose.rotateAngleY == original.defaultRotationY && pose.rotateAngleZ == original.defaultRotationZ;
+    public boolean isAngleEqual(AdvancedModelBox original, AdvancedModelBox pose) {
+        return pose != null && pose.rotateAngleX == original.rotateAngleX && pose.rotateAngleY == original.rotateAngleY && pose.rotateAngleZ == original.rotateAngleZ;
     }
     public boolean isPositionEqual(AdvancedModelBox original, AdvancedModelBox pose) {
-        return pose.rotationPointX == original.defaultPositionX && pose.rotationPointY == original.defaultPositionY && pose.rotationPointZ == original.defaultPositionZ;
+        return pose.rotationPointX == original.rotationPointX && pose.rotationPointY == original.rotationPointY && pose.rotationPointZ == original.rotationPointZ;
     }
 
     public void copyPositions(TabulaModel model, TabulaModel modelTo) {
         for (AdvancedModelBox cube : model.getCubes().values()) {
             AdvancedModelBox modelToCube = modelTo.getCube(cube.boxName);
-            if (!isPartEqual(cube,modelToCube)) {
+            if (!isAngleEqual(cube,modelToCube)) {
                 cube.rotateAngleX = modelToCube.rotateAngleX;
                 cube.rotateAngleY = modelToCube.rotateAngleY;
                 cube.rotateAngleZ = modelToCube.rotateAngleZ;
             }
             if (!isPositionEqual(cube,modelToCube)) {
-                float toX = modelToCube.rotationPointX;
-                float toY = modelToCube.rotationPointY;
-                float toZ = modelToCube.rotationPointZ;
-                cube.rotationPointX = toX;
-                cube.rotationPointY = toY;
-                cube.rotationPointZ = toZ;
+                cube.rotationPointX = modelToCube.rotationPointX;
+                cube.rotationPointY = modelToCube.rotationPointY;
+                cube.rotationPointZ= modelToCube.rotationPointZ;
             }
 
         }
