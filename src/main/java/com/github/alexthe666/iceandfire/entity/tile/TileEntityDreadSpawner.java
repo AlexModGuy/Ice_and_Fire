@@ -6,13 +6,14 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.spawner.AbstractSpawner;
 
-public class TileEntityDreadSpawner extends TileEntity implements ITickableTileEntity {
+public class TileEntityDreadSpawner extends MobSpawnerTileEntity implements ITickableTileEntity {
     private final DreadSpawnerBaseLogic spawnerLogic = new DreadSpawnerBaseLogic() {
         public void broadcastEvent(int id) {
             TileEntityDreadSpawner.this.world.addBlockEvent(TileEntityDreadSpawner.this.pos, Blocks.SPAWNER, id, 0);
@@ -37,7 +38,7 @@ public class TileEntityDreadSpawner extends TileEntity implements ITickableTileE
     };
 
     public TileEntityDreadSpawner() {
-        super(IafTileEntityRegistry.DREAD_SPAWNER);
+        super();
     }
 
     public void read(BlockState blockstate, CompoundNBT compound) {
