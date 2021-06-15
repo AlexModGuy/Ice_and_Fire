@@ -67,6 +67,15 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
         }
         return attributeModifierMultimap;
     }
+
+    @Override
+    public int getMaxDamage(ItemStack stack) {
+        if (this.slot !=null) {
+            return (this.getArmorMaterial()).getDurability(this.slot);
+        }
+        return super.getMaxDamage(stack);
+    }
+
     @OnlyIn(Dist.CLIENT)
     @Nullable
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {

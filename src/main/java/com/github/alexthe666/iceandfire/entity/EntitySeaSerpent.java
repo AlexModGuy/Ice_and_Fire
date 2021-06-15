@@ -401,7 +401,6 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
 
     private void setSeaSerpentScale(float scale) {
         this.dataManager.set(SCALE, Float.valueOf(scale));
-        this.updateAttributes();
     }
 
     public int getVariant() {
@@ -664,6 +663,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         } else {
             this.setSeaSerpentScale(1.5F + this.getRNG().nextFloat() * 4.0F);
         }
+        this.updateAttributes();
         return spawnDataIn;
     }
 
@@ -677,6 +677,7 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
         } else {
             this.setSeaSerpentScale(1.5F + random.nextFloat() * 4.0F);
         }
+        this.updateAttributes();
     }
 
     @Nullable
