@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.spawner.AbstractSpawner;
 
-public class TileEntityDreadSpawner extends MobSpawnerTileEntity implements ITickableTileEntity {
+public class TileEntityDreadSpawner extends TileEntity implements ITickableTileEntity {
     private final DreadSpawnerBaseLogic spawnerLogic = new DreadSpawnerBaseLogic() {
         public void broadcastEvent(int id) {
             TileEntityDreadSpawner.this.world.addBlockEvent(TileEntityDreadSpawner.this.pos, Blocks.SPAWNER, id, 0);
@@ -38,7 +38,7 @@ public class TileEntityDreadSpawner extends MobSpawnerTileEntity implements ITic
     };
 
     public TileEntityDreadSpawner() {
-        super();
+        super(IafTileEntityRegistry.DREAD_SPAWNER);
     }
 
     public void read(BlockState blockstate, CompoundNBT compound) {
