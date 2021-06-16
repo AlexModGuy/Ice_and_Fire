@@ -23,13 +23,10 @@ repositories{
         url = "https://dvs1.progwml6.com/files/maven/"
     }
     maven {
-        name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
-    }
-    maven {
         name = "CurseMaven"
         url = "https://www.cursemaven.com"
     }
+
 }
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
