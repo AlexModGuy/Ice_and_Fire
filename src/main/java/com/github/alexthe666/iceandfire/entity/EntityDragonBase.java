@@ -1472,7 +1472,9 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     protected void updatePreyInMouth(Entity prey) {
+        if (this.getAnimation() != ANIMATION_SHAKEPREY){
         this.setAnimation(ANIMATION_SHAKEPREY);
+        }
         if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null) {
             prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof PlayerEntity ? 17F : (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 4);
             prey.stopRiding();
