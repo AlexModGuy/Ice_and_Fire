@@ -109,6 +109,7 @@ public class ServerConfig {
     public final ForgeConfigSpec.IntValue myrmexColonyGenChance ;
     public final ForgeConfigSpec.IntValue myrmexColonySize;
     public final ForgeConfigSpec.DoubleValue myrmexBaseAttackStrength ;
+    public final ForgeConfigSpec.IntValue myrmexMaximumWanderRadius;
     public final ForgeConfigSpec.BooleanValue spawnAmphitheres;
     public final ForgeConfigSpec.IntValue amphithereSpawnRate;
     public final ForgeConfigSpec.IntValue amphithereVillagerSearchLength ;
@@ -124,6 +125,7 @@ public class ServerConfig {
     public final ForgeConfigSpec.DoubleValue dragonsteelBaseDamage;
     public final ForgeConfigSpec.IntValue dragonsteelBaseArmor;
     public final ForgeConfigSpec.IntValue dragonsteelBaseDurability;
+    public final ForgeConfigSpec.IntValue dragonsteelBaseDurabilityEquipment;
     public final ForgeConfigSpec.BooleanValue dragonMovedWronglyFix;
     public final ForgeConfigSpec.BooleanValue weezerTinkers;
     public final ForgeConfigSpec.DoubleValue dragonBlockBreakingDropChance;
@@ -237,8 +239,6 @@ public class ServerConfig {
         this.dragonAttackDamageIce = buildDouble(builder, "Dragon Attack Damage(Ice breath)", "all", 2.5F, 0, 10000, "Damage dealt from a successful ice breath attack. Attack Damage is scaled to by age, so a stage 5 dragon will deal 5x as much as this number");
         this.dragonAttackDamageLightning = buildDouble(builder, "Dragon Attack Damage(Lightning breath)", "all", 3.5F, 0, 10000, "Damage dealt from a successful lightning breath attack. Attack Damage is scaled to by age, so a stage 5 dragon will deal 5x as much as this number");
         this.dragonFlightSpeedMod = buildDouble(builder, "Dragon Flight Speed Modifier", "all", 1F, 0.0F, 2.0F, "Change this to slow down or speed up dragon or amphithere flight.");
-        this.hippogryphFlightSpeedMod = buildDouble(builder, "Hippogryph Flight Speed Modifier", "all", 1F, 0.0F, 2.0F, "Change this to slow down or speed up hippogryph flight.");
-        this.hippocampusSwimSpeedMod = buildDouble(builder, "Hippocampus Swim Speed Modifier", "all", 1F, 0.0F, 2.0F, "Change this to slow down or speed up hippocampus swimming.");
         this.dragonMovedWronglyFix = buildBoolean(builder, "Dragon Moved Wrongly Error Fix", "all", false, "Enable this if your server is being bombarded with moved wrongly or moved too fast console messages. REQUIRES RESTART!");
         builder.pop();
         builder.push("Behaviour");
@@ -332,6 +332,7 @@ public class ServerConfig {
         this.myrmexColonyGenChance = buildInt(builder, "Myrmex Colony Gen Chance", "all", 150, 1, 10000, "One out of this number chance per chunk to generate a myrmex hive.");
         this.myrmexColonySize = buildInt(builder, "Myrmex Colony Max Size", "all", 80, 10, 10000, "How many maximum individuals a myrmex colony can have.");
         this.myrmexBaseAttackStrength = buildDouble(builder, "Myrmex Base Attack Strength", "all", 3, 1, 10000, "Base Myrmex(worker) attack strength");
+        this.myrmexMaximumWanderRadius = buildInt(builder,"Myrmex Maximum Wnader Radius","all",4000,100,20000,"The maximum radius myrmex area allowed to wander/forage");
         builder.pop();
         builder.push("Amphitheres");
         this.spawnAmphitheres = buildBoolean(builder, "Spawn Amphitheres", "all", true, "True if amphitheres are allowed to spawn");
@@ -349,17 +350,22 @@ public class ServerConfig {
         this.seaSerpentBaseHealth = buildDouble(builder, "Sea Serpent Base Health", "all", 20, 1, 10000, "Default sea serpent health, this is scaled to the sea serpent's particular size");
         this.seaSerpentAttackStrength = buildDouble(builder, "Sea Serpent Base Attack Strength", "all", 4, 1, 10000, "Default sea serpent attack strength, this is scaled to the sea serpent's particular size");
         builder.pop();
-        builder.push("Others");
+        builder.push("Hippocampus");
         this.spawnHippocampus = buildBoolean(builder, "Spawn Hippocampus", "all", true, "True if hippocampi are allowed to spawn");
         this.hippocampusSpawnChance = buildInt(builder, "Spawn Hippocampus Chance", "all", 40, 1, 10000, "1 out of this number chance per chunk for generation");
-
+        this.hippocampusSwimSpeedMod = buildDouble(builder, "Hippocampus Swim Speed Modifier", "all", 1F, 0.0F, 2.0F, "Change this to slow down or speed up hippocampus swimming.");
+        builder.pop();
+        builder.push("Hippogryph");
         this.spawnHippogryphs = buildBoolean(builder, "Spawn Hippogryphs", "all", true, "True if hippogryphs are allowed to spawn");
         this.hippogryphSpawnRate = buildInt(builder, "Hippogryph Spawn Weight", "all", 2, 1, 10000, "Hippogryph spawn weight. Lower = lower chance to spawn.");
-
+        this.hippogryphFlightSpeedMod = buildDouble(builder, "Hippogryph Flight Speed Modifier", "all", 1F, 0.0F, 2.0F, "Change this to slow down or speed up hippogryph flight.");
+        builder.pop();
+        builder.push("Gorgons");
         this.spawnGorgons = buildBoolean(builder, "Spawn Gorgons", "all", true, "True if gorgon temples are allowed to spawn");
         this.spawnGorgonsChance = buildInt(builder, "Spawn Gorgon Chance", "all", 75, 1, 10000, "1 out of this number chance per chunk for generation");
         this.gorgonMaxHealth = buildDouble(builder, "Gorgon Max Health", "all", 100, 1, 10000, "Maximum gorgon health");
-
+        builder.pop();
+        builder.push("Others");
         this.spawnLiches = buildBoolean(builder, "Spawn Liches", "all", true, "True if dread liches are allowed to spawn");
         this.lichSpawnRate = buildInt(builder, "Lich Spawn Weight", "all", 2, 1, 10000, "Dread Lich spawn weight. Lower = lower chance to spawn");
 
@@ -376,7 +382,8 @@ public class ServerConfig {
         builder.push("Items");
         this.dragonsteelBaseDamage = buildDouble(builder, "Dragonsteel Sword Base Attack Strength", "all", 25, 5, Integer.MAX_VALUE, "Default attack strength of a dragonsteel sword.");
         this.dragonsteelBaseArmor = buildInt(builder, "Dragonsteel Base Armor", "all", 12, 7, Integer.MAX_VALUE, "Default armor value of dragonsteel chestplate.");
-        this.dragonsteelBaseDurability = buildInt(builder, "Dragonsteel Base Durability", "all", 8000, 1, Integer.MAX_VALUE, "Default durability value of dragonsteel sword.");
+        this.dragonsteelBaseDurability = buildInt(builder, "Dragonsteel Base Durability", "all", 8000, 1, Integer.MAX_VALUE, "Default durability value of dragonsteel tools.");
+        this.dragonsteelBaseDurabilityEquipment = buildInt(builder, "Dragonsteel Base Durability Equipment", "all", 8000, 1, Integer.MAX_VALUE, "Default durability value of dragonsteel equipment.");
         this.weezerTinkers = buildBoolean(builder, "Weezer", "all", true, "Disable this to remove easter egg with tinkers installed.");
         this.weezerTinkersDisarmChance = buildDouble(builder, "Easter Egg Tinkers Tool Disarm chance", "all", 0.2F, 0F, 1F, "Percentage of critical strike that will disarm with easter egg tinkers material.");
         this.chunkLoadSummonCrystal = buildBoolean(builder, "Chunk Load Summon Crystal", "all", true, "True if the summon crystal can load chunks to find dragons.");

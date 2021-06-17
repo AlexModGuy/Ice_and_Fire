@@ -121,6 +121,7 @@ public class IafConfig {
     public static int myrmexLarvaTicks = 35000;
     public static int myrmexColonyGenChance = 150;
     public static int myrmexColonySize = 80;
+    public static int myrmexMaximumWanderRadius = 4000;
     public static double myrmexBaseAttackStrength = 3.0D;
     public static boolean spawnAmphitheres = true;
     public static int amphithereSpawnRate = 50;
@@ -137,6 +138,7 @@ public class IafConfig {
     public static double dragonsteelBaseDamage = 25F;
     public static int dragonsteelBaseArmor = 12;
     public static int dragonsteelBaseDurability = 8000;
+    public static int dragonsteelBaseDurabilityEquipment = 8000;
     public static boolean spawnStructuresOnSuperflat = true;
     public static boolean dragonMovedWronglyFix = false;
     public static int dreadlandsDimensionId = -12;
@@ -281,6 +283,7 @@ public class IafConfig {
             myrmexColonyGenChance = ConfigHolder.SERVER.myrmexColonyGenChance.get();
             myrmexColonySize = ConfigHolder.SERVER.myrmexColonySize.get();
             myrmexBaseAttackStrength = ConfigHolder.SERVER.myrmexBaseAttackStrength.get();
+            myrmexMaximumWanderRadius = ConfigHolder.SERVER.myrmexMaximumWanderRadius.get();
             spawnAmphitheres = ConfigHolder.SERVER.spawnAmphitheres.get();
             amphithereSpawnRate = ConfigHolder.SERVER.amphithereSpawnRate.get();
             amphithereVillagerSearchLength = ConfigHolder.SERVER.amphithereVillagerSearchLength.get();
@@ -296,6 +299,7 @@ public class IafConfig {
             dragonsteelBaseDamage = ConfigHolder.SERVER.dragonsteelBaseDamage.get();
             dragonsteelBaseArmor = ConfigHolder.SERVER.dragonsteelBaseArmor.get();
             dragonsteelBaseDurability = ConfigHolder.SERVER.dragonsteelBaseDurability.get();
+            dragonsteelBaseDurabilityEquipment = ConfigHolder.SERVER.dragonsteelBaseDurabilityEquipment.get();
             dragonMovedWronglyFix = ConfigHolder.SERVER.dragonMovedWronglyFix.get();
             weezerTinkers = ConfigHolder.SERVER.weezerTinkers.get();
             dragonBlockBreakingDropChance = ConfigHolder.SERVER.dragonBlockBreakingDropChance.get();

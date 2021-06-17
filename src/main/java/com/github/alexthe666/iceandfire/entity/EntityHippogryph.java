@@ -1244,7 +1244,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 } else {
                     target = DragonUtils.getBlockInViewHippogryph(EntityHippogryph.this, 0);
                     if (EntityHippogryph.this.doesWantToLand()) {
-                        while (target.getY() > 3 && EntityHippogryph.this.world.isAirBlock(target)) {
+                        while (target != null && target.getY() > 3 && EntityHippogryph.this.world.isAirBlock(target)) {
                             target = target.down();
                         }
                     }

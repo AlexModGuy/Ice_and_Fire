@@ -35,7 +35,7 @@ public class SpawnHippocampus extends Feature<NoFeatureConfig> {
                 BlockPos pos = oceanPos.add(rand.nextInt(10) - 5, rand.nextInt(30), rand.nextInt(10) - 5);
                 if (worldIn.getFluidState(pos).getFluid() == Fluids.WATER) {
                     EntityHippocampus campus = IafEntityRegistry.HIPPOCAMPUS.create(worldIn.getWorld());
-                    campus.setVariant(rand.nextInt(5));
+                    campus.setVariant(rand.nextInt(6));
                     campus.setLocationAndAngles(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0, 0);
                     worldIn.addEntity(campus);
                 }

@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import java.util.*;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
@@ -23,7 +24,6 @@ import net.minecraft.entity.ai.goal.Goal.Flag;
 
 public class MyrmexAIForage extends Goal {
     private static final int RADIUS = 16;
-
     private final EntityMyrmexWorker myrmex;
     private final BlockSorter targetSorter;
     private BlockPos targetBlock = null;
@@ -186,6 +186,9 @@ public class MyrmexAIForage extends Goal {
         wanderRadius *= 2;
         this.myrmex.setWaitTicks(40+new Random().nextInt(40));
         //Set target as random position inside wanderRadius
+        if (wanderRadius >= IafConfig.myrmexMaximumWanderRadius){
+            wanderRadius = IafConfig.myrmexMaximumWanderRadius;
+        }
         Vector3d vec = RandomPositionGenerator.findRandomTarget(this.myrmex, wanderRadius, 7);
         if (vec != null) {
             this.targetBlock = new BlockPos(vec);

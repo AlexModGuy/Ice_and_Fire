@@ -1290,7 +1290,10 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                     this.world.addParticle(ParticleTypes.HAPPY_VILLAGER, f, f1, f2, motionX, motionY, motionZ);
                 }
             }
+
         }
+        if (this.getDragonStage() >= 2)
+            this.dismount();
         this.updateAttributes();
     }
 
@@ -1472,7 +1475,9 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     protected void updatePreyInMouth(Entity prey) {
+        if (this.getAnimation() != ANIMATION_SHAKEPREY){
         this.setAnimation(ANIMATION_SHAKEPREY);
+        }
         if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null) {
             prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof PlayerEntity ? 17F : (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 4);
             prey.stopRiding();
@@ -1662,9 +1667,9 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         int stage = this.getDragonStage() - 1;
         float step = (growth_stages[stage][1] - growth_stages[stage][0]) / 25;
         if (this.getAgeInDays() > 125) {
-            return growth_stages[stage][0] + ((step * 25));
+            return growth_stages[stage][0] + (step * 25);
         }
-        return growth_stages[stage][0] + ((step * this.getAgeFactor()));
+        return growth_stages[stage][0] + (step * this.getAgeFactor());
     }
 
     private int getAgeFactor() {
@@ -2080,7 +2085,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         float hoverProg = this.hoverProgress * 0.03F;
         float flyProg = this.flyProgress * 0.01F;
         float sleepProg = this.sleepProgress * -0.025F;
-        float extraAgeScale = (Math.max(0, this.getAgeInDays() - 75) / 75F) * 1.65F;
+        float extraAgeScale = this.getRenderScale()*0.2F;
         float pitchX = 0;
         float pitchY = 0;
         float dragonPitch = getDragonPitch();

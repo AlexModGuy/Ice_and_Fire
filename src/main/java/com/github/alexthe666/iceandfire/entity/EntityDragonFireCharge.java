@@ -157,7 +157,8 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
                         return;
                     }
                     if (shootingEntity != null && shootingEntity instanceof EntityDragonBase) {
-                        entity.attackEntityFrom(IafDamageRegistry.DRAGON_FIRE, 10.0F);
+                        float damageAmount = (float) IafConfig.dragonAttackDamageFire * ((EntityDragonBase) shootingEntity).getDragonStage();
+                        entity.attackEntityFrom(IafDamageRegistry.DRAGON_FIRE, damageAmount);
                         if (entity instanceof LivingEntity && ((LivingEntity) entity).getHealth() == 0) {
                             ((EntityDragonBase) shootingEntity).randomizeAttacks();
                         }

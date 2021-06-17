@@ -149,7 +149,7 @@ public class MyrmexHive {
         return this.wanderRadius;
     }
     public void setWanderRadius(int wanderRadius){
-        this.wanderRadius = wanderRadius;
+        this.wanderRadius = Math.min(wanderRadius,IafConfig.myrmexMaximumWanderRadius);
     }
 
     public boolean isBlockPosWithinSqVillageRadius(BlockPos pos) {
