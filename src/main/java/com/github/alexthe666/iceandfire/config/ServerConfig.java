@@ -162,6 +162,9 @@ public class ServerConfig {
     public final ForgeConfigSpec.BooleanValue ghostSpawnFromPlayerDeaths;
     public ForgeConfigSpec.IntValue dragonPathfindingThreads;
     public ForgeConfigSpec.IntValue maxDragonPathingNodes;
+    public final ForgeConfigSpec.BooleanValue dragonWeaponFireAbility;
+    public final ForgeConfigSpec.BooleanValue dragonWeaponIceAbility;
+    public final ForgeConfigSpec.BooleanValue dragonWeaponLightningAbility;
 
     public ServerConfig(final ForgeConfigSpec.Builder builder) {
         builder.push("Generation");
@@ -387,6 +390,9 @@ public class ServerConfig {
         this.weezerTinkers = buildBoolean(builder, "Weezer", "all", true, "Disable this to remove easter egg with tinkers installed.");
         this.weezerTinkersDisarmChance = buildDouble(builder, "Easter Egg Tinkers Tool Disarm chance", "all", 0.2F, 0F, 1F, "Percentage of critical strike that will disarm with easter egg tinkers material.");
         this.chunkLoadSummonCrystal = buildBoolean(builder, "Chunk Load Summon Crystal", "all", true, "True if the summon crystal can load chunks to find dragons.");
+        this.dragonWeaponFireAbility = buildBoolean(builder, "Dragon Bone Fire Abilities", "all", true, "True if the dragon bone fire sword ignites attackers.");
+        this.dragonWeaponIceAbility = buildBoolean(builder, "Dragon Bone Ice Abilities", "all", true, "True if the dragon bone ice sword freezes attackers.");
+        this.dragonWeaponLightningAbility = buildBoolean(builder, "Dragon Bone Lightning Abilities", "all", true, "True if the dragon bone lightning sword strikes attackers.");
         builder.pop();
         builder.push("Pathfinding");
         this.dragonPathfindingThreads = buildInt(builder, "Dragon Pathfinding Threads", "all", 3, 1, Integer.MAX_VALUE, "Maximum threads to use for dragon/myrmex pathfinding. Increase this number if pathing is slow and you have many cores.");

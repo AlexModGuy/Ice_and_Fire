@@ -169,6 +169,9 @@ public class IafConfig {
 
     public static int dragonPathfindingThreads = 3;
     public static int maxDragonPathingNodes = 5000;
+    public static boolean dragonWeaponFireAbility = true;
+    public static boolean dragonWeaponIceAbility = true;
+    public static boolean dragonWeaponLightningAbility = true;
 
     public static void bakeClient(final ModConfig config) {
         try {
@@ -334,6 +337,9 @@ public class IafConfig {
             ghostsFromPlayerDeaths = ConfigHolder.SERVER.ghostSpawnFromPlayerDeaths.get();
             dragonPathfindingThreads = ConfigHolder.SERVER.dragonPathfindingThreads.get();
             maxDragonPathingNodes = ConfigHolder.SERVER.maxDragonPathingNodes.get();
+            dragonWeaponFireAbility = ConfigHolder.SERVER.dragonWeaponFireAbility.get();
+            dragonWeaponIceAbility = ConfigHolder.SERVER.dragonWeaponIceAbility.get();
+            dragonWeaponLightningAbility = ConfigHolder.SERVER.dragonWeaponLightningAbility.get();
         } catch (Exception e) {
             IceAndFire.LOGGER.warn("An exception was caused trying to load the common config for Ice and Fire.");
             e.printStackTrace();

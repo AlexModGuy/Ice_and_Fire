@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
@@ -36,14 +37,14 @@ public class ItemAlchemySword extends SwordItem {
 
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (this == IafItemRegistry.DRAGONBONE_SWORD_FIRE) {
+        if (this == IafItemRegistry.DRAGONBONE_SWORD_FIRE && IafConfig.dragonWeaponFireAbility) {
             if (target instanceof EntityIceDragon) {
                 target.attackEntityFrom(DamageSource.IN_FIRE, 13.5F);
             }
             target.setFire(5);
             target.applyKnockback( 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
         }
-        if (this == IafItemRegistry.DRAGONBONE_SWORD_ICE) {
+        if (this == IafItemRegistry.DRAGONBONE_SWORD_ICE && IafConfig.dragonWeaponIceAbility) {
             if (target instanceof EntityFireDragon) {
                 target.attackEntityFrom(DamageSource.DROWN, 13.5F);
             }
@@ -53,7 +54,7 @@ public class ItemAlchemySword extends SwordItem {
             target.addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, 100, 2));
             target.applyKnockback(1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
         }
-        if (this == IafItemRegistry.DRAGONBONE_SWORD_LIGHTNING) {
+        if (this == IafItemRegistry.DRAGONBONE_SWORD_LIGHTNING && IafConfig.dragonWeaponLightningAbility) {
             boolean flag = true;
             if(attacker instanceof PlayerEntity){
                 if(((PlayerEntity)attacker).swingProgress > 0.2){
