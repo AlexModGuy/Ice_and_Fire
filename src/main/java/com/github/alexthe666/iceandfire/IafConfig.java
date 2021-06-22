@@ -172,6 +172,7 @@ public class IafConfig {
     public static boolean dragonWeaponFireAbility = true;
     public static boolean dragonWeaponIceAbility = true;
     public static boolean dragonWeaponLightningAbility = true;
+    public static int villagerHouseWeight = 30;
 
     public static void bakeClient(final ModConfig config) {
         try {
@@ -340,6 +341,8 @@ public class IafConfig {
             dragonWeaponFireAbility = ConfigHolder.SERVER.dragonWeaponFireAbility.get();
             dragonWeaponIceAbility = ConfigHolder.SERVER.dragonWeaponIceAbility.get();
             dragonWeaponLightningAbility = ConfigHolder.SERVER.dragonWeaponLightningAbility.get();
+            villagerHouseWeight = ConfigHolder.SERVER.villagerHouseWeight.get();
+
         } catch (Exception e) {
             IceAndFire.LOGGER.warn("An exception was caused trying to load the common config for Ice and Fire.");
             e.printStackTrace();

@@ -165,6 +165,7 @@ public class ServerConfig {
     public final ForgeConfigSpec.BooleanValue dragonWeaponFireAbility;
     public final ForgeConfigSpec.BooleanValue dragonWeaponIceAbility;
     public final ForgeConfigSpec.BooleanValue dragonWeaponLightningAbility;
+    public ForgeConfigSpec.IntValue villagerHouseWeight;
 
     public ServerConfig(final ForgeConfigSpec.Builder builder) {
         builder.push("Generation");
@@ -379,6 +380,7 @@ public class ServerConfig {
         this.ghostMaxHealth = buildDouble(builder, "Ghost Max Health", "all", 30F, 1.0F, 10000.0F, "Maximum ghost health.");
         this.ghostAttackStrength = buildDouble(builder, "Ghost Attack Strength", "all", 3F, 0.0F, 10000.0F, "Maximum ghost attack strength.");
         this.ghostSpawnFromPlayerDeaths = buildBoolean(builder, "Ghost Spawn from PvP deaths", "all", true, "True if ghosts can rarely spawn from brutal PvP deaths.");
+        this.villagerHouseWeight = buildInt(builder, "Villager Scribe House Weight", "all", 1, 30, 10000, "Villager Scribe House generation weight. Lower = lower chance to spawn");
 
         builder.pop();
         builder.pop();

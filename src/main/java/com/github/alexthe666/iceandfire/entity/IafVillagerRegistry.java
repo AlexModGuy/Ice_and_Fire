@@ -1,47 +1,51 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.world.gen.processor.VillageHouseProcessor;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.minecraft.entity.ai.brain.task.GiveHeroGiftsTask;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.MerchantOffer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.village.PointOfInterestType;
-import net.minecraft.world.gen.feature.Features;
-import net.minecraft.world.gen.feature.jigsaw.*;
+import net.minecraft.world.gen.feature.jigsaw.JigsawPattern;
+import net.minecraft.world.gen.feature.jigsaw.JigsawPatternRegistry;
+import net.minecraft.world.gen.feature.jigsaw.JigsawPiece;
+import net.minecraft.world.gen.feature.jigsaw.LegacySingleJigsawPiece;
 import net.minecraft.world.gen.feature.structure.*;
-import net.minecraft.world.gen.feature.template.ProcessorLists;
+import net.minecraft.world.gen.feature.template.*;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafVillagerRegistry {
 
+    private static final String[] VILLAGE_TYPES = new String[]{"plains", "desert", "snowy", "savanna", "taiga"};
+    private static final StructureProcessorList HOUSE_PROCESSOR = WorldGenRegistries.register(WorldGenRegistries.STRUCTURE_PROCESSOR_LIST, new ResourceLocation("iceandfire:village_house_processor"), genVillageHouseProcessor());
     public static PointOfInterestType LECTERN_POI;
     public static VillagerProfession SCRIBE;
-    private static final String[] VILLAGE_TYPES = new String[]{"plains", "desert", "snowy", "savanna", "taiga"};
+
+    private static StructureProcessorList genVillageHouseProcessor() {
+        RuleStructureProcessor mossify = new RuleStructureProcessor(ImmutableList.of(new RuleEntry(new RandomBlockMatchRuleTest(Blocks.COBBLESTONE, 0.1F), AlwaysTrueRuleTest.INSTANCE, Blocks.MOSSY_COBBLESTONE.getDefaultState())));
+        return new StructureProcessorList(ImmutableList.of(mossify, new VillageHouseProcessor()));
+    }
 
     public static void setup() {
         PlainsVillagePools.init();
@@ -49,20 +53,14 @@ public class IafVillagerRegistry {
         SavannaVillagePools.init();
         DesertVillagePools.init();
         TaigaVillagePools.init();
-        JigsawPatternRegistry.func_244094_a(new JigsawPattern(
-                new ResourceLocation("iceandfire", "village/workstations"),
-                new ResourceLocation("empty"),
-                ImmutableList.of(new Pair<>(createWorkstation("village/workstations/scriber"), 1))
-        ));
+
         for (String type : VILLAGE_TYPES) {
-            addStructureToPool(new ResourceLocation("village/" + type + "/houses"), new ResourceLocation("village/" + type + "/terminators"), new ResourceLocation("iceandfire", "village/" + type + "/houses/" + type + "_scriber_1"), 10);
-            addStructureToPool(new ResourceLocation("village/" + type + "/decor"), new ResourceLocation("empty"), new ResourceLocation("iceandfire", "village/workstations/scriber"), 2);
+            addStructureToPool(new ResourceLocation("village/" + type + "/houses"), new ResourceLocation("village/" + type + "/terminators"), new ResourceLocation("iceandfire", "village/" + type + "_scriber_1"), IafConfig.villagerHouseWeight);
         }
 
     }
 
-    private static JigsawPiece createWorkstation(String name)
-    {
+    private static JigsawPiece createWorkstation(String name) {
         return new LegacySingleJigsawPiece(Either.left(new ResourceLocation("iceandfire", name)), () -> ProcessorLists.EMPTY, JigsawPattern.PlacementBehaviour.RIGID);
     }
 
@@ -115,8 +113,8 @@ public class IafVillagerRegistry {
         JigsawPattern old = WorldGenRegistries.JIGSAW_POOL.getOrDefault(pool);
         List<JigsawPiece> shuffled = old != null ? old.getShuffledPieces(new Random()) : ImmutableList.of();
         List<Pair<JigsawPiece, Integer>> newPieces = shuffled.stream().map(p -> new Pair<>(p, 1)).collect(Collectors.toList());
-        newPieces.add(new Pair<>(new LegacySingleJigsawPiece(Either.left(toAdd), () -> ProcessorLists.EMPTY, JigsawPattern.PlacementBehaviour.RIGID), weight));
-        Registry.register(WorldGenRegistries.JIGSAW_POOL, pool, new JigsawPattern(pool, terminatorPool, newPieces));
+        newPieces.add(new Pair<>(new LegacySingleJigsawPiece(Either.left(toAdd), () -> HOUSE_PROCESSOR, JigsawPattern.PlacementBehaviour.RIGID), weight));
+        JigsawPatternRegistry.func_244094_a(new JigsawPattern(pool, terminatorPool, newPieces));
     }
 
 }
