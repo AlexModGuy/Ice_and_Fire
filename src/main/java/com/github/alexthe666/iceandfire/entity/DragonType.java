@@ -83,6 +83,9 @@ public class DragonType {
                     if (!egg.world.isRemote) {
                         egg.world.addEntity(dragon);
                     }
+                    if (egg.hasCustomName()) {
+                        dragon.setCustomName(egg.getCustomName());
+                    }
                     dragon.setTamed(true);
                     dragon.setOwnerId(egg.getOwnerId());
                     egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, egg.getSoundCategory(), 2.5F, 1.0F, false);
@@ -121,6 +124,9 @@ public class DragonType {
                 dragon.setHunger(50);
                 if (!egg.world.isRemote) {
                     egg.world.addEntity(dragon);
+                }
+                if (egg.hasCustomName()) {
+                    dragon.setCustomName(egg.getCustomName());
                 }
                 dragon.setTamed(true);
                 dragon.setOwnerId(egg.getOwnerId());

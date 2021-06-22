@@ -124,7 +124,8 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
             matrixStackIn.pop();
             matrixStackIn.pop();
             if(entityIn.getCrackAmount() >= 1){
-                RenderType crackTex = IafRenderType.getStoneCrackRenderType(DESTROY_STAGES[entityIn.getCrackAmount() - 1], x, y);
+                int i = MathHelper.clamp(entityIn.getCrackAmount() - 1, 0, DESTROY_STAGES.length - 1);
+                RenderType crackTex = IafRenderType.getStoneCrackRenderType(DESTROY_STAGES[i], x, y);
                 IVertexBuilder ivertexbuilder2 = bufferIn.getBuffer(crackTex);
                 matrixStackIn.push();
                 matrixStackIn.push();

@@ -62,6 +62,7 @@ public class RenderMobSkull extends EntityRenderer<EntityMobSkull> {
     }
 
     public void render(EntityMobSkull entity, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        super.render(entity, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         matrixStackIn.push();
         matrixStackIn.rotate(new Quaternion(Vector3f.XP, -180, true));
         matrixStackIn.rotate(new Quaternion(Vector3f.YN, 180 - entity.getYaw(), true));

@@ -85,7 +85,9 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
                 yaw = context.getPlayer().getHorizontalFacing().getHorizontalAngle();
             }
             skull.setYaw(yaw);
-
+            if (stack.hasDisplayName()) {
+                skull.setCustomName(stack.getDisplayName());
+            }
             if (!context.getWorld().isRemote) {
                 context.getWorld().addEntity(skull);
             }

@@ -51,6 +51,9 @@ public class ItemDragonEgg extends Item {
         egg.setEggType(type);
         egg.setLocationAndAngles(offset.getX() + 0.5, offset.getY(), offset.getZ() + 0.5, 0, 0);
         egg.onPlayerPlace(context.getPlayer());
+        if (itemstack.hasDisplayName()) {
+            egg.setCustomName(itemstack.getDisplayName());
+        }
         if (!context.getWorld().isRemote) {
             context.getWorld().addEntity(egg);
         }
