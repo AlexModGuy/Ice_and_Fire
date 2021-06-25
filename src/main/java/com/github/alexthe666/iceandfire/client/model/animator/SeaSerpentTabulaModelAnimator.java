@@ -13,7 +13,6 @@ import net.minecraft.client.Minecraft;
 public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator implements ITabulaModelAnimator<EntitySeaSerpent> {
 
     public TabulaModel[] swimPose = {EnumSeaSerpentAnimations.SWIM1.seaserpent_model, EnumSeaSerpentAnimations.SWIM3.seaserpent_model, EnumSeaSerpentAnimations.SWIM4.seaserpent_model, EnumSeaSerpentAnimations.SWIM6.seaserpent_model};
-    private ModelAnimator bakedAnimation;
     public SeaSerpentTabulaModelAnimator() {
         super(EnumSeaSerpentAnimations.T_POSE.seaserpent_model);
     }
@@ -22,6 +21,7 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
     public void setRotationAngles(TabulaModel model, EntitySeaSerpent entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         model.resetToDefaultPose();
         model.getCube("BodyUpper").rotationPointY += 9;//model was made too high
+        model.llibAnimator.update(entity);
         animate(model, entity, limbSwing, limbSwingAmount, ageInTicks, rotationYaw, rotationPitch, scale);
         int currentIndex = entity.swimCycle / 10;
         int prevIndex = currentIndex - 1;
@@ -93,38 +93,33 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
     }
 
     private void animate(TabulaModel model, EntitySeaSerpent entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
-        if (bakedAnimation == null) {
-            model.llibAnimator.update(entity);
-            model.llibAnimator.setAnimation(EntitySeaSerpent.ANIMATION_SPEAK);
-            model.llibAnimator.startKeyframe(5);
-            this.rotate(model.llibAnimator, model.getCube("Jaw"), 25, 0, 0);
-            model.llibAnimator.endKeyframe();
-            model.llibAnimator.setStaticKeyframe(5);
-            model.llibAnimator.resetKeyframe(5);
-            model.llibAnimator.setAnimation(EntitySeaSerpent.ANIMATION_BITE);
-            model.llibAnimator.startKeyframe(5);
-            moveToPose(model, EnumSeaSerpentAnimations.BITE1.seaserpent_model);
-            model.llibAnimator.endKeyframe();
-            model.llibAnimator.startKeyframe(5);
-            moveToPose(model, EnumSeaSerpentAnimations.BITE2.seaserpent_model);
-            model.llibAnimator.endKeyframe();
-            model.llibAnimator.setStaticKeyframe(2);
-            model.llibAnimator.resetKeyframe(3);
+        model.llibAnimator.setAnimation(EntitySeaSerpent.ANIMATION_SPEAK);
+        model.llibAnimator.startKeyframe(5);
+        this.rotate(model.llibAnimator, model.getCube("Jaw"), 25, 0, 0);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.setStaticKeyframe(5);
+        model.llibAnimator.resetKeyframe(5);
+        model.llibAnimator.setAnimation(EntitySeaSerpent.ANIMATION_BITE);
+        model.llibAnimator.startKeyframe(5);
+        moveToPose(model, EnumSeaSerpentAnimations.BITE1.seaserpent_model);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.startKeyframe(5);
+        moveToPose(model, EnumSeaSerpentAnimations.BITE2.seaserpent_model);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.setStaticKeyframe(2);
+        model.llibAnimator.resetKeyframe(3);
 
-            model.llibAnimator.setAnimation(EntitySeaSerpent.ANIMATION_ROAR);
-            model.llibAnimator.startKeyframe(10);
-            moveToPose(model, EnumSeaSerpentAnimations.ROAR1.seaserpent_model);
-            model.llibAnimator.endKeyframe();
-            model.llibAnimator.startKeyframe(10);
-            moveToPose(model, EnumSeaSerpentAnimations.ROAR2.seaserpent_model);
-            model.llibAnimator.endKeyframe();
-            model.llibAnimator.startKeyframe(10);
-            moveToPose(model, EnumSeaSerpentAnimations.ROAR3.seaserpent_model);
-            model.llibAnimator.endKeyframe();
-            model.llibAnimator.resetKeyframe(10);
-        }
-        else{
-            model.llibAnimator = bakedAnimation;
-        }
+        model.llibAnimator.setAnimation(EntitySeaSerpent.ANIMATION_ROAR);
+        model.llibAnimator.startKeyframe(10);
+        moveToPose(model, EnumSeaSerpentAnimations.ROAR1.seaserpent_model);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.startKeyframe(10);
+        moveToPose(model, EnumSeaSerpentAnimations.ROAR2.seaserpent_model);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.startKeyframe(10);
+        moveToPose(model, EnumSeaSerpentAnimations.ROAR3.seaserpent_model);
+        model.llibAnimator.endKeyframe();
+        model.llibAnimator.resetKeyframe(10);
+
     }
 }
