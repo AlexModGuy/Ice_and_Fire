@@ -10,6 +10,7 @@ import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.pathfinding.*;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -240,8 +241,10 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             pathResult = null;
         }
         //Make sure the entity isn't sleeping or chained when checking if it's stuck
-        if (this.entity instanceof EntityDragonBase){
-            if (!((EntityDragonBase) this.entity).isEntitySleeping() && !((EntityDragonBase) this.entity).isChained()){
+        if (this.entity instanceof TameableEntity){
+            if (!((TameableEntity)this.entity).isTamed() &&
+                (this.entity instanceof EntityDragonBase &&
+                !((EntityDragonBase) this.entity).isChained() &&!((EntityDragonBase) this.entity).isEntitySleeping())) {
                 stuckHandler.checkStuck(this);
             }
         }
