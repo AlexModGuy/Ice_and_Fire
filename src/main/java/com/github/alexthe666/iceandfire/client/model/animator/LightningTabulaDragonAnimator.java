@@ -14,8 +14,8 @@ import net.minecraft.util.math.MathHelper;
 
 import java.util.Iterator;
 
-public class LightningTabulaDragonAnimator extends DragonTabulaModelAnimator<EntityLightningDragon> {
 
+public class LightningTabulaDragonAnimator extends DragonTabulaModelAnimator<EntityLightningDragon> {
 
     public LightningTabulaDragonAnimator() {
         super(EnumDragonAnimations.GROUND_POSE.lightningdragon_model);
@@ -23,16 +23,6 @@ public class LightningTabulaDragonAnimator extends DragonTabulaModelAnimator<Ent
         this.walkPoses = new TabulaModel[] {EnumDragonAnimations.WALK1.lightningdragon_model, EnumDragonAnimations.WALK2.lightningdragon_model, EnumDragonAnimations.WALK3.lightningdragon_model, EnumDragonAnimations.WALK4.lightningdragon_model};
         this.flyPoses =  new TabulaModel[] {EnumDragonAnimations.FLIGHT1.lightningdragon_model, EnumDragonAnimations.FLIGHT2.lightningdragon_model, EnumDragonAnimations.FLIGHT3.lightningdragon_model, EnumDragonAnimations.FLIGHT4.lightningdragon_model, EnumDragonAnimations.FLIGHT5.lightningdragon_model, EnumDragonAnimations.FLIGHT6.lightningdragon_model};
         this.swimPoses = new TabulaModel[] {EnumDragonAnimations.WALK1.lightningdragon_model, EnumDragonAnimations.WALK2.lightningdragon_model, EnumDragonAnimations.WALK3.lightningdragon_model, EnumDragonAnimations.WALK4.lightningdragon_model}; //TODO Proper swim animations
-    }
-
-    public void init(TabulaModel model) {
-        neckParts = new AdvancedModelBox[]{model.getCube("Neck1"), model.getCube("Neck2"), model.getCube("Neck3"), model.getCube("Neck3"), model.getCube("Head")};
-        tailParts = new AdvancedModelBox[]{model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
-        tailPartsWBody = new AdvancedModelBox[]{model.getCube("BodyLower"), model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
-        toesPartsL = new AdvancedModelBox[]{model.getCube("ToeL1"), model.getCube("ToeL2"), model.getCube("ToeL3")};
-        toesPartsR = new AdvancedModelBox[]{model.getCube("ToeR1"), model.getCube("ToeR2"), model.getCube("ToeR3")};
-        clawL = new AdvancedModelBox[]{model.getCube("ClawL")};
-        clawR = new AdvancedModelBox[]{model.getCube("ClawR")};
     }
 
     @Override
