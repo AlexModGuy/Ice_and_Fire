@@ -89,6 +89,7 @@ import java.util.UUID;
 public abstract class EntityDragonBase extends TameableEntity implements IPassabilityNavigator, ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor {
 
     public static final int FLIGHT_CHANCE_PER_TICK = 1500;
+    protected static final DataParameter<Boolean> SWIMMING = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> HUNGER = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> AGE_TICKS = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> GENDER = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
@@ -145,6 +146,11 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     5 = riding
     6 = tackle
      */
+    public boolean isSwimming;
+    public float prevSwimProgress;
+    public float swimProgress;
+    public int ticksSwiming;
+    public int swimCycle;
     public float[] prevAnimationProgresses = new float[10];
     public boolean isDaytime;
     public int flightCycle;

@@ -24,9 +24,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
@@ -51,13 +48,7 @@ public class EntityIceDragon extends EntityDragonBase {
     public static final ResourceLocation FEMALE_LOOT = new ResourceLocation("iceandfire", "entities/dragon/ice_dragon_female");
     public static final ResourceLocation MALE_LOOT = new ResourceLocation("iceandfire", "entities/dragon/ice_dragon_male");
     public static final ResourceLocation SKELETON_LOOT = new ResourceLocation("iceandfire", "entities/dragon/ice_dragon_skeleton");
-    private static final DataParameter<Boolean> SWIMMING = EntityDataManager.createKey(EntityIceDragon.class, DataSerializers.BOOLEAN);
     public static Animation ANIMATION_FIRECHARGE;
-    public boolean isSwimming;
-    public float prevSwimProgress;
-    public float swimProgress;
-    public int ticksSwiming;
-    public int swimCycle;
 
     public EntityIceDragon(World worldIn) {
         this(IafEntityRegistry.ICE_DRAGON, worldIn);
@@ -76,10 +67,6 @@ public class EntityIceDragon extends EntityDragonBase {
         this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
     }
 
-    public void breakBlock() {
-        super.breakBlock();
-    }
-
     @Override
     protected boolean shouldTarget(Entity entity) {
         if(entity instanceof EntityDragonBase && !this.isTamed()){
@@ -94,6 +81,7 @@ public class EntityIceDragon extends EntityDragonBase {
         this.dataManager.register(SWIMMING, Boolean.valueOf(false));
     }
 
+    @Override
     public String getVariantName(int variant) {
         switch (variant) {
             default:
@@ -107,10 +95,12 @@ public class EntityIceDragon extends EntityDragonBase {
         }
     }
 
+    @Override
     public boolean canBreatheUnderwater() {
         return true;
     }
 
+    @Override
     public Item getVariantScale(int variant) {
         switch (variant) {
             default:
@@ -124,6 +114,7 @@ public class EntityIceDragon extends EntityDragonBase {
         }
     }
 
+    @Override
     public Item getVariantEgg(int variant) {
         switch (variant) {
             default:
@@ -137,6 +128,7 @@ public class EntityIceDragon extends EntityDragonBase {
         }
     }
 
+    @Override
     public boolean isPushedByWater() {
         return false;
     }
@@ -156,6 +148,7 @@ public class EntityIceDragon extends EntityDragonBase {
         this.ticksSwiming = compound.getInt("SwimmingTicks");
     }
 
+    @Override
     public boolean canBeSteered() {
         return true;
     }
