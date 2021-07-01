@@ -217,7 +217,8 @@ public class FireDragonTabulaModelAnimator extends DragonTabulaModelAnimator<Ent
         }
     }
 
-    private void genderMob(EntityFireDragon entity, AdvancedModelBox cube) {
+    @Override
+    protected void genderMob(EntityFireDragon entity, AdvancedModelBox cube) {
         if (!entity.isMale()) {
             TabulaModel maleModel = EnumDragonAnimations.MALE.firedragon_model;
             TabulaModel femaleModel = EnumDragonAnimations.FEMALE.firedragon_model;
@@ -232,8 +233,9 @@ public class FireDragonTabulaModelAnimator extends DragonTabulaModelAnimator<Ent
         }
     }
 
-    public void animate(TabulaModel model, EntityFireDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
-        if (bakedAnimation == null) {
+    //I don't actually know what this mess is about, but I've moved it here for the sake of the refactor
+    @Override
+    public void bakeAnimation(TabulaModel model, EntityFireDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
             model.llibAnimator.update(entity);
 
             model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_FIRECHARGE);
@@ -367,10 +369,6 @@ public class FireDragonTabulaModelAnimator extends DragonTabulaModelAnimator<Ent
             model.llibAnimator.move(model.getCube("BodyUpper"), 0, -6.8F, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.resetKeyframe(10);
-        }
-        else{
-            model.llibAnimator = bakedAnimation;
-        }
     }
 
 

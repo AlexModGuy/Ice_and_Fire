@@ -6,7 +6,7 @@ import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 
-public class DragonTabulaModelAnimator<T extends EntityDragonBase> extends IceAndFireTabulaModelAnimator implements ITabulaModelAnimator<T> {
+public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> extends IceAndFireTabulaModelAnimator implements ITabulaModelAnimator<T> {
 
     protected TabulaModel[] walkPoses;
     protected TabulaModel[] flyPoses;
@@ -36,4 +36,16 @@ public class DragonTabulaModelAnimator<T extends EntityDragonBase> extends IceAn
     protected boolean isHorn(AdvancedModelBox modelRenderer) {
         return modelRenderer.boxName.contains("Horn");
     }
+
+    protected abstract void genderMob(T entity, AdvancedModelBox cube);
+
+
+    public void animate(TabulaModel model, T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
+        if(bakedAnimation == null)
+            bakeAnimation(model, entity, limbSwing, limbSwingAmount, ageInTicks, rotationYaw, rotationPitch, scale);
+        else
+            model.llibAnimator = bakedAnimation;
+    }
+
+    protected abstract void bakeAnimation(TabulaModel model, T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale);
 }
