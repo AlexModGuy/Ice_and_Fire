@@ -14,21 +14,15 @@ import net.minecraft.util.math.MathHelper;
 
 import java.util.Iterator;
 
-public class LightningTabulaDragonAnimator extends IceAndFireTabulaModelAnimator implements ITabulaModelAnimator<EntityLightningDragon> {
+public class LightningTabulaDragonAnimator extends DragonTabulaModelAnimator<EntityLightningDragon> {
 
-    AdvancedModelBox[] neckParts;
-    AdvancedModelBox[] tailParts;
-    AdvancedModelBox[] tailPartsWBody;
-    AdvancedModelBox[] toesPartsL;
-    AdvancedModelBox[] toesPartsR;
-    AdvancedModelBox[] clawL;
-    AdvancedModelBox[] clawR;
-    private TabulaModel[] walkPoses = {EnumDragonAnimations.WALK1.lightningdragon_model, EnumDragonAnimations.WALK2.lightningdragon_model, EnumDragonAnimations.WALK3.lightningdragon_model, EnumDragonAnimations.WALK4.lightningdragon_model};
-    private TabulaModel[] flyPoses = {EnumDragonAnimations.FLIGHT1.lightningdragon_model, EnumDragonAnimations.FLIGHT2.lightningdragon_model, EnumDragonAnimations.FLIGHT3.lightningdragon_model, EnumDragonAnimations.FLIGHT4.lightningdragon_model, EnumDragonAnimations.FLIGHT5.lightningdragon_model, EnumDragonAnimations.FLIGHT6.lightningdragon_model};
-    private ModelAnimator bakedAnimation;
 
     public LightningTabulaDragonAnimator() {
         super(EnumDragonAnimations.GROUND_POSE.lightningdragon_model);
+
+        this.walkPoses = new TabulaModel[] {EnumDragonAnimations.WALK1.lightningdragon_model, EnumDragonAnimations.WALK2.lightningdragon_model, EnumDragonAnimations.WALK3.lightningdragon_model, EnumDragonAnimations.WALK4.lightningdragon_model};
+        this.flyPoses =  new TabulaModel[] {EnumDragonAnimations.FLIGHT1.lightningdragon_model, EnumDragonAnimations.FLIGHT2.lightningdragon_model, EnumDragonAnimations.FLIGHT3.lightningdragon_model, EnumDragonAnimations.FLIGHT4.lightningdragon_model, EnumDragonAnimations.FLIGHT5.lightningdragon_model, EnumDragonAnimations.FLIGHT6.lightningdragon_model};
+        this.swimPoses = new TabulaModel[] {EnumDragonAnimations.WALK1.lightningdragon_model, EnumDragonAnimations.WALK2.lightningdragon_model, EnumDragonAnimations.WALK3.lightningdragon_model, EnumDragonAnimations.WALK4.lightningdragon_model}; //TODO Proper swim animations
     }
 
     public void init(TabulaModel model) {

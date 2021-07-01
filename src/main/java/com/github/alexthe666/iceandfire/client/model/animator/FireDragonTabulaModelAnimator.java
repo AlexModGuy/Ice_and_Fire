@@ -15,21 +15,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class FireDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator implements ITabulaModelAnimator<EntityFireDragon> {
-
-    AdvancedModelBox[] neckParts;
-    AdvancedModelBox[] tailParts;
-    AdvancedModelBox[] tailPartsWBody;
-    AdvancedModelBox[] toesPartsL;
-    AdvancedModelBox[] toesPartsR;
-    AdvancedModelBox[] clawL;
-    AdvancedModelBox[] clawR;
-    private TabulaModel[] walkPoses = {EnumDragonAnimations.WALK1.firedragon_model, EnumDragonAnimations.WALK2.firedragon_model, EnumDragonAnimations.WALK3.firedragon_model, EnumDragonAnimations.WALK4.firedragon_model};
-    private TabulaModel[] flyPoses = {EnumDragonAnimations.FLIGHT1.firedragon_model, EnumDragonAnimations.FLIGHT2.firedragon_model, EnumDragonAnimations.FLIGHT3.firedragon_model, EnumDragonAnimations.FLIGHT4.firedragon_model, EnumDragonAnimations.FLIGHT5.firedragon_model, EnumDragonAnimations.FLIGHT6.firedragon_model};
-    private ModelAnimator bakedAnimation;
+public class FireDragonTabulaModelAnimator extends DragonTabulaModelAnimator<EntityFireDragon> {
 
     public FireDragonTabulaModelAnimator() {
         super(EnumDragonAnimations.GROUND_POSE.firedragon_model);
+        this.walkPoses = new TabulaModel[] {EnumDragonAnimations.WALK1.firedragon_model, EnumDragonAnimations.WALK2.firedragon_model, EnumDragonAnimations.WALK3.firedragon_model, EnumDragonAnimations.WALK4.firedragon_model};
+        this.flyPoses  = new TabulaModel[] {EnumDragonAnimations.FLIGHT1.firedragon_model, EnumDragonAnimations.FLIGHT2.firedragon_model, EnumDragonAnimations.FLIGHT3.firedragon_model, EnumDragonAnimations.FLIGHT4.firedragon_model, EnumDragonAnimations.FLIGHT5.firedragon_model, EnumDragonAnimations.FLIGHT6.firedragon_model};
+        this.swimPoses = new TabulaModel[] {EnumDragonAnimations.WALK1.firedragon_model, EnumDragonAnimations.WALK2.firedragon_model, EnumDragonAnimations.WALK3.firedragon_model, EnumDragonAnimations.WALK4.firedragon_model}; //TODO Proper swim animations
     }
 
     public void init(TabulaModel model) {
@@ -248,6 +240,7 @@ public class FireDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator
     public void animate(TabulaModel model, EntityFireDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         if (bakedAnimation == null) {
             model.llibAnimator.update(entity);
+
             model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_FIRECHARGE);
             model.llibAnimator.startKeyframe(10);
             moveToPose(model, EnumDragonAnimations.BLAST_CHARGE1.firedragon_model);
@@ -259,6 +252,7 @@ public class FireDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator
             moveToPose(model, EnumDragonAnimations.BLAST_CHARGE3.firedragon_model);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.resetKeyframe(5);
+
             model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_SPEAK);
             model.llibAnimator.startKeyframe(5);
             this.rotate(model.llibAnimator, model.getCube("Jaw"), 18, 0, 0);
@@ -300,6 +294,7 @@ public class FireDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator
             moveToPose(model, EnumDragonAnimations.GRAB_SHAKE3.firedragon_model);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.resetKeyframe(10);
+
             model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_TAILWHACK);
             model.llibAnimator.startKeyframe(10);
             moveToPose(model, EnumDragonAnimations.TAIL_WHIP1.firedragon_model);
@@ -311,6 +306,7 @@ public class FireDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator
             moveToPose(model, EnumDragonAnimations.TAIL_WHIP3.firedragon_model);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.resetKeyframe(10);
+
             model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_WINGBLAST);
             model.llibAnimator.startKeyframe(10);
             moveToPose(model, EnumDragonAnimations.WING_BLAST1.firedragon_model);
@@ -341,6 +337,7 @@ public class FireDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator
             model.llibAnimator.move(model.getCube("BodyUpper"), 0, -4F, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.resetKeyframe(10);
+
             model.llibAnimator.setAnimation(EntityFireDragon.ANIMATION_ROAR);
             model.llibAnimator.startKeyframe(10);
             moveToPose(model, EnumDragonAnimations.ROAR1.firedragon_model);

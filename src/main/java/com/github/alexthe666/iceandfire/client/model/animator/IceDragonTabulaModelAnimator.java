@@ -15,22 +15,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class IceDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator implements ITabulaModelAnimator<EntityIceDragon> {
-
-    private TabulaModel[] walkPoses = {EnumDragonAnimations.WALK1.icedragon_model, EnumDragonAnimations.WALK2.icedragon_model, EnumDragonAnimations.WALK3.icedragon_model, EnumDragonAnimations.WALK4.icedragon_model};
-    private TabulaModel[] flyPoses = {EnumDragonAnimations.FLIGHT1.icedragon_model, EnumDragonAnimations.FLIGHT2.icedragon_model, EnumDragonAnimations.FLIGHT3.icedragon_model, EnumDragonAnimations.FLIGHT4.icedragon_model, EnumDragonAnimations.FLIGHT5.icedragon_model, EnumDragonAnimations.FLIGHT6.icedragon_model};
-    private TabulaModel[] swimPoses = {EnumDragonAnimations.SWIM1.icedragon_model, EnumDragonAnimations.SWIM2.icedragon_model, EnumDragonAnimations.SWIM3.icedragon_model, EnumDragonAnimations.SWIM4.icedragon_model, EnumDragonAnimations.SWIM5.icedragon_model};
-    private AdvancedModelBox[] neckParts;
-    private AdvancedModelBox[] tailParts;
-    private AdvancedModelBox[] tailPartsWBody;
-    private AdvancedModelBox[] toesPartsL;
-    private AdvancedModelBox[] toesPartsR;
-    private AdvancedModelBox[] clawL;
-    private AdvancedModelBox[] clawR;
-    private ModelAnimator bakedAnimation;
+public class IceDragonTabulaModelAnimator extends DragonTabulaModelAnimator<EntityIceDragon> {
 
     public IceDragonTabulaModelAnimator() {
         super(EnumDragonAnimations.GROUND_POSE.icedragon_model);
+
+        this.walkPoses = new TabulaModel[] {EnumDragonAnimations.WALK1.icedragon_model, EnumDragonAnimations.WALK2.icedragon_model, EnumDragonAnimations.WALK3.icedragon_model, EnumDragonAnimations.WALK4.icedragon_model};
+        this.flyPoses  = new TabulaModel[] {EnumDragonAnimations.FLIGHT1.icedragon_model, EnumDragonAnimations.FLIGHT2.icedragon_model, EnumDragonAnimations.FLIGHT3.icedragon_model, EnumDragonAnimations.FLIGHT4.icedragon_model, EnumDragonAnimations.FLIGHT5.icedragon_model, EnumDragonAnimations.FLIGHT6.icedragon_model};
+        this.swimPoses = new TabulaModel[] {EnumDragonAnimations.SWIM1.icedragon_model, EnumDragonAnimations.SWIM2.icedragon_model, EnumDragonAnimations.SWIM3.icedragon_model, EnumDragonAnimations.SWIM4.icedragon_model, EnumDragonAnimations.SWIM5.icedragon_model};
     }
 
     public void init(TabulaModel model) {
