@@ -242,11 +242,6 @@ public class LightningTabulaDragonAnimator extends DragonTabulaModelAnimator<Ent
         }
     }
 
-    private boolean isWing(TabulaModel model, AdvancedModelBox modelRenderer) {
-
-        return model.getCube("armL1") == modelRenderer || model.getCube("armR1") == modelRenderer || model.getCube("armL1").childModels.contains(modelRenderer) || model.getCube("armR1").childModels.contains(modelRenderer);
-    }
-
     public void animate(TabulaModel model, EntityLightningDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         if (bakedAnimation == null) {
             AdvancedModelBox modelCubeJaw = model.getCube("Jaw");
