@@ -121,7 +121,7 @@ public class IafConfig {
     public static int myrmexLarvaTicks = 35000;
     public static int myrmexColonyGenChance = 150;
     public static int myrmexColonySize = 80;
-    public static int myrmexMaximumWanderRadius = 4000;
+    public static int myrmexMaximumWanderRadius = 50;
     public static double myrmexBaseAttackStrength = 3.0D;
     public static boolean spawnAmphitheres = true;
     public static int amphithereSpawnRate = 50;
