@@ -30,7 +30,7 @@ public class MyrmexAIForage extends Goal {
     private int wanderRadius;
     private int chance;
     private PathResult path;
-
+    private int failedToFindPath = 0;
     public MyrmexAIForage(EntityMyrmexWorker myrmex,int chanceIn) {
         super();
         this.myrmex = myrmex;
@@ -69,6 +69,9 @@ public class MyrmexAIForage extends Goal {
         if (this.targetBlock == null) {
             return false;
         }
+        if (this.myrmex.getWaitTicks()>0){
+            return false;
+        }
         if (myrmex.shouldEnterHive()) {
             this.myrmex.keepSearching = false;
             return false;
@@ -83,6 +86,7 @@ public class MyrmexAIForage extends Goal {
             //If the myrmex is close enough to the target or at the end of the path
             if (this.myrmex.isCloseEnoughToTarget(targetBlock,12)
                     || !this.myrmex.pathReachesTarget(path,targetBlock,12)) {
+                failedToFindPath = 0;
                 List<BlockPos> edibleBlocks = getEdibleBlocks();
                 //If we found an edible block nearby
                 if (!edibleBlocks.isEmpty()){
@@ -98,6 +102,7 @@ public class MyrmexAIForage extends Goal {
             }
             //if we have found an edible block
         } else if(!this.myrmex.keepSearching){
+            failedToFindPath = 0;
             BlockState block = this.myrmex.world.getBlockState(this.targetBlock);
             //Test if the block is edible
             if (EntityMyrmexBase.isEdibleBlock(block)) {
@@ -184,10 +189,16 @@ public class MyrmexAIForage extends Goal {
         }
         //Increase wander radius
         wanderRadius *= 2;
-        this.myrmex.setWaitTicks(40+new Random().nextInt(40));
+        //this.myrmex.setWaitTicks(80+new Random().nextInt(40));
         //Set target as random position inside wanderRadius
         if (wanderRadius >= IafConfig.myrmexMaximumWanderRadius){
             wanderRadius = IafConfig.myrmexMaximumWanderRadius;
+            this.myrmex.setWaitTicks(80+new Random().nextInt(40));
+            //Keep track of how many times the myrmex has potentially not found a path to a target
+            failedToFindPath++;
+            if (failedToFindPath >= 10){
+                this.myrmex.setWaitTicks(800+new Random().nextInt(40));
+            }
         }
         Vector3d vec = RandomPositionGenerator.findRandomTarget(this.myrmex, wanderRadius, 7);
         if (vec != null) {
