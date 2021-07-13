@@ -215,9 +215,9 @@ public class ClientProxy extends CommonProxy {
         EnumSeaSerpentAnimations.initializeSerpentModels();
         try {
             SEA_SERPENT_BASE_MODEL = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent"), new SeaSerpentTabulaModelAnimator());
-            FIRE_DRAGON_BASE_MODEL = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFireGround"), new FireDragonTabulaModelAnimator());
-            ICE_DRAGON_BASE_MODEL = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/dragonIceGround"), new IceDragonTabulaModelAnimator());
-            LIGHTNING_DRAGON_BASE_MODEL = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/lightningdragon/dragonLightningGround"), new LightningTabulaDragonAnimator());
+            FIRE_DRAGON_BASE_MODEL = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/firedragon_Ground"), new FireDragonTabulaModelAnimator());
+            ICE_DRAGON_BASE_MODEL = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/icedragon_Ground"), new IceDragonTabulaModelAnimator());
+            LIGHTNING_DRAGON_BASE_MODEL = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/lightningdragon/lightningdragon_Ground"), new LightningTabulaDragonAnimator());
         } catch (IOException e) {
             e.printStackTrace();
         }
