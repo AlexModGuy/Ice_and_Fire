@@ -8,6 +8,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
+/**
+ * @deprecated use {@link DragonAnimationsLibrary}. Old dragons will be moved to the new library system.
+ */
 @OnlyIn(Dist.CLIENT)
 public enum EnumDragonAnimations {
     MALE("BaseMale"),
