@@ -4,8 +4,7 @@ import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ITabulaModelAnimator;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.citadel.client.model.TabulaModel;
-import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
-import com.github.alexthe666.iceandfire.client.model.util.LegArticulator;
+import com.github.alexthe666.iceandfire.client.model.util.*;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
 
@@ -216,21 +215,8 @@ public class LightningTabulaDragonAnimator extends DragonTabulaModelAnimator<Ent
     }
 
     @Override
-    protected void genderMob(EntityLightningDragon entity, AdvancedModelBox cube) {
-        if (!entity.isMale()) {
-            TabulaModel maleModel = EnumDragonAnimations.MALE.lightningdragon_model;
-            TabulaModel femaleModel = EnumDragonAnimations.FEMALE.lightningdragon_model;
-            AdvancedModelBox femaleModelCube = femaleModel.getCube(cube.boxName);
-            AdvancedModelBox maleModelCube = maleModel.getCube(cube.boxName);
-            if (femaleModelCube != null) {
-                float x = femaleModelCube.rotateAngleX;
-                float y = femaleModelCube.rotateAngleY;
-                float z = femaleModelCube.rotateAngleZ;
-                if (x != maleModelCube.rotateAngleX || y != maleModelCube.rotateAngleY || z != maleModelCube.rotateAngleZ) {
-                    this.setRotateAngle(cube, 1F, x, y, z);
-                }
-            }
-        }
+    protected TabulaModel getModel(EnumDragonPoses pose) {
+        return DragonAnimationsLibrary.getModel(pose, EnumDragonModelTypes.LIGHTNING_DRAGON_MODEL);
     }
 
     //I don't actually know what this mess is about, but I've moved it here for the sake of the refactor

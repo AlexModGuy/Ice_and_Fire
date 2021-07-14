@@ -4,7 +4,12 @@ import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ITabulaModelAnimator;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.citadel.client.model.TabulaModel;
+import com.github.alexthe666.iceandfire.client.model.util.DragonAnimationsLibrary;
+import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
+import com.github.alexthe666.iceandfire.client.model.util.EnumDragonModelTypes;
+import com.github.alexthe666.iceandfire.client.model.util.EnumDragonPoses;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 
 public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> extends IceAndFireTabulaModelAnimator implements ITabulaModelAnimator<T> {
 
@@ -47,8 +52,6 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
         return modelRenderer.boxName.contains("Horn");
     }
 
-    protected abstract void genderMob(T entity, AdvancedModelBox cube);
-
 
     public void animate(TabulaModel model, T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         if(bakedAnimation == null)
@@ -56,6 +59,23 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
         else
             model.llibAnimator = bakedAnimation;
     }
+
+    protected void genderMob(T entity, AdvancedModelBox cube) {
+        if (!entity.isMale()) {
+            TabulaModel maleModel = getModel(EnumDragonPoses.MALE);
+            TabulaModel femaleModel = getModel(EnumDragonPoses.FEMALE);
+            AdvancedModelBox femaleModelCube = femaleModel.getCube(cube.boxName);
+            AdvancedModelBox maleModelCube = maleModel.getCube(cube.boxName);
+            float x = femaleModelCube.rotateAngleX;
+            float y = femaleModelCube.rotateAngleY;
+            float z = femaleModelCube.rotateAngleZ;
+            if (x != maleModelCube.rotateAngleX || y != maleModelCube.rotateAngleY || z != maleModelCube.rotateAngleZ) {
+                this.setRotateAngle(cube, 1F, x, y, z);
+            }
+        }
+    }
+
+    protected abstract TabulaModel getModel(EnumDragonPoses pose);
 
     protected abstract void bakeAnimation(TabulaModel model, T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale);
 }

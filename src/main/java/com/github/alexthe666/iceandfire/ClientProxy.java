@@ -34,8 +34,7 @@ import com.github.alexthe666.iceandfire.client.model.animator.FireDragonTabulaMo
 import com.github.alexthe666.iceandfire.client.model.animator.IceDragonTabulaModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.animator.LightningTabulaDragonAnimator;
 import com.github.alexthe666.iceandfire.client.model.animator.SeaSerpentTabulaModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
-import com.github.alexthe666.iceandfire.client.model.util.EnumSeaSerpentAnimations;
+import com.github.alexthe666.iceandfire.client.model.util.*;
 import com.github.alexthe666.iceandfire.client.particle.ParticleBlood;
 import com.github.alexthe666.iceandfire.client.particle.ParticleDragonFlame;
 import com.github.alexthe666.iceandfire.client.particle.ParticleDragonFrost;
@@ -213,6 +212,7 @@ public class ClientProxy extends CommonProxy {
     public void setupClient() {
         EnumDragonAnimations.initializeDragonModels();
         EnumSeaSerpentAnimations.initializeSerpentModels();
+        DragonAnimationsLibrary.register(EnumDragonPoses.values(), EnumDragonModelTypes.values());
         try {
             SEA_SERPENT_BASE_MODEL = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent"), new SeaSerpentTabulaModelAnimator());
             FIRE_DRAGON_BASE_MODEL = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/firedragon_Ground"), new FireDragonTabulaModelAnimator());
