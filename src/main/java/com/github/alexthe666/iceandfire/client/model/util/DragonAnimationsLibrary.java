@@ -72,7 +72,7 @@ public class DragonAnimationsLibrary {
     public static void registerSingle(IEnumDragonPoses pose, IEnumDragonModelTypes modelType, String modID) {
         //Load model
         TabulaModel result;
-        String location = "/assets/" + modID + "/models/tabula/" + modelType.getModelType() + "dragon/" + pose.getPose() + ".tbl";
+        String location = "/assets/" + modID + "/models/tabula/" + modelType.getModelType() + "dragon/" + modelType.getModelType() + "dragon_" + pose.getPose() + ".tbl";
         try{
             result = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel(location));
         }
