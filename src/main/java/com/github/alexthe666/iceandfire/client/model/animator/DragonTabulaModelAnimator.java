@@ -66,6 +66,8 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
             TabulaModel femaleModel = getModel(EnumDragonPoses.FEMALE);
             AdvancedModelBox femaleModelCube = femaleModel.getCube(cube.boxName);
             AdvancedModelBox maleModelCube = maleModel.getCube(cube.boxName);
+            if(maleModelCube == null || femaleModelCube == null)
+                return;
             float x = femaleModelCube.rotateAngleX;
             float y = femaleModelCube.rotateAngleY;
             float z = femaleModelCube.rotateAngleZ;
