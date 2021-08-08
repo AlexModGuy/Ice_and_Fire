@@ -23,6 +23,8 @@ public class FireDragonTabulaModelAnimator extends DragonTabulaModelAnimator<Ent
         this.swimPoses = new TabulaModel[] {EnumDragonAnimations.WALK1.firedragon_model, EnumDragonAnimations.WALK2.firedragon_model, EnumDragonAnimations.WALK3.firedragon_model, EnumDragonAnimations.WALK4.firedragon_model}; //TODO Proper swim animations
     }
 
+    //old setRotationAngles()
+    /*
     @Override
     public void setRotationAngles(TabulaModel model, EntityFireDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         model.resetToDefaultPose();
@@ -44,6 +46,7 @@ public class FireDragonTabulaModelAnimator extends DragonTabulaModelAnimator<Ent
         if (delta == 0) {
             deltaTicks = 0;
         }
+
 
 
         for (AdvancedModelBox cube : model.getCubes().values()) {
@@ -205,6 +208,7 @@ public class FireDragonTabulaModelAnimator extends DragonTabulaModelAnimator<Ent
             );
         }
     }
+*/
 
     @Override
     protected TabulaModel getModel(EnumDragonPoses pose) {

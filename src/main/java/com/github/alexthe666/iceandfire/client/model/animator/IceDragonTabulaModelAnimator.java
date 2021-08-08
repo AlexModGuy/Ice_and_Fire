@@ -24,6 +24,8 @@ public class IceDragonTabulaModelAnimator extends DragonTabulaModelAnimator<Enti
         this.swimPoses = new TabulaModel[] {EnumDragonAnimations.SWIM1.icedragon_model, EnumDragonAnimations.SWIM2.icedragon_model, EnumDragonAnimations.SWIM3.icedragon_model, EnumDragonAnimations.SWIM4.icedragon_model, EnumDragonAnimations.SWIM5.icedragon_model};
     }
 
+    //old setRotationAngles()
+    /*
     @Override
     public void setRotationAngles(TabulaModel model, EntityIceDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         model.resetToDefaultPose();
@@ -238,6 +240,7 @@ public class IceDragonTabulaModelAnimator extends DragonTabulaModelAnimator<Enti
             );
         }
     }
+     */
 
     @Override
     protected TabulaModel getModel(EnumDragonPoses pose) {

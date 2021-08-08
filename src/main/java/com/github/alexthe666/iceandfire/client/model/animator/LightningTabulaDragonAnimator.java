@@ -24,6 +24,8 @@ public class LightningTabulaDragonAnimator extends DragonTabulaModelAnimator<Ent
         this.swimPoses = new TabulaModel[] {EnumDragonAnimations.WALK1.lightningdragon_model, EnumDragonAnimations.WALK2.lightningdragon_model, EnumDragonAnimations.WALK3.lightningdragon_model, EnumDragonAnimations.WALK4.lightningdragon_model}; //TODO Proper swim animations
     }
 
+    //old setRotationAngles
+    /*
     @Override
     public void setRotationAngles(TabulaModel model, EntityLightningDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         model.resetToDefaultPose();
@@ -46,6 +48,8 @@ public class LightningTabulaDragonAnimator extends DragonTabulaModelAnimator<Ent
         if (delta == 0) {
             deltaTicks = 0;
         }
+
+
 
 
         for (AdvancedModelBox cube : model.getCubes().values()) {
@@ -213,6 +217,7 @@ public class LightningTabulaDragonAnimator extends DragonTabulaModelAnimator<Ent
             );
         }
     }
+*/
 
     @Override
     protected TabulaModel getModel(EnumDragonPoses pose) {
