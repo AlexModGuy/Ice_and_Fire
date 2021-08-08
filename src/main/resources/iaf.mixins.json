@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.github.alexthe666.iceandfire.world.gen.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "iaf.refmap.json",
+  "mixins": [
+    "NoLakesInStructuresMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}
