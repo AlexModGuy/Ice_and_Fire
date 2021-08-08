@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Random;
 
-// Base code from TelepathicGrunts RepurposedStructures
+// Based on code from TelepathicGrunts RepurposedStructures
 @Mixin(LakesFeature.class)
 public class NoLakesInStructuresMixin {
 
@@ -29,7 +29,7 @@ public class NoLakesInStructuresMixin {
         SectionPos sectionPos = SectionPos.from(blockPos);
         Structure<NoFeatureConfig> structure = IafWorldRegistry.MAUSOLEUM;
         if (serverWorldAccess.func_241827_a(sectionPos, structure).findAny().isPresent()) {
-            cir.setReturnValue(false);
+             cir.setReturnValue(false);
         }
     }
 }
