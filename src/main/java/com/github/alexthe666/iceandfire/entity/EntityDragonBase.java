@@ -106,6 +106,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     private static final DataParameter<Integer> COMMAND = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.VARINT);
     private static final DataParameter<Float> DRAGON_PITCH = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.FLOAT);
     private static final DataParameter<Boolean> CRYSTAL_BOUND = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<String> CUSTOM_POSE = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.STRING);
     public static Animation ANIMATION_FIRECHARGE;
     public static Animation ANIMATION_EAT;
     public static Animation ANIMATION_SPEAK;
@@ -619,6 +620,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         this.dataManager.register(COMMAND, Integer.valueOf(0));
         this.dataManager.register(DRAGON_PITCH, Float.valueOf(0));
         this.dataManager.register(CRYSTAL_BOUND, Boolean.valueOf(false));
+        this.dataManager.register(CUSTOM_POSE, "");
     }
 
     public boolean isGoingUp() {
@@ -725,6 +727,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         compound.putFloat("DeadProg", this.modelDeadProgress);
         compound.putBoolean("Tackle", this.isTackling());
         compound.putBoolean("HasHomePosition", this.hasHomePosition);
+        compound.putString("CustomPose", this.getCustomPose());
         if (homePos != null && this.hasHomePosition) {
             compound.putInt("HomeAreaX", homePos.getX());
             compound.putInt("HomeAreaY", homePos.getY());
@@ -767,6 +770,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         this.setDeathStage(compound.getInt("DeathStage"));
         this.setModelDead(compound.getBoolean("ModelDead"));
         this.modelDeadProgress = compound.getFloat("DeadProg");
+        this.setCustomPose(compound.getString("CustomPose"));
         this.hasHomePosition = compound.getBoolean("HasHomePosition");
         if (hasHomePosition && compound.getInt("HomeAreaX") != 0 && compound.getInt("HomeAreaY") != 0 && compound.getInt("HomeAreaZ") != 0) {
             homePos = new BlockPos(compound.getInt("HomeAreaX"), compound.getInt("HomeAreaY"), compound.getInt("HomeAreaZ"));
@@ -975,6 +979,14 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         } else {
             this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 & -2)));
         }
+    }
+
+    public String getCustomPose() {
+        return this.dataManager.get(CUSTOM_POSE);
+    }
+    public void setCustomPose(String customPose) {
+        this.dataManager.set(CUSTOM_POSE, customPose);
+        modelDeadProgress = 20f;
     }
 
     public void riderShootFire(Entity controller) {

@@ -4,6 +4,7 @@ import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ITabulaModelAnimator;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.citadel.client.model.TabulaModel;
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.util.*;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
@@ -169,8 +170,10 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
             }
         }
         if (entity.modelDeadProgress > 0.0F) {
-            if (!isPartEqual(cube, getModel(EnumDragonPoses.DEAD).getCube(cube.boxName))) {
-                transitionTo(cube, getModel(EnumDragonPoses.DEAD).getCube(cube.boxName), entity.prevModelDeadProgress + (entity.modelDeadProgress - entity.prevModelDeadProgress) * Minecraft.getInstance().getRenderPartialTicks(), 20, cube.boxName.equals("ThighR") || cube.boxName.equals("ThighL"));
+            TabulaModel customPose = customPose(entity);
+            TabulaModel pose = customPose == null ? getModel(EnumDragonPoses.DEAD) : customPose;
+            if (!isPartEqual(cube, pose.getCube(cube.boxName))) {
+                transitionTo(cube, pose.getCube(cube.boxName), entity.prevModelDeadProgress + (entity.modelDeadProgress - entity.prevModelDeadProgress) * Minecraft.getInstance().getRenderPartialTicks(), 20, cube.boxName.equals("ThighR") || cube.boxName.equals("ThighL"));
             }
         }
         if (entity.sleepProgress > 0.0F) {
@@ -242,6 +245,14 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
     protected boolean isWing(TabulaModel model, AdvancedModelBox modelRenderer) {
         return model.getCube("armL1") == modelRenderer || model.getCube("armR1") == modelRenderer || model.getCube("armL1").childModels.contains(modelRenderer) || model.getCube("armR1").childModels.contains(modelRenderer);
     }
+
+    protected TabulaModel customPose(T entity) {
+        try {
+        return getModel(EnumDragonPoses.valueOf(entity.getCustomPose()));}
+        catch(IllegalArgumentException e) { return null; }
+    }
+
+
 
     protected boolean isHorn(AdvancedModelBox modelRenderer) {
         return modelRenderer.boxName.contains("Horn");
