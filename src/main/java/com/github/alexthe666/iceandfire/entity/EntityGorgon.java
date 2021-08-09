@@ -18,6 +18,7 @@ import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
 
+import io.netty.buffer.Unpooled;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -38,6 +39,7 @@ import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -225,22 +227,32 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                         if (!world.isRemote) {
                             if (playerStatueCooldown == 0) {
                                 EntityStoneStatue statue = EntityStoneStatue.buildStatueEntity(this.getAttackTarget());
-                                statue.setPositionAndRotation(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY(), this.getAttackTarget().getPosZ(), this.getAttackTarget().rotationYaw, this.getAttackTarget().rotationPitch);
-                                if (!world.isRemote) {
-                                    world.addEntity(statue);
+                                try {
+                                    //Simulate packet buffer reading and writing to eliminate the chance of a statue being created with too much nbt data
+                                    PacketBuffer testPacket = new PacketBuffer(Unpooled.buffer());
+                                    testPacket.writeCompoundTag(statue.serializeNBT());
+                                    testPacket.readCompoundTag();
+                                    statue.setPositionAndRotation(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY(), this.getAttackTarget().getPosZ(), this.getAttackTarget().rotationYaw, this.getAttackTarget().rotationPitch);
+                                    if (!world.isRemote) {
+                                        world.addEntity(statue);
+                                    }
+                                    statue.prevRotationYaw = this.getAttackTarget().rotationYaw;
+                                    statue.rotationYaw = this.getAttackTarget().rotationYaw;
+                                    statue.rotationYawHead = this.getAttackTarget().rotationYaw;
+                                    statue.renderYawOffset = this.getAttackTarget().rotationYaw;
+                                    statue.prevRenderYawOffset = this.getAttackTarget().rotationYaw;
+                                    playerStatueCooldown = 40;
                                 }
-                                statue.prevRotationYaw = this.getAttackTarget().rotationYaw;
-                                statue.rotationYaw = this.getAttackTarget().rotationYaw;
-                                statue.rotationYawHead = this.getAttackTarget().rotationYaw;
-                                statue.renderYawOffset = this.getAttackTarget().rotationYaw;
-                                statue.prevRenderYawOffset = this.getAttackTarget().rotationYaw;
-                                playerStatueCooldown = 40;
-                                if(this.getAttackTarget() instanceof PlayerEntity){
+                                catch (Exception ex){
+                                    IceAndFire.LOGGER.debug("Tried to create a stone statue with too much NBT data {}", ex.toString());
+                                }
+                                if (this.getAttackTarget() instanceof PlayerEntity) {
                                     this.getAttackTarget().attackEntityFrom(IafDamageRegistry.GORGON_DMG, Integer.MAX_VALUE);
-                                }else{
+                                } else {
                                     this.getAttackTarget().remove();
                                 }
                                 this.setAttackTarget(null);
+
                             }
                         }
                     }
