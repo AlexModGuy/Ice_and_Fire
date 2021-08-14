@@ -33,11 +33,11 @@ public class LayerDragonEyes extends LayerRenderer<EntityDragonBase, SegmentedMo
         super(renderIn);
         this.render = renderIn;
         try{
-            fireHead = onlyKeepCubes(new TabulaModelAccessor(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/dragonFireGround"),null),
+            fireHead = onlyKeepCubes(new TabulaModelAccessor(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/firedragon_Ground"),null),
                     Collections.singletonList("HeadFront"));
-            iceHead = onlyKeepCubes(new TabulaModelAccessor(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/dragonIceGround"),null),
+            iceHead = onlyKeepCubes(new TabulaModelAccessor(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/icedragon_Ground"),null),
                     Collections.singletonList("HeadFront"));
-            lightningHead = onlyKeepCubes(new TabulaModelAccessor(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/lightningdragon/dragonLightningGround"),null),
+            lightningHead = onlyKeepCubes(new TabulaModelAccessor(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/lightningdragon/lightningdragon_Ground"),null),
                     Collections.singletonList("HeadFront"));
         }
         catch (Exception ex){

@@ -55,7 +55,6 @@ public class EntityLightningDragon extends EntityDragonBase {
     private static final DataParameter<Float> LIGHTNING_TARGET_X = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.FLOAT);
     private static final DataParameter<Float> LIGHTNING_TARGET_Y = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.FLOAT);
     private static final DataParameter<Float> LIGHTNING_TARGET_Z = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.FLOAT);
-    public static Animation ANIMATION_FIRECHARGE;
 
     public EntityLightningDragon(World worldIn) {
         this(IafEntityRegistry.LIGHTNING_DRAGON, worldIn);

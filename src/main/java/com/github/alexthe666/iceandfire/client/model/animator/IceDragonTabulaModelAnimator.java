@@ -4,8 +4,7 @@ import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ITabulaModelAnimator;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.citadel.client.model.TabulaModel;
-import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
-import com.github.alexthe666.iceandfire.client.model.util.LegArticulator;
+import com.github.alexthe666.iceandfire.client.model.util.*;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 
@@ -15,33 +14,18 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class IceDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator implements ITabulaModelAnimator<EntityIceDragon> {
-
-    private TabulaModel[] walkPoses = {EnumDragonAnimations.WALK1.icedragon_model, EnumDragonAnimations.WALK2.icedragon_model, EnumDragonAnimations.WALK3.icedragon_model, EnumDragonAnimations.WALK4.icedragon_model};
-    private TabulaModel[] flyPoses = {EnumDragonAnimations.FLIGHT1.icedragon_model, EnumDragonAnimations.FLIGHT2.icedragon_model, EnumDragonAnimations.FLIGHT3.icedragon_model, EnumDragonAnimations.FLIGHT4.icedragon_model, EnumDragonAnimations.FLIGHT5.icedragon_model, EnumDragonAnimations.FLIGHT6.icedragon_model};
-    private TabulaModel[] swimPoses = {EnumDragonAnimations.SWIM1.icedragon_model, EnumDragonAnimations.SWIM2.icedragon_model, EnumDragonAnimations.SWIM3.icedragon_model, EnumDragonAnimations.SWIM4.icedragon_model, EnumDragonAnimations.SWIM5.icedragon_model};
-    private AdvancedModelBox[] neckParts;
-    private AdvancedModelBox[] tailParts;
-    private AdvancedModelBox[] tailPartsWBody;
-    private AdvancedModelBox[] toesPartsL;
-    private AdvancedModelBox[] toesPartsR;
-    private AdvancedModelBox[] clawL;
-    private AdvancedModelBox[] clawR;
+public class IceDragonTabulaModelAnimator extends DragonTabulaModelAnimator<EntityIceDragon> {
 
     public IceDragonTabulaModelAnimator() {
         super(EnumDragonAnimations.GROUND_POSE.icedragon_model);
+
+        this.walkPoses = new TabulaModel[] {EnumDragonAnimations.WALK1.icedragon_model, EnumDragonAnimations.WALK2.icedragon_model, EnumDragonAnimations.WALK3.icedragon_model, EnumDragonAnimations.WALK4.icedragon_model};
+        this.flyPoses  = new TabulaModel[] {EnumDragonAnimations.FLIGHT1.icedragon_model, EnumDragonAnimations.FLIGHT2.icedragon_model, EnumDragonAnimations.FLIGHT3.icedragon_model, EnumDragonAnimations.FLIGHT4.icedragon_model, EnumDragonAnimations.FLIGHT5.icedragon_model, EnumDragonAnimations.FLIGHT6.icedragon_model};
+        this.swimPoses = new TabulaModel[] {EnumDragonAnimations.SWIM1.icedragon_model, EnumDragonAnimations.SWIM2.icedragon_model, EnumDragonAnimations.SWIM3.icedragon_model, EnumDragonAnimations.SWIM4.icedragon_model, EnumDragonAnimations.SWIM5.icedragon_model};
     }
 
-    public void init(TabulaModel model) {
-        neckParts = new AdvancedModelBox[]{model.getCube("Neck1"), model.getCube("Neck2"), model.getCube("Neck3"), model.getCube("Neck3"), model.getCube("Head")};
-        tailParts = new AdvancedModelBox[]{model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
-        tailPartsWBody = new AdvancedModelBox[]{model.getCube("BodyLower"), model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
-        toesPartsL = new AdvancedModelBox[]{model.getCube("ToeL1"), model.getCube("ToeL2"), model.getCube("ToeL3")};
-        toesPartsR = new AdvancedModelBox[]{model.getCube("ToeR1"), model.getCube("ToeR2"), model.getCube("ToeR3")};
-        clawL = new AdvancedModelBox[]{model.getCube("ClawL")};
-        clawR = new AdvancedModelBox[]{model.getCube("ClawR")};
-    }
-
+    //old setRotationAngles()
+    /*
     @Override
     public void setRotationAngles(TabulaModel model, EntityIceDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         model.resetToDefaultPose();
@@ -256,163 +240,11 @@ public class IceDragonTabulaModelAnimator extends IceAndFireTabulaModelAnimator 
             );
         }
     }
+     */
 
-    private void genderMob(EntityIceDragon entity, AdvancedModelBox cube) {
-        if (!entity.isMale()) {
-            TabulaModel maleModel = EnumDragonAnimations.MALE.icedragon_model;
-            TabulaModel femaleModel = EnumDragonAnimations.FEMALE.icedragon_model;
-            AdvancedModelBox femaleModelCube = femaleModel.getCube(cube.boxName);
-            AdvancedModelBox maleModelCube = maleModel.getCube(cube.boxName);
-            float x = femaleModelCube.rotateAngleX;
-            float y = femaleModelCube.rotateAngleY;
-            float z = femaleModelCube.rotateAngleZ;
-            if (x != maleModelCube.rotateAngleX || y != maleModelCube.rotateAngleY || z != maleModelCube.rotateAngleZ) {
-                this.setRotateAngle(cube, 1F, x, y, z);
-            }
-        }
+    @Override
+    protected TabulaModel getModel(EnumDragonPoses pose) {
+        return DragonAnimationsLibrary.getModel(pose, EnumDragonModelTypes.ICE_DRAGON_MODEL);
     }
-
-    private boolean isWing(TabulaModel model, AdvancedModelBox modelRenderer) {
-        return model.getCube("armL1") == modelRenderer || model.getCube("armR1") == modelRenderer || model.getCube("armL1").childModels.contains(modelRenderer) || model.getCube("armR1").childModels.contains(modelRenderer);
-    }
-
-    private boolean isHorn(AdvancedModelBox modelRenderer) {
-        return modelRenderer.boxName.contains("Horn");
-    }
-
-    public void animate(TabulaModel model, EntityIceDragon entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
-        AdvancedModelBox modelCubeJaw = model.getCube("Jaw");
-        AdvancedModelBox modelCubeBodyUpper = model.getCube("BodyUpper");
-        model.llibAnimator.update(entity);
-        model.llibAnimator.setAnimation(EntityIceDragon.ANIMATION_FIRECHARGE);
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.BLAST_CHARGE1.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.BLAST_CHARGE2.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(5);
-        moveToPoseSameModel(model, EnumDragonAnimations.BLAST_CHARGE3.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.resetKeyframe(5);
-        model.llibAnimator.setAnimation(EntityIceDragon.ANIMATION_SPEAK);
-        model.llibAnimator.startKeyframe(5);
-        this.rotate(model.llibAnimator, modelCubeJaw, 18, 0, 0);
-        model.llibAnimator.move(modelCubeJaw, 0, 0, 0.2F);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.setStaticKeyframe(5);
-        model.llibAnimator.startKeyframe(5);
-        this.rotate(model.llibAnimator, modelCubeJaw, 18, 0, 0);
-        model.llibAnimator.move(modelCubeJaw, 0, 0, 0.2F);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.resetKeyframe(5);
-
-        model.llibAnimator.setAnimation(EntityIceDragon.ANIMATION_BITE);
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.BITE1.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(5);
-        moveToPoseSameModel(model, EnumDragonAnimations.BITE2.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(5);
-        moveToPoseSameModel(model, EnumDragonAnimations.BITE3.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.resetKeyframe(10);
-
-        model.llibAnimator.setAnimation(EntityIceDragon.ANIMATION_SHAKEPREY);
-        model.llibAnimator.startKeyframe(15);
-        moveToPoseSameModel(model, EnumDragonAnimations.GRAB1.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.GRAB2.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.GRAB_SHAKE1.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.GRAB_SHAKE2.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.GRAB_SHAKE3.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.resetKeyframe(10);
-        model.llibAnimator.setAnimation(EntityIceDragon.ANIMATION_TAILWHACK);
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.TAIL_WHIP1.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.TAIL_WHIP2.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.TAIL_WHIP3.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.resetKeyframe(10);
-        model.llibAnimator.setAnimation(EntityIceDragon.ANIMATION_WINGBLAST);
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.WING_BLAST1.icedragon_model);
-        model.llibAnimator.move(modelCubeBodyUpper, 0, -4F, 0);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(5);
-        moveToPoseSameModel(model, EnumDragonAnimations.WING_BLAST2.icedragon_model);
-        model.llibAnimator.move(modelCubeBodyUpper, 0, -4F, 0);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(5);
-        moveToPoseSameModel(model, EnumDragonAnimations.WING_BLAST3.icedragon_model);
-        model.llibAnimator.move(modelCubeBodyUpper, 0, -4F, 0);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(5);
-        moveToPoseSameModel(model, EnumDragonAnimations.WING_BLAST4.icedragon_model);
-        model.llibAnimator.move(modelCubeBodyUpper, 0, -4F, 0);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(5);
-        moveToPoseSameModel(model, EnumDragonAnimations.WING_BLAST5.icedragon_model);
-        model.llibAnimator.move(modelCubeBodyUpper, 0, -4F, 0);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(5);
-        moveToPoseSameModel(model, EnumDragonAnimations.WING_BLAST6.icedragon_model);
-        model.llibAnimator.move(modelCubeBodyUpper, 0, -4F, 0);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(5);
-        moveToPoseSameModel(model, EnumDragonAnimations.WING_BLAST5.icedragon_model);
-        model.llibAnimator.move(modelCubeBodyUpper, 0, -4F, 0);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.resetKeyframe(10);
-        model.llibAnimator.setAnimation(EntityIceDragon.ANIMATION_ROAR);
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.ROAR1.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.ROAR2.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.ROAR3.icedragon_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.resetKeyframe(10);
-
-        model.llibAnimator.setAnimation(EntityIceDragon.ANIMATION_EPIC_ROAR);
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.EPIC_ROAR1.icedragon_model);
-        model.llibAnimator.move(modelCubeBodyUpper, 0, -6.8F, 0);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.EPIC_ROAR2.icedragon_model);
-        model.llibAnimator.move(modelCubeBodyUpper, 0, -6.8F, 0);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.EPIC_ROAR3.icedragon_model);
-        model.llibAnimator.move(modelCubeBodyUpper, 0, -6.8F, 0);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.EPIC_ROAR2.icedragon_model);
-        model.llibAnimator.move(modelCubeBodyUpper, 0, -6.8F, 0);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(10);
-        moveToPoseSameModel(model, EnumDragonAnimations.EPIC_ROAR3.icedragon_model);
-        model.llibAnimator.move(modelCubeBodyUpper, 0, -6.8F, 0);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.resetKeyframe(10);
-
-    }
-
 
 }
