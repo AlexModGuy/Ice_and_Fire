@@ -69,14 +69,7 @@ public class EntityTideTrident extends TridentEntity {
 
         Entity entity1 = this.getShooter();
         DamageSource damagesource = DamageSource.causeTridentDamage(this, entity1 == null ? this : entity1);
-        try {
-            Field dealtDamageField = ObfuscationReflectionHelper.findField(EntityTideTrident.class, "field_226571_aq_");
-            Field modifier = Field.class.getDeclaredField("modifiers");
-            modifier.setAccessible(true);
-            dealtDamageField.set(this, true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.dealtDamage = true;
         SoundEvent soundevent = SoundEvents.ITEM_TRIDENT_HIT;
         if (entity.attackEntityFrom(damagesource, f)) {
             if (entity.getType() == EntityType.ENDERMAN) {

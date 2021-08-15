@@ -785,7 +785,8 @@ public class GuiBestiary extends Screen {
 
     public void imageFromTxt(MatrixStack ms) {
         String fileName = this.pageType.toString().toLowerCase(Locale.ROOT) + "_" + this.bookPages + ".txt";
-        ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + Minecraft.getInstance().gameSettings.language + "_0/" + fileName);
+        String languageName = Minecraft.getInstance().gameSettings.language.toLowerCase(Locale.ROOT);
+        ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + languageName + "_0/" + fileName);
         ResourceLocation backupLoc = new ResourceLocation("iceandfire:lang/bestiary/en_us_0/" + fileName);
         IResource resource = null;
 
