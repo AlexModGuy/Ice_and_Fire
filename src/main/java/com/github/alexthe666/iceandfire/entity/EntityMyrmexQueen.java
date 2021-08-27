@@ -90,8 +90,8 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     }
 
     public void setCustomName(ITextComponent name) {
-        if (!this.getHive().colonyName.equals(name.getUnformattedComponentText())) {
-            if (this.getHive() != null) {
+        if (this.getHive() != null) {
+            if (!this.getHive().colonyName.equals(name.getUnformattedComponentText())) {
                 this.getHive().colonyName = name.getString();
             }
         }

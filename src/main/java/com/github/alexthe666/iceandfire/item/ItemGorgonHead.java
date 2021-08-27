@@ -13,6 +13,7 @@ import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
 
+import io.netty.buffer.Unpooled;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -21,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
@@ -107,12 +109,19 @@ public class ItemGorgonHead extends Item implements IUsesTEISR, ICustomRendered 
                 statue.setPositionAndRotation(pointedEntity.getPosX(), pointedEntity.getPosY(), pointedEntity.getPosZ(), pointedEntity.rotationYaw, pointedEntity.rotationPitch);
                 statue.renderYawOffset = pointedEntity.rotationYaw;
                 if (!worldIn.isRemote) {
-                    worldIn.addEntity(statue);
+                    try {
+                        PacketBuffer testPacket = new PacketBuffer(Unpooled.buffer());
+                        testPacket.writeCompoundTag(statue.serializeNBT());
+                        testPacket.readCompoundTag();
+                        worldIn.addEntity(statue);
+
+                    } catch (Exception ex) {
+                        IceAndFire.LOGGER.debug("Tried to create a stone statue with too much NBT data {}", ex.toString());
+                    }
                 }
                 if (entity instanceof PlayerEntity && !((PlayerEntity) entity).isCreative()) {
                     stack.shrink(1);
                 }
-
             }
         }
         stack.getTag().putBoolean("Active", false);

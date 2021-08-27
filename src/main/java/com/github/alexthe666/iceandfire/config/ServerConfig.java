@@ -336,7 +336,7 @@ public class ServerConfig {
         this.myrmexColonyGenChance = buildInt(builder, "Myrmex Colony Gen Chance", "all", 150, 1, 10000, "One out of this number chance per chunk to generate a myrmex hive.");
         this.myrmexColonySize = buildInt(builder, "Myrmex Colony Max Size", "all", 80, 10, 10000, "How many maximum individuals a myrmex colony can have.");
         this.myrmexBaseAttackStrength = buildDouble(builder, "Myrmex Base Attack Strength", "all", 3, 1, 10000, "Base Myrmex(worker) attack strength");
-        this.myrmexMaximumWanderRadius = buildInt(builder,"Myrmex Maximum Wnader Radius","all",4000,100,20000,"The maximum radius myrmex area allowed to wander/forage");
+        this.myrmexMaximumWanderRadius = buildInt(builder,"Myrmex Maximum Wander Radius","all",50,25,4000,"The maximum radius myrmex area allowed to wander/forage");
         builder.pop();
         builder.push("Amphitheres");
         this.spawnAmphitheres = buildBoolean(builder, "Spawn Amphitheres", "all", true, "True if amphitheres are allowed to spawn");
@@ -381,6 +381,7 @@ public class ServerConfig {
         this.ghostAttackStrength = buildDouble(builder, "Ghost Attack Strength", "all", 3F, 0.0F, 10000.0F, "Maximum ghost attack strength.");
         this.ghostSpawnFromPlayerDeaths = buildBoolean(builder, "Ghost Spawn from PvP deaths", "all", true, "True if ghosts can rarely spawn from brutal PvP deaths.");
         this.villagerHouseWeight = buildInt(builder, "Villager Scribe House Weight", "all", 22, 0, 10000, "Villager Scribe House generation weight. Lower = lower chance to spawn");
+
 
         builder.pop();
         builder.pop();

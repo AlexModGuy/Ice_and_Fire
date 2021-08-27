@@ -402,7 +402,7 @@ public class IafWorldRegistry {
             event.getGeneration().withFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MYRMEX_HIVE_JUNGLE_CF);
         	LOADED_FEATURES.put("MYRMEX_HIVE_JUNGLE_CF", true);
         }
-        if (IafConfig.generateMyrmexColonies && BiomeConfig.test(BiomeConfig.sirenBiomes, biome)) {
+        if (IafConfig.generateSirenIslands && BiomeConfig.test(BiomeConfig.sirenBiomes, biome)) {
             event.getGeneration().withFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, SIREN_ISLAND_CF);
         	LOADED_FEATURES.put("SIREN_ISLAND_CF", true);
         }

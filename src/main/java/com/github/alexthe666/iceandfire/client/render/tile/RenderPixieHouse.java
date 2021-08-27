@@ -40,13 +40,21 @@ public class RenderPixieHouse<T extends TileEntityPixieHouse> extends TileEntity
         }
         if (entity != null && entity.getWorld() != null && entity.getWorld().getBlockState(entity.getPos()).getBlock() instanceof BlockPixieHouse) {
             meta = TileEntityPixieHouse.getHouseTypeFromBlock(entity.getWorld().getBlockState(entity.getPos()).getBlock());
-            if (entity.getWorld().getBlockState(entity.getPos()).get(BlockPixieHouse.FACING) == Direction.NORTH) {
+            // Apparently with Optifine/other optimizations mods, this code path can get run before the block
+            // has been destroyed/possibly created, causing the BlockState to be an air block,
+            // which is missing the below property, causing a crash. If this property is missing,
+            // let's just silently fail.
+            if (!entity.getWorld().getBlockState(entity.getPos()).hasProperty(BlockPixieHouse.FACING)){
+                return;
+            }
+            Direction facing = entity.getWorld().getBlockState(entity.getPos()).get(BlockPixieHouse.FACING);
+            if (facing == Direction.NORTH) {
                 rotation = 180;
             }
-            if (entity.getWorld().getBlockState(entity.getPos()).get(BlockPixieHouse.FACING) == Direction.EAST) {
+            else if (facing == Direction.EAST) {
                 rotation = -90;
             }
-            if (entity.getWorld().getBlockState(entity.getPos()).get(BlockPixieHouse.FACING) == Direction.WEST) {
+            else if (facing == Direction.WEST) {
                 rotation = 90;
             }
 

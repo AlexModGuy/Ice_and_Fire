@@ -45,7 +45,6 @@ public class EntityFireDragon extends EntityDragonBase {
     public static final ResourceLocation FEMALE_LOOT = new ResourceLocation("iceandfire", "entities/dragon/fire_dragon_female");
     public static final ResourceLocation MALE_LOOT = new ResourceLocation("iceandfire", "entities/dragon/fire_dragon_male");
     public static final ResourceLocation SKELETON_LOOT = new ResourceLocation("iceandfire", "entities/dragon/fire_dragon_skeleton");
-    public static Animation ANIMATION_FIRECHARGE;
 
     public EntityFireDragon(World worldIn) {
         this(IafEntityRegistry.FIRE_DRAGON, worldIn);
