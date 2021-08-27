@@ -381,8 +381,6 @@ public class ServerConfig {
         this.ghostAttackStrength = buildDouble(builder, "Ghost Attack Strength", "all", 3F, 0.0F, 10000.0F, "Maximum ghost attack strength.");
         this.ghostSpawnFromPlayerDeaths = buildBoolean(builder, "Ghost Spawn from PvP deaths", "all", true, "True if ghosts can rarely spawn from brutal PvP deaths.");
         this.villagerHouseWeight = buildInt(builder, "Villager Scribe House Weight", "all", 22, 0, 10000, "Villager Scribe House generation weight. Lower = lower chance to spawn");
-
-
         builder.pop();
         builder.pop();
         builder.push("Items");
