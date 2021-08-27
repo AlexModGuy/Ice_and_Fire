@@ -45,6 +45,7 @@ public class FrozenEntityProperties extends EntityProperties<LivingEntity> {
     }
 
     public void setFrozenFor(int frozenFor) {
+        //#4133, #4134, #4132, #4125, #4123, #4122, #4120, #4119, #4114, #4110, #4103, #4099, #4094, #4093, #4088, #4087, #4085, #4080, #4078
         if (!(this.getEntity() instanceof EntityIceDragon)) {
             this.isFrozen = true;
             this.ticksUntilUnfrozen = frozenFor;
