@@ -48,14 +48,16 @@ public class IafVillagerRegistry {
     }
 
     public static void setup() {
-        PlainsVillagePools.init();
-        SnowyVillagePools.init();
-        SavannaVillagePools.init();
-        DesertVillagePools.init();
-        TaigaVillagePools.init();
+        if(IafConfig.villagerHouseWeight > 0){
+            PlainsVillagePools.init();
+            SnowyVillagePools.init();
+            SavannaVillagePools.init();
+            DesertVillagePools.init();
+            TaigaVillagePools.init();
 
-        for (String type : VILLAGE_TYPES) {
-            addStructureToPool(new ResourceLocation("village/" + type + "/houses"), new ResourceLocation("village/" + type + "/terminators"), new ResourceLocation("iceandfire", "village/" + type + "_scriber_1"), IafConfig.villagerHouseWeight);
+            for (String type : VILLAGE_TYPES) {
+                addStructureToPool(new ResourceLocation("village/" + type + "/houses"), new ResourceLocation("village/" + type + "/terminators"), new ResourceLocation("iceandfire", "village/" + type + "_scriber_1"), IafConfig.villagerHouseWeight);
+            }
         }
 
     }

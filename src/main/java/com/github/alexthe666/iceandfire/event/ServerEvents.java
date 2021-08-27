@@ -746,7 +746,6 @@ public class ServerEvents {
     public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
         ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), ChainEntityProperties.class);
         if (chainProperties != null) {
-            //chainProperties.debug();
             chainProperties.updateConnectedEntities(event.getTarget());
             if (chainProperties.isChained() && chainProperties.isConnectedToEntity(event.getTarget(), event.getPlayer())) {
                 chainProperties.removeChain(event.getTarget(), event.getPlayer());
