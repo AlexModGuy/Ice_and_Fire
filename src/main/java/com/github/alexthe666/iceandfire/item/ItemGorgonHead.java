@@ -13,7 +13,6 @@ import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
 
-import io.netty.buffer.Unpooled;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -22,7 +21,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
@@ -104,20 +102,13 @@ public class ItemGorgonHead extends Item implements IUsesTEISR, ICustomRendered 
                 if(pointedEntity instanceof PlayerEntity){
                     pointedEntity.attackEntityFrom(IafDamageRegistry.GORGON_DMG, Integer.MAX_VALUE);
                 }else{
-                    pointedEntity.remove();
+                    if (!worldIn.isRemote)
+                        pointedEntity.remove();
                 }
                 statue.setPositionAndRotation(pointedEntity.getPosX(), pointedEntity.getPosY(), pointedEntity.getPosZ(), pointedEntity.rotationYaw, pointedEntity.rotationPitch);
                 statue.renderYawOffset = pointedEntity.rotationYaw;
                 if (!worldIn.isRemote) {
-                    try {
-                        PacketBuffer testPacket = new PacketBuffer(Unpooled.buffer());
-                        testPacket.writeCompoundTag(statue.serializeNBT());
-                        testPacket.readCompoundTag();
-                        worldIn.addEntity(statue);
-
-                    } catch (Exception ex) {
-                        IceAndFire.LOGGER.debug("Tried to create a stone statue with too much NBT data {}", ex.toString());
-                    }
+                    worldIn.addEntity(statue);
                 }
                 if (entity instanceof PlayerEntity && !((PlayerEntity) entity).isCreative()) {
                     stack.shrink(1);

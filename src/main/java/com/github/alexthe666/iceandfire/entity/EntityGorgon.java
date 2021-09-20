@@ -227,25 +227,16 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                         if (!world.isRemote) {
                             if (playerStatueCooldown == 0) {
                                 EntityStoneStatue statue = EntityStoneStatue.buildStatueEntity(this.getAttackTarget());
-                                try {
-                                    //Simulate packet buffer reading and writing to eliminate the chance of a statue being created with too much nbt data
-                                    PacketBuffer testPacket = new PacketBuffer(Unpooled.buffer());
-                                    testPacket.writeCompoundTag(statue.serializeNBT());
-                                    testPacket.readCompoundTag();
-                                    statue.setPositionAndRotation(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY(), this.getAttackTarget().getPosZ(), this.getAttackTarget().rotationYaw, this.getAttackTarget().rotationPitch);
-                                    if (!world.isRemote) {
-                                        world.addEntity(statue);
-                                    }
-                                    statue.prevRotationYaw = this.getAttackTarget().rotationYaw;
-                                    statue.rotationYaw = this.getAttackTarget().rotationYaw;
-                                    statue.rotationYawHead = this.getAttackTarget().rotationYaw;
-                                    statue.renderYawOffset = this.getAttackTarget().rotationYaw;
-                                    statue.prevRenderYawOffset = this.getAttackTarget().rotationYaw;
-                                    playerStatueCooldown = 40;
+                                statue.setPositionAndRotation(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY(), this.getAttackTarget().getPosZ(), this.getAttackTarget().rotationYaw, this.getAttackTarget().rotationPitch);
+                                if (!world.isRemote) {
+                                    world.addEntity(statue);
                                 }
-                                catch (Exception ex){
-                                    IceAndFire.LOGGER.debug("Tried to create a stone statue with too much NBT data {}", ex.toString());
-                                }
+                                statue.prevRotationYaw = this.getAttackTarget().rotationYaw;
+                                statue.rotationYaw = this.getAttackTarget().rotationYaw;
+                                statue.rotationYawHead = this.getAttackTarget().rotationYaw;
+                                statue.renderYawOffset = this.getAttackTarget().rotationYaw;
+                                statue.prevRenderYawOffset = this.getAttackTarget().rotationYaw;
+                                playerStatueCooldown = 40;
                                 if (this.getAttackTarget() instanceof PlayerEntity) {
                                     this.getAttackTarget().attackEntityFrom(IafDamageRegistry.GORGON_DMG, Integer.MAX_VALUE);
                                 } else {
