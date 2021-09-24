@@ -15,6 +15,7 @@ public class DragonAIEscort extends Goal {
     private final double movementSpeed;
     private Path path;
     private BlockPos previousPosition;
+    private int maxRange = 2000;
 
     public DragonAIEscort(EntityDragonBase entityIn, double movementSpeedIn) {
         this.dragon = entityIn;
@@ -29,6 +30,9 @@ public class DragonAIEscort extends Goal {
     public void tick() {
         if (this.dragon.getOwner() != null) {
             double dist = this.dragon.getDistance(this.dragon.getOwner());
+            if (dist > maxRange){
+                return;
+            }
             if (dist > this.dragon.getBoundingBox().getAverageEdgeLength() && (!this.dragon.isFlying() && !this.dragon.isHovering() || !dragon.isAllowedToTriggerFlight())) {
                 if(previousPosition == null || previousPosition.distanceSq(this.dragon.getOwner().getPosition()) > 9) {
                     this.dragon.getNavigator().tryMoveToEntityLiving(this.dragon.getOwner(), 1F);
