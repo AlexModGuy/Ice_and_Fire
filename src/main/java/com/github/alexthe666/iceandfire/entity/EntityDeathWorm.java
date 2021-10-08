@@ -102,7 +102,10 @@ public class EntityDeathWorm extends EntityTameable implements ISyncMount, IBlac
             @Override
             public boolean apply(@Nullable EntityLivingBase input) {
                 if (EntityDeathWorm.this.isTamed()) {
-                    return input instanceof EntityMob;
+                    if (!EntityDeathWorm.this.isBeingRidden())
+                        return input instanceof EntityMob;
+                    else
+                        return false;
                 } else {
                     return (IceAndFire.CONFIG.deathWormAttackMonsters ? input instanceof EntityLivingBase : (input instanceof EntityAnimal || input instanceof EntityPlayer)) && DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase && ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwner(input);
                 }
