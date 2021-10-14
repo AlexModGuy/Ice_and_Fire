@@ -91,33 +91,35 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
     }
 
     private void animate(TabulaModel model, EntitySeaSerpent entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
-        model.llibAnimator.setAnimation(EntitySeaSerpent.ANIMATION_SPEAK);
-        model.llibAnimator.startKeyframe(5);
-        this.rotate(model.llibAnimator, model.getCube("Jaw"), 25, 0, 0);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.setStaticKeyframe(5);
-        model.llibAnimator.resetKeyframe(5);
-        model.llibAnimator.setAnimation(EntitySeaSerpent.ANIMATION_BITE);
-        model.llibAnimator.startKeyframe(5);
-        moveToPose(model, EnumSeaSerpentAnimations.BITE1.seaserpent_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(5);
-        moveToPose(model, EnumSeaSerpentAnimations.BITE2.seaserpent_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.setStaticKeyframe(2);
-        model.llibAnimator.resetKeyframe(3);
-
-        model.llibAnimator.setAnimation(EntitySeaSerpent.ANIMATION_ROAR);
-        model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumSeaSerpentAnimations.ROAR1.seaserpent_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumSeaSerpentAnimations.ROAR2.seaserpent_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.startKeyframe(10);
-        moveToPose(model, EnumSeaSerpentAnimations.ROAR3.seaserpent_model);
-        model.llibAnimator.endKeyframe();
-        model.llibAnimator.resetKeyframe(10);
+        if (model.llibAnimator.setAnimation(EntitySeaSerpent.ANIMATION_SPEAK)) {
+            model.llibAnimator.startKeyframe(5);
+            this.rotate(model.llibAnimator, model.getCube("Jaw"), 25, 0, 0);
+            model.llibAnimator.endKeyframe();
+            model.llibAnimator.setStaticKeyframe(5);
+            model.llibAnimator.resetKeyframe(5);
+        }
+        if (model.llibAnimator.setAnimation(EntitySeaSerpent.ANIMATION_BITE)) {
+            model.llibAnimator.startKeyframe(5);
+            moveToPose(model, EnumSeaSerpentAnimations.BITE1.seaserpent_model);
+            model.llibAnimator.endKeyframe();
+            model.llibAnimator.startKeyframe(5);
+            moveToPose(model, EnumSeaSerpentAnimations.BITE2.seaserpent_model);
+            model.llibAnimator.endKeyframe();
+            model.llibAnimator.setStaticKeyframe(2);
+            model.llibAnimator.resetKeyframe(3);
+        }
+        if (model.llibAnimator.setAnimation(EntitySeaSerpent.ANIMATION_ROAR)) {
+            model.llibAnimator.startKeyframe(10);
+            moveToPose(model, EnumSeaSerpentAnimations.ROAR1.seaserpent_model);
+            model.llibAnimator.endKeyframe();
+            model.llibAnimator.startKeyframe(10);
+            moveToPose(model, EnumSeaSerpentAnimations.ROAR2.seaserpent_model);
+            model.llibAnimator.endKeyframe();
+            model.llibAnimator.startKeyframe(10);
+            moveToPose(model, EnumSeaSerpentAnimations.ROAR3.seaserpent_model);
+            model.llibAnimator.endKeyframe();
+            model.llibAnimator.resetKeyframe(10);
+        }
 
     }
 }

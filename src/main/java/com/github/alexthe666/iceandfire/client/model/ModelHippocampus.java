@@ -230,12 +230,13 @@ public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
         animator.update(entity);
-        animator.setAnimation(EntityHippocampus.ANIMATION_SPEAK);
-        animator.startKeyframe(10);
-        this.rotate(animator, Head, -10, 0, 0);
-        this.rotate(animator, BottomJaw, 20, 0, 0);
-        animator.endKeyframe();
-        animator.resetKeyframe(5);
+        if (animator.setAnimation(EntityHippocampus.ANIMATION_SPEAK)) {
+            animator.startKeyframe(10);
+            this.rotate(animator, Head, -10, 0, 0);
+            this.rotate(animator, BottomJaw, 20, 0, 0);
+            animator.endKeyframe();
+            animator.resetKeyframe(5);
+        }
     }
 
     @Override

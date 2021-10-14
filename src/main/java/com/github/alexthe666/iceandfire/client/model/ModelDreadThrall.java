@@ -237,18 +237,19 @@ public class ModelDreadThrall extends ModelDragonBase<EntityDreadThrall> impleme
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         animator.update(entity);
-        animator.setAnimation(EntityDreadThrall.ANIMATION_SPAWN);
-        animator.startKeyframe(0);
-        animator.move(this.bipedBody, 0, 35, 0);
-        rotate(animator, this.bipedLeftArm, -180, 0, 0);
-        rotate(animator, this.bipedRightArm, -180, 0, 0);
-        animator.endKeyframe();
-        animator.startKeyframe(30);
-        animator.move(this.bipedBody, 0, 0, 0);
-        rotate(animator, this.bipedLeftArm, -180, 0, 0);
-        rotate(animator, this.bipedRightArm, -180, 0, 0);
-        animator.endKeyframe();
-        animator.resetKeyframe(5);
+        if (animator.setAnimation(EntityDreadThrall.ANIMATION_SPAWN)) {
+            animator.startKeyframe(0);
+            animator.move(this.bipedBody, 0, 35, 0);
+            rotate(animator, this.bipedLeftArm, -180, 0, 0);
+            rotate(animator, this.bipedRightArm, -180, 0, 0);
+            animator.endKeyframe();
+            animator.startKeyframe(30);
+            animator.move(this.bipedBody, 0, 0, 0);
+            rotate(animator, this.bipedLeftArm, -180, 0, 0);
+            rotate(animator, this.bipedRightArm, -180, 0, 0);
+            animator.endKeyframe();
+            animator.resetKeyframe(5);
+        }
     }
 
     public void rotate(ModelAnimator animator, AdvancedModelBox model, float x, float y, float z) {

@@ -242,26 +242,28 @@ public class ModelDreadBeast extends ModelDragonBase<EntityDreadBeast> {
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
         animator.update(entity);
-        animator.setAnimation(EntityDreadBeast.ANIMATION_BITE);
-        animator.startKeyframe(5);
-        this.rotate(animator, Neck1, -39, 0, 0);
-        this.rotate(animator, HeadBase, 40, 0, -15);
-        this.rotate(animator, Jaw, -50, 0, 0);
-        animator.endKeyframe();
-        animator.startKeyframe(5);
-        this.rotate(animator, Neck1, -19, 0, 0);
-        this.rotate(animator, HeadBase, 20, 0, 10);
-        this.rotate(animator, Jaw, 10, 0, 0);
-        animator.endKeyframe();
-        animator.resetKeyframe(5);
-        animator.setAnimation(EntityDreadBeast.ANIMATION_SPAWN);
-        animator.startKeyframe(0);
-        animator.move(this.Body, 0, 35, 0);
-        animator.endKeyframe();
-        animator.startKeyframe(30);
-        animator.move(this.Body, 0, 0, 0);
-        animator.endKeyframe();
-        animator.resetKeyframe(5);
+        if (animator.setAnimation(EntityDreadBeast.ANIMATION_BITE)) {
+            animator.startKeyframe(5);
+            this.rotate(animator, Neck1, -39, 0, 0);
+            this.rotate(animator, HeadBase, 40, 0, -15);
+            this.rotate(animator, Jaw, -50, 0, 0);
+            animator.endKeyframe();
+            animator.startKeyframe(5);
+            this.rotate(animator, Neck1, -19, 0, 0);
+            this.rotate(animator, HeadBase, 20, 0, 10);
+            this.rotate(animator, Jaw, 10, 0, 0);
+            animator.endKeyframe();
+            animator.resetKeyframe(5);
+        }
+        if (animator.setAnimation(EntityDreadBeast.ANIMATION_SPAWN)) {
+            animator.startKeyframe(0);
+            animator.move(this.Body, 0, 35, 0);
+            animator.endKeyframe();
+            animator.startKeyframe(30);
+            animator.move(this.Body, 0, 0, 0);
+            animator.endKeyframe();
+            animator.resetKeyframe(5);
+    }
     }
 
     @Override

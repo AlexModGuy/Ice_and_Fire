@@ -238,30 +238,30 @@ public class ModelMyrmexPupa extends ModelDragonBase {
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
         animator.update(entity);
-        animator.update(entity);
-        animator.setAnimation(EntityMyrmexBase.ANIMATION_PUPA_WIGGLE);
-        animator.startKeyframe(5);
-        ModelUtils.rotate(animator, Body1, 0, -15, 0);
-        ModelUtils.rotate(animator, Body2, 0, -15, 0);
-        ModelUtils.rotate(animator, Body3, 0, -15, 0);
-        ModelUtils.rotate(animator, Body4, 0, 15, 0);
-        ModelUtils.rotate(animator, Body5, 0, 15, 0);
-        animator.endKeyframe();
-        animator.startKeyframe(5);
-        ModelUtils.rotate(animator, Body1, 0, 15, 0);
-        ModelUtils.rotate(animator, Body2, 0, 15, 0);
-        ModelUtils.rotate(animator, Body3, 0, 15, 0);
-        ModelUtils.rotate(animator, Body4, 0, -15, 0);
-        ModelUtils.rotate(animator, Body5, 0, -15, 0);
-        animator.endKeyframe();
-        animator.startKeyframe(5);
-        ModelUtils.rotate(animator, Body1, 0, -15, 0);
-        ModelUtils.rotate(animator, Body2, 0, -15, 0);
-        ModelUtils.rotate(animator, Body3, 0, -15, 0);
-        ModelUtils.rotate(animator, Body4, 0, 15, 0);
-        ModelUtils.rotate(animator, Body5, 0, 15, 0);
-        animator.endKeyframe();
-        animator.resetKeyframe(5);
+        if (animator.setAnimation(EntityMyrmexBase.ANIMATION_PUPA_WIGGLE)) {
+            animator.startKeyframe(5);
+            ModelUtils.rotate(animator, Body1, 0, -15, 0);
+            ModelUtils.rotate(animator, Body2, 0, -15, 0);
+            ModelUtils.rotate(animator, Body3, 0, -15, 0);
+            ModelUtils.rotate(animator, Body4, 0, 15, 0);
+            ModelUtils.rotate(animator, Body5, 0, 15, 0);
+            animator.endKeyframe();
+            animator.startKeyframe(5);
+            ModelUtils.rotate(animator, Body1, 0, 15, 0);
+            ModelUtils.rotate(animator, Body2, 0, 15, 0);
+            ModelUtils.rotate(animator, Body3, 0, 15, 0);
+            ModelUtils.rotate(animator, Body4, 0, -15, 0);
+            ModelUtils.rotate(animator, Body5, 0, -15, 0);
+            animator.endKeyframe();
+            animator.startKeyframe(5);
+            ModelUtils.rotate(animator, Body1, 0, -15, 0);
+            ModelUtils.rotate(animator, Body2, 0, -15, 0);
+            ModelUtils.rotate(animator, Body3, 0, -15, 0);
+            ModelUtils.rotate(animator, Body4, 0, 15, 0);
+            ModelUtils.rotate(animator, Body5, 0, 15, 0);
+            animator.endKeyframe();
+            animator.resetKeyframe(5);
+        }
     }
 
     @Override

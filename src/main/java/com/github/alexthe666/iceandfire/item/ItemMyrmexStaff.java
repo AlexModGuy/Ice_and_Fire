@@ -49,7 +49,7 @@ public class ItemMyrmexStaff extends Item {
         if (playerIn.isSneaking()) {
             return super.onItemRightClick(worldIn, playerIn, hand);
         }
-        if (itemStackIn.getTag() != null) {
+        if (itemStackIn.getTag() != null && itemStackIn.getTag().hasUniqueId("HiveUUID")) {
             UUID id = itemStackIn.getTag().getUniqueId("HiveUUID");
             if (!worldIn.isRemote) {
                 MyrmexHive hive = MyrmexWorldData.get(worldIn).getHiveFromUUID(id);

@@ -237,26 +237,27 @@ public class ModelDeathWorm extends ModelDragonBase<EntityDeathWorm> {
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4) {
         this.resetToDefaultPose();
         animator.update(entity);
-        animator.setAnimation(EntityDeathWorm.ANIMATION_BITE);
-        animator.startKeyframe(3);
-        this.rotate(animator, TopJaw, -20, 0, 0);
-        this.rotate(animator, BottomJaw, 20, 0, 0);
-        animator.move(JawExtender, 0, 0, -8);
-        animator.move(JawExtender2, 0, 0, -8);
-        animator.endKeyframe();
-        animator.startKeyframe(3);
-        this.rotate(animator, TopJaw, -40, 0, 0);
-        this.rotate(animator, BottomJaw, 40, 0, 0);
-        animator.move(JawExtender, 0, 0, -10);
-        animator.move(JawExtender2, 0, 0, -10);
-        animator.endKeyframe();
-        animator.startKeyframe(2);
-        this.rotate(animator, TopJaw, 5, 0, 0);
-        this.rotate(animator, BottomJaw, -5, 0, 0);
-        animator.move(JawExtender, 0, 0, -7);
-        animator.move(JawExtender2, 0, 0, -7);
-        animator.endKeyframe();
-        animator.resetKeyframe(2);
+        if (animator.setAnimation(EntityDeathWorm.ANIMATION_BITE)) {
+            animator.startKeyframe(3);
+            this.rotate(animator, TopJaw, -20, 0, 0);
+            this.rotate(animator, BottomJaw, 20, 0, 0);
+            animator.move(JawExtender, 0, 0, -8);
+            animator.move(JawExtender2, 0, 0, -8);
+            animator.endKeyframe();
+            animator.startKeyframe(3);
+            this.rotate(animator, TopJaw, -40, 0, 0);
+            this.rotate(animator, BottomJaw, 40, 0, 0);
+            animator.move(JawExtender, 0, 0, -10);
+            animator.move(JawExtender2, 0, 0, -10);
+            animator.endKeyframe();
+            animator.startKeyframe(2);
+            this.rotate(animator, TopJaw, 5, 0, 0);
+            this.rotate(animator, BottomJaw, -5, 0, 0);
+            animator.move(JawExtender, 0, 0, -7);
+            animator.move(JawExtender2, 0, 0, -7);
+            animator.endKeyframe();
+            animator.resetKeyframe(2);
+        }
     }
 
     @Override
