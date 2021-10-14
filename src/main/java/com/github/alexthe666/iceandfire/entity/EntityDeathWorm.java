@@ -256,7 +256,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
         super.writeAdditional(compound);
         compound.putInt("Variant", this.getVariant());
         compound.putInt("GrowthCounter", this.growthCounter);
-        compound.putFloat("Scale", this.getScale());
+        compound.putFloat("Scale", this.getDeathwormScale());
         compound.putInt("WormAge", this.getWormAge());
         compound.putLong("WormHome", this.getWormHome().toLong());
         compound.putBoolean("WillExplode", this.willExplode);
@@ -323,13 +323,13 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
     public void setWormAge(int age) {
         this.dataManager.set(WORM_AGE, Integer.valueOf(age));
     }
-
-    public float getScale() {
-        return Float.valueOf(this.dataManager.get(SCALE).floatValue());
+    
+    public float getRenderScale() {
+        return Math.min(this.getDeathwormScale() * (this.getWormAge() / 5F), 7F);
     }
 
-    public float getRenderScale() {
-        return Math.min(this.getScale() * (this.getWormAge() / 5F), 7F);
+    public float getDeathwormScale() {
+        return Float.valueOf(this.dataManager.get(SCALE).floatValue());
     }
 
     public void setDeathWormScale(float scale) {
@@ -518,7 +518,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
             this.setWormAge(Math.min(5, this.getWormAge() + 1));
             this.clearSegments();
             this.heal(15);
-            this.setDeathWormScale(this.getScale());
+            this.setDeathWormScale(this.getDeathwormScale());
             if (world.isRemote) {
                 for (int i = 0; i < 10 * this.getRenderScale(); i++) {
                     this.world.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getSurface((int) Math.floor(this.getPosX()), (int) Math.floor(this.getPosY()), (int) Math.floor(this.getPosZ())) + 0.5F, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
