@@ -240,18 +240,20 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             pathResult.setStatus(PathFindingStatus.COMPLETE);
             pathResult = null;
         }
-        //Make sure the entity isn't sleeping or chained when checking if it's stuck
+        //Make sure the entity isn't sleeping, tamed or chained when checking if it's stuck
         if (this.entity instanceof TameableEntity){
-            if (!((TameableEntity)this.entity).isTamed() &&
-                (this.entity instanceof EntityDragonBase &&
-                !((EntityDragonBase) this.entity).isChained() &&!((EntityDragonBase) this.entity).isEntitySleeping())) {
-                stuckHandler.checkStuck(this);
+            if (((TameableEntity)this.entity).isTamed())
+                return;
+            if (this.entity instanceof EntityDragonBase){
+                if (((EntityDragonBase) this.entity).isChained())
+                    return;
+                if (((EntityDragonBase) this.entity).isEntitySleeping())
+                    return;
             }
-        }
-        else{
-            stuckHandler.checkStuck(this);
+
         }
 
+        stuckHandler.checkStuck(this);
     }
 
     @Nullable

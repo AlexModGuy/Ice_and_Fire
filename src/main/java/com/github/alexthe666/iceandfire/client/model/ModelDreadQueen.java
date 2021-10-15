@@ -215,18 +215,19 @@ public class ModelDreadQueen extends ModelDragonBase<EntityDreadQueen> {
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         animator.update(entity);
-        animator.setAnimation(EntityDreadQueen.ANIMATION_SPAWN);
-        animator.startKeyframe(0);
-        animator.move(this.body, 0, 35, 0);
-        rotate(animator, this.armLeft, -180, 0, 0);
-        rotate(animator, this.armRight, -180, 0, 0);
-        animator.endKeyframe();
-        animator.startKeyframe(30);
-        animator.move(this.body, 0, 0, 0);
-        rotate(animator, this.armLeft, -180, 0, 0);
-        rotate(animator, this.armRight, -180, 0, 0);
-        animator.endKeyframe();
-        animator.resetKeyframe(5);
+        if (animator.setAnimation(EntityDreadQueen.ANIMATION_SPAWN)) {
+            animator.startKeyframe(0);
+            animator.move(this.body, 0, 35, 0);
+            rotate(animator, this.armLeft, -180, 0, 0);
+            rotate(animator, this.armRight, -180, 0, 0);
+            animator.endKeyframe();
+            animator.startKeyframe(30);
+            animator.move(this.body, 0, 0, 0);
+            rotate(animator, this.armLeft, -180, 0, 0);
+            rotate(animator, this.armRight, -180, 0, 0);
+            animator.endKeyframe();
+            animator.resetKeyframe(5);
+        }
     }
 
     protected ModelRenderer getArmForSide(HandSide side) {

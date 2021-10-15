@@ -24,6 +24,8 @@ public class TileEntityEggInIce extends TileEntity implements ITickableTileEntit
     public EnumDragonEgg type;
     public int age;
     public int ticksExisted;
+    // boolean to prevent time in a bottle shenanigans
+    private boolean spawned;
     @Nullable
     public UUID ownerUUID;
 
@@ -95,7 +97,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickableTileEntit
     @Override
     public void tick() {
         age++;
-        if (age >= IafConfig.dragonEggTime && type != null) {
+        if (age >= IafConfig.dragonEggTime && type != null && !spawned) {
             world.destroyBlock(pos, false);
             world.setBlockState(pos, Blocks.WATER.getDefaultState());
             EntityIceDragon dragon = new EntityIceDragon(world);
@@ -107,7 +109,9 @@ public class TileEntityEggInIce extends TileEntity implements ITickableTileEntit
             dragon.setOwnerId(ownerUUID);
             if (!world.isRemote) {
                 world.addEntity(dragon);
+                spawned = true;
             }
+
         }
         ticksExisted++;
     }

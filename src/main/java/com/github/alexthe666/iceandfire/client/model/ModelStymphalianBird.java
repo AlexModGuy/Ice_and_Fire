@@ -316,32 +316,35 @@ public class ModelStymphalianBird extends ModelDragonBase<EntityStymphalianBird>
         this.resetToDefaultPose();
         animator = ModelAnimator.create();
         animator.update(entity);
-        animator.setAnimation(EntityStymphalianBird.ANIMATION_PECK);
-        animator.startKeyframe(5);
-        this.rotate(animator, Neck1, -47, 0, 0);
-        this.rotate(animator, NeckPivot, 17, 0, 0);
-        this.rotate(animator, HeadPivot, 46, 0, 0);
-        this.rotate(animator, Jaw, 10, 0, 0);
-        animator.endKeyframe();
-        animator.startKeyframe(5);
-        this.rotate(animator, Neck1, 26, 0, 0);
-        this.rotate(animator, NeckPivot, -18, 0, 0);
-        this.rotate(animator, HeadPivot, 2, 0, 0);
-        this.rotate(animator, Jaw, 33, 0, 0);
-        this.rotate(animator, HeadFront, -20, 0, 0);
-        animator.endKeyframe();
-        animator.resetKeyframe(5);
-        animator.setAnimation(EntityStymphalianBird.ANIMATION_SPEAK);
-        animator.startKeyframe(5);
-        this.rotate(animator, Jaw, 35, 0, 0);
-        animator.startKeyframe(5);
-        this.rotate(animator, Jaw, 0, 0, 0);
-        animator.endKeyframe();
-        animator.setAnimation(EntityStymphalianBird.ANIMATION_SHOOT_ARROWS);
-        animator.startKeyframe(20);
-        shootPosture();
-        animator.endKeyframe();
-        animator.resetKeyframe(10);
+        if (animator.setAnimation(EntityStymphalianBird.ANIMATION_PECK)) {
+            animator.startKeyframe(5);
+            this.rotate(animator, Neck1, -47, 0, 0);
+            this.rotate(animator, NeckPivot, 17, 0, 0);
+            this.rotate(animator, HeadPivot, 46, 0, 0);
+            this.rotate(animator, Jaw, 10, 0, 0);
+            animator.endKeyframe();
+            animator.startKeyframe(5);
+            this.rotate(animator, Neck1, 26, 0, 0);
+            this.rotate(animator, NeckPivot, -18, 0, 0);
+            this.rotate(animator, HeadPivot, 2, 0, 0);
+            this.rotate(animator, Jaw, 33, 0, 0);
+            this.rotate(animator, HeadFront, -20, 0, 0);
+            animator.endKeyframe();
+            animator.resetKeyframe(5);
+        }
+        if (animator.setAnimation(EntityStymphalianBird.ANIMATION_SPEAK)) {
+            animator.startKeyframe(5);
+            this.rotate(animator, Jaw, 35, 0, 0);
+            animator.startKeyframe(5);
+            this.rotate(animator, Jaw, 0, 0, 0);
+            animator.endKeyframe();
+        }
+        if (animator.setAnimation(EntityStymphalianBird.ANIMATION_SHOOT_ARROWS)) {
+            animator.startKeyframe(20);
+            shootPosture();
+            animator.endKeyframe();
+            animator.resetKeyframe(10);
+        }
 
     }
 

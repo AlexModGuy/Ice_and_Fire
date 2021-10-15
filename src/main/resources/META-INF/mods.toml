@@ -1,5 +1,5 @@
 modLoader="javafml" #mandatory
-loaderVersion="[31,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+loaderVersion="[35,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 issueTrackerURL="https://github.com/Alex-the-666/ice-and-fire/issues" #optional
 license="GNU LESSER GENERAL PUBLIC LICENSE"
 [[mods]] #mandatory
@@ -15,7 +15,7 @@ description='''Dragons and other mythological creatures in minecraft.'''
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[1.8.1,)" #mandatory
+    versionRange="[1.8.1,1.8.99]" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="AFTER"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER

@@ -146,24 +146,26 @@ public class ModelSiren extends ModelDragonBase<EntitySiren> {
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
         animator.update(entity);
-        animator.setAnimation(EntitySiren.ANIMATION_BITE);
-        animator.startKeyframe(5);
-        this.rotate(animator, Mouth, -28, 0, 0);
-        this.rotate(animator, Jaw, 7, 0, 0);
-        animator.endKeyframe();
-        animator.resetKeyframe(5);
-        animator.endKeyframe();
-        animator.setAnimation(EntitySiren.ANIMATION_PULL);
-        animator.startKeyframe(5);
-        this.rotate(animator, Left_Arm, -103, 5, 0);
-        this.rotate(animator, Right_Arm, -103, -5, 0);
-        animator.endKeyframe();
-        animator.startKeyframe(5);
-        this.rotate(animator, Left_Arm, 103, 5, 0);
-        this.rotate(animator, Right_Arm, 103, -5, 0);
-        animator.endKeyframe();
-        animator.resetKeyframe(5);
-        animator.endKeyframe();
+        if (animator.setAnimation(EntitySiren.ANIMATION_BITE)) {
+            animator.startKeyframe(5);
+            this.rotate(animator, Mouth, -28, 0, 0);
+            this.rotate(animator, Jaw, 7, 0, 0);
+            animator.endKeyframe();
+            animator.resetKeyframe(5);
+            animator.endKeyframe();
+        }
+        if (animator.setAnimation(EntitySiren.ANIMATION_PULL)) {
+            animator.startKeyframe(5);
+            this.rotate(animator, Left_Arm, -103, 5, 0);
+            this.rotate(animator, Right_Arm, -103, -5, 0);
+            animator.endKeyframe();
+            animator.startKeyframe(5);
+            this.rotate(animator, Left_Arm, 103, 5, 0);
+            this.rotate(animator, Right_Arm, 103, -5, 0);
+            animator.endKeyframe();
+            animator.resetKeyframe(5);
+            animator.endKeyframe();
+        }
     }
 
     public void setRotationAngles(EntitySiren entity, float f, float f1, float f2, float f3, float f4) {

@@ -140,7 +140,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
         }));
         this.goalSelector.removeGoal(aiMelee);
     }
-
+    //TODO: Make cockatrice patrol an area
     public boolean detachHome() {
         return this.hasHomePosition && this.getCommand() == 3 || super.detachHome();
     }

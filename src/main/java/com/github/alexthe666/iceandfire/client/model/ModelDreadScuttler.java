@@ -236,25 +236,27 @@ public class ModelDreadScuttler extends ModelDragonBase<EntityDreadScuttler> {
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
         animator.update(entity);
-        animator.setAnimation(EntityDreadScuttler.ANIMATION_BITE);
-        animator.startKeyframe(5);
-        this.rotate(animator, Neck1, -30, 0, 0);
-        this.rotate(animator, palpTopR1, -50, 0, 0);
-        this.rotate(animator, palpTopL1, -50, 0, 0);
-        animator.endKeyframe();
-        animator.startKeyframe(5);
-        this.rotate(animator, Neck1, -70, 0, 0);
-        this.rotate(animator, HeadBase, 20, 0, 10);
-        animator.endKeyframe();
-        animator.resetKeyframe(5);
-        animator.setAnimation(EntityDreadScuttler.ANIMATION_SPAWN);
-        animator.startKeyframe(0);
-        animator.move(this.Body2, 0, 35, 0);
-        animator.endKeyframe();
-        animator.startKeyframe(30);
-        animator.move(this.Body2, 0, 0, 0);
-        animator.endKeyframe();
-        animator.resetKeyframe(5);
+        if (animator.setAnimation(EntityDreadScuttler.ANIMATION_BITE)) {
+            animator.startKeyframe(5);
+            this.rotate(animator, Neck1, -30, 0, 0);
+            this.rotate(animator, palpTopR1, -50, 0, 0);
+            this.rotate(animator, palpTopL1, -50, 0, 0);
+            animator.endKeyframe();
+            animator.startKeyframe(5);
+            this.rotate(animator, Neck1, -70, 0, 0);
+            this.rotate(animator, HeadBase, 20, 0, 10);
+            animator.endKeyframe();
+            animator.resetKeyframe(5);
+        }
+        if (animator.setAnimation(EntityDreadScuttler.ANIMATION_SPAWN)) {
+            animator.startKeyframe(0);
+            animator.move(this.Body2, 0, 35, 0);
+            animator.endKeyframe();
+            animator.startKeyframe(30);
+            animator.move(this.Body2, 0, 0, 0);
+            animator.endKeyframe();
+            animator.resetKeyframe(5);
+        }
     }
 
     public void setRotationAngles(EntityDreadScuttler beast, float f, float f1, float f2, float f3, float f4) {

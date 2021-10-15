@@ -82,41 +82,43 @@ public class ModelDreadGhoul extends ModelDragonBase<EntityDreadGhoul> {
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.resetToDefaultPose();
         animator.update(entity);
-        animator.setAnimation(EntityDreadGhoul.ANIMATION_SLASH);
-        animator.startKeyframe(5);
-        rotate(animator, this.armRight, 20, 45, 80);
-        rotate(animator, this.body, 0, 30, 0);
-        rotate(animator, this.head, 0, -20, 0);
-        animator.endKeyframe();
-        animator.startKeyframe(5);
-        rotate(animator, this.armRight, -80, -15, 10);
-        rotate(animator, this.body, 0, -70, 0);
-        rotate(animator, this.head, 0, 60, 0);
-        animator.endKeyframe();
-        animator.startKeyframe(5);
-        rotate(animator, this.armLeft, 20, -45, -80);
-        rotate(animator, this.body, 0, -30, 0);
-        rotate(animator, this.head, 0, 20, 0);
-        animator.endKeyframe();
-        animator.startKeyframe(5);
-        rotate(animator, this.armLeft, -80, 15, -10);
-        rotate(animator, this.body, 0, 70, 0);
-        rotate(animator, this.head, 0, -60, 0);
-        animator.endKeyframe();
-        animator.resetKeyframe(5);
-        animator.setAnimation(EntityDreadGhoul.ANIMATION_SPAWN);
-        animator.startKeyframe(0);
-        animator.move(this.body, 0, 35, 0);
-        rotateMinus(animator, this.armLeft, -180, -90, 50);
-        rotateMinus(animator, this.head, -60, 0, 0);
-        rotateMinus(animator, this.armRight, -180, 90, -50);
-        animator.endKeyframe();
-        animator.startKeyframe(30);
-        animator.move(this.body, 0, 0, 0);
-        rotate(animator, this.armLeft, -30, -90, 0);
-        rotate(animator, this.armRight, -30, 90, 0);
-        animator.endKeyframe();
-        animator.resetKeyframe(5);
+        if (animator.setAnimation(EntityDreadGhoul.ANIMATION_SLASH)) {
+            animator.startKeyframe(5);
+            rotate(animator, this.armRight, 20, 45, 80);
+            rotate(animator, this.body, 0, 30, 0);
+            rotate(animator, this.head, 0, -20, 0);
+            animator.endKeyframe();
+            animator.startKeyframe(5);
+            rotate(animator, this.armRight, -80, -15, 10);
+            rotate(animator, this.body, 0, -70, 0);
+            rotate(animator, this.head, 0, 60, 0);
+            animator.endKeyframe();
+            animator.startKeyframe(5);
+            rotate(animator, this.armLeft, 20, -45, -80);
+            rotate(animator, this.body, 0, -30, 0);
+            rotate(animator, this.head, 0, 20, 0);
+            animator.endKeyframe();
+            animator.startKeyframe(5);
+            rotate(animator, this.armLeft, -80, 15, -10);
+            rotate(animator, this.body, 0, 70, 0);
+            rotate(animator, this.head, 0, -60, 0);
+            animator.endKeyframe();
+            animator.resetKeyframe(5);
+        }
+        if (animator.setAnimation(EntityDreadGhoul.ANIMATION_SPAWN)) {
+            animator.startKeyframe(0);
+            animator.move(this.body, 0, 35, 0);
+            rotateMinus(animator, this.armLeft, -180, -90, 50);
+            rotateMinus(animator, this.head, -60, 0, 0);
+            rotateMinus(animator, this.armRight, -180, 90, -50);
+            animator.endKeyframe();
+            animator.startKeyframe(30);
+            animator.move(this.body, 0, 0, 0);
+            rotate(animator, this.armLeft, -30, -90, 0);
+            rotate(animator, this.armRight, -30, 90, 0);
+            animator.endKeyframe();
+            animator.resetKeyframe(5);
+        }
     }
 
     public void setRotationAngles(EntityDreadGhoul thrall, float f, float f1, float f2, float f3, float f4) {

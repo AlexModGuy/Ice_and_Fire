@@ -9,23 +9,19 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 
 public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromStatues {
 
@@ -116,12 +112,14 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
         EntityStoneStatue statue = IafEntityRegistry.STONE_STATUE.create(parent.world);
         CompoundNBT entityTag = new CompoundNBT();
         try{
-            parent.writeWithoutTypeId(entityTag);
+            if (!(parent instanceof PlayerEntity)) {
+                parent.writeWithoutTypeId(entityTag);
+            }
         }catch (Exception e){
             IceAndFire.LOGGER.debug("Encountered issue creating stone statue from {}", parent);
         }
         statue.setTrappedTag(entityTag);
-        statue.setTrappedEntityTypeString(Registry.ENTITY_TYPE.getKey(parent.getType()).toString());
+        statue.setTrappedEntityTypeString(ForgeRegistries.ENTITIES.getKey(parent.getType()).toString());
         statue.setTrappedEntityWidth(parent.getWidth());
         statue.setTrappedHeight(parent.getHeight());
         statue.setTrappedScale(parent.getRenderScale());

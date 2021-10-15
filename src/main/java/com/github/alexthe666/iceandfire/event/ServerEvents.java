@@ -273,7 +273,9 @@ public class ServerEvents {
             event.setCanceled(true);
             Entity parent = ((EntityMutlipartPart) event.getTarget()).getParent();
             try {
-                ((PlayerEntity) event.getEntity()).attackTargetEntityWithCurrentItem(parent);
+                //If the attacked entity is the parent itself parent will be null and also doesn't have to be attacked
+                if (parent != null)
+                    ((PlayerEntity) event.getEntity()).attackTargetEntityWithCurrentItem(parent);
             } catch (Exception e) {
                 IceAndFire.LOGGER.warn("Exception thrown while interacting with entity");
             }

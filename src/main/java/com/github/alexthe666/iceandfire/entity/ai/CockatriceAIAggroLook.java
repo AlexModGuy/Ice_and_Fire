@@ -57,7 +57,7 @@ public class CockatriceAIAggroLook extends NearestAttackableTargetGoal<PlayerEnt
      * Returns whether an in-progress Goal should continue executing
      */
     public boolean shouldContinueExecuting() {
-        if (this.player != null && !this.player.isCreative()) {
+        if (this.player != null && !this.player.isCreative() && !this.player.isSpectator()) {
             if (!EntityGorgon.isEntityLookingAt(this.player, this.cockatrice, 0.4F)) {
                 return false;
             } else {
