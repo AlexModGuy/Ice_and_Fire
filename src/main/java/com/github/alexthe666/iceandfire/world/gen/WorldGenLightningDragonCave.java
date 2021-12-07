@@ -134,28 +134,28 @@ public class WorldGenLightningDragonCave extends Feature<NoFeatureConfig> {
                         if (chance < 30) {
                             worldIn.setBlockState(blockPos, Blocks.IRON_ORE.getDefaultState(), 3);
                         }
-                        if (chance > 30 && chance < 40) {
+                        else if (chance > 30 && chance < 40) {
                             worldIn.setBlockState(blockPos, Blocks.GOLD_ORE.getDefaultState(), 3);
                         }
-                        if (chance > 40 && chance < 45) {
+                        else if (chance > 40 && chance < 45) {
                             worldIn.setBlockState(blockPos, IafConfig.generateCopperOre ? IafBlockRegistry.COPPER_ORE.getDefaultState() : IafBlockRegistry.CRACKLED_STONE.getDefaultState(), 3);
                         }
-                        if (chance > 45 && chance < 50) {
+                        else if (chance > 45 && chance < 50) {
                             worldIn.setBlockState(blockPos, IafConfig.generateSilverOre ? IafBlockRegistry.SILVER_ORE.getDefaultState() : IafBlockRegistry.CRACKLED_STONE.getDefaultState(), 3);
                         }
-                        if (chance > 50 && chance < 60) {
+                        else if (chance > 50 && chance < 60) {
                             worldIn.setBlockState(blockPos, Blocks.COAL_ORE.getDefaultState(), 3);
                         }
-                        if (chance > 60 && chance < 70) {
+                        else if (chance > 60 && chance < 70) {
                             worldIn.setBlockState(blockPos, Blocks.REDSTONE_ORE.getDefaultState(), 3);
                         }
-                        if (chance > 70 && chance < 80) {
+                        else if (chance > 70 && chance < 80) {
                             worldIn.setBlockState(blockPos, Blocks.LAPIS_ORE.getDefaultState(), 3);
                         }
-                        if (chance > 80 && chance < 90) {
+                        else if (chance > 80 && chance < 90) {
                             worldIn.setBlockState(blockPos, Blocks.DIAMOND_ORE.getDefaultState(), 3);
                         }
-                        if (chance > 90 && chance < 1000) {
+                        else if (chance > 90 && chance < 1000) {
                             worldIn.setBlockState(blockPos, IafConfig.generateAmythestOre ? IafBlockRegistry.AMYTHEST_ORE.getDefaultState() : Blocks.EMERALD_ORE.getDefaultState(), 3);
                         }
                     } else {
