@@ -134,7 +134,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
                     return !((PlayerEntity) entity).isCreative() && !entity.isSpectator();
                 }else{
                     return ((entity instanceof IMob) && EntityCockatrice.this.isTamed() && !(entity instanceof CreeperEntity) && !(entity instanceof ZombifiedPiglinEntity) && !(entity instanceof EndermanEntity) ||
-                            ServerEvents.isAnimaniaFerret(entity) && !ServerEvents.isAnimaniaChicken(entity));
+                            ServerEvents.doesScareCockatrice(entity) && !ServerEvents.isChicken(entity));
                 }
             }
         }));
@@ -164,12 +164,12 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     }
 
     public boolean isOnSameTeam(Entity entityIn) {
-        return ServerEvents.isAnimaniaChicken(entityIn) || super.isOnSameTeam(entityIn);
+        return ServerEvents.isChicken(entityIn) || super.isOnSameTeam(entityIn);
     }
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (source.getTrueSource() != null && ServerEvents.isAnimaniaFerret(source.getTrueSource())) {
+        if (source.getTrueSource() != null && ServerEvents.doesScareCockatrice(source.getTrueSource())) {
             damage *= 5;
         }
         if (source == DamageSource.IN_WALL) {
@@ -179,7 +179,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     }
 
     private boolean canUseStareOn(Entity entity) {
-        return (!(entity instanceof IBlacklistedFromStatues) || ((IBlacklistedFromStatues) entity).canBeTurnedToStone()) && !ServerEvents.isAnimaniaFerret(entity);
+        return (!(entity instanceof IBlacklistedFromStatues) || ((IBlacklistedFromStatues) entity).canBeTurnedToStone()) && !ServerEvents.doesScareCockatrice(entity);
     }
 
     private void switchAI(boolean melee) {
@@ -656,7 +656,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     private boolean shouldMelee() {
         boolean blindness = this.isPotionActive(Effects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(Effects.BLINDNESS);
         if (this.getAttackTarget() != null) {
-            return this.getDistance(this.getAttackTarget()) < 4D || ServerEvents.isAnimaniaFerret(this.getAttackTarget()) || blindness || !this.canUseStareOn(this.getAttackTarget());
+            return this.getDistance(this.getAttackTarget()) < 4D || ServerEvents.doesScareCockatrice(this.getAttackTarget()) || blindness || !this.canUseStareOn(this.getAttackTarget());
         }
         return false;
     }
