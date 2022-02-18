@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 
 public class PathNavigateCyclops extends GroundPathNavigator {
     public BlockPos targetPosition;
-    private EntityCyclops cyclops;
+    private final EntityCyclops cyclops;
     private int ticksAtLastPos;
     private Vector3d lastPosCheck = Vector3d.ZERO;
     private Vector3d timeoutCachedNode = Vector3d.ZERO;
@@ -206,8 +206,12 @@ public class PathNavigateCyclops extends GroundPathNavigator {
                     double d1 = (double) l + 0.5D - vec31.z;
 
                     if (d0 * p_179683_8_ + d1 * p_179683_10_ >= 0.0D) {
-                        PathNodeType pathnodetype = this.nodeProcessor.determineNodeType(this.world, k, y - 1, l, this.entity, sizeX, sizeY, sizeZ, true, true);
-
+                        PathNodeType pathnodetype;
+                        try {
+                            pathnodetype = this.nodeProcessor.determineNodeType(this.world, k, y - 1, l, this.entity, sizeX, sizeY, sizeZ, true, true);
+                        } catch (Exception e) {
+                            pathnodetype = PathNodeType.BLOCKED;
+                        }
                         if (pathnodetype == PathNodeType.WATER) {
                             return false;
                         }
@@ -219,8 +223,11 @@ public class PathNavigateCyclops extends GroundPathNavigator {
                         if (pathnodetype == PathNodeType.OPEN) {
                             return false;
                         }
-
-                        pathnodetype = this.nodeProcessor.determineNodeType(this.world, k, y, l, this.entity, sizeX, sizeY, sizeZ, true, true);
+                        try {
+                            pathnodetype = this.nodeProcessor.determineNodeType(this.world, k, y, l, this.entity, sizeX, sizeY, sizeZ, true, true);
+                        } catch (Exception e) {
+                            pathnodetype = PathNodeType.BLOCKED;
+                        }
                         float f = this.entity.getPathPriority(pathnodetype);
 
                         if (f < 0.0F || f >= 8.0F) {
