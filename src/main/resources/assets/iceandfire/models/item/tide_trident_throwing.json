@@ -4,10 +4,14 @@
   "ambientocclusion": true,
   "display": {
     "thirdperson_righthand": {
+      "rotation": [ 0, 0, 200 ],
       "translation": [0, 0, 0]
+
     },
     "thirdperson_lefthand": {
+      "rotation": [ 0, 0, 200 ],
       "translation": [0, 0, 0]
+
     },
     "firstperson_righthand": {
       "translation": [0, 0, 0]
@@ -27,13 +31,5 @@
     "fixed": {
       "translation": [0, 0, 0]
     }
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "throwing": 1
-      },
-      "model": "iceandfire:item/tide_trident_throwing"
-    }
-  ]
+  }
 }

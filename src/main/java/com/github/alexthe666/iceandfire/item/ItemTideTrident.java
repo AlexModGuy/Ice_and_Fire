@@ -42,7 +42,7 @@ import net.minecraft.world.World;
 public class ItemTideTrident extends TridentItem {
 
     public ItemTideTrident() {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxDamage(400));
+        super(IceAndFire.PROXY.setupISTER(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxDamage(400)));
         this.setRegistryName(IceAndFire.MODID, "tide_trident");
     }
 
