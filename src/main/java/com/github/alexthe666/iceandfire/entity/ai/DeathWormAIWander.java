@@ -6,7 +6,7 @@ import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 
 public class DeathWormAIWander extends WaterAvoidingRandomWalkingGoal {
 
-    private EntityDeathWorm worm;
+    private final EntityDeathWorm worm;
 
     public DeathWormAIWander(EntityDeathWorm creatureIn, double speedIn) {
         super(creatureIn, speedIn);
@@ -14,10 +14,10 @@ public class DeathWormAIWander extends WaterAvoidingRandomWalkingGoal {
     }
 
     public boolean shouldExecute() {
-        return !worm.isInSand() && super.shouldExecute();
+        return !worm.isInSand() && !worm.isBeingRidden() && super.shouldExecute();
     }
 
     public boolean shouldContinueExecuting() {
-        return !worm.isInSand() && super.shouldContinueExecuting();
+        return !worm.isInSand() && !worm.isBeingRidden() && super.shouldContinueExecuting();
     }
 }

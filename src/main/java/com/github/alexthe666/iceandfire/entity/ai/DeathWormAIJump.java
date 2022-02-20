@@ -28,7 +28,7 @@ public class DeathWormAIJump extends JumpGoal {
         if(jumpCooldown > 0){
             jumpCooldown--;
         }
-        if (this.dolphin.getRNG().nextInt(this.field_220712_c) != 0 || dolphin.getAttackTarget() != null) {
+        if (this.dolphin.getRNG().nextInt(this.field_220712_c) != 0 || dolphin.isBeingRidden() || dolphin.getAttackTarget() != null) {
             return false;
         } else {
             Direction direction = this.dolphin.getAdjustedHorizontalFacing();

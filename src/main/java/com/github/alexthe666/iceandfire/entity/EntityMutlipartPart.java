@@ -243,7 +243,7 @@ public abstract class EntityMutlipartPart extends Entity {
         List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
         Entity parent = this.getParent();
         if(parent != null){
-            entities.stream().filter(entity -> entity != parent && !(entity instanceof EntityMutlipartPart) && entity.canBePushed()).forEach(entity -> entity.applyEntityCollision(parent));
+            entities.stream().filter(entity -> entity != parent && !parent.isRidingOrBeingRiddenBy(entity) && !(entity instanceof EntityMutlipartPart) && entity.canBePushed()).forEach(entity -> entity.applyEntityCollision(parent));
 
         }
     }
