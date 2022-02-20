@@ -75,12 +75,10 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
             BlockPos.getAllInBox(position.add(-j, k, -l), position.add(j, 0, l)).map(BlockPos::toImmutable).forEach(blockPos ->  {
                 int yAdd = blockPos.getY() - finalPosition.getY();
                 if (blockPos.distanceSq(finalPosition) <= (double) (f * f) && yAdd < 2 + rand.nextInt(k) && !worldIn.isAirBlock(blockPos.down())) {
-                    worldIn.setBlockState(blockPos, IafBlockRegistry.CHARRED_GRASS.getDefaultState(), 2);
-                }
-            });
-            BlockPos.getAllInBox(position.add(-j, k, -l), position.add(j, 0, l)).map(BlockPos::toImmutable).forEach(blockPos ->  {
-                if (worldIn.getBlockState(blockPos).getBlock() == IafBlockRegistry.CHARRED_GRASS && !worldIn.isAirBlock(blockPos.up())) {
-                    worldIn.setBlockState(blockPos, IafBlockRegistry.CHARRED_DIRT.getDefaultState(), 2);
+                    if (worldIn.isAirBlock(blockPos.up()))
+                        worldIn.setBlockState(blockPos, IafBlockRegistry.CHARRED_GRASS.getDefaultState(), 2);
+                    else
+                        worldIn.setBlockState(blockPos, IafBlockRegistry.CHARRED_DIRT.getDefaultState(), 2);
                 }
             });
         }
@@ -93,7 +91,7 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
                 if (blockPos.distanceSq(finalPosition) < (double) (f * f)) {
                     worldIn.setBlockState(blockPos, rand.nextBoolean() ? IafBlockRegistry.CHARRED_GRAVEL.getDefaultState() : IafBlockRegistry.CHARRED_DIRT.getDefaultState(), 2);
                 }
-                if (blockPos.distanceSq(finalPosition) == (double) (f * f)) {
+                else if (blockPos.distanceSq(finalPosition) == (double) (f * f)) {
                     worldIn.setBlockState(blockPos, rand.nextBoolean() ? IafBlockRegistry.CHARRED_COBBLESTONE.getDefaultState() : IafBlockRegistry.CHARRED_COBBLESTONE.getDefaultState(), 2);
                 }
             });

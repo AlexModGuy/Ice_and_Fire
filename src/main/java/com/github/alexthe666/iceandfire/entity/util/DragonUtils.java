@@ -309,6 +309,7 @@ public class DragonUtils {
     public static boolean canDragonBreak(Block block) {
         return block != Blocks.BARRIER &&
                 block != Blocks.OBSIDIAN &&
+                block != Blocks.CRYING_OBSIDIAN &&
                 block != Blocks.END_STONE &&
                 block != Blocks.BEDROCK &&
                 block != Blocks.END_PORTAL &&
