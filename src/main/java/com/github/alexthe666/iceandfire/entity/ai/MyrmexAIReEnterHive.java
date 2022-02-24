@@ -35,10 +35,10 @@ public class MyrmexAIReEnterHive extends Goal {
         if (village == null) {
             village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(this.myrmex.getPosition(), 500);
         }
-        if (!(this.myrmex.getNavigator() instanceof AdvancedPathNavigate) ||this.myrmex.isPassenger()){
+        if (!(this.myrmex.getNavigator() instanceof AdvancedPathNavigate) || this.myrmex.isPassenger()){
             return false;
         }
-        if (village == null) {
+        if (village == null || this.myrmex.isInHive()) {
             return false;
         } else {
             this.hive = village;
