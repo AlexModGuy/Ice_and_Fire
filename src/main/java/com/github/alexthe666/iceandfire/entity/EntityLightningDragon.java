@@ -51,10 +51,10 @@ public class EntityLightningDragon extends EntityDragonBase {
     public static final ResourceLocation FEMALE_LOOT = new ResourceLocation("iceandfire", "entities/dragon/lightning_dragon_female");
     public static final ResourceLocation MALE_LOOT = new ResourceLocation("iceandfire", "entities/dragon/lightning_dragon_male");
     public static final ResourceLocation SKELETON_LOOT = new ResourceLocation("iceandfire", "entities/dragon/lightning_dragon_skeleton");
-    private static final DataParameter<Boolean> HAS_LIGHTNING_TARGET = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Float> LIGHTNING_TARGET_X = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.FLOAT);
-    private static final DataParameter<Float> LIGHTNING_TARGET_Y = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.FLOAT);
-    private static final DataParameter<Float> LIGHTNING_TARGET_Z = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.FLOAT);
+    private static final DataParameter<Boolean> HAS_LIGHTNING_TARGET = EntityDataManager.createKey(EntityLightningDragon.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Float> LIGHTNING_TARGET_X = EntityDataManager.createKey(EntityLightningDragon.class, DataSerializers.FLOAT);
+    private static final DataParameter<Float> LIGHTNING_TARGET_Y = EntityDataManager.createKey(EntityLightningDragon.class, DataSerializers.FLOAT);
+    private static final DataParameter<Float> LIGHTNING_TARGET_Z = EntityDataManager.createKey(EntityLightningDragon.class, DataSerializers.FLOAT);
 
     public EntityLightningDragon(World worldIn) {
         this(IafEntityRegistry.LIGHTNING_DRAGON, worldIn);

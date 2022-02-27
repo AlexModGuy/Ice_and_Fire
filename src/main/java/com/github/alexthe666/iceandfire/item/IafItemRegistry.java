@@ -275,6 +275,7 @@ public class IafItemRegistry {
     public static final Item AMPHITHERE_MACUAHUITL = new ItemAmphithereMacuahuitl();
     public static final Item SERPENT_FANG = new ItemGeneric("sea_serpent_fang");
     public static final Item SEA_SERPENT_ARROW = new ItemSeaSerpentArrow();
+    public static final Item TIDE_TRIDENT_INVENTORY = new ItemGeneric("tide_trident_inventory", 0, true);
     public static final Item TIDE_TRIDENT = new ItemTideTrident();
     public static final Item CHAIN = new ItemChain(false);
     public static final Item CHAIN_STICKY = new ItemChain(true);

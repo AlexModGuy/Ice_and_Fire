@@ -26,7 +26,7 @@ public class DeathWormAIAttack extends Goal {
         if (jumpCooldown > 0) {
             jumpCooldown--;
         }
-        if (this.worm.getAttackTarget() == null || !worm.isOnGround() && !worm.isInSandStrict() || jumpCooldown > 0) {
+        if (this.worm.getAttackTarget() == null || worm.isBeingRidden() || !worm.isOnGround() && !worm.isInSandStrict() || jumpCooldown > 0) {
             return false;
         } else {
             BlockPos blockpos = this.worm.getPosition();

@@ -86,12 +86,12 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
             hippo.heal(4);
             if (hippo.feedings > 3 && (hippo.feedings > 7 || hippo.getRNG().nextInt(3) == 0) && !hippo.isTamed() && this.targetEntity.getThrowerId() != null && this.goalOwner.world.getPlayerByUuid(this.targetEntity.getThrowerId()) != null) {
                 PlayerEntity owner = this.goalOwner.world.getPlayerByUuid(this.targetEntity.getThrowerId());
-                hippo.setTamed(true);
-                hippo.setOwnerId(owner.getUniqueID());
-                hippo.setAttackTarget(null);
-                hippo.setCommand(1);
-                //owner.addStat(ModAchievements.tameHippogryph);
-                hippo.setSitting(true);
+                if (owner != null) {
+                    hippo.setTamedBy(owner);
+                    hippo.setAttackTarget(null);
+                    hippo.setCommand(1);
+                    hippo.setSitting(true);
+                }
             }
             resetTask();
         }

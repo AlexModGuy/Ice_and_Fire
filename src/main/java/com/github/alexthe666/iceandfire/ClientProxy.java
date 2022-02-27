@@ -349,6 +349,9 @@ public class ClientProxy extends CommonProxy {
         ItemModelsProperties.registerProperty(IafItemRegistry.SUMMONING_CRYSTAL_LIGHTNING, new ResourceLocation("has_dragon"), (stack, p_239428_1_, p_239428_2_) -> {
             return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
         });
+        ItemModelsProperties.registerProperty(IafItemRegistry.TIDE_TRIDENT, new ResourceLocation("throwing"), (p_239419_0_, p_239419_1_, p_239419_2_) -> {
+            return p_239419_2_ != null && p_239419_2_.isHandActive() && p_239419_2_.getActiveItemStack() == p_239419_0_ ? 1.0F : 0.0F;
+        });
     }
 
     @OnlyIn(Dist.CLIENT)

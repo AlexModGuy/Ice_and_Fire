@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import java.util.EnumSet;
 
+import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.github.alexthe666.iceandfire.entity.util.IGroundMount;
 
 import net.minecraft.entity.MobEntity;
@@ -17,8 +18,8 @@ public class EntityGroundAIRide<T extends MobEntity & IGroundMount> extends Goal
     private PlayerEntity player;
 
     public EntityGroundAIRide(T dragon) {
+        this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         this.dragon = dragon;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
@@ -39,6 +40,9 @@ public class EntityGroundAIRide<T extends MobEntity & IGroundMount> extends Goal
         dragon.setAttackTarget(null);
         double x = dragon.getPosX();
         double y = dragon.getPosY();
+        if(dragon instanceof EntityDeathWorm){
+           y = ((EntityDeathWorm)dragon).processRiderY(y);
+        }
         double z = dragon.getPosZ();
         double speed = 1.8F * dragon.getRideSpeedModifier();
         if (player.moveStrafing != 0 || player.moveForward != 0) {

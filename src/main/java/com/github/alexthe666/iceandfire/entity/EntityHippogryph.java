@@ -856,21 +856,21 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         }
         LivingEntity attackTarget = this.getAttackTarget();
         if (this.getAnimation() == ANIMATION_SCRATCH && attackTarget != null && this.getAnimationTick() == 6) {
-            double dist = this.getDistanceSq(this.getAttackTarget());
+            double dist = this.getDistanceSq(attackTarget);
 
             if (dist < 8) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
-                this.getAttackTarget().isAirBorne = true;
+                attackTarget.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                attackTarget.isAirBorne = true;
                 float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
                 attackTarget.setMotion(attackTarget.getMotion().add(-0.5 / (double) f, 1, -0.5 / (double) f));
                 attackTarget.setMotion(attackTarget.getMotion().mul(0.5D, 1, 0.5D));
 
-                if (this.getAttackTarget().isOnGround()) {
+                if (attackTarget.isOnGround()) {
                     attackTarget.setMotion(attackTarget.getMotion().add(0, 0.3, 0));
                 }
             }
         }
-        if (!world.isRemote && !this.isOverAir() && this.getNavigator().noPath() && this.getAttackTarget() != null && this.getAttackTarget().getPosY() - 3 > this.getPosY() && this.getRNG().nextInt(15) == 0 && this.canMove() && !this.isHovering() && !this.isFlying()) {
+        if (!world.isRemote && !this.isOverAir() && this.getNavigator().noPath() && attackTarget != null && attackTarget.getPosY() - 3 > this.getPosY() && this.getRNG().nextInt(15) == 0 && this.canMove() && !this.isHovering() && !this.isFlying()) {
             this.setHovering(true);
             this.hoverTicks = 0;
             this.flyTicks = 0;
@@ -894,7 +894,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         if (this.isFlying() && this.ticksExisted % 40 == 0 || this.isFlying() && this.isQueuedToSit()) {
             this.setFlying(true);
         }
-        if (!this.canMove() && this.getAttackTarget() != null) {
+        if (!this.canMove() && attackTarget != null) {
             this.setAttackTarget(null);
         }
         if (!this.canMove()) {
@@ -1054,7 +1054,6 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             this.setAttackTarget(null);
         }
     }
-
 
     public boolean isTargetBlocked(Vector3d target) {
         if (target != null) {

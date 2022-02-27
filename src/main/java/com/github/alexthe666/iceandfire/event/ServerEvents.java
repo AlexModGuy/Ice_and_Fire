@@ -32,8 +32,6 @@ import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
 import com.github.alexthe666.iceandfire.message.MessageSwingArm;
 import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
-import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
-import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenFireDragonCave;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenIceDragonCave;
@@ -45,11 +43,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.WallBlock;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -59,7 +53,6 @@ import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.WitherSkeletonEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.passive.horse.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -78,10 +71,8 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.util.CombatEntry;
-import net.minecraft.util.CombatTracker;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.tags.ITag;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
@@ -213,25 +204,29 @@ public class ServerEvents {
         return angle + f;
     }
 
-    public static boolean isLivestock(Entity entity) {
-        return entity != null && EntityTypeTags.getCollection().get(IafTagRegistry.FEAR_DRAGONS).contains(entity.getType());
+    private static boolean isInEntityTag(ResourceLocation loc, EntityType type) {
+        ITag<EntityType<?>> tag = EntityTypeTags.getCollection().get(loc);
+        return tag != null && tag.contains(type);
+    }
 
+    public static boolean isLivestock(Entity entity) {
+        return entity != null && isInEntityTag(IafTagRegistry.FEAR_DRAGONS, entity.getType());
     }
 
     public static boolean isVillager(Entity entity) {
-        return entity != null && EntityTypeTags.getCollection().get(IafTagRegistry.VILLAGERS).contains(entity.getType());
+        return entity != null && isInEntityTag(IafTagRegistry.VILLAGERS, entity.getType());
     }
 
-    public static boolean isAnimaniaSheep(Entity entity) {
-        return entity != null && EntityTypeTags.getCollection().get(IafTagRegistry.SHEEP).contains(entity.getType());
+    public static boolean isSheep(Entity entity) {
+        return entity != null && isInEntityTag(IafTagRegistry.SHEEP, entity.getType());
     }
 
-    public static boolean isAnimaniaChicken(Entity entity) {
-        return entity != null && EntityTypeTags.getCollection().get(IafTagRegistry.CHICKENS).contains(entity.getType());
+    public static boolean isChicken(Entity entity) {
+        return entity != null && isInEntityTag(IafTagRegistry.CHICKENS, entity.getType());
     }
 
-    public static boolean isAnimaniaFerret(Entity entity) {
-        return entity != null && EntityTypeTags.getCollection().get(IafTagRegistry.SCARES_COCKATRICES).contains(entity.getType());
+    public static boolean doesScareCockatrice(Entity entity) {
+        return entity != null && isInEntityTag(IafTagRegistry.SCARES_COCKATRICES, entity.getType());
     }
 
     public static boolean isRidingOrBeingRiddenBy(Entity first, Entity entityIn) {
@@ -384,7 +379,7 @@ public class ServerEvents {
             if (properties != null && properties.inLoveTicks > 0) {
                 event.setCanceled(true);
             }
-            if (isAnimaniaChicken(event.getEntityLiving()) && attacker instanceof LivingEntity) {
+            if (isChicken(event.getEntityLiving()) && attacker instanceof LivingEntity) {
                 signalChickenAlarm(event.getEntityLiving(), (LivingEntity) attacker);
             }
             if (DragonUtils.isVillager(event.getEntityLiving()) && attacker instanceof LivingEntity) {
@@ -399,7 +394,7 @@ public class ServerEvents {
     public void onLivingSetTarget(LivingSetAttackTargetEvent event) {
         if (event.getTarget() != null) {
             LivingEntity attacker = event.getEntityLiving();
-            if (isAnimaniaChicken(event.getTarget())) {
+            if (isChicken(event.getTarget())) {
                 signalChickenAlarm(event.getTarget(), attacker);
             }
             if (DragonUtils.isVillager(event.getTarget())) {
@@ -410,7 +405,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onPlayerAttack(AttackEntityEvent event) {
-        if (event.getTarget() != null && isAnimaniaSheep(event.getTarget())) {
+        if (event.getTarget() != null && isSheep(event.getTarget())) {
             float dist = IafConfig.cyclopesSheepSearchLength;
             List<Entity> list = event.getTarget().world.getEntitiesWithinAABBExcludingEntity(event.getPlayer(), event.getPlayer().getBoundingBox().expand(dist, dist, dist));
             if (!list.isEmpty()) {
@@ -547,7 +542,7 @@ public class ServerEvents {
         } catch (Exception e) {
 
         }
-        if (IafConfig.chickensLayRottenEggs && !event.getEntityLiving().world.isRemote && isAnimaniaChicken(event.getEntityLiving()) && !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof AnimalEntity) {
+        if (IafConfig.chickensLayRottenEggs && !event.getEntityLiving().world.isRemote && isChicken(event.getEntityLiving()) && !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof AnimalEntity) {
             ChickenEntityProperties chickenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), ChickenEntityProperties.class);
             if (chickenProps != null) {
                 if (chickenProps.timeUntilNextEgg < 0) {
@@ -853,7 +848,17 @@ public class ServerEvents {
     @SubscribeEvent
     public void onEntityJoinWorld(LivingSpawnEvent.SpecialSpawn event) {
         try {
-            if (event.getEntity() != null && isAnimaniaSheep(event.getEntity()) && event.getEntity() instanceof AnimalEntity) {
+            if (event.getEntity() instanceof LivingEntity) {
+                try {
+                    ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
+                    if (properties != null) {
+                        properties.updateConnectedEntities(event.getEntity());
+                    }
+                } catch (Exception e) {
+                    IceAndFire.LOGGER.warn("could not instantiate chain properties for " + event.getEntity().getName());
+                }
+            }
+            if (event.getEntity() != null && isSheep(event.getEntity()) && event.getEntity() instanceof AnimalEntity) {
                 AnimalEntity animal = (AnimalEntity) event.getEntity();
                 animal.goalSelector.addGoal(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
             }

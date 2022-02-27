@@ -241,8 +241,9 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
         if (!this.isInWater() && this.isSwimming()) {
             this.setSwimming(false);
         }
-        boolean pathOnHighGround = this.isPathOnHighGround() || this.getAttackTarget() != null && !this.getAttackTarget().isInWater() && !this.getAttackTarget().isInWater();
-        if (this.getAttackTarget() == null || !this.getAttackTarget().isInWater() && !this.getAttackTarget().isInWater()) {
+        LivingEntity target = getAttackTarget();
+        boolean pathOnHighGround = this.isPathOnHighGround() || !world.isRemote && target != null && !target.isInWater();
+        if (target == null || !target.isInWater() && !target.isInWater()) {
             if (pathOnHighGround && this.isInWater()) {
                 jump();
                 doWaterSplashEffect();
@@ -254,11 +255,11 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
         if ((!this.isInWater() || pathOnHighGround) && !this.isLandNavigator) {
             switchNavigator(true);
         }
-        if (this.getAttackTarget() != null && this.getAttackTarget() instanceof PlayerEntity && ((PlayerEntity) this.getAttackTarget()).isCreative()) {
+        if (target instanceof PlayerEntity && ((PlayerEntity) target).isCreative()) {
             this.setAttackTarget(null);
             this.setAggressive(false);
         }
-        if (this.getAttackTarget() != null && !this.isAgressive()) {
+        if (target != null && !this.isAgressive()) {
             this.setAggressive(true);
         }
         boolean singing = isActuallySinging() && !this.isAgressive() && !this.isInWater() && onGround;
