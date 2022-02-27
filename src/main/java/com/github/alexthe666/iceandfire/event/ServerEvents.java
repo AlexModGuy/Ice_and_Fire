@@ -15,11 +15,7 @@ import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.AiDebug;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
-import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
-import com.github.alexthe666.iceandfire.entity.props.ChickenEntityProperties;
-import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
-import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
-import com.github.alexthe666.iceandfire.entity.props.SirenEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.*;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
 import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
@@ -471,7 +467,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityDie(LivingDeathEvent event) {
-        ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
+        /*ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
         if (chainProperties != null) {
             chainProperties.minimizeLists();
             if (!event.getEntity().world.isRemote) {
@@ -480,7 +476,7 @@ public class ServerEvents {
                 event.getEntity().world.addEntity(entityitem);
             }
             chainProperties.clearChained();
-        }
+        }*/
         if (event.getEntityLiving().getUniqueID().equals(ServerEvents.ALEX_UUID)) {
             event.getEntityLiving().entityDropItem(new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM), 1);
         }
@@ -530,23 +526,8 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
-        ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
-        if (chainProperties != null && chainProperties.isChained()) {
-            if (chainProperties.wasJustDisconnected) {
-                chainProperties.wasJustDisconnected = false;
-            }
-            if (!event.getEntityLiving().world.isRemote) {
-                chainProperties.updateConnectedEntities(event.getEntityLiving());
-                for (Entity chainer : chainProperties.connectedEntities) {
-                    float f = event.getEntityLiving().getDistance(chainer);
-                    if (f > 7) {
-                        double d0 = (chainer.getPosX() - event.getEntityLiving().getPosX()) / (double) f;
-                        double d1 = (chainer.getPosY() - event.getEntityLiving().getPosY()) / (double) f;
-                        double d2 = (chainer.getPosZ() - event.getEntityLiving().getPosZ()) / (double) f;
-                        event.getEntityLiving().setMotion(event.getEntity().getMotion().add(d0 * Math.abs(d0) * 0.4D, d1 * Math.abs(d1) * 0.2D, d2 * Math.abs(d2) * 0.4D));
-                    }
-                }
-            }
+        if (ChainUtil.hasChainData(event.getEntityLiving())) {
+            ChainUtil.tickChain(event.getEntityLiving());
         }
         try {
             if (event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.FEET).getItem() instanceof ItemSeaSerpentArmor) {
@@ -746,7 +727,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
-        ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), ChainEntityProperties.class);
+        /*ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), ChainEntityProperties.class);
         if (chainProperties != null) {
             chainProperties.updateConnectedEntities(event.getTarget());
             if (chainProperties.isChained() && chainProperties.isConnectedToEntity(event.getTarget(), event.getPlayer())) {
@@ -755,7 +736,7 @@ public class ServerEvents {
                     event.getTarget().entityDropItem(IafItemRegistry.CHAIN, 1);
                 }
             }
-        }
+        }*/
         if (AiDebug.isEnabled() && !event.getWorld().isRemote() && event.getTarget() instanceof MobEntity && event.getItemStack().getItem() == Items.STICK ){
             AiDebug.addEntity((MobEntity) event.getTarget());
         }
@@ -872,16 +853,6 @@ public class ServerEvents {
     @SubscribeEvent
     public void onEntityJoinWorld(LivingSpawnEvent.SpecialSpawn event) {
         try {
-            if (event.getEntity() instanceof LivingEntity) {
-                try {
-                    ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
-                    if (properties != null) {
-                        properties.updateConnectedEntities(event.getEntity());
-                    }
-                } catch (Exception e) {
-                    IceAndFire.LOGGER.warn("could not instantiate chain properties for " + event.getEntity().getName());
-                }
-            }
             if (event.getEntity() != null && isAnimaniaSheep(event.getEntity()) && event.getEntity() instanceof AnimalEntity) {
                 AnimalEntity animal = (AnimalEntity) event.getEntity();
                 animal.goalSelector.addGoal(8, new EntitySheepAIFollowCyclops(animal, 1.2D));

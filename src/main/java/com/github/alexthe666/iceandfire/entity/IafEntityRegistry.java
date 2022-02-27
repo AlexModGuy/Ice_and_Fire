@@ -7,7 +7,6 @@ import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesH
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
-import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.ChickenEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
@@ -100,7 +99,6 @@ public class IafEntityRegistry {
         EntityPropertiesHandler.INSTANCE.registerProperties(FrozenEntityProperties.class);
         EntityPropertiesHandler.INSTANCE.registerProperties(SirenEntityProperties.class);
         EntityPropertiesHandler.INSTANCE.registerProperties(ChickenEntityProperties.class);
-        EntityPropertiesHandler.INSTANCE.registerProperties(ChainEntityProperties.class);
     }
 
     @SubscribeEvent
