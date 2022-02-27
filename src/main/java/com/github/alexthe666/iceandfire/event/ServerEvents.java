@@ -722,16 +722,15 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
-        /*ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), ChainEntityProperties.class);
-        if (chainProperties != null) {
-            chainProperties.updateConnectedEntities(event.getTarget());
-            if (chainProperties.isChained() && chainProperties.isConnectedToEntity(event.getTarget(), event.getPlayer())) {
-                chainProperties.removeChain(event.getTarget(), event.getPlayer());
+        if (event.getTarget() instanceof LivingEntity) {
+            LivingEntity target = (LivingEntity) event.getTarget();
+            if (ChainUtil.isChainedTo(target, event.getPlayer())) {
+                ChainUtil.removeChain(target, event.getPlayer());
                 if (!event.getWorld().isRemote) {
                     event.getTarget().entityDropItem(IafItemRegistry.CHAIN, 1);
                 }
             }
-        }*/
+        }
         if (AiDebug.isEnabled() && !event.getWorld().isRemote() && event.getTarget() instanceof MobEntity && event.getItemStack().getItem() == Items.STICK ){
             AiDebug.addEntity((MobEntity) event.getTarget());
         }
@@ -848,16 +847,6 @@ public class ServerEvents {
     @SubscribeEvent
     public void onEntityJoinWorld(LivingSpawnEvent.SpecialSpawn event) {
         try {
-            if (event.getEntity() instanceof LivingEntity) {
-                try {
-                    ChainEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
-                    if (properties != null) {
-                        properties.updateConnectedEntities(event.getEntity());
-                    }
-                } catch (Exception e) {
-                    IceAndFire.LOGGER.warn("could not instantiate chain properties for " + event.getEntity().getName());
-                }
-            }
             if (event.getEntity() != null && isSheep(event.getEntity()) && event.getEntity() instanceof AnimalEntity) {
                 AnimalEntity animal = (AnimalEntity) event.getEntity();
                 animal.goalSelector.addGoal(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
