@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.props.ChainUtil;
+import com.github.alexthe666.iceandfire.entity.props.ChainProperties;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -23,7 +23,7 @@ public class RenderChain {
     private static ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/misc/chain_link.png");
 
     public static void render(LivingEntity entityLivingIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int lightIn) {
-        List<Entity> chainTargets = ChainUtil.getChainedTo(entityLivingIn);
+        List<Entity> chainTargets = ChainProperties.getChainedTo(entityLivingIn);
         for (Entity chainTarget : chainTargets) {
             if (chainTarget == null) {
                 IceAndFire.LOGGER.warn("Found null value in list of target entities");

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ChainUtil {
+public class ChainProperties {
 
     private static final String CHAIN_TO_TAG = "ChainOwnerIaf";
     private static final String CHAIN_TO_ENTITY_ID_TAG = "ChainOwnerIDIaf";

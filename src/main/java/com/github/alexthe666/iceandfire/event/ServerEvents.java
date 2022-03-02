@@ -521,8 +521,8 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
-        if (ChainUtil.hasChainData(event.getEntityLiving())) {
-            ChainUtil.tickChain(event.getEntityLiving());
+        if (ChainProperties.hasChainData(event.getEntityLiving())) {
+            ChainProperties.tickChain(event.getEntityLiving());
         }
         try {
             if (event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.FEET).getItem() instanceof ItemSeaSerpentArmor) {
@@ -724,8 +724,8 @@ public class ServerEvents {
     public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
         if (event.getTarget() instanceof LivingEntity) {
             LivingEntity target = (LivingEntity) event.getTarget();
-            if (ChainUtil.isChainedTo(target, event.getPlayer())) {
-                ChainUtil.removeChain(target, event.getPlayer());
+            if (ChainProperties.isChainedTo(target, event.getPlayer())) {
+                ChainProperties.removeChain(target, event.getPlayer());
                 if (!event.getWorld().isRemote) {
                     event.getTarget().entityDropItem(IafItemRegistry.CHAIN, 1);
                 }

@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.entity.props.ChainUtil;
+import com.github.alexthe666.iceandfire.entity.props.ChainProperties;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.block.WallBlock;
 import net.minecraft.entity.*;
@@ -123,8 +123,8 @@ public class EntityChainTie extends HangingEntity {
         double d0 = 30D;
         List<LivingEntity> list = this.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(this.getPosX() - d0, this.getPosY() - d0, this.getPosZ() - d0, this.getPosX() + d0, this.getPosY() + d0, this.getPosZ() + d0));
         for (LivingEntity livingEntity : list) {
-            if (ChainUtil.isChainedTo(livingEntity, this)) {
-                ChainUtil.removeChain(livingEntity, this);
+            if (ChainProperties.isChainedTo(livingEntity, this)) {
+                ChainProperties.removeChain(livingEntity, this);
                 ItemEntity entityitem = new ItemEntity(this.world, this.getPosX(), this.getPosY() + (double) 1, this.getPosZ(), new ItemStack(IafItemRegistry.CHAIN));
                 entityitem.setDefaultPickupDelay();
                 this.world.addEntity(entityitem);
@@ -142,9 +142,9 @@ public class EntityChainTie extends HangingEntity {
             List<LivingEntity> list = this.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(this.getPosX() - d0, this.getPosY() - d0, this.getPosZ() - d0, this.getPosX() + d0, this.getPosY() + d0, this.getPosZ() + d0));
 
             for (LivingEntity livingEntity : list) {
-                if (ChainUtil.isChainedTo(livingEntity, player)) {
-                    ChainUtil.removeChain(livingEntity, player);
-                    ChainUtil.attachChain(livingEntity, this);
+                if (ChainProperties.isChainedTo(livingEntity, player)) {
+                    ChainProperties.removeChain(livingEntity, player);
+                    ChainProperties.attachChain(livingEntity, this);
                     flag = true;
                 }
             }

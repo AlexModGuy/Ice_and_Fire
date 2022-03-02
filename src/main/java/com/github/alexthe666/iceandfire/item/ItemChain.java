@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityChainTie;
-import com.github.alexthe666.iceandfire.entity.props.ChainUtil;
+import com.github.alexthe666.iceandfire.entity.props.ChainProperties;
 import net.minecraft.block.Block;
 import net.minecraft.block.WallBlock;
 import net.minecraft.client.util.ITooltipFlag;
@@ -42,12 +42,12 @@ public class ItemChain extends Item {
         int k = fence.getZ();
 
         for (LivingEntity livingEntity : worldIn.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB((double) i - d0, (double) j - d0, (double) k - d0, (double) i + d0, (double) j + d0, (double) k + d0))) {
-            if (ChainUtil.isChainedTo(livingEntity, player)) {
+            if (ChainProperties.isChainedTo(livingEntity, player)) {
                 if (entityleashknot == null) {
                     entityleashknot = EntityChainTie.createTie(worldIn, fence);
                 }
-                ChainUtil.removeChain(livingEntity, player);
-                ChainUtil.attachChain(livingEntity, entityleashknot);
+                ChainProperties.removeChain(livingEntity, player);
+                ChainProperties.attachChain(livingEntity, entityleashknot);
                 flag = true;
             }
         }
@@ -67,7 +67,7 @@ public class ItemChain extends Item {
 
     @Override
     public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
-        if (ChainUtil.isChainedTo(target, playerIn)) {
+        if (ChainProperties.isChainedTo(target, playerIn)) {
             return ActionResultType.SUCCESS;
         } else {
             if (sticky) {
@@ -79,27 +79,27 @@ public class ItemChain extends Item {
                 boolean flag = false;
                 List<LivingEntity> nearbyEntities = playerIn.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(i - d0, j - d0, k - d0, i + d0, j + d0, k + d0));
                 if (playerIn.isCrouching()){
-                    ChainUtil.clearChainData(target);
+                    ChainProperties.clearChainData(target);
                     for (LivingEntity livingEntity : nearbyEntities) {
-                        if (ChainUtil.isChainedTo(livingEntity, target)){
-                            ChainUtil.removeChain(livingEntity, target);
+                        if (ChainProperties.isChainedTo(livingEntity, target)){
+                            ChainProperties.removeChain(livingEntity, target);
                         }
                     }
                     return ActionResultType.SUCCESS;
                 }
                 for (LivingEntity livingEntity : nearbyEntities) {
-                    if (ChainUtil.isChainedTo(livingEntity, playerIn)) {
-                        ChainUtil.removeChain(target, playerIn);
-                        ChainUtil.removeChain(livingEntity, playerIn);
-                        ChainUtil.attachChain(livingEntity, target);
+                    if (ChainProperties.isChainedTo(livingEntity, playerIn)) {
+                        ChainProperties.removeChain(target, playerIn);
+                        ChainProperties.removeChain(livingEntity, playerIn);
+                        ChainProperties.attachChain(livingEntity, target);
                         flag = true;
                     }
                 }
                 if (!flag) {
-                    ChainUtil.attachChain(target, playerIn);
+                    ChainProperties.attachChain(target, playerIn);
                 }
             } else {
-                ChainUtil.attachChain(target, playerIn);
+                ChainProperties.attachChain(target, playerIn);
             }
             if (!playerIn.isCreative()) {
                 stack.shrink(1);
