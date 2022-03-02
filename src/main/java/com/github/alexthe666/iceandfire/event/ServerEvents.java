@@ -561,44 +561,14 @@ public class ServerEvents {
             }
 
         }
-        FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), FrozenEntityProperties.class);
-        if (frozenProps != null) {
-            boolean prevFrozen = frozenProps.isFrozen;
-            if (event.getEntityLiving() instanceof EntityIceDragon) {
-                frozenProps.isFrozen = false;
-            }
-            if (!event.getEntityLiving().world.isRemote) {
-                if (frozenProps.isFrozen && event.getEntityLiving().isBurning()) {
-                    frozenProps.isFrozen = false;
-                    event.getEntityLiving().extinguish();
-                }
-                if (event.getEntityLiving().deathTime > 0) {
-                    frozenProps.isFrozen = false;
-                }
-                if (frozenProps.ticksUntilUnfrozen > 0) {
-                    frozenProps.ticksUntilUnfrozen--;
-                } else {
-                    frozenProps.ticksUntilUnfrozen = 0;
-                    frozenProps.isFrozen = false;
-                }
-            }
-            if (frozenProps.isFrozen && !(event.getEntityLiving() instanceof PlayerEntity && ((PlayerEntity) event.getEntityLiving()).isCreative())) {
-                event.getEntity().setMotion(event.getEntity().getMotion().mul(0.25F, 1, 0.25F));
-                if (!(event.getEntityLiving() instanceof EnderDragonEntity) && !event.getEntityLiving().isOnGround()) {
-                    event.getEntity().setMotion(event.getEntity().getMotion().add(0, -0.2, 0));
-                }
+        FrozenProperties.tickFrozenEntity(event.getEntityLiving());
 
+        if (FrozenProperties.isFrozen(event.getEntityLiving()) && !(event.getEntityLiving() instanceof PlayerEntity && ((PlayerEntity) event.getEntityLiving()).isCreative())) {
+            event.getEntity().setMotion(event.getEntity().getMotion().mul(0.25F, 1, 0.25F));
+            if (!(event.getEntityLiving() instanceof EnderDragonEntity) && !event.getEntityLiving().isOnGround()) {
+                event.getEntity().setMotion(event.getEntity().getMotion().add(0, -0.2, 0));
             }
-            if (prevFrozen != frozenProps.isFrozen) {
-                if (frozenProps.isFrozen) {
-                    event.getEntityLiving().playSound(SoundEvents.BLOCK_GLASS_PLACE, 1, 1);
-                } else {
-                    for (int i = 0; i < 15; i++) {
-                        event.getEntityLiving().world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, IafBlockRegistry.DRAGON_ICE.getDefaultState()), event.getEntityLiving().getPosX() + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().getWidth()), event.getEntityLiving().getPosY() + ((rand.nextDouble()) * event.getEntityLiving().getHeight()), event.getEntityLiving().getPosZ() + ((rand.nextDouble() - 0.5D) * event.getEntityLiving().getWidth()), 0, 0, 0);
-                    }
-                    event.getEntityLiving().playSound(SoundEvents.BLOCK_GLASS_BREAK, 3, 1);
-                }
-            }
+
         }
 
         if (event.getEntityLiving() instanceof PlayerEntity || event.getEntityLiving() instanceof AbstractVillagerEntity || event.getEntityLiving() instanceof IHearsSiren) {

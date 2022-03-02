@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.event;
 
-import java.util.List;
 import java.util.Random;
 
 import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
@@ -13,8 +12,7 @@ import com.github.alexthe666.iceandfire.client.render.entity.RenderChain;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
-import com.github.alexthe666.iceandfire.entity.props.ChainUtil;
-import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.SirenEntityProperties;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
@@ -26,7 +24,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -211,8 +208,7 @@ public class ClientEvents {
                 net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post(event.getEntity(), event.getRenderer(), event.getPartialRenderTick(), event.getMatrixStack(), event.getBuffers(), event.getLight()));
             }
         }
-        FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), FrozenEntityProperties.class);
-        if (frozenProps != null && frozenProps.isFrozen) {
+        if (FrozenProperties.isFrozen(event.getEntity())) {
             LivingEntity entity = event.getEntity();
             float sideExpand = -0.125F;
             float sideExpandY = 0.325F;
@@ -220,7 +216,7 @@ public class ClientEvents {
             event.getMatrixStack().push();
             event.getMatrixStack().push();
             RenderSystem.enableDepthTest();
-            Minecraft.getInstance().getTextureManager().bindTexture(getIceTexture(frozenProps.ticksUntilUnfrozen));
+            Minecraft.getInstance().getTextureManager().bindTexture(getIceTexture(FrozenProperties.ticksUntilUnfrozen(event.getEntity())));
             renderMovingAABB(axisalignedbb1, event.getMatrixStack());
             RenderSystem.disableDepthTest();
             event.getMatrixStack().pop();
