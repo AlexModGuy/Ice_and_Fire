@@ -7,18 +7,16 @@ import javax.annotation.Nullable;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
-import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.ai.AquaticAIGetInWater;
 import com.github.alexthe666.iceandfire.entity.ai.AquaticAIGetOutOfWater;
 import com.github.alexthe666.iceandfire.entity.ai.SirenAIFindWaterTarget;
 import com.github.alexthe666.iceandfire.entity.ai.SirenAIWander;
-import com.github.alexthe666.iceandfire.entity.props.SirenEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.SirenProperties;
 import com.github.alexthe666.iceandfire.entity.util.ChainBuffer;
 import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
-import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageSirenSong;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -218,8 +216,8 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
             double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
             float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
             float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
-            this.getAttackTarget().rotationPitch = ServerEvents.updateRotation(this.getAttackTarget().rotationPitch, f1, 30F);
-            this.getAttackTarget().rotationYaw = ServerEvents.updateRotation(this.getAttackTarget().rotationYaw, f, 30F);
+            this.getAttackTarget().rotationPitch = updateRotation(this.getAttackTarget().rotationPitch, f1, 30F);
+            this.getAttackTarget().rotationYaw = updateRotation(this.getAttackTarget().rotationYaw, f, 30F);
         }
         if (world.isRemote) {
             tail_buffer.calculateChainSwingBuffer(40, 10, 2.5F, this);
@@ -275,8 +273,9 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
             swimProgress -= 0.5F;
         }
         if (!world.isRemote && !EntityGorgon.isStoneMob(this) && this.isActuallySinging()) {
-            checkForPrey();
             updateLure();
+            checkForPrey();
+
         }
         if (!world.isRemote && EntityGorgon.isStoneMob(this) && this.isSinging()) {
             this.setSinging(false);
@@ -327,10 +326,8 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
         if (this.ticksExisted % 20 == 0) {
             List<LivingEntity> entities = world.getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(50, 12, 50), SIREN_PREY);
             for (LivingEntity entity : entities) {
-                SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, SirenEntityProperties.class);
-                if (!isWearingEarplugs(entity) && sirenProps != null && (!sirenProps.isCharmed || sirenProps.getSiren(world) == null)) {
-                    sirenProps.isCharmed = true;
-                    sirenProps.sirenID = this.getEntityId();
+                if (!isWearingEarplugs(entity) && (!SirenProperties.isCharmed(entity) || SirenProperties.getSiren(entity) == null)) {
+                    SirenProperties.setCharmedBy(entity, this);
                 }
             }
         }
@@ -462,6 +459,17 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
         this.setHairColor(this.getRNG().nextInt(3));
         this.setSingingPose(this.getRNG().nextInt(3));
         return spawnDataIn;
+    }
+
+    public static float updateRotation(float angle, float targetAngle, float maxIncrease) {
+        float f = MathHelper.wrapDegrees(targetAngle - angle);
+        if (f > maxIncrease) {
+            f = maxIncrease;
+        }
+        if (f < -maxIncrease) {
+            f = -maxIncrease;
+        }
+        return angle + f;
     }
 
     @Override

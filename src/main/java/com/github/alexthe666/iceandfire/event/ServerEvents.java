@@ -193,16 +193,7 @@ public class ServerEvents {
         }
     }
 
-    public static float updateRotation(float angle, float targetAngle, float maxIncrease) {
-        float f = MathHelper.wrapDegrees(targetAngle - angle);
-        if (f > maxIncrease) {
-            f = maxIncrease;
-        }
-        if (f < -maxIncrease) {
-            f = -maxIncrease;
-        }
-        return angle + f;
-    }
+
 
     private static boolean isInEntityTag(ResourceLocation loc, EntityType type) {
         ITag<EntityType<?>> tag = EntityTypeTags.getCollection().get(loc);
@@ -524,43 +515,11 @@ public class ServerEvents {
         if (ChainProperties.hasChainData(event.getEntityLiving())) {
             ChainProperties.tickChain(event.getEntityLiving());
         }
-        try {
-            if (event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() instanceof ItemSeaSerpentArmor || event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.FEET).getItem() instanceof ItemSeaSerpentArmor) {
-                event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 50, 0, false, false));
-                if (event.getEntityLiving().isWet()) {
-                    int headMod = event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-                    int chestMod = event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-                    int legMod = event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-                    int footMod = event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.FEET).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-                    event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.STRENGTH, 50, headMod + chestMod + legMod + footMod - 1, false, false));
-                }
-            }
-            if (event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemBlindfold) {
-                event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.BLINDNESS, 50, 0, false, false));
 
-            }
-        } catch (Exception e) {
-
-        }
         if (IafConfig.chickensLayRottenEggs && !event.getEntityLiving().world.isRemote && isChicken(event.getEntityLiving()) && !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof AnimalEntity) {
-            ChickenEntityProperties chickenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), ChickenEntityProperties.class);
-            if (chickenProps != null) {
-                if (chickenProps.timeUntilNextEgg < 0) {
-                    chickenProps.timeUntilNextEgg = 0;
-                }
-                if (chickenProps.timeUntilNextEgg == 0) {
-                    if (event.getEntityLiving().getRNG().nextInt(IafConfig.cockatriceEggChance + 1) == 0 && event.getEntityLiving().ticksExisted > 30) {
-                        event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-                        event.getEntityLiving().playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-                        event.getEntityLiving().entityDropItem(IafItemRegistry.ROTTEN_EGG, 1);
-                    }
-                    chickenProps.timeUntilNextEgg = chickenProps.generateTime();
-                } else if (chickenProps.timeUntilNextEgg > 0) {
-                    chickenProps.timeUntilNextEgg--;
-                }
-            }
-
+            ChickenProperties.tickChicken(event.getEntityLiving());
         }
+
         FrozenProperties.tickFrozenEntity(event.getEntityLiving());
 
         if (FrozenProperties.isFrozen(event.getEntityLiving()) && !(event.getEntityLiving() instanceof PlayerEntity && ((PlayerEntity) event.getEntityLiving()).isCreative())) {
@@ -572,67 +531,10 @@ public class ServerEvents {
         }
 
         if (event.getEntityLiving() instanceof PlayerEntity || event.getEntityLiving() instanceof AbstractVillagerEntity || event.getEntityLiving() instanceof IHearsSiren) {
-            SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
-            if (sirenProps != null && sirenProps.sirenID != 0) {
-                EntitySiren closestSiren = sirenProps.getSiren(event.getEntityLiving().world);
-                if (closestSiren != null && closestSiren.isActuallySinging()) {
-                    if (EntitySiren.isWearingEarplugs(event.getEntityLiving()) || sirenProps.singTime > IafConfig.sirenMaxSingTime) {
-                        sirenProps.isCharmed = false;
-                        sirenProps.sirenID = 0;
-                        sirenProps.singTime = 0;
-                        closestSiren.singCooldown = IafConfig.sirenTimeBetweenSongs;
-                    } else {
-                        sirenProps.isCharmed = true;
-                        sirenProps.singTime++;
-                        if (rand.nextInt(7) == 0) {
-                            for (int i = 0; i < 5; i++) {
-                                event.getEntityLiving().world.addParticle(ParticleTypes.HEART, event.getEntityLiving().getPosX() + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().getPosY() + ((rand.nextDouble() - 0.5D) * 3), event.getEntityLiving().getPosZ() + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
-                            }
-                        }
-                        LivingEntity entity = event.getEntityLiving();
-                        if (entity.collidedHorizontally) {
-                            if (entity instanceof LivingEntity) {
-                                entity.setJumping(true);
-                            } else if (entity.isOnGround()) {
-                                entity.setMotion(entity.getMotion().add(0, 0.42, 0));
-                            }
-                        }
-                        double motionXAdd = (Math.signum(closestSiren.getPosX() - entity.getPosX()) * 0.5D - entity.getMotion().x) * 0.100000000372529;
-                        double motionYAdd = (Math.signum(closestSiren.getPosY() - entity.getPosY() + 1) * 0.5D - entity.getMotion().y) * 0.100000000372529;
-                        double motionZAdd = (Math.signum(closestSiren.getPosZ() - entity.getPosZ()) * 0.5D - entity.getMotion().z) * 0.100000000372529;
-                        entity.setMotion(entity.getMotion().add(motionXAdd, motionYAdd, motionZAdd));
-                        float angle = (float) (Math.atan2(entity.getMotion().z, entity.getMotion().x) * 180.0D / Math.PI) - 90.0F;
-                        double d0 = closestSiren.getPosX() - entity.getPosX();
-                        double d2 = closestSiren.getPosZ() - entity.getPosZ();
-                        double d1 = closestSiren.getPosY() - 1 - entity.getPosY();
-                        if (entity.isPassenger()) {
-                            entity.stopRiding();
-                        }
-                        double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
-                        float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
-                        float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
-                        if (!(entity instanceof PlayerEntity)) {
-                            entity.rotationPitch = updateRotation(entity.rotationPitch, f1, 30F);
-                            entity.rotationYaw = updateRotation(entity.rotationYaw, f, 30F);
-                        }
-                        if (entity.getDistance(closestSiren) < 5D) {
-                            sirenProps.isCharmed = false;
-                            sirenProps.sirenID = 0;
-                            sirenProps.singTime = 0;
-                            closestSiren.singCooldown = IafConfig.sirenTimeBetweenSongs;
-                            closestSiren.setSinging(false);
-                            closestSiren.setAttackTarget(entity);
-                            closestSiren.setAggressive(true);
-                            closestSiren.triggerOtherSirens(entity);
-                        }
-                        if (!closestSiren.isAlive() || entity.getDistance(closestSiren) > EntitySiren.SEARCH_RANGE * 2 || sirenProps.getSiren(event.getEntityLiving().world) == null || entity instanceof PlayerEntity && ((PlayerEntity) entity).isCreative()) {
-                            sirenProps.isCharmed = false;
-                            sirenProps.sirenID = 0;
-                            sirenProps.singTime = 0;
-                        }
-                    }
-                }
-            }
+            SirenProperties.tickCharmedEntity(event.getEntityLiving());
+        }
+        else {
+            int i = 0;
         }
         MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), MiscEntityProperties.class);
         if (properties != null && properties.entitiesWeAreGlaringAt.size() > 0) {

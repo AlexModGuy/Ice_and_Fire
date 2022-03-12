@@ -14,7 +14,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
-import com.github.alexthe666.iceandfire.entity.props.SirenEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.SirenProperties;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -53,7 +53,6 @@ public class ClientEvents {
     private static final ResourceLocation TEXTURE_1 = new ResourceLocation("textures/block/frosted_ice_1.png");
     private static final ResourceLocation TEXTURE_2 = new ResourceLocation("textures/block/frosted_ice_2.png");
     private static final ResourceLocation TEXTURE_3 = new ResourceLocation("textures/block/frosted_ice_3.png");
-    private static final ResourceLocation CHAIN_TEXTURE = new ResourceLocation("iceandfire:textures/models/misc/chain_link.png");
     private Random rand = new Random();
 
     @SubscribeEvent
@@ -173,19 +172,25 @@ public class ClientEvents {
                 IceAndFire.PROXY.setDragon3rdPersonView(currentView);
             }
 
-            SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
-            if (player.world.isRemote && sirenProps != null) {
+            if (player.world.isRemote) {
                 GameRenderer renderer = Minecraft.getInstance().gameRenderer;
-                EntitySiren siren = sirenProps.getSiren(event.getEntityLiving().world);
-                if (IafConfig.sirenShader && !sirenProps.isCharmed && renderer != null && renderer.getShaderGroup() != null && SIREN_SHADER.toString().equals(renderer.getShaderGroup().getShaderGroupName())) {
+                EntitySiren siren = SirenProperties.getSiren(player);
+
+                if (IafConfig.sirenShader && siren == null && renderer != null && renderer.getShaderGroup() != null) {
+                    if (SIREN_SHADER.toString().equals(renderer.getShaderGroup().getShaderGroupName()))
+                        renderer.stopUseShader();
+                }
+
+                if (siren == null)
+                    return;
+
+                boolean isCharmed = SirenProperties.isCharmed(player);
+
+                if (IafConfig.sirenShader && !isCharmed && renderer != null && renderer.getShaderGroup() != null && SIREN_SHADER.toString().equals(renderer.getShaderGroup().getShaderGroupName())) {
                     renderer.stopUseShader();
                 }
-                if (siren == null) {
-                    sirenProps.isCharmed = false;
 
-                    return;
-                }
-                if (sirenProps.isCharmed) {
+                if (isCharmed) {
                     if (player.world.isRemote && rand.nextInt(40) == 0) {
                         IceAndFire.PROXY.spawnParticle("siren_appearance", player.getPosX(), player.getPosY(), player.getPosZ(), siren.getHairColor(), 0, 0);
                     }

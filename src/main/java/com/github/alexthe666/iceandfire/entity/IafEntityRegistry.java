@@ -7,9 +7,7 @@ import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesH
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
-import com.github.alexthe666.iceandfire.entity.props.ChickenEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
-import com.github.alexthe666.iceandfire.entity.props.SirenEntityProperties;
 
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
@@ -95,8 +93,6 @@ public class IafEntityRegistry {
 
     public static void setup() {
         EntityPropertiesHandler.INSTANCE.registerProperties(MiscEntityProperties.class);
-        EntityPropertiesHandler.INSTANCE.registerProperties(SirenEntityProperties.class);
-        EntityPropertiesHandler.INSTANCE.registerProperties(ChickenEntityProperties.class);
     }
 
     @SubscribeEvent
