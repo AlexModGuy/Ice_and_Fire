@@ -1,12 +1,5 @@
 package com.github.alexthe666.iceandfire.event;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
@@ -20,14 +13,7 @@ import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
 import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
-import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.item.ItemBlindfold;
-import com.github.alexthe666.iceandfire.item.ItemChain;
-import com.github.alexthe666.iceandfire.item.ItemCockatriceScepter;
-import com.github.alexthe666.iceandfire.item.ItemDeathwormGauntlet;
-import com.github.alexthe666.iceandfire.item.ItemScaleArmor;
-import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
-import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
+import com.github.alexthe666.iceandfire.item.*;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
 import com.github.alexthe666.iceandfire.message.MessageSwingArm;
 import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
@@ -37,7 +23,6 @@ import com.github.alexthe666.iceandfire.world.gen.WorldGenFireDragonCave;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenIceDragonCave;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Multimap;
-
 import net.minecraft.block.AbstractChestBlock;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.WallBlock;
@@ -59,14 +44,9 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.loot.ItemLootEntry;
-import net.minecraft.loot.LootEntry;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTables;
-import net.minecraft.loot.RandomValueRange;
+import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.RandomChance;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -75,7 +55,6 @@ import net.minecraft.tags.ITag;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.IServerWorld;
@@ -84,15 +63,7 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -101,6 +72,12 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import javax.annotation.Nullable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)
 public class ServerEvents {
@@ -519,8 +496,8 @@ public class ServerEvents {
         if (IafConfig.chickensLayRottenEggs && !event.getEntityLiving().world.isRemote && isChicken(event.getEntityLiving()) && !event.getEntityLiving().isChild() && event.getEntityLiving() instanceof AnimalEntity) {
             ChickenProperties.tickChicken(event.getEntityLiving());
         }
-
-        FrozenProperties.tickFrozenEntity(event.getEntityLiving());
+        if (FrozenProperties.isFrozen(event.getEntityLiving()))
+            FrozenProperties.tickFrozenEntity(event.getEntityLiving());
 
         if (FrozenProperties.isFrozen(event.getEntityLiving()) && !(event.getEntityLiving() instanceof PlayerEntity && ((PlayerEntity) event.getEntityLiving()).isCreative())) {
             event.getEntity().setMotion(event.getEntity().getMotion().mul(0.25F, 1, 0.25F));
@@ -713,6 +690,17 @@ public class ServerEvents {
             while (itr.hasNext()) {
                 (itr.next()).stopRiding();
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerStartTracking(PlayerEvent.StartTracking event) {
+        if (event.getTarget() instanceof LivingEntity) {
+            LivingEntity target = (LivingEntity) event.getTarget();
+            if (ChainProperties.hasChainData(target))
+                ChainProperties.updateData(target);
+            if (FrozenProperties.isFrozen(target))
+                FrozenProperties.updateData(target);
         }
     }
 

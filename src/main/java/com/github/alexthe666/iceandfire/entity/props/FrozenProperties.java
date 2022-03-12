@@ -90,7 +90,7 @@ public class FrozenProperties {
         }
     }
 
-    private static void updateData(LivingEntity entity) {
+    public static void updateData(LivingEntity entity) {
         updateData(entity, CitadelEntityData.getCitadelTag(entity));
     }
 
@@ -104,11 +104,6 @@ public class FrozenProperties {
     public static void tickFrozenEntity(LivingEntity entity) {
         CompoundNBT entityData = CitadelEntityData.getOrCreateCitadelTag(entity);
         CompoundNBT frozenData = getOrCreateFrozenData(entityData);
-        // If the entity isn't frozen just return (update to make sure it syncs with the client)
-        if (!isFrozen(entity)){
-            updateData(entity);
-            return;
-        }
         if (entity instanceof EntityIceDragon) {
             frozenData.putBoolean(FROZEN_BOOL, false);
         }

@@ -72,7 +72,7 @@ public class ChainProperties {
         return new ListNBT();
     }
 
-    private static void updateData(LivingEntity entity) {
+    public static void updateData(LivingEntity entity) {
         updateData(entity, CitadelEntityData.getOrCreateCitadelTag(entity));
     }
 
@@ -153,10 +153,6 @@ public class ChainProperties {
     }
 
     public static void tickChain(LivingEntity chained) {
-        if (!chained.world.isRemote()) {
-            //TODO: there must be a better way of updating this preferably only once
-            updateData(chained);
-        }
         List<Entity> chainedToList = getChainedTo(chained);
         for (Entity chainedOwner : chainedToList) {
             if (chainedOwner != null) {
