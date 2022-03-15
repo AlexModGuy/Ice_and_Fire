@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
-import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
-import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
+import com.github.alexthe666.iceandfire.item.ItemDeathwormGauntlet;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 
 public class ModelDeathWormGauntlet extends ModelDragonBase {
@@ -111,18 +112,15 @@ public class ModelDeathWormGauntlet extends ModelDragonBase {
         this.resetToDefaultPose();
         if (stack.getTag() != null) {
             Entity holder = Minecraft.getInstance().world.getEntityByID(stack.getTag().getInt("HolderID"));
-            MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(holder, MiscEntityProperties.class);
-            if (properties != null) {
-                int lungeTicks = properties.deathwormLungeTicks;
-                int prevLungeTicks = properties.prevDeathwormLungeTicks;
-                float lungeProg = ((float) prevLungeTicks + (lungeTicks - prevLungeTicks) * partialTick);
-                progressRotation(TopJaw, lungeProg, (float) Math.toRadians(-30), 0, 0);
-                progressRotation(BottomJaw, lungeProg, (float) Math.toRadians(30), 0, 0);
-                progressPosition(JawExtender, lungeProg, 0, 0, -4);
-                progressPosition(JawExtender2, lungeProg, 0, 0, -10);
-                progressPosition(JawExtender3, lungeProg, 0, 0, -10);
-                progressPosition(JawExtender4, lungeProg, 0, 0, -10);
-            }
+            if (!(holder instanceof LivingEntity))
+                return;
+            float lungeTicks = MiscProperties.getLungeTicks((LivingEntity) holder) + partialTick;
+            progressRotation(TopJaw, lungeTicks, (float) Math.toRadians(-30), 0, 0);
+            progressRotation(BottomJaw, lungeTicks, (float) Math.toRadians(30), 0, 0);
+            progressPosition(JawExtender, lungeTicks, 0, 0, -4);
+            progressPosition(JawExtender2, lungeTicks, 0, 0, -10);
+            progressPosition(JawExtender3, lungeTicks, 0, 0, -10);
+            progressPosition(JawExtender4, lungeTicks, 0, 0, -10);
 
         }
         /*animator.setAnimation(EntityDeathWorm.ANIMATION_BITE);

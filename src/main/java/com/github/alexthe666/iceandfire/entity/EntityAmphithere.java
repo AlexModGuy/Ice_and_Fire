@@ -19,7 +19,7 @@ import com.github.alexthe666.iceandfire.entity.ai.AmphithereAIHurtByTarget;
 import com.github.alexthe666.iceandfire.entity.ai.AmphithereAITargetItems;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAIRide;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIWatchClosestIgnoreRider;
-import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IDragonFlute;
 import com.github.alexthe666.iceandfire.entity.util.IFlapable;
@@ -722,10 +722,8 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
             }
         }
         if (this.getUntamedRider() != null && this.getUntamedRider().isSneaking()) {
-            MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getUntamedRider(), MiscEntityProperties.class);
-            if (properties != null) {
-                properties.hasDismountedDragon = true;
-            }
+            if (this.getUntamedRider() instanceof LivingEntity)
+                MiscProperties.setDismountedDragon((LivingEntity) this.getUntamedRider(), true);
             this.getUntamedRider().stopRiding();
         }
         if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof PlayerEntity) {

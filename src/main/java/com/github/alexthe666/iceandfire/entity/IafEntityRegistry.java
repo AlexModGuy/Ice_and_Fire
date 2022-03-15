@@ -1,14 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-
-import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
-import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
-
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
@@ -22,6 +16,9 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.lang.reflect.Field;
+import java.util.HashMap;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafEntityRegistry {
@@ -92,7 +89,6 @@ public class IafEntityRegistry {
     }
 
     public static void setup() {
-        EntityPropertiesHandler.INSTANCE.registerProperties(MiscEntityProperties.class);
     }
 
     @SubscribeEvent

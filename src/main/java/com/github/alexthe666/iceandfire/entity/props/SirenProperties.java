@@ -50,7 +50,7 @@ public class SirenProperties {
         return clearCharmedStatus(nbt);
     }
 
-    private static void updateData(LivingEntity entity) {
+    public static void updateData(LivingEntity entity) {
         updateData(entity, CitadelEntityData.getCitadelTag(entity));
     }
 
