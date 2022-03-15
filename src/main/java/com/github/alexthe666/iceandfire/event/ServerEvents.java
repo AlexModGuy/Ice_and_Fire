@@ -430,16 +430,16 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityDie(LivingDeathEvent event) {
-        /*ChainEntityProperties chainProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), ChainEntityProperties.class);
-        if (chainProperties != null) {
-            chainProperties.minimizeLists();
-            if (!event.getEntity().world.isRemote) {
-                ItemEntity entityitem = new ItemEntity(event.getEntity().world, event.getEntity().getPosX(), event.getEntity().getPosY() + (double) 1, event.getEntity().getPosZ(), new ItemStack(IafItemRegistry.CHAIN, chainProperties.connectedEntities.size()));
-                entityitem.setDefaultPickupDelay();
-                event.getEntity().world.addEntity(entityitem);
-            }
-            chainProperties.clearChained();
-        }*/
+        if (!event.getEntity().world.isRemote && ChainProperties.hasChainData(event.getEntityLiving())) {
+            ItemEntity entityitem = new ItemEntity(event.getEntity().world,
+                event.getEntity().getPosX(),
+                event.getEntity().getPosY() + (double) 1,
+                event.getEntity().getPosZ(),
+                new ItemStack(IafItemRegistry.CHAIN, ChainProperties.getChainedTo(event.getEntityLiving()).size()));
+            entityitem.setDefaultPickupDelay();
+            event.getEntity().world.addEntity(entityitem);
+            ChainProperties.clearChainData(event.getEntityLiving());
+        }
         if (event.getEntityLiving().getUniqueID().equals(ServerEvents.ALEX_UUID)) {
             event.getEntityLiving().entityDropItem(new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM), 1);
         }
