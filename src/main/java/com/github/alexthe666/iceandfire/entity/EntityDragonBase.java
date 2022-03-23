@@ -547,7 +547,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
             }
         }
         this.setModelDead(true);
-
+        this.removePassengers();
         if (this.getDeathStage() >= this.getAgeInDays() / 5) {
             this.remove();
             for (int k = 0; k < 40; ++k) {
