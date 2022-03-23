@@ -111,14 +111,14 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
         this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F, 1.0F));
         this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 0, true, true, new Predicate<LivingEntity>() {
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, true, new Predicate<LivingEntity>() {
             @Override
             public boolean apply(@Nullable LivingEntity entity) {
                 return !EntityGorgon.isStoneMob(entity) && DragonUtils.isAlive(entity) && !(entity instanceof WaterMobEntity) && (!(entity instanceof PlayerEntity) || ((PlayerEntity)entity).isCreative()) && !(entity instanceof EntityCyclops) && !ServerEvents.isSheep(entity) && !(entity instanceof AnimalEntity && !(entity instanceof WolfEntity || entity instanceof PolarBearEntity || entity instanceof EntityDragonBase)) || entity instanceof EntityGorgon || entity instanceof AbstractVillagerEntity;
             }
         }));
 
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, PlayerEntity.class, 0, true, true, new Predicate<PlayerEntity>() {
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, PlayerEntity.class, 10, true, true, new Predicate<PlayerEntity>() {
 
             @Override
             public boolean apply(@Nullable PlayerEntity entity) {
