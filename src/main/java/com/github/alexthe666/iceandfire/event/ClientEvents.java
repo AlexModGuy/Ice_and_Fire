@@ -15,6 +15,7 @@ import com.github.alexthe666.iceandfire.entity.props.ChainEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
 import com.github.alexthe666.iceandfire.entity.props.SirenEntityProperties;
+import com.github.alexthe666.iceandfire.item.ItemGorgonHead;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -39,10 +40,7 @@ import net.minecraft.util.math.vector.Matrix3f;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -386,6 +384,19 @@ public class ClientEvents {
             }
         }
     }
+
+    @SubscribeEvent
+    public void onRenderItemInFrame(RenderItemInFrameEvent event) {
+        if (event.getItem().getItem() instanceof ItemGorgonHead) {
+            // Fix the Gorgonhead being small and not facing the right direction
+            // There might be a better way of doing this...
+            event.getMatrix().rotate(Vector3f.XP.rotationDegrees(180.0F));
+            event.getMatrix().translate(0, 0.1, 0.1f);
+            event.getMatrix().scale(2.5f, 2.5f, 2.5f);
+        }
+    }
+
+
 
     private Vector3d getPosition(Entity LivingEntityIn, double p_177110_2_, float p_177110_4_) {
         double d0 = LivingEntityIn.lastTickPosX + (LivingEntityIn.getPosX() - LivingEntityIn.lastTickPosX) * (double) p_177110_4_;
