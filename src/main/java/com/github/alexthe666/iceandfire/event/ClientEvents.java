@@ -37,6 +37,9 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -155,7 +158,6 @@ public class ClientEvents {
         MiscProperties.getTargetedBy(entity).forEach(caster -> {
             CockatriceBeamRender.render(entity, caster, event.getMatrixStack(), event.getBuffers(), event.getPartialRenderTick());
         });
-
         RenderChain.render(entity, event.getPartialRenderTick(), event.getMatrixStack(), event.getBuffers(), event.getLight());
     }
 

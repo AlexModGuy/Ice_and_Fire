@@ -309,18 +309,23 @@ public class ServerEvents {
             }
             event.setAmount(event.getAmount() * multi);
         }
-        if (event.getSource() == IafDamageRegistry.DRAGON_FIRE || event.getSource() == IafDamageRegistry.DRAGON_ICE) {
+        if (event.getSource() == IafDamageRegistry.DRAGON_FIRE || event.getSource() == IafDamageRegistry.DRAGON_ICE ||
+            event.getSource() == IafDamageRegistry.DRAGON_LIGHTNING) {
             float multi = 1;
-            if (event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemScaleArmor) {
+            if (event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemScaleArmor ||
+                event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemDragonsteelArmor) {
                 multi -= 0.1;
             }
-            if (event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() instanceof ItemScaleArmor) {
+            if (event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() instanceof ItemScaleArmor ||
+                event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() instanceof ItemDragonsteelArmor) {
                 multi -= 0.3;
             }
-            if (event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() instanceof ItemScaleArmor) {
+            if (event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() instanceof ItemScaleArmor ||
+                event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() instanceof ItemDragonsteelArmor) {
                 multi -= 0.2;
             }
-            if (event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.FEET).getItem() instanceof ItemScaleArmor) {
+            if (event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.FEET).getItem() instanceof ItemScaleArmor ||
+                event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.FEET).getItem() instanceof ItemDragonsteelArmor) {
                 multi -= 0.1;
             }
             event.setAmount(event.getAmount() * multi);

@@ -113,13 +113,13 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
         });
         this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, PlayerEntity.class, 0, false, false, new Predicate<Entity>() {
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, PlayerEntity.class, 10, false, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
                 return entity.isAlive();
             }
         }));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, LivingEntity.class, 0, true, false, new Predicate<Entity>() {
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, LivingEntity.class, 10, true, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
                 return entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity)  || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
