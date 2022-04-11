@@ -598,7 +598,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     public boolean isInHive(){
         if (getHive() != null) {
             for (BlockPos pos : getHive().getAllRooms()) {
-                if (isCloseEnoughToTarget(MyrmexHive.getGroundedPos(getWorld(), pos), 20))
+                if (isCloseEnoughToTarget(MyrmexHive.getGroundedPos(getWorld(), pos), 300))
                     return true;
             }
         }

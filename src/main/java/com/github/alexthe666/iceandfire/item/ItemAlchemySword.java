@@ -9,8 +9,8 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
-import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
 
+import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -48,10 +48,7 @@ public class ItemAlchemySword extends SwordItem {
             if (target instanceof EntityFireDragon) {
                 target.attackEntityFrom(DamageSource.DROWN, 13.5F);
             }
-            FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(target, FrozenEntityProperties.class);
-            if(frozenProps != null){
-                frozenProps.setFrozenFor(200);
-            }
+            FrozenProperties.setFrozenFor(target, 200);
             target.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 2));
             target.addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, 100, 2));
             target.applyKnockback(1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());

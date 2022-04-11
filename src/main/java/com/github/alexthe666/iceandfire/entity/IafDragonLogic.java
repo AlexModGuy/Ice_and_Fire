@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -65,10 +65,8 @@ public class IafDragonLogic {
             }
         }
         if (dragon.getControllingPassenger() != null && dragon.getControllingPassenger().isSneaking()) {
-            MiscEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(dragon.getControllingPassenger(), MiscEntityProperties.class);
-            if (properties != null) {
-                properties.hasDismountedDragon = true;
-            }
+            if (dragon.getControllingPassenger() instanceof LivingEntity)
+                MiscProperties.setDismountedDragon((LivingEntity) dragon.getControllingPassenger(), true);
             dragon.getControllingPassenger().stopRiding();
         }
         if (dragon.isFlying() && !dragon.isHovering() && dragon.getControllingPassenger() != null && !dragon.isOnGround() && Math.max(Math.abs(dragon.getMotion().getX()), Math.abs(dragon.getMotion().getZ())) < 0.1F) {

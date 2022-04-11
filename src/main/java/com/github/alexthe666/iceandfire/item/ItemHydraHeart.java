@@ -42,9 +42,9 @@ public class ItemHydraHeart extends Item {
                 } else if (healthPercentage < 0.75D) {
                     level = 1;
                 }
-                if (!((PlayerEntity) entity).isPotionActive(Effects.REGENERATION))
+                //Consider using EffectInstance.combine
+                if (!((PlayerEntity) entity).isPotionActive(Effects.REGENERATION) || ((PlayerEntity) entity).getActivePotionEffect(Effects.REGENERATION).getAmplifier() < level)
                     ((PlayerEntity) entity).addPotionEffect(new EffectInstance(Effects.REGENERATION, 900, level, true, false));
-
             }
             //In hotbar
         }

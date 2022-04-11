@@ -1,7 +1,9 @@
 package com.github.alexthe666.iceandfire;
 
 
+import com.github.alexthe666.citadel.server.message.PropertiesMessage;
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
+import com.github.alexthe666.iceandfire.message.*;
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,29 +13,6 @@ import com.github.alexthe666.iceandfire.config.ConfigHolder;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.loot.IafLootRegistry;
-import com.github.alexthe666.iceandfire.message.MessageAddChainedEntity;
-import com.github.alexthe666.iceandfire.message.MessageDaytime;
-import com.github.alexthe666.iceandfire.message.MessageDeathWormHitbox;
-import com.github.alexthe666.iceandfire.message.MessageDragonControl;
-import com.github.alexthe666.iceandfire.message.MessageDragonSetBurnBlock;
-import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
-import com.github.alexthe666.iceandfire.message.MessageGetMyrmexHive;
-import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
-import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
-import com.github.alexthe666.iceandfire.message.MessageMyrmexSettings;
-import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
-import com.github.alexthe666.iceandfire.message.MessageRemoveChainedEntity;
-import com.github.alexthe666.iceandfire.message.MessageSetMyrmexHiveNull;
-import com.github.alexthe666.iceandfire.message.MessageSirenSong;
-import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
-import com.github.alexthe666.iceandfire.message.MessageStartRidingMob;
-import com.github.alexthe666.iceandfire.message.MessageSwingArm;
-import com.github.alexthe666.iceandfire.message.MessageUpdateDragonforge;
-import com.github.alexthe666.iceandfire.message.MessageUpdateLectern;
-import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
-import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
-import com.github.alexthe666.iceandfire.message.MessageUpdatePixieJar;
-import com.github.alexthe666.iceandfire.message.MessageUpdatePodium;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -128,7 +107,6 @@ public class IceAndFire {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageAddChainedEntity.class, MessageAddChainedEntity::write, MessageAddChainedEntity::read, MessageAddChainedEntity.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageDaytime.class, MessageDaytime::write, MessageDaytime::read, MessageDaytime.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageDeathWormHitbox.class, MessageDeathWormHitbox::write, MessageDeathWormHitbox::read, MessageDeathWormHitbox.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageDragonControl.class, MessageDragonControl::write, MessageDragonControl::read, MessageDragonControl.Handler::handle);
@@ -139,7 +117,6 @@ public class IceAndFire {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageHippogryphArmor.class, MessageHippogryphArmor::write, MessageHippogryphArmor::read, MessageHippogryphArmor.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageMultipartInteract.class, MessageMultipartInteract::write, MessageMultipartInteract::read, MessageMultipartInteract.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessagePlayerHitMultipart.class, MessagePlayerHitMultipart::write, MessagePlayerHitMultipart::read, MessagePlayerHitMultipart.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageRemoveChainedEntity.class, MessageRemoveChainedEntity::write, MessageRemoveChainedEntity::read, MessageRemoveChainedEntity.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSetMyrmexHiveNull.class, MessageSetMyrmexHiveNull::write, MessageSetMyrmexHiveNull::read, MessageSetMyrmexHiveNull.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSirenSong.class, MessageSirenSong::write, MessageSirenSong::read, MessageSirenSong.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSpawnParticleAt.class, MessageSpawnParticleAt::write, MessageSpawnParticleAt::read, MessageSpawnParticleAt.Handler::handle);

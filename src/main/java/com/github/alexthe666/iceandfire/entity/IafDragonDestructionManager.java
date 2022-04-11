@@ -8,7 +8,7 @@ import com.github.alexthe666.iceandfire.block.BlockFallingReturningState;
 import com.github.alexthe666.iceandfire.block.BlockReturningState;
 import com.github.alexthe666.iceandfire.block.IDragonProof;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.entity.props.FrozenEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.entity.util.BlockLaunchExplosion;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
@@ -167,10 +167,7 @@ public class IafDragonDestructionManager {
 		).stream().forEach(livingEntity -> {
             if (!DragonUtils.onSameTeam(destroyer, livingEntity) && !destroyer.isEntityEqual(livingEntity) && destroyer.canEntityBeSeen(livingEntity)) {
                 livingEntity.attackEntityFrom(IafDamageRegistry.DRAGON_ICE, stageDmg);
-                FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(livingEntity, FrozenEntityProperties.class);
-                if (frozenProps != null) {
-                    frozenProps.setFrozenFor(statusDuration);
-                }
+                FrozenProperties.setFrozenFor(livingEntity, statusDuration);
             }
 		});
     }
@@ -335,10 +332,7 @@ public class IafDragonDestructionManager {
     		).stream().forEach(livingEntity -> {
                 if (!destroyer.isOnSameTeam(livingEntity) && !destroyer.isEntityEqual(livingEntity) && destroyer.canEntityBeSeen(livingEntity)) {
                     livingEntity.attackEntityFrom(IafDamageRegistry.DRAGON_ICE, stageDmg);
-                    FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(livingEntity, FrozenEntityProperties.class);
-                    if (frozenProps != null) {
-                        frozenProps.setFrozenFor(statusDuration);
-                    }
+                    FrozenProperties.setFrozenFor(livingEntity, statusDuration);
                 }
     		});
 

@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 
 import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.props.MiscEntityProperties;
+import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -86,10 +86,7 @@ public class ItemSirenFlute extends Item {
         }
         if (pointedEntity != null) {
             if (pointedEntity instanceof LivingEntity) {
-                MiscEntityProperties theirProperties = EntityPropertiesHandler.INSTANCE.getProperties(pointedEntity, MiscEntityProperties.class);
-                if (theirProperties != null) {
-                    theirProperties.inLoveTicks = 600;
-                }
+                MiscProperties.setLoveTicks((LivingEntity) pointedEntity, 600);
                 itemStackIn.damageItem(2, player, (entity) -> {
                     entity.sendBreakAnimation(EquipmentSlotType.MAINHAND);
                 });
