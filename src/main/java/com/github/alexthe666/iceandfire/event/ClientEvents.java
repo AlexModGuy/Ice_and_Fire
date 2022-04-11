@@ -48,11 +48,18 @@ public class ClientEvents {
 
     private static final ResourceLocation SIREN_SHADER = new ResourceLocation("iceandfire:shaders/post/siren.json");
 
-    private Random rand = new Random();
+    private final Random rand = new Random();
+
+    private static boolean shouldCancelRender(LivingEntity living) {
+        if (living.getRidingEntity() != null && living.getRidingEntity() instanceof EntityDragonBase) {
+            return ClientProxy.currentDragonRiders.contains(living.getUniqueID()) || living == Minecraft.getInstance().player && Minecraft.getInstance().gameSettings.getPointOfView().func_243192_a();
+        }
+        return false;
+    }
 
     @SubscribeEvent
     public void renderWorldLastEvent(RenderWorldLastEvent event) {
-        if(Pathfinding.isDebug()){
+        if (Pathfinding.isDebug()) {
             Pathfinding.debugDraw(event.getPartialTicks(), event.getMatrixStack());
         }
     }
@@ -140,11 +147,8 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onPreRenderLiving(RenderLivingEvent.Pre event) {
-        if (event.getEntity().getRidingEntity() != null && event.getEntity().getRidingEntity() instanceof EntityDragonBase) {
-            if (ClientProxy.currentDragonRiders.contains(event.getEntity().getUniqueID()) || event.getEntity() == Minecraft.getInstance().player && Minecraft.getInstance().gameSettings.getPointOfView().func_243192_a()) {
-                event.setCanceled(true);
-                net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post(event.getEntity(), event.getRenderer(), event.getPartialRenderTick(), event.getMatrixStack(), event.getBuffers(), event.getLight()));
-            }
+        if (shouldCancelRender(event.getEntity())) {
+            event.setCanceled(true);
         }
         if (FrozenProperties.isFrozen(event.getEntity())) {
             RenderFrozenState.render(event.getEntity(), event.getMatrixStack());
@@ -154,6 +158,9 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onPostRenderLiving(RenderLivingEvent.Post event) {
+        if (shouldCancelRender(event.getEntity())) {
+            event.setCanceled(true);
+        }
         LivingEntity entity = event.getEntity();
         MiscProperties.getTargetedBy(entity).forEach(caster -> {
             CockatriceBeamRender.render(entity, caster, event.getMatrixStack(), event.getBuffers(), event.getPartialRenderTick());

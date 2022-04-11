@@ -111,7 +111,7 @@ public class ItemDragonHorn extends Item {
     }
 
 
-    public void func_77624_a(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (stack.getTag() != null) {
             CompoundNBT entityTag = stack.getTag().getCompound("EntityTag");
             if (!entityTag.isEmpty()) {
