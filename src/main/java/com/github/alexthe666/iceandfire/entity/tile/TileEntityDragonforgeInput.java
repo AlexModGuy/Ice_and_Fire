@@ -51,7 +51,8 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
                 world.setTileEntity(pos, tileentity);
             }
         }
-        lureDragons();
+        if (isAssembled())
+            lureDragons();
 
     }
 
@@ -87,14 +88,7 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
 
         boolean dragonSelected = false;
         for (EntityDragonBase dragon : world.getEntitiesWithinAABB(EntityDragonBase.class, searchArea)) {
-            if (
-                !dragonSelected &&
-
-                // Forge Core Checks
-                core != null &&
-                core.assembled() &&
-                core.canSmelt() &&
-
+            if (!dragonSelected &&
                 // Dragon Checks
                 getDragonType() == DragonType.getIntFromType(dragon.dragonType) &&
                 (dragon.isChained() || dragon.isTamed()) &&
@@ -108,6 +102,12 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
                 dragon.setBreathingFire(false);
             }
         }
+    }
+
+    public boolean isAssembled() {
+        return (core != null &&
+            core.assembled() &&
+            core.canSmelt());
     }
 
     public void resetCore() {
@@ -164,7 +164,6 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
         }
     }
 
-
     private TileEntityDragonforge getConnectedTileEntity() {
         for (Direction facing : HORIZONTALS) {
             if (world.getTileEntity(pos.offset(facing)) != null && world.getTileEntity(pos.offset(facing)) instanceof TileEntityDragonforge) {
@@ -173,8 +172,6 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
         }
         return null;
     }
-
-
     @SuppressWarnings("unchecked")
     @Override
     @javax.annotation.Nullable
