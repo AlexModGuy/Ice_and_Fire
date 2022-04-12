@@ -1,0 +1,9 @@
+{
+  "__comment": "all mobs that cannot see (immune to damage from gorgons and cockatrices).",
+  "replace": false,
+  "values": [
+    "iceandfire:deathworm",
+    "iceandfire:dragon_skull",
+    "iceandfire:mob_skull"
+  ]
+}

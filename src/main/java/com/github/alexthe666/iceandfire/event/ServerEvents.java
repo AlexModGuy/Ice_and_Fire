@@ -167,8 +167,6 @@ public class ServerEvents {
         }
     }
 
-
-
     private static boolean isInEntityTag(ResourceLocation loc, EntityType type) {
         ITag<EntityType<?>> tag = EntityTypeTags.getCollection().get(loc);
         return tag != null && tag.contains(type);
@@ -192,6 +190,10 @@ public class ServerEvents {
 
     public static boolean doesScareCockatrice(Entity entity) {
         return entity != null && isInEntityTag(IafTagRegistry.SCARES_COCKATRICES, entity.getType());
+    }
+
+    public static boolean isBlindMob(Entity entity) {
+        return entity != null && isInEntityTag(IafTagRegistry.BLINDED, entity.getType());
     }
 
     public static boolean isRidingOrBeingRiddenBy(Entity first, Entity entityIn) {
