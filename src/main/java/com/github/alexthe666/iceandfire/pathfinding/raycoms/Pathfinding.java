@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 /*
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
+
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.AbstractPathJob;
@@ -45,9 +46,10 @@ public final class Pathfinding {
         //Hides default constructor.
     }
 
-    public static boolean isDebug(){
+    public static boolean isDebug() {
         return false;
     }
+
     /**
      * Creates a new thread pool for pathfinding jobs
      *
@@ -84,7 +86,7 @@ public final class Pathfinding {
                 return path;
             });
         }
-        if(getExecutor().isShutdown() || getExecutor().isTerminating() || getExecutor().isTerminated()){
+        if (getExecutor().isShutdown() || getExecutor().isTerminating() || getExecutor().isTerminated()) {
             return null;
         }
         return getExecutor().submit(job);
@@ -133,7 +135,7 @@ public final class Pathfinding {
             }
 
             for (final Node n : debugNodesVisited) {
-               debugDrawNode(n, 0F, 0F, 1.0F, matrixStack);
+                debugDrawNode(n, 0F, 0F, 1.0F, matrixStack);
             }
 
             for (final Node n : debugNodesPath) {
@@ -289,19 +291,15 @@ public final class Pathfinding {
          */
         public static int id;
 
-
-        private static final ClassLoader classLoader;
-
-        static {
-            ThreadTaskExecutor<?> workqueue = LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER);
-            if (workqueue.isOnExecutionThread())
-                classLoader = Thread.currentThread().getContextClassLoader();
-            else
-                classLoader = CompletableFuture.supplyAsync(() -> Thread.currentThread().getContextClassLoader(), workqueue).join();
-        }
-
         @Override
         public Thread newThread(final Runnable runnable) {
+            ThreadTaskExecutor<?> workqueue = LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER);
+            ClassLoader classLoader;
+            if (workqueue.isOnExecutionThread()) {
+                classLoader = Thread.currentThread().getContextClassLoader();
+            } else {
+                classLoader = CompletableFuture.supplyAsync(() -> Thread.currentThread().getContextClassLoader(), workqueue).join();
+            }
             final Thread thread = new Thread(runnable, "Ice and Fire Pathfinding Worker #" + (id++));
             thread.setDaemon(true);
             thread.setPriority(Thread.MAX_PRIORITY);

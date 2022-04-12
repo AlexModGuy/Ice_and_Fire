@@ -105,11 +105,8 @@ public class ItemDragonHorn extends Item {
                     stack.setTag(new CompoundNBT());
             }
         }
-
-
         return ActionResultType.SUCCESS;
     }
-
 
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (stack.getTag() != null) {
