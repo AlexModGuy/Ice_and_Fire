@@ -10,6 +10,7 @@ import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -103,4 +104,9 @@ public class EntityTideTrident extends TridentEntity {
 
         this.playSound(soundevent, f1, 1.0F);
     }
+
+    protected ItemStack getArrowStack() {
+        return this.thrownStack.getItem() == Items.TRIDENT ? new ItemStack(IafItemRegistry.TIDE_TRIDENT) : this.thrownStack.copy();
+    }
+
 }
