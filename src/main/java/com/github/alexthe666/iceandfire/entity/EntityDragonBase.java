@@ -1624,6 +1624,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                 this.move(MoverType.SELF, new Vector3d(0, -0.2F, 0));
             }
             this.setBreathingFire(false);
+            if(this.getDragonPitch() > 0){
+                this.setDragonPitch(Math.min(0, this.getDragonPitch() - 5));
+            }
+            if(this.getDragonPitch() < 0){
+                this.setDragonPitch(Math.max(0, this.getDragonPitch() + 5));
+            }
         } else {
             if (world.isRemote) {
                 logic.updateDragonClient();
