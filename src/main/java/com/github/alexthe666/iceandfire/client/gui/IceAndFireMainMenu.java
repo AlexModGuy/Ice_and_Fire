@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
@@ -100,6 +101,7 @@ public class IceAndFireMainMenu extends MainMenuScreen {
             URLConnection connection = null;
             try {
                 connection = url.openConnection();
+                connection.setConnectTimeout(200);
                 InputStream is = connection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(is));
             } catch (IOException e) {
@@ -146,7 +148,7 @@ public class IceAndFireMainMenu extends MainMenuScreen {
             } else {
                 x = 30 + random.nextInt(30);
             }
-            String s1 = "missingno"; //generateNewRandomName(Minecraft.getInstance().fontRenderer, 50, random);
+            String s1 = "missingno";
             drawnEnscriptions[i] = new Enscription(s1, x, y, random.nextFloat() * 0.5F + 0.5F, 0X9C8B7B);
         }
     }
