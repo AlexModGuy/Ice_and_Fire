@@ -119,7 +119,7 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
             }
         }
         if (!entity.isModelDead()) {
-            if (entity.turn_buffer != null && !(entity.isBeingRidden() && !entity.isPassenger() && entity.isBreathingFire())) {
+            if (entity.turn_buffer != null && !entity.isBeingRidden() && !entity.isPassenger() && entity.isBreathingFire()) {
                 entity.turn_buffer.applyChainSwingBuffer(neckParts);
             }
             if (entity.tail_buffer != null && !entity.isPassenger()) {
