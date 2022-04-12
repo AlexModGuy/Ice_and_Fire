@@ -324,7 +324,7 @@ public class ServerConfig {
         this.spawnTrolls = buildBoolean(builder, "Spawn Trolls", "all", true, "True if trolls are allowed to spawn");
         this.trollsDropWeapon = buildBoolean(builder, "Trolls Drop Weapon", "all", true, "True if trolls are allowed to drop their weapon on death.");
         this.trollSpawnRate = buildInt(builder, "Troll Spawn Weight", "all", 40, 1, 10000, "Troll spawn weight. Lower = lower chance to spawn");
-        this.trollSpawnCheckChance = buildInt(builder, "Troll Spawn Check Chance", "all", 10, 0, 10000, "A double check to see if the game can spawn trolls. Higher number = lower chance to spawn.");
+        this.trollSpawnCheckChance = buildInt(builder, "Troll Spawn Check Chance", "all", 2, 0, 10000, "A double check to see if the game can spawn trolls. Higher number = lower chance to spawn.");
         this.trollMaxHealth = buildDouble(builder, "Troll Max Health", "all", 50, 1, 10000, "Maximum troll health");
         this.trollAttackStrength = buildDouble(builder, "Troll Attack Strength", "all", 10, 1, 10000, "Troll attack strength");
         builder.pop();

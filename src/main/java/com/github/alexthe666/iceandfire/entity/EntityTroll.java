@@ -114,7 +114,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
 
     public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn) {
         BlockPos pos = this.getPosition();
-        BlockPos heightAt = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE, pos);
+        BlockPos heightAt = worldIn.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, pos);
         boolean rngCheck = true;
         if (IafConfig.trollSpawnCheckChance > 0) {
             rngCheck = this.getRNG().nextInt(IafConfig.trollSpawnCheckChance) == 0;
