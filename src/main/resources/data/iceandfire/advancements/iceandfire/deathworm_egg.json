@@ -12,12 +12,14 @@
     },
     "parent": "iceandfire:iceandfire/kill_deathworm",
     "criteria": {
-        "tame_rat": {
-            "trigger": "minecraft:tame_animal",
+        "egg": {
+            "trigger": "minecraft:inventory_changed",
             "conditions": {
-                "entity": {
-                    "type": "iceandfire:deathworm"
-                }
+                "items": [
+                    {
+                        "item": "iceandfire:deathworm_egg"
+                    }
+                ]
             }
         }
     }
