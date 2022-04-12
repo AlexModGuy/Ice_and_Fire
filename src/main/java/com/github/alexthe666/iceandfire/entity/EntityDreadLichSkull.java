@@ -8,6 +8,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -81,13 +83,17 @@ public class EntityDreadLichSkull extends AbstractArrowEntity {
             if (target == null || !target.isAlive()) {
                 double d0 = 10;
                 List<Entity> list = world.getEntitiesInAABBexcluding(shootingEntity, (new AxisAlignedBB(this.getPosX(), this.getPosY(), this.getPosZ(), this.getPosX() + 1.0D, this.getPosY() + 1.0D, this.getPosZ() + 1.0D)).grow(d0, 10.0D, d0), EntityPredicates.IS_ALIVE);
+                LivingEntity closest = null;
                 if (!list.isEmpty()) {
                     for(Entity e : list){
-                        if(e instanceof LivingEntity && !e.getUniqueID().equals(shootingEntity.getUniqueID())){
-                            target = (LivingEntity) e;
+                        if(e instanceof LivingEntity && !e.getUniqueID().equals(shootingEntity.getUniqueID()) && e instanceof IMob){
+                            if (closest == null || closest.getDistance(shootingEntity) > e.getDistance(shootingEntity)) {
+                                closest = (LivingEntity) e;
+                            }
                         }
                     }
                 }
+                target = closest;
             }
             if (target != null && target.isAlive()) {
                 double minusX = target.getPosX() - this.getPosX();
