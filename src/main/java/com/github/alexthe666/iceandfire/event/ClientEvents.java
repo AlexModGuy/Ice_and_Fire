@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.event;
 
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
@@ -15,34 +13,23 @@ import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
 import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.props.SirenProperties;
-import com.github.alexthe666.iceandfire.item.ItemCockatriceScepter;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.MainMenuScreen;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.PointOfView;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.Random;
 
 public class ClientEvents {
 
@@ -75,21 +62,21 @@ public class ClientEvents {
                 if (Minecraft.getInstance().gameSettings.getPointOfView() == PointOfView.THIRD_PERSON_BACK) {
                     if (currentView == 0) {
                     } else if (currentView == 1) {
-                        event.getInfo().movePosition(-scale * 1.2F, 0F, 0);
+                        event.getInfo().movePosition(-event.getInfo().calcCameraDistance(scale * 1.2F), 0F, 0);
                     } else if (currentView == 2) {
-                        event.getInfo().movePosition(-scale * 3F, 0F, 0);
+                        event.getInfo().movePosition(-event.getInfo().calcCameraDistance(scale * 3F), 0F, 0);
                     } else if (currentView == 3) {
-                        event.getInfo().movePosition(-scale * 5F, 0F, 0);
+                        event.getInfo().movePosition(-event.getInfo().calcCameraDistance(scale * 5F), 0F, 0);
                     }
                 }
                 if (Minecraft.getInstance().gameSettings.getPointOfView() == PointOfView.THIRD_PERSON_FRONT) {
                     if (currentView == 0) {
                     } else if (currentView == 1) {
-                        event.getInfo().movePosition(-scale * 1.2F, 0F, 0);
+                        event.getInfo().movePosition(-event.getInfo().calcCameraDistance(scale * 1.2F), 0F, 0);
                     } else if (currentView == 2) {
-                        event.getInfo().movePosition(-scale * 3F, 0F, 0);
+                        event.getInfo().movePosition(-event.getInfo().calcCameraDistance(scale * 3F), 0F, 0);
                     } else if (currentView == 3) {
-                        event.getInfo().movePosition(-scale * 5F, 0F, 0);
+                        event.getInfo().movePosition(-event.getInfo().calcCameraDistance(scale * 5F), 0F, 0);
                     }
                 }
 
