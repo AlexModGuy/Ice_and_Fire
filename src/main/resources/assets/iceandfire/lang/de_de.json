@@ -4,7 +4,6 @@
   "iceandfire.empty": "Leer",
 
   "block.iceandfire.lectern": "Bestiariumpult",
-
   "block.iceandfire.podium": "Podium",
   "block.iceandfire.podium_oak": "Eichenholzpodest",
   "block.iceandfire.podium_spruce": "Fichtenholzpodest",
@@ -402,6 +401,7 @@
   "item.iceandfire.amphithere_macuahuitl.desc_0": "Schleudert Gegner hoch und zurück",
   "item.iceandfire.amphithere_macuahuitl.desc_1": "Macht Schild unbrauchbar",
   "item.iceandfire.tide_trident": "Gezeitendreizack",
+  "item.iceandfire.tide_trident_inventory": "Tide Trident",
   "item.iceandfire.tide_trident.desc_0": "Sehr starke Dreizackwaffe",
   "item.iceandfire.tide_trident.desc_1": "Durchschlägt mehrere Gegner",
   "item.iceandfire.hippogryph_skull": "Hippogryphschädel",

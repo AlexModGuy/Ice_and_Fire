@@ -401,6 +401,7 @@
   "item.iceandfire.amphithere_macuahuitl.desc_0": "Подбрасывает и отталкивает существ",
   "item.iceandfire.amphithere_macuahuitl.desc_1": "Сбивает щиты",
   "item.iceandfire.tide_trident": "Трезубец Волны",
+  "item.iceandfire.tide_trident_inventory": "Tide Trident",
   "item.iceandfire.tide_trident.desc_0": "Мощный боевой трезубец",
   "item.iceandfire.tide_trident.desc_1": "Пробивает нескольких врагов",
   "item.iceandfire.hippogryph_skull": "Череп гиппогрифа",
@@ -776,6 +777,7 @@
   "death.attack.dragon_lightning.attacker_0": "%s был заряжен %s",
   "death.attack.dragon_lightning.attacker_1": "%s поражен разрядом %s",
   "death.attack.dragon_lightning.attacker_2": "%s шокирован %s",
+
   "key.dragon_strike": "Драконий Удар",
   "key.dragon_fireAttack": "Драконье Дыхание",
   "key.dragon_down": "Слезть с дракона/Снять малыша дракона",
@@ -858,6 +860,8 @@
   "advancements.iceandfire.dragonarmor.description": "Получите драконью броню",
   "advancements.iceandfire.kill_hydra.title": "Двенадцать подвигов Геракла",
   "advancements.iceandfire.kill_hydra.description": "Победите Гидру",
+  "advancements.iceandfire.kill_ghost.title": "Who You Gonna Call?",
+  "advancements.iceandfire.kill_ghost.description": "Slay a ghost.",
   "iceandfire.fire_dragon_forge": "Огненная драконья кузня",
   "iceandfire.ice_dragon_forge": "Ледяная драконья кузня",
   "iceandfire.lightning_dragon_forge": "Грозовая драконья кузня",
@@ -1019,7 +1023,7 @@
   "block.minecraft.banner.lightning_head.green": "Зелёная голова Грозового дракона",
   "block.minecraft.banner.lightning_head.red": "Красная голова Грозового дракона",
   "block.minecraft.banner.lightning_head.black": "Чёрная голова Грозового дракона",
-  
+
   "block.minecraft.banner.gorgon.white": "Белая горгона",
   "block.minecraft.banner.gorgon.orange": "Оранжевая горгона",
   "block.minecraft.banner.gorgon.magenta": "Пурпурная горгона",
@@ -1240,7 +1244,7 @@
   "block.minecraft.banner.dread.green": "Зелёный череп ужаса",
   "block.minecraft.banner.dread.red": "Красный череп ужаса",
   "block.minecraft.banner.dread.black": "Чёрный череп ужаса",
-  
+
   "iceandfire.sound.subtitle.ghost_attack": "Призрак атакует",
   "iceandfire.sound.subtitle.ghost_idle": "Призрак вздыхает",
   "iceandfire.sound.subtitle.ghost_hurt": "Призраку больно",

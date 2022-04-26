@@ -375,7 +375,6 @@
   "item.iceandfire.hippogryph_talon.desc_0": "§6Item Raro§r",
   "item.iceandfire.hippogryph_sword": "Espada de Garra de Hipogrifo",
   "item.iceandfire.hippogryph_sword.desc_0": "Sempre arranha o alvo, causando dano extra",
-  "item.iceandfire.hippogryph_sword.desc_1": " ",
   "item.iceandfire.cyclops_eye": "Olho de Ciclope",
   "item.iceandfire.cyclops_eye.desc_0": "Arma de Efeito em Área",
   "item.iceandfire.cyclops_eye.desc_1": "Enfraquece todas criaturas hostis próximas, quando segurado",
@@ -402,6 +401,7 @@
   "item.iceandfire.amphithere_macuahuitl.desc_0": "Empurra entidades pra cima e pra trás",
   "item.iceandfire.amphithere_macuahuitl.desc_1": "Desabilita escudos",
   "item.iceandfire.tide_trident": "Tridente do Guardião da Maré",
+  "item.iceandfire.tide_trident_inventory": "Tide Trident",
   "item.iceandfire.tide_trident.desc_0": "Tridente poderoso",
   "item.iceandfire.tide_trident.desc_1": "Atravessa vários inimigos",
   "item.iceandfire.hippogryph_skull": "Crânio de Hipogrifo",
@@ -1023,7 +1023,7 @@
   "block.minecraft.banner.lightning_head.green": "Cabeça de Dragão Elétrico Verde",
   "block.minecraft.banner.lightning_head.red": "Cabeça de Dragão Elétrico Vermelho",
   "block.minecraft.banner.lightning_head.black": "Cabeça de Dragão Elétrico Preto",
-  
+
   "block.minecraft.banner.gorgon.white": "Gorgóna Branco",
   "block.minecraft.banner.gorgon.orange": "Gorgóna Laranja",
   "block.minecraft.banner.gorgon.magenta": "Gorgóna Magenta",
@@ -1337,5 +1337,6 @@
   "iceandfire.sound.subtitle.icedragon_hurt": "Dragão de Gelo sendo ferido",
   "iceandfire.sound.subtitle.icedragon_death": "Dragão de Gelo morrendo",
   "iceandfire.sound.subtitle.dragonegg_hatch": "Ovo de Dragão eclodindo",
-  "iceandfire.sound.subtitle.dragonflute": "Flauta de Dragão sendo tocada"
+  "iceandfire.sound.subtitle.dragonflute": "Flauta de Dragão sendo tocada",
+  "item.iceandfire.hippogryph_sword.desc_1": " "
 }
