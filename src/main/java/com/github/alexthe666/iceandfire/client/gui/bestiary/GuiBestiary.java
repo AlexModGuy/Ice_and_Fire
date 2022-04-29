@@ -1,11 +1,16 @@
 package com.github.alexthe666.iceandfire.client.gui.bestiary;
 
 import java.io.IOException;
+
 import java.nio.charset.StandardCharsets;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+
 
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
@@ -22,6 +27,7 @@ import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.collect.Maps;
+import com.google.common.primitives.Ints;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -44,6 +50,10 @@ import net.minecraft.item.Items;
 import net.minecraft.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
+
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -71,10 +81,10 @@ public class GuiBestiary extends Screen {
     public GuiBestiary(ItemStack book) {
         super(new TranslationTextComponent("bestiary_gui"));
         this.book = book;
-        int indexPageTotal = 0;
         if (!book.isEmpty() && book.getItem() != null && book.getItem() == IafItemRegistry.BESTIARY) {
             if (book.getTag() != null) {
-                List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(book.getTag().getIntArray("Pages")));
+                Set<EnumBestiaryPages> pages = EnumBestiaryPages
+                    .containedPages(Ints.asList(book.getTag().getIntArray("Pages")));
                 allPageTypes.addAll(pages);
                 indexPagesTotal = (int) Math.ceil(pages.size() / 10D);
             }

@@ -1,6 +1,14 @@
 package com.github.alexthe666.iceandfire;
 
 
+
+
+import com.github.alexthe666.citadel.server.message.PropertiesMessage;
+import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
+import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
+import com.github.alexthe666.iceandfire.message.*;
+import com.github.alexthe666.iceandfire.world.IafProcessors;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -87,6 +95,8 @@ public class IceAndFire {
         modBus.addListener(this::setup);
         modBus.addListener(this::setupClient);
         modBus.addListener(this::setupComplete);
+        IafTileEntityRegistry.TYPES.register(modBus);
+
     }
 
     @SubscribeEvent
