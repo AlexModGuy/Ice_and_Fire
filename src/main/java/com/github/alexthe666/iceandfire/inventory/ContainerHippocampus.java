@@ -10,7 +10,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
@@ -34,9 +33,7 @@ public class ContainerHippocampus extends Container {
         }
         this.hippocampus = hippocampus;
         this.player = playerInventory.player;
-        int i = 3;
         hippocampusInventory.openInventory(player);
-        int j = -18;
         this.addSlot(new Slot(hippocampusInventory, 0, 8, 18) {
             @Override
             public boolean isItemValid(ItemStack stack) {
@@ -59,7 +56,7 @@ public class ContainerHippocampus extends Container {
         this.addSlot(new Slot(hippocampusInventory, 1, 8, 36) {
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return stack.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !this.getHasStack();
+                return stack.getItem() == Blocks.CHEST.asItem() && !this.getHasStack();
             }
 
             @Override
