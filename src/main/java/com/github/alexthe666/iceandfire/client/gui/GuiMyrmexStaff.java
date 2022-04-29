@@ -10,7 +10,7 @@ import com.github.alexthe666.iceandfire.message.MessageGetMyrmexHive;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -32,17 +32,15 @@ public class GuiMyrmexStaff extends Screen {
     public ChangePageButton nextPage;
     int ticksSinceDeleted = 0;
     int currentPage = 0;
-    private ItemStack staff;
     private boolean jungle;
     private int hiveCount;
 
     public GuiMyrmexStaff(ItemStack staff) {
         super(new TranslationTextComponent("myrmex_staff_screen"));
-        this.staff = staff;
         this.jungle = staff.getItem() == IafItemRegistry.MYRMEX_JUNGLE_STAFF;
-        init();
     }
 
+    @Override
     protected void init() {
         super.init();
         this.buttons.clear();
@@ -59,12 +57,14 @@ public class GuiMyrmexStaff extends Screen {
             boolean opposite = !ClientProxy.getReferedClientHive().reproduces;
             ClientProxy.getReferedClientHive().reproduces = opposite;
         }));
-        this.addButton(this.previousPage = new ChangePageButton(i + 5, j + 150, false, 0, this.jungle ? 2 : 1, (p_214132_1_) -> {
+        this.addButton(
+            this.previousPage = new ChangePageButton(i + 5, j + 150, false, this.jungle ? 2 : 1, (p_214132_1_) -> {
             if (this.currentPage > 0) {
                 this.currentPage--;
             }
         }));
-        this.addButton(this.nextPage = new ChangePageButton(i + 225, j + 150, true, 0, this.jungle ? 2 : 1, (p_214132_1_) -> {
+        this.addButton(
+            this.nextPage = new ChangePageButton(i + 225, j + 150, true, this.jungle ? 2 : 1, (p_214132_1_) -> {
             if (this.currentPage < this.allRoomButtonPos.size() / ROOMS_PER_PAGE) {
                 this.currentPage++;
             }
@@ -110,15 +110,17 @@ public class GuiMyrmexStaff extends Screen {
         }
     }
 
+    @Override
     public void renderBackground(MatrixStack ms) {
         super.renderBackground(ms);
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.getMinecraft().getTextureManager().bindTexture(jungle ? JUNGLE_TEXTURE : DESERT_TEXTURE);
         int i = (this.width - 248) / 2;
         int j = (this.height - 166) / 2;
         this.blit(ms, i, j, 0, 0, 248, 166);
     }
 
+    @Override
     public void render(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(ms);
         init();
@@ -166,6 +168,7 @@ public class GuiMyrmexStaff extends Screen {
         }
     }
 
+    @Override
     public void onClose() {
         if(ClientProxy.getReferedClientHive() != null){
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageGetMyrmexHive(ClientProxy.getReferedClientHive().toNBT()));

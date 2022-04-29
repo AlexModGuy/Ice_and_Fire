@@ -12,23 +12,17 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class GuiHippocampus extends ContainerScreen<ContainerHippocampus> {
     private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/hippogryph.png");
-    private final PlayerInventory playerInventory;
-    private final ContainerHippocampus hippogryphInv;
     private float mousePosx;
     private float mousePosY;
 
     public GuiHippocampus(ContainerHippocampus dragonInv, PlayerInventory playerInv, ITextComponent name) {
         super(dragonInv, playerInv, name);
-        this.playerInventory = playerInv;
-        this.hippogryphInv = dragonInv;
     }
 
+    @Override
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
         int k = 0;
         int l = 0;
@@ -41,10 +35,11 @@ public class GuiHippocampus extends ContainerScreen<ContainerHippocampus> {
         font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(), k+ 8, l + this.ySize - 96 + 2, 4210752);
     }
 
+    @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
-        this.mousePosx = (float)mouseX;
-        this.mousePosY = (float)mouseY;
+        this.mousePosx = mouseX;
+        this.mousePosY = mouseY;
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
     }
@@ -62,7 +57,8 @@ public class GuiHippocampus extends ContainerScreen<ContainerHippocampus> {
             if (hippo.isChested()) {
                 this.blit(matrixStack, i + 79, j + 17, 0, this.ySize, 5 * 18, 54);
             }
-            GuiDragon.drawEntityOnScreen(i + 51, j + 60, 17, (float) (i + 51) - this.mousePosx, (float) (j + 75 - 50) - this.mousePosY, hippo);
+            GuiDragon.drawEntityOnScreen(i + 51, j + 60, 17, i + 51 - this.mousePosx, j + 75 - 50 - this.mousePosY,
+                hippo);
         }
     }
 }

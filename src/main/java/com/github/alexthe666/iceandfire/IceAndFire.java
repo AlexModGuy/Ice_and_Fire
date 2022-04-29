@@ -1,27 +1,36 @@
 package com.github.alexthe666.iceandfire;
 
 
+
+
 import com.github.alexthe666.citadel.server.message.PropertiesMessage;
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
 import com.github.alexthe666.iceandfire.message.*;
 import com.github.alexthe666.iceandfire.world.IafProcessors;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
+import com.github.alexthe666.iceandfire.inventory.IafContainerRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.loot.IafLootRegistry;
+import com.github.alexthe666.iceandfire.message.*;
+import com.github.alexthe666.iceandfire.world.IafProcessors;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -74,17 +83,20 @@ public class IceAndFire {
 
     public IceAndFire() {
         final ModLoadingContext modLoadingContext = ModLoadingContext.get();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupComplete);
         modLoadingContext.registerConfig(ModConfig.Type.CLIENT, ConfigHolder.CLIENT_SPEC);
         modLoadingContext.registerConfig(ModConfig.Type.COMMON, ConfigHolder.SERVER_SPEC);
         MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadFromJSON);
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
         PROXY.init();
         IafWorldRegistry.register();
-        
-        IafTileEntityRegistry.TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+
+        final IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        IafContainerRegistry.CONTAINERS.register(modBus);
+        modBus.addListener(this::setup);
+        modBus.addListener(this::setupClient);
+        modBus.addListener(this::setupComplete);
+        IafTileEntityRegistry.TYPES.register(modBus);
+
     }
 
     @SubscribeEvent

@@ -19,7 +19,7 @@ public class ContainerPodium extends Container {
 
 
     public ContainerPodium(int id, IInventory furnaceInventory, PlayerInventory playerInventory, IIntArray vars) {
-        super(IafContainerRegistry.PODIUM_CONTAINER, id);
+        super(IafContainerRegistry.PODIUM_CONTAINER.get(), id);
         this.podium = furnaceInventory;
         furnaceInventory.openInventory(playerInventory.player);
         byte b0 = 51;

@@ -31,17 +31,12 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class GuiLectern extends ContainerScreen<ContainerLectern> {
     private static final ResourceLocation ENCHANTMENT_TABLE_GUI_TEXTURE = new ResourceLocation("iceandfire:textures/gui/lectern.png");
     private static final ResourceLocation ENCHANTMENT_TABLE_BOOK_TEXTURE = new ResourceLocation("iceandfire:textures/models/lectern_book.png");
     private static final BookModel MODEL_BOOK = new BookModel();
-    private final PlayerInventory playerInventory;
     private final Random random = new Random();
-    private final ContainerLectern container;
     private final ITextComponent nameable;
     public int ticks;
     public float flip;
@@ -55,23 +50,25 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
 
     public GuiLectern(ContainerLectern container, PlayerInventory inv, ITextComponent name) {
         super(container, inv, name);
-        this.playerInventory = inv;
-        this.container = container;
         this.nameable = name;
     }
 
+    @Override
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
         FontRenderer font = this.getMinecraft().fontRenderer;
         font.drawString(matrixStack, this.nameable.getString(), 12, 4, 4210752);
         font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(), 8, this.ySize - 96 + 2, 4210752);
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.container.onUpdate();
         this.tickBook();
     }
 
+    @SuppressWarnings("resource")
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
@@ -89,6 +86,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
         return super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
+    @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderHelper.setupGuiFlatDiffuseLighting();
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -110,7 +108,6 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
         matrixstack$entry.getMatrix().setIdentity();
         matrixstack$entry.getNormal().setIdentity();
         matrixstack.translate(0.0D, 3.3F, 1984.0D);
-        float f = 5.0F;
         matrixstack.scale(5.0F, 5.0F, 5.0F);
         matrixstack.rotate(Vector3f.ZP.rotationDegrees(180.0F));
         matrixstack.rotate(Vector3f.XP.rotationDegrees(20.0F));
@@ -121,8 +118,8 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
         matrixstack.rotate(Vector3f.XP.rotationDegrees(180.0F));
         float f3 = MathHelper.lerp(partialTicks, this.oFlip, this.flip) + 0.25F;
         float f4 = MathHelper.lerp(partialTicks, this.oFlip, this.flip) + 0.75F;
-        f3 = (f3 - (float) MathHelper.fastFloor(f3)) * 1.6F - 0.3F;
-        f4 = (f4 - (float) MathHelper.fastFloor(f4)) * 1.6F - 0.3F;
+        f3 = (f3 - MathHelper.fastFloor(f3)) * 1.6F - 0.3F;
+        f4 = (f4 - MathHelper.fastFloor(f4)) * 1.6F - 0.3F;
         if (f3 < 0.0F) {
             f3 = 0.0F;
         }
@@ -152,7 +149,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
         RenderSystem.matrixMode(5888);
         RenderHelper.setupGui3DDiffuseLighting();
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        int l = this.container.getManuscriptAmount();
+        this.container.getManuscriptAmount();
 
         for (int i1 = 0; i1 < 3; ++i1) {
             int j1 = i + 60;
@@ -177,7 +174,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
                 }
                 int j2 = 6839882;
                 if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern) {
-                    TileEntityLectern lectern = (TileEntityLectern) IceAndFire.PROXY.getRefrencedTE();
+                    IceAndFire.PROXY.getRefrencedTE();
                     if (container.getSlot(0).getStack().getItem() == IafItemRegistry.BESTIARY) { // Forge: render buttons as disabled when enchantable but enchantability not met on lower levels
                         int k2 = mouseX - (i + 60);
                         int l2 = mouseY - (j + 14 + 19 * i1);
@@ -197,19 +194,19 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
                         fontrenderer.drawString(matrixStack,s1, 0, 20 + 19 * i1, j2);
                         RenderSystem.popMatrix();
                         fontrenderer = this.getMinecraft().fontRenderer;
-                        fontrenderer.drawStringWithShadow(matrixStack, s, (float) (k1 + 84 - fontrenderer.getStringWidth(s)), (float) (j + 13 + 19 * i1 + 7), j3);
+                        fontrenderer.drawStringWithShadow(matrixStack, s, k1 + 84 - fontrenderer.getStringWidth(s),
+                            j + 13 + 19 * i1 + 7, j3);
                     } else {
                         this.blit(matrixStack,j1, j + 14 + 19 * i1, 0, 185, 108, 19);
                         this.blit(matrixStack,j1 + 1, j + 15 + 19 * i1, 16 * i1, 239, 16, 16);
-                        j2 = 4226832;
                     }
                 }
             }
         }
     }
 
+    @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        partialTicks = this.getMinecraft().getRenderPartialTicks();
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
@@ -247,7 +244,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
             this.last = itemstack;
 
             while (true) {
-                this.flipT += (float) (this.random.nextInt(4) - this.random.nextInt(4));
+                this.flipT += this.random.nextInt(4) - this.random.nextInt(4);
 
                 if (this.flip > this.flipT + 1.0F || this.flip < this.flipT - 1.0F) {
                     break;
@@ -278,7 +275,6 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
             f1 = (ticks + this.getMinecraft().getRenderPartialTicks()) * 0.5F;
             flapTimer--;
         }
-        float f = 0.2F;
         f1 = MathHelper.clamp(f1, -0.2F, 0.2F);
         this.flipA += (f1 - this.flipA) * 0.9F;
         this.flip += this.flipA;

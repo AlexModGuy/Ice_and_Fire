@@ -21,13 +21,14 @@ public class ContainerDragon extends Container {
     }
 
     public ContainerDragon(int id, IInventory ratInventory, PlayerInventory playerInventory, EntityDragonBase rat) {
-        super(IafContainerRegistry.DRAGON_CONTAINER, id);
+        super(IafContainerRegistry.DRAGON_CONTAINER.get(), id);
         this.dragonInventory = ratInventory;
         this.dragon = rat;
         byte b0 = 3;
         dragonInventory.openInventory(playerInventory.player);
         int i = (b0 - 4) * 18;
         this.addSlot(new Slot(ratInventory, 0, 8, 54) {
+            @Override
             public void onSlotChanged() {
                 this.inventory.markDirty();
             }
@@ -38,6 +39,7 @@ public class ContainerDragon extends Container {
             }
         });
         this.addSlot(new Slot(ratInventory, 1, 8, 18) {
+            @Override
             public void onSlotChanged() {
                 this.inventory.markDirty();
             }
@@ -48,6 +50,7 @@ public class ContainerDragon extends Container {
             }
         });
         this.addSlot(new Slot(ratInventory, 2, 8, 36) {
+            @Override
             public void onSlotChanged() {
                 this.inventory.markDirty();
             }
@@ -58,6 +61,7 @@ public class ContainerDragon extends Container {
             }
         });
         this.addSlot(new Slot(ratInventory, 3, 153, 18) {
+            @Override
             public void onSlotChanged() {
                 this.inventory.markDirty();
             }
@@ -68,6 +72,7 @@ public class ContainerDragon extends Container {
             }
         });
         this.addSlot(new Slot(ratInventory, 4, 153, 36) {
+            @Override
             public void onSlotChanged() {
                 this.inventory.markDirty();
             }
