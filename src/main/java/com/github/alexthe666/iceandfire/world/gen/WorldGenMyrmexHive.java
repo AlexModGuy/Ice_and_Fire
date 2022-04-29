@@ -110,7 +110,7 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         generatePath(world, rand, position.offset(Direction.WEST, 9).down(), 15 + rand.nextInt(10), Direction.WEST, 100);
         generatePath(world, rand, position.offset(Direction.EAST, 9).down(), 15 + rand.nextInt(10), Direction.EAST, 100);
         if (!small) {
-            EntityMyrmexQueen queen = new EntityMyrmexQueen(IafEntityRegistry.MYRMEX_QUEEN, world.getWorld());
+            EntityMyrmexQueen queen = new EntityMyrmexQueen(IafEntityRegistry.MYRMEX_QUEEN.get(), world.getWorld());
             BlockPos ground = MyrmexHive.getGroundedPos(world, position);
             queen.onInitialSpawn(world, world.getDifficultyForLocation(ground), SpawnReason.CHUNK_GENERATION, null, null);
             queen.setHive(hive);
@@ -119,7 +119,8 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
             world.addEntity(queen);
 
             for (int i = 0; i < 4 + rand.nextInt(3); i++) {
-                EntityMyrmexBase myrmex = new EntityMyrmexWorker(IafEntityRegistry.MYRMEX_WORKER, world.getWorld());
+                EntityMyrmexBase myrmex = new EntityMyrmexWorker(IafEntityRegistry.MYRMEX_WORKER.get(),
+                    world.getWorld());
                 myrmex.onInitialSpawn(world, world.getDifficultyForLocation(ground), SpawnReason.CHUNK_GENERATION, null, null);
                 myrmex.setHive(hive);
                 myrmex.setPositionAndRotation(ground.getX() + 0.5D, ground.getY() + 1D, ground.getZ() + 0.5D, 0, 0);
@@ -127,7 +128,8 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
                 world.addEntity(myrmex);
             }
             for (int i = 0; i < 2 + rand.nextInt(2); i++) {
-                EntityMyrmexBase myrmex = new EntityMyrmexSoldier(IafEntityRegistry.MYRMEX_SOLDIER, world.getWorld());
+                EntityMyrmexBase myrmex = new EntityMyrmexSoldier(IafEntityRegistry.MYRMEX_SOLDIER.get(),
+                    world.getWorld());
                 myrmex.onInitialSpawn(world, world.getDifficultyForLocation(ground), SpawnReason.CHUNK_GENERATION, null, null);
                 myrmex.setHive(hive);
                 myrmex.setPositionAndRotation(ground.getX() + 0.5D, ground.getY() + 1D, ground.getZ() + 0.5D, 0, 0);
@@ -135,7 +137,8 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
                 world.addEntity(myrmex);
             }
             for (int i = 0; i < rand.nextInt(2); i++) {
-                EntityMyrmexBase myrmex = new EntityMyrmexSentinel(IafEntityRegistry.MYRMEX_SENTINEL, world.getWorld());
+                EntityMyrmexBase myrmex = new EntityMyrmexSentinel(IafEntityRegistry.MYRMEX_SENTINEL.get(),
+                    world.getWorld());
                 myrmex.onInitialSpawn(world, world.getDifficultyForLocation(ground), SpawnReason.CHUNK_GENERATION, null, null);
                 myrmex.setHive(hive);
                 myrmex.setPositionAndRotation(ground.getX() + 0.5D, ground.getY() + 1D, ground.getZ() + 0.5D, 0, 0);
@@ -334,9 +337,9 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         int j = i2 + rand.nextInt(2);
         int k = height + ySize;
         int l = i2 + rand.nextInt(2);
-        float f = (float) (j + k + l) * 0.333F;
+        float f = (j + k + l) * 0.333F;
         for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
-            if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F)) && !world.isAirBlock(blockpos)) {
+            if (blockpos.distanceSq(position) <= f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F) && !world.isAirBlock(blockpos)) {
                 world.setBlockState(blockpos, fill, 3);
             }
         }
@@ -348,9 +351,9 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         int j = i2 + rand.nextInt(2);
         int k = height + ySize;
         int l = i2 + rand.nextInt(2);
-        float f = (float) (j + k + l) * 0.333F;
+        float f = (j + k + l) * 0.333F;
         for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
-            if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F))) {
+            if (blockpos.distanceSq(position) <= f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F)) {
                 world.setBlockState(blockpos, rand.nextInt(3) == 0 ? fill2 : fill, 2);
             }
         }
@@ -362,9 +365,9 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         int j = i2 + rand.nextInt(2);
         int k = height + ySize;
         int l = i2 + rand.nextInt(2);
-        float f = (float) (j + k + l) * 0.333F;
+        float f = (j + k + l) * 0.333F;
         for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
-            if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F))
+            if (blockpos.distanceSq(position) <= f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F)
                     && (!world.isAirBlock(blockpos) || world.isAirBlock(blockpos) && !hasResinUnder(blockpos, world))) {
                 world.setBlockState(blockpos, rand.nextInt(3) == 0 ? fill2 : fill, 2);
             }
@@ -377,9 +380,9 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         int j = i2 + rand.nextInt(2);
         int k = height + ySize;
         int l = i2 + rand.nextInt(2);
-        float f = (float) (j + k + l) * 0.333F;
+        float f = (j + k + l) * 0.333F;
         for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
-            if (blockpos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F))
+            if (blockpos.distanceSq(position) <= f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F)
                     && !world.isAirBlock(blockpos)) {
                 world.setBlockState(blockpos, rand.nextInt(3) == 0 ? fill2 : fill, 2);
             }
@@ -427,9 +430,9 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         int j = i2 + rand.nextInt(2);
         int k = height + ySize;
         int l = i2 + rand.nextInt(2);
-        float f = (float) (j + k + l) * 0.333F;
+        float f = (j + k + l) * 0.333F;
         for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k + 1, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
-            if (blockpos.distanceSq(position) <= (double) (f * f)) {
+            if (blockpos.distanceSq(position) <= f * f) {
                 if (world.getBlockState(blockpos.down()).isSolid() && world.isAirBlock(blockpos)) {
                     decorate(world, blockpos, position, size, rand, roomType);
                 }

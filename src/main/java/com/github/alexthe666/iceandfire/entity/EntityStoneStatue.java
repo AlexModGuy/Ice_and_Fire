@@ -6,7 +6,12 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,6 +25,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
+
 import net.minecraftforge.registries.ForgeRegistries;
 
 
@@ -34,7 +40,7 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     private static final DataParameter<Integer> CRACK_AMOUNT = EntityDataManager.createKey(EntityStoneStatue.class, DataSerializers.VARINT);
     private EntitySize stoneStatueSize = EntitySize.fixed(0.5F, 0.5F);
 
-    public EntityStoneStatue(EntityType t, World worldIn) {
+    public EntityStoneStatue(EntityType<? extends LivingEntity> t, World worldIn) {
         super(t, worldIn);
     }
 
@@ -48,6 +54,7 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 1.0D);
     }
 
+    @Override
     public void applyEntityCollision(Entity entityIn) {
     }
 
@@ -109,7 +116,7 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     }
 
     public static EntityStoneStatue buildStatueEntity(LivingEntity parent){
-        EntityStoneStatue statue = IafEntityRegistry.STONE_STATUE.create(parent.world);
+        EntityStoneStatue statue = IafEntityRegistry.STONE_STATUE.get().create(parent.world);
         CompoundNBT entityTag = new CompoundNBT();
         try{
             if (!(parent instanceof PlayerEntity)) {
@@ -171,14 +178,17 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
         }
     }
 
+    @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         return source == DamageSource.OUT_OF_WORLD;
     }
 
+    @Override
     public EntitySize getSize(Pose poseIn) {
         return stoneStatueSize;
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.rotationYaw = this.renderYawOffset;
@@ -192,6 +202,7 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
         }
     }
 
+    @Override
     public void onKillCommand() {
         this.remove();
     }

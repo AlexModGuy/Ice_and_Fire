@@ -58,12 +58,13 @@ public class ItemStoneStatue extends Item {
             if (stack.getTag() != null) {
                 String id = stack.getTag().getString("IAFStoneStatueEntityID");
                 CompoundNBT statueNBT = stack.getTag().getCompound("IAFStoneStatueNBT");
-                EntityStoneStatue statue = new EntityStoneStatue(IafEntityRegistry.STONE_STATUE, context.getWorld());
+                EntityStoneStatue statue = new EntityStoneStatue(IafEntityRegistry.STONE_STATUE.get(),
+                    context.getWorld());
                 statue.readAdditional(statueNBT);
                 statue.setTrappedEntityTypeString(id);
                 double d1 = context.getPlayer().getPosX() - (context.getPos().getX() + 0.5);
                 double d2 = context.getPlayer().getPosZ() - (context.getPos().getZ() + 0.5);
-                float yaw = (float)(MathHelper.atan2(d2, d1) * (double)(180F / (float)Math.PI)) - 90;
+                float yaw = (float) (MathHelper.atan2(d2, d1) * (180F / (float) Math.PI)) - 90;
                 statue.prevRotationYaw = yaw;
                 statue.rotationYaw = yaw;
                 statue.rotationYawHead = yaw;

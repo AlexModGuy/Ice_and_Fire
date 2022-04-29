@@ -30,6 +30,7 @@ public class ItemDragonEgg extends Item {
         this.setRegistryName(IceAndFire.MODID, name);
     }
 
+    @Override
     public String getTranslationKey() {
         return "item.iceandfire.dragonegg";
     }
@@ -44,10 +45,11 @@ public class ItemDragonEgg extends Item {
         tooltip.add(new TranslationTextComponent("dragon." + type.toString().toLowerCase()).mergeStyle(type.color));
     }
 
+    @Override
     public ActionResultType onItemUse(ItemUseContext context) {
         ItemStack itemstack = context.getPlayer().getHeldItem(context.getHand());
         BlockPos offset = context.getPos().offset(context.getFace());
-        EntityDragonEgg egg = new EntityDragonEgg(IafEntityRegistry.DRAGON_EGG, context.getWorld());
+        EntityDragonEgg egg = new EntityDragonEgg(IafEntityRegistry.DRAGON_EGG.get(), context.getWorld());
         egg.setEggType(type);
         egg.setLocationAndAngles(offset.getX() + 0.5, offset.getY(), offset.getZ() + 0.5, 0, 0);
         egg.onPlayerPlace(context.getPlayer());

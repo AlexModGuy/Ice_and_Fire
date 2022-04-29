@@ -19,6 +19,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -26,15 +27,16 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
 
     public int ticksInAir;
 
-    public EntityDragonFireCharge(EntityType type, World worldIn) {
+    public EntityDragonFireCharge(EntityType<? extends AbstractFireballEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
     public EntityDragonFireCharge(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
-        this(IafEntityRegistry.FIRE_DRAGON_CHARGE, worldIn);
+        this(IafEntityRegistry.FIRE_DRAGON_CHARGE.get(), worldIn);
     }
 
-    public EntityDragonFireCharge(EntityType type, World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
+    public EntityDragonFireCharge(EntityType<? extends AbstractFireballEntity> type, World worldIn, double posX,
+        double posY, double posZ, double accelX, double accelY, double accelZ) {
         super(type, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.07D;
@@ -55,6 +57,7 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
         return true;
     }
 
+    @Override
     public void tick() {
         Entity shootingEntity = this.getShooter();
         for (int i = 0; i < 4; ++i) {
@@ -83,8 +86,8 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
             double d1 = this.getPosY() + Vector3d.y;
             double d2 = this.getPosZ() + Vector3d.z;
             float f = MathHelper.sqrt(horizontalMag(Vector3d));
-            this.rotationYaw = (float) (MathHelper.atan2(Vector3d.x, Vector3d.z) * (double) (180F / (float) Math.PI));
-            for (this.rotationPitch = (float) (MathHelper.atan2(Vector3d.y, f) * (double) (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
+            this.rotationYaw = (float) (MathHelper.atan2(Vector3d.x, Vector3d.z) * (180F / (float) Math.PI));
+            for (this.rotationPitch = (float) (MathHelper.atan2(Vector3d.y, f) * (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
             }
             while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
                 this.prevRotationPitch += 360.0F;
@@ -184,6 +187,7 @@ public class EntityDragonFireCharge extends AbstractFireballEntity implements ID
         return false;
     }
 
+    @Override
     public float getCollisionBorderSize() {
         return 0F;
     }

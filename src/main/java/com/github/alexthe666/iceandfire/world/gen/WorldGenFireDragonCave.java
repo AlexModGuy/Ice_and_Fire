@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.world.gen;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
@@ -82,7 +81,7 @@ public class WorldGenFireDragonCave extends Feature<NoFeatureConfig> {
             decorateCave(worldIn, rand, info.pos, info.radius + 2);
         }
         sphereList.clear();
-        EntityFireDragon dragon = new EntityFireDragon(IafEntityRegistry.FIRE_DRAGON, worldIn.getWorld());
+        EntityFireDragon dragon = new EntityFireDragon(IafEntityRegistry.FIRE_DRAGON.get(), worldIn.getWorld());
         dragon.setGender(isMale);
         dragon.growDragon(dragonAge);
         dragon.setAgingDisabled(true);
@@ -104,9 +103,9 @@ public class WorldGenFireDragonCave extends Feature<NoFeatureConfig> {
         int j = radius;
         int k = radius / 2;
         int l = radius;
-        float f = (float) (j + k + l) * 0.333F + 0.5F;
+        float f = (j + k + l) * 0.333F + 0.5F;
         BlockPos.getAllInBox(pos.add(-j, -k, -l), pos.add(j, k / 2, l)).map(BlockPos::toImmutable).forEach(blockPos -> {
-            if (blockPos.distanceSq(pos) <= (double) (f * f) && worldIn.getBlockState(blockPos.down()).getMaterial() == Material.ROCK && worldIn.getBlockState(blockPos).getMaterial() != Material.ROCK) {
+            if (blockPos.distanceSq(pos) <= f * f && worldIn.getBlockState(blockPos.down()).getMaterial() == Material.ROCK && worldIn.getBlockState(blockPos).getMaterial() != Material.ROCK) {
                 setGoldPile(worldIn, blockPos, rand);
             }
         });
@@ -125,9 +124,9 @@ public class WorldGenFireDragonCave extends Feature<NoFeatureConfig> {
         int j = radius;
         int k = radius / 2;
         int l = radius;
-        float f = (float) (j + k + l) * 0.333F + 0.5F;
+        float f = (j + k + l) * 0.333F + 0.5F;
         BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).forEach(blockPos ->  {
-            if (blockPos.distanceSq(position) <= (double) (f * f)) {
+            if (blockPos.distanceSq(position) <= f * f) {
                 if (!(worldIn.getBlockState(position).getBlock() instanceof ContainerBlock) && worldIn.getBlockState(position).getBlockHardness(worldIn, position) >= 0) {
                     boolean doOres = rand.nextInt(IafConfig.oreToStoneRatioForDragonCaves + 1) == 0;
                     if (doOres) {
@@ -172,9 +171,9 @@ public class WorldGenFireDragonCave extends Feature<NoFeatureConfig> {
         int j = radius;
         int k = radius / 2;
         int l = radius;
-        float f = (float) (j + k + l) * 0.333F + 0.5F;
+        float f = (j + k + l) * 0.333F + 0.5F;
         BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).forEach(blockPos ->  {
-            if (blockPos.distanceSq(position) <= (double) (f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F))) {
+            if (blockPos.distanceSq(position) <= f * f * MathHelper.clamp(rand.nextFloat(), 0.75F, 1.0F)) {
                 if (!(worldIn.getBlockState(position).getBlock() instanceof ContainerBlock)) {
                     worldIn.setBlockState(blockPos, Blocks.AIR.getDefaultState(), 2);
                 }

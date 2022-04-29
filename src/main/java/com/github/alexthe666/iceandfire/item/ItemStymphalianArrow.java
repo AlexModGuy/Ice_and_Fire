@@ -26,8 +26,9 @@ public class ItemStymphalianArrow extends ArrowItem {
         this.setRegistryName(IceAndFire.MODID, "stymphalian_arrow");
     }
 
+    @Override
     public AbstractArrowEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-        return new EntityStymphalianArrow(IafEntityRegistry.STYMPHALIAN_ARROW, worldIn, shooter);
+        return new EntityStymphalianArrow(IafEntityRegistry.STYMPHALIAN_ARROW.get(), worldIn, shooter);
     }
 
     @Override

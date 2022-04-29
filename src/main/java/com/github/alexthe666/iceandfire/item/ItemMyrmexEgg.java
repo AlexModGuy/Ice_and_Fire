@@ -32,6 +32,7 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
         this.setRegistryName(IceAndFire.MODID, isJungle ? "myrmex_jungle_egg" : "myrmex_desert_egg");
     }
 
+    @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
         if (this.isInGroup(group)) {
             for (int i = 0; i < 5; i++) {
@@ -76,10 +77,11 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
         }
     }
 
+    @Override
     public ActionResultType onItemUse(ItemUseContext context) {
         ItemStack itemstack = context.getPlayer().getHeldItem(context.getHand());
         BlockPos offset = context.getPos().offset(context.getFace());
-        EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG, context.getWorld());
+        EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG.get(), context.getWorld());
         CompoundNBT tag = itemstack.getTag();
         int eggOrdinal = 0;
         if (tag != null) {
@@ -99,6 +101,7 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
         return ActionResultType.SUCCESS;
     }
 
+    @Override
     public boolean hasEffect(ItemStack stack) {
         CompoundNBT tag = stack.getTag();
         int eggOrdinal = 0;

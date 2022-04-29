@@ -20,6 +20,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -28,17 +29,18 @@ public class EntityPixieCharge extends AbstractFireballEntity {
     public int ticksInAir;
     private float[] rgb;
 
-    public EntityPixieCharge(EntityType t, World worldIn) {
+    public EntityPixieCharge(EntityType<? extends AbstractFireballEntity> t, World worldIn) {
         super(t, worldIn);
         rgb = EntityPixie.PARTICLE_RGB[rand.nextInt(EntityPixie.PARTICLE_RGB.length - 1)];
     }
 
 
     public EntityPixieCharge(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
-        this(IafEntityRegistry.PIXIE_CHARGE, worldIn);
+        this(IafEntityRegistry.PIXIE_CHARGE.get(), worldIn);
     }
 
-    public EntityPixieCharge(EntityType t, World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
+    public EntityPixieCharge(EntityType<? extends AbstractFireballEntity> t, World worldIn, double posX, double posY,
+        double posZ, double accelX, double accelY, double accelZ) {
         super(t, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.07D;
@@ -47,7 +49,8 @@ public class EntityPixieCharge extends AbstractFireballEntity {
         rgb = EntityPixie.PARTICLE_RGB[rand.nextInt(EntityPixie.PARTICLE_RGB.length - 1)];
     }
 
-    public EntityPixieCharge(EntityType t, World worldIn, PlayerEntity shooter, double accelX, double accelY, double accelZ) {
+    public EntityPixieCharge(EntityType<? extends AbstractFireballEntity> t, World worldIn, PlayerEntity shooter,
+        double accelX, double accelY, double accelZ) {
         super(t, shooter, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.07D;
@@ -61,6 +64,7 @@ public class EntityPixieCharge extends AbstractFireballEntity {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
+    @Override
     protected boolean isFireballFiery() {
         return false;
     }
@@ -70,6 +74,7 @@ public class EntityPixieCharge extends AbstractFireballEntity {
         return false;
     }
 
+    @Override
     public void tick() {
         Entity shootingEntity = this.getShooter();
         if (this.world.isRemote) {
@@ -122,8 +127,8 @@ public class EntityPixieCharge extends AbstractFireballEntity {
             double d1 = this.getPosY() + Vector3d.y;
             double d2 = this.getPosZ() + Vector3d.z;
             float f = MathHelper.sqrt(horizontalMag(Vector3d));
-            this.rotationYaw = (float) (MathHelper.atan2(Vector3d.x, Vector3d.z) * (double) (180F / (float) Math.PI));
-            for (this.rotationPitch = (float) (MathHelper.atan2(Vector3d.y, f) * (double) (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
+            this.rotationYaw = (float) (MathHelper.atan2(Vector3d.x, Vector3d.z) * (180F / (float) Math.PI));
+            for (this.rotationPitch = (float) (MathHelper.atan2(Vector3d.y, f) * (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
             }
             while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
                 this.prevRotationPitch += 360.0F;

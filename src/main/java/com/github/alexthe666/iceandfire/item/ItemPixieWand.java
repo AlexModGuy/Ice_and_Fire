@@ -50,10 +50,11 @@ public class ItemPixieWand extends Item {
             double d3 = playerIn.getLookVec().y;
             double d4 = playerIn.getLookVec().z;
             float inaccuracy = 1.0F;
-            d2 = d2 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-            d3 = d3 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-            d4 = d4 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-            EntityPixieCharge charge = new EntityPixieCharge(IafEntityRegistry.PIXIE_CHARGE, worldIn, playerIn, d2, d3, d4);
+            d2 = d2 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * inaccuracy;
+            d3 = d3 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * inaccuracy;
+            d4 = d4 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * inaccuracy;
+            EntityPixieCharge charge = new EntityPixieCharge(IafEntityRegistry.PIXIE_CHARGE.get(), worldIn, playerIn,
+                d2, d3, d4);
             charge.setPosition(playerIn.getPosX(), playerIn.getPosY() + 1, playerIn.getPosZ());
             if (!worldIn.isRemote) {
                 worldIn.addEntity(charge);

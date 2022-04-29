@@ -17,24 +17,25 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityHydraArrow extends AbstractArrowEntity {
 
-    public EntityHydraArrow(EntityType t, World worldIn) {
+    public EntityHydraArrow(EntityType<? extends AbstractArrowEntity> t, World worldIn) {
         super(t, worldIn);
         this.setDamage(5F);
     }
 
-    public EntityHydraArrow(EntityType t, World worldIn, double x, double y, double z) {
+    public EntityHydraArrow(EntityType<? extends AbstractArrowEntity> t, World worldIn, double x, double y, double z) {
         this(t, worldIn);
         this.setPosition(x, y, z);
         this.setDamage(5F);
     }
 
     public EntityHydraArrow(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
-        this(IafEntityRegistry.HYDRA_ARROW, worldIn);
+        this(IafEntityRegistry.HYDRA_ARROW.get(), worldIn);
     }
 
     @Override
@@ -48,6 +49,7 @@ public class EntityHydraArrow extends AbstractArrowEntity {
         this.setDamage(5F);
     }
 
+    @Override
     public void tick() {
         super.tick();
         if (world.isRemote && !this.inGround) {
@@ -57,8 +59,8 @@ public class EntityHydraArrow extends AbstractArrowEntity {
             double d3 = 10.0D;
             double xRatio = this.getMotion().x * this.getHeight();
             double zRatio = this.getMotion().z * this.getHeight();
-            IceAndFire.PROXY.spawnParticle("hydra", this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d2 * 10.0D, 0.1D, 1.0D, 0.1D);
-            IceAndFire.PROXY.spawnParticle("hydra", this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d2 * 10.0D, 0.1D, 1.0D, 0.1D);
+            IceAndFire.PROXY.spawnParticle("hydra", this.getPosX() + xRatio + this.rand.nextFloat() * this.getWidth() * 1.0F - this.getWidth() - d0 * 10.0D, this.getPosY() + this.rand.nextFloat() * this.getHeight() - d1 * 10.0D, this.getPosZ() + zRatio + this.rand.nextFloat() * this.getWidth() * 1.0F - this.getWidth() - d2 * 10.0D, 0.1D, 1.0D, 0.1D);
+            IceAndFire.PROXY.spawnParticle("hydra", this.getPosX() + xRatio + this.rand.nextFloat() * this.getWidth() * 1.0F - this.getWidth() - d0 * 10.0D, this.getPosY() + this.rand.nextFloat() * this.getHeight() - d1 * 10.0D, this.getPosZ() + zRatio + this.rand.nextFloat() * this.getWidth() * 1.0F - this.getWidth() - d2 * 10.0D, 0.1D, 1.0D, 0.1D);
 
         }
     }
@@ -86,6 +88,7 @@ public class EntityHydraArrow extends AbstractArrowEntity {
         }
     }
 
+    @Override
     protected void arrowHit(LivingEntity living) {
         if (living instanceof PlayerEntity) {
             this.damageShield((PlayerEntity) living, (float) this.getDamage());

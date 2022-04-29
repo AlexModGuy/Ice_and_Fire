@@ -6,12 +6,10 @@ import javax.annotation.Nullable;
 
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.AbstractChestBlock;
+
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -21,6 +19,7 @@ import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.StructureProcessor;
 import net.minecraft.world.gen.feature.template.Template;
+
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class DreadRuinProcessor extends StructureProcessor {
@@ -42,6 +41,7 @@ public class DreadRuinProcessor extends StructureProcessor {
         }
     }
 
+    @Override
     public Template.BlockInfo process(IWorldReader worldReader, BlockPos pos, BlockPos pos2, Template.BlockInfo infoIn1, Template.BlockInfo infoIn2, PlacementSettings settings,@Nullable Template template) {
         Random random = settings.getRandom(infoIn2.pos);
         if (random.nextFloat() <= integrity) {
@@ -75,14 +75,14 @@ public class DreadRuinProcessor extends StructureProcessor {
     private EntityType getRandomMobForMobSpawner(Random random) {
         float rand = random.nextFloat();
         if (rand < 0.3D) {
-            return IafEntityRegistry.DREAD_THRALL;
+            return IafEntityRegistry.DREAD_THRALL.get();
         } else if (rand < 0.5D) {
-            return IafEntityRegistry.DREAD_GHOUL;
+            return IafEntityRegistry.DREAD_GHOUL.get();
         } else if (rand < 0.7D) {
-            return IafEntityRegistry.DREAD_BEAST;
+            return IafEntityRegistry.DREAD_BEAST.get();
         } else if (rand < 0.85D) {
-            return IafEntityRegistry.DREAD_SCUTTLER;
+            return IafEntityRegistry.DREAD_SCUTTLER.get();
         }
-        return IafEntityRegistry.DREAD_KNIGHT;
+        return IafEntityRegistry.DREAD_KNIGHT.get();
     }
 }

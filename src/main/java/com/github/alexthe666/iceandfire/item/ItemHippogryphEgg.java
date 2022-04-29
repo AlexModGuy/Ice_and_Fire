@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nullable;
 
@@ -36,7 +36,7 @@ public class ItemHippogryphEgg extends Item implements ICustomRendered {
     }
 
     public static ItemStack createEggStack(EnumHippogryphTypes parent1, EnumHippogryphTypes parent2) {
-        EnumHippogryphTypes eggType = new Random().nextBoolean() ? parent1 : parent2;
+        EnumHippogryphTypes eggType = ThreadLocalRandom.current().nextBoolean() ? parent1 : parent2;
         ItemStack stack = new ItemStack(IafItemRegistry.HIPPOGRYPH_EGG);
         CompoundNBT tag = new CompoundNBT();
         tag.putInt("EggOrdinal", eggType.ordinal());
@@ -45,6 +45,7 @@ public class ItemHippogryphEgg extends Item implements ICustomRendered {
     }
 
 
+    @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
         if (this.isInGroup(group)) {
             for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
@@ -70,7 +71,8 @@ public class ItemHippogryphEgg extends Item implements ICustomRendered {
         worldIn.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_EGG_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
 
         if (!worldIn.isRemote) {
-            EntityHippogryphEgg entityegg = new EntityHippogryphEgg(IafEntityRegistry.HIPPOGRYPH_EGG, worldIn, playerIn, itemstack);
+            EntityHippogryphEgg entityegg = new EntityHippogryphEgg(IafEntityRegistry.HIPPOGRYPH_EGG.get(), worldIn,
+                playerIn, itemstack);
             entityegg.setDirectionAndMovement(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
             worldIn.addEntity(entityegg);
         }

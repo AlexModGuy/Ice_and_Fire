@@ -14,24 +14,26 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntitySeaSerpentArrow extends AbstractArrowEntity {
 
-    public EntitySeaSerpentArrow(EntityType t, World worldIn) {
+    public EntitySeaSerpentArrow(EntityType<? extends AbstractArrowEntity> t, World worldIn) {
         super(t, worldIn);
         this.setDamage(3F);
     }
 
-    public EntitySeaSerpentArrow(EntityType t, World worldIn, double x, double y, double z) {
+    public EntitySeaSerpentArrow(EntityType<? extends AbstractArrowEntity> t, World worldIn, double x, double y,
+        double z) {
         this(t, worldIn);
         this.setPosition(x, y, z);
         this.setDamage(3F);
     }
 
     public EntitySeaSerpentArrow(FMLPlayMessages.SpawnEntity spawnEntity, World world) {
-        this(IafEntityRegistry.SEA_SERPENT_ARROW, world);
+        this(IafEntityRegistry.SEA_SERPENT_ARROW.get(), world);
     }
 
     @Override
@@ -45,6 +47,7 @@ public class EntitySeaSerpentArrow extends AbstractArrowEntity {
         this.setDamage(3F);
     }
 
+    @Override
     public void tick() {
         super.tick();
         if (world.isRemote && !this.inGround) {
@@ -54,12 +57,13 @@ public class EntitySeaSerpentArrow extends AbstractArrowEntity {
             double d3 = 10.0D;
             double xRatio = this.getMotion().x * this.getHeight();
             double zRatio = this.getMotion().z * this.getHeight();
-            this.world.addParticle(ParticleTypes.BUBBLE, this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d2 * 10.0D, d0, d1, d2);
-            this.world.addParticle(ParticleTypes.SPLASH, this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d2 * 10.0D, d0, d1, d2);
+            this.world.addParticle(ParticleTypes.BUBBLE, this.getPosX() + xRatio + this.rand.nextFloat() * this.getWidth() * 1.0F - this.getWidth() - d0 * 10.0D, this.getPosY() + this.rand.nextFloat() * this.getHeight() - d1 * 10.0D, this.getPosZ() + zRatio + this.rand.nextFloat() * this.getWidth() * 1.0F - this.getWidth() - d2 * 10.0D, d0, d1, d2);
+            this.world.addParticle(ParticleTypes.SPLASH, this.getPosX() + xRatio + this.rand.nextFloat() * this.getWidth() * 1.0F - this.getWidth() - d0 * 10.0D, this.getPosY() + this.rand.nextFloat() * this.getHeight() - d1 * 10.0D, this.getPosZ() + zRatio + this.rand.nextFloat() * this.getWidth() * 1.0F - this.getWidth() - d2 * 10.0D, d0, d1, d2);
 
         }
     }
 
+    @Override
     public boolean isInWater() {
         return false;
     }

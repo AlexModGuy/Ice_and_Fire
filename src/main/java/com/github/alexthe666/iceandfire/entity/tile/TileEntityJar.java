@@ -25,7 +25,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.MathHelper;
 
 public class TileEntityJar extends TileEntity implements ITickableTileEntity {
 
@@ -56,6 +55,7 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
         this.hasPixie = !empty;
     }
 
+    @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
         compound.putBoolean("HasPixie", hasPixie);
@@ -83,10 +83,12 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
         }
     }
 
+    @Override
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
     }
 
+    @Override
     public void read(BlockState state, CompoundNBT compound) {
         hasPixie = compound.getBoolean("HasPixie");
         pixieType = compound.getInt("PixieType");
@@ -105,7 +107,7 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
     public void tick() {
         ticksExisted++;
         if (this.world.isRemote && this.hasPixie) {
-            IceAndFire.PROXY.spawnParticle("if_pixie", this.pos.getX() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, this.pos.getY() + (double) (this.rand.nextFloat() * PARTICLE_HEIGHT), this.pos.getZ() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, EntityPixie.PARTICLE_RGB[this.pixieType][0], EntityPixie.PARTICLE_RGB[this.pixieType][1], EntityPixie.PARTICLE_RGB[this.pixieType][2]);
+            IceAndFire.PROXY.spawnParticle("if_pixie", this.pos.getX() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH, this.pos.getY() + (double) (this.rand.nextFloat() * PARTICLE_HEIGHT), this.pos.getZ() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH, EntityPixie.PARTICLE_RGB[this.pixieType][0], EntityPixie.PARTICLE_RGB[this.pixieType][1], EntityPixie.PARTICLE_RGB[this.pixieType][2]);
         }
         if (ticksExisted % 24000 == 0 && !this.hasProduced && this.hasPixie) {
             this.hasProduced = true;
@@ -131,7 +133,7 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
     }
 
     public void releasePixie() {
-        EntityPixie pixie = new EntityPixie(IafEntityRegistry.PIXIE, this.world);
+        EntityPixie pixie = new EntityPixie(IafEntityRegistry.PIXIE.get(), this.world);
         pixie.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 1F, this.pos.getZ() + 0.5F, new Random().nextInt(360), 0);
         pixie.setHeldItem(Hand.MAIN_HAND, pixieItems.get(0));
         pixie.setColor(this.pixieType);
@@ -152,19 +154,5 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
         if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             return downHandler.cast();
         return super.getCapability(capability, facing);
-    }
-
-    private float updateRotation(float float1, float float2, float float3) {
-        float f = MathHelper.wrapDegrees(float2 - float1);
-
-        if (f > float3) {
-            f = float3;
-        }
-
-        if (f < -float3) {
-            f = -float3;
-        }
-
-        return float1 + f;
     }
 }

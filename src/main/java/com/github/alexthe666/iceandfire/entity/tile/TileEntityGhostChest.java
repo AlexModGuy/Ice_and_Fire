@@ -19,18 +19,21 @@ public class TileEntityGhostChest extends ChestTileEntity {
         super(IafTileEntityRegistry.GHOST_CHEST);
     }
 
+    @Override
     public void read(BlockState state, CompoundNBT nbt) {
         super.read(state, nbt);
     }
 
+    @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
         return compound;
     }
+    @Override
     public void openInventory(PlayerEntity player) {
         super.openInventory(player);
         if(this.world.getDifficulty() != Difficulty.PEACEFUL){
-            EntityGhost ghost = IafEntityRegistry.GHOST.create(world);
+            EntityGhost ghost = IafEntityRegistry.GHOST.get().create(world);
             Random random = new Random();
             ghost.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 0.5F, this.pos.getZ() + 0.5F, random.nextFloat() * 360F, 0);
             if(!this.world.isRemote){
@@ -47,6 +50,7 @@ public class TileEntityGhostChest extends ChestTileEntity {
         }
     }
 
+    @Override
     protected void onOpenOrClose() {
         super.onOpenOrClose();
         this.world.notifyNeighborsOfStateChange(this.pos.down(), this.getBlockState().getBlock());
