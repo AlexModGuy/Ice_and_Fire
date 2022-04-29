@@ -1,7 +1,9 @@
 package com.github.alexthe666.iceandfire;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import com.github.alexthe666.citadel.client.model.TabulaModel;
