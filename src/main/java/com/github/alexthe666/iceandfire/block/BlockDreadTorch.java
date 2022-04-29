@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 
-import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -43,7 +42,7 @@ public class BlockDreadTorch extends TorchBlock implements IDreadBlock, IWallBlo
         double d2 = (double) pos.getZ() + 0.5D;
         double d3 = 0.22D;
         double d4 = 0.27D;
-        IceAndFire.PROXY.spawnParticle(EnumParticles.Dread_Torch, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+        IceAndFire.PROXY.spawnParticle("dread_torch", d0, d1, d2, 0.0D, 0.0D, 0.0D);
   /*   if (Direction.getAxis().isHorizontal()) {
             Direction Direction1 = Direction.getOpposite();
             //worldIn.spawnParticle(ParticleTypes.SMOKE_NORMAL, d0 + 0.27D * (double)Direction1.getXOffset(), d1 + 0.22D, d2 + 0.27D * (double)Direction1.getZOffset(), 0.0D, 0.0D, 0.0D);

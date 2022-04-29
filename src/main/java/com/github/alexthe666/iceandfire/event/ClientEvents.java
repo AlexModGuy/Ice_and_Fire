@@ -13,7 +13,6 @@ import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
 import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.props.SirenProperties;
-import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.MainMenuScreen;
@@ -112,7 +111,7 @@ public class ClientEvents {
                 if (siren == null)
                     return;
 
-                final boolean isCharmed = SirenProperties.isCharmed(player);
+                boolean isCharmed = SirenProperties.isCharmed(player);
 
                 if (IafConfig.sirenShader && !isCharmed && renderer != null && renderer.getShaderGroup() != null && SIREN_SHADER.toString().equals(renderer.getShaderGroup().getShaderGroupName())) {
                     renderer.stopUseShader();
@@ -120,7 +119,7 @@ public class ClientEvents {
 
                 if (isCharmed) {
                     if (player.world.isRemote && rand.nextInt(40) == 0) {
-                        IceAndFire.PROXY.spawnParticle(EnumParticles.Siren_Appearance, player.getPosX(), player.getPosY(), player.getPosZ(), siren.getHairColor(), 0, 0);
+                        IceAndFire.PROXY.spawnParticle("siren_appearance", player.getPosX(), player.getPosY(), player.getPosZ(), siren.getHairColor(), 0, 0);
                     }
 
                     if (IafConfig.sirenShader && renderer.getShaderGroup() == null) {

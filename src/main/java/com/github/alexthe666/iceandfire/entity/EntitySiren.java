@@ -17,7 +17,6 @@ import com.github.alexthe666.iceandfire.entity.props.SirenProperties;
 import com.github.alexthe666.iceandfire.entity.util.ChainBuffer;
 import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
-import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageSirenSong;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -290,7 +289,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
                     double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
                     double extraY = 1.2F;
                     double extraZ = radius * MathHelper.cos(angle);
-                    IceAndFire.PROXY.spawnParticle(EnumParticles.Siren_Music, this.getPosX() + extraX + this.rand.nextFloat() - 0.5, this.getPosY() + extraY + this.rand.nextFloat() - 0.5, this.getPosZ() + extraZ + this.rand.nextFloat() - 0.5, 0, 0, 0);
+                    IceAndFire.PROXY.spawnParticle("siren_music", this.getPosX() + extraX + this.rand.nextFloat() - 0.5, this.getPosY() + extraY + this.rand.nextFloat() - 0.5, this.getPosZ() + extraZ + this.rand.nextFloat() - 0.5, 0, 0, 0);
                 }
             }
         }

@@ -7,7 +7,6 @@ import java.util.function.Function;
 import javax.annotation.Nullable;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.google.common.collect.Lists;
 
 import net.minecraft.entity.Entity;
@@ -78,7 +77,7 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
                 double d4 = (float) blockpos.getY() + this.getWorld().rand.nextFloat();
                 double d5 = (float) blockpos.getZ() + this.getWorld().rand.nextFloat();
                 this.getWorld().addParticle(ParticleTypes.SMOKE, d3, d4, d5, 0.0D, 0.0D, 0.0D);
-                IceAndFire.PROXY.spawnParticle(EnumParticles.Dread_Torch, d3, d4, d5, 0.0D, 0.0D, 0.0D);
+                IceAndFire.PROXY.spawnParticle("dread_torch", d3, d4, d5, 0.0D, 0.0D, 0.0D);
                 if (this.spawnDelay > 0) {
                     --this.spawnDelay;
                 }
