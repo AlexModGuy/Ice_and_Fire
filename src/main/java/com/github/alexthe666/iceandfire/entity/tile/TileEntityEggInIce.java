@@ -30,7 +30,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickableTileEntit
     public UUID ownerUUID;
 
     public TileEntityEggInIce() {
-        super(IafTileEntityRegistry.EGG_IN_ICE);
+        super(IafTileEntityRegistry.EGG_IN_ICE.get());
     }
 
     @Override
@@ -78,6 +78,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickableTileEntit
         read(this.getBlockState(), packet.getNbtCompound());
     }
 
+    @Override
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
     }

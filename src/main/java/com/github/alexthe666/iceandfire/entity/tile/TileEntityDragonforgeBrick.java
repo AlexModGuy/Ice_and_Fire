@@ -4,12 +4,13 @@ import javax.annotation.Nullable;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 public class TileEntityDragonforgeBrick extends TileEntity {
 
     public TileEntityDragonforgeBrick() {
-        super(IafTileEntityRegistry.DRAGONFORGE_BRICK);
+        super(IafTileEntityRegistry.DRAGONFORGE_BRICK.get());
     }
 
     @Override

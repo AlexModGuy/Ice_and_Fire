@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.citadel.server.message.PropertiesMessage;
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
+import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
 import com.github.alexthe666.iceandfire.message.*;
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import org.apache.logging.log4j.LogManager;
@@ -82,6 +83,8 @@ public class IceAndFire {
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
         PROXY.init();
         IafWorldRegistry.register();
+        
+        IafTileEntityRegistry.TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     @SubscribeEvent
