@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
@@ -48,6 +49,8 @@ public enum EnumBestiaryPages {
     GHOST(1);
 
     public static final ImmutableList<EnumBestiaryPages> ALL_PAGES = ImmutableList.copyOf(EnumBestiaryPages.values());
+    public static final ImmutableList<Integer> ALL_INDEXES = ImmutableList
+        .copyOf(IntStream.range(0, EnumBestiaryPages.values().length).iterator());
 
     public int pages;
 
@@ -60,7 +63,7 @@ public enum EnumBestiaryPages {
     }
 
     public static boolean hasAllPages(ItemStack book) {
-        return containedPages(Ints.asList(book.getTag().getIntArray("Pages"))).containsAll(ALL_PAGES);
+        return Ints.asList(book.getTag().getIntArray("Pages")).containsAll(ALL_INDEXES);
     }
 
     public static List<Integer> enumToInt(List<EnumBestiaryPages> pages) {
