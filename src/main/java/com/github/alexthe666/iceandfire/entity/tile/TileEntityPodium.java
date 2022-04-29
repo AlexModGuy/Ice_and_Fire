@@ -25,6 +25,7 @@ import net.minecraft.util.IntArray;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -39,7 +40,7 @@ public class TileEntityPodium extends LockableTileEntity implements ITickableTil
     private NonNullList<ItemStack> stacks = NonNullList.withSize(1, ItemStack.EMPTY);
 
     public TileEntityPodium() {
-        super(IafTileEntityRegistry.PODIUM);
+        super(IafTileEntityRegistry.PODIUM.get());
     }
 
     @Override
@@ -48,6 +49,7 @@ public class TileEntityPodium extends LockableTileEntity implements ITickableTil
         ticksExisted++;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public net.minecraft.util.math.AxisAlignedBB getRenderBoundingBox() {
         return new net.minecraft.util.math.AxisAlignedBB(pos, pos.add(1, 3, 1));
@@ -182,6 +184,7 @@ public class TileEntityPodium extends LockableTileEntity implements ITickableTil
         read(this.getBlockState(), packet.getNbtCompound());
     }
 
+    @Override
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
     }

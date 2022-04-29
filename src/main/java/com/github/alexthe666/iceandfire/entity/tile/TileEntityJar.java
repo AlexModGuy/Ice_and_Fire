@@ -46,17 +46,18 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
     private Random rand;
 
     public TileEntityJar() {
-        super(IafTileEntityRegistry.PIXIE_JAR);
+        super(IafTileEntityRegistry.PIXIE_JAR.get());
         this.rand = new Random();
         this.hasPixie = true;
     }
 
     public TileEntityJar(boolean empty) {
-        super(IafTileEntityRegistry.PIXIE_JAR);
+        super(IafTileEntityRegistry.PIXIE_JAR.get());
         this.rand = new Random();
         this.hasPixie = !empty;
     }
 
+    @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
         compound.putBoolean("HasPixie", hasPixie);
@@ -84,10 +85,12 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
         }
     }
 
+    @Override
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
     }
 
+    @Override
     public void read(BlockState state, CompoundNBT compound) {
         hasPixie = compound.getBoolean("HasPixie");
         pixieType = compound.getInt("PixieType");

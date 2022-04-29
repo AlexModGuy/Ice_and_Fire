@@ -15,10 +15,9 @@ public class IafLootRegistry {
         return Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(p_237451_0_), new LootFunctionType(p_237451_1_));
     }
 
-    public static void init(){
+    public static void init() {
         CUSTOMIZE_TO_DRAGON = register("iceandfire:customize_to_dragon", new CustomizeToDragon.Serializer());
         CUSTOMIZE_TO_SERPENT = register("iceandfire:customize_to_sea_serpent", new CustomizeToSeaSerpent.Serializer());
-
     }
 
 }

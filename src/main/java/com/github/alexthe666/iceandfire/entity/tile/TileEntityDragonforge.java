@@ -54,18 +54,20 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     private boolean canAddFlameAgain = true;
 
     public TileEntityDragonforge() {
-        super(IafTileEntityRegistry.DRAGONFORGE_CORE);
+        super(IafTileEntityRegistry.DRAGONFORGE_CORE.get());
     }
 
     public TileEntityDragonforge(int isFire) {
-        super(IafTileEntityRegistry.DRAGONFORGE_CORE);
+        super(IafTileEntityRegistry.DRAGONFORGE_CORE.get());
         this.isFire = isFire;
     }
 
+    @Override
     public int getSizeInventory() {
         return this.forgeItemStacks.size();
     }
 
+    @Override
     public boolean isEmpty() {
         for (ItemStack itemstack : this.forgeItemStacks) {
             if (!itemstack.isEmpty()) {
@@ -114,18 +116,22 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         return false;
     }
 
+    @Override
     public ItemStack getStackInSlot(int index) {
         return this.forgeItemStacks.get(index);
     }
 
+    @Override
     public ItemStack decrStackSize(int index, int count) {
         return ItemStackHelper.getAndSplit(this.forgeItemStacks, index, count);
     }
 
+    @Override
     public ItemStack removeStackFromSlot(int index) {
         return ItemStackHelper.getAndRemove(this.forgeItemStacks, index);
     }
 
+    @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
         ItemStack itemstack = this.forgeItemStacks.get(index);
         boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack);
@@ -141,6 +147,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         }
     }
 
+    @Override
     public void read(BlockState state, CompoundNBT compound) {
         super.read(state, compound);
         this.forgeItemStacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
@@ -148,6 +155,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         this.cookTime = compound.getInt("CookTime");
     }
 
+    @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
         compound.putInt("CookTime", (short) this.cookTime);
@@ -155,6 +163,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         return compound;
     }
 
+    @Override
     public int getInventoryStackLimit() {
         return 64;
     }
@@ -188,6 +197,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         return "";
     }
 
+    @Override
     public void tick() {
         boolean flag = this.isBurning();
         boolean flag1 = false;
@@ -332,11 +342,12 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         );
     }
 
+    @Override
     public boolean isUsableByPlayer(PlayerEntity player) {
         if (this.world.getTileEntity(this.pos) != this) {
             return false;
         } else {
-            return player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D) <= 64.0D;
+            return player.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64.0D;
         }
     }
 
@@ -361,12 +372,15 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         bloodStack.shrink(1);
     }
 
+    @Override
     public void openInventory(PlayerEntity player) {
     }
 
+    @Override
     public void closeInventory(PlayerEntity player) {
     }
 
+    @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         if (index == 2) {
             return false;
@@ -379,6 +393,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         return index == 0;
     }
 
+    @Override
     public int[] getSlotsForFace(Direction side) {
         if (side == Direction.DOWN) {
             return SLOTS_BOTTOM;
@@ -387,10 +402,12 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         }
     }
 
+    @Override
     public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
         return this.isItemValidForSlot(index, itemStackIn);
     }
 
+    @Override
     public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
         if (direction == Direction.DOWN && index == 1) {
             Item item = stack.getItem();
@@ -413,6 +430,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         return 1;
     }
 
+    @Override
     public void clear() {
         this.forgeItemStacks.clear();
     }
@@ -486,6 +504,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         read(this.getBlockState(), packet.getNbtCompound());
     }
 
+    @Override
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
     }
