@@ -48,7 +48,6 @@ public class ContainerHippogryph extends Container {
             }
 
             @Override
-            @OnlyIn(Dist.CLIENT)
             public boolean isEnabled() {
                 return true;
             }
@@ -67,7 +66,6 @@ public class ContainerHippogryph extends Container {
             }
 
             @Override
-            @OnlyIn(Dist.CLIENT)
             public boolean isEnabled() {
                 return true;
             }
@@ -92,7 +90,6 @@ public class ContainerHippogryph extends Container {
             }
 
             @Override
-            @OnlyIn(Dist.CLIENT)
             public boolean isEnabled() {
                 return true;
             }
