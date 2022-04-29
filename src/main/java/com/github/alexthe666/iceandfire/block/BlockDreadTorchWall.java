@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 
+import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.WallTorchBlock;
@@ -44,6 +45,6 @@ public class BlockDreadTorchWall extends WallTorchBlock implements IDreadBlock {
         double d3 = 0.22D;
         double d4 = 0.27D;
         Direction direction1 = direction.getOpposite();
-        IceAndFire.PROXY.spawnParticle("dread_torch", d0 + 0.27D * (double)direction1.getXOffset(), d1 + 0.22D, d2 + 0.27D * (double)direction1.getZOffset(), 0.0D, 0.0D, 0.0D);
+        IceAndFire.PROXY.spawnParticle(EnumParticles.Dread_Torch, d0 + 0.27D * (double)direction1.getXOffset(), d1 + 0.22D, d2 + 0.27D * (double)direction1.getZOffset(), 0.0D, 0.0D, 0.0D);
     }
 }

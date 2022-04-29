@@ -14,6 +14,7 @@ import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.entity.util.IHumanoid;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
+import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
@@ -235,7 +236,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
             if(this.getAnimation() == ANIMATION_SCARE && this.getAnimationTick() == 3 && !this.isHauntedShoppingList() && rand.nextInt(3) == 0){
                 this.playSound(IafSoundRegistry.GHOST_JUMPSCARE, this.getSoundVolume(), this.getSoundPitch());
                 if(world.isRemote){
-                    IceAndFire.PROXY.spawnParticle("ghost_appearance", this.getPosX(), this.getPosY(), this.getPosZ(), this.getEntityId(), 0, 0);
+                    IceAndFire.PROXY.spawnParticle(EnumParticles.Ghost_Appearance, this.getPosX(), this.getPosY(), this.getPosZ(), this.getEntityId(), 0, 0);
                 }
             }
         }
