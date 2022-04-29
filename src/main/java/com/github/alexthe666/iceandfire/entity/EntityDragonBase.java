@@ -55,6 +55,7 @@ import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -772,7 +773,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         if (dragonInventory != null) {
             ListNBT nbttaglist = compound.getList("Items", 10);
             this.initInventory();
-            for (net.minecraft.nbt.INBT inbt : nbttaglist) {
+            for (INBT inbt : nbttaglist) {
                 CompoundNBT CompoundNBT = (net.minecraft.nbt.CompoundNBT) inbt;
                 int j = CompoundNBT.getByte("Slot") & 255;
                 if (j <= 4) {
@@ -782,7 +783,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         } else {
             ListNBT nbttaglist = compound.getList("Items", 10);
             this.initInventory();
-            for (net.minecraft.nbt.INBT inbt : nbttaglist) {
+            for (INBT inbt : nbttaglist) {
                 CompoundNBT CompoundNBT = (net.minecraft.nbt.CompoundNBT) inbt;
                 int j = CompoundNBT.getByte("Slot") & 255;
                 dragonInventory.setInventorySlotContents(j, ItemStack.read(CompoundNBT));
