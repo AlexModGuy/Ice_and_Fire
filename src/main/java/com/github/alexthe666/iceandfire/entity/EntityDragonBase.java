@@ -157,15 +157,10 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     public int flightCycle;
     public BlockPos homePos;
     public boolean hasHomePosition = false;
-    @OnlyIn(Dist.CLIENT)
     public IFChainBuffer roll_buffer;
-    @OnlyIn(Dist.CLIENT)
     public IFChainBuffer pitch_buffer;
-    @OnlyIn(Dist.CLIENT)
     public IFChainBuffer pitch_buffer_body;
-    @OnlyIn(Dist.CLIENT)
     public ReversedBuffer turn_buffer;
-    @OnlyIn(Dist.CLIENT)
     public ChainBuffer tail_buffer;
     public int spacebarTicks;
     public float[][] growth_stages;
@@ -604,22 +599,22 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(HUNGER, Integer.valueOf(0));
-        this.dataManager.register(AGE_TICKS, Integer.valueOf(0));
-        this.dataManager.register(GENDER, Boolean.valueOf(false));
-        this.dataManager.register(VARIANT, Integer.valueOf(0));
-        this.dataManager.register(SLEEPING, Boolean.valueOf(false));
-        this.dataManager.register(FIREBREATHING, Boolean.valueOf(false));
-        this.dataManager.register(HOVERING, Boolean.valueOf(false));
-        this.dataManager.register(FLYING, Boolean.valueOf(false));
-        this.dataManager.register(DEATH_STAGE, Integer.valueOf(0));
-        this.dataManager.register(MODEL_DEAD, Boolean.valueOf(false));
-        this.dataManager.register(CONTROL_STATE, Byte.valueOf((byte) 0));
-        this.dataManager.register(TACKLE, Boolean.valueOf(false));
-        this.dataManager.register(AGINGDISABLED, Boolean.valueOf(false));
-        this.dataManager.register(COMMAND, Integer.valueOf(0));
-        this.dataManager.register(DRAGON_PITCH, Float.valueOf(0));
-        this.dataManager.register(CRYSTAL_BOUND, Boolean.valueOf(false));
+        this.dataManager.register(HUNGER, 0);
+        this.dataManager.register(AGE_TICKS, 0);
+        this.dataManager.register(GENDER, false);
+        this.dataManager.register(VARIANT, 0);
+        this.dataManager.register(SLEEPING, false);
+        this.dataManager.register(FIREBREATHING, false);
+        this.dataManager.register(HOVERING, false);
+        this.dataManager.register(FLYING, false);
+        this.dataManager.register(DEATH_STAGE, 0);
+        this.dataManager.register(MODEL_DEAD, false);
+        this.dataManager.register(CONTROL_STATE, (byte) 0);
+        this.dataManager.register(TACKLE, false);
+        this.dataManager.register(AGINGDISABLED, false);
+        this.dataManager.register(COMMAND, 0);
+        this.dataManager.register(DRAGON_PITCH, 0F);
+        this.dataManager.register(CRYSTAL_BOUND, false);
         this.dataManager.register(CUSTOM_POSE, "");
     }
 
@@ -664,7 +659,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     private void setStateField(int i, boolean newState) {
-        byte prevState = dataManager.get(CONTROL_STATE).byteValue();
+        byte prevState = dataManager.get(CONTROL_STATE);
         if (newState) {
             dataManager.set(CONTROL_STATE, (byte) (prevState | (1 << i)));
         } else {
@@ -673,7 +668,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public byte getControlState() {
-        return dataManager.get(CONTROL_STATE).byteValue();
+        return dataManager.get(CONTROL_STATE);
     }
 
     public void setControlState(byte state) {
@@ -681,20 +676,16 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public int getCommand() {
-        return Integer.valueOf(this.dataManager.get(COMMAND).intValue());
+        return this.dataManager.get(COMMAND);
     }
 
     public void setCommand(int command) {
-        this.dataManager.set(COMMAND, Integer.valueOf(command));
-        if (command == 1) {
-            this.setSitting(true);
-        } else {
-            this.setSitting(false);
-        }
+        this.dataManager.set(COMMAND, command);
+        this.setSitting(command == 1);
     }
 
     public float getDragonPitch() {
-        return dataManager.get(DRAGON_PITCH).floatValue();
+        return dataManager.get(DRAGON_PITCH);
     }
 
     public void setDragonPitch(float pitch) {
@@ -781,8 +772,8 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         if (dragonInventory != null) {
             ListNBT nbttaglist = compound.getList("Items", 10);
             this.initInventory();
-            for (int i = 0; i < nbttaglist.size(); ++i) {
-                CompoundNBT CompoundNBT = (net.minecraft.nbt.CompoundNBT) nbttaglist.get(i);
+            for (net.minecraft.nbt.INBT inbt : nbttaglist) {
+                CompoundNBT CompoundNBT = (net.minecraft.nbt.CompoundNBT) inbt;
                 int j = CompoundNBT.getByte("Slot") & 255;
                 if (j <= 4) {
                     dragonInventory.setInventorySlotContents(j, ItemStack.read(CompoundNBT));
@@ -791,8 +782,8 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         } else {
             ListNBT nbttaglist = compound.getList("Items", 10);
             this.initInventory();
-            for (int i = 0; i < nbttaglist.size(); ++i) {
-                CompoundNBT CompoundNBT = (net.minecraft.nbt.CompoundNBT) nbttaglist.get(i);
+            for (net.minecraft.nbt.INBT inbt : nbttaglist) {
+                CompoundNBT CompoundNBT = (net.minecraft.nbt.CompoundNBT) inbt;
                 int j = CompoundNBT.getByte("Slot") & 255;
                 dragonInventory.setInventorySlotContents(j, ItemStack.read(CompoundNBT));
             }
@@ -842,28 +833,29 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     protected void updateAttributes() {
         prevArmorResLoc = armorResLoc;
-        int armorHead = this.getArmorOrdinal(this.getItemStackFromSlot(EquipmentSlotType.HEAD));
-        int armorNeck = this.getArmorOrdinal(this.getItemStackFromSlot(EquipmentSlotType.CHEST));
-        int armorLegs = this.getArmorOrdinal(this.getItemStackFromSlot(EquipmentSlotType.LEGS));
-        int armorFeet = this.getArmorOrdinal(this.getItemStackFromSlot(EquipmentSlotType.FEET));
+        final int armorHead = this.getArmorOrdinal(this.getItemStackFromSlot(EquipmentSlotType.HEAD));
+        final int armorNeck = this.getArmorOrdinal(this.getItemStackFromSlot(EquipmentSlotType.CHEST));
+        final int armorLegs = this.getArmorOrdinal(this.getItemStackFromSlot(EquipmentSlotType.LEGS));
+        final int armorFeet = this.getArmorOrdinal(this.getItemStackFromSlot(EquipmentSlotType.FEET));
         armorResLoc = dragonType.getName() + "|" + armorHead + "|" + armorNeck + "|" + armorLegs + "|" + armorFeet;
         IceAndFire.PROXY.updateDragonArmorRender(armorResLoc);
-        double healthStep = (maximumHealth - minimumHealth) / 125F;
-        double attackStep = (maximumDamage - minimumDamage) / 125F;
-        double speedStep = (maximumSpeed - minimumSpeed) / 125F;
-        double armorStep = (maximumArmor - minimumArmor) / 125F;
         if (this.getAgeInDays() <= 125) {
+            final double healthStep = (maximumHealth - minimumHealth) / 125F;
+            final double attackStep = (maximumDamage - minimumDamage) / 125F;
+            final double speedStep = (maximumSpeed - minimumSpeed) / 125F;
+            final double armorStep = (maximumArmor - minimumArmor) / 125F;
+
             this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Math.round(minimumHealth + (healthStep * this.getAgeInDays())));
             this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Math.round(minimumDamage + (attackStep * this.getAgeInDays())));
             this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * this.getAgeInDays()));
-            double oldValue = minimumArmor + (armorStep * this.getAgeInDays());
+            final double oldValue = minimumArmor + (armorStep * this.getAgeInDays());
             this.getAttribute(Attributes.ARMOR).setBaseValue(oldValue + calculateArmorModifier());
             this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
         }
     }
 
     public int getHunger() {
-        return this.dataManager.get(HUNGER).intValue();
+        return this.dataManager.get(HUNGER);
     }
 
     public void setHunger(int hunger) {
@@ -871,7 +863,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public int getVariant() {
-        return this.dataManager.get(VARIANT).intValue();
+        return this.dataManager.get(VARIANT);
     }
 
     public void setVariant(int variant) {
@@ -879,7 +871,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public int getAgeInDays() {
-        return this.dataManager.get(AGE_TICKS).intValue() / 24000;
+        return this.dataManager.get(AGE_TICKS) / 24000;
     }
 
     public void setAgeInDays(int age) {
@@ -887,7 +879,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public int getAgeInTicks() {
-        return this.dataManager.get(AGE_TICKS).intValue();
+        return this.dataManager.get(AGE_TICKS);
     }
 
     public void setAgeInTicks(int age) {
@@ -895,7 +887,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public int getDeathStage() {
-        return this.dataManager.get(DEATH_STAGE).intValue();
+        return this.dataManager.get(DEATH_STAGE);
     }
 
     public void setDeathStage(int stage) {
@@ -903,12 +895,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean isMale() {
-        return this.dataManager.get(GENDER).booleanValue();
+        return this.dataManager.get(GENDER);
     }
 
     public boolean isModelDead() {
         if (world.isRemote) {
-            return this.isModelDead = Boolean.valueOf(this.dataManager.get(MODEL_DEAD).booleanValue());
+            return this.isModelDead = this.dataManager.get(MODEL_DEAD);
         }
         return isModelDead;
     }
@@ -921,7 +913,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean isHovering() {
-        return this.dataManager.get(HOVERING).booleanValue();
+        return this.dataManager.get(HOVERING);
     }
 
     public void setHovering(boolean hovering) {
@@ -929,7 +921,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean isFlying() {
-        return this.dataManager.get(FLYING).booleanValue();
+        return this.dataManager.get(FLYING);
     }
 
     public void setFlying(boolean flying) {
@@ -945,7 +937,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean isSleeping() {
-        return this.dataManager.get(SLEEPING).booleanValue();
+        return this.dataManager.get(SLEEPING);
     }
 
     public boolean isBlinking() {
@@ -953,7 +945,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean isBreathingFire() {
-        return this.dataManager.get(FIREBREATHING).booleanValue();
+        return this.dataManager.get(FIREBREATHING);
     }
 
     public void setBreathingFire(boolean breathing) {
@@ -973,7 +965,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public void setSitting(boolean sitting) {
-        byte b0 = this.dataManager.get(TAMED).byteValue();
+        byte b0 = this.dataManager.get(TAMED);
         if (sitting) {
             this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 | 1)));
         } else {
@@ -999,32 +991,26 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     private double calculateArmorModifier() {
         double val = 1D;
-        EquipmentSlotType[] slots = {EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
+        final EquipmentSlotType[] slots = {EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
         for (EquipmentSlotType slot : slots) {
             switch (getArmorOrdinal(getItemStackFromSlot(slot))) {
                 case 1:
                     val += 2D;
                     break;
                 case 2:
+                case 4:
                     val += 3D;
                     break;
                 case 3:
                     val += 5D;
                     break;
-                case 4:
-                    val += 3D;
-                    break;
                 case 5:
-                    val += 10D;
-                    break;
                 case 6:
+                case 8:
                     val += 10D;
                     break;
                 case 7:
                     val += 1.5D;
-                    break;
-                case 8:
-                    val += 10D;
                     break;
             }
         }
@@ -1144,12 +1130,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                 }
                 if (stack.isEmpty() && !player.isSneaking()) {
                     if (!world.isRemote) {
-                        if (this.getDragonStage() < 2) {
+                        final int dragonStage = this.getDragonStage();
+                        if (dragonStage < 2) {
                             this.startRiding(player, true);
                             IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, true));
                             return ActionResultType.SUCCESS;
-                        }
-                        if (this.getDragonStage() > 2 && !player.isPassenger()) {
+                        } else if (dragonStage > 2 && !player.isPassenger()) {
                             player.setSneaking(false);
                             player.startRiding(this, true);
                             IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, false));
@@ -1174,12 +1160,13 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                         }
                         return ActionResultType.SUCCESS;
                     }
-                    if (stack.getItem() == IafItemRegistry.DRAGON_MEAL) {
+                    final Item stackItem = stack.getItem();
+                    if (stackItem == IafItemRegistry.DRAGON_MEAL) {
                         this.growDragon(1);
                         this.setHunger(this.getHunger() + 20);
                         this.heal(Math.min(this.getHealth(), (int) (this.getMaxHealth() / 2)));
                         this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
-                        this.spawnItemCrackParticles(stack.getItem());
+                        this.spawnItemCrackParticles(stackItem);
                         this.spawnItemCrackParticles(Items.BONE);
                         this.spawnItemCrackParticles(Items.BONE_MEAL);
                         this.eatFoodBonus(stack);
@@ -1187,12 +1174,11 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                             stack.shrink(1);
                         }
                         return ActionResultType.SUCCESS;
-                    }
-                    if (stack.getItem() == IafItemRegistry.SICKLY_DRAGON_MEAL && !this.isAgingDisabled()) {
+                    } else if (stackItem == IafItemRegistry.SICKLY_DRAGON_MEAL && !this.isAgingDisabled()) {
                         this.setHunger(this.getHunger() + 20);
                         this.heal(this.getMaxHealth());
                         this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, this.getSoundVolume(), this.getSoundPitch());
-                        this.spawnItemCrackParticles(stack.getItem());
+                        this.spawnItemCrackParticles(stackItem);
                         this.spawnItemCrackParticles(Items.BONE);
                         this.spawnItemCrackParticles(Items.BONE_MEAL);
                         this.spawnItemCrackParticles(Items.POISONOUS_POTATO);
@@ -1203,8 +1189,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                             stack.shrink(1);
                         }
                         return ActionResultType.SUCCESS;
-                    }
-                    if (stack.getItem() == IafItemRegistry.DRAGON_STAFF) {
+                    } else if (stackItem == IafItemRegistry.DRAGON_STAFF) {
                         if (player.isSneaking()) {
                             if (this.hasHomePosition) {
                                 this.hasHomePosition = false;
@@ -1228,8 +1213,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                             String commandText = "stand";
                             if (this.getCommand() == 1) {
                                 commandText = "sit";
-                            }
-                            if (this.getCommand() == 2) {
+                            } else if (this.getCommand() == 2) {
                                 commandText = "escort";
                             }
                             player.sendStatusMessage(new TranslationTextComponent("dragon.command." + commandText), true);
@@ -1261,9 +1245,9 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return stack;
     }
 
-    public boolean canPositionBeSeen(double x, double y, double z) {
-        RayTraceResult result = this.world.rayTraceBlocks(new RayTraceContext(new Vector3d(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ()), new Vector3d(x, y, z), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
-        double dist = result.getHitVec().squareDistanceTo(x, y, z);
+    public boolean canPositionBeSeen(final double x, final double y, final double z) {
+        final RayTraceResult result = this.world.rayTraceBlocks(new RayTraceContext(new Vector3d(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ()), new Vector3d(x, y, z), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+        final double dist = result.getHitVec().squareDistanceTo(x, y, z);
         return dist <= 1.0D || result.getType() == RayTraceResult.Type.MISS;
     }
 
@@ -1291,25 +1275,25 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return true;
     }
 
-    public void growDragon(int ageInDays) {
+    public void growDragon(final int ageInDays) {
         if (this.isAgingDisabled()) {
             return;
         }
         this.setAgeInDays(this.getAgeInDays() + ageInDays);
         this.resetPositionToBB();
-        if (this.getAgeInDays() % 25 == 0) {
-            for (int i = 0; i < this.getRenderSize() * 4; i++) {
-                double motionX = getRNG().nextGaussian() * 0.07D;
-                double motionY = getRNG().nextGaussian() * 0.07D;
-                double motionZ = getRNG().nextGaussian() * 0.07D;
-                float f = (float) (getRNG().nextFloat() * (this.getBoundingBox().maxX - this.getBoundingBox().minX) + this.getBoundingBox().minX);
-                float f1 = (float) (getRNG().nextFloat() * (this.getBoundingBox().maxY - this.getBoundingBox().minY) + this.getBoundingBox().minY);
-                float f2 = (float) (getRNG().nextFloat() * (this.getBoundingBox().maxZ - this.getBoundingBox().minZ) + this.getBoundingBox().minZ);
-                if (world.isRemote) {
+        if (world.isRemote) {
+            if (this.getAgeInDays() % 25 == 0) {
+                for (int i = 0; i < this.getRenderSize() * 4; i++) {
+                    final float f = (float) (getRNG().nextFloat() * (this.getBoundingBox().maxX - this.getBoundingBox().minX) + this.getBoundingBox().minX);
+                    final float f1 = (float) (getRNG().nextFloat() * (this.getBoundingBox().maxY - this.getBoundingBox().minY) + this.getBoundingBox().minY);
+                    final float f2 = (float) (getRNG().nextFloat() * (this.getBoundingBox().maxZ - this.getBoundingBox().minZ) + this.getBoundingBox().minZ);
+                    final double motionX = getRNG().nextGaussian() * 0.07D;
+                    final double motionY = getRNG().nextGaussian() * 0.07D;
+                    final double motionZ = getRNG().nextGaussian() * 0.07D;
+
                     this.world.addParticle(ParticleTypes.HAPPY_VILLAGER, f, f1, f2, motionX, motionY, motionZ);
                 }
             }
-
         }
         if (this.getDragonStage() >= 2)
             this.dismount();
@@ -1317,12 +1301,13 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public void spawnItemCrackParticles(Item item) {
-        for (int i = 0; i < 15; i++) {
-            double motionX = getRNG().nextGaussian() * 0.07D;
-            double motionY = getRNG().nextGaussian() * 0.07D;
-            double motionZ = getRNG().nextGaussian() * 0.07D;
-            Vector3d headVec = this.getHeadPosition();
-            if (world.isRemote) {
+        if (world.isRemote) {
+            for (int i = 0; i < 15; i++) {
+                final double motionX = getRNG().nextGaussian() * 0.07D;
+                final double motionY = getRNG().nextGaussian() * 0.07D;
+                final double motionZ = getRNG().nextGaussian() * 0.07D;
+                final Vector3d headVec = this.getHeadPosition();
+
                 this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, new ItemStack(item)), headVec.x, headVec.y, headVec.z, motionX, motionY, motionZ);
             }
         }
@@ -1369,13 +1354,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     public void breakBlock() {
         if (this.blockBreakCounter > 0 || IafConfig.dragonBreakBlockCooldown == 0) {
             --this.blockBreakCounter;
-            int bounds = 1;//(int)Math.ceil(this.getRenderSize() * 0.1);
-            int flightModifier = isFlying() && this.getAttackTarget() != null ? -1 : 1;
-            int yMinus = calculateDownY();
             if (!this.isIceInWater() && (this.blockBreakCounter == 0 || IafConfig.dragonBreakBlockCooldown == 0) && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
                 if (IafConfig.dragonGriefing != 2 && (!this.isTamed() || IafConfig.tamedDragonGriefing)) {
-                    float hardness = IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
                     if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
+                        final int bounds = 1;//(int)Math.ceil(this.getRenderSize() * 0.1);
+                        final int flightModifier = isFlying() && this.getAttackTarget() != null ? -1 : 1;
+                        final int yMinus = calculateDownY();
                         BlockPos.getAllInBox(
                                 (int) Math.floor(this.getBoundingBox().minX) - bounds,
                                 (int) Math.floor(this.getBoundingBox().minY) + yMinus,
@@ -1386,7 +1370,8 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                         ).forEach(pos -> {
                             if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, pos.getX(), pos.getY(), pos.getZ())))
                                 return;
-                            BlockState state = world.getBlockState(pos);
+                            final BlockState state = world.getBlockState(pos);
+                            final float hardness = IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
                             if (isBreakable(pos, state, hardness)) {
                                 this.setMotion(this.getMotion().mul(0.6F, 1, 0.6F));
                                 if (!world.isRemote) {
@@ -1422,20 +1407,21 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public void spawnGroundEffects() {
-        for (int i = 0; i < this.getRenderSize(); i++) {
-            for (int i1 = 0; i1 < 20; i1++) {
-                double motionX = getRNG().nextGaussian() * 0.07D;
-                double motionY = getRNG().nextGaussian() * 0.07D;
-                double motionZ = getRNG().nextGaussian() * 0.07D;
-                float radius = 0.75F * (0.7F * getRenderSize() / 3) * -3;
-                float angle = (0.01745329251F * this.renderYawOffset) + i1 * 1F;
-                double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
-                double extraY = 0.8F;
-                double extraZ = radius * MathHelper.cos(angle);
-                BlockPos ground = getGround(new BlockPos(MathHelper.floor(this.getPosX() + extraX), MathHelper.floor(this.getPosY() + extraY) - 1, MathHelper.floor(this.getPosZ() + extraZ)));
-                BlockState BlockState = this.world.getBlockState(ground);
-                if (BlockState.getMaterial() != Material.AIR) {
-                    if (world.isRemote) {
+        if (world.isRemote) {
+            for (int i = 0; i < this.getRenderSize(); i++) {
+                for (int i1 = 0; i1 < 20; i1++) {
+                    final float radius = 0.75F * (0.7F * getRenderSize() / 3) * -3;
+                    final float angle = (0.01745329251F * this.renderYawOffset) + i1 * 1F;
+                    final double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+                    final double extraY = 0.8F;
+                    final double extraZ = radius * MathHelper.cos(angle);
+                    final BlockPos ground = getGround(new BlockPos(MathHelper.floor(this.getPosX() + extraX), MathHelper.floor(this.getPosY() + extraY) - 1, MathHelper.floor(this.getPosZ() + extraZ)));
+                    final BlockState BlockState = this.world.getBlockState(ground);
+                    if (BlockState.getMaterial() != Material.AIR) {
+                        final double motionX = getRNG().nextGaussian() * 0.07D;
+                        final double motionY = getRNG().nextGaussian() * 0.07D;
+                        final double motionZ = getRNG().nextGaussian() * 0.07D;
+
                         world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, BlockState), true, this.getPosX() + extraX, ground.getY() + extraY, this.getPosZ() + extraZ, motionX, motionY, motionZ);
                     }
                 }
@@ -1486,35 +1472,36 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     private float bob(float speed, float degree, boolean bounce, float f, float f1) {
-        float bob = (float) (Math.sin(f * speed) * f1 * degree - f1 * degree);
+        final double a = Math.sin(f * speed) * f1 * degree;
+        float bob = (float) (a - f1 * degree);
         if (bounce) {
-            bob = (float) -Math.abs((Math.sin(f * speed) * f1 * degree));
+            bob = (float) -Math.abs(a);
         }
         return bob * this.getRenderSize() / 3;
     }
 
     protected void updatePreyInMouth(Entity prey) {
-        if (this.getAnimation() != ANIMATION_SHAKEPREY){
-        this.setAnimation(ANIMATION_SHAKEPREY);
+        if (this.getAnimation() != ANIMATION_SHAKEPREY) {
+            this.setAnimation(ANIMATION_SHAKEPREY);
         }
         if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null) {
             prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof PlayerEntity ? 17F : (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 4);
             prey.stopRiding();
         }
         renderYawOffset = rotationYaw;
-        float modTick_0 = this.getAnimationTick() - 25;
-        float modTick_1 = this.getAnimationTick() > 25 && this.getAnimationTick() < 55 ? 8 * MathHelper.clamp(MathHelper.sin((float) (Math.PI + modTick_0 * 0.25)), -0.8F, 0.8F) : 0;
-        float modTick_2 = this.getAnimationTick() > 30 ? 10 : Math.max(0, this.getAnimationTick() - 20);
-        float radius = 0.75F * (0.6F * getRenderSize() / 3) * -3;
-        float angle = (0.01745329251F * this.renderYawOffset) + 3.15F + (modTick_1 * 2F) * 0.015F;
-        double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
-        double extraZ = radius * MathHelper.cos(angle);
-        double extraY = modTick_2 == 0 ? 0 : 0.035F * ((getRenderSize() / 3) + (modTick_2 * 0.5 * (getRenderSize() / 3)));
+        final float modTick_0 = this.getAnimationTick() - 25;
+        final float modTick_1 = this.getAnimationTick() > 25 && this.getAnimationTick() < 55 ? 8 * MathHelper.clamp(MathHelper.sin((float) (Math.PI + modTick_0 * 0.25)), -0.8F, 0.8F) : 0;
+        final float modTick_2 = this.getAnimationTick() > 30 ? 10 : Math.max(0, this.getAnimationTick() - 20);
+        final float radius = 0.75F * (0.6F * getRenderSize() / 3) * -3;
+        final float angle = (0.01745329251F * this.renderYawOffset) + 3.15F + (modTick_1 * 2F) * 0.015F;
+        final double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+        final double extraZ = radius * MathHelper.cos(angle);
+        final double extraY = modTick_2 == 0 ? 0 : 0.035F * ((getRenderSize() / 3) + (modTick_2 * 0.5 * (getRenderSize() / 3)));
         prey.setPosition(this.getPosX() + extraX, this.getPosY() + extraY, this.getPosZ() + extraZ);
     }
 
     public int getDragonStage() {
-        int age = this.getAgeInDays();
+        final int age = this.getAgeInDays();
         if (age >= 100) {
             return 5;
         } else if (age >= 75) {
@@ -1545,12 +1532,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setGender(this.getRNG().nextBoolean());
-        int age = this.getRNG().nextInt(80) + 1;
+        final int age = this.getRNG().nextInt(80) + 1;
         this.growDragon(age);
         this.setVariant(new Random().nextInt(4));
         this.setQueuedToSit(false);
         this.updateAttributes();
-        double healthStep = (maximumHealth - minimumHealth) / (125);
+        final double healthStep = (maximumHealth - minimumHealth) / 125;
         this.heal((Math.round(minimumHealth + (healthStep * age))));
         this.usingGroundAttack = true;
         this.setHunger(50);
@@ -1592,14 +1579,14 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     public void recalculateSize() {
         super.recalculateSize();
-        float scale = Math.min(this.getRenderSize() * 0.35F, 7F);
-        double prevX = getPosX();
-        double prevY = getPosY();
-        double prevZ = getPosZ();
-        float localWidth = this.getWidth();
-        if (this.getWidth() > localWidth && !this.firstUpdate && !this.world.isRemote) {
-            //this.setPosition(prevX, prevY, prevZ);
-        }
+        final float scale = Math.min(this.getRenderSize() * 0.35F, 7F);
+//        double prevX = getPosX();
+//        double prevY = getPosY();
+//        double prevZ = getPosZ();
+//        float localWidth = this.getWidth();
+//        if (this.getWidth() > localWidth && !this.firstUpdate && !this.world.isRemote) {
+//            this.setPosition(prevX, prevY, prevZ);
+//        }
         if (scale != lastScale) {
             resetParts(this.getRenderSize() / 3);
         }
@@ -1624,11 +1611,14 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                 this.move(MoverType.SELF, new Vector3d(0, -0.2F, 0));
             }
             this.setBreathingFire(false);
-            if(this.getDragonPitch() > 0){
-                this.setDragonPitch(Math.min(0, this.getDragonPitch() - 5));
+
+            float dragonPitch = this.getDragonPitch();
+            if (dragonPitch > 0) {
+                dragonPitch = Math.min(0, dragonPitch - 5);
+                this.setDragonPitch(dragonPitch);
             }
-            if(this.getDragonPitch() < 0){
-                this.setDragonPitch(Math.max(0, this.getDragonPitch() + 5));
+            if (dragonPitch < 0) {
+                this.setDragonPitch(Math.max(0, dragonPitch + 5));
             }
         } else {
             if (world.isRemote) {
@@ -1661,10 +1651,11 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         if (world.getDifficulty() == Difficulty.PEACEFUL && this.getAttackTarget() instanceof PlayerEntity) {
             this.setAttackTarget(null);
         }
-        if (this.isBeingRidden() && this.isModelDead()) {
-            this.removePassengers();
-        }
         if (this.isModelDead()) {
+            if (this.isBeingRidden()) {
+                this.removePassengers();
+            }
+
             this.setHovering(false);
             this.setFlying(false);
         }
@@ -1681,16 +1672,15 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     @Override
     public float getRenderScale() {
-        float scale = Math.min(this.getRenderSize() * 0.35F, 7F);
-        return scale;
+        return Math.min(this.getRenderSize() * 0.35F, 7F);
     }
 
     protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
     public float getRenderSize() {
-        int stage = this.getDragonStage() - 1;
-        float step = (growth_stages[stage][1] - growth_stages[stage][0]) / 25;
+        final int stage = this.getDragonStage() - 1;
+        final float step = (growth_stages[stage][1] - growth_stages[stage][0]) / 25;
         if (this.getAgeInDays() > 125) {
             return growth_stages[stage][0] + (step * 25);
         }
@@ -1704,13 +1694,11 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         this.getLookController().setLookPositionWithEntity(entityIn, 30.0F, 30.0F);
-        if (this.isTackling()) {
+        if (this.isTackling() || this.isModelDead()) {
             return false;
         }
-        if (this.isModelDead()) {
-            return false;
-        }
-        boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+
+        final boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
 
         if (flag) {
             this.applyEnchantments(this, entityIn);
@@ -1734,12 +1722,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     public void updateRiding(Entity riding) {
         if (riding != null && riding.isPassenger(this) && riding instanceof PlayerEntity) {
-            int i = riding.getPassengers().indexOf(this);
-            float radius = (i == 2 ? -0.2F : 0.5F) + (((PlayerEntity) riding).isElytraFlying() ? 2 : 0);
-            float angle = (0.01745329251F * ((PlayerEntity) riding).renderYawOffset) + (i == 1 ? 90 : i == 0 ? -90 : 0);
-            double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
-            double extraZ = radius * MathHelper.cos(angle);
-            double extraY = (riding.isSneaking() ? 1.2D : 1.4D) + (i == 2 ? 0.4D : 0D);
+            final int i = riding.getPassengers().indexOf(this);
+            final float radius = (i == 2 ? -0.2F : 0.5F) + (((PlayerEntity) riding).isElytraFlying() ? 2 : 0);
+            final float angle = (0.01745329251F * ((PlayerEntity) riding).renderYawOffset) + (i == 1 ? 90 : i == 0 ? -90 : 0);
+            final double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+            final double extraZ = radius * MathHelper.cos(angle);
+            final double extraY = (riding.isSneaking() ? 1.2D : 1.4D) + (i == 2 ? 0.4D : 0D);
             this.rotationYawHead = ((PlayerEntity) riding).rotationYawHead;
             this.prevRotationYaw = ((PlayerEntity) riding).rotationYawHead;
             this.setPosition(riding.getPosX() + extraX, riding.getPosY() + extraY, riding.getPosZ() + extraZ);
@@ -1818,13 +1806,9 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public EntityDragonEgg createEgg(EntityDragonBase ageable) {
-        int i = MathHelper.floor(this.getPosX());
-        int j = MathHelper.floor(this.getPosY());
-        int k = MathHelper.floor(this.getPosZ());
-        BlockPos pos = new BlockPos(i, j, k);
         EntityDragonEgg dragon = new EntityDragonEgg(IafEntityRegistry.DRAGON_EGG, this.world);
         dragon.setEggType(EnumDragonEgg.byMetadata(new Random().nextInt(4) + getStartMetaForType()));
-        dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+        dragon.setPosition(MathHelper.floor(this.getPosX()) + 0.5, MathHelper.floor(this.getPosY()) + 1, MathHelper.floor(this.getPosZ()) + 0.5);
         return dragon;
     }
 
@@ -1834,17 +1818,14 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     public boolean isTargetBlocked(Vector3d target) {
         if (target != null) {
-            BlockRayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(this.getPositionVec().add(0, this.getEyeHeight(), 0), target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
-            if (rayTrace != null && rayTrace.getHitVec() != null) {
-                BlockPos sidePos = rayTrace.getPos();
-                BlockPos pos = new BlockPos(rayTrace.getHitVec());
-                if (!world.isAirBlock(sidePos)) {
-                    return true;
-                } else if (!world.isAirBlock(pos)) {
-                    return true;
-                }
-                return rayTrace != null && rayTrace.getType() == RayTraceResult.Type.BLOCK;
+            final BlockRayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(this.getPositionVec().add(0, this.getEyeHeight(), 0), target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+            final BlockPos sidePos = rayTrace.getPos();
+            if (!world.isAirBlock(sidePos)) {
+                return true;
+            } else if (!world.isAirBlock(new BlockPos(rayTrace.getHitVec()))) {
+                return true;
             }
+            return rayTrace.getType() == RayTraceResult.Type.BLOCK;
         }
         return false;
     }
@@ -1854,7 +1835,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean isTackling() {
-        return this.dataManager.get(TACKLE).booleanValue();
+        return this.dataManager.get(TACKLE);
     }
 
     public void setTackling(boolean tackling) {
@@ -1862,7 +1843,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean isAgingDisabled() {
-        return this.dataManager.get(AGINGDISABLED).booleanValue();
+        return this.dataManager.get(AGINGDISABLED);
     }
 
     public void setAgingDisabled(boolean isAgingDisabled) {
@@ -1871,7 +1852,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
 
     public boolean isBoundToCrystal() {
-        return this.dataManager.get(CRYSTAL_BOUND).booleanValue();
+        return this.dataManager.get(CRYSTAL_BOUND);
     }
 
     public void setCrystalBound(boolean crystalBound) {
@@ -1880,9 +1861,9 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
 
     public float getDistanceSquared(Vector3d Vector3d) {
-        float f = (float) (this.getPosX() - Vector3d.x);
-        float f1 = (float) (this.getPosY() - Vector3d.y);
-        float f2 = (float) (this.getPosZ() - Vector3d.z);
+        final float f = (float) (this.getPosX() - Vector3d.x);
+        final float f1 = (float) (this.getPosY() - Vector3d.y);
+        final float f2 = (float) (this.getPosZ() - Vector3d.z);
         return f * f + f1 * f1 + f2 * f2;
     }
 
@@ -1892,25 +1873,24 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     public abstract Item getSummoningCrystal();
 
-    @OnlyIn(Dist.CLIENT)
     protected void updateClientControls() {
-        Minecraft mc = Minecraft.getInstance();
+        final Minecraft mc = Minecraft.getInstance();
         if (this.isRidingPlayer(mc.player)) {
-            byte previousState = getControlState();
+            final byte previousState = getControlState();
             goUp(mc.gameSettings.keyBindJump.isKeyDown());
             goDown(IafKeybindRegistry.dragon_down.isKeyDown());
             goAttack(IafKeybindRegistry.dragon_fireAttack.isKeyDown());
             goStrike(IafKeybindRegistry.dragon_strike.isKeyDown());
             goDismount(mc.gameSettings.keyBindSneak.isKeyDown());
-            byte controlState = getControlState();
+            final byte controlState = getControlState();
             if (controlState != previousState) {
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, getPosX(), getPosY(), getPosZ()));
             }
         }
         if (this.getRidingEntity() != null && this.getRidingEntity() == mc.player) {
-            byte previousState = getControlState();
+            final byte previousState = getControlState();
             goDismount(mc.gameSettings.keyBindSneak.isKeyDown());
-            byte controlState = getControlState();
+            final byte controlState = getControlState();
             if (controlState != previousState) {
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, getPosX(), getPosY(), getPosZ()));
             }
@@ -1953,8 +1933,8 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public void updateCheckPlayer() {
-        double checklength = this.getBoundingBox().getAverageEdgeLength() * 3;
-        PlayerEntity player = world.getClosestPlayer(this, checklength);
+        final double checkLength = this.getBoundingBox().getAverageEdgeLength() * 3;
+        final PlayerEntity player = world.getClosestPlayer(this, checkLength);
         if (this.isSleeping()) {
             if (player != null && !this.isOwner(player) && !player.isCreative()) {
                 this.setQueuedToSit(false);
@@ -1969,16 +1949,16 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean isDirectPathBetweenPoints(Vector3d vec1, Vector3d vec2) {
-        BlockRayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(vec1, new Vector3d(vec2.x, vec2.y + (double) this.getHeight() * 0.5D, vec2.z), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
-        return rayTrace == null || rayTrace.getType() != RayTraceResult.Type.BLOCK;
+        final BlockRayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(vec1, new Vector3d(vec2.x, vec2.y + (double) this.getHeight() * 0.5D, vec2.z), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+        return rayTrace.getType() != RayTraceResult.Type.BLOCK;
     }
 
     public void onDeath(DamageSource cause) {
-        if (cause.getTrueSource() != null) {
-            //if (cause.getTrueSource() instanceof PlayerEntity) {
-            //	((PlayerEntity) cause.getTrueSource()).addStat(ModAchievements.dragonSlayer, 1);
-            //}
-        }
+//        if (cause.getTrueSource() != null) {
+//            if (cause.getTrueSource() instanceof PlayerEntity) {
+//            	((PlayerEntity) cause.getTrueSource()).addStat(ModAchievements.dragonSlayer, 1);
+//            }
+//        }
         super.onDeath(cause);
     }
 
@@ -2004,10 +1984,10 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                 this.playSound(this.getRoarSound(), this.getSoundVolume() + 3 + Math.max(0, this.getDragonStage() - 2), this.getSoundPitch() * 0.7F);
             }
             if (this.getDragonStage() > 3) {
-                int size = (this.getDragonStage() - 3) * 30;
-                List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().expand(size, size, size));
-                for (Entity entity : entities) {
-                    boolean isStrongerDragon = entity instanceof EntityDragonBase && ((EntityDragonBase) entity).getDragonStage() >= this.getDragonStage();
+                final int size = (this.getDragonStage() - 3) * 30;
+                final List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().expand(size, size, size));
+                for (final Entity entity : entities) {
+                    final boolean isStrongerDragon = entity instanceof EntityDragonBase && ((EntityDragonBase) entity).getDragonStage() >= this.getDragonStage();
                     if (entity instanceof LivingEntity && !isStrongerDragon) {
                         LivingEntity living = (LivingEntity) entity;
                         if (this.isOwner(living) || this.isOwnersPet(living)) {
@@ -2026,10 +2006,10 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                 this.playSound(this.getRoarSound(), this.getSoundVolume() + 2 + Math.max(0, this.getDragonStage() - 3), this.getSoundPitch());
             }
             if (this.getDragonStage() > 3) {
-                int size = (this.getDragonStage() - 3) * 30;
-                List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().expand(size, size, size));
-                for (Entity entity : entities) {
-                    boolean isStrongerDragon = entity instanceof EntityDragonBase && ((EntityDragonBase) entity).getDragonStage() >= this.getDragonStage();
+                final int size = (this.getDragonStage() - 3) * 30;
+                final List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().expand(size, size, size));
+                for (final Entity entity : entities) {
+                    final boolean isStrongerDragon = entity instanceof EntityDragonBase && ((EntityDragonBase) entity).getDragonStage() >= this.getDragonStage();
                     if (entity instanceof LivingEntity && !isStrongerDragon) {
                         LivingEntity living = (LivingEntity) entity;
                         if (this.isOwner(living) || this.isOwnersPet(living)) {
@@ -2050,7 +2030,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     public boolean isDirectPathBetweenPoints(Entity entity, Vector3d vec1, Vector3d vec2) {
 
         RayTraceResult movingobjectposition = this.world.rayTraceBlocks(new RayTraceContext(vec1, vec2, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
-        return movingobjectposition == null || movingobjectposition.getType() != RayTraceResult.Type.BLOCK;
+        return movingobjectposition.getType() != RayTraceResult.Type.BLOCK;
     }
 
     public void processArrows() {
@@ -2080,7 +2060,6 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     /*
-    @OnlyIn(Dist.CLIENT)
     public boolean shouldRender(ICamera camera) {
         boolean render = false;
         return inFrustrum(camera, headPart) || inFrustrum(camera, neckPart) ||
@@ -2104,27 +2083,26 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public Vector3d getRiderPosition() {
-        float sitProg = this.sitProgress * 0.015F;
-        float deadProg = this.modelDeadProgress * -0.02F;
-        float hoverProg = this.hoverProgress * 0.03F;
-        float flyProg = this.flyProgress * 0.01F;
-        float sleepProg = this.sleepProgress * -0.025F;
-        float extraAgeScale = this.getRenderScale()*0.2F;
-        float pitchX = 0;
-        float pitchY = 0;
-        float dragonPitch = getDragonPitch();
+        final float sitProg = this.sitProgress * 0.015F;
+        final float deadProg = this.modelDeadProgress * -0.02F;
+        final float hoverProg = this.hoverProgress * 0.03F;
+        final float flyProg = this.flyProgress * 0.01F;
+        final float sleepProg = this.sleepProgress * -0.025F;
+        final float extraAgeScale = this.getRenderScale()*0.2F;
+        float pitchX = 0F;
+        float pitchY = 0F;
+        final float dragonPitch = getDragonPitch();
         if (dragonPitch > 0) {
             pitchX = Math.min(dragonPitch / 90, 0.3F);
             pitchY = -(dragonPitch / 90) * 2F;
-        }
-        if (dragonPitch < 0) {//going up
+        } else if (dragonPitch < 0) {//going up
             pitchY = (dragonPitch / 90) * 0.1F;
             pitchX = Math.max(dragonPitch / 90, -0.7F);
         }
-        float xzMod = (0.15F + pitchX) * getRenderSize() + extraAgeScale;
-        float headPosX = (float) (getPosX() + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
-        float headPosY = (float) (getPosY() + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F + extraAgeScale);
-        float headPosZ = (float) (getPosZ() + (xzMod) * Math.sin((rotationYaw + 90) * Math.PI / 180));
+        final float xzMod = (0.15F + pitchX) * getRenderSize() + extraAgeScale;
+        final float headPosX = (float) (getPosX() + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
+        final float headPosY = (float) (getPosY() + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F + extraAgeScale);
+        final float headPosZ = (float) (getPosZ() + (xzMod) * Math.sin((rotationYaw + 90) * Math.PI / 180));
         return new Vector3d(headPosX, headPosY, headPosZ);
     }
 
@@ -2135,10 +2113,10 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public Vector3d getHeadPosition() {
-        float sitProg = this.sitProgress * 0.015F;
-        float deadProg = this.modelDeadProgress * -0.02F;
-        float hoverProg = this.hoverProgress * 0.03F;
-        float flyProg = this.flyProgress * 0.01F;
+        final float sitProg = this.sitProgress * 0.015F;
+        final float deadProg = this.modelDeadProgress * -0.02F;
+        final float hoverProg = this.hoverProgress * 0.03F;
+        final float flyProg = this.flyProgress * 0.01F;
         int tick = 0;
         if (this.getAnimationTick() < 10) {
             tick = this.getAnimationTick();
@@ -2147,12 +2125,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         } else {
             tick = 10;
         }
-        float epicRoarProg = this.getAnimation() == ANIMATION_EPIC_ROAR ? tick * 0.1F : 0;
-        float sleepProg = this.sleepProgress * -0.025F;
-        float pitchMulti = 0;
-        float pitchAdjustment = 0;
-        float pitchMinus = 0;
-        float dragonPitch = -getDragonPitch();
+        final float epicRoarProg = this.getAnimation() == ANIMATION_EPIC_ROAR ? tick * 0.1F : 0;
+        final float sleepProg = this.sleepProgress * -0.025F;
+        float pitchMulti = 0F;
+        float pitchAdjustment = 0F;
+        float pitchMinus = 0F;
+        final float dragonPitch = -getDragonPitch();
         if (this.isFlying() || this.isHovering()) {
             pitchMulti = (float) Math.sin(Math.toRadians(dragonPitch));
             pitchAdjustment = 1.2F;
@@ -2169,11 +2147,11 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                 pitchMinus = 0.95F * Math.abs(dragonPitch / 90);
             }
         }
-        float flightXz = 1.0F + flyProg + hoverProg;
-        float xzMod = (1.7F * getRenderSize() * 0.3F * flightXz) + getRenderSize() * (0.3F * (float) Math.sin((dragonPitch + 90) * Math.PI / 180) * pitchAdjustment - pitchMinus - hoverProg * 0.45F);
-        float headPosX = (float) (getPosX() + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
-        float headPosY = (float) (getPosY() + (0.7F + sitProg + hoverProg + deadProg + epicRoarProg + sleepProg + flyProg + pitchMulti) * getRenderSize() * 0.3F);
-        float headPosZ = (float) (getPosZ() + (xzMod) * Math.sin((rotationYaw + 90) * Math.PI / 180));
+        final float flightXz = 1.0F + flyProg + hoverProg;
+        final float xzMod = (1.7F * getRenderSize() * 0.3F * flightXz) + getRenderSize() * (0.3F * (float) Math.sin((dragonPitch + 90) * Math.PI / 180) * pitchAdjustment - pitchMinus - hoverProg * 0.45F);
+        final float headPosX = (float) (getPosX() + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
+        final float headPosY = (float) (getPosY() + (0.7F + sitProg + hoverProg + deadProg + epicRoarProg + sleepProg + flyProg + pitchMulti) * getRenderSize() * 0.3F);
+        final float headPosZ = (float) (getPosZ() + (xzMod) * Math.sin((rotationYaw + 90) * Math.PI / 180));
         return new Vector3d(headPosX, headPosY, headPosZ);
     }
 
@@ -2188,8 +2166,8 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     public void tryScorchTarget() {
         LivingEntity entity = this.getAttackTarget();
         if (entity != null) {
-            float distX = (float) (entity.getPosX() - this.getPosX());
-            float distZ = (float) (entity.getPosZ() - this.getPosZ());
+            final float distX = (float) (entity.getPosX() - this.getPosX());
+            final float distZ = (float) (entity.getPosZ() - this.getPosZ());
             if (this.isBreathingFire()) {
                 if (this.isActuallyBreathingFire()) {
                     rotationYaw = renderYawOffset;
@@ -2289,34 +2267,25 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return true;
     }
 
-    public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
-        if (slotIn == EquipmentSlotType.OFFHAND) {
-            return dragonInventory.getStackInSlot(0);
-        } else if (slotIn == EquipmentSlotType.HEAD) {
-            return dragonInventory.getStackInSlot(1);
-        } else if (slotIn == EquipmentSlotType.CHEST) {
-            return dragonInventory.getStackInSlot(2);
-        } else if (slotIn == EquipmentSlotType.LEGS) {
-            return dragonInventory.getStackInSlot(3);
-        } else if (slotIn == EquipmentSlotType.FEET) {
-            return dragonInventory.getStackInSlot(4);
+    public ItemStack getItemStackFromSlot(final EquipmentSlotType slotIn) {
+        switch (slotIn) {
+            case OFFHAND: return dragonInventory.getStackInSlot(0);
+            case HEAD: return dragonInventory.getStackInSlot(1);
+            case CHEST: return dragonInventory.getStackInSlot(2);
+            case LEGS: return dragonInventory.getStackInSlot(3);
+            case FEET: return dragonInventory.getStackInSlot(4);
+            default: return super.getItemStackFromSlot(slotIn);
         }
-        return super.getItemStackFromSlot(slotIn);
     }
 
-    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
-        if (slotIn == EquipmentSlotType.OFFHAND) {
-            dragonInventory.setInventorySlotContents(0, stack);
-        } else if (slotIn == EquipmentSlotType.HEAD) {
-            dragonInventory.setInventorySlotContents(1, stack);
-        } else if (slotIn == EquipmentSlotType.CHEST) {
-            dragonInventory.setInventorySlotContents(2, stack);
-        } else if (slotIn == EquipmentSlotType.LEGS) {
-            dragonInventory.setInventorySlotContents(3, stack);
-        } else if (slotIn == EquipmentSlotType.FEET) {
-            dragonInventory.setInventorySlotContents(4, stack);
-        } else {
-            super.getItemStackFromSlot(slotIn);
+    public void setItemStackToSlot(final EquipmentSlotType slotIn, final ItemStack stack) {
+        switch (slotIn) {
+            case OFFHAND: dragonInventory.setInventorySlotContents(0, stack); break;
+            case HEAD: dragonInventory.setInventorySlotContents(1, stack); break;
+            case CHEST: dragonInventory.setInventorySlotContents(2, stack); break;
+            case LEGS: dragonInventory.setInventorySlotContents(3, stack); break;
+            case FEET: dragonInventory.setInventorySlotContents(4, stack); break;
+            default: super.getItemStackFromSlot(slotIn);
         }
         updateAttributes();
     }
