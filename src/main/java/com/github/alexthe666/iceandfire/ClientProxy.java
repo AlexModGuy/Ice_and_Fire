@@ -1,9 +1,7 @@
 package com.github.alexthe666.iceandfire;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 import com.github.alexthe666.citadel.client.model.TabulaModel;
@@ -158,7 +156,7 @@ public class ClientProxy extends CommonProxy {
     private static final ModelCopperArmor COPPER_ARMOR_MODEL = new ModelCopperArmor(0.5F);
     private static final ModelCopperArmor COPPER_ARMOR_MODEL_LEGS = new ModelCopperArmor(0.2F);
 
-    public static List<UUID> currentDragonRiders = new ArrayList<UUID>();
+    public static Set<UUID> currentDragonRiders = new HashSet<UUID>();
     public static TabulaModel FIRE_DRAGON_BASE_MODEL;
     public static TabulaModel ICE_DRAGON_BASE_MODEL;
     public static TabulaModel SEA_SERPENT_BASE_MODEL;
