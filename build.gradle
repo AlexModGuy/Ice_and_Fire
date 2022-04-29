@@ -1,19 +1,16 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
         mavenCentral()
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-
     }
-
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
-repositories{
+repositories {
     maven {
         name = "CurseForge"
         url = "https://minecraft.curseforge.com/api/maven/"
@@ -26,7 +23,6 @@ repositories{
         name = "CurseMaven"
         url = "https://www.cursemaven.com"
     }
-
 }
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
@@ -49,11 +45,10 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
-            arg "-mixin.config="+"citadel.mixins.json"
-            arg "-mixin.config="+"iceandfire.mixins.json"
+            arg "-mixin.config=citadel.mixins.json"
+            arg "-mixin.config=iceandfire.mixins.json"
             properties 'mixin.env.remapRefMap': 'true'
             property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
-
 
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
@@ -72,8 +67,8 @@ minecraft {
             workingDirectory project.file('run')
             properties 'mixin.env.remapRefMap': 'true'
             property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
-            arg "-mixin.config="+"citadel.mixins.json"
-            arg "-mixin.config="+"iceandfire.mixins.json"
+            arg "-mixin.config=citadel.mixins.json"
+            arg "-mixin.config=iceandfire.mixins.json"
             args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
 
             // Recommended logging data for a userdev environment
@@ -91,8 +86,8 @@ minecraft {
 
         data {
             workingDirectory project.file('run')
-            arg "-mixin.config="+"citadel.mixins.json"
-            arg "-mixin.config="+"iceandfire.mixins.json"
+            arg "-mixin.config=citadel.mixins.json"
+            arg "-mixin.config=iceandfire.mixins.json"
             properties 'mixin.env.remapRefMap': 'true'
             property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
 
@@ -121,7 +116,7 @@ mixin {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.0.46'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
     compileOnly fg.deobf("mezz.jei:jei-1.16.2:7.1.3.19:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.2:7.1.3.19")
     compile "curse.maven:citadel-331936:3441030"
