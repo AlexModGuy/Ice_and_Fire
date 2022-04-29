@@ -6,22 +6,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-import net.minecraft.client.gui.widget.button.Button.IPressable;
-
-@OnlyIn(Dist.CLIENT)
 public class ChangePageButton extends Button {
     private final boolean right;
     public int lastpage = 1;
-    private int page;
     private int color;
 
-    public ChangePageButton(int x, int y, boolean right, int bookpage, int color, IPressable press) {
+    public ChangePageButton(int x, int y, boolean right, int color, IPressable press) {
         super(x, y, 23, 10, new StringTextComponent(""), press);
         this.right = right;
-        page = bookpage;
         this.color = color;
     }
 

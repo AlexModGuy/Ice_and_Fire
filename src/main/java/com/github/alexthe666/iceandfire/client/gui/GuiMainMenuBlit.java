@@ -17,16 +17,22 @@ public class GuiMainMenuBlit {
     }
 
     private static void innerBlit(int p_innerBlit_0_, int p_innerBlit_1_, int p_innerBlit_2_, int p_innerBlit_3_, int p_innerBlit_4_, int p_innerBlit_5_, int p_innerBlit_6_, float p_innerBlit_7_, float p_innerBlit_8_, int p_innerBlit_9_, int p_innerBlit_10_, float alpha) {
-        innerBlit(p_innerBlit_0_, p_innerBlit_1_, p_innerBlit_2_, p_innerBlit_3_, p_innerBlit_4_, (p_innerBlit_7_ + 0.0F) / (float)p_innerBlit_9_, (p_innerBlit_7_ + (float)p_innerBlit_5_) / (float)p_innerBlit_9_, (p_innerBlit_8_ + 0.0F) / (float)p_innerBlit_10_, (p_innerBlit_8_ + (float)p_innerBlit_6_) / (float)p_innerBlit_10_, alpha);
+        innerBlit(p_innerBlit_0_, p_innerBlit_1_, p_innerBlit_2_, p_innerBlit_3_, p_innerBlit_4_,
+            (p_innerBlit_7_ + 0.0F) / p_innerBlit_9_, (p_innerBlit_7_ + p_innerBlit_5_) / p_innerBlit_9_,
+            (p_innerBlit_8_ + 0.0F) / p_innerBlit_10_, (p_innerBlit_8_ + p_innerBlit_6_) / p_innerBlit_10_, alpha);
     }
 
     protected static void innerBlit(int p_innerBlit_0_, int p_innerBlit_1_, int p_innerBlit_2_, int p_innerBlit_3_, int p_innerBlit_4_, float p_innerBlit_5_, float p_innerBlit_6_, float p_innerBlit_7_, float p_innerBlit_8_, float alpha) {
         BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR_TEX);
-        bufferbuilder.pos((double)p_innerBlit_0_, (double)p_innerBlit_3_, (double)p_innerBlit_4_).color(1, 1, 1, alpha).tex(p_innerBlit_5_, p_innerBlit_8_).endVertex();
-        bufferbuilder.pos((double)p_innerBlit_1_, (double)p_innerBlit_3_, (double)p_innerBlit_4_).color(1, 1, 1, alpha).tex(p_innerBlit_6_, p_innerBlit_8_).endVertex();
-        bufferbuilder.pos((double)p_innerBlit_1_, (double)p_innerBlit_2_, (double)p_innerBlit_4_).color(1, 1, 1, alpha).tex(p_innerBlit_6_, p_innerBlit_7_).endVertex();
-        bufferbuilder.pos((double)p_innerBlit_0_, (double)p_innerBlit_2_, (double)p_innerBlit_4_).color(1, 1, 1, alpha).tex(p_innerBlit_5_, p_innerBlit_7_).endVertex();
+        bufferbuilder.pos(p_innerBlit_0_, p_innerBlit_3_, p_innerBlit_4_).color(1, 1, 1, alpha)
+            .tex(p_innerBlit_5_, p_innerBlit_8_).endVertex();
+        bufferbuilder.pos(p_innerBlit_1_, p_innerBlit_3_, p_innerBlit_4_).color(1, 1, 1, alpha)
+            .tex(p_innerBlit_6_, p_innerBlit_8_).endVertex();
+        bufferbuilder.pos(p_innerBlit_1_, p_innerBlit_2_, p_innerBlit_4_).color(1, 1, 1, alpha)
+            .tex(p_innerBlit_6_, p_innerBlit_7_).endVertex();
+        bufferbuilder.pos(p_innerBlit_0_, p_innerBlit_2_, p_innerBlit_4_).color(1, 1, 1, alpha)
+            .tex(p_innerBlit_5_, p_innerBlit_7_).endVertex();
         bufferbuilder.finishDrawing();
         RenderSystem.enableAlphaTest();
         WorldVertexBufferUploader.draw(bufferbuilder);

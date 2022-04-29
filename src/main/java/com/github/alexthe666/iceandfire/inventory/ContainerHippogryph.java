@@ -13,6 +13,7 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -26,7 +27,7 @@ public class ContainerHippogryph extends Container {
     }
 
     public ContainerHippogryph(int id, IInventory ratInventory, PlayerInventory playerInventory, EntityHippogryph hippogryph) {
-        super(IafContainerRegistry.HIPPOGRYPH_CONTAINER, id);
+        super(IafContainerRegistry.HIPPOGRYPH_CONTAINER.get(), id);
         this.hippogryphInventory = ratInventory;
         if(hippogryph == null && IceAndFire.PROXY.getReferencedMob() instanceof EntityHippogryph){
             hippogryph = (EntityHippogryph)IceAndFire.PROXY.getReferencedMob();
@@ -37,32 +38,38 @@ public class ContainerHippogryph extends Container {
         hippogryphInventory.openInventory(player);
         int j = -18;
         this.addSlot(new Slot(hippogryphInventory, 0, 8, 18) {
+            @Override
             public boolean isItemValid(ItemStack stack) {
                 return stack.getItem() == Items.SADDLE && !this.getHasStack();
             }
 
+            @Override
             public void onSlotChanged() {
                 if (ContainerHippogryph.this.hippogryph != null) {
                     ContainerHippogryph.this.hippogryph.refreshInventory();
                 }
             }
 
+            @Override
             @OnlyIn(Dist.CLIENT)
             public boolean isEnabled() {
                 return true;
             }
         });
         this.addSlot(new Slot(hippogryphInventory, 1, 8, 36) {
+            @Override
             public boolean isItemValid(ItemStack stack) {
                 return stack.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !this.getHasStack();
             }
 
+            @Override
             public void onSlotChanged() {
                 if (ContainerHippogryph.this.hippogryph != null) {
                     ContainerHippogryph.this.hippogryph.refreshInventory();
                 }
             }
 
+            @Override
             @OnlyIn(Dist.CLIENT)
             public boolean isEnabled() {
                 return true;
@@ -70,20 +77,24 @@ public class ContainerHippogryph extends Container {
         });
         this.addSlot(new Slot(hippogryphInventory, 2, 8, 52) {
 
+            @Override
             public boolean isItemValid(ItemStack stack) {
                 return EntityHippogryph.getIntFromArmor(stack) != 0;
             }
 
+            @Override
             public int getSlotStackLimit() {
                 return 1;
             }
 
+            @Override
             public void onSlotChanged() {
                 if (ContainerHippogryph.this.hippogryph != null) {
                     ContainerHippogryph.this.hippogryph.refreshInventory();
                 }
             }
 
+            @Override
             @OnlyIn(Dist.CLIENT)
             public boolean isEnabled() {
                 return true;
@@ -93,11 +104,13 @@ public class ContainerHippogryph extends Container {
         for (int k = 0; k < 3; ++k) {
             for (int l = 0; l < 5; ++l) {
                 this.addSlot(new Slot(hippogryphInventory, 3 + l + k * 5, 80 + l * 18, 18 + k * 18) {
+                    @Override
                     @OnlyIn(Dist.CLIENT)
                     public boolean isEnabled() {
                         return ContainerHippogryph.this.hippogryph != null && ContainerHippogryph.this.hippogryph.isChested();
                     }
 
+                    @Override
                     public boolean isItemValid(ItemStack stack) {
                         return ContainerHippogryph.this.hippogryph != null && ContainerHippogryph.this.hippogryph.isChested();
                     }
@@ -154,10 +167,12 @@ public class ContainerHippogryph extends Container {
         return itemstack;
     }
 
+    @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
         return this.hippogryphInventory.isUsableByPlayer(playerIn) && this.hippogryph.isAlive() && this.hippogryph.getDistance(playerIn) < 8.0F;
     }
 
+    @Override
     public void onContainerClosed(PlayerEntity playerIn) {
         super.onContainerClosed(playerIn);
         this.hippogryphInventory.closeInventory(playerIn);

@@ -19,7 +19,6 @@ public class ContainerDragonForge extends Container {
 
     private final IInventory tileFurnace;
     public int isFire;
-    private int cookTime;
 
     public ContainerDragonForge(int i, PlayerInventory playerInventory) {
         this(i, new Inventory(3), playerInventory, new IntArray(0));
@@ -27,7 +26,7 @@ public class ContainerDragonForge extends Container {
 
 
     public ContainerDragonForge(int id, IInventory furnaceInventory, PlayerInventory playerInventory, IIntArray vars) {
-        super(IafContainerRegistry.DRAGON_FORGE_CONTAINER, id);
+        super(IafContainerRegistry.DRAGON_FORGE_CONTAINER.get(), id);
         this.tileFurnace = furnaceInventory;
         if(furnaceInventory instanceof TileEntityDragonforge){
             isFire = ((TileEntityDragonforge) furnaceInventory).isFire;
@@ -49,6 +48,7 @@ public class ContainerDragonForge extends Container {
         }
     }
 
+    @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
         return this.tileFurnace.isUsableByPlayer(playerIn);
     }

@@ -1,7 +1,11 @@
 package com.github.alexthe666.iceandfire.client.gui.bestiary;
 
 import java.io.IOException;
-import java.util.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
@@ -32,30 +36,28 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+
 import net.minecraftforge.registries.ForgeRegistries;
 
-@OnlyIn(Dist.CLIENT)
+@SuppressWarnings("resource")
 public class GuiBestiary extends Screen {
     protected static final int X = 390;
     protected static final int Y = 245;
     private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/bestiary/bestiary.png");
     private static final ResourceLocation DRAWINGS_0 = new ResourceLocation("iceandfire:textures/gui/bestiary/drawings_0.png");
     private static final ResourceLocation DRAWINGS_1 = new ResourceLocation("iceandfire:textures/gui/bestiary/drawings_1.png");
-    private static final ResourceLocation DRAWINGS_2 = new ResourceLocation("iceandfire:textures/gui/bestiary/drawings_2.png");
     private static final Map<String, ResourceLocation> PICTURE_LOCATION_CACHE = Maps.newHashMap();
-    public List<EnumBestiaryPages> allPageTypes = new ArrayList<EnumBestiaryPages>();
+    public List<EnumBestiaryPages> allPageTypes = new ArrayList<>();
     public EnumBestiaryPages pageType;
-    public List<IndexPageButton> indexButtons = new ArrayList<IndexPageButton>();
+    public List<IndexPageButton> indexButtons = new ArrayList<>();
     public ChangePageButton previousPage;
     public ChangePageButton nextPage;
     public int bookPages;
@@ -80,21 +82,21 @@ public class GuiBestiary extends Screen {
         index = true;
     }
 
-    private FontRenderer getFont() {
-        FontRenderer font;
+    private static FontRenderer getFont() {
         if (IafConfig.useVanillaFont || !Minecraft.getInstance().gameSettings.language.equalsIgnoreCase("en_us")) {
-            font = Minecraft.getInstance().fontRenderer;
+            return Minecraft.getInstance().fontRenderer;
         } else {
-            font = (FontRenderer) IceAndFire.PROXY.getFontRenderer();
+            return (FontRenderer) IceAndFire.PROXY.getFontRenderer();
         }
-        return font;
     }
 
+    @Override
     protected void init() {
         super.init();
         int centerX = (width - X) / 2;
         int centerY = (height - Y) / 2;
-        this.addButton(this.previousPage = new ChangePageButton(centerX + 15, centerY + 215, false, bookPages, 0, (p_214132_1_) -> {
+        this.addButton(
+            this.previousPage = new ChangePageButton(centerX + 15, centerY + 215, false, 0, (p_214132_1_) -> {
             if ((this.index ? this.indexPages > 0 : this.pageType != null)) {
                 if (this.index) {
                     this.indexPages--;
@@ -109,7 +111,7 @@ public class GuiBestiary extends Screen {
                 }
             }
         }));
-        this.addButton(this.nextPage = new ChangePageButton(centerX + 357, centerY + 215, true, bookPages, 0, (p_214132_1_) -> {
+        this.addButton(this.nextPage = new ChangePageButton(centerX + 357, centerY + 215, true, 0, (p_214132_1_) -> {
             if ((this.index ? this.indexPages < this.indexPagesTotal - 1 : this.pageType != null && this.bookPages < this.pageType.pages)) {
                 if (this.index) {
                     this.indexPages++;
@@ -125,7 +127,11 @@ public class GuiBestiary extends Screen {
                 int xIndex = i % -2;
                 int yIndex = i % 10;
                 int id = 2 + i;
-                IndexPageButton button = new IndexPageButton(id, centerX + 15 + (xIndex * 200), centerY + 10 + (yIndex * 20) - (xIndex == 1 ? 20 : 0), new TranslationTextComponent("bestiary." + EnumBestiaryPages.values()[allPageTypes.get(i).ordinal()].toString().toLowerCase()), (p_214132_1_) -> {
+                IndexPageButton button = new IndexPageButton(centerX + 15 + (xIndex * 200),
+                    centerY + 10 + (yIndex * 20) - (xIndex == 1 ? 20 : 0),
+                    new TranslationTextComponent("bestiary."
+                        + EnumBestiaryPages.values()[allPageTypes.get(i).ordinal()].toString().toLowerCase()),
+                    (p_214132_1_) -> {
                     if (this.indexButtons.get(id - 2) != null && allPageTypes.get(id - 2) != null) {
                         Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
                         this.index = false;
@@ -213,6 +219,10 @@ public class GuiBestiary extends Screen {
             case FIREDRAGON:
                 break;
             case FIREDRAGONEGG:
+                break;
+            case LIGHTNINGDRAGON:
+                break;
+            case LIGHTNINGDRAGONEGG:
                 break;
             case ICEDRAGON:
                 break;
@@ -534,8 +544,8 @@ public class GuiBestiary extends Screen {
                     ms.pop();
 
 
-                    drawItemStack(ms, new ItemStack(Item.getItemFromBlock(Blocks.OAK_BUTTON)), 180, 20, 1.35F);
-                    drawItemStack(ms, new ItemStack(Item.getItemFromBlock(Blocks.OAK_BUTTON)), 215, 20, 1.35F);
+                    drawItemStack(ms, new ItemStack(Blocks.OAK_BUTTON), 180, 20, 1.35F);
+                    drawItemStack(ms, new ItemStack(Blocks.OAK_BUTTON), 215, 20, 1.35F);
                     drawItemStack(ms, new ItemStack(IafItemRegistry.EARPLUGS), 170, 10, 2F);
                     drawItemStack(ms, new ItemStack(IafItemRegistry.SHINY_SCALES), 123, 75, 2.25F);
                 }
@@ -779,6 +789,8 @@ public class GuiBestiary extends Screen {
                     drawItemStack(ms, new ItemStack(IafItemRegistry.SEA_SERPENT_ARROW), 60, 33, 2F);
                 }
                 break;
+            default:
+                break;
         }
         writeFromTxt(ms);
     }
@@ -800,12 +812,10 @@ public class GuiBestiary extends Screen {
             }
         }
         try {
-            Iterator iterator = IOUtils.readLines(resource.getInputStream(), "UTF-8").iterator();
-            String line = null;
-            int linenumber = 0;
+            final List<String> lines = IOUtils.readLines(resource.getInputStream(), StandardCharsets.UTF_8);
             int zLevelAdd = 0;
-            while (iterator.hasNext()) {
-                line = ((String) iterator.next()).trim();
+            for (String line : lines) {
+                line = line.trim();
                 if (line.contains("<") || line.contains(">")) {
                     if (line.contains("<image>")) {
                         line = line.substring(8, line.length() - 1);
@@ -859,7 +869,7 @@ public class GuiBestiary extends Screen {
         }
     }
 
-    private Item getItemByRegistryName(String registryName) {
+    private static Item getItemByRegistryName(String registryName) {
         return ForgeRegistries.ITEMS.getValue(new ResourceLocation(registryName));
     }
 
@@ -899,11 +909,10 @@ public class GuiBestiary extends Screen {
             }
         }
         try {
-            Iterator iterator = IOUtils.readLines(resource.getInputStream(), "UTF-8").iterator();
-            String line = null;
+            final List<String> lines = IOUtils.readLines(resource.getInputStream(), "UTF-8");
             int linenumber = 0;
-            while (iterator.hasNext()) {
-                line = ((String) iterator.next()).trim();
+            for (String line : lines) {
+                line = line.trim();
                 if (line.contains("<") || line.contains(">")) {
                     continue;
                 }
@@ -948,7 +957,6 @@ public class GuiBestiary extends Screen {
         int cornerY = (height - Y) / 2;
         RenderSystem.pushMatrix();
         RenderSystem.translatef(cornerX, cornerY, 32.0F);
-        float zLevel = 200.0F;
         this.itemRenderer.zLevel = 200.0F;
         net.minecraft.client.gui.FontRenderer font = null;
         if (!stack.isEmpty()) font = stack.getItem().getFontRenderer(stack);
@@ -957,17 +965,17 @@ public class GuiBestiary extends Screen {
         this.itemRenderer.zLevel = -100;
         RenderSystem.depthMask(true);
         this.itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
-        zLevel = 0.0F;
         this.itemRenderer.zLevel = 0.0F;
         RenderSystem.popMatrix();
     }
 
     protected void renderItemModelIntoGUI(MatrixStack ms, ItemStack stack, int x, int y, IBakedModel bakedmodel, float scale) {
-        int i = (this.width - X) / 2;
-        int j = (this.height - Y) / 2;
         RenderSystem.pushMatrix();
-        this.getMinecraft().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
-        this.getMinecraft().getTextureManager().getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).setBlurMipmapDirect(false, false);
+        // PlayerContainer.LOCATION_BLOCKS_TEXTURE is equivalent to
+        // AtlasTexture.LOCATION_BLOCKS_TEXTURE, but the latter is deprecated
+        this.getMinecraft().getTextureManager().bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
+        this.getMinecraft().getTextureManager().getTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE)
+            .setBlurMipmapDirect(false, false);
         RenderSystem.enableRescaleNormal();
         RenderSystem.enableAlphaTest();
         RenderSystem.defaultAlphaFunc();
@@ -975,7 +983,7 @@ public class GuiBestiary extends Screen {
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.scalef(16.0F * scale, 16.0F * scale, 16.0F * scale);
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.translatef((float)x, (float)y , 100.0F + itemRenderer.zLevel);
+        RenderSystem.translatef(x, y , 100.0F + itemRenderer.zLevel);
         RenderSystem.scalef(1.0F, -1.0F, 1.0F);
         MatrixStack matrixstack = new MatrixStack();
         IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
@@ -1002,7 +1010,6 @@ public class GuiBestiary extends Screen {
         int cornerY = (height - Y) / 2;
         RenderSystem.pushMatrix();
         RenderSystem.translatef(cornerX, cornerY, 32.0F);
-        float zLevel = 200.0F;
         this.itemRenderer.zLevel = 200.0F;
         net.minecraft.client.gui.FontRenderer font = null;
         if (!stack.isEmpty()) font = stack.getItem().getFontRenderer(stack);
@@ -1010,7 +1017,6 @@ public class GuiBestiary extends Screen {
         GL11.glScalef(scale, scale, scale);
         this.itemRenderer.zLevel = -100 + zScale * 10;
         this.itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
-        zLevel = 0.0F;
         this.itemRenderer.zLevel = 0.0F;
         RenderSystem.popMatrix();
 

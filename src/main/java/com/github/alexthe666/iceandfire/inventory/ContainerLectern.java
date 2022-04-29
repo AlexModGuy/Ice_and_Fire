@@ -30,7 +30,7 @@ public class ContainerLectern extends Container {
 
 
     public ContainerLectern(int id, IInventory furnaceInventory, PlayerInventory playerInventory, IIntArray vars) {
-        super(IafContainerRegistry.IAF_LECTERN_CONTAINER, id);
+        super(IafContainerRegistry.IAF_LECTERN_CONTAINER.get(), id);
         this.tileFurnace = furnaceInventory;
         this.addSlot(new SlotLectern(playerInventory.player, furnaceInventory, 0, 15, 47) {
             @Override
@@ -140,6 +140,7 @@ public class ContainerLectern extends Container {
         return -1;
     }
 
+    @Override
     public boolean enchantItem(PlayerEntity playerIn, int id) {
         possiblePagesInt[0] = getPageField(0);
         possiblePagesInt[1] = getPageField(1);

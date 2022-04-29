@@ -13,6 +13,7 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -26,7 +27,7 @@ public class ContainerHippocampus extends Container {
     }
 
     public ContainerHippocampus(int id, IInventory ratInventory, PlayerInventory playerInventory, EntityHippocampus hippocampus) {
-        super(IafContainerRegistry.HIPPOCAMPUS_CONTAINER, id);
+        super(IafContainerRegistry.HIPPOCAMPUS_CONTAINER.get(), id);
         this.hippocampusInventory = ratInventory;
         if(hippocampus == null && IceAndFire.PROXY.getReferencedMob() instanceof EntityHippocampus){
             hippocampus = (EntityHippocampus)IceAndFire.PROXY.getReferencedMob();
@@ -37,32 +38,38 @@ public class ContainerHippocampus extends Container {
         hippocampusInventory.openInventory(player);
         int j = -18;
         this.addSlot(new Slot(hippocampusInventory, 0, 8, 18) {
+            @Override
             public boolean isItemValid(ItemStack stack) {
                 return stack.getItem() == Items.SADDLE && !this.getHasStack();
             }
 
+            @Override
             public void onSlotChanged() {
                 if (ContainerHippocampus.this.hippocampus != null) {
                     ContainerHippocampus.this.hippocampus.refreshInventory();
                 }
             }
 
+            @Override
             @OnlyIn(Dist.CLIENT)
             public boolean isEnabled() {
                 return true;
             }
         });
         this.addSlot(new Slot(hippocampusInventory, 1, 8, 36) {
+            @Override
             public boolean isItemValid(ItemStack stack) {
                 return stack.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !this.getHasStack();
             }
 
+            @Override
             public void onSlotChanged() {
                 if (ContainerHippocampus.this.hippocampus != null) {
                     ContainerHippocampus.this.hippocampus.refreshInventory();
                 }
             }
 
+            @Override
             @OnlyIn(Dist.CLIENT)
             public boolean isEnabled() {
                 return true;
@@ -70,20 +77,24 @@ public class ContainerHippocampus extends Container {
         });
         this.addSlot(new Slot(hippocampusInventory, 2, 8, 52) {
 
+            @Override
             public boolean isItemValid(ItemStack stack) {
                 return EntityHippocampus.getIntFromArmor(stack) != 0;
             }
 
+            @Override
             public void onSlotChanged() {
                 if (ContainerHippocampus.this.hippocampus != null) {
                     ContainerHippocampus.this.hippocampus.refreshInventory();
                 }
             }
 
+            @Override
             public int getSlotStackLimit() {
                 return 1;
             }
 
+            @Override
             @OnlyIn(Dist.CLIENT)
             public boolean isEnabled() {
                 return true;
@@ -93,11 +104,13 @@ public class ContainerHippocampus extends Container {
         for (int k = 0; k < 3; ++k) {
             for (int l = 0; l < 5; ++l) {
                 this.addSlot(new Slot(hippocampusInventory, 3 + l + k * 5, 80 + l * 18, 18 + k * 18) {
+                    @Override
                     @OnlyIn(Dist.CLIENT)
                     public boolean isEnabled() {
                         return ContainerHippocampus.this.hippocampus != null && ContainerHippocampus.this.hippocampus.isChested();
                     }
 
+                    @Override
                     public boolean isItemValid(ItemStack stack) {
                         return ContainerHippocampus.this.hippocampus != null && ContainerHippocampus.this.hippocampus.isChested();
                     }
@@ -154,10 +167,12 @@ public class ContainerHippocampus extends Container {
         return itemstack;
     }
 
+    @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
         return this.hippocampusInventory.isUsableByPlayer(playerIn) && this.hippocampus.isAlive() && this.hippocampus.getDistance(playerIn) < 8.0F;
     }
 
+    @Override
     public void onContainerClosed(PlayerEntity playerIn) {
         super.onContainerClosed(playerIn);
         this.hippocampusInventory.closeInventory(playerIn);
