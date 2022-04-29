@@ -82,6 +82,8 @@ public class IceAndFire {
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
         PROXY.init();
         IafWorldRegistry.register();
+        
+        IafEntityRegistry.ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     @SubscribeEvent
