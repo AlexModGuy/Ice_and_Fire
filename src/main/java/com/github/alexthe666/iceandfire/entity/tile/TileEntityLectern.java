@@ -67,7 +67,7 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
     private NonNullList<ItemStack> stacks = NonNullList.withSize(3, ItemStack.EMPTY);
 
     public TileEntityLectern() {
-        super(IafTileEntityRegistry.IAF_LECTERN);
+        super(IafTileEntityRegistry.IAF_LECTERN.get());
     }
 
     @Override
@@ -248,6 +248,7 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
         this.stacks.clear();
     }
 
+    @Override
     public ITextComponent getName() {
         return new TranslationTextComponent("block.iceandfire.lectern");
     }
@@ -291,6 +292,7 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
         read(this.getBlockState(), packet.getNbtCompound());
     }
 
+    @Override
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
     }

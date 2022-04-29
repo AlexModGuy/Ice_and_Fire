@@ -36,7 +36,7 @@ public class TileEntityPixieHouse extends TileEntity implements ITickableTileEnt
     private Random rand;
 
     public TileEntityPixieHouse() {
-        super(IafTileEntityRegistry.PIXIE_HOUSE);
+        super(IafTileEntityRegistry.PIXIE_HOUSE.get());
         this.rand = new Random();
     }
 
@@ -62,6 +62,7 @@ public class TileEntityPixieHouse extends TileEntity implements ITickableTileEnt
         return 0;
     }
 
+    @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
         compound.putInt("HouseType", houseType);
@@ -88,10 +89,12 @@ public class TileEntityPixieHouse extends TileEntity implements ITickableTileEnt
         }
     }
 
+    @Override
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
     }
 
+    @Override
     public void read(BlockState state, CompoundNBT compound) {
         houseType = compound.getInt("HouseType");
         hasPixie = compound.getBoolean("HasPixie");
@@ -112,7 +115,7 @@ public class TileEntityPixieHouse extends TileEntity implements ITickableTileEnt
             releasePixie();
         }
         if (this.world.isRemote && this.hasPixie) {
-            IceAndFire.PROXY.spawnParticle("if_pixie", this.pos.getX() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, this.pos.getY() + (double) (this.rand.nextFloat() * PARTICLE_HEIGHT), this.pos.getZ() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, EntityPixie.PARTICLE_RGB[this.pixieType][0], EntityPixie.PARTICLE_RGB[this.pixieType][1], EntityPixie.PARTICLE_RGB[this.pixieType][2]);
+            IceAndFire.PROXY.spawnParticle("if_pixie", this.pos.getX() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH, this.pos.getY() + (double) (this.rand.nextFloat() * PARTICLE_HEIGHT), this.pos.getZ() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH, EntityPixie.PARTICLE_RGB[this.pixieType][0], EntityPixie.PARTICLE_RGB[this.pixieType][1], EntityPixie.PARTICLE_RGB[this.pixieType][2]);
         }
     }
 

@@ -8,6 +8,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -17,9 +18,10 @@ public class TileEntityDreadPortal extends TileEntity implements ITickableTileEn
     private boolean exactTeleport;
 
     public TileEntityDreadPortal() {
-        super(IafTileEntityRegistry.DREAD_PORTAL);
+        super(IafTileEntityRegistry.DREAD_PORTAL.get());
     }
 
+    @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
         compound.putLong("Age", this.age);
@@ -35,6 +37,7 @@ public class TileEntityDreadPortal extends TileEntity implements ITickableTileEn
         return compound;
     }
 
+    @Override
     public void read(BlockState state, CompoundNBT compound) {
         super.read(state, compound);
         this.age = compound.getLong("Age");
@@ -46,11 +49,13 @@ public class TileEntityDreadPortal extends TileEntity implements ITickableTileEn
         this.exactTeleport = compound.getBoolean("ExactTeleport");
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public double getMaxRenderDistanceSquared() {
         return 65536.0D;
     }
 
+    @Override
     public void tick() {
         ++this.age;
     }
@@ -65,6 +70,7 @@ public class TileEntityDreadPortal extends TileEntity implements ITickableTileEn
         read(this.getBlockState(), packet.getNbtCompound());
     }
 
+    @Override
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
     }

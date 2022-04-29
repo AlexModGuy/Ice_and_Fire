@@ -26,7 +26,7 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
     private TileEntityDragonforge core = null;
 
     public TileEntityDragonforgeInput() {
-        super(IafTileEntityRegistry.DRAGONFORGE_INPUT);
+        super(IafTileEntityRegistry.DRAGONFORGE_INPUT.get());
     }
 
     public void onHitWithFlame() {
@@ -66,6 +66,7 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
         read(this.getBlockState(), packet.getNbtCompound());
     }
 
+    @Override
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
     }

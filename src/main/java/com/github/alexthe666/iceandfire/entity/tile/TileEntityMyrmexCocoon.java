@@ -26,13 +26,15 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
     private NonNullList<ItemStack> chestContents = NonNullList.withSize(18, ItemStack.EMPTY);
 
     public TileEntityMyrmexCocoon() {
-        super(IafTileEntityRegistry.MYRMEX_COCOON);
+        super(IafTileEntityRegistry.MYRMEX_COCOON.get());
     }
 
+    @Override
     public int getSizeInventory() {
         return 18;
     }
 
+    @Override
     public boolean isEmpty() {
         for (ItemStack itemstack : this.chestContents) {
             if (!itemstack.isEmpty()) {
@@ -43,6 +45,7 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
     }
 
 
+    @Override
     public void read(BlockState bs, CompoundNBT compound) {
         super.read(bs, compound);
         this.chestContents = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
@@ -52,6 +55,7 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
         }
     }
 
+    @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
         if (!this.checkLootAndWrite(compound)) {
@@ -78,11 +82,13 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
     }
 
 
+    @Override
     public int getInventoryStackLimit() {
         return 64;
     }
 
 
+    @Override
     protected NonNullList<ItemStack> getItems() {
         return this.chestContents;
     }
@@ -92,11 +98,13 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
     }
 
+    @Override
     public void openInventory(PlayerEntity player) {
         this.fillWithLoot(null);
         player.world.playSound(this.pos.getX(), this.pos.getY(), this.pos.getZ(), SoundEvents.ENTITY_SLIME_JUMP, SoundCategory.BLOCKS, 1, 1, false);
     }
 
+    @Override
     public void closeInventory(PlayerEntity player) {
         this.fillWithLoot(null);
         player.world.playSound(this.pos.getX(), this.pos.getY(), this.pos.getZ(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.BLOCKS, 1, 1, false);
@@ -112,6 +120,7 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
         read(this.getBlockState(), packet.getNbtCompound());
     }
 
+    @Override
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
     }

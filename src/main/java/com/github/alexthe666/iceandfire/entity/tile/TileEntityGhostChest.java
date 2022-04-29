@@ -16,17 +16,20 @@ import net.minecraft.world.server.ServerWorld;
 public class TileEntityGhostChest extends ChestTileEntity {
 
     public TileEntityGhostChest() {
-        super(IafTileEntityRegistry.GHOST_CHEST);
+        super(IafTileEntityRegistry.GHOST_CHEST.get());
     }
 
+    @Override
     public void read(BlockState state, CompoundNBT nbt) {
         super.read(state, nbt);
     }
 
+    @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
         return compound;
     }
+    @Override
     public void openInventory(PlayerEntity player) {
         super.openInventory(player);
         if(this.world.getDifficulty() != Difficulty.PEACEFUL){
@@ -47,6 +50,7 @@ public class TileEntityGhostChest extends ChestTileEntity {
         }
     }
 
+    @Override
     protected void onOpenOrClose() {
         super.onOpenOrClose();
         this.world.notifyNeighborsOfStateChange(this.pos.down(), this.getBlockState().getBlock());

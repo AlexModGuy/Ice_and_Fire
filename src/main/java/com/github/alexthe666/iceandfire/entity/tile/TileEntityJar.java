@@ -45,17 +45,18 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
     private Random rand;
 
     public TileEntityJar() {
-        super(IafTileEntityRegistry.PIXIE_JAR);
+        super(IafTileEntityRegistry.PIXIE_JAR.get());
         this.rand = new Random();
         this.hasPixie = true;
     }
 
     public TileEntityJar(boolean empty) {
-        super(IafTileEntityRegistry.PIXIE_JAR);
+        super(IafTileEntityRegistry.PIXIE_JAR.get());
         this.rand = new Random();
         this.hasPixie = !empty;
     }
 
+    @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
         compound.putBoolean("HasPixie", hasPixie);
@@ -83,10 +84,12 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
         }
     }
 
+    @Override
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
     }
 
+    @Override
     public void read(BlockState state, CompoundNBT compound) {
         hasPixie = compound.getBoolean("HasPixie");
         pixieType = compound.getInt("PixieType");
@@ -105,7 +108,7 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
     public void tick() {
         ticksExisted++;
         if (this.world.isRemote && this.hasPixie) {
-            IceAndFire.PROXY.spawnParticle("if_pixie", this.pos.getX() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, this.pos.getY() + (double) (this.rand.nextFloat() * PARTICLE_HEIGHT), this.pos.getZ() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, EntityPixie.PARTICLE_RGB[this.pixieType][0], EntityPixie.PARTICLE_RGB[this.pixieType][1], EntityPixie.PARTICLE_RGB[this.pixieType][2]);
+            IceAndFire.PROXY.spawnParticle("if_pixie", this.pos.getX() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH, this.pos.getY() + (double) (this.rand.nextFloat() * PARTICLE_HEIGHT), this.pos.getZ() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH, EntityPixie.PARTICLE_RGB[this.pixieType][0], EntityPixie.PARTICLE_RGB[this.pixieType][1], EntityPixie.PARTICLE_RGB[this.pixieType][2]);
         }
         if (ticksExisted % 24000 == 0 && !this.hasProduced && this.hasPixie) {
             this.hasProduced = true;
