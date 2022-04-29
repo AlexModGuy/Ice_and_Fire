@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 
+import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -117,7 +118,7 @@ public class EntityDreadLichSkull extends AbstractArrowEntity {
         double z = this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth();
         float f = (this.getWidth() + this.getHeight() + this.getWidth()) * 0.333F + 0.5F;
         if (particleDistSq(x, y, z) < f * f) {
-            IceAndFire.PROXY.spawnParticle("dread_torch", x, y + 0.5D, z, d0, d1, d2);
+            IceAndFire.PROXY.spawnParticle(EnumParticles.Dread_Torch, x, y + 0.5D, z, d0, d1, d2);
         }
         super.tick();
     }
