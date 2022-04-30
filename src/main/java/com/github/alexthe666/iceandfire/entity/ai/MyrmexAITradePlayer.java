@@ -7,8 +7,6 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class MyrmexAITradePlayer extends Goal {
     private final EntityMyrmexBase myrmex;
 
@@ -20,6 +18,7 @@ public class MyrmexAITradePlayer extends Goal {
     /**
      * Returns whether the Goal should begin execution.
      */
+    @Override
     public boolean shouldExecute() {
         if (!this.myrmex.isAlive()) {
             return false;
@@ -45,6 +44,7 @@ public class MyrmexAITradePlayer extends Goal {
         }
     }
 
+    @Override
     public void tick() {
         this.myrmex.getNavigator().clearPath();
     }
@@ -52,6 +52,7 @@ public class MyrmexAITradePlayer extends Goal {
     /**
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
+    @Override
     public void resetTask() {
         this.myrmex.setCustomer(null);
     }

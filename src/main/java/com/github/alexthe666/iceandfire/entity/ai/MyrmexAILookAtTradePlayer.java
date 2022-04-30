@@ -13,6 +13,7 @@ public class MyrmexAILookAtTradePlayer extends LookAtGoal {
         this.myrmex = myrmex;
     }
 
+    @Override
     public boolean shouldExecute() {
         if (this.myrmex.hasCustomer() && this.myrmex.getHive() != null) {
             if (!this.myrmex.getHive().isPlayerReputationTooLowToTrade(this.myrmex.getCustomer().getUniqueID())) {

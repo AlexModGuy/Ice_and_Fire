@@ -3,11 +3,9 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-
-import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSentinel;
-import com.google.common.base.Predicate;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -15,8 +13,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.gen.Heightmap;
-
-import net.minecraft.entity.ai.goal.Goal.Flag;
 
 public class MyrmexAIFindHidingSpot extends Goal {
     private static final int RADIUS = 32;
@@ -31,8 +27,8 @@ public class MyrmexAIFindHidingSpot extends Goal {
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(myrmex);
         this.targetEntitySelector = new Predicate<Entity>() {
             @Override
-            public boolean apply(@Nullable Entity myrmex) {
-                return myrmex != null && myrmex instanceof EntityMyrmexSentinel;
+            public boolean test(Entity myrmex) {
+                return myrmex instanceof EntityMyrmexSentinel;
             }
         };
         this.myrmex = myrmex;
@@ -69,6 +65,7 @@ public class MyrmexAIFindHidingSpot extends Goal {
 
     }
 
+    @Override
     public void resetTask() {
         this.targetBlock = null;
         wanderRadius = RADIUS;

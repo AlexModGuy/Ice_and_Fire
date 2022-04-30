@@ -13,6 +13,7 @@ public class MyrmexAIWander extends WaterAvoidingRandomWalkingGoal {
         this.myrmex = myrmex;
     }
 
+    @Override
     public boolean shouldExecute() {
         return myrmex.canMove() && myrmex.shouldWander() && super.shouldExecute();
     }
