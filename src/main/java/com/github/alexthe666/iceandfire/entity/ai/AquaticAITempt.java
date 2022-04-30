@@ -11,8 +11,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class AquaticAITempt extends Goal {
     private final MobEntity temptedEntity;
     private final double speed;
@@ -42,6 +40,7 @@ public class AquaticAITempt extends Goal {
     /**
      * Returns whether the Goal should begin execution.
      */
+    @Override
     public boolean shouldExecute() {
         if (this.delayTemptCounter > 0) {
             --this.delayTemptCounter;
@@ -64,6 +63,7 @@ public class AquaticAITempt extends Goal {
     /**
      * Returns whether an in-progress Goal should continue executing
      */
+    @Override
     public boolean shouldContinueExecuting() {
         if (this.scaredByPlayerMovement) {
             if (this.temptedEntity.getDistanceSq(this.temptingPlayer) < 36.0D) {
@@ -71,7 +71,8 @@ public class AquaticAITempt extends Goal {
                     return false;
                 }
 
-                if (Math.abs((double) this.temptingPlayer.rotationPitch - this.pitch) > 5.0D || Math.abs((double) this.temptingPlayer.rotationYaw - this.yaw) > 5.0D) {
+                if (Math.abs(this.temptingPlayer.rotationPitch - this.pitch) > 5.0D
+                    || Math.abs(this.temptingPlayer.rotationYaw - this.yaw) > 5.0D) {
                     return false;
                 }
             } else {
@@ -90,6 +91,7 @@ public class AquaticAITempt extends Goal {
     /**
      * Execute a one shot task or start executing a continuous task
      */
+    @Override
     public void startExecuting() {
         this.targetX = this.temptingPlayer.getPosX();
         this.targetY = this.temptingPlayer.getPosY();
@@ -100,6 +102,7 @@ public class AquaticAITempt extends Goal {
     /**
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
+    @Override
     public void resetTask() {
         this.temptingPlayer = null;
         this.temptedEntity.getNavigator().clearPath();
@@ -110,8 +113,10 @@ public class AquaticAITempt extends Goal {
     /**
      * Keep ticking a continuous task that has already been started
      */
+    @Override
     public void tick() {
-        this.temptedEntity.getLookController().setLookPositionWithEntity(this.temptingPlayer, (float) (this.temptedEntity.getHorizontalFaceSpeed() + 20), (float) this.temptedEntity.getVerticalFaceSpeed());
+        this.temptedEntity.getLookController().setLookPositionWithEntity(this.temptingPlayer,
+            this.temptedEntity.getHorizontalFaceSpeed() + 20, this.temptedEntity.getVerticalFaceSpeed());
 
         if (this.temptedEntity.getDistanceSq(this.temptingPlayer) < 6.25D) {
             this.temptedEntity.getNavigator().clearPath();
