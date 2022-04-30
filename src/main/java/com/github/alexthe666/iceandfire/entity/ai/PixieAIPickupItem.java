@@ -4,12 +4,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import com.google.common.base.Predicate;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -19,8 +19,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
-
-import net.minecraft.entity.ai.goal.Goal.Flag;
 
 public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
@@ -41,9 +39,11 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
 
         this.targetEntitySelector = new Predicate<ItemEntity>() {
             @Override
-            public boolean apply(@Nullable ItemEntity item) {
+            public boolean test(ItemEntity item) {
 
-                return item != null && !item.getItem().isEmpty() && (item.getItem().getItem() == Items.CAKE && !creature.isTamed() || item.getItem().getItem() == Items.SUGAR && creature.isTamed() && creature.getHealth() < creature.getMaxHealth());
+                return !item.getItem().isEmpty() && (item.getItem().getItem() == Items.CAKE && !creature.isTamed()
+                    || item.getItem().getItem() == Items.SUGAR && creature.isTamed()
+                        && creature.getHealth() < creature.getMaxHealth());
             }
         };
         this.setMutexFlags(EnumSet.of(Flag.TARGET));
@@ -85,11 +85,9 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
     @Override
     public void tick() {
         super.tick();
-        if (this.targetEntity == null || this.targetEntity != null && !this.targetEntity.isAlive()) {
+        if (this.targetEntity == null || !this.targetEntity.isAlive()) {
             this.resetTask();
-        }
-
-        if (this.targetEntity != null && this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
+        } else if (this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
             EntityPixie pixie = (EntityPixie) this.goalOwner;
             if (this.targetEntity.getItem() != null && this.targetEntity.getItem().getItem() != null && this.targetEntity.getItem().getItem() == Items.SUGAR) {
                 pixie.heal(5);
@@ -125,6 +123,7 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
             this.theEntity = theEntityIn;
         }
 
+        @Override
         public int compare(Entity p_compare_1_, Entity p_compare_2_) {
             double d0 = this.theEntity.getDistanceSq(p_compare_1_);
             double d1 = this.theEntity.getDistanceSq(p_compare_2_);

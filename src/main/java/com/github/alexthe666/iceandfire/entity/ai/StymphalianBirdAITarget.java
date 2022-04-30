@@ -38,6 +38,7 @@ public class StymphalianBirdAITarget extends NearestAttackableTargetGoal<LivingE
         return supe && nearestTarget != null && !nearestTarget.getClass().equals(this.bird.getClass());
     }
 
+    @Override
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
         return this.bird.getBoundingBox().grow(targetDistance, targetDistance, targetDistance);
     }

@@ -11,8 +11,6 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class SeaSerpentAIAttackMelee extends Goal {
     protected final int attackInterval = 20;
     protected EntitySeaSerpent attacker;
@@ -51,6 +49,7 @@ public class SeaSerpentAIAttackMelee extends Goal {
     /**
      * Returns whether the Goal should begin execution.
      */
+    @Override
     public boolean shouldExecute() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
 
@@ -81,6 +80,7 @@ public class SeaSerpentAIAttackMelee extends Goal {
     /**
      * Returns whether an in-progress Goal should continue executing
      */
+    @Override
     public boolean shouldContinueExecuting() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
 
@@ -97,6 +97,7 @@ public class SeaSerpentAIAttackMelee extends Goal {
         }
     }
 
+    @Override
     public void startExecuting() {
         if (attacker.isInWater()) {
             this.attacker.getMoveHelper().setMoveTo(this.targetX, this.targetY, this.targetZ, 0.1F);
@@ -109,6 +110,7 @@ public class SeaSerpentAIAttackMelee extends Goal {
     /**
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
+    @Override
     public void resetTask() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
 
@@ -119,6 +121,7 @@ public class SeaSerpentAIAttackMelee extends Goal {
         this.attacker.getNavigator().clearPath();
     }
 
+    @Override
     public void tick() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
         if (LivingEntity != null) {
@@ -159,12 +162,11 @@ public class SeaSerpentAIAttackMelee extends Goal {
                 }
             }
             this.attackTick = Math.max(this.attackTick - 1, 0);
-            this.checkAndPerformAttack(LivingEntity, d0);
+            this.checkAndPerformAttack(LivingEntity);
         }
     }
 
-    protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
-        double d0 = this.getAttackReachSqr(enemy);
+    protected void checkAndPerformAttack(LivingEntity enemy) {
         if (this.attacker.isTouchingMob(enemy)) {
             this.attackTick = 20;
             this.attacker.swingArm(Hand.MAIN_HAND);
