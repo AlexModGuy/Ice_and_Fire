@@ -22,9 +22,12 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.gen.feature.Feature;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -88,11 +91,13 @@ public class IceAndFire {
         IafContainerRegistry.CONTAINERS.register(modBus);
         IafEntityRegistry.ENTITIES.register(modBus);
         IafTileEntityRegistry.TYPES.register(modBus);
+        IafWorldRegistry.FEATURES.register(modBus);
 
         modBus.addListener(this::setup);
         modBus.addListener(this::setupClient);
         modBus.addListener(this::setupComplete);
-        modBus.addListener((final FMLCommonSetupEvent event) -> IafWorldRegistry.register());
+        modBus.addGenericListener(Feature.class, EventPriority.LOW,
+            (final RegistryEvent.Register<Feature<?>> event) -> IafWorldRegistry.registerConfiguredFeatures());
     }
 
     @SubscribeEvent
