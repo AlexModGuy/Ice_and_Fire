@@ -100,7 +100,7 @@ public enum EnumBestiaryPages {
         boolean flag = false;
         if (book.getItem() instanceof ItemBestiary) {
             CompoundNBT tag = book.getTag();
-            final List<Integer> already = Ints.asList(tag.getIntArray("Pages"));
+            final List<Integer> already = new ArrayList<>(Ints.asList(tag.getIntArray("Pages")));
             if (!already.contains(page.ordinal())) {
                 already.add(page.ordinal());
                 flag = true;
