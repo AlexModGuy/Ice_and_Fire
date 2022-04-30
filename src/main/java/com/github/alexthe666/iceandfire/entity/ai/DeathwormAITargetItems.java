@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
@@ -37,7 +36,7 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
 
             @Override
             public boolean test(ItemEntity item) {
-                return !item.getItem().isEmpty() && item.getItem().getItem() == Blocks.TNT.asItem();
+                return item != null && !item.getItem().isEmpty() && item.getItem().getItem() == Blocks.TNT.asItem();
             }
         };
         this.setMutexFlags(EnumSet.of(Flag.TARGET));
