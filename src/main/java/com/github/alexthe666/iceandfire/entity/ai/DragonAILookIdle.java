@@ -6,8 +6,6 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 
 import net.minecraft.entity.ai.goal.Goal;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class DragonAILookIdle extends Goal {
     private EntityDragonBase dragon;
     private double lookX;

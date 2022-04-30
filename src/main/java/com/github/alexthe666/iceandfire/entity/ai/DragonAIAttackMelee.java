@@ -3,21 +3,16 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import java.util.EnumSet;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
-import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-
-import net.minecraft.entity.ai.goal.Goal.Flag;
 
 public class DragonAIAttackMelee extends Goal {
     protected EntityDragonBase dragon;
     private int attackTick;
-    private double speedTowardsTarget;
     private boolean longMemory;
     private int delayCounter;
     private double targetX;
@@ -25,14 +20,12 @@ public class DragonAIAttackMelee extends Goal {
     private double targetZ;
     private int failedPathFindingPenalty = 0;
     private boolean canPenalize = false;
-    private PathResult attackPath;
-    private AdvancedPathNavigate pathNavigate;
-    private BlockPos lastTargetPosition;
+    private double speedTowardsTarget;
 
     public DragonAIAttackMelee(EntityDragonBase dragon, double speedIn, boolean useLongMemory) {
         this.dragon = dragon;
-        this.speedTowardsTarget = speedIn;
         this.longMemory = useLongMemory;
+        this.speedTowardsTarget = speedIn;
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
@@ -49,7 +42,7 @@ public class DragonAIAttackMelee extends Goal {
         } else if (!dragon.canMove() || dragon.isHovering() || dragon.isFlying()) {
             return false;
         } else {
-            attackPath = ((AdvancedPathNavigate) this.dragon.getNavigator()).moveToLivingEntity(livingEntity, speedTowardsTarget);
+            ((AdvancedPathNavigate) this.dragon.getNavigator()).moveToLivingEntity(livingEntity, speedTowardsTarget);
             return true;
         }
     }
@@ -89,13 +82,13 @@ public class DragonAIAttackMelee extends Goal {
             delayCounter--;
         }
         if (entity != null) {
-            double resetDist = 10;
-            attackPath = ((AdvancedPathNavigate) this.dragon.getNavigator()).moveToLivingEntity(entity, speedTowardsTarget);
-
             if (dragon.getAnimation() == EntityDragonBase.ANIMATION_SHAKEPREY) {
                 this.resetTask();
                 return;
             }
+
+            ((AdvancedPathNavigate) this.dragon.getNavigator()).moveToLivingEntity(entity, speedTowardsTarget);
+
             double d0 = this.dragon.getDistanceSq(entity.getPosX(), entity.getBoundingBox().minY, entity.getPosZ());
             double d1 = this.getAttackReachSqr(entity);
             --this.delayCounter;
