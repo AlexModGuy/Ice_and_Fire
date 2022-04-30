@@ -5,7 +5,20 @@ import javax.annotation.Nullable;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIAttackMelee;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIAttackPlayers;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIDefendHive;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIForage;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIForageForItems;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAILeaveHive;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAILookAtTradePlayer;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIMoveThroughHive;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIPickupBabies;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIReEnterHive;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIStoreBabies;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIStoreItems;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAITradePlayer;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIWander;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexTrades;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
@@ -18,7 +31,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
@@ -36,9 +53,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     public static final Animation ANIMATION_BITE = Animation.create(15);
@@ -49,10 +63,11 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     private static final ResourceLocation TEXTURE_JUNGLE = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_worker.png");
     public boolean keepSearching = true;
 
-    public EntityMyrmexWorker(EntityType t, World worldIn) {
+    public EntityMyrmexWorker(EntityType<?> t, World worldIn) {
         super(t, worldIn);
     }
 
+    @Override
     @Nullable
     protected ResourceLocation getLootTable() {
         return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
@@ -60,14 +75,17 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
 
 
+    @Override
     protected int getExperiencePoints(PlayerEntity player) {
         return 3;
     }
 
+    @Override
     public boolean isSmallerThanBlock(){
         return true;
     }
 
+    @Override
     public void livingTick() {
         super.livingTick();
         /*if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
@@ -93,7 +111,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
                 if (tag != null) {
                     metadata = tag.getInt("EggOrdinal");
                 }
-                EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG, world);
+                EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG.get(), world);
                 egg.copyLocationAndAnglesFrom(this);
                 egg.setJungle(isJungle);
                 egg.setMyrmexCaste(metadata);
@@ -113,6 +131,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         }
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(0, new MyrmexAITradePlayer(this));
@@ -133,6 +152,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         this.targetSelector.addGoal(4, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(4, new MyrmexAIAttackPlayers(this));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, true, new Predicate<LivingEntity>() {
+            @Override
             public boolean apply(@Nullable LivingEntity entity) {
                 return EntityMyrmexWorker.this.getHeldItemMainhand().isEmpty() && entity != null && !EntityMyrmexBase.haveSameHive(EntityMyrmexWorker.this, entity) && DragonUtils.isAlive(entity) && !(entity instanceof IMob);
             }
@@ -141,6 +161,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     }
 
+    @Override
     public boolean shouldWander() {
         return super.shouldWander() && this.canSeeSky();
     }
@@ -179,14 +200,17 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         return 0.6F;
     }
 
+    @Override
     public boolean shouldLeaveHive() {
         return !holdingSomething();
     }
 
+    @Override
     public boolean shouldEnterHive() {
         return holdingSomething() || !world.isDaytime();
     }
 
+    @Override
     public boolean shouldMoveThroughHive() {
         return !shouldLeaveHive() && !holdingSomething();
     }
@@ -244,6 +268,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         return new Animation[]{ANIMATION_PUPA_WIGGLE, ANIMATION_BITE, ANIMATION_STING};
     }
 
+    @Override
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
@@ -256,6 +281,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         }
     }
 
+    @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (amount >= 1.0D && !this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(Hand.MAIN_HAND) != ItemStack.EMPTY) {
             this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0);

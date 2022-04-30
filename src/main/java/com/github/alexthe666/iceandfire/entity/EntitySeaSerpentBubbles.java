@@ -18,18 +18,18 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements IDragonProjectile {
 
-    private int ticksInAir;
-
-    public EntitySeaSerpentBubbles(EntityType t, World worldIn) {
+    public EntitySeaSerpentBubbles(EntityType<? extends AbstractFireballEntity> t, World worldIn) {
         super(t, worldIn);
     }
 
-    public EntitySeaSerpentBubbles(EntityType t, World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
+    public EntitySeaSerpentBubbles(EntityType<? extends AbstractFireballEntity> t, World worldIn, double posX,
+        double posY, double posZ, double accelX, double accelY, double accelZ) {
         super(t, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
     }
 
@@ -40,7 +40,7 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
 
 
     public EntitySeaSerpentBubbles(FMLPlayMessages.SpawnEntity spawnEntity, World world) {
-        this(IafEntityRegistry.SEA_SERPENT_BUBBLES, world);
+        this(IafEntityRegistry.SEA_SERPENT_BUBBLES.get(), world);
     }
 
     @Override
@@ -48,7 +48,8 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
-    public EntitySeaSerpentBubbles(EntityType t, World worldIn, EntitySeaSerpent shooter, double accelX, double accelY, double accelZ) {
+    public EntitySeaSerpentBubbles(EntityType<? extends AbstractFireballEntity> t, World worldIn,
+        EntitySeaSerpent shooter, double accelX, double accelY, double accelZ) {
         super(t, shooter, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.1D;
@@ -56,10 +57,12 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
         this.accelerationZ = accelZ / d0 * 0.1D;
     }
 
+    @Override
     protected boolean isFireballFiery() {
         return false;
     }
 
+    @Override
     public void tick() {
         super.tick();
         Entity shootingEntity = this.getShooter();
@@ -74,7 +77,6 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
 
         if (this.world.isRemote || (shootingEntity == null || !shootingEntity.isAlive()) && this.world.isBlockLoaded(this.getPosition())) {
             if (this.world.isRemote || (shootingEntity == null || !shootingEntity.removed) && this.world.isBlockLoaded(this.getPosition())) {
-                ++this.ticksInAir;
                 RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
                 if (raytraceresult.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                     this.onImpact(raytraceresult);
@@ -92,12 +94,11 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
                     }
                 }
 
-                this.setMotion(Vector3d.add(this.accelerationX, this.accelerationY, this.accelerationZ).scale((double)f));
+                this.setMotion(Vector3d.add(this.accelerationX, this.accelerationY, this.accelerationZ).scale(f));
                 this.setPosition(d0, d1, d2);
             } else {
                 this.remove();
             }
-            ++this.ticksInAir;
             Vector3d Vector3d = this.getMotion();
             RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
 
@@ -109,8 +110,8 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
             double d1 = this.getPosY() + Vector3d.y;
             double d2 = this.getPosZ() + Vector3d.z;
             float f = MathHelper.sqrt(horizontalMag(Vector3d));
-            this.rotationYaw = (float) (MathHelper.atan2(Vector3d.x, Vector3d.z) * (double) (180F / (float) Math.PI));
-            for (this.rotationPitch = (float) (MathHelper.atan2(Vector3d.y, f) * (double) (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
+            this.rotationYaw = (float) (MathHelper.atan2(Vector3d.x, Vector3d.z) * (180F / (float) Math.PI));
+            for (this.rotationPitch = (float) (MathHelper.atan2(Vector3d.y, f) * (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
             }
             while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
                 this.prevRotationPitch += 360.0F;
@@ -126,8 +127,6 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
 
             this.rotationPitch = MathHelper.lerp(0.2F, this.prevRotationPitch, this.rotationPitch);
             this.rotationYaw = MathHelper.lerp(0.2F, this.prevRotationYaw, this.rotationYaw);
-            float f1 = 0.99F;
-            float f2 = 0.06F;
             this.setPosition(d0, d1, d2);
             this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
         }
@@ -137,6 +136,7 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
         }
     }
 
+    @Override
     protected boolean func_230298_a_(Entity entityIn) {
         return super.func_230298_a_(entityIn) && !(entityIn instanceof EntityMutlipartPart) && !(entityIn instanceof EntitySeaSerpentBubbles);
     }
@@ -164,6 +164,7 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
         return true;
     }
 
+    @Override
     protected IParticleData getParticle() {
         return ParticleTypes.BUBBLE;
     }
@@ -173,6 +174,7 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
         return false;
     }
 
+    @Override
     public float getCollisionBorderSize() {
         return 0F;
     }
@@ -184,7 +186,7 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
             if (movingObject.getType() == RayTraceResult.Type.ENTITY) {
                 Entity entity = ((EntityRayTraceResult) movingObject).getEntity();
 
-                if (entity != null && entity instanceof EntitSlowPart) {
+                if (entity != null && entity instanceof EntitySlowPart) {
                     return;
                 }
                 Entity shootingEntity = this.getShooter();

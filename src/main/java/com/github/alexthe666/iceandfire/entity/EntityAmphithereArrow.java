@@ -15,6 +15,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.FMLPlayMessages;
@@ -22,19 +23,20 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityAmphithereArrow extends AbstractArrowEntity {
 
-    public EntityAmphithereArrow(EntityType type, World worldIn) {
+    public EntityAmphithereArrow(EntityType<? extends AbstractArrowEntity> type, World worldIn) {
         super(type, worldIn);
         this.setDamage(2.5F);
     }
 
-    public EntityAmphithereArrow(EntityType type, World worldIn, double x, double y, double z) {
+    public EntityAmphithereArrow(EntityType<? extends AbstractArrowEntity> type, World worldIn, double x, double y,
+        double z) {
         this(type, worldIn);
         this.setPosition(x, y, z);
         this.setDamage(2.5F);
     }
 
     public EntityAmphithereArrow(FMLPlayMessages.SpawnEntity spawnEntity, World world) {
-        this(IafEntityRegistry.AMPHITHERE_ARROW, world);
+        this(IafEntityRegistry.AMPHITHERE_ARROW.get(), world);
     }
 
     public EntityAmphithereArrow(EntityType type, LivingEntity shooter, World worldIn) {
@@ -48,6 +50,7 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
+    @Override
     public void tick() {
         super.tick();
         if ((ticksExisted == 1 || this.ticksExisted % 70 == 0) && !this.inGround && !this.onGround) {
@@ -60,11 +63,12 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
             double d3 = 10.0D;
             double xRatio = this.getMotion().x * this.getWidth();
             double zRatio = this.getMotion().z * this.getWidth();
-            this.world.addParticle(ParticleTypes.CLOUD, this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d2 * 10.0D, d0, d1, d2);
+            this.world.addParticle(ParticleTypes.CLOUD, this.getPosX() + xRatio + this.rand.nextFloat() * this.getWidth() * 1.0F - this.getWidth() - d0 * 10.0D, this.getPosY() + this.rand.nextFloat() * this.getHeight() - d1 * 10.0D, this.getPosZ() + zRatio + this.rand.nextFloat() * this.getWidth() * 1.0F - this.getWidth() - d2 * 10.0D, d0, d1, d2);
 
         }
     }
 
+    @Override
     protected void arrowHit(LivingEntity living) {
         if (living instanceof PlayerEntity) {
             this.damageShield((PlayerEntity) living, (float) this.getDamage());
@@ -74,7 +78,7 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
         double zRatio = this.getMotion().z;
         float strength = -1.4F;
         float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
-        living.setMotion(living.getMotion().mul(0.5D, 1, 0.5D).subtract(xRatio / (double) f * (double) strength, 0, zRatio / (double) f * (double) strength).add(0, 0.6, 0));
+        living.setMotion(living.getMotion().mul(0.5D, 1, 0.5D).subtract(xRatio / f * strength, 0, zRatio / f * strength).add(0, 0.6, 0));
         spawnExplosionParticle();
     }
 
@@ -88,7 +92,7 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
                     double d3 = 10.0D;
                     double xRatio = this.getMotion().x * this.getWidth();
                     double zRatio = this.getMotion().z * this.getWidth();
-                    this.world.addParticle(ParticleTypes.CLOUD, this.getPosX() + xRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d0 * 10.0D, this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()) - d1 * 10.0D, this.getPosZ() + zRatio + (double) (this.rand.nextFloat() * this.getWidth() * 1.0F) - (double) this.getWidth() - d2 * 10.0D, d0, d1, d2);
+                    this.world.addParticle(ParticleTypes.CLOUD, this.getPosX() + xRatio + this.rand.nextFloat() * this.getWidth() * 1.0F - this.getWidth() - d0 * 10.0D, this.getPosY() + this.rand.nextFloat() * this.getHeight() - d1 * 10.0D, this.getPosZ() + zRatio + this.rand.nextFloat() * this.getWidth() * 1.0F - this.getWidth() - d2 * 10.0D, d0, d1, d2);
                 }
             }
         } else {
@@ -99,6 +103,7 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
     /**
      * Handler for {@link World#setEntityState}
      */
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {
         if (id == 20) {

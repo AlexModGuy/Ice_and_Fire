@@ -26,7 +26,15 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.*;
+import net.minecraft.entity.AgeableEntity;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
@@ -65,6 +73,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -89,7 +98,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     private boolean isSitting;
     private boolean hasChestVarChanged = false;
 
-    public EntityHippocampus(EntityType t, World worldIn) {
+    public EntityHippocampus(EntityType<? extends TameableEntity> t, World worldIn) {
         super(t, worldIn);
         this.stepHeight = 1;
         ANIMATION_SPEAK = Animation.create(15);
@@ -100,6 +109,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         initHippocampusInv();
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new HippocampusAIRide(this));
         this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, Items.KELP, false));
@@ -111,18 +121,22 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
 
     }
 
+    @Override
     protected int getExperiencePoints(PlayerEntity player) {
         return 2;
     }
 
+    @Override
     public float getBlockPathWeight(BlockPos pos) {
         return this.world.getBlockState(pos.down()).getMaterial() == Material.WATER ? 10.0F : this.world.getLight(pos) - 0.5F;
     }
 
+    @Override
     public CreatureAttribute getCreatureAttribute() {
         return CreatureAttribute.WATER;
     }
 
+    @Override
     public boolean isPushedByWater() {
         return false;
     }
@@ -172,6 +186,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         }
     }
 
+    @Override
     @Nullable
     public Entity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
@@ -196,6 +211,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         return 0;
     }
 
+    @Override
     public boolean replaceItemInInventory(int inventorySlot, @Nullable ItemStack itemStackIn) {
         int j = inventorySlot - 500 + 2;
         if (j >= 0 && j < this.hippocampusInventory.getSizeInventory()) {
@@ -206,6 +222,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         }
     }
 
+    @Override
     public void onDeath(DamageSource cause) {
         super.onDeath(cause);
         if (hippocampusInventory != null && !this.world.isRemote) {
@@ -251,6 +268,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     {
         return true;
     }
+    @Override
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
@@ -343,7 +361,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     public boolean getCanSpawnHere() {
-        return this.getPosY() > 30 && this.getPosY() < (double) this.world.getSeaLevel();
+        return this.getPosY() > 30 && this.getPosY() < this.world.getSeaLevel();
     }
 
     @Override
@@ -422,6 +440,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         this.hasChestVarChanged = true;
     }
 
+    @Override
     public boolean isQueuedToSit() {
         if (world.isRemote) {
             boolean isSitting = (this.dataManager.get(TAMED).byteValue() & 1) != 0;
@@ -431,6 +450,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         return isSitting;
     }
 
+    @Override
     public void setSitting(boolean sitting) {
         if (!world.isRemote) {
             this.isSitting = sitting;
@@ -471,6 +491,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         this.dataManager.set(VARIANT, variant);
     }
 
+    @Override
     @Nullable
     public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         ILivingEntityData data = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
@@ -507,7 +528,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     @Override
     public AgeableEntity createChild(ServerWorld serverWorld, AgeableEntity ageable) {
         if (ageable instanceof EntityHippocampus) {
-            EntityHippocampus hippo = new EntityHippocampus(IafEntityRegistry.HIPPOCAMPUS, this.world);
+            EntityHippocampus hippo = new EntityHippocampus(IafEntityRegistry.HIPPOCAMPUS.get(), this.world);
             hippo.setVariant(this.getRNG().nextBoolean() ? this.getVariant() : ((EntityHippocampus) ageable).getVariant());
             return hippo;
         }
@@ -536,7 +557,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
             if (this.isInWater()) {
                 this.moveRelative(0.1F, vec);
                 f4 = 0.6F;
-                float d0 = (float) EnchantmentHelper.getDepthStriderModifier(this);
+                float d0 = EnchantmentHelper.getDepthStriderModifier(this);
                 if (d0 > 3.0F) {
                     d0 = 3.0F;
                 }
@@ -547,7 +568,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
                     f4 += (0.54600006F - f4) * d0 / 3.0F;
                 }
                 this.move(MoverType.SELF, this.getMotion());
-                this.setMotion(this.getMotion().mul((double) f4 * 0.9D, (double) f4 * 0.9D, (double) f4 * 0.9D));
+                this.setMotion(this.getMotion().mul(f4 * 0.9D, f4 * 0.9D, f4 * 0.9D));
             } else {
                 super.travel(vec);
             }
@@ -565,10 +586,12 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
 
     }
 
+    @Override
     public boolean isBreedingItem(ItemStack stack) {
         return stack.getItem() == Items.PRISMARINE_CRYSTALS;
     }
 
+    @Override
     public void playAmbientSound() {
         if (this.getAnimation() == this.NO_ANIMATION) {
             this.setAnimation(ANIMATION_SPEAK);
@@ -576,6 +599,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         super.playAmbientSound();
     }
 
+    @Override
     protected void playHurtSound(DamageSource source) {
         if (this.getAnimation() == this.NO_ANIMATION) {
             this.setAnimation(ANIMATION_SPEAK);
@@ -583,6 +607,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         super.playHurtSound(source);
     }
 
+    @Override
     public ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
         if (itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
@@ -599,7 +624,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
                 this.heal(5);
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
                 for (int i = 0; i < 3; i++) {
-                    this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, itemstack), this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0);
+                    this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, itemstack), this.getPosX() + this.rand.nextFloat() * this.getWidth() * 2.0F - this.getWidth(), this.getPosY() + this.rand.nextFloat() * this.getHeight(), this.getPosZ() + this.rand.nextFloat() * this.getWidth() * 2.0F - this.getWidth(), 0, 0, 0);
                 }
                 if (!player.isCreative()) {
                     itemstack.shrink(1);
@@ -608,7 +633,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
             if (!this.isTamed() && this.getRNG().nextInt(3) == 0) {
                 this.setTamedBy(player);
                 for (int i = 0; i < 6; i++) {
-                    this.world.addParticle(ParticleTypes.HEART, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), 0, 0, 0);
+                    this.world.addParticle(ParticleTypes.HEART, this.getPosX() + this.rand.nextFloat() * this.getWidth() * 2.0F - this.getWidth(), this.getPosY() + this.rand.nextFloat() * this.getHeight(), this.getPosZ() + this.rand.nextFloat() * this.getWidth() * 2.0F - this.getWidth(), 0, 0, 0);
                 }
             }
             return ActionResultType.SUCCESS;
@@ -709,21 +734,25 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         }*/
     }
 
+    @Override
     @Nullable
     protected SoundEvent getAmbientSound() {
         return IafSoundRegistry.HIPPOCAMPUS_IDLE;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return IafSoundRegistry.HIPPOCAMPUS_HURT;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getDeathSound() {
         return IafSoundRegistry.HIPPOCAMPUS_DIE;
     }
 
+    @Override
     public void dropArmor() {
         if (hippocampusInventory != null && !this.world.isRemote) {
             for (int i = 0; i < hippocampusInventory.getSizeInventory(); ++i) {
@@ -805,7 +834,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
                 this.hippo.setAIMoveSpeed(1F);
                 float f1 = 0;
                 float f2 = 0;
-                if (distance < (double) Math.max(1.0F, this.hippo.getWidth())) {
+                if (distance < Math.max(1.0F, this.hippo.getWidth())) {
                     float f = this.hippo.rotationYaw * 0.017453292F;
                     f1 -= (double) (MathHelper.sin(f) * 0.35F);
                     f2 += (double) (MathHelper.cos(f) * 0.35F);

@@ -21,6 +21,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -28,16 +29,17 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
 
     public int ticksInAir;
 
-    public EntityDragonIceCharge(EntityType type, World worldIn) {
+    public EntityDragonIceCharge(EntityType<? extends AbstractFireballEntity> type, World worldIn) {
         super(type, worldIn);
 
     }
 
     public EntityDragonIceCharge(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
-        this(IafEntityRegistry.ICE_DRAGON_CHARGE, worldIn);
+        this(IafEntityRegistry.ICE_DRAGON_CHARGE.get(), worldIn);
     }
 
-    public EntityDragonIceCharge(EntityType type, World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
+    public EntityDragonIceCharge(EntityType<? extends AbstractFireballEntity> type, World worldIn, double posX,
+        double posY, double posZ, double accelX, double accelY, double accelZ) {
         super(type, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.07D;
@@ -45,7 +47,8 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
         this.accelerationZ = accelZ / d0 * 0.07D;
     }
 
-    public EntityDragonIceCharge(EntityType type, World worldIn, EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
+    public EntityDragonIceCharge(EntityType<? extends AbstractFireballEntity> type, World worldIn,
+        EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
         super(type, shooter, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.07D;
@@ -54,6 +57,7 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
     }
 
 
+    @Override
     protected boolean isFireballFiery() {
         return false;
     }
@@ -63,6 +67,7 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
         return false;
     }
 
+    @Override
     public void tick() {
         Entity shootingEntity = this.getShooter();
         if (this.world.isRemote) {
@@ -84,8 +89,8 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
             double d1 = this.getPosY() + Vector3d.y;
             double d2 = this.getPosZ() + Vector3d.z;
             float f = MathHelper.sqrt(horizontalMag(Vector3d));
-            this.rotationYaw = (float) (MathHelper.atan2(Vector3d.x, Vector3d.z) * (double) (180F / (float) Math.PI));
-            for (this.rotationPitch = (float) (MathHelper.atan2(Vector3d.y, f) * (double) (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
+            this.rotationYaw = (float) (MathHelper.atan2(Vector3d.x, Vector3d.z) * (180F / (float) Math.PI));
+            for (this.rotationPitch = (float) (MathHelper.atan2(Vector3d.y, f) * (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
             }
             while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
                 this.prevRotationPitch += 360.0F;
@@ -101,16 +106,10 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
 
             this.rotationPitch = MathHelper.lerp(0.2F, this.prevRotationPitch, this.rotationPitch);
             this.rotationYaw = MathHelper.lerp(0.2F, this.prevRotationYaw, this.rotationYaw);
-            float f1 = 0.99F;
-            float f2 = 0.06F;
-
-
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
                     this.world.addParticle(ParticleTypes.BUBBLE, this.getPosX() - this.getMotion().x * 0.25D, this.getPosY() - this.getMotion().y * 0.25D, this.getPosZ() - this.getMotion().z * 0.25D, this.getMotion().x, this.getMotion().y, this.getMotion().z);
                 }
-
-                f = 0.8F;
             }
             this.setPosition(d0, d1, d2);
             this.world.addParticle(this.getParticle(), this.getPosX(), this.getPosY() + 0.5D, this.getPosZ(), 0.0D, 0.0D, 0.0D);
@@ -128,12 +127,12 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
     @Override
     protected void onImpact(RayTraceResult movingObject) {
         Entity shootingEntity = this.getShooter();
-        boolean flag = this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING);
+        this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING);
         if (!this.world.isRemote) {
             if (movingObject.getType() == RayTraceResult.Type.ENTITY) {
                 Entity entity = ((EntityRayTraceResult) movingObject).getEntity();
 
-                if (entity != null && entity instanceof IDragonProjectile) {
+                if (entity instanceof IDragonProjectile) {
                     return;
                 }
                 if (entity != null && shootingEntity != null && shootingEntity instanceof EntityDragonBase && entity != null) {
@@ -156,7 +155,7 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
                     if (shootingEntity != null && (entity.isEntityEqual(shootingEntity) || (shootingEntity instanceof EntityDragonBase & entity instanceof TameableEntity && ((EntityDragonBase) shootingEntity).getOwner() == ((TameableEntity) entity).getOwner()))) {
                         return;
                     }
-                    if (shootingEntity != null && shootingEntity instanceof EntityDragonBase) {
+                    if (shootingEntity instanceof EntityDragonBase) {
                         float damageAmount = (float) IafConfig.dragonAttackDamageIce * ((EntityDragonBase) shootingEntity).getDragonStage();
                         entity.attackEntityFrom(IafDamageRegistry.DRAGON_ICE, damageAmount);
                         if (entity instanceof LivingEntity && ((LivingEntity) entity).getHealth() == 0) {
@@ -183,6 +182,7 @@ public class EntityDragonIceCharge extends AbstractFireballEntity implements IDr
         return false;
     }
 
+    @Override
     public float getCollisionBorderSize() {
         return 0F;
     }

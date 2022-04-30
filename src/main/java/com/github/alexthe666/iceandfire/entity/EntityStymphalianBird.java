@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
-import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIAirTarget;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIFlee;
@@ -59,6 +58,7 @@ import net.minecraft.world.World;
 public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEntity, IMob, IVillagerFear, IAnimalFear {
 
     public static final Predicate<Entity> STYMPHALIAN_PREDICATE = new Predicate<Entity>() {
+        @Override
         public boolean apply(@Nullable Entity entity) {
             return entity instanceof EntityStymphalianBird;
         }
@@ -81,13 +81,15 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     private boolean aiFlightLaunch = false;
     private int airBorneCounter;
 
-    public EntityStymphalianBird(EntityType t, World worldIn) {
+    public EntityStymphalianBird(EntityType<? extends MonsterEntity> t, World worldIn) {
         super(t, worldIn);
     }
 
+    @Override
     protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new SwimGoal(this));
         this.goalSelector.addGoal(2, new StymphalianBirdAIFlee(this, 10));
@@ -122,10 +124,12 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         this.dataManager.register(FLYING, Boolean.valueOf(false));
     }
 
+    @Override
     protected int getExperiencePoints(PlayerEntity player) {
         return 10;
     }
 
+    @Override
     public void tick() {
         super.tick();
         if (!this.world.isRemote && this.world.getDifficulty() == Difficulty.PEACEFUL) {
@@ -177,6 +181,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         }
     }
 
+    @Override
     public void onDeath(DamageSource cause) {
         if (cause.getTrueSource() != null && cause.getTrueSource() instanceof LivingEntity && !world.isRemote) {
             this.setVictorId(cause.getTrueSource().getUniqueID());
@@ -187,13 +192,14 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         super.onDeath(cause);
     }
 
+    @Override
     protected void onDeathUpdate() {
         super.onDeathUpdate();
     }
 
     @Nullable
     public UUID getVictorId() {
-        return (UUID) ((Optional) this.dataManager.get(VICTOR_ENTITY)).orElse(null);
+        return this.dataManager.get(VICTOR_ENTITY).orElse(null);
     }
 
     public void setVictorId(@Nullable UUID uuid) {
@@ -222,6 +228,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         return world.rayTraceBlocks(new RayTraceContext(target, this.getEyePosition(1.0F), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
     }
 
+    @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             this.setAnimation(ANIMATION_PECK);
@@ -294,9 +301,11 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
                             double d1 = target.getBoundingBox().minY - wingY;
                             double d2 = target.getPosZ() - wingZ;
                             double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
-                            EntityStymphalianFeather entityarrow = new EntityStymphalianFeather(IafEntityRegistry.STYMPHALIAN_FEATHER, world, this);
+                            EntityStymphalianFeather entityarrow = new EntityStymphalianFeather(
+                                IafEntityRegistry.STYMPHALIAN_FEATHER.get(), world, this);
                             entityarrow.setPosition(wingX, wingY, wingZ);
-                            entityarrow.shoot(d0, d1 + d3 * 0.10000000298023224D, d2, 1.6F, (float) (14 - this.world.getDifficulty().getId() * 4));
+                            entityarrow.shoot(d0, d1 + d3 * 0.10000000298023224D, d2, 1.6F,
+                                14 - this.world.getDifficulty().getId() * 4);
                             this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
                             this.world.addEntity(entityarrow);
                         }
@@ -369,10 +378,6 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         return world.rayTraceBlocks(new RayTraceContext(vec1, vec2, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
     }
 
-    private boolean isLeaderNotFlying() {
-        return this.flock != null && this.flock.getLeader() != null && !this.flock.getLeader().isFlying();
-    }
-
     public void flyAround() {
         if (airTarget != null && this.isFlying()) {
             if (!isTargetInAir() || flyTicks > 6000 || !this.isFlying()) {
@@ -421,6 +426,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     public void fall(float distance, float damageMultiplier) {
     }
 
+    @Override
     public void playAmbientSound() {
         if (this.getAnimation() == this.NO_ANIMATION) {
             this.setAnimation(ANIMATION_SPEAK);
@@ -428,6 +434,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         super.playAmbientSound();
     }
 
+    @Override
     protected void playHurtSound(DamageSource source) {
         if (this.getAnimation() == this.NO_ANIMATION) {
             this.setAnimation(ANIMATION_SPEAK);
@@ -435,16 +442,19 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         super.playHurtSound(source);
     }
 
+    @Override
     @Nullable
     protected SoundEvent getAmbientSound() {
         return IafSoundRegistry.STYMPHALIAN_BIRD_IDLE;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getHurtSound(DamageSource source) {
         return IafSoundRegistry.STYMPHALIAN_BIRD_HURT;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getDeathSound() {
         return IafSoundRegistry.STYMPHALIAN_BIRD_DIE;

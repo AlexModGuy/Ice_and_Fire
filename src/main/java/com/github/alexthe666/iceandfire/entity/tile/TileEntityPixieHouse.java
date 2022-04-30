@@ -121,7 +121,7 @@ public class TileEntityPixieHouse extends TileEntity implements ITickableTileEnt
     }
 
     public void releasePixie() {
-        EntityPixie pixie = new EntityPixie(IafEntityRegistry.PIXIE, this.world);
+        EntityPixie pixie = new EntityPixie(IafEntityRegistry.PIXIE.get(), this.world);
         pixie.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 1F, this.pos.getZ() + 0.5F, new Random().nextInt(360), 0);
         pixie.setHeldItem(Hand.MAIN_HAND, pixieItems.get(0));
         pixie.setColor(this.pixieType);

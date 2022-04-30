@@ -74,7 +74,7 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
          * 0.5); if(!worldIn.isRemote){ worldIn.spawnEntityInWorld(egg); }
          */
         if (stack.getTag() != null) {
-            EntityDragonSkull skull = new EntityDragonSkull(IafEntityRegistry.DRAGON_SKULL, context.getWorld());
+            EntityDragonSkull skull = new EntityDragonSkull(IafEntityRegistry.DRAGON_SKULL.get(), context.getWorld());
             skull.setDragonType(dragonType);
             skull.setStage(stack.getTag().getInt("Stage"));
             skull.setDragonAge(stack.getTag().getInt("DragonAge"));

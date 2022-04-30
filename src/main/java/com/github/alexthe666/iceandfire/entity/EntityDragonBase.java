@@ -1,5 +1,11 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
@@ -10,10 +16,31 @@ import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
-import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.entity.ai.AquaticAITempt;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIAttackMelee;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIEscort;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAILookIdle;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIMate;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIReturnToRoost;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIRide;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAITarget;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetItems;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetNonTamed;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIWander;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAIWatchClosest;
 import com.github.alexthe666.iceandfire.entity.props.ChainProperties;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
-import com.github.alexthe666.iceandfire.entity.util.*;
+import com.github.alexthe666.iceandfire.entity.util.ChainBuffer;
+import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
+import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
+import com.github.alexthe666.iceandfire.entity.util.IDeadMob;
+import com.github.alexthe666.iceandfire.entity.util.IDragonFlute;
+import com.github.alexthe666.iceandfire.entity.util.IDropArmor;
+import com.github.alexthe666.iceandfire.entity.util.IFlyingMount;
+import com.github.alexthe666.iceandfire.entity.util.IMultipartEntity;
+import com.github.alexthe666.iceandfire.entity.util.ISyncMount;
+import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
+import com.github.alexthe666.iceandfire.entity.util.ReversedBuffer;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragon;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
@@ -27,11 +54,21 @@ import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.IPassabilityNavigator;
 import com.github.alexthe666.iceandfire.world.DragonPosWorldData;
 import com.google.common.base.Predicate;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.*;
+import net.minecraft.entity.AgeableEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
@@ -67,8 +104,19 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.*;
-import net.minecraft.util.math.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
+import net.minecraft.util.IItemProvider;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -77,14 +125,10 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
 
 public abstract class EntityDragonBase extends TameableEntity implements IPassabilityNavigator, ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor {
 
@@ -256,6 +300,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                 .createMutableAttribute(Attributes.ARMOR, 4);
     }
 
+    @Override
     public BlockPos getHomePosition() {
         return this.homePos == null ? super.getHomePosition() : homePos;
     }
@@ -452,6 +497,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     protected abstract void breathFireAtPos(BlockPos burningTarget);
 
+    @Override
     protected PathNavigator createNavigator(World worldIn) {
         return createNavigator(worldIn, AdvancedPathNavigate.MovementType.WALKING);
     }
@@ -491,6 +537,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return true;
     }
 
+    @Override
     protected void updateAITasks() {
         super.updateAITasks();
         breakBlock();
@@ -500,10 +547,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return state.getBlock().canEntityDestroy(state, world, pos, this);
     }
 
+    @Override
     public boolean isMobDead() {
         return this.isModelDead();
     }
 
+    @Override
     public int getHorizontalFaceSpeed() {
         return 10 * this.getDragonStage() / 5;
     }
@@ -525,10 +574,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         }
     }
 
+    @Override
     public int getTalkInterval() {
         return 90;
     }
 
+    @Override
     protected void onDeathUpdate() {
         this.deathTime = 0;
         if (!this.isModelDead()) {
@@ -551,7 +602,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
                 if (world.isRemote) {
-                    this.world.addParticle(ParticleTypes.CLOUD, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d2, d0, d1);
+                    this.world.addParticle(ParticleTypes.CLOUD, this.getPosX() + this.rand.nextFloat() * this.getWidth() * 2.0F - this.getWidth(), this.getPosY() + this.rand.nextFloat() * this.getHeight(), this.getPosZ() + this.rand.nextFloat() * this.getWidth() * 2.0F - this.getWidth(), d2, d0, d1);
                 }
             }
             spawnDeathParticles();
@@ -564,11 +615,13 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     protected void spawnBabyParticles() {
     }
 
+    @Override
     public void remove() {
         removeParts();
         super.remove();
     }
 
+    @Override
     protected int getExperiencePoints(PlayerEntity player) {
         switch (this.getDragonStage()) {
             case 2:
@@ -619,10 +672,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         this.dataManager.register(CUSTOM_POSE, "");
     }
 
+    @Override
     public boolean isGoingUp() {
         return (dataManager.get(CONTROL_STATE).byteValue() & 1) == 1;
     }
 
+    @Override
     public boolean isGoingDown() {
         return (dataManager.get(CONTROL_STATE).byteValue() >> 1 & 1) == 1;
     }
@@ -807,6 +862,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         }
     }
 
+    @Override
     @Nullable
     public Entity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
@@ -824,6 +880,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return getRidingPlayer() != null && player != null && getRidingPlayer().getUniqueID().equals(player.getUniqueID());
     }
 
+    @Override
     @Nullable
     public PlayerEntity getRidingPlayer() {
         if (this.getControllingPassenger() instanceof PlayerEntity) {
@@ -913,6 +970,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         }
     }
 
+    @Override
     public boolean isHovering() {
         return this.dataManager.get(HOVERING);
     }
@@ -921,6 +979,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         this.dataManager.set(HOVERING, hovering);
     }
 
+    @Override
     public boolean isFlying() {
         return this.dataManager.get(FLYING);
     }
@@ -937,6 +996,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         this.dataManager.set(GENDER, male);
     }
 
+    @Override
     public boolean isSleeping() {
         return this.dataManager.get(SLEEPING);
     }
@@ -953,18 +1013,22 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         this.dataManager.set(FIREBREATHING, breathing);
     }
 
+    @Override
     protected boolean canFitPassenger(Entity passenger) {
         return this.getPassengers().size() < 2;
     }
 
+    @Override
     public boolean isQueuedToSit() {
         return (this.dataManager.get(TAMED).byteValue() & 1) != 0;
     }
 
+    @Override
     public void setQueuedToSit(boolean sleeping) {
         this.dataManager.set(SLEEPING, sleeping);
     }
 
+    @Override
     public void setSitting(boolean sitting) {
         byte b0 = this.dataManager.get(TAMED);
         if (sitting) {
@@ -1022,6 +1086,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return !this.isQueuedToSit() && !this.isSleeping() && this.getControllingPassenger() == null && !this.isModelDead() && sleepProgress == 0 && this.getAnimation() != ANIMATION_SHAKEPREY;
     }
 
+    @Override
     public boolean isAlive() {
         return super.isAlive();
     }
@@ -1268,10 +1333,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
 
+    @Override
     public boolean preventDespawn() {
         return true;
     }
 
+    @Override
     public boolean isNoDespawnRequired() {
         return true;
     }
@@ -1394,6 +1461,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return state.getMaterial().blocksMovement() && !state.isAir() && state.getFluidState().isEmpty() && !state.getShape(world, pos).isEmpty() && state.getBlockHardness(world, pos) >= 0F && state.getBlockHardness(world, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos, state);
     }
 
+    @Override
     public boolean isBlockPassable(BlockState state, BlockPos pos, BlockPos entityPos) {
         if (!isModelDead() && this.getDragonStage() >= 3) {
             if (IafConfig.dragonGriefing != 2 && (!this.isTamed() || IafConfig.tamedDragonGriefing) && pos.getY() >= this.getPosY()) {
@@ -1451,10 +1519,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     public abstract String getVariantName(int variant);
 
+    @Override
     public boolean shouldRiderSit() {
         return this.getControllingPassenger() != null;
     }
 
+    @Override
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
@@ -1520,10 +1590,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return getDragonStage() < 4 && getDragonStage() > 2;
     }
 
+    @Override
     public boolean isAdult() {
         return getDragonStage() >= 4;
     }
 
+    @Override
     public boolean isChild() {
         return getDragonStage() < 2;
     }
@@ -1578,6 +1650,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     }
 
+    @Override
     public void recalculateSize() {
         super.recalculateSize();
         final float scale = Math.min(this.getRenderSize() * 0.35F, 7F);
@@ -1676,6 +1749,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return Math.min(this.getRenderSize() * 0.35F, 7F);
     }
 
+    @Override
     protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -1708,6 +1782,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return flag;
     }
 
+    @Override
     public void updateRidden() {
         Entity entity = this.getRidingEntity();
         if (this.isPassenger() && !entity.isAlive()) {
@@ -1769,6 +1844,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         currentAnimation = animation;
     }
 
+    @Override
     public void playAmbientSound() {
         if (!this.isSleeping() && !this.isModelDead() && !this.world.isRemote) {
             if (this.getAnimation() == this.NO_ANIMATION) {
@@ -1778,6 +1854,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         }
     }
 
+    @Override
     protected void playHurtSound(DamageSource source) {
         if (!this.isModelDead()) {
             if (this.getAnimation() == this.NO_ANIMATION && !this.world.isRemote) {
@@ -1807,7 +1884,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public EntityDragonEgg createEgg(EntityDragonBase ageable) {
-        EntityDragonEgg dragon = new EntityDragonEgg(IafEntityRegistry.DRAGON_EGG, this.world);
+        EntityDragonEgg dragon = new EntityDragonEgg(IafEntityRegistry.DRAGON_EGG.get(), this.world);
         dragon.setEggType(EnumDragonEgg.byMetadata(new Random().nextInt(4) + getStartMetaForType()));
         dragon.setPosition(MathHelper.floor(this.getPosX()) + 0.5, MathHelper.floor(this.getPosY()) + 1, MathHelper.floor(this.getPosZ()) + 0.5);
         return dragon;
@@ -1954,6 +2031,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return rayTrace.getType() != RayTraceResult.Type.BLOCK;
     }
 
+    @Override
     public void onDeath(DamageSource cause) {
 //        if (cause.getTrueSource() != null) {
 //            if (cause.getTrueSource() instanceof PlayerEntity) {
@@ -2052,6 +2130,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return DragonUtils.canTameDragonAttack(this, entity);
     }
 
+    @Override
     public void dropArmor() {
 
     }
@@ -2107,6 +2186,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return new Vector3d(headPosX, headPosY, headPosZ);
     }
 
+    @Override
     public void onKillCommand() {
         this.remove();
         this.setDeathStage(this.getAgeInDays() / 5);
@@ -2201,6 +2281,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return super.shouldAttackEntity(target, owner);
     }
 
+    @Override
     public boolean canAttack(LivingEntity target) {
         return super.canAttack(target) && DragonUtils.isAlive(target);
     }
@@ -2213,6 +2294,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                 tail3Part != null && tail3Part.isEntityEqual(entityHit) || tail4Part != null && tail4Part.isEntityEqual(entityHit);
     }
 
+    @Override
     public double getFlightSpeedModifier() {
         return IafConfig.dragonFlightSpeedMod;
     }
@@ -2244,6 +2326,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return this.writeUnlessRemoved(compound);
     }
 
+    @Override
     public void playSound(SoundEvent soundIn, float volume, float pitch) {
         if (soundIn == SoundEvents.ENTITY_GENERIC_EAT || soundIn == this.getAmbientSound() || soundIn == this.getHurtSound(null) || soundIn == this.getDeathSound() || soundIn == this.getRoarSound()) {
             if (!this.isSilent() && this.headPart != null) {
@@ -2254,6 +2337,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         }
     }
 
+    @Override
     public SoundCategory getSoundCategory() {
         return SoundCategory.HOSTILE;
     }
@@ -2267,7 +2351,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         }
         return true;
     }
-
+  
     public ItemStack getItemStackFromSlot(final EquipmentSlotType slotIn) {
         switch (slotIn) {
             case OFFHAND: return dragonInventory.getStackInSlot(0);
@@ -2291,6 +2375,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         updateAttributes();
     }
 
+    @Override
     public float getSoundPitch() {
         return super.getSoundPitch();
     }
@@ -2312,6 +2397,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return FLIGHT_CHANCE_PER_TICK;
     }
 
+    @Override
     public void onRemovedFromWorld() {
         if (IafConfig.chunkLoadSummonCrystal) {
             if (this.isBoundToCrystal()) {
@@ -2324,6 +2410,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         super.onRemovedFromWorld();
     }
 
+    @Override
     public int maxSearchNodes() {
         return 50;
     }

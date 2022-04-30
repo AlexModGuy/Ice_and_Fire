@@ -1,9 +1,10 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
+import java.util.function.Supplier;
+
 import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.client.model.ModelTideTrident;
-import com.github.alexthe666.iceandfire.client.model.ModelTrollWeapon;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderTideTrident;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadPortal;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityGhostChest;
@@ -21,51 +22,60 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Vector3f;
+
+import static net.minecraftforge.common.util.Lazy.of;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
 @OnlyIn(Dist.CLIENT)
 public class IceAndFireTEISR extends ItemStackTileEntityRenderer {
 
-    private static final ModelTideTrident TIDE_TRIDENT_MODEL = new ModelTideTrident();
-    private final RenderTrollWeapon renderTrollWeapon = new RenderTrollWeapon();
-    private final RenderDeathWormGauntlet renderDeathWormGauntlet = new RenderDeathWormGauntlet();
-    private final RenderDreadPortal renderDreadPortal = new RenderDreadPortal(TileEntityRendererDispatcher.instance);
-    private final RenderGorgonHead renderGorgonHead = new RenderGorgonHead(true);
-    private final RenderGorgonHead renderGorgonHeadDead = new RenderGorgonHead(false);
-    private final RenderPixieHouse renderPixieHouse = new RenderPixieHouse(TileEntityRendererDispatcher.instance);
-    private final TileEntityDreadPortal dreadPortalDummy = new TileEntityDreadPortal();
-    private final RenderGhostChest renderGhostChest = new RenderGhostChest(TileEntityRendererDispatcher.instance);
-    private final TileEntityGhostChest ghostChestDummy = new TileEntityGhostChest();
+    private static final Supplier<ModelTideTrident> TIDE_TRIDENT_MODEL = of(ModelTideTrident::new);
+    private final Supplier<RenderTrollWeapon> renderTrollWeapon = of(RenderTrollWeapon::new);
+    private final Supplier<RenderDeathWormGauntlet> renderDeathWormGauntlet = of(RenderDeathWormGauntlet::new);
+    private final Supplier<RenderDreadPortal> renderDreadPortal = of(
+        () -> new RenderDreadPortal(TileEntityRendererDispatcher.instance));
+    private final Supplier<RenderGorgonHead> renderGorgonHead = of(() -> new RenderGorgonHead(true));
+    private final Supplier<RenderGorgonHead> renderGorgonHeadDead = of(() -> new RenderGorgonHead(false));
+    private final Supplier<RenderPixieHouse<?>> renderPixieHouse = of(
+        () -> new RenderPixieHouse<>(TileEntityRendererDispatcher.instance));
+    private final Supplier<TileEntityDreadPortal> dreadPortalDummy = of(TileEntityDreadPortal::new);
+    private final Supplier<RenderGhostChest> renderGhostChest = of(
+        () -> new RenderGhostChest(TileEntityRendererDispatcher.instance));
+    private final Supplier<TileEntityGhostChest> ghostChestDummy = of(TileEntityGhostChest::new);
 
     @Override
     public void func_239207_a_(ItemStack itemStackIn, ItemCameraTransforms.TransformType p_239207_2_, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         if (itemStackIn.getItem() == IafItemRegistry.GORGON_HEAD) {
             if (itemStackIn.getTag() != null) {
                 if (itemStackIn.getTag().getBoolean("Active")) {
-                    renderGorgonHead.render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+                    renderGorgonHead.get().render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
                 } else {
-                    renderGorgonHeadDead.render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+                    renderGorgonHeadDead.get().render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
                 }
             }
         }
         if (itemStackIn.getItem() == IafBlockRegistry.GHOST_CHEST.asItem()) {
-            renderGhostChest.render(ghostChestDummy, 0, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+            renderGhostChest.get().render(ghostChestDummy.get(), 0, matrixStackIn, bufferIn, combinedLightIn,
+                combinedOverlayIn);
         }
 
         if (itemStackIn.getItem() instanceof ItemTrollWeapon) {
             ItemTrollWeapon weaponItem = (ItemTrollWeapon) itemStackIn.getItem();
-            renderTrollWeapon.renderItem(weaponItem.weapon, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+            renderTrollWeapon.get().renderItem(weaponItem.weapon, matrixStackIn, bufferIn, combinedLightIn,
+                combinedOverlayIn);
         }
         if (itemStackIn.getItem() instanceof ItemDeathwormGauntlet) {
-            renderDeathWormGauntlet.renderItem(itemStackIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+            renderDeathWormGauntlet.get().renderItem(itemStackIn, matrixStackIn, bufferIn, combinedLightIn,
+                combinedOverlayIn);
         }
         if (itemStackIn.getItem() instanceof BlockItem && ((BlockItem) itemStackIn.getItem()).getBlock() == IafBlockRegistry.DREAD_PORTAL) {
-            renderDreadPortal.render(dreadPortalDummy, 0, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+            renderDreadPortal.get().render(dreadPortalDummy.get(), 0, matrixStackIn, bufferIn, combinedLightIn,
+                combinedOverlayIn);
         }
         if (itemStackIn.getItem() instanceof BlockItem && ((BlockItem) itemStackIn.getItem()).getBlock() instanceof BlockPixieHouse) {
-            renderPixieHouse.metaOverride = (BlockItem) itemStackIn.getItem();
-            renderPixieHouse.render(null, 0, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+            renderPixieHouse.get().metaOverride = (BlockItem) itemStackIn.getItem();
+            renderPixieHouse.get().render(null, 0, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
         }
         if (itemStackIn.getItem() == IafItemRegistry.TIDE_TRIDENT) {
             matrixStackIn.translate(0.5F, 0.5f, 0.5f);
@@ -80,7 +90,9 @@ public class IceAndFireTEISR extends ItemStackTileEntityRenderer {
                     matrixStackIn.translate(0, 0.6F, 0.0F);
                 }
                 matrixStackIn.rotate(Vector3f.XP.rotationDegrees(160));
-                TIDE_TRIDENT_MODEL.render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(RenderTideTrident.TRIDENT)), combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+                TIDE_TRIDENT_MODEL.get().render(matrixStackIn,
+                    bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(RenderTideTrident.TRIDENT)), combinedLightIn,
+                    combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
                 matrixStackIn.pop();
             }
 

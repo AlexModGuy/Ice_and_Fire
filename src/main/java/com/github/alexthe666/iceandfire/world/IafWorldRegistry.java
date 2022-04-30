@@ -1,17 +1,40 @@
 package com.github.alexthe666.iceandfire.world;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import com.github.alexthe666.iceandfire.world.feature.*;
-import com.github.alexthe666.iceandfire.world.gen.*;
+import com.github.alexthe666.iceandfire.world.feature.SpawnDeathWorm;
+import com.github.alexthe666.iceandfire.world.feature.SpawnDragonSkeleton;
+import com.github.alexthe666.iceandfire.world.feature.SpawnHippocampus;
+import com.github.alexthe666.iceandfire.world.feature.SpawnSeaSerpent;
+import com.github.alexthe666.iceandfire.world.feature.SpawnStymphalianBird;
+import com.github.alexthe666.iceandfire.world.feature.SpawnWanderingCyclops;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenCyclopsCave;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenFireDragonCave;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenFireDragonRoosts;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenHydraCave;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenIceDragonCave;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenIceDragonRoosts;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenLightningDragonCave;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenLightningDragonRoosts;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenPixieVillage;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenSirenIsland;
 import com.github.alexthe666.iceandfire.world.structure.DreadMausoleumStructure;
 import com.github.alexthe666.iceandfire.world.structure.DummyPiece;
 import com.github.alexthe666.iceandfire.world.structure.GorgonTempleStructure;
 import com.github.alexthe666.iceandfire.world.structure.GraveyardStructure;
 import com.google.common.collect.ImmutableList;
+
 import net.minecraft.block.Blocks;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -25,20 +48,23 @@ import net.minecraft.world.gen.DimensionSettings;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
-import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.feature.BlockClusterFeatureConfig;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.Features;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.feature.ReplaceBlockConfig;
+import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
+
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 
 public class IafWorldRegistry {
 
@@ -115,9 +141,12 @@ public class IafWorldRegistry {
         MYRMEX_HIVE_JUNGLE = registerFeature("iceandfire:myrmex_hive_jungle", new WorldGenMyrmexHive(false, true, NoFeatureConfig.CODEC));
 
         SPAWN_DEATH_WORM = registerFeature("iceandfire:spawn_death_worm", new SpawnDeathWorm(NoFeatureConfig.CODEC));
-        SPAWN_DRAGON_SKELETON_L = registerFeature("iceandfire:spawn_dragon_skeleton_l", new SpawnDragonSkeleton(IafEntityRegistry.LIGHTNING_DRAGON, NoFeatureConfig.CODEC));
-        SPAWN_DRAGON_SKELETON_F = registerFeature("iceandfire:spawn_dragon_skeleton_f", new SpawnDragonSkeleton(IafEntityRegistry.FIRE_DRAGON, NoFeatureConfig.CODEC));
-        SPAWN_DRAGON_SKELETON_I = registerFeature("iceandfire:spawn_dragon_skeleton_i", new SpawnDragonSkeleton(IafEntityRegistry.ICE_DRAGON, NoFeatureConfig.CODEC));
+        SPAWN_DRAGON_SKELETON_L = registerFeature("iceandfire:spawn_dragon_skeleton_l",
+            new SpawnDragonSkeleton(IafEntityRegistry.LIGHTNING_DRAGON.get(), NoFeatureConfig.CODEC));
+        SPAWN_DRAGON_SKELETON_F = registerFeature("iceandfire:spawn_dragon_skeleton_f",
+            new SpawnDragonSkeleton(IafEntityRegistry.FIRE_DRAGON.get(), NoFeatureConfig.CODEC));
+        SPAWN_DRAGON_SKELETON_I = registerFeature("iceandfire:spawn_dragon_skeleton_i",
+            new SpawnDragonSkeleton(IafEntityRegistry.ICE_DRAGON.get(), NoFeatureConfig.CODEC));
         SPAWN_HIPPOCAMPUS = registerFeature("iceandfire:spawn_hippocampus", new SpawnHippocampus(NoFeatureConfig.CODEC));
         SPAWN_SEA_SERPENT = registerFeature("iceandfire:spawn_sea_serpent", new SpawnSeaSerpent(NoFeatureConfig.CODEC));
         SPAWN_STYMPHALIAN_BIRD = registerFeature("iceandfire:spawn_stymphalian_bird", new SpawnStymphalianBird(NoFeatureConfig.CODEC));

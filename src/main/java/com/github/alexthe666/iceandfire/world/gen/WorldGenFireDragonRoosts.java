@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
@@ -54,7 +53,7 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
         worldIn.setBlockState(position, Blocks.AIR.getDefaultState(), 2);
         BlockPos finalPosition = position;
         if(!worldIn.isRemote()){
-        	EntityDragonBase dragon = IafEntityRegistry.FIRE_DRAGON.create(worldIn.getWorld());
+            EntityDragonBase dragon = IafEntityRegistry.FIRE_DRAGON.get().create(worldIn.getWorld());
         	dragon.setGender(isMale);
             dragon.enablePersistence();
             dragon.growDragon(40 + radius);
@@ -71,10 +70,10 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
             int j = radius;
             int k = 2;
             int l = radius;
-            float f = (float) (j + k + l) * 0.333F + 0.5F;
+            float f = (j + k + l) * 0.333F + 0.5F;
             BlockPos.getAllInBox(position.add(-j, k, -l), position.add(j, 0, l)).map(BlockPos::toImmutable).forEach(blockPos ->  {
                 int yAdd = blockPos.getY() - finalPosition.getY();
-                if (blockPos.distanceSq(finalPosition) <= (double) (f * f) && yAdd < 2 + rand.nextInt(k) && !worldIn.isAirBlock(blockPos.down())) {
+                if (blockPos.distanceSq(finalPosition) <= f * f && yAdd < 2 + rand.nextInt(k) && !worldIn.isAirBlock(blockPos.down())) {
                     if (worldIn.isAirBlock(blockPos.up()))
                         worldIn.setBlockState(blockPos, IafBlockRegistry.CHARRED_GRASS.getDefaultState(), 2);
                     else
@@ -86,12 +85,12 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
             int j = radius;
             int k = (radius / 5);
             int l = radius;
-            float f = (float) (j + k + l) * 0.333F + 0.5F;
+            float f = (j + k + l) * 0.333F + 0.5F;
             BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, 1, l)).map(BlockPos::toImmutable).forEach(blockPos ->  {
-                if (blockPos.distanceSq(finalPosition) < (double) (f * f)) {
+                if (blockPos.distanceSq(finalPosition) < f * f) {
                     worldIn.setBlockState(blockPos, rand.nextBoolean() ? IafBlockRegistry.CHARRED_GRAVEL.getDefaultState() : IafBlockRegistry.CHARRED_DIRT.getDefaultState(), 2);
                 }
-                else if (blockPos.distanceSq(finalPosition) == (double) (f * f)) {
+                else if (blockPos.distanceSq(finalPosition) == f * f) {
                     worldIn.setBlockState(blockPos, rand.nextBoolean() ? IafBlockRegistry.CHARRED_COBBLESTONE.getDefaultState() : IafBlockRegistry.CHARRED_COBBLESTONE.getDefaultState(), 2);
                 }
             });
@@ -101,10 +100,10 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
             int j = radius;
             int k = 2;
             int l = radius;
-            float f = (float) (j + k + l) * 0.333F + 0.5F;
+            float f = (j + k + l) * 0.333F + 0.5F;
             BlockPos up = position.up(k - 1);
             BlockPos.getAllInBox(up.add(-j, -k + 2, -l), up.add(j, k, l)).map(BlockPos::toImmutable).forEach(blockPos ->  {
-                if (blockPos.distanceSq(finalPosition) <= (double) (f * f)) {
+                if (blockPos.distanceSq(finalPosition) <= f * f) {
                     worldIn.setBlockState(blockPos, Blocks.AIR.getDefaultState(), 2);
                 }
             });
@@ -114,10 +113,10 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
             int j = radius;
             int k = (radius / 5);
             int l = radius;
-            float f = (float) (j + k + l) * 0.333F + 0.5F;
+            float f = (j + k + l) * 0.333F + 0.5F;
             BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).forEach(blockPos -> {
-                if (blockPos.distanceSq(finalPosition) <= (double) (f * f)) {
-                    double dist = blockPos.distanceSq(finalPosition) / (double) (f * f);
+                if (blockPos.distanceSq(finalPosition) <= f * f) {
+                    double dist = blockPos.distanceSq(finalPosition) / (f * f);
                     if (!worldIn.isAirBlock(finalPosition) && rand.nextDouble() > dist * 0.5D) {
                         transformState(worldIn, blockPos, worldIn.getBlockState(blockPos));
                     }

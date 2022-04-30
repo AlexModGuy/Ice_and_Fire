@@ -118,7 +118,8 @@ public class MyrmexHive {
         List<EntityMyrmexQueen> ourQueens = new ArrayList<>();
         if (!world.isRemote) {
             ServerWorld serverWorld = world.getServer().getWorld(world.getDimensionKey());
-            List<Entity> allQueens = serverWorld.getEntities(IafEntityRegistry.MYRMEX_QUEEN, EntityPredicates.NOT_SPECTATING);
+            List<Entity> allQueens = serverWorld.getEntities(IafEntityRegistry.MYRMEX_QUEEN.get(),
+                EntityPredicates.NOT_SPECTATING);
             for (Entity queen : allQueens) {
                 if (queen instanceof EntityMyrmexQueen && ((EntityMyrmexQueen) queen).getHive().equals(this)) {
                     ourQueens.add(((EntityMyrmexQueen) queen));
@@ -153,7 +154,7 @@ public class MyrmexHive {
     }
 
     public boolean isBlockPosWithinSqVillageRadius(BlockPos pos) {
-        return this.center.distanceSq(pos) < (double) (this.villageRadius * this.villageRadius);
+        return this.center.distanceSq(pos) < this.villageRadius * this.villageRadius;
     }
 
     public boolean isAnnihilated() {
@@ -619,6 +620,7 @@ public class MyrmexHive {
         this.getEntranceBottoms().remove(pos);
     }
 
+    @Override
     public String toString() {
         return "MyrmexHive(x=" + this.center.getX() + ",y=" + this.center.getY() + ",z=" + this.center.getZ() + "), population=" + this.getNumMyrmex() + "\nUUID: " + hiveUUID;
     }

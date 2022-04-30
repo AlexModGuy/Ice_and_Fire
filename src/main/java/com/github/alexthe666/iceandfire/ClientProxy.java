@@ -34,7 +34,11 @@ import com.github.alexthe666.iceandfire.client.model.animator.FireDragonTabulaMo
 import com.github.alexthe666.iceandfire.client.model.animator.IceDragonTabulaModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.animator.LightningTabulaDragonAnimator;
 import com.github.alexthe666.iceandfire.client.model.animator.SeaSerpentTabulaModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.*;
+import com.github.alexthe666.iceandfire.client.model.util.DragonAnimationsLibrary;
+import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
+import com.github.alexthe666.iceandfire.client.model.util.EnumDragonModelTypes;
+import com.github.alexthe666.iceandfire.client.model.util.EnumDragonPoses;
+import com.github.alexthe666.iceandfire.client.model.util.EnumSeaSerpentAnimations;
 import com.github.alexthe666.iceandfire.client.particle.ParticleBlood;
 import com.github.alexthe666.iceandfire.client.particle.ParticleDragonFlame;
 import com.github.alexthe666.iceandfire.client.particle.ParticleDragonFrost;
@@ -46,48 +50,7 @@ import com.github.alexthe666.iceandfire.client.particle.ParticlePixieDust;
 import com.github.alexthe666.iceandfire.client.particle.ParticleSerpentBubble;
 import com.github.alexthe666.iceandfire.client.particle.ParticleSirenAppearance;
 import com.github.alexthe666.iceandfire.client.particle.ParticleSirenMusic;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderAmphithere;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderAmphithereArrow;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderChainTie;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderCockatrice;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderCyclops;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDeathWorm;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonArrow;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonBase;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonEgg;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonFireCharge;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonLightningCharge;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonSkull;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDreadBeast;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDreadGhoul;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDreadHorse;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDreadKnight;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDreadLich;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDreadLichSkull;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDreadScuttler;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderDreadThrall;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderGhost;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderGhostSword;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderGorgon;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderHippocampus;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderHippogryph;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderHydra;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderHydraArrow;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderLightningDragon;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderMobSkull;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderMyrmexBase;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderMyrmexEgg;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderNothing;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderPixie;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderSeaSerpent;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderSeaSerpentArrow;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderSiren;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderStoneStatue;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderStymphalianArrow;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderStymphalianBird;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderStymphalianFeather;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderTideTrident;
-import com.github.alexthe666.iceandfire.client.render.entity.RenderTroll;
+import com.github.alexthe666.iceandfire.client.render.entity.*;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonArmor;
 import com.github.alexthe666.iceandfire.client.render.tile.IceAndFireTEISR;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderDreadPortal;
@@ -120,13 +83,17 @@ import net.minecraft.client.util.InputMappings;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemModelsProperties;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -178,6 +145,7 @@ public class ClientProxy extends CommonProxy {
         return IceAndFireTEISR::new;
     }
 
+    @Override
     public void setReferencedHive(MyrmexHive hive) {
         referedClientHive = hive;
     }
@@ -185,16 +153,14 @@ public class ClientProxy extends CommonProxy {
     @Override
     @SuppressWarnings("deprecation")
     public void init() {
-        IafGuiRegistry.register();
         this.bestiaryFontRenderer = Minecraft.getInstance().fontRenderer;
         IafKeybindRegistry.init();
         MinecraftForge.EVENT_BUS.register(new PlayerRenderEvents());
         MinecraftForge.EVENT_BUS.register(new ClientEvents());
         renderEntities();
-
-
     }
 
+    @Override
     public void postInit() {
 
     }
@@ -205,7 +171,9 @@ public class ClientProxy extends CommonProxy {
 
     }
 
+    @Override
     public void setupClient() {
+        IafGuiRegistry.register();
         EnumDragonAnimations.initializeDragonModels();
         EnumSeaSerpentAnimations.initializeSerpentModels();
         DragonAnimationsLibrary.register(EnumDragonPoses.values(), EnumDragonModelTypes.values());
@@ -217,65 +185,66 @@ public class ClientProxy extends CommonProxy {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.FIRE_DRAGON, manager -> new RenderDragonBase(manager, FIRE_DRAGON_BASE_MODEL, 0));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.ICE_DRAGON, manager -> new RenderDragonBase(manager, ICE_DRAGON_BASE_MODEL, 1));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.LIGHTNING_DRAGON, manager -> new RenderLightningDragon(manager, LIGHTNING_DRAGON_BASE_MODEL, 2));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_EGG, manager -> new RenderDragonEgg(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_ARROW, manager -> new RenderDragonArrow(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_SKULL, manager -> new RenderDragonSkull(manager, FIRE_DRAGON_BASE_MODEL, ICE_DRAGON_BASE_MODEL, LIGHTNING_DRAGON_BASE_MODEL));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.FIRE_DRAGON_CHARGE, manager -> new RenderDragonFireCharge(manager, true));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.ICE_DRAGON_CHARGE, manager -> new RenderDragonFireCharge(manager, false));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.LIGHTNING_DRAGON_CHARGE, manager -> new RenderDragonLightningCharge());
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HIPPOGRYPH_EGG, manager -> new SpriteRenderer(manager, Minecraft.getInstance().getItemRenderer()));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HIPPOGRYPH, manager -> new RenderHippogryph(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.STONE_STATUE, manager -> new RenderStoneStatue(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.GORGON, manager -> new RenderGorgon(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.PIXIE, manager -> new RenderPixie(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.CYCLOPS, manager -> new RenderCyclops(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.SIREN, manager -> new RenderSiren(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HIPPOCAMPUS, manager -> new RenderHippocampus(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DEATH_WORM, manager -> new RenderDeathWorm(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DEATH_WORM_EGG, manager -> new SpriteRenderer(manager, Minecraft.getInstance().getItemRenderer()));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.COCKATRICE, manager -> new RenderCockatrice(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.COCKATRICE_EGG, manager -> new SpriteRenderer(manager, Minecraft.getInstance().getItemRenderer()));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.STYMPHALIAN_BIRD, manager -> new RenderStymphalianBird(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.STYMPHALIAN_FEATHER, manager -> new RenderStymphalianFeather(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.STYMPHALIAN_ARROW, manager -> new RenderStymphalianArrow(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.TROLL, manager -> new RenderTroll(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MYRMEX_WORKER, manager -> new RenderMyrmexBase(manager, new ModelMyrmexWorker(), 0.5F));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MYRMEX_SOLDIER, manager -> new RenderMyrmexBase(manager, new ModelMyrmexSoldier(), 0.75F));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MYRMEX_QUEEN, manager -> new RenderMyrmexBase(manager, new ModelMyrmexQueen(), 1.25F));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MYRMEX_EGG, manager -> new RenderMyrmexEgg(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MYRMEX_SENTINEL, manager -> new RenderMyrmexBase(manager, new ModelMyrmexSentinel(), 0.85F));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MYRMEX_ROYAL, manager -> new RenderMyrmexBase(manager, new ModelMyrmexRoyal(), 0.75F));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MYRMEX_SWARMER, manager -> new RenderMyrmexBase(manager, new ModelMyrmexRoyal(), 0.25F));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.AMPHITHERE, manager -> new RenderAmphithere(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.AMPHITHERE_ARROW, manager -> new RenderAmphithereArrow(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.SEA_SERPENT, manager -> new RenderSeaSerpent(manager, SEA_SERPENT_BASE_MODEL));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.SEA_SERPENT_BUBBLES, manager -> new RenderNothing(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.SEA_SERPENT_ARROW, manager -> new RenderSeaSerpentArrow(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.CHAIN_TIE, manager -> new RenderChainTie(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.PIXIE_CHARGE, manager -> new RenderNothing(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.TIDE_TRIDENT, manager -> new RenderTideTrident(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MOB_SKULL, manager -> new RenderMobSkull(manager, SEA_SERPENT_BASE_MODEL));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_SCUTTLER, manager -> new RenderDreadScuttler(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_GHOUL, manager -> new RenderDreadGhoul(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_BEAST, manager -> new RenderDreadBeast(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_SCUTTLER, manager -> new RenderDreadScuttler(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_THRALL, manager -> new RenderDreadThrall(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_LICH, manager -> new RenderDreadLich(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_LICH_SKULL, manager -> new RenderDreadLichSkull());
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_KNIGHT, manager -> new RenderDreadKnight(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_HORSE, manager -> new RenderDreadHorse(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA, manager -> new RenderHydra(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA_BREATH, manager -> new RenderNothing(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA_ARROW, manager -> new RenderHydraArrow(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.SLOW_MULTIPART, manager -> new RenderNothing(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_MULTIPART, manager -> new RenderNothing(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.CYCLOPS_MULTIPART, manager -> new RenderNothing(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA_MULTIPART, manager -> new RenderNothing(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.GHOST, manager -> new RenderGhost(manager));
-        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.GHOST_SWORD, manager -> new RenderGhostSword(manager));
+        //@formatter:off
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.FIRE_DRAGON.get(), manager -> new RenderDragonBase(manager, FIRE_DRAGON_BASE_MODEL, 0));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.ICE_DRAGON.get(), manager -> new RenderDragonBase(manager, ICE_DRAGON_BASE_MODEL, 1));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.LIGHTNING_DRAGON.get(), manager -> new RenderLightningDragon(manager, LIGHTNING_DRAGON_BASE_MODEL, 2));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_EGG.get(), manager -> new RenderDragonEgg(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_ARROW.get(), manager -> new RenderDragonArrow(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_SKULL.get(), manager -> new RenderDragonSkull(manager, FIRE_DRAGON_BASE_MODEL, ICE_DRAGON_BASE_MODEL, LIGHTNING_DRAGON_BASE_MODEL));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.FIRE_DRAGON_CHARGE.get(), manager -> new RenderDragonFireCharge(manager, true));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.ICE_DRAGON_CHARGE.get(), manager -> new RenderDragonFireCharge(manager, false));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.LIGHTNING_DRAGON_CHARGE.get(), manager -> new RenderDragonLightningCharge());
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HIPPOGRYPH_EGG.get(), manager -> new SpriteRenderer(manager, Minecraft.getInstance().getItemRenderer()));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HIPPOGRYPH.get(), manager -> new RenderHippogryph(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.STONE_STATUE.get(), manager -> new RenderStoneStatue(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.GORGON.get(), manager -> new RenderGorgon(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.PIXIE.get(), manager -> new RenderPixie(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.CYCLOPS.get(), manager -> new RenderCyclops(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.SIREN.get(), manager -> new RenderSiren(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HIPPOCAMPUS.get(), manager -> new RenderHippocampus(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DEATH_WORM.get(), manager -> new RenderDeathWorm(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DEATH_WORM_EGG.get(), manager -> new SpriteRenderer(manager, Minecraft.getInstance().getItemRenderer()));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.COCKATRICE.get(), manager -> new RenderCockatrice(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.COCKATRICE_EGG.get(), manager -> new SpriteRenderer(manager, Minecraft.getInstance().getItemRenderer()));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.STYMPHALIAN_BIRD.get(), manager -> new RenderStymphalianBird(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.STYMPHALIAN_FEATHER.get(), manager -> new RenderStymphalianFeather(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.STYMPHALIAN_ARROW.get(), manager -> new RenderStymphalianArrow(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.TROLL.get(), manager -> new RenderTroll(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MYRMEX_WORKER.get(), manager -> new RenderMyrmexBase(manager, new ModelMyrmexWorker(), 0.5F));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MYRMEX_SOLDIER.get(), manager -> new RenderMyrmexBase(manager, new ModelMyrmexSoldier(), 0.75F));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MYRMEX_QUEEN.get(), manager -> new RenderMyrmexBase(manager, new ModelMyrmexQueen(), 1.25F));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MYRMEX_EGG.get(), manager -> new RenderMyrmexEgg(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MYRMEX_SENTINEL.get(), manager -> new RenderMyrmexBase(manager, new ModelMyrmexSentinel(), 0.85F));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MYRMEX_ROYAL.get(), manager -> new RenderMyrmexBase(manager, new ModelMyrmexRoyal(), 0.75F));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MYRMEX_SWARMER.get(), manager -> new RenderMyrmexBase(manager, new ModelMyrmexRoyal(), 0.25F));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.AMPHITHERE.get(), manager -> new RenderAmphithere(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.AMPHITHERE_ARROW.get(), manager -> new RenderAmphithereArrow(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.SEA_SERPENT.get(), manager -> new RenderSeaSerpent(manager, SEA_SERPENT_BASE_MODEL));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.SEA_SERPENT_BUBBLES.get(), manager -> new RenderNothing(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.SEA_SERPENT_ARROW.get(), manager -> new RenderSeaSerpentArrow(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.CHAIN_TIE.get(), manager -> new RenderChainTie(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.PIXIE_CHARGE.get(), manager -> new RenderNothing(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.TIDE_TRIDENT.get(), manager -> new RenderTideTrident(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.MOB_SKULL.get(), manager -> new RenderMobSkull(manager, SEA_SERPENT_BASE_MODEL));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_SCUTTLER.get(), manager -> new RenderDreadScuttler(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_GHOUL.get(), manager -> new RenderDreadGhoul(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_BEAST.get(), manager -> new RenderDreadBeast(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_SCUTTLER.get(), manager -> new RenderDreadScuttler(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_THRALL.get(), manager -> new RenderDreadThrall(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_LICH.get(), manager -> new RenderDreadLich(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_LICH_SKULL.get(), manager -> new RenderDreadLichSkull());
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_KNIGHT.get(), manager -> new RenderDreadKnight(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DREAD_HORSE.get(), manager -> new RenderDreadHorse(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA.get(), manager -> new RenderHydra(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA_BREATH.get(), manager -> new RenderNothing(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA_ARROW.get(), manager -> new RenderHydraArrow(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.SLOW_MULTIPART.get(), manager -> new RenderNothing(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.DRAGON_MULTIPART.get(), manager -> new RenderNothing(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.CYCLOPS_MULTIPART.get(), manager -> new RenderNothing(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA_MULTIPART.get(), manager -> new RenderNothing(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.GHOST.get(), manager -> new RenderGhost(manager));
+        RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.GHOST_SWORD.get(), manager -> new RenderGhostSword(manager));
         //@formatter:off
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PODIUM.get(), manager -> new RenderPodium(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.IAF_LECTERN.get(), manager -> new RenderLectern(manager));
@@ -351,6 +320,7 @@ public class ClientProxy extends CommonProxy {
         });
     }
 
+    @Override
     public void spawnDragonParticle(final EnumParticles name, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase) {
         ClientWorld world = Minecraft.getInstance().world;
         if (world == null) {
@@ -367,6 +337,7 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
+    @Override
     public void spawnParticle(final EnumParticles name, double x, double y, double z, double motX, double motY, double motZ, float size) {
         ClientWorld world = Minecraft.getInstance().world;
         if (world == null) {
@@ -407,6 +378,8 @@ public class ClientProxy extends CommonProxy {
             case Hydra:
                 particle = new ParticleHydraBreath(world, x, y, z, (float) motX, (float) motY, (float) motZ);
                 break;
+        default:
+            break;
         }
         if (particle != null) {
             Minecraft.getInstance().particles.addEffect(particle);
@@ -428,6 +401,7 @@ public class ClientProxy extends CommonProxy {
         Minecraft.getInstance().displayGuiScreen(new GuiMyrmexAddRoom(staff, pos, facing));
     }
 
+    @Override
     public Object getArmorModel(int armorId) {
         switch (armorId) {
             case 0:
@@ -478,58 +452,72 @@ public class ClientProxy extends CommonProxy {
         return null;
     }
 
+    @Override
     public Object getFontRenderer() {
         return Minecraft.getInstance().fontRenderer;
     }
 
+    @Override
     public int getDragon3rdPersonView() {
         return thirdPersonViewDragon;
     }
 
+    @Override
     public void setDragon3rdPersonView(int view) {
         thirdPersonViewDragon = view;
     }
 
+    @Override
     public Object getDreadlandsRender(int i) {
         return null;
     }
 
+    @Override
     public int getPreviousViewType() {
         return previousViewType;
     }
 
+    @Override
     public void setPreviousViewType(int view) {
         previousViewType = view;
     }
 
+    @Override
     public void updateDragonArmorRender(String clear) {
         LayerDragonArmor.clearCache(clear);
     }
 
+    @Override
     public boolean shouldSeeBestiaryContents() {
         return InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 340) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 344);
     }
 
+    @Override
     public Entity getReferencedMob() {
         return referencedMob;
     }
 
+    @Override
     public void setReferencedMob(Entity dragonBase) {
         referencedMob = dragonBase;
     }
 
+    @Override
     public TileEntity getRefrencedTE() {
         return referencedTE;
     }
 
+    @Override
     public void setRefrencedTE(TileEntity tileEntity) {
         referencedTE = tileEntity;
     }
 
+    @Override
     public Item.Properties setupISTER(Item.Properties group) {
         return group.setISTER(ClientProxy::getTEISR);
     }
 
+    @Override
     public PlayerEntity getClientSidePlayer() {
         return Minecraft.getInstance().player;
     }

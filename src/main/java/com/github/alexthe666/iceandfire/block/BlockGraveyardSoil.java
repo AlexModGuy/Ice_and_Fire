@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityGhost;
@@ -15,9 +16,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.ToolType;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraftforge.common.ToolType;
 
 public class BlockGraveyardSoil extends Block {
 
@@ -36,6 +36,7 @@ public class BlockGraveyardSoil extends Block {
     }
 
 
+    @Override
     public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
         if (!worldIn.isRemote) {
             if (!worldIn.isAreaLoaded(pos, 3))
@@ -44,9 +45,9 @@ public class BlockGraveyardSoil extends Block {
                 int checkRange = 32;
                 int k = worldIn.getEntitiesWithinAABB(EntityGhost.class, (new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)).grow(checkRange)).size();
                 if(k < 10){
-                    EntityGhost ghost = IafEntityRegistry.GHOST.create(worldIn);
-                    Random random = new Random();
-                    ghost.setPositionAndRotation(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, random.nextFloat() * 360F, 0);
+                    EntityGhost ghost = IafEntityRegistry.GHOST.get().create(worldIn);
+                    ghost.setPositionAndRotation(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
+                        ThreadLocalRandom.current().nextFloat() * 360F, 0);
                     if (!worldIn.isRemote) {
                         ghost.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(pos), SpawnReason.SPAWNER, null, null);
                         worldIn.addEntity(ghost);

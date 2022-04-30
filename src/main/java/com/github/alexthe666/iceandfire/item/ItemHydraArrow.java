@@ -26,10 +26,12 @@ public class ItemHydraArrow extends ArrowItem {
         this.setRegistryName(IceAndFire.MODID, "hydra_arrow");
     }
 
+    @Override
     public AbstractArrowEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-        return new EntityHydraArrow(IafEntityRegistry.HYDRA_ARROW, worldIn, shooter);
+        return new EntityHydraArrow(IafEntityRegistry.HYDRA_ARROW.get(), worldIn, shooter);
     }
 
+    @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         tooltip.add(new TranslationTextComponent("item.iceandfire.hydra_arrow.desc").mergeStyle(TextFormatting.GRAY));
     }

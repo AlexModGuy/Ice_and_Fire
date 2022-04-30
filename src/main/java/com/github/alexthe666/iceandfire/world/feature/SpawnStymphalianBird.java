@@ -33,7 +33,7 @@ public class SpawnStymphalianBird extends Feature<NoFeatureConfig> {
                 BlockPos pos = position.add(rand.nextInt(10) - 5, 0, rand.nextInt(10) - 5);
                 pos = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);
                 if (worldIn.getBlockState(pos.down()).isSolid()) {
-                    EntityStymphalianBird bird = IafEntityRegistry.STYMPHALIAN_BIRD.create(worldIn.getWorld());
+                    EntityStymphalianBird bird = IafEntityRegistry.STYMPHALIAN_BIRD.get().create(worldIn.getWorld());
                     bird.setLocationAndAngles(pos.getX() + 0.5F, pos.getY() + 1.5F, pos.getZ() + 0.5F, 0, 0);
                     worldIn.addEntity(bird);
                     

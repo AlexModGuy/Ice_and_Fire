@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.Level;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityAmphithereArrow;
 import com.github.alexthe666.iceandfire.entity.EntityCockatriceEgg;
@@ -19,37 +21,31 @@ import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.resources.JsonReloadListener;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.dispenser.ProjectileDispenseBehavior;
-import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
-
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import org.apache.logging.log4j.Level;
 
 public class IafRecipeRegistry extends JsonReloadListener {
 
@@ -98,7 +94,7 @@ public class IafRecipeRegistry extends JsonReloadListener {
         });
         ImmutableMap<ResourceLocation, DragonForgeRecipe> immutablemap = builder.build();
         immutablemap.forEach((p_215305_2_, p_215305_3_) -> {
-            ALL_FORGE_RECIPES.add((DragonForgeRecipe)p_215305_3_);
+            ALL_FORGE_RECIPES.add(p_215305_3_);
         });
         FIRE_FORGE_RECIPES.clear();
         ICE_FORGE_RECIPES.clear();
@@ -121,8 +117,11 @@ public class IafRecipeRegistry extends JsonReloadListener {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
+            @Override
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-                EntityStymphalianArrow entityarrow = new EntityStymphalianArrow(IafEntityRegistry.STYMPHALIAN_ARROW, worldIn, position.getX(), position.getY(), position.getZ());
+                EntityStymphalianArrow entityarrow = new EntityStymphalianArrow(
+                    IafEntityRegistry.STYMPHALIAN_ARROW.get(), worldIn, position.getX(), position.getY(),
+                    position.getZ());
                 entityarrow.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
                 return entityarrow;
             }
@@ -131,8 +130,10 @@ public class IafRecipeRegistry extends JsonReloadListener {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
+            @Override
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-                EntityAmphithereArrow entityarrow = new EntityAmphithereArrow(IafEntityRegistry.AMPHITHERE_ARROW, worldIn, position.getX(), position.getY(), position.getZ());
+                EntityAmphithereArrow entityarrow = new EntityAmphithereArrow(IafEntityRegistry.AMPHITHERE_ARROW.get(),
+                    worldIn, position.getX(), position.getY(), position.getZ());
                 entityarrow.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
                 return entityarrow;
             }
@@ -141,8 +142,10 @@ public class IafRecipeRegistry extends JsonReloadListener {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
+            @Override
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-                EntitySeaSerpentArrow entityarrow = new EntitySeaSerpentArrow(IafEntityRegistry.SEA_SERPENT_ARROW, worldIn, position.getX(), position.getY(), position.getZ());
+                EntitySeaSerpentArrow entityarrow = new EntitySeaSerpentArrow(IafEntityRegistry.SEA_SERPENT_ARROW.get(),
+                    worldIn, position.getX(), position.getY(), position.getZ());
                 entityarrow.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
                 return entityarrow;
             }
@@ -151,8 +154,10 @@ public class IafRecipeRegistry extends JsonReloadListener {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
+            @Override
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-                EntityDragonArrow entityarrow = new EntityDragonArrow(IafEntityRegistry.DRAGON_ARROW, position.getX(), position.getY(), position.getZ(), worldIn);
+                EntityDragonArrow entityarrow = new EntityDragonArrow(IafEntityRegistry.DRAGON_ARROW.get(),
+                    position.getX(), position.getY(), position.getZ(), worldIn);
                 entityarrow.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
                 return entityarrow;
             }
@@ -161,8 +166,10 @@ public class IafRecipeRegistry extends JsonReloadListener {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
+            @Override
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-                EntityHydraArrow entityarrow = new EntityHydraArrow(IafEntityRegistry.HYDRA_ARROW, worldIn, position.getX(), position.getY(), position.getZ());
+                EntityHydraArrow entityarrow = new EntityHydraArrow(IafEntityRegistry.HYDRA_ARROW.get(), worldIn,
+                    position.getX(), position.getY(), position.getZ());
                 entityarrow.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
                 return entityarrow;
             }
@@ -171,32 +178,40 @@ public class IafRecipeRegistry extends JsonReloadListener {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
+            @Override
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-                return new EntityHippogryphEgg(IafEntityRegistry.HIPPOGRYPH_EGG, worldIn, position.getX(), position.getY(), position.getZ(), stackIn);
+                return new EntityHippogryphEgg(IafEntityRegistry.HIPPOGRYPH_EGG.get(), worldIn, position.getX(),
+                    position.getY(), position.getZ(), stackIn);
             }
         });
         DispenserBlock.registerDispenseBehavior(IafItemRegistry.ROTTEN_EGG, new ProjectileDispenseBehavior() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
+            @Override
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-                return new EntityCockatriceEgg(IafEntityRegistry.COCKATRICE_EGG, position.getX(), position.getY(), position.getZ(), worldIn);
+                return new EntityCockatriceEgg(IafEntityRegistry.COCKATRICE_EGG.get(), position.getX(), position.getY(),
+                    position.getZ(), worldIn);
             }
         });
         DispenserBlock.registerDispenseBehavior(IafItemRegistry.DEATHWORM_EGG, new ProjectileDispenseBehavior() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
+            @Override
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-                return new EntityDeathWormEgg(IafEntityRegistry.DEATH_WORM_EGG, position.getX(), position.getY(), position.getZ(), worldIn, false);
+                return new EntityDeathWormEgg(IafEntityRegistry.DEATH_WORM_EGG.get(), position.getX(), position.getY(),
+                    position.getZ(), worldIn, false);
             }
         });
         DispenserBlock.registerDispenseBehavior(IafItemRegistry.DEATHWORM_EGG_GIGANTIC, new ProjectileDispenseBehavior() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
+            @Override
             protected ProjectileEntity getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
-                return new EntityDeathWormEgg(IafEntityRegistry.DEATH_WORM_EGG, position.getX(), position.getY(), position.getZ(), worldIn, true);
+                return new EntityDeathWormEgg(IafEntityRegistry.DEATH_WORM_EGG.get(), position.getX(), position.getY(),
+                    position.getZ(), worldIn, true);
             }
         });
         IafItemRegistry.BLINDFOLD_ARMOR_MATERIAL.setRepairMaterial(Ingredient.fromStacks(new ItemStack(Items.STRING)));

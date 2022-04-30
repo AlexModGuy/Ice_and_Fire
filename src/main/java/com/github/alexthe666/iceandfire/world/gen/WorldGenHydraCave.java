@@ -58,14 +58,14 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
             int j = i1 + rand.nextInt(2);
             int k = 5 + ySize;
             int l = i1 + rand.nextInt(2);
-            float f = (float) (j + k + l) * 0.333F + 0.5F;
+            float f = (j + k + l) * 0.333F + 0.5F;
 
 
             for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
                 boolean doorwayX = blockpos.getX() >= position.getX() - 2 + rand.nextInt(2) && blockpos.getX() <= position.getX() + 2 + rand.nextInt(2);
                 boolean doorwayZ = blockpos.getZ() >= position.getZ() - 2 + rand.nextInt(2) && blockpos.getZ() <= position.getZ() + 2 + rand.nextInt(2);
                 boolean isNotInDoorway = !doorwayX && !doorwayZ && blockpos.getY() > position.getY() || blockpos.getY() > position.getY() + k - (1 + rand.nextInt(2));
-                if (blockpos.distanceSq(position) <= (double) (f * f)) {
+                if (blockpos.distanceSq(position) <= f * f) {
                     if (!(worldIn.getBlockState(position).getBlock() instanceof ChestBlock) && isNotInDoorway) {
                         worldIn.setBlockState(blockpos, Blocks.GRASS_BLOCK.getDefaultState(), 3);
                         if (worldIn.getBlockState(position.down()).getBlock() == Blocks.GRASS_BLOCK) {
@@ -96,9 +96,9 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
             int j = i2 + rand.nextInt(2);
             int k = 4 + ySize;
             int l = i2 + rand.nextInt(2);
-            float f = (float) (j + k + l) * 0.333F + 0.5F;
+            float f = (j + k + l) * 0.333F + 0.5F;
             for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
-                if (blockpos.distanceSq(position) <= (double) (f * f) && blockpos.getY() > position.getY()) {
+                if (blockpos.distanceSq(position) <= f * f && blockpos.getY() > position.getY()) {
                     if (!(worldIn.getBlockState(position).getBlock() instanceof ChestBlock)) {
                         worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 3);
 
@@ -106,7 +106,7 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
                 }
             }
             for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k + 8, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
-                if (blockpos.distanceSq(position) <= (double) (f * f) && blockpos.getY() == position.getY()) {
+                if (blockpos.distanceSq(position) <= f * f && blockpos.getY() == position.getY()) {
                     if (rand.nextInt(30) == 0 && isTouchingAir(worldIn, blockpos.up())) {
                         worldIn.setBlockState(blockpos.up(1), Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, HORIZONTALS[new Random().nextInt(3)]), 2);
                         if (worldIn.getBlockState(blockpos.up(1)).getBlock() instanceof ChestBlock) {
@@ -142,7 +142,7 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
                 }
             }
         }
-        EntityHydra hydra = new EntityHydra(IafEntityRegistry.HYDRA, worldIn.getWorld());
+        EntityHydra hydra = new EntityHydra(IafEntityRegistry.HYDRA.get(), worldIn.getWorld());
         hydra.setVariant(rand.nextInt(3));
         hydra.setHomePosAndDistance(position, 15);
         hydra.setPositionAndRotation(position.getX() + 0.5, position.getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);

@@ -13,24 +13,26 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityStymphalianArrow extends AbstractArrowEntity {
 
-    public EntityStymphalianArrow(EntityType t, World worldIn) {
+    public EntityStymphalianArrow(EntityType<? extends AbstractArrowEntity> t, World worldIn) {
         super(t, worldIn);
         this.setDamage(3.5F);
     }
 
-    public EntityStymphalianArrow(EntityType t, World worldIn, double x, double y, double z) {
+    public EntityStymphalianArrow(EntityType<? extends AbstractArrowEntity> t, World worldIn, double x, double y,
+        double z) {
         this(t, worldIn);
         this.setPosition(x, y, z);
         this.setDamage(3.5F);
     }
 
     public EntityStymphalianArrow(FMLPlayMessages.SpawnEntity spawnEntity, World world) {
-        this(IafEntityRegistry.STYMPHALIAN_ARROW, world);
+        this(IafEntityRegistry.STYMPHALIAN_ARROW.get(), world);
     }
 
     @Override
@@ -43,6 +45,7 @@ public class EntityStymphalianArrow extends AbstractArrowEntity {
         this.setDamage(3.5F);
     }
 
+    @Override
     public void tick() {
         super.tick();
         float sqrt = MathHelper.sqrt(this.getMotion().x * this.getMotion().x + this.getMotion().z * this.getMotion().z);
@@ -73,6 +76,7 @@ public class EntityStymphalianArrow extends AbstractArrowEntity {
         }
     }
 
+    @Override
     public boolean hasNoGravity() {
         return true;
     }
