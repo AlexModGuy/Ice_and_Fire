@@ -26,10 +26,12 @@ public class ItemAmphithereArrow extends ArrowItem {
         this.setRegistryName(IceAndFire.MODID, "amphithere_arrow");
     }
 
+    @Override
     public AbstractArrowEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-        return new EntityAmphithereArrow(IafEntityRegistry.AMPHITHERE_ARROW, shooter, worldIn);
+        return new EntityAmphithereArrow(IafEntityRegistry.AMPHITHERE_ARROW.get(), shooter, worldIn);
     }
 
+    @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         tooltip.add(new TranslationTextComponent("item.iceandfire.amphithere_arrow.desc").mergeStyle(TextFormatting.GRAY));
     }

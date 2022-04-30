@@ -194,7 +194,7 @@ public class IceAndFireMainMenu extends MainMenuScreen {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.enableBlend();
         this.getMinecraft().fontRenderer.drawString(ms, "Ice and Fire " + TextFormatting.YELLOW + IceAndFire.VERSION, 2, height - 10, 0xFFFFFFFF);
-        ms.push();
+        GlStateManager.pushMatrix();
         this.getMinecraft().getTextureManager().bindTexture(MINECRAFT_TITLE_TEXTURES);
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         blit(ms, width / 2 - 274 / 2, 10, 0, 0, 155, 44);
@@ -207,7 +207,7 @@ public class IceAndFireMainMenu extends MainMenuScreen {
         RenderSystem.translatef(0, f1 * 10, 0.0F);
         RenderSystem.scalef(f1, f1, f1);
         this.drawCenteredString(ms, this.getMinecraft().fontRenderer, this.splashText, 0, -40, TextFormatting.YELLOW.getColor());
-        ms.pop();
+        GlStateManager.popMatrix();
 
         ForgeHooksClient.renderMainMenu(this, ms, this.getMinecraft().fontRenderer, width, height);
         String s1 = "Copyright Mojang AB. Do not distribute!";

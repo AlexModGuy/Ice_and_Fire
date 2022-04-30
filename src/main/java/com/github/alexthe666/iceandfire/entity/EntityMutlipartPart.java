@@ -4,17 +4,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.github.alexthe666.iceandfire.IafConfig;
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
 
-import com.google.common.collect.ImmutableList;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -23,13 +26,11 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.NetworkHooks;
 
-import javax.annotation.Nullable;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public abstract class EntityMutlipartPart extends Entity {
 
@@ -43,7 +44,7 @@ public abstract class EntityMutlipartPart extends Entity {
     protected float offsetY;
     protected float damageMultiplier;
 
-    public EntityMutlipartPart(EntityType t, World world) {
+    protected EntityMutlipartPart(EntityType<?> t, World world) {
         super(t, world);
         multipartSize = t.getSize();
     }
@@ -68,7 +69,8 @@ public abstract class EntityMutlipartPart extends Entity {
 
     }
 
-    public EntityMutlipartPart(EntityType t, Entity parent, float radius, float angleYaw, float offsetY, float sizeX, float sizeY, float damageMultiplier) {
+    public EntityMutlipartPart(EntityType<?> t, Entity parent, float radius, float angleYaw, float offsetY, float sizeX,
+        float sizeY, float damageMultiplier) {
         super(t, parent.world);
         this.setParent(parent);
         this.setScaleX(sizeX);
@@ -151,9 +153,8 @@ public abstract class EntityMutlipartPart extends Entity {
                     double d0 = parent.getPosX() - this.getPosX();
                     double d1 = parent.getPosY() - this.getPosY();
                     double d2 = parent.getPosZ() - this.getPosZ();
-                    double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-                    float f = (float)(MathHelper.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F;
-                    float f2 = -((float) (MathHelper.atan2(d1, MathHelper.sqrt(d0 * d0 + d2 * d2)) * (double) (180F / (float) Math.PI)));
+                    MathHelper.atan2(d2, d0);
+                    float f2 = -((float) (MathHelper.atan2(d1, MathHelper.sqrt(d0 * d0 + d2 * d2)) * (180F / (float) Math.PI)));
                     this.rotationPitch = this.limitAngle(this.rotationPitch, f2, 5.0F);
                     this.markVelocityChanged();
                     this.rotationYaw = renderYawOffset;
@@ -203,6 +204,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
 
+    @Override
     public void remove() {
         this.remove(false);
     }
@@ -210,8 +212,7 @@ public abstract class EntityMutlipartPart extends Entity {
     public Entity getParent() {
         UUID id = getParentId();
         if (id != null && !world.isRemote) {
-            Entity e = ((ServerWorld) world).getEntityByUuid(id);
-            return e;
+            return ((ServerWorld) world).getEntityByUuid(id);
         }
         return null;
     }
@@ -248,6 +249,7 @@ public abstract class EntityMutlipartPart extends Entity {
         }
     }
 
+    @Override
     public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
         Entity parent = getParent();
         if (world.isRemote && parent != null) {

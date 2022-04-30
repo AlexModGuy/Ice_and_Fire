@@ -26,10 +26,12 @@ public class ItemSeaSerpentArrow extends ArrowItem {
         this.setRegistryName(IceAndFire.MODID, "sea_serpent_arrow");
     }
 
+    @Override
     public AbstractArrowEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-        return new EntitySeaSerpentArrow(IafEntityRegistry.SEA_SERPENT_ARROW, worldIn, shooter);
+        return new EntitySeaSerpentArrow(IafEntityRegistry.SEA_SERPENT_ARROW.get(), worldIn, shooter);
     }
 
+    @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         tooltip.add(new TranslationTextComponent("item.iceandfire.sea_serpent_arrow.desc").mergeStyle(TextFormatting.GRAY));
     }

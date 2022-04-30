@@ -20,6 +20,7 @@ public class ItemLichStaff extends Item {
         this.setRegistryName("iceandfire:lich_staff");
     }
 
+    @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         return repair.getItem() == IafItemRegistry.DREAD_SHARD || super.getIsRepairable(toRepair, repair);
     }
@@ -34,10 +35,11 @@ public class ItemLichStaff extends Item {
             double d3 = playerIn.getLookVec().y;
             double d4 = playerIn.getLookVec().z;
             float inaccuracy = 1.0F;
-            d2 = d2 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-            d3 = d3 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-            d4 = d4 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-            EntityDreadLichSkull charge = new EntityDreadLichSkull(IafEntityRegistry.DREAD_LICH_SKULL, worldIn, playerIn, 6);
+            d2 = d2 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * inaccuracy;
+            d3 = d3 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * inaccuracy;
+            d4 = d4 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * inaccuracy;
+            EntityDreadLichSkull charge = new EntityDreadLichSkull(IafEntityRegistry.DREAD_LICH_SKULL.get(), worldIn,
+                playerIn, 6);
             charge.shoot( playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 7.0F, 1.0F);
             charge.setPosition(playerIn.getPosX(), playerIn.getPosY() + 1, playerIn.getPosZ());
             worldIn.addEntity(charge);

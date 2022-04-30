@@ -26,7 +26,7 @@ public class ItemMobSkull extends Item implements ICustomRendered {
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
         PlayerEntity player = context.getPlayer();
-        EntityMobSkull skull = new EntityMobSkull(IafEntityRegistry.MOB_SKULL, context.getWorld());
+        EntityMobSkull skull = new EntityMobSkull(IafEntityRegistry.MOB_SKULL.get(), context.getWorld());
         ItemStack stack = player.getHeldItem(context.getHand());
         BlockPos offset = context.getPos().offset(context.getFace(), 1);
         skull.setLocationAndAngles(offset.getX() + 0.5, offset.getY(), offset.getZ() + 0.5, 0, 0);

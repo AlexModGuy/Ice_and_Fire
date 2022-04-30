@@ -16,9 +16,10 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 public class SpawnDragonSkeleton extends Feature<NoFeatureConfig> {
-	protected EntityType<EntityDragonBase> dragonType;
 
-	public SpawnDragonSkeleton(EntityType<EntityDragonBase> dt, Codec<NoFeatureConfig> configFactoryIn) {
+    protected EntityType<? extends EntityDragonBase> dragonType;
+
+    public SpawnDragonSkeleton(EntityType<? extends EntityDragonBase> dt, Codec<NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
         dragonType = dt;
     }

@@ -3,12 +3,6 @@ package com.github.alexthe666.iceandfire;
 
 
 
-import com.github.alexthe666.citadel.server.message.PropertiesMessage;
-import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
-import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
-import com.github.alexthe666.iceandfire.message.*;
-import com.github.alexthe666.iceandfire.world.IafProcessors;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,6 +10,7 @@ import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
+import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
 import com.github.alexthe666.iceandfire.inventory.IafContainerRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.loot.IafLootRegistry;
@@ -88,15 +83,16 @@ public class IceAndFire {
         MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadFromJSON);
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
         PROXY.init();
-        IafWorldRegistry.register();
-
+      
         final IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         IafContainerRegistry.CONTAINERS.register(modBus);
+        IafEntityRegistry.ENTITIES.register(modBus);
+        IafTileEntityRegistry.TYPES.register(modBus);
+
         modBus.addListener(this::setup);
         modBus.addListener(this::setupClient);
         modBus.addListener(this::setupComplete);
-        IafTileEntityRegistry.TYPES.register(modBus);
-
+        modBus.addListener((final FMLCommonSetupEvent event) -> IafWorldRegistry.register());
     }
 
     @SubscribeEvent

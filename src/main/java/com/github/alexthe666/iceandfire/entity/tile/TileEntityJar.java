@@ -26,7 +26,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.MathHelper;
 
 public class TileEntityJar extends TileEntity implements ITickableTileEntity {
 
@@ -135,7 +134,7 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
     }
 
     public void releasePixie() {
-        EntityPixie pixie = new EntityPixie(IafEntityRegistry.PIXIE, this.world);
+        EntityPixie pixie = new EntityPixie(IafEntityRegistry.PIXIE.get(), this.world);
         pixie.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 1F, this.pos.getZ() + 0.5F, new Random().nextInt(360), 0);
         pixie.setHeldItem(Hand.MAIN_HAND, pixieItems.get(0));
         pixie.setColor(this.pixieType);
@@ -156,19 +155,5 @@ public class TileEntityJar extends TileEntity implements ITickableTileEntity {
         if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             return downHandler.cast();
         return super.getCapability(capability, facing);
-    }
-
-    private float updateRotation(float float1, float float2, float float3) {
-        float f = MathHelper.wrapDegrees(float2 - float1);
-
-        if (f > float3) {
-            f = float3;
-        }
-
-        if (f < -float3) {
-            f = -float3;
-        }
-
-        return float1 + f;
     }
 }

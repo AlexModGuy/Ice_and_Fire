@@ -4,7 +4,6 @@ import javax.annotation.Nullable;
 
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
-import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
@@ -46,6 +45,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -94,6 +94,7 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         headDamageThreshold = Math.max(5, (float) IafConfig.hydraMaxHealth * 0.08F);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new SwimGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
@@ -115,6 +116,7 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         }));
     }
 
+    @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         return false;
     }
@@ -167,7 +169,8 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
                     double d2 = entity.getPosX() - headPosX + this.rand.nextGaussian() * 0.4D;
                     double d3 = entity.getPosY() + entity.getEyeHeight() - headPosY + this.rand.nextGaussian() * 0.4D;
                     double d4 = entity.getPosZ() - headPosZ + this.rand.nextGaussian() * 0.4D;
-                    EntityHydraBreath entitylargefireball = new EntityHydraBreath(IafEntityRegistry.HYDRA_BREATH, world, this, d2, d3, d4);
+                    EntityHydraBreath entitylargefireball = new EntityHydraBreath(IafEntityRegistry.HYDRA_BREATH.get(),
+                        world, this, d2, d3, d4);
                     entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
                     if (!world.isRemote) {
                         world.addEntity(entitylargefireball);
@@ -299,21 +302,25 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         }
     }
 
+    @Override
     public void remove() {
         clearParts();
         super.remove();
     }
 
+    @Override
     protected void playHurtSound(DamageSource source) {
         speakingProgress[rand.nextInt(getHeadCount())] = 1F;
         super.playHurtSound(source);
     }
 
+    @Override
     public void playAmbientSound() {
         speakingProgress[rand.nextInt(getHeadCount())] = 1F;
         super.playAmbientSound();
     }
 
+    @Override
     public int getTalkInterval() {
         return 100 / getHeadCount();
     }
@@ -380,6 +387,7 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         return super.attackEntityFrom(source, amount);
     }
 
+    @Override
     @Nullable
     public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         ILivingEntityData data = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
@@ -451,6 +459,7 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         this.dataManager.set(SEVERED_HEAD, MathHelper.clamp(count, -1, HEADS));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {
         if (id >= 40 && id <= 48) {
@@ -467,6 +476,7 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         }
     }
 
+    @Override
     public boolean isPotionApplicable(EffectInstance potioneffectIn) {
         return potioneffectIn.getPotion() != Effects.POISON && super.isPotionApplicable(potioneffectIn);
     }
@@ -479,16 +489,19 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         lastHitHead = index;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getAmbientSound() {
         return IafSoundRegistry.HYDRA_IDLE;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getHurtSound(DamageSource source) {
         return IafSoundRegistry.HYDRA_HURT;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getDeathSound() {
         return IafSoundRegistry.HYDRA_DIE;

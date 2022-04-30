@@ -1,12 +1,13 @@
 package com.github.alexthe666.iceandfire.item;
 
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-
-import java.util.List;
-import javax.annotation.Nullable;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -17,7 +18,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -43,13 +43,13 @@ public class ItemDragonHorn extends Item {
             String id = stack.getTag().getString("DragonHornEntityID");
             if (EntityType.byKey(id).isPresent()) {
                 EntityType entityType = EntityType.byKey(id).get();
-                if (entityType == IafEntityRegistry.FIRE_DRAGON)
+                if (entityType == IafEntityRegistry.FIRE_DRAGON.get())
                     return 1;
 
-                if (entityType == IafEntityRegistry.ICE_DRAGON)
+                if (entityType == IafEntityRegistry.ICE_DRAGON.get())
                     return 2;
 
-                if (entityType == IafEntityRegistry.LIGHTNING_DRAGON)
+                if (entityType == IafEntityRegistry.LIGHTNING_DRAGON.get())
                     return 3;
             }
         }
@@ -58,21 +58,23 @@ public class ItemDragonHorn extends Item {
     }
 
 
+    @Override
     public void onCreated(ItemStack itemStack, World world, PlayerEntity player) {
         itemStack.setTag(new CompoundNBT());
     }
 
 
+    @Override
     public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
         ItemStack trueStack = playerIn.getHeldItem(hand);
-        if (!playerIn.world.isRemote && hand == Hand.MAIN_HAND && target instanceof EntityDragonBase && ((EntityDragonBase) target).isOwner((LivingEntity) playerIn) && (trueStack.getTag() == null || (trueStack.getTag() != null && trueStack.getTag().getCompound("EntityTag").isEmpty()))) {
+        if (!playerIn.world.isRemote && hand == Hand.MAIN_HAND && target instanceof EntityDragonBase && ((EntityDragonBase) target).isOwner(playerIn) && (trueStack.getTag() == null || (trueStack.getTag() != null && trueStack.getTag().getCompound("EntityTag").isEmpty()))) {
             CompoundNBT entityTag = new CompoundNBT();
             target.writeAdditional(entityTag);
             CompoundNBT newTag = new CompoundNBT();
             newTag.putString("DragonHornEntityID", Registry.ENTITY_TYPE.getKey(((EntityDragonBase) target).getType()).toString());
             newTag.put("EntityTag", entityTag);
             newTag.putUniqueId("EntityUUID", target.getUniqueID());
-            trueStack.setTag((CompoundNBT) newTag);
+            trueStack.setTag(newTag);
             playerIn.swingArm(hand);
             playerIn.world.playSound(playerIn, playerIn.getPosition(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3.0F, 0.75F);
             target.remove();
@@ -83,6 +85,7 @@ public class ItemDragonHorn extends Item {
     }
 
 
+    @Override
     public ActionResultType onItemUse(ItemUseContext context) {
         if (context.getFace() != Direction.UP)
             return ActionResultType.FAIL;
@@ -108,6 +111,7 @@ public class ItemDragonHorn extends Item {
         return ActionResultType.SUCCESS;
     }
 
+    @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (stack.getTag() != null) {
             CompoundNBT entityTag = stack.getTag().getCompound("EntityTag");
@@ -148,13 +152,13 @@ public class ItemDragonHorn extends Item {
     }
 
     private TextFormatting getTextColorForEntityType(EntityType type) {
-        if (type == IafEntityRegistry.FIRE_DRAGON)
+        if (type == IafEntityRegistry.FIRE_DRAGON.get())
             return TextFormatting.DARK_RED;
 
-        if (type == IafEntityRegistry.ICE_DRAGON)
+        if (type == IafEntityRegistry.ICE_DRAGON.get())
             return TextFormatting.BLUE;
 
-        if (type == IafEntityRegistry.LIGHTNING_DRAGON)
+        if (type == IafEntityRegistry.LIGHTNING_DRAGON.get())
             return TextFormatting.DARK_PURPLE;
 
         return TextFormatting.GRAY;

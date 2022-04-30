@@ -1,18 +1,46 @@
 package com.github.alexthe666.iceandfire.event;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
+import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
+import com.github.alexthe666.iceandfire.entity.EntityCyclops;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.EntityGhost;
+import com.github.alexthe666.iceandfire.entity.EntityGhostSword;
+import com.github.alexthe666.iceandfire.entity.EntityHydra;
+import com.github.alexthe666.iceandfire.entity.EntityHydraHead;
+import com.github.alexthe666.iceandfire.entity.EntityMutlipartPart;
+import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.AiDebug;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
-import com.github.alexthe666.iceandfire.entity.props.*;
+import com.github.alexthe666.iceandfire.entity.props.ChainProperties;
+import com.github.alexthe666.iceandfire.entity.props.ChickenProperties;
+import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
+import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
+import com.github.alexthe666.iceandfire.entity.props.SirenProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
 import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
-import com.github.alexthe666.iceandfire.item.*;
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.item.ItemChain;
+import com.github.alexthe666.iceandfire.item.ItemCockatriceScepter;
+import com.github.alexthe666.iceandfire.item.ItemDeathwormGauntlet;
+import com.github.alexthe666.iceandfire.item.ItemDragonsteelArmor;
+import com.github.alexthe666.iceandfire.item.ItemScaleArmor;
+import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
 import com.github.alexthe666.iceandfire.message.MessageSwingArm;
 import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
@@ -22,12 +50,18 @@ import com.github.alexthe666.iceandfire.world.gen.WorldGenFireDragonCave;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenIceDragonCave;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Multimap;
+
 import net.minecraft.block.AbstractChestBlock;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.WallBlock;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.*;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -43,24 +77,41 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.loot.*;
+import net.minecraft.loot.ItemLootEntry;
+import net.minecraft.loot.LootEntry;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTables;
+import net.minecraft.loot.RandomValueRange;
 import net.minecraft.loot.conditions.RandomChance;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ITag;
-import net.minecraft.util.*;
+import net.minecraft.util.CombatEntry;
+import net.minecraft.util.CombatTracker;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
-import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -70,17 +121,12 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)
 public class ServerEvents {
 
     public static final UUID ALEX_UUID = UUID.fromString("71363abe-fd03-49c9-940d-aae8b8209b7c");
     private static final Predicate VILLAGER_FEAR = new Predicate<LivingEntity>() {
+        @Override
         public boolean apply(@Nullable LivingEntity entity) {
             return entity != null && entity instanceof IVillagerFear;
         }
@@ -109,9 +155,10 @@ public class ServerEvents {
                     totalDmg += modifier.getAmount();
                 }
                 living.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
-                final EntityGhostSword shot = new EntityGhostSword(IafEntityRegistry.GHOST_SWORD, living.world, living, totalDmg * 0.5F);
-                final Vector3d vector3d = living.getLook(1.0F);
-                final Vector3f vector3f = new Vector3f(vector3d);
+                EntityGhostSword shot = new EntityGhostSword(IafEntityRegistry.GHOST_SWORD.get(), living.world, living,
+                    totalDmg * 0.5F);
+                Vector3d vector3d = living.getLook(1.0F);
+                Vector3f vector3f = new Vector3f(vector3d);
                 shot.shoot(vector3f.getX(), vector3f.getY(), vector3f.getZ(), 1.0F, 0.5F);
                 living.world.addEntity(shot);
 
@@ -425,7 +472,7 @@ public class ServerEvents {
         if (!event.getEntity().world.isRemote && ChainProperties.hasChainData(event.getEntityLiving())) {
             ItemEntity entityitem = new ItemEntity(event.getEntity().world,
                 event.getEntity().getPosX(),
-                event.getEntity().getPosY() + (double) 1,
+                event.getEntity().getPosY() + 1,
                 event.getEntity().getPosZ(),
                 new ItemStack(IafItemRegistry.CHAIN, ChainProperties.getChainedTo(event.getEntityLiving()).size()));
             entityitem.setDefaultPickupDelay();
@@ -449,7 +496,7 @@ public class ServerEvents {
                 }
                 if (flag) {
                     World world = event.getEntityLiving().world;
-                    EntityGhost ghost = IafEntityRegistry.GHOST.create(world);
+                    EntityGhost ghost = IafEntityRegistry.GHOST.get().create(world);
                     ghost.copyLocationAndAnglesFrom(event.getEntityLiving());
                     if (!world.isRemote) {
                         ghost.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(event.getEntityLiving().getPosition()), SpawnReason.SPAWNER, null, null);
@@ -652,25 +699,22 @@ public class ServerEvents {
     @SubscribeEvent
     public void onEntityJoinWorld(LivingSpawnEvent.SpecialSpawn event) {
         try {
-            if (event.getEntity() != null) {
-                final Entity entity = event.getEntity();
-
-                if (entity instanceof AnimalEntity && isSheep(entity)) {
-                    AnimalEntity animal = (AnimalEntity) entity;
-                    animal.goalSelector.addGoal(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
-                }
-                else if (IafConfig.villagersFearDragons && entity instanceof MobEntity && isVillager(entity)) {
-                    MobEntity villager = (MobEntity) entity;
-                    villager.goalSelector.addGoal(1, new VillagerAIFearUntamed((CreatureEntity) villager, LivingEntity.class, 8.0F, 0.8D, 0.8D, VILLAGER_FEAR));
-                }
-                else if (IafConfig.animalsFearDragons && entity instanceof MobEntity && isLivestock(entity)) {
-                    MobEntity animal = (MobEntity) entity;
-                    animal.goalSelector.addGoal(1, new VillagerAIFearUntamed((CreatureEntity) animal, LivingEntity.class, 30, 1.0D, 0.5D, new java.util.function.Predicate<LivingEntity>() {
-                        public boolean test(LivingEntity entity) {
-                            return entity != null && entity instanceof IAnimalFear && ((IAnimalFear) entity).shouldAnimalsFear(animal);
-                        }
-                    }));
-                }
+            if (event.getEntity() != null && isSheep(event.getEntity()) && event.getEntity() instanceof AnimalEntity) {
+                AnimalEntity animal = (AnimalEntity) event.getEntity();
+                animal.goalSelector.addGoal(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
+            }
+            if (event.getEntity() != null && isVillager(event.getEntity()) && event.getEntity() instanceof MobEntity && IafConfig.villagersFearDragons) {
+                MobEntity villager = (MobEntity) event.getEntity();
+                villager.goalSelector.addGoal(1, new VillagerAIFearUntamed((CreatureEntity) villager, LivingEntity.class, 8.0F, 0.8D, 0.8D, VILLAGER_FEAR));
+            }
+            if (event.getEntity() != null && isLivestock(event.getEntity()) && event.getEntity() instanceof MobEntity && IafConfig.animalsFearDragons) {
+                MobEntity animal = (MobEntity) event.getEntity();
+                animal.goalSelector.addGoal(1, new VillagerAIFearUntamed((CreatureEntity) animal, LivingEntity.class, 30, 1.0D, 0.5D, new java.util.function.Predicate<LivingEntity>() {
+                    @Override
+                    public boolean test(LivingEntity entity) {
+                        return entity != null && entity instanceof IAnimalFear && ((IAnimalFear) entity).shouldAnimalsFear(animal);
+                    }
+                }));
             }
         } catch (Exception e) {
             IceAndFire.LOGGER.warn("Tried to add unique behaviors to vanilla mobs and encountered an error");

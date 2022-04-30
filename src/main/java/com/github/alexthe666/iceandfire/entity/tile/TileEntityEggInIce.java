@@ -85,7 +85,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickableTileEntit
 
     public void spawnEgg() {
         if (type != null) {
-            EntityDragonEgg egg = new EntityDragonEgg(IafEntityRegistry.DRAGON_EGG, world);
+            EntityDragonEgg egg = new EntityDragonEgg(IafEntityRegistry.DRAGON_EGG.get(), world);
             egg.setEggType(type);
             egg.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
             egg.setOwnerId(this.ownerUUID);

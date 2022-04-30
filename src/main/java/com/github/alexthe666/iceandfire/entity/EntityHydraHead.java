@@ -5,10 +5,9 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.network.FMLPlayMessages;
 
 public class EntityHydraHead extends EntityMutlipartPart {
@@ -16,16 +15,16 @@ public class EntityHydraHead extends EntityMutlipartPart {
     public EntityHydra hydra;
     private boolean neck;
 
-    public EntityHydraHead(EntityType t, World world) {
+    public EntityHydraHead(EntityType<?> t, World world) {
         super(t, world);
     }
 
     public EntityHydraHead(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
-        this(IafEntityRegistry.HYDRA_MULTIPART, worldIn);
+        this(IafEntityRegistry.HYDRA_MULTIPART.get(), worldIn);
     }
 
     public EntityHydraHead(EntityHydra entity, float radius, float angle, float y, float width, float height, float damageMulti, int headIndex, boolean neck) {
-        super(IafEntityRegistry.HYDRA_MULTIPART, entity, radius, angle, y, width, height, damageMulti);
+        super(IafEntityRegistry.HYDRA_MULTIPART.get(), entity, radius, angle, y, width, height, damageMulti);
         this.headIndex = headIndex;
         this.neck = neck;
         this.hydra = entity;

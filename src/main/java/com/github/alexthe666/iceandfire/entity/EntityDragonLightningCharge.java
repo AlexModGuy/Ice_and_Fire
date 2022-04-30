@@ -20,6 +20,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -27,16 +28,17 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
 
     public int ticksInAir;
 
-    public EntityDragonLightningCharge(EntityType type, World worldIn) {
+    public EntityDragonLightningCharge(EntityType<? extends AbstractFireballEntity> type, World worldIn) {
         super(type, worldIn);
 
     }
 
     public EntityDragonLightningCharge(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
-        this(IafEntityRegistry.LIGHTNING_DRAGON_CHARGE, worldIn);
+        this(IafEntityRegistry.LIGHTNING_DRAGON_CHARGE.get(), worldIn);
     }
 
-    public EntityDragonLightningCharge(EntityType type, World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
+    public EntityDragonLightningCharge(EntityType<? extends AbstractFireballEntity> type, World worldIn, double posX,
+        double posY, double posZ, double accelX, double accelY, double accelZ) {
         super(type, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.07D;
@@ -44,7 +46,8 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
         this.accelerationZ = accelZ / d0 * 0.07D;
     }
 
-    public EntityDragonLightningCharge(EntityType type, World worldIn, EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
+    public EntityDragonLightningCharge(EntityType<? extends AbstractFireballEntity> type, World worldIn,
+        EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
         super(type, shooter, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.07D;
@@ -57,6 +60,7 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
         return false;
     }
 
+    @Override
     public void tick() {
         Entity shootingEntity = this.getShooter();
         this.extinguish();
@@ -76,8 +80,8 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
             double d1 = this.getPosY() + Vector3d.y;
             double d2 = this.getPosZ() + Vector3d.z;
             float f = MathHelper.sqrt(horizontalMag(Vector3d));
-            this.rotationYaw = (float) (MathHelper.atan2(Vector3d.x, Vector3d.z) * (double) (180F / (float) Math.PI));
-            for (this.rotationPitch = (float) (MathHelper.atan2(Vector3d.y, f) * (double) (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
+            this.rotationYaw = (float) (MathHelper.atan2(Vector3d.x, Vector3d.z) * (180F / (float) Math.PI));
+            for (this.rotationPitch = (float) (MathHelper.atan2(Vector3d.y, f) * (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
             }
             while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
                 this.prevRotationPitch += 360.0F;
@@ -173,6 +177,7 @@ public class EntityDragonLightningCharge  extends AbstractFireballEntity impleme
         return false;
     }
 
+    @Override
     public float getCollisionBorderSize() {
         return 0F;
     }

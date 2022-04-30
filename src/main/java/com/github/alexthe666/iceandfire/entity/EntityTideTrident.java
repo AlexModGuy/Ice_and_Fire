@@ -20,24 +20,21 @@ import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
-
-import java.lang.reflect.Field;
 
 public class EntityTideTrident extends TridentEntity {
 
 
-    public EntityTideTrident(EntityType type, World worldIn) {
+    public EntityTideTrident(EntityType<? extends TridentEntity> type, World worldIn) {
         super(type, worldIn);
         thrownStack = new ItemStack(IafItemRegistry.TIDE_TRIDENT);
     }
 
     public EntityTideTrident(World worldIn, LivingEntity thrower, ItemStack thrownStackIn) {
-        this(IafEntityRegistry.TIDE_TRIDENT, worldIn);
-        this.setPosition(thrower.getPosX(), thrower.getPosYEye() - (double)0.1F, thrower.getPosZ());
+        this(IafEntityRegistry.TIDE_TRIDENT.get(), worldIn);
+        this.setPosition(thrower.getPosX(), thrower.getPosYEye() - 0.1F, thrower.getPosZ());
         this.setShooter(thrower);
         thrownStack = thrownStackIn;
         this.dataManager.set(LOYALTY_LEVEL, (byte)EnchantmentHelper.getLoyaltyModifier(thrownStackIn));
@@ -45,7 +42,7 @@ public class EntityTideTrident extends TridentEntity {
     }
 
     public EntityTideTrident(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
-        this(IafEntityRegistry.TIDE_TRIDENT, worldIn);
+        this(IafEntityRegistry.TIDE_TRIDENT.get(), worldIn);
     }
 
     public EntityTideTrident(World worldIn, double x, double y, double z) {
@@ -105,6 +102,7 @@ public class EntityTideTrident extends TridentEntity {
         this.playSound(soundevent, f1, 1.0F);
     }
 
+    @Override
     protected ItemStack getArrowStack() {
         return this.thrownStack.getItem() == Items.TRIDENT ? new ItemStack(IafItemRegistry.TIDE_TRIDENT) : this.thrownStack.copy();
     }

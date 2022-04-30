@@ -5,7 +5,14 @@ import javax.annotation.Nullable;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
-import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIAttackMelee;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIAttackPlayers;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIDefendHive;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAILookAtTradePlayer;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIReEnterHive;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAITradePlayer;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIWanderHiveCenter;
+import com.github.alexthe666.iceandfire.entity.ai.MyrmexQueenAIWander;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexTrades;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
@@ -22,7 +29,6 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
@@ -46,6 +52,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.server.ServerWorld;
+
 import net.minecraftforge.common.MinecraftForge;
 
 public class EntityMyrmexQueen extends EntityMyrmexBase {
@@ -61,19 +68,22 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     private static final DataParameter<Boolean> HASMADEHOME = EntityDataManager.createKey(EntityMyrmexQueen.class, DataSerializers.BOOLEAN);
     private int eggTicks = 0;
 
-    public EntityMyrmexQueen(EntityType t, World worldIn) {
+    public EntityMyrmexQueen(EntityType<?> t, World worldIn) {
         super(t, worldIn);
     }
 
+    @Override
     @Nullable
     protected ResourceLocation getLootTable() {
         return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
     }
 
+    @Override
     protected int getExperiencePoints(PlayerEntity player) {
         return 20;
     }
 
+    @Override
     protected void registerData() {
         super.registerData();
         this.dataManager.register(HASMADEHOME, Boolean.valueOf(true));
@@ -89,6 +99,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         return isJungle() ? MyrmexTrades.JUNGLE_QUEEN.get(2) : MyrmexTrades.DESERT_QUEEN.get(2);
     }
 
+    @Override
     public void setCustomName(ITextComponent name) {
         if (this.getHive() != null) {
             if (!this.getHive().colonyName.equals(name.getUnformattedComponentText())) {
@@ -121,6 +132,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         this.dataManager.set(HASMADEHOME, madeHome);
     }
 
+    @Override
     public void livingTick() {
         super.livingTick();
         if (this.getAnimation() == ANIMATION_DIGNEST) {
@@ -147,7 +159,8 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                     this.addPotionEffect(new EffectInstance(Effects.INVISIBILITY, 30));
                     this.setHive(hiveGen.hive);
                     for (int i = 0; i < 3; i++) {
-                        EntityMyrmexWorker worker = new EntityMyrmexWorker(IafEntityRegistry.MYRMEX_WORKER, world);
+                        EntityMyrmexWorker worker = new EntityMyrmexWorker(IafEntityRegistry.MYRMEX_WORKER.get(),
+                            world);
                         worker.copyLocationAndAnglesFrom(this);
                         worker.setHive(this.getHive());
                         worker.setJungleVariant(this.isJungle());
@@ -168,7 +181,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
             if (world.isAirBlock(eggPos)) {
                 this.setAnimation(ANIMATION_EGG);
                 if (this.getAnimationTick() == 10) {
-                    EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG, this.world);
+                    EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG.get(), this.world);
                     egg.setJungle(this.isJungle());
                     int caste = getRandomCaste(world, this.getRNG(), getHive() == null || getHive().reproduces);
                     egg.setMyrmexCaste(caste);
@@ -204,7 +217,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
                 this.getAttackTarget().isAirBorne = true;
                 attackTarget.setMotion(attackTarget.getMotion().mul(0.5D, 1, 0.5D));
-                attackTarget.setMotion(attackTarget.getMotion().add(-0.5 / (double) f * 4, 1, -0.5 / (double) f * 4));
+                attackTarget.setMotion(attackTarget.getMotion().add(-0.5 / f * 4, 1, -0.5 / f * 4));
 
                 if (this.getAttackTarget().isOnGround()) {
                     attackTarget.setMotion(attackTarget.getMotion().add(0, 0.4, 0));
@@ -214,10 +227,12 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
 
     }
 
+    @Override
     public boolean isInvulnerableTo(DamageSource source) {
         return super.isInvulnerableTo(source) || this.getAnimation() == ANIMATION_DIGNEST;
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(0, new MyrmexAITradePlayer(this));
@@ -232,6 +247,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new MyrmexAIAttackPlayers(this));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, true, new Predicate<LivingEntity>() {
+            @Override
             public boolean apply(@Nullable LivingEntity entity) {
                 return entity != null && !EntityMyrmexBase.haveSameHive(EntityMyrmexQueen.this, entity) && DragonUtils.isAlive(entity) && !(entity instanceof IMob);
             }
@@ -242,6 +258,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     public void fall(float distance, float damageMultiplier) {
     }
 
+    @Override
     public boolean shouldMoveThroughHive() {
         return false;
     }
@@ -276,10 +293,12 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         return 3;
     }
 
+    @Override
     public boolean shouldLeaveHive() {
         return false;
     }
 
+    @Override
     public boolean shouldEnterHive() {
         return true;
     }
@@ -305,6 +324,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         return false;
     }
 
+    @Override
     public boolean canMove() {
         return super.canMove() && this.hasMadeHome();
     }

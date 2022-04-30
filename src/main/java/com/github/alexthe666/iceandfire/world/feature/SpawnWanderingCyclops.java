@@ -33,7 +33,7 @@ public class SpawnWanderingCyclops extends Feature<NoFeatureConfig> {
 
         if (IafConfig.generateWanderingCyclops && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)) {
             if (rand.nextInt(IafConfig.spawnWanderingCyclopsChance + 1) == 0 && rand.nextInt(12) == 0) {
-                EntityCyclops cyclops = IafEntityRegistry.CYCLOPS.create(worldIn.getWorld());
+                EntityCyclops cyclops = IafEntityRegistry.CYCLOPS.get().create(worldIn.getWorld());
                 cyclops.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                 cyclops.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(position), SpawnReason.SPAWNER, null, null);
                 cyclops.setVariant(rand.nextInt(3));

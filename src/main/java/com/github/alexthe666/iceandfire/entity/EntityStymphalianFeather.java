@@ -16,22 +16,23 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityStymphalianFeather extends AbstractArrowEntity {
 
-    public EntityStymphalianFeather(EntityType t, World worldIn) {
+    public EntityStymphalianFeather(EntityType<? extends AbstractArrowEntity> t, World worldIn) {
         super(t, worldIn);
     }
 
-    public EntityStymphalianFeather(EntityType t, World worldIn, LivingEntity shooter) {
+    public EntityStymphalianFeather(EntityType<? extends AbstractArrowEntity> t, World worldIn, LivingEntity shooter) {
         super(t, shooter, worldIn);
         this.setDamage(IafConfig.stymphalianBirdFeatherAttackStength);
     }
 
     public EntityStymphalianFeather(FMLPlayMessages.SpawnEntity spawnEntity, World world) {
-        this(IafEntityRegistry.STYMPHALIAN_FEATHER, world);
+        this(IafEntityRegistry.STYMPHALIAN_FEATHER.get(), world);
     }
 
     @Override
@@ -39,6 +40,7 @@ public class EntityStymphalianFeather extends AbstractArrowEntity {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
+    @Override
     public void remove() {
         super.remove();
         if (IafConfig.stymphalianBirdFeatherDropChance > 0) {
@@ -49,6 +51,7 @@ public class EntityStymphalianFeather extends AbstractArrowEntity {
 
     }
 
+    @Override
     public void tick() {
         super.tick();
         if (this.ticksExisted > 100) {
@@ -56,6 +59,7 @@ public class EntityStymphalianFeather extends AbstractArrowEntity {
         }
     }
 
+    @Override
     protected void onEntityHit(EntityRayTraceResult entityHit) {
         Entity shootingEntity = this.getShooter();
         if (shootingEntity instanceof EntityStymphalianBird && entityHit.getEntity() != null && entityHit.getEntity() instanceof EntityStymphalianBird) {

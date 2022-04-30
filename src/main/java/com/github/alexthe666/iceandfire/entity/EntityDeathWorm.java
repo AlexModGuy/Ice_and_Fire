@@ -167,7 +167,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
     public void initSegments(float scale) {
         segments = new EntityMutlipartPart[7];
         for (int i = 0; i < segments.length; i++) {
-            segments[i] = new EntitSlowPart(this, (-0.8F - (i * 0.8F)) * scale, 0, 0, 0.7F * scale, 0.7F * scale, 1);
+            segments[i] = new EntitySlowPart(this, (-0.8F - (i * 0.8F)) * scale, 0, 0, 0.7F * scale, 0.7F * scale, 1);
             segments[i].copyLocationAndAnglesFrom(this);
             segments[i].setParent(this);
         }
