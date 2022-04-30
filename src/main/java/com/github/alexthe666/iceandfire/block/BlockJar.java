@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.block;
 
 import javax.annotation.Nullable;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
@@ -59,9 +60,9 @@ public class BlockJar extends ContainerBlock implements ICustomRendered {
         this.empty = pixieType == -1;
         this.pixieType = pixieType;
         if (empty) {
-            this.setRegistryName("iceandfire:pixie_jar_empty");
+            this.setRegistryName(IceAndFire.MODID, "pixie_jar_empty");
         } else {
-            this.setRegistryName("iceandfire:pixie_jar_" + pixieType);
+            this.setRegistryName(IceAndFire.MODID, "pixie_jar_" + pixieType);
         }
     }
 

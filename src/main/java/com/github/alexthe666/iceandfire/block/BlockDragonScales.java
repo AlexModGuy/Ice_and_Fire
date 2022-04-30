@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 
 import net.minecraft.block.Block;
@@ -35,7 +36,7 @@ public class BlockDragonScales extends Block implements IDragonProof {
     			.setRequiresTool()
 		);
 
-        this.setRegistryName("iceandfire:" + name);
+        this.setRegistryName(IceAndFire.MODID, name);
         this.type = type;
     }
 
