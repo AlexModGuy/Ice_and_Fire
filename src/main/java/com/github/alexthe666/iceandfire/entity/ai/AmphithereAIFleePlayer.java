@@ -1,16 +1,21 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 
+import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.vector.Vector3d;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class AmphithereAIFleePlayer extends Goal {
     private final double farSpeed;
@@ -20,6 +25,10 @@ public class AmphithereAIFleePlayer extends Goal {
     protected PlayerEntity closestLivingEntity;
     private Path path;
 
+    @Nonnull
+    private List<PlayerEntity> list = IAFMath.emptyPlayerEntityList;
+    private int counter = 4;
+
     public AmphithereAIFleePlayer(EntityAmphithere entityIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
         this.entity = entityIn;
         this.avoidDistance = avoidDistanceIn;
@@ -28,27 +37,32 @@ public class AmphithereAIFleePlayer extends Goal {
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
-
     @Override
     public boolean shouldExecute() {
         if (!this.entity.isFlying() && !this.entity.isTamed()) {
-            List<PlayerEntity> list = this.entity.world.getEntitiesWithinAABB(PlayerEntity.class, this.entity.getBoundingBox().grow(this.avoidDistance, 6D, this.avoidDistance), EntityPredicates.CAN_AI_TARGET);
-            if (list.isEmpty()) {
+            counter++;
+            if (counter == 4) { // only update the list every 4 ticks
+                counter = 0;
+                list = this.entity.world.getEntitiesWithinAABB(PlayerEntity.class, this.entity.getBoundingBox().grow(this.avoidDistance, 6D, this.avoidDistance), EntityPredicates.CAN_AI_TARGET);
+            }
+
+            if (list.isEmpty())
+                return false;
+
+            this.closestLivingEntity = list.get(0);
+            Vector3d Vector3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.entity, 20, 7, new Vector3d(this.closestLivingEntity.getPosX(), this.closestLivingEntity.getPosY(), this.closestLivingEntity.getPosZ()));
+
+            if (Vector3d == null) {
+                return false;
+            } else if (this.closestLivingEntity.getDistanceSq(Vector3d) < this.closestLivingEntity.getDistanceSq(this.entity)) {
                 return false;
             } else {
-                this.closestLivingEntity = list.get(0);
-                Vector3d Vector3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.entity, 20, 7, new Vector3d(this.closestLivingEntity.getPosX(), this.closestLivingEntity.getPosY(), this.closestLivingEntity.getPosZ()));
-
-                if (Vector3d == null) {
-                    return false;
-                } else if (this.closestLivingEntity.getDistanceSq(Vector3d) < this.closestLivingEntity.getDistanceSq(this.entity)) {
-                    return false;
-                } else {
-                    this.path = this.entity.getNavigator().pathfind(Vector3d.x, Vector3d.y, Vector3d.z, 0);
-                    return this.path != null;
-                }
+                this.path = this.entity.getNavigator().pathfind(Vector3d.x, Vector3d.y, Vector3d.z, 0);
+                return this.path != null;
             }
+
         } else {
+            list = IAFMath.emptyPlayerEntityList;
             return false;
         }
     }
