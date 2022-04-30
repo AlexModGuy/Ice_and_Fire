@@ -134,19 +134,20 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
                 return IafBlockRegistry.DRAGONFORGE_ICE_INPUT.getDefaultState().with(BlockDragonforgeInput.ACTIVE, false);
             case 2:
                 return IafBlockRegistry.DRAGONFORGE_LIGHTNING_INPUT.getDefaultState().with(BlockDragonforgeInput.ACTIVE, false);
-
+            default:
+                return IafBlockRegistry.DRAGONFORGE_FIRE_INPUT.getDefaultState().with(BlockDragonforgeInput.ACTIVE,
+                    false);
         }
-        return IafBlockRegistry.DRAGONFORGE_FIRE_INPUT.getDefaultState().with(BlockDragonforgeInput.ACTIVE, false);
     }
 
     private int getDragonType() {
-        if(world.getBlockState(pos).getBlock() == IafBlockRegistry.DRAGONFORGE_FIRE_INPUT){
+        if (world.getBlockState(pos).getBlock() == IafBlockRegistry.DRAGONFORGE_FIRE_INPUT) {
             return 0;
         }
-        if(world.getBlockState(pos).getBlock() == IafBlockRegistry.DRAGONFORGE_ICE_INPUT){
+        if (world.getBlockState(pos).getBlock() == IafBlockRegistry.DRAGONFORGE_ICE_INPUT) {
             return 1;
         }
-        if(world.getBlockState(pos).getBlock() == IafBlockRegistry.DRAGONFORGE_LIGHTNING_INPUT){
+        if (world.getBlockState(pos).getBlock() == IafBlockRegistry.DRAGONFORGE_LIGHTNING_INPUT) {
             return 2;
         }
         return 0;
@@ -156,26 +157,16 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
         return world.getBlockState(pos).getBlock() instanceof BlockDragonforgeInput && world.getBlockState(pos).get(BlockDragonforgeInput.ACTIVE);
     }
 
-    private void setActive() {
-        TileEntity tileentity = world.getTileEntity(pos);
-        world.setBlockState(this.pos, getDeactivatedState().with(BlockDragonforgeInput.ACTIVE, true));
-        if (tileentity != null) {
-            tileentity.validate();
-            world.setTileEntity(pos, tileentity);
-        }
-    }
-
     private TileEntityDragonforge getConnectedTileEntity() {
         for (Direction facing : HORIZONTALS) {
-            if (world.getTileEntity(pos.offset(facing)) != null && world.getTileEntity(pos.offset(facing)) instanceof TileEntityDragonforge) {
+            if (world.getTileEntity(pos.offset(facing)) instanceof TileEntityDragonforge) {
                 return (TileEntityDragonforge) world.getTileEntity(pos.offset(facing));
             }
         }
         return null;
     }
-    @SuppressWarnings("unchecked")
     @Override
-    @javax.annotation.Nullable
+    @javax.annotation.Nonnull
     public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
         if (core != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return core.getCapability(capability, facing);
