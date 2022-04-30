@@ -6,10 +6,12 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 
+import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
@@ -22,6 +24,9 @@ public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super ItemEntity> targetEntitySelector;
     protected ItemEntity targetEntity;
+
+    @Nonnull
+    private List<ItemEntity> list = IAFMath.emptyItemEntityList;
 
     public AmphithereAITargetItems(MobEntity creature, boolean checkSight) {
         this(creature, checkSight, false);
@@ -54,16 +59,16 @@ public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
         if (targetEntitySelector.test(this.targetEntity)) {
             return true;
         }
-        final List<ItemEntity> list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class,
-            this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
-        if (list.isEmpty()) {
+        if (this.goalOwner.world.getGameTime() % 4 == 0) // only update the list every 4 ticks
+            list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+
+        if (list.isEmpty())
             return false;
-        } else {
-            Collections.sort(list, this.theNearestAttackableTargetSorter);
-            this.targetEntity = list.get(0);
-            return true;
-        }
+
+        list.sort(this.theNearestAttackableTargetSorter);
+        this.targetEntity = list.get(0);
+        return true;
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
