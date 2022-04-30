@@ -129,10 +129,10 @@ public class SeaSerpentAIAttackMelee extends Goal {
                 this.attacker.getMoveHelper().setMoveTo(LivingEntity.getPosX(), LivingEntity.getPosY() + LivingEntity.getEyeHeight(), LivingEntity.getPosZ(), 0.1D);
             }
             this.attacker.getLookController().setLookPositionWithEntity(LivingEntity, 30.0F, 30.0F);
-            double d0 = this.attacker.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getBoundingBox().minY, LivingEntity.getPosZ());
             --this.delayCounter;
 
             if ((this.longMemory || this.attacker.getEntitySenses().canSee(LivingEntity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || LivingEntity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.attacker.getRNG().nextFloat() < 0.05F)) {
+                final double d0 = this.attacker.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getBoundingBox().minY, LivingEntity.getPosZ());
                 this.targetX = LivingEntity.getPosX();
                 this.targetY = LivingEntity.getBoundingBox().minY;
                 this.targetZ = LivingEntity.getPosZ();

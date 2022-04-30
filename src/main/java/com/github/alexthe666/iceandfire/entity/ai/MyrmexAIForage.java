@@ -107,7 +107,7 @@ public class MyrmexAIForage extends Goal {
             BlockState block = this.myrmex.world.getBlockState(this.targetBlock);
             // Test if the block is edible
             if (EntityMyrmexBase.isEdibleBlock(block)) {
-                double distance = this.getDistanceSq(this.targetBlock);
+                final double distance = this.getDistanceSq(this.targetBlock);
                 if (distance < 6) {
                     block.getBlock();
                     // Routine to break block and add item to myrmex
@@ -163,9 +163,9 @@ public class MyrmexAIForage extends Goal {
     }
 
     private double getDistanceSq(BlockPos pos) {
-        double deltaX = this.myrmex.getPosX() - (pos.getX() + 0.5);
-        double deltaY = this.myrmex.getPosY() + this.myrmex.getEyeHeight() - (pos.getY() + 0.5);
-        double deltaZ = this.myrmex.getPosZ() - (pos.getZ() + 0.5);
+        final double deltaX = this.myrmex.getPosX() - (pos.getX() + 0.5);
+        final double deltaY = this.myrmex.getPosY() + this.myrmex.getEyeHeight() - (pos.getY() + 0.5);
+        final double deltaZ = this.myrmex.getPosZ() - (pos.getZ() + 0.5);
         return deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
     }
 

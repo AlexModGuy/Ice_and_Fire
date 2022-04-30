@@ -62,9 +62,9 @@ public class GorgonAIStareAttack extends Goal {
                 LivingEntity.getPosY() + LivingEntity.getEyeHeight(), LivingEntity.getPosZ(),
                 this.entity.getHorizontalFaceSpeed(), this.entity.getVerticalFaceSpeed());
 
-            double d0 = this.entity.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getBoundingBox().minY, LivingEntity.getPosZ());
-            boolean flag = this.entity.getEntitySenses().canSee(LivingEntity);
-            boolean flag1 = this.seeTime > 0;
+            final double d0 = this.entity.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getBoundingBox().minY, LivingEntity.getPosZ());
+            final boolean flag = this.entity.getEntitySenses().canSee(LivingEntity);
+            final boolean flag1 = this.seeTime > 0;
 
             if (flag != flag1) {
                 this.seeTime = 0;

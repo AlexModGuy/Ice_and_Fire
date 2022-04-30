@@ -55,16 +55,17 @@ public class DeathWormAIAttack extends Goal {
                 }
                 worm.setPosition(worm.getPosX(), topSand.getY() + 0.5F, worm.getPosZ());
             }
-            double distanceXZ = worm.getDistanceSq(target.getPosX(), worm.getPosY(), target.getPosZ());
-            if (Math.sqrt(distanceXZ) < 12 && Math.sqrt(distanceXZ) > 2) {
+            final double distanceXZ = worm.getDistanceSq(target.getPosX(), worm.getPosY(), target.getPosZ());
+            final float distanceXZSqrt = (float) Math.sqrt(distanceXZ);
+            if (distanceXZSqrt < 12 && distanceXZSqrt > 2) {
                 worm.faceEntity(target, 260, 30);
-                double smoothX = MathHelper.clamp(Math.abs(target.getPosX() - worm.getPosX()), 0, 1);
-                MathHelper.clamp(Math.abs(target.getPosY() - worm.getPosY()), 0, 1);
-                double smoothZ = MathHelper.clamp(Math.abs(target.getPosZ() - worm.getPosZ()), 0, 1);
-                double d0 = (target.getPosX() - this.worm.getPosX()) * 0.2 * smoothX;
-                Math.signum(target.getPosY() - this.worm.getPosY());
-                double d2 = (target.getPosZ() - this.worm.getPosZ()) * 0.2 * smoothZ;
-                float up = (worm.getRenderScale() > 3 ? 0.8F : 0.5F) + worm.getRNG().nextFloat() * 0.5F;
+                final double smoothX = MathHelper.clamp(Math.abs(target.getPosX() - worm.getPosX()), 0, 1);
+                //MathHelper.clamp(Math.abs(target.getPosY() - worm.getPosY()), 0, 1);
+                final double smoothZ = MathHelper.clamp(Math.abs(target.getPosZ() - worm.getPosZ()), 0, 1);
+                final double d0 = (target.getPosX() - this.worm.getPosX()) * 0.2 * smoothX;
+                //Math.signum(target.getPosY() - this.worm.getPosY());
+                final double d2 = (target.getPosZ() - this.worm.getPosZ()) * 0.2 * smoothZ;
+                final float up = (worm.getRenderScale() > 3 ? 0.8F : 0.5F) + worm.getRNG().nextFloat() * 0.5F;
                 this.worm.setMotion(this.worm.getMotion().add(d0 * 0.3D, up, d2 * 0.3D));
                 this.worm.getNavigator().clearPath();
                 this.worm.setWormJumping(20);
@@ -97,8 +98,8 @@ public class DeathWormAIAttack extends Goal {
         if (vector3d.y * vector3d.y < 0.1F && this.worm.rotationPitch != 0.0F) {
             this.worm.rotationPitch = MathHelper.rotLerp(this.worm.rotationPitch, 0.0F, 0.2F);
         } else {
-            double d0 = Math.sqrt(Entity.horizontalMag(vector3d));
-            double d1 = Math.signum(-vector3d.y) * Math.acos(d0 / vector3d.length()) * (180F / (float) Math.PI);
+            final double d0 = Math.sqrt(Entity.horizontalMag(vector3d));
+            final double d1 = Math.signum(-vector3d.y) * Math.acos(d0 / vector3d.length()) * (180F / (float) Math.PI);
             this.worm.rotationPitch = (float) d1;
         }
 

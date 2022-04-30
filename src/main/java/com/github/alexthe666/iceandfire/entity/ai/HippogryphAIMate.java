@@ -97,12 +97,12 @@ public class HippogryphAIMate extends Goal {
         Random random = this.hippo.getRNG();
 
         for (int i = 0; i < 7; ++i) {
-            double d0 = random.nextGaussian() * 0.02D;
-            double d1 = random.nextGaussian() * 0.02D;
-            double d2 = random.nextGaussian() * 0.02D;
-            double d3 = random.nextDouble() * this.hippo.getWidth() * 2.0D - this.hippo.getWidth();
-            double d4 = 0.5D + random.nextDouble() * this.hippo.getHeight();
-            double d5 = random.nextDouble() * this.hippo.getWidth() * 2.0D - this.hippo.getWidth();
+            final double d0 = random.nextGaussian() * 0.02D;
+            final double d1 = random.nextGaussian() * 0.02D;
+            final double d2 = random.nextGaussian() * 0.02D;
+            final double d3 = random.nextDouble() * this.hippo.getWidth() * 2.0D - this.hippo.getWidth();
+            final double d4 = 0.5D + random.nextDouble() * this.hippo.getHeight();
+            final double d5 = random.nextDouble() * this.hippo.getWidth() * 2.0D - this.hippo.getWidth();
             this.world.addParticle(ParticleTypes.HEART, this.hippo.getPosX() + d3, this.hippo.getPosY() + d4,
                 this.hippo.getPosZ() + d5, d0, d1, d2);
         }

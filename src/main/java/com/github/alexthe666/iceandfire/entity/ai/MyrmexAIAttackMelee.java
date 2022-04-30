@@ -92,8 +92,8 @@ public class MyrmexAIAttackMelee extends Goal {
         LivingEntity entity = this.myrmex.getAttackTarget();
         if (entity != null) {
             ((AdvancedPathNavigate) this.myrmex.getNavigator()).tryMoveToEntityLiving(entity, speedTowardsTarget);
-            double d0 = this.myrmex.getDistanceSq(entity.getPosX(), entity.getBoundingBox().minY, entity.getPosZ());
-            double d1 = this.getAttackReachSqr(entity);
+            final double d0 = this.myrmex.getDistanceSq(entity.getPosX(), entity.getBoundingBox().minY, entity.getPosZ());
+            final double d1 = this.getAttackReachSqr(entity);
             --this.delayCounter;
             if ((this.longMemory || this.myrmex.getEntitySenses().canSee(entity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || entity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.myrmex.getRNG().nextFloat() < 0.05F)) {
                 this.targetX = entity.getPosX();

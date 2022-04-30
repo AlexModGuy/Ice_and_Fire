@@ -28,10 +28,10 @@ public class DragonAIReturnToRoost extends Goal {
     @Override
     public void tick() {
         if (this.dragon.getHomePosition() != null) {
-            double dist = Math.sqrt(dragon.getDistanceSquared(Vector3d.copyCentered(dragon.getHomePosition())));
-            double xDist = Math.abs(dragon.getPosX() - dragon.getHomePosition().getX() - 0.5F);
-            double zDist = Math.abs(dragon.getPosZ() - dragon.getHomePosition().getZ() - 0.5F);
-            double xzDist = Math.sqrt(xDist * xDist + zDist * zDist);
+            final double dist = Math.sqrt(dragon.getDistanceSquared(Vector3d.copyCentered(dragon.getHomePosition())));
+            final double xDist = Math.abs(dragon.getPosX() - dragon.getHomePosition().getX() - 0.5F);
+            final double zDist = Math.abs(dragon.getPosZ() - dragon.getHomePosition().getZ() - 0.5F);
+            final double xzDist = Math.sqrt(xDist * xDist + zDist * zDist);
 
             if (dist < this.dragon.getWidth()) {
                 this.dragon.setFlying(false);

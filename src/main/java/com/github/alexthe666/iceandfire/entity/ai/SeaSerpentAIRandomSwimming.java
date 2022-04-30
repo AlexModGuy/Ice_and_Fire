@@ -51,8 +51,8 @@ public class SeaSerpentAIRandomSwimming  extends RandomWalkingGoal {
             }
         }else{
             BlockPos blockpos = null;
-            Random random = ThreadLocalRandom.current();
-            int range = 16;
+            final Random random = ThreadLocalRandom.current();
+            final int range = 16;
             for(int i = 0; i < 15; i++){
                 BlockPos blockpos1 = this.creature.getPosition().add(random.nextInt(range) - range/2, random.nextInt(range) - range/2, random.nextInt(range) - range/2);
                 while(this.creature.world.isAirBlock(blockpos1) && this.creature.world.getFluidState(blockpos1).isEmpty() && blockpos1.getY() > 1){

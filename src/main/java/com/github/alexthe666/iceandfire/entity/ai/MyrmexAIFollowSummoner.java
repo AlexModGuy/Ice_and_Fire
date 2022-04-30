@@ -85,9 +85,9 @@ public class MyrmexAIFollowSummoner extends Goal {
             this.tameable.getMoveHelper().setMoveTo(this.owner.getPosX(), this.owner.getPosY() + this.owner.getEyeHeight(), this.owner.getPosZ(), 0.25D);
             if (!this.tameable.getLeashed()) {
                 if (this.tameable.getDistanceSq(this.owner) >= 50.0D) {
-                    int i = MathHelper.floor(this.owner.getPosX()) - 2;
-                    int j = MathHelper.floor(this.owner.getPosZ()) - 2;
-                    int k = MathHelper.floor(this.owner.getBoundingBox().minY);
+                    final int i = MathHelper.floor(this.owner.getPosX()) - 2;
+                    final int j = MathHelper.floor(this.owner.getPosZ()) - 2;
+                    final int k = MathHelper.floor(this.owner.getBoundingBox().minY);
 
                     for (int l = 0; l <= 4; ++l) {
                         for (int i1 = 0; i1 <= 4; ++i1) {

@@ -32,7 +32,7 @@ public class DragonAILookIdle extends Goal {
 
     @Override
     public void startExecuting() {
-        double d0 = (Math.PI * 2D) * this.dragon.getRNG().nextDouble();
+        final double d0 = (Math.PI * 2D) * this.dragon.getRNG().nextDouble();
         this.lookX = Math.cos(d0);
         this.lookZ = Math.sin(d0);
         this.idleTime = 20 + this.dragon.getRNG().nextInt(20);

@@ -35,8 +35,8 @@ public class DeathWormAIJump extends JumpGoal {
             return false;
         } else {
             Direction direction = this.dolphin.getAdjustedHorizontalFacing();
-            int i = direction.getXOffset();
-            int j = direction.getZOffset();
+            final int i = direction.getXOffset();
+            final int j = direction.getZOffset();
             BlockPos blockpos = this.dolphin.getPosition();
             for (int k : JUMP_DISTANCES) {
                 if (!this.canJumpTo(blockpos, i, j, k) || !this.isAirAbove(blockpos, i, j, k)) { return false; }
@@ -61,7 +61,7 @@ public class DeathWormAIJump extends JumpGoal {
      */
     @Override
     public boolean shouldContinueExecuting() {
-        double d0 = this.dolphin.getMotion().y;
+        final double d0 = this.dolphin.getMotion().y;
         return jumpCooldown > 0 && (d0 * d0 >= 0.03F || this.dolphin.rotationPitch == 0.0F
             || Math.abs(this.dolphin.rotationPitch) >= 10.0F || !this.dolphin.isInSand()) && !this.dolphin.isOnGround();
     }
@@ -77,7 +77,7 @@ public class DeathWormAIJump extends JumpGoal {
     @Override
     public void startExecuting() {
         Direction direction = this.dolphin.getAdjustedHorizontalFacing();
-        float up = (dolphin.getRenderScale() > 3 ? 0.7F : 0.4F) + dolphin.getRNG().nextFloat() * 0.4F;
+        final float up = (dolphin.getRenderScale() > 3 ? 0.7F : 0.4F) + dolphin.getRNG().nextFloat() * 0.4F;
         this.dolphin
             .setMotion(this.dolphin.getMotion().add(direction.getXOffset() * 0.6D, up, direction.getZOffset() * 0.6D));
         this.dolphin.getNavigator().clearPath();
@@ -99,7 +99,7 @@ public class DeathWormAIJump extends JumpGoal {
      */
     @Override
     public void tick() {
-        boolean flag = this.inWater;
+        final boolean flag = this.inWater;
         if (!flag) {
             this.inWater = this.dolphin.world.getBlockState(this.dolphin.getPosition()).isIn(BlockTags.SAND);
         }
@@ -107,8 +107,8 @@ public class DeathWormAIJump extends JumpGoal {
         if (vector3d.y * vector3d.y < 0.1F && this.dolphin.rotationPitch != 0.0F) {
             this.dolphin.rotationPitch = MathHelper.rotLerp(this.dolphin.rotationPitch, 0.0F, 0.2F);
         } else {
-            double d0 = Math.sqrt(Entity.horizontalMag(vector3d));
-            double d1 = Math.signum(-vector3d.y) * Math.acos(d0 / vector3d.length()) * (180F / (float) Math.PI);
+            final double d0 = Math.sqrt(Entity.horizontalMag(vector3d));
+            final double d1 = Math.signum(-vector3d.y) * Math.acos(d0 / vector3d.length()) * (180F / (float) Math.PI);
             this.dolphin.rotationPitch = (float) d1;
         }
 

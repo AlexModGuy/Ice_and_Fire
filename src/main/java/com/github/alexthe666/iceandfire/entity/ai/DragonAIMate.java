@@ -103,11 +103,11 @@ public class DragonAIMate extends Goal {
         EntityDragonEgg egg = this.dragon.createEgg(this.targetMate);
 
         if (egg != null) {
-            PlayerEntity PlayerEntity = this.dragon.getLoveCause();
-
-            if (PlayerEntity == null && this.targetMate.getLoveCause() != null) {
-                PlayerEntity = this.targetMate.getLoveCause();
-            }
+//            PlayerEntity PlayerEntity = this.dragon.getLoveCause();
+//
+//            if (PlayerEntity == null && this.targetMate.getLoveCause() != null) {
+//                PlayerEntity = this.targetMate.getLoveCause();
+//            }
 
             this.dragon.setGrowingAge(6000);
             this.targetMate.setGrowingAge(6000);
@@ -122,12 +122,12 @@ public class DragonAIMate extends Goal {
             Random random = this.dragon.getRNG();
 
             for (int i = 0; i < 17; ++i) {
-                double d0 = random.nextGaussian() * 0.02D;
-                double d1 = random.nextGaussian() * 0.02D;
-                double d2 = random.nextGaussian() * 0.02D;
-                double d3 = random.nextDouble() * this.dragon.getWidth() * 2.0D - this.dragon.getWidth();
-                double d4 = 0.5D + random.nextDouble() * this.dragon.getHeight();
-                double d5 = random.nextDouble() * this.dragon.getWidth() * 2.0D - this.dragon.getWidth();
+                final double d0 = random.nextGaussian() * 0.02D;
+                final double d1 = random.nextGaussian() * 0.02D;
+                final double d2 = random.nextGaussian() * 0.02D;
+                final double d3 = random.nextDouble() * this.dragon.getWidth() * 2.0D - this.dragon.getWidth();
+                final double d4 = 0.5D + random.nextDouble() * this.dragon.getHeight();
+                final double d5 = random.nextDouble() * this.dragon.getWidth() * 2.0D - this.dragon.getWidth();
                 this.theWorld.addParticle(ParticleTypes.HEART, this.dragon.getPosX() + d3, this.dragon.getPosY() + d4, this.dragon.getPosZ() + d5, d0, d1, d2);
             }
             BlockPos eggPos = new BlockPos(nestX - 2, nestY, nestZ - 2);

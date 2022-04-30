@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 public class DragonAIEscort extends Goal {
     private final EntityDragonBase dragon;
     private BlockPos previousPosition;
-    private int maxRange = 2000;
+    private final float maxRange = 2000F;
 
     public DragonAIEscort(EntityDragonBase entityIn, double movementSpeedIn) {
         this.dragon = entityIn;
@@ -25,7 +25,7 @@ public class DragonAIEscort extends Goal {
     @Override
     public void tick() {
         if (this.dragon.getOwner() != null) {
-            double dist = this.dragon.getDistance(this.dragon.getOwner());
+            final float dist = this.dragon.getDistance(this.dragon.getOwner());
             if (dist > maxRange){
                 return;
             }
@@ -35,7 +35,7 @@ public class DragonAIEscort extends Goal {
                     previousPosition = this.dragon.getOwner().getPosition();
                 }
             }
-            if ((dist > 30 || this.dragon.getOwner().getPosY() - this.dragon.getPosY() > 8) && !this.dragon.isFlying() && !this.dragon.isHovering() && dragon.isAllowedToTriggerFlight()) {
+            if ((dist > 30F || this.dragon.getOwner().getPosY() - this.dragon.getPosY() > 8) && !this.dragon.isFlying() && !this.dragon.isHovering() && dragon.isAllowedToTriggerFlight()) {
                 this.dragon.setHovering(true);
                 this.dragon.setQueuedToSit(false);
                 this.dragon.setSitting(false);
