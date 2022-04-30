@@ -1,16 +1,15 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
-
-import java.util.EnumSet;
-
-import net.minecraft.entity.ai.goal.Goal.Flag;
 
 public class MyrmexAIAttackMelee extends Goal {
     protected EntityMyrmexBase myrmex;
@@ -24,7 +23,6 @@ public class MyrmexAIAttackMelee extends Goal {
     private int failedPathFindingPenalty = 0;
     private boolean canPenalize = false;
     private PathResult attackPath;
-    private AdvancedPathNavigate pathNavigate;
 
     public MyrmexAIAttackMelee(EntityMyrmexBase dragon, double speedIn, boolean useLongMemory) {
         this.myrmex = dragon;
@@ -36,9 +34,7 @@ public class MyrmexAIAttackMelee extends Goal {
     @Override
     public boolean shouldExecute() {
         LivingEntity LivingEntity = this.myrmex.getAttackTarget();
-        if (this.myrmex.getNavigator() instanceof AdvancedPathNavigate) {
-            pathNavigate = (AdvancedPathNavigate) this.myrmex.getNavigator();
-        } else {
+        if (!(this.myrmex.getNavigator() instanceof AdvancedPathNavigate)) {
             return false;
         }
         if (LivingEntity instanceof PlayerEntity&& this.myrmex.getHive()!=null){

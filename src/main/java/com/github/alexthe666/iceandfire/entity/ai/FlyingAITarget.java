@@ -11,17 +11,17 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.util.math.AxisAlignedBB;
 
-public class FlyingAITarget extends NearestAttackableTargetGoal<LivingEntity> {
+public class FlyingAITarget<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
 
-    public FlyingAITarget(MobEntity creature, Class<LivingEntity> classTarget, boolean checkSight) {
+    public FlyingAITarget(MobEntity creature, Class<T> classTarget, boolean checkSight) {
         super(creature, classTarget, checkSight);
     }
 
-    public FlyingAITarget(MobEntity creature, Class<LivingEntity> classTarget, boolean checkSight, boolean onlyNearby) {
+    public FlyingAITarget(MobEntity creature, Class<T> classTarget, boolean checkSight, boolean onlyNearby) {
         super(creature, classTarget, checkSight, onlyNearby);
     }
 
-    public FlyingAITarget(MobEntity creature, Class<LivingEntity> classTarget, int chance, boolean checkSight,
+    public FlyingAITarget(MobEntity creature, Class<T> classTarget, int chance, boolean checkSight,
         boolean onlyNearby, @Nullable final Predicate<LivingEntity> targetSelector) {
         super(creature, classTarget, chance, checkSight, onlyNearby, targetSelector);
     }
