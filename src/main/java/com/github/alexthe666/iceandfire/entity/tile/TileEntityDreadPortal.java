@@ -9,9 +9,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 public class TileEntityDreadPortal extends TileEntity implements ITickableTileEntity {
     private long age;
     private BlockPos exitPortal;
@@ -50,7 +47,6 @@ public class TileEntityDreadPortal extends TileEntity implements ITickableTileEn
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public double getMaxRenderDistanceSquared() {
         return 65536.0D;
     }
@@ -75,7 +71,6 @@ public class TileEntityDreadPortal extends TileEntity implements ITickableTileEn
         return this.write(new CompoundNBT());
     }
 
-    @OnlyIn(Dist.CLIENT)
     public boolean shouldRenderFace(Direction face) {
         return true;
     }

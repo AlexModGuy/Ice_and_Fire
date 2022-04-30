@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import com.github.alexthe666.iceandfire.entity.EntityGhost;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
@@ -29,16 +29,18 @@ public class TileEntityGhostChest extends ChestTileEntity {
         super.write(compound);
         return compound;
     }
+
     @Override
     public void openInventory(PlayerEntity player) {
         super.openInventory(player);
-        if(this.world.getDifficulty() != Difficulty.PEACEFUL){
+        if (this.world.getDifficulty() != Difficulty.PEACEFUL) {
             EntityGhost ghost = IafEntityRegistry.GHOST.create(world);
-            Random random = new Random();
-            ghost.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 0.5F, this.pos.getZ() + 0.5F, random.nextFloat() * 360F, 0);
-            if(!this.world.isRemote){
-                ghost.onInitialSpawn((ServerWorld)world, world.getDifficultyForLocation(this.pos), SpawnReason.SPAWNER, null, null);
-                if(!player.isCreative()){
+            ghost.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 0.5F, this.pos.getZ() + 0.5F,
+                ThreadLocalRandom.current().nextFloat() * 360F, 0);
+            if (!this.world.isRemote) {
+                ghost.onInitialSpawn((ServerWorld) world, world.getDifficultyForLocation(this.pos), SpawnReason.SPAWNER,
+                    null, null);
+                if (!player.isCreative()) {
                     ghost.setAttackTarget(player);
                 }
                 ghost.enablePersistence();
@@ -54,6 +56,5 @@ public class TileEntityGhostChest extends ChestTileEntity {
     protected void onOpenOrClose() {
         super.onOpenOrClose();
         this.world.notifyNeighborsOfStateChange(this.pos.down(), this.getBlockState().getBlock());
-
     }
 }

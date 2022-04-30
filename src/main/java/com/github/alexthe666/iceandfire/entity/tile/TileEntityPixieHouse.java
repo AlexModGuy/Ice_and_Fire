@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity.tile;
 
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
@@ -42,24 +43,12 @@ public class TileEntityPixieHouse extends TileEntity implements ITickableTileEnt
     }
 
     public static int getHouseTypeFromBlock(Block block) {
-        if (block == IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_RED) {
-            return 1;
-        }
-        if (block == IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_BROWN) {
-            return 0;
-        }
-        if (block == IafBlockRegistry.PIXIE_HOUSE_OAK) {
-            return 3;
-        }
-        if (block == IafBlockRegistry.PIXIE_HOUSE_BIRCH) {
-            return 2;
-        }
-        if (block == IafBlockRegistry.PIXIE_HOUSE_SPRUCE) {
-            return 5;
-        }
-        if (block == IafBlockRegistry.PIXIE_HOUSE_DARK_OAK) {
-            return 4;
-        }
+        if (block == IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_RED) { return 1; }
+        if (block == IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_BROWN) { return 0; }
+        if (block == IafBlockRegistry.PIXIE_HOUSE_OAK) { return 3; }
+        if (block == IafBlockRegistry.PIXIE_HOUSE_BIRCH) { return 2; }
+        if (block == IafBlockRegistry.PIXIE_HOUSE_SPRUCE) { return 5; }
+        if (block == IafBlockRegistry.PIXIE_HOUSE_DARK_OAK) { return 4; }
         return 0;
     }
 
@@ -86,7 +75,8 @@ public class TileEntityPixieHouse extends TileEntity implements ITickableTileEnt
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
         read(this.getBlockState(), packet.getNbtCompound());
         if (!world.isRemote) {
-            IceAndFire.sendMSGToAll(new MessageUpdatePixieHouseModel(pos.toLong(), packet.getNbtCompound().getInt("HouseType")));
+            IceAndFire.sendMSGToAll(
+                new MessageUpdatePixieHouseModel(pos.toLong(), packet.getNbtCompound().getInt("HouseType")));
         }
     }
 
@@ -101,7 +91,7 @@ public class TileEntityPixieHouse extends TileEntity implements ITickableTileEnt
         hasPixie = compound.getBoolean("HasPixie");
         pixieType = compound.getInt("PixieType");
         tamedPixie = compound.getBoolean("TamedPixie");
-        if(compound.hasUniqueId("PixieOwnerUUID")){
+        if (compound.hasUniqueId("PixieOwnerUUID")) {
             pixieOwnerUUID = compound.getUniqueId("PixieOwnerUUID");
         }
         this.pixieItems = NonNullList.withSize(1, ItemStack.EMPTY);
@@ -112,17 +102,23 @@ public class TileEntityPixieHouse extends TileEntity implements ITickableTileEnt
     @Override
     public void tick() {
         ticksExisted++;
-        if (!world.isRemote && this.hasPixie && new Random().nextInt(100) == 0) {
+        if (!world.isRemote && this.hasPixie && ThreadLocalRandom.current().nextInt(100) == 0) {
             releasePixie();
         }
         if (this.world.isRemote && this.hasPixie) {
-            IceAndFire.PROXY.spawnParticle(EnumParticles.If_Pixie, this.pos.getX() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, this.pos.getY() + (double) (this.rand.nextFloat() * PARTICLE_HEIGHT), this.pos.getZ() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, EntityPixie.PARTICLE_RGB[this.pixieType][0], EntityPixie.PARTICLE_RGB[this.pixieType][1], EntityPixie.PARTICLE_RGB[this.pixieType][2]);
+            IceAndFire.PROXY.spawnParticle(EnumParticles.If_Pixie,
+                this.pos.getX() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH,
+                this.pos.getY() + (double) (this.rand.nextFloat() * PARTICLE_HEIGHT),
+                this.pos.getZ() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH,
+                EntityPixie.PARTICLE_RGB[this.pixieType][0], EntityPixie.PARTICLE_RGB[this.pixieType][1],
+                EntityPixie.PARTICLE_RGB[this.pixieType][2]);
         }
     }
 
     public void releasePixie() {
         EntityPixie pixie = new EntityPixie(IafEntityRegistry.PIXIE, this.world);
-        pixie.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 1F, this.pos.getZ() + 0.5F, new Random().nextInt(360), 0);
+        pixie.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 1F, this.pos.getZ() + 0.5F,
+            ThreadLocalRandom.current().nextInt(360), 0);
         pixie.setHeldItem(Hand.MAIN_HAND, pixieItems.get(0));
         pixie.setColor(this.pixieType);
         if (!world.isRemote) {
