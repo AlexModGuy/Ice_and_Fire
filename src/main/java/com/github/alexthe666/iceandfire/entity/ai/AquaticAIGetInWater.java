@@ -15,9 +15,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class AquaticAIGetInWater extends Goal {
+
     private final MobEntity creature;
     private final double movementSpeed;
     private final World world;
@@ -36,8 +35,11 @@ public class AquaticAIGetInWater extends Goal {
         return creature.getAttackTarget() != null && !creature.getAttackTarget().isInWater();
     }
 
+    @Override
     public boolean shouldExecute() {
-        if (creature.isBeingRidden() || creature instanceof TameableEntity && ((TameableEntity) creature).isTamed() || creature.isInWater() || isAttackerInWater() || creature instanceof EntitySiren && (((EntitySiren) creature).isSinging() || ((EntitySiren) creature).wantsToSing())) {
+        if (creature.isBeingRidden() || creature instanceof TameableEntity && ((TameableEntity) creature).isTamed()
+            || creature.isInWater() || isAttackerInWater() || creature instanceof EntitySiren
+                && (((EntitySiren) creature).isSinging() || ((EntitySiren) creature).wantsToSing())) {
             return false;
         } else {
             Vector3d Vector3d = this.findPossibleShelter();
@@ -56,6 +58,7 @@ public class AquaticAIGetInWater extends Goal {
     /**
      * Returns whether an in-progress Goal should continue executing
      */
+    @Override
     public boolean shouldContinueExecuting() {
         return !this.creature.getNavigator().noPath();
     }
@@ -63,6 +66,7 @@ public class AquaticAIGetInWater extends Goal {
     /**
      * Execute a one shot task or start executing a continuous task
      */
+    @Override
     public void startExecuting() {
         this.creature.getNavigator().tryMoveToXYZ(this.shelterX, this.shelterY, this.shelterZ, this.movementSpeed);
     }
@@ -75,10 +79,12 @@ public class AquaticAIGetInWater extends Goal {
     @Nullable
     protected Vector3d findPossibleShelter(int xz, int y) {
         Random random = this.creature.getRNG();
-        BlockPos blockpos = new BlockPos(this.creature.getPosX(), this.creature.getBoundingBox().minY, this.creature.getPosZ());
+        BlockPos blockpos = new BlockPos(this.creature.getPosX(), this.creature.getBoundingBox().minY,
+            this.creature.getPosZ());
 
         for (int i = 0; i < 10; ++i) {
-            BlockPos blockpos1 = blockpos.add(random.nextInt(xz * 2) - xz, random.nextInt(y * 2) - y, random.nextInt(xz * 2) - xz);
+            BlockPos blockpos1 = blockpos.add(random.nextInt(xz * 2) - xz, random.nextInt(y * 2) - y,
+                random.nextInt(xz * 2) - xz);
 
             if (this.world.getBlockState(blockpos1).getMaterial() == Material.WATER) {
                 return new Vector3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());

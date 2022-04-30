@@ -13,8 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class AquaticAIGetOutOfWater extends Goal {
     private final MobEntity creature;
     private final double movementSpeed;
@@ -30,6 +28,7 @@ public class AquaticAIGetOutOfWater extends Goal {
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
+    @Override
     public boolean shouldExecute() {
         if (!creature.isInWater() || !((EntitySiren) creature).wantsToSing()) {
             return false;
@@ -47,10 +46,12 @@ public class AquaticAIGetOutOfWater extends Goal {
         }
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
         return !this.creature.getNavigator().noPath();
     }
 
+    @Override
     public void startExecuting() {
         this.creature.getNavigator().tryMoveToXYZ(this.shelterX, this.shelterY, this.shelterZ, this.movementSpeed);
     }

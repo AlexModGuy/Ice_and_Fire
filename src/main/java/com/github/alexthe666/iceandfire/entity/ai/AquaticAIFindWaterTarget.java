@@ -13,18 +13,11 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class AquaticAIFindWaterTarget extends Goal {
     protected AquaticAIFindWaterTarget.Sorter fleePosSorter;
     private MobEntity mob;
-    private int range;
-    private boolean avoidAttacker;
-
     public AquaticAIFindWaterTarget(MobEntity mob, int range, boolean avoidAttacker) {
         this.mob = mob;
-        this.range = range;
-        this.avoidAttacker = avoidAttacker;
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
         fleePosSorter = new Sorter(mob);
     }
@@ -83,6 +76,7 @@ public class AquaticAIFindWaterTarget extends Goal {
         }
 
         //further; more prefered.
+        @Override
         public int compare(BlockPos p_compare_1_, BlockPos p_compare_2_) {
             this.pos = AquaticAIFindWaterTarget.this.mob.getPosition();
             double d0 = this.pos.distanceSq(p_compare_1_);
