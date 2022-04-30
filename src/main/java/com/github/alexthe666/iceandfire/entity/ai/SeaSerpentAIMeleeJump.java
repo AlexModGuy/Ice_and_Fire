@@ -1,14 +1,13 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.JumpGoal;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 
@@ -21,23 +20,29 @@ public class SeaSerpentAIMeleeJump  extends JumpGoal {
         this.dolphin = dolphin;
     }
 
+    @Override
     public boolean shouldExecute() {
         if (this.dolphin.getAttackTarget() == null || !dolphin.shouldUseJumpAttack(this.dolphin.getAttackTarget()) || this.dolphin.isOnGround() ) {
             return false;
         } else {
-            BlockPos blockpos = this.dolphin.getPosition();
             return true;
         }
     }
+    @Override
     public boolean shouldContinueExecuting() {
         double d0 = this.dolphin.getMotion().y;
-        return dolphin.getAttackTarget() != null && dolphin.jumpCooldown > 0 && (!(d0 * d0 < (double) 0.03F) || this.dolphin.rotationPitch == 0.0F || !(Math.abs(this.dolphin.rotationPitch) < 10.0F) || !this.dolphin.isInWater()) && !this.dolphin.isOnGround();
+        return dolphin.getAttackTarget() != null && dolphin.jumpCooldown > 0
+            && (d0 * d0 >= 0.03F || this.dolphin.rotationPitch == 0.0F
+                || Math.abs(this.dolphin.rotationPitch) >= 10.0F || !this.dolphin.isInWater())
+            && !this.dolphin.isOnGround();
     }
 
+    @Override
     public boolean isPreemptible() {
         return false;
     }
 
+    @Override
     public void startExecuting() {
         LivingEntity target = this.dolphin.getAttackTarget();
         if(target != null){
@@ -45,13 +50,11 @@ public class SeaSerpentAIMeleeJump  extends JumpGoal {
             if(distanceXZ < 300){
                 dolphin.faceEntity(target, 260, 30);
                 double smoothX = MathHelper.clamp(Math.abs(target.getPosX() - dolphin.getPosX()), 0, 1);
-                double smoothY = MathHelper.clamp(Math.abs(target.getPosY() - dolphin.getPosY()), 0, 1);
                 double smoothZ = MathHelper.clamp(Math.abs(target.getPosZ() - dolphin.getPosZ()), 0, 1);
                 double d0 = (target.getPosX() - this.dolphin.getPosX()) * 0.3 * smoothX;
-                double d1 = Math.signum(target.getPosY() - this.dolphin.getPosY());
                 double d2 = (target.getPosZ() - this.dolphin.getPosZ()) * 0.3 * smoothZ;
                 float up = 1F + dolphin.getRNG().nextFloat() * 0.8F;
-                this.dolphin.setMotion(this.dolphin.getMotion().add((double) d0 * 0.3D, up, (double) d2 * 0.3D));
+                this.dolphin.setMotion(this.dolphin.getMotion().add(d0 * 0.3D, up, d2 * 0.3D));
                 this.dolphin.getNavigator().clearPath();
                 this.dolphin.jumpCooldown = dolphin.getRNG().nextInt(32) + 32;
             }else{
@@ -61,11 +64,13 @@ public class SeaSerpentAIMeleeJump  extends JumpGoal {
         }
     }
 
+    @Override
     public void resetTask() {
         this.dolphin.rotationPitch = 0.0F;
         this.attackCooldown = 0;
     }
 
+    @Override
     public void tick() {
         boolean flag = this.inWater;
         if (!flag) {
@@ -89,11 +94,11 @@ public class SeaSerpentAIMeleeJump  extends JumpGoal {
         }
 
         Vector3d vector3d = this.dolphin.getMotion();
-        if (vector3d.y * vector3d.y < (double) 0.1F && this.dolphin.rotationPitch != 0.0F) {
+        if (vector3d.y * vector3d.y < 0.1F && this.dolphin.rotationPitch != 0.0F) {
             this.dolphin.rotationPitch = MathHelper.rotLerp(this.dolphin.rotationPitch, 0.0F, 0.2F);
         } else {
             double d0 = Math.sqrt(Entity.horizontalMag(vector3d));
-            double d1 = Math.signum(-vector3d.y) * Math.acos(d0 / vector3d.length()) * (double) (180F / (float) Math.PI);
+            double d1 = Math.signum(-vector3d.y) * Math.acos(d0 / vector3d.length()) * (180F / (float) Math.PI);
             this.dolphin.rotationPitch = (float) d1;
         }
 

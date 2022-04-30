@@ -1,24 +1,24 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
-import net.minecraft.block.Blocks;
+
 import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.pathfinding.PathType;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class SeaSerpentAIRandomSwimming  extends RandomWalkingGoal {
     public SeaSerpentAIRandomSwimming(CreatureEntity creature, double speed, int chance) {
         super(creature, speed, chance, false);
     }
 
+    @Override
     public boolean shouldExecute() {
         if (this.creature.isBeingRidden() || this.creature.getAttackTarget() != null) {
             return false;
@@ -41,6 +41,7 @@ public class SeaSerpentAIRandomSwimming  extends RandomWalkingGoal {
         }
     }
 
+    @Override
     @Nullable
     protected Vector3d getPosition() {
         if(((EntitySeaSerpent)this.creature).jumpCooldown <= 0){
@@ -50,7 +51,7 @@ public class SeaSerpentAIRandomSwimming  extends RandomWalkingGoal {
             }
         }else{
             BlockPos blockpos = null;
-            Random random = new Random();
+            Random random = ThreadLocalRandom.current();
             int range = 16;
             for(int i = 0; i < 15; i++){
                 BlockPos blockpos1 = this.creature.getPosition().add(random.nextInt(range) - range/2, random.nextInt(range) - range/2, random.nextInt(range) - range/2);

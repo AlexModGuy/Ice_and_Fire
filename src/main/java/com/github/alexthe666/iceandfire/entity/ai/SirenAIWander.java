@@ -13,10 +13,12 @@ public class SirenAIWander extends RandomWalkingGoal {
         this.siren = creatureIn;
     }
 
+    @Override
     public boolean shouldExecute() {
         return !this.siren.isInWater() && !siren.isSinging() && super.shouldExecute();
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
         return !this.siren.isInWater() && !siren.isSinging() && super.shouldContinueExecuting();
     }

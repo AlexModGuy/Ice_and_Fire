@@ -2,26 +2,20 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import java.util.EnumSet;
 import java.util.List;
-
-import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
-import com.google.common.base.Predicate;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
 
 public class PixieAIFlee<T extends Entity> extends Goal {
-    private final Predicate<Entity> canBeSeenSelector;
     private final float avoidDistance;
-    private final Predicate<? super T> avoidTargetSelector;
     private final Class<T> classToAvoid;
     protected EntityPixie pixie;
     protected T closestLivingEntity;
@@ -30,17 +24,12 @@ public class PixieAIFlee<T extends Entity> extends Goal {
     public PixieAIFlee(EntityPixie pixie, Class<T> classToAvoidIn, float avoidDistanceIn, Predicate<? super T> avoidTargetSelectorIn) {
         this.pixie = pixie;
         this.classToAvoid = classToAvoidIn;
-        this.canBeSeenSelector = new Predicate<Entity>() {
-            public boolean apply(@Nullable Entity entity) {
-                return entity.isAlive() && PixieAIFlee.this.pixie.getEntitySenses().canSee(entity) && !PixieAIFlee.this.pixie.isOnSameTeam(entity);
-            }
-        };
-        this.avoidTargetSelector = avoidTargetSelectorIn;
         this.avoidDistance = avoidDistanceIn;
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
 
+    @Override
     public boolean shouldExecute() {
         if (this.pixie.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
             return false;
@@ -86,15 +75,18 @@ public class PixieAIFlee<T extends Entity> extends Goal {
         return 1D;
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
         return hidePlace != null && this.pixie.getDistanceSq(hidePlace.add(0.5, 0.5, 0.5)) < 2;
     }
 
+    @Override
     public void startExecuting() {
         this.pixie.getMoveHelper().setMoveTo(hidePlace.x, hidePlace.y, hidePlace.z, calculateRunSpeed());
         this.pixie.getLookController().setLookPosition(hidePlace.x, hidePlace.y, hidePlace.z, 180.0F, 20.0F);
     }
 
+    @Override
     public void resetTask() {
         this.closestLivingEntity = null;
         pixie.slowSpeed = false;
