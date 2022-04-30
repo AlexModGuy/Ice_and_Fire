@@ -23,6 +23,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.structure.Structure;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -91,11 +92,15 @@ public class IceAndFire {
         IafContainerRegistry.CONTAINERS.register(modBus);
         IafEntityRegistry.ENTITIES.register(modBus);
         IafTileEntityRegistry.TYPES.register(modBus);
+        IafWorldRegistry.STRUCTURES.register(modBus);
         IafWorldRegistry.FEATURES.register(modBus);
 
         modBus.addListener(this::setup);
         modBus.addListener(this::setupClient);
         modBus.addListener(this::setupComplete);
+        modBus.addGenericListener(Structure.class, EventPriority.LOW,
+            (final RegistryEvent.Register<Structure<?>> event) -> IafWorldRegistry
+                .registerStructureConfiguredFeatures());
         modBus.addGenericListener(Feature.class, EventPriority.LOW,
             (final RegistryEvent.Register<Feature<?>> event) -> IafWorldRegistry.registerConfiguredFeatures());
     }

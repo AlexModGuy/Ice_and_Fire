@@ -10,7 +10,6 @@ import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,7 +19,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.feature.structure.Structure;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -43,13 +41,6 @@ public class CommonProxy {
         }
         BiomeConfig.init();
 
-    }
-
-    @SubscribeEvent
-    public static void registerStructures(final RegistryEvent.Register<Structure<?>> event) {
-        for (Structure<?> feature : IafWorldRegistry.structureFeatureList) {
-            event.getRegistry().register(feature);
-        }
     }
 
     @SubscribeEvent

@@ -1,9 +1,6 @@
 package com.github.alexthe666.iceandfire.world;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -74,6 +71,8 @@ public class IafWorldRegistry {
 
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES,
         IceAndFire.MODID);
+    public static final DeferredRegister<Structure<?>> STRUCTURES = DeferredRegister
+        .create(ForgeRegistries.STRUCTURE_FEATURES, IceAndFire.MODID);
 
     public static final RegistryObject<Feature<NoFeatureConfig>> FIRE_DRAGON_ROOST;
     public static final RegistryObject<Feature<NoFeatureConfig>> ICE_DRAGON_ROOST;
@@ -96,15 +95,14 @@ public class IafWorldRegistry {
     public static final RegistryObject<Feature<NoFeatureConfig>> SPAWN_STYMPHALIAN_BIRD;
     public static final RegistryObject<Feature<NoFeatureConfig>> SPAWN_WANDERING_CYCLOPS;
 
-    private static <C extends IFeatureConfig, F extends Feature<C>> RegistryObject<F> register(String name,
-        Supplier<? extends F> supplier) {
-        return FEATURES.register(name, supplier);
-    }
+    public static final RegistryObject<Structure<NoFeatureConfig>> MAUSOLEUM = STRUCTURES.register("mausoleum",
+        () -> new DreadMausoleumStructure(NoFeatureConfig.CODEC));
+    public static final RegistryObject<Structure<NoFeatureConfig>> GORGON_TEMPLE = STRUCTURES.register("gorgon_temple",
+        () -> new GorgonTempleStructure(NoFeatureConfig.CODEC));
+    public static final RegistryObject<Structure<NoFeatureConfig>> GRAVEYARD = STRUCTURES.register("graveyard",
+        () -> new GraveyardStructure(NoFeatureConfig.CODEC));
 
     public static IStructurePieceType DUMMY_PIECE;
-    public static Structure<NoFeatureConfig> MAUSOLEUM = new DreadMausoleumStructure(NoFeatureConfig.CODEC);
-    public static Structure<NoFeatureConfig> GORGON_TEMPLE = new GorgonTempleStructure(NoFeatureConfig.CODEC);
-    public static Structure<NoFeatureConfig> GRAVEYARD = new GraveyardStructure(NoFeatureConfig.CODEC);
     public static ConfiguredFeature FIRE_LILY_CF;
     public static ConfiguredFeature FROST_LILY_CF;
     public static ConfiguredFeature LIGHTNING_LILY_CF;
@@ -135,8 +133,6 @@ public class IafWorldRegistry {
     public static StructureFeature GORGON_TEMPLE_CF;
     public static StructureFeature MAUSOLEUM_CF;
     public static StructureFeature GRAVEYARD_CF;
-    public static List<Structure<?>> structureFeatureList = new ArrayList<>();
-
 
     static {
         FIRE_DRAGON_ROOST = register("fire_dragon_roost", () -> new WorldGenFireDragonRoosts(NoFeatureConfig.CODEC));
@@ -171,6 +167,11 @@ public class IafWorldRegistry {
             () -> new SpawnWanderingCyclops(NoFeatureConfig.CODEC));
     }
 
+    private static <C extends IFeatureConfig, F extends Feature<C>> RegistryObject<F> register(String name,
+        Supplier<? extends F> supplier) {
+        return FEATURES.register(name, supplier);
+    }
+
     public static void registerConfiguredFeatures() {
         // Technically we don't need the piece classes anymore but we should register
         // dummy pieces
@@ -179,25 +180,6 @@ public class IafWorldRegistry {
         Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:mausoleum_piece", DummyPiece::new);
         Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece_empty", DummyPiece::new);
         Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:graveyard_piece", DummyPiece::new);
-
-        MAUSOLEUM = registerStructureFeature( "iceandfire:mausoleum", MAUSOLEUM);
-        putStructureOnAList("iceandfire:mausoleum", MAUSOLEUM);
-
-        GORGON_TEMPLE = registerStructureFeature( "iceandfire:gorgon_temple", GORGON_TEMPLE);
-        putStructureOnAList("iceandfire:gorgon_temple", GORGON_TEMPLE);
-
-        GRAVEYARD = registerStructureFeature( "iceandfire:graveyard", GRAVEYARD);
-        putStructureOnAList("iceandfire:graveyard", GRAVEYARD);
-
-        addStructureSeperation(DimensionSettings.OVERWORLD, GORGON_TEMPLE, new StructureSeparationSettings(Math.max(IafConfig.spawnGorgonsChance, 2), Math.max(IafConfig.spawnGorgonsChance / 2, 1), 342226450));
-        addStructureSeperation(DimensionSettings.OVERWORLD, MAUSOLEUM, new StructureSeparationSettings(Math.max(IafConfig.generateMausoleumChance, 2), Math.max(IafConfig.generateMausoleumChance / 2, 1), 342226451));
-        addStructureSeperation(DimensionSettings.OVERWORLD, GRAVEYARD, new StructureSeparationSettings(Math.max(IafConfig.generateGraveyardChance * 3, 2), Math.max(IafConfig.generateGraveyardChance * 3 / 2, 1), 342226440));
-
-        GORGON_TEMPLE_CF = Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, "iceandfire:gorgon_temple", GORGON_TEMPLE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
-        MAUSOLEUM_CF = Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, "iceandfire:mausoleum", MAUSOLEUM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
-        GRAVEYARD_CF = Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, "iceandfire:graveyard", GRAVEYARD.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
-
-        Structure.field_236384_t_= ImmutableList.<Structure<?>>builder().addAll(Structure.field_236384_t_).add(GORGON_TEMPLE, MAUSOLEUM, GRAVEYARD).build();
 
         COPPER_ORE_CF = Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, "iceandfire:copper_ore", Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, IafBlockRegistry.COPPER_ORE.getDefaultState(), 5)).range(128).square().count(5));
         SILVER_ORE_CF = Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, "iceandfire:silver_ore", Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, IafBlockRegistry.SILVER_ORE.getDefaultState(), 8)).range(32).square().count(2));
@@ -261,19 +243,40 @@ public class IafWorldRegistry {
             SPAWN_WANDERING_CYCLOPS.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
     }
 
-    public static void addStructureSeperation(RegistryKey<DimensionSettings> preset, Structure structure, StructureSeparationSettings settings) {
+    public static void registerStructureConfiguredFeatures() {
+        Structure.field_236384_t_ = ImmutableList.<Structure<?>>builder().addAll(Structure.field_236384_t_)
+            .add(GORGON_TEMPLE.get(), MAUSOLEUM.get(), GRAVEYARD.get()).build();
+
+        GORGON_TEMPLE_CF = Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE,
+            "iceandfire:gorgon_temple", GORGON_TEMPLE.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+        MAUSOLEUM_CF = Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, "iceandfire:mausoleum",
+            MAUSOLEUM.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+        GRAVEYARD_CF = Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, "iceandfire:graveyard",
+            GRAVEYARD.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+
+        addStructureSeperation(DimensionSettings.OVERWORLD, GORGON_TEMPLE.get(), new StructureSeparationSettings(
+            Math.max(IafConfig.spawnGorgonsChance, 2), Math.max(IafConfig.spawnGorgonsChance / 2, 1), 342226450));
+        addStructureSeperation(DimensionSettings.OVERWORLD, MAUSOLEUM.get(),
+            new StructureSeparationSettings(Math.max(IafConfig.generateMausoleumChance, 2),
+                Math.max(IafConfig.generateMausoleumChance / 2, 1), 342226451));
+        addStructureSeperation(DimensionSettings.OVERWORLD, GRAVEYARD.get(),
+            new StructureSeparationSettings(Math.max(IafConfig.generateGraveyardChance * 3, 2),
+                Math.max(IafConfig.generateGraveyardChance * 3 / 2, 1), 342226440));
+
+        putStructureOnAList(GORGON_TEMPLE);
+        putStructureOnAList(MAUSOLEUM);
+        putStructureOnAList(GRAVEYARD);
+    }
+
+    public static void addStructureSeperation(RegistryKey<DimensionSettings> preset, Structure<?> structure,
+        StructureSeparationSettings settings) {
         WorldGenRegistries.NOISE_SETTINGS.getValueForKey(preset).getStructures().func_236195_a_().put(structure, settings);
     }
 
-    public static <F extends Structure<?>> void putStructureOnAList(String nameForList, F structure) {
-        Structure.NAME_STRUCTURE_BIMAP.put(nameForList.toLowerCase(Locale.ROOT), structure);
+    public static <F extends Structure<?>> void putStructureOnAList(RegistryObject<F> structure) {
+        Structure.NAME_STRUCTURE_BIMAP.put(structure.getId().toString(), structure.get());
     }
 
-
-    private static Structure<NoFeatureConfig> registerStructureFeature(String registryName, Structure<NoFeatureConfig> feature) {
-        structureFeatureList.add(feature);
-        return feature;
-    }
 
     public static void setup() {
     }
