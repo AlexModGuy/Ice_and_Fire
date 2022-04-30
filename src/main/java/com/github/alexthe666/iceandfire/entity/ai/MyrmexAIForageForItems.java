@@ -41,7 +41,7 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
         if (list.isEmpty()) {
             return false;
         } else {
-            Collections.sort(list, this.theNearestAttackableTargetSorter);
+            list.sort(this.theNearestAttackableTargetSorter);
             this.targetEntity = list.get(0);
             return true;
         }
@@ -90,9 +90,9 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
 
         @Override
         public int compare(Entity p_compare_1_, Entity p_compare_2_) {
-            double d0 = this.theEntity.getDistanceSq(p_compare_1_);
-            double d1 = this.theEntity.getDistanceSq(p_compare_2_);
-            return d0 < d1 ? -1 : (d0 > d1 ? 1 : 0);
+            final double d0 = this.theEntity.getDistanceSq(p_compare_1_);
+            final double d1 = this.theEntity.getDistanceSq(p_compare_2_);
+            return Double.compare(d0, d1);
         }
     }
 }

@@ -51,7 +51,7 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
         if (list.isEmpty()) {
             return false;
         } else {
-            Collections.sort(list, this.theNearestAttackableTargetSorter);
+            list.sort(this.theNearestAttackableTargetSorter);
             this.targetEntity = list.get(0);
             return true;
         }

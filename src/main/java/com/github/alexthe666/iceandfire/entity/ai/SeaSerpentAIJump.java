@@ -76,7 +76,7 @@ public class SeaSerpentAIJump extends JumpGoal {
     @Override
     public void startExecuting() {
         Direction direction = this.serpent.getAdjustedHorizontalFacing();
-        float up = 1F + serpent.getRNG().nextFloat() * 0.8F;
+        final float up = 1F + serpent.getRNG().nextFloat() * 0.8F;
         this.serpent
             .setMotion(this.serpent.getMotion().add(direction.getXOffset() * 0.6D, up, direction.getZOffset() * 0.6D));
         this.serpent.setJumpingOutOfWater(true);
@@ -99,7 +99,7 @@ public class SeaSerpentAIJump extends JumpGoal {
      */
     @Override
     public void tick() {
-        boolean flag = this.inWater;
+        final boolean flag = this.inWater;
         if (!flag) {
             FluidState fluidstate = this.serpent.world.getFluidState(this.serpent.getPosition());
             this.inWater = fluidstate.isTagged(FluidTags.WATER);
@@ -113,8 +113,8 @@ public class SeaSerpentAIJump extends JumpGoal {
         if (vector3d.y * vector3d.y < 0.1F && this.serpent.rotationPitch != 0.0F) {
             this.serpent.rotationPitch = MathHelper.rotLerp(this.serpent.rotationPitch, 0.0F, 0.2F);
         } else {
-            double d0 = Math.sqrt(Entity.horizontalMag(vector3d));
-            double d1 = Math.signum(-vector3d.y) * Math.acos(d0 / vector3d.length()) * (180F / (float) Math.PI);
+            final double d0 = Math.sqrt(Entity.horizontalMag(vector3d));
+            final double d1 = Math.signum(-vector3d.y) * Math.acos(d0 / vector3d.length()) * (180F / (float) Math.PI);
             this.serpent.rotationPitch = (float) d1;
         }
 

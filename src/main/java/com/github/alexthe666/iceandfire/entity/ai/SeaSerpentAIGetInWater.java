@@ -44,7 +44,7 @@ public class SeaSerpentAIGetInWater extends Goal {
 
     public BlockPos generateTarget() {
         BlockPos blockpos = null;
-        int range = 16;
+        final int range = 16;
         for (int i = 0; i < 15; i++) {
             BlockPos blockpos1 = this.creature.getPosition().add(ThreadLocalRandom.current().nextInt(range) - range / 2,
                 3, ThreadLocalRandom.current().nextInt(range) - range / 2);

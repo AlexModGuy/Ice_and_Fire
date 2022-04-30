@@ -92,7 +92,7 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
         } else if (this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
             this.targetEntity.getItem().shrink(1);
             this.goalOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
-            int hunger = FoodUtils.getFoodPoints(this.targetEntity.getItem(), true, isIce);
+            final int hunger = FoodUtils.getFoodPoints(this.targetEntity.getItem(), true, isIce);
             final EntityDragonBase dragon = ((EntityDragonBase) this.goalOwner);
             dragon.setHunger(Math.min(100, ((EntityDragonBase) this.goalOwner).getHunger() + hunger));
             dragon.eatFoodBonus(this.targetEntity.getItem());
@@ -123,9 +123,9 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
 
         @Override
         public int compare(Entity p_compare_1_, Entity p_compare_2_) {
-            double d0 = this.theEntity.getDistanceSq(p_compare_1_);
-            double d1 = this.theEntity.getDistanceSq(p_compare_2_);
-            return d0 < d1 ? -1 : (d0 > d1 ? 1 : 0);
+            final double d0 = this.theEntity.getDistanceSq(p_compare_1_);
+            final double d1 = this.theEntity.getDistanceSq(p_compare_2_);
+            return Double.compare(d0, d1);
         }
     }
 }

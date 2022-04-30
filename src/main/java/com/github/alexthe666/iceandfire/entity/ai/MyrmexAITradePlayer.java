@@ -34,11 +34,9 @@ public class MyrmexAITradePlayer extends Goal {
                 return false;
             } else if (this.myrmex.getDistanceSq(PlayerEntity) > 16.0D) {
                 return false;
-            }
-            else if (this.myrmex.getHive() != null && !this.myrmex.getHive().isPlayerReputationTooLowToTrade(PlayerEntity.getUniqueID())){
+            } else if (this.myrmex.getHive() != null && !this.myrmex.getHive().isPlayerReputationTooLowToTrade(PlayerEntity.getUniqueID())){
                 return false;
-            }
-            else {
+            } else {
                 return PlayerEntity.openContainer != null;
             }
         }

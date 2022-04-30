@@ -66,7 +66,7 @@ public class SeaSerpentPathNavigator  extends PathNavigator {
     protected void pathFollow() {
         if (this.currentPath != null) {
             Vector3d entityPos = this.getEntityPosition();
-            float entityWidth = this.entity.getWidth();
+            final float entityWidth = this.entity.getWidth();
             float lvt_3_1_ = entityWidth > 0.75F ? entityWidth / 2.0F : 0.75F - entityWidth / 2.0F;
             Vector3d lvt_4_1_ = this.entity.getMotion();
             if (Math.abs(lvt_4_1_.x) > 0.2D || Math.abs(lvt_4_1_.z) > 0.2D) {
@@ -109,7 +109,7 @@ public class SeaSerpentPathNavigator  extends PathNavigator {
                 this.timeoutTimer += Util.milliTime() - this.lastTimeoutCheck;
             } else {
                 this.timeoutCachedNode = lvt_2_1_;
-                double lvt_3_1_ = positionVec3.distanceTo(Vector3d.copyCentered(this.timeoutCachedNode));
+                final double lvt_3_1_ = positionVec3.distanceTo(Vector3d.copyCentered(this.timeoutCachedNode));
                 this.timeoutLimit = this.entity.getAIMoveSpeed() > 0.0F
                     ? lvt_3_1_ / this.entity.getAIMoveSpeed() * 100.0D
                     : 0.0D;

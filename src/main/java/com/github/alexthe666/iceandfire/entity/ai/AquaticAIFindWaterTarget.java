@@ -79,9 +79,9 @@ public class AquaticAIFindWaterTarget extends Goal {
         @Override
         public int compare(BlockPos p_compare_1_, BlockPos p_compare_2_) {
             this.pos = AquaticAIFindWaterTarget.this.mob.getPosition();
-            double d0 = this.pos.distanceSq(p_compare_1_);
-            double d1 = this.pos.distanceSq(p_compare_2_);
-            return d0 < d1 ? 1 : (d0 > d1 ? -1 : 0);
+            final double d0 = this.pos.distanceSq(p_compare_1_);
+            final double d1 = this.pos.distanceSq(p_compare_2_);
+            return Double.compare(d1, d0);
         }
     }
 }

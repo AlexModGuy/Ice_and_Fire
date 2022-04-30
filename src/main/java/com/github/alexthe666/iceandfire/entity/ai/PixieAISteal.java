@@ -75,8 +75,8 @@ public class PixieAISteal extends Goal {
                 }
             }
             if (!slotlist.isEmpty()) {
-                int slot;
-                if(slotlist.size() == 1) {
+                final int slot;
+                if (slotlist.size() == 1) {
                     slot = slotlist.get(0);
                 } else {
                     slot = slotlist.get(ThreadLocalRandom.current().nextInt(slotlist.size()));
@@ -93,9 +93,8 @@ public class PixieAISteal extends Goal {
                 if (temptingPlayer != null) {
                     this.temptingPlayer.addPotionEffect(new EffectInstance(this.temptedEntity.negativePotions[this.temptedEntity.getColor()], 100));
                 }
-            }
-            //If the pixie couldn't steal anything
-            else{
+            } else {
+                //If the pixie couldn't steal anything
                 this.temptedEntity.flipAI(true);
                 this.delayTemptCounter = 10 *20;
             }

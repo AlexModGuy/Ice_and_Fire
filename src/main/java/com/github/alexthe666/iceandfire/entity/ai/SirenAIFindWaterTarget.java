@@ -54,9 +54,12 @@ public class SirenAIFindWaterTarget extends Goal {
         if (this.mob.getAttackTarget() == null || !this.mob.getAttackTarget().isAlive()) {
             List<Vector3d> water = new ArrayList<>();
             List<Vector3d> singTargets = new ArrayList<>();
-            for (int x = (int) this.mob.getPosX() - 5; x < (int) this.mob.getPosX() + 5; x++) {
-                for (int y = (int) this.mob.getPosY() - 5; y < (int) this.mob.getPosY() + 5; y++) {
-                    for (int z = (int) this.mob.getPosZ() - 5; z < (int) this.mob.getPosZ() + 5; z++) {
+            final int posX = (int) this.mob.getPosX();
+            final int posY = (int) this.mob.getPosY();
+            final int posZ = (int) this.mob.getPosZ();
+            for (int x = posX - 5; x < posX + 5; x++) {
+                for (int y = posY - 5; y < posY + 5; y++) {
+                    for (int z = posZ - 5; z < posZ + 5; z++) {
                         if (mob.wantsToSing()) {
                             if (this.mob.world.getBlockState(new BlockPos(x, y, z)).getMaterial().isSolid() && this.mob.world.isAirBlock(new BlockPos(x, y + 1, z)) && this.mob.isDirectPathBetweenPoints(this.mob.getPositionVec(), new Vector3d(x, y + 1, z))) {
                                 singTargets.add(new Vector3d(x, y + 1, z));
