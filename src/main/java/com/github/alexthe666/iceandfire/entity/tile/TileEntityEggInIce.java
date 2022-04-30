@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nullable;
 
@@ -104,7 +104,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickableTileEntit
             EntityIceDragon dragon = new EntityIceDragon(world);
             dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
             dragon.setVariant(type.ordinal() - 4);
-            dragon.setGender(new Random().nextBoolean());
+            dragon.setGender(ThreadLocalRandom.current().nextBoolean());
             dragon.setTamed(true);
             dragon.setHunger(50);
             dragon.setOwnerId(ownerUUID);
