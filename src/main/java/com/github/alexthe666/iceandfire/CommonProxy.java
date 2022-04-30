@@ -6,13 +6,11 @@ import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 
-import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -21,8 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.structure.Structure;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -44,20 +41,6 @@ public class CommonProxy {
         }
         BiomeConfig.init();
 
-    }
-
-    @SubscribeEvent
-    public static void registerFeatures(final RegistryEvent.Register<Feature<?>> event) {
-        for (Feature<?> feature : IafWorldRegistry.featureList) {
-            event.getRegistry().register(feature);
-        }
-    }
-
-    @SubscribeEvent
-    public static void registerStructures(final RegistryEvent.Register<Structure<?>> event) {
-        for (Structure<?> feature : IafWorldRegistry.structureFeatureList) {
-            event.getRegistry().register(feature);
-        }
     }
 
     @SubscribeEvent

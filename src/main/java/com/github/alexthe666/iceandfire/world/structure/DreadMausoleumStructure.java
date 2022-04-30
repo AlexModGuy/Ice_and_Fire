@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.world.structure;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.mojang.serialization.Codec;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -21,23 +22,23 @@ import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
-import net.minecraft.world.gen.feature.structure.Structure.IStartFactory;
-
 public class DreadMausoleumStructure extends Structure<NoFeatureConfig> {
 
     public DreadMausoleumStructure(Codec<NoFeatureConfig> p_i51440_1_) {
         super(p_i51440_1_);
-        this.setRegistryName("iceandfire:mausoleum");
     }
 
+    @Override
     public GenerationStage.Decoration getDecorationStage() {
         return GenerationStage.Decoration.SURFACE_STRUCTURES;
     }
 
+    @Override
     public String getStructureName() {
         return IceAndFire.MODID + ":mausoleum";
     }
 
+    @Override
     public IStartFactory getStartFactory() {
         return DreadMausoleumStructure.Start::new;
     }
