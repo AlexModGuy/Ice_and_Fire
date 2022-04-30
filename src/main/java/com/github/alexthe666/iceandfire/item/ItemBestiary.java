@@ -1,11 +1,13 @@
 package com.github.alexthe666.iceandfire.item;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
+import com.google.common.primitives.Ints;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -38,6 +40,7 @@ public class ItemBestiary extends Item {
 
     }
 
+    @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
         if (this.isInGroup(group)) {
             items.add(new ItemStack(this));
@@ -58,7 +61,7 @@ public class ItemBestiary extends Item {
         if (worldIn.isRemote) {
             IceAndFire.PROXY.openBestiaryGui(itemStackIn);
         }
-        return new ActionResult<ItemStack>(ActionResultType.PASS, itemStackIn);
+        return new ActionResult<>(ActionResultType.PASS, itemStackIn);
     }
 
     @Override
@@ -75,7 +78,8 @@ public class ItemBestiary extends Item {
         if (stack.getTag() != null) {
             if (IceAndFire.PROXY.shouldSeeBestiaryContents()) {
                 tooltip.add(new TranslationTextComponent("bestiary.contains").mergeStyle(TextFormatting.GRAY));
-                List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(stack.getTag().getIntArray("Pages")));
+                final Set<EnumBestiaryPages> pages = EnumBestiaryPages
+                    .containedPages(Ints.asList(stack.getTag().getIntArray("Pages")));
                 for (EnumBestiaryPages page : pages) {
                     tooltip.add(new StringTextComponent(TextFormatting.WHITE + "-").appendSibling(new TranslationTextComponent("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase())).mergeStyle(TextFormatting.GRAY));
                 }

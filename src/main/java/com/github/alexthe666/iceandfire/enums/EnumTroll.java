@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.enums;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
@@ -17,7 +17,6 @@ import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-
 
 public enum EnumTroll {
     FOREST(IafItemRegistry.TROLL_FOREST_ARMOR_MATERIAL, Weapon.TRUNK, Weapon.COLUMN_FOREST, Weapon.AXE, Weapon.HAMMER),
@@ -50,7 +49,7 @@ public enum EnumTroll {
     }
 
     public static EnumTroll getBiomeType(Biome biome) {
-        List<EnumTroll> types = new ArrayList<EnumTroll>();
+        List<EnumTroll> types = new ArrayList<>();
         if (BiomeConfig.test(BiomeConfig.snowyTrollBiomes, biome)) {
             types.add(EnumTroll.FROST);
         }
@@ -61,15 +60,15 @@ public enum EnumTroll {
             types.add(EnumTroll.MOUNTAIN);
         }
         if (types.isEmpty()) {
-            return values()[new Random().nextInt(values().length)];
+            return values()[ThreadLocalRandom.current().nextInt(values().length)];
         } else {
-            return types.get(new Random().nextInt(types.size()));
+            return types.get(ThreadLocalRandom.current().nextInt(types.size()));
         }
     }
 
 
     public static Weapon getWeaponForType(EnumTroll troll) {
-        return troll.weapons[new Random().nextInt(troll.weapons.length)];
+        return troll.weapons[ThreadLocalRandom.current().nextInt(troll.weapons.length)];
     }
 
     public enum Weapon {

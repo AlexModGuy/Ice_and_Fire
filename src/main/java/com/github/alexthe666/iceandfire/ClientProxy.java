@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
@@ -65,6 +65,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
+import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.event.ClientEvents;
 import com.github.alexthe666.iceandfire.event.PlayerRenderEvents;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
@@ -99,7 +100,6 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 
-@OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, value = Dist.CLIENT)
 public class ClientProxy extends CommonProxy {
 
@@ -126,7 +126,7 @@ public class ClientProxy extends CommonProxy {
     private static final ModelCopperArmor COPPER_ARMOR_MODEL = new ModelCopperArmor(0.5F);
     private static final ModelCopperArmor COPPER_ARMOR_MODEL_LEGS = new ModelCopperArmor(0.2F);
 
-    public static List<UUID> currentDragonRiders = new ArrayList<UUID>();
+    public static Set<UUID> currentDragonRiders = new HashSet<UUID>();
     public static TabulaModel FIRE_DRAGON_BASE_MODEL;
     public static TabulaModel ICE_DRAGON_BASE_MODEL;
     public static TabulaModel SEA_SERPENT_BASE_MODEL;
@@ -142,7 +142,6 @@ public class ClientProxy extends CommonProxy {
         return referedClientHive;
     }
 
-    @OnlyIn(Dist.CLIENT)
     private static Callable<ItemStackTileEntityRenderer> getTEISR() {
         return IceAndFireTEISR::new;
     }
@@ -152,7 +151,6 @@ public class ClientProxy extends CommonProxy {
         referedClientHive = hive;
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     @SuppressWarnings("deprecation")
     public void init() {
@@ -165,13 +163,11 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void postInit() {
 
     }
 
     @SuppressWarnings("deprecation")
-    @OnlyIn(Dist.CLIENT)
     private void renderEntities() {
 
 
@@ -250,14 +246,15 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.HYDRA_MULTIPART.get(), manager -> new RenderNothing(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.GHOST.get(), manager -> new RenderGhost(manager));
         RenderingRegistry.registerEntityRenderingHandler(IafEntityRegistry.GHOST_SWORD.get(), manager -> new RenderGhostSword(manager));
-        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PODIUM, manager -> new RenderPodium(manager));
-        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.IAF_LECTERN, manager -> new RenderLectern(manager));
-        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.EGG_IN_ICE, manager -> new RenderEggInIce(manager));
-        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PIXIE_HOUSE, manager -> new RenderPixieHouse(manager));
-        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PIXIE_JAR, manager -> new RenderJar(manager));
-        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.DREAD_PORTAL, manager -> new RenderDreadPortal(manager));
-        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.DREAD_SPAWNER, manager -> new RenderDreadSpawner(manager));
-        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.GHOST_CHEST, manager -> new RenderGhostChest(manager));
+        //@formatter:off
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PODIUM.get(), manager -> new RenderPodium(manager));
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.IAF_LECTERN.get(), manager -> new RenderLectern(manager));
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.EGG_IN_ICE.get(), manager -> new RenderEggInIce(manager));
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PIXIE_HOUSE.get(), manager -> new RenderPixieHouse(manager));
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.PIXIE_JAR.get(), manager -> new RenderJar(manager));
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.DREAD_PORTAL.get(), manager -> new RenderDreadPortal(manager));
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.DREAD_SPAWNER.get(), manager -> new RenderDreadSpawner(manager));
+        ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.GHOST_CHEST.get(), manager -> new RenderGhostChest(manager));
         RenderTypeLookup.setRenderLayer(IafBlockRegistry.GOLD_PILE, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(IafBlockRegistry.SILVER_PILE, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(IafBlockRegistry.LECTERN, RenderType.getCutout());
@@ -325,17 +322,15 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void spawnDragonParticle(String name, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase) {
         ClientWorld world = Minecraft.getInstance().world;
         if (world == null) {
             return;
         }
         net.minecraft.client.particle.Particle particle = null;
-        if (name.equals("dragonfire")) {
+        if (name == EnumParticles.DragonFire) {
             particle = new ParticleDragonFlame(world, x, y, z, motX, motY, motZ, entityDragonBase, 0);
-        }
-        if (name.equals("dragonice")) {
+        } else if (name == EnumParticles.DragonIce) {
             particle = new ParticleDragonFrost(world, x, y, z, motX, motY, motZ, entityDragonBase, 0);
         }
         if (particle != null) {
@@ -344,71 +339,68 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void spawnParticle(String name, double x, double y, double z, double motX, double motY, double motZ, float size) {
         ClientWorld world = Minecraft.getInstance().world;
         if (world == null) {
             return;
         }
         net.minecraft.client.particle.Particle particle = null;
-        if (name.equals("dragonfire")) {
-            particle = new ParticleDragonFlame(world, x, y, z, motX, motY, motZ, size);
-        }
-        if (name.equals("dragonice")) {
-            particle = new ParticleDragonFrost(world, x, y, z, motX, motY, motZ, size);
-        }
-        if (name.equals("dread_torch")) {
-            particle = new ParticleDreadTorch(world, x, y, z, motX, motY, motZ, size);
-        }
-        if (name.equals("dread_portal")) {
-            particle = new ParticleDreadPortal(world, x, y, z, motX, motY, motZ, size);
-        }
-        if (name.equals("blood")) {
-            particle = new ParticleBlood(world, x, y, z);
-        }
-        if (name.equals("if_pixie")) {
-            particle = new ParticlePixieDust(world, x, y, z, (float) motX, (float) motY, (float) motZ);
-        }
-        if (name.equals("siren_appearance")) {
-            particle = new ParticleSirenAppearance(world, x, y, z, (int) motX);
-        }
-        if (name.equals("ghost_appearance")) {
-            particle = new ParticleGhostAppearance(world, x, y, z, (int) motX);
-        }
-        if (name.equals("siren_music")) {
-            particle = new ParticleSirenMusic(world, x, y, z, motX, motY, motZ, 1);
-        }
-        if (name.equals("serpent_bubble")) {
-            particle = new ParticleSerpentBubble(world, x, y, z, motX, motY, motZ, 1);
-        }
-        if (name.equals("hydra")) {
-            particle = new ParticleHydraBreath(world, x, y, z, (float) motX, (float) motY, (float) motZ);
+        switch (name) {
+            case DragonFire:
+                particle = new ParticleDragonFlame(world, x, y, z, motX, motY, motZ, size);
+                break;
+            case DragonIce:
+                particle = new ParticleDragonFrost(world, x, y, z, motX, motY, motZ, size);
+                break;
+            case Dread_Torch:
+                particle = new ParticleDreadTorch(world, x, y, z, motX, motY, motZ, size);
+                break;
+            case Dread_Portal:
+                particle = new ParticleDreadPortal(world, x, y, z, motX, motY, motZ, size);
+                break;
+            case Blood:
+                particle = new ParticleBlood(world, x, y, z);
+                break;
+            case If_Pixie:
+                particle = new ParticlePixieDust(world, x, y, z, (float) motX, (float) motY, (float) motZ);
+                break;
+            case Siren_Appearance:
+                particle = new ParticleSirenAppearance(world, x, y, z, (int) motX);
+                break;
+            case Ghost_Appearance:
+                particle = new ParticleGhostAppearance(world, x, y, z, (int) motX);
+                break;
+            case Siren_Music:
+                particle = new ParticleSirenMusic(world, x, y, z, motX, motY, motZ, 1);
+                break;
+            case Serpent_Bubble:
+                particle = new ParticleSerpentBubble(world, x, y, z, motX, motY, motZ, 1);
+                break;
+            case Hydra:
+                particle = new ParticleHydraBreath(world, x, y, z, (float) motX, (float) motY, (float) motZ);
+                break;
         }
         if (particle != null) {
             Minecraft.getInstance().particles.addEffect(particle);
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void openBestiaryGui(ItemStack book) {
         Minecraft.getInstance().displayGuiScreen(new GuiBestiary(book));
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void openMyrmexStaffGui(ItemStack staff) {
         Minecraft.getInstance().displayGuiScreen(new GuiMyrmexStaff(staff));
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void openMyrmexAddRoomGui(ItemStack staff, BlockPos pos, Direction facing) {
         Minecraft.getInstance().displayGuiScreen(new GuiMyrmexAddRoom(staff, pos, facing));
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public Object getArmorModel(int armorId) {
         switch (armorId) {
             case 0:

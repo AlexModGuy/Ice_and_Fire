@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.util.IDragonProjectile;
 
+import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.AbstractFireballEntity;
@@ -89,7 +90,7 @@ public class EntitySeaSerpentBubbles extends AbstractFireballEntity implements I
                 float f = this.getMotionFactor();
                 if (this.world.isRemote) {
                     for (int i = 0; i < 3; ++i) {
-                        IceAndFire.PROXY.spawnParticle("serpent_bubble", this.getPosX() + this.rand.nextFloat() * this.getWidth() - (double) this.getWidth() * 0.5F, this.getPosY() - 0.5D, this.getPosZ() + this.rand.nextFloat() * this.getWidth() - (double) this.getWidth() * 0.5F, 0, 0, 0);
+                        IceAndFire.PROXY.spawnParticle(EnumParticles.Serpent_Bubble, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth()) - (double) this.getWidth() * 0.5F, this.getPosY() - 0.5D, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth()) - (double) this.getWidth() * 0.5F, 0, 0, 0);
                     }
                 }
 

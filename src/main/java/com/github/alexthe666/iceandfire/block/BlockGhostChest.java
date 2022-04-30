@@ -19,8 +19,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockReader;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
 public class BlockGhostChest extends ChestBlock implements ICustomRendered {
 
     public BlockGhostChest() {
@@ -30,29 +28,34 @@ public class BlockGhostChest extends ChestBlock implements ICustomRendered {
     			.hardnessAndResistance(2.5F)
     			.sound(SoundType.WOOD),
 			() -> {
-	            return IafTileEntityRegistry.GHOST_CHEST;
+                return IafTileEntityRegistry.GHOST_CHEST.get();
 	        }
 		);
 
         setRegistryName(IceAndFire.MODID, "ghost_chest");
     }
 
+    @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TileEntityGhostChest();
     }
 
+    @Override
     protected Stat<ResourceLocation> getOpenStat() {
         return Stats.CUSTOM.get(Stats.TRIGGER_TRAPPED_CHEST);
     }
 
+    @Override
     public boolean canProvidePower(BlockState state) {
         return true;
     }
 
+    @Override
     public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
         return MathHelper.clamp(ChestTileEntity.getPlayersUsing(blockAccess, pos), 0, 15);
     }
 
+    @Override
     public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
         return side == Direction.UP ? blockState.getWeakPower(blockAccess, pos, side) : 0;
     }

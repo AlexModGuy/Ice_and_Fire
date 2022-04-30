@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.enums;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
 
@@ -38,11 +38,11 @@ public enum EnumHippogryphTypes {
     }
 
     public static EnumHippogryphTypes getRandomType() {
-        return getWildTypes()[new Random().nextInt(getWildTypes().length - 1)];
+        return getWildTypes()[ThreadLocalRandom.current().nextInt(getWildTypes().length - 1)];
     }
 
     public static EnumHippogryphTypes getBiomeType(Biome biome) {
-        List<EnumHippogryphTypes> types = new ArrayList<EnumHippogryphTypes>();
+        List<EnumHippogryphTypes> types = new ArrayList<>();
         if (BiomeConfig.test(BiomeConfig.blackHippogryphBiomes, biome)) {
             types.add(BLACK);
         }
@@ -70,7 +70,7 @@ public enum EnumHippogryphTypes {
             if (types.contains(GRAY) && types.contains(CHESTNUT)) {
                 return GRAY;
             }
-            return types.get(new Random().nextInt(types.size()));
+            return types.get(ThreadLocalRandom.current().nextInt(types.size()));
         }
 
     }

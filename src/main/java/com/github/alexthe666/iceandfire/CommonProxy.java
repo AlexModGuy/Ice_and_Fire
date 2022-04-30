@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
+import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 
@@ -92,14 +93,14 @@ public class CommonProxy {
     public void postInit() {
     }
 
-    public void spawnParticle(String name, double x, double y, double z, double motX, double motY, double motZ) {
+    public void spawnParticle(EnumParticles name, double x, double y, double z, double motX, double motY, double motZ) {
         spawnParticle(name, x, y, z, motX, motY, motZ, 1.0F);
     }
 
-    public void spawnDragonParticle(String name, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase) {
+    public void spawnDragonParticle(EnumParticles name, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase) {
     }
 
-    public void spawnParticle(String name, double x, double y, double z, double motX, double motY, double motZ, float size) {
+    public void spawnParticle(EnumParticles name, double x, double y, double z, double motX, double motY, double motZ, float size) {
     }
 
     public void openBestiaryGui(ItemStack book) {

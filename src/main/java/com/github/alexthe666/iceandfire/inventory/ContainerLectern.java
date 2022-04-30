@@ -30,9 +30,9 @@ public class ContainerLectern extends Container {
 
 
     public ContainerLectern(int id, IInventory furnaceInventory, PlayerInventory playerInventory, IIntArray vars) {
-        super(IafContainerRegistry.IAF_LECTERN_CONTAINER, id);
+        super(IafContainerRegistry.IAF_LECTERN_CONTAINER.get(), id);
         this.tileFurnace = furnaceInventory;
-        this.addSlot(new SlotLectern(playerInventory.player, furnaceInventory, 0, 15, 47) {
+        this.addSlot(new SlotLectern(furnaceInventory, 0, 15, 47) {
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() instanceof ItemBestiary;
@@ -132,14 +132,15 @@ public class ContainerLectern extends Container {
         return pages;
     }
 
-    private int getPageField(int i) {
-        if(IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern){
+    private static int getPageField(int i) {
+        if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern) {
             TileEntityLectern lectern = (TileEntityLectern) IceAndFire.PROXY.getRefrencedTE();
             return lectern.selectedPages[i] == null ? -1 : lectern.selectedPages[i].ordinal();
         }
         return -1;
     }
 
+    @Override
     public boolean enchantItem(PlayerEntity playerIn, int id) {
         possiblePagesInt[0] = getPageField(0);
         possiblePagesInt[1] = getPageField(1);
@@ -156,14 +157,12 @@ public class ContainerLectern extends Container {
             return false;
         }
 
-        boolean didEnchant = false;
         if ((itemstack1.isEmpty() || itemstack1.getCount() < i) && !playerIn.isCreative()) {
             return false;
         } else if (this.possiblePagesInt[id] > 0 && !itemstack.isEmpty()) {
             EnumBestiaryPages page = getPossiblePages()[MathHelper.clamp(id, 0, 2)];
             if (page != null) {
                 if (itemstack.getItem() == IafItemRegistry.BESTIARY) {
-                    didEnchant = EnumBestiaryPages.addPage(page, itemstack);
                     this.tileFurnace.setInventorySlotContents(0, itemstack);
                     if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern) {
                         if(playerIn.world.isRemote){

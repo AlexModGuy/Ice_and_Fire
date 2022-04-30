@@ -16,7 +16,7 @@ import net.minecraft.world.server.ServerWorld;
 public class TileEntityGhostChest extends ChestTileEntity {
 
     public TileEntityGhostChest() {
-        super(IafTileEntityRegistry.GHOST_CHEST);
+        super(IafTileEntityRegistry.GHOST_CHEST.get());
     }
 
     @Override

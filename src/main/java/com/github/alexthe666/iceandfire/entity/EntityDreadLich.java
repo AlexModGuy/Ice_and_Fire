@@ -14,6 +14,7 @@ import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
 import com.github.alexthe666.iceandfire.entity.util.IDreadMob;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
+import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
@@ -151,8 +152,8 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
             float f = this.renderYawOffset * 0.017453292F + MathHelper.cos(this.ticksExisted * 0.6662F) * 0.25F;
             float f1 = MathHelper.cos(f);
             float f2 = MathHelper.sin(f);
-            IceAndFire.PROXY.spawnParticle("dread_torch", this.getPosX() + f1 * 0.6D, this.getPosY() + 1.8D, this.getPosZ() + f2 * 0.6D, d0, d1, d2);
-            IceAndFire.PROXY.spawnParticle("dread_torch", this.getPosX() - f1 * 0.6D, this.getPosY() + 1.8D, this.getPosZ() - f2 * 0.6D, d0, d1, d2);
+            IceAndFire.PROXY.spawnParticle(EnumParticles.Dread_Torch, this.getPosX() + (double) f1 * 0.6D, this.getPosY() + 1.8D, this.getPosZ() + (double) f2 * 0.6D, d0, d1, d2);
+            IceAndFire.PROXY.spawnParticle(EnumParticles.Dread_Torch, this.getPosX() - (double) f1 * 0.6D, this.getPosY() + 1.8D, this.getPosZ() - (double) f2 * 0.6D, d0, d1, d2);
         }
         if (fireCooldown > 0) {
             fireCooldown--;
