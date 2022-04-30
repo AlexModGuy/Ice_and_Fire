@@ -9,8 +9,6 @@ import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class MyrmexAIDefendHive extends TargetGoal {
     EntityMyrmexBase myrmex;
     LivingEntity villageAgressorTarget;
@@ -21,6 +19,7 @@ public class MyrmexAIDefendHive extends TargetGoal {
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
+    @Override
     public boolean shouldExecute() {
         MyrmexHive village = this.myrmex.getHive();
 
@@ -42,6 +41,7 @@ public class MyrmexAIDefendHive extends TargetGoal {
     /**
      * Execute a one shot task or start executing a continuous task
      */
+    @Override
     public void startExecuting() {
         this.myrmex.setAttackTarget(this.villageAgressorTarget);
         super.startExecuting();

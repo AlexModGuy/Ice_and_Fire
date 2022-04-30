@@ -11,8 +11,6 @@ import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class MyrmexAIReEnterHive extends Goal {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;
@@ -27,6 +25,7 @@ public class MyrmexAIReEnterHive extends Goal {
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
+    @Override
     public boolean shouldExecute() {
         if (!this.myrmex.canMove() || this.myrmex.shouldLeaveHive() || !this.myrmex.shouldEnterHive() || !first) {
             return false;
@@ -49,6 +48,7 @@ public class MyrmexAIReEnterHive extends Goal {
         }
     }
 
+    @Override
     public void tick() {
         //Fallback for if for some reason the myrmex can't reach the entrance try a different one (random)
         if (first && !this.myrmex.pathReachesTarget(path,nextEntrance,12)) {
@@ -65,13 +65,12 @@ public class MyrmexAIReEnterHive extends Goal {
         this.myrmex.isEnteringHive = !this.myrmex.isCloseEnoughToTarget(nextEntrance,14) && !first;
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
-        if (this.myrmex.isCloseEnoughToTarget(nextEntrance,9) && !first) {
-            return false;
-        }
-        return true;
+        return !(this.myrmex.isCloseEnoughToTarget(nextEntrance, 9) && !first);
     }
 
+    @Override
     public void resetTask() {
         nextEntrance = BlockPos.ZERO;
         first = true;

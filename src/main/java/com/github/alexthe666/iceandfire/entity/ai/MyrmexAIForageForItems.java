@@ -1,20 +1,18 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.*;
-
-import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.function.Predicate;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
-import com.google.common.base.Predicate;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
-
-import net.minecraft.entity.ai.goal.Goal.Flag;
 
 public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
@@ -26,8 +24,8 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(myrmex);
         this.targetEntitySelector = new Predicate<ItemEntity>() {
             @Override
-            public boolean apply(@Nullable ItemEntity item) {
-                return item instanceof ItemEntity && !item.getItem().isEmpty() && !item.isInWater();
+            public boolean test(ItemEntity item) {
+                return !item.getItem().isEmpty() && !item.isInWater();
             }
         };
         this.myrmex = myrmex;
@@ -62,10 +60,9 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
     @Override
     public void tick() {
         super.tick();
-        if (this.targetEntity == null || this.targetEntity != null && (!this.targetEntity.isAlive() || this.targetEntity.isInWater())) {
+        if (this.targetEntity == null || (!this.targetEntity.isAlive() || this.targetEntity.isInWater())) {
             this.resetTask();
-        }
-        if (this.targetEntity != null && this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 8F) {
+        } else if (this.goalOwner.getDistanceSq(this.targetEntity) < 8F) {
             this.myrmex.onPickupItem(targetEntity);
             this.myrmex.setHeldItem(Hand.MAIN_HAND, this.targetEntity.getItem());
             this.targetEntity.remove();
@@ -91,6 +88,7 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
             this.theEntity = theEntityIn;
         }
 
+        @Override
         public int compare(Entity p_compare_1_, Entity p_compare_2_) {
             double d0 = this.theEntity.getDistanceSq(p_compare_1_);
             double d1 = this.theEntity.getDistanceSq(p_compare_2_);

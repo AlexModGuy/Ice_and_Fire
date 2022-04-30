@@ -10,8 +10,6 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class MyrmexAIWanderHiveCenter extends Goal {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;
@@ -24,6 +22,7 @@ public class MyrmexAIWanderHiveCenter extends Goal {
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
+    @Override
     public boolean shouldExecute() {
         if (!this.myrmex.canMove() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky()) {
             return false;
@@ -42,14 +41,17 @@ public class MyrmexAIWanderHiveCenter extends Goal {
         }
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
         return !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D) > 3 && this.myrmex.shouldEnterHive();
     }
 
+    @Override
     public void startExecuting() {
         this.myrmex.getNavigator().setPath(this.path, this.movementSpeed);
     }
 
+    @Override
     public void resetTask() {
         target = BlockPos.ZERO;
         this.myrmex.getNavigator().setPath(null, this.movementSpeed);
