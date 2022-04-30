@@ -9,11 +9,11 @@ import net.minecraft.entity.player.PlayerEntity;
 
 public class AmphithereAIHurtByTarget extends HurtByTargetGoal {
 
-    public AmphithereAIHurtByTarget(EntityAmphithere amphithere, boolean help, Class[] classes) {
+    public AmphithereAIHurtByTarget(EntityAmphithere amphithere, boolean help, Class<?>[] classes) {
         super(amphithere, classes);
     }
 
-    protected void setEntityAttackTarget(MobEntity creatureIn, LivingEntity LivingEntityIn) {
+    protected static void setEntityAttackTarget(MobEntity creatureIn, LivingEntity LivingEntityIn) {
         EntityAmphithere amphithere = (EntityAmphithere) creatureIn;
         if (amphithere.isTamed() || !(LivingEntityIn instanceof PlayerEntity)) {
             amphithere.setAttackTarget(LivingEntityIn);

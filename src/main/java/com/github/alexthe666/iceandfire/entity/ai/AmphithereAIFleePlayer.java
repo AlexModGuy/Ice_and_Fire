@@ -12,8 +12,6 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.vector.Vector3d;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class AmphithereAIFleePlayer extends Goal {
     private final double farSpeed;
     private final double nearSpeed;
@@ -31,6 +29,7 @@ public class AmphithereAIFleePlayer extends Goal {
     }
 
 
+    @Override
     public boolean shouldExecute() {
         if (!this.entity.isFlying() && !this.entity.isTamed()) {
             List<PlayerEntity> list = this.entity.world.getEntitiesWithinAABB(PlayerEntity.class, this.entity.getBoundingBox().grow(this.avoidDistance, 6D, this.avoidDistance), EntityPredicates.CAN_AI_TARGET);
@@ -54,18 +53,22 @@ public class AmphithereAIFleePlayer extends Goal {
         }
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
         return !this.entity.getNavigator().noPath();
     }
 
+    @Override
     public void startExecuting() {
         this.entity.getNavigator().setPath(this.path, this.farSpeed);
     }
 
+    @Override
     public void resetTask() {
         this.closestLivingEntity = null;
     }
 
+    @Override
     public void tick() {
         if (this.entity.getDistanceSq(this.closestLivingEntity) < 49.0D) {
             this.entity.getNavigator().setSpeed(this.nearSpeed);
