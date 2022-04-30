@@ -13,10 +13,12 @@ public class DeathWormAIWander extends WaterAvoidingRandomWalkingGoal {
         this.worm = creatureIn;
     }
 
+    @Override
     public boolean shouldExecute() {
         return !worm.isInSand() && !worm.isBeingRidden() && super.shouldExecute();
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
         return !worm.isInSand() && !worm.isBeingRidden() && super.shouldContinueExecuting();
     }

@@ -12,8 +12,6 @@ import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class DeathWormAITarget<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
     private EntityDeathWorm deathworm;
 
@@ -25,7 +23,8 @@ public class DeathWormAITarget<T extends LivingEntity> extends NearestAttackable
 
     @Override
     public boolean shouldExecute() {
-        if (super.shouldExecute() && nearestTarget != null && !nearestTarget.getClass().equals(this.deathworm.getClass())) {
+        if (super.shouldExecute() && nearestTarget != null
+            && !nearestTarget.getClass().isAssignableFrom(this.deathworm.getClass())) {
             if (nearestTarget instanceof PlayerEntity && !deathworm.isOwner(nearestTarget)) {
                 return !deathworm.isTamed();
             } else {
@@ -43,6 +42,7 @@ public class DeathWormAITarget<T extends LivingEntity> extends NearestAttackable
         return false;
     }
 
+    @Override
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
         return this.deathworm.getBoundingBox().grow(targetDistance, targetDistance, targetDistance);
     }

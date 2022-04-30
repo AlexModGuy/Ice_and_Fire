@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
@@ -13,12 +12,9 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class DeathWormAIFindSandTarget extends Goal {
     private EntityDeathWorm mob;
     private int range;
-    private boolean avoidAttacker;
 
     public DeathWormAIFindSandTarget(EntityDeathWorm mob, int range) {
         this.mob = mob;
@@ -31,8 +27,12 @@ public class DeathWormAIFindSandTarget extends Goal {
             return false;
         }
         if (this.mob.getRNG().nextFloat() < 0.5F) {
-            Path path = this.mob.getNavigator().getPath();
-            if (path != null || !this.mob.getNavigator().noPath() && !isDirectPathBetweenPoints(this.mob, this.mob.getPositionVec(), new Vector3d(path.getFinalPathPoint().x, path.getFinalPathPoint().y, path.getFinalPathPoint().z))) {
+            final Path path = this.mob.getNavigator().getPath();
+            if (path != null /*
+                              * || !this.mob.getNavigator().noPath() && !isDirectPathBetweenPoints(this.mob,
+                              * this.mob.getPositionVec(), new Vector3d(path.getFinalPathPoint().x,
+                              * path.getFinalPathPoint().y, path.getFinalPathPoint().z))
+                              */) {
                 this.mob.getNavigator().clearPath();
             }
             if (this.mob.getNavigator().noPath() && !this.mob.getMoveHelper().isUpdating()) {
