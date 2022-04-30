@@ -5,6 +5,8 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
+import javax.annotation.Nonnull;
+
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 
 import net.minecraft.entity.Entity;
@@ -13,8 +15,6 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.vector.Vector3d;
-
-import javax.annotation.Nonnull;
 
 
 public class PixieAIFlee<T extends Entity> extends Goal {
@@ -37,6 +37,7 @@ public class PixieAIFlee<T extends Entity> extends Goal {
     @Override
     public boolean shouldExecute() {
         if (this.pixie.getHeldItem(Hand.MAIN_HAND).isEmpty() || this.pixie.isTamed()) {
+            list = Collections.emptyList();
             return false;
         }
 

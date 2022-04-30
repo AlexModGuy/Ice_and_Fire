@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
@@ -10,8 +9,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
-
 import com.github.alexthe666.iceandfire.util.IAFMath;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
@@ -52,6 +51,7 @@ public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
     @Override
     public boolean shouldExecute() {
         if (!((EntityAmphithere) this.goalOwner).canMove()) {
+            list = IAFMath.emptyItemEntityList;
             return false;
         }
 
