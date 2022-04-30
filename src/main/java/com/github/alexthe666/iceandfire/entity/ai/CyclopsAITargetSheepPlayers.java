@@ -7,12 +7,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 
+public class CyclopsAITargetSheepPlayers<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
-public class CyclopsAITargetSheepPlayers<T extends LivingEntity> extends NearestAttackableTargetGoal {
-
-    public CyclopsAITargetSheepPlayers(MobEntity goalOwnerIn, Class targetClassIn, boolean checkSight) {
+    public CyclopsAITargetSheepPlayers(MobEntity goalOwnerIn, Class<T> targetClassIn, boolean checkSight) {
         super(goalOwnerIn, targetClassIn, 0, checkSight, true, new Predicate<LivingEntity>() {
             @Override
             public boolean test(LivingEntity livingEntity) {
