@@ -11,8 +11,6 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class AmphithereAIAttackMelee extends Goal {
     protected final int attackInterval = 20;
     protected EntityAmphithere attacker;
@@ -51,6 +49,7 @@ public class AmphithereAIAttackMelee extends Goal {
     /**
      * Returns whether the Goal should begin execution.
      */
+    @Override
     public boolean shouldExecute() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
         if (!attacker.canMove()) {
@@ -83,25 +82,27 @@ public class AmphithereAIAttackMelee extends Goal {
     /**
      * Returns whether an in-progress Goal should continue executing
      */
+    @Override
     public boolean shouldContinueExecuting() {
-        LivingEntity LivingEntity = this.attacker.getAttackTarget();
+        LivingEntity living = this.attacker.getAttackTarget();
 
-        if (LivingEntity == null) {
+        if (living == null) {
             return false;
-        } else if (!LivingEntity.isAlive()) {
+        } else if (!living.isAlive()) {
             return false;
         } else if (!this.longMemory) {
             return !this.attacker.getNavigator().noPath();
-        } else if (!this.attacker.isWithinHomeDistanceFromPosition(LivingEntity.getPosition())) {
+        } else if (!this.attacker.isWithinHomeDistanceFromPosition(living.getPosition())) {
             return false;
         } else {
-            return !(LivingEntity instanceof PlayerEntity) || !LivingEntity.isSpectator() && !((PlayerEntity) LivingEntity).isCreative();
+            return !(living instanceof PlayerEntity) || !living.isSpectator() && !((PlayerEntity) living).isCreative();
         }
     }
 
     /**
      * Execute a one shot task or start executing a continuous task
      */
+    @Override
     public void startExecuting() {
         if (attacker.isFlying()) {
             this.attacker.getMoveHelper().setMoveTo(this.targetX, this.targetY, this.targetZ, 0.1F);
@@ -114,6 +115,7 @@ public class AmphithereAIAttackMelee extends Goal {
     /**
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
+    @Override
     public void resetTask() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
 
@@ -124,6 +126,7 @@ public class AmphithereAIAttackMelee extends Goal {
         this.attacker.getNavigator().clearPath();
     }
 
+    @Override
     public void tick() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
         if (attacker.isFlying()) {
