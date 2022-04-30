@@ -94,7 +94,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -154,7 +153,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     @SuppressWarnings("deprecation")
     public void init() {
-        IafGuiRegistry.register();
         this.bestiaryFontRenderer = Minecraft.getInstance().fontRenderer;
         IafKeybindRegistry.init();
         MinecraftForge.EVENT_BUS.register(new PlayerRenderEvents());
@@ -175,6 +173,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void setupClient() {
+        IafGuiRegistry.register();
         EnumDragonAnimations.initializeDragonModels();
         EnumSeaSerpentAnimations.initializeSerpentModels();
         DragonAnimationsLibrary.register(EnumDragonPoses.values(), EnumDragonModelTypes.values());
@@ -322,7 +321,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void spawnDragonParticle(String name, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase) {
+    public void spawnDragonParticle(final EnumParticles name, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase) {
         ClientWorld world = Minecraft.getInstance().world;
         if (world == null) {
             return;
@@ -339,7 +338,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void spawnParticle(String name, double x, double y, double z, double motX, double motY, double motZ, float size) {
+    public void spawnParticle(final EnumParticles name, double x, double y, double z, double motX, double motY, double motZ, float size) {
         ClientWorld world = Minecraft.getInstance().world;
         if (world == null) {
             return;
@@ -379,6 +378,8 @@ public class ClientProxy extends CommonProxy {
             case Hydra:
                 particle = new ParticleHydraBreath(world, x, y, z, (float) motX, (float) motY, (float) motZ);
                 break;
+        default:
+            break;
         }
         if (particle != null) {
             Minecraft.getInstance().particles.addEffect(particle);
