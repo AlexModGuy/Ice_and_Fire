@@ -37,7 +37,7 @@ public class CockatriceAITargetItems<T extends ItemEntity> extends TargetGoal {
 
             @Override
             public boolean test(ItemEntity item) {
-                return !item.getItem().isEmpty()
+                return item != null && !item.getItem().isEmpty()
                     && (item.getItem().getItem() == Items.ROTTEN_FLESH || FoodUtils.isSeeds(item.getItem()));
             }
         };

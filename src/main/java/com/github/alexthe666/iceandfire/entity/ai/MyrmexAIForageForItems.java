@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
@@ -25,7 +24,7 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
         this.targetEntitySelector = new Predicate<ItemEntity>() {
             @Override
             public boolean test(ItemEntity item) {
-                return !item.getItem().isEmpty() && !item.isInWater();
+                return item != null && !item.getItem().isEmpty() && !item.isInWater();
             }
         };
         this.myrmex = myrmex;

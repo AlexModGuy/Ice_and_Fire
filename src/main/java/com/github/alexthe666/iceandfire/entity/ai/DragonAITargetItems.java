@@ -45,7 +45,7 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
 
             @Override
             public boolean test(ItemEntity item) {
-                return !item.getItem().isEmpty() && item.getItem().getItem() != null
+                return item != null && !item.getItem().isEmpty() && item.getItem().getItem() != null
                     && FoodUtils.getFoodPoints(item.getItem(), true, isIce) > 0;
             }
         };

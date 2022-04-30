@@ -38,7 +38,7 @@ public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
 
             @Override
             public boolean test(ItemEntity item) {
-                return !item.getItem().isEmpty() && item.getItem().getItem() == Items.COCOA_BEANS;
+                return item != null & !item.getItem().isEmpty() && item.getItem().getItem() == Items.COCOA_BEANS;
             }
         };
         this.setMutexFlags(EnumSet.of(Flag.TARGET));
