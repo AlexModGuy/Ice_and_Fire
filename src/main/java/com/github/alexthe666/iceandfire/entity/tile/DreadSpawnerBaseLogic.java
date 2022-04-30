@@ -105,14 +105,10 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
                     }
 
                     ListNBT listnbt = compoundnbt.getList("Pos", 6);
-                    int j = listnbt.size();
-                    double d0 = j >= 1 ? listnbt.getDouble(0)
-                        : blockpos.getX() + (world.rand.nextDouble() - world.rand.nextDouble()) * this.spawnRange
-                            + 0.5D;
-                    double d1 = j >= 2 ? listnbt.getDouble(1) : (double) (blockpos.getY() + world.rand.nextInt(3) - 1);
-                    double d2 = j >= 3 ? listnbt.getDouble(2)
-                        : blockpos.getZ() + (world.rand.nextDouble() - world.rand.nextDouble()) * this.spawnRange
-                            + 0.5D;
+                    final int j = listnbt.size();
+                    final double d0 = j >= 1 ? listnbt.getDouble(0) : blockpos.getX() + (world.rand.nextDouble() - world.rand.nextDouble()) * this.spawnRange + 0.5D;
+                    final double d1 = j >= 2 ? listnbt.getDouble(1) : (double) (blockpos.getY() + world.rand.nextInt(3) - 1);
+                    final double d2 = j >= 3 ? listnbt.getDouble(2) : blockpos.getZ() + (world.rand.nextDouble() - world.rand.nextDouble()) * this.spawnRange + 0.5D;
                     if (world.hasNoCollisions(optional.get().getBoundingBoxWithSizeApplied(d0, d1, d2)) && EntitySpawnPlacementRegistry.canSpawnEntity(optional.get(), (IServerWorld)world, SpawnReason.SPAWNER, new BlockPos(d0, d1, d2), world.getRandom())) {
                         ServerWorld serverworld = (ServerWorld)world;
                         Entity entity = EntityType.loadEntityAndExecute(compoundnbt, world, (p_221408_6_) -> {
@@ -124,7 +120,7 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
                             return;
                         }
 
-                        int k = world.getEntitiesWithinAABB(entity.getClass(), (new AxisAlignedBB(blockpos.getX(), blockpos.getY(), blockpos.getZ(), blockpos.getX() + 1, blockpos.getY() + 1, blockpos.getZ() + 1)).grow(this.spawnRange)).size();
+                        final int k = world.getEntitiesWithinAABB(entity.getClass(), (new AxisAlignedBB(blockpos.getX(), blockpos.getY(), blockpos.getZ(), blockpos.getX() + 1, blockpos.getY() + 1, blockpos.getZ() + 1)).grow(this.spawnRange)).size();
                         if (k >= this.maxNearbyEntities) {
                             this.resetTimer();
                             return;

@@ -43,13 +43,13 @@ public class TileEntityPixieHouse extends TileEntity implements ITickableTileEnt
     }
 
     public static int getHouseTypeFromBlock(Block block) {
-        if (block == IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_RED) { return 1; }
-        if (block == IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_BROWN) { return 0; }
-        if (block == IafBlockRegistry.PIXIE_HOUSE_OAK) { return 3; }
-        if (block == IafBlockRegistry.PIXIE_HOUSE_BIRCH) { return 2; }
-        if (block == IafBlockRegistry.PIXIE_HOUSE_SPRUCE) { return 5; }
-        if (block == IafBlockRegistry.PIXIE_HOUSE_DARK_OAK) { return 4; }
-        return 0;
+        if (block == IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_RED) return 1;
+        if (block == IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_BROWN) return 0;
+        if (block == IafBlockRegistry.PIXIE_HOUSE_OAK) return 3;
+        if (block == IafBlockRegistry.PIXIE_HOUSE_BIRCH) return 2;
+        if (block == IafBlockRegistry.PIXIE_HOUSE_SPRUCE) return 5;
+        if (block == IafBlockRegistry.PIXIE_HOUSE_DARK_OAK) return 4;
+        else return 0;
     }
 
     @Override

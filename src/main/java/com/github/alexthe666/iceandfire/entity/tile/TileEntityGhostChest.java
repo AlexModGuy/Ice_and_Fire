@@ -38,8 +38,7 @@ public class TileEntityGhostChest extends ChestTileEntity {
             ghost.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 0.5F, this.pos.getZ() + 0.5F,
                 ThreadLocalRandom.current().nextFloat() * 360F, 0);
             if (!this.world.isRemote) {
-                ghost.onInitialSpawn((ServerWorld) world, world.getDifficultyForLocation(this.pos), SpawnReason.SPAWNER,
-                    null, null);
+                ghost.onInitialSpawn((ServerWorld) world, world.getDifficultyForLocation(this.pos), SpawnReason.SPAWNER, null, null);
                 if (!player.isCreative()) {
                     ghost.setAttackTarget(player);
                 }

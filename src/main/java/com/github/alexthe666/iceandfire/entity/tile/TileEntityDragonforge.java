@@ -35,30 +35,23 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 public class TileEntityDragonforge extends LockableTileEntity implements ITickableTileEntity, ISidedInventory {
 
-    private static final int[] SLOTS_TOP = new int[] {
-        0, 1
-    };
-    private static final int[] SLOTS_BOTTOM = new int[] {
-        2
-    };
-    private static final int[] SLOTS_SIDES = new int[] {
-        0, 1
-    };
+    private static final int[] SLOTS_TOP = new int[]{0, 1};
+    private static final int[] SLOTS_BOTTOM = new int[]{2};
+    private static final int[] SLOTS_SIDES = new int[]{0,1};
     private static final Direction[] HORIZONTALS = new Direction[] {
         Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST
     };
     public int isFire;
     public int cookTime;
-    net.minecraftforge.items.IItemHandler handlerTop = new net.minecraftforge.items.wrapper.SidedInvWrapper(this,
-        net.minecraft.util.Direction.UP);
-    net.minecraftforge.items.IItemHandler handlerBottom = new net.minecraftforge.items.wrapper.SidedInvWrapper(this,
-        net.minecraft.util.Direction.DOWN);
-    net.minecraftforge.items.IItemHandler handlerSide = new net.minecraftforge.items.wrapper.SidedInvWrapper(this,
-        net.minecraft.util.Direction.WEST);
-    net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers = net.minecraftforge.items.wrapper.SidedInvWrapper
+    IItemHandler handlerTop = new SidedInvWrapper(this, net.minecraft.util.Direction.UP);
+    IItemHandler handlerBottom = new SidedInvWrapper(this, net.minecraft.util.Direction.DOWN);
+    IItemHandler handlerSide = new SidedInvWrapper(this, net.minecraft.util.Direction.WEST);
+    net.minecraftforge.common.util.LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper
         .create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
     private NonNullList<ItemStack> forgeItemStacks = NonNullList.withSize(3, ItemStack.EMPTY);
     public int lastDragonFlameTimer = 0;
@@ -82,7 +75,8 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     @Override
     public boolean isEmpty() {
         for (ItemStack itemstack : this.forgeItemStacks) {
-            if (!itemstack.isEmpty()) { return false; }
+            if (!itemstack.isEmpty())
+                return false;
         }
 
         return true;
@@ -101,22 +95,19 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     public Block getGrillBlock() {
-        if (isFire == 0) { return IafBlockRegistry.DRAGONFORGE_FIRE_BRICK; }
-        if (isFire == 1) { return IafBlockRegistry.DRAGONFORGE_ICE_BRICK; }
-        if (isFire == 2) { return IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK; }
-        return IafBlockRegistry.DRAGONFORGE_FIRE_BRICK;
+        switch (isFire) {
+            case 1: return IafBlockRegistry.DRAGONFORGE_ICE_BRICK;
+            case 2: return IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK;
+            default: return IafBlockRegistry.DRAGONFORGE_FIRE_BRICK; // isFire == 0
+        }
     }
 
     public boolean grillMatches(Block block) {
         switch (isFire) {
-        case 0:
-            return block == IafBlockRegistry.DRAGONFORGE_FIRE_BRICK;
-        case 1:
-            return block == IafBlockRegistry.DRAGONFORGE_ICE_BRICK;
-        case 2:
-            return block == IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK;
-        default:
-            return false;
+            case 0: return block == IafBlockRegistry.DRAGONFORGE_FIRE_BRICK;
+            case 1: return block == IafBlockRegistry.DRAGONFORGE_ICE_BRICK;
+            case 2: return block == IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK;
+            default: return false;
         }
     }
 
@@ -195,14 +186,10 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
 
     public String getTypeID() {
         switch (getFireType(this.getBlockState().getBlock())) {
-        case 0:
-            return "fire";
-        case 1:
-            return "ice";
-        case 2:
-            return "lightning";
-        default:
-            return "";
+            case 0: return "fire";
+            case 1: return "ice";
+            case 2: return "lightning";
+            default: return "";
         }
     }
 
@@ -273,27 +260,19 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
 
     private DragonForgeRecipe getRecipeForInput(ItemStack cookStack) {
         switch (this.isFire) {
-        case 0:
-            return IafRecipeRegistry.getFireForgeRecipe(cookStack);
-        case 1:
-            return IafRecipeRegistry.getIceForgeRecipe(cookStack);
-        case 2:
-            return IafRecipeRegistry.getLightningForgeRecipe(cookStack);
-        default:
-            return null;
+            case 0: return IafRecipeRegistry.getFireForgeRecipe(cookStack);
+            case 1: return IafRecipeRegistry.getIceForgeRecipe(cookStack);
+            case 2: return IafRecipeRegistry.getLightningForgeRecipe(cookStack);
+            default: return null;
         }
     }
 
     private DragonForgeRecipe getRecipeForBlood(ItemStack bloodStack) {
         switch (this.isFire) {
-        case 0:
-            return IafRecipeRegistry.getFireForgeRecipeForBlood(bloodStack);
-        case 1:
-            return IafRecipeRegistry.getIceForgeRecipeForBlood(bloodStack);
-        case 2:
-            return IafRecipeRegistry.getLightningForgeRecipeForBlood(bloodStack);
-        default:
-            return null;
+            case 0: return IafRecipeRegistry.getFireForgeRecipeForBlood(bloodStack);
+            case 1: return IafRecipeRegistry.getIceForgeRecipeForBlood(bloodStack);
+            case 2: return IafRecipeRegistry.getLightningForgeRecipeForBlood(bloodStack);
+            default: return null;
         }
     }
 
@@ -307,11 +286,16 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         // Item input and quantity match
             forgeRecipe.getInput().test(cookStack) && cookStack.getCount() > 0 &&
             // Blood item and quantity match
-            forgeRecipe.getBlood().test(bloodStack) && bloodStack.getCount() > 0)
+            forgeRecipe.getBlood().test(bloodStack) && bloodStack.getCount() > 0) {
             return forgeRecipe;
+        }
 
-        return new DragonForgeRecipe(Ingredient.fromStacks(cookStack), Ingredient.fromStacks(bloodStack),
-            new ItemStack(getDefaultOutput()), getTypeID());
+        return new DragonForgeRecipe(
+                Ingredient.fromStacks(cookStack),
+                Ingredient.fromStacks(bloodStack),
+                new ItemStack(getDefaultOutput()),
+                getTypeID()
+        );
     }
 
     private ItemStack getCurrentResult(ItemStack cookStack, ItemStack bloodStack) {
@@ -380,12 +364,9 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         switch (index) {
-        case 1:
-            return getRecipeForBlood(stack) != null;
-        case 0:
-            return true;
-        default:
-            return false;
+            case 1: return getRecipeForBlood(stack) != null;
+            case 0: return true;
+            default: return false;
         }
     }
 
@@ -510,12 +491,9 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
 
     private Block getBrick() {
         switch (isFire) {
-        case 0:
-            return IafBlockRegistry.DRAGONFORGE_FIRE_BRICK;
-        case 1:
-            return IafBlockRegistry.DRAGONFORGE_ICE_BRICK;
-        default:
-            return IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK;
+            case 0: return IafBlockRegistry.DRAGONFORGE_FIRE_BRICK;
+            case 1: return IafBlockRegistry.DRAGONFORGE_ICE_BRICK;
+            default: return IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK;
         }
     }
 

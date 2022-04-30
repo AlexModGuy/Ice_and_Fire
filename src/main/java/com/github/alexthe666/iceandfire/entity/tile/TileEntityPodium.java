@@ -25,19 +25,17 @@ import net.minecraft.util.IntArray;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 public class TileEntityPodium extends LockableTileEntity implements ITickableTileEntity, ISidedInventory {
 
-    private static final int[] slotsTop = new int[] {
-        0
-    };
+    private static final int[] slotsTop = new int[] {0};
     public int ticksExisted;
     public int prevTicksExisted;
-    net.minecraftforge.items.IItemHandler handlerUp = new net.minecraftforge.items.wrapper.SidedInvWrapper(this,
-        net.minecraft.util.Direction.UP);
-    net.minecraftforge.items.IItemHandler handlerDown = new net.minecraftforge.items.wrapper.SidedInvWrapper(this,
-        Direction.DOWN);
-    net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers = net.minecraftforge.items.wrapper.SidedInvWrapper
+    IItemHandler handlerUp = new SidedInvWrapper(this, net.minecraft.util.Direction.UP);
+    IItemHandler handlerDown = new SidedInvWrapper(this, Direction.DOWN);
+    net.minecraftforge.common.util.LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper
         .create(this, Direction.UP, Direction.DOWN);
     private NonNullList<ItemStack> stacks = NonNullList.withSize(1, ItemStack.EMPTY);
 
@@ -212,7 +210,8 @@ public class TileEntityPodium extends LockableTileEntity implements ITickableTil
     @Override
     public boolean isEmpty() {
         for (int i = 0; i < this.getSizeInventory(); i++) {
-            if (!this.getStackInSlot(i).isEmpty()) { return false; }
+            if (!this.getStackInSlot(i).isEmpty())
+                return false;
         }
         return true;
     }
