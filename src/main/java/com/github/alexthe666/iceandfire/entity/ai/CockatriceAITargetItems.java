@@ -4,11 +4,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 
+import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Items;
@@ -20,6 +22,9 @@ public class CockatriceAITargetItems<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super ItemEntity> targetEntitySelector;
     protected ItemEntity targetEntity;
+
+    @Nonnull
+    private List<ItemEntity> list = IAFMath.emptyItemEntityList;
 
     public CockatriceAITargetItems(EntityCockatrice creature, boolean checkSight) {
         this(creature, checkSight, false);
@@ -46,17 +51,19 @@ public class CockatriceAITargetItems<T extends ItemEntity> extends TargetGoal {
     @Override
     public boolean shouldExecute() {
 
-        if (!((EntityCockatrice) this.goalOwner).canMove())
+        if ((!((EntityCockatrice) this.goalOwner).canMove()) || this.goalOwner.getHealth() >= this.goalOwner.getMaxHealth()) {
+            list = IAFMath.emptyItemEntityList;
             return false;
-        if (this.goalOwner.getHealth() >= this.goalOwner.getMaxHealth())
-            return false;
-        List<ItemEntity> list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class,
-            this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        }
+
+        if (this.goalOwner.world.getGameTime() % 4 == 0) // only update the list every 4 ticks
+            list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class,
+                    this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
         if (list.isEmpty()) {
             return false;
         } else {
-            Collections.sort(list, this.theNearestAttackableTargetSorter);
+            list.sort(this.theNearestAttackableTargetSorter);
             this.targetEntity = list.get(0);
             return true;
         }

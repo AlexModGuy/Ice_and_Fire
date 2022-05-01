@@ -10,12 +10,15 @@ import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 
+import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
+
+import javax.annotation.Nonnull;
 
 public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
 
@@ -24,6 +27,9 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
     private final int targetChance;
     protected ItemEntity targetEntity;
     private boolean isIce = false;
+
+    @Nonnull
+    private List<ItemEntity> list = IAFMath.emptyItemEntityList;
 
     public DragonAITargetItems(MobEntity creature, boolean checkSight) {
         this(creature, checkSight, false);
@@ -53,20 +59,20 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
 
     @Override
     public boolean shouldExecute() {
-        if (((EntityDragonBase) this.goalOwner).getHunger() >= 100) { return false; }
-        if (!((EntityDragonBase) this.goalOwner).canMove()) { return false; }
-
-        if (this.targetChance > 0 && this.goalOwner.getRNG().nextInt(10) != 0) {
+        final EntityDragonBase dragon = (EntityDragonBase) this.goalOwner;
+        if (dragon.getHunger() >= 100 || !dragon.canMove() || (this.targetChance > 0 && this.goalOwner.getRNG().nextInt(10) != 0)) {
+            list = IAFMath.emptyItemEntityList;
             return false;
         } else {
 
-            List<ItemEntity> list = this.goalOwner.world.getLoadedEntitiesWithinAABB(ItemEntity.class,
-                this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+            if (this.goalOwner.world.getGameTime() % 4 == 0) // only update the list every 4 ticks
+                list = this.goalOwner.world.getLoadedEntitiesWithinAABB(ItemEntity.class,
+                        this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
             if (list.isEmpty()) {
                 return false;
             } else {
-                Collections.sort(list, this.theNearestAttackableTargetSorter);
+                list.sort(this.theNearestAttackableTargetSorter);
                 this.targetEntity = list.get(0);
                 return true;
             }
