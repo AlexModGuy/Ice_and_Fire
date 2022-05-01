@@ -33,8 +33,8 @@ public class SeaSerpentAIJump extends JumpGoal {
             return false;
         } else {
             Direction direction = this.serpent.getAdjustedHorizontalFacing();
-            int i = direction.getXOffset();
-            int j = direction.getZOffset();
+            final int i = direction.getXOffset();
+            final int j = direction.getZOffset();
             BlockPos blockpos = this.serpent.getPosition();
             for (int k : JUMP_DISTANCES) {
                 if (!this.canJumpTo(blockpos, i, j, k) || !this.isAirAbove(blockpos, i, j, k)) { return false; }

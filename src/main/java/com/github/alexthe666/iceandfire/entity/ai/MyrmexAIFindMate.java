@@ -9,17 +9,24 @@ import java.util.function.Predicate;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexRoyal;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
+import com.github.alexthe666.iceandfire.util.IAFMath;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.TargetGoal;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
+
+import javax.annotation.Nonnull;
 
 public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super Entity> targetEntitySelector;
     public EntityMyrmexRoyal myrmex;
     protected EntityMyrmexBase targetEntity;
+
+    @Nonnull
+    private List<Entity> list = IAFMath.emptyEntityList;
 
     public MyrmexAIFindMate(EntityMyrmexRoyal myrmex) {
         super(myrmex, false, false);
@@ -37,9 +44,11 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
     @Override
     public boolean shouldExecute() {
         if (!this.myrmex.shouldHaveNormalAI()) {
+            list = IAFMath.emptyEntityList;
             return false;
         }
         if (!this.myrmex.canMove() || this.myrmex.getAttackTarget() != null || this.myrmex.releaseTicks < 400 || this.myrmex.mate != null) {
+            list = IAFMath.emptyEntityList;
             return false;
         }
         MyrmexHive village = this.myrmex.getHive();
@@ -47,22 +56,25 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
             village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(this.myrmex.getPosition(), 100);
         }
         if (village != null && village.getCenter().distanceSq(this.myrmex.getPosX(), village.getCenter().getY(), this.myrmex.getPosZ(), true) < 2000) {
+            list = IAFMath.emptyEntityList;
             return false;
         }
-        List<Entity> list = this.goalOwner.world.getEntitiesInAABBexcluding(myrmex, this.getTargetableArea(100), this.targetEntitySelector);
-        if (list.isEmpty()) {
+
+        if (this.myrmex.world.getGameTime() % 4 == 0) // only update the list every 4 ticks
+            list = this.goalOwner.world.getEntitiesInAABBexcluding(myrmex, this.getTargetableArea(100), this.targetEntitySelector);
+
+        if (list.isEmpty())
             return false;
-        } else {
-            Collections.sort(list, this.theNearestAttackableTargetSorter);
-            for (Entity royal : list) {
-                if (this.myrmex.canMateWith((EntityMyrmexRoyal) royal)) {
-                    this.myrmex.mate = (EntityMyrmexRoyal) royal;
-                    this.myrmex.world.setEntityState(this.myrmex, (byte) 76);
-                    return true;
-                }
+
+        list.sort(this.theNearestAttackableTargetSorter);
+        for (Entity royal : list) {
+            if (this.myrmex.canMateWith((EntityMyrmexRoyal) royal)) {
+                this.myrmex.mate = (EntityMyrmexRoyal) royal;
+                this.myrmex.world.setEntityState(this.myrmex, (byte) 76);
+                return true;
             }
-            return false;
         }
+        return false;
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {

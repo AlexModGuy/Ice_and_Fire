@@ -41,7 +41,7 @@ public class SeaSerpentAIMeleeJump  extends JumpGoal {
     @Override
     public void startExecuting() {
         LivingEntity target = this.dolphin.getAttackTarget();
-        if(target != null){
+        if (target != null) {
             final double distanceXZ = dolphin.getDistanceSq(target.getPosX(), dolphin.getPosY(), target.getPosZ());
             if (distanceXZ < 300) {
                 dolphin.faceEntity(target, 260, 30);
@@ -53,7 +53,7 @@ public class SeaSerpentAIMeleeJump  extends JumpGoal {
                 this.dolphin.setMotion(this.dolphin.getMotion().add(d0 * 0.3D, up, d2 * 0.3D));
                 this.dolphin.getNavigator().clearPath();
                 this.dolphin.jumpCooldown = dolphin.getRNG().nextInt(32) + 32;
-            }else{
+            } else {
                 dolphin.getNavigator().tryMoveToEntityLiving(target, 1.0F);
             }
 
@@ -68,23 +68,23 @@ public class SeaSerpentAIMeleeJump  extends JumpGoal {
 
     @Override
     public void tick() {
-        boolean flag = this.inWater;
+        final boolean flag = this.inWater;
         if (!flag) {
             FluidState fluidstate = this.dolphin.world.getFluidState(this.dolphin.getPosition());
             this.inWater = fluidstate.isTagged(FluidTags.WATER);
         }
-        if(attackCooldown > 0){
+        if (attackCooldown > 0) {
             attackCooldown--;
         }
         if (this.inWater && !flag) {
             this.dolphin.playSound(SoundEvents.ENTITY_DOLPHIN_JUMP, 1.0F, 1.0F);
         }
         LivingEntity target = this.dolphin.getAttackTarget();
-        if(target != null){
-            if(this.dolphin.getDistance(target) < 3F && attackCooldown <= 0){
+        if (target != null) {
+            if (this.dolphin.getDistance(target) < 3F && attackCooldown <= 0) {
                 this.dolphin.onJumpHit(target);
                 attackCooldown = 20;
-            }else if(this.dolphin.getDistance(target) < 5F){
+            } else if (this.dolphin.getDistance(target) < 5F) {
                 this.dolphin.setAnimation(EntitySeaSerpent.ANIMATION_BITE);
             }
         }

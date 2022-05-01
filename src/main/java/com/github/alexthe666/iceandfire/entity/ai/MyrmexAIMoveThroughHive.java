@@ -47,7 +47,7 @@ public class MyrmexAIMoveThroughHive extends Goal {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return  !myrmex.shouldLeaveHive() && !this.myrmex.isCloseEnoughToTarget(nextRoom,3) && this.myrmex.shouldEnterHive() && !(this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby());
+        return !myrmex.shouldLeaveHive() && !this.myrmex.isCloseEnoughToTarget(nextRoom,3) && this.myrmex.shouldEnterHive() && !(this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby());
     }
 
     @Override

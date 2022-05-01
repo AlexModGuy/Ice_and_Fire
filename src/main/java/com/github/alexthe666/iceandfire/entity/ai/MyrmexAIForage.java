@@ -13,6 +13,7 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
 
+import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.ai.RandomPositionGenerator;
@@ -70,8 +71,8 @@ public class MyrmexAIForage extends Goal {
 
     @Override
     public boolean shouldContinueExecuting() {
-        if (this.targetBlock == null) { return false; }
-        if (this.myrmex.getWaitTicks() > 0) { return false; }
+        if (this.targetBlock == null) return false;
+        if (this.myrmex.getWaitTicks() > 0) return false;
         if (myrmex.shouldEnterHive()) {
             this.myrmex.keepSearching = false;
             return false;

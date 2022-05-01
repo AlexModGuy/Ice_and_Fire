@@ -7,17 +7,25 @@ import java.util.function.Predicate;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 
+import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
+
+import javax.annotation.Nonnull;
 
 public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super ItemEntity> targetEntitySelector;
     public EntityMyrmexWorker myrmex;
     protected ItemEntity targetEntity;
+
+    @Nonnull
+    private List<ItemEntity> list = IAFMath.emptyItemEntityList;
+
     public MyrmexAIForageForItems(EntityMyrmexWorker myrmex) {
         super(myrmex, false, false);
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(myrmex);
@@ -34,16 +42,19 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
     @Override
     public boolean shouldExecute() {
         if (!this.myrmex.canMove() || this.myrmex.holdingSomething() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching || this.myrmex.getAttackTarget() != null) {
+            list = IAFMath.emptyItemEntityList;
             return false;
         }
-        List<ItemEntity> list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(32), this.targetEntitySelector);
-        if (list.isEmpty()) {
+
+        if (this.myrmex.world.getGameTime() % 4 == 0) // only update the list every 4 ticks
+            list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(32), this.targetEntitySelector);
+
+        if (list.isEmpty())
             return false;
-        } else {
-            list.sort(this.theNearestAttackableTargetSorter);
-            this.targetEntity = list.get(0);
-            return true;
-        }
+
+        list.sort(this.theNearestAttackableTargetSorter);
+        this.targetEntity = list.get(0);
+        return true;
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {

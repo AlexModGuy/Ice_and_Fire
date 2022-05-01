@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -15,7 +14,6 @@ import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.vector.Vector3d;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class AmphithereAIFleePlayer extends Goal {
     private final double farSpeed;
@@ -27,7 +25,6 @@ public class AmphithereAIFleePlayer extends Goal {
 
     @Nonnull
     private List<PlayerEntity> list = IAFMath.emptyPlayerEntityList;
-    private int counter = 4;
 
     public AmphithereAIFleePlayer(EntityAmphithere entityIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
         this.entity = entityIn;
@@ -40,11 +37,9 @@ public class AmphithereAIFleePlayer extends Goal {
     @Override
     public boolean shouldExecute() {
         if (!this.entity.isFlying() && !this.entity.isTamed()) {
-            counter++;
-            if (counter == 4) { // only update the list every 4 ticks
-                counter = 0;
+
+            if (this.entity.world.getGameTime() % 4 == 0) // only update the list every 4 ticks
                 list = this.entity.world.getEntitiesWithinAABB(PlayerEntity.class, this.entity.getBoundingBox().grow(this.avoidDistance, 6D, this.avoidDistance), EntityPredicates.CAN_AI_TARGET);
-            }
 
             if (list.isEmpty())
                 return false;

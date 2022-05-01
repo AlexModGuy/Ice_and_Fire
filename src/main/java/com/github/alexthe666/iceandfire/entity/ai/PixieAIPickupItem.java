@@ -6,11 +6,13 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 
+import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
@@ -24,6 +26,9 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super ItemEntity> targetEntitySelector;
     protected ItemEntity targetEntity;
+
+    @Nonnull
+    private List<ItemEntity> list = IAFMath.emptyItemEntityList;
 
     public PixieAIPickupItem(EntityPixie creature, boolean checkSight) {
         this(creature, checkSight, false);
@@ -52,15 +57,16 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
     @Override
     public boolean shouldExecute() {
 
-        EntityPixie pixie = (EntityPixie)this.goalOwner;
-        if(pixie.isPixieSitting()) return false;
+        EntityPixie pixie = (EntityPixie) this.goalOwner;
+        if (pixie.isPixieSitting()) return false;
 
-        List<ItemEntity> list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        if (this.goalOwner.world.getGameTime() % 4 == 0) // only update the list every 4 ticks
+            list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
         if (list.isEmpty()) {
             return false;
         } else {
-            Collections.sort(list, this.theNearestAttackableTargetSorter);
+            list.sort(this.theNearestAttackableTargetSorter);
             this.targetEntity = list.get(0);
             return true;
         }
@@ -96,7 +102,7 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
                     if (!pixie.isTamed() && this.targetEntity.getThrowerId() != null && this.goalOwner.world.getPlayerByUuid(this.targetEntity.getThrowerId()) != null) {
                         PlayerEntity owner = this.goalOwner.world.getPlayerByUuid(this.targetEntity.getThrowerId());
                         pixie.setTamed(true);
-                        if(owner != null){
+                        if (owner != null) {
                             pixie.setTamedBy(owner);
                         }
                         pixie.setPixieSitting(true);

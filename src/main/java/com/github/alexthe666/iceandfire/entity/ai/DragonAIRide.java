@@ -56,8 +56,7 @@ public class DragonAIRide<T extends MobEntity & IFlyingMount> extends Goal {
         }
         if (dragon.isGoingUp()) {
             lookVec = lookVec.add(0, 1, 0);
-        }
-        if (dragon.isGoingDown()) {
+        } else if (dragon.isGoingDown()) {
             lookVec = lookVec.add(0, -1, 0);
         }
         if (player.moveStrafing != 0 || player.moveForward != 0 || (dragon.fliesLikeElytra())) {

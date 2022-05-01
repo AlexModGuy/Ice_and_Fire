@@ -42,25 +42,24 @@ public class StymphalianBirdAIFlee extends Goal {
         List<LivingEntity> list = this.stymphalianBird.world.getEntitiesWithinAABB(LivingEntity.class, this.stymphalianBird.getBoundingBox().grow(this.avoidDistance, 3.0D, this.avoidDistance),
                 this.canBeSeenSelector);
 
-        if (list.isEmpty()) {
+        if (list.isEmpty())
             return false;
-        } else {
-            this.closestLivingEntity = list.get(0);
-            if (closestLivingEntity != null && this.stymphalianBird.getVictor() != null && this.closestLivingEntity.equals(this.stymphalianBird.getVictor())) {
-                Vector3d Vector3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.stymphalianBird, 32, 7, new Vector3d(this.closestLivingEntity.getPosX(), this.closestLivingEntity.getPosY(), this.closestLivingEntity.getPosZ()));
 
-                if (Vector3d == null) {
-                    return false;
-                } else {
-                    Vector3d = Vector3d.add(0, 3, 0);
-                    this.stymphalianBird.getMoveHelper().setMoveTo(Vector3d.x, Vector3d.y, Vector3d.z, 3D);
-                    this.stymphalianBird.getLookController().setLookPosition(Vector3d.x, Vector3d.y, Vector3d.z, 180.0F, 20.0F);
-                    hidePlace = Vector3d;
-                    return true;
-                }
+        this.closestLivingEntity = list.get(0);
+        if (closestLivingEntity != null && this.stymphalianBird.getVictor() != null && this.closestLivingEntity.equals(this.stymphalianBird.getVictor())) {
+            Vector3d Vector3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.stymphalianBird, 32, 7, new Vector3d(this.closestLivingEntity.getPosX(), this.closestLivingEntity.getPosY(), this.closestLivingEntity.getPosZ()));
+
+            if (Vector3d == null) {
+                return false;
+            } else {
+                Vector3d = Vector3d.add(0, 3, 0);
+                this.stymphalianBird.getMoveHelper().setMoveTo(Vector3d.x, Vector3d.y, Vector3d.z, 3D);
+                this.stymphalianBird.getLookController().setLookPosition(Vector3d.x, Vector3d.y, Vector3d.z, 180.0F, 20.0F);
+                hidePlace = Vector3d;
+                return true;
             }
-            return false;
         }
+        return false;
     }
 
     @Override

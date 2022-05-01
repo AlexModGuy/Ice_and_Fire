@@ -17,7 +17,7 @@ public class EntityAIWatchClosestIgnoreRider extends LookAtGoal {
     }
 
     public static boolean isRidingOrBeingRiddenBy(Entity first, Entity entityIn) {
-        for(Entity entity : first.getPassengers()) {
+        for (Entity entity : first.getPassengers()) {
             if (entity.equals(entityIn)) {
                 return true;
             }

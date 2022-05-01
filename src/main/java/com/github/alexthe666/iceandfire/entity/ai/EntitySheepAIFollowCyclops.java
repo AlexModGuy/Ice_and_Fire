@@ -29,7 +29,7 @@ public class EntitySheepAIFollowCyclops extends Goal {
         double d0 = Double.MAX_VALUE;
 
         for (EntityCyclops cyclops1 : list) {
-            double d1 = this.childAnimal.getDistanceSq(cyclops1);
+            final double d1 = this.childAnimal.getDistanceSq(cyclops1);
 
             if (d1 <= d0) {
                 d0 = d1;
@@ -52,7 +52,7 @@ public class EntitySheepAIFollowCyclops extends Goal {
         if (this.cyclops.isAlive()) {
             return false;
         } else {
-            double d0 = this.childAnimal.getDistanceSq(this.cyclops);
+            final double d0 = this.childAnimal.getDistanceSq(this.cyclops);
             return d0 >= 9.0D && d0 <= 256.0D;
         }
     }

@@ -37,8 +37,8 @@ public class MyrmexAIAttackMelee extends Goal {
         if (!(this.myrmex.getNavigator() instanceof AdvancedPathNavigate)) {
             return false;
         }
-        if (LivingEntity instanceof PlayerEntity&& this.myrmex.getHive()!=null){
-            if(!this.myrmex.getHive().isPlayerReputationLowEnoughToFight(LivingEntity.getUniqueID())){
+        if (LivingEntity instanceof PlayerEntity && this.myrmex.getHive() != null) {
+            if (!this.myrmex.getHive().isPlayerReputationLowEnoughToFight(LivingEntity.getUniqueID())) {
                 return false;
             }
         }

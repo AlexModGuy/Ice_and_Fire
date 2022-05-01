@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexEgg;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 
+import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
@@ -20,6 +21,8 @@ public class MyrmexAIPickupBabies<T extends ItemEntity> extends TargetGoal {
     protected final Predicate<? super LivingEntity> targetEntitySelector;
     public EntityMyrmexWorker myrmex;
     protected LivingEntity targetEntity;
+
+    private List<LivingEntity> listBabies = IAFMath.emptyLivingEntityList;
 
     public MyrmexAIPickupBabies(EntityMyrmexWorker myrmex) {
         super(myrmex, false, false);
@@ -39,16 +42,19 @@ public class MyrmexAIPickupBabies<T extends ItemEntity> extends TargetGoal {
     @Override
     public boolean shouldExecute() {
         if (!this.myrmex.canMove() || this.myrmex.holdingSomething() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching || this.myrmex.holdingBaby()) {
+            listBabies = IAFMath.emptyLivingEntityList;
             return false;
         }
-        List<LivingEntity> listBabies = this.goalOwner.world.getLoadedEntitiesWithinAABB(LivingEntity.class, this.getTargetableArea(20), this.targetEntitySelector);
-        if (listBabies.isEmpty()) {
+
+        if (this.myrmex.world.getGameTime() % 4 == 0) // only update the list every 4 ticks
+            listBabies = this.goalOwner.world.getLoadedEntitiesWithinAABB(LivingEntity.class, this.getTargetableArea(20), this.targetEntitySelector);
+
+        if (listBabies.isEmpty())
             return false;
-        } else {
-            listBabies.sort(this.theNearestAttackableTargetSorter);
-            this.targetEntity = listBabies.get(0);
-            return true;
-        }
+
+        listBabies.sort(this.theNearestAttackableTargetSorter);
+        this.targetEntity = listBabies.get(0);
+        return true;
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {

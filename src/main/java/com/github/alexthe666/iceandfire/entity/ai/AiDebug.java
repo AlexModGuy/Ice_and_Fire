@@ -15,17 +15,17 @@ import net.minecraft.entity.MobEntity;
  */
 public class AiDebug {
     private static List<MobEntity> entities = new ArrayList<>();
-    private static Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private AiDebug() {
         //Hides default constructor.
     }
 
-    public static boolean isEnabled(){
+    public static boolean isEnabled() {
         return false;
     }
 
-    public static void logData(){
+    public static void logData() {
         List<MobEntity> entitiesCopy = new ArrayList<>(entities);
         for (MobEntity entity : entitiesCopy) {
             if (!entity.isAlive()){
@@ -46,11 +46,11 @@ public class AiDebug {
         }
     }
 
-    public static boolean contains(MobEntity entity){
+    public static boolean contains(MobEntity entity) {
         return entities.contains(entity);
     }
 
-    public static void addEntity(MobEntity entity){
+    public static void addEntity(MobEntity entity) {
         if (entities.contains(entity)){
             entities.remove(entity);
         }

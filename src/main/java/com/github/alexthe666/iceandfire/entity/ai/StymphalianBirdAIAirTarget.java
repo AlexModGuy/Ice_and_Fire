@@ -36,10 +36,7 @@ public class StymphalianBirdAIAirTarget extends Goal {
             if (!bird.isFlying()) {
                 return false;
             }
-            if (bird.isChild()) {
-                return false;
-            }
-            if (bird.doesWantToLand()) {
+            if (bird.isChild() || bird.doesWantToLand()) {
                 return false;
             }
             if (bird.airTarget != null && (bird.isTargetBlocked(Vector3d.copyCentered(bird.airTarget)))) {

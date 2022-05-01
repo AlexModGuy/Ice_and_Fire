@@ -44,21 +44,21 @@ public class SeaSerpentAIRandomSwimming  extends RandomWalkingGoal {
     @Override
     @Nullable
     protected Vector3d getPosition() {
-        if(((EntitySeaSerpent)this.creature).jumpCooldown <= 0){
+        if (((EntitySeaSerpent)this.creature).jumpCooldown <= 0) {
             Vector3d vector3d = findSurfaceTarget(this.creature, 32, 16);
-            if(vector3d != null){
+            if (vector3d != null) {
                 return vector3d.add(0, 1, 0);
             }
-        }else{
+        } else {
             BlockPos blockpos = null;
             final Random random = ThreadLocalRandom.current();
             final int range = 16;
-            for(int i = 0; i < 15; i++){
+            for (int i = 0; i < 15; i++) {
                 BlockPos blockpos1 = this.creature.getPosition().add(random.nextInt(range) - range/2, random.nextInt(range) - range/2, random.nextInt(range) - range/2);
-                while(this.creature.world.isAirBlock(blockpos1) && this.creature.world.getFluidState(blockpos1).isEmpty() && blockpos1.getY() > 1){
+                while (this.creature.world.isAirBlock(blockpos1) && this.creature.world.getFluidState(blockpos1).isEmpty() && blockpos1.getY() > 1) {
                     blockpos1 = blockpos1.down();
                 }
-                if(this.creature.world.getFluidState(blockpos1).isTagged(FluidTags.WATER)){
+                if (this.creature.world.getFluidState(blockpos1).isTagged(FluidTags.WATER)) {
                     blockpos = blockpos1;
                 }
             }
@@ -78,10 +78,10 @@ public class SeaSerpentAIRandomSwimming  extends RandomWalkingGoal {
 
     private Vector3d findSurfaceTarget(CreatureEntity creature, int i, int i1) {
         BlockPos upPos = creature.getPosition();
-        while(creature.world.getFluidState(upPos).isTagged(FluidTags.WATER)){
+        while (creature.world.getFluidState(upPos).isTagged(FluidTags.WATER)) {
             upPos = upPos.up();
         }
-        if(isAirAbove(upPos.down(), 0, 0, 0) && canJumpTo(upPos.down(), 0, 0, 0)){
+        if (isAirAbove(upPos.down(), 0, 0, 0) && canJumpTo(upPos.down(), 0, 0, 0)) {
             return new Vector3d(upPos.getX() + 0.5F, upPos.getY() + 3.5F, upPos.getZ() + 0.5F);
         }
         return null;
