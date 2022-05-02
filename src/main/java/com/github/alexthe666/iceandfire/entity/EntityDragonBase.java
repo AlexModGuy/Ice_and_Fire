@@ -1094,7 +1094,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     @Override
     public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        int lastDeathStage = this.getAgeInDays() / 5;
+        int lastDeathStage = Math.min(this.getAgeInDays() / 5, 25);
         if (stack.getItem() == IafItemRegistry.DRAGON_DEBUG_STICK) {
             logic.debug();
             return ActionResultType.SUCCESS;
@@ -1108,7 +1108,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                 player.inventory.addItemStackToInventory(new ItemStack(this.getBloodItem(), 1));
                 return ActionResultType.SUCCESS;
             } else if (!world.isRemote && stack.isEmpty() && IafConfig.dragonDropSkull) {
-                if (this.getDeathStage() == lastDeathStage - 1) {
+                if (this.getDeathStage() >= lastDeathStage - 1) {
                     ItemStack skull = getSkull().copy();
                     skull.setTag(new CompoundNBT());
                     skull.getTag().putInt("Stage", this.getDragonStage());
@@ -2137,6 +2137,11 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     public boolean isChained() {
         return ChainProperties.hasChainData(this);
+    }
+
+    @Override
+    protected void dropLoot(DamageSource damageSourceIn, boolean attackedRecently) {
+        return;
     }
 
     /*
