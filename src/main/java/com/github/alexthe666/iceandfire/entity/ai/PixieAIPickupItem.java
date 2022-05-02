@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
@@ -11,8 +10,8 @@ import javax.annotation.Nullable;
 
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-
 import com.github.alexthe666.iceandfire.util.IAFMath;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
@@ -46,7 +45,8 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
             @Override
             public boolean test(ItemEntity item) {
 
-                return !item.getItem().isEmpty() && (item.getItem().getItem() == Items.CAKE && !creature.isTamed()
+                return item != null && !item.getItem().isEmpty() && (item.getItem().getItem() == Items.CAKE
+                    && !creature.isTamed()
                     || item.getItem().getItem() == Items.SUGAR && creature.isTamed()
                         && creature.getHealth() < creature.getMaxHealth());
             }
