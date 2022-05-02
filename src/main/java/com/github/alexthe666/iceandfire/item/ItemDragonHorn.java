@@ -68,13 +68,15 @@ public class ItemDragonHorn extends Item {
     public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
         ItemStack trueStack = playerIn.getHeldItem(hand);
         if (!playerIn.world.isRemote && hand == Hand.MAIN_HAND && target instanceof EntityDragonBase && ((EntityDragonBase) target).isOwner(playerIn) && (trueStack.getTag() == null || (trueStack.getTag() != null && trueStack.getTag().getCompound("EntityTag").isEmpty()))) {
-            CompoundNBT entityTag = new CompoundNBT();
-            target.writeAdditional(entityTag);
             CompoundNBT newTag = new CompoundNBT();
-            newTag.putString("DragonHornEntityID", Registry.ENTITY_TYPE.getKey(((EntityDragonBase) target).getType()).toString());
+
+            CompoundNBT entityTag = new CompoundNBT();
+            target.writeUnlessPassenger(entityTag);
             newTag.put("EntityTag", entityTag);
-            newTag.putUniqueId("EntityUUID", target.getUniqueID());
+
+            newTag.putString("DragonHornEntityID", Registry.ENTITY_TYPE.getKey(((EntityDragonBase) target).getType()).toString());
             trueStack.setTag(newTag);
+
             playerIn.swingArm(hand);
             playerIn.world.playSound(playerIn, playerIn.getPosition(), SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3.0F, 0.75F);
             target.remove();
@@ -98,14 +100,20 @@ public class ItemDragonHorn extends Item {
                 Entity entity = type.create(world);
                 if (entity instanceof EntityDragonBase) {
                     EntityDragonBase dragon = (EntityDragonBase) entity;
-                    dragon.readAdditional(stack.getTag().getCompound("EntityTag"));
+                    dragon.read(stack.getTag().getCompound("EntityTag"));
                 }
+                //Still needed to allow for intercompatibility
                 if (stack.getTag().contains("EntityUUID"))
                     entity.setUniqueId(stack.getTag().getUniqueId("EntityUUID"));
 
                 entity.setPositionAndRotation(context.getPos().getX() + 0.5D, (context.getPos().getY() + 1), context.getPos().getZ() + 0.5D, 180 + (context.getPlacementHorizontalFacing()).getHorizontalAngle(), 0.0F);
-                if (world.addEntity(entity))
-                    stack.setTag(new CompoundNBT());
+                if (world.addEntity(entity)) {
+                    CompoundNBT tag = stack.getTag();
+                    tag.remove("DragonHornEntityID");
+                    tag.remove("EntityTag");
+                    tag.remove("EntityUUID");
+                    stack.setTag(tag);
+                }
             }
         }
         return ActionResultType.SUCCESS;
