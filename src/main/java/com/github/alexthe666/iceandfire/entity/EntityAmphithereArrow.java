@@ -2,20 +2,14 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.FMLPlayMessages;
@@ -29,7 +23,7 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
     }
 
     public EntityAmphithereArrow(EntityType<? extends AbstractArrowEntity> type, World worldIn, double x, double y,
-        double z) {
+                                 double z) {
         this(type, worldIn);
         this.setPosition(x, y, z);
         this.setDamage(2.5F);
@@ -70,9 +64,6 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
 
     @Override
     protected void arrowHit(LivingEntity living) {
-        if (living instanceof PlayerEntity) {
-            this.damageShield((PlayerEntity) living, (float) this.getDamage());
-        }
         living.isAirBorne = true;
         double xRatio = this.getMotion().x;
         double zRatio = this.getMotion().z;
@@ -110,29 +101,6 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
             this.spawnExplosionParticle();
         } else {
             super.handleStatusUpdate(id);
-        }
-    }
-
-    protected void damageShield(PlayerEntity player, float damage) {
-        if (damage >= 3.0F && player.getActiveItemStack().getItem().isShield(player.getActiveItemStack(), player)) {
-            ItemStack copyBeforeUse = player.getActiveItemStack().copy();
-            int i = 1 + MathHelper.floor(damage);
-            player.getActiveItemStack().damageItem(i, player, (playerSheild) -> {
-                playerSheild.sendBreakAnimation(playerSheild.getActiveHand());
-            });
-
-            if (player.getActiveItemStack().isEmpty()) {
-                Hand Hand = player.getActiveHand();
-                net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, Hand);
-
-                if (Hand == net.minecraft.util.Hand.MAIN_HAND) {
-                    this.setItemStackToSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
-                } else {
-                    this.setItemStackToSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
-                }
-                player.resetActiveHand();
-                this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
-            }
         }
     }
 
