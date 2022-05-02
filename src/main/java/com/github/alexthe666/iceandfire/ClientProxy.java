@@ -131,7 +131,6 @@ public class ClientProxy extends CommonProxy {
     public static TabulaModel SEA_SERPENT_BASE_MODEL;
     public static TabulaModel LIGHTNING_DRAGON_BASE_MODEL;
     private static MyrmexHive referedClientHive = null;
-    private FontRenderer bestiaryFontRenderer;
     private int previousViewType = 0;
     private int thirdPersonViewDragon = 0;
     private Entity referencedMob = null;
@@ -153,7 +152,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     @SuppressWarnings("deprecation")
     public void init() {
-        this.bestiaryFontRenderer = Minecraft.getInstance().fontRenderer;
         IafKeybindRegistry.init();
         MinecraftForge.EVENT_BUS.register(new PlayerRenderEvents());
         MinecraftForge.EVENT_BUS.register(new ClientEvents());
