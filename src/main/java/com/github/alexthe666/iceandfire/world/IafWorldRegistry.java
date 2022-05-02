@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.world;
 import java.util.HashMap;
 import java.util.function.Supplier;
 
+import net.minecraft.world.storage.IWorldInfo;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
@@ -282,7 +283,9 @@ public class IafWorldRegistry {
     }
 
     public static boolean isFarEnoughFromSpawn(IWorld world, BlockPos pos) {
-        BlockPos spawnRelative = new BlockPos(0, pos.getY(), 0);
+        IWorldInfo spawnPoint = world.getWorldInfo();
+        BlockPos spawnRelative = new BlockPos(spawnPoint.getSpawnX(), pos.getY(), spawnPoint.getSpawnY());
+
         boolean spawnCheck = !spawnRelative.withinDistance(pos, IafConfig.dangerousWorldGenDistanceLimit);
         return spawnCheck;
     }
