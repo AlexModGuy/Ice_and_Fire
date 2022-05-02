@@ -2,7 +2,7 @@
   "__comment": "Keep in mind that trolls drop their weapon(club/axe) and sometimes broken materials from them(cobblestone/sticks). That can be disabled in ice_and_fire.cfg",
   "pools": [
     {
-      "name": "troll_forest",
+      "name": "troll_frost",
       "rolls": 2,
       "entries": [
         {
@@ -92,7 +92,7 @@
       ]
     },
     {
-      "name": "troll_skull",
+      "name": "troll_frost",
       "conditions": [
         {
           "condition": "killed_by_player"
