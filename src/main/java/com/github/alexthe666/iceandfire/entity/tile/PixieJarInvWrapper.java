@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
+
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -13,15 +13,13 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 public class PixieJarInvWrapper implements IItemHandlerModifiable {
 
     private TileEntityJar tile;
-    private Direction side;
 
-    public PixieJarInvWrapper(TileEntityJar tile, Direction side) {
+    public PixieJarInvWrapper(TileEntityJar tile) {
         this.tile = tile;
-        this.side = side;
     }
 
-    public static LazyOptional<IItemHandler> create(TileEntityJar trashCan, Direction sides) {
-        return LazyOptional.of(() -> new PixieJarInvWrapper(trashCan, sides));
+    public static LazyOptional<IItemHandler> create(TileEntityJar trashCan) {
+        return LazyOptional.of(() -> new PixieJarInvWrapper(trashCan));
     }
 
     @Override

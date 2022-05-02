@@ -17,7 +17,7 @@ public class ItemLichStaff extends Item {
 
     public ItemLichStaff() {
         super(new Item.Properties().maxDamage(100).group(IceAndFire.TAB_ITEMS));
-        this.setRegistryName("iceandfire:lich_staff");
+        this.setRegistryName(IceAndFire.MODID, "lich_staff");
     }
 
     @Override

@@ -25,18 +25,18 @@ import net.minecraft.util.IntArray;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 public class TileEntityPodium extends LockableTileEntity implements ITickableTileEntity, ISidedInventory {
-    private static final int[] slotsTop = new int[]{0};
+
+    private static final int[] slotsTop = new int[] {0};
     public int ticksExisted;
     public int prevTicksExisted;
-    net.minecraftforge.items.IItemHandler handlerUp = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.Direction.UP);
-    net.minecraftforge.items.IItemHandler handlerDown = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, Direction.DOWN);
-    net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
-            net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN);
+    IItemHandler handlerUp = new SidedInvWrapper(this, net.minecraft.util.Direction.UP);
+    IItemHandler handlerDown = new SidedInvWrapper(this, Direction.DOWN);
+    net.minecraftforge.common.util.LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper
+        .create(this, Direction.UP, Direction.DOWN);
     private NonNullList<ItemStack> stacks = NonNullList.withSize(1, ItemStack.EMPTY);
 
     public TileEntityPodium() {
@@ -50,7 +50,6 @@ public class TileEntityPodium extends LockableTileEntity implements ITickableTil
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public net.minecraft.util.math.AxisAlignedBB getRenderBoundingBox() {
         return new net.minecraft.util.math.AxisAlignedBB(pos, pos.add(1, 3, 1));
     }
@@ -100,14 +99,13 @@ public class TileEntityPodium extends LockableTileEntity implements ITickableTil
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
-        boolean flag = !stack.isEmpty() && stack.isItemEqual(this.stacks.get(index)) && ItemStack.areItemStackTagsEqual(stack, this.stacks.get(index));
         this.stacks.set(index, stack);
 
         if (!stack.isEmpty() && stack.getCount() > this.getInventoryStackLimit()) {
             stack.setCount(this.getInventoryStackLimit());
         }
         this.write(this.getUpdateTag());
-        if(!world.isRemote){
+        if (!world.isRemote) {
             IceAndFire.sendMSGToAll(new MessageUpdatePodium(this.getPos().toLong(), stacks.get(0)));
         }
     }
@@ -212,16 +210,17 @@ public class TileEntityPodium extends LockableTileEntity implements ITickableTil
     @Override
     public boolean isEmpty() {
         for (int i = 0; i < this.getSizeInventory(); i++) {
-            if (!this.getStackInSlot(i).isEmpty()) {
+            if (!this.getStackInSlot(i).isEmpty())
                 return false;
-            }
         }
         return true;
     }
 
     @Override
-    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-        if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(
+        net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
+        if (!this.removed && facing != null
+            && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (facing == Direction.DOWN)
                 return handlers[1].cast();
             else

@@ -22,7 +22,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
-
     private NonNullList<ItemStack> chestContents = NonNullList.withSize(18, ItemStack.EMPTY);
 
     public TileEntityMyrmexCocoon() {

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.enums;
 
 import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockSeaSerpentScales;
 import com.github.alexthe666.iceandfire.item.IafArmorMaterial;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
@@ -48,10 +49,10 @@ public enum EnumSeaSerpent {
             color.chestplate = new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlotType.CHEST);
             color.leggings = new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlotType.LEGS);
             color.boots = new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlotType.FEET);
-            color.helmet.setRegistryName("iceandfire:tide_" + color.resourceName + "_helmet");
-            color.chestplate.setRegistryName("iceandfire:tide_" + color.resourceName + "_chestplate");
-            color.leggings.setRegistryName("iceandfire:tide_" + color.resourceName + "_leggings");
-            color.boots.setRegistryName("iceandfire:tide_" + color.resourceName + "_boots");
+            color.helmet.setRegistryName(IceAndFire.MODID, "tide_" + color.resourceName + "_helmet");
+            color.chestplate.setRegistryName(IceAndFire.MODID, "tide_" + color.resourceName + "_chestplate");
+            color.leggings.setRegistryName(IceAndFire.MODID, "tide_" + color.resourceName + "_leggings");
+            color.boots.setRegistryName(IceAndFire.MODID, "tide_" + color.resourceName + "_boots");
         }
     }
 }

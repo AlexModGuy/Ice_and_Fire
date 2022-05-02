@@ -28,23 +28,21 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.spawner.AbstractSpawner;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
 
     private final List<WeightedSpawnerEntity> potentialSpawns = Lists.newArrayList();
-    private int spawnDelay = 20;
+    private short spawnDelay = 20;
     private WeightedSpawnerEntity spawnData = new WeightedSpawnerEntity();
     private double mobRotation;
     private double prevMobRotation;
-    private int minSpawnDelay = 200;
-    private int maxSpawnDelay = 800;
-    private int spawnCount = 4;
+    private short minSpawnDelay = 200;
+    private short maxSpawnDelay = 800;
+    private short spawnCount = 4;
     private Entity cachedEntity;
-    private int maxNearbyEntities = 6;
-    private int activatingRangeFromPlayer = 16;
-    private int spawnRange = 4;
+    private short maxNearbyEntities = 6;
+    private short activatingRangeFromPlayer = 16;
+    private short spawnRange = 4;
 
     @Nullable
     private ResourceLocation getEntityId() {
@@ -63,7 +61,8 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
      */
     private boolean isActivated() {
         BlockPos blockpos = this.getSpawnerPosition();
-        return this.getWorld().isPlayerWithin((double) blockpos.getX() + 0.5D, (double) blockpos.getY() + 0.5D, (double) blockpos.getZ() + 0.5D, this.activatingRangeFromPlayer);
+        return this.getWorld().isPlayerWithin(blockpos.getX() + 0.5D, blockpos.getY() + 0.5D, blockpos.getZ() + 0.5D,
+            this.activatingRangeFromPlayer);
     }
 
     public void updateSpawner() {
@@ -74,9 +73,9 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
             BlockPos blockpos = this.getSpawnerPosition();
 
             if (this.getWorld().isRemote) {
-                double d3 = (float) blockpos.getX() + this.getWorld().rand.nextFloat();
-                double d4 = (float) blockpos.getY() + this.getWorld().rand.nextFloat();
-                double d5 = (float) blockpos.getZ() + this.getWorld().rand.nextFloat();
+                double d3 = blockpos.getX() + this.getWorld().rand.nextFloat();
+                double d4 = blockpos.getY() + this.getWorld().rand.nextFloat();
+                double d5 = blockpos.getZ() + this.getWorld().rand.nextFloat();
                 this.getWorld().addParticle(ParticleTypes.SMOKE, d3, d4, d5, 0.0D, 0.0D, 0.0D);
                 IceAndFire.PROXY.spawnParticle(EnumParticles.Dread_Torch, d3, d4, d5, 0.0D, 0.0D, 0.0D);
                 if (this.spawnDelay > 0) {
@@ -84,7 +83,7 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
                 }
 
                 this.prevMobRotation = this.mobRotation;
-                this.mobRotation = (this.mobRotation + (double) (1000.0F / ((float) this.spawnDelay + 200.0F))) % 360.0D;
+                this.mobRotation = (this.mobRotation + 1000.0F / (this.spawnDelay + 200.0F)) % 360.0D;
             } else {
                 if (this.spawnDelay == -1) {
                     this.resetTimer();
@@ -106,10 +105,10 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
                     }
 
                     ListNBT listnbt = compoundnbt.getList("Pos", 6);
-                    int j = listnbt.size();
-                    double d0 = j >= 1 ? listnbt.getDouble(0) : (double) blockpos.getX() + (world.rand.nextDouble() - world.rand.nextDouble()) * (double) this.spawnRange + 0.5D;
-                    double d1 = j >= 2 ? listnbt.getDouble(1) : (double) (blockpos.getY() + world.rand.nextInt(3) - 1);
-                    double d2 = j >= 3 ? listnbt.getDouble(2) : (double) blockpos.getZ() + (world.rand.nextDouble() - world.rand.nextDouble()) * (double) this.spawnRange + 0.5D;
+                    final int j = listnbt.size();
+                    final double d0 = j >= 1 ? listnbt.getDouble(0) : blockpos.getX() + (world.rand.nextDouble() - world.rand.nextDouble()) * this.spawnRange + 0.5D;
+                    final double d1 = j >= 2 ? listnbt.getDouble(1) : (double) (blockpos.getY() + world.rand.nextInt(3) - 1);
+                    final double d2 = j >= 3 ? listnbt.getDouble(2) : blockpos.getZ() + (world.rand.nextDouble() - world.rand.nextDouble()) * this.spawnRange + 0.5D;
                     if (world.hasNoCollisions(optional.get().getBoundingBoxWithSizeApplied(d0, d1, d2)) && EntitySpawnPlacementRegistry.canSpawnEntity(optional.get(), (IServerWorld)world, SpawnReason.SPAWNER, new BlockPos(d0, d1, d2), world.getRandom())) {
                         ServerWorld serverworld = (ServerWorld)world;
                         Entity entity = EntityType.loadEntityAndExecute(compoundnbt, world, (p_221408_6_) -> {
@@ -121,7 +120,7 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
                             return;
                         }
 
-                        int k = world.getEntitiesWithinAABB(entity.getClass(), (new AxisAlignedBB(blockpos.getX(), blockpos.getY(), blockpos.getZ(), blockpos.getX() + 1, blockpos.getY() + 1, blockpos.getZ() + 1)).grow(this.spawnRange)).size();
+                        final int k = world.getEntitiesWithinAABB(entity.getClass(), (new AxisAlignedBB(blockpos.getX(), blockpos.getY(), blockpos.getZ(), blockpos.getX() + 1, blockpos.getY() + 1, blockpos.getZ() + 1)).grow(this.spawnRange)).size();
                         if (k >= this.maxNearbyEntities) {
                             this.resetTimer();
                             return;
@@ -135,14 +134,14 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
                             }
 
                             if (this.spawnData.getNbt().size() == 1 && this.spawnData.getNbt().contains("id", 8)){
-                                ((MobEntity) entity).onInitialSpawn(serverworld, world.getDifficultyForLocation(entity.getPosition()), SpawnReason.SPAWNER, null, null);
+                                mobentity.onInitialSpawn(serverworld,
+                                    world.getDifficultyForLocation(entity.getPosition()), SpawnReason.SPAWNER, null,
+                                    null);
                             }
-                        }
 
-                        this.func_221409_a(entity);
-                        world.playEvent(2004, blockpos, 0);
-                        if (entity instanceof MobEntity) {
-                            ((MobEntity) entity).spawnExplosionParticle();
+                            this.spawnMobs(entity);
+                            world.playEvent(2004, blockpos, 0);
+                            mobentity.spawnExplosionParticle();
                         }
 
                         flag = true;
@@ -156,10 +155,10 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
         }
     }
 
-    private void func_221409_a(Entity entityIn) {
+    private void spawnMobs(Entity entityIn) {
         if (this.getWorld().addEntity(entityIn)) {
             for (Entity entity : entityIn.getPassengers()) {
-                this.func_221409_a(entity);
+                this.spawnMobs(entity);
             }
 
         }
@@ -170,7 +169,7 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
             this.spawnDelay = this.minSpawnDelay;
         } else {
             int i = this.maxSpawnDelay - this.minSpawnDelay;
-            this.spawnDelay = this.minSpawnDelay + this.getWorld().rand.nextInt(i);
+            this.spawnDelay = (short) (this.minSpawnDelay + getWorld().rand.nextInt(i));
         }
 
         if (!this.potentialSpawns.isEmpty()) {
@@ -180,6 +179,7 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
         this.broadcastEvent(1);
     }
 
+    @Override
     public void read(CompoundNBT nbt) {
         this.spawnDelay = nbt.getShort("Delay");
         this.potentialSpawns.clear();
@@ -218,18 +218,19 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
 
     }
 
+    @Override
     public CompoundNBT write(CompoundNBT compound) {
         ResourceLocation resourcelocation = this.getEntityId();
         if (resourcelocation == null) {
             return compound;
         } else {
-            compound.putShort("Delay", (short) this.spawnDelay);
-            compound.putShort("MinSpawnDelay", (short) this.minSpawnDelay);
-            compound.putShort("MaxSpawnDelay", (short) this.maxSpawnDelay);
-            compound.putShort("SpawnCount", (short) this.spawnCount);
-            compound.putShort("MaxNearbyEntities", (short) this.maxNearbyEntities);
-            compound.putShort("RequiredPlayerRange", (short) this.activatingRangeFromPlayer);
-            compound.putShort("SpawnRange", (short) this.spawnRange);
+            compound.putShort("Delay", this.spawnDelay);
+            compound.putShort("MinSpawnDelay", this.minSpawnDelay);
+            compound.putShort("MaxSpawnDelay", this.maxSpawnDelay);
+            compound.putShort("SpawnCount", this.spawnCount);
+            compound.putShort("MaxNearbyEntities", this.maxNearbyEntities);
+            compound.putShort("RequiredPlayerRange", this.activatingRangeFromPlayer);
+            compound.putShort("SpawnRange", this.spawnRange);
             compound.put("SpawnData", this.spawnData.getNbt().copy());
             ListNBT listnbt = new ListNBT();
             if (this.potentialSpawns.isEmpty()) {
@@ -248,6 +249,7 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
     /**
      * Sets the delay to minDelay if parameter given is 1, else return false.
      */
+    @Override
     public boolean setDelayToMin(int delay) {
         if (delay == 1 && this.getWorld().isRemote) {
             this.spawnDelay = this.minSpawnDelay;
@@ -257,7 +259,7 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Override
     public Entity getCachedEntity() {
         if (this.cachedEntity == null) {
             this.cachedEntity = EntityType.loadEntityAndExecute(this.spawnData.getNbt(), this.getWorld(), Function.identity());
@@ -268,20 +270,23 @@ public abstract class DreadSpawnerBaseLogic extends AbstractSpawner {
         return this.cachedEntity;
     }
 
+    @Override
     public void setNextSpawnData(WeightedSpawnerEntity nextSpawnData) {
         this.spawnData = nextSpawnData;
     }
 
+    @Override
     public abstract void broadcastEvent(int id);
 
+    @Override
     public abstract BlockPos getSpawnerPosition();
 
-    @OnlyIn(Dist.CLIENT)
+    @Override
     public double getMobRotation() {
         return this.mobRotation;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Override
     public double getPrevMobRotation() {
         return this.prevMobRotation;
     }

@@ -92,7 +92,7 @@
       ]
     },
     {
-      "name": "troll_skull",
+      "name": "troll_forest",
       "conditions": [
         {
           "condition": "killed_by_player"

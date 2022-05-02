@@ -1,7 +1,7 @@
 {
   "pools": [
     {
-      "name": "myrmex_solider_desert",
+      "name": "myrmex_soldier_desert",
       "rolls": 3,
       "entries": [
         {

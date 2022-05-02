@@ -32,7 +32,7 @@ public class ItemTrollArmor extends ArmorItem {
     public ItemTrollArmor(EnumTroll troll, CustomArmorMaterial material, EquipmentSlotType slot) {
         super(material, slot, new Item.Properties().group(IceAndFire.TAB_ITEMS));
         this.troll = troll;
-        this.setRegistryName(troll.name().toLowerCase(Locale.ROOT) + "_troll_leather_" + getArmorPart(slot));
+        this.setRegistryName(IceAndFire.MODID, troll.name().toLowerCase(Locale.ROOT) + "_troll_leather_" + getArmorPart(slot));
     }
 
     public IArmorMaterial getArmorMaterial() {

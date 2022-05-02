@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 public class ItemDragonArrow extends ArrowItem {
     public ItemDragonArrow() {
         super(new Properties().group(IceAndFire.TAB_ITEMS));
-        this.setRegistryName("iceandfire:dragonbone_arrow");
+        this.setRegistryName(IceAndFire.MODID, "dragonbone_arrow");
     }
 
     @Override

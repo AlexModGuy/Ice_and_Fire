@@ -68,13 +68,13 @@ public class IafVillagerRegistry {
 
     @SubscribeEvent
     public static void registerPointOfInterests(final RegistryEvent.Register<PointOfInterestType> event) {
-        event.getRegistry().register(LECTERN_POI = new PointOfInterestType("scribe", ImmutableSet.copyOf(IafBlockRegistry.LECTERN.getStateContainer().getValidStates()), 1, 1).setRegistryName("iceandfire:scribe"));
+        event.getRegistry().register(LECTERN_POI = new PointOfInterestType("scribe", ImmutableSet.copyOf(IafBlockRegistry.LECTERN.getStateContainer().getValidStates()), 1, 1).setRegistryName(IceAndFire.MODID, "scribe"));
         PointOfInterestType.registerBlockStates(LECTERN_POI);
     }
 
     @SubscribeEvent
     public static void registerVillagerProfessions(final RegistryEvent.Register<VillagerProfession> event) {
-        event.getRegistry().register(SCRIBE = new VillagerProfession("scribe", LECTERN_POI, ImmutableSet.of(), ImmutableSet.of(), SoundEvents.ENTITY_VILLAGER_WORK_LIBRARIAN).setRegistryName("iceandfire:scribe"));
+        event.getRegistry().register(SCRIBE = new VillagerProfession("scribe", LECTERN_POI, ImmutableSet.of(), ImmutableSet.of(), SoundEvents.ENTITY_VILLAGER_WORK_LIBRARIAN).setRegistryName(IceAndFire.MODID, "scribe"));
     }
 
     public static void addScribeTrades(Int2ObjectMap<List<VillagerTrades.ITrade>> trades) {
