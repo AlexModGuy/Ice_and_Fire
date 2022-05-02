@@ -80,15 +80,18 @@ public class ItemAlchemySword extends SwordItem {
         tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").mergeStyle(TextFormatting.GRAY));
         if (this == IafItemRegistry.DRAGONBONE_SWORD_FIRE) {
             tooltip.add(new TranslationTextComponent("dragon_sword_fire.hurt1").mergeStyle(TextFormatting.GREEN));
-            tooltip.add(new TranslationTextComponent("dragon_sword_fire.hurt2").mergeStyle(TextFormatting.DARK_RED));
+            if (IafConfig.dragonWeaponFireAbility)
+                tooltip.add(new TranslationTextComponent("dragon_sword_fire.hurt2").mergeStyle(TextFormatting.DARK_RED));
         }
         if (this == IafItemRegistry.DRAGONBONE_SWORD_ICE) {
             tooltip.add(new TranslationTextComponent("dragon_sword_ice.hurt1").mergeStyle(TextFormatting.GREEN));
-            tooltip.add(new TranslationTextComponent("dragon_sword_ice.hurt2").mergeStyle(TextFormatting.AQUA));
+            if (IafConfig.dragonWeaponIceAbility)
+                tooltip.add(new TranslationTextComponent("dragon_sword_ice.hurt2").mergeStyle(TextFormatting.AQUA));
         }
         if (this == IafItemRegistry.DRAGONBONE_SWORD_LIGHTNING) {
             tooltip.add(new TranslationTextComponent("dragon_sword_lightning.hurt1").mergeStyle(TextFormatting.GREEN));
-            tooltip.add(new TranslationTextComponent("dragon_sword_lightning.hurt2").mergeStyle(TextFormatting.DARK_PURPLE));
+            if (IafConfig.dragonWeaponLightningAbility)
+                tooltip.add(new TranslationTextComponent("dragon_sword_lightning.hurt2").mergeStyle(TextFormatting.DARK_PURPLE));
         }
     }
 
