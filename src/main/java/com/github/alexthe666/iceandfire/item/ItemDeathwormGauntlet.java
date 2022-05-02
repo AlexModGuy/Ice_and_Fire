@@ -120,16 +120,19 @@ public class ItemDeathwormGauntlet extends Item implements ICustomRendered {
                     PlayerEntity player = (PlayerEntity) entity;
                     Vector3d Vector3d = player.getLook(1.0F).normalize();
                     double range = 5;
-                    for (MobEntity LivingEntity : world.getEntitiesWithinAABB(MobEntity.class, new AxisAlignedBB(player.getPosX() - range, player.getPosY() - range, player.getPosZ() - range, player.getPosX() + range, player.getPosY() + range, player.getPosZ() + range))) {
-                        Vector3d Vector3d1 = new Vector3d(LivingEntity.getPosX() - player.getPosX(), LivingEntity.getPosY() - player.getPosY(), LivingEntity.getPosZ() - player.getPosZ());
+                    for (LivingEntity livingEntity : world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(player.getPosX() - range, player.getPosY() - range, player.getPosZ() - range, player.getPosX() + range, player.getPosY() + range, player.getPosZ() + range))) {
+                        //Let's not pull/hit ourselves
+                        if (livingEntity == entity)
+                            continue;
+                        Vector3d Vector3d1 = new Vector3d(livingEntity.getPosX() - player.getPosX(), livingEntity.getPosY() - player.getPosY(), livingEntity.getPosZ() - player.getPosZ());
                         double d0 = Vector3d1.length();
                         Vector3d1 = Vector3d1.normalize();
                         double d1 = Vector3d.dotProduct(Vector3d1);
-                        boolean canSee = d1 > 1.0D - 0.5D / d0 && player.canEntityBeSeen(LivingEntity);
+                        boolean canSee = d1 > 1.0D - 0.5D / d0 && player.canEntityBeSeen(livingEntity);
                         if (canSee) {
                             specialDamage++;
-                            LivingEntity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity) entity), 3F);
-                            LivingEntity.applyKnockback(0.5F, LivingEntity.getPosX() - player.getPosX(), LivingEntity.getPosZ() - player.getPosZ());
+                            livingEntity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity) entity), 3F);
+                            livingEntity.applyKnockback(0.5F, livingEntity.getPosX() - player.getPosX(), livingEntity.getPosZ() - player.getPosZ());
                         }
                     }
                 }

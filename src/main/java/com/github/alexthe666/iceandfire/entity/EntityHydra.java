@@ -1,33 +1,15 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
-import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
-import com.github.alexthe666.iceandfire.entity.util.IMultipartEntity;
-import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
+import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -45,9 +27,10 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
 
 public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMultipartEntity, IVillagerFear, IAnimalFear {
 
@@ -57,15 +40,15 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
     private static final DataParameter<Integer> HEAD_COUNT = EntityDataManager.createKey(EntityHydra.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> SEVERED_HEAD = EntityDataManager.createKey(EntityHydra.class, DataSerializers.VARINT);
     private static final float[][] ROTATE = new float[][]{
-            {0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F},// 1 total heads
-            {10F, -10F, 0F, 0F, 0F, 0F, 0F, 0F, 0F},// 2 total heads
-            {10F, 0F, -10F, 0F, 0F, 0F, 0F, 0F, 0F},// 3 total heads
-            {25F, 10F, -10F, -25F, 0F, 0F, 0F, 0F, 0F},//etc...
-            {30F, 15F, 0F, -15F, -30F, 0F, 0F, 0F, 0F},
-            {40F, 25F, 5F, -5F, -25F, -40F, 0F, 0F, 0F},
-            {40F, 30F, 15F, 0F, -15F, -30F, -40F, 0F, 0F},
-            {45F, 30F, 20F, 5F, -5F, -20F, -30F, -45F, 0F},
-            {50F, 37F, 25F, 15F, 0, -15F, -25F, -37F, -50F},
+        {0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F},// 1 total heads
+        {10F, -10F, 0F, 0F, 0F, 0F, 0F, 0F, 0F},// 2 total heads
+        {10F, 0F, -10F, 0F, 0F, 0F, 0F, 0F, 0F},// 3 total heads
+        {25F, 10F, -10F, -25F, 0F, 0F, 0F, 0F, 0F},//etc...
+        {30F, 15F, 0F, -15F, -30F, 0F, 0F, 0F, 0F},
+        {40F, 25F, 5F, -5F, -25F, -40F, 0F, 0F, 0F},
+        {40F, 30F, 15F, 0F, -15F, -30F, -40F, 0F, 0F},
+        {45F, 30F, 20F, 5F, -5F, -20F, -30F, -45F, 0F},
+        {50F, 37F, 25F, 15F, 0, -15F, -25F, -37F, -50F},
     };
     public boolean[] isStriking = new boolean[HEADS];
     public float[] strikingProgress = new float[HEADS];
@@ -94,6 +77,18 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         headDamageThreshold = Math.max(5, (float) IafConfig.hydraMaxHealth * 0.08F);
     }
 
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+            //HEALTH
+            .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.hydraMaxHealth)
+            //SPEED
+            .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3D)
+            //ATTACK
+            .createMutableAttribute(Attributes.ATTACK_DAMAGE, 3.0D)
+            //ARMOR
+            .createMutableAttribute(Attributes.ARMOR, 1.0D);
+    }
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new SwimGoal(this));
@@ -102,12 +97,6 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, PlayerEntity.class, 10, true, false, new Predicate<Entity>() {
-            @Override
-            public boolean apply(@Nullable Entity entity) {
-                return entity.isAlive();
-            }
-        }));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, LivingEntity.class, 10, true, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
@@ -124,10 +113,11 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
     @Override
     public void livingTick() {
         super.livingTick();
-        if (this.getAttackTarget() != null && this.canEntityBeSeen(this.getAttackTarget())) {
+        LivingEntity attackTarget = this.getAttackTarget();
+        if (attackTarget != null && this.canEntityBeSeen(attackTarget)) {
             int index = rand.nextInt(getHeadCount());
             if (!isBreathing[index] && !isStriking[index]) {
-                if (this.getDistance(this.getAttackTarget()) < 6) {
+                if (this.getDistance(attackTarget) < 6) {
                     if (strikeCooldown == 0 && strikingProgress[index] == 0) {
                         isBreathing[index] = false;
                         isStriking[index] = true;
@@ -150,15 +140,14 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
             prevStrikeProgress[i] = strikingProgress[i];
             if (striking && strikingProgress[i] > 9) {
                 isStriking[i] = false;
-                if (this.getAttackTarget() != null && this.getDistance(this.getAttackTarget()) < 6) {
-                    this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
-                    this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 100, 3, false, false));
-                    this.getAttackTarget().applyKnockback(0.25F, this.getPosX() - this.getAttackTarget().getPosX(), this.getPosZ() - this.getAttackTarget().getPosZ());
+                if (attackTarget != null && this.getDistance(attackTarget) < 6) {
+                    attackTarget.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+                    attackTarget.addPotionEffect(new EffectInstance(Effects.POISON, 100, 3, false, false));
+                    attackTarget.applyKnockback(0.25F, this.getPosX() - attackTarget.getPosX(), this.getPosZ() - attackTarget.getPosZ());
                 }
             }
             if (breathing) {
-                LivingEntity entity = this.getAttackTarget();
-                if (ticksExisted % 7 == 0 && entity != null && i < this.getHeadCount()) {
+                if (ticksExisted % 7 == 0 && attackTarget != null && i < this.getHeadCount()) {
                     Vector3d Vector3d = this.getLook(1.0F);
                     if (rand.nextFloat() < 0.2F) {
                         this.playSound(IafSoundRegistry.HYDRA_SPIT, this.getSoundVolume(), this.getSoundPitch());
@@ -166,9 +155,9 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
                     double headPosX = this.headBoxes[i].getPosX() + Vector3d.x * 1.0D;
                     double headPosY = this.headBoxes[i].getPosY() + 1.3F;
                     double headPosZ = this.headBoxes[i].getPosZ() + Vector3d.z * 1.0D;
-                    double d2 = entity.getPosX() - headPosX + this.rand.nextGaussian() * 0.4D;
-                    double d3 = entity.getPosY() + entity.getEyeHeight() - headPosY + this.rand.nextGaussian() * 0.4D;
-                    double d4 = entity.getPosZ() - headPosZ + this.rand.nextGaussian() * 0.4D;
+                    double d2 = attackTarget.getPosX() - headPosX + this.rand.nextGaussian() * 0.4D;
+                    double d3 = attackTarget.getPosY() + attackTarget.getEyeHeight() - headPosY + this.rand.nextGaussian() * 0.4D;
+                    double d4 = attackTarget.getPosZ() - headPosZ + this.rand.nextGaussian() * 0.4D;
                     EntityHydraBreath entitylargefireball = new EntityHydraBreath(IafEntityRegistry.HYDRA_BREATH.get(),
                         world, this, d2, d3, d4);
                     entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
@@ -176,7 +165,7 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
                         world.addEntity(entitylargefireball);
                     }
                 }
-                if (isBreathing[i] && (entity == null || !entity.isAlive() || breathTicks[i] > 60) && !world.isRemote) {
+                if (isBreathing[i] && (attackTarget == null || !attackTarget.isAlive() || breathTicks[i] > 60) && !world.isRemote) {
                     isBreathing[i] = false;
                     breathTicks[i] = 0;
                     breathCooldown = 15;
@@ -254,7 +243,6 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         }
     }
 
-
     @Override
     public void tick() {
         super.tick();
@@ -266,12 +254,12 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         for (int i = 0; i < getHeadCount(); i++) {
             headBoxes[i].setPosition(headBoxes[i].getPosX(), this.getPosY() + partY, headBoxes[i].getPosZ());
             headBoxes[i].setParent(this);
-            if(!headBoxes[i].shouldContinuePersisting()){
+            if (!headBoxes[i].shouldContinuePersisting()) {
                 world.addEntity(headBoxes[i]);
             }
             headBoxes[HEADS + i].setPosition(headBoxes[HEADS + i].getPosX(), this.getPosY() + partY, headBoxes[HEADS + i].getPosZ());
             headBoxes[HEADS + i].setParent(this);
-            if(!headBoxes[HEADS + i].shouldContinuePersisting()){
+            if (!headBoxes[HEADS + i].shouldContinuePersisting()) {
                 world.addEntity(headBoxes[HEADS + i]);
             }
         }
@@ -353,18 +341,6 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         this.dataManager.register(VARIANT, Integer.valueOf(0));
         this.dataManager.register(HEAD_COUNT, Integer.valueOf(3));
         this.dataManager.register(SEVERED_HEAD, Integer.valueOf(-1));
-    }
-
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-                //HEALTH
-                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.hydraMaxHealth)
-                //SPEED
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3D)
-                //ATTACK
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 3.0D)
-                //ARMOR
-                .createMutableAttribute(Attributes.ARMOR, 1.0D);
     }
 
     @Override

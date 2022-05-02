@@ -13,14 +13,18 @@ import com.github.alexthe666.iceandfire.item.ItemDeathwormGauntlet;
 import com.github.alexthe666.iceandfire.item.ItemTrollWeapon;
 import com.mojang.blaze3d.matrix.MatrixStack;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.vector.Vector3f;
 
 import static net.minecraftforge.common.util.Lazy.of;
@@ -80,7 +84,12 @@ public class IceAndFireTEISR extends ItemStackTileEntityRenderer {
         if (itemStackIn.getItem() == IafItemRegistry.TIDE_TRIDENT) {
             matrixStackIn.translate(0.5F, 0.5f, 0.5f);
             if (p_239207_2_ == ItemCameraTransforms.TransformType.GUI || p_239207_2_ == ItemCameraTransforms.TransformType.FIXED || p_239207_2_ == ItemCameraTransforms.TransformType.NONE || p_239207_2_ == ItemCameraTransforms.TransformType.GROUND) {
-                Minecraft.getInstance().getItemRenderer().renderItem(new ItemStack(IafItemRegistry.TIDE_TRIDENT_INVENTORY), p_239207_2_, p_239207_2_ == ItemCameraTransforms.TransformType.GROUND ? combinedLightIn : 240, combinedOverlayIn, matrixStackIn, bufferIn);
+                ItemStack tridentInventory = new ItemStack(IafItemRegistry.TIDE_TRIDENT_INVENTORY);
+                if (itemStackIn.isEnchanted()) {
+                    ListNBT enchantments = itemStackIn.getTag().getList("Enchantments", 10);
+                    tridentInventory.setTagInfo("Enchantments", enchantments);
+                }
+                Minecraft.getInstance().getItemRenderer().renderItem(tridentInventory, p_239207_2_, p_239207_2_ == ItemCameraTransforms.TransformType.GROUND ? combinedLightIn : 240, combinedOverlayIn, matrixStackIn, bufferIn);
             } else {
                 matrixStackIn.push();
                 matrixStackIn.translate(0, 0.2F, -0.15F);
@@ -90,8 +99,9 @@ public class IceAndFireTEISR extends ItemStackTileEntityRenderer {
                     matrixStackIn.translate(0, 0.6F, 0.0F);
                 }
                 matrixStackIn.rotate(Vector3f.XP.rotationDegrees(160));
+                IVertexBuilder glintVertexBuilder = ItemRenderer.getEntityGlintVertexBuilder(bufferIn, RenderType.getEntityCutoutNoCull(RenderTideTrident.TRIDENT), false, itemStackIn.hasEffect());
                 TIDE_TRIDENT_MODEL.get().render(matrixStackIn,
-                    bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(RenderTideTrident.TRIDENT)), combinedLightIn,
+                    glintVertexBuilder, combinedLightIn,
                     combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
                 matrixStackIn.pop();
             }

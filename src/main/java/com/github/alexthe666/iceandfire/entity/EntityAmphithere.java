@@ -664,11 +664,12 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     @Override
     public void tick() {
         super.tick();
-        if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 7) {
-            double dist = this.getDistanceSq(this.getAttackTarget());
+        LivingEntity target = this.getAttackTarget();
+        if (target != null && this.getAnimation() == ANIMATION_BITE && this.getAnimationTick() == 7) {
+            double dist = this.getDistanceSq(target);
             if (dist < 10) {
-                this.getAttackTarget().applyKnockback(0.6F, MathHelper.sin(this.rotationYaw * 0.017453292F), -MathHelper.cos(this.rotationYaw * 0.017453292F));
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                target.applyKnockback(0.6F, MathHelper.sin(this.rotationYaw * 0.017453292F), -MathHelper.cos(this.rotationYaw * 0.017453292F));
+                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_WING_BLAST && this.getAnimationTick() == 5) {
@@ -677,8 +678,8 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         if ((this.getAnimation() == ANIMATION_BITE || this.getAnimation() == ANIMATION_BITE_RIDER) && this.getAnimationTick() == 1) {
             this.playSound(IafSoundRegistry.AMPHITHERE_BITE, 1, 1);
         }
-        if (this.getAnimation() == ANIMATION_WING_BLAST && this.getAttackTarget() != null && this.getAnimationTick() > 5 && this.getAnimationTick() < 22) {
-            LivingEntity target = this.getAttackTarget();
+        if (target != null && this.getAnimation() == ANIMATION_WING_BLAST && this.getAnimationTick() > 5 && this.getAnimationTick() < 22) {
+
             double dist = this.getDistanceSq(target);
             if (dist < 25) {
                 target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() / 2));
@@ -697,12 +698,11 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
                 }
             }
         }
-        if (this.getAnimation() == ANIMATION_TAIL_WHIP && this.getAttackTarget() != null && this.getAnimationTick() == 7) {
-            LivingEntity target = this.getAttackTarget();
-            double dist = this.getDistanceSq(this.getAttackTarget());
+        if (this.getAnimation() == ANIMATION_TAIL_WHIP && target != null && this.getAnimationTick() == 7) {
+            double dist = this.getDistanceSq(target);
             if (dist < 10) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
-                this.getAttackTarget().isAirBorne = true;
+                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                target.isAirBorne = true;
                 float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
                 double d0;
                 double d1 = target.getPosX() - this.getPosX();
@@ -740,18 +740,18 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
             this.getUntamedRider().stopRiding();
         }
         if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof PlayerEntity) {
-            LivingEntity target = DragonUtils.riderLookingAtEntity(this, (PlayerEntity) this.getControllingPassenger(), 2.5D);
+            LivingEntity riderTarget = DragonUtils.riderLookingAtEntity(this, (PlayerEntity) this.getControllingPassenger(), 2.5D);
             if (this.getAnimation() != ANIMATION_BITE) {
                 this.setAnimation(ANIMATION_BITE);
             }
-            if (target != null) {
-                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+            if (riderTarget != null) {
+                riderTarget.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
-        if (this.getAttackTarget() != null && this.isOwner(this.getAttackTarget())) {
+        if (target != null && this.isOwner(target)) {
             this.setAttackTarget(null);
         }
-        if (this.getAttackTarget() != null && this.isOnGround() && this.isFlying() && ticksFlying > 40) {
+        if (target != null && this.isOnGround() && this.isFlying() && ticksFlying > 40) {
             this.setFlying(false);
         }
     }
@@ -840,7 +840,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     }
 
     public boolean attack() {
-        return (dataManager.get(CONTROL_STATE).byteValue() >> 2 & 1) == 1;
+        return (dataManager.get(CONTROL_STATE).byteValue() >> 2 & 1) == 0;
     }
 
     public boolean dismountIAF() {

@@ -1,13 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
@@ -20,6 +14,10 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 
 public class ItemAmphithereMacuahuitl extends SwordItem {
 
@@ -47,6 +45,11 @@ public class ItemAmphithereMacuahuitl extends SwordItem {
             targetEntity.world.addParticle(ParticleTypes.CLOUD, targetEntity.getPosX() + (double) (rand.nextFloat() * targetEntity.getWidth() * 5.0F) - (double) targetEntity.getWidth() - d0 * 10.0D, targetEntity.getPosY() + (double) (rand.nextFloat() * targetEntity.getHeight()) - d1 * 10.0D, targetEntity.getPosZ() + (double) (rand.nextFloat() * targetEntity.getWidth() * 5.0F) - (double) targetEntity.getWidth() - d2 * 10.0D, d0, d1, d2);
         }
         return super.hitEntity(stack, targetEntity, attacker);
+    }
+
+    @Override
+    public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
+        return true;
     }
 
     @Override
