@@ -17,7 +17,7 @@ public class MyrmexAIAttackPlayers extends NearestAttackableTargetGoal {
 
             @Override
             public boolean test(PlayerEntity entity) {
-                return (myrmex.getHive() == null
+                return entity != null && (myrmex.getHive() == null
                     || myrmex.getHive().isPlayerReputationLowEnoughToFight(entity.getUniqueID()));
             }
         });
