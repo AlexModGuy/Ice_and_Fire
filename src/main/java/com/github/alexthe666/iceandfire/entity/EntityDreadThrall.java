@@ -6,10 +6,7 @@ import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.entity.ai.DreadAITargetNonDread;
-import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
-import com.github.alexthe666.iceandfire.entity.util.IDreadMob;
-import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
+import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.google.common.base.Predicate;
 
@@ -50,7 +47,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 
-public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
+public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear, IHasArmorVariant {
 
     private static final DataParameter<Boolean> CUSTOM_ARMOR_HEAD = EntityDataManager.createKey(EntityDreadThrall.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> CUSTOM_ARMOR_CHEST = EntityDataManager.createKey(EntityDreadThrall.class, DataSerializers.BOOLEAN);
@@ -160,7 +157,7 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
             this.setItemStackToSlot(EquipmentSlotType.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
             setCustomArmorFeet(rand.nextInt(8) != 0);
         }
-        setArmorVariant(rand.nextInt(8));
+        setBodyArmorVariant(rand.nextInt(8));
     }
 
     @Nullable
@@ -183,7 +180,7 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
 
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
-        compound.putInt("ArmorVariant", getArmorVariant());
+        compound.putInt("ArmorVariant", getBodyArmorVariant());
         compound.putBoolean("HasCustomHelmet", hasCustomArmorHead());
         compound.putBoolean("HasCustomChestplate", hasCustomArmorChest());
         compound.putBoolean("HasCustomLeggings", hasCustomArmorLegs());
@@ -193,7 +190,7 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
     @Override
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
-        setArmorVariant(compound.getInt("ArmorVariant"));
+        setBodyArmorVariant(compound.getInt("ArmorVariant"));
         setCustomArmorHead(compound.getBoolean("HasCustomHelmet"));
         setCustomArmorChest(compound.getBoolean("HasCustomChestplate"));
         setCustomArmorLegs(compound.getBoolean("HasCustomLeggings"));
@@ -242,12 +239,24 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
         this.dataManager.set(CUSTOM_ARMOR_FEET, head);
     }
 
-    public int getArmorVariant() {
+    @Override
+    public int getBodyArmorVariant() {
         return this.dataManager.get(CUSTOM_ARMOR_INDEX).intValue();
     }
 
-    public void setArmorVariant(int variant) {
+    @Override
+    public void setBodyArmorVariant(int variant) {
         this.dataManager.set(CUSTOM_ARMOR_INDEX, variant);
+    }
+
+    @Override
+    public int getLegArmorVariant() {
+        return 0;
+    }
+
+    @Override
+    public void setLegArmorVariant(int variant) {
+
     }
 
     @Override

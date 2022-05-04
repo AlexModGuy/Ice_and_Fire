@@ -1,16 +1,15 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.client.model.ModelDreadKnight;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
 import com.github.alexthe666.iceandfire.entity.EntityDreadKnight;
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.util.ResourceLocation;
+
+import javax.annotation.Nullable;
 
 public class RenderDreadKnight extends MobRenderer<EntityDreadKnight, ModelDreadKnight> {
     public static final ResourceLocation TEXTURE_EYES = new ResourceLocation("iceandfire:textures/models/dread/dread_knight_eyes.png");
@@ -19,9 +18,9 @@ public class RenderDreadKnight extends MobRenderer<EntityDreadKnight, ModelDread
     public static final ResourceLocation TEXTURE_2 = new ResourceLocation("iceandfire:textures/models/dread/dread_knight_3.png");
 
     public RenderDreadKnight(EntityRendererManager renderManager) {
-        super(renderManager, new ModelDreadKnight(0.0F, false), 0.6F);
-        this.addLayer(new LayerGenericGlowing(this, TEXTURE_EYES));
-        this.addLayer(new HeldItemLayer<EntityDreadKnight, ModelDreadKnight>(this));
+        super(renderManager, new ModelDreadKnight(0.0F), 0.6F);
+        this.addLayer(new LayerGenericGlowing<>(this, TEXTURE_EYES));
+        this.addLayer(new HeldItemLayer<>(this));
     }
 
     @Override

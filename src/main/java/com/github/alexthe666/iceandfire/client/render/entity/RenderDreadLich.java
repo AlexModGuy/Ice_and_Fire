@@ -21,9 +21,9 @@ public class RenderDreadLich extends MobRenderer<EntityDreadLich, ModelDreadLich
     public static final ResourceLocation TEXTURE_4 = new ResourceLocation("iceandfire:textures/models/dread/dread_lich_4.png");
 
     public RenderDreadLich(EntityRendererManager renderManager) {
-        super(renderManager, new ModelDreadLich(0.0F, false), 0.6F);
-        this.addLayer(new LayerGenericGlowing(this, TEXTURE_EYES));
-        this.addLayer(new HeldItemLayer<EntityDreadLich, ModelDreadLich>(this));
+        super(renderManager, new ModelDreadLich(0.0F), 0.6F);
+        this.addLayer(new LayerGenericGlowing<>(this, TEXTURE_EYES));
+        this.addLayer(new HeldItemLayer<>(this));
 
     }
 

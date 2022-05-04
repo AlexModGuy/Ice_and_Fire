@@ -20,7 +20,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class ParticleGhostAppearance extends Particle {
-    private final ModelGhost model = new ModelGhost();
+    private final ModelGhost model = new ModelGhost(0.0F);
     private int ghost;
     private boolean fromLeft = false;
     public ParticleGhostAppearance(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int ghost) {
