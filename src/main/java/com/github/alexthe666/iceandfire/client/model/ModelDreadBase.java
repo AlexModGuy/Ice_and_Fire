@@ -6,7 +6,7 @@ import net.minecraft.entity.LivingEntity;
 
 abstract class ModelDreadBase<T extends LivingEntity & IAnimatedEntity> extends ModelBipedBase<T> {
 
-    abstract Animation getSpawnAnimation();
+    public abstract Animation getSpawnAnimation();
 
     @Override
     public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {

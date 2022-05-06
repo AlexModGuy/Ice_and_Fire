@@ -88,19 +88,19 @@ public class ModelDreadKnight extends ModelDreadBase<EntityDreadKnight> {
     }
 
     @Override
-    public void setLivingAnimations(EntityDreadKnight LivingEntityIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
+    public void setLivingAnimations(EntityDreadKnight livingEntityIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
         this.rightArmPose = BipedModel.ArmPose.EMPTY;
         this.leftArmPose = BipedModel.ArmPose.EMPTY;
-        ItemStack itemstack = LivingEntityIn.getHeldItem(Hand.MAIN_HAND);
+        ItemStack itemstack = livingEntityIn.getHeldItem(Hand.MAIN_HAND);
 
-        if (itemstack.getItem() == Items.BOW && LivingEntityIn.isSwingInProgress) {
-            if (LivingEntityIn.getPrimaryHand() == HandSide.RIGHT) {
+        if (itemstack.getItem() == Items.BOW && livingEntityIn.isSwingInProgress) {
+            if (livingEntityIn.getPrimaryHand() == HandSide.RIGHT) {
                 this.rightArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
             } else {
                 this.leftArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
             }
         }
-        super.setLivingAnimations(LivingEntityIn, limbSwing, limbSwingAmount, partialTickTime);
+        super.setLivingAnimations(livingEntityIn, limbSwing, limbSwingAmount, partialTickTime);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class ModelDreadKnight extends ModelDreadBase<EntityDreadKnight> {
     }
 
     @Override
-    Animation getSpawnAnimation() {
+    public Animation getSpawnAnimation() {
         return EntityDreadKnight.ANIMATION_SPAWN;
     }
 

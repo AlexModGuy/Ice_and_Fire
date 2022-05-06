@@ -103,7 +103,7 @@ public class ModelDreadLich extends ModelDreadBase<EntityDreadLich> implements I
     }
 
     @Override
-    Animation getSpawnAnimation() {
+    public Animation getSpawnAnimation() {
         return EntityDreadLich.ANIMATION_SPAWN;
     }
 

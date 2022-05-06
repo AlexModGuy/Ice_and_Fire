@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelDreadThrall;
+import com.github.alexthe666.iceandfire.client.model.util.HideableLayer;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.IHasArmorVariantResource;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerBipedArmorMultiple;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
@@ -13,8 +14,6 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.List;
 
 public class RenderDreadThrall extends MobRenderer<EntityDreadThrall, ModelDreadThrall> implements IHasArmorVariantResource {
     public static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/dread/dread_thrall.png");
@@ -28,12 +27,14 @@ public class RenderDreadThrall extends MobRenderer<EntityDreadThrall, ModelDread
     public static final ResourceLocation TEXTURE_ARMOR_5 = new ResourceLocation("iceandfire:textures/models/dread/thrall_chest_6.png");
     public static final ResourceLocation TEXTURE_ARMOR_6 = new ResourceLocation("iceandfire:textures/models/dread/thrall_chest_7.png");
     public static final ResourceLocation TEXTURE_ARMOR_7 = new ResourceLocation("iceandfire:textures/models/dread/thrall_chest_8.png");
+    public final HideableLayer<EntityDreadThrall, ModelDreadThrall, HeldItemLayer<EntityDreadThrall, ModelDreadThrall>> itemLayer;
 
     public RenderDreadThrall(EntityRendererManager renderManager) {
         super(renderManager, new ModelDreadThrall(0.0F, false), 0.6F);
 
         this.addLayer(new LayerGenericGlowing<>(this, TEXTURE_EYES));
-        this.addLayer(new HeldItemLayer<>(this));
+        this.itemLayer = new HideableLayer<>(new HeldItemLayer<>(this), this);
+        this.addLayer(this.itemLayer);
         this.addLayer(new LayerBipedArmorMultiple<>(this,
             new ModelDreadThrall(0.5F, true), new ModelDreadThrall(1.0F, true),
             TEXTURE_ARMOR_0, TEXTURE_LEG_ARMOR));
@@ -66,8 +67,14 @@ public class RenderDreadThrall extends MobRenderer<EntityDreadThrall, ModelDread
     }
 
     @Override
-    public void preRenderCallback(EntityDreadThrall LivingEntityIn, MatrixStack stack, float partialTickTime) {
+    public void preRenderCallback(EntityDreadThrall livingEntityIn, MatrixStack stack, float partialTickTime) {
         stack.scale(0.95F, 0.95F, 0.95F);
+        if (livingEntityIn.getAnimation() == this.getEntityModel().getSpawnAnimation()) {
+            itemLayer.hidden = livingEntityIn.getAnimationTick() <= this.getEntityModel().getSpawnAnimation().getDuration() - 10;
+            return;
+        }
+        itemLayer.hidden = false;
+
     }
 
     @Nullable

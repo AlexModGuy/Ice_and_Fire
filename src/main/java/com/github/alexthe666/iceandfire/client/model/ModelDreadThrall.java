@@ -89,7 +89,7 @@ public class ModelDreadThrall extends ModelDreadBase<EntityDreadThrall> {
     }
 
     @Override
-    Animation getSpawnAnimation() {
+    public Animation getSpawnAnimation() {
         return EntityDreadThrall.ANIMATION_SPAWN;
     }
 

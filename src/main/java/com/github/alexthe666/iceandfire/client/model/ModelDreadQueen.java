@@ -95,7 +95,7 @@ public class ModelDreadQueen extends ModelDreadBase<EntityDreadQueen> {
     }
 
     @Override
-    Animation getSpawnAnimation() {
+    public Animation getSpawnAnimation() {
         return EntityDreadQueen.ANIMATION_SPAWN;
     }
 
