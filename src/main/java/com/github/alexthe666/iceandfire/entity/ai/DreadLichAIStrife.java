@@ -9,15 +9,12 @@ import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class DreadLichAIStrife extends Goal {
 
     private final EntityDreadLich entity;
     private final double moveSpeedAmp;
     private final float maxAttackDistance;
     private int attackCooldown;
-    private int attackTime = -1;
     private int seeTime;
     private boolean strafingClockwise;
     private boolean strafingBackwards;
@@ -35,6 +32,7 @@ public class DreadLichAIStrife extends Goal {
         this.attackCooldown = attackCooldownIn;
     }
 
+    @Override
     public boolean shouldExecute() {
         return this.entity.getAttackTarget() != null && this.isStaffInHand();
     }
@@ -43,28 +41,31 @@ public class DreadLichAIStrife extends Goal {
         return !this.entity.getHeldItemMainhand().isEmpty() && this.entity.getHeldItemMainhand().getItem() == IafItemRegistry.LICH_STAFF;
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
         return (this.shouldExecute() || !this.entity.getNavigator().noPath()) && this.isStaffInHand();
     }
 
+    @Override
     public void startExecuting() {
         super.startExecuting();
     }
 
+    @Override
     public void resetTask() {
         super.resetTask();
         this.seeTime = 0;
-        this.attackTime = -1;
         this.entity.resetActiveHand();
     }
 
+    @Override
     public void tick() {
         LivingEntity LivingEntity = this.entity.getAttackTarget();
 
         if (LivingEntity != null) {
-            double d0 = this.entity.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getBoundingBox().minY, LivingEntity.getPosZ());
-            boolean flag = this.entity.getEntitySenses().canSee(LivingEntity);
-            boolean flag1 = this.seeTime > 0;
+            final double d0 = this.entity.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getBoundingBox().minY, LivingEntity.getPosZ());
+            final boolean flag = this.entity.getEntitySenses().canSee(LivingEntity);
+            final boolean flag1 = this.seeTime > 0;
 
             if (flag != flag1) {
                 this.seeTime = 0;
@@ -76,7 +77,7 @@ public class DreadLichAIStrife extends Goal {
                 --this.seeTime;
             }
 
-            if (d0 <= (double) this.maxAttackDistance && this.seeTime >= 20) {
+            if (d0 <= this.maxAttackDistance && this.seeTime >= 20) {
                 this.entity.getNavigator().clearPath();
                 ++this.strafingTime;
             } else {
@@ -85,11 +86,11 @@ public class DreadLichAIStrife extends Goal {
             }
 
             if (this.strafingTime >= 20) {
-                if ((double) this.entity.getRNG().nextFloat() < 0.3D) {
+                if (this.entity.getRNG().nextFloat() < 0.3D) {
                     this.strafingClockwise = !this.strafingClockwise;
                 }
 
-                if ((double) this.entity.getRNG().nextFloat() < 0.3D) {
+                if (this.entity.getRNG().nextFloat() < 0.3D) {
                     this.strafingBackwards = !this.strafingBackwards;
                 }
 
@@ -97,9 +98,9 @@ public class DreadLichAIStrife extends Goal {
             }
 
             if (this.strafingTime > -1) {
-                if (d0 > (double) (this.maxAttackDistance * 0.75F)) {
+                if (d0 > this.maxAttackDistance * 0.75F) {
                     this.strafingBackwards = false;
-                } else if (d0 < (double) (this.maxAttackDistance * 0.25F)) {
+                } else if (d0 < this.maxAttackDistance * 0.25F) {
                     this.strafingBackwards = true;
                 }
 
@@ -114,7 +115,6 @@ public class DreadLichAIStrife extends Goal {
             } else if (flag) {
                 this.entity.resetActiveHand();
                 ((IRangedAttackMob) this.entity).attackEntityWithRangedAttack(LivingEntity, 0);
-                this.attackTime = this.attackCooldown;
             }
         }
     }

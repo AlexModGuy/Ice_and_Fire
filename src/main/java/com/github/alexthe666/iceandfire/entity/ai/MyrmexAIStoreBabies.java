@@ -8,23 +8,18 @@ import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
-
-import net.minecraft.entity.ai.goal.Goal.Flag;
 
 public class MyrmexAIStoreBabies extends Goal {
     private final EntityMyrmexWorker myrmex;
-    private final double movementSpeed;
-    private Path path;
     private BlockPos nextRoom = BlockPos.ZERO;
 
     public MyrmexAIStoreBabies(EntityMyrmexWorker entityIn, double movementSpeedIn) {
         this.myrmex = entityIn;
-        this.movementSpeed = movementSpeedIn;
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
+    @Override
     public boolean shouldExecute() {
         if (!this.myrmex.canMove() || !this.myrmex.holdingBaby() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky()) {
             return false;
@@ -38,10 +33,12 @@ public class MyrmexAIStoreBabies extends Goal {
         }
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
         return this.myrmex.holdingBaby() && !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(nextRoom.getX() + 0.5D, nextRoom.getY() + 0.5D, nextRoom.getZ() + 0.5D) > 3 && this.myrmex.shouldEnterHive();
     }
 
+    @Override
     public void startExecuting() {
         this.myrmex.getNavigator().tryMoveToXYZ(this.nextRoom.getX(), this.nextRoom.getY(), this.nextRoom.getZ(), 1.5F);
     }
@@ -59,6 +56,7 @@ public class MyrmexAIStoreBabies extends Goal {
         }
     }
 
+    @Override
     public void resetTask() {
         nextRoom = BlockPos.ZERO;
         this.myrmex.getNavigator().clearPath();

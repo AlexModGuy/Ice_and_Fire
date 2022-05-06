@@ -1,16 +1,15 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
-
-import java.util.EnumSet;
-
-import net.minecraft.entity.ai.goal.Goal.Flag;
 
 public class MyrmexAIAttackMelee extends Goal {
     protected EntityMyrmexBase myrmex;
@@ -24,7 +23,6 @@ public class MyrmexAIAttackMelee extends Goal {
     private int failedPathFindingPenalty = 0;
     private boolean canPenalize = false;
     private PathResult attackPath;
-    private AdvancedPathNavigate pathNavigate;
 
     public MyrmexAIAttackMelee(EntityMyrmexBase dragon, double speedIn, boolean useLongMemory) {
         this.myrmex = dragon;
@@ -36,13 +34,11 @@ public class MyrmexAIAttackMelee extends Goal {
     @Override
     public boolean shouldExecute() {
         LivingEntity LivingEntity = this.myrmex.getAttackTarget();
-        if (this.myrmex.getNavigator() instanceof AdvancedPathNavigate) {
-            pathNavigate = (AdvancedPathNavigate) this.myrmex.getNavigator();
-        } else {
+        if (!(this.myrmex.getNavigator() instanceof AdvancedPathNavigate)) {
             return false;
         }
-        if (LivingEntity instanceof PlayerEntity&& this.myrmex.getHive()!=null){
-            if(!this.myrmex.getHive().isPlayerReputationLowEnoughToFight(LivingEntity.getUniqueID())){
+        if (LivingEntity instanceof PlayerEntity && this.myrmex.getHive() != null) {
+            if (!this.myrmex.getHive().isPlayerReputationLowEnoughToFight(LivingEntity.getUniqueID())) {
                 return false;
             }
         }
@@ -96,8 +92,8 @@ public class MyrmexAIAttackMelee extends Goal {
         LivingEntity entity = this.myrmex.getAttackTarget();
         if (entity != null) {
             ((AdvancedPathNavigate) this.myrmex.getNavigator()).tryMoveToEntityLiving(entity, speedTowardsTarget);
-            double d0 = this.myrmex.getDistanceSq(entity.getPosX(), entity.getBoundingBox().minY, entity.getPosZ());
-            double d1 = this.getAttackReachSqr(entity);
+            final double d0 = this.myrmex.getDistanceSq(entity.getPosX(), entity.getBoundingBox().minY, entity.getPosZ());
+            final double d1 = this.getAttackReachSqr(entity);
             --this.delayCounter;
             if ((this.longMemory || this.myrmex.getEntitySenses().canSee(entity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || entity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.myrmex.getRNG().nextFloat() < 0.05F)) {
                 this.targetX = entity.getPosX();

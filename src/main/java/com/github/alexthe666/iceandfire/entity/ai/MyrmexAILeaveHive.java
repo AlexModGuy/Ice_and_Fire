@@ -14,14 +14,11 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class MyrmexAILeaveHive extends Goal {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;
     private PathResult path;
     private BlockPos nextEntrance = BlockPos.ZERO;
-    private BlockPos inProgPos = BlockPos.ZERO;
 
     public MyrmexAILeaveHive(EntityMyrmexBase entityIn, double movementSpeedIn) {
         this.myrmex = entityIn;
@@ -29,12 +26,13 @@ public class MyrmexAILeaveHive extends Goal {
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
+    @Override
     public boolean shouldExecute() {
         if (this.myrmex instanceof EntityMyrmexQueen) {
             return false;
         }
         //If it's riding something don't execute
-        if (!(this.myrmex.getNavigator() instanceof AdvancedPathNavigate) ||this.myrmex.isPassenger()){
+        if (!(this.myrmex.getNavigator() instanceof AdvancedPathNavigate) || this.myrmex.isPassenger()) {
             return false;
         }
         if (this.myrmex.isChild()) {
@@ -49,26 +47,24 @@ public class MyrmexAILeaveHive extends Goal {
         } else {
             nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, village.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), true));
             this.path = ((AdvancedPathNavigate) this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY(), nextEntrance.getZ(), movementSpeed);
-            inProgPos = new BlockPos(this.myrmex.getPosition());
             return true;
         }
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
-        if (this.myrmex.isCloseEnoughToTarget(nextEntrance,12)) {
-            return false;
-        }
-        if(this.myrmex.shouldEnterHive()){
+        if (this.myrmex.isCloseEnoughToTarget(nextEntrance,12) || this.myrmex.shouldEnterHive()) {
             return false;
         }
 
         return this.myrmex.shouldLeaveHive();
     }
 
+    @Override
     public void tick() {
         //If the path has been created but the destination couldn't be reached
         //or if the myrmex has reached the end of the path but isn't close enough to the entrance for some reason
-        if(!this.myrmex.pathReachesTarget(path,nextEntrance,12)){
+        if (!this.myrmex.pathReachesTarget(path,nextEntrance,12)) {
             MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(this.myrmex.getPosition(), 1000);
             nextEntrance = MyrmexHive.getGroundedPos(this.myrmex.world, village.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), true));
             path = ((AdvancedPathNavigate)this.myrmex.getNavigator()).moveToXYZ(nextEntrance.getX(), nextEntrance.getY() + 1,  nextEntrance.getZ(), movementSpeed);
@@ -76,9 +72,11 @@ public class MyrmexAILeaveHive extends Goal {
     }
 
 
+    @Override
     public void startExecuting() {
     }
 
+    @Override
     public void resetTask() {
         nextEntrance = BlockPos.ZERO;
         this.myrmex.getNavigator().clearPath();

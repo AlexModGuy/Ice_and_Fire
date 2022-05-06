@@ -40,7 +40,7 @@ public class EntityGroundAIRide<T extends MobEntity & IGroundMount> extends Goal
         dragon.setAttackTarget(null);
         double x = dragon.getPosX();
         double y = dragon.getPosY();
-        if(dragon instanceof EntityDeathWorm){
+        if (dragon instanceof EntityDeathWorm) {
            y = ((EntityDeathWorm)dragon).processRiderY(y);
         }
         double z = dragon.getPosZ();

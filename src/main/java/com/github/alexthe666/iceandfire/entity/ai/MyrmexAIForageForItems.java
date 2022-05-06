@@ -1,33 +1,38 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.*;
-
-import javax.annotation.Nullable;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.function.Predicate;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
-import com.google.common.base.Predicate;
 
+import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
+import javax.annotation.Nonnull;
 
 public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super ItemEntity> targetEntitySelector;
     public EntityMyrmexWorker myrmex;
     protected ItemEntity targetEntity;
+
+    @Nonnull
+    private List<ItemEntity> list = IAFMath.emptyItemEntityList;
+
     public MyrmexAIForageForItems(EntityMyrmexWorker myrmex) {
         super(myrmex, false, false);
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(myrmex);
         this.targetEntitySelector = new Predicate<ItemEntity>() {
             @Override
-            public boolean apply(@Nullable ItemEntity item) {
-                return item instanceof ItemEntity && !item.getItem().isEmpty() && !item.isInWater();
+            public boolean test(ItemEntity item) {
+                return item != null && !item.getItem().isEmpty() && !item.isInWater();
             }
         };
         this.myrmex = myrmex;
@@ -37,16 +42,19 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
     @Override
     public boolean shouldExecute() {
         if (!this.myrmex.canMove() || this.myrmex.holdingSomething() || !this.myrmex.getNavigator().noPath() || this.myrmex.shouldEnterHive() || !this.myrmex.keepSearching || this.myrmex.getAttackTarget() != null) {
+            list = IAFMath.emptyItemEntityList;
             return false;
         }
-        List<ItemEntity> list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(32), this.targetEntitySelector);
-        if (list.isEmpty()) {
+
+        if (this.myrmex.world.getGameTime() % 4 == 0) // only update the list every 4 ticks
+            list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(32), this.targetEntitySelector);
+
+        if (list.isEmpty())
             return false;
-        } else {
-            Collections.sort(list, this.theNearestAttackableTargetSorter);
-            this.targetEntity = list.get(0);
-            return true;
-        }
+
+        list.sort(this.theNearestAttackableTargetSorter);
+        this.targetEntity = list.get(0);
+        return true;
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
@@ -62,10 +70,9 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
     @Override
     public void tick() {
         super.tick();
-        if (this.targetEntity == null || this.targetEntity != null && (!this.targetEntity.isAlive() || this.targetEntity.isInWater())) {
+        if (this.targetEntity == null || (!this.targetEntity.isAlive() || this.targetEntity.isInWater())) {
             this.resetTask();
-        }
-        if (this.targetEntity != null && this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 8F) {
+        } else if (this.goalOwner.getDistanceSq(this.targetEntity) < 8F) {
             this.myrmex.onPickupItem(targetEntity);
             this.myrmex.setHeldItem(Hand.MAIN_HAND, this.targetEntity.getItem());
             this.targetEntity.remove();
@@ -91,10 +98,11 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
             this.theEntity = theEntityIn;
         }
 
+        @Override
         public int compare(Entity p_compare_1_, Entity p_compare_2_) {
-            double d0 = this.theEntity.getDistanceSq(p_compare_1_);
-            double d1 = this.theEntity.getDistanceSq(p_compare_2_);
-            return d0 < d1 ? -1 : (d0 > d1 ? 1 : 0);
+            final double d0 = this.theEntity.getDistanceSq(p_compare_1_);
+            final double d1 = this.theEntity.getDistanceSq(p_compare_2_);
+            return Double.compare(d0, d1);
         }
     }
 }

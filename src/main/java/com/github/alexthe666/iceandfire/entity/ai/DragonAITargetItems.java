@@ -4,14 +4,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
-
-import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
-import com.google.common.base.Predicate;
 
+import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
@@ -19,14 +18,18 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
+import javax.annotation.Nonnull;
 
 public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
+
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super ItemEntity> targetEntitySelector;
     private final int targetChance;
     protected ItemEntity targetEntity;
     private boolean isIce = false;
+
+    @Nonnull
+    private List<ItemEntity> list = IAFMath.emptyItemEntityList;
 
     public DragonAITargetItems(MobEntity creature, boolean checkSight) {
         this(creature, checkSight, false);
@@ -34,43 +37,42 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
     }
 
     public DragonAITargetItems(MobEntity creature, boolean checkSight, boolean onlyNearby) {
-        this(creature, 20, checkSight, onlyNearby, null);
+        this(creature, 20, checkSight, onlyNearby);
         isIce = creature instanceof EntityIceDragon;
     }
 
-    public DragonAITargetItems(MobEntity creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
+    public DragonAITargetItems(MobEntity creature, int chance, boolean checkSight, boolean onlyNearby) {
         super(creature, checkSight, onlyNearby);
         isIce = creature instanceof EntityIceDragon;
         this.targetChance = chance;
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
         this.targetEntitySelector = new Predicate<ItemEntity>() {
+
             @Override
-            public boolean apply(@Nullable ItemEntity item) {
-                return item instanceof ItemEntity && !item.getItem().isEmpty() && item.getItem().getItem() != null && FoodUtils.getFoodPoints(item.getItem(), true, isIce) > 0;
+            public boolean test(ItemEntity item) {
+                return item != null && !item.getItem().isEmpty() && item.getItem().getItem() != null
+                    && FoodUtils.getFoodPoints(item.getItem(), true, isIce) > 0;
             }
         };
     }
 
     @Override
     public boolean shouldExecute() {
-        if (((EntityDragonBase) this.goalOwner).getHunger() >= 100) {
-            return false;
-        }
-        if (!((EntityDragonBase) this.goalOwner).canMove()) {
-            return false;
-        }
-
-        if (this.targetChance > 0 && this.goalOwner.getRNG().nextInt(10) != 0) {
+        final EntityDragonBase dragon = (EntityDragonBase) this.goalOwner;
+        if (dragon.getHunger() >= 100 || !dragon.canMove() || (this.targetChance > 0 && this.goalOwner.getRNG().nextInt(10) != 0)) {
+            list = IAFMath.emptyItemEntityList;
             return false;
         } else {
 
-            List<ItemEntity> list = this.goalOwner.world.getLoadedEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+            if (this.goalOwner.world.getGameTime() % 4 == 0) // only update the list every 4 ticks
+                list = this.goalOwner.world.getLoadedEntitiesWithinAABB(ItemEntity.class,
+                        this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
             if (list.isEmpty()) {
                 return false;
             } else {
-                Collections.sort(list, this.theNearestAttackableTargetSorter);
+                list.sort(this.theNearestAttackableTargetSorter);
                 this.targetEntity = list.get(0);
                 return true;
             }
@@ -83,28 +85,30 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
 
     @Override
     public void startExecuting() {
-        this.goalOwner.getNavigator().tryMoveToXYZ(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ(), 1);
+        this.goalOwner.getNavigator().tryMoveToXYZ(this.targetEntity.getPosX(), this.targetEntity.getPosY(),
+            this.targetEntity.getPosZ(), 1);
         super.startExecuting();
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.targetEntity == null || this.targetEntity != null && this.targetEntity.isAlive()) {
+        if (this.targetEntity == null || this.targetEntity.isAlive()) {
             this.resetTask();
-        }
-        if (this.targetEntity != null && this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
+        } else if (this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
             this.targetEntity.getItem().shrink(1);
             this.goalOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
-            int hunger = FoodUtils.getFoodPoints(this.targetEntity.getItem(), true, isIce);
-            ((EntityDragonBase) this.goalOwner).setHunger(Math.min(100, ((EntityDragonBase) this.goalOwner).getHunger() + hunger));
-            ((EntityDragonBase) this.goalOwner).eatFoodBonus(this.targetEntity.getItem());
-            this.goalOwner.setHealth(Math.min(this.goalOwner.getMaxHealth(), (int) (this.goalOwner.getHealth() + FoodUtils.getFoodPoints(this.targetEntity.getItem(), true, isIce))));
+            final int hunger = FoodUtils.getFoodPoints(this.targetEntity.getItem(), true, isIce);
+            final EntityDragonBase dragon = ((EntityDragonBase) this.goalOwner);
+            dragon.setHunger(Math.min(100, ((EntityDragonBase) this.goalOwner).getHunger() + hunger));
+            dragon.eatFoodBonus(this.targetEntity.getItem());
+            this.goalOwner.setHealth(Math.min(this.goalOwner.getMaxHealth(), (int) (this.goalOwner.getHealth()
+                + FoodUtils.getFoodPoints(this.targetEntity.getItem(), true, isIce))));
             if (EntityDragonBase.ANIMATION_EAT != null) {
-                ((EntityDragonBase) this.goalOwner).setAnimation(EntityDragonBase.ANIMATION_EAT);
+                dragon.setAnimation(EntityDragonBase.ANIMATION_EAT);
             }
             for (int i = 0; i < 4; i++) {
-                ((EntityDragonBase) this.goalOwner).spawnItemCrackParticles(this.targetEntity.getItem().getItem());
+                dragon.spawnItemCrackParticles(this.targetEntity.getItem().getItem());
             }
             resetTask();
         }
@@ -116,16 +120,18 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
     }
 
     public static class Sorter implements Comparator<Entity> {
+
         private final Entity theEntity;
 
         public Sorter(Entity theEntityIn) {
             this.theEntity = theEntityIn;
         }
 
+        @Override
         public int compare(Entity p_compare_1_, Entity p_compare_2_) {
-            double d0 = this.theEntity.getDistanceSq(p_compare_1_);
-            double d1 = this.theEntity.getDistanceSq(p_compare_2_);
-            return d0 < d1 ? -1 : (d0 > d1 ? 1 : 0);
+            final double d0 = this.theEntity.getDistanceSq(p_compare_1_);
+            final double d1 = this.theEntity.getDistanceSq(p_compare_2_);
+            return Double.compare(d0, d1);
         }
     }
 }

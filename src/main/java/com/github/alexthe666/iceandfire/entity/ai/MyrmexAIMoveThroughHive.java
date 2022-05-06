@@ -12,8 +12,6 @@ import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class MyrmexAIMoveThroughHive extends Goal {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;
@@ -26,6 +24,7 @@ public class MyrmexAIMoveThroughHive extends Goal {
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
+    @Override
     public boolean shouldExecute() {
         if (!this.myrmex.canMove() || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingSomething() || !this.myrmex.shouldMoveThroughHive() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky()) {
             return false;
@@ -46,13 +45,16 @@ public class MyrmexAIMoveThroughHive extends Goal {
         }
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
-        return  !myrmex.shouldLeaveHive() && !this.myrmex.isCloseEnoughToTarget(nextRoom,3) && this.myrmex.shouldEnterHive() && !(this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby());
+        return !myrmex.shouldLeaveHive() && !this.myrmex.isCloseEnoughToTarget(nextRoom,3) && this.myrmex.shouldEnterHive() && !(this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby());
     }
 
+    @Override
     public void startExecuting() {
     }
 
+    @Override
     public void resetTask() {
         nextRoom = BlockPos.ZERO;
 

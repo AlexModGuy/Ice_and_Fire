@@ -16,11 +16,13 @@ public class GhostPathNavigator extends FlyingPathNavigator {
 
     }
 
+    @Override
     public boolean tryMoveToEntityLiving(Entity entityIn, double speedIn) {
         ghost.getMoveHelper().setMoveTo(entityIn.getPosX(), entityIn.getPosY(), entityIn.getPosZ(), speedIn);
         return true;
     }
 
+    @Override
     public boolean tryMoveToXYZ(double x, double y, double z, double speedIn) {
         ghost.getMoveHelper().setMoveTo(x, y, z, speedIn);
         return true;

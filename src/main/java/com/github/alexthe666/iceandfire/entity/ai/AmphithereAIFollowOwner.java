@@ -13,8 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class AmphithereAIFollowOwner extends Goal {
     private final EntityAmphithere ampithere;
     private final double followSpeed;
@@ -34,6 +32,7 @@ public class AmphithereAIFollowOwner extends Goal {
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
+    @Override
     public boolean shouldExecute() {
         LivingEntity LivingEntity = this.ampithere.getOwner();
         if (ampithere.getCommand() != 2) {
@@ -45,7 +44,7 @@ public class AmphithereAIFollowOwner extends Goal {
             return false;
         } else if (this.ampithere.isQueuedToSit()) {
             return false;
-        } else if (this.ampithere.getDistanceSq(LivingEntity) < (double) (this.minDist * this.minDist)) {
+        } else if (this.ampithere.getDistanceSq(LivingEntity) < this.minDist * this.minDist) {
             return false;
         } else {
             this.owner = LivingEntity;
@@ -53,8 +52,10 @@ public class AmphithereAIFollowOwner extends Goal {
         }
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
-        return !noPath() && this.ampithere.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist) && !this.ampithere.isQueuedToSit();
+        return !noPath() && this.ampithere.getDistanceSq(this.owner) > this.maxDist * this.maxDist
+            && !this.ampithere.isQueuedToSit();
     }
 
     private boolean noPath() {
@@ -65,20 +66,24 @@ public class AmphithereAIFollowOwner extends Goal {
         }
     }
 
+    @Override
     public void startExecuting() {
         this.timeToRecalcPath = 0;
         this.oldWaterCost = this.ampithere.getPathPriority(PathNodeType.WATER);
         this.ampithere.setPathPriority(PathNodeType.WATER, 0.0F);
     }
 
+    @Override
     public void resetTask() {
         this.owner = null;
         this.ampithere.getNavigator().clearPath();
         this.ampithere.setPathPriority(PathNodeType.WATER, this.oldWaterCost);
     }
 
+    @Override
     public void tick() {
-        this.ampithere.getLookController().setLookPositionWithEntity(this.owner, 10.0F, (float) this.ampithere.getVerticalFaceSpeed());
+        this.ampithere.getLookController().setLookPositionWithEntity(this.owner, 10.0F,
+            this.ampithere.getVerticalFaceSpeed());
 
         if (!this.ampithere.isQueuedToSit()) {
             if (--this.timeToRecalcPath <= 0) {
@@ -86,14 +91,15 @@ public class AmphithereAIFollowOwner extends Goal {
                 tryMoveTo();
                 if (!this.ampithere.getLeashed() && !this.ampithere.isPassenger()) {
                     if (this.ampithere.getDistanceSq(this.owner) >= 144.0D) {
-                        int i = MathHelper.floor(this.owner.getPosX()) - 2;
-                        int j = MathHelper.floor(this.owner.getPosZ()) - 2;
-                        int k = MathHelper.floor(this.owner.getBoundingBox().minY);
+                        final int i = MathHelper.floor(this.owner.getPosX()) - 2;
+                        final int j = MathHelper.floor(this.owner.getPosZ()) - 2;
+                        final int k = MathHelper.floor(this.owner.getBoundingBox().minY);
 
                         for (int l = 0; l <= 4; ++l) {
                             for (int i1 = 0; i1 <= 4; ++i1) {
                                 if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.canTeleportToBlock(new BlockPos(i, j, k))) {
-                                    this.ampithere.setLocationAndAngles((float) (i + l) + 0.5F, k, (float) (j + i1) + 0.5F, this.ampithere.rotationYaw, this.ampithere.rotationPitch);
+                                    this.ampithere.setLocationAndAngles(i + l + 0.5F, k, j + i1 + 0.5F,
+                                        this.ampithere.rotationYaw, this.ampithere.rotationPitch);
                                     ampithere.getNavigator().clearPath();
                                     return;
                                 }

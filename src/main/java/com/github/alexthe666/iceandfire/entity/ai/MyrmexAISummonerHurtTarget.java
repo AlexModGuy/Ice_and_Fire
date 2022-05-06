@@ -8,8 +8,6 @@ import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class MyrmexAISummonerHurtTarget extends TargetGoal {
     EntityMyrmexSwarmer tameable;
     LivingEntity attacker;
@@ -21,18 +19,21 @@ public class MyrmexAISummonerHurtTarget extends TargetGoal {
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
+    @Override
     public boolean shouldExecute() {
-        LivingEntity LivingEntity = this.tameable.getSummoner();
+        LivingEntity living = this.tameable.getSummoner();
 
-        if (LivingEntity == null) {
+        if (living == null) {
             return false;
         } else {
-            this.attacker = LivingEntity.getLastAttackedEntity();
-            int i = LivingEntity.getLastAttackedEntityTime();
-            return i != this.timestamp && this.isSuitableTarget(this.attacker, EntityPredicate.DEFAULT) && this.tameable.shouldAttackEntity(this.attacker, LivingEntity);
+            this.attacker = living.getLastAttackedEntity();
+            int i = living.getLastAttackedEntityTime();
+            return i != this.timestamp && this.isSuitableTarget(this.attacker, EntityPredicate.DEFAULT)
+                && this.tameable.shouldAttackEntity(this.attacker, living);
         }
     }
 
+    @Override
     public void startExecuting() {
         this.goalOwner.setAttackTarget(this.attacker);
         LivingEntity LivingEntity = this.tameable.getSummoner();

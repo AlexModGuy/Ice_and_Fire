@@ -13,8 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class DeathWormAIGetInSand extends Goal {
     private final EntityDeathWorm creature;
     private final double movementSpeed;
@@ -30,6 +28,7 @@ public class DeathWormAIGetInSand extends Goal {
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
+    @Override
     public boolean shouldExecute() {
         if (creature.isBeingRidden() || creature.isInSand() || creature.getAttackTarget() != null && !creature.getAttackTarget().isInWater()) {
             return false;
@@ -50,6 +49,7 @@ public class DeathWormAIGetInSand extends Goal {
     /**
      * Returns whether an in-progress Goal should continue executing
      */
+    @Override
     public boolean shouldContinueExecuting() {
         return !this.creature.getNavigator().noPath();
     }
@@ -57,6 +57,7 @@ public class DeathWormAIGetInSand extends Goal {
     /**
      * Execute a one shot task or start executing a continuous task
      */
+    @Override
     public void startExecuting() {
         this.creature.getNavigator().tryMoveToXYZ(this.shelterX, this.shelterY, this.shelterZ, this.movementSpeed);
     }

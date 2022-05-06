@@ -14,11 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class PixieAIFollowOwner extends Goal {
     private final EntityPixie tameable;
-    private final double followSpeed;
     World world;
     float maxDist;
     float minDist;
@@ -29,12 +26,12 @@ public class PixieAIFollowOwner extends Goal {
     public PixieAIFollowOwner(EntityPixie tameableIn, double followSpeedIn, float minDistIn, float maxDistIn) {
         this.tameable = tameableIn;
         this.world = tameableIn.world;
-        this.followSpeed = followSpeedIn;
         this.minDist = minDistIn;
         this.maxDist = maxDistIn;
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
+    @Override
     public boolean shouldExecute() {
         LivingEntity LivingEntity = this.tameable.getOwner();
 
@@ -44,7 +41,7 @@ public class PixieAIFollowOwner extends Goal {
             return false;
         } else if (this.tameable.isPixieSitting()) {
             return false;
-        } else if (this.tameable.getDistanceSq(LivingEntity) < (double) (this.minDist * this.minDist)) {
+        } else if (this.tameable.getDistanceSq(LivingEntity) < this.minDist * this.minDist) {
             return false;
         } else {
             this.owner = LivingEntity;
@@ -52,17 +49,20 @@ public class PixieAIFollowOwner extends Goal {
         }
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
         // first check sitting to save distance calculation in case pixie indeed is
-        return !this.tameable.isPixieSitting() && this.tameable.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist);
+        return !this.tameable.isPixieSitting() && this.tameable.getDistanceSq(this.owner) > this.maxDist * this.maxDist;
     }
 
+    @Override
     public void startExecuting() {
         this.timeToRecalcPath = 0;
         this.oldWaterCost = this.tameable.getPathPriority(PathNodeType.WATER);
         this.tameable.setPathPriority(PathNodeType.WATER, 0.0F);
     }
 
+    @Override
     public void resetTask() {
         this.owner = null;
         this.tameable.setPathPriority(PathNodeType.WATER, this.oldWaterCost);
@@ -74,9 +74,10 @@ public class PixieAIFollowOwner extends Goal {
         return BlockState.getMaterial() == Material.AIR || !BlockState.isSolid();
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
     public void tick() {
-        this.tameable.getLookController().setLookPositionWithEntity(this.owner, 10.0F, (float) this.tameable.getVerticalFaceSpeed());
+        this.tameable.getLookController().setLookPositionWithEntity(this.owner, 10.0F,
+            this.tameable.getVerticalFaceSpeed());
 
         if (!this.tameable.isPixieSitting()) {
             if (--this.timeToRecalcPath <= 0) {
@@ -86,14 +87,15 @@ public class PixieAIFollowOwner extends Goal {
                 this.tameable.slowSpeed = true;
                 if (!this.tameable.getLeashed()) {
                     if (this.tameable.getDistanceSq(this.owner) >= 50.0D) {
-                        int i = MathHelper.floor(this.owner.getPosX()) - 2;
-                        int j = MathHelper.floor(this.owner.getPosZ()) - 2;
-                        int k = MathHelper.floor(this.owner.getBoundingBox().minY);
+                        final int i = MathHelper.floor(this.owner.getPosX()) - 2;
+                        final int j = MathHelper.floor(this.owner.getPosZ()) - 2;
+                        final int k = MathHelper.floor(this.owner.getBoundingBox().minY);
 
                         for (int l = 0; l <= 4; ++l) {
                             for (int i1 = 0; i1 <= 4; ++i1) {
                                 if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.isEmptyBlock(new BlockPos(i + l, k, j + i1)) && this.isEmptyBlock(new BlockPos(i + l, k + 1, j + i1))) {
-                                    this.tameable.setLocationAndAngles((float) (i + l) + 0.5F, (double) k + 1.5, (float) (j + i1) + 0.5F, this.tameable.rotationYaw, this.tameable.rotationPitch);
+                                    this.tameable.setLocationAndAngles(i + l + 0.5F, k + 1.5, j + i1 + 0.5F,
+                                        this.tameable.rotationYaw, this.tameable.rotationPitch);
                                     return;
                                 }
                             }

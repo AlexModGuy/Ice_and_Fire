@@ -3,8 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
+import java.util.concurrent.ThreadLocalRandom;
 
 import com.github.alexthe666.iceandfire.block.BlockMyrmexCocoon;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
@@ -21,8 +20,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class MyrmexAIStoreItems extends Goal {
     private final EntityMyrmexBase myrmex;
     private final double movementSpeed;
@@ -37,14 +34,15 @@ public class MyrmexAIStoreItems extends Goal {
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
+    @Override
     public boolean shouldExecute() {
-        if (!this.myrmex.canMove() || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath()  || this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+        if (!this.myrmex.canMove() || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
             return false;
         }
         if (!(this.myrmex.getNavigator() instanceof AdvancedPathNavigate) || this.myrmex.isPassenger()){
             return false;
         }
-        if (this.myrmex.getWaitTicks()>0){
+        if (this.myrmex.getWaitTicks() > 0) {
             return false;
         }
         MyrmexHive village = this.myrmex.getHive();
@@ -61,14 +59,15 @@ public class MyrmexAIStoreItems extends Goal {
 
         nextRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getRandomRoom(WorldGenMyrmexHive.RoomType.FOOD, this.myrmex.getRNG(), this.myrmex.getPosition()));
         nextCocoon = getNearbyCocoon(nextRoom);
-        if(nextCocoon == null){
-            this.myrmex.setWaitTicks(20 + new Random().nextInt(40));
+        if (nextCocoon == null) {
+            this.myrmex.setWaitTicks(20 + ThreadLocalRandom.current().nextInt(40));
         }
         this.path = ((AdvancedPathNavigate) this.myrmex.getNavigator()).moveToXYZ(mainRoom.getX() + 0.5D, mainRoom.getY() + 0.5D, mainRoom.getZ() + 0.5D, this.movementSpeed);
         return nextCocoon != null;
 
     }
 
+    @Override
     public boolean shouldContinueExecuting() {
         return !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && nextCocoon != null && isUseableCocoon(nextCocoon) && !this.myrmex.isCloseEnoughToTarget(nextCocoon,3) && this.myrmex.shouldEnterHive();
     }
@@ -86,8 +85,8 @@ public class MyrmexAIStoreItems extends Goal {
         }
 
         if (!first && nextCocoon != null) {
-            double dist = 3 * 3;
-            if (this.myrmex.isCloseEnoughToTarget(nextCocoon,dist) && !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
+            final double dist = 9.0D; // 3 * 3
+            if (this.myrmex.isCloseEnoughToTarget(nextCocoon, dist) && !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
                 TileEntityMyrmexCocoon cocoon = (TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(nextCocoon);
                 ItemStack itemstack = this.myrmex.getHeldItem(Hand.MAIN_HAND);
                 if (!itemstack.isEmpty()) {
@@ -101,9 +100,9 @@ public class MyrmexAIStoreItems extends Goal {
                                 this.myrmex.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
                                 this.myrmex.isEnteringHive = false;
                                 return;
-                            }else if (cocoonStack.getItem() == itemstack.getItem()) {
-                                int j = Math.min(cocoon.getInventoryStackLimit(), cocoonStack.getMaxStackSize());
-                                int k = Math.min(itemstack.getCount(), j - cocoonStack.getCount());
+                            } else if (cocoonStack.getItem() == itemstack.getItem()) {
+                                final int j = Math.min(cocoon.getInventoryStackLimit(), cocoonStack.getMaxStackSize());
+                                final int k = Math.min(itemstack.getCount(), j - cocoonStack.getCount());
                                 if (k > 0) {
                                     cocoonStack.grow(k);
                                     itemstack.shrink(k);
@@ -133,6 +132,7 @@ public class MyrmexAIStoreItems extends Goal {
         }
     }
 
+    @Override
     public void resetTask() {
         nextRoom = null;
         nextCocoon = null;
@@ -143,10 +143,10 @@ public class MyrmexAIStoreItems extends Goal {
     public BlockPos getNearbyCocoon(BlockPos roomCenter) {
         int RADIUS_XZ = 15;
         int RADIUS_Y = 7;
-        List<BlockPos> closeCocoons = new ArrayList<BlockPos>();
+        List<BlockPos> closeCocoons = new ArrayList<>();
         BlockPos.getAllInBox(roomCenter.add(-RADIUS_XZ, -RADIUS_Y, -RADIUS_XZ), roomCenter.add(RADIUS_XZ, RADIUS_Y, RADIUS_XZ)).forEach(blockpos -> {
             TileEntity te = this.myrmex.world.getTileEntity(blockpos);
-            if (te != null && te instanceof TileEntityMyrmexCocoon) {
+            if (te instanceof TileEntityMyrmexCocoon) {
                 if (!((TileEntityMyrmexCocoon) te).isFull(this.myrmex.getHeldItem(Hand.MAIN_HAND))) {
                     closeCocoons.add(te.getPos());
                 }

@@ -1,14 +1,15 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.function.Predicate;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
-import com.google.common.base.Predicate;
+import com.github.alexthe666.iceandfire.util.IAFMath;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
@@ -18,13 +19,13 @@ import net.minecraft.item.Items;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super ItemEntity> targetEntitySelector;
-    private final int targetChance;
     protected ItemEntity targetEntity;
+
+    @Nonnull
+    private List<ItemEntity> list = IAFMath.emptyItemEntityList;
 
     public AmphithereAITargetItems(MobEntity creature, boolean checkSight) {
         this(creature, checkSight, false);
@@ -36,12 +37,12 @@ public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
 
     public AmphithereAITargetItems(MobEntity creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
         super(creature, checkSight, onlyNearby);
-        this.targetChance = chance;
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
         this.targetEntitySelector = new Predicate<ItemEntity>() {
+
             @Override
-            public boolean apply(@Nullable ItemEntity item) {
-                return item instanceof ItemEntity && !item.getItem().isEmpty() && item.getItem().getItem() == Items.COCOA_BEANS;
+            public boolean test(ItemEntity item) {
+                return item != null && !item.getItem().isEmpty() && item.getItem().getItem() == Items.COCOA_BEANS;
             }
         };
         this.setMutexFlags(EnumSet.of(Flag.TARGET));
@@ -50,21 +51,24 @@ public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
     @Override
     public boolean shouldExecute() {
         if (!((EntityAmphithere) this.goalOwner).canMove()) {
+            list = IAFMath.emptyItemEntityList;
             return false;
         }
-        //If the target entity already is what we want skip AABB
-        if (targetEntitySelector.apply(this.targetEntity)){
-            return true;
-        }
-        List<ItemEntity> list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
-        if (list.isEmpty()) {
-            return false;
-        } else {
-            Collections.sort(list, this.theNearestAttackableTargetSorter);
-            this.targetEntity = list.get(0);
+        // If the target entity already is what we want skip AABB
+        if (targetEntitySelector.test(this.targetEntity)) {
             return true;
         }
+
+        if (this.goalOwner.world.getGameTime() % 4 == 0) // only update the list every 4 ticks
+            list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+
+        if (list.isEmpty())
+            return false;
+
+        list.sort(this.theNearestAttackableTargetSorter);
+        this.targetEntity = list.get(0);
+        return true;
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
@@ -86,7 +90,7 @@ public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
     @Override
     public void tick() {
         super.tick();
-        if (this.targetEntity == null || this.targetEntity != null && !this.targetEntity.isAlive()) {
+        if (this.targetEntity == null || !this.targetEntity.isAlive()) {
             this.resetTask();
         }
         if (this.targetEntity != null && this.targetEntity.isAlive() && this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
@@ -110,10 +114,11 @@ public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
             this.theEntity = theEntityIn;
         }
 
+        @Override
         public int compare(Entity p_compare_1_, Entity p_compare_2_) {
-            double d0 = this.theEntity.getDistanceSq(p_compare_1_);
-            double d1 = this.theEntity.getDistanceSq(p_compare_2_);
-            return d0 < d1 ? -1 : (d0 > d1 ? 1 : 0);
+            final double d0 = this.theEntity.getDistanceSq(p_compare_1_);
+            final double d1 = this.theEntity.getDistanceSq(p_compare_2_);
+            return Double.compare(d0, d1);
         }
     }
 }

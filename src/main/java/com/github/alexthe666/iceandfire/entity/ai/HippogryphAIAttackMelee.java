@@ -10,8 +10,6 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class HippogryphAIAttackMelee extends Goal {
     protected final int attackInterval = 20;
     protected MobEntity attacker;
@@ -38,6 +36,7 @@ public class HippogryphAIAttackMelee extends Goal {
     /**
      * Returns whether the Goal should begin execution.
      */
+    @Override
     public boolean shouldExecute() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
 
@@ -68,6 +67,7 @@ public class HippogryphAIAttackMelee extends Goal {
     /**
      * Returns whether an in-progress Goal should continue executing
      */
+    @Override
     public boolean shouldContinueExecuting() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
 
@@ -87,6 +87,7 @@ public class HippogryphAIAttackMelee extends Goal {
     /**
      * Execute a one shot task or start executing a continuous task
      */
+    @Override
     public void startExecuting() {
         this.attacker.getNavigator().setPath(this.path, this.speedTowardsTarget);
         this.delayCounter = 0;
@@ -95,6 +96,7 @@ public class HippogryphAIAttackMelee extends Goal {
     /**
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
+    @Override
     public void resetTask() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
 
@@ -108,11 +110,12 @@ public class HippogryphAIAttackMelee extends Goal {
     /**
      * Keep ticking a continuous task that has already been started
      */
+    @Override
     public void tick() {
         LivingEntity LivingEntity = this.attacker.getAttackTarget();
         if (LivingEntity != null) {
             this.attacker.getLookController().setLookPositionWithEntity(LivingEntity, 30.0F, 30.0F);
-            double d0 = this.attacker.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getBoundingBox().minY, LivingEntity.getPosZ());
+            final double d0 = this.attacker.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getBoundingBox().minY, LivingEntity.getPosZ());
             --this.delayCounter;
 
             if ((this.longMemory || this.attacker.getEntitySenses().canSee(LivingEntity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || LivingEntity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.attacker.getRNG().nextFloat() < 0.05F)) {
@@ -151,7 +154,7 @@ public class HippogryphAIAttackMelee extends Goal {
     }
 
     protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
-        double d0 = this.getAttackReachSqr(enemy);
+        final double d0 = this.getAttackReachSqr(enemy);
 
         if (distToEnemySqr <= d0) {
             this.attackTick = 20;
