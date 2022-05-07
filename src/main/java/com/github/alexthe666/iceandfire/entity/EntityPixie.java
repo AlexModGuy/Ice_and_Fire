@@ -66,7 +66,7 @@ public class EntityPixie extends TameableEntity {
 
     public static final float[][] PARTICLE_RGB = new float[][]{new float[]{1F, 0.752F, 0.792F}, new float[]{0.831F, 0.662F, 1F}, new float[]{0.513F, 0.843F, 1F}, new float[]{0.654F, 0.909F, 0.615F}, new float[]{0.996F, 0.788F, 0.407F}};
     private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityPixie.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> COMMAND = EntityDataManager.createKey(EntityHippogryph.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> COMMAND = EntityDataManager.createKey(EntityPixie.class, DataSerializers.VARINT);
 
     public static final int STEAL_COOLDOWN = 3000;
 
