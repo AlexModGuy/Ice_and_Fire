@@ -43,10 +43,6 @@ public class BlockEggInIce extends ContainerBlock {
         return new TileEntityEggInIce();
     }
 
-    public Item getItem(World worldIn, BlockPos pos) {
-        return Item.getItemFromBlock(Blocks.ICE);
-    }
-
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }

@@ -457,7 +457,7 @@ public class ServerEvents {
                             }
                         } else {
                             if (!((LivingEntity) event.getTarget()).world.isRemote) {
-                                event.getTarget().entityDropItem(Item.getItemFromBlock(Blocks.COBBLESTONE), 2 + event.getEntityLiving().getRNG().nextInt(4));
+                                event.getTarget().entityDropItem(Blocks.COBBLESTONE.asItem(), 2 + event.getEntityLiving().getRNG().nextInt(4));
                             }
                         }
                         event.getTarget().remove();

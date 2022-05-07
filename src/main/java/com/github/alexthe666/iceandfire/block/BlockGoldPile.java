@@ -119,7 +119,7 @@ public class BlockGoldPile extends Block {
 
         if (!item.isEmpty()) {
             if (item.getItem() != null) {
-                if (item.getItem() == Item.getItemFromBlock(this)) {
+                if (item.getItem() == this.asItem()) {
                     if (!item.isEmpty()) {
                         if (state.get(LAYERS) < 8) {
                             worldIn.setBlockState(pos, state.with(LAYERS, state.get(LAYERS) + 1), 3);

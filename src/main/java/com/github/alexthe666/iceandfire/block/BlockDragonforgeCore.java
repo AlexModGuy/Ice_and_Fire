@@ -107,15 +107,15 @@ public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof
 
     public ItemStack getItem(World worldIn, BlockPos pos, BlockState state) {
         if(isFire == 0){
-            return new ItemStack(Item.getItemFromBlock(IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED));
+            return new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.asItem());
         }
         if(isFire == 1){
-            return new ItemStack(Item.getItemFromBlock(IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED));
+            return new ItemStack(IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED.asItem());
         }
         if(isFire == 2){
-            return new ItemStack(Item.getItemFromBlock(IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED));
+            return new ItemStack(IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.asItem());
         }
-        return new ItemStack(Item.getItemFromBlock(IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED));
+        return new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.asItem());
     }
 
     public BlockRenderType getRenderType(BlockState state) {

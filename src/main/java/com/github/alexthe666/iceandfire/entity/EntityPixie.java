@@ -222,7 +222,7 @@ public class EntityPixie extends TameableEntity {
 
                 return ActionResultType.SUCCESS;
             }
-        } else if (player.getHeldItem(hand).getItem() == Item.getItemFromBlock(IafBlockRegistry.JAR_EMPTY) && !this.isTamed()) {
+        } else if (player.getHeldItem(hand).getItem() == IafBlockRegistry.JAR_EMPTY.asItem() && !this.isTamed()) {
             if (!player.isCreative()) {
                 player.getHeldItem(hand).shrink(1);
             }

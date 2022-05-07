@@ -290,7 +290,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 ItemStack saddle = animalchest.getStackInSlot(0);
                 ItemStack chest = animalchest.getStackInSlot(1);
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 0, saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty() ? 1 : 0));
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 1, chest != null && chest.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !chest.isEmpty() ? 1 : 0));
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 1, chest != null && chest.getItem() == Blocks.CHEST.asItem() && !chest.isEmpty() ? 1 : 0));
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 2, getIntFromArmor(animalchest.getStackInSlot(2))));
             }
         }
@@ -548,7 +548,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
                 ItemStack chest = hippogryphInventory.getStackInSlot(1);
                 if (world.isRemote) {
                     IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 0, saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty() ? 1 : 0));
-                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 1, chest != null && chest.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !chest.isEmpty() ? 1 : 0));
+                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 1, chest != null && chest.getItem() == Blocks.CHEST.asItem() && !chest.isEmpty() ? 1 : 0));
                     IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 2, getIntFromArmor(hippogryphInventory.getStackInSlot(2))));
                 }
             }
@@ -1102,7 +1102,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             ItemStack saddle = this.hippogryphInventory.getStackInSlot(0);
             ItemStack chest = this.hippogryphInventory.getStackInSlot(1);
             this.setSaddled(saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty());
-            this.setChested(chest != null && chest.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !chest.isEmpty());
+            this.setChested(chest != null && chest.getItem() == Blocks.CHEST.asItem() && !chest.isEmpty());
             this.setArmor(getIntFromArmor(this.hippogryphInventory.getStackInSlot(2)));
         }
         /*if (this.world.isRemote) {
