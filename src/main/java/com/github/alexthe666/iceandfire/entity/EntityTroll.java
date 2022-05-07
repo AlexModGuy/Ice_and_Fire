@@ -11,6 +11,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.entity.ai.TrollAIFleeSun;
 import com.github.alexthe666.iceandfire.entity.util.BlockBreakExplosion;
+import com.github.alexthe666.iceandfire.entity.util.IHasCustomizableAttributes;
 import com.github.alexthe666.iceandfire.entity.util.IHumanoid;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
@@ -66,7 +67,7 @@ import net.minecraft.world.gen.Heightmap;
 
 import net.minecraftforge.common.MinecraftForge;
 
-public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVillagerFear, IHumanoid {
+public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVillagerFear, IHumanoid, IHasCustomizableAttributes {
 
     public static final Animation ANIMATION_STRIKE_HORIZONTAL = Animation.create(20);
     public static final Animation ANIMATION_STRIKE_VERTICAL = Animation.create(20);
@@ -82,8 +83,9 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
     private Animation currentAnimation;
     private boolean avoidSun = true;
 
-    public EntityTroll(EntityType<? extends MonsterEntity> t, World worldIn) {
+    public EntityTroll(EntityType<EntityTroll> t, World worldIn) {
         super(t, worldIn);
+        IHasCustomizableAttributes.applyAttributesForEntity(t, this);
     }
 
     public static boolean canTrollSpawnOn(EntityType<? extends MobEntity> typeIn, IServerWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
@@ -103,6 +105,11 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
                 .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 //ARMOR
                 .createMutableAttribute(Attributes.ARMOR, 9.0D);
+    }
+
+    @Override
+    public AttributeModifierMap.MutableAttribute getAttributes() {
+        return bakeAttributes();
     }
 
     private void setAvoidSun(boolean day) {

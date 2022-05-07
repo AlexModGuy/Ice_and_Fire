@@ -15,6 +15,7 @@ import com.github.alexthe666.iceandfire.entity.ai.HippocampusAIRide;
 import com.github.alexthe666.iceandfire.entity.ai.HippocampusAIWander;
 import com.github.alexthe666.iceandfire.entity.util.ChainBuffer;
 import com.github.alexthe666.iceandfire.entity.util.IDropArmor;
+import com.github.alexthe666.iceandfire.entity.util.IHasCustomizableAttributes;
 import com.github.alexthe666.iceandfire.entity.util.ISyncMount;
 import com.github.alexthe666.iceandfire.inventory.ContainerHippocampus;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
@@ -78,7 +79,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class EntityHippocampus extends TameableEntity implements ISyncMount, IAnimatedEntity, IDropArmor {
+public class EntityHippocampus extends TameableEntity implements ISyncMount, IAnimatedEntity, IDropArmor, IHasCustomizableAttributes {
 
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityHippocampus.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> SADDLE = EntityDataManager.createKey(EntityHippocampus.class, DataSerializers.BOOLEAN);
@@ -98,8 +99,9 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     private boolean isSitting;
     private boolean hasChestVarChanged = false;
 
-    public EntityHippocampus(EntityType<? extends TameableEntity> t, World worldIn) {
+    public EntityHippocampus(EntityType<EntityHippocampus> t, World worldIn) {
         super(t, worldIn);
+        IHasCustomizableAttributes.applyAttributesForEntity(t, this);
         this.stepHeight = 1;
         ANIMATION_SPEAK = Animation.create(15);
         this.switchNavigator(true);
@@ -262,7 +264,12 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
                 //ATTACK
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 1.0D);
     }
-    
+
+    @Override
+    public AttributeModifierMap.MutableAttribute getAttributes() {
+        return bakeAttributes();
+    }
+
     @Override
     public boolean canBeRiddenInWater(Entity rider)
     {

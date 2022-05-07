@@ -80,7 +80,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     private boolean isLandNavigator;
     private boolean isMating = false;
 
-    public EntityMyrmexRoyal(EntityType<?> t, World worldIn) {
+    public EntityMyrmexRoyal(EntityType<EntityMyrmexRoyal> t, World worldIn) {
         super(t, worldIn);
         this.switchNavigator(true);
     }
@@ -315,6 +315,11 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
                 .createMutableAttribute(Attributes.FOLLOW_RANGE, 64.0D)
                 //ARMOR
                 .createMutableAttribute(Attributes.ARMOR, 9.0D);
+    }
+
+    @Override
+    public AttributeModifierMap.MutableAttribute getAttributes() {
+        return bakeAttributes();
     }
 
     @Override

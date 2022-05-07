@@ -7,10 +7,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.entity.ai.CyclopsAIAttackMelee;
 import com.github.alexthe666.iceandfire.entity.ai.CyclopsAITargetSheepPlayers;
-import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
-import com.github.alexthe666.iceandfire.entity.util.IHumanoid;
-import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
+import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
@@ -51,7 +48,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 
-public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBlacklistedFromStatues, IVillagerFear, IHumanoid {
+public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBlacklistedFromStatues, IVillagerFear, IHumanoid, IHasCustomizableAttributes {
 
     private static final DataParameter<Boolean> BLINDED = EntityDataManager.createKey(EntityCyclops.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityCyclops.class, DataSerializers.VARINT);
@@ -63,8 +60,9 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
     private int animationTick;
     private Animation currentAnimation;
 
-    public EntityCyclops(EntityType type, World worldIn) {
+    public EntityCyclops(EntityType<EntityCyclops> type, World worldIn) {
         super(type, worldIn);
+        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         this.stepHeight = 2.5F;
         this.setPathPriority(PathNodeType.WATER, -1.0F);
         this.setPathPriority(PathNodeType.FENCE, 0.0F);
@@ -87,6 +85,11 @@ public class EntityCyclops extends MonsterEntity implements IAnimatedEntity, IBl
             .createMutableAttribute(Attributes.FOLLOW_RANGE, 32D)
             //ARMOR
             .createMutableAttribute(Attributes.ARMOR, 20.0D);
+    }
+
+    @Override
+    public AttributeModifierMap.MutableAttribute getAttributes() {
+        return bakeAttributes();
     }
 
     protected PathNavigator createNavigator(World worldIn) {

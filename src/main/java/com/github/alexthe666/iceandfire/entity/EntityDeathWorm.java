@@ -54,7 +54,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 
-public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICustomCollisions, IBlacklistedFromStatues, IAnimatedEntity, IVillagerFear, IAnimalFear, IGroundMount {
+public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICustomCollisions, IBlacklistedFromStatues, IAnimatedEntity, IVillagerFear, IAnimalFear, IGroundMount, IHasCustomizableAttributes {
 
     public static final ResourceLocation TAN_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_tan");
     public static final ResourceLocation WHITE_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_white");
@@ -83,8 +83,9 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
     private LookController lookHelper;
     private int growthCounter = 0;
 
-    public EntityDeathWorm(EntityType type, World worldIn) {
+    public EntityDeathWorm(EntityType<EntityDeathWorm> type, World worldIn) {
         super(type, worldIn);
+        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         this.lookHelper = new IAFLookHelper(this);
         this.ignoreFrustumCheck = true;
         this.stepHeight = 1;
@@ -127,6 +128,11 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
                 .createMutableAttribute(Attributes.FOLLOW_RANGE, IafConfig.deathWormTargetSearchLength)
                 //ARMOR
                 .createMutableAttribute(Attributes.ARMOR, 3);
+    }
+
+    @Override
+    public AttributeModifierMap.MutableAttribute getAttributes() {
+        return bakeAttributes();
     }
 
     public LookController getLookController() {

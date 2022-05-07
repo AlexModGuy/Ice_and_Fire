@@ -63,7 +63,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     private static final ResourceLocation TEXTURE_JUNGLE = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_worker.png");
     public boolean keepSearching = true;
 
-    public EntityMyrmexWorker(EntityType<?> t, World worldIn) {
+    public EntityMyrmexWorker(EntityType<EntityMyrmexWorker> t, World worldIn) {
         super(t, worldIn);
     }
 
@@ -188,6 +188,11 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
                 .createMutableAttribute(Attributes.FOLLOW_RANGE, 32D)
                 //ARMOR
                 .createMutableAttribute(Attributes.ARMOR, 4D);
+    }
+
+    @Override
+    public AttributeModifierMap.MutableAttribute getAttributes() {
+        return bakeAttributes();
     }
 
     @Override

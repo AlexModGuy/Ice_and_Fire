@@ -17,6 +17,7 @@ import com.github.alexthe666.iceandfire.entity.ai.CockatriceAITargetItems;
 import com.github.alexthe666.iceandfire.entity.ai.CockatriceAIWander;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIAttackMeleeNoCooldown;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
+import com.github.alexthe666.iceandfire.entity.util.IHasCustomizableAttributes;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -72,7 +73,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityCockatrice extends TameableEntity implements IAnimatedEntity, IBlacklistedFromStatues, IVillagerFear {
+public class EntityCockatrice extends TameableEntity implements IAnimatedEntity, IBlacklistedFromStatues, IVillagerFear, IHasCustomizableAttributes {
 
     public static final Animation ANIMATION_JUMPAT = Animation.create(30);
     public static final Animation ANIMATION_WATTLESHAKE = Animation.create(20);
@@ -101,8 +102,9 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     private LivingEntity targetedEntity;
     private int clientSideAttackTime;
 
-    public EntityCockatrice(EntityType type, World worldIn) {
+    public EntityCockatrice(EntityType<EntityCockatrice> type, World worldIn) {
         super(type, worldIn);
+        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
     }
 
     protected int getExperiencePoints(PlayerEntity player) {
@@ -229,6 +231,11 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
                 .createMutableAttribute(Attributes.FOLLOW_RANGE, 64.0D)
                 //ARMOR
                 .createMutableAttribute(Attributes.ARMOR, 2.0D);
+    }
+
+    @Override
+    public AttributeModifierMap.MutableAttribute getAttributes() {
+        return bakeAttributes();
     }
 
     public boolean canMove() {

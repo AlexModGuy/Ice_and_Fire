@@ -15,6 +15,7 @@ import com.github.alexthe666.iceandfire.entity.ai.SirenAIFindWaterTarget;
 import com.github.alexthe666.iceandfire.entity.ai.SirenAIWander;
 import com.github.alexthe666.iceandfire.entity.props.SirenProperties;
 import com.github.alexthe666.iceandfire.entity.util.ChainBuffer;
+import com.github.alexthe666.iceandfire.entity.util.IHasCustomizableAttributes;
 import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
@@ -63,7 +64,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVillagerFear {
+public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVillagerFear, IHasCustomizableAttributes {
 
     public static final int SEARCH_RANGE = 32;
     public static final Predicate<Entity> SIREN_PREY = new Predicate<Entity>() {
@@ -92,8 +93,9 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     private boolean isLandNavigator;
     private int ticksAgressive;
 
-    public EntitySiren(EntityType t, World worldIn) {
+    public EntitySiren(EntityType<EntitySiren> t, World worldIn) {
         super(t, worldIn);
+        IHasCustomizableAttributes.applyAttributesForEntity(t, this);
         this.switchNavigator(true);
         this.stepHeight = 2;
         this.goalSelector.addGoal(0, new SirenAIFindWaterTarget(this));
@@ -439,6 +441,11 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25D)
                 //ATTACK
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 6.0D);
+    }
+
+    @Override
+    public AttributeModifierMap.MutableAttribute getAttributes() {
+        return bakeAttributes();
     }
 
     @Override

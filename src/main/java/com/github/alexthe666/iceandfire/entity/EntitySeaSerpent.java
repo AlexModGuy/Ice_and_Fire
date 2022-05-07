@@ -16,10 +16,7 @@ import com.github.alexthe666.iceandfire.entity.ai.SeaSerpentAIJump;
 import com.github.alexthe666.iceandfire.entity.ai.SeaSerpentAIMeleeJump;
 import com.github.alexthe666.iceandfire.entity.ai.SeaSerpentAIRandomSwimming;
 import com.github.alexthe666.iceandfire.entity.ai.SeaSerpentPathNavigator;
-import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
-import com.github.alexthe666.iceandfire.entity.util.IMultipartEntity;
-import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
+import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
@@ -78,7 +75,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, IMultipartEntity, IVillagerFear, IAnimalFear {
+public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, IMultipartEntity, IVillagerFear, IAnimalFear, IHasCustomizableAttributes {
 
     public static final Animation ANIMATION_BITE = Animation.create(15);
     public static final Animation ANIMATION_SPEAK = Animation.create(15);
@@ -123,8 +120,9 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     private float[] tailPitch = new float[5];
     private float[] prevTailPitch = new float[5];
 
-    public EntitySeaSerpent(EntityType<? extends AnimalEntity> t, World worldIn) {
+    public EntitySeaSerpent(EntityType<EntitySeaSerpent> t, World worldIn) {
         super(t, worldIn);
+        IHasCustomizableAttributes.applyAttributesForEntity(t, this);
         switchNavigator(false);
         this.ignoreFrustumCheck = true;
         resetParts(1.0F);
@@ -220,6 +218,11 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
                 .createMutableAttribute(Attributes.FOLLOW_RANGE, Math.min(2048, IafConfig.dragonTargetSearchLength))
                 //ARMOR
                 .createMutableAttribute(Attributes.ARMOR, 3.0D);
+    }
+
+    @Override
+    public AttributeModifierMap.MutableAttribute getAttributes() {
+        return bakeAttributes();
     }
 
     public void resetParts(float scale) {

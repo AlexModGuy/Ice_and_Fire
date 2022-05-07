@@ -1,47 +1,26 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.ai.GorgonAIStareAttack;
-import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
-import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
-import com.github.alexthe666.iceandfire.entity.util.IHumanoid;
-import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
+import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
-
-import io.netty.buffer.Unpooled;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.FleeSunGoal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.RestrictSunGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -53,7 +32,10 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
-public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVillagerFear, IAnimalFear, IHumanoid {
+import javax.annotation.Nullable;
+
+
+public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVillagerFear, IAnimalFear, IHumanoid, IHasCustomizableAttributes {
 
     public static Animation ANIMATION_SCARE;
     public static Animation ANIMATION_HIT;
@@ -63,8 +45,9 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
     private MeleeAttackGoal aiMelee;
     private int playerStatueCooldown;
 
-    public EntityGorgon(EntityType type, World worldIn) {
+    public EntityGorgon(EntityType<EntityGorgon> type, World worldIn) {
         super(type, worldIn);
+        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         ANIMATION_SCARE = Animation.create(30);
         ANIMATION_HIT = Animation.create(10);
     }
@@ -85,6 +68,23 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
 
     public static boolean isBlindfolded(LivingEntity attackTarget) {
         return attackTarget != null && (attackTarget.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == IafItemRegistry.BLINDFOLD || attackTarget.isPotionActive(Effects.BLINDNESS) || ServerEvents.isBlindMob(attackTarget));
+    }
+
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+            //HEALTH
+            .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.gorgonMaxHealth)
+            //SPEED
+            .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25D)
+            //ATTACK
+            .createMutableAttribute(Attributes.ATTACK_DAMAGE, 3.0D)
+            //ARMOR
+            .createMutableAttribute(Attributes.ARMOR, 1.0D);
+    }
+
+    @Override
+    public AttributeModifierMap.MutableAttribute getAttributes() {
+        return bakeAttributes();
     }
 
     public boolean isTargetBlocked(Vector3d target) {
@@ -124,7 +124,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, LivingEntity.class, 10, true, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                return entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity)  || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
+                return entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
             }
         }));
         this.goalSelector.removeGoal(aiMelee);
@@ -132,7 +132,7 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
 
     public void attackEntityWithRangedAttack(LivingEntity entity) {
         if (!(entity instanceof MobEntity) && entity instanceof LivingEntity) {
-            forcePreyToLook((MobEntity) entity);
+            forcePreyToLook(entity);
         }
     }
 
@@ -209,9 +209,9 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
         if (this.getAttackTarget() != null) {
             boolean blindness = this.isPotionActive(Effects.BLINDNESS) || this.getAttackTarget().isPotionActive(Effects.BLINDNESS);
             if (!blindness && this.deathTime == 0 && this.getAttackTarget() instanceof MobEntity && !(this.getAttackTarget() instanceof PlayerEntity)) {
-                forcePreyToLook((MobEntity) this.getAttackTarget());
+                forcePreyToLook(this.getAttackTarget());
             }
-            if(isEntityLookingAt(this.getAttackTarget(), this, 0.4)){
+            if (isEntityLookingAt(this.getAttackTarget(), this, 0.4)) {
                 this.getLookController().setLookPosition(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY() + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().getPosZ(), (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
             }
         }
@@ -268,24 +268,13 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
     }
 
     public void forcePreyToLook(LivingEntity mob) {
-        if(mob instanceof MobEntity){
-            MobEntity mobEntity = (MobEntity)mob;
+        if (mob instanceof MobEntity) {
+            MobEntity mobEntity = (MobEntity) mob;
             mobEntity.getLookController().setLookPosition(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ(), (float) mobEntity.getHorizontalFaceSpeed(), (float) mobEntity.getVerticalFaceSpeed());
 
         }
     }
 
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-                //HEALTH
-                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.gorgonMaxHealth)
-                //SPEED
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25D)
-                //ATTACK
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 3.0D)
-                //ARMOR
-                .createMutableAttribute(Attributes.ARMOR, 1.0D);
-    }
 
     @Override
     public int getAnimationTick() {

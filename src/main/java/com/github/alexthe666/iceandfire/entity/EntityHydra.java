@@ -32,7 +32,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMultipartEntity, IVillagerFear, IAnimalFear {
+public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMultipartEntity, IVillagerFear, IAnimalFear, IHasCustomizableAttributes {
 
     public static final int HEADS = 9;
     public static final double HEAD_HEALTH_THRESHOLD = 20;
@@ -71,8 +71,9 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
     private boolean onlyRegrowOneHeadNotTwo = false;
     private float headDamageThreshold = 20;
 
-    public EntityHydra(EntityType type, World worldIn) {
+    public EntityHydra(EntityType<EntityHydra> type, World worldIn) {
         super(type, worldIn);
+        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         resetParts();
         headDamageThreshold = Math.max(5, (float) IafConfig.hydraMaxHealth * 0.08F);
     }
@@ -87,6 +88,11 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
             .createMutableAttribute(Attributes.ATTACK_DAMAGE, 3.0D)
             //ARMOR
             .createMutableAttribute(Attributes.ARMOR, 1.0D);
+    }
+
+    @Override
+    public AttributeModifierMap.MutableAttribute getAttributes() {
+        return bakeAttributes();
     }
 
     @Override

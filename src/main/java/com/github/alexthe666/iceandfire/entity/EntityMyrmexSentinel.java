@@ -194,6 +194,11 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
     }
 
     @Override
+    public AttributeModifierMap.MutableAttribute getAttributes() {
+        return bakeAttributes();
+    }
+
+    @Override
     public ResourceLocation getAdultTexture() {
         if (isHiding()) {
             return isJungle() ? TEXTURE_JUNGLE_HIDDEN : TEXTURE_DESERT_HIDDEN;

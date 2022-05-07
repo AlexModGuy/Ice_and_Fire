@@ -19,12 +19,7 @@ import com.github.alexthe666.iceandfire.entity.ai.AmphithereAITargetItems;
 import com.github.alexthe666.iceandfire.entity.ai.DragonAIRide;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIWatchClosestIgnoreRider;
 import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
-import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.util.IDragonFlute;
-import com.github.alexthe666.iceandfire.entity.util.IFlapable;
-import com.github.alexthe666.iceandfire.entity.util.IFlyingMount;
-import com.github.alexthe666.iceandfire.entity.util.IPhasesThroughBlock;
-import com.github.alexthe666.iceandfire.entity.util.ISyncMount;
+import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -87,7 +82,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityAmphithere extends TameableEntity implements ISyncMount, IAnimatedEntity, IPhasesThroughBlock, IFlapable, IDragonFlute, IFlyingMount {
+public class EntityAmphithere extends TameableEntity implements ISyncMount, IAnimatedEntity, IPhasesThroughBlock, IFlapable, IDragonFlute, IFlyingMount, IHasCustomizableAttributes {
 
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityAmphithere.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> FLYING = EntityDataManager.createKey(EntityAmphithere.class, DataSerializers.BOOLEAN);
@@ -134,8 +129,9 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
        */
     private int navigatorType = 0;
 
-    public EntityAmphithere(EntityType type, World worldIn) {
+    public EntityAmphithere(EntityType<EntityAmphithere> type, World worldIn) {
         super(type, worldIn);
+        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         this.stepHeight = 1;
         if (worldIn.isRemote) {
             roll_buffer = new IFChainBuffer();
@@ -610,6 +606,11 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, IafConfig.amphithereAttackStrength)
                 //FOLLOW RANGE
                 .createMutableAttribute(Attributes.FOLLOW_RANGE, 32.0D);
+    }
+
+    @Override
+    public AttributeModifierMap.MutableAttribute getAttributes() {
+        return bakeAttributes();
     }
 
     @Override

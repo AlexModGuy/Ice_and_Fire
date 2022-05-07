@@ -9,11 +9,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.ai.GhostAICharge;
 import com.github.alexthe666.iceandfire.entity.ai.GhostPathNavigator;
-import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
-import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
-import com.github.alexthe666.iceandfire.entity.util.IHumanoid;
-import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
+import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -63,7 +59,7 @@ import net.minecraft.world.World;
 
 import net.minecraft.entity.ai.controller.MovementController.Action;
 
-public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVillagerFear, IAnimalFear, IHumanoid, IBlacklistedFromStatues {
+public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVillagerFear, IAnimalFear, IHumanoid, IBlacklistedFromStatues, IHasCustomizableAttributes {
 
     private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityGhost.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> CHARGING = EntityDataManager.createKey(EntityGhost.class, DataSerializers.BOOLEAN);
@@ -76,8 +72,9 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
     private Animation currentAnimation;
 
 
-    public EntityGhost(EntityType type, World worldIn) {
+    public EntityGhost(EntityType<EntityGhost> type, World worldIn) {
         super(type, worldIn);
+        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         ANIMATION_SCARE = Animation.create(30);
         ANIMATION_HIT = Animation.create(10);
         this.moveController = new MoveHelper(this);
@@ -115,6 +112,11 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, IafConfig.ghostAttackStrength)
                 //ARMOR
                 .createMutableAttribute(Attributes.ARMOR, 1D);
+    }
+
+    @Override
+    public AttributeModifierMap.MutableAttribute getAttributes() {
+        return bakeAttributes();
     }
 
     public boolean isPotionApplicable(EffectInstance potioneffectIn) {

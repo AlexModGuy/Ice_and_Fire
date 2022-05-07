@@ -68,7 +68,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     private static final DataParameter<Boolean> HASMADEHOME = EntityDataManager.createKey(EntityMyrmexQueen.class, DataSerializers.BOOLEAN);
     private int eggTicks = 0;
 
-    public EntityMyrmexQueen(EntityType<?> t, World worldIn) {
+    public EntityMyrmexQueen(EntityType<EntityMyrmexQueen> t, World worldIn) {
         super(t, worldIn);
     }
 
@@ -277,6 +277,10 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 .createMutableAttribute(Attributes.ARMOR, 15.0D);
     }
 
+    @Override
+    public AttributeModifierMap.MutableAttribute getAttributes() {
+        return bakeAttributes();
+    }
 
     @Override
     public ResourceLocation getAdultTexture() {
