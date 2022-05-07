@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.model.BipedModel;
 
 public class ModelStonePlayer extends BipedModel<EntityStoneStatue> {
 
-    public ModelStonePlayer(float modelSize, boolean smallArmsIn) {
+    public ModelStonePlayer(float modelSize) {
         super(modelSize);
     }
 

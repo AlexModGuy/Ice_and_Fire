@@ -4,6 +4,7 @@ import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.ICustomStatueModel;
 import com.github.alexthe666.iceandfire.client.model.ModelHydraBody;
+import com.github.alexthe666.iceandfire.client.model.ModelStonePlayer;
 import com.github.alexthe666.iceandfire.client.render.IafRenderType;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerHydraHead;
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
@@ -22,6 +23,7 @@ import net.minecraft.client.renderer.entity.model.PigModel;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Quaternion;
@@ -62,8 +64,8 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
             EntityRenderer renderer = Minecraft.getInstance().getRenderManager().renderers.get(entityIn.getTrappedEntityType());
             if (renderer instanceof IEntityRenderer) {
                 model = ((IEntityRenderer<?, ?>) renderer).getEntityModel();
-            } else {
-                model = new PigModel();
+            } else if (entityIn.getTrappedEntityType() == EntityType.PLAYER) {
+                model = new ModelStonePlayer(0.0F);
             }
             modelMap.put(entityIn.getTrappedEntityTypeString(), model);
         }
