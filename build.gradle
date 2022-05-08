@@ -29,7 +29,18 @@ repositories {
     }
 }
 
-version = '2.1.9-1.16.5'
+def build_snapshot = System.getenv("BUILD_SNAPSHOT") == "true"
+def build_id = System.getenv("BUILD_ID")
+
+version = '2.1.10-1.16.5'
+
+if (build_snapshot) {
+    version += '-SNAPSHOT'
+}
+if (build_id != null) {
+    version += "+build.${build_id}"
+}
+
 group = 'com.github.alexthe667' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'iceandfire'
 

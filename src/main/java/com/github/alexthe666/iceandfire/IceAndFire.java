@@ -3,6 +3,8 @@ package com.github.alexthe666.iceandfire;
 
 
 
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -52,7 +54,7 @@ public class IceAndFire {
     public static final String MODID = "iceandfire";
     public static final SimpleChannel NETWORK_WRAPPER;
     public static boolean DEBUG = true;
-    public static final String VERSION = "2.1.9-1.16.4";
+    public static String VERSION = "UNKNOWN";
     private static final String PROTOCOL_VERSION = Integer.toString(1);
     public static ItemGroup TAB_ITEMS = new ItemGroup(MODID) {
         @Override
@@ -81,6 +83,12 @@ public class IceAndFire {
     }
 
     public IceAndFire() {
+        try {
+            ModContainer mod = ModList.get().getModContainerById(IceAndFire.MODID).orElseThrow(NullPointerException::new);
+            VERSION = mod.getModInfo().getVersion().toString();
+        }
+        catch (Exception ignored) {}
+
         final ModLoadingContext modLoadingContext = ModLoadingContext.get();
         modLoadingContext.registerConfig(ModConfig.Type.CLIENT, ConfigHolder.CLIENT_SPEC);
         modLoadingContext.registerConfig(ModConfig.Type.COMMON, ConfigHolder.SERVER_SPEC);
