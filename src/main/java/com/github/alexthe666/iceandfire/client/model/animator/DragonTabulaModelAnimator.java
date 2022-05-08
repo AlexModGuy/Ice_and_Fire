@@ -168,8 +168,11 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
             }
         }
         if (entity.modelDeadProgress > 0.0F) {
-            TabulaModel customPose = customPose(entity);
-            TabulaModel pose = customPose == null ? getModel(EnumDragonPoses.DEAD) : customPose;
+            // TODO: Figure out what's up with custom poses
+            // DON'T use this in it's current state since it heavily effects render performance due to the fact that
+            // custom poses aren't being used right now
+            // TabulaModel customPose = customPose(entity);
+            TabulaModel pose = getModel(EnumDragonPoses.DEAD);
             if (!isRotationEqual(cube, pose.getCube(cube.boxName))) {
                 transitionTo(cube, pose.getCube(cube.boxName), entity.prevModelDeadProgress + (entity.modelDeadProgress - entity.prevModelDeadProgress) * Minecraft.getInstance().getRenderPartialTicks(), 20, cube.boxName.equals("ThighR") || cube.boxName.equals("ThighL"));
             }
