@@ -37,6 +37,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 
 public class DragonUtils {
@@ -68,7 +70,8 @@ public class DragonUtils {
             BlockPos ground = dragon.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, dragonPos);
             int distFromGround = (int) dragon.getPosY() - ground.getY();
             for (int i = 0; i < 10; i++) {
-                BlockPos pos = new BlockPos(dragon.homePos.getX() + dragon.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance * 2) - IafConfig.dragonWanderFromHomeDistance, (distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, dragon.getPosY() + dragon.getRNG().nextInt(16) - 8) : (int) dragon.getPosY() + dragon.getRNG().nextInt(16) + 1), (dragon.homePos.getZ() + dragon.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance * 2) - IafConfig.dragonWanderFromHomeDistance));
+                BlockPos homePos = dragon.homePos.getPosition();
+                BlockPos pos = new BlockPos(homePos.getX() + dragon.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance * 2) - IafConfig.dragonWanderFromHomeDistance, (distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, dragon.getPosY() + dragon.getRNG().nextInt(16) - 8) : (int) dragon.getPosY() + dragon.getRNG().nextInt(16) + 1), (homePos.getZ() + dragon.getRNG().nextInt(IafConfig.dragonWanderFromHomeDistance * 2) - IafConfig.dragonWanderFromHomeDistance));
                 if (!dragon.isTargetBlocked(Vector3d.copyCentered(pos)) && dragon.getDistanceSquared(Vector3d.copyCentered(pos)) > 6) {
                     return pos;
                 }
@@ -304,6 +307,14 @@ public class DragonUtils {
     public static boolean isDragonTargetable(Entity entity, ResourceLocation tag) {
         return EntityTypeTags.getCollection().get(tag).contains(entity.getType());
 
+    }
+
+    public static String getDimensionName(World world) {
+        return world.getDimensionKey().getLocation().toString();
+    }
+
+    public static boolean isInHomeDimension(EntityDragonBase dragonBase) {
+        return (dragonBase.getHomeDimensionName() == null || getDimensionName(dragonBase.world).equals(dragonBase.getHomeDimensionName()));
     }
 
     public static boolean canDragonBreak(Block block) {

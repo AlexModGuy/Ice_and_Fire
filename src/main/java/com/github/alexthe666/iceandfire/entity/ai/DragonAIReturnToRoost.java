@@ -4,6 +4,7 @@ import java.util.EnumSet;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 
+import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.vector.Vector3d;
 
@@ -21,6 +22,7 @@ public class DragonAIReturnToRoost extends Goal {
         return this.dragon.canMove() && this.dragon.lookingForRoostAIFlag
             && (dragon.getAttackTarget() == null || !dragon.getAttackTarget().isAlive())
             && dragon.getHomePosition() != null
+            && DragonUtils.isInHomeDimension(dragon)
             && dragon.getDistanceSquared(Vector3d.copyCentered(dragon.getHomePosition())) > dragon.getWidth()
                 * dragon.getWidth();
     }

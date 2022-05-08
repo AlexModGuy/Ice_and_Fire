@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import com.github.alexthe666.iceandfire.entity.util.HomePosition;
 import com.github.alexthe666.iceandfire.event.WorldGenUtils;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
@@ -61,7 +62,7 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
             dragon.setHealth(dragon.getMaxHealth());
             dragon.setVariant(new Random().nextInt(4));
             dragon.setPositionAndRotation(position.getX() + 0.5, 1 + worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position).getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
-            dragon.homePos = position;
+            dragon.homePos = new HomePosition(position, worldIn.getWorld());
             dragon.hasHomePosition = true;
             dragon.setHunger(50);
             worldIn.addEntity(dragon);

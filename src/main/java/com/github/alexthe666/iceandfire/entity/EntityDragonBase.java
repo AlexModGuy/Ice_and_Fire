@@ -154,7 +154,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     public float[] prevAnimationProgresses = new float[10];
     public boolean isDaytime;
     public int flightCycle;
-    public BlockPos homePos;
+    public HomePosition homePos;
     public boolean hasHomePosition = false;
     public IFChainBuffer roll_buffer;
     public IFChainBuffer pitch_buffer;
@@ -262,7 +262,22 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     @Override
     public BlockPos getHomePosition() {
-        return this.homePos == null ? super.getHomePosition() : homePos;
+        return this.homePos == null ? super.getHomePosition() : homePos.getPosition();
+    }
+
+    @Override
+    public float getMaximumHomeDistance() {
+        return IafConfig.dragonWanderFromHomeDistance;
+    }
+
+    public String getHomeDimensionName() {
+        return this.homePos == null ? "" : homePos.getDimension();
+    }
+
+    public boolean detachHome() {
+        return this.hasHomePosition &&
+            getHomeDimensionName().equals(DragonUtils.getDimensionName(this.world))
+            || super.detachHome();
     }
 
     @Override
@@ -736,9 +751,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         compound.putBoolean("HasHomePosition", this.hasHomePosition);
         compound.putString("CustomPose", this.getCustomPose());
         if (homePos != null && this.hasHomePosition) {
-            compound.putInt("HomeAreaX", homePos.getX());
-            compound.putInt("HomeAreaY", homePos.getY());
-            compound.putInt("HomeAreaZ", homePos.getZ());
+            homePos.write(compound);
         }
         compound.putBoolean("AgingDisabled", this.isAgingDisabled());
         compound.putInt("Command", this.getCommand());
@@ -780,7 +793,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         this.setCustomPose(compound.getString("CustomPose"));
         this.hasHomePosition = compound.getBoolean("HasHomePosition");
         if (hasHomePosition && compound.getInt("HomeAreaX") != 0 && compound.getInt("HomeAreaY") != 0 && compound.getInt("HomeAreaZ") != 0) {
-            homePos = new BlockPos(compound.getInt("HomeAreaX"), compound.getInt("HomeAreaY"), compound.getInt("HomeAreaZ"));
+            homePos = new HomePosition(compound);//new BlockPos(compound.getInt("HomeAreaX"), compound.getInt("HomeAreaY"), compound.getInt("HomeAreaZ"));
         }
         this.setTackling(compound.getBoolean("Tackle"));
         this.setAgingDisabled(compound.getBoolean("AgingDisabled"));
@@ -1224,9 +1237,9 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                                 return ActionResultType.SUCCESS;
                             } else {
                                 BlockPos pos = this.getPosition();
-                                this.homePos = pos;
+                                this.homePos = new HomePosition(pos, this.world);
                                 this.hasHomePosition = true;
-                                player.sendStatusMessage(new TranslationTextComponent("dragon.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
+                                player.sendStatusMessage(new TranslationTextComponent("dragon.command.new_home", pos.getX(), pos.getY(), pos.getZ(), homePos.getDimension()), true);
                                 return ActionResultType.SUCCESS;
                             }
                         } else {

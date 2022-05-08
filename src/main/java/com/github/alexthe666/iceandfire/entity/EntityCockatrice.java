@@ -1,46 +1,20 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.api.FoodUtils;
-import com.github.alexthe666.iceandfire.entity.ai.CockatriceAIAggroLook;
-import com.github.alexthe666.iceandfire.entity.ai.CockatriceAIFollowOwner;
-import com.github.alexthe666.iceandfire.entity.ai.CockatriceAIStareAttack;
-import com.github.alexthe666.iceandfire.entity.ai.CockatriceAITarget;
-import com.github.alexthe666.iceandfire.entity.ai.CockatriceAITargetItems;
-import com.github.alexthe666.iceandfire.entity.ai.CockatriceAIWander;
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIAttackMeleeNoCooldown;
-import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
-import com.github.alexthe666.iceandfire.entity.util.IHasCustomizableAttributes;
-import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
+import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.google.common.base.Predicate;
-
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.OwnerHurtByTargetGoal;
-import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
-import net.minecraft.entity.ai.goal.SitGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.entity.monster.IMob;
@@ -56,12 +30,7 @@ import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceContext;
@@ -72,6 +41,9 @@ import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class EntityCockatrice extends TameableEntity implements IAnimatedEntity, IBlacklistedFromStatues, IVillagerFear, IHasCustomizableAttributes {
 
@@ -90,7 +62,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     public float sitProgress;
     public float stareProgress;
     public int ticksStaring = 0;
-    public BlockPos homePos;
+    public HomePosition homePos;
     public boolean hasHomePosition = false;
     private int animationTick;
     private Animation currentAnimation;
@@ -132,19 +104,22 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
         this.targetSelector.addGoal(5, new CockatriceAITarget(this, LivingEntity.class, true, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                if (entity instanceof PlayerEntity ) {
+                if (entity instanceof PlayerEntity) {
                     return !((PlayerEntity) entity).isCreative() && !entity.isSpectator();
-                }else{
+                } else {
                     return ((entity instanceof IMob) && EntityCockatrice.this.isTamed() && !(entity instanceof CreeperEntity) && !(entity instanceof ZombifiedPiglinEntity) && !(entity instanceof EndermanEntity) ||
-                            ServerEvents.doesScareCockatrice(entity) && !ServerEvents.isChicken(entity));
+                        ServerEvents.doesScareCockatrice(entity) && !ServerEvents.isChicken(entity));
                 }
             }
         }));
         this.goalSelector.removeGoal(aiMelee);
     }
-    //TODO: Make cockatrice patrol an area
+
     public boolean detachHome() {
-        return this.hasHomePosition && this.getCommand() == 3 || super.detachHome();
+        return this.hasHomePosition &&
+            this.getCommand() == 3 &&
+            getHomeDimensionName().equals(DragonUtils.getDimensionName(this.world))
+            || super.detachHome();
     }
 
     public SoundCategory getSoundCategory() {
@@ -152,18 +127,26 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     }
 
     public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn) {
-        if(worldIn instanceof IServerWorld && !IafWorldRegistry.isDimensionListedForMobs((IServerWorld)world)){
+        if (worldIn instanceof IServerWorld && !IafWorldRegistry.isDimensionListedForMobs((IServerWorld) world)) {
             return false;
         }
         return super.canSpawn(worldIn, spawnReasonIn);
     }
 
+    @Override
     public BlockPos getHomePosition() {
-        if (this.hasHomePosition && this.getCommand() == 3) {
-            return this.homePos;
-        }
-        return super.getHomePosition();
+        return this.hasHomePosition && this.getCommand() == 3 && homePos != null ? homePos.getPosition() : super.getHomePosition();
     }
+
+    @Override
+    public float getMaximumHomeDistance() {
+        return 30.0F;
+    }
+
+    public String getHomeDimensionName() {
+        return this.homePos == null ? "" : homePos.getDimension();
+    }
+
 
     public boolean isOnSameTeam(Entity entityIn) {
         return ServerEvents.isChicken(entityIn) || super.isOnSameTeam(entityIn);
@@ -221,16 +204,16 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
         return MobEntity.func_233666_p_()
-                //HEALTH
-                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.cockatriceMaxHealth)
-                //SPEED
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4D)
-                //ATTACK
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0D)
-                //FOLLOW RANGE
-                .createMutableAttribute(Attributes.FOLLOW_RANGE, 64.0D)
-                //ARMOR
-                .createMutableAttribute(Attributes.ARMOR, 2.0D);
+            //HEALTH
+            .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.cockatriceMaxHealth)
+            //SPEED
+            .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4D)
+            //ATTACK
+            .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0D)
+            //FOLLOW RANGE
+            .createMutableAttribute(Attributes.FOLLOW_RANGE, 64.0D)
+            //ARMOR
+            .createMutableAttribute(Attributes.ARMOR, 2.0D);
     }
 
     @Override
@@ -334,9 +317,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
         tag.putInt("Command", this.getCommand());
         tag.putBoolean("HasHomePosition", this.hasHomePosition);
         if (homePos != null && this.hasHomePosition) {
-            tag.putInt("HomeAreaX", homePos.getX());
-            tag.putInt("HomeAreaY", homePos.getY());
-            tag.putInt("HomeAreaZ", homePos.getZ());
+            homePos.write(tag);
         }
     }
 
@@ -350,7 +331,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
         this.setCommand(tag.getInt("Command"));
         this.hasHomePosition = tag.getBoolean("HasHomePosition");
         if (hasHomePosition && tag.getInt("HomeAreaX") != 0 && tag.getInt("HomeAreaY") != 0 && tag.getInt("HomeAreaZ") != 0) {
-            homePos = new BlockPos(tag.getInt("HomeAreaX"), tag.getInt("HomeAreaY"), tag.getInt("HomeAreaZ"));
+            homePos = new HomePosition(tag);
         }
     }
 
@@ -453,9 +434,10 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
                         player.sendStatusMessage(new TranslationTextComponent("cockatrice.command.remove_home"), true);
                         return ActionResultType.SUCCESS;
                     } else {
-                        this.homePos = this.getPosition();
+                        BlockPos pos = this.getPosition();
+                        this.homePos = new HomePosition(pos, this.world);
                         this.hasHomePosition = true;
-                        player.sendStatusMessage(new TranslationTextComponent("cockatrice.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
+                        player.sendStatusMessage(new TranslationTextComponent("cockatrice.command.new_home", pos.getX(), pos.getY(), pos.getZ(), homePos.getDimension()), true);
                         return ActionResultType.SUCCESS;
                     }
                 } else {

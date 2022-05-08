@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import com.github.alexthe666.iceandfire.entity.util.HomePosition;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
 
@@ -90,7 +91,7 @@ public class WorldGenLightningDragonCave extends Feature<NoFeatureConfig> {
         dragon.setVariant(rand.nextInt(4));
         dragon.setPositionAndRotation(position.getX() + 0.5, position.getY() + 0.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
         dragon.setQueuedToSit(true);
-        dragon.homePos = position;
+        dragon.homePos = new HomePosition(position, worldIn.getWorld());
         dragon.setHunger(50);
         worldIn.addEntity(dragon);
         return false;

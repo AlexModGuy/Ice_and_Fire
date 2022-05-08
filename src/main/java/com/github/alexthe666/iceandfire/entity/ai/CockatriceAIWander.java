@@ -30,7 +30,10 @@ public class CockatriceAIWander extends Goal {
 
     @Override
     public boolean shouldExecute() {
-        if (!cockatrice.canMove() || cockatrice.getCommand() != 0) {
+        if (!cockatrice.canMove()) {
+            return false;
+        }
+        if (cockatrice.getCommand() != 3 && cockatrice.getCommand() != 0) {
             return false;
         }
         if (!this.mustUpdate) {
@@ -46,7 +49,6 @@ public class CockatriceAIWander extends Goal {
             this.yPosition = Vector3d.y;
             this.zPosition = Vector3d.z;
             this.mustUpdate = false;
-
             return true;
         }
     }
