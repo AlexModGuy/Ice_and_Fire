@@ -436,26 +436,38 @@ public class IafWorldRegistry {
             event.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, AMETHYST_ORE_CF);
         	LOADED_FEATURES.put("AMETHYST_ORE_CF", true);
         }
-        if (IafConfig.generateDragonRoosts) {
-            if (safelyTestBiome(BiomeConfig.fireDragonBiomes, biome)) {
+
+        if (safelyTestBiome(BiomeConfig.fireDragonBiomes, biome)) {
+            if (IafConfig.generateDragonRoosts) {
                 event.getGeneration().withFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, FIRE_DRAGON_ROOST_CF);
+                LOADED_FEATURES.put("FIRE_DRAGON_ROOST_CF", true);
+            }
+            if (IafConfig.generateDragonDens) {
                 event.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, FIRE_DRAGON_CAVE_CF);
-            	LOADED_FEATURES.put("FIRE_DRAGON_ROOST_CF", true);
-            	LOADED_FEATURES.put("FIRE_DRAGON_CAVE_CF", true);
-            }
-            if (safelyTestBiome(BiomeConfig.lightningDragonBiomes, biome)) {
-                event.getGeneration().withFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, LIGHTNING_DRAGON_ROOST_CF);
-                event.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, LIGHTNING_DRAGON_CAVE_CF);
-            	LOADED_FEATURES.put("LIGHTNING_DRAGON_ROOST_CF", true);
-            	LOADED_FEATURES.put("LIGHTNING_DRAGON_CAVE_CF", true);
-            }
-            if (safelyTestBiome(BiomeConfig.iceDragonBiomes, biome)) {
-                event.getGeneration().withFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, ICE_DRAGON_ROOST_CF);
-                event.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, ICE_DRAGON_CAVE_CF);
-            	LOADED_FEATURES.put("ICE_DRAGON_ROOST_CF", true);
-            	LOADED_FEATURES.put("ICE_DRAGON_CAVE_CF", true);
+                LOADED_FEATURES.put("FIRE_DRAGON_CAVE_CF", true);
             }
         }
+        if (safelyTestBiome(BiomeConfig.lightningDragonBiomes, biome)) {
+            if (IafConfig.generateDragonRoosts) {
+                event.getGeneration().withFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, LIGHTNING_DRAGON_ROOST_CF);
+                LOADED_FEATURES.put("LIGHTNING_DRAGON_ROOST_CF", true);
+            }
+            if (IafConfig.generateDragonDens) {
+                event.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, LIGHTNING_DRAGON_CAVE_CF);
+                LOADED_FEATURES.put("LIGHTNING_DRAGON_CAVE_CF", true);
+            }
+        }
+        if (safelyTestBiome(BiomeConfig.iceDragonBiomes, biome)) {
+            if (IafConfig.generateDragonRoosts) {
+                event.getGeneration().withFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, ICE_DRAGON_ROOST_CF);
+                LOADED_FEATURES.put("ICE_DRAGON_ROOST_CF", true);
+            }
+            if (IafConfig.generateDragonDens) {
+                event.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, ICE_DRAGON_CAVE_CF);
+                LOADED_FEATURES.put("ICE_DRAGON_CAVE_CF", true);
+            }
+        }
+
         if (IafConfig.generateCyclopsCaves && safelyTestBiome(BiomeConfig.cyclopsCaveBiomes, biome)) {
             event.getGeneration().withFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, CYCLOPS_CAVE_CF);
         	LOADED_FEATURES.put("CYCLOPS_CAVE_CF", true);
