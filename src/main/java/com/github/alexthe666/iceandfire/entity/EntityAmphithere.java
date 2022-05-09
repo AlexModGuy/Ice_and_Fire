@@ -430,6 +430,8 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         if (!this.isTamed() && ridingTime > IafConfig.amphithereTameTime && this.getUntamedRider() != null && this.getUntamedRider() instanceof PlayerEntity) {
             this.world.setEntityState(this, (byte) 45);
             this.setTamedBy((PlayerEntity) this.getUntamedRider());
+            if (this.getAttackTarget() == this.getUntamedRider())
+                this.setAttackTarget(null);
         }
         if (world.isRemote) {
             this.updateClientControls();
@@ -841,7 +843,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     }
 
     public boolean attack() {
-        return (dataManager.get(CONTROL_STATE).byteValue() >> 2 & 1) == 0;
+        return (dataManager.get(CONTROL_STATE).byteValue() >> 2 & 1) == 1;
     }
 
     public boolean dismountIAF() {
