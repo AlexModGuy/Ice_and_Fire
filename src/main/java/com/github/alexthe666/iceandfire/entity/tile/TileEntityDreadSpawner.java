@@ -5,15 +5,15 @@ import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.MobSpawnerTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.spawner.AbstractSpawner;
 
-public class TileEntityDreadSpawner extends MobSpawnerTileEntity implements ITickableTileEntity {
+public class TileEntityDreadSpawner extends MobSpawnerTileEntity {
+    private final TileEntityType<?> type;
     private final DreadSpawnerBaseLogic spawnerLogic = new DreadSpawnerBaseLogic() {
         @Override
         public void broadcastEvent(int id) {
@@ -43,6 +43,7 @@ public class TileEntityDreadSpawner extends MobSpawnerTileEntity implements ITic
 
     public TileEntityDreadSpawner() {
         super();
+        type = IafTileEntityRegistry.DREAD_SPAWNER.get();
     }
 
     @Override
@@ -96,7 +97,13 @@ public class TileEntityDreadSpawner extends MobSpawnerTileEntity implements ITic
         return true;
     }
 
+    @Override
     public AbstractSpawner getSpawnerBaseLogic() {
         return this.spawnerLogic;
+    }
+
+    @Override
+    public TileEntityType<?> getType() {
+        return this.type;
     }
 }
