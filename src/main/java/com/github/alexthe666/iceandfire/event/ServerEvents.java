@@ -1,70 +1,31 @@
 package com.github.alexthe666.iceandfire.event;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
-import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
-import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntityGhost;
-import com.github.alexthe666.iceandfire.entity.EntityGhostSword;
-import com.github.alexthe666.iceandfire.entity.EntityHydra;
-import com.github.alexthe666.iceandfire.entity.EntityHydraHead;
-import com.github.alexthe666.iceandfire.entity.EntityMutlipartPart;
-import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
-import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
+import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.AiDebug;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
-import com.github.alexthe666.iceandfire.entity.props.ChainProperties;
-import com.github.alexthe666.iceandfire.entity.props.ChickenProperties;
-import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
-import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
-import com.github.alexthe666.iceandfire.entity.props.SirenProperties;
+import com.github.alexthe666.iceandfire.entity.props.*;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
 import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
-import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.item.ItemChain;
-import com.github.alexthe666.iceandfire.item.ItemCockatriceScepter;
-import com.github.alexthe666.iceandfire.item.ItemDeathwormGauntlet;
-import com.github.alexthe666.iceandfire.item.ItemDragonsteelArmor;
-import com.github.alexthe666.iceandfire.item.ItemScaleArmor;
-import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
+import com.github.alexthe666.iceandfire.item.*;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
-import com.github.alexthe666.iceandfire.message.MessageSwingArm;
 import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenFireDragonCave;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenIceDragonCave;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Multimap;
-
 import net.minecraft.block.AbstractChestBlock;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.WallBlock;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
@@ -74,44 +35,24 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.loot.ItemLootEntry;
-import net.minecraft.loot.LootEntry;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTables;
-import net.minecraft.loot.RandomValueRange;
+import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.RandomChance;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ITag;
-import net.minecraft.util.CombatEntry;
-import net.minecraft.util.CombatTracker;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
-
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -120,6 +61,11 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)
 public class ServerEvents {
@@ -136,34 +82,6 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onAddReloadListener(AddReloadListenerEvent event) {
         event.addListener(new IafRecipeRegistry());
-    }
-
-    @SubscribeEvent
-    public static void onPlayerLeftClick(PlayerInteractEvent.LeftClickEmpty event) {
-        onLeftClick(event.getPlayer(), event.getItemStack());
-        if (event.getWorld().isRemote) {
-            IceAndFire.sendMSGToServer(new MessageSwingArm());
-        }
-    }
-
-    public static void onLeftClick(final PlayerEntity living, final ItemStack stack) {
-        if (stack.getItem() == IafItemRegistry.GHOST_SWORD) {
-            if (living.swingProgress == 0) {
-                final Multimap<Attribute, AttributeModifier> dmg = stack.getAttributeModifiers(EquipmentSlotType.MAINHAND);
-                double totalDmg = 0D;
-                for (AttributeModifier modifier : dmg.get(Attributes.ATTACK_DAMAGE)) {
-                    totalDmg += modifier.getAmount();
-                }
-                living.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
-                EntityGhostSword shot = new EntityGhostSword(IafEntityRegistry.GHOST_SWORD.get(), living.world, living,
-                    totalDmg * 0.5F);
-                Vector3d vector3d = living.getLook(1.0F);
-                Vector3f vector3f = new Vector3f(vector3d);
-                shot.shoot(vector3f.getX(), vector3f.getY(), vector3f.getZ(), 1.0F, 0.5F);
-                living.world.addEntity(shot);
-
-            }
-        }
     }
 
     private static void signalChickenAlarm(LivingEntity chicken, LivingEntity attacker) {
@@ -297,40 +215,6 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
-    public void onEntityMount(EntityMountEvent event) {
-        /*
-        if (event.getEntityBeingMounted() instanceof EntityDragonBase) {
-            EntityDragonBase dragon = (EntityDragonBase) event.getEntityBeingMounted();
-            if (event.isDismounting() && event.getEntityMounting() instanceof PlayerEntity && !event.getEntityMounting().world.isRemote) {
-                PlayerEntity player = (PlayerEntity) event.getEntityMounting();
-                if (dragon.isOwner((PlayerEntity) event.getEntityMounting())) {
-                    dragon.setPositionAndRotation(player.getPosX(), player.getPosY(), player.getPosZ(), player.rotationYaw, player.rotationPitch);
-                    player.fallDistance = -dragon.height;
-                } else {
-                    dragon.renderYawOffset = dragon.rotationYaw;
-                    float modTick_0 = dragon.getAnimationTick() - 25;
-                    float modTick_1 = dragon.getAnimationTick() > 25 && dragon.getAnimationTick() < 55 ? 8 * MathHelper.clamp(MathHelper.sin((float) (Math.PI + modTick_0 * 0.25)), -0.8F, 0.8F) : 0;
-                    float modTick_2 = dragon.getAnimationTick() > 30 ? 10 : Math.max(0, dragon.getAnimationTick() - 20);
-                    float radius = 0.75F * (0.6F * dragon.getRenderSize() / 3) * -3;
-                    float angle = (0.01745329251F * dragon.renderYawOffset) + 3.15F + (modTick_1 * 2F) * 0.015F;
-                    double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-                    double extraZ = (double) (radius * MathHelper.cos(angle));
-                    double extraY = modTick_2 == 0 ? 0 : 0.035F * ((dragon.getRenderSize() / 3) + (modTick_2 * 0.5 * (dragon.getRenderSize() / 3)));
-                    player.setPosition(dragon.getPosX() + extraX, dragon.getPosY() + extraY, dragon.getPosZ() + extraZ);
-                }
-            }
-
-        }
-        if (event.getEntityBeingMounted() instanceof EntityHippogryph) {
-            EntityHippogryph hippogryph = (EntityHippogryph) event.getEntityBeingMounted();
-            if (event.isDismounting() && event.getEntityMounting() instanceof PlayerEntity && !event.getEntityMounting().world.isRemote && hippogryph.isOwner((PlayerEntity) event.getEntityMounting())) {
-                PlayerEntity player = (PlayerEntity) event.getEntityMounting();
-                hippogryph.setPositionAndRotation(player.getPosX(), player.getPosY(), player.getPosZ(), player.rotationYaw, player.rotationPitch);
-            }
-        }
-         */
-    }
 
     @SubscribeEvent
     public void onEntityDamage(LivingHurtEvent event) {
@@ -377,7 +261,7 @@ public class ServerEvents {
     public void onEntityDrop(LivingDropsEvent event) {
         if (event.getEntityLiving() instanceof WitherSkeletonEntity) {
             event.getDrops().add(new ItemEntity(event.getEntity().world, event.getEntity().getPosX(), event.getEntity().getPosY(), event.getEntity().getPosZ(),
-                    new ItemStack(IafItemRegistry.WITHERBONE, event.getEntityLiving().getRNG().nextInt(2))));
+                new ItemStack(IafItemRegistry.WITHERBONE, event.getEntityLiving().getRNG().nextInt(2))));
         }
     }
 
@@ -556,7 +440,7 @@ public class ServerEvents {
         if (MiscProperties.getLoveTicks(event.getEntityLiving()) > 0) {
             MiscProperties.tickLove(event.getEntityLiving());
         }
-        if (AiDebug.isEnabled() && event.getEntityLiving() instanceof MobEntity && AiDebug.contains((MobEntity) event.getEntityLiving())){
+        if (AiDebug.isEnabled() && event.getEntityLiving() instanceof MobEntity && AiDebug.contains((MobEntity) event.getEntityLiving())) {
             AiDebug.logData();
         }
     }
@@ -572,7 +456,7 @@ public class ServerEvents {
                 }
             }
         }
-        if (AiDebug.isEnabled() && !event.getWorld().isRemote() && event.getTarget() instanceof MobEntity && event.getItemStack().getItem() == Items.STICK ){
+        if (AiDebug.isEnabled() && !event.getWorld().isRemote() && event.getTarget() instanceof MobEntity && event.getItemStack().getItem() == Items.STICK) {
             AiDebug.addEntity((MobEntity) event.getTarget());
         }
     }
@@ -634,11 +518,11 @@ public class ServerEvents {
     public void onChestGenerated(LootTableLoadEvent event) {
         final ResourceLocation eventName = event.getName();
         final boolean condition1 = eventName.equals(LootTables.CHESTS_SIMPLE_DUNGEON)
-                || eventName.equals(LootTables.CHESTS_ABANDONED_MINESHAFT)
-                || eventName.equals(LootTables.CHESTS_DESERT_PYRAMID)
-                || eventName.equals(LootTables.CHESTS_JUNGLE_TEMPLE)
-                || eventName.equals(LootTables.CHESTS_STRONGHOLD_CORRIDOR)
-                || eventName.equals(LootTables.CHESTS_STRONGHOLD_CROSSING);
+            || eventName.equals(LootTables.CHESTS_ABANDONED_MINESHAFT)
+            || eventName.equals(LootTables.CHESTS_DESERT_PYRAMID)
+            || eventName.equals(LootTables.CHESTS_JUNGLE_TEMPLE)
+            || eventName.equals(LootTables.CHESTS_STRONGHOLD_CORRIDOR)
+            || eventName.equals(LootTables.CHESTS_STRONGHOLD_CROSSING);
 
         if (condition1 || eventName.equals(LootTables.CHESTS_VILLAGE_VILLAGE_CARTOGRAPHER)) {
             LootEntry.Builder item = ItemLootEntry.builder(IafItemRegistry.MANUSCRIPT).quality(20).weight(5);
@@ -646,10 +530,10 @@ public class ServerEvents {
             event.getTable().addPool(builder.build());
         }
         if (condition1
-                || eventName.equals(LootTables.CHESTS_IGLOO_CHEST)
-                || eventName.equals(LootTables.CHESTS_WOODLAND_MANSION)
-                || eventName.equals(LootTables.CHESTS_VILLAGE_VILLAGE_TOOLSMITH)
-                || eventName.equals(LootTables.CHESTS_VILLAGE_VILLAGE_ARMORER)) {
+            || eventName.equals(LootTables.CHESTS_IGLOO_CHEST)
+            || eventName.equals(LootTables.CHESTS_WOODLAND_MANSION)
+            || eventName.equals(LootTables.CHESTS_VILLAGE_VILLAGE_TOOLSMITH)
+            || eventName.equals(LootTables.CHESTS_VILLAGE_VILLAGE_ARMORER)) {
 
             if (IafConfig.generateSilverOre) {
                 LootEntry.Builder item = ItemLootEntry.builder(IafItemRegistry.SILVER_INGOT).quality(15).weight(12);
@@ -661,9 +545,9 @@ public class ServerEvents {
                 event.getTable().addPool(builder.build());
             }
         } else if ((eventName.equals(WorldGenFireDragonCave.FIREDRAGON_CHEST)
-                || eventName.equals(WorldGenFireDragonCave.FIREDRAGON_MALE_CHEST)
-                || eventName.equals(WorldGenIceDragonCave.ICEDRAGON_CHEST)
-                || eventName.equals(WorldGenIceDragonCave.ICEDRAGON_MALE_CHEST))) {
+            || eventName.equals(WorldGenFireDragonCave.FIREDRAGON_MALE_CHEST)
+            || eventName.equals(WorldGenIceDragonCave.ICEDRAGON_CHEST)
+            || eventName.equals(WorldGenIceDragonCave.ICEDRAGON_MALE_CHEST))) {
             LootEntry.Builder item = ItemLootEntry.builder(IafItemRegistry.WEEZER_BLUE_ALBUM).quality(100).weight(1);
             LootPool.Builder builder = new LootPool.Builder().name("iaf_weezer").addEntry(item).acceptCondition(RandomChance.builder(0.01f)).rolls(new RandomValueRange(1, 1)).bonusRolls(0, 0);
             event.getTable().addPool(builder.build());
