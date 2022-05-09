@@ -14,6 +14,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraft.client.renderer.RenderState.TextureState;
+import org.lwjgl.opengl.GL11;
 
 public class IafRenderType extends RenderType {
 
@@ -59,6 +60,11 @@ public class IafRenderType extends RenderType {
         RenderState.TextureState textureState = new RenderState.TextureState(STONE_TEXTURE, false, false);
         RenderType.State rendertype$state = RenderType.State.getBuilder().texture(textureState).texturing(new StoneTexturingState(STONE_TEXTURE, xSize, ySize)).transparency(NO_TRANSPARENCY).diffuseLighting(DIFFUSE_LIGHTING_ENABLED).alpha(DEFAULT_ALPHA).lightmap(LIGHTMAP_ENABLED).overlay(OVERLAY_ENABLED).build(true);
         return makeType("stone_entity_type", DefaultVertexFormats.ENTITY, 7, 256, rendertype$state);
+    }
+
+    public static RenderType getIce(ResourceLocation locationIn) {
+        TextureState lvt_1_1_ = new TextureState(locationIn, false, false);
+        return makeType("ice_texture", DefaultVertexFormats.ENTITY, GL11.GL_QUADS, 256, false, true, RenderType.State.getBuilder().texture(lvt_1_1_).transparency(TRANSLUCENT_TRANSPARENCY).diffuseLighting(DIFFUSE_LIGHTING_ENABLED).alpha(DEFAULT_ALPHA).cull(CULL_ENABLED).lightmap(LIGHTMAP_ENABLED).overlay(OVERLAY_ENABLED).build(true));
     }
 
     public static RenderType getStoneCrackRenderType(ResourceLocation crackTex, float xSize, float ySize) {

@@ -138,10 +138,6 @@ public class ClientEvents {
         if (shouldCancelRender(event.getEntity())) {
             event.setCanceled(true);
         }
-        if (FrozenProperties.isFrozen(event.getEntity())) {
-            RenderFrozenState.render(event.getEntity(), event.getMatrixStack());
-        }
-
     }
 
     @SubscribeEvent
@@ -153,6 +149,9 @@ public class ClientEvents {
         MiscProperties.getTargetedBy(entity).forEach(caster -> {
             CockatriceBeamRender.render(entity, caster, event.getMatrixStack(), event.getBuffers(), event.getPartialRenderTick());
         });
+        if (FrozenProperties.isFrozen(event.getEntity())) {
+            RenderFrozenState.render(event.getEntity(), event.getMatrixStack(), event.getBuffers(), event.getLight());
+        }
         RenderChain.render(entity, event.getPartialRenderTick(), event.getMatrixStack(), event.getBuffers(), event.getLight());
     }
 
