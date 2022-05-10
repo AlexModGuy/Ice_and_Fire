@@ -58,11 +58,10 @@ public class ClientEvents {
         if (player.getRidingEntity() != null) {
             if (player.getRidingEntity() instanceof EntityDragonBase) {
                 int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
-                EntityDragonBase dragon = (EntityDragonBase) player.getRidingEntity();
                 float scale = ((EntityDragonBase) player.getRidingEntity()).getRenderSize() / 3;
-                if (Minecraft.getInstance().gameSettings.getPointOfView() == PointOfView.THIRD_PERSON_BACK) {
-                    if (currentView == 0) {
-                    } else if (currentView == 1) {
+                if (Minecraft.getInstance().gameSettings.getPointOfView() == PointOfView.THIRD_PERSON_BACK ||
+                    Minecraft.getInstance().gameSettings.getPointOfView() == PointOfView.THIRD_PERSON_FRONT) {
+                    if (currentView == 1) {
                         event.getInfo().movePosition(-event.getInfo().calcCameraDistance(scale * 1.2F), 0F, 0);
                     } else if (currentView == 2) {
                         event.getInfo().movePosition(-event.getInfo().calcCameraDistance(scale * 3F), 0F, 0);
@@ -70,19 +69,7 @@ public class ClientEvents {
                         event.getInfo().movePosition(-event.getInfo().calcCameraDistance(scale * 5F), 0F, 0);
                     }
                 }
-                if (Minecraft.getInstance().gameSettings.getPointOfView() == PointOfView.THIRD_PERSON_FRONT) {
-                    if (currentView == 0) {
-                    } else if (currentView == 1) {
-                        event.getInfo().movePosition(-event.getInfo().calcCameraDistance(scale * 1.2F), 0F, 0);
-                    } else if (currentView == 2) {
-                        event.getInfo().movePosition(-event.getInfo().calcCameraDistance(scale * 3F), 0F, 0);
-                    } else if (currentView == 3) {
-                        event.getInfo().movePosition(-event.getInfo().calcCameraDistance(scale * 5F), 0F, 0);
-                    }
-                }
-
             }
-
         }
     }
 
