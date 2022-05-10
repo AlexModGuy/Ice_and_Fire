@@ -240,7 +240,8 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                                 statue.prevRenderYawOffset = this.getAttackTarget().rotationYaw;
                                 playerStatueCooldown = 40;
                                 if (this.getAttackTarget() instanceof PlayerEntity) {
-                                    this.getAttackTarget().attackEntityFrom(IafDamageRegistry.GORGON_DMG, Integer.MAX_VALUE);
+
+                                    this.getAttackTarget().attackEntityFrom(IafDamageRegistry.causeGorgonDamage(this), Integer.MAX_VALUE);
                                 } else {
                                     this.getAttackTarget().remove();
                                 }

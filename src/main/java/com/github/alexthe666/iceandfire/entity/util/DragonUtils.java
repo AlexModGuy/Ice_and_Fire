@@ -1,26 +1,13 @@
 package com.github.alexthe666.iceandfire.entity.util;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntityGhost;
-import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
-import com.github.alexthe666.iceandfire.entity.EntityMutlipartPart;
-import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
-import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
+import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import com.google.common.base.Predicate;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -37,16 +24,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class DragonUtils {
 
+
+    private static Map<Block, Boolean> BLOCK_CACHE = new HashMap<>();
+
     public static BlockPos getBlockInViewEscort(EntityDragonBase dragon) {
-        float radius = 12 * (0.7F * dragon.getRenderSize() / 3);
-        float neg = dragon.getRNG().nextBoolean() ? 1 : -1;
-        float renderYawOffset = dragon.renderYawOffset;
         BlockPos escortPos = dragon.getEscortPosition();
         BlockPos ground = dragon.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, escortPos);
         int distFromGround = escortPos.getY() - ground.getY();
@@ -215,8 +206,6 @@ public class DragonUtils {
         if (bird.getDistanceSq(leader) > 2) {
             double d0 = leader.getPosX() - bird.getPosX();
             double d2 = leader.getPosZ() - bird.getPosZ();
-            double d1 = leader.getPosY() + (double) leader.getEyeHeight() - (bird.getPosY() + (double) bird.getEyeHeight());
-            double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
             float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
             float degrees = MathHelper.wrapDegrees(f - bird.rotationYaw);
 
@@ -228,7 +217,6 @@ public class DragonUtils {
 
     public static BlockPos getBlockInTargetsViewCockatrice(EntityCockatrice cockatrice, LivingEntity target) {
         float radius = 10 + cockatrice.getRNG().nextInt(10);
-        float neg = cockatrice.getRNG().nextBoolean() ? 1 : -1;
         float angle = (0.01745329251F * target.rotationYawHead);
         double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
         double extraZ = radius * MathHelper.cos(angle);
@@ -243,7 +231,6 @@ public class DragonUtils {
 
     public static BlockPos getBlockInTargetsViewGhost(EntityGhost ghost, LivingEntity target) {
         float radius = 4 + ghost.getRNG().nextInt(5);
-        float neg = ghost.getRNG().nextBoolean() ? 1 : -1;
         float angle = (0.01745329251F * (target.rotationYawHead + 90F + ghost.getRNG().nextInt(180)));
         double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
         double extraZ = radius * MathHelper.cos(angle);
@@ -257,7 +244,6 @@ public class DragonUtils {
 
     public static BlockPos getBlockInTargetsViewGorgon(EntityGorgon cockatrice, LivingEntity target) {
         float radius = 6;
-        float neg = cockatrice.getRNG().nextBoolean() ? 1 : -1;
         float angle = (0.01745329251F * target.rotationYawHead);
         double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
         double extraZ = radius * MathHelper.cos(angle);
@@ -271,7 +257,6 @@ public class DragonUtils {
 
     public static BlockPos getBlockInTargetsViewSeaSerpent(EntitySeaSerpent serpent, LivingEntity target) {
         float radius = 10 * serpent.getSeaSerpentScale() + serpent.getRNG().nextInt(10);
-        float neg = serpent.getRNG().nextBoolean() ? 1 : -1;
         float angle = (0.01745329251F * target.rotationYawHead);
         double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
         double extraZ = radius * MathHelper.cos(angle);
@@ -318,19 +303,24 @@ public class DragonUtils {
     }
 
     public static boolean canDragonBreak(Block block) {
-        return block != Blocks.BARRIER &&
-                block != Blocks.OBSIDIAN &&
-                block != Blocks.CRYING_OBSIDIAN &&
-                block != Blocks.END_STONE &&
-                block != Blocks.BEDROCK &&
-                block != Blocks.END_PORTAL &&
-                block != Blocks.END_PORTAL_FRAME &&
-                block != Blocks.COMMAND_BLOCK &&
-                block != Blocks.REPEATING_COMMAND_BLOCK &&
-                block != Blocks.CHAIN_COMMAND_BLOCK &&
-                block != Blocks.IRON_BARS &&
-                block != Blocks.END_GATEWAY &&
-                !isBlacklistedBlock(block);
+        if (BLOCK_CACHE.containsKey(block))
+            return BLOCK_CACHE.get(block);
+
+        boolean value = block != Blocks.BARRIER &&
+            block != Blocks.OBSIDIAN &&
+            block != Blocks.CRYING_OBSIDIAN &&
+            block != Blocks.END_STONE &&
+            block != Blocks.BEDROCK &&
+            block != Blocks.END_PORTAL &&
+            block != Blocks.END_PORTAL_FRAME &&
+            block != Blocks.COMMAND_BLOCK &&
+            block != Blocks.REPEATING_COMMAND_BLOCK &&
+            block != Blocks.CHAIN_COMMAND_BLOCK &&
+            block != Blocks.IRON_BARS &&
+            block != Blocks.END_GATEWAY &&
+            !isBlacklistedBlock(block);
+        BLOCK_CACHE.put(block, value);
+        return value;
     }
 
     public static boolean hasSameOwner(TameableEntity cockatrice, Entity entity) {

@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -21,7 +20,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -41,7 +39,7 @@ public class EntityPixieCharge extends AbstractFireballEntity {
     }
 
     public EntityPixieCharge(EntityType<? extends AbstractFireballEntity> t, World worldIn, double posX, double posY,
-        double posZ, double accelX, double accelY, double accelZ) {
+                             double posZ, double accelX, double accelY, double accelZ) {
         super(t, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.07D;
@@ -51,7 +49,7 @@ public class EntityPixieCharge extends AbstractFireballEntity {
     }
 
     public EntityPixieCharge(EntityType<? extends AbstractFireballEntity> t, World worldIn, PlayerEntity shooter,
-        double accelX, double accelY, double accelZ) {
+                             double accelX, double accelY, double accelZ) {
         super(t, shooter, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.07D;
@@ -88,73 +86,35 @@ public class EntityPixieCharge extends AbstractFireballEntity {
             this.remove();
         }
         if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.getPosition())) {
-            if (this.world.isRemote || (shootingEntity == null || !shootingEntity.removed) && this.world.isBlockLoaded(this.getPosition())) {
-                if (this.isFireballFiery()) {
-                    this.setFire(1);
-                }
-
-                ++this.ticksInAir;
-                RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
-                if (raytraceresult.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
-                    this.onImpact(raytraceresult);
-                }
-
-                Vector3d Vector3d = this.getMotion();
-                double d0 = this.getPosX() + Vector3d.x;
-                double d1 = this.getPosY() + Vector3d.y;
-                double d2 = this.getPosZ() + Vector3d.z;
-                ProjectileHelper.rotateTowardsMovement(this, 0.2F);
-                float f = this.getMotionFactor();
-
-
-                this.setMotion(Vector3d.add(this.accelerationX, this.accelerationY, this.accelerationZ).scale(f));
-                this.setPosition(d0, d1, d2);
-            } else {
-                this.remove();
+            this.baseTick();
+            if (this.isFireballFiery()) {
+                this.setFire(1);
             }
+
+            ++this.ticksInAir;
+            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
+            if (raytraceresult.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
+                this.onImpact(raytraceresult);
+            }
+
+            Vector3d vector3d = this.getMotion();
+            double d0 = this.getPosX() + vector3d.x;
+            double d1 = this.getPosY() + vector3d.y;
+            double d2 = this.getPosZ() + vector3d.z;
+            ProjectileHelper.rotateTowardsMovement(this, 0.2F);
+            float f = this.getMotionFactor();
+            this.setMotion(vector3d.add(this.accelerationX, this.accelerationY, this.accelerationZ).scale(f));
+
             this.accelerationX *= 0.95F;
             this.accelerationY *= 0.95F;
             this.accelerationZ *= 0.95F;
             this.addVelocity(this.accelerationX, this.accelerationY, this.accelerationZ);
             ++this.ticksInAir;
-            Vector3d Vector3d = this.getMotion();
-            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
-
-            if (raytraceresult != null) {
-                this.onImpact(raytraceresult);
-            }
-
-            double d0 = this.getPosX() + Vector3d.x;
-            double d1 = this.getPosY() + Vector3d.y;
-            double d2 = this.getPosZ() + Vector3d.z;
-            float f = MathHelper.sqrt(horizontalMag(Vector3d));
-            this.rotationYaw = (float) (MathHelper.atan2(Vector3d.x, Vector3d.z) * (180F / (float) Math.PI));
-            for (this.rotationPitch = (float) (MathHelper.atan2(Vector3d.y, f) * (180F / (float) Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
-            }
-            while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
-                this.prevRotationPitch += 360.0F;
-            }
-
-            while (this.rotationYaw - this.prevRotationYaw < -180.0F) {
-                this.prevRotationYaw -= 360.0F;
-            }
-
-            while (this.rotationYaw - this.prevRotationYaw >= 180.0F) {
-                this.prevRotationYaw += 360.0F;
-            }
-
-            this.rotationPitch = MathHelper.lerp(0.2F, this.prevRotationPitch, this.rotationPitch);
-            this.rotationYaw = MathHelper.lerp(0.2F, this.prevRotationYaw, this.rotationYaw);
-            float f1 = 0.99F;
-            float f2 = 0.06F;
-
 
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
                     this.world.addParticle(ParticleTypes.BUBBLE, this.getPosX() - this.getMotion().x * 0.25D, this.getPosY() - this.getMotion().y * 0.25D, this.getPosZ() - this.getMotion().z * 0.25D, this.getMotion().x, this.getMotion().y, this.getMotion().z);
                 }
-
-                f = 0.8F;
             }
             this.setPosition(d0, d1, d2);
             this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());

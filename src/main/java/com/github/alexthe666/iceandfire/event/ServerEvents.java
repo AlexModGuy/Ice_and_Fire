@@ -234,8 +234,9 @@ public class ServerEvents {
             }
             event.setAmount(event.getAmount() * multi);
         }
-        if (event.getSource() == IafDamageRegistry.DRAGON_FIRE || event.getSource() == IafDamageRegistry.DRAGON_ICE ||
-            event.getSource() == IafDamageRegistry.DRAGON_LIGHTNING) {
+        String damageType = event.getSource().getDamageType();
+        if (IafDamageRegistry.DRAGON_FIRE_TYPE.equals(damageType) || IafDamageRegistry.DRAGON_ICE_TYPE.equals(damageType) ||
+            IafDamageRegistry.DRAGON_LIGHTNING_TYPE.equals(damageType)) {
             float multi = 1;
             if (event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemScaleArmor ||
                 event.getEntityLiving().getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemDragonsteelArmor) {

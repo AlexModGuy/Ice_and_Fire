@@ -100,7 +100,7 @@ public class ItemGorgonHead extends Item implements IUsesTEISR, ICustomRendered 
                 pointedEntity.playSound(IafSoundRegistry.TURN_STONE, 1, 1);
                 EntityStoneStatue statue = EntityStoneStatue.buildStatueEntity((LivingEntity) pointedEntity);
                 if(pointedEntity instanceof PlayerEntity){
-                    pointedEntity.attackEntityFrom(IafDamageRegistry.GORGON_DMG, Integer.MAX_VALUE);
+                    pointedEntity.attackEntityFrom(IafDamageRegistry.causeGorgonDamage(pointedEntity), Integer.MAX_VALUE);
                 }else{
                     if (!worldIn.isRemote)
                         pointedEntity.remove();
