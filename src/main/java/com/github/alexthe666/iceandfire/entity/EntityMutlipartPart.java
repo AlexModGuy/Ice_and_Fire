@@ -149,7 +149,7 @@ public abstract class EntityMutlipartPart extends Entity {
                     renderYawOffset = ((LivingEntity) parent).renderYawOffset;
                 }
                 if(isSlowFollow()){
-                    this.setPosition(parent.prevPosX + this.radius * Math.cos(renderYawOffset * (Math.PI / 180.0F) + this.angleYaw), parent.prevPosY + this.offsetY, parent.prevPosZ + this.radius * Math.sin(renderYawOffset * (Math.PI / 180.0F) + this.angleYaw));
+                    this.setPosition(parent.prevPosX + this.radius * MathHelper.cos((float) (renderYawOffset * (Math.PI / 180.0F) + this.angleYaw)), parent.prevPosY + this.offsetY, parent.prevPosZ + this.radius * MathHelper.sin((float) (renderYawOffset * (Math.PI / 180.0F) + this.angleYaw)));
                     double d0 = parent.getPosX() - this.getPosX();
                     double d1 = parent.getPosY() - this.getPosY();
                     double d2 = parent.getPosZ() - this.getPosZ();
@@ -163,7 +163,7 @@ public abstract class EntityMutlipartPart extends Entity {
                         this.collideWithNearbyEntities();
                     }
                 }else{
-                    this.setPosition(parent.getPosX() + this.radius * Math.cos(renderYawOffset * (Math.PI / 180.0F) + this.angleYaw), parent.getPosY() + this.offsetY, parent.getPosZ() + this.radius * Math.sin(renderYawOffset * (Math.PI / 180.0F) + this.angleYaw));
+                    this.setPosition(parent.getPosX() + this.radius * MathHelper.cos((float) (renderYawOffset * (Math.PI / 180.0F) + this.angleYaw)), parent.getPosY() + this.offsetY, parent.getPosZ() + this.radius * MathHelper.sin((float) (renderYawOffset * (Math.PI / 180.0F) + this.angleYaw)));
                     this.markVelocityChanged();
                 }
                 if (!this.world.isRemote) {

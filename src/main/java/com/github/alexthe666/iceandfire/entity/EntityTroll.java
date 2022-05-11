@@ -363,8 +363,8 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
             }
         }
         if (this.getAnimation() == ANIMATION_STRIKE_VERTICAL && this.getAnimationTick() == 10) {
-            float weaponX = (float) (getPosX() + 1.9F * Math.cos((renderYawOffset + 90) * Math.PI / 180));
-            float weaponZ = (float) (getPosZ() + 1.9F * Math.sin((renderYawOffset + 90) * Math.PI / 180));
+            float weaponX = (float) (getPosX() + 1.9F * MathHelper.cos((float) ((renderYawOffset + 90) * Math.PI / 180)));
+            float weaponZ = (float) (getPosZ() + 1.9F * MathHelper.sin((float) ((renderYawOffset + 90) * Math.PI / 180)));
             float weaponY = (float) (getPosY() + (0.2F));
             BlockState state = world.getBlockState(new BlockPos(weaponX, weaponY - 1, weaponZ));
             for (int i = 0; i < 20; i++) {
@@ -405,10 +405,9 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
                 this.setAnimation(ANIMATION_STRIKE_VERTICAL);
             }
             if (this.getAnimation() == ANIMATION_STRIKE_VERTICAL && this.getAnimationTick() == 10) {
-                float weaponX = (float) (getPosX() + 1.9F * Math.cos((renderYawOffset + 90) * Math.PI / 180));
-                float weaponZ = (float) (getPosZ() + 1.9F * Math.sin((renderYawOffset + 90) * Math.PI / 180));
+                float weaponX = (float) (getPosX() + 1.9F * MathHelper.cos((float) ((renderYawOffset + 90) * Math.PI / 180)));
+                float weaponZ = (float) (getPosZ() + 1.9F * MathHelper.sin((float) ((renderYawOffset + 90) * Math.PI / 180)));
                 float weaponY = (float) (getPosY() + (this.getEyeHeight() / 2));
-                BlockState state = world.getBlockState(new BlockPos(weaponX, weaponY, weaponZ));
                 BlockBreakExplosion explosion = new BlockBreakExplosion(world, this, weaponX, weaponY, weaponZ, 1F + this.getRNG().nextFloat());
                 if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, weaponX, weaponY, weaponZ))) {
                     explosion.doExplosionA();

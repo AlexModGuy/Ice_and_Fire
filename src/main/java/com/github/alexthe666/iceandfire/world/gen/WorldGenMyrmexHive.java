@@ -242,8 +242,8 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         {
             for (float i = 0; i < radius; i += 0.5) {
                 for (float j = 0; j < 2 * Math.PI * i; j += 0.5) {
-                    int x = (int) Math.floor(Math.sin(j) * i);
-                    int z = (int) Math.floor(Math.cos(j) * i);
+                    int x = (int) Math.floor(MathHelper.sin(j) * i);
+                    int z = (int) Math.floor(MathHelper.cos(j) * i);
                     if (direction == Direction.WEST || direction == Direction.EAST) {
                         world.setBlockState(position.add(0, x, z), rand.nextInt(3) == 0 ? sticky_resin : resin, 2);
 
@@ -257,8 +257,8 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         {
             for (float i = 0; i < radius; i += 0.5) {
                 for (float j = 0; j < 2 * Math.PI * i; j += 0.5) {
-                    int x = (int) Math.floor(Math.sin(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
-                    int z = (int) Math.floor(Math.cos(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
+                    int x = (int) Math.floor(MathHelper.sin(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
+                    int z = (int) Math.floor(MathHelper.cos(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
                     if (direction == Direction.WEST || direction == Direction.EAST) {
                         world.setBlockState(position.add(0, x, z), Blocks.AIR.getDefaultState(), 2);
                     } else {
@@ -278,8 +278,8 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         {
             for (float i = 0; i < radius; i += 0.5) {
                 for (float j = 0; j < 2 * Math.PI * i; j += 0.5) {
-                    int x = (int) Math.floor(Math.sin(j) * i);
-                    int z = (int) Math.floor(Math.cos(j) * i);
+                    int x = (int) Math.floor(MathHelper.sin(j) * i);
+                    int z = (int) Math.floor(MathHelper.cos(j) * i);
                     if (direction == Direction.WEST || direction == Direction.EAST) {
                         if (!world.canBlockSeeSky(position.add(0, x, z))) {
                             world.setBlockState(position.add(0, x, z), rand.nextInt(3) == 0 ? sticky_resin : resin, 3);
@@ -297,8 +297,8 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         {
             for (float i = 0; i < radius; i += 0.5) {
                 for (float j = 0; j < 2 * Math.PI * i; j += 0.5) {
-                    int x = (int) Math.floor(Math.sin(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
-                    int z = (int) Math.floor(Math.cos(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
+                    int x = (int) Math.floor(MathHelper.sin(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
+                    int z = (int) Math.floor(MathHelper.cos(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
                     if (direction == Direction.WEST || direction == Direction.EAST) {
                         world.setBlockState(position.add(0, x, z), Blocks.AIR.getDefaultState(), 3);
                     } else {
@@ -317,8 +317,8 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         {
             for (float i = 0; i < radius; i += 0.5) {
                 for (float j = 0; j < 2 * Math.PI * i; j += 0.5) {
-                    int x = (int) Math.floor(Math.sin(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
-                    int z = (int) Math.floor(Math.cos(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
+                    int x = (int) Math.floor(MathHelper.sin(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
+                    int z = (int) Math.floor(MathHelper.cos(j) * i * MathHelper.clamp(rand.nextFloat(), 0.5F, 1.0F));
                     if (direction == Direction.WEST || direction == Direction.EAST) {
                         world.setBlockState(position.add(0, x, z), Blocks.AIR.getDefaultState(), 2);
                     } else {
@@ -402,8 +402,8 @@ public class WorldGenMyrmexHive extends Feature<NoFeatureConfig> {
         {
             for (float i = 0; i < radius; i += 0.5) {
                 for (float j = 0; j < 2 * Math.PI * i; j += 0.5) {
-                    int x = (int) Math.floor(Math.sin(j) * i);
-                    int z = (int) Math.floor(Math.cos(j) * i);
+                    int x = (int) Math.floor(MathHelper.sin(j) * i);
+                    int z = (int) Math.floor(MathHelper.cos(j) * i);
                     if (direction == Direction.WEST || direction == Direction.EAST) {
                         if (world.isAirBlock(position.add(0, x, z))) {
                             decorate(world, position.add(0, x, z), position, size, rand, RoomType.TUNNEL);

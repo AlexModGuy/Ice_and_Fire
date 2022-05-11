@@ -342,12 +342,12 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
 
         if (myrmexQueen.getAnimation() == EntityMyrmexQueen.ANIMATION_EGG) {
             int animationTick = MathHelper.clamp(myrmexQueen.getAnimationTick(), 0, 20);
-            double swellToPi = animationTick / 20F * Math.PI;
-            this.increaseScale(Body5, 0.5F * (float) Math.abs(Math.sin(swellToPi + 0.5F)));
-            this.increaseScale(Tail1, 0.75F * (float) Math.abs(Math.sin(swellToPi)));
-            this.increaseScale(Tail2, 0.75F * (float) Math.abs(Math.sin(swellToPi - 0.5F)));
-            this.increaseScale(Tail3, 0.75F * (float) Math.abs(Math.sin(swellToPi - 1.0F)));
-            this.Stinger.rotationPointZ += 10 * (float) Math.abs(Math.sin(swellToPi - 1.0F));
+            float swellToPi = (float) (animationTick / 20F * Math.PI);
+            this.increaseScale(Body5, 0.5F * Math.abs(MathHelper.sin(swellToPi + 0.5F)));
+            this.increaseScale(Tail1, 0.75F * Math.abs(MathHelper.sin(swellToPi)));
+            this.increaseScale(Tail2, 0.75F * Math.abs(MathHelper.sin(swellToPi - 0.5F)));
+            this.increaseScale(Tail3, 0.75F * Math.abs(MathHelper.sin(swellToPi - 1.0F)));
+            this.Stinger.rotationPointZ += 10 * Math.abs(MathHelper.sin(swellToPi - 1.0F));
         }
     }
 

@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.client.model.animator;
 
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ITabulaModelAnimator;
-import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.iceandfire.client.model.util.EnumDragonPoses;
 import com.github.alexthe666.iceandfire.client.model.util.LegArticulator;
@@ -81,6 +80,9 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
         float degree_idle = entity.isSleeping() ? 0.25F : 0.5F;
         float degree_fly = 0.5F;
         if (!entity.isAIDisabled()) {
+            if (entity.getAnimation() != EntityDragonBase.ANIMATION_SHAKEPREY || entity.getAnimation() != EntityDragonBase.ANIMATION_ROAR) {
+                model.faceTarget((float) Math.toRadians(rotationYaw), (float) Math.toRadians(rotationPitch), 2, neckParts);
+            }
             if (!walking) {
                 model.bob(model.getCube("BodyUpper"), -speed_fly, degree_fly * 5, false, ageInTicks, 1);
                 model.walk(model.getCube("BodyUpper"), -speed_fly, degree_fly * 0.1F, false, 0, 0, ageInTicks, 1);
@@ -108,9 +110,7 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
             model.bob(model.getCube("ThighL"), speed_idle, -degree_idle * 1.3F, false, ageInTicks, 1);
             model.bob(model.getCube("armR1"), speed_idle, -degree_idle * 1.3F, false, ageInTicks, 1);
             model.bob(model.getCube("armL1"), speed_idle, -degree_idle * 1.3F, false, ageInTicks, 1);
-            if (entity.getAnimation() != EntityDragonBase.ANIMATION_SHAKEPREY || entity.getAnimation() != EntityDragonBase.ANIMATION_ROAR) {
-                model.faceTarget(rotationYaw, rotationPitch, 4, neckParts);
-            }
+
             if (entity.isActuallyBreathingFire()) {
                 float speed_shake = 0.7F;
                 float degree_shake = 0.1F;
@@ -363,11 +363,11 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
         //Wingblast
         if (model.llibAnimator.setAnimation(T.ANIMATION_WINGBLAST)) {
             model.llibAnimator.startKeyframe(5);
-            moveToPose(model, getModel(EnumDragonPoses.WING_BLAST3));
+            moveToPose(model, getModel(EnumDragonPoses.WING_BLAST1));
             model.llibAnimator.move(modelCubeBodyUpper, 0, -4F, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.startKeyframe(5);
-            moveToPose(model, getModel(EnumDragonPoses.WING_BLAST4));
+            moveToPose(model, getModel(EnumDragonPoses.WING_BLAST2));
             model.llibAnimator.move(modelCubeBodyUpper, 0, -4F, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.startKeyframe(5);

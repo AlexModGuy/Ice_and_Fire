@@ -294,8 +294,8 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
                     if ((this.getAnimationTick() == 7 || this.getAnimationTick() == 14) && isDirectPathBetweenPoints(this, this.getPositionVec(), target.getPositionVec())) {
                         this.playSound(IafSoundRegistry.STYMPHALIAN_BIRD_ATTACK, 1, 1);
                         for (int i = 0; i < 4; i++) {
-                            float wingX = (float) (getPosX() + 1.8F * 0.5F * Math.cos((rotationYaw + 180 * (i % 2)) * Math.PI / 180));
-                            float wingZ = (float) (getPosZ() + 1.8F * 0.5F * Math.sin((rotationYaw + 180 * (i % 2)) * Math.PI / 180));
+                            float wingX = (float) (getPosX() + 1.8F * 0.5F * MathHelper.cos((float) ((rotationYaw + 180 * (i % 2)) * Math.PI / 180)));
+                            float wingZ = (float) (getPosZ() + 1.8F * 0.5F * MathHelper.sin((float) ((rotationYaw + 180 * (i % 2)) * Math.PI / 180)));
                             float wingY = (float) (getPosY() + 1F);
                             double d0 = target.getPosX() - wingX;
                             double d1 = target.getBoundingBox().minY - wingY;

@@ -443,8 +443,8 @@ public class EntityFireDragon extends EntityDragonBase {
     protected void spawnBabyParticles() {
         for (int i = 0; i < 5; i++) {
             float radiusAdd = i * 0.15F;
-            float headPosX = (float) (this.getPosX() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.cos((rotationYaw + 90) * Math.PI / 180));
-            float headPosZ = (float) (this.getPosY() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.sin((rotationYaw + 90) * Math.PI / 180));
+            float headPosX = (float) (this.getPosX() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * MathHelper.cos((float) ((rotationYaw + 90) * Math.PI / 180)));
+            float headPosZ = (float) (this.getPosY() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * MathHelper.sin((float) ((rotationYaw + 90) * Math.PI / 180)));
             float headPosY = (float) (this.getPosZ() + 0.5 * getRenderSize() * 0.3F);
             world.addParticle(ParticleTypes.LARGE_SMOKE, headPosX, headPosY, headPosZ, 0, 0, 0);
         }

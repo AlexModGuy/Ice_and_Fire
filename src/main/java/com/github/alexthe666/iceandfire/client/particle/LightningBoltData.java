@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.util.math.MathHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.util.math.vector.Vector3d;
@@ -202,7 +203,7 @@ public class LightningBoltData {
         /** A steady linear increase in perpendicular noise, followed by a steady decrease after the halfway point. */
         SpreadFunction LINEAR_ASCENT_DESCENT = (progress) -> (progress - Math.max(0, 2 * progress - 1)) / 0.5F;
         /** Represents a unit sine wave from 0 to PI, scaled by progress. */
-        SpreadFunction SINE = (progress) -> (float) Math.sin(Math.PI * progress);
+        SpreadFunction SINE = (progress) -> MathHelper.sin((float) (Math.PI * progress));
 
         float getMaxSpread(float progress);
     }

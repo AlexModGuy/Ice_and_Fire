@@ -523,8 +523,8 @@ public class EntityLightningDragon extends EntityDragonBase {
     protected void spawnBabyParticles() {
         for (int i = 0; i < 5; i++) {
             float radiusAdd = i * 0.15F;
-            float headPosX = (float) (this.getPosX() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.cos((rotationYaw + 90) * Math.PI / 180));
-            float headPosZ = (float) (this.getPosY() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.sin((rotationYaw + 90) * Math.PI / 180));
+            float headPosX = (float) (this.getPosX() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * MathHelper.cos((float) ((rotationYaw + 90) * Math.PI / 180)));
+            float headPosZ = (float) (this.getPosY() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * MathHelper.sin((float) ((rotationYaw + 90) * Math.PI / 180)));
             float headPosY = (float) (this.getPosZ() + 0.5 * getRenderSize() * 0.3F);
             world.addParticle(ParticleTypes.LARGE_SMOKE, headPosX, headPosY, headPosZ, 0, 0, 0);
         }
@@ -568,10 +568,10 @@ public class EntityLightningDragon extends EntityDragonBase {
         float absPitch = Math.abs(dragonPitch) / 90F;//1 down/up, 0 straight
         float minXZ = dragonPitch > 20 ? (dragonPitch - 20) * 0.009F : 0;
         float xzMod = (0.58F - hoverProg * 0.45F + flyProg * 0.2F + absPitch * 0.3F - sitProg)* flightXz * getRenderSize();
-        float xzModSine = xzMod * (Math.max(0.25F, (float)Math.cos(Math.toRadians(dragonPitch))) - minXZ);
-        float headPosX = (float) (getPosX() + (xzModSine) * Math.cos((renderYawOffset + 90) * Math.PI / 180));
+        float xzModSine = xzMod * (Math.max(0.25F, MathHelper.cos((float) Math.toRadians(dragonPitch))) - minXZ);
+        float headPosX = (float) (getPosX() + (xzModSine) * MathHelper.cos((float) ((renderYawOffset + 90) * Math.PI / 180)));
         float headPosY = (float) (getPosY() + (0.7F + (sitProg * 5F) + hoverProg + deadProg + epicRoarProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F);
-        float headPosZ = (float) (getPosZ() + (xzModSine) * Math.sin((renderYawOffset + 90) * Math.PI / 180));
+        float headPosZ = (float) (getPosZ() + (xzModSine) * MathHelper.sin((float) ((renderYawOffset + 90) * Math.PI / 180)));
         return new Vector3d(headPosX, headPosY, headPosZ);
     }
 }

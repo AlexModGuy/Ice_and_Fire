@@ -14,7 +14,7 @@ public class DragonAIWatchClosest extends LookAtGoal {
 
     @Override
     public boolean shouldExecute() {
-        if (this.entity instanceof EntityDragonBase && (!((EntityDragonBase) this.entity).canMove() || ((EntityDragonBase) this.entity).getAnimation() == EntityDragonBase.ANIMATION_SHAKEPREY)) {
+        if (this.entity instanceof EntityDragonBase && ((EntityDragonBase) this.entity).getAnimation() == EntityDragonBase.ANIMATION_SHAKEPREY) {
             return false;
         }
         return super.shouldExecute();

@@ -26,11 +26,11 @@ public class LegSolver {
 
     public final void update(EntityDragonBase entity, float yaw, float scale) {
         double sideTheta = yaw / (180 / Math.PI);
-        double sideX = Math.cos(sideTheta) * scale;
-        double sideZ = Math.sin(sideTheta) * scale;
+        double sideX = MathHelper.cos((float) sideTheta) * scale;
+        double sideZ = MathHelper.sin((float) sideTheta) * scale;
         double forwardTheta = sideTheta + Math.PI / 2;
-        double forwardX = Math.cos(forwardTheta) * scale;
-        double forwardZ = Math.sin(forwardTheta) * scale;
+        double forwardX = MathHelper.cos((float) forwardTheta) * scale;
+        double forwardZ = MathHelper.sin((float) forwardTheta) * scale;
         for (Leg leg : this.legs) {
             leg.update(entity, sideX, sideZ, forwardX, forwardZ, scale);
         }

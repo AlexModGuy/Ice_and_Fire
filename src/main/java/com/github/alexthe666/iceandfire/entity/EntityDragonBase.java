@@ -1516,7 +1516,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     private float bob(float speed, float degree, boolean bounce, float f, float f1) {
-        final double a = Math.sin(f * speed) * f1 * degree;
+        final double a = MathHelper.sin(f * speed) * f1 * degree;
         float bob = (float) (a - f1 * degree);
         if (bounce) {
             bob = (float) -Math.abs(a);
@@ -2158,9 +2158,9 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
             pitchX = Math.max(dragonPitch / 90, -0.7F);
         }
         final float xzMod = (0.15F + pitchX) * getRenderSize() + extraAgeScale;
-        final float headPosX = (float) (getPosX() + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
+        final float headPosX = (float) (getPosX() + (xzMod) * MathHelper.cos((float) ((rotationYaw + 90) * Math.PI / 180)));
         final float headPosY = (float) (getPosY() + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F + extraAgeScale);
-        final float headPosZ = (float) (getPosZ() + (xzMod) * Math.sin((rotationYaw + 90) * Math.PI / 180));
+        final float headPosZ = (float) (getPosZ() + (xzMod) * MathHelper.sin((float) ((rotationYaw + 90) * Math.PI / 180)));
         return new Vector3d(headPosX, headPosY, headPosZ);
     }
 
@@ -2191,7 +2191,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         float pitchMinus = 0F;
         final float dragonPitch = -getDragonPitch();
         if (this.isFlying() || this.isHovering()) {
-            pitchMulti = (float) Math.sin(Math.toRadians(dragonPitch));
+            pitchMulti = MathHelper.sin((float) Math.toRadians(dragonPitch));
             pitchAdjustment = 1.2F;
             pitchMulti *= 2.1F * Math.abs(dragonPitch) / 90;
             if (pitchMulti > 0) {
@@ -2207,10 +2207,10 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
             }
         }
         final float flightXz = 1.0F + flyProg + hoverProg;
-        final float xzMod = (1.7F * getRenderSize() * 0.3F * flightXz) + getRenderSize() * (0.3F * (float) Math.sin((dragonPitch + 90) * Math.PI / 180) * pitchAdjustment - pitchMinus - hoverProg * 0.45F);
-        final float headPosX = (float) (getPosX() + (xzMod) * Math.cos((rotationYaw + 90) * Math.PI / 180));
+        final float xzMod = (1.7F * getRenderSize() * 0.3F * flightXz) + getRenderSize() * (0.3F * MathHelper.sin((float) ((dragonPitch + 90) * Math.PI / 180)) * pitchAdjustment - pitchMinus - hoverProg * 0.45F);
+        final float headPosX = (float) (getPosX() + (xzMod) * MathHelper.cos((float) ((rotationYaw + 90) * Math.PI / 180)));
         final float headPosY = (float) (getPosY() + (0.7F + sitProg + hoverProg + deadProg + epicRoarProg + sleepProg + flyProg + pitchMulti) * getRenderSize() * 0.3F);
-        final float headPosZ = (float) (getPosZ() + (xzMod) * Math.sin((rotationYaw + 90) * Math.PI / 180));
+        final float headPosZ = (float) (getPosZ() + (xzMod) * MathHelper.sin((float) ((rotationYaw + 90) * Math.PI / 180)));
         return new Vector3d(headPosX, headPosY, headPosZ);
     }
 

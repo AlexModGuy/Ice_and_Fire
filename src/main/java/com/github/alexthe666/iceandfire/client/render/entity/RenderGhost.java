@@ -117,7 +117,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
             int i = getPackedOverlay(entityIn, this.getOverlayProgress(entityIn, partialTicks));
             if (entityIn.isHauntedShoppingList()) {
                 matrixStackIn.push();
-                matrixStackIn.translate(0, 0.8F + Math.sin((entityIn.ticksExisted + partialTicks) * 0.15F) * 0.1F, 0);
+                matrixStackIn.translate(0, 0.8F + MathHelper.sin((entityIn.ticksExisted + partialTicks) * 0.15F) * 0.1F, 0);
                 matrixStackIn.scale(0.6F, 0.6F, 0.6F);
                 matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F));
                 {
@@ -174,7 +174,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
         if (entityIn.isDaytimeMode()) {
             return MathHelper.clamp((101 - Math.min(entityIn.getDaytimeCounter(), 100)) / 100F, 0, 1);
         }
-        return MathHelper.clamp(((float) Math.sin((entityIn.ticksExisted + partialTicks) * 0.1F) + 1F) * 0.5F + 0.1F, 0F, 1F);
+        return MathHelper.clamp((MathHelper.sin((entityIn.ticksExisted + partialTicks) * 0.1F) + 1F) * 0.5F + 0.1F, 0F, 1F);
     }
 
     @Override

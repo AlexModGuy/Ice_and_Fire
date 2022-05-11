@@ -11,6 +11,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -70,7 +71,7 @@ public class WorldGenSirenIsland extends Feature<NoFeatureConfig> {
             layer++;
             for (float i = 0; i < getRadius(layer, up); i += 0.5) {
                 for (float j = 0; j < 2 * Math.PI * i + rand.nextInt(2); j += 0.5) {
-                    BlockPos stonePos = new BlockPos(Math.floor(center.getX() + Math.sin(j) * i + rand.nextInt(2)), center.getY(), Math.floor(center.getZ() + Math.cos(j) * i + rand.nextInt(2)));
+                    BlockPos stonePos = new BlockPos(Math.floor(center.getX() + MathHelper.sin(j) * i + rand.nextInt(2)), center.getY(), Math.floor(center.getZ() + MathHelper.cos(j) * i + rand.nextInt(2)));
                     worldIn.setBlockState(stonePos, getStone(rand), 3);
                     BlockPos upPos = stonePos.up();
                     if (worldIn.isAirBlock(upPos) && worldIn.isAirBlock(upPos.east()) && worldIn.isAirBlock(upPos.north()) && worldIn.isAirBlock(upPos.north().east()) && rand.nextInt(3) == 0 && sirens < sirensMax) {
@@ -84,7 +85,7 @@ public class WorldGenSirenIsland extends Feature<NoFeatureConfig> {
         layer++;
         for (float i = 0; i < getRadius(layer, up); i += 0.5) {
             for (float j = 0; j < 2 * Math.PI * i + rand.nextInt(2); j += 0.5) {
-                BlockPos stonePos = new BlockPos(Math.floor(center.getX() + Math.sin(j) * i + rand.nextInt(2)), center.getY(), Math.floor(center.getZ() + Math.cos(j) * i + rand.nextInt(2)));
+                BlockPos stonePos = new BlockPos(Math.floor(center.getX() + MathHelper.sin(j) * i + rand.nextInt(2)), center.getY(), Math.floor(center.getZ() + MathHelper.cos(j) * i + rand.nextInt(2)));
                 while (!worldIn.getBlockState(stonePos).isSolid() && stonePos.getY() >= 0) {
                     worldIn.setBlockState(stonePos, getStone(rand), 3);
                     stonePos = stonePos.down();

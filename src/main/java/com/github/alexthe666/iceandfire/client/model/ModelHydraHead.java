@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
 
 public class ModelHydraHead extends ModelDragonBase<EntityHydra> {
     public AdvancedModelBox Neck1;
@@ -136,7 +137,7 @@ public class ModelHydraHead extends ModelDragonBase<EntityHydra> {
         this.walk(neckSpike2, speed_idle * 1.5F, degree_idle * 0.4F, false, 3, -0.1F, f2, 1);
         this.chainSwing(ENTIRE_HEAD, speed_walk, degree_walk * 0.75F, -3, f, f1);
         float speakProgress = entity.prevSpeakingProgress[headIndex] + partialTicks * (entity.speakingProgress[headIndex] - entity.prevSpeakingProgress[headIndex]);
-        this.progressRotationInterp(LowerJaw1, (float) (Math.sin(speakProgress * Math.PI) * 10F), (float) Math.toRadians(25), 0.0F, 0.0F, 10F);
+        this.progressRotationInterp(LowerJaw1, MathHelper.sin((float) (speakProgress * Math.PI)) * 10F, (float) Math.toRadians(25), 0.0F, 0.0F, 10F);
         float limbSwingProgress = f1;
         /*
         this.progressRotationInterp(Neck1, (float)limbSwingProgress, (float) Math.toRadians(5), 0.0F, 0.0F, 1F);

@@ -797,8 +797,8 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
                     float f1 = 0;
                     float f2 = 0;
                     float f3 = 0;
-                    float headPosX = f1 + (float) (this.segments[0].getPosX() + 1.3F * getSeaSerpentScale() * Math.cos((rotationYaw + 90) * Math.PI / 180));
-                    float headPosZ = f2 + (float) (this.segments[0].getPosZ() + 1.3F * getSeaSerpentScale() * Math.sin((rotationYaw + 90) * Math.PI / 180));
+                    float headPosX = f1 + (float) (this.segments[0].getPosX() + 1.3F * getSeaSerpentScale() * MathHelper.cos((float) ((rotationYaw + 90) * Math.PI / 180)));
+                    float headPosZ = f2 + (float) (this.segments[0].getPosZ() + 1.3F * getSeaSerpentScale() * MathHelper.sin((float) ((rotationYaw + 90) * Math.PI / 180)));
                     float headPosY = f3 + (float) (this.segments[0].getPosY() + 0.2F * getSeaSerpentScale());
                     double d2 = entity.getPosX() - headPosX;
                     double d3 = entity.getPosY() - headPosY;

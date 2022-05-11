@@ -576,8 +576,8 @@ public class EntityIceDragon extends EntityDragonBase {
         if (this.world.isRemote) {
             for (int i = 0; i < 5; i++) {
                 float radiusAdd = i * 0.15F;
-                float headPosX = (float) (getPosX() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.cos((rotationYaw + 90) * Math.PI / 180));
-                float headPosZ = (float) (getPosZ() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Math.sin((rotationYaw + 90) * Math.PI / 180));
+                float headPosX = (float) (getPosX() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * MathHelper.cos((float) ((rotationYaw + 90) * Math.PI / 180)));
+                float headPosZ = (float) (getPosZ() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * MathHelper.sin((float) ((rotationYaw + 90) * Math.PI / 180)));
                 float headPosY = (float) (getPosY() + 0.5 * getRenderSize() * 0.3F);
                 IceAndFire.PROXY.spawnParticle(EnumParticles.DragonIce, headPosX, headPosY, headPosZ, 0, 0, 0);
             }
