@@ -375,6 +375,7 @@
   "item.iceandfire.hippogryph_talon.desc_0": "§6Item Raro§r",
   "item.iceandfire.hippogryph_sword": "Espada de Garra de Hipogrifo",
   "item.iceandfire.hippogryph_sword.desc_0": "Sempre arranha o alvo, causando dano extra",
+  "item.iceandfire.hippogryph_sword.desc_1": "Every use of it is a sweeping attack",
   "item.iceandfire.cyclops_eye": "Olho de Ciclope",
   "item.iceandfire.cyclops_eye.desc_0": "Arma de Efeito em Área",
   "item.iceandfire.cyclops_eye.desc_1": "Enfraquece todas criaturas hostis próximas, quando segurado",
@@ -1337,6 +1338,5 @@
   "iceandfire.sound.subtitle.icedragon_hurt": "Dragão de Gelo sendo ferido",
   "iceandfire.sound.subtitle.icedragon_death": "Dragão de Gelo morrendo",
   "iceandfire.sound.subtitle.dragonegg_hatch": "Ovo de Dragão eclodindo",
-  "iceandfire.sound.subtitle.dragonflute": "Flauta de Dragão sendo tocada",
-  "item.iceandfire.hippogryph_sword.desc_1": " "
+  "iceandfire.sound.subtitle.dragonflute": "Flauta de Dragão sendo tocada"
 }

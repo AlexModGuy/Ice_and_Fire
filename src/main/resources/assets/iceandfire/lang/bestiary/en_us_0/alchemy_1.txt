@@ -1,5 +1,5 @@
 When combined with a diamond, ender
-pearl, and a emerald or sapphire,
+pearl, and an emerald or sapphire,
 one can create a summoning crystal.
 
 <item><iceandfire:summoning_crystal_fire 0 15 22 1.25>
@@ -8,7 +8,7 @@ one can create a summoning crystal.
 
 
 
-When right clicked on a dragon,
+When right-# clicked on a dragon,
 the crystal is bound to it.
 When clicked anywhere again
 while in the same dimension,

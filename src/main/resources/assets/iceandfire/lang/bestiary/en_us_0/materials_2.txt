@@ -24,6 +24,6 @@ compacted into large cubes for
 storage. I predict that
 consolidating such a large mass
 of magical presence in a block
-could have unforseen uses.
+could have unforeseen uses.
 <recipe><iceandfire:dragonscale_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 210 80 0.75>
 <recipe><iceandfire:dragon_bone_block 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 210 140 0.75>

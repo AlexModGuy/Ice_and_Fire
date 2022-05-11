@@ -26,7 +26,7 @@ afterwards is to make sure the
 Hydra is on fire. When on fire,
 the Hydra cannot regrow heads,
 and every stump will eventually
-burn away. It will also loose its
+burn away. It will also lose its
 regenerative effects overall.
 
 The Hydra can only truly die when
