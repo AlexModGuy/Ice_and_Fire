@@ -1056,7 +1056,13 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public boolean canMove() {
-        return !this.isQueuedToSit() && !this.isSleeping() && this.getControllingPassenger() == null && !this.isModelDead() && sleepProgress == 0 && this.getAnimation() != ANIMATION_SHAKEPREY;
+        return !this.isQueuedToSit() && !this.isSleeping() &&
+            this.getControllingPassenger() == null && !this.isModelDead() &&
+            sleepProgress == 0 && this.getAnimation() != ANIMATION_SHAKEPREY;
+    }
+
+    public boolean isFuelingForge() {
+        return burningTarget != null && world.getTileEntity(burningTarget) instanceof TileEntityDragonforgeInput;
     }
 
     @Override

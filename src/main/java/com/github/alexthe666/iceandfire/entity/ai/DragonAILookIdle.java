@@ -20,7 +20,7 @@ public class DragonAILookIdle extends Goal {
 
     @Override
     public boolean shouldExecute() {
-        if (!this.dragon.canMove() || dragon.getAnimation() == EntityDragonBase.ANIMATION_SHAKEPREY) {
+        if (!this.dragon.canMove() || dragon.getAnimation() == EntityDragonBase.ANIMATION_SHAKEPREY || dragon.isFuelingForge()) {
             return false;
         }
         return this.dragon.getRNG().nextFloat() < 0.02F;

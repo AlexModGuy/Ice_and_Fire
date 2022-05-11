@@ -119,8 +119,8 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
         if (target != null) {
             RayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(dragon.getHeadPosition(), target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, dragon));
             if (rayTrace != null && rayTrace.getHitVec() != null) {
-                double distance = target.distanceTo(rayTrace.getHitVec());
-                return distance < 1.0F;
+                double distance = dragon.getHeadPosition().distanceTo(rayTrace.getHitVec());
+                return distance < 10.0F + dragon.getWidth();
             }
         }
         return false;

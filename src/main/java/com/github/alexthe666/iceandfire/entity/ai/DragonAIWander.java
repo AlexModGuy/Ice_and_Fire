@@ -31,7 +31,7 @@ public class DragonAIWander extends Goal {
 
     @Override
     public boolean shouldExecute() {
-        if (!dragon.canMove()) {
+        if (!dragon.canMove() || dragon.isFuelingForge()) {
             return false;
         }
         if (dragon.getControllingPassenger() != null) {
