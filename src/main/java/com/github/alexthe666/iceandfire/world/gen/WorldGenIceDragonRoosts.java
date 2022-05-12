@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
@@ -10,7 +8,6 @@ import com.github.alexthe666.iceandfire.entity.util.HomePosition;
 import com.github.alexthe666.iceandfire.event.WorldGenUtils;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
@@ -19,6 +16,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
@@ -27,10 +25,12 @@ import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
+import java.util.Random;
+
 public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private static boolean isMale;
-    private BlockPos lastIceRoost = BlockPos.ZERO;
+    public static ResourceLocation DRAGON_FEMALE_CHEST = new ResourceLocation("iceandfire", "chest/ice_dragon_female_cave");
 
     public WorldGenIceDragonRoosts(Codec<NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
@@ -67,7 +67,7 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
         if (!IafWorldRegistry.isDimensionListedForDragons(worldIn)) {
             return false;
         }
-        if (!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)||!IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
+        if (!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
             return false;
         }
         if (!worldIn.getFluidState(worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position).down()).isEmpty()) {
@@ -98,7 +98,7 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
             int l = radius;
             float f = (j + k + l) * 0.333F + 0.5F;
 
-            BlockPos.getAllInBox(position.add(-j, k, -l), position.add(j, 0, l)).map(BlockPos::toImmutable).forEach(blockPos ->  {
+            BlockPos.getAllInBox(position.add(-j, k, -l), position.add(j, 0, l)).map(BlockPos::toImmutable).forEach(blockPos -> {
                 int yAdd = blockPos.getY() - finalPosition.getY();
                 if (blockPos.distanceSq(finalPosition) <= f * f && yAdd < 2 + rand.nextInt(k) && !worldIn.isAirBlock(blockPos.down())) {
                     if (worldIn.isAirBlock(blockPos.up()))
@@ -165,7 +165,7 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
                         if (worldIn.getBlockState(height).getBlock() instanceof ChestBlock) {
                             TileEntity tileentity1 = worldIn.getTileEntity(height);
                             if (tileentity1 instanceof ChestTileEntity) {
-                                ((ChestTileEntity) tileentity1).setLootTable(WorldGenIceDragonCave.ICEDRAGON_CHEST, new Random().nextLong());
+                                ((ChestTileEntity) tileentity1).setLootTable(DRAGON_FEMALE_CHEST, new Random().nextLong());
                             }
                         }
                     }

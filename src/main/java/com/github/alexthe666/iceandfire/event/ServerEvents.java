@@ -545,10 +545,12 @@ public class ServerEvents {
                 LootPool.Builder builder = new LootPool.Builder().name("iaf_copper_ingot").addEntry(item).acceptCondition(RandomChance.builder(0.6f)).rolls(new RandomValueRange(1, 2)).bonusRolls(0, 3);
                 event.getTable().addPool(builder.build());
             }
-        } else if ((eventName.equals(WorldGenFireDragonCave.FIREDRAGON_CHEST)
-            || eventName.equals(WorldGenFireDragonCave.FIREDRAGON_MALE_CHEST)
-            || eventName.equals(WorldGenIceDragonCave.ICEDRAGON_CHEST)
-            || eventName.equals(WorldGenIceDragonCave.ICEDRAGON_MALE_CHEST))) {
+        } else if ((event.getName().equals(WorldGenFireDragonCave.FIRE_DRAGON_CHEST)
+            || event.getName().equals(WorldGenFireDragonCave.FIRE_DRAGON_CHEST_MALE)
+            || event.getName().equals(WorldGenIceDragonCave.ICE_DRAGON_CHEST)
+            || event.getName().equals(WorldGenIceDragonCave.ICE_DRAGON_CHEST_MALE)
+            || event.getName().equals(WorldGenLightningDragonCave.LIGHTNING_DRAGON_CHEST)
+            || event.getName().equals(WorldGenLightningDragonCave.LIGHTNING_DRAGON_CHEST_MALE))) {
             LootEntry.Builder item = ItemLootEntry.builder(IafItemRegistry.WEEZER_BLUE_ALBUM).quality(100).weight(1);
             LootPool.Builder builder = new LootPool.Builder().name("iaf_weezer").addEntry(item).acceptCondition(RandomChance.builder(0.01f)).rolls(new RandomValueRange(1, 1)).bonusRolls(0, 0);
             event.getTable().addPool(builder.build());

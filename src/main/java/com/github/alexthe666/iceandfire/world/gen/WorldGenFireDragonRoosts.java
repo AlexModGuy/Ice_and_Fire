@@ -19,6 +19,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
@@ -30,6 +31,7 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private static boolean isMale;
+    public static ResourceLocation DRAGON_FEMALE_CHEST = new ResourceLocation("iceandfire", "chest/fire_dragon_female_cave");
 
     public WorldGenFireDragonRoosts(Codec<NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
@@ -118,7 +120,7 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
             BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).forEach(blockPos -> {
                 if (blockPos.distanceSq(finalPosition) <= f * f) {
                     double dist = blockPos.distanceSq(finalPosition) / (f * f);
-                    if (!worldIn.isAirBlock(finalPosition) && rand.nextDouble() > dist * 0.5D) {
+                    if (!worldIn.isAirBlock(blockPos) && rand.nextDouble() > dist * 0.5D) {
                         transformState(worldIn, blockPos, worldIn.getBlockState(blockPos));
                     }
                     if (dist > 0.5D && rand.nextInt(1000) == 0) {
@@ -139,7 +141,7 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
                         if (worldIn.getBlockState(height).getBlock() instanceof ChestBlock) {
                             TileEntity tileentity1 = worldIn.getTileEntity(height);
                             if (tileentity1 instanceof ChestTileEntity) {
-                                ((ChestTileEntity) tileentity1).setLootTable(WorldGenFireDragonCave.FIREDRAGON_CHEST, new Random().nextLong());
+                                ((ChestTileEntity) tileentity1).setLootTable(DRAGON_FEMALE_CHEST, new Random().nextLong());
                             }
                         }
                     }

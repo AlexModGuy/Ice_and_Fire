@@ -19,6 +19,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
@@ -30,7 +31,7 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 public class WorldGenLightningDragonRoosts extends Feature<NoFeatureConfig> {
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private static boolean isMale;
-
+    public static ResourceLocation DRAGON_FEMALE_CHEST = new ResourceLocation("iceandfire", "chest/lightning_dragon_female_cave");
     public WorldGenLightningDragonRoosts(Codec<NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
     }
@@ -54,7 +55,7 @@ public class WorldGenLightningDragonRoosts extends Feature<NoFeatureConfig> {
         BlockPos finalPosition = position;
         if(!worldIn.isRemote()){
             EntityDragonBase dragon = IafEntityRegistry.LIGHTNING_DRAGON.get().create(worldIn.getWorld());
-        	dragon.setGender(isMale);
+            dragon.setGender(isMale);
             dragon.enablePersistence();
             dragon.growDragon(40 + radius);
             dragon.setAgingDisabled(true);
@@ -143,7 +144,7 @@ public class WorldGenLightningDragonRoosts extends Feature<NoFeatureConfig> {
                         if (worldIn.getBlockState(height).getBlock() instanceof ChestBlock) {
                             TileEntity tileentity1 = worldIn.getTileEntity(height);
                             if (tileentity1 instanceof ChestTileEntity) {
-                                ((ChestTileEntity) tileentity1).setLootTable(WorldGenLightningDragonCave.LIGHTNINGDRAGON_CHEST, new Random().nextLong());
+                                ((ChestTileEntity) tileentity1).setLootTable(DRAGON_FEMALE_CHEST, new Random().nextLong());
                             }
                         }
                     }
