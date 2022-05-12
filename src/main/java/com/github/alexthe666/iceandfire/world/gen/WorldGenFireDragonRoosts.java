@@ -31,7 +31,7 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private static boolean isMale;
-    public static ResourceLocation DRAGON_FEMALE_CHEST = new ResourceLocation("iceandfire", "chest/fire_dragon_female_cave");
+    public static ResourceLocation DRAGON_CHEST = new ResourceLocation("iceandfire", "chest/fire_dragon_roost");
 
     public WorldGenFireDragonRoosts(Codec<NoFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
@@ -141,7 +141,7 @@ public class WorldGenFireDragonRoosts extends Feature<NoFeatureConfig> {
                         if (worldIn.getBlockState(height).getBlock() instanceof ChestBlock) {
                             TileEntity tileentity1 = worldIn.getTileEntity(height);
                             if (tileentity1 instanceof ChestTileEntity) {
-                                ((ChestTileEntity) tileentity1).setLootTable(DRAGON_FEMALE_CHEST, new Random().nextLong());
+                                ((ChestTileEntity) tileentity1).setLootTable(DRAGON_CHEST, new Random().nextLong());
                             }
                         }
                     }
