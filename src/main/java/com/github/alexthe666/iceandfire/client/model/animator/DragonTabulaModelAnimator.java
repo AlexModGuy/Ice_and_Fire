@@ -27,7 +27,7 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
     }
 
     public void init(TabulaModel model) {
-        neckParts = new AdvancedModelBox[]{model.getCube("Neck1"), model.getCube("Neck2"), model.getCube("Neck3"), model.getCube("Neck3"), model.getCube("Head")};
+        neckParts = new AdvancedModelBox[]{model.getCube("Neck1"), model.getCube("Neck2"), model.getCube("Neck3"), model.getCube("Head")};
         tailParts = new AdvancedModelBox[]{model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
         tailPartsWBody = new AdvancedModelBox[]{model.getCube("BodyLower"), model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4")};
         toesPartsL = new AdvancedModelBox[]{model.getCube("ToeL1"), model.getCube("ToeL2"), model.getCube("ToeL3")};
@@ -364,11 +364,11 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
         if (model.llibAnimator.setAnimation(T.ANIMATION_WINGBLAST)) {
             model.llibAnimator.startKeyframe(5);
             moveToPose(model, getModel(EnumDragonPoses.WING_BLAST1));
-            model.llibAnimator.move(modelCubeBodyUpper, 0, -4F, 0);
+            model.llibAnimator.move(modelCubeBodyUpper, 0, 0, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.startKeyframe(5);
             moveToPose(model, getModel(EnumDragonPoses.WING_BLAST2));
-            model.llibAnimator.move(modelCubeBodyUpper, 0, -4F, 0);
+            model.llibAnimator.move(modelCubeBodyUpper, 0, -2F, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.startKeyframe(5);
             moveToPose(model, getModel(EnumDragonPoses.WING_BLAST3));
@@ -388,7 +388,7 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
             model.llibAnimator.endKeyframe();
             model.llibAnimator.startKeyframe(5);
             moveToPose(model, getModel(EnumDragonPoses.WING_BLAST7));
-            model.llibAnimator.move(modelCubeBodyUpper, 0, -4F, 0);
+            model.llibAnimator.move(modelCubeBodyUpper, 0, -2F, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.resetKeyframe(10);
         }
@@ -428,6 +428,27 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
             model.llibAnimator.move(modelCubeBodyUpper, 0, -6.8F, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.resetKeyframe(10);
+        }
+        // EATING
+        if (model.llibAnimator.setAnimation(T.ANIMATION_EAT)) {
+            model.llibAnimator.startKeyframe(5);
+            this.rotate(model.llibAnimator, model.getCube("Neck1"), 18 , 0,0);
+            this.rotate(model.llibAnimator, model.getCube("Neck2"), 18 , 0,0);
+            model.llibAnimator.endKeyframe();
+            //CODE from speak
+            model.llibAnimator.startKeyframe(5);
+            this.rotate(model.llibAnimator, modelCubeJaw, 18, 0, 0);
+            model.llibAnimator.move(modelCubeJaw, 0, 0, 0.2F);
+            model.llibAnimator.endKeyframe();
+            model.llibAnimator.setStaticKeyframe(5);
+            model.llibAnimator.startKeyframe(5);
+            this.rotate(model.llibAnimator, modelCubeJaw, 18, 0, 0);
+            model.llibAnimator.move(modelCubeJaw, 0, 0, 0.2F);
+            model.llibAnimator.endKeyframe();
+            model.llibAnimator.startKeyframe(5);
+            this.rotate(model.llibAnimator, model.getCube("Neck1"), -18 , 0,0);
+            this.rotate(model.llibAnimator, model.getCube("Neck2"), -18 , 0,0);
+            model.llibAnimator.endKeyframe();
         }
     }
 }

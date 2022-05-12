@@ -1,24 +1,20 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.function.Predicate;
-
 import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
-
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nonnull;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
 
@@ -31,17 +27,17 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
     @Nonnull
     private List<ItemEntity> list = IAFMath.emptyItemEntityList;
 
-    public DragonAITargetItems(MobEntity creature, boolean checkSight) {
+    public DragonAITargetItems(EntityDragonBase creature, boolean checkSight) {
         this(creature, checkSight, false);
         this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
 
-    public DragonAITargetItems(MobEntity creature, boolean checkSight, boolean onlyNearby) {
+    public DragonAITargetItems(EntityDragonBase creature, boolean checkSight, boolean onlyNearby) {
         this(creature, 20, checkSight, onlyNearby);
         isIce = creature instanceof EntityIceDragon;
     }
 
-    public DragonAITargetItems(MobEntity creature, int chance, boolean checkSight, boolean onlyNearby) {
+    public DragonAITargetItems(EntityDragonBase creature, int chance, boolean checkSight, boolean onlyNearby) {
         super(creature, checkSight, onlyNearby);
         isIce = creature instanceof EntityIceDragon;
         this.targetChance = chance;
@@ -93,10 +89,12 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
     @Override
     public void tick() {
         super.tick();
-        if (this.targetEntity == null || this.targetEntity.isAlive()) {
+        if (this.targetEntity == null || !this.targetEntity.isAlive()) {
             this.resetTask();
-        } else if (this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
-            this.targetEntity.getItem().shrink(1);
+        } else if (this.goalOwner.getDistanceSq(this.targetEntity) < this.goalOwner.getWidth() * 2 + this.goalOwner.getHeight() / 2 ||
+            (this.goalOwner instanceof EntityDragonBase &&
+                ((EntityDragonBase) this.goalOwner).getHeadPosition().squareDistanceTo(this.targetEntity.getPositionVec()) < this.goalOwner.getHeight())) {
+
             this.goalOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
             final int hunger = FoodUtils.getFoodPoints(this.targetEntity.getItem(), true, isIce);
             final EntityDragonBase dragon = ((EntityDragonBase) this.goalOwner);
@@ -110,6 +108,7 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
             for (int i = 0; i < 4; i++) {
                 dragon.spawnItemCrackParticles(this.targetEntity.getItem().getItem());
             }
+            this.targetEntity.getItem().shrink(1);
             resetTask();
         }
     }

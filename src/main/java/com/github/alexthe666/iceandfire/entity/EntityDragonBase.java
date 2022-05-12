@@ -1348,13 +1348,15 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     public void spawnItemCrackParticles(Item item) {
-        if (world.isRemote) {
-            for (int i = 0; i < 15; i++) {
-                final double motionX = getRNG().nextGaussian() * 0.07D;
-                final double motionY = getRNG().nextGaussian() * 0.07D;
-                final double motionZ = getRNG().nextGaussian() * 0.07D;
-                final Vector3d headVec = this.getHeadPosition();
-
+        for (int i = 0; i < 15; i++) {
+            final double motionX = getRNG().nextGaussian() * 0.07D;
+            final double motionY = getRNG().nextGaussian() * 0.07D;
+            final double motionZ = getRNG().nextGaussian() * 0.07D;
+            final Vector3d headVec = this.getHeadPosition();
+            if (!world.isRemote) {
+                ((ServerWorld) this.world).spawnParticle(new ItemParticleData(ParticleTypes.ITEM, new ItemStack(item)), headVec.x, headVec.y, headVec.z, 1, motionX, motionY, motionZ, 0.1);
+            }
+            else {
                 this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, new ItemStack(item)), headVec.x, headVec.y, headVec.z, motionX, motionY, motionZ);
             }
         }
