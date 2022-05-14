@@ -94,13 +94,13 @@ public class DragonType {
         }
         if (this == ICE) {
             if (egg.world.getBlockState(pos).getMaterial() == Material.WATER && egg.getRNG().nextInt(500) == 0) {
-                egg.remove();
                 egg.world.setBlockState(pos, IafBlockRegistry.EGG_IN_ICE.getDefaultState());
                 egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), SoundEvents.BLOCK_GLASS_BREAK, egg.getSoundCategory(), 2.5F, 1.0F, false);
                 if (egg.world.getBlockState(pos).getBlock() instanceof BlockEggInIce) {
                     ((TileEntityEggInIce) egg.world.getTileEntity(pos)).type = egg.getEggType();
                     ((TileEntityEggInIce) egg.world.getTileEntity(pos)).ownerUUID = egg.getOwnerId();
                 }
+                egg.remove();
             }
         }
         if (this == LIGHTNING) {

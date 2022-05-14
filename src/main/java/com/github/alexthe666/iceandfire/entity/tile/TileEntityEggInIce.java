@@ -1,16 +1,10 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
@@ -19,6 +13,10 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+
+import javax.annotation.Nullable;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class TileEntityEggInIce extends TileEntity implements ITickableTileEntity {
     public EnumDragonEgg type;
@@ -35,6 +33,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickableTileEntit
 
     @Override
     public CompoundNBT write(CompoundNBT tag) {
+        super.write(tag);
         if (type != null) {
             tag.putByte("Color", (byte) type.ordinal());
         } else {
@@ -44,24 +43,26 @@ public class TileEntityEggInIce extends TileEntity implements ITickableTileEntit
         if (ownerUUID == null) {
             tag.putString("OwnerUUID", "");
         } else {
-            tag.putString("OwnerUUID", ownerUUID.toString());
+            tag.putUniqueId("OwnerUUID", ownerUUID);
         }
-
-        return super.write(tag);
+        return tag;
     }
 
     @Override
     public void read(BlockState state, CompoundNBT tag) {
         super.read(state,tag);
         type = EnumDragonEgg.values()[tag.getByte("Color")];
-        age = tag.getByte("Age");
-        UUID s;
+        age = tag.getInt("Age");
+        UUID s = null;
 
         if (tag.hasUniqueId("OwnerUUID")) {
             s = tag.getUniqueId("OwnerUUID");
         } else {
-            String s1 = tag.getString("OwnerUUID");
-            s = PreYggdrasilConverter.convertMobOwnerIfNeeded(this.world.getServer(), s1);
+            try {
+                String s1 = tag.getString("OwnerUUID");
+                s = PreYggdrasilConverter.convertMobOwnerIfNeeded(this.world.getServer(), s1);
+            }
+            catch (Exception ignored) { }
         }
         if (s != null) {
             ownerUUID = s;
@@ -69,18 +70,31 @@ public class TileEntityEggInIce extends TileEntity implements ITickableTileEntit
     }
 
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+    public void handleUpdateTag(BlockState blockState, CompoundNBT parentNBTTagCompound)
+    {
+        this.read(blockState, parentNBTTagCompound);
+    }
+
+    public CompoundNBT getUpdateTag()
+    {
+        CompoundNBT nbtTagCompound = new CompoundNBT();
+        write(nbtTagCompound);
+        return nbtTagCompound;
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        read(this.getBlockState(), packet.getNbtCompound());
+    @Nullable
+    public SUpdateTileEntityPacket getUpdatePacket()
+    {
+        CompoundNBT nbtTagCompound = new CompoundNBT();
+        write(nbtTagCompound);
+        return new SUpdateTileEntityPacket(this.pos, -1, nbtTagCompound);
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        return this.write(new CompoundNBT());
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+        BlockState blockState = world.getBlockState(pos);
+        read(blockState, pkt.getNbtCompound());   // read from the nbt in the packet
     }
 
     public void spawnEgg() {
@@ -99,18 +113,18 @@ public class TileEntityEggInIce extends TileEntity implements ITickableTileEntit
     public void tick() {
         age++;
         if (age >= IafConfig.dragonEggTime && type != null && !spawned) {
-            world.destroyBlock(pos, false);
-            world.setBlockState(pos, Blocks.WATER.getDefaultState());
-            EntityIceDragon dragon = new EntityIceDragon(world);
-            dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-            dragon.setVariant(type.ordinal() - 4);
-            dragon.setGender(ThreadLocalRandom.current().nextBoolean());
-            dragon.setTamed(true);
-            dragon.setHunger(50);
-            dragon.setOwnerId(ownerUUID);
             if (!world.isRemote) {
+                EntityIceDragon dragon = new EntityIceDragon(world);
+                dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+                dragon.setVariant(type.ordinal() - 4);
+                dragon.setGender(ThreadLocalRandom.current().nextBoolean());
+                dragon.setTamed(true);
+                dragon.setHunger(50);
+                dragon.setOwnerId(ownerUUID);
                 world.addEntity(dragon);
                 spawned = true;
+                world.destroyBlock(pos, false);
+                world.setBlockState(pos, Blocks.WATER.getDefaultState());
             }
 
         }
