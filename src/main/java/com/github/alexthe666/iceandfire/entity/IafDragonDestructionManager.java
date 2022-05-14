@@ -12,7 +12,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SpreadableSnowyDirtBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -29,8 +28,9 @@ public class IafDragonDestructionManager {
     public static void destroyAreaFire(World world, BlockPos center, EntityDragonBase destroyer) {
         if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
             return;
-        Entity cause = destroyer.getRidingPlayer() != null ? destroyer.getRidingPlayer() : destroyer;
-        DamageSource source = IafDamageRegistry.causeDragonFireDamage(cause);
+        DamageSource source = destroyer.getRidingPlayer() != null ?
+            IafDamageRegistry.causeIndirectDragonFireDamage(destroyer, destroyer.getRidingPlayer()) :
+            IafDamageRegistry.causeDragonFireDamage(destroyer);
         int stage = destroyer.getDragonStage();
         double damageRadius = 3.5D;
         float dmgScale = (float) IafConfig.dragonAttackDamageFire;
@@ -90,8 +90,9 @@ public class IafDragonDestructionManager {
     public static void destroyAreaIce(World world, BlockPos center, EntityDragonBase destroyer) {
         if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
             return;
-        Entity cause = destroyer.getRidingPlayer() != null ? destroyer.getRidingPlayer() : destroyer;
-        DamageSource source = IafDamageRegistry.causeDragonIceDamage(cause);
+        DamageSource source = destroyer.getRidingPlayer() != null ?
+            IafDamageRegistry.causeIndirectDragonIceDamage(destroyer, destroyer.getRidingPlayer()) :
+            IafDamageRegistry.causeDragonIceDamage(destroyer);
         int stage = destroyer.getDragonStage();
         double damageRadius = 3.5D;
         float dmgScale = (float) IafConfig.dragonAttackDamageIce;
@@ -151,8 +152,9 @@ public class IafDragonDestructionManager {
     public static void destroyAreaLightning(World world, BlockPos center, EntityDragonBase destroyer) {
         if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
             return;
-        Entity cause = destroyer.getRidingPlayer() != null ? destroyer.getRidingPlayer() : destroyer;
-        DamageSource source = IafDamageRegistry.causeDragonLightningDamage(cause);
+        DamageSource source = destroyer.getRidingPlayer() != null ?
+            IafDamageRegistry.causeIndirectDragonLightningDamage(destroyer, destroyer.getRidingPlayer()) :
+            IafDamageRegistry.causeDragonLightningDamage(destroyer);
         int stage = destroyer.getDragonStage();
         double damageRadius = 3.5D;
         float dmgScale = (float) IafConfig.dragonAttackDamageLightning;
@@ -214,8 +216,9 @@ public class IafDragonDestructionManager {
         if (destroyer != null) {
             if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
                 return;
-            Entity cause = destroyer.getRidingPlayer() != null ? destroyer.getRidingPlayer() : destroyer;
-            DamageSource source = IafDamageRegistry.causeDragonFireDamage(cause);
+            DamageSource source = destroyer.getRidingPlayer() != null ?
+                IafDamageRegistry.causeIndirectDragonFireDamage(destroyer, destroyer.getRidingPlayer()) :
+                IafDamageRegistry.causeDragonFireDamage(destroyer);
             int stage = destroyer.getDragonStage();
             int j = 2;
             int k = 2;
@@ -279,8 +282,9 @@ public class IafDragonDestructionManager {
         if (destroyer != null) {
             if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
                 return;
-            Entity cause = destroyer.getRidingPlayer() != null ? destroyer.getRidingPlayer() : destroyer;
-            DamageSource source = IafDamageRegistry.causeDragonIceDamage(cause);
+            DamageSource source = destroyer.getRidingPlayer() != null ?
+                IafDamageRegistry.causeIndirectDragonIceDamage(destroyer, destroyer.getRidingPlayer()) :
+                IafDamageRegistry.causeDragonIceDamage(destroyer);
             int stage = destroyer.getDragonStage();
             int j = 2;
             int k = 2;
@@ -344,8 +348,9 @@ public class IafDragonDestructionManager {
         if (destroyer != null) {
             if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
                 return;
-            Entity cause = destroyer.getRidingPlayer() != null ? destroyer.getRidingPlayer() : destroyer;
-            DamageSource source = IafDamageRegistry.causeDragonLightningDamage(cause);
+            DamageSource source = destroyer.getRidingPlayer() != null ?
+                IafDamageRegistry.causeIndirectDragonLightningDamage(destroyer, destroyer.getRidingPlayer()) :
+                IafDamageRegistry.causeDragonLightningDamage(destroyer);
             int stage = destroyer.getDragonStage();
             int j = 2;
             int k = 2;

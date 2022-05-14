@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -60,7 +61,7 @@ public class IafDragonLogic {
                 dragon.setAnimation(EntityDragonBase.ANIMATION_BITE);
             }
             if (target != null && !DragonUtils.hasSameOwner(dragon, target)) {
-                target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+               attackTarget(target, ridingPlayer, (int) dragon.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
             }
         }
         if (dragon.getControllingPassenger() != null && dragon.getControllingPassenger().isSneaking()) {
@@ -185,7 +186,7 @@ public class IafDragonLogic {
                 if (dragon.getBoundingBox().expand(2.0D, 2.0D, 2.0D).intersects(dragon.getAttackTarget().getBoundingBox())) {
                     dragon.usingGroundAttack = true;
                     dragon.randomizeAttacks();
-                    dragon.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(dragon), dragon.getDragonStage() * 3);
+                    attackTarget(dragon.getAttackTarget(), ridingPlayer, dragon.getDragonStage() * 3);
                     dragon.setFlying(false);
                     dragon.setHovering(false);
                 }
@@ -357,6 +358,13 @@ public class IafDragonLogic {
 
     }
 
+    public void attackTarget(Entity target, PlayerEntity ridingPlayer, float damage) {
+        if (ridingPlayer == null)
+            target.attackEntityFrom(DamageSource.causeMobDamage(dragon), damage);
+        else
+            target.attackEntityFrom(DamageSource.causeIndirectDamage(dragon, ridingPlayer), damage);
+    }
+
     /*
     logic done exclusively on client.
     */
@@ -513,26 +521,27 @@ public class IafDragonLogic {
     logic handler for the dragon's melee attacks.
     */
     public void updateDragonAttack() {
+        PlayerEntity ridingPlayer = dragon.getRidingPlayer();
         if (dragon.isPlayingAttackAnimation() && dragon.getAttackTarget() != null && dragon.canEntityBeSeen(dragon.getAttackTarget())) {
             LivingEntity target = dragon.getAttackTarget();
             final double dist = dragon.getDistance(target);
             if (dist < dragon.getRenderSize() * 0.2574 * 2 + 2) {
                 if (dragon.getAnimation() == EntityDragonBase.ANIMATION_BITE) {
                     if (dragon.getAnimationTick() > 15 && dragon.getAnimationTick() < 25) {
-                        target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                        attackTarget(target, ridingPlayer, (int) dragon.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
                         dragon.usingGroundAttack = dragon.getRNG().nextBoolean();
                         dragon.randomizeAttacks();
                     }
                 } else if (dragon.getAnimation() == EntityDragonBase.ANIMATION_TAILWHACK) {
                     if (dragon.getAnimationTick() > 20 && dragon.getAnimationTick() < 30) {
-                        target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                        attackTarget(target, ridingPlayer, (int) dragon.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
                         target.applyKnockback( dragon.getDragonStage() * 0.6F, MathHelper.sin(dragon.rotationYaw * 0.017453292F), -MathHelper.cos(dragon.rotationYaw * 0.017453292F));
                         dragon.usingGroundAttack = dragon.getRNG().nextBoolean();
                         dragon.randomizeAttacks();
                     }
                 } else if (dragon.getAnimation() == EntityDragonBase.ANIMATION_WINGBLAST) {
                     if ((dragon.getAnimationTick() == 15 || dragon.getAnimationTick() == 25 || dragon.getAnimationTick() == 35)) {
-                        target.attackEntityFrom(DamageSource.causeMobDamage(dragon), ((int) dragon.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                        attackTarget(target, ridingPlayer, (int) dragon.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
                         target.applyKnockback( dragon.getDragonStage() * 0.6F, MathHelper.sin(dragon.rotationYaw * 0.017453292F), -MathHelper.cos(dragon.rotationYaw * 0.017453292F));
                         dragon.usingGroundAttack = dragon.getRNG().nextBoolean();
                         dragon.randomizeAttacks();
