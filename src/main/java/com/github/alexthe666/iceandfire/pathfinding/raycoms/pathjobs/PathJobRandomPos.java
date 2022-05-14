@@ -3,8 +3,7 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs;
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.pathfinding.raycoms.Node;
-import com.github.alexthe666.iceandfire.pathfinding.raycoms.RandomPathResult;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.*;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.pathfinding.Path;
@@ -16,7 +15,6 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.AbstractPathJob.SurfaceType;
 
 /**
  * Job that handles random pathing.
@@ -26,51 +24,116 @@ public class PathJobRandomPos extends AbstractPathJob
     /**
      * Direction to walk to.
      */
-
     protected final BlockPos destination;
 
     /**
      * Required avoidDistance.
      */
-    protected final int distance;
+    protected final int minDistFromStart;
+
 
     /**
      * Random pathing rand.
      */
     private static Random random = new Random();
 
+
+    /**
+     * Minimum distance to the goal.
+     */
+    private final int maxDistToDest;
+
     /**
      * Prepares the PathJob for the path finding system.
      *
      * @param world         world the entity is in.
      * @param start         starting location.
-     * @param distance how far to move away.
+     * @param minDistFromStart how far to move away.
      * @param range         max range to search.
      * @param entity        the entity.
      */
     public PathJobRandomPos(
       final World world,
       final BlockPos start,
-      final int distance,
+      final int minDistFromStart,
       final int range,
       final LivingEntity entity)
     {
-        super(world, start, start, range, new RandomPathResult(), entity);
-        this.distance = distance;
+        super(world, start, start, range, new PathResult<PathJobRandomPos>(), entity);
+        this.minDistFromStart = minDistFromStart;
+        this.maxDistToDest = range;
 
         final Tuple<Direction, Direction> dir = getRandomDirectionTuple(random);
-        this.destination = start.offset(dir.getA(), distance).offset(dir.getB(), distance);
+        this.destination = start.offset(dir.getA(), minDistFromStart).offset(dir.getB(), minDistFromStart);
     }
 
-    private Tuple<Direction, Direction> getRandomDirectionTuple(Random random) {
-        return new Tuple<Direction, Direction>(Direction.getRandomDirection(random), Direction.getRandomDirection(random));
+    /**
+     * Prepares the PathJob for the path finding system.
+     *
+     * @param world            world the entity is in.
+     * @param start            starting location.
+     * @param minDistFromStart how far to move away.
+     * @param searchRange            max range to search.
+     * @param entity           the entity.
+     */
+    public PathJobRandomPos(
+        final World world,
+        final BlockPos start,
+        final int minDistFromStart,
+        final int searchRange,
+        final int maxDistToDest,
+        final LivingEntity entity,
+        final BlockPos dest)
+    {
+        super(world, start, dest, searchRange, new PathResult<PathJobRandomPos>(), entity);
+        this.minDistFromStart = minDistFromStart;
+        this.maxDistToDest = maxDistToDest;
+        this.destination = dest;
+    }
+
+    /**
+     * Prepares the PathJob for the path finding system.
+     *
+     * @param world    world the entity is in.
+     * @param start    starting location.
+     * @param minDistFromStart how far to move away.
+     * @param range    max range to search.
+     * @param entity   the entity.
+     */
+    public PathJobRandomPos(
+        final World world,
+        final BlockPos start,
+        final int minDistFromStart,
+        final int range,
+        final LivingEntity entity,
+        final BlockPos startRestriction,
+        final BlockPos endRestriction,
+        final AbstractAdvancedPathNavigate.RestrictionType restrictionType)
+    {
+        super(world, start, startRestriction, endRestriction, range, false, new PathResult<PathJobRandomPos>(), entity, restrictionType);
+        this.minDistFromStart = minDistFromStart;
+        this.maxDistToDest = range;
+
+        final Tuple<Direction, Direction> dir = getRandomDirectionTuple(random);
+        this.destination = start.offset(dir.getA(), minDistFromStart).offset(dir.getB(), minDistFromStart);
+    }
+
+    /**
+     * Searches a random direction.
+     *
+     * @param random a random object.
+     * @return a tuple of two directions.
+     */
+    public static Tuple<Direction, Direction> getRandomDirectionTuple(final Random random)
+    {
+        return new Tuple<>(Direction.getRandomDirection(random), Direction.getRandomDirection(random));
     }
 
     @Nullable
     @Override
     protected Path search()
     {
-        if (true)
+        if (Pathfinding.isDebug())
         {
             IceAndFire.LOGGER.info(String.format("Pathfinding from [%d,%d,%d] in the direction of [%d,%d,%d]",
               start.getX(), start.getY(), start.getZ(), destination.getX(), destination.getY(), destination.getZ()));
@@ -81,9 +144,9 @@ public class PathJobRandomPos extends AbstractPathJob
 
 
     @Override
-    public RandomPathResult getResult()
+    public PathResult getResult()
     {
-        return (RandomPathResult) super.getResult();
+        return super.getResult();
     }
 
     @Override
@@ -95,9 +158,10 @@ public class PathJobRandomPos extends AbstractPathJob
     @Override
     protected boolean isAtDestination(final Node n)
     {
-        if (Math.sqrt(start.distanceSq(n.pos)) > distance && isWalkableSurface(world.getBlockState(n.pos.down()), n.pos.down()) == SurfaceType.WALKABLE) //&& isWalkableSurface(world.getBlockState(n.pos.down()), n.pos.down()) == SurfaceType.WALKABLE)
+        if (random.nextInt(10) == 0 && isInRestrictedArea(n.pos) && (start.distanceSq(n.pos) > minDistFromStart * minDistFromStart)
+            && SurfaceType.getSurfaceType(world, world.getBlockState(n.pos.down()), n.pos.down()) == SurfaceType.WALKABLE
+            && destination.distanceSq(n.pos) < this.maxDistToDest * this.maxDistToDest)
         {
-            getResult().randomPos = n.pos;
             return true;
         }
         return false;
@@ -109,4 +173,18 @@ public class PathJobRandomPos extends AbstractPathJob
         //  For Result Score lower is better
         return destination.distanceSq(n.pos);
     }
+
+    /**
+     * Checks if position and range match the given parameters
+     *
+     * @param range max dist to dest range
+     * @param pos   dest to look from
+     * @return
+     */
+    public boolean posAndRangeMatch(final int range, final BlockPos pos)
+    {
+        return destination != null && pos != null && range == maxDistToDest && destination.equals(pos);
+    }
+
+
 }

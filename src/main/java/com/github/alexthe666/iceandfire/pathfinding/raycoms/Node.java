@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 /*
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
@@ -124,6 +125,42 @@ public class Node implements Comparable<Node>
         this.heuristic = heuristic;
         this.score = score;
         this.hash = pos.getX() ^ ((pos.getZ() << HASH_A) | (pos.getZ() >> HASH_B)) ^ (pos.getY() << HASH_C);
+    }
+
+    /**
+     * Create an MNode from a bytebuf.
+     * @param byteBuf the buffer to load it from.
+     */
+    public Node(final PacketBuffer byteBuf)
+    {
+        if (byteBuf.readBoolean())
+        {
+            this.parent = new Node(byteBuf.readBlockPos(), 0);
+        }
+        this.pos = byteBuf.readBlockPos();
+        this.cost = byteBuf.readDouble();
+        this.heuristic = byteBuf.readDouble();
+        this.score = byteBuf.readDouble();
+        this.hash = pos.getX() ^ ((pos.getZ() << HASH_A) | (pos.getZ() >> HASH_B)) ^ (pos.getY() << HASH_C);
+        this.isReachedByWorker = byteBuf.readBoolean();
+    }
+
+    /**
+     * Serialize the Node to buf.
+     * @param byteBuf
+     */
+    public void serializeToBuf(final PacketBuffer byteBuf)
+    {
+        byteBuf.writeBoolean(this.parent != null);
+        if (this.parent != null)
+        {
+            byteBuf.writeBlockPos(this.parent.pos);
+        }
+        byteBuf.writeBlockPos(this.pos);
+        byteBuf.writeDouble(this.cost);
+        byteBuf.writeDouble(this.heuristic);
+        byteBuf.writeDouble(this.score);
+        byteBuf.writeBoolean(this.isReachedByWorker);
     }
 
     @Override
@@ -371,9 +408,9 @@ public class Node implements Comparable<Node>
     /**
      * Marks the node as reached by the worker
      */
-    public void setReachedByWorker()
+    public void setReachedByWorker(boolean bool)
     {
-        isReachedByWorker = true;
+        isReachedByWorker = bool;
     }
 
     /**

@@ -95,7 +95,7 @@ public class IceAndFire {
         MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadFromJSON);
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
         PROXY.init();
-      
+
         final IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         IafContainerRegistry.CONTAINERS.register(modBus);
         IafEntityRegistry.ENTITIES.register(modBus);
@@ -135,6 +135,10 @@ public class IceAndFire {
         }
     }
 
+    public static <MSG> void sendMSGToPlayer(MSG message, ServerPlayerEntity player) {
+        NETWORK_WRAPPER.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+    }
+
     private void setup(final FMLCommonSetupEvent event) {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageDaytime.class, MessageDaytime::write, MessageDaytime::read, MessageDaytime.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageDeathWormHitbox.class, MessageDeathWormHitbox::write, MessageDeathWormHitbox::read, MessageDeathWormHitbox.Handler::handle);
@@ -156,6 +160,8 @@ public class IceAndFire {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageUpdatePodium.class, MessageUpdatePodium::write, MessageUpdatePodium::read, MessageUpdatePodium.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageUpdateDragonforge.class, MessageUpdateDragonforge::write, MessageUpdateDragonforge::read, MessageUpdateDragonforge.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageUpdateLectern.class, MessageUpdateLectern::write, MessageUpdateLectern::read, MessageUpdateLectern.Handler::handle);
+        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSyncPath.class, MessageSyncPath::write, MessageSyncPath::read, MessageSyncPath.Handler::handle);
+        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSyncPathReached.class, MessageSyncPathReached::write, MessageSyncPathReached::read, MessageSyncPathReached.Handler::handle);
         event.enqueueWork(() ->{
             PROXY.setup();
             IafProcessors.registerProcessors();

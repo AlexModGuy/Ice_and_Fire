@@ -5,23 +5,29 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.concurrent.Future;
 
 public abstract class AbstractAdvancedPathNavigate extends GroundPathNavigator {
+    /**
+     * Type of restriction.
+     */
+    public enum RestrictionType
+    {
+        NONE,
+        XZ,
+        XYZ
+    }
+
     //  Parent class private members
-    protected final MobEntity ourEntity;
+    protected final MobEntity    ourEntity;
     @Nullable
-    protected BlockPos destination;
-    protected double walkSpeedFactor = 1.0D;
+    protected       BlockPos     destination;
+    protected       double       walkSpeedFactor = 1.0D;
     @Nullable
-    protected BlockPos originalDestination;
-    @Nullable
-    protected Future<Path> calculationFuture;
+    protected       BlockPos     originalDestination;
 
     /**
      * The navigators node costs
@@ -49,11 +55,12 @@ public abstract class AbstractAdvancedPathNavigate extends GroundPathNavigator {
      * Used to path away from a position.
      *
      * @param currentPosition the position to avoid.
-     * @param range           the range he should move out of.
-     * @param speed           the speed to run at.
+     * @param range the range he should move out of.
+     * @param speed the speed to run at.
+     * @param safeDestination if the destination is save and should be set.
      * @return the result of the pathing.
      */
-    public abstract PathResult moveAwayFromXYZ(final BlockPos currentPosition, final double range, final double speed);
+    public abstract PathResult moveAwayFromXYZ(final BlockPos currentPosition, final double range, final double speed, final boolean safeDestination);
 
     /**
      * Try to move to a certain position.
@@ -92,7 +99,27 @@ public abstract class AbstractAdvancedPathNavigate extends GroundPathNavigator {
      * @param speed the speed to run at.
      * @return the result of the pathing.
      */
-    public abstract RandomPathResult moveToRandomPos(final double range, final double speed);
+    public abstract PathResult moveToRandomPos(final double range, final double speed);
+
+    /**
+     * Used to path towards a random pos.
+     *
+     * @param range the range he should move out of.
+     * @param speed the speed to run at.
+     * @param pos the pos to circle around.
+     * @return the result of the pathing.
+     */
+    public abstract PathResult moveToRandomPosAroundX(final int range, final double speed, final BlockPos pos);
+
+    /**
+     * Used to path towards a random pos within some restrictions
+     *
+     * @param range the range he should move out of.
+     * @param speed the speed to run at.
+     * @param corners the corners they can't leave.
+     * @return the result of the pathing.
+     */
+    public abstract PathResult moveToRandomPos(final int range, final double speed, final net.minecraft.util.Tuple<BlockPos, BlockPos> corners, final RestrictionType restrictionType);
 
     /**
      * Used to move a living ourEntity with a speed.
@@ -134,4 +161,6 @@ public abstract class AbstractAdvancedPathNavigate extends GroundPathNavigator {
      * @param stuckHandler handler to use
      */
     public abstract void setStuckHandler(final IStuckHandler stuckHandler);
+
+    public abstract void setSwimSpeedFactor(double factor);
 }

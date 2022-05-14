@@ -14,11 +14,15 @@ import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.item.*;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
+import com.github.alexthe666.iceandfire.message.MessageSyncPath;
 import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.AbstractPathJob;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenFireDragonCave;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenIceDragonCave;
+import com.github.alexthe666.iceandfire.world.gen.WorldGenLightningDragonCave;
 import com.google.common.base.Predicate;
 import net.minecraft.block.AbstractChestBlock;
 import net.minecraft.block.Blocks;
@@ -33,6 +37,7 @@ import net.minecraft.entity.monster.WitherSkeletonEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -63,9 +68,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)
 public class ServerEvents {
@@ -457,8 +460,20 @@ public class ServerEvents {
                 }
             }
         }
-        if (AiDebug.isEnabled() && !event.getWorld().isRemote() && event.getTarget() instanceof MobEntity && event.getItemStack().getItem() == Items.STICK) {
-            AiDebug.addEntity((MobEntity) event.getTarget());
+        if (!event.getWorld().isRemote() && event.getTarget() instanceof MobEntity && event.getItemStack().getItem() == Items.STICK ){
+            if (AiDebug.isEnabled())
+                AiDebug.addEntity((MobEntity) event.getTarget());
+            if (Pathfinding.isDebug()) {
+                if (AbstractPathJob.trackingMap.getOrDefault(event.getPlayer(), UUID.randomUUID()).equals(event.getTarget().getUniqueID()))
+                {
+                    AbstractPathJob.trackingMap.remove(event.getPlayer());
+                    IceAndFire.sendMSGToPlayer(new MessageSyncPath(new HashSet<>(), new HashSet<>(), new HashSet<>()), (ServerPlayerEntity) event.getPlayer());
+                }
+                else
+                {
+                    AbstractPathJob.trackingMap.put(event.getPlayer(), event.getTarget().getUniqueID());
+                }
+            }
         }
     }
 

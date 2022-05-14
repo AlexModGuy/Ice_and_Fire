@@ -1,12 +1,49 @@
 package com.github.alexthe666.iceandfire.pathfinding.raycoms;
-/*
-    All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
+
+import com.github.alexthe666.iceandfire.IceAndFire;
+
+import net.minecraft.pathfinding.Path;
+
+import javax.annotation.Nullable;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+
+/**
+ * Creates a pathResult of a certain path.
  */
-public class PathResult
+public class PathResult<T extends Callable<Path>>
 {
-    protected PathFindingStatus status                 = PathFindingStatus.IN_PROGRESS_COMPUTING;
-    private   boolean           pathReachesDestination = false;
-    private   int               pathLength             = 0;
+    /**
+     * The pathfinding status
+     */
+    protected PathFindingStatus status = PathFindingStatus.IN_PROGRESS_COMPUTING;
+
+    /**
+     * Whether the pathfinding job reached its destination
+     */
+    private volatile boolean pathReachesDestination = false;
+
+    /**
+     * Finished path reference
+     */
+    private Path path = null;
+
+    /**
+     * The calculation future for this result and job
+     */
+    private Future<Path> pathCalculation = null;
+
+    /**
+     * The job to execute for this result
+     */
+    private T job = null;
+
+    /**
+     * Whether the pathing calc is done and processed
+     */
+    private boolean pathingDoneAndProcessed = false;
 
     /**
      * Get Status of the Path.
@@ -46,7 +83,7 @@ public class PathResult
      */
     public boolean failedToReachDestination()
     {
-        return !isComputing() && !isPathReachingDestination();
+        return isFinished() && !pathReachesDestination;
     }
 
     /**
@@ -54,7 +91,7 @@ public class PathResult
      */
     public boolean isPathReachingDestination()
     {
-        return pathReachesDestination;
+        return isFinished() && path != null && pathReachesDestination;
     }
 
     /**
@@ -80,24 +117,123 @@ public class PathResult
      */
     public int getPathLength()
     {
-        return pathLength;
-    }
-
-    /**
-     * For PathNavigate use only.
-     *
-     * @param l new value for pathLength.
-     */
-    public void setPathLength(final int l)
-    {
-        pathLength = l;
+        return path.getCurrentPathLength();
     }
 
     /**
      * @return true if the path moves from the current location, useful for checking if a path actually generated.
      */
-    public boolean didPathGenerate()
+    public boolean hasPath()
     {
-        return pathLength > 0;
+        return path != null;
+    }
+
+    /**
+     * Get the generated path or null
+     *
+     * @return path
+     */
+    @Nullable
+    public Path getPath()
+    {
+        return path;
+    }
+
+    /**
+     * Get the queried job for the pathresult
+     *
+     * @return
+     */
+    public T getJob()
+    {
+        return job;
+    }
+
+    /**
+     * Set the job for this result
+     *
+     * @param job
+     */
+    public void setJob(final T job)
+    {
+        this.job = job;
+    }
+
+    /**
+     * Starts the job by queing it to an executor
+     *
+     * @param executorService executor
+     */
+    public void startJob(final ExecutorService executorService)
+    {
+        if (job != null)
+        {
+            pathCalculation = executorService.submit(job);
+        }
+    }
+
+    /**
+     * Processes the completed calculation results
+     */
+    public void processCalculationResults()
+    {
+        if (pathingDoneAndProcessed)
+        {
+            return;
+        }
+
+        try
+        {
+            path = pathCalculation.get();
+            pathCalculation = null;
+            setStatus(PathFindingStatus.CALCULATION_COMPLETE);
+        }
+        catch (InterruptedException | ExecutionException e)
+        {
+            IceAndFire.LOGGER.catching(e);
+        }
+    }
+
+    /**
+     * Check if we're calculating the pathfinding currently
+     *
+     * @return true
+     */
+    public boolean isCalculatingPath()
+    {
+        return pathCalculation != null && !pathCalculation.isDone();
+    }
+
+    /**
+     * Whether the path calculation finished and was processed
+     *
+     * @return true if calculation is done and processed
+     */
+    public boolean isFinished()
+    {
+        if (!pathingDoneAndProcessed)
+        {
+            if (pathCalculation != null && pathCalculation.isDone())
+            {
+                processCalculationResults();
+                pathingDoneAndProcessed = true;
+            }
+        }
+
+        return pathingDoneAndProcessed;
+    }
+
+    /**
+     * Cancels the path calculation
+     */
+    public void cancel()
+    {
+        if (pathCalculation != null)
+        {
+            pathCalculation.cancel(true);
+            pathCalculation = null;
+        }
+
+        pathingDoneAndProcessed = true;
     }
 }

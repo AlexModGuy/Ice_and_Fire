@@ -26,6 +26,8 @@ import com.github.alexthe666.iceandfire.message.MessageStartRidingMob;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.IPassabilityNavigator;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathingStuckHandler;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.ICustomSizeNavigator;
 import com.github.alexthe666.iceandfire.world.DragonPosWorldData;
 import com.google.common.base.Predicate;
 import net.minecraft.block.BlockState;
@@ -33,6 +35,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
@@ -45,7 +48,6 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.fluid.FluidState;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
@@ -83,9 +85,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-public abstract class EntityDragonBase extends TameableEntity implements IPassabilityNavigator, ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor, IHasCustomizableAttributes {
+public abstract class EntityDragonBase extends TameableEntity implements IPassabilityNavigator, ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor, IHasCustomizableAttributes, ICustomSizeNavigator {
 
     public static final int FLIGHT_CHANCE_PER_TICK = 1500;
+    private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
     protected static final DataParameter<Boolean> SWIMMING = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> HUNGER = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> AGE_TICKS = EntityDataManager.createKey(EntityDragonBase.class, DataSerializers.VARINT);
@@ -197,6 +200,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     private int animationTick;
     private Animation currentAnimation;
     private float lastScale;
+
     private EntityDragonPart headPart;
     private EntityDragonPart neckPart;
     private EntityDragonPart rightWingUpperPart;
@@ -471,16 +475,26 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     protected abstract void breathFireAtPos(BlockPos burningTarget);
 
+    protected PathingStuckHandler createStuckHandler()
+    {
+        return PathingStuckHandler.createStuckHandler();
+    }
+
     @Override
     protected PathNavigator createNavigator(World worldIn) {
         return createNavigator(worldIn, AdvancedPathNavigate.MovementType.WALKING);
     }
 
+
     protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type) {
-        return createNavigator(worldIn, type, 4f, 4f);
+        return createNavigator(worldIn, type, createStuckHandler());
     }
 
-    protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type, float width, float height) {
+    protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type, PathingStuckHandler stuckHandler) {
+        return createNavigator(worldIn, type, stuckHandler, 4f, 4f);
+    }
+
+    protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type, PathingStuckHandler stuckHandler, float width, float height) {
         AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, world, type, width, height);
         this.navigator = newNavigator;
         newNavigator.setCanSwim(true);
@@ -491,7 +505,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     protected void switchNavigator(int navigatorType) {
         if (navigatorType == 0) {
             this.moveController = new IafDragonFlightManager.GroundMoveHelper(this);
-            this.navigator = createNavigator(world, AdvancedPathNavigate.MovementType.WALKING);
+            this.navigator = createNavigator(world, AdvancedPathNavigate.MovementType.WALKING, createStuckHandler().withTeleportSteps(5));
             this.navigatorType = 0;
             this.setFlying(false);
             this.setHovering(false);
@@ -878,10 +892,14 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
             this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Math.round(minimumHealth + (healthStep * this.getAgeInDays())));
             this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Math.round(minimumDamage + (attackStep * this.getAgeInDays())));
             this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * this.getAgeInDays()));
-            final double oldValue = minimumArmor + (armorStep * this.getAgeInDays());
-            this.getAttribute(Attributes.ARMOR).setBaseValue(oldValue + calculateArmorModifier());
-            this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
+            final double baseValue = minimumArmor + (armorStep * this.getAgeInDays());
+            this.getAttribute(Attributes.ARMOR).setBaseValue(baseValue);
+            if (!this.world.isRemote) {
+                this.getAttribute(Attributes.ARMOR).removeModifier(ARMOR_MODIFIER_UUID);
+                this.getAttribute(Attributes.ARMOR).applyNonPersistentModifier(new AttributeModifier(ARMOR_MODIFIER_UUID, "Dragon armor bonus", calculateArmorModifier(), AttributeModifier.Operation.ADDITION));
+            }
         }
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
     }
 
     public int getHunger() {
@@ -1630,6 +1648,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return super.attackEntityFrom(dmg, i);
 
     }
+
 
     @Override
     public void recalculateSize() {
@@ -2420,6 +2439,21 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     @Override
     public int maxSearchNodes() {
-        return 50;
+        return (int) this.getAttribute(Attributes.FOLLOW_RANGE).getValue();
+    }
+
+    @Override
+    public boolean isSmallerThanBlock() {
+        return false;
+    }
+
+    @Override
+    public float getXZNavSize() {
+        return Math.max(1.3F, this.getWidth()/2.0F);
+    }
+
+    @Override
+    public int getYNavSize() {
+        return MathHelper.ceil(this.getHeight());
     }
 }

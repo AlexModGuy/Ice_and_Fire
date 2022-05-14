@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -62,7 +63,7 @@ public class ChunkCache implements IWorldReader
             {
                 if (isEntityChunkLoaded(world, new ChunkPos(k, l)))
                 {
-                    this.chunkArray[k - this.chunkX][l - this.chunkZ] = worldIn.getChunk(k, l);
+                    this.chunkArray[k - this.chunkX][l - this.chunkZ] = (Chunk) worldIn.getChunk(k, l, ChunkStatus.FULL, false);
                 }
             }
         }
@@ -129,7 +130,23 @@ public class ChunkCache implements IWorldReader
     @Override
     public FluidState getFluidState(final BlockPos pos)
     {
-        return null;
+        if (pos.getY() >= 0 && pos.getY() < 256)
+        {
+            int i = (pos.getX() >> 4) - this.chunkX;
+            int j = (pos.getZ() >> 4) - this.chunkZ;
+
+            if (i >= 0 && i < this.chunkArray.length && j >= 0 && j < this.chunkArray[i].length)
+            {
+                Chunk chunk = this.chunkArray[i][j];
+
+                if (chunk != null)
+                {
+                    return chunk.getFluidState(pos);
+                }
+            }
+        }
+
+        return Fluids.EMPTY.getDefaultState();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -160,6 +177,13 @@ public class ChunkCache implements IWorldReader
     @Override
     public IChunk getChunk(final int x, final int z, final ChunkStatus requiredStatus, final boolean nonnull)
     {
+        int i = x - this.chunkX;
+        int j = z - this.chunkZ;
+
+        if (i >= 0 && i < this.chunkArray.length && j >= 0 && j < this.chunkArray[i].length)
+        {
+            return this.chunkArray[i][j];
+        }
         return null;
     }
 
@@ -239,7 +263,8 @@ public class ChunkCache implements IWorldReader
     }
 
     @Override
-    public float func_230487_a_(Direction p_230487_1_, boolean p_230487_2_) {
+    public float func_230487_a_(final Direction direction, final boolean b)
+    {
         return 0;
     }
 

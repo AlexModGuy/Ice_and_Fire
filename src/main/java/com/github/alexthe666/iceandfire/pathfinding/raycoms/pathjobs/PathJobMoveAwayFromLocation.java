@@ -5,6 +5,7 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Node;
 
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
@@ -60,7 +61,7 @@ public class PathJobMoveAwayFromLocation extends AbstractPathJob
     @Override
     protected Path search()
     {
-        if (true)
+        if (Pathfinding.isDebug())
         {
             IceAndFire.LOGGER.info(String.format("Pathfinding from [%d,%d,%d] away from [%d,%d,%d]",
               start.getX(), start.getY(), start.getZ(), avoid.getX(), avoid.getY(), avoid.getZ()));

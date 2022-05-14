@@ -6,7 +6,12 @@ public class PathingOptions {
     /**
      * Additional cost of jumping and dropping - base 1.
      */
-    public double jumpDropCost = 1.1D;
+    public double jumpCost = 1.1D;
+
+    /**
+     * Additional cost of jumping and dropping - base 1.
+     */
+    public double dropCost = 1.1D;
 
     /**
      * Cost improvement of paths - base 1.
@@ -34,21 +39,35 @@ public class PathingOptions {
     public double swimCostEnter = 25D;
 
     /**
+     * Cost to traverse trap doors
+     */
+    public double traverseToggleAbleCost = 2D;
+
+    /**
+     * Cost to climb a vine.
+     */
+    public double vineCost = 2D;
+
+    /**
      * Whether to use minecart rail pathing
      */
-    private boolean canUseRails = false;
+    private boolean canUseRails  = false;
     /**
      * Can swim
      */
-    private boolean canSwim = false;
+    private boolean canSwim      = false;
     /**
      * Allowed to enter doors?
      */
-    private boolean enterDoors = false;
+    private boolean enterDoors   = false;
     /**
      * Allowed to open doors?
      */
     private boolean canOpenDoors = false;
+    /**
+     * Whether to path through vines.
+     */
+    private boolean canClimbVines  = false;
 
     private boolean flying = false;
 
@@ -67,6 +86,11 @@ public class PathingOptions {
 
     public boolean canUseRails() {
         return canUseRails;
+    }
+
+    public boolean canClimbVines()
+    {
+        return canClimbVines;
     }
 
     public void setCanUseRails(final boolean canUseRails) {
@@ -107,8 +131,15 @@ public class PathingOptions {
         return this;
     }
 
-    public PathingOptions withJumpDropCost(final double jumpDropCost) {
-        this.jumpDropCost = jumpDropCost;
+    public PathingOptions withJumpCost(final double jumpCost)
+    {
+        this.jumpCost = jumpCost;
+        return this;
+    }
+
+    public PathingOptions withDropCost(final double dropCost)
+    {
+        this.dropCost = dropCost;
         return this;
     }
 
@@ -124,6 +155,41 @@ public class PathingOptions {
 
     public PathingOptions withRailExitCost(final double railExitCost) {
         railsExitCost = railExitCost;
+        return this;
+    }
+
+    public PathingOptions withToggleCost(final double toggleCost)
+    {
+        traverseToggleAbleCost = toggleCost;
+        return this;
+    }
+
+    public PathingOptions withVineCost(final double vineCost)
+    {
+        this.vineCost = vineCost;
+        return this;
+    }
+
+    /**
+     * Sets swimming ability
+     *
+     * @param canswim whether swimming is allowed
+     * @return
+     */
+    public PathingOptions withCanSwim(final boolean canswim)
+    {
+        setCanSwim(canswim);
+        return this;
+    }
+
+    /**
+     * Set door opening capability
+     * @param canEnter whether we can enter doors
+     * @return
+     */
+    public PathingOptions withCanEnterDoors(final boolean canEnter)
+    {
+        setEnterDoors(canEnter);
         return this;
     }
 }
