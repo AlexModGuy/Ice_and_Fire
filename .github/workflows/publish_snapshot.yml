@@ -1,9 +1,6 @@
 name: Publish Latest Snapshot
 
-on:
-  push:
-    branches:
-      - "1.16.3"
+on: workflow_dispatch
 
 jobs:
   build:
