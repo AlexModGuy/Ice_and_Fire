@@ -24,10 +24,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.LookController;
 import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.OwnerHurtByTargetGoal;
-import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -82,6 +79,8 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
     private float prevScale = 0.0F;
     private LookController lookHelper;
     private int growthCounter = 0;
+    private PlayerEntity thrower;
+    public DeathwormAITargetItems targetItemsGoal;
 
     public EntityDeathWorm(EntityType<EntityDeathWorm> type, World worldIn) {
         super(type, worldIn);
@@ -103,14 +102,19 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(4, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(4, new DeathwormAITargetItems(this, false, false));
-        this.targetSelector.addGoal(1, new DeathWormAITarget(this, LivingEntity.class, false, new Predicate<LivingEntity>() {
+        this.targetSelector.addGoal(4, targetItemsGoal = new DeathwormAITargetItems(this, false, false));
+        this.targetSelector.addGoal(5, new DeathWormAITarget(this, LivingEntity.class, false, new Predicate<LivingEntity>() {
             @Override
             public boolean apply(@Nullable LivingEntity input) {
                 if (EntityDeathWorm.this.isTamed()) {
                     return input instanceof MonsterEntity;
                 } else {
-                    return (IafConfig.deathWormAttackMonsters ? input instanceof LivingEntity && DragonUtils.isAlive(input) : (input instanceof AnimalEntity || input instanceof PlayerEntity)) && DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase && ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwner(input);
+                    return (IafConfig.deathWormAttackMonsters ?
+                        input instanceof LivingEntity && DragonUtils.isAlive(input) && !input.isInWater() :
+                        (input instanceof AnimalEntity || input instanceof PlayerEntity)) &&
+                        DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase &&
+                        ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwner(input)
+                        && !input.isInWater();
                 }
             }
         }));
@@ -199,9 +203,10 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
         }
     }
 
-    public void setExplosive(boolean explosive) {
+    public void setExplosive(boolean explosive, PlayerEntity thrower) {
         this.willExplode = true;
         this.ticksTillExplosion = 60;
+        this.thrower = thrower;
     }
 
     public boolean attackEntityAsMob(Entity entityIn) {
@@ -507,8 +512,9 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
             if (this.ticksTillExplosion == 0) {
                 boolean b = !MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, this.getPosX(), this.getPosY(), this.getPosZ()));
                 if (b) {
-                    world.createExplosion(null, this.getPosX(), this.getPosY(), this.getPosZ(), 2.5F * this.getRenderScale(), false, Explosion.Mode.DESTROY);
+                    world.createExplosion(this.thrower, this.getPosX(), this.getPosY(), this.getPosZ(), 2.5F * this.getRenderScale(), false, Explosion.Mode.DESTROY);
                 }
+                this.thrower = null;
             } else {
                 this.ticksTillExplosion--;
             }
@@ -747,7 +753,6 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
         return 10;
     }
 
-
     @Override
     public boolean canPassengerSteer() {
         return false;
@@ -818,17 +823,17 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
         @Override
         public void tick() {
             if (this.action == MovementController.Action.MOVE_TO) {
-                Vector3d Vector3d = new Vector3d(this.posX - EntityDeathWorm.this.getPosX(), this.posY - EntityDeathWorm.this.getPosY(), this.posZ - EntityDeathWorm.this.getPosZ());
+                double d1 = this.posY - this.worm.getPosY();
+                double d2 = this.posZ - this.worm.getPosZ();
+                Vector3d Vector3d = new Vector3d(this.posX - worm.getPosX(), this.posY - worm.getPosY(), this.posZ - worm.getPosZ());
                 double d0 = Vector3d.length();
-                if (d0 < EntityDeathWorm.this.getBoundingBox().getAverageEdgeLength()) {
-                    this.action = MovementController.Action.WAIT;
-                    EntityDeathWorm.this.setMotion(EntityDeathWorm.this.getMotion().scale(0.5D));
+                if (d0 < (double)2.5000003E-7F) {
+                    this.mob.setMoveForward(0.0F);
                 } else {
                     this.speed = 1.0F;
-                    EntityDeathWorm.this.setMotion(EntityDeathWorm.this.getMotion().add(Vector3d.scale(this.speed * 0.05D / d0)));
-                    Vector3d Vector3d1 = EntityDeathWorm.this.getMotion();
-                    EntityDeathWorm.this.rotationYaw = -((float) MathHelper.atan2(Vector3d1.x, Vector3d1.z)) * (180F / (float) Math.PI);
-                    EntityDeathWorm.this.renderYawOffset = EntityDeathWorm.this.rotationYaw;
+                    worm.setMotion(worm.getMotion().add(Vector3d.scale(this.speed * 0.05D / d0)));
+                    Vector3d Vector3d1 = worm.getMotion();
+                    worm.rotationYaw = -((float) MathHelper.atan2(Vector3d1.x, Vector3d1.z)) * (180F / (float) Math.PI);
                 }
 
             }

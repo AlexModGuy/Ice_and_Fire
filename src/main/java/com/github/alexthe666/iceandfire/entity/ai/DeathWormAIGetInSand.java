@@ -30,7 +30,7 @@ public class DeathWormAIGetInSand extends Goal {
 
     @Override
     public boolean shouldExecute() {
-        if (creature.isBeingRidden() || creature.isInSand() || creature.getAttackTarget() != null && !creature.getAttackTarget().isInWater()) {
+        if (creature.isBeingRidden() || creature.isInSand() || creature.getAttackTarget() != null && !creature.getAttackTarget().isInWater() || creature.targetItemsGoal.targetEntity != null) {
             return false;
         } else {
             Vector3d Vector3d = this.findPossibleShelter();
