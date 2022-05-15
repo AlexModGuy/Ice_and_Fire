@@ -854,7 +854,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         //getIndex doesn't return an 0-indexed index
         int closest = path.getCurrentPathIndex() - 1;
         if (closest < 0) {
-            return true;
+            return false;
         }
         //Search through path from the current index outwards to improve performance
         for (int i = 0; i < path.getCurrentPathLength(); i++) {
