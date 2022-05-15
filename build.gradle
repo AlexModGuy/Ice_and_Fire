@@ -59,7 +59,6 @@ minecraft {
         client {
             workingDirectory project.file('run')
             arg "-mixin.config=citadel.mixins.json"
-            arg "-mixin.config=iceandfire.mixins.json"
             properties 'mixin.env.remapRefMap': 'true'
             property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
 
@@ -81,13 +80,10 @@ minecraft {
         }
 
         server {
-            workingDirectory project.file('run')
-            properties 'mixin.env.remapRefMap': 'true'
+            workingDirectory project.file('server')
+            property 'mixin.env.disableRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
             arg "-mixin.config=citadel.mixins.json"
-            arg "-mixin.config=iceandfire.mixins.json"
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
-
             property 'forge.logging.markers', 'REGISTRIES'
 
             property 'forge.logging.console.level', 'debug'
@@ -100,9 +96,8 @@ minecraft {
         }
 
         data {
-            workingDirectory project.file('run')
+            workingDirectory project.file('data')
             arg "-mixin.config=citadel.mixins.json"
-            arg "-mixin.config=iceandfire.mixins.json"
             properties 'mixin.env.remapRefMap': 'true'
             property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
 
