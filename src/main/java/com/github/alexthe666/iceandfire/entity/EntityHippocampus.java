@@ -1,41 +1,20 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
-import com.github.alexthe666.iceandfire.entity.ai.AquaticAIFindWaterTarget;
-import com.github.alexthe666.iceandfire.entity.ai.AquaticAIGetInWater;
-import com.github.alexthe666.iceandfire.entity.ai.AquaticAITempt;
-import com.github.alexthe666.iceandfire.entity.ai.HippocampusAIRide;
-import com.github.alexthe666.iceandfire.entity.ai.HippocampusAIWander;
-import com.github.alexthe666.iceandfire.entity.util.ChainBuffer;
-import com.github.alexthe666.iceandfire.entity.util.IDropArmor;
-import com.github.alexthe666.iceandfire.entity.util.IHasCustomizableAttributes;
-import com.github.alexthe666.iceandfire.entity.util.ISyncMount;
+import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.inventory.ContainerHippocampus;
-import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateAmphibious;
-
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
@@ -47,7 +26,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -60,11 +38,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -74,12 +48,11 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class EntityHippocampus extends TameableEntity implements ISyncMount, IAnimatedEntity, IDropArmor, IHasCustomizableAttributes {
+import javax.annotation.Nullable;
+
+public class EntityHippocampus extends TameableEntity implements ISyncMount, IAnimatedEntity, IDropArmor, IHasCustomizableAttributes, ICustomMoveController {
 
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityHippocampus.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> SADDLE = EntityDataManager.createKey(EntityHippocampus.class, DataSerializers.BOOLEAN);
@@ -88,8 +61,9 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     private static final DataParameter<Byte> CONTROL_STATE = EntityDataManager.createKey(EntityHippocampus.class, DataSerializers.BYTE);
     public static Animation ANIMATION_SPEAK;
     public float onLandProgress;
-    @OnlyIn(Dist.CLIENT)
+
     public ChainBuffer tail_buffer;
+
     public Inventory hippocampusInventory;
     public float sitProgress;
     public int airBorneCounter;
@@ -183,7 +157,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
                 ItemStack chest = animalchest.getStackInSlot(1);
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 0, saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty() ? 1 : 0));
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 1, chest != null && chest.getItem() == Blocks.CHEST.asItem() && !chest.isEmpty() ? 1 : 0));
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 2, this.getIntFromArmor(animalchest.getStackInSlot(2))));
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 2, getIntFromArmor(animalchest.getStackInSlot(2))));
             }
         }
     }
@@ -247,10 +221,12 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         }
     }
 
+    @Override
     public byte getControlState() {
         return dataManager.get(CONTROL_STATE).byteValue();
     }
 
+    @Override
     public void setControlState(byte state) {
         dataManager.set(CONTROL_STATE, state);
     }
@@ -302,9 +278,6 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
             airBorneCounter++;
         } else {
             airBorneCounter = 0;
-        }
-        if (world.isRemote) {
-            this.updateClientControls();
         }
         if (world.isRemote) {
             tail_buffer.calculateChainSwingBuffer(40, 10, 1F, this);
@@ -423,7 +396,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
                 if (world.isRemote) {
                     IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 0, saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty() ? 1 : 0));
                     IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 1, chest != null && chest.getItem() == Blocks.CHEST.asItem() && !chest.isEmpty() ? 1 : 0));
-                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 2, this.getIntFromArmor(hippocampusInventory.getStackInSlot(2))));
+                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 2, getIntFromArmor(hippocampusInventory.getStackInSlot(2))));
                 }
             }
         }
@@ -689,38 +662,26 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         IceAndFire.PROXY.setReferencedMob(this);
     }
 
-    @OnlyIn(Dist.CLIENT)
-    protected void updateClientControls() {
-        Minecraft mc = Minecraft.getInstance();
-        if (this.isRidingPlayer(mc.player)) {
-            byte previousState = getControlState();
-            up(mc.gameSettings.keyBindJump.isKeyDown());
-            dismount(mc.gameSettings.keyBindSneak.isKeyDown());
-            down(IafKeybindRegistry.dragon_down.isKeyDown());
-            byte controlState = getControlState();
-            if (controlState != previousState) {
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, getPosX(), getPosY(), getPosZ()));
-            }
-        }
-        if (this.getRidingEntity() != null && this.getRidingEntity() == mc.player) {
-            byte previousState = getControlState();
-            dismount(mc.gameSettings.keyBindSneak.isKeyDown());
-            down(IafKeybindRegistry.dragon_down.isKeyDown());
-            byte controlState = getControlState();
-            if (controlState != previousState) {
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, getPosX(), getPosY(), getPosZ()));
-            }
-        }
-    }
-
+    @Override
     public void up(boolean up) {
         setStateField(0, up);
     }
 
+    @Override
     public void down(boolean down) {
         setStateField(1, down);
     }
 
+    @Override
+    public void attack(boolean attack) {
+    }
+
+    @Override
+    public void strike(boolean strike) {
+
+    }
+
+    @Override
     public void dismount(boolean dismount) {
         setStateField(2, dismount);
     }
@@ -803,7 +764,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     class SwimmingMoveHelper extends MovementController {
-        private EntityHippocampus hippo = EntityHippocampus.this;
+        private final EntityHippocampus hippo = EntityHippocampus.this;
 
         public SwimmingMoveHelper() {
             super(EntityHippocampus.this);

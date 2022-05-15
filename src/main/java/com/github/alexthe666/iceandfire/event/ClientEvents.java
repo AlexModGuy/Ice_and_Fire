@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.event;
 
-import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.client.ClientProxy;
 import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.client.gui.IceAndFireMainMenu;
 import com.github.alexthe666.iceandfire.client.particle.CockatriceBeamRender;
@@ -13,15 +13,20 @@ import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
 import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.props.SirenProperties;
+import com.github.alexthe666.iceandfire.entity.util.ICustomMoveController;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
+import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.settings.PointOfView;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -29,9 +34,12 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.Random;
 
+@OnlyIn(Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = IceAndFire.MODID, value = Dist.CLIENT)
 public class ClientEvents {
 
     private static final ResourceLocation SIREN_SHADER = new ResourceLocation("iceandfire:shaders/post/siren.json");
@@ -75,8 +83,38 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
+        Minecraft mc = Minecraft.getInstance();
+        if (event.getEntityLiving() instanceof ICustomMoveController) {
+            Entity entity = event.getEntityLiving();
+            ICustomMoveController moveController = ((Entity & ICustomMoveController) event.getEntityLiving());
+            if (entity.getRidingEntity() != null && entity.getRidingEntity() == mc.player) {
+                byte previousState = moveController.getControlState();
+                moveController.dismount(mc.gameSettings.keyBindSneak.isKeyDown());
+                byte controlState = moveController.getControlState();
+                if (controlState != previousState) {
+                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(entity.getEntityId(), controlState, entity.getPosX(), entity.getPosY(), entity.getPosZ()));
+                }
+            }
+        }
         if (event.getEntityLiving() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+            if (player.world.isRemote) {
+
+                if (player.getRidingEntity() instanceof ICustomMoveController) {
+                    Entity entity = player.getRidingEntity();
+                    ICustomMoveController moveController = ((Entity & ICustomMoveController) player.getRidingEntity());
+                    byte previousState = moveController.getControlState();
+                    moveController.up(mc.gameSettings.keyBindJump.isKeyDown());
+                    moveController.down(IafKeybindRegistry.dragon_down.isKeyDown());
+                    moveController.attack(IafKeybindRegistry.dragon_strike.isKeyDown());
+                    moveController.dismount(mc.gameSettings.keyBindSneak.isKeyDown());
+                    moveController.strike(IafKeybindRegistry.dragon_fireAttack.isKeyDown());
+                    byte controlState = moveController.getControlState();
+                    if (controlState != previousState) {
+                        IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(entity.getEntityId(), controlState, entity.getPosX(), entity.getPosY(), entity.getPosZ()));
+                    }
+                }
+            }
             if (player.world.isRemote && IafKeybindRegistry.dragon_change_view.isKeyDown()) {
                 int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
                 if (currentView + 1 > 3) {

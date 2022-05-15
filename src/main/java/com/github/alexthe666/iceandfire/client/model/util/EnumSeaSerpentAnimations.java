@@ -3,9 +3,7 @@ package com.github.alexthe666.iceandfire.client.model.util;
 import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.citadel.client.model.TabulaModelHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
-
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
 public enum EnumSeaSerpentAnimations {
@@ -26,15 +24,15 @@ public enum EnumSeaSerpentAnimations {
     JUMPING1("Jumping1"),
     JUMPING2("Jumping2");
 
-    @OnlyIn(Dist.CLIENT)
+
     public TabulaModel seaserpent_model;
-    private String fileSuffix;
+    private final String fileSuffix;
 
     EnumSeaSerpentAnimations(String fileSuffix) {
         this.fileSuffix = fileSuffix;
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     public static void initializeSerpentModels() {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             for (EnumSeaSerpentAnimations animation : values()) {

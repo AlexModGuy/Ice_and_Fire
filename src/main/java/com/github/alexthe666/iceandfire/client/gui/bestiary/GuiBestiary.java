@@ -1,21 +1,5 @@
 package com.github.alexthe666.iceandfire.client.gui.bestiary;
 
-import java.io.IOException;
-
-import java.nio.charset.StandardCharsets;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
-
-import org.apache.commons.io.IOUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
@@ -31,7 +15,6 @@ import com.google.common.primitives.Ints;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
@@ -50,12 +33,14 @@ import net.minecraft.item.Items;
 import net.minecraft.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
-
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.commons.io.IOUtils;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 @SuppressWarnings("resource")
 public class GuiBestiary extends Screen {
@@ -107,20 +92,20 @@ public class GuiBestiary extends Screen {
         int centerY = (height - Y) / 2;
         this.addButton(
             this.previousPage = new ChangePageButton(centerX + 15, centerY + 215, false, 0, (p_214132_1_) -> {
-            if ((this.index ? this.indexPages > 0 : this.pageType != null)) {
-                if (this.index) {
-                    this.indexPages--;
-                    Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
-                } else {
-                    if (this.bookPages > 0) {
-                        this.bookPages--;
+                if ((this.index ? this.indexPages > 0 : this.pageType != null)) {
+                    if (this.index) {
+                        this.indexPages--;
                         Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
                     } else {
-                        this.index = true;
+                        if (this.bookPages > 0) {
+                            this.bookPages--;
+                            Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+                        } else {
+                            this.index = true;
+                        }
                     }
                 }
-            }
-        }));
+            }));
         this.addButton(this.nextPage = new ChangePageButton(centerX + 357, centerY + 215, true, 0, (p_214132_1_) -> {
             if ((this.index ? this.indexPages < this.indexPagesTotal - 1 : this.pageType != null && this.bookPages < this.pageType.pages)) {
                 if (this.index) {
@@ -142,13 +127,13 @@ public class GuiBestiary extends Screen {
                     new TranslationTextComponent("bestiary."
                         + EnumBestiaryPages.values()[allPageTypes.get(i).ordinal()].toString().toLowerCase()),
                     (p_214132_1_) -> {
-                    if (this.indexButtons.get(id - 2) != null && allPageTypes.get(id - 2) != null) {
-                        Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
-                        this.index = false;
-                        this.bookPages = 0;
-                        this.pageType = allPageTypes.get(id - 2);
-                    }
-                });
+                        if (this.indexButtons.get(id - 2) != null && allPageTypes.get(id - 2) != null) {
+                            Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+                            this.index = false;
+                            this.bookPages = 0;
+                            this.pageType = allPageTypes.get(id - 2);
+                        }
+                    });
                 this.indexButtons.add(button);
                 this.addButton(button);
             }
@@ -993,7 +978,7 @@ public class GuiBestiary extends Screen {
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.scalef(16.0F * scale, 16.0F * scale, 16.0F * scale);
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.translatef(x, y , 100.0F + itemRenderer.zLevel);
+        RenderSystem.translatef(x, y, 100.0F + itemRenderer.zLevel);
         RenderSystem.scalef(1.0F, -1.0F, 1.0F);
         MatrixStack matrixstack = new MatrixStack();
         IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();

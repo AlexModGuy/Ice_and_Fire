@@ -1,9 +1,7 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
-import java.util.List;
-
-import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.client.ClientProxy;
 import com.github.alexthe666.iceandfire.client.gui.bestiary.ChangePageButton;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageGetMyrmexHive;
@@ -11,7 +9,6 @@ import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
@@ -20,6 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
+
+import java.util.List;
 
 public class GuiMyrmexStaff extends Screen {
     private static final ResourceLocation JUNGLE_TEXTURE = new ResourceLocation("iceandfire:textures/gui/myrmex_staff_jungle.png");
@@ -32,7 +31,7 @@ public class GuiMyrmexStaff extends Screen {
     public ChangePageButton nextPage;
     int ticksSinceDeleted = 0;
     int currentPage = 0;
-    private boolean jungle;
+    private final boolean jungle;
     private int hiveCount;
 
     public GuiMyrmexStaff(ItemStack staff) {
@@ -59,16 +58,16 @@ public class GuiMyrmexStaff extends Screen {
         }));
         this.addButton(
             this.previousPage = new ChangePageButton(i + 5, j + 150, false, this.jungle ? 2 : 1, (p_214132_1_) -> {
-            if (this.currentPage > 0) {
-                this.currentPage--;
-            }
-        }));
+                if (this.currentPage > 0) {
+                    this.currentPage--;
+                }
+            }));
         this.addButton(
             this.nextPage = new ChangePageButton(i + 225, j + 150, true, this.jungle ? 2 : 1, (p_214132_1_) -> {
-            if (this.currentPage < this.allRoomButtonPos.size() / ROOMS_PER_PAGE) {
-                this.currentPage++;
-            }
-        }));
+                if (this.currentPage < this.allRoomButtonPos.size() / ROOMS_PER_PAGE) {
+                    this.currentPage++;
+                }
+            }));
         int totalRooms = allRoomPos.size();
         for (int rooms = 0; rooms < allRoomPos.size(); rooms++) {
             int yIndex = rooms % ROOMS_PER_PAGE;
@@ -170,7 +169,7 @@ public class GuiMyrmexStaff extends Screen {
 
     @Override
     public void onClose() {
-        if(ClientProxy.getReferedClientHive() != null){
+        if (ClientProxy.getReferedClientHive() != null) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageGetMyrmexHive(ClientProxy.getReferedClientHive().toNBT()));
         }
     }

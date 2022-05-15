@@ -8,7 +8,6 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.block.IDragonProof;
-import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
 import com.github.alexthe666.iceandfire.entity.ai.*;
@@ -20,7 +19,6 @@ import com.github.alexthe666.iceandfire.inventory.ContainerDragon;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import com.github.alexthe666.iceandfire.item.ItemSummoningCrystal;
-import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageDragonSetBurnBlock;
 import com.github.alexthe666.iceandfire.message.MessageStartRidingMob;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -33,7 +31,6 @@ import com.google.common.base.Predicate;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -85,7 +82,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-public abstract class EntityDragonBase extends TameableEntity implements IPassabilityNavigator, ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor, IHasCustomizableAttributes, ICustomSizeNavigator {
+public abstract class EntityDragonBase extends TameableEntity implements IPassabilityNavigator, ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor, IHasCustomizableAttributes, ICustomSizeNavigator, ICustomMoveController {
 
     public static final int FLIGHT_CHANCE_PER_TICK = 1500;
     private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
@@ -682,23 +679,28 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return (dataManager.get(CONTROL_STATE).byteValue() >> 4 & 1) == 1;
     }
 
-    public void goUp(boolean up) {
+    @Override
+    public void up(boolean up) {
         setStateField(0, up);
     }
 
-    public void goDown(boolean down) {
+    @Override
+    public void down(boolean down) {
         setStateField(1, down);
     }
 
-    public void goAttack(boolean attack) {
+    @Override
+    public void attack(boolean attack) {
         setStateField(2, attack);
     }
 
-    public void goStrike(boolean strike) {
+    @Override
+    public void strike(boolean strike) {
         setStateField(3, strike);
     }
 
-    public void goDismount(boolean dismount) {
+    @Override
+    public void dismount(boolean dismount) {
         setStateField(4, dismount);
     }
 
@@ -711,10 +713,12 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         }
     }
 
+    @Override
     public byte getControlState() {
         return dataManager.get(CONTROL_STATE);
     }
 
+    @Override
     public void setControlState(byte state) {
         dataManager.set(CONTROL_STATE, state);
     }
@@ -1673,9 +1677,6 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         recalculateSize();
         updateParts();
         this.prevDragonPitch = getDragonPitch();
-        if (world.isRemote) {
-            this.updateClientControls();
-        }
         world.getProfiler().startSection("dragonLogic");
         this.stepHeight = 1.2F;
         isOverAir = isOverAirLogic();
@@ -1950,30 +1951,6 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     public abstract Item getVariantEgg(int variant);
 
     public abstract Item getSummoningCrystal();
-
-    protected void updateClientControls() {
-        final Minecraft mc = Minecraft.getInstance();
-        if (this.isRidingPlayer(mc.player)) {
-            final byte previousState = getControlState();
-            goUp(mc.gameSettings.keyBindJump.isKeyDown());
-            goDown(IafKeybindRegistry.dragon_down.isKeyDown());
-            goAttack(IafKeybindRegistry.dragon_fireAttack.isKeyDown());
-            goStrike(IafKeybindRegistry.dragon_strike.isKeyDown());
-            goDismount(mc.gameSettings.keyBindSneak.isKeyDown());
-            final byte controlState = getControlState();
-            if (controlState != previousState) {
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, getPosX(), getPosY(), getPosZ()));
-            }
-        }
-        if (this.getRidingEntity() != null && this.getRidingEntity() == mc.player) {
-            final byte previousState = getControlState();
-            goDismount(mc.gameSettings.keyBindSneak.isKeyDown());
-            final byte controlState = getControlState();
-            if (controlState != previousState) {
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, getPosX(), getPosY(), getPosZ()));
-            }
-        }
-    }
 
     @Override
     public boolean canPassengerSteer() {

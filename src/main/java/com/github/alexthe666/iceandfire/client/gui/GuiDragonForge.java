@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.resources.I18n;
@@ -19,8 +18,8 @@ public class GuiDragonForge extends ContainerScreen<ContainerDragonForge> {
     private static final ResourceLocation TEXTURE_FIRE = new ResourceLocation("iceandfire:textures/gui/dragonforge_fire.png");
     private static final ResourceLocation TEXTURE_ICE = new ResourceLocation("iceandfire:textures/gui/dragonforge_ice.png");
     private static final ResourceLocation TEXTURE_LIGHTNING = new ResourceLocation("iceandfire:textures/gui/dragonforge_lightning.png");
-    private ContainerDragonForge tileFurnace;
-    private int dragonType;
+    private final ContainerDragonForge tileFurnace;
+    private final int dragonType;
 
     public GuiDragonForge(ContainerDragonForge container, PlayerInventory inv, ITextComponent name) {
         super(container, inv, name);
@@ -45,7 +44,7 @@ public class GuiDragonForge extends ContainerScreen<ContainerDragonForge> {
             this.getMinecraft().getTextureManager().bindTexture(TEXTURE_FIRE);
         } else if (dragonType == 1) {
             this.getMinecraft().getTextureManager().bindTexture(TEXTURE_ICE);
-        } else{
+        } else {
             this.getMinecraft().getTextureManager().bindTexture(TEXTURE_LIGHTNING);
         }
         int k = (this.width - this.xSize) / 2;

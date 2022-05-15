@@ -9,7 +9,6 @@ import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.AbstractPat
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -32,7 +31,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.*;
 
-import static com.github.alexthe666.iceandfire.pathfinding.raycoms.PathfindingConstants.debugNodeMonitor;
 
 /**
  * Static class the handles all the Pathfinding.

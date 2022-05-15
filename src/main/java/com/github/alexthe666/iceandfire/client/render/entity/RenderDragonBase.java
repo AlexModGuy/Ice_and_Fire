@@ -1,9 +1,5 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonArmor;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonBanner;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonEyes;
@@ -13,7 +9,6 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -23,14 +18,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class RenderDragonBase extends MobRenderer<EntityDragonBase, SegmentedModel<EntityDragonBase>> {
 
-    private Map<String, ResourceLocation> LAYERED_TEXTURE_CACHE = Maps.newHashMap();
-    private int dragonType;
+    private final Map<String, ResourceLocation> LAYERED_TEXTURE_CACHE = Maps.newHashMap();
+    private final int dragonType;
 
     public RenderDragonBase(EntityRendererManager manager, SegmentedModel model, int dragonType) {
         super(manager, model, 0.15F);

@@ -1,9 +1,5 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
@@ -24,22 +20,12 @@ import com.github.alexthe666.iceandfire.message.MessageSirenSong;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateAmphibious;
 import com.google.common.base.Predicate;
-
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -61,8 +47,9 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVillagerFear, IHasCustomizableAttributes {
 
@@ -81,7 +68,6 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(EntitySiren.class, DataSerializers.BYTE);
     public static Animation ANIMATION_BITE = Animation.create(20);
     public static Animation ANIMATION_PULL = Animation.create(20);
-    @OnlyIn(Dist.CLIENT)
     public ChainBuffer tail_buffer;
     public float singProgress;
     public float swimProgress;
@@ -541,7 +527,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     class SwimmingMoveHelper extends MovementController {
-        private EntitySiren siren = EntitySiren.this;
+        private final EntitySiren siren = EntitySiren.this;
 
         public SwimmingMoveHelper() {
             super(EntitySiren.this);

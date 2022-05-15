@@ -1,14 +1,8 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.List;
-import java.util.Locale;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
-
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -22,8 +16,10 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Locale;
 
 public class ItemTrollArmor extends ArmorItem {
 
@@ -54,7 +50,7 @@ public class ItemTrollArmor extends ArmorItem {
         return "";
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Override
     @Nullable
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
         return (A) IceAndFire.PROXY.getArmorModel(slot == EquipmentSlotType.LEGS ? 7 : 6);

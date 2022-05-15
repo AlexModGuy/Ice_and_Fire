@@ -4,14 +4,10 @@ import com.github.alexthe666.iceandfire.client.model.ModelGorgon;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGorgonEyes;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class RenderGorgon extends MobRenderer<EntityGorgon, ModelGorgon> {
 
     public static final ResourceLocation PASSIVE_TEXTURE = new ResourceLocation("iceandfire:textures/models/gorgon/gorgon_passive.png");

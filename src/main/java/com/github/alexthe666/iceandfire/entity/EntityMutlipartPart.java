@@ -1,20 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.Pose;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,8 +17,12 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-
 import net.minecraftforge.fml.network.NetworkHooks;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public abstract class EntityMutlipartPart extends Entity {
 
@@ -243,10 +235,24 @@ public abstract class EntityMutlipartPart extends Entity {
     public void collideWithNearbyEntities() {
         List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
         Entity parent = this.getParent();
-        if(parent != null){
-            entities.stream().filter(entity -> entity != parent && !parent.isRidingOrBeingRiddenBy(entity) && !(entity instanceof EntityMutlipartPart) && entity.canBePushed()).forEach(entity -> entity.applyEntityCollision(parent));
+        if (parent != null) {
+            entities.stream().filter(entity -> entity != parent && !isRidingOrBeingRiddenBy(parent, entity) && !(entity instanceof EntityMutlipartPart) && entity.canBePushed()).forEach(entity -> entity.applyEntityCollision(parent));
 
         }
+    }
+
+    public static boolean isRidingOrBeingRiddenBy(Entity parent, Entity entityIn) {
+        for (Entity entity : parent.getPassengers()) {
+            if (entity.equals(entityIn)) {
+                return true;
+            }
+
+            if (entity.isRidingOrBeingRiddenBy(entityIn)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

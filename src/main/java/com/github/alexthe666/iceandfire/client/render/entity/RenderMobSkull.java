@@ -1,22 +1,12 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
-import java.util.Locale;
-import java.util.Map;
-
 import com.github.alexthe666.citadel.client.model.TabulaModel;
-import com.github.alexthe666.iceandfire.client.model.ModelAmphithere;
-import com.github.alexthe666.iceandfire.client.model.ModelCockatrice;
-import com.github.alexthe666.iceandfire.client.model.ModelCyclops;
-import com.github.alexthe666.iceandfire.client.model.ModelHippogryph;
-import com.github.alexthe666.iceandfire.client.model.ModelHydraHead;
-import com.github.alexthe666.iceandfire.client.model.ModelStymphalianBird;
-import com.github.alexthe666.iceandfire.client.model.ModelTroll;
+import com.github.alexthe666.iceandfire.client.model.*;
 import com.github.alexthe666.iceandfire.entity.EntityMobSkull;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -27,21 +17,21 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
+import java.util.Locale;
+import java.util.Map;
+
 public class RenderMobSkull extends EntityRenderer<EntityMobSkull> {
 
     private static final Map<String, ResourceLocation> SKULL_TEXTURE_CACHE = Maps.newHashMap();
-    private ModelHippogryph hippogryphModel;
-    private ModelCyclops cyclopsModel;
-    private ModelCockatrice cockatriceModel;
-    private ModelStymphalianBird stymphalianBirdModel;
-    private ModelTroll trollModel;
-    private ModelAmphithere amphithereModel;
-    private ModelHydraHead hydraModel;
-    private TabulaModel seaSerpentModel;
+    private final ModelHippogryph hippogryphModel;
+    private final ModelCyclops cyclopsModel;
+    private final ModelCockatrice cockatriceModel;
+    private final ModelStymphalianBird stymphalianBirdModel;
+    private final ModelTroll trollModel;
+    private final ModelAmphithere amphithereModel;
+    private final ModelHydraHead hydraModel;
+    private final TabulaModel seaSerpentModel;
 
     public RenderMobSkull(EntityRendererManager renderManager, SegmentedModel seaSerpentModel) {
         super(renderManager);

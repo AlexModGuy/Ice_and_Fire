@@ -8,7 +8,6 @@ import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
@@ -58,7 +57,7 @@ public class ModelAmphithere extends ModelDragonBase<EntityAmphithere> {
     public AdvancedModelBox FingerR2;
     public AdvancedModelBox FingerR3;
     public AdvancedModelBox FingerR4;
-    private ModelAnimator animator;
+    private final ModelAnimator animator;
 
     public ModelAmphithere() {
         this.textureWidth = 256;
@@ -429,9 +428,9 @@ public class ModelAmphithere extends ModelDragonBase<EntityAmphithere> {
     }
 
     @Override
-    public void setRotationAngles(EntityAmphithere amphithere, float f, float f1, float f2, float f3, float f4) {
+    public void setRotationAngles(EntityAmphithere amphithere, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetToDefaultPose();
-        animate(amphithere, f, f1, f2, f3, f4, 0);
+        animate(amphithere, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0);
         if (this.isChild) {
             this.BodyUpper.setShouldScaleChildren(true);
             this.HeadFront.setShouldScaleChildren(true);
@@ -456,15 +455,15 @@ public class ModelAmphithere extends ModelDragonBase<EntityAmphithere> {
         AdvancedModelBox[] ENTIRE_BODY = new AdvancedModelBox[]{BodyUpper, BodyLower, Tail1, Tail2, Tail3, Tail4};
         AdvancedModelBox[] NECK = new AdvancedModelBox[]{Neck1, Neck2, Neck3};
         if (amphithere.groundProgress >= 10) {
-            this.chainSwing(ENTIRE_BODY, speed_walk, 0.125F, 2, f, f1);
-            this.chainSwing(NECK, speed_walk, -degree_walk, 4, f, f1);
+            this.chainSwing(ENTIRE_BODY, speed_walk, 0.125F, 2, limbSwing, limbSwingAmount);
+            this.chainSwing(NECK, speed_walk, -degree_walk, 4, limbSwing, limbSwingAmount);
         }
-        this.chainWave(NECK, speed_idle, degree_idle * 0.15F, 4, f2, 1);
-        this.chainSwing(TAIL, speed_idle, degree_idle * 0.1F, 2, f2, 1);
-        this.flap(WingL, speed_fly, degree_flap, false, 0, 0, f2, 1);
-        this.flap(WingR, speed_fly, -degree_flap, false, 0, 0, f2, 1);
-        this.flap(WingL2, speed_fly, degree_flap, false, 0, 0, f2, 1);
-        this.flap(WingR2, speed_fly, -degree_flap, false, 0, 0, f2, 1);
+        this.chainWave(NECK, speed_idle, degree_idle * 0.15F, 4, ageInTicks, 1);
+        this.chainSwing(TAIL, speed_idle, degree_idle * 0.1F, 2, ageInTicks, 1);
+        this.flap(WingL, speed_fly, degree_flap, false, 0, 0, ageInTicks, 1);
+        this.flap(WingR, speed_fly, -degree_flap, false, 0, 0, ageInTicks, 1);
+        this.flap(WingL2, speed_fly, degree_flap, false, 0, 0, ageInTicks, 1);
+        this.flap(WingR2, speed_fly, -degree_flap, false, 0, 0, ageInTicks, 1);
         {
             float sitProgress = amphithere.diveProgress;
             progressRotation(FingerR4, sitProgress, 0.2617993877991494F, 0.0F, 0.0F);

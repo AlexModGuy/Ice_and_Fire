@@ -1,5 +1,18 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.screen.MainMenuScreen;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.ForgeHooksClient;
+import org.apache.commons.io.IOUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,22 +24,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-
-import org.apache.commons.io.IOUtils;
-
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.MainMenuScreen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextFormatting;
-
-import net.minecraftforge.client.ForgeHooksClient;
 
 public class IceAndFireMainMenu extends MainMenuScreen {
     public static final int LAYER_COUNT = 2;
@@ -43,13 +40,14 @@ public class IceAndFireMainMenu extends MainMenuScreen {
     private Picture[] drawnPictures;
     private Enscription[] drawnEnscriptions;
     private float globalAlpha = 1F;
+
     public IceAndFireMainMenu() {
         pageFlipTextures = new ResourceLocation[]{new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_1.png"),
-                new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_2.png"),
-                new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_3.png"),
-                new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_4.png"),
-                new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_5.png"),
-                new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_6.png")};
+            new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_2.png"),
+            new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_3.png"),
+            new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_4.png"),
+            new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_5.png"),
+            new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_6.png")};
         for (int i = 0; i < drawingTextures.length; i++) {
             drawingTextures[i] = new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/drawing_" + (i + 1) + ".png");
         }
@@ -99,7 +97,6 @@ public class IceAndFireMainMenu extends MainMenuScreen {
         }
         return reader;
     }
-
 
 
     private void resetDrawnImages() {
@@ -206,7 +203,7 @@ public class IceAndFireMainMenu extends MainMenuScreen {
         f1 = f1 * 100.0F / (this.getMinecraft().fontRenderer.getStringWidth(this.splashText) + 32);
         RenderSystem.translatef(0, f1 * 10, 0.0F);
         RenderSystem.scalef(f1, f1, f1);
-        this.drawCenteredString(ms, this.getMinecraft().fontRenderer, this.splashText, 0, -40, TextFormatting.YELLOW.getColor());
+        drawCenteredString(ms, this.getMinecraft().fontRenderer, this.splashText, 0, -40, TextFormatting.YELLOW.getColor());
         GlStateManager.popMatrix();
 
         ForgeHooksClient.renderMainMenu(this, ms, this.getMinecraft().fontRenderer, width, height);
@@ -214,7 +211,7 @@ public class IceAndFireMainMenu extends MainMenuScreen {
         FontRenderer font = this.getMinecraft().fontRenderer;
         AbstractGui.drawString(ms, font, s1, width - this.getMinecraft().fontRenderer.getStringWidth(s1) - 2,
             height - 10, 0xFFFFFFFF);
-        for(int i = 0; i < this.buttons.size(); ++i) {
+        for (int i = 0; i < this.buttons.size(); ++i) {
             this.buttons.get(i).render(ms, mouseX, mouseY, partialTicks);
         }
         for (int i = 0; i < this.buttons.size(); i++) {
@@ -227,6 +224,7 @@ public class IceAndFireMainMenu extends MainMenuScreen {
         int x;
         int y;
         float alpha;
+
         public Picture(int image, int x, int y, float alpha, float scale) {
             this.image = image;
             this.x = x;

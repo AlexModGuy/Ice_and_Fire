@@ -39,8 +39,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -385,11 +383,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
 
     public void setCommand(int command) {
         this.dataManager.set(COMMAND, Integer.valueOf(command));
-        if (command == 1) {
-            this.setSitting(true);
-        } else {
-            this.setSitting(false);
-        }
+        this.setSitting(command == 1);
     }
 
     public boolean isStaring() {
@@ -728,7 +722,6 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
         return IafSoundRegistry.COCKATRICE_DIE;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {
         if (id == 45) {
             this.playEffect(true);

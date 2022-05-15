@@ -4,7 +4,6 @@ import com.github.alexthe666.iceandfire.client.model.ModelMyrmexPupa;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerMyrmexItem;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -12,15 +11,13 @@ import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
+
 public class RenderMyrmexBase extends MobRenderer<EntityMyrmexBase, SegmentedModel<EntityMyrmexBase>> {
 
     private static final SegmentedModel<EntityMyrmexBase> LARVA_MODEL = new ModelMyrmexPupa();
     private static final SegmentedModel<EntityMyrmexBase> PUPA_MODEL = new ModelMyrmexPupa();
-    private SegmentedModel<EntityMyrmexBase> adultModel;
+    private final SegmentedModel<EntityMyrmexBase> adultModel;
 
     public RenderMyrmexBase(EntityRendererManager renderManager, SegmentedModel model, float shadowSize) {
         super(renderManager, model, shadowSize);

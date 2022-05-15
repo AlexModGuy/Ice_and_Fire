@@ -1,9 +1,6 @@
 package com.github.alexthe666.iceandfire.block;
 
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
-
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -13,19 +10,20 @@ import net.minecraft.block.material.Material;
 import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import java.util.Random;
+
 
 public class BlockDreadTorch extends TorchBlock implements IDreadBlock, IWallBlock {
 
     public BlockDreadTorch() {
         super(
-    		Properties
-    			.create(Material.WOOD)
-    			.setLightLevel((state) -> { return 5; })
-    			.sound(SoundType.STONE)
+            Properties
+                .create(Material.WOOD)
+                .setLightLevel((state) -> {
+                    return 5;
+                })
+                .sound(SoundType.STONE)
     			.notSolid()
     			.variableOpacity()
                     .doesNotBlockMovement(),
@@ -35,7 +33,7 @@ public class BlockDreadTorch extends TorchBlock implements IDreadBlock, IWallBlo
         setRegistryName(IceAndFire.MODID, "dread_torch");
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Override
     public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         // Direction Direction = stateIn.get(FACING);
         double d0 = (double) pos.getX() + 0.5D;

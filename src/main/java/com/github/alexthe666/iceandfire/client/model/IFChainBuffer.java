@@ -1,19 +1,15 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.iceandfire.entity.util.IFlapable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * @author rafa_mv
  * @since 1.0.0
  */
-@OnlyIn(Dist.CLIENT)
 public class IFChainBuffer {
     private int yawTimer;
     private float yawVariation;
@@ -259,7 +255,7 @@ public class IFChainBuffer {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     private float getPartialTicks() {
         return Minecraft.getInstance().getRenderPartialTicks();
     }

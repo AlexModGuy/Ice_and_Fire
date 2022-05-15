@@ -1,47 +1,24 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
-import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAIRide;
-import com.github.alexthe666.iceandfire.entity.ai.HippogryphAIMate;
-import com.github.alexthe666.iceandfire.entity.ai.HippogryphAITarget;
-import com.github.alexthe666.iceandfire.entity.ai.HippogryphAITargetItems;
-import com.github.alexthe666.iceandfire.entity.ai.HippogryphAIWander;
-import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
-import com.github.alexthe666.iceandfire.entity.util.IDragonFlute;
-import com.github.alexthe666.iceandfire.entity.util.IDropArmor;
-import com.github.alexthe666.iceandfire.entity.util.IFlyingMount;
-import com.github.alexthe666.iceandfire.entity.util.ISyncMount;
-import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
+import com.github.alexthe666.iceandfire.entity.ai.*;
+import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.github.alexthe666.iceandfire.inventory.ContainerHippogryph;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.google.common.base.Predicate;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
@@ -55,7 +32,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -68,11 +44,7 @@ import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceContext;
@@ -83,15 +55,13 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
 
-public class EntityHippogryph extends TameableEntity implements ISyncMount, IAnimatedEntity, IDragonFlute, IVillagerFear, IAnimalFear, IDropArmor, IFlyingMount {
+public class EntityHippogryph extends TameableEntity implements ISyncMount, IAnimatedEntity, IDragonFlute, IVillagerFear, IAnimalFear, IDropArmor, IFlyingMount, ICustomMoveController {
 
     private static final int FLIGHT_CHANCE_PER_TICK = 1200;
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityHippogryph.class, DataSerializers.VARINT);
@@ -107,8 +77,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     public static Animation ANIMATION_SCRATCH;
     public static Animation ANIMATION_BITE;
     public Inventory hippogryphInventory;
-    @OnlyIn(Dist.CLIENT)
-    public IFChainBuffer roll_buffer;
+
     public float sitProgress;
     public float hoverProgress;
     public float flyProgress;
@@ -137,9 +106,6 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         ANIMATION_SCRATCH = Animation.create(25);
         ANIMATION_BITE = Animation.create(20);
         initHippogryphInv();
-        if (worldIn.isRemote) {
-            roll_buffer = new IFChainBuffer();
-        }
         this.stepHeight = 1;
     }
 
@@ -451,6 +417,11 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         setStateField(2, attack);
     }
 
+    @Override
+    public void strike(boolean strike) {
+
+    }
+
     public void dismount(boolean dismount) {
         setStateField(3, dismount);
     }
@@ -478,11 +449,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
 
     public void setCommand(int command) {
         this.dataManager.set(COMMAND, Integer.valueOf(command));
-        if (command == 1) {
-            this.setSitting(true);
-        } else {
-            this.setSitting(false);
-        }
+        this.setSitting(command == 1);
     }
 
     @Override
@@ -772,29 +739,6 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         return movingobjectposition == null || movingobjectposition.getType() != RayTraceResult.Type.BLOCK;
     }
 
-    @OnlyIn(Dist.CLIENT)
-    protected void updateClientControls() {
-        Minecraft mc = Minecraft.getInstance();
-        if (this.isRidingPlayer(mc.player)) {
-            byte previousState = getControlState();
-            up(mc.gameSettings.keyBindJump.isKeyDown());
-            down(IafKeybindRegistry.dragon_down.isKeyDown());
-            attack(IafKeybindRegistry.dragon_strike.isKeyDown());
-            dismount(mc.gameSettings.keyBindSneak.isKeyDown());
-            byte controlState = getControlState();
-            if (controlState != previousState) {
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, getPosX(), getPosY(), getPosZ()));
-            }
-        }
-        if (this.getRidingEntity() != null && this.getRidingEntity() == mc.player) {
-            byte previousState = getControlState();
-            dismount(mc.gameSettings.keyBindSneak.isKeyDown());
-            byte controlState = getControlState();
-            if (controlState != previousState) {
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, getPosX(), getPosY(), getPosZ()));
-            }
-        }
-    }
 
     @Override
     public void travel(Vector3d move) {
@@ -1001,9 +945,6 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     public void tick() {
         super.tick();
         isOverAir = this.isOverAirLogic();
-        if (world.isRemote) {
-            this.updateClientControls();
-        }
         if (this.isGoingUp()) {
             if (this.airBorneCounter == 0) {
                 this.setMotion(this.getMotion().add(0, 0.4F, 0));
@@ -1046,9 +987,6 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         }
         if (this.spacebarTicks > 10 && this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && !this.isFlying() && !this.isHovering()) {
             this.setHovering(true);
-        }
-        if (world.isRemote) {
-            roll_buffer.calculateChainFlapBuffer(35, 8, 6, this);
         }
         if (this.getAttackTarget() != null && this.getRidingEntity() == null && !this.getAttackTarget().isAlive() || this.getAttackTarget() != null && this.getAttackTarget() instanceof EntityDragonBase && !this.getAttackTarget().isAlive()) {
             this.setAttackTarget(null);

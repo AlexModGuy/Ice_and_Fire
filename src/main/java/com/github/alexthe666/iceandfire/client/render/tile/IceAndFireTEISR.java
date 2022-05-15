@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
-import java.util.function.Supplier;
-
 import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.client.model.ModelTideTrident;
@@ -12,7 +10,6 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemDeathwormGauntlet;
 import com.github.alexthe666.iceandfire.item.ItemTrollWeapon;
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -22,16 +19,14 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.vector.Vector3f;
 
+import java.util.function.Supplier;
+
 import static net.minecraftforge.common.util.Lazy.of;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-@OnlyIn(Dist.CLIENT)
 public class IceAndFireTEISR extends ItemStackTileEntityRenderer {
 
     private static final Supplier<ModelTideTrident> TIDE_TRIDENT_MODEL = of(ModelTideTrident::new);

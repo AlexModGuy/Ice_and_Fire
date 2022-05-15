@@ -1,12 +1,9 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.client.model.ModelHippogryph;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -14,10 +11,9 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
+import javax.annotation.Nullable;
+
 public class RenderHippogryph extends MobRenderer<EntityHippogryph, ModelHippogryph> {
 
     public RenderHippogryph(EntityRendererManager renderManager) {
@@ -36,7 +32,7 @@ public class RenderHippogryph extends MobRenderer<EntityHippogryph, ModelHippogr
         return entity.isBlinking() ? entity.getEnumVariant().TEXTURE_BLINK : entity.getEnumVariant().TEXTURE;
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     private class LayerHippogriffSaddle extends LayerRenderer<EntityHippogryph, ModelHippogryph> {
         private final RenderHippogryph renderer;
         private final RenderType SADDLE_TEXTURE = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippogryph/saddle.png"));

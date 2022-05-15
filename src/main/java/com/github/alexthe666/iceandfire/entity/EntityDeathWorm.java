@@ -7,24 +7,24 @@ import com.github.alexthe666.citadel.server.entity.collision.ICustomCollisions;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
-import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.message.MessageDeathWormHitbox;
-import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDeathWormLand;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDeathWormSand;
 import com.google.common.base.Predicate;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.LookController;
 import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.OwnerHurtByTargetGoal;
+import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -45,13 +45,11 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 
-public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICustomCollisions, IBlacklistedFromStatues, IAnimatedEntity, IVillagerFear, IAnimalFear, IGroundMount, IHasCustomizableAttributes {
+public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICustomCollisions, IBlacklistedFromStatues, IAnimatedEntity, IVillagerFear, IAnimalFear, IGroundMount, IHasCustomizableAttributes, ICustomMoveController {
 
     public static final ResourceLocation TAN_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_tan");
     public static final ResourceLocation WHITE_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_white");
@@ -66,7 +64,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
     private static final DataParameter<Integer> WORM_AGE = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.VARINT);
     private static final DataParameter<BlockPos> HOME = EntityDataManager.createKey(EntityDeathWorm.class, DataSerializers.BLOCK_POS);
     public static Animation ANIMATION_BITE = Animation.create(10);
-    @OnlyIn(Dist.CLIENT)
+
     public ChainBuffer tail_buffer;
     public float jumpProgress;
     public float prevJumpProgress;
@@ -76,8 +74,8 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
     private Animation currentAnimation;
     private EntityMutlipartPart[] segments = new EntityMutlipartPart[6];
     private boolean isSandNavigator;
-    private float prevScale = 0.0F;
-    private LookController lookHelper;
+    private final float prevScale = 0.0F;
+    private final LookController lookHelper;
     private int growthCounter = 0;
     private PlayerEntity thrower;
     public DeathwormAITargetItems targetItemsGoal;
@@ -293,10 +291,12 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
         }
     }
 
+    @Override
     public byte getControlState() {
         return Byte.valueOf(dataManager.get(CONTROL_STATE));
     }
 
+    @Override
     public void setControlState(byte state) {
         dataManager.set(CONTROL_STATE, Byte.valueOf(state));
     }
@@ -650,33 +650,8 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
         if (world.isRemote) {
             tail_buffer.calculateChainSwingBuffer(90, 20, 5F, this);
         }
-        if (world.isRemote) {
-            this.updateClientControls();
-        }
-        AnimationHandler.INSTANCE.updateAnimations(this);
-    }
 
-    @OnlyIn(Dist.CLIENT)
-    protected void updateClientControls() {
-        Minecraft mc = Minecraft.getInstance();
-        if (this.isRidingPlayer(mc.player)) {
-            byte previousState = getControlState();
-            up(mc.gameSettings.keyBindJump.isKeyDown());
-            dismount(mc.gameSettings.keyBindSneak.isKeyDown());
-            attack(IafKeybindRegistry.dragon_strike.isKeyDown());
-            byte controlState = getControlState();
-            if (controlState != previousState) {
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, getPosX(), getPosY(), getPosZ()));
-            }
-        }
-        if (this.getRidingEntity() != null && this.getRidingEntity() == mc.player) {
-            byte previousState = getControlState();
-            dismount(mc.gameSettings.keyBindSneak.isKeyDown());
-            byte controlState = getControlState();
-            if (controlState != previousState) {
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(this.getEntityId(), controlState, getPosX(), getPosY(), getPosZ()));
-            }
-        }
+        AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
     public boolean up() {
@@ -691,16 +666,29 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
         return (dataManager.get(CONTROL_STATE).byteValue() >> 2 & 1) == 1;
     }
 
+    @Override
     public void up(boolean up) {
         setStateField(0, up);
     }
 
+    @Override
+    public void down(boolean down) {
+
+    }
+
+    @Override
     public void dismount(boolean dismount) {
         setStateField(1, dismount);
     }
 
+    @Override
     public void attack(boolean attack) {
         setStateField(2, attack);
+    }
+
+    @Override
+    public void strike(boolean strike) {
+
     }
 
     public boolean isSandBelow() {
@@ -814,7 +802,7 @@ public class EntityDeathWorm extends TameableEntity implements ISyncMount, ICust
     }
 
     public class SandMoveHelper extends MovementController {
-        private EntityDeathWorm worm = EntityDeathWorm.this;
+        private final EntityDeathWorm worm = EntityDeathWorm.this;
 
         public SandMoveHelper() {
             super(EntityDeathWorm.this);

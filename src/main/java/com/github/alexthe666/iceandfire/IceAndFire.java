@@ -1,14 +1,7 @@
 package com.github.alexthe666.iceandfire;
 
-
-
-
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModList;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
+import com.github.alexthe666.iceandfire.client.ClientProxy;
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
@@ -19,14 +12,12 @@ import com.github.alexthe666.iceandfire.loot.IafLootRegistry;
 import com.github.alexthe666.iceandfire.message.*;
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
-
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.structure.Structure;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -34,10 +25,11 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
@@ -46,6 +38,8 @@ import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(IceAndFire.MODID)
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)
@@ -53,9 +47,9 @@ public class IceAndFire {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "iceandfire";
     public static final SimpleChannel NETWORK_WRAPPER;
+    private static final String PROTOCOL_VERSION = Integer.toString(1);
     public static boolean DEBUG = true;
     public static String VERSION = "UNKNOWN";
-    private static final String PROTOCOL_VERSION = Integer.toString(1);
     public static ItemGroup TAB_ITEMS = new ItemGroup(MODID) {
         @Override
         public ItemStack createIcon() {
@@ -70,6 +64,7 @@ public class IceAndFire {
     };
     public static CommonProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
     private static int packetsRegistered = 0;
+
     static {
         NetworkRegistry.ChannelBuilder channel = NetworkRegistry.ChannelBuilder.named(new ResourceLocation("iceandfire", "main_channel"));
         String version = PROTOCOL_VERSION;
@@ -86,8 +81,8 @@ public class IceAndFire {
         try {
             ModContainer mod = ModList.get().getModContainerById(IceAndFire.MODID).orElseThrow(NullPointerException::new);
             VERSION = mod.getModInfo().getVersion().toString();
+        } catch (Exception ignored) {
         }
-        catch (Exception ignored) {}
 
         final ModLoadingContext modLoadingContext = ModLoadingContext.get();
         modLoadingContext.registerConfig(ModConfig.Type.CLIENT, ConfigHolder.CLIENT_SPEC);
@@ -104,7 +99,6 @@ public class IceAndFire {
         IafWorldRegistry.FEATURES.register(modBus);
 
         modBus.addListener(this::setup);
-        modBus.addListener(this::setupClient);
         modBus.addListener(this::setupComplete);
         modBus.addGenericListener(Structure.class, EventPriority.LOW,
             (final RegistryEvent.Register<Structure<?>> event) -> IafWorldRegistry
@@ -115,13 +109,13 @@ public class IceAndFire {
 
     @SubscribeEvent
     public void onServerStarted(FMLServerStartedEvent event) {
-    	LOGGER.info(IafWorldRegistry.LOADED_FEATURES);
-    	LOGGER.info(IafEntityRegistry.LOADED_ENTITIES);
+        LOGGER.info(IafWorldRegistry.LOADED_FEATURES);
+        LOGGER.info(IafEntityRegistry.LOADED_ENTITIES);
     }
-    
+
     @SubscribeEvent
     public void onBiomeLoadFromJSON(BiomeLoadingEvent event) {
-    	IafWorldRegistry.onBiomesLoad(event);
+        IafWorldRegistry.onBiomesLoad(event);
         IafEntityRegistry.onBiomesLoad(event);
     }
 
@@ -162,7 +156,7 @@ public class IceAndFire {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageUpdateLectern.class, MessageUpdateLectern::write, MessageUpdateLectern::read, MessageUpdateLectern.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSyncPath.class, MessageSyncPath::write, MessageSyncPath::read, MessageSyncPath.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSyncPathReached.class, MessageSyncPathReached::write, MessageSyncPathReached::read, MessageSyncPathReached.Handler::handle);
-        event.enqueueWork(() ->{
+        event.enqueueWork(() -> {
             PROXY.setup();
             IafProcessors.registerProcessors();
             IafWorldRegistry.setup();
@@ -175,7 +169,4 @@ public class IceAndFire {
         PROXY.postInit();
     }
 
-    private void setupClient(FMLClientSetupEvent event) {
-        PROXY.setupClient();
-    }
 }

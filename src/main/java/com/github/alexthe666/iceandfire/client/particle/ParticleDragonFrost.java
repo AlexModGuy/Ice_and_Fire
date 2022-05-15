@@ -1,10 +1,7 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.SpriteTexturedParticle;
@@ -18,27 +15,27 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
 
 public class ParticleDragonFrost extends SpriteTexturedParticle {
 
     private static final ResourceLocation SNOWFLAKE = new ResourceLocation("iceandfire:textures/particles/snowflake_0.png");
     private static final ResourceLocation SNOWFLAKE_BIG = new ResourceLocation("iceandfire:textures/particles/snowflake_1.png");
-    private float dragonSize;
-    private double initialX;
-    private double initialY;
-    private double initialZ;
+    private final float dragonSize;
+    private final double initialX;
+    private final double initialY;
+    private final double initialZ;
     private double targetX;
     private double targetY;
     private double targetZ;
-    private int touchedTime = 0;
-    private float speedBonus;
+    private final int touchedTime = 0;
+    private final float speedBonus;
     @Nullable
     private EntityDragonBase dragon;
-    private boolean big;
+    private final boolean big;
 
-    @OnlyIn(Dist.CLIENT)
+
     public ParticleDragonFrost(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, float dragonSize) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
         this.maxAge = 30;

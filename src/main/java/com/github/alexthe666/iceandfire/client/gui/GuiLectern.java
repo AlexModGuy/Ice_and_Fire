@@ -1,8 +1,5 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
-import java.util.List;
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
@@ -12,7 +9,6 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -31,6 +27,9 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+
+import java.util.List;
+import java.util.Random;
 
 public class GuiLectern extends ContainerScreen<ContainerLectern> {
     private static final ResourceLocation ENCHANTMENT_TABLE_GUI_TEXTURE = new ResourceLocation("iceandfire:textures/gui/lectern.png");
@@ -191,14 +190,14 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
                         RenderSystem.pushMatrix();
                         RenderSystem.translatef(width / 2F - 10, height / 2F - 83 + (1.0F - textScale) * 55, 2);
                         RenderSystem.scalef(textScale, textScale, 1);
-                        fontrenderer.drawString(matrixStack,s1, 0, 20 + 19 * i1, j2);
+                        fontrenderer.drawString(matrixStack, s1, 0, 20 + 19 * i1, j2);
                         RenderSystem.popMatrix();
                         fontrenderer = this.getMinecraft().fontRenderer;
                         fontrenderer.drawStringWithShadow(matrixStack, s, k1 + 84 - fontrenderer.getStringWidth(s),
                             j + 13 + 19 * i1 + 7, j3);
                     } else {
-                        this.blit(matrixStack,j1, j + 14 + 19 * i1, 0, 185, 108, 19);
-                        this.blit(matrixStack,j1 + 1, j + 15 + 19 * i1, 16 * i1, 239, 16, 16);
+                        this.blit(matrixStack, j1, j + 14 + 19 * i1, 0, 185, 108, 19);
+                        this.blit(matrixStack, j1 + 1, j + 15 + 19 * i1, 16 * i1, 239, 16, 16);
                     }
                 }
             }
@@ -271,7 +270,7 @@ public class GuiLectern extends ContainerScreen<ContainerLectern> {
 
         this.open = MathHelper.clamp(this.open, 0.0F, 1.0F);
         float f1 = (this.flipT - this.flip) * 0.4F;
-        if(flapTimer > 0){
+        if (flapTimer > 0) {
             f1 = (ticks + this.getMinecraft().getRenderPartialTicks()) * 0.5F;
             flapTimer--;
         }

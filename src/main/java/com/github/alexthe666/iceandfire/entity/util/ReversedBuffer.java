@@ -4,10 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class ReversedBuffer {
     private int yawTimer;
     private float yawVariation;
@@ -145,7 +142,7 @@ public class ReversedBuffer {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     private float getPartialTicks() {
         return Minecraft.getInstance().getRenderPartialTicks();
     }

@@ -1,11 +1,5 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
@@ -24,17 +18,11 @@ import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.ICustomSize
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.google.common.collect.Sets;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.merchant.IMerchant;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
@@ -56,15 +44,11 @@ import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Difficulty;
@@ -72,8 +56,11 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
 
 public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimatedEntity, IMerchant, ICustomSizeNavigator, IHasCustomizableAttributes {
 
@@ -382,7 +369,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     public boolean isOnLadder() {
         if (this.getNavigator() instanceof AdvancedPathNavigate ){
             //Make sure the entity can only climb when it's on or below the path. This prevents the entity from getting stuck
-            if(((AdvancedPathNavigate) this.getNavigator()).entityOnOrBelowPath(this, new Vector3d(1.1,1.5,1.1)))
+            if (((AdvancedPathNavigate) this.getNavigator()).entityOnOrBelowPath(this, new Vector3d(1.1, 1.1, 1.1)))
                 return true;
         }
         return super.isOnLadder();
@@ -637,7 +624,6 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         return this.getHive() == null;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {
         if (id == 76) {
             this.playVillagerEffect();
@@ -727,7 +713,6 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         return this.offers;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void setClientSideOffers(@Nullable MerchantOffers offers) {
     }
 
@@ -884,9 +869,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         return true;
     }
 
-
-
-    public boolean isSmallerThanBlock(){
+    public boolean isSmallerThanBlock() {
         return false;
     }
 

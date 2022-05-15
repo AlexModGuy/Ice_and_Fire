@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.github.alexthe666.iceandfire.inventory.ContainerHippocampus;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.Entity;
@@ -30,9 +29,9 @@ public class GuiHippocampus extends ContainerScreen<ContainerHippocampus> {
         FontRenderer font = this.getMinecraft().fontRenderer;
         if (entity instanceof EntityHippocampus) {
             EntityHippocampus hippo = (EntityHippocampus) entity;
-            font.drawString(matrixStack, hippo.getDisplayName().getString(), l+8, 6, 4210752);
+            font.drawString(matrixStack, hippo.getDisplayName().getString(), l + 8, 6, 4210752);
         }
-        font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(), k+ 8, l + this.ySize - 96 + 2, 4210752);
+        font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(), k + 8, l + this.ySize - 96 + 2, 4210752);
     }
 
     @Override

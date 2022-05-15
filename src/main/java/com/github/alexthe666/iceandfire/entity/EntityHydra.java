@@ -27,8 +27,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -442,7 +440,6 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {
         if (id >= 40 && id <= 48) {
             int index = id - 40;

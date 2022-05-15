@@ -1,41 +1,19 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.entity.ai.FlyingAITarget;
-import com.github.alexthe666.iceandfire.entity.ai.SeaSerpentAIAttackMelee;
-import com.github.alexthe666.iceandfire.entity.ai.SeaSerpentAIGetInWater;
-import com.github.alexthe666.iceandfire.entity.ai.SeaSerpentAIJump;
-import com.github.alexthe666.iceandfire.entity.ai.SeaSerpentAIMeleeJump;
-import com.github.alexthe666.iceandfire.entity.ai.SeaSerpentAIRandomSwimming;
-import com.github.alexthe666.iceandfire.entity.ai.SeaSerpentPathNavigator;
+import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
@@ -65,15 +43,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 
 public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, IMultipartEntity, IVillagerFear, IAnimalFear, IHasCustomizableAttributes {
 
@@ -115,10 +90,10 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     public int jumpCooldown = 0;
     private int ticksSinceRoar = 0;
     private boolean isBreathing;
-    private float[] tailYaw = new float[5];
-    private float[] prevTailYaw = new float[5];
-    private float[] tailPitch = new float[5];
-    private float[] prevTailPitch = new float[5];
+    private final float[] tailYaw = new float[5];
+    private final float[] prevTailYaw = new float[5];
+    private final float[] tailPitch = new float[5];
+    private final float[] prevTailPitch = new float[5];
 
     public EntitySeaSerpent(EntityType<EntitySeaSerpent> t, World worldIn) {
         super(t, worldIn);
@@ -151,7 +126,6 @@ public class EntitySeaSerpent extends AnimalEntity implements IAnimatedEntity, I
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public boolean isInRangeToRender3d(double x, double y, double z) {
         return true;
     }

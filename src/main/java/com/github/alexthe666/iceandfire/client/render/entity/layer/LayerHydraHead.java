@@ -4,10 +4,8 @@ import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.iceandfire.client.model.ModelHydraBody;
 import com.github.alexthe666.iceandfire.client.model.ModelHydraHead;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderHydra;
-import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingRenderer;
@@ -15,10 +13,7 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class LayerHydraHead extends LayerRenderer<EntityHydra, ModelHydraBody> {
     public static final ResourceLocation TEXTURE_STONE = new ResourceLocation("iceandfire:textures/models/hydra/stone.png");
     private static final float[][] TRANSLATE = new float[][]{
@@ -44,7 +39,7 @@ public class LayerHydraHead extends LayerRenderer<EntityHydra, ModelHydraBody> {
             {50F, 37F, 25F, 15F, 0, -15F, -25F, -37F, -50F},
     };
     private final RenderHydra renderer;
-    private static ModelHydraHead[] modelArr = new ModelHydraHead[EntityHydra.HEADS];
+    private static final ModelHydraHead[] modelArr = new ModelHydraHead[EntityHydra.HEADS];
 
     static{
         for (int i = 0; i < modelArr.length; i++) {

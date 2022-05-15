@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragon;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -105,17 +104,17 @@ public class GuiDragon extends ContainerScreen<ContainerDragon> {
 
             FontRenderer font = this.getMinecraft().fontRenderer;
             String s3 = dragon.getCustomName() == null ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + " " + dragon.getCustomName().getString();
-            font.drawString(matrixStack,s3, k + this.xSize / 2 - font.getStringWidth(s3) / 2, l + 75, 0XFFFFFF);
+            font.drawString(matrixStack, s3, k + this.xSize / 2 - font.getStringWidth(s3) / 2, l + 75, 0XFFFFFF);
             String s2 = StatCollector.translateToLocal("dragon.health") + " " + Math.floor(Math.min(dragon.getHealth(), dragon.getMaxHealth())) + " / " + dragon.getMaxHealth();
-            font.drawString(matrixStack,s2, k + this.xSize / 2 - font.getStringWidth(s2) / 2, l + 84, 0XFFFFFF);
+            font.drawString(matrixStack, s2, k + this.xSize / 2 - font.getStringWidth(s2) / 2, l + 84, 0XFFFFFF);
             String s5 = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((dragon.isMale() ? "dragon.gender.male" : "dragon.gender.female"));
-            font.drawString(matrixStack,s5, k + this.xSize / 2 - font.getStringWidth(s5) / 2, l + 93, 0XFFFFFF);
+            font.drawString(matrixStack, s5, k + this.xSize / 2 - font.getStringWidth(s5) / 2, l + 93, 0XFFFFFF);
             String s6 = StatCollector.translateToLocal("dragon.hunger") + dragon.getHunger() + "/100";
-            font.drawString(matrixStack,s6, k + this.xSize / 2 - font.getStringWidth(s6) / 2, l + 102, 0XFFFFFF);
-            String s4 = StatCollector.translateToLocal("dragon.stage")  + " " + dragon.getDragonStage()  + " " + StatCollector.translateToLocal("dragon.days.front") + dragon.getAgeInDays() + " " + StatCollector.translateToLocal("dragon.days.back");
-            font.drawString(matrixStack,s4, k + this.xSize / 2 - font.getStringWidth(s4) / 2, l + 111, 0XFFFFFF);
+            font.drawString(matrixStack, s6, k + this.xSize / 2 - font.getStringWidth(s6) / 2, l + 102, 0XFFFFFF);
+            String s4 = StatCollector.translateToLocal("dragon.stage") + " " + dragon.getDragonStage() + " " + StatCollector.translateToLocal("dragon.days.front") + dragon.getAgeInDays() + " " + StatCollector.translateToLocal("dragon.days.back");
+            font.drawString(matrixStack, s4, k + this.xSize / 2 - font.getStringWidth(s4) / 2, l + 111, 0XFFFFFF);
             String s7 = dragon.getOwner() != null ? StatCollector.translateToLocal("dragon.owner") + dragon.getOwner().getName().getString() : StatCollector.translateToLocal("dragon.untamed");
-            font.drawString(matrixStack,s7, k + this.xSize / 2 - font.getStringWidth(s7) / 2, l + 120, 0XFFFFFF);
+            font.drawString(matrixStack, s7, k + this.xSize / 2 - font.getStringWidth(s7) / 2, l + 120, 0XFFFFFF);
         }
     }
 

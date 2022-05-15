@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire;
 
-import java.lang.reflect.Field;
-
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
@@ -11,7 +9,6 @@ import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -20,16 +17,21 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonProxy {
 
+    public static Set<UUID> currentDragonRiders = new HashSet<UUID>();
 
     @SubscribeEvent
     public static void onModConfigEvent(final ModConfig.ModConfigEvent event) {
@@ -155,9 +157,6 @@ public class CommonProxy {
 
     public Item.Properties setupISTER(Item.Properties group) {
         return group;
-    }
-
-    public void setupClient() {
     }
 
     public PlayerEntity getClientSidePlayer(){

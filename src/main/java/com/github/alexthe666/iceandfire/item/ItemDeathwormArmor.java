@@ -1,9 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
-
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -12,8 +9,8 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
 
 public class ItemDeathwormArmor extends ArmorItem {
 
@@ -22,7 +19,7 @@ public class ItemDeathwormArmor extends ArmorItem {
         this.setRegistryName(IceAndFire.MODID, name);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Override
     @Nullable
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
         return (A) IceAndFire.PROXY.getArmorModel(slot == EquipmentSlotType.LEGS ? 5 : 4);

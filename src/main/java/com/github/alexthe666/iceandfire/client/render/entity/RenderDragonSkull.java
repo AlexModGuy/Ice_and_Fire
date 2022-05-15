@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -16,10 +15,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
 
     public static final float[] growth_stage_1 = new float[]{1F, 3F};
@@ -28,9 +24,9 @@ public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
     public static final float[] growth_stage_4 = new float[]{12.5F, 20F};
     public static final float[] growth_stage_5 = new float[]{20F, 30F};
     public float[][] growth_stages;
-    private TabulaModel fireDragonModel;
-    private TabulaModel lightningDragonModel;
-    private TabulaModel iceDragonModel;
+    private final TabulaModel fireDragonModel;
+    private final TabulaModel lightningDragonModel;
+    private final TabulaModel iceDragonModel;
 
     public RenderDragonSkull(EntityRendererManager renderManager, SegmentedModel fireDragonModel, SegmentedModel iceDragonModel, SegmentedModel lightningDragonModel) {
         super(renderManager);

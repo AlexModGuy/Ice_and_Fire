@@ -1,12 +1,9 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.client.model.ModelHippocampus;
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -17,10 +14,10 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
+import javax.annotation.Nullable;
+
+
 public class RenderHippocampus extends MobRenderer<EntityHippocampus, ModelHippocampus> {
 
     private static final ResourceLocation VARIANT_0 = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_0.png");
@@ -63,7 +60,7 @@ public class RenderHippocampus extends MobRenderer<EntityHippocampus, ModelHippo
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     private class LayerHippocampusSaddle extends LayerRenderer<EntityHippocampus, ModelHippocampus> {
         private final RenderHippocampus renderer;
         private final RenderType SADDLE_TEXTURE = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippocampus/saddle.png"));

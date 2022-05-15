@@ -1,18 +1,11 @@
 package com.github.alexthe666.iceandfire.client.model.animator;
 
-import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
-import com.github.alexthe666.citadel.client.model.ITabulaModelAnimator;
-import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.citadel.client.model.TabulaModel;
-import com.github.alexthe666.iceandfire.client.model.util.*;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.client.model.util.DragonAnimationsLibrary;
+import com.github.alexthe666.iceandfire.client.model.util.EnumDragonAnimations;
+import com.github.alexthe666.iceandfire.client.model.util.EnumDragonModelTypes;
+import com.github.alexthe666.iceandfire.client.model.util.EnumDragonPoses;
 import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.MathHelper;
-
-import java.util.Iterator;
-
 
 public class LightningTabulaDragonAnimator extends DragonTabulaModelAnimator<EntityLightningDragon> {
 

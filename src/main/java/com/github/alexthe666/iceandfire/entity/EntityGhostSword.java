@@ -1,22 +1,18 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.play.server.SChangeGameStatePacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
@@ -25,14 +21,12 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class EntityGhostSword  extends AbstractArrowEntity {
+import java.util.List;
+
+public class EntityGhostSword extends AbstractArrowEntity {
 
     public EntityGhostSword(EntityType<? extends AbstractArrowEntity> type, World worldIn) {
         super(type, worldIn);
@@ -40,7 +34,7 @@ public class EntityGhostSword  extends AbstractArrowEntity {
     }
 
     public EntityGhostSword(EntityType<? extends AbstractArrowEntity> type, World worldIn, double x, double y, double z,
-        float r, float g, float b) {
+                            float r, float g, float b) {
         this(type, worldIn);
         this.setPosition(x, y, z);
         this.setDamage(9F);
@@ -142,7 +136,6 @@ public class EntityGhostSword  extends AbstractArrowEntity {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     public int getBrightnessForRender() {
         return 15728880;
     }

@@ -3,15 +3,13 @@ package com.github.alexthe666.iceandfire.client.model.util;
 import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.citadel.client.model.TabulaModelHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
-
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
 /**
  * @deprecated use {@link DragonAnimationsLibrary}. Old dragons will be moved to the new library system.
  */
-@OnlyIn(Dist.CLIENT)
+
 public enum EnumDragonAnimations {
     MALE("BaseMale"),
     FEMALE("BaseFemale"),
@@ -73,13 +71,13 @@ public enum EnumDragonAnimations {
     TACKLE("AttackTackle"),
     SIT_ON_PLAYER_POSE("SittingShoulder", 1);
 
-    @OnlyIn(Dist.CLIENT)
+
     public TabulaModel firedragon_model;
-    @OnlyIn(Dist.CLIENT)
+
     public TabulaModel icedragon_model;
-    @OnlyIn(Dist.CLIENT)
+
     public TabulaModel lightningdragon_model;
-    private String fileSuffix;
+    private final String fileSuffix;
     private int dragonType;
 
     EnumDragonAnimations(String fileSuffix) {
@@ -91,7 +89,7 @@ public enum EnumDragonAnimations {
         this.dragonType = iceOrFire;
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     public static void initializeDragonModels() {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             for (EnumDragonAnimations animation : values()) {

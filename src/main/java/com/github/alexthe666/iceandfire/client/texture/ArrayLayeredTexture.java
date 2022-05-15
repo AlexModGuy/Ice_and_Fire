@@ -1,25 +1,18 @@
 package com.github.alexthe666.iceandfire.client.texture;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-@OnlyIn(Dist.CLIENT)
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 public class ArrayLayeredTexture extends Texture {
     private static final Logger LOGGER = LogManager.getLogger();
     public final List<String> layeredTextureNames;

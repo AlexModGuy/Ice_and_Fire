@@ -1,13 +1,11 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -23,7 +21,7 @@ import net.minecraft.util.math.vector.Vector3d;
  */
 public class IafDragonLogic {
 
-    private EntityDragonBase dragon;
+    private final EntityDragonBase dragon;
 
     public IafDragonLogic(EntityDragonBase dragon) {
         this.dragon = dragon;
@@ -50,18 +48,18 @@ public class IafDragonLogic {
         if (!dragon.isDismounting() && (dragon.isFlying() || dragon.isHovering())) {
             dragon.setMotion(dragon.getMotion().add(0, 0.01, 0));
         }
-        if (dragon.isAttacking() && dragon.getControllingPassenger() != null && dragon.getDragonStage() > 1) {
+        if (dragon.isStriking() && dragon.getControllingPassenger() != null && dragon.getDragonStage() > 1) {
             dragon.setBreathingFire(true);
             dragon.riderShootFire(dragon.getControllingPassenger());
             dragon.fireStopTicks = 10;
         }
-        if (dragon.isStriking() && dragon.getControllingPassenger() != null && dragon.getControllingPassenger() instanceof PlayerEntity) {
+        if (dragon.isAttacking() && dragon.getControllingPassenger() != null && dragon.getControllingPassenger() instanceof PlayerEntity) {
             LivingEntity target = DragonUtils.riderLookingAtEntity(dragon, (PlayerEntity) dragon.getControllingPassenger(), dragon.getDragonStage() + (dragon.getBoundingBox().maxX - dragon.getBoundingBox().minX));
             if (dragon.getAnimation() != EntityDragonBase.ANIMATION_BITE) {
                 dragon.setAnimation(EntityDragonBase.ANIMATION_BITE);
             }
             if (target != null && !DragonUtils.hasSameOwner(dragon, target)) {
-               attackTarget(target, ridingPlayer, (int) dragon.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+                attackTarget(target, ridingPlayer, (int) dragon.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
             }
         }
         if (dragon.getControllingPassenger() != null && dragon.getControllingPassenger().isSneaking()) {
