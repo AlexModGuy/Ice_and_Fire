@@ -1,11 +1,9 @@
 package com.github.alexthe666.iceandfire.config;
 
-import java.util.List;
-
-import com.github.alexthe666.iceandfire.world.DragonPosWorldData;
 import com.google.common.collect.Lists;
-
 import net.minecraftforge.common.ForgeConfigSpec;
+
+import java.util.List;
 
 public class ServerConfig {
 
@@ -134,6 +132,7 @@ public class ServerConfig {
     public final ForgeConfigSpec.IntValue generateMausoleumChance;
     public final ForgeConfigSpec.BooleanValue spawnLiches;
     public final ForgeConfigSpec.IntValue lichSpawnRate;
+    public final ForgeConfigSpec.IntValue lichSpawnChance;
     public final ForgeConfigSpec.DoubleValue hydraMaxHealth;
     public final ForgeConfigSpec.BooleanValue generateHydraCaves;
     public final ForgeConfigSpec.IntValue generateHydraChance;
@@ -373,6 +372,7 @@ public class ServerConfig {
         builder.push("Others");
         this.spawnLiches = buildBoolean(builder, "Spawn Liches", "all", true, "True if dread liches are allowed to spawn");
         this.lichSpawnRate = buildInt(builder, "Lich Spawn Weight", "all", 2, 1, 10000, "Dread Lich spawn weight. Lower = lower chance to spawn");
+        this.lichSpawnChance = buildInt(builder, "Lich Spawn Chance", "all", 30, 1, 10000, "Dread Lich spawn chance. Lower = higher chance to spawn");
 
         this.hydraMaxHealth = buildDouble(builder, "Hydra Max Health", "all", 250, 1, 10000, "Maximum hydra health");
         this.generateHydraCaves = buildBoolean(builder, "Generate Hydra Caves", "all", true, "True if hydra caves are allowed to generate");

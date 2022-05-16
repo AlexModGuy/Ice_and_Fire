@@ -1,11 +1,10 @@
 package com.github.alexthe666.iceandfire;
 
-import java.util.List;
-
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
 import com.google.common.collect.Lists;
-
 import net.minecraftforge.fml.config.ModConfig;
+
+import java.util.List;
 
 public class IafConfig {
     public static boolean customMainMenu = true;
@@ -150,6 +149,7 @@ public class IafConfig {
     public static int generateMausoleumChance = 30;
     public static boolean spawnLiches = true;
     public static int lichSpawnRate = 4;
+    public static int lichSpawnChance = 30;
     public static double hydraMaxHealth = 250D;
     public static boolean generateHydraCaves = true;
     public static int generateHydraChance = 120;
@@ -312,6 +312,7 @@ public class IafConfig {
             generateMausoleumChance = ConfigHolder.SERVER.generateMausoleumChance.get();
             spawnLiches = ConfigHolder.SERVER.spawnLiches.get();
             lichSpawnRate = ConfigHolder.SERVER.lichSpawnRate.get();
+            lichSpawnChance = ConfigHolder.SERVER.lichSpawnChance.get();
             hydraMaxHealth = ConfigHolder.SERVER.hydraMaxHealth.get();
             generateHydraCaves = ConfigHolder.SERVER.generateHydraCaves.get();
             generateHydraChance = ConfigHolder.SERVER.generateHydraChance.get();
