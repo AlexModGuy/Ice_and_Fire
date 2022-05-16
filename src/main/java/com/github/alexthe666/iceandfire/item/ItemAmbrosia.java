@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.EffectInstance;
@@ -20,8 +21,8 @@ public class ItemAmbrosia extends ItemGenericFood {
         livingEntity.addPotionEffect(new EffectInstance(Effects.LUCK, 3600, 2));
     }
 
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity LivingEntity) {
-        super.onItemUseFinish(stack, worldIn, LivingEntity);
-        return new ItemStack(Items.BOWL);
+    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity livingEntity) {
+        super.onItemUseFinish(stack, worldIn, livingEntity);
+        return livingEntity instanceof PlayerEntity && ((PlayerEntity) livingEntity).abilities.isCreativeMode ? stack : new ItemStack(Items.BOWL);
     }
 }
