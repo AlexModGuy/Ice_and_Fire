@@ -47,7 +47,7 @@ public class IafDamageRegistry {
     }
 
     public static CustomEntityDamageSource causeGorgonDamage(@Nullable Entity entity) {
-        return new CustomEntityDamageSource(GORGON_DMG_TYPE, entity);
+        return (CustomEntityDamageSource) new CustomEntityDamageSource(GORGON_DMG_TYPE, entity).setDamageBypassesArmor().setDamageIsAbsolute();
     }
 
     public static CustomEntityDamageSource causeDragonFireDamage(@Nullable Entity entity) {
