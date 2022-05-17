@@ -33,17 +33,17 @@ import java.util.stream.Stream;
 
 public abstract class WorldGenDragonCave extends Feature<NoFeatureConfig> {
 
-    public static ResourceLocation DRAGON_CHEST;
-    public static ResourceLocation DRAGON_MALE_CHEST;
-    public static WorldGenCaveStalactites CEILING_DECO;
-    public static BlockState PALETTE_BLOCK1;
-    public static BlockState PALETTE_BLOCK2;
-    public static BlockState PALETTE_ORE1;
-    public static BlockState PALETTE_ORE2;
-    public static BlockState TREASURE_PILE;
+    public ResourceLocation DRAGON_CHEST;
+    public ResourceLocation DRAGON_MALE_CHEST;
+    public WorldGenCaveStalactites CEILING_DECO;
+    public BlockState PALETTE_BLOCK1;
+    public BlockState PALETTE_BLOCK2;
+    public BlockState PALETTE_ORE1;
+    public BlockState PALETTE_ORE2;
+    public BlockState TREASURE_PILE;
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
-    public static boolean isMale;
-    public static boolean generateGemOre = false;
+    public boolean isMale;
+    public boolean generateGemOre = false;
 
     protected WorldGenDragonCave(Codec<NoFeatureConfig> codec) {
         super(codec);
@@ -154,7 +154,7 @@ public abstract class WorldGenDragonCave extends Feature<NoFeatureConfig> {
         });
     }
 
-    public static void setGoldPile(IWorld world, BlockPos pos, Random rand) {
+    public void setGoldPile(IWorld world, BlockPos pos, Random rand) {
         if (!(world.getBlockState(pos).getBlock() instanceof ContainerBlock)) {
             int chance = rand.nextInt(99) + 1;
             if (chance < 60) {
