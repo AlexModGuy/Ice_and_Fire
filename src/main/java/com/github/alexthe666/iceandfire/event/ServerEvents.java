@@ -55,7 +55,6 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -68,7 +67,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)
 public class ServerEvents {
@@ -344,7 +346,7 @@ public class ServerEvents {
                                 event.getTarget().entityDropItem(statuette, 1);
                             }
                         } else {
-                            if (!((LivingEntity) event.getTarget()).world.isRemote) {
+                            if (!event.getTarget().world.isRemote) {
                                 event.getTarget().entityDropItem(Blocks.COBBLESTONE.asItem(), 2 + event.getEntityLiving().getRNG().nextInt(4));
                             }
                         }
@@ -375,10 +377,7 @@ public class ServerEvents {
             if (attacker instanceof PlayerEntity && event.getEntityLiving().getRNG().nextInt(3) == 0) {
                 CombatTracker combat = event.getEntityLiving().getCombatTracker();
                 CombatEntry entry = combat.getBestCombatEntry();
-                boolean flag = false;
-                if (entry != null && (entry.getDamageSrc() == DamageSource.FALL || entry.getDamageSrc() == DamageSource.DROWN || entry.getDamageSrc() == DamageSource.LAVA)) {
-                    flag = true;
-                }
+                boolean flag = entry != null && (entry.getDamageSrc() == DamageSource.FALL || entry.getDamageSrc() == DamageSource.DROWN || entry.getDamageSrc() == DamageSource.LAVA);
                 if (event.getEntityLiving().isPotionActive(Effects.POISON)) {
                     flag = true;
                 }
@@ -489,14 +488,14 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onPlayerRightClick(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getPlayer() != null && (event.getWorld().getBlockState(event.getPos()).getBlock() instanceof AbstractChestBlock)) {
+        if (event.getPlayer() != null && (event.getWorld().getBlockState(event.getPos()).getBlock() instanceof AbstractChestBlock) && !event.getPlayer().isCreative()) {
             float dist = IafConfig.dragonGoldSearchLength;
-            final List<Entity> list = event.getWorld().getEntitiesWithinAABBExcludingEntity(event.getPlayer(), event.getPlayer().getBoundingBox().expand(dist, dist, dist));
+            final List<Entity> list = event.getWorld().getEntitiesWithinAABBExcludingEntity(event.getPlayer(), event.getPlayer().getBoundingBox().grow(dist, dist, dist));
             if (!list.isEmpty()) {
                 for (final Entity entity : list) {
                     if (entity instanceof EntityDragonBase) {
                         EntityDragonBase dragon = (EntityDragonBase) entity;
-                        if (!dragon.isTamed() && !dragon.isModelDead() && !dragon.isOwner(event.getPlayer()) && !event.getPlayer().isCreative()) {
+                        if (!dragon.isTamed() && !dragon.isModelDead() && !dragon.isOwner(event.getPlayer())) {
                             dragon.setQueuedToSit(false);
                             dragon.setSitting(false);
                             dragon.setAttackTarget(event.getPlayer());
@@ -514,7 +513,7 @@ public class ServerEvents {
     public void onBreakBlock(BlockEvent.BreakEvent event) {
         if (event.getPlayer() != null && (event.getState().getBlock() instanceof AbstractChestBlock || event.getState().getBlock() == IafBlockRegistry.GOLD_PILE || event.getState().getBlock() == IafBlockRegistry.SILVER_PILE || event.getState().getBlock() == IafBlockRegistry.COPPER_PILE)) {
             final float dist = IafConfig.dragonGoldSearchLength;
-            List<Entity> list = event.getWorld().getEntitiesWithinAABBExcludingEntity(event.getPlayer(), event.getPlayer().getBoundingBox().expand(dist, dist, dist));
+            List<Entity> list = event.getWorld().getEntitiesWithinAABBExcludingEntity(event.getPlayer(), event.getPlayer().getBoundingBox().grow(dist, dist, dist));
             if (list.isEmpty()) return;
 
             for (Entity entity : list) {
