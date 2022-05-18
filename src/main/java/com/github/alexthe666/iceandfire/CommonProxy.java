@@ -8,30 +8,21 @@ import com.github.alexthe666.iceandfire.entity.util.IHasCustomizableAttributes;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
-import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonProxy {
-
-    public static Set<UUID> currentDragonRiders = new HashSet<UUID>();
 
     @SubscribeEvent
     public static void onModConfigEvent(final ModConfig.ModConfigEvent event) {
@@ -52,24 +43,6 @@ public class CommonProxy {
         // In case we reload the config clear the attribute cache to allow for values to be modified
         if (config.getSpec() == ConfigHolder.SERVER_SPEC) {
             IHasCustomizableAttributes.ATTRIBUTE_MODIFIER_MAP.clear();
-        }
-    }
-
-    @SubscribeEvent
-    public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {
-        try {
-            for (Field f : IafSoundRegistry.class.getDeclaredFields()) {
-                Object obj = f.get(null);
-                if (obj instanceof SoundEvent) {
-                    event.getRegistry().register((SoundEvent) obj);
-                } else if (obj instanceof SoundEvent[]) {
-                    for (SoundEvent soundEvent : (SoundEvent[]) obj) {
-                        event.getRegistry().register(soundEvent);
-                    }
-                }
-            }
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
         }
     }
 

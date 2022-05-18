@@ -1,11 +1,18 @@
 package com.github.alexthe666.iceandfire.misc;
 
-import static com.github.alexthe666.iceandfire.IceAndFire.MODID;
-
+import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+import java.lang.reflect.Field;
+
+import static com.github.alexthe666.iceandfire.IceAndFire.MODID;
 
 @SuppressWarnings("WeakerAccess")
+@Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class IafSoundRegistry {
 
     public static final SoundEvent BESTIARY_PAGE = createSoundEvent("bestiary_page");
@@ -263,5 +270,23 @@ public final class IafSoundRegistry {
     private static SoundEvent createSoundEvent(final String soundName) {
         final ResourceLocation soundID = new ResourceLocation(MODID, soundName);
         return new SoundEvent(soundID).setRegistryName(soundID);
+    }
+
+    @SubscribeEvent
+    public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {
+        try {
+            for (Field f : IafSoundRegistry.class.getFields()) {
+                Object obj = f.get(null);
+                if (obj instanceof SoundEvent) {
+                    event.getRegistry().register((SoundEvent) obj);
+                } else if (obj instanceof SoundEvent[]) {
+                    for (SoundEvent soundEvent : (SoundEvent[]) obj) {
+                        event.getRegistry().register(soundEvent);
+                    }
+                }
+            }
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

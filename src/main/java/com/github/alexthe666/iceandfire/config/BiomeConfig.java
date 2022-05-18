@@ -1,20 +1,15 @@
 package com.github.alexthe666.iceandfire.config;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.github.alexthe666.citadel.config.biome.SpawnBiomeConfig;
 import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.google.common.collect.Lists;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BiomeConfig {
     public static Pair<String, SpawnBiomeData> oreGenBiomes = Pair.of("iceandfire:ore_gen_biomes", DefaultBiomes.OVERWORLD);
@@ -60,15 +55,15 @@ public class BiomeConfig {
     public static Pair<String, SpawnBiomeData> whiteHippogryphBiomes = Pair.of("iceandfire:hippogryph_white_biomes", DefaultBiomes.HIPPOGRYPH_WHITE);
 
     private static boolean init = false;
-    private static Map<String, SpawnBiomeData> biomeConfigValues = new HashMap<>();
+    private static final Map<String, SpawnBiomeData> biomeConfigValues = new HashMap<>();
 
     public static void init() {
         try {
-            for (Field f : BiomeConfig.class.getDeclaredFields()) {
+            for (Field f : BiomeConfig.class.getFields()) {
                 Object obj = f.get(null);
-                if(obj instanceof Pair){
-                    String id = (String)((Pair) obj).getLeft();
-                    SpawnBiomeData data = (SpawnBiomeData)((Pair) obj).getRight();
+                if (obj instanceof Pair) {
+                    String id = (String) ((Pair) obj).getLeft();
+                    SpawnBiomeData data = (SpawnBiomeData) ((Pair) obj).getRight();
                     biomeConfigValues.put(id, SpawnBiomeConfig.create(new ResourceLocation(id), data));
                 }
             }

@@ -1,30 +1,24 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.lang.reflect.Field;
-import java.util.Locale;
-
 import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.citadel.server.item.CustomToolMaterial;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
-import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
-import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
-import com.github.alexthe666.iceandfire.enums.EnumSkullType;
-import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import com.github.alexthe666.iceandfire.enums.*;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
-
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BannerPatternItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.SoundEvents;
-
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.lang.reflect.Field;
+import java.util.Locale;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafItemRegistry {
@@ -340,15 +334,15 @@ public class IafItemRegistry {
     public static void registerItems(RegistryEvent.Register<Item> event) {
         // Items
         try {
-            for (Field f : IafItemRegistry.class.getDeclaredFields()) {
+            for (Field f : IafItemRegistry.class.getFields()) {
                 Object obj = f.get(null);
                 if (obj instanceof Item) {
-                    if(((Item) obj).getRegistryName() != null){
+                    if (((Item) obj).getRegistryName() != null) {
                         event.getRegistry().register((Item) obj);
                     }
                 } else if (obj instanceof Item[]) {
                     for (Item item : (Item[]) obj) {
-                        if(item.getRegistryName() != null){
+                        if (item.getRegistryName() != null) {
                             event.getRegistry().register(item);
                         }
                     }
@@ -386,10 +380,10 @@ public class IafItemRegistry {
         IafRecipeRegistry.preInit();
         //Banner Patterns
         try {
-            for (Field f : IafRecipeRegistry.class.getDeclaredFields()) {
+            for (Field f : IafRecipeRegistry.class.getFields()) {
                 Object obj = f.get(null);
                 if (obj instanceof BannerPattern) {
-                    BannerPattern pattern = (BannerPattern)obj;
+                    BannerPattern pattern = (BannerPattern) obj;
                     String name = f.getName().replace("PATTERN_", "").toLowerCase(Locale.ROOT);
                     event.getRegistry().register(new BannerPatternItem(pattern, (new Item.Properties()).maxStackSize(1).group(IceAndFire.TAB_ITEMS)).setRegistryName("iceandfire:banner_pattern_" + name));
 
