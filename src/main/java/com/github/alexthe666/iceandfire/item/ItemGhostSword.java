@@ -33,38 +33,28 @@ public class ItemGhostSword extends SwordItem {
         this.setRegistryName(IceAndFire.MODID, "ghost_sword");
     }
 
-    @Override
-    public boolean onEntitySwing(ItemStack stack, LivingEntity livingEntity) {
-        if (super.onEntitySwing(stack, livingEntity))
-            return true;
-        if (livingEntity.getHeldItem(Hand.MAIN_HAND) != stack)
-            return false;
-        if (livingEntity instanceof PlayerEntity) {
-            if (((PlayerEntity) livingEntity).getCooldownTracker().hasCooldown(stack.getItem()))
-                return false;
-        }
+    public static void spawnGhostSwordEntity(ItemStack stack, PlayerEntity playerEntity) {
+        if (playerEntity.getCooldownTracker().hasCooldown(stack.getItem()))
+            return;
+        if (playerEntity.getHeldItem(Hand.MAIN_HAND) != stack)
+            return;
         final Multimap<Attribute, AttributeModifier> dmg = stack.getAttributeModifiers(EquipmentSlotType.MAINHAND);
         double totalDmg = 0D;
         for (AttributeModifier modifier : dmg.get(Attributes.ATTACK_DAMAGE)) {
             totalDmg += modifier.getAmount();
         }
-        livingEntity.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
-        EntityGhostSword shot = new EntityGhostSword(IafEntityRegistry.GHOST_SWORD.get(), livingEntity.world, livingEntity,
+        playerEntity.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
+        EntityGhostSword shot = new EntityGhostSword(IafEntityRegistry.GHOST_SWORD.get(), playerEntity.world, playerEntity,
             totalDmg * 0.5F);
-        Vector3d vector3d = livingEntity.getLook(1.0F);
+        Vector3d vector3d = playerEntity.getLook(1.0F);
         Vector3f vector3f = new Vector3f(vector3d);
         shot.shoot(vector3f.getX(), vector3f.getY(), vector3f.getZ(), 1.0F, 0.5F);
-        livingEntity.world.addEntity(shot);
-        stack.damageItem(1, livingEntity, (entity) -> {
+        playerEntity.world.addEntity(shot);
+        stack.damageItem(1, playerEntity, (entity) -> {
             entity.sendBreakAnimation(EquipmentSlotType.MAINHAND);
         });
-        if (livingEntity instanceof PlayerEntity) {
-            ((PlayerEntity) livingEntity).getCooldownTracker().setCooldown(stack.getItem(), 10);
-        }
-        return false;
-
+        playerEntity.getCooldownTracker().setCooldown(stack.getItem(), 10);
     }
-
 
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity targetEntity, LivingEntity attacker) {
