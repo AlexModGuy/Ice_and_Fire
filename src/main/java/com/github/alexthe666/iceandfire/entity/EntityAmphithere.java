@@ -224,13 +224,13 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
                     return ActionResultType.SUCCESS;
                 }
                 return ActionResultType.SUCCESS;
-            } else if ((!this.isTamed() || this.isOwner(player)) && !this.isChild()) {
+            } else if ((!this.isTamed() || this.isOwner(player)) && !this.isChild() && itemstack.isEmpty()) {
                 player.startRiding(this);
                 return ActionResultType.SUCCESS;
             }
 
         }
-        return ActionResultType.SUCCESS;
+        return super.getEntityInteractionResult(player, hand);
     }
 
     @Override
