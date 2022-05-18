@@ -1,13 +1,10 @@
 package com.github.alexthe666.iceandfire.world.feature;
 
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
-
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.SheepEntity;
@@ -17,6 +14,8 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+
+import java.util.Random;
 
 public class SpawnWanderingCyclops extends Feature<NoFeatureConfig> {
 
@@ -36,7 +35,6 @@ public class SpawnWanderingCyclops extends Feature<NoFeatureConfig> {
                 EntityCyclops cyclops = IafEntityRegistry.CYCLOPS.get().create(worldIn.getWorld());
                 cyclops.setPosition(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                 cyclops.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(position), SpawnReason.SPAWNER, null, null);
-                cyclops.setVariant(rand.nextInt(3));
                 worldIn.addEntity(cyclops);
                 for (int i = 0; i < 3 + rand.nextInt(3); i++) {
                     SheepEntity sheep = EntityType.SHEEP.create(worldIn.getWorld());

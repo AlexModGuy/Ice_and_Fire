@@ -1,8 +1,5 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
-import java.util.Random;
-import java.util.stream.Collectors;
-
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
@@ -10,13 +7,7 @@ import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
-
-import net.minecraft.block.AbstractChestBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.block.FenceBlock;
-import net.minecraft.block.RotatedPillarBlock;
+import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.item.DyeColor;
@@ -32,6 +23,9 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+
+import java.util.Random;
+import java.util.stream.Collectors;
 
 public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
 
@@ -231,8 +225,7 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
                 }
             }
         }
-        EntityCyclops cyclops = new EntityCyclops(IafEntityRegistry.CYCLOPS.get(), worldIn.getWorld());
-        cyclops.setVariant(rand.nextInt(3));
+        EntityCyclops cyclops = IafEntityRegistry.CYCLOPS.get().create(worldIn.getWorld());
         cyclops.setPositionAndRotation(position.getX() + 0.5, position.getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
         worldIn.addEntity(cyclops);
         return true;
