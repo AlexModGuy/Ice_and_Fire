@@ -30,6 +30,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, value = Dist.CLIENT)
@@ -58,7 +61,7 @@ public class ClientProxy extends CommonProxy {
     private static final ModelCopperArmor COPPER_ARMOR_MODEL = new ModelCopperArmor(0.5F);
     private static final ModelCopperArmor COPPER_ARMOR_MODEL_LEGS = new ModelCopperArmor(0.2F);
 
-
+    public static Set<UUID> currentDragonRiders = new HashSet<UUID>();
     private static MyrmexHive referedClientHive = null;
     private int previousViewType = 0;
     private int thirdPersonViewDragon = 0;

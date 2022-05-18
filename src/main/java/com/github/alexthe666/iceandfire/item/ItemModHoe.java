@@ -1,15 +1,9 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.citadel.server.item.CustomToolMaterial;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
-
 import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -34,6 +28,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 public class ItemModHoe extends HoeItem {
 
     private final CustomToolMaterial toolMaterial;
@@ -50,21 +47,25 @@ public class ItemModHoe extends HoeItem {
 
     private Multimap<Attribute, AttributeModifier> dragonsteelModifiers;
     private Multimap<Attribute, AttributeModifier> bakeDragonsteel() {
-        if(toolMaterial.getAttackDamage() != IafConfig.dragonsteelBaseDamage || dragonsteelModifiers == null){
+        if(toolMaterial.getAttackDamage() != IafConfig.dragonsteelBaseDamage || dragonsteelModifiers == null) {
             ImmutableMultimap.Builder<Attribute, AttributeModifier> lvt_5_1_ = ImmutableMultimap.builder();
-            lvt_5_1_.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)1F, AttributeModifier.Operation.ADDITION));
-            lvt_5_1_.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", (double)-3F, AttributeModifier.Operation.ADDITION));
+            lvt_5_1_.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 1F, AttributeModifier.Operation.ADDITION));
+            lvt_5_1_.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -3F, AttributeModifier.Operation.ADDITION));
             this.dragonsteelModifiers = lvt_5_1_.build();
             return this.dragonsteelModifiers;
-        }else{
+        } else {
             return dragonsteelModifiers;
         }
+    }
+
+    @Override
+    public int getMaxDamage(ItemStack stack) {
+        return toolMaterial.getMaxUses();
     }
 
     public float getAttackDamage() {
         return this.toolMaterial instanceof DragonsteelToolMaterial ? (float) IafConfig.dragonsteelBaseDamage : super.getAttackDamage();
     }
-
 
 
     @Override
@@ -94,7 +95,7 @@ public class ItemModHoe extends HoeItem {
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL && IafConfig.dragonWeaponLightningAbility) {
             boolean flag = true;
             if(attacker instanceof PlayerEntity){
-                if(((PlayerEntity)attacker).swingProgress > 0.2){
+                if (attacker.swingProgress > 0.2) {
                     flag = false;
                 }
             }
