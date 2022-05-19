@@ -177,14 +177,15 @@ public class IceAndFireMainMenu extends MainMenuScreen {
             int middleX = width / 2;
             int middleY = height / 5;
             float widthScale = width / 427F;
-            float imageScale = widthScale * 128;
+            float heightScale = height / 427F;
+            float imageScale = Math.min(widthScale, heightScale) * 192;
             for (Picture picture : drawnPictures) {
                 float alpha = (picture.alpha * globalAlpha + 0.01F);
                 RenderSystem.enableBlend();
                 this.getMinecraft().getTextureManager().bindTexture(drawingTextures[picture.image]);
                 //3 -> 1
                 //1 -> 3
-                GuiMainMenuBlit.blit((int) ((picture.x * widthScale) + middleX), (int) ((picture.y * widthScale) + middleY), 0, 0, (int) imageScale, (int) imageScale, (int) imageScale, (int) imageScale, alpha);
+                GuiMainMenuBlit.blit((int) ((picture.x * widthScale) + middleX), (int) ((picture.y * heightScale) + middleY), 0, 0, (int) imageScale, (int) imageScale, (int) imageScale, (int) imageScale, alpha);
             }
         }
         GlStateManager.enableTexture();
