@@ -46,6 +46,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -82,7 +84,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-public abstract class EntityDragonBase extends TameableEntity implements IPassabilityNavigator, ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor, IHasCustomizableAttributes, ICustomSizeNavigator, ICustomMoveController {
+public abstract class EntityDragonBase extends TameableEntity implements IPassabilityNavigator, ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor, IHasCustomizableAttributes, ICustomSizeNavigator, ICustomMoveController, IInventoryChangedListener {
 
     public static final int FLIGHT_CHANCE_PER_TICK = 1500;
     private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
@@ -213,7 +215,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     public EntityDragonBase(EntityType t, World world, DragonType type, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(t, world);
         IHasCustomizableAttributes.applyAttributesForEntity(t, this);
-        initInventory();
+
         this.dragonType = type;
         this.minimumDamage = minimumDamage;
         this.maximumDamage = maximumDamage;
@@ -224,7 +226,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         this.minimumArmor = 1D;
         this.maximumArmor = 20D;
         ANIMATION_EAT = Animation.create(20);
-        updateAttributes();
+        initInventory();
         if (world.isRemote) {
             roll_buffer = new IFChainBuffer();
             pitch_buffer = new IFChainBuffer();
@@ -841,15 +843,22 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     private void initInventory() {
-        dragonInventory = new Inventory(5);
-        if (dragonInventory != null) {
-            for (int j = 0; j < dragonInventory.getSizeInventory(); ++j) {
-                ItemStack itemstack = dragonInventory.getStackInSlot(j);
+        //Code based on initHorseChest from AbstractHorseEntity
+        Inventory inventory = this.dragonInventory;
+        this.dragonInventory = new Inventory(5);
+        if (inventory != null) {
+            inventory.removeListener(this);
+            int i = Math.min(inventory.getSizeInventory(), this.dragonInventory.getSizeInventory());
+            for (int j = 0; j < i; ++j) {
+                ItemStack itemstack = inventory.getStackInSlot(j);
                 if (!itemstack.isEmpty()) {
-                    dragonInventory.setInventorySlotContents(j, itemstack.copy());
+                    this.dragonInventory.setInventorySlotContents(j, itemstack.copy());
                 }
             }
         }
+        this.dragonInventory.addListener(this);
+        this.updateAttributes();
+        //TODO: use itemHandlers
     }
 
     @Override
@@ -2426,11 +2435,18 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     @Override
     public float getXZNavSize() {
-        return Math.max(1.3F, this.getWidth()/2.0F);
+        return Math.max(1.3F, this.getWidth() / 2.0F);
     }
 
     @Override
     public int getYNavSize() {
         return MathHelper.ceil(this.getHeight());
+    }
+
+    @Override
+    public void onInventoryChanged(IInventory invBasic) {
+        if (!this.world.isRemote) {
+            updateAttributes();
+        }
     }
 }
