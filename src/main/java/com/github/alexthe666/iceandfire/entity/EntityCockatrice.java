@@ -66,14 +66,16 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     private Animation currentAnimation;
     private boolean isSitting;
     private boolean isStaring;
-    private CockatriceAIStareAttack aiStare;
-    private MeleeAttackGoal aiMelee;
+    private final CockatriceAIStareAttack aiStare;
+    private final MeleeAttackGoal aiMelee;
     private boolean isMeleeMode = false;
     private LivingEntity targetedEntity;
     private int clientSideAttackTime;
 
     public EntityCockatrice(EntityType<EntityCockatrice> type, World worldIn) {
         super(type, worldIn);
+        aiStare = new CockatriceAIStareAttack(this, 1.0D, 0, 15.0F);
+        aiMelee = new EntityAIAttackMeleeNoCooldown(this, 1.5D, false);
         IHasCustomizableAttributes.applyAttributesForEntity(type, this);
     }
 
@@ -87,8 +89,6 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
 
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new SwimGoal(this));
-        this.goalSelector.addGoal(2, aiStare = new CockatriceAIStareAttack(this, 1.0D, 0, 15.0F));
-        this.goalSelector.addGoal(2, aiMelee = new EntityAIAttackMeleeNoCooldown(this, 1.5D, false));
         this.goalSelector.addGoal(3, new CockatriceAIFollowOwner(this, 1.0D, 7.0F, 2.0F));
         this.goalSelector.addGoal(3, new SitGoal(this));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, LivingEntity.class, 14.0F, 1.0D, 1.0D, new Predicate<LivingEntity>() {
@@ -120,7 +120,6 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
                 }
             }
         }));
-        this.goalSelector.removeGoal(aiMelee);
     }
 
     public boolean detachHome() {
