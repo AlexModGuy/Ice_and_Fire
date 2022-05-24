@@ -206,19 +206,20 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
         if (playerStatueCooldown > 0) {
             playerStatueCooldown--;
         }
-        if (this.getAttackTarget() != null) {
-            boolean blindness = this.isPotionActive(Effects.BLINDNESS) || this.getAttackTarget().isPotionActive(Effects.BLINDNESS);
-            if (!blindness && this.deathTime == 0 && this.getAttackTarget() instanceof MobEntity && !(this.getAttackTarget() instanceof PlayerEntity)) {
-                forcePreyToLook(this.getAttackTarget());
+        LivingEntity attackTarget = this.getAttackTarget();
+        if (attackTarget != null) {
+            boolean blindness = this.isPotionActive(Effects.BLINDNESS) || attackTarget.isPotionActive(Effects.BLINDNESS);
+            if (!blindness && this.deathTime == 0 && attackTarget instanceof MobEntity && !(attackTarget instanceof PlayerEntity)) {
+                forcePreyToLook(attackTarget);
             }
-            if (isEntityLookingAt(this.getAttackTarget(), this, 0.4)) {
-                this.getLookController().setLookPosition(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY() + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().getPosZ(), (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
+            if (isEntityLookingAt(attackTarget, this, 0.4)) {
+                this.getLookController().setLookPosition(attackTarget.getPosX(), attackTarget.getPosY() + (double) attackTarget.getEyeHeight(), attackTarget.getPosZ(), (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
             }
         }
 
 
-        if (this.getAttackTarget() != null && isEntityLookingAt(this, this.getAttackTarget(), 0.4) && isEntityLookingAt(this.getAttackTarget(), this, 0.4) && !isBlindfolded(this.getAttackTarget())) {
-            boolean blindness = this.isPotionActive(Effects.BLINDNESS) || this.getAttackTarget().isPotionActive(Effects.BLINDNESS) || this.getAttackTarget() instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone();
+        if (attackTarget != null && isEntityLookingAt(this, attackTarget, 0.4) && isEntityLookingAt(attackTarget, this, 0.4) && !isBlindfolded(attackTarget)) {
+            boolean blindness = this.isPotionActive(Effects.BLINDNESS) || attackTarget.isPotionActive(Effects.BLINDNESS) || attackTarget instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) attackTarget).canBeTurnedToStone();
             if (!blindness && this.deathTime == 0) {
                 if (this.getAnimation() != ANIMATION_SCARE) {
                     this.playSound(IafSoundRegistry.GORGON_ATTACK, 1, 1);
@@ -228,22 +229,22 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                     if (this.getAnimationTick() > 10) {
                         if (!world.isRemote) {
                             if (playerStatueCooldown == 0) {
-                                EntityStoneStatue statue = EntityStoneStatue.buildStatueEntity(this.getAttackTarget());
-                                statue.setPositionAndRotation(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY(), this.getAttackTarget().getPosZ(), this.getAttackTarget().rotationYaw, this.getAttackTarget().rotationPitch);
+                                EntityStoneStatue statue = EntityStoneStatue.buildStatueEntity(attackTarget);
+                                statue.setPositionAndRotation(attackTarget.getPosX(), attackTarget.getPosY(), attackTarget.getPosZ(), attackTarget.rotationYaw, attackTarget.rotationPitch);
                                 if (!world.isRemote) {
                                     world.addEntity(statue);
                                 }
-                                statue.prevRotationYaw = this.getAttackTarget().rotationYaw;
-                                statue.rotationYaw = this.getAttackTarget().rotationYaw;
-                                statue.rotationYawHead = this.getAttackTarget().rotationYaw;
-                                statue.renderYawOffset = this.getAttackTarget().rotationYaw;
-                                statue.prevRenderYawOffset = this.getAttackTarget().rotationYaw;
+                                statue.prevRotationYaw = attackTarget.rotationYaw;
+                                statue.rotationYaw = attackTarget.rotationYaw;
+                                statue.rotationYawHead = attackTarget.rotationYaw;
+                                statue.renderYawOffset = attackTarget.rotationYaw;
+                                statue.prevRenderYawOffset = attackTarget.rotationYaw;
                                 playerStatueCooldown = 40;
-                                if (this.getAttackTarget() instanceof PlayerEntity) {
+                                if (attackTarget instanceof PlayerEntity) {
 
-                                    this.getAttackTarget().attackEntityFrom(IafDamageRegistry.causeGorgonDamage(this), Integer.MAX_VALUE);
+                                    attackTarget.attackEntityFrom(IafDamageRegistry.causeGorgonDamage(this), Integer.MAX_VALUE);
                                 } else {
-                                    this.getAttackTarget().remove();
+                                    attackTarget.remove();
                                 }
                                 this.setAttackTarget(null);
 
