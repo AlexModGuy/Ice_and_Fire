@@ -91,6 +91,16 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
         this.goalSelector.addGoal(2, aiMelee = new EntityAIAttackMeleeNoCooldown(this, 1.5D, false));
         this.goalSelector.addGoal(3, new CockatriceAIFollowOwner(this, 1.0D, 7.0F, 2.0F));
         this.goalSelector.addGoal(3, new SitGoal(this));
+        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, LivingEntity.class, 14.0F, 1.0D, 1.0D, new Predicate<LivingEntity>() {
+            @Override
+            public boolean apply(@Nullable LivingEntity entity) {
+                if (entity instanceof PlayerEntity) {
+                    return !((PlayerEntity) entity).isCreative() && !entity.isSpectator();
+                } else {
+                    return ServerEvents.doesScareCockatrice(entity) && !ServerEvents.isChicken(entity);
+                }
+            }
+        }));
         this.goalSelector.addGoal(4, new CockatriceAIWander(this, 1.0D));
         this.goalSelector.addGoal(5, new CockatriceAIAggroLook(this));
         this.goalSelector.addGoal(6, new LookAtGoal(this, LivingEntity.class, 6.0F));
@@ -106,7 +116,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
                     return !((PlayerEntity) entity).isCreative() && !entity.isSpectator();
                 } else {
                     return ((entity instanceof IMob) && EntityCockatrice.this.isTamed() && !(entity instanceof CreeperEntity) && !(entity instanceof ZombifiedPiglinEntity) && !(entity instanceof EndermanEntity) ||
-                        ServerEvents.doesScareCockatrice(entity) && !ServerEvents.isChicken(entity));
+                        ServerEvents.isCockatriceTarget(entity) && !ServerEvents.isChicken(entity));
                 }
             }
         }));
@@ -152,7 +162,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (source.getTrueSource() != null && ServerEvents.doesScareCockatrice(source.getTrueSource())) {
+        if (source.getTrueSource() != null && ServerEvents.isCockatriceTarget(source.getTrueSource())) {
             damage *= 5;
         }
         if (source == DamageSource.IN_WALL) {
@@ -162,7 +172,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     }
 
     private boolean canUseStareOn(Entity entity) {
-        return (!(entity instanceof IBlacklistedFromStatues) || ((IBlacklistedFromStatues) entity).canBeTurnedToStone()) && !ServerEvents.doesScareCockatrice(entity);
+        return (!(entity instanceof IBlacklistedFromStatues) || ((IBlacklistedFromStatues) entity).canBeTurnedToStone()) && !ServerEvents.isCockatriceTarget(entity);
     }
 
     private void switchAI(boolean melee) {
@@ -639,7 +649,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     private boolean shouldMelee() {
         boolean blindness = this.isPotionActive(Effects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(Effects.BLINDNESS);
         if (this.getAttackTarget() != null) {
-            return this.getDistance(this.getAttackTarget()) < 4D || ServerEvents.doesScareCockatrice(this.getAttackTarget()) || blindness || !this.canUseStareOn(this.getAttackTarget());
+            return this.getDistance(this.getAttackTarget()) < 4D || ServerEvents.isCockatriceTarget(this.getAttackTarget()) || blindness || !this.canUseStareOn(this.getAttackTarget());
         }
         return false;
     }

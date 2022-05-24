@@ -155,6 +155,10 @@ public class ServerEvents {
         return entity != null && isInEntityTag(IafTagRegistry.CHICKENS, entity.getType());
     }
 
+    public static boolean isCockatriceTarget(Entity entity) {
+        return entity != null && isInEntityTag(IafTagRegistry.COCKATRICE_TARGETS, entity.getType());
+    }
+
     public static boolean doesScareCockatrice(Entity entity) {
         return entity != null && isInEntityTag(IafTagRegistry.SCARES_COCKATRICES, entity.getType());
     }
