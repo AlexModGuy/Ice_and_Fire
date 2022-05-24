@@ -161,7 +161,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (source.getTrueSource() != null && ServerEvents.isCockatriceTarget(source.getTrueSource())) {
+        if (source.getTrueSource() != null && ServerEvents.doesScareCockatrice(source.getTrueSource())) {
             damage *= 5;
         }
         if (source == DamageSource.IN_WALL) {
