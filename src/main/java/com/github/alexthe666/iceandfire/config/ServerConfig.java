@@ -161,6 +161,7 @@ public class ServerConfig {
     public final ForgeConfigSpec.BooleanValue ghostSpawnFromPlayerDeaths;
     public ForgeConfigSpec.IntValue dragonPathfindingThreads;
     public ForgeConfigSpec.IntValue maxDragonPathingNodes;
+    public ForgeConfigSpec.BooleanValue pathfindingDebug;
     public final ForgeConfigSpec.BooleanValue dragonWeaponFireAbility;
     public final ForgeConfigSpec.BooleanValue dragonWeaponIceAbility;
     public final ForgeConfigSpec.BooleanValue dragonWeaponLightningAbility;
@@ -401,6 +402,7 @@ public class ServerConfig {
         builder.push("Pathfinding");
         this.dragonPathfindingThreads = buildInt(builder, "Dragon Pathfinding Threads", "all", 3, 1, Integer.MAX_VALUE, "Maximum threads to use for dragon/myrmex pathfinding. Increase this number if pathing is slow and you have many cores.");
         this.maxDragonPathingNodes = buildInt(builder, "Dragon Max Pathfinding Nodes", "all", 5000, 1, Integer.MAX_VALUE, "Maximum nodes for dragons/myrmex to path too. Decrease this is dragon pathfinding is super slow or intensive.");
+        this.pathfindingDebug = buildBoolean(builder, "Debug Pathfinding Mode", "all", false, "Enables the option to draw the pathfinding nodes when enabled (use a stick on an entity)");
     }
 
     private static ForgeConfigSpec.BooleanValue buildBoolean(ForgeConfigSpec.Builder builder, String name, String catagory, boolean defaultValue, String comment){

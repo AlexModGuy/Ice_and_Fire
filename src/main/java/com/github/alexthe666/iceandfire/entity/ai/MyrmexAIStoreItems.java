@@ -1,24 +1,24 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
 import com.github.alexthe666.iceandfire.block.BlockMyrmexCocoon;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityMyrmexCocoon;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathFindingStatus;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
-
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MyrmexAIStoreItems extends Goal {
     private final EntityMyrmexBase myrmex;
@@ -28,6 +28,7 @@ public class MyrmexAIStoreItems extends Goal {
     private BlockPos mainRoom = null;
     private boolean first = true; //first stage - enter the main hive room then storage room
     private PathResult path;
+
     public MyrmexAIStoreItems(EntityMyrmexBase entityIn, double movementSpeedIn) {
         this.myrmex = entityIn;
         this.movementSpeed = movementSpeedIn;
@@ -39,7 +40,7 @@ public class MyrmexAIStoreItems extends Goal {
         if (!this.myrmex.canMove() || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
             return false;
         }
-        if (!(this.myrmex.getNavigator() instanceof AdvancedPathNavigate) || this.myrmex.isPassenger()){
+        if (!(this.myrmex.getNavigator() instanceof AdvancedPathNavigate) || this.myrmex.isPassenger()) {
             return false;
         }
         if (this.myrmex.getWaitTicks() > 0) {
@@ -49,10 +50,8 @@ public class MyrmexAIStoreItems extends Goal {
         if (village == null) {
             return false;
         }
-        if(!this.myrmex.isInHive()){
-            if(!this.myrmex.isCloseEnoughToTarget(MyrmexHive.getGroundedPos(this.myrmex.world, village.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRNG(), false)),100)) {
-                return false;
-            }
+        if (!this.myrmex.isInHive()) {
+            return false;
         }
         first = true;
         mainRoom = MyrmexHive.getGroundedPos(this.myrmex.world, village.getCenter());
@@ -69,16 +68,16 @@ public class MyrmexAIStoreItems extends Goal {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && nextCocoon != null && isUseableCocoon(nextCocoon) && !this.myrmex.isCloseEnoughToTarget(nextCocoon,3) && this.myrmex.shouldEnterHive();
+        return !this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && nextCocoon != null && isUseableCocoon(nextCocoon) && !this.myrmex.isCloseEnoughToTarget(nextCocoon, 3) && this.myrmex.shouldEnterHive();
     }
 
     @Override
     public void tick() {
         if (first && mainRoom != null) {
-            if (this.myrmex.isCloseEnoughToTarget(mainRoom,10)) {
+            if (this.myrmex.isCloseEnoughToTarget(mainRoom, 10)) {
+                this.path = ((AdvancedPathNavigate) this.myrmex.getNavigator()).moveToXYZ(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D, this.movementSpeed);
                 first = false;
-            }
-            else if (!this.myrmex.pathReachesTarget(path,mainRoom, 9)) {
+            } else if (!this.myrmex.pathReachesTarget(path, mainRoom, 9)) {
                 //Simple way to stop executing this task
                 nextCocoon = null;
             }
@@ -120,13 +119,12 @@ public class MyrmexAIStoreItems extends Goal {
                 }
             }
             //In case the myrmex isn't close enough to the cocoon and walked to it's destination try a different one
-            else if(!this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && !this.myrmex.pathReachesTarget(path,nextCocoon,dist)){
+            else if (!this.myrmex.getHeldItem(Hand.MAIN_HAND).isEmpty() && this.path.getStatus() == PathFindingStatus.COMPLETE && !this.myrmex.pathReachesTarget(path, nextCocoon, dist)) {
                 nextCocoon = getNearbyCocoon(nextRoom);
-                if (nextCocoon !=null) {
+                if (nextCocoon != null) {
                     this.path = ((AdvancedPathNavigate) this.myrmex.getNavigator()).moveToXYZ(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D, this.movementSpeed);
                 }
-            }
-            else if(this.myrmex.pathReachesTarget(path,nextCocoon,dist) && this.path.isCancelled()){
+            } else if (this.myrmex.pathReachesTarget(path, nextCocoon, dist) && this.path.isCancelled()) {
                 resetTask();
             }
         }

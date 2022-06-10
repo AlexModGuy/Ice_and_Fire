@@ -169,6 +169,7 @@ public class IafConfig {
 
     public static int dragonPathfindingThreads = 3;
     public static int maxDragonPathingNodes = 5000;
+    public static boolean pathfindingDebug = false;
     public static boolean dragonWeaponFireAbility = true;
     public static boolean dragonWeaponIceAbility = true;
     public static boolean dragonWeaponLightningAbility = true;
@@ -345,6 +346,7 @@ public class IafConfig {
             dragonWeaponLightningAbility = ConfigHolder.SERVER.dragonWeaponLightningAbility.get();
             villagerHouseWeight = ConfigHolder.SERVER.villagerHouseWeight.get();
             allowAttributeOverriding = ConfigHolder.SERVER.allowAttributeOverriding.get();
+            pathfindingDebug = ConfigHolder.SERVER.pathfindingDebug.get();
         } catch (Exception e) {
             IceAndFire.LOGGER.warn("An exception was caused trying to load the common config for Ice and Fire.");
             e.printStackTrace();

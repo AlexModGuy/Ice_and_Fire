@@ -55,7 +55,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     /**
      * Spawn pos of minecart.
      */
-    private BlockPos spawnedPos = BlockPos.ZERO;
+    private final BlockPos spawnedPos = BlockPos.ZERO;
 
     /**
      * Desired position to reach
@@ -196,7 +196,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         }
 
         desiredPos = BlockPos.ZERO;
-        final int theRange = (int) (entity.getRNG().nextInt((int) range) + range / 2);
+        final int theRange = entity.getRNG().nextInt(range) + range / 2;
         final BlockPos start = AbstractPathJob.prepareStart(ourEntity);
 
         return setPathJob(new PathJobRandomPos(ourEntity.world,
@@ -846,27 +846,24 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         // Do nothing, unstuck is checked on tick, not just when we have a path
     }
 
-    public boolean entityOnOrBelowPath(Entity entity, Vector3d slack){
+    public boolean entityOnAndBelowPath(Entity entity, Vector3d slack) {
         Path path = getPath();
-        if (path == null){
+        if (path == null) {
             return false;
         }
-        //getIndex doesn't return an 0-indexed index
-        int closest = path.getCurrentPathIndex() - 1;
-        if (closest < 0) {
-            return false;
-        }
+
+        int closest = path.getCurrentPathIndex();
         //Search through path from the current index outwards to improve performance
-        for (int i = 0; i < path.getCurrentPathLength(); i++) {
+        for (int i = 0; i < path.getCurrentPathLength() - 1; i++) {
             if (closest + i < path.getCurrentPathLength()) {
                 PathPoint currentPoint = path.getPathPointFromIndex(closest + i);
-                if (entityNearOrBelowPoint(currentPoint, entity, slack)) {
+                if (entityNearAndBelowPoint(currentPoint, entity, slack)) {
                     return true;
                 }
             }
             if (closest - i >= 0) {
                 PathPoint currentPoint = path.getPathPointFromIndex(closest - i);
-                if (entityNearOrBelowPoint(currentPoint, entity, slack)) {
+                if (entityNearAndBelowPoint(currentPoint, entity, slack)) {
                     return true;
                 }
             }
@@ -874,10 +871,10 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         return false;
     }
 
-    private boolean entityNearOrBelowPoint(PathPoint currentPoint, Entity entity, Vector3d slack) {
+    private boolean entityNearAndBelowPoint(PathPoint currentPoint, Entity entity, Vector3d slack) {
         return Math.abs(currentPoint.x - entity.getPosX()) < slack.getX()
-                && currentPoint.y - entity.getPosY() > -slack.getY()
-                && Math.abs(currentPoint.z - entity.getPosZ()) < slack.getZ();
+            && currentPoint.y - entity.getPosY() + slack.getY() > 0
+            && Math.abs(currentPoint.z - entity.getPosZ()) < slack.getZ();
     }
 
 

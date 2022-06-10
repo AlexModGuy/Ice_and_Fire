@@ -202,7 +202,7 @@ public class ServerEvents {
                 if (parent != null)
                     ((PlayerEntity) event.getEntity()).attackTargetEntityWithCurrentItem(parent);
             } catch (Exception e) {
-                IceAndFire.LOGGER.warn("Exception thrown while interacting with entity");
+                IceAndFire.LOGGER.warn("Exception thrown while interacting with entity.", e);
             }
             int extraData = 0;
             if (event.getTarget() instanceof EntityHydraHead && parent instanceof EntityHydra) {

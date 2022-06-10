@@ -59,7 +59,7 @@ public final class Pathfinding {
     }
 
     public static boolean isDebug() {
-        return false;
+        return IafConfig.pathfindingDebug;
     }
 
     /**

@@ -7,5 +7,7 @@ public interface IPassabilityNavigator {
 
     int maxSearchNodes();
 
-    boolean isBlockPassable(BlockState state, BlockPos pos, BlockPos entityPos);
+    boolean isBlockExplicitlyPassable(BlockState state, BlockPos pos, BlockPos entityPos);
+
+    boolean isBlockExplicitlyNotPassable(BlockState state, BlockPos pos, BlockPos entityPos);
 }

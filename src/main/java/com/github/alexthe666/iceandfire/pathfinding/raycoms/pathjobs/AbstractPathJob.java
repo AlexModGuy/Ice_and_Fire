@@ -61,10 +61,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
      */
     protected final PathResult result;
     /**
-     * Max range used to calculate the number of nodes we visit (square of maxrange).
-     */
-    protected int maxRange;
-    /**
      * Queue of all open nodes.
      */
     private final Queue<Node> nodesOpen = new PriorityQueue<>(500);
@@ -72,8 +68,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
      * Queue of all the visited nodes.
      */
     private final Map<Integer, Node> nodesVisited = new HashMap<>();
-    //  May be faster, but can produce strange results
-    private boolean allowJumpPointSearchTypeWalk;
     /**
      * Type of restriction.
      */
@@ -82,6 +76,14 @@ public abstract class AbstractPathJob implements Callable<Path> {
      * Are xz restrictions hard or soft.
      */
     private final boolean hardXzRestriction;
+    /**
+     * Are there hard xz restrictions.
+     */
+    private final boolean xzRestricted = false;
+    /**
+     * Max range used to calculate the number of nodes we visit (square of maxrange).
+     */
+    protected int maxRange;
     /**
      * End position trying to reach.
      */
@@ -98,20 +100,18 @@ public abstract class AbstractPathJob implements Callable<Path> {
      * The entity this job belongs to.
      */
     protected WeakReference<LivingEntity> entity;
+    IPassabilityNavigator passabilityNavigator;
+    //  May be faster, but can produce strange results
+    private boolean allowJumpPointSearchTypeWalk;
     //  May be faster, but can produce strange results
     private float entitySizeXZ = 1;
     private int entitySizeY = 1;
-    /**
-     * Are there hard xz restrictions.
-     */
-    private final boolean xzRestricted = false;
     /**
      * The cost values for certain nodes.
      */
     private boolean circumventSizeCheck = false;
     private int totalNodesAdded = 0;
     private int totalNodesVisited = 0;
-    IPassabilityNavigator passabilityNavigator;
     /**
      * The cost values for certain nodes.
      */
@@ -126,6 +126,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
     private int maxY;
     private int minY;
     private double maxJumpHeight = MAX_JUMP_HEIGHT;
+
     /**
      * AbstractPathJob constructor.
      *
@@ -454,8 +455,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
             entitySizeXZ = ((ICustomSizeNavigator) entity).getXZNavSize();
             entitySizeY = ((ICustomSizeNavigator) entity).getYNavSize();
             circumventSizeCheck = ((ICustomSizeNavigator) entity).isSmallerThanBlock();
-        }
-        else {
+        } else {
             entitySizeXZ = entity.getWidth() / 2.0F;
             entitySizeY = MathHelper.ceil(entity.getHeight());
         }
@@ -640,6 +640,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
         }
         if (pathingOptions.canClimb()) {
             //If the entity can climb and it needs to climb a block higher than 1 block
+            //TODO: Add code for climbing downwards
             if (getHighest(currentNode).getFirst() > 1) {
                 walk(currentNode, BLOCKPOS_IDENTITY.up(getHighest(currentNode).getFirst()));
             }
@@ -1181,6 +1182,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
         BlockState target = world.getBlockState(pos);
         BlockState origin;
         int i = 0;
+        //TODO: Use collision shapes of blocks
         while (target.isSolid()) {
             pos = pos.up();
             target = world.getBlockState(pos);
@@ -1260,6 +1262,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
     protected boolean isPassable(final BlockState block, final BlockPos pos, final Node parent) {
         final BlockPos parentPos = parent == null ? start : parent.pos;
         final BlockState parentBlock = world.getBlockState(parentPos);
+
         if (parentBlock.getBlock() instanceof TrapDoorBlock) {
             final BlockPos dir = pos.subtract(parentPos);
             if (dir.getX() != 0 || dir.getZ() != 0) {
@@ -1319,7 +1322,14 @@ public abstract class AbstractPathJob implements Callable<Path> {
     protected boolean isPassable(final BlockPos pos, final boolean head, final Node parent) {
         final BlockState state = world.getBlockState(pos);
         final VoxelShape shape = state.getCollisionShape(world, pos);
-        if ((shape.isEmpty() || shape.getEnd(Direction.Axis.Y) <= 0.1) && passabilityNavigator != null && passabilityNavigator.isBlockPassable(state, pos, pos)) {
+
+        if (passabilityNavigator != null && passabilityNavigator.isBlockExplicitlyNotPassable(state, pos, pos)) {
+            return false;
+        }
+
+        if ((shape.isEmpty() || shape.getEnd(Direction.Axis.Y) <= 0.1)) {
+            if (passabilityNavigator != null && passabilityNavigator.isBlockExplicitlyPassable(state, pos, pos))
+                return isPassable(state, pos, parent);
             return !head
                 || !(state.getBlock() instanceof CarpetBlock)
                 || isLadder(state.getBlock(), pos);

@@ -1474,12 +1474,17 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     }
 
     @Override
-    public boolean isBlockPassable(BlockState state, BlockPos pos, BlockPos entityPos) {
+    public boolean isBlockExplicitlyPassable(BlockState state, BlockPos pos, BlockPos entityPos) {
         if (!isModelDead() && this.getDragonStage() >= 3) {
             if (IafConfig.dragonGriefing != 2 && (!this.isTamed() || IafConfig.tamedDragonGriefing) && pos.getY() >= this.getPosY()) {
                 return isBreakable(pos, state, IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F);
             }
         }
+        return false;
+    }
+
+    @Override
+    public boolean isBlockExplicitlyNotPassable(BlockState state, BlockPos pos, BlockPos entityPos) {
         return false;
     }
 
@@ -2435,7 +2440,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     @Override
     public float getXZNavSize() {
-        return Math.max(1.3F, this.getWidth() / 2.0F);
+        return Math.max(1.4F, this.getWidth() / 2.0F);
     }
 
     @Override
