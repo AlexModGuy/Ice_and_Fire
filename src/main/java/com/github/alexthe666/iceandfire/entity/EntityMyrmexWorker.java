@@ -200,7 +200,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     @Override
     public boolean shouldEnterHive() {
-        return holdingSomething() || !world.isDaytime();
+        return holdingSomething() || (!world.isDaytime() && !IafConfig.myrmexHiveIgnoreDaytime);
     }
 
     @Override
