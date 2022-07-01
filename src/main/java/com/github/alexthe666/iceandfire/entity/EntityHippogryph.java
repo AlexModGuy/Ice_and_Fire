@@ -1080,6 +1080,24 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
+    public boolean isOnSameTeam(Entity entityIn) {
+        if (this.isTamed()) {
+            LivingEntity livingentity = this.getOwner();
+            if (entityIn == livingentity) {
+                return true;
+            }
+            if (entityIn instanceof TameableEntity) {
+                return ((TameableEntity) entityIn).isOwner(livingentity);
+            }
+            if (livingentity != null) {
+                return livingentity.isOnSameTeam(entityIn);
+            }
+        }
+
+        return super.isOnSameTeam(entityIn);
+    }
+
+    @Override
     public void onHearFlute(PlayerEntity player) {
         if (this.isTamed() && this.isOwner(player)) {
             if (this.isFlying() || this.isHovering()) {

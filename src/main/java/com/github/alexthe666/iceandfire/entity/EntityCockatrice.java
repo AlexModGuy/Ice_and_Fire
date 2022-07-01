@@ -154,9 +154,25 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
         return this.homePos == null ? "" : homePos.getDimension();
     }
 
-
+    @Override
     public boolean isOnSameTeam(Entity entityIn) {
-        return ServerEvents.isChicken(entityIn) || super.isOnSameTeam(entityIn);
+        if(ServerEvents.isChicken(entityIn)){
+            return true;
+        }
+        if (this.isTamed()) {
+            LivingEntity livingentity = this.getOwner();
+            if (entityIn == livingentity) {
+                return true;
+            }
+            if (entityIn instanceof TameableEntity) {
+                return ((TameableEntity) entityIn).isOwner(livingentity);
+            }
+            if (livingentity != null) {
+                return livingentity.isOnSameTeam(entityIn);
+            }
+        }
+
+        return super.isOnSameTeam(entityIn);
     }
 
     @Override

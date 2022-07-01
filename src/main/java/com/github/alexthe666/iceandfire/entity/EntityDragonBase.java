@@ -2189,6 +2189,24 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         this.setModelDead(false);
     }
 
+    @Override
+    public boolean isOnSameTeam(Entity entityIn) {
+        if (this.isTamed()) {
+            LivingEntity livingentity = this.getOwner();
+            if (entityIn == livingentity) {
+                return true;
+            }
+            if (entityIn instanceof TameableEntity) {
+                return ((TameableEntity) entityIn).isOwner(livingentity);
+            }
+            if (livingentity != null) {
+                return livingentity.isOnSameTeam(entityIn);
+            }
+        }
+
+        return super.isOnSameTeam(entityIn);
+    }
+
     public Vector3d getHeadPosition() {
         final float sitProg = this.sitProgress * 0.015F;
         final float deadProg = this.modelDeadProgress * -0.02F;
