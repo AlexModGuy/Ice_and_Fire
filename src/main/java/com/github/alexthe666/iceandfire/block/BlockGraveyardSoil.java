@@ -26,7 +26,7 @@ public class BlockGraveyardSoil extends Block {
     		Properties
     			.create(Material.EARTH)
     			.sound(SoundType.GROUND)
-    			.hardnessAndResistance(5, 15)
+    			.hardnessAndResistance(5, 1F)
     			.harvestTool(ToolType.SHOVEL)
     			.harvestLevel(0)
     			.tickRandomly()
