@@ -108,6 +108,7 @@ public class ServerConfig {
     public final ForgeConfigSpec.IntValue myrmexColonySize;
     public final ForgeConfigSpec.DoubleValue myrmexBaseAttackStrength ;
     public final ForgeConfigSpec.IntValue myrmexMaximumWanderRadius;
+    public final ForgeConfigSpec.BooleanValue myrmexHiveIgnoreDaytime;
     public final ForgeConfigSpec.BooleanValue spawnAmphitheres;
     public final ForgeConfigSpec.IntValue amphithereSpawnRate;
     public final ForgeConfigSpec.IntValue amphithereVillagerSearchLength ;
@@ -338,6 +339,7 @@ public class ServerConfig {
         this.myrmexColonySize = buildInt(builder, "Myrmex Colony Max Size", "all", 80, 10, 10000, "How many maximum individuals a myrmex colony can have.");
         this.myrmexBaseAttackStrength = buildDouble(builder, "Myrmex Base Attack Strength", "all", 3, 1, 10000, "Base Myrmex(worker) attack strength");
         this.myrmexMaximumWanderRadius = buildInt(builder,"Myrmex Maximum Wander Radius","all",50,25,4000,"The maximum radius myrmex area allowed to wander/forage");
+        this.myrmexHiveIgnoreDaytime = buildBoolean(builder, "Myrmex Hive Ignore Daytime", "all", false, "Myrmex hives will ignore daytime");
         builder.pop();
         builder.push("Amphitheres");
         this.spawnAmphitheres = buildBoolean(builder, "Spawn Amphitheres", "all", true, "True if amphitheres are allowed to spawn");
