@@ -57,6 +57,7 @@ public abstract class WorldGenDragonCave extends Feature<NoFeatureConfig> {
         if (!IafConfig.generateDragonDens || rand.nextInt(IafConfig.generateDragonDenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
             return false;
         }
+        isMale = rand.nextBoolean();
         ChunkPos chunkPos = worldIn.getChunk(position).getPos();
         // Center the position at the "middle" of the chunk
         position = new BlockPos((chunkPos.x << 4) + 8, 20 + rand.nextInt(20), (chunkPos.z << 4) + 8);
