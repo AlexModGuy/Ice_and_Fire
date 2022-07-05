@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.spawner.AbstractSpawner;
 
 public class TileEntityDreadSpawner extends MobSpawnerTileEntity {
-    private final TileEntityType<?> type = IafTileEntityRegistry.DREAD_SPAWNER.get();
+    private final TileEntityType<?> type;
     private final DreadSpawnerBaseLogic spawnerLogic = new DreadSpawnerBaseLogic() {
         @Override
         public void broadcastEvent(int id) {
@@ -43,6 +43,7 @@ public class TileEntityDreadSpawner extends MobSpawnerTileEntity {
 
     public TileEntityDreadSpawner() {
         super();
+        this.type = IafTileEntityRegistry.DREAD_SPAWNER.get();
     }
 
     @Override
@@ -103,6 +104,6 @@ public class TileEntityDreadSpawner extends MobSpawnerTileEntity {
 
     @Override
     public TileEntityType<?> getType() {
-        return this.type;
+        return this.type != null ? this.type : super.getType();
     }
 }
