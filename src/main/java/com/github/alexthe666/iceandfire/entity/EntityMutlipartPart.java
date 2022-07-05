@@ -247,7 +247,7 @@ public abstract class EntityMutlipartPart extends Entity {
                 return true;
             }
 
-            if (entity.isRidingOrBeingRiddenBy(entityIn)) {
+            if (isRidingOrBeingRiddenBy(entity, entityIn)) {
                 return true;
             }
         }
