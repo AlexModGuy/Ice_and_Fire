@@ -10,7 +10,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -87,13 +86,7 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
                 return false;
             } else {
                 double d0 = this.getTargetDistance();
-                if (this.goalOwner.getDistanceSq(itemTarget) > d0 * d0) {
-                    return false;
-                } else {
-
-                    return true;
-
-                }
+                return !(this.goalOwner.getDistanceSq(itemTarget) > d0 * d0);
             }
         }
     }
@@ -108,8 +101,9 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
             this.targetEntity.getItem().shrink(1);
             this.goalOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
             deathWorm.setAnimation(EntityDeathWorm.ANIMATION_BITE);
-
-            PlayerEntity thrower = this.targetEntity.world.getPlayerByUuid(this.targetEntity.getThrowerId());
+            PlayerEntity thrower = null;
+            if (this.targetEntity.getThrowerId() != null)
+                thrower = this.targetEntity.world.getPlayerByUuid(this.targetEntity.getThrowerId());
             deathWorm.setExplosive(true, thrower);
             resetTask();
         }
