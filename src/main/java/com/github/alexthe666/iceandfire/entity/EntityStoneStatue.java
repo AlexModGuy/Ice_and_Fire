@@ -237,6 +237,11 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
 
 
     @Override
+    public boolean canBreatheUnderwater() {
+        return true;
+    }
+
+    @Override
     public boolean canBeTurnedToStone() {
         return false;
     }
