@@ -21,5 +21,4 @@ nie zostanie zlokalizowany, kryształ rozwiąże się
 
 
 Aby ręcznie rozwiązać kryształ ręcznie,
-umieść go w siatce do wytwarzania
-samodzielnie.
+umieść go i tylko go w siatce do wytwarzania.
