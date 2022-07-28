@@ -57,6 +57,8 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     private static final DataParameter<Integer> TAMING_PLAYER = EntityDataManager.createKey(EntityCockatrice.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> TAMING_LEVEL = EntityDataManager.createKey(EntityCockatrice.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> COMMAND = EntityDataManager.createKey(EntityCockatrice.class, DataSerializers.VARINT);
+    private final CockatriceAIStareAttack aiStare;
+    private final MeleeAttackGoal aiMelee;
     public float sitProgress;
     public float stareProgress;
     public int ticksStaring = 0;
@@ -66,8 +68,6 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
     private Animation currentAnimation;
     private boolean isSitting;
     private boolean isStaring;
-    private final CockatriceAIStareAttack aiStare;
-    private final MeleeAttackGoal aiMelee;
     private boolean isMeleeMode = false;
     private LivingEntity targetedEntity;
     private int clientSideAttackTime;
@@ -77,6 +77,20 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
         aiStare = new CockatriceAIStareAttack(this, 1.0D, 0, 15.0F);
         aiMelee = new EntityAIAttackMeleeNoCooldown(this, 1.5D, false);
         IHasCustomizableAttributes.applyAttributesForEntity(type, this);
+    }
+
+    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+        return MobEntity.func_233666_p_()
+            //HEALTH
+            .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.cockatriceMaxHealth)
+            //SPEED
+            .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4D)
+            //ATTACK
+            .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0D)
+            //FOLLOW RANGE
+            .createMutableAttribute(Attributes.FOLLOW_RANGE, 64.0D)
+            //ARMOR
+            .createMutableAttribute(Attributes.ARMOR, 2.0D);
     }
 
     protected int getExperiencePoints(PlayerEntity player) {
@@ -156,7 +170,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
 
     @Override
     public boolean isOnSameTeam(Entity entityIn) {
-        if(ServerEvents.isChicken(entityIn)){
+        if (ServerEvents.isChicken(entityIn)) {
             return true;
         }
         if (this.isTamed()) {
@@ -223,20 +237,6 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
             return false;
         }
 
-    }
-
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-            //HEALTH
-            .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.cockatriceMaxHealth)
-            //SPEED
-            .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4D)
-            //ATTACK
-            .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0D)
-            //FOLLOW RANGE
-            .createMutableAttribute(Attributes.FOLLOW_RANGE, 64.0D)
-            //ARMOR
-            .createMutableAttribute(Attributes.ARMOR, 2.0D);
     }
 
     @Override
@@ -354,7 +354,7 @@ public class EntityCockatrice extends TameableEntity implements IAnimatedEntity,
         this.setCommand(tag.getInt("Command"));
         this.hasHomePosition = tag.getBoolean("HasHomePosition");
         if (hasHomePosition && tag.getInt("HomeAreaX") != 0 && tag.getInt("HomeAreaY") != 0 && tag.getInt("HomeAreaZ") != 0) {
-            homePos = new HomePosition(tag);
+            homePos = new HomePosition(tag, this.world);
         }
     }
 

@@ -16,6 +16,10 @@ public class HomePosition {
         read(compound);
     }
 
+    public HomePosition(CompoundNBT compound, World world) {
+        read(compound, world);
+    }
+
     public HomePosition(BlockPos pos, World world) {
         this(pos.getX(), pos.getY(), pos.getZ(), world);
     }
@@ -40,8 +44,16 @@ public class HomePosition {
         compound.putInt("HomeAreaX", this.x);
         compound.putInt("HomeAreaY", this.y);
         compound.putInt("HomeAreaZ", this.z);
-        compound.putString("HomeDimension", this.dimension);
+        if (dimension != null)
+            compound.putString("HomeDimension", this.dimension);
         return compound;
+    }
+
+    public HomePosition read(CompoundNBT compound, World world) {
+        read(compound);
+        if (this.dimension == null)
+            this.dimension = DragonUtils.getDimensionName(world);
+        return this;
     }
 
     public HomePosition read(CompoundNBT compound) {
@@ -54,7 +66,6 @@ public class HomePosition {
         pos = new BlockPos(x, y, z);
         if (compound.contains("HomeDimension"))
             this.dimension = compound.getString("HomeDimension");
-
         return this;
     }
 }
