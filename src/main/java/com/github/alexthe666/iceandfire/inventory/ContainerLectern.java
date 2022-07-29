@@ -7,7 +7,6 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemBestiary;
 import com.github.alexthe666.iceandfire.message.MessageUpdateLectern;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -21,8 +20,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 
 public class ContainerLectern extends Container {
-    private IInventory tileFurnace;
-    private int[] possiblePagesInt = new int[3];
+    private final IInventory tileFurnace;
+    private final int[] possiblePagesInt = new int[3];
 
     public ContainerLectern(int i, PlayerInventory playerInventory) {
         this(i, new Inventory(2), playerInventory, new IntArray(0));
@@ -52,6 +51,14 @@ public class ContainerLectern extends Container {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
+    }
+
+    private static int getPageField(int i) {
+        if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern) {
+            TileEntityLectern lectern = (TileEntityLectern) IceAndFire.PROXY.getRefrencedTE();
+            return lectern.selectedPages[i] == null ? -1 : lectern.selectedPages[i].ordinal();
+        }
+        return -1;
     }
 
     @Override
@@ -132,14 +139,6 @@ public class ContainerLectern extends Container {
         return pages;
     }
 
-    private static int getPageField(int i) {
-        if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern) {
-            TileEntityLectern lectern = (TileEntityLectern) IceAndFire.PROXY.getRefrencedTE();
-            return lectern.selectedPages[i] == null ? -1 : lectern.selectedPages[i].ordinal();
-        }
-        return -1;
-    }
-
     @Override
     public boolean enchantItem(PlayerEntity playerIn, int id) {
         possiblePagesInt[0] = getPageField(0);
@@ -149,7 +148,7 @@ public class ContainerLectern extends Container {
         ItemStack itemstack1 = this.tileFurnace.getStackInSlot(1);
         int i = 3;
 
-        if (!playerIn.world.isRemote && !playerIn.isCreative()){
+        if (!playerIn.world.isRemote && !playerIn.isCreative()) {
             itemstack1.shrink(i);
             if (itemstack1.isEmpty()) {
                 this.tileFurnace.setInventorySlotContents(1, ItemStack.EMPTY);
@@ -157,7 +156,10 @@ public class ContainerLectern extends Container {
             return false;
         }
 
-        if ((itemstack1.isEmpty() || itemstack1.getCount() < i) && !playerIn.isCreative()) {
+        if ((itemstack1.isEmpty() ||
+            itemstack1.getCount() < i ||
+            itemstack1.getItem() != IafItemRegistry.MANUSCRIPT)
+            && !playerIn.isCreative()) {
             return false;
         } else if (this.possiblePagesInt[id] > 0 && !itemstack.isEmpty()) {
             EnumBestiaryPages page = getPossiblePages()[MathHelper.clamp(id, 0, 2)];
@@ -165,8 +167,8 @@ public class ContainerLectern extends Container {
                 if (itemstack.getItem() == IafItemRegistry.BESTIARY) {
                     this.tileFurnace.setInventorySlotContents(0, itemstack);
                     if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern) {
-                        if(playerIn.world.isRemote){
-                            IceAndFire.sendMSGToServer(new MessageUpdateLectern(((TileEntityLectern)IceAndFire.PROXY.getRefrencedTE()).getPos().toLong(), 0, 0, 0, true, page.ordinal()));
+                        if (playerIn.world.isRemote) {
+                            IceAndFire.sendMSGToServer(new MessageUpdateLectern(IceAndFire.PROXY.getRefrencedTE().getPos().toLong(), 0, 0, 0, true, page.ordinal()));
                         }
                         ((TileEntityLectern) IceAndFire.PROXY.getRefrencedTE()).randomizePages(itemstack, itemstack1);
                     }

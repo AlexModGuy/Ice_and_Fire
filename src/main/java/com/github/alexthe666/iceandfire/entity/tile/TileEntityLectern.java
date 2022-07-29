@@ -1,18 +1,11 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.item.ItemBestiary;
 import com.github.alexthe666.iceandfire.message.MessageUpdateLectern;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -31,6 +24,12 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class TileEntityLectern extends LockableTileEntity implements ITickableTileEntity, ISidedInventory {
     private static final int[] slotsTop = new int[]{0};
@@ -59,15 +58,17 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
     public float pageHelp1;
     public float pageHelp2;
     public EnumBestiaryPages[] selectedPages = new EnumBestiaryPages[3];
-    net.minecraftforge.items.IItemHandler handlerUp = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.Direction.UP);
-    net.minecraftforge.items.IItemHandler handlerDown = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, Direction.DOWN);
     net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
-            net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN);
-    private Random localRand = new Random();
+        net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN);
+    private final Random localRand = new Random();
     private NonNullList<ItemStack> stacks = NonNullList.withSize(3, ItemStack.EMPTY);
 
     public TileEntityLectern() {
         super(IafTileEntityRegistry.IAF_LECTERN.get());
+    }
+
+    public static String getGuiID() {
+        return IceAndFire.MODID + ":lectern";
     }
 
     @Override
@@ -204,7 +205,13 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return true;
+        if (stack.isEmpty())
+            return false;
+        if (index == 0)
+            return stack.getItem() instanceof ItemBestiary;
+        if (index == 1)
+            return stack.getItem() == IafItemRegistry.MANUSCRIPT;
+        return false;
     }
 
     @Override
@@ -245,10 +252,6 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
     @Override
     public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
         return this.isItemValidForSlot(index, itemStackIn);
-    }
-
-    public static String getGuiID() {
-        return IceAndFire.MODID + ":lectern";
     }
 
     @Override
