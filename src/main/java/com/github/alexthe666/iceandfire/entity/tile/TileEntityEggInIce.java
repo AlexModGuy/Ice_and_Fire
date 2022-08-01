@@ -39,7 +39,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickableTileEntit
         } else {
             tag.putByte("Color", (byte) 0);
         }
-        tag.putInt("Age", (byte) age);
+        tag.putInt("Age", age);
         if (ownerUUID == null) {
             tag.putString("OwnerUUID", "");
         } else {
