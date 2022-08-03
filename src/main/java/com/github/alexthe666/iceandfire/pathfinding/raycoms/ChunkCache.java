@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 /*
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -26,8 +27,6 @@ import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.lighting.WorldLightManager;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
@@ -79,7 +78,6 @@ public class ChunkCache implements IWorldReader
      *
      * @return if so.
      */
-    @OnlyIn(Dist.CLIENT)
     public boolean isEmpty()
     {
         return this.empty;
@@ -149,11 +147,11 @@ public class ChunkCache implements IWorldReader
         return Fluids.EMPTY.getDefaultState();
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
-    public Biome getBiome(BlockPos pos)
-    {
-        return BiomeRegistry.PLAINS;
+    public Biome getBiome(BlockPos pos) {
+        if (world.isRemote())
+            return BiomeRegistry.PLAINS;
+        return this.getBiomeManager().getBiome(pos);
     }
 
     @Override

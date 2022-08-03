@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.client.gui.IceAndFireMainMenu;
 import com.github.alexthe666.iceandfire.client.particle.CockatriceBeamRender;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderChain;
+import com.github.alexthe666.iceandfire.client.render.pathfinding.RenderPath;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderFrozenState;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
@@ -56,7 +57,7 @@ public class ClientEvents {
     @SubscribeEvent
     public void renderWorldLastEvent(RenderWorldLastEvent event) {
         if (Pathfinding.isDebug()) {
-            Pathfinding.debugDraw(event.getPartialTicks(), event.getMatrixStack());
+            RenderPath.debugDraw(event.getPartialTicks(), event.getMatrixStack());
         }
     }
 

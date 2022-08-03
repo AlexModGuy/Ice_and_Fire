@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 /*
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
-import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -116,7 +115,7 @@ public class PathingStuckHandler implements IStuckHandler
      */
     private BlockPos moveAwayStartPos = BlockPos.ZERO;
 
-    private Random rand = new Random();
+    private final Random rand = new Random();
 
     private PathingStuckHandler()
     {
