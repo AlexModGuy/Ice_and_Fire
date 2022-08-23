@@ -180,33 +180,35 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     public void livingTick() {
         super.livingTick();
         renderYawOffset = rotationYaw;
+
+        LivingEntity attackTarget = this.getAttackTarget();
         if (singCooldown > 0) {
             singCooldown--;
             this.setSinging(false);
         }
-        if (!world.isRemote && this.getAttackTarget() == null && !this.isAgressive()) {
+        if (!world.isRemote && attackTarget == null && !this.isAgressive()) {
             this.setSinging(true);
         }
-        if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 7D && this.getAnimationTick() == 5) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+        if (this.getAnimation() == ANIMATION_BITE && attackTarget != null && this.getDistanceSq(attackTarget) < 7D && this.getAnimationTick() == 5) {
+            attackTarget.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
         }
-        if (this.getAnimation() == ANIMATION_PULL && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 16D && this.getAnimationTick() == 5) {
-            this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
-            double attackmotionX = (Math.signum(this.getPosX() - this.getAttackTarget().getPosX()) * 0.5D - this.getAttackTarget().getMotion().z) * 0.100000000372529 * 5;
-            double attackmotionY = (Math.signum(this.getPosY() - this.getAttackTarget().getPosY() + 1) * 0.5D - this.getAttackTarget().getMotion().y) * 0.100000000372529 * 5;
-            double attackmotionZ = (Math.signum(this.getPosZ() - this.getAttackTarget().getPosZ()) * 0.5D - this.getAttackTarget().getMotion().z) * 0.100000000372529 * 5;
+        if (this.getAnimation() == ANIMATION_PULL && attackTarget != null && this.getDistanceSq(attackTarget) < 16D && this.getAnimationTick() == 5) {
+            attackTarget.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+            double attackmotionX = (Math.signum(this.getPosX() - attackTarget.getPosX()) * 0.5D - attackTarget.getMotion().z) * 0.100000000372529 * 5;
+            double attackmotionY = (Math.signum(this.getPosY() - attackTarget.getPosY() + 1) * 0.5D - attackTarget.getMotion().y) * 0.100000000372529 * 5;
+            double attackmotionZ = (Math.signum(this.getPosZ() - attackTarget.getPosZ()) * 0.5D - attackTarget.getMotion().z) * 0.100000000372529 * 5;
 
-            this.getAttackTarget().setMotion(this.getAttackTarget().getMotion().add(attackmotionX, attackmotionY, attackmotionZ));
-            float angle = (float) (Math.atan2(this.getAttackTarget().getMotion().z, this.getAttackTarget().getMotion().x) * 180.0D / Math.PI) - 90.0F;
+            attackTarget.setMotion(attackTarget.getMotion().add(attackmotionX, attackmotionY, attackmotionZ));
+            float angle = (float) (Math.atan2(attackTarget.getMotion().z, attackTarget.getMotion().x) * 180.0D / Math.PI) - 90.0F;
             //entity.moveForward = 0.5F;
-            double d0 = this.getPosX() - this.getAttackTarget().getPosX();
-            double d2 = this.getPosZ() - this.getAttackTarget().getPosZ();
-            double d1 = this.getPosY() - 1 - this.getAttackTarget().getPosY();
+            double d0 = this.getPosX() - attackTarget.getPosX();
+            double d2 = this.getPosZ() - attackTarget.getPosZ();
+            double d1 = this.getPosY() - 1 - attackTarget.getPosY();
             double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
             float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
             float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
-            this.getAttackTarget().rotationPitch = updateRotation(this.getAttackTarget().rotationPitch, f1, 30F);
-            this.getAttackTarget().rotationYaw = updateRotation(this.getAttackTarget().rotationYaw, f, 30F);
+            attackTarget.rotationPitch = updateRotation(attackTarget.rotationPitch, f1, 30F);
+            attackTarget.rotationYaw = updateRotation(attackTarget.rotationYaw, f, 30F);
         }
         if (world.isRemote) {
             tail_buffer.calculateChainSwingBuffer(40, 10, 2.5F, this);
@@ -216,7 +218,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
         } else {
             ticksAgressive = 0;
         }
-        if (ticksAgressive > 300 && this.isAgressive() && this.getAttackTarget() == null && !world.isRemote) {
+        if (ticksAgressive > 300 && this.isAgressive() && attackTarget == null && !world.isRemote) {
             this.setAggressive(false);
             this.ticksAgressive = 0;
             this.setSinging(false);

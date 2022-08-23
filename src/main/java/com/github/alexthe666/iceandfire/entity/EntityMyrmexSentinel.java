@@ -1,26 +1,18 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.citadel.animation.Animation;
-import com.github.alexthe666.citadel.server.entity.datatracker.EntityPropertiesHandler;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexTrades;
 import com.google.common.base.Predicate;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,6 +26,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class EntityMyrmexSentinel extends EntityMyrmexBase {
 
@@ -82,12 +76,13 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
 
     public void livingTick() {
         super.livingTick();
+        LivingEntity attackTarget = this.getAttackTarget();
         if (visibleTicks > 0) {
             visibleTicks--;
         } else {
             visibleTicks = 0;
         }
-        if(this.getAttackTarget() != null){
+        if (attackTarget != null) {
             visibleTicks = 100;
         }
         if (this.canSeeSky()) {
@@ -97,7 +92,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         }
         boolean holding = getHeldEntity() != null;
         boolean hiding = isHiding() && !this.hasCustomer();
-        if ((holding || this.isOnResin() || this.getAttackTarget() != null) || visibleTicks > 0) {
+        if ((holding || this.isOnResin() || attackTarget != null) || visibleTicks > 0) {
             this.setHiding(false);
         }
         if (holding && holdingProgress < 20.0F) {
@@ -120,35 +115,34 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
                 this.getHeldEntity().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() / 6));
             }
         }
-        if (this.getAnimation() == ANIMATION_GRAB && this.getAttackTarget() != null && this.getAnimationTick() == 7) {
+        if (this.getAnimation() == ANIMATION_GRAB && attackTarget != null && this.getAnimationTick() == 7) {
             this.playStingSound();
-            if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() / 2));
+            if (this.getAttackBounds().intersects(attackTarget.getBoundingBox())) {
+                attackTarget.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() / 2));
                 //Make sure it doesn't grab a dead dragon
-                if (this.getAttackTarget() instanceof EntityDragonBase) {
-                    if(!((EntityDragonBase) this.getAttackTarget()).isMobDead()){
-                        this.getAttackTarget().startRiding(this);
+                if (attackTarget instanceof EntityDragonBase) {
+                    if (!((EntityDragonBase) attackTarget).isMobDead()) {
+                        attackTarget.startRiding(this);
                     }
-                }
-                else {
-                    this.getAttackTarget().startRiding(this);
+                } else {
+                    attackTarget.startRiding(this);
                 }
             }
         }
-        if (this.getAnimation() == ANIMATION_SLASH && this.getAttackTarget() != null && this.getAnimationTick() % 5 == 0 && this.getAnimationTick() <= 20) {
+        if (this.getAnimation() == ANIMATION_SLASH && attackTarget != null && this.getAnimationTick() % 5 == 0 && this.getAnimationTick() <= 20) {
             this.playBiteSound();
-            if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()) / 4);
+            if (this.getAttackBounds().intersects(attackTarget.getBoundingBox())) {
+                attackTarget.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()) / 4);
             }
         }
         if (this.getAnimation() == ANIMATION_STING && (this.getAnimationTick() == 0 || this.getAnimationTick() == 10)) {
             this.playStingSound();
         }
-        if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && (this.getAnimationTick() == 6 || this.getAnimationTick() == 16)) {
-            double dist = this.getDistanceSq(this.getAttackTarget());
+        if (this.getAnimation() == ANIMATION_STING && attackTarget != null && (this.getAnimationTick() == 6 || this.getAnimationTick() == 16)) {
+            double dist = this.getDistanceSq(attackTarget);
             if (dist < 18) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
-                this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 100, 3));
+                attackTarget.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                attackTarget.addPotionEffect(new EffectInstance(Effects.POISON, 100, 3));
             }
         }
     }

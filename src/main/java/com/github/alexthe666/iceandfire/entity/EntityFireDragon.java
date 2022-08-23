@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import java.util.Random;
-
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
@@ -13,7 +11,6 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -33,8 +30,9 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.MinecraftForge;
+
+import java.util.Random;
 
 public class EntityFireDragon extends EntityDragonBase {
 
@@ -169,20 +167,21 @@ public class EntityFireDragon extends EntityDragonBase {
     @Override
     public void livingTick() {
         super.livingTick();
-        if (!world.isRemote && this.getAttackTarget() != null) {
-            if (this.getBoundingBox().grow(2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F).intersects(this.getAttackTarget().getBoundingBox())) {
-                attackEntityAsMob(this.getAttackTarget());
+        LivingEntity attackTarget = this.getAttackTarget();
+        if (!world.isRemote && attackTarget != null) {
+            if (this.getBoundingBox().grow(2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F).intersects(attackTarget.getBoundingBox())) {
+                attackEntityAsMob(attackTarget);
             }
             if (this.groundAttack == IafDragonAttacks.Ground.FIRE && (usingGroundAttack || this.onGround)) {
-                shootFireAtMob(this.getAttackTarget());
+                shootFireAtMob(attackTarget);
             }
-            if (this.airAttack == IafDragonAttacks.Air.TACKLE && !usingGroundAttack && this.getDistanceSq(this.getAttackTarget()) < 100) {
-                double difX = this.getAttackTarget().getPosX() - this.getPosX();
-                double difY = this.getAttackTarget().getPosY() + this.getAttackTarget().getHeight() - this.getPosY();
-                double difZ = this.getAttackTarget().getPosZ() - this.getPosZ();
+            if (this.airAttack == IafDragonAttacks.Air.TACKLE && !usingGroundAttack && this.getDistanceSq(attackTarget) < 100) {
+                double difX = attackTarget.getPosX() - this.getPosX();
+                double difY = attackTarget.getPosY() + attackTarget.getHeight() - this.getPosY();
+                double difZ = attackTarget.getPosZ() - this.getPosZ();
                 this.setMotion(this.getMotion().add(difX * 0.1D, difY * 0.1D, difZ * 0.1D));
-                if (this.getBoundingBox().grow(1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F).intersects(this.getAttackTarget().getBoundingBox())) {
-                    attackEntityAsMob(this.getAttackTarget());
+                if (this.getBoundingBox().grow(1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F, 1 + this.getRenderSize() * 0.5F).intersects(attackTarget.getBoundingBox())) {
+                    attackEntityAsMob(attackTarget);
                     usingGroundAttack = true;
                     randomizeAttacks();
                     setFlying(false);
