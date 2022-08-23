@@ -5,7 +5,6 @@ import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.event.DragonFireEvent;
-import com.github.alexthe666.iceandfire.client.particle.DragonParticles;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
@@ -559,7 +558,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 double d2 = this.rand.nextGaussian() * 0.02D;
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
-                DragonParticles.spawnParticle(EnumParticles.Snowflake, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d2, d0, d1);
+                IceAndFire.PROXY.spawnParticle(EnumParticles.Snowflake, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d2, d0, d1);
             }
         }
     }
@@ -572,7 +571,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 float headPosX = (float) (getPosX() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * MathHelper.cos((float) ((rotationYaw + 90) * Math.PI / 180)));
                 float headPosZ = (float) (getPosZ() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * MathHelper.sin((float) ((rotationYaw + 90) * Math.PI / 180)));
                 float headPosY = (float) (getPosY() + 0.5 * getRenderSize() * 0.3F);
-                DragonParticles.spawnParticle(EnumParticles.DragonIce, headPosX, headPosY, headPosZ, 0, 0, 0);
+                IceAndFire.PROXY.spawnParticle(EnumParticles.DragonIce, headPosX, headPosY, headPosZ, 0, 0, 0);
             }
         }
     }
