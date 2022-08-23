@@ -1,0 +1,24 @@
+W połączeniu z diamentem, perłą endu 
+i szmaragdem lub szafirem,
+można stworzyć kryształ przyzywający.
+
+<item><iceandfire:summoning_crystal_fire 0 15 22 1.25>
+<item><iceandfire:summoning_crystal_ice 0 45 22 1.25>
+
+
+
+
+Po kliknięciu prawym przyciskiem myszy na smoku,
+kryształ zostaje z nim związany.
+Po ponownym kliknięciu w dowolnym miejscu
+w tym samym wymiarze,
+kryształ teleportuje
+i uwolni smoka.
+
+Jeśli smok zostanie zabity lub w jakiś sposób
+nie zostanie zlokalizowany, kryształ rozwiąże się
+
+
+
+Aby ręcznie rozwiązać kryształ ręcznie,
+umieść go i tylko go w siatce do wytwarzania.
