@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
@@ -14,25 +12,13 @@ import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.google.common.base.Predicate;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.DyeColor;
@@ -54,10 +40,12 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
 
     public static final ItemStack SHIELD = generateShield();
-    private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityDreadKnight.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> VARIANT = EntityDataManager.defineId(EntityDreadKnight.class, DataSerializers.INT);
     public static Animation ANIMATION_SPAWN = Animation.create(40);
     private int animationTick;
     private Animation currentAnimation;
@@ -68,8 +56,8 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
 
     private static ItemStack generateShield() {
         ItemStack itemstack = new ItemStack(Items.CYAN_BANNER);
-        CompoundNBT compoundnbt = itemstack.getOrCreateChildTag("BlockEntityTag");
-        ListNBT listnbt = (new BannerPattern.Builder()).setPatternWithColor(BannerPattern.BASE, DyeColor.CYAN).setPatternWithColor(IafRecipeRegistry.PATTERN_DREAD, DyeColor.WHITE).buildNBT();
+        CompoundNBT compoundnbt = itemstack.getOrCreateTagElement("BlockEntityTag");
+        ListNBT listnbt = (new BannerPattern.Builder()).addPattern(BannerPattern.BASE, DyeColor.CYAN).addPattern(IafRecipeRegistry.PATTERN_DREAD, DyeColor.WHITE).toListTag();
         compoundnbt.put("Patterns", listnbt);
         ItemStack shield = new ItemStack(Items.SHIELD, 1);
         shield.setTag(itemstack.getTag());
@@ -77,17 +65,17 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     }
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-                //HEALTH
-                .createMutableAttribute(Attributes.MAX_HEALTH, 40.0D)
-                //SPEED
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25D)
-                //ATTACK
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2.0D)
-                //FOLLOW RANGE
-                .createMutableAttribute(Attributes.FOLLOW_RANGE, 128.0D)
-                //ARMOR
-                .createMutableAttribute(Attributes.ARMOR, 20.0D);
+        return MobEntity.createMobAttributes()
+            //HEALTH
+            .add(Attributes.MAX_HEALTH, 40.0D)
+            //SPEED
+            .add(Attributes.MOVEMENT_SPEED, 0.25D)
+            //ATTACK
+            .add(Attributes.ATTACK_DAMAGE, 2.0D)
+            //FOLLOW RANGE
+            .add(Attributes.FOLLOW_RANGE, 128.0D)
+            //ARMOR
+            .add(Attributes.ARMOR, 20.0D);
     }
 
     protected void registerGoals() {
@@ -113,39 +101,39 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(VARIANT, Integer.valueOf(0));
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(VARIANT, Integer.valueOf(0));
     }
 
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
-            BlockState belowBlock = world.getBlockState(this.getPosition().down());
+            BlockState belowBlock = level.getBlockState(this.blockPosition().below());
             if (belowBlock.getBlock() != Blocks.AIR) {
                 for (int i = 0; i < 5; i++) {
-                    this.world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, belowBlock), this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getBoundingBox().minY, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
+                    this.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, belowBlock), this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getBoundingBox().minY, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
                 }
             }
-            this.setMotion(0, this.getMotion().y, this.getMotion().z);
+            this.setDeltaMovement(0, this.getDeltaMovement().y, this.getDeltaMovement().z);
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-        super.setEquipmentBasedOnDifficulty(difficulty);
-        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(IafItemRegistry.DREAD_KNIGHT_SWORD));
-        if (rand.nextBoolean()) {
-            this.setItemStackToSlot(EquipmentSlotType.OFFHAND, SHIELD.copy());
+    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+        super.populateDefaultEquipmentSlots(difficulty);
+        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(IafItemRegistry.DREAD_KNIGHT_SWORD));
+        if (random.nextBoolean()) {
+            this.setItemSlot(EquipmentSlotType.OFFHAND, SHIELD.copy());
         }
-        setArmorVariant(rand.nextInt(3));
+        setArmorVariant(random.nextInt(3));
     }
 
     @Nullable
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        ILivingEntityData data = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+        ILivingEntityData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setAnimation(ANIMATION_SPAWN);
-        this.setEquipmentBasedOnDifficulty(difficultyIn);
+        this.populateDefaultEquipmentSlots(difficultyIn);
         return data;
     }
 
@@ -159,14 +147,14 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         animationTick = tick;
     }
 
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         compound.putInt("ArmorVariant", getArmorVariant());
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         setArmorVariant(compound.getInt("ArmorVariant"));
     }
 
@@ -181,11 +169,11 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     }
 
     public int getArmorVariant() {
-        return this.dataManager.get(VARIANT).intValue();
+        return this.entityData.get(VARIANT).intValue();
     }
 
     public void setArmorVariant(int variant) {
-        this.dataManager.set(VARIANT, variant);
+        this.entityData.set(VARIANT, variant);
     }
 
     @Override
@@ -203,30 +191,30 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         return true;
     }
 
-    public double getYOffset() {
+    public double getMyRidingOffset() {
         return -0.6D;
     }
 
     @Nullable
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ENTITY_STRAY_AMBIENT;
+        return SoundEvents.STRAY_AMBIENT;
     }
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.ENTITY_STRAY_HURT;
+        return SoundEvents.STRAY_HURT;
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_STRAY_DEATH;
+        return SoundEvents.STRAY_DEATH;
     }
 
     protected void playStepSound(BlockPos pos, Block blockIn) {
-        this.playSound(SoundEvents.ENTITY_STRAY_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEvents.STRAY_STEP, 0.15F, 1.0F);
     }
 
-    protected float getSoundPitch() {
-        return super.getSoundPitch() * 0.75F;
+    protected float getVoicePitch() {
+        return super.getVoicePitch() * 0.75F;
     }
 }

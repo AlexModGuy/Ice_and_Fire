@@ -51,20 +51,20 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     @Override
     @Nullable
-    protected ResourceLocation getLootTable() {
+    protected ResourceLocation getDefaultLootTable() {
         return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
     }
 
-    public void onDeath(DamageSource cause) {
-        if (!this.world.isRemote && !this.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
-            this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0);
-            this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+    public void die(DamageSource cause) {
+        if (!this.level.isClientSide && !this.getItemInHand(Hand.MAIN_HAND).isEmpty()) {
+            this.spawnAtLocation(this.getItemInHand(Hand.MAIN_HAND), 0);
+            this.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
         }
-        super.onDeath(cause);
+        super.die(cause);
     }
 
     @Override
-    protected int getExperiencePoints(PlayerEntity player) {
+    protected int getExperienceReward(PlayerEntity player) {
         return 3;
     }
 
@@ -74,8 +74,8 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     }
 
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         /*if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
@@ -91,23 +91,23 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
                 this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 60, 1));
             }
         }*/
-        if (!this.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
-            if (this.getHeldItem(Hand.MAIN_HAND).getItem() instanceof ItemMyrmexEgg) {
-                boolean isJungle = this.getHeldItem(Hand.MAIN_HAND).getItem() == IafItemRegistry.MYRMEX_JUNGLE_EGG;
-                CompoundNBT tag = this.getHeldItem(Hand.MAIN_HAND).getTag();
+        if (!this.getItemInHand(Hand.MAIN_HAND).isEmpty()) {
+            if (this.getItemInHand(Hand.MAIN_HAND).getItem() instanceof ItemMyrmexEgg) {
+                boolean isJungle = this.getItemInHand(Hand.MAIN_HAND).getItem() == IafItemRegistry.MYRMEX_JUNGLE_EGG;
+                CompoundNBT tag = this.getItemInHand(Hand.MAIN_HAND).getTag();
                 int metadata = 0;
                 if (tag != null) {
                     metadata = tag.getInt("EggOrdinal");
                 }
-                EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG.get(), world);
-                egg.copyLocationAndAnglesFrom(this);
+                EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG.get(), level);
+                egg.copyPosition(this);
                 egg.setJungle(isJungle);
                 egg.setMyrmexCaste(metadata);
-                if (!world.isRemote) {
-                    world.addEntity(egg);
+                if (!level.isClientSide) {
+                    level.addFreshEntity(egg);
                 }
                 egg.startRiding(this);
-                this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+                this.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
             }
         }
         if (!this.getPassengers().isEmpty()) {
@@ -142,7 +142,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, true, new Predicate<LivingEntity>() {
             @Override
             public boolean apply(@Nullable LivingEntity entity) {
-                return EntityMyrmexWorker.this.getHeldItemMainhand().isEmpty() && entity != null && !EntityMyrmexBase.haveSameHive(EntityMyrmexWorker.this, entity) && DragonUtils.isAlive(entity) && !(entity instanceof IMob);
+                return EntityMyrmexWorker.this.getMainHandItem().isEmpty() && entity != null && !EntityMyrmexBase.haveSameHive(EntityMyrmexWorker.this, entity) && DragonUtils.isAlive(entity) && !(entity instanceof IMob);
             }
         }));
 
@@ -165,21 +165,21 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     }
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-                //HEALTH
-                .createMutableAttribute(Attributes.MAX_HEALTH, 20)
-                //SPEED
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3D)
-                //ATTACK
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, IafConfig.myrmexBaseAttackStrength)
-                //FOLLOW RANGE
-                .createMutableAttribute(Attributes.FOLLOW_RANGE, 32D)
-                //ARMOR
-                .createMutableAttribute(Attributes.ARMOR, 4D);
+        return MobEntity.createMobAttributes()
+            //HEALTH
+            .add(Attributes.MAX_HEALTH, 20)
+            //SPEED
+            .add(Attributes.MOVEMENT_SPEED, 0.3D)
+            //ATTACK
+            .add(Attributes.ATTACK_DAMAGE, IafConfig.myrmexBaseAttackStrength)
+            //FOLLOW RANGE
+            .add(Attributes.FOLLOW_RANGE, 32D)
+            //ARMOR
+            .add(Attributes.ARMOR, 4D);
     }
 
     @Override
-    public AttributeModifierMap.MutableAttribute getAttributes() {
+    public AttributeModifierMap.MutableAttribute getConfigurableAttributes() {
         return bakeAttributes();
     }
 
@@ -200,7 +200,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     @Override
     public boolean shouldEnterHive() {
-        return holdingSomething() || (!world.isDaytime() && !IafConfig.myrmexHiveIgnoreDaytime);
+        return holdingSomething() || (!level.isDay() && !IafConfig.myrmexHiveIgnoreDaytime);
     }
 
     @Override
@@ -209,29 +209,28 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     }
 
     @Override
-    public boolean attackEntityAsMob(Entity entityIn) {
+    public boolean doHurtTarget(Entity entityIn) {
         if (this.getGrowthStage() < 2) {
             return false;
         }
 
         if (this.getAnimation() != ANIMATION_STING && this.getAnimation() != ANIMATION_BITE) {
-            this.setAnimation(this.getRNG().nextBoolean() ? ANIMATION_STING : ANIMATION_BITE);
-            float f = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
-            this.setLastAttackedEntity(entityIn);
-            boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), f);
-            if (this.getAnimation() == ANIMATION_STING && flag){
+            this.setAnimation(this.getRandom().nextBoolean() ? ANIMATION_STING : ANIMATION_BITE);
+            float f = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
+            this.setLastHurtMob(entityIn);
+            boolean flag = entityIn.hurt(DamageSource.mobAttack(this), f);
+            if (this.getAnimation() == ANIMATION_STING && flag) {
                 this.playStingSound();
-                if(entityIn instanceof LivingEntity) {
-                    ((LivingEntity)entityIn).addPotionEffect(new EffectInstance(Effects.POISON, 200, 2));
-                    this.setAttackTarget((LivingEntity)entityIn);
+                if (entityIn instanceof LivingEntity) {
+                    ((LivingEntity) entityIn).addEffect(new EffectInstance(Effects.POISON, 200, 2));
+                    this.setTarget((LivingEntity) entityIn);
                 }
-            }
-            else{
+            } else {
                 this.playBiteSound();
             }
-            if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(Hand.MAIN_HAND) != ItemStack.EMPTY) {
-                this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0);
-                this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+            if (!this.level.isClientSide && this.getRandom().nextInt(3) == 0 && this.getItemInHand(Hand.MAIN_HAND) != ItemStack.EMPTY) {
+                this.spawnAtLocation(this.getItemInHand(Hand.MAIN_HAND), 0);
+                this.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
             }
             if (!this.getPassengers().isEmpty()) {
                 for (Entity entity : this.getPassengers()) {
@@ -245,7 +244,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
 
     public boolean holdingSomething() {
-        return this.getHeldEntity() != null || !this.getHeldItem(Hand.MAIN_HAND).isEmpty() || this.getAttackTarget() != null;
+        return this.getHeldEntity() != null || !this.getItemInHand(Hand.MAIN_HAND).isEmpty() || this.getTarget() != null;
     }
 
     public boolean holdingBaby() {
@@ -262,30 +261,30 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     }
 
     @Override
-    public void updatePassenger(Entity passenger) {
-        super.updatePassenger(passenger);
-        if (this.isPassenger(passenger)) {
-            renderYawOffset = rotationYaw;
+    public void positionRider(Entity passenger) {
+        super.positionRider(passenger);
+        if (this.hasPassenger(passenger)) {
+            yBodyRot = yRot;
             float radius = 1.05F;
-            float angle = (0.01745329251F * this.renderYawOffset);
+            float angle = (0.01745329251F * this.yBodyRot);
             double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
             double extraZ = radius * MathHelper.cos(angle);
-            passenger.setPosition(this.getPosX() + extraX, this.getPosY() + 0.25F, this.getPosZ() + extraZ);
+            passenger.setPos(this.getX() + extraX, this.getY() + 0.25F, this.getZ() + extraZ);
         }
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (amount >= 1.0D && !this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(Hand.MAIN_HAND) != ItemStack.EMPTY) {
-            this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0);
-            this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+    public boolean hurt(DamageSource source, float amount) {
+        if (amount >= 1.0D && !this.level.isClientSide && this.getRandom().nextInt(3) == 0 && this.getItemInHand(Hand.MAIN_HAND) != ItemStack.EMPTY) {
+            this.spawnAtLocation(this.getItemInHand(Hand.MAIN_HAND), 0);
+            this.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
         }
         if (amount >= 1.0D && !this.getPassengers().isEmpty()) {
             for (Entity entity : this.getPassengers()) {
                 entity.stopRiding();
             }
         }
-        return super.attackEntityFrom(source, amount);
+        return super.hurt(source, amount);
     }
 
     public Entity getHeldEntity() {
@@ -298,29 +297,29 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
             PlayerEntity owner = null;
             try {
-                if (itemEntity.getThrowerId() != null) {
-                    owner = this.world.getPlayerByUuid(itemEntity.getThrowerId());
+                if (itemEntity.getThrower() != null) {
+                    owner = this.level.getPlayerByUUID(itemEntity.getThrower());
                 }
             } catch (Exception e) {
                 IceAndFire.LOGGER.warn("Myrmex picked up resin that wasn't thrown!");
             }
             if (owner != null && this.getHive() != null) {
-                this.getHive().modifyPlayerReputation(owner.getUniqueID(), 5);
-                this.playSound(SoundEvents.ENTITY_SLIME_SQUISH, 1, 1);
-                if (!world.isRemote) {
-                    world.addEntity(new ExperienceOrbEntity(world, owner.getPosX(), owner.getPosY(), owner.getPosZ(), 1 + rand.nextInt(3)));
+                this.getHive().modifyPlayerReputation(owner.getUUID(), 5);
+                this.playSound(SoundEvents.SLIME_SQUISH, 1, 1);
+                if (!level.isClientSide) {
+                    level.addFreshEntity(new ExperienceOrbEntity(level, owner.getX(), owner.getY(), owner.getZ(), 1 + random.nextInt(3)));
                 }
             }
         }
     }
 
     @Override
-    public int getXp() {
+    public int getVillagerXp() {
         return 0;
     }
 
     @Override
-    public boolean hasXPBar() {
+    public boolean showProgressBar() {
         return false;
     }
 }

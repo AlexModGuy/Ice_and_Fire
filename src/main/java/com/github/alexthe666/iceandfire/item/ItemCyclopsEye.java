@@ -1,11 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -22,15 +17,18 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 public class ItemCyclopsEye extends Item {
 
     public ItemCyclopsEye() {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxDamage(500));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(500));
         this.setRegistryName(IceAndFire.MODID, "cyclops_eye");
     }
 
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return !oldStack.isItemEqual(newStack);
+        return !oldStack.sameItem(newStack);
     }
 
     @Override
@@ -40,12 +38,12 @@ public class ItemCyclopsEye extends Item {
         } else {
             if (entity instanceof LivingEntity) {
                 LivingEntity living = (LivingEntity) entity;
-                if (living.getHeldItemMainhand() == stack || living.getHeldItemOffhand() == stack) {
+                if (living.getMainHandItem() == stack || living.getOffhandItem() == stack) {
                     double range = 15;
                     boolean inflictedDamage = false;
-                    for (MobEntity LivingEntity : world.getEntitiesWithinAABB(MobEntity.class, new AxisAlignedBB(living.getPosX() - range, living.getPosY() - range, living.getPosZ() - range, living.getPosX() + range, living.getPosY() + range, living.getPosZ() + range))) {
-                        if (!LivingEntity.isEntityEqual(living) && !LivingEntity.isOnSameTeam(living) && (LivingEntity.getAttackTarget() == living || LivingEntity.getRevengeTarget() == living || LivingEntity instanceof IMob)) {
-                            LivingEntity.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10, 1));
+                    for (MobEntity LivingEntity : world.getEntitiesOfClass(MobEntity.class, new AxisAlignedBB(living.getX() - range, living.getY() - range, living.getZ() - range, living.getX() + range, living.getY() + range, living.getZ() + range))) {
+                        if (!LivingEntity.is(living) && !LivingEntity.isAlliedTo(living) && (LivingEntity.getTarget() == living || LivingEntity.getLastHurtByMob() == living || LivingEntity instanceof IMob)) {
+                            LivingEntity.addEffect(new EffectInstance(Effects.WEAKNESS, 10, 1));
                             inflictedDamage = true;
                         }
                     }
@@ -54,7 +52,7 @@ public class ItemCyclopsEye extends Item {
                     }
                 }
                 if (stack.getTag().getInt("HurtingTicks") > 120) {
-                    stack.damageItem(1, (LivingEntity) entity, (p_220017_1_) -> {
+                    stack.hurtAndBreak(1, (LivingEntity) entity, (p_220017_1_) -> {
                     });
                     stack.getTag().putInt("HurtingTicks", 0);
                 }
@@ -64,9 +62,9 @@ public class ItemCyclopsEye extends Item {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.cyclops_eye.desc_0").mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.cyclops_eye.desc_1").mergeStyle(TextFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.cyclops_eye.desc_0").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.cyclops_eye.desc_1").withStyle(TextFormatting.GRAY));
     }
 }

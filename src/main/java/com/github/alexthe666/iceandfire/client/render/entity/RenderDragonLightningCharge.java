@@ -1,12 +1,9 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.client.model.ModelDreadLichSkull;
 import com.github.alexthe666.iceandfire.entity.EntityDragonLightningCharge;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -16,6 +13,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 
+import javax.annotation.Nullable;
+
 public class RenderDragonLightningCharge extends EntityRenderer<EntityDragonLightningCharge> {
 
     public static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/lightningdragon/charge.png");
@@ -23,43 +22,43 @@ public class RenderDragonLightningCharge extends EntityRenderer<EntityDragonLigh
     private static final ModelDreadLichSkull MODEL_SPIRIT = new ModelDreadLichSkull();
 
     public RenderDragonLightningCharge() {
-        super(Minecraft.getInstance().getRenderManager());
+        super(Minecraft.getInstance().getEntityRenderDispatcher());
     }
 
     public void render(EntityDragonLightningCharge entity, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        float f = (float)entity.ticksExisted + partialTicks;
-        float yaw = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks;
-        IVertexBuilder ivertexbuilder2 = bufferIn.getBuffer(RenderType.getEyes(TEXTURE_CORE));
-        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEnergySwirl(TEXTURE, f * 0.01F, f * 0.01F));
+        float f = (float) entity.tickCount + partialTicks;
+        float yaw = entity.yRotO + (entity.yRot - entity.yRotO) * partialTicks;
+        IVertexBuilder ivertexbuilder2 = bufferIn.getBuffer(RenderType.eyes(TEXTURE_CORE));
+        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.energySwirl(TEXTURE, f * 0.01F, f * 0.01F));
 
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         matrixStackIn.translate(0F, 0.5F, 0F);
         matrixStackIn.translate(0F, -0.25F, 0F);
-        matrixStackIn.rotate(new Quaternion(Vector3f.YP, yaw - 180, true));
-        matrixStackIn.rotate(new Quaternion(Vector3f.XP, f * 20, true));
+        matrixStackIn.mulPose(new Quaternion(Vector3f.YP, yaw - 180, true));
+        matrixStackIn.mulPose(new Quaternion(Vector3f.XP, f * 20, true));
         matrixStackIn.translate(0F, 0.25F, 0F);
-        MODEL_SPIRIT.render(matrixStackIn, ivertexbuilder2, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        matrixStackIn.pop();
+        MODEL_SPIRIT.renderToBuffer(matrixStackIn, ivertexbuilder2, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        matrixStackIn.popPose();
 
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         matrixStackIn.translate(0F, 0.5F, 0F);
         matrixStackIn.translate(0F, -0.25F, 0F);
-        matrixStackIn.rotate(new Quaternion(Vector3f.YP, yaw - 180, true));
-        matrixStackIn.rotate(new Quaternion(Vector3f.XP, f * 15, true));
+        matrixStackIn.mulPose(new Quaternion(Vector3f.YP, yaw - 180, true));
+        matrixStackIn.mulPose(new Quaternion(Vector3f.XP, f * 15, true));
         matrixStackIn.translate(0F, 0.25F, 0F);
         matrixStackIn.scale(1.5F, 1.5F, 1.5F);
-        MODEL_SPIRIT.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        matrixStackIn.pop();
+        MODEL_SPIRIT.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        matrixStackIn.popPose();
 
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         matrixStackIn.translate(0F, 0.75F, 0F);
         matrixStackIn.translate(0F, -0.25F, 0F);
-        matrixStackIn.rotate(new Quaternion(Vector3f.YP, yaw - 180, true));
-        matrixStackIn.rotate(new Quaternion(Vector3f.XP, f * 10, true));
+        matrixStackIn.mulPose(new Quaternion(Vector3f.YP, yaw - 180, true));
+        matrixStackIn.mulPose(new Quaternion(Vector3f.XP, f * 10, true));
         matrixStackIn.translate(0F, 0.75F, 0F);
         matrixStackIn.scale(2.5F, 2.5F, 2.5F);
-        MODEL_SPIRIT.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        matrixStackIn.pop();
+        MODEL_SPIRIT.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        matrixStackIn.popPose();
 
         super.render(entity, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
@@ -70,7 +69,7 @@ public class RenderDragonLightningCharge extends EntityRenderer<EntityDragonLigh
 
     @Nullable
     @Override
-    public ResourceLocation getEntityTexture(EntityDragonLightningCharge entity) {
+    public ResourceLocation getTextureLocation(EntityDragonLightningCharge entity) {
         return TEXTURE;
     }
 }

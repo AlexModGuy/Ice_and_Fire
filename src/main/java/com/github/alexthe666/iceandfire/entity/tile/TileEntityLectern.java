@@ -49,7 +49,7 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 0;
         }
     };
@@ -86,12 +86,12 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return 2;
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
         return this.stacks.get(index);
     }
 
@@ -104,7 +104,7 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count) {
+    public ItemStack removeItem(int index, int count) {
         if (!this.stacks.get(index).isEmpty()) {
             ItemStack itemstack;
 
@@ -137,24 +137,24 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
-        boolean flag = !stack.isEmpty() && stack.isItemEqual(this.stacks.get(index)) && ItemStack.areItemStackTagsEqual(stack, this.stacks.get(index));
+    public void setItem(int index, ItemStack stack) {
+        boolean flag = !stack.isEmpty() && stack.sameItem(this.stacks.get(index)) && ItemStack.tagMatches(stack, this.stacks.get(index));
         this.stacks.set(index, stack);
 
-        if (!stack.isEmpty() && stack.getCount() > this.getInventoryStackLimit()) {
-            stack.setCount(this.getInventoryStackLimit());
+        if (!stack.isEmpty() && stack.getCount() > this.getMaxStackSize()) {
+            stack.setCount(this.getMaxStackSize());
         }
         if (index == 0 && !flag) {
-            this.markDirty();
-            selectedPages = randomizePages(getStackInSlot(0), getStackInSlot(1));
+            this.setChanged();
+            selectedPages = randomizePages(getItem(0), getItem(1));
         }
     }
 
     public EnumBestiaryPages[] randomizePages(ItemStack bestiary, ItemStack manuscript) {
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
             if (bestiary.getItem() == IafItemRegistry.BESTIARY) {
                 List<EnumBestiaryPages> possibleList = getPossiblePages();
-                localRand.setSeed(this.world.getGameTime());
+                localRand.setSeed(this.level.getGameTime());
                 Collections.shuffle(possibleList, localRand);
                 if (!possibleList.isEmpty()) {
                     selectedPages[0] = possibleList.get(0);
@@ -175,36 +175,36 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
             int page1 = selectedPages[0] == null ? -1 : selectedPages[0].ordinal();
             int page2 = selectedPages[1] == null ? -1 : selectedPages[1].ordinal();
             int page3 = selectedPages[2] == null ? -1 : selectedPages[2].ordinal();
-            IceAndFire.sendMSGToAll(new MessageUpdateLectern(pos.toLong(), page1, page2, page3, false, 0));
+            IceAndFire.sendMSGToAll(new MessageUpdateLectern(worldPosition.asLong(), page1, page2, page3, false, 0));
         }
         return selectedPages;
     }
 
     @Override
-    public void read(BlockState blockstate, CompoundNBT compound) {
-        super.read(blockstate, compound);
-        this.stacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
+    public void load(BlockState blockstate, CompoundNBT compound) {
+        super.load(blockstate, compound);
+        this.stacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, this.stacks);
 
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         ItemStackHelper.saveAllItems(compound, this.stacks);
         return compound;
     }
 
     @Override
-    public void openInventory(PlayerEntity player) {
+    public void startOpen(PlayerEntity player) {
     }
 
     @Override
-    public void closeInventory(PlayerEntity player) {
+    public void stopOpen(PlayerEntity player) {
     }
 
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
+    public boolean canPlaceItem(int index, ItemStack stack) {
         if (stack.isEmpty())
             return false;
         if (index == 0)
@@ -215,17 +215,17 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
     }
 
     @Override
-    public int getInventoryStackLimit() {
+    public int getMaxStackSize() {
         return 64;
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
         return true;
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         this.stacks.clear();
     }
 
@@ -235,7 +235,7 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
         return false;
     }
 
@@ -250,28 +250,28 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
-        return this.isItemValidForSlot(index, itemStackIn);
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
+        return this.canPlaceItem(index, itemStackIn);
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
+    public ItemStack removeItemNoUpdate(int index) {
         return ItemStack.EMPTY;
     }
 
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+        return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        read(this.getBlockState(), packet.getNbtCompound());
+        load(this.getBlockState(), packet.getTag());
     }
 
     @Override
     public CompoundNBT getUpdateTag() {
-        return this.write(new CompoundNBT());
+        return this.save(new CompoundNBT());
     }
 
     @Override
@@ -296,7 +296,7 @@ public class TileEntityLectern extends LockableTileEntity implements ITickableTi
 
     @Override
     public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-        if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (!this.remove && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (facing == Direction.DOWN)
                 return handlers[1].cast();
             else

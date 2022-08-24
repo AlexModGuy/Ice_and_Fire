@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
-
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
 
 public class CockatriceAIFollowOwner extends FollowOwnerGoal {
@@ -13,7 +12,7 @@ public class CockatriceAIFollowOwner extends FollowOwnerGoal {
     }
 
     @Override
-    public boolean shouldExecute() {
-        return super.shouldExecute() && cockatrice.getCommand() == 2;
+    public boolean canUse() {
+        return super.canUse() && cockatrice.getCommand() == 2;
     }
 }

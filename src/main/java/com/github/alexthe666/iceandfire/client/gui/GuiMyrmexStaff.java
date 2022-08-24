@@ -113,7 +113,7 @@ public class GuiMyrmexStaff extends Screen {
     public void renderBackground(MatrixStack ms) {
         super.renderBackground(ms);
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.getMinecraft().getTextureManager().bindTexture(jungle ? JUNGLE_TEXTURE : DESERT_TEXTURE);
+        this.getMinecraft().getTextureManager().bind(jungle ? JUNGLE_TEXTURE : DESERT_TEXTURE);
         int i = (this.width - 248) / 2;
         int j = (this.height - 166) / 2;
         this.blit(ms, i, j, 0, 0, 248, 166);
@@ -138,14 +138,14 @@ public class GuiMyrmexStaff extends Screen {
         }
         if (ClientProxy.getReferedClientHive() != null) {
             if (!ClientProxy.getReferedClientHive().colonyName.isEmpty()) {
-                String title = I18n.format("myrmex.message.colony_named", ClientProxy.getReferedClientHive().colonyName);
-                this.getMinecraft().fontRenderer.drawString(ms, title, i + 40 - title.length() / 2, j - 3, color);
+                String title = I18n.get("myrmex.message.colony_named", ClientProxy.getReferedClientHive().colonyName);
+                this.getMinecraft().font.draw(ms, title, i + 40 - title.length() / 2, j - 3, color);
             } else {
-                this.getMinecraft().fontRenderer.drawString(ms, I18n.format("myrmex.message.colony"), i + 80, j - 3, color);
+                this.getMinecraft().font.draw(ms, I18n.get("myrmex.message.colony"), i + 80, j - 3, color);
             }
-            int opinion = ClientProxy.getReferedClientHive().getPlayerReputation(Minecraft.getInstance().player.getUniqueID());
-            this.getMinecraft().fontRenderer.drawString(ms, I18n.format("myrmex.message.hive_opinion", opinion), i, j + 12, color);
-            this.getMinecraft().fontRenderer.drawString(ms, I18n.format("myrmex.message.rooms"), i, j + 25, color);
+            int opinion = ClientProxy.getReferedClientHive().getPlayerReputation(Minecraft.getInstance().player.getUUID());
+            this.getMinecraft().font.draw(ms, I18n.get("myrmex.message.hive_opinion", opinion), i, j + 12, color);
+            this.getMinecraft().font.draw(ms, I18n.get("myrmex.message.rooms"), i, j + 25, color);
             /*int hiveCount = 0;
             for (WorldGenMyrmexHive.RoomType type : ROOMS) {
                 List<BlockPos> roomPos = ClientProxy.getReferedClientHive().getRooms(type);
@@ -168,7 +168,7 @@ public class GuiMyrmexStaff extends Screen {
     }
 
     @Override
-    public void onClose() {
+    public void removed() {
         if (ClientProxy.getReferedClientHive() != null) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageGetMyrmexHive(ClientProxy.getReferedClientHive().toNBT()));
         }
@@ -177,7 +177,7 @@ public class GuiMyrmexStaff extends Screen {
 
     private void drawRoomInfo(MatrixStack ms, String type, BlockPos pos, int i, int j, int color) {
         String translate = "myrmex.message.room." + type;
-        this.getMinecraft().fontRenderer.drawString(ms, I18n.format(translate, pos.getX(), pos.getY(), pos.getZ()), i, j + 36 + hiveCount * 22, color);
+        this.getMinecraft().font.draw(ms, I18n.get(translate, pos.getX(), pos.getY(), pos.getZ()), i, j + 36 + hiveCount * 22, color);
         hiveCount++;
     }
 

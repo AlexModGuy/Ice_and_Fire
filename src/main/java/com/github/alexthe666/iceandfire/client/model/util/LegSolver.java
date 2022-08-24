@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model.util;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -21,7 +20,7 @@ public class LegSolver {
     }
 
     public final void update(EntityDragonBase entity, float scale) {
-        this.update(entity, entity.renderYawOffset, scale);
+        this.update(entity, entity.yBodyRot, scale);
     }
 
     public final void update(EntityDragonBase entity, float yaw, float scale) {
@@ -43,7 +42,7 @@ public class LegSolver {
         private final float range;
         private float height;
         private float prevHeight;
-        private boolean isWing;
+        private final boolean isWing;
 
         public Leg(float forward, float side, float range, boolean isWing) {
             this.forward = forward;
@@ -58,17 +57,17 @@ public class LegSolver {
 
         public void update(EntityDragonBase entity, double sideX, double sideZ, double forwardX, double forwardZ, float scale) {
             this.prevHeight = this.height;
-            double posY = entity.getPosY();
-            float settledHeight = this.settle(entity, entity.getPosX() + sideX * this.side + forwardX * this.forward, posY, entity.getPosZ() + sideZ * this.side + forwardZ * this.forward, this.height);
+            double posY = entity.getY();
+            float settledHeight = this.settle(entity, entity.getX() + sideX * this.side + forwardX * this.forward, posY, entity.getZ() + sideZ * this.side + forwardZ * this.forward, this.height);
             this.height = MathHelper.clamp(settledHeight, -this.range * scale, this.range * scale);
         }
 
 
         private float settle(EntityDragonBase entity, double x, double y, double z, float height) {
             BlockPos pos = new BlockPos(x, y + 1e-3, z);
-            float dist = this.getDistance(entity.world, pos);
+            float dist = this.getDistance(entity.level, pos);
             if (1 - dist < 1e-3) {
-                dist = this.getDistance(entity.world, pos.down()) + (float) y % 1;
+                dist = this.getDistance(entity.level, pos.below()) + (float) y % 1;
             } else {
                 dist -= 1 - (y % 1);
             }
@@ -82,7 +81,7 @@ public class LegSolver {
 
         private float getDistance(World world, BlockPos pos) {
             BlockState state = world.getBlockState(pos);
-            VoxelShape aabb = state.getCollisionShapeUncached(world, pos);
+            VoxelShape aabb = state.getCollisionShape(world, pos);
             return aabb.isEmpty() ? 1 : 1 - Math.min((float) aabb.max(Direction.Axis.Y, 0.5D, 0.5D), 1);
         }
 

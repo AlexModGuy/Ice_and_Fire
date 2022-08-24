@@ -33,9 +33,9 @@ public class HideableModelRenderer extends AdvancedModelBox {
     }
 
     public void invisibleRender(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        if (this.showModel && (!this.cubeList.isEmpty() || !this.childModels.isEmpty())) {
-            matrixStackIn.push();
-            this.translateRotate(matrixStackIn);
+        if (this.visible && (!this.cubeList.isEmpty() || !this.childModels.isEmpty())) {
+            matrixStackIn.pushPose();
+            this.translateAndRotate(matrixStackIn);
             if (!this.scaleChildren) {
                 matrixStackIn.scale(1.0F / Math.max(this.scaleX, 1.0E-4F), 1.0F / Math.max(this.scaleY, 1.0E-4F), 1.0F / Math.max(this.scaleZ, 1.0E-4F));
             }
@@ -43,7 +43,7 @@ public class HideableModelRenderer extends AdvancedModelBox {
                 renderer.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
             }
 
-            matrixStackIn.pop();
+            matrixStackIn.popPose();
         }
     }
 }

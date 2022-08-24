@@ -27,12 +27,12 @@ public class ItemSeaSerpentArmor extends ArmorItem {
     public EnumSeaSerpent armor_type;
 
     public ItemSeaSerpentArmor(EnumSeaSerpent armorType, CustomArmorMaterial material, EquipmentSlotType slot) {
-        super(material, slot, new Item.Properties().group(IceAndFire.TAB_ITEMS));
+        super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.armor_type = armorType;
     }
 
-    public String getTranslationKey() {
-        switch (this.slot){
+    public String getDescriptionId() {
+        switch (this.slot) {
             case HEAD:
                 return "item.iceandfire.sea_serpent_helmet";
             case CHEST:
@@ -58,21 +58,21 @@ public class ItemSeaSerpentArmor extends ArmorItem {
     @Override
     public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
         super.onArmorTick(stack, world, player);
-        player.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 50, 0, false, false));
-        if (player.isWet()) {
-            int headMod = player.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-            int chestMod = player.getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-            int legMod = player.getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-            int footMod = player.getItemStackFromSlot(EquipmentSlotType.FEET).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
-            player.addPotionEffect(new EffectInstance(Effects.STRENGTH, 50, headMod + chestMod + legMod + footMod - 1, false, false));
+        player.addEffect(new EffectInstance(Effects.WATER_BREATHING, 50, 0, false, false));
+        if (player.isInWaterOrRain()) {
+            int headMod = player.getItemBySlot(EquipmentSlotType.HEAD).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
+            int chestMod = player.getItemBySlot(EquipmentSlotType.CHEST).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
+            int legMod = player.getItemBySlot(EquipmentSlotType.LEGS).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
+            int footMod = player.getItemBySlot(EquipmentSlotType.FEET).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
+            player.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 50, headMod + chestMod + legMod + footMod - 1, false, false));
         }
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 
-        tooltip.add(new TranslationTextComponent("sea_serpent." + armor_type.resourceName).mergeStyle(armor_type.color));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.sea_serpent_armor.desc_0").mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.sea_serpent_armor.desc_1").mergeStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("sea_serpent." + armor_type.resourceName).withStyle(armor_type.color));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.sea_serpent_armor.desc_0").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.sea_serpent_armor.desc_1").withStyle(TextFormatting.GRAY));
     }
 }

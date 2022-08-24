@@ -38,56 +38,56 @@ public class ParticleDragonFrost extends SpriteTexturedParticle {
 
     public ParticleDragonFrost(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, float dragonSize) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
-        this.maxAge = 30;
+        this.lifetime = 30;
         this.initialX = xCoordIn;
         this.initialY = yCoordIn;
         this.initialZ = zCoordIn;
-        targetX = xCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.75F * dragonSize);
-        targetY = yCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.75F * dragonSize);
-        targetZ = zCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.75F * dragonSize);
-        this.setPosition(posX, posY, posZ);
+        targetX = xCoordIn + (double) ((this.random.nextFloat() - this.random.nextFloat()) * 1.75F * dragonSize);
+        targetY = yCoordIn + (double) ((this.random.nextFloat() - this.random.nextFloat()) * 1.75F * dragonSize);
+        targetZ = zCoordIn + (double) ((this.random.nextFloat() - this.random.nextFloat()) * 1.75F * dragonSize);
+        this.setPos(x, y, z);
         this.dragonSize = dragonSize;
-        this.speedBonus = rand.nextFloat() * 0.015F;
-        big = rand.nextBoolean();
+        this.speedBonus = random.nextFloat() * 0.015F;
+        big = random.nextBoolean();
     }
 
     public ParticleDragonFrost(ClientWorld world, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase, int startingAge) {
         this(world, x, y, z, motX, motY, motZ, MathHelper.clamp(entityDragonBase.getRenderSize() * 0.08F, 0.55F, 3F));
         this.dragon = entityDragonBase;
-        this.targetX = dragon.burnParticleX + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
-        this.targetY = dragon.burnParticleY + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
-        this.targetZ = dragon.burnParticleZ + (double) ((this.rand.nextFloat() - this.rand.nextFloat())) * 3.5F;
-        this.posX = x;
-        this.posY = y;
-        this.posZ = z;
+        this.targetX = dragon.burnParticleX + (double) ((this.random.nextFloat() - this.random.nextFloat())) * 3.5F;
+        this.targetY = dragon.burnParticleY + (double) ((this.random.nextFloat() - this.random.nextFloat())) * 3.5F;
+        this.targetZ = dragon.burnParticleZ + (double) ((this.random.nextFloat() - this.random.nextFloat())) * 3.5F;
+        this.x = x;
+        this.y = y;
+        this.z = z;
         this.age = startingAge;
     }
 
 
     @Override
-    public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
-        Vector3d inerp = renderInfo.getProjectedView();
-        if (age > this.getMaxAge()) {
-            this.setExpired();
+    public void render(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
+        Vector3d inerp = renderInfo.getPosition();
+        if (age > this.getLifetime()) {
+            this.remove();
         }
 
-        Vector3d Vector3d = renderInfo.getProjectedView();
-        float f = (float) (MathHelper.lerp(partialTicks, this.prevPosX, this.posX) - Vector3d.getX());
-        float f1 = (float) (MathHelper.lerp(partialTicks, this.prevPosY, this.posY) - Vector3d.getY());
-        float f2 = (float) (MathHelper.lerp(partialTicks, this.prevPosZ, this.posZ) - Vector3d.getZ());
+        Vector3d Vector3d = renderInfo.getPosition();
+        float f = (float) (MathHelper.lerp(partialTicks, this.xo, this.x) - Vector3d.x());
+        float f1 = (float) (MathHelper.lerp(partialTicks, this.yo, this.y) - Vector3d.y());
+        float f2 = (float) (MathHelper.lerp(partialTicks, this.zo, this.z) - Vector3d.z());
         Quaternion quaternion;
-        if (this.particleAngle == 0.0F) {
-            quaternion = renderInfo.getRotation();
+        if (this.roll == 0.0F) {
+            quaternion = renderInfo.rotation();
         } else {
-            quaternion = new Quaternion(renderInfo.getRotation());
-            float f3 = MathHelper.lerp(partialTicks, this.prevParticleAngle, this.particleAngle);
-            quaternion.multiply(Vector3f.ZP.rotation(f3));
+            quaternion = new Quaternion(renderInfo.rotation());
+            float f3 = MathHelper.lerp(partialTicks, this.oRoll, this.roll);
+            quaternion.mul(Vector3f.ZP.rotation(f3));
         }
 
         Vector3f vector3f1 = new Vector3f(-1.0F, -1.0F, 0.0F);
         vector3f1.transform(quaternion);
         Vector3f[] avector3f = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
-        float f4 = this.getScale(partialTicks);
+        float f4 = this.getQuadSize(partialTicks);
 
         for (int i = 0; i < 4; ++i) {
             Vector3f vector3f = avector3f[i];
@@ -99,26 +99,26 @@ public class ParticleDragonFrost extends SpriteTexturedParticle {
         float f8 = 1;
         float f5 = 0;
         float f6 = 1;
-        Minecraft.getInstance().getTextureManager().bindTexture(big ? SNOWFLAKE_BIG : SNOWFLAKE);
-        int j = this.getBrightnessForRender(partialTicks);
+        Minecraft.getInstance().getTextureManager().bind(big ? SNOWFLAKE_BIG : SNOWFLAKE);
+        int j = this.getLightColor(partialTicks);
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder vertexbuffer = tessellator.getBuffer();
-        vertexbuffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-        vertexbuffer.pos(avector3f[0].getX(), avector3f[0].getY(), avector3f[0].getZ()).tex(f8, f6).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
-        vertexbuffer.pos(avector3f[1].getX(), avector3f[1].getY(), avector3f[1].getZ()).tex(f8, f5).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
-        vertexbuffer.pos(avector3f[2].getX(), avector3f[2].getY(), avector3f[2].getZ()).tex(f7, f5).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
-        vertexbuffer.pos(avector3f[3].getX(), avector3f[3].getY(), avector3f[3].getZ()).tex(f7, f6).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j).endVertex();
-        Tessellator.getInstance().draw();
+        BufferBuilder vertexbuffer = tessellator.getBuilder();
+        vertexbuffer.begin(7, DefaultVertexFormats.PARTICLE);
+        vertexbuffer.vertex(avector3f[0].x(), avector3f[0].y(), avector3f[0].z()).uv(f8, f6).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
+        vertexbuffer.vertex(avector3f[1].x(), avector3f[1].y(), avector3f[1].z()).uv(f8, f5).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
+        vertexbuffer.vertex(avector3f[2].x(), avector3f[2].y(), avector3f[2].z()).uv(f7, f5).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
+        vertexbuffer.vertex(avector3f[3].x(), avector3f[3].y(), avector3f[3].z()).uv(f7, f6).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
+        Tessellator.getInstance().end();
     }
 
-    public int getMaxAge() {
+    public int getLifetime() {
         return dragon == null ? 10 : 30;
     }
 
-    public int getBrightnessForRender(float partialTick) {
+    public int getLightColor(float partialTick) {
         float f = 0;
         f = MathHelper.clamp(f, 0.0F, 1.0F);
-        int i = super.getBrightnessForRender(partialTick);
+        int i = super.getLightColor(partialTick);
         int j = i & 255;
         int k = i >> 16 & 255;
         j = j + (int) (f * 15.0F * 16.0F);
@@ -134,22 +134,22 @@ public class ParticleDragonFrost extends SpriteTexturedParticle {
         super.tick();
 
         if (dragon == null) {
-            float distX = (float) (this.initialX - posX);
-            float distZ = (float) (this.initialZ - posZ);
-            this.motionX += distX * -0.01F * dragonSize * rand.nextFloat();
-            this.motionZ += distZ * -0.01F * dragonSize * rand.nextFloat();
-            this.motionY += 0.015F * rand.nextFloat();
+            float distX = (float) (this.initialX - x);
+            float distZ = (float) (this.initialZ - z);
+            this.xd += distX * -0.01F * dragonSize * random.nextFloat();
+            this.zd += distZ * -0.01F * dragonSize * random.nextFloat();
+            this.yd += 0.015F * random.nextFloat();
         } else {
             double d2 = this.targetX - initialX;
             double d3 = this.targetY - initialY;
             double d4 = this.targetZ - initialZ;
             double dist = MathHelper.sqrt(d2 * d2 + d3 * d3 + d4 * d4);
             float speed = 0.015F + speedBonus;
-            this.motionX += d2 * speed;
-            this.motionY += d3 * speed;
-            this.motionZ += d4 * speed;
+            this.xd += d2 * speed;
+            this.yd += d3 * speed;
+            this.zd += d4 * speed;
             if (touchedTime > 3) {
-                this.setExpired();
+                this.remove();
             }
         }
     }

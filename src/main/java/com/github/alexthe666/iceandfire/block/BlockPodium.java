@@ -3,12 +3,7 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
@@ -23,19 +18,17 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
 public class BlockPodium extends ContainerBlock implements ICustomRendered {
 
-    protected static final VoxelShape AABB = Block.makeCuboidShape(2, 0, 2, 14, 23, 14);
+    protected static final VoxelShape AABB = Block.box(2, 0, 2, 14, 23, 14);
 
     public BlockPodium(String type) {
         super(
-    		Properties
-    			.create(Material.WOOD)
-    			.notSolid()
-    			.variableOpacity()
-    			.hardnessAndResistance(2.0F)
+            Properties
+                .of(Material.WOOD)
+                .noOcclusion()
+                .dynamicShape()
+                .strength(2.0F)
     			.sound(SoundType.WOOD)
 		);
 
@@ -50,24 +43,24 @@ public class BlockPodium extends ContainerBlock implements ICustomRendered {
         return AABB;
     }
 
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        TileEntity tileentity = worldIn.getTileEntity(pos);
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        TileEntity tileentity = worldIn.getBlockEntity(pos);
         if (tileentity instanceof TileEntityPodium) {
-            InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityPodium) tileentity);
-            worldIn.updateComparatorOutputLevel(pos, this);
+            InventoryHelper.dropContents(worldIn, pos, (TileEntityPodium) tileentity);
+            worldIn.updateNeighbourForOutputSignal(pos, this);
         }
-        super.onReplaced(state, worldIn, pos, newState, isMoving);
+        super.onRemove(state, worldIn, pos, newState, isMoving);
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (!player.isSneaking()) {
-            if (worldIn.isRemote) {
-                IceAndFire.PROXY.setRefrencedTE(worldIn.getTileEntity(pos));
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if (!player.isShiftKeyDown()) {
+            if (worldIn.isClientSide) {
+                IceAndFire.PROXY.setRefrencedTE(worldIn.getBlockEntity(pos));
             } else {
-                INamedContainerProvider inamedcontainerprovider = this.getContainer(state, worldIn, pos);
+                INamedContainerProvider inamedcontainerprovider = this.getMenuProvider(state, worldIn, pos);
                 if (inamedcontainerprovider != null) {
-                    player.openContainer(inamedcontainerprovider);
+                    player.openMenu(inamedcontainerprovider);
                 }
             }
             return ActionResultType.SUCCESS;
@@ -77,12 +70,12 @@ public class BlockPodium extends ContainerBlock implements ICustomRendered {
 
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
     @Override
-    public TileEntity createNewTileEntity(IBlockReader reader) {
+    public TileEntity newBlockEntity(IBlockReader reader) {
         return new TileEntityPodium();
     }
 

@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,7 +12,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -21,14 +19,14 @@ public class EntityStymphalianArrow extends AbstractArrowEntity {
 
     public EntityStymphalianArrow(EntityType<? extends AbstractArrowEntity> t, World worldIn) {
         super(t, worldIn);
-        this.setDamage(3.5F);
+        this.setBaseDamage(3.5F);
     }
 
     public EntityStymphalianArrow(EntityType<? extends AbstractArrowEntity> t, World worldIn, double x, double y,
         double z) {
         this(t, worldIn);
-        this.setPosition(x, y, z);
-        this.setDamage(3.5F);
+        this.setPos(x, y, z);
+        this.setBaseDamage(3.5F);
     }
 
     public EntityStymphalianArrow(FMLPlayMessages.SpawnEntity spawnEntity, World world) {
@@ -36,53 +34,53 @@ public class EntityStymphalianArrow extends AbstractArrowEntity {
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     public EntityStymphalianArrow(EntityType t, World worldIn, LivingEntity shooter) {
         super(t, shooter, worldIn);
-        this.setDamage(3.5F);
+        this.setBaseDamage(3.5F);
     }
 
     @Override
     public void tick() {
         super.tick();
-        float sqrt = MathHelper.sqrt(this.getMotion().x * this.getMotion().x + this.getMotion().z * this.getMotion().z);
+        float sqrt = MathHelper.sqrt(this.getDeltaMovement().x * this.getDeltaMovement().x + this.getDeltaMovement().z * this.getDeltaMovement().z);
         if (sqrt < 0.1F) {
-            this.setMotion(this.getMotion().add(0, -0.01F, 0));
+            this.setDeltaMovement(this.getDeltaMovement().add(0, -0.01F, 0));
         }
     }
 
     protected void damageShield(PlayerEntity player, float damage) {
-        if (damage >= 3.0F && player.getActiveItemStack().getItem().isShield(player.getActiveItemStack(), player)) {
-            ItemStack copyBeforeUse = player.getActiveItemStack().copy();
+        if (damage >= 3.0F && player.getUseItem().getItem().isShield(player.getUseItem(), player)) {
+            ItemStack copyBeforeUse = player.getUseItem().copy();
             int i = 1 + MathHelper.floor(damage);
-            player.getActiveItemStack().damageItem(i, player, (entity) -> {
-                entity.sendBreakAnimation(EquipmentSlotType.MAINHAND);
+            player.getUseItem().hurtAndBreak(i, player, (entity) -> {
+                entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
             });
-            if (player.getActiveItemStack().isEmpty()) {
-                Hand Hand = player.getActiveHand();
+            if (player.getUseItem().isEmpty()) {
+                Hand Hand = player.getUsedItemHand();
                 net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, Hand);
 
                 if (Hand == net.minecraft.util.Hand.MAIN_HAND) {
-                    this.setItemStackToSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
+                    this.setItemSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
                 } else {
-                    this.setItemStackToSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
+                    this.setItemSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
                 }
-                player.resetActiveHand();
-                this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+                player.stopUsingItem();
+                this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
             }
         }
     }
 
     @Override
-    public boolean hasNoGravity() {
+    public boolean isNoGravity() {
         return true;
     }
 
     @Override
-    protected ItemStack getArrowStack() {
+    protected ItemStack getPickupItem() {
         return new ItemStack(IafItemRegistry.STYMPHALIAN_ARROW);
     }
 }

@@ -1,25 +1,14 @@
 package com.github.alexthe666.iceandfire.entity.util;
 
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.google.common.collect.ImmutableMap;
-
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.MerchantOffer;
-import net.minecraft.item.SuspiciousStewItem;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.Potion;
@@ -27,6 +16,11 @@ import net.minecraft.potion.PotionBrewing;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.registry.Registry;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 public class MyrmexTrades {
     public static final Int2ObjectMap<VillagerTrades.ITrade[]> DESERT_WORKER;
@@ -265,7 +259,7 @@ public class MyrmexTrades {
                 return !potion.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potion);
             }).collect(Collectors.toList());
             Potion lvt_5_1_ = lvt_4_1_.get(rand.nextInt(lvt_4_1_.size()));
-            ItemStack lvt_6_1_ = PotionUtils.addPotionToItemStack(new ItemStack(this.potionStack.getItem(), this.potionCount), lvt_5_1_);
+            ItemStack lvt_6_1_ = PotionUtils.setPotion(new ItemStack(this.potionStack.getItem(), this.potionCount), lvt_5_1_);
             return new MerchantOffer(lvt_3_1_, new ItemStack(this.buyingItem, this.buyingItemCount), lvt_6_1_, this.maxUses, this.xpValue, this.priceMultiplier);
         }
     }
@@ -291,7 +285,7 @@ public class MyrmexTrades {
 
         public MerchantOffer getOffer(Entity trader, Random rand) {
             int lvt_3_1_ = 5 + rand.nextInt(15);
-            ItemStack lvt_4_1_ = EnchantmentHelper.addRandomEnchantment(rand, new ItemStack(this.sellingStack.getItem()), lvt_3_1_, false);
+            ItemStack lvt_4_1_ = EnchantmentHelper.enchantItem(rand, new ItemStack(this.sellingStack.getItem()), lvt_3_1_, false);
             int lvt_5_1_ = Math.min(this.emeraldCount + lvt_3_1_, 64);
             ItemStack lvt_6_1_ = new ItemStack(IafItemRegistry.MYRMEX_DESERT_RESIN, lvt_5_1_);
             return new MerchantOffer(lvt_6_1_, lvt_4_1_, this.maxUses, this.xpValue, this.priceMultiplier);
@@ -314,7 +308,7 @@ public class MyrmexTrades {
         @Nullable
         public MerchantOffer getOffer(Entity trader, Random rand) {
             ItemStack lvt_3_1_ = new ItemStack(Items.SUSPICIOUS_STEW, 1);
-            SuspiciousStewItem.addEffect(lvt_3_1_, this.effect, this.duration);
+            SuspiciousStewItem.saveMobEffect(lvt_3_1_, this.effect, this.duration);
             return new MerchantOffer(new ItemStack(IafItemRegistry.MYRMEX_DESERT_RESIN, 1), lvt_3_1_, 12, this.xpValue, this.priceMultiplier);
         }
     }
@@ -439,7 +433,7 @@ public class MyrmexTrades {
                 return !potion.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potion);
             }).collect(Collectors.toList());
             Potion lvt_5_1_ = lvt_4_1_.get(rand.nextInt(lvt_4_1_.size()));
-            ItemStack lvt_6_1_ = PotionUtils.addPotionToItemStack(new ItemStack(this.potionStack.getItem(), this.potionCount), lvt_5_1_);
+            ItemStack lvt_6_1_ = PotionUtils.setPotion(new ItemStack(this.potionStack.getItem(), this.potionCount), lvt_5_1_);
             return new MerchantOffer(lvt_3_1_, new ItemStack(this.buyingItem, this.buyingItemCount), lvt_6_1_, this.maxUses, this.xpValue, this.priceMultiplier);
         }
     }
@@ -465,7 +459,7 @@ public class MyrmexTrades {
 
         public MerchantOffer getOffer(Entity trader, Random rand) {
             int lvt_3_1_ = 5 + rand.nextInt(15);
-            ItemStack lvt_4_1_ = EnchantmentHelper.addRandomEnchantment(rand, new ItemStack(this.sellingStack.getItem()), lvt_3_1_, false);
+            ItemStack lvt_4_1_ = EnchantmentHelper.enchantItem(rand, new ItemStack(this.sellingStack.getItem()), lvt_3_1_, false);
             int lvt_5_1_ = Math.min(this.emeraldCount + lvt_3_1_, 64);
             ItemStack lvt_6_1_ = new ItemStack(IafItemRegistry.MYRMEX_JUNGLE_RESIN, lvt_5_1_);
             return new MerchantOffer(lvt_6_1_, lvt_4_1_, this.maxUses, this.xpValue, this.priceMultiplier);

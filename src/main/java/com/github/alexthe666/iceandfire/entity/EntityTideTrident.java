@@ -30,17 +30,17 @@ public class EntityTideTrident extends TridentEntity {
 
     public EntityTideTrident(EntityType<? extends TridentEntity> type, World worldIn) {
         super(type, worldIn);
-        thrownStack = new ItemStack(IafItemRegistry.TIDE_TRIDENT);
+        tridentItem = new ItemStack(IafItemRegistry.TIDE_TRIDENT);
     }
 
     public EntityTideTrident(World worldIn, LivingEntity thrower, ItemStack thrownStackIn) {
         this(IafEntityRegistry.TIDE_TRIDENT.get(), worldIn);
-        this.setPosition(thrower.getPosX(), thrower.getPosYEye() - 0.1F, thrower.getPosZ());
-        this.setShooter(thrower);
-        thrownStack = thrownStackIn;
-        this.dataManager.set(LOYALTY_LEVEL, (byte) EnchantmentHelper.getLoyaltyModifier(thrownStackIn));
-        this.dataManager.set(field_226571_aq_, thrownStackIn.hasEffect());
-        int piercingLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.PIERCING, thrownStackIn);
+        this.setPos(thrower.getX(), thrower.getEyeY() - 0.1F, thrower.getZ());
+        this.setOwner(thrower);
+        tridentItem = thrownStackIn;
+        this.entityData.set(ID_LOYALTY, (byte) EnchantmentHelper.getLoyalty(thrownStackIn));
+        this.entityData.set(ID_FOIL, thrownStackIn.hasFoil());
+        int piercingLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PIERCING, thrownStackIn);
         this.setPierceLevel((byte) piercingLevel);
     }
 
@@ -49,26 +49,26 @@ public class EntityTideTrident extends TridentEntity {
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
-    protected void onEntityHit(EntityRayTraceResult result) {
+    protected void onHitEntity(EntityRayTraceResult result) {
         Entity entity = result.getEntity();
         float f = 12.0F;
         if (entity instanceof LivingEntity) {
             LivingEntity livingentity = (LivingEntity) entity;
-            f += EnchantmentHelper.getModifierForCreature(this.thrownStack, livingentity.getCreatureAttribute());
+            f += EnchantmentHelper.getDamageBonus(this.tridentItem, livingentity.getMobType());
         }
 
-        Entity entity1 = this.getShooter();
-        DamageSource damagesource = DamageSource.causeTridentDamage(this, entity1 == null ? this : entity1);
+        Entity entity1 = this.getOwner();
+        DamageSource damagesource = DamageSource.trident(this, entity1 == null ? this : entity1);
         entitiesHit++;
         if (entitiesHit >= getMaxPiercing())
             this.dealtDamage = true;
-        SoundEvent soundevent = SoundEvents.ITEM_TRIDENT_HIT;
-        if (entity.attackEntityFrom(damagesource, f)) {
+        SoundEvent soundevent = SoundEvents.TRIDENT_HIT;
+        if (entity.hurt(damagesource, f)) {
             if (entity.getType() == EntityType.ENDERMAN) {
                 return;
             }
@@ -76,23 +76,23 @@ public class EntityTideTrident extends TridentEntity {
             if (entity instanceof LivingEntity) {
                 LivingEntity livingentity1 = (LivingEntity) entity;
                 if (entity1 instanceof LivingEntity) {
-                    EnchantmentHelper.applyThornEnchantments(livingentity1, entity1);
-                    EnchantmentHelper.applyArthropodEnchantments((LivingEntity) entity1, livingentity1);
+                    EnchantmentHelper.doPostHurtEffects(livingentity1, entity1);
+                    EnchantmentHelper.doPostDamageEffects((LivingEntity) entity1, livingentity1);
                 }
 
-                this.arrowHit(livingentity1);
+                this.doPostHurtEffects(livingentity1);
             }
         }
 
         float f1 = 1.0F;
-        if (this.world instanceof ServerWorld && this.world.isThundering() && EnchantmentHelper.hasChanneling(this.thrownStack)) {
-            BlockPos blockpos = entity.getPosition();
-            if (this.world.canSeeSky(blockpos)) {
-                LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.world);
-                lightningboltentity.moveForced(Vector3d.copyCentered(blockpos));
-                lightningboltentity.setCaster(entity1 instanceof ServerPlayerEntity ? (ServerPlayerEntity) entity1 : null);
-                this.world.addEntity(lightningboltentity);
-                soundevent = SoundEvents.ITEM_TRIDENT_THUNDER;
+        if (this.level instanceof ServerWorld && this.level.isThundering() && EnchantmentHelper.hasChanneling(this.tridentItem)) {
+            BlockPos blockpos = entity.blockPosition();
+            if (this.level.canSeeSky(blockpos)) {
+                LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.level);
+                lightningboltentity.moveTo(Vector3d.atCenterOf(blockpos));
+                lightningboltentity.setCause(entity1 instanceof ServerPlayerEntity ? (ServerPlayerEntity) entity1 : null);
+                this.level.addFreshEntity(lightningboltentity);
+                soundevent = SoundEvents.TRIDENT_THUNDER;
                 f1 = 5.0F;
             }
         }
@@ -105,8 +105,8 @@ public class EntityTideTrident extends TridentEntity {
     }
 
     @Override
-    protected ItemStack getArrowStack() {
-        return this.thrownStack.getItem() == Items.TRIDENT ? new ItemStack(IafItemRegistry.TIDE_TRIDENT) : this.thrownStack.copy();
+    protected ItemStack getPickupItem() {
+        return this.tridentItem.getItem() == Items.TRIDENT ? new ItemStack(IafItemRegistry.TIDE_TRIDENT) : this.tridentItem.copy();
     }
 
 }

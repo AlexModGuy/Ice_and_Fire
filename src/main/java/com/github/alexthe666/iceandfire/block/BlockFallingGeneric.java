@@ -15,9 +15,9 @@ public class BlockFallingGeneric extends FallingBlock {
     public BlockFallingGeneric(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound) {
         super(
             AbstractBlock.Properties
-                .create(materialIn)
+                .of(materialIn)
                 .sound(sound)
-                .hardnessAndResistance(hardness, resistance)
+                .strength(hardness, resistance)
                 .harvestTool(ToolType.get(toolUsed))
                 .harvestLevel(toolStrength)
         );
@@ -30,12 +30,12 @@ public class BlockFallingGeneric extends FallingBlock {
     public BlockFallingGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery) {
         super(
             AbstractBlock.Properties
-                .create(materialIn)
+                .of(materialIn)
                 .sound(sound)
-                .hardnessAndResistance(hardness, resistance)
+                .strength(hardness, resistance)
                 .harvestTool(ToolType.get(toolUsed))
                 .harvestLevel(toolStrength)
-                .slipperiness(0.98F)
+                .friction(0.98F)
         );
 
         setRegistryName(IceAndFire.MODID, name);

@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import java.util.UUID;
-
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.entity.util.IDeadMob;
@@ -11,7 +9,6 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.google.common.collect.ImmutableList;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -31,11 +28,13 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.UUID;
+
 public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromStatues, IDeadMob {
 
-    private static final DataParameter<Boolean> MYRMEX_TYPE = EntityDataManager.createKey(EntityMyrmexEgg.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> MYRMEX_AGE = EntityDataManager.createKey(EntityMyrmexEgg.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> MYRMEX_CASTE = EntityDataManager.createKey(EntityMyrmexEgg.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> MYRMEX_TYPE = EntityDataManager.defineId(EntityMyrmexEgg.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> MYRMEX_AGE = EntityDataManager.defineId(EntityMyrmexEgg.class, DataSerializers.INT);
+    private static final DataParameter<Integer> MYRMEX_CASTE = EntityDataManager.defineId(EntityMyrmexEgg.class, DataSerializers.INT);
     public UUID hiveUUID;
 
     public EntityMyrmexEgg(EntityType t, World worldIn) {
@@ -43,66 +42,66 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-                //HEALTH
-                .createMutableAttribute(Attributes.MAX_HEALTH, 10.0D)
-                //SPEED
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.0D);
+        return MobEntity.createMobAttributes()
+            //HEALTH
+            .add(Attributes.MAX_HEALTH, 10.0D)
+            //SPEED
+            .add(Attributes.MOVEMENT_SPEED, 0.0D);
     }
 
     @Override
-    public void writeAdditional(CompoundNBT tag) {
-        super.writeAdditional(tag);
+    public void addAdditionalSaveData(CompoundNBT tag) {
+        super.addAdditionalSaveData(tag);
         tag.putBoolean("Jungle", this.isJungle());
         tag.putInt("MyrmexAge", this.getMyrmexAge());
         tag.putInt("MyrmexCaste", this.getMyrmexCaste());
-        tag.putUniqueId("HiveUUID", hiveUUID == null ? hiveUUID = UUID.randomUUID() : hiveUUID);
+        tag.putUUID("HiveUUID", hiveUUID == null ? hiveUUID = UUID.randomUUID() : hiveUUID);
     }
 
     @Override
-    public void readAdditional(CompoundNBT tag) {
-        super.readAdditional(tag);
+    public void readAdditionalSaveData(CompoundNBT tag) {
+        super.readAdditionalSaveData(tag);
         this.setJungle(tag.getBoolean("Jungle"));
         this.setMyrmexAge(tag.getInt("MyrmexAge"));
         this.setMyrmexCaste(tag.getInt("MyrmexCaste"));
-        hiveUUID = tag.getUniqueId("HiveUUID");
+        hiveUUID = tag.getUUID("HiveUUID");
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.getDataManager().register(MYRMEX_TYPE, false);
-        this.getDataManager().register(MYRMEX_AGE, Integer.valueOf(0));
-        this.getDataManager().register(MYRMEX_CASTE, Integer.valueOf(0));
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.getEntityData().define(MYRMEX_TYPE, false);
+        this.getEntityData().define(MYRMEX_AGE, Integer.valueOf(0));
+        this.getEntityData().define(MYRMEX_CASTE, Integer.valueOf(0));
     }
 
 
     public boolean isJungle() {
-        return this.getDataManager().get(MYRMEX_TYPE).booleanValue();
+        return this.getEntityData().get(MYRMEX_TYPE).booleanValue();
     }
 
     public void setJungle(boolean jungle) {
-        this.getDataManager().set(MYRMEX_TYPE, jungle);
+        this.getEntityData().set(MYRMEX_TYPE, jungle);
     }
 
     public int getMyrmexAge() {
-        return this.getDataManager().get(MYRMEX_AGE).intValue();
+        return this.getEntityData().get(MYRMEX_AGE).intValue();
     }
 
     public void setMyrmexAge(int i) {
-        this.getDataManager().set(MYRMEX_AGE, i);
+        this.getEntityData().set(MYRMEX_AGE, i);
     }
 
     public int getMyrmexCaste() {
-        return this.getDataManager().get(MYRMEX_CASTE).intValue();
+        return this.getEntityData().get(MYRMEX_CASTE).intValue();
     }
 
     public void setMyrmexCaste(int i) {
-        this.getDataManager().set(MYRMEX_CASTE, i);
+        this.getEntityData().set(MYRMEX_CASTE, i);
     }
 
     public boolean canSeeSky() {
-        return world.canBlockSeeSky(this.getPosition());
+        return level.canSeeSkyFromBelowWater(this.blockPosition());
     }
 
     @Override
@@ -116,56 +115,56 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
             EntityMyrmexBase myrmex;
             switch (this.getMyrmexCaste()) {
                 default:
-                    myrmex = new EntityMyrmexWorker(IafEntityRegistry.MYRMEX_WORKER.get(), world);
+                    myrmex = new EntityMyrmexWorker(IafEntityRegistry.MYRMEX_WORKER.get(), level);
                     break;
                 case 1:
-                    myrmex = new EntityMyrmexSoldier(IafEntityRegistry.MYRMEX_SOLDIER.get(), world);
+                    myrmex = new EntityMyrmexSoldier(IafEntityRegistry.MYRMEX_SOLDIER.get(), level);
                     break;
                 case 2:
-                    myrmex = new EntityMyrmexRoyal(IafEntityRegistry.MYRMEX_ROYAL.get(), world);
+                    myrmex = new EntityMyrmexRoyal(IafEntityRegistry.MYRMEX_ROYAL.get(), level);
                     break;
                 case 3:
-                    myrmex = new EntityMyrmexSentinel(IafEntityRegistry.MYRMEX_SENTINEL.get(), world);
+                    myrmex = new EntityMyrmexSentinel(IafEntityRegistry.MYRMEX_SENTINEL.get(), level);
                     break;
                 case 4:
-                    myrmex = new EntityMyrmexQueen(IafEntityRegistry.MYRMEX_QUEEN.get(), world);
+                    myrmex = new EntityMyrmexQueen(IafEntityRegistry.MYRMEX_QUEEN.get(), level);
                     break;
             }
             myrmex.setJungleVariant(this.isJungle());
             myrmex.setGrowthStage(0);
-            myrmex.setPositionAndRotation(this.getPosX(), this.getPosY(), this.getPosZ(), 0, 0);
+            myrmex.absMoveTo(this.getX(), this.getY(), this.getZ(), 0, 0);
             if (myrmex instanceof EntityMyrmexQueen) {
-                MyrmexHive hive = new MyrmexHive(world, this.getPosition(), 100);
-                PlayerEntity player = world.getClosestPlayer(this, 30);
+                MyrmexHive hive = new MyrmexHive(level, this.blockPosition(), 100);
+                PlayerEntity player = level.getNearestPlayer(this, 30);
                 if (player != null) {
                     hive.hasOwner = true;
-                    hive.ownerUUID = player.getUniqueID();
-                    if (!world.isRemote) {
-                        hive.modifyPlayerReputation(player.getUniqueID(), 100);
+                    hive.ownerUUID = player.getUUID();
+                    if (!level.isClientSide) {
+                        hive.modifyPlayerReputation(player.getUUID(), 100);
                     }
                 }
-                MyrmexWorldData.addHive(world, hive);
+                MyrmexWorldData.addHive(level, hive);
                 myrmex.setHive(hive);
 
 
             } else {
-                if(MyrmexWorldData.get(world) != null) {
+                if (MyrmexWorldData.get(level) != null) {
                     MyrmexHive hive;
-                    if(this.hiveUUID == null){
-                        hive = MyrmexWorldData.get(world).getNearestHive(this.getPosition(), 400);
-                    }else {
-                        hive = MyrmexWorldData.get(world).getHiveFromUUID(hiveUUID);
+                    if (this.hiveUUID == null) {
+                        hive = MyrmexWorldData.get(level).getNearestHive(this.blockPosition(), 400);
+                    } else {
+                        hive = MyrmexWorldData.get(level).getHiveFromUUID(hiveUUID);
                     }
-                    if (!world.isRemote && hive != null && Math.sqrt(this.getDistanceSq(hive.getCenter().getX(), hive.getCenter().getY(), hive.getCenter().getZ())) < 2000) {
+                    if (!level.isClientSide && hive != null && Math.sqrt(this.distanceToSqr(hive.getCenter().getX(), hive.getCenter().getY(), hive.getCenter().getZ())) < 2000) {
                         myrmex.setHive(hive);
                     }
                 }
             }
 
-            if (!world.isRemote) {
-                world.addEntity(myrmex);
+            if (!level.isClientSide) {
+                level.addFreshEntity(myrmex);
             }
-            this.world.playSound(this.getPosX(), this.getPosY() + this.getEyeHeight(), this.getPosZ(), IafSoundRegistry.EGG_HATCH, this.getSoundCategory(), 2.5F, 1.0F, false);
+            this.level.playLocalSound(this.getX(), this.getY() + this.getEyeHeight(), this.getZ(), IafSoundRegistry.EGG_HATCH, this.getSoundSource(), 2.5F, 1.0F, false);
         }
     }
 
@@ -175,30 +174,30 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public Iterable<ItemStack> getArmorInventoryList() {
+    public Iterable<ItemStack> getArmorSlots() {
         return ImmutableList.of();
     }
 
     @Override
-    public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
+    public ItemStack getItemBySlot(EquipmentSlotType slotIn) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
+    public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack) {
 
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource dmg, float var2) {
+    public boolean hurt(DamageSource dmg, float var2) {
         if (dmg == DamageSource.IN_WALL || dmg == DamageSource.FALL) {
             return false;
         }
-        if (!world.isRemote && !dmg.canHarmInCreative()) {
-            this.entityDropItem(this.getItem(), 0);
+        if (!level.isClientSide && !dmg.isBypassInvul()) {
+            this.spawnAtLocation(this.getItem(), 0);
         }
         this.remove();
-        return super.attackEntityFrom(dmg, var2);
+        return super.hurt(dmg, var2);
     }
 
     private ItemStack getItem() {
@@ -210,17 +209,17 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public boolean canBePushed() {
+    public boolean isPushable() {
         return false;
     }
 
     @Override
-    public HandSide getPrimaryHand() {
+    public HandSide getMainArm() {
         return null;
     }
 
     @Override
-    protected void collideWithEntity(Entity entity) {
+    protected void doPush(Entity entity) {
     }
 
     @Override
@@ -237,13 +236,13 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     public boolean isInNursery() {
-        MyrmexHive hive = MyrmexWorldData.get(this.world).getNearestHive(this.getPosition(), 100);
-        if (hive != null && hive.getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty() && hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition()) != null) {
+        MyrmexHive hive = MyrmexWorldData.get(this.level).getNearestHive(this.blockPosition(), 100);
+        if (hive != null && hive.getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty() && hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRandom(), this.blockPosition()) != null) {
             return false;
         }
         if (hive != null) {
-            BlockPos nursery = hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRNG(), this.getPosition());
-            return this.getDistanceSq(nursery.getX(), nursery.getY(), nursery.getZ()) < 2025;
+            BlockPos nursery = hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRandom(), this.blockPosition());
+            return this.distanceToSqr(nursery.getX(), nursery.getY(), nursery.getZ()) < 2025;
         }
         return false;
     }

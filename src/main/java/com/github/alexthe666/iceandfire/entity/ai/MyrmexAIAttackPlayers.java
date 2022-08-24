@@ -1,15 +1,14 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.function.Predicate;
-
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
-
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.player.PlayerEntity;
 
+import java.util.function.Predicate;
+
 public class MyrmexAIAttackPlayers extends NearestAttackableTargetGoal {
 
-    private EntityMyrmexBase myrmex;
+    private final EntityMyrmexBase myrmex;
 
     @SuppressWarnings("unchecked")
     public MyrmexAIAttackPlayers(EntityMyrmexBase myrmex) {
@@ -18,14 +17,14 @@ public class MyrmexAIAttackPlayers extends NearestAttackableTargetGoal {
             @Override
             public boolean test(PlayerEntity entity) {
                 return entity != null && (myrmex.getHive() == null
-                    || myrmex.getHive().isPlayerReputationLowEnoughToFight(entity.getUniqueID()));
+                    || myrmex.getHive().isPlayerReputationLowEnoughToFight(entity.getUUID()));
             }
         });
         this.myrmex = myrmex;
     }
 
     @Override
-    public boolean shouldExecute() {
-        return myrmex.shouldHaveNormalAI() && super.shouldExecute();
+    public boolean canUse() {
+        return myrmex.shouldHaveNormalAI() && super.canUse();
     }
 }

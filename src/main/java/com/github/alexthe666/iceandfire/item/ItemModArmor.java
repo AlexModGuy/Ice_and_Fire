@@ -1,13 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -20,14 +13,19 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 public class ItemModArmor extends ArmorItem {
 
     public ItemModArmor(IArmorMaterial material, EquipmentSlotType slot, String name) {
-        super(material, slot, new Item.Properties().group(IceAndFire.TAB_ITEMS));
+        super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.setRegistryName(IceAndFire.MODID, name);
     }
 
-    public String getTranslationKey(ItemStack stack) {
+    public String getDescriptionId(ItemStack stack) {
         if (this == IafItemRegistry.EARPLUGS) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
@@ -35,7 +33,7 @@ public class ItemModArmor extends ArmorItem {
                 return "item.iceandfire.air_pods";
             }
         }
-        return super.getTranslationKey(stack);
+        return super.getDescriptionId(stack);
     }
 
     @Nullable
@@ -56,14 +54,14 @@ public class ItemModArmor extends ArmorItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (this == IafItemRegistry.EARPLUGS) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             if (calendar.get(2) + 1 == 4 && calendar.get(5) == 1) {
-                tooltip.add(new TranslationTextComponent("item.iceandfire.air_pods.desc").mergeStyle(TextFormatting.GREEN));
+                tooltip.add(new TranslationTextComponent("item.iceandfire.air_pods.desc").withStyle(TextFormatting.GREEN));
             }
         }
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 }

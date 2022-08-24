@@ -36,31 +36,31 @@ public class IafDragonDestructionManager {
         float dmgScale = (float) IafConfig.dragonAttackDamageFire;
 
         if (stage <= 3) {
-            BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1)).forEach(pos -> {
-                if (world.getTileEntity(pos) instanceof TileEntityDragonforgeInput) {
-                    ((TileEntityDragonforgeInput) world.getTileEntity(pos)).onHitWithFlame();
+            BlockPos.betweenClosedStream(center.offset(-1, -1, -1), center.offset(1, 1, 1)).forEach(pos -> {
+                if (world.getBlockEntity(pos) instanceof TileEntityDragonforgeInput) {
+                    ((TileEntityDragonforgeInput) world.getBlockEntity(pos)).onHitWithFlame();
                     return;
                 }
-                if (IafConfig.dragonGriefing != 2 && world.rand.nextBoolean()) {
+                if (IafConfig.dragonGriefing != 2 && world.random.nextBoolean()) {
                     fireAttackBlock(world, pos);
                 }
             });
         } else {
             final int radius = stage == 4 ? 2 : 3;
-            final int j = radius + world.rand.nextInt(1);
-            final int k = radius + world.rand.nextInt(1);
-            final int l = radius + world.rand.nextInt(1);
+            final int j = radius + world.random.nextInt(1);
+            final int k = radius + world.random.nextInt(1);
+            final int l = radius + world.random.nextInt(1);
             final float f = (float) (j + k + l) * 0.333F + 0.5F;
             final float ff = f * f;
 
             damageRadius = 2.5F + f * 1.2F;
-            BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(pos -> {
-                if (world.getTileEntity(pos) instanceof TileEntityDragonforgeInput) {
-                    ((TileEntityDragonforgeInput) world.getTileEntity(pos)).onHitWithFlame();
+            BlockPos.betweenClosedStream(center.offset(-j, -k, -l), center.offset(j, k, l)).forEach(pos -> {
+                if (world.getBlockEntity(pos) instanceof TileEntityDragonforgeInput) {
+                    ((TileEntityDragonforgeInput) world.getBlockEntity(pos)).onHitWithFlame();
                     return;
                 }
-                if (center.distanceSq(pos) <= ff) {
-                    if (IafConfig.dragonGriefing != 2 && world.rand.nextFloat() > (float) center.distanceSq(pos) / ff) {
+                if (center.distSqr(pos) <= ff) {
+                    if (IafConfig.dragonGriefing != 2 && world.random.nextFloat() > (float) center.distSqr(pos) / ff) {
                         fireAttackBlock(world, pos);
                     }
                 }
@@ -69,7 +69,7 @@ public class IafDragonDestructionManager {
 
         final float stageDmg = stage * dmgScale;
         final int statusDuration = 5 + stage * 5;
-        world.getEntitiesWithinAABB(
+        world.getEntitiesOfClass(
             LivingEntity.class,
             new AxisAlignedBB(
                 (double) center.getX() - damageRadius,
@@ -80,9 +80,9 @@ public class IafDragonDestructionManager {
                 (double) center.getZ() + damageRadius
             )
         ).stream().forEach(livingEntity -> {
-            if (!DragonUtils.onSameTeam(destroyer, livingEntity) && !destroyer.isEntityEqual(livingEntity) && destroyer.canEntityBeSeen(livingEntity)) {
-                livingEntity.attackEntityFrom(source, stageDmg);
-                livingEntity.setFire(statusDuration);
+            if (!DragonUtils.onSameTeam(destroyer, livingEntity) && !destroyer.is(livingEntity) && destroyer.canSee(livingEntity)) {
+                livingEntity.hurt(source, stageDmg);
+                livingEntity.setSecondsOnFire(statusDuration);
             }
         });
     }
@@ -98,31 +98,31 @@ public class IafDragonDestructionManager {
         float dmgScale = (float) IafConfig.dragonAttackDamageIce;
 
         if (stage <= 3) {
-            BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1)).forEach(pos -> {
-                if (world.getTileEntity(pos) instanceof TileEntityDragonforgeInput) {
-                    ((TileEntityDragonforgeInput) world.getTileEntity(pos)).onHitWithFlame();
+            BlockPos.betweenClosedStream(center.offset(-1, -1, -1), center.offset(1, 1, 1)).forEach(pos -> {
+                if (world.getBlockEntity(pos) instanceof TileEntityDragonforgeInput) {
+                    ((TileEntityDragonforgeInput) world.getBlockEntity(pos)).onHitWithFlame();
                     return;
                 }
-                if (IafConfig.dragonGriefing != 2 && world.rand.nextBoolean()) {
+                if (IafConfig.dragonGriefing != 2 && world.random.nextBoolean()) {
                     iceAttackBlock(world, pos);
                 }
             });
         } else {
             final int radius = stage == 4 ? 2 : 3;
-            final int j = radius + world.rand.nextInt(1);
-            final int k = radius + world.rand.nextInt(1);
-            final int l = radius + world.rand.nextInt(1);
+            final int j = radius + world.random.nextInt(1);
+            final int k = radius + world.random.nextInt(1);
+            final int l = radius + world.random.nextInt(1);
             final float f = (float) (j + k + l) * 0.333F + 0.5F;
             final float ff = f * f;
 
             damageRadius = 2.5F + f * 1.2F;
-            BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(pos -> {
-                if (world.getTileEntity(pos) instanceof TileEntityDragonforgeInput) {
-                    ((TileEntityDragonforgeInput) world.getTileEntity(pos)).onHitWithFlame();
+            BlockPos.betweenClosedStream(center.offset(-j, -k, -l), center.offset(j, k, l)).forEach(pos -> {
+                if (world.getBlockEntity(pos) instanceof TileEntityDragonforgeInput) {
+                    ((TileEntityDragonforgeInput) world.getBlockEntity(pos)).onHitWithFlame();
                     return;
                 }
-                if (center.distanceSq(pos) <= ff) {
-                    if (IafConfig.dragonGriefing != 2 && world.rand.nextFloat() > (float) center.distanceSq(pos) / ff) {
+                if (center.distSqr(pos) <= ff) {
+                    if (IafConfig.dragonGriefing != 2 && world.random.nextFloat() > (float) center.distSqr(pos) / ff) {
                         iceAttackBlock(world, pos);
                     }
                 }
@@ -131,7 +131,7 @@ public class IafDragonDestructionManager {
 
         final float stageDmg = stage * dmgScale;
         final int statusDuration = 50 * stage;
-        world.getEntitiesWithinAABB(
+        world.getEntitiesOfClass(
             LivingEntity.class,
             new AxisAlignedBB(
                 (double) center.getX() - damageRadius,
@@ -142,8 +142,8 @@ public class IafDragonDestructionManager {
                 (double) center.getZ() + damageRadius
             )
         ).stream().forEach(livingEntity -> {
-            if (!DragonUtils.onSameTeam(destroyer, livingEntity) && !destroyer.isEntityEqual(livingEntity) && destroyer.canEntityBeSeen(livingEntity)) {
-                livingEntity.attackEntityFrom(source, stageDmg);
+            if (!DragonUtils.onSameTeam(destroyer, livingEntity) && !destroyer.is(livingEntity) && destroyer.canSee(livingEntity)) {
+                livingEntity.hurt(source, stageDmg);
                 FrozenProperties.setFrozenFor(livingEntity, statusDuration);
             }
         });
@@ -160,31 +160,31 @@ public class IafDragonDestructionManager {
         float dmgScale = (float) IafConfig.dragonAttackDamageLightning;
 
         if (stage <= 3) {
-            BlockPos.getAllInBox(center.add(-1, -1, -1), center.add(1, 1, 1)).forEach(pos -> {
-                if (world.getTileEntity(pos) instanceof TileEntityDragonforgeInput) {
-                    ((TileEntityDragonforgeInput) world.getTileEntity(pos)).onHitWithFlame();
+            BlockPos.betweenClosedStream(center.offset(-1, -1, -1), center.offset(1, 1, 1)).forEach(pos -> {
+                if (world.getBlockEntity(pos) instanceof TileEntityDragonforgeInput) {
+                    ((TileEntityDragonforgeInput) world.getBlockEntity(pos)).onHitWithFlame();
                     return;
                 }
-                if (IafConfig.dragonGriefing != 2 && world.rand.nextBoolean()) {
+                if (IafConfig.dragonGriefing != 2 && world.random.nextBoolean()) {
                     lightningAttackBlock(world, pos);
                 }
             });
         } else {
             int radius = stage == 4 ? 2 : 3;
-            int j = radius + world.rand.nextInt(1);
-            int k = radius + world.rand.nextInt(1);
-            int l = radius + world.rand.nextInt(1);
+            int j = radius + world.random.nextInt(1);
+            int k = radius + world.random.nextInt(1);
+            int l = radius + world.random.nextInt(1);
             float f = (float) (j + k + l) * 0.333F + 0.5F;
             final float ff = f * f;
 
             damageRadius = 2.5F + f * 1.2F;
-            BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(pos -> {
-                if (world.getTileEntity(pos) instanceof TileEntityDragonforgeInput) {
-                    ((TileEntityDragonforgeInput) world.getTileEntity(pos)).onHitWithFlame();
+            BlockPos.betweenClosedStream(center.offset(-j, -k, -l), center.offset(j, k, l)).forEach(pos -> {
+                if (world.getBlockEntity(pos) instanceof TileEntityDragonforgeInput) {
+                    ((TileEntityDragonforgeInput) world.getBlockEntity(pos)).onHitWithFlame();
                     return;
                 }
-                if (center.distanceSq(pos) <= ff) {
-                    if (IafConfig.dragonGriefing != 2 && world.rand.nextFloat() > (float) center.distanceSq(pos) / ff) {
+                if (center.distSqr(pos) <= ff) {
+                    if (IafConfig.dragonGriefing != 2 && world.random.nextFloat() > (float) center.distSqr(pos) / ff) {
                         lightningAttackBlock(world, pos);
                     }
                 }
@@ -192,7 +192,7 @@ public class IafDragonDestructionManager {
         }
 
         final float stageDmg = stage * dmgScale;
-        world.getEntitiesWithinAABB(
+        world.getEntitiesOfClass(
             LivingEntity.class,
             new AxisAlignedBB(
                 (double) center.getX() - damageRadius,
@@ -203,11 +203,11 @@ public class IafDragonDestructionManager {
                 (double) center.getZ() + damageRadius
             )
         ).stream().forEach(livingEntity -> {
-            if (!DragonUtils.onSameTeam(destroyer, livingEntity) && !destroyer.isEntityEqual(livingEntity) && destroyer.canEntityBeSeen(livingEntity)) {
-                livingEntity.attackEntityFrom(source, stageDmg);
-                double d1 = destroyer.getPosX() - livingEntity.getPosX();
-                double d0 = destroyer.getPosZ() - livingEntity.getPosZ();
-                livingEntity.applyKnockback(0.3F, d1, d0);
+            if (!DragonUtils.onSameTeam(destroyer, livingEntity) && !destroyer.is(livingEntity) && destroyer.canSee(livingEntity)) {
+                livingEntity.hurt(source, stageDmg);
+                double d1 = destroyer.getX() - livingEntity.getX();
+                double d0 = destroyer.getZ() - livingEntity.getZ();
+                livingEntity.knockback(0.3F, d1, d0);
             }
         });
     }
@@ -225,21 +225,21 @@ public class IafDragonDestructionManager {
             int l = 2;
 
             if (stage <= 3) {
-                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(pos -> {
-                    if (world.rand.nextFloat() * 3 > center.distanceSq(pos) &&
+                BlockPos.betweenClosedStream(center.offset(-j, -k, -l), center.offset(j, k, l)).forEach(pos -> {
+                    if (world.random.nextFloat() * 3 > center.distSqr(pos) &&
                         !(world.getBlockState(pos).getBlock() instanceof IDragonProof) &&
                         DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
-                        world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                        world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                     }
-                    if (world.rand.nextBoolean()) {
+                    if (world.random.nextBoolean()) {
                         fireAttackBlock(world, pos);
                     }
                 });
             } else {
                 final int radius = stage == 4 ? 2 : 3;
-                j = radius + world.rand.nextInt(2);
-                k = radius + world.rand.nextInt(2);
-                l = radius + world.rand.nextInt(2);
+                j = radius + world.random.nextInt(2);
+                k = radius + world.random.nextInt(2);
+                l = radius + world.random.nextInt(2);
                 final float f = (float) (j + k + l) * 0.333F + 0.5F;
                 final float ff = f * f;
 
@@ -248,8 +248,8 @@ public class IafDragonDestructionManager {
                 j++;
                 k++;
                 l++;
-                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(pos -> {
-                    if (center.distanceSq(pos) <= ff) {
+                BlockPos.betweenClosedStream(center.offset(-j, -k, -l), center.offset(j, k, l)).forEach(pos -> {
+                    if (center.distSqr(pos) <= ff) {
                         fireAttackBlock(world, pos);
                     }
                 });
@@ -257,7 +257,7 @@ public class IafDragonDestructionManager {
 
             final float stageDmg = Math.max(1, stage - 1) * 2F;
             final int statusDuration = 15;
-            world.getEntitiesWithinAABB(
+            world.getEntitiesOfClass(
                 LivingEntity.class,
                 new AxisAlignedBB(
                     (double) center.getX() - j,
@@ -268,9 +268,9 @@ public class IafDragonDestructionManager {
                     (double) center.getZ() + l
                 )
             ).stream().forEach(livingEntity -> {
-                if (!destroyer.isOnSameTeam(livingEntity) && !destroyer.isEntityEqual(livingEntity) && destroyer.canEntityBeSeen(livingEntity)) {
-                    livingEntity.attackEntityFrom(source, stageDmg);
-                    livingEntity.setFire(statusDuration);
+                if (!destroyer.isAlliedTo(livingEntity) && !destroyer.is(livingEntity) && destroyer.canSee(livingEntity)) {
+                    livingEntity.hurt(source, stageDmg);
+                    livingEntity.setSecondsOnFire(statusDuration);
                 }
             });
             if (IafConfig.explosiveDragonBreath)
@@ -291,20 +291,20 @@ public class IafDragonDestructionManager {
             int l = 2;
 
             if (stage <= 3) {
-                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(pos -> {
-                    if (world.rand.nextFloat() * 3 > center.distanceSq(pos) &&
+                BlockPos.betweenClosedStream(center.offset(-j, -k, -l), center.offset(j, k, l)).forEach(pos -> {
+                    if (world.random.nextFloat() * 3 > center.distSqr(pos) &&
                         !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
-                        world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                        world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                     }
-                    if (world.rand.nextBoolean()) {
+                    if (world.random.nextBoolean()) {
                         iceAttackBlock(world, pos);
                     }
                 });
             } else {
                 int radius = stage == 4 ? 2 : 3;
-                j = radius + world.rand.nextInt(2);
-                k = radius + world.rand.nextInt(2);
-                l = radius + world.rand.nextInt(2);
+                j = radius + world.random.nextInt(2);
+                k = radius + world.random.nextInt(2);
+                l = radius + world.random.nextInt(2);
                 final float f = (float) (j + k + l) * 0.333F + 0.5F;
                 final float ff = f * f;
 
@@ -313,8 +313,8 @@ public class IafDragonDestructionManager {
                 j++;
                 k++;
                 l++;
-                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(pos -> {
-                    if (center.distanceSq(pos) <= ff) {
+                BlockPos.betweenClosedStream(center.offset(-j, -k, -l), center.offset(j, k, l)).forEach(pos -> {
+                    if (center.distSqr(pos) <= ff) {
                         iceAttackBlock(world, pos);
                     }
                 });
@@ -322,7 +322,7 @@ public class IafDragonDestructionManager {
 
             final float stageDmg = Math.max(1, stage - 1) * 2F;
             final int statusDuration = 400;
-            world.getEntitiesWithinAABB(
+            world.getEntitiesOfClass(
                 LivingEntity.class,
                 new AxisAlignedBB(
                     (double) center.getX() - j,
@@ -333,8 +333,8 @@ public class IafDragonDestructionManager {
                     (double) center.getZ() + l
                 )
             ).stream().forEach(livingEntity -> {
-                if (!destroyer.isOnSameTeam(livingEntity) && !destroyer.isEntityEqual(livingEntity) && destroyer.canEntityBeSeen(livingEntity)) {
-                    livingEntity.attackEntityFrom(source, stageDmg);
+                if (!destroyer.isAlliedTo(livingEntity) && !destroyer.is(livingEntity) && destroyer.canSee(livingEntity)) {
+                    livingEntity.hurt(source, stageDmg);
                     FrozenProperties.setFrozenFor(livingEntity, statusDuration);
                 }
             });
@@ -357,22 +357,22 @@ public class IafDragonDestructionManager {
             int l = 2;
 
             if (stage <= 3) {
-                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(pos -> {
-                    if (Math.pow(world.rand.nextFloat() * 7F, 2) > center.distanceSq(pos)
+                BlockPos.betweenClosedStream(center.offset(-j, -k, -l), center.offset(j, k, l)).forEach(pos -> {
+                    if (Math.pow(world.random.nextFloat() * 7F, 2) > center.distSqr(pos)
                         && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
-                        world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                        world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                     }
-                    if (Math.pow(world.rand.nextFloat() * 7F, 2) > center.distanceSq(pos)
+                    if (Math.pow(world.random.nextFloat() * 7F, 2) > center.distSqr(pos)
                         && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
                         BlockState transformState = transformBlockLightning(world.getBlockState(pos));
-                        world.setBlockState(pos, transformState);
+                        world.setBlockAndUpdate(pos, transformState);
                     }
                 });
             } else {
                 int radius = stage == 4 ? 2 : 3;
-                j = radius + world.rand.nextInt(2);
-                k = radius + world.rand.nextInt(2);
-                l = radius + world.rand.nextInt(2);
+                j = radius + world.random.nextInt(2);
+                k = radius + world.random.nextInt(2);
+                l = radius + world.random.nextInt(2);
                 float f = (float) (j + k + l) * 0.333F + 0.5F;
                 final float ff = f * f;
 
@@ -381,18 +381,18 @@ public class IafDragonDestructionManager {
                 j++;
                 k++;
                 l++;
-                BlockPos.getAllInBox(center.add(-j, -k, -l), center.add(j, k, l)).forEach(pos -> {
-                    if (center.distanceSq(pos) <= ff) {
+                BlockPos.betweenClosedStream(center.offset(-j, -k, -l), center.offset(j, k, l)).forEach(pos -> {
+                    if (center.distSqr(pos) <= ff) {
                         if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
                             BlockState transformState = transformBlockLightning(world.getBlockState(pos));
-                            world.setBlockState(pos, transformState);
+                            world.setBlockAndUpdate(pos, transformState);
                         }
                     }
                 });
             }
 
             final float stageDmg = Math.max(1, stage - 1) * 2F;
-            world.getEntitiesWithinAABB(
+            world.getEntitiesOfClass(
                 LivingEntity.class,
                 new AxisAlignedBB(
                     (double) center.getX() - j,
@@ -403,11 +403,11 @@ public class IafDragonDestructionManager {
                     (double) center.getZ() + l
                 )
             ).stream().forEach(livingEntity -> {
-                if (!destroyer.isOnSameTeam(livingEntity) && !destroyer.isEntityEqual(livingEntity) && destroyer.canEntityBeSeen(livingEntity)) {
-                    livingEntity.attackEntityFrom(source, stageDmg);
-                    double d1 = destroyer.getPosX() - livingEntity.getPosX();
-                    double d0 = destroyer.getPosZ() - livingEntity.getPosZ();
-                    livingEntity.applyKnockback(0.9F, d1, d0);
+                if (!destroyer.isAlliedTo(livingEntity) && !destroyer.is(livingEntity) && destroyer.canSee(livingEntity)) {
+                    livingEntity.hurt(source, stageDmg);
+                    double d1 = destroyer.getX() - livingEntity.getX();
+                    double d0 = destroyer.getZ() - livingEntity.getZ();
+                    livingEntity.knockback(0.9F, d1, d0);
                 }
             });
             if (IafConfig.explosiveDragonBreath)
@@ -418,8 +418,8 @@ public class IafDragonDestructionManager {
     private static void causeExplosion(World world, BlockPos center, EntityDragonBase destroyer, DamageSource source, int stage) {
         Explosion.Mode mode = ForgeEventFactory.getMobGriefingEvent(world, destroyer) ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
         BlockLaunchExplosion explosion = new BlockLaunchExplosion(world, destroyer, source, center.getX(), center.getY(), center.getZ(), Math.min(2, stage - 2), mode);
-        explosion.doExplosionA();
-        explosion.doExplosionB(true);
+        explosion.explode();
+        explosion.finalizeExplosion(true);
     }
 
 
@@ -427,11 +427,11 @@ public class IafDragonDestructionManager {
         if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
             BlockState transformState = transformBlockFire(world.getBlockState(pos));
             if (transformState.getBlock() != world.getBlockState(pos).getBlock())
-                world.setBlockState(pos, transformState);
-            if (world.rand.nextBoolean() && transformState.getMaterial().isSolid() &&
-                world.getFluidState(pos.up()).isEmpty() && !world.getBlockState(pos.up()).isSolid() &&
-                world.getBlockState(pos).isSolid() && DragonUtils.canDragonBreak(world.getBlockState(pos.up()).getBlock())) {
-                world.setBlockState(pos.up(), Blocks.FIRE.getDefaultState());
+                world.setBlockAndUpdate(pos, transformState);
+            if (world.random.nextBoolean() && transformState.getMaterial().isSolid() &&
+                world.getFluidState(pos.above()).isEmpty() && !world.getBlockState(pos.above()).canOcclude() &&
+                world.getBlockState(pos).canOcclude() && DragonUtils.canDragonBreak(world.getBlockState(pos.above()).getBlock())) {
+                world.setBlockAndUpdate(pos.above(), Blocks.FIRE.defaultBlockState());
             }
         }
     }
@@ -440,11 +440,11 @@ public class IafDragonDestructionManager {
         if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
             BlockState transformState = transformBlockIce(world.getBlockState(pos));
             if (transformState.getBlock() != world.getBlockState(pos).getBlock())
-                world.setBlockState(pos, transformState);
-            if (world.rand.nextInt(9) == 0 && transformState.getMaterial().isSolid() &&
-                world.getFluidState(pos.up()).isEmpty() && !world.getBlockState(pos.up()).isSolid() &&
-                world.getBlockState(pos).isSolid() && DragonUtils.canDragonBreak(world.getBlockState(pos.up()).getBlock())) {
-                world.setBlockState(pos.up(), IafBlockRegistry.DRAGON_ICE_SPIKES.getDefaultState());
+                world.setBlockAndUpdate(pos, transformState);
+            if (world.random.nextInt(9) == 0 && transformState.getMaterial().isSolid() &&
+                world.getFluidState(pos.above()).isEmpty() && !world.getBlockState(pos.above()).canOcclude() &&
+                world.getBlockState(pos).canOcclude() && DragonUtils.canDragonBreak(world.getBlockState(pos.above()).getBlock())) {
+                world.setBlockAndUpdate(pos.above(), IafBlockRegistry.DRAGON_ICE_SPIKES.defaultBlockState());
             }
         }
     }
@@ -453,16 +453,16 @@ public class IafDragonDestructionManager {
         if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
             BlockState transformState = transformBlockLightning(world.getBlockState(pos));
             if (transformState.getBlock() != world.getBlockState(pos).getBlock()) {
-                world.setBlockState(pos, transformState);
+                world.setBlockAndUpdate(pos, transformState);
             }
         }
     }
 
     private static void destroyBlocks(World world, BlockPos center, int x, int y, int z, double radius2) {
-        BlockPos.getAllInBox(center.add(-x, -y, -z), center.add(x, y, z)).forEach(pos -> {
-            if (center.distanceSq(pos) <= radius2) {
-                if (world.rand.nextFloat() * 3 > (float) center.distanceSq(pos) / radius2 && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
-                    world.setBlockState(pos, Blocks.AIR.getDefaultState());
+        BlockPos.betweenClosedStream(center.offset(-x, -y, -z), center.offset(x, y, z)).forEach(pos -> {
+            if (center.distSqr(pos) <= radius2) {
+                if (world.random.nextFloat() * 3 > (float) center.distSqr(pos) / radius2 && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
+                    world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                 }
             }
         });
@@ -470,67 +470,67 @@ public class IafDragonDestructionManager {
 
     public static BlockState transformBlockFire(BlockState in) {
         if (in.getBlock() instanceof SpreadableSnowyDirtBlock) {
-            return IafBlockRegistry.CHARRED_GRASS.getDefaultState().with(BlockReturningState.REVERTS, true);
-        } else if (in.getMaterial() == Material.EARTH && in.getBlock() == Blocks.DIRT) {
-            return IafBlockRegistry.CHARRED_DIRT.getDefaultState().with(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.CHARRED_GRASS.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+        } else if (in.getMaterial() == Material.DIRT && in.getBlock() == Blocks.DIRT) {
+            return IafBlockRegistry.CHARRED_DIRT.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.SAND && in.getBlock() == Blocks.GRAVEL) {
-            return IafBlockRegistry.CHARRED_GRAVEL.getDefaultState().with(BlockFallingReturningState.REVERTS, true);
-        } else if (in.getMaterial() == Material.ROCK && (in.getBlock() == Blocks.COBBLESTONE || in.getBlock().getTranslationKey().contains("cobblestone"))) {
-            return IafBlockRegistry.CHARRED_COBBLESTONE.getDefaultState().with(BlockReturningState.REVERTS, true);
-        } else if (in.getMaterial() == Material.ROCK && in.getBlock() != IafBlockRegistry.CHARRED_COBBLESTONE) {
-            return IafBlockRegistry.CHARRED_STONE.getDefaultState().with(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.CHARRED_GRAVEL.defaultBlockState().setValue(BlockFallingReturningState.REVERTS, true);
+        } else if (in.getMaterial() == Material.STONE && (in.getBlock() == Blocks.COBBLESTONE || in.getBlock().getDescriptionId().contains("cobblestone"))) {
+            return IafBlockRegistry.CHARRED_COBBLESTONE.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+        } else if (in.getMaterial() == Material.STONE && in.getBlock() != IafBlockRegistry.CHARRED_COBBLESTONE) {
+            return IafBlockRegistry.CHARRED_STONE.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
         } else if (in.getBlock() == Blocks.GRASS_PATH) {
-            return IafBlockRegistry.CHARRED_GRASS_PATH.getDefaultState().with(BlockCharedPath.REVERTS, true);
+            return IafBlockRegistry.CHARRED_GRASS_PATH.defaultBlockState().setValue(BlockCharedPath.REVERTS, true);
         } else if (in.getMaterial() == Material.WOOD) {
-            return IafBlockRegistry.ASH.getDefaultState();
-        } else if (in.getMaterial() == Material.LEAVES || in.getMaterial() == Material.PLANTS || in.getBlock() == Blocks.SNOW) {
-            return Blocks.AIR.getDefaultState();
+            return IafBlockRegistry.ASH.defaultBlockState();
+        } else if (in.getMaterial() == Material.LEAVES || in.getMaterial() == Material.PLANT || in.getBlock() == Blocks.SNOW) {
+            return Blocks.AIR.defaultBlockState();
         }
         return in;
     }
 
     public static BlockState transformBlockIce(BlockState in) {
         if (in.getBlock() instanceof SpreadableSnowyDirtBlock) {
-            return IafBlockRegistry.FROZEN_GRASS.getDefaultState().with(BlockReturningState.REVERTS, true);
-        } else if (in.getMaterial() == Material.EARTH && in.getBlock() == Blocks.DIRT || in.getMaterial() == Material.SNOW_BLOCK) {
-            return IafBlockRegistry.FROZEN_DIRT.getDefaultState().with(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.FROZEN_GRASS.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+        } else if (in.getMaterial() == Material.DIRT && in.getBlock() == Blocks.DIRT || in.getMaterial() == Material.SNOW) {
+            return IafBlockRegistry.FROZEN_DIRT.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.SAND && in.getBlock() == Blocks.GRAVEL) {
-            return IafBlockRegistry.FROZEN_GRAVEL.getDefaultState().with(BlockFallingReturningState.REVERTS, true);
+            return IafBlockRegistry.FROZEN_GRAVEL.defaultBlockState().setValue(BlockFallingReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.SAND && in.getBlock() != Blocks.GRAVEL) {
             return in;
-        } else if (in.getMaterial() == Material.ROCK && (in.getBlock() == Blocks.COBBLESTONE || in.getBlock().getTranslationKey().contains("cobblestone"))) {
-            return IafBlockRegistry.FROZEN_COBBLESTONE.getDefaultState().with(BlockReturningState.REVERTS, true);
-        } else if (in.getMaterial() == Material.ROCK && in.getBlock() != IafBlockRegistry.FROZEN_COBBLESTONE) {
-            return IafBlockRegistry.FROZEN_STONE.getDefaultState().with(BlockReturningState.REVERTS, true);
+        } else if (in.getMaterial() == Material.STONE && (in.getBlock() == Blocks.COBBLESTONE || in.getBlock().getDescriptionId().contains("cobblestone"))) {
+            return IafBlockRegistry.FROZEN_COBBLESTONE.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+        } else if (in.getMaterial() == Material.STONE && in.getBlock() != IafBlockRegistry.FROZEN_COBBLESTONE) {
+            return IafBlockRegistry.FROZEN_STONE.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
         } else if (in.getBlock() == Blocks.GRASS_PATH) {
-            return IafBlockRegistry.FROZEN_GRASS_PATH.getDefaultState().with(BlockCharedPath.REVERTS, true);
+            return IafBlockRegistry.FROZEN_GRASS_PATH.defaultBlockState().setValue(BlockCharedPath.REVERTS, true);
         } else if (in.getMaterial() == Material.WOOD) {
-            return IafBlockRegistry.FROZEN_SPLINTERS.getDefaultState();
+            return IafBlockRegistry.FROZEN_SPLINTERS.defaultBlockState();
         } else if (in.getMaterial() == Material.WATER) {
-            return Blocks.ICE.getDefaultState();
-        } else if (in.getMaterial() == Material.LEAVES || in.getMaterial() == Material.PLANTS || in.getBlock() == Blocks.SNOW) {
-            return Blocks.AIR.getDefaultState();
+            return Blocks.ICE.defaultBlockState();
+        } else if (in.getMaterial() == Material.LEAVES || in.getMaterial() == Material.PLANT || in.getBlock() == Blocks.SNOW) {
+            return Blocks.AIR.defaultBlockState();
         }
         return in;
     }
 
     public static BlockState transformBlockLightning(BlockState in) {
         if (in.getBlock() instanceof SpreadableSnowyDirtBlock) {
-            return IafBlockRegistry.CRACKLED_GRASS.getDefaultState().with(BlockReturningState.REVERTS, true);
-        } else if (in.getMaterial() == Material.EARTH && in.getBlock() == Blocks.DIRT) {
-            return IafBlockRegistry.CRACKLED_DIRT.getDefaultState().with(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.CRACKLED_GRASS.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+        } else if (in.getMaterial() == Material.DIRT && in.getBlock() == Blocks.DIRT) {
+            return IafBlockRegistry.CRACKLED_DIRT.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.SAND && in.getBlock() == Blocks.GRAVEL) {
-            return IafBlockRegistry.CRACKLED_GRAVEL.getDefaultState().with(BlockFallingReturningState.REVERTS, true);
-        } else if (in.getMaterial() == Material.ROCK && (in.getBlock() == Blocks.COBBLESTONE || in.getBlock().getTranslationKey().contains("cobblestone"))) {
-            return IafBlockRegistry.CRACKLED_COBBLESTONE.getDefaultState().with(BlockReturningState.REVERTS, true);
-        } else if (in.getMaterial() == Material.ROCK && in.getBlock() != IafBlockRegistry.CRACKLED_COBBLESTONE) {
-            return IafBlockRegistry.CRACKLED_STONE.getDefaultState().with(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.CRACKLED_GRAVEL.defaultBlockState().setValue(BlockFallingReturningState.REVERTS, true);
+        } else if (in.getMaterial() == Material.STONE && (in.getBlock() == Blocks.COBBLESTONE || in.getBlock().getDescriptionId().contains("cobblestone"))) {
+            return IafBlockRegistry.CRACKLED_COBBLESTONE.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+        } else if (in.getMaterial() == Material.STONE && in.getBlock() != IafBlockRegistry.CRACKLED_COBBLESTONE) {
+            return IafBlockRegistry.CRACKLED_STONE.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
         } else if (in.getBlock() == Blocks.GRASS_PATH) {
-            return IafBlockRegistry.CRACKLED_GRASS_PATH.getDefaultState().with(BlockCharedPath.REVERTS, true);
+            return IafBlockRegistry.CRACKLED_GRASS_PATH.defaultBlockState().setValue(BlockCharedPath.REVERTS, true);
         } else if (in.getMaterial() == Material.WOOD) {
-            return IafBlockRegistry.ASH.getDefaultState();
-        } else if (in.getMaterial() == Material.LEAVES || in.getMaterial() == Material.PLANTS || in.getBlock() == Blocks.SNOW) {
-            return Blocks.AIR.getDefaultState();
+            return IafBlockRegistry.ASH.defaultBlockState();
+        } else if (in.getMaterial() == Material.LEAVES || in.getMaterial() == Material.PLANT || in.getBlock() == Blocks.SNOW) {
+            return Blocks.AIR.defaultBlockState();
         }
         return in;
     }

@@ -32,13 +32,13 @@ public abstract class AbstractAdvancedPathNavigate extends GroundPathNavigator {
     /**
      * The navigators node costs
      */
-    private PathingOptions pathingOptions = new PathingOptions();
+    private final PathingOptions pathingOptions = new PathingOptions();
 
     public AbstractAdvancedPathNavigate(
             final MobEntity entityLiving,
             final World worldIn) {
         super(entityLiving, worldIn);
-        this.ourEntity = entity;
+        this.ourEntity = mob;
     }
 
     /**

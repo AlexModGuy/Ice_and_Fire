@@ -8,7 +8,6 @@ import com.github.alexthe666.iceandfire.entity.EntityHydra;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
@@ -27,59 +26,59 @@ public class ModelHydraBody extends ModelDragonBase<EntityHydra> {
     public AdvancedModelBox TailSpike1;
     public AdvancedModelBox TailSpike2;
     public AdvancedModelBox TailSpike3;
-    private ModelAnimator animator;
+    private final ModelAnimator animator;
 
     public ModelHydraBody() {
-        this.textureWidth = 256;
-        this.textureHeight = 128;
+        this.texWidth = 256;
+        this.texHeight = 128;
         this.BodySpike1 = new AdvancedModelBox(this, 0, 0);
-        this.BodySpike1.setRotationPoint(0.0F, -1.2F, 3.0F);
+        this.BodySpike1.setPos(0.0F, -1.2F, 3.0F);
         this.BodySpike1.addBox(-0.5F, -0.5F, 0.0F, 1, 1, 4, 0.0F);
         this.setRotateAngle(BodySpike1, 0.6433283622851098F, -0.0F, 0.0F);
         this.Tail3 = new AdvancedModelBox(this, 70, 15);
-        this.Tail3.setRotationPoint(0.0F, -0.1F, 7.7F);
+        this.Tail3.setPos(0.0F, -0.1F, 7.7F);
         this.Tail3.addBox(-1.5F, -1.3F, 0.7F, 3, 4, 9, 0.0F);
         this.setRotateAngle(Tail3, 0.091106186954104F, 0.0F, 0.0F);
         this.Tail1 = new AdvancedModelBox(this, 69, 34);
-        this.Tail1.setRotationPoint(0.0F, -1.2F, 7.3F);
+        this.Tail1.setPos(0.0F, -1.2F, 7.3F);
         this.Tail1.addBox(-2.5F, -2.0F, 1.0F, 5, 5, 8, 0.0F);
         this.setRotateAngle(Tail1, 0.045553093477052F, 0.0F, 0.0F);
         this.TailSpike2 = new AdvancedModelBox(this, 0, 0);
-        this.TailSpike2.setRotationPoint(0.0F, 0.0F, 3.0F);
+        this.TailSpike2.setPos(0.0F, 0.0F, 3.0F);
         this.TailSpike2.addBox(-0.5F, -0.5F, 0.0F, 1, 1, 4, 0.0F);
         this.setRotateAngle(TailSpike2, 0.6433283622851098F, -0.0F, 0.0F);
         this.Tail4 = new AdvancedModelBox(this, 97, 16);
-        this.Tail4.setRotationPoint(0.0F, 0.3F, 8.0F);
+        this.Tail4.setPos(0.0F, 0.3F, 8.0F);
         this.Tail4.addBox(-1.52F, -1.3F, 0.8F, 3, 3, 9, 0.0F);
         this.Tail5 = new AdvancedModelBox(this, 42, 17);
-        this.Tail5.setRotationPoint(0.0F, -0.4F, 7.5F);
+        this.Tail5.setPos(0.0F, -0.4F, 7.5F);
         this.Tail5.addBox(-1.0F, -0.4F, 1.0F, 2, 2, 8, 0.0F);
         this.setRotateAngle(Tail5, 0.091106186954104F, 0.0F, 0.0F);
         this.TailSpike3 = new AdvancedModelBox(this, 40, 0);
-        this.TailSpike3.setRotationPoint(0.0F, 0.0F, 7.0F);
+        this.TailSpike3.setPos(0.0F, 0.0F, 7.0F);
         this.TailSpike3.addBox(-0.5F, -0.5F, 0.0F, 1, 1, 3, 0.0F);
         this.setRotateAngle(TailSpike3, 0.6433283622851098F, -0.0F, 0.0F);
         this.BodySpike3 = new AdvancedModelBox(this, 0, 0);
-        this.BodySpike3.setRotationPoint(0.0F, -3.1F, 2.5F);
+        this.BodySpike3.setPos(0.0F, -3.1F, 2.5F);
         this.BodySpike3.addBox(-0.5F, -0.5F, 0.0F, 1, 1, 4, 0.0F);
         this.setRotateAngle(BodySpike3, 0.6433283622851098F, -0.0F, 0.0F);
         this.BodySpike2 = new AdvancedModelBox(this, 40, 0);
-        this.BodySpike2.setRotationPoint(0.0F, -1.2F, 7.0F);
+        this.BodySpike2.setPos(0.0F, -1.2F, 7.0F);
         this.BodySpike2.addBox(-0.5F, -0.5F, 0.0F, 1, 1, 3, 0.0F);
         this.setRotateAngle(BodySpike2, 0.6433283622851098F, -0.0F, 0.0F);
         this.BodyLower = new AdvancedModelBox(this, 103, 47);
-        this.BodyLower.setRotationPoint(0.0F, 2.2F, 8.1F);
+        this.BodyLower.setPos(0.0F, 2.2F, 8.1F);
         this.BodyLower.addBox(-3.5F, -3.5F, 0.0F, 7, 6, 9, 0.0F);
         this.setRotateAngle(BodyLower, -0.091106186954104F, -0.0F, 0.0F);
         this.TailSpike1 = new AdvancedModelBox(this, 40, 0);
-        this.TailSpike1.setRotationPoint(0.0F, -0.6F, 4.2F);
+        this.TailSpike1.setPos(0.0F, -0.6F, 4.2F);
         this.TailSpike1.addBox(-0.5F, -0.5F, 0.0F, 1, 1, 3, 0.0F);
         this.setRotateAngle(TailSpike1, 0.6433283622851098F, -0.0F, 0.0F);
         this.Tail2 = new AdvancedModelBox(this, 95, 34);
-        this.Tail2.setRotationPoint(0.0F, 0.5F, 7.4F);
+        this.Tail2.setPos(0.0F, 0.5F, 7.4F);
         this.Tail2.addBox(-2.01F, -1.6F, 0.9F, 4, 4, 8, 0.0F);
         this.BodyUpper = new AdvancedModelBox(this, 67, 47);
-        this.BodyUpper.setRotationPoint(0.0F, 19.1F, -9.7F);
+        this.BodyUpper.setPos(0.0F, 19.1F, -9.7F);
         this.BodyUpper.addBox(-4.5F, -1.8F, 0.0F, 9, 7, 9, 0.0F);
         this.BodyUpper.addChild(this.BodySpike1);
         this.Tail2.addChild(this.Tail3);
@@ -102,7 +101,7 @@ public class ModelHydraBody extends ModelDragonBase<EntityHydra> {
         animator.update(entity);
     }
 
-    public void setRotationAngles(EntityHydra entity, float f, float f1, float f2, float f3, float f4) {
+    public void setupAnim(EntityHydra entity, float f, float f1, float f2, float f3, float f4) {
         animate(entity, f, f1, f2, f3, f4, 1);
         float speed_walk = 0.6F;
         float speed_idle = 0.05F;
@@ -125,13 +124,13 @@ public class ModelHydraBody extends ModelDragonBase<EntityHydra> {
     @Override
     public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
         this.resetToDefaultPose();
-        this.render(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 
         this.resetToDefaultPose();
     }
 
     @Override
-    public Iterable<ModelRenderer> getParts() {
+    public Iterable<ModelRenderer> parts() {
         return ImmutableList.of(BodyUpper);
     }
 

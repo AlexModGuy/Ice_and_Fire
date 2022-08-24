@@ -1,17 +1,16 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
-import java.util.Random;
-import java.util.stream.Collectors;
-
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.Heightmap;
 
+import java.util.Random;
+import java.util.stream.Collectors;
+
 public class WorldGenRoostGoldPile {
-    private Block block;
+    private final Block block;
 
     public WorldGenRoostGoldPile(Block block) {
         this.block = block;
@@ -24,15 +23,15 @@ public class WorldGenRoostGoldPile {
             int j = radius - i;
             int l = radius - i;
             float f = (float) (j + l) * 0.333F + 0.5F;
-            BlockPos up = position.up(i);
-            for (BlockPos blockpos : BlockPos.getAllInBox(up.add(-j, 0, -l), up.add(j, 0, l)).map(BlockPos::toImmutable).collect(Collectors.toSet())) {
-                if (blockpos.distanceSq(position) <= (double) (f * f)) {
-                    blockpos = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos);
+            BlockPos up = position.above(i);
+            for (BlockPos blockpos : BlockPos.betweenClosedStream(up.offset(-j, 0, -l), up.offset(j, 0, l)).map(BlockPos::immutable).collect(Collectors.toSet())) {
+                if (blockpos.distSqr(position) <= (double) (f * f)) {
+                    blockpos = worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, blockpos);
                     if (block instanceof BlockGoldPile) {
-                        if (worldIn.isAirBlock(blockpos)) {
-                            worldIn.setBlockState(blockpos, block.getDefaultState().with(BlockGoldPile.LAYERS, 1 + rand.nextInt(7)), 2);
-                            if (worldIn.getBlockState(blockpos.down()).getBlock() instanceof BlockGoldPile) {
-                                worldIn.setBlockState(blockpos.down(), block.getDefaultState().with(BlockGoldPile.LAYERS, 8), 2);
+                        if (worldIn.isEmptyBlock(blockpos)) {
+                            worldIn.setBlock(blockpos, block.defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + rand.nextInt(7)), 2);
+                            if (worldIn.getBlockState(blockpos.below()).getBlock() instanceof BlockGoldPile) {
+                                worldIn.setBlock(blockpos.below(), block.defaultBlockState().setValue(BlockGoldPile.LAYERS, 8), 2);
                             }
                         }
                     }

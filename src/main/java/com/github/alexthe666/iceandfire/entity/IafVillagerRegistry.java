@@ -38,22 +38,22 @@ import java.util.stream.Collectors;
 public class IafVillagerRegistry {
 
     private static final String[] VILLAGE_TYPES = new String[]{"plains", "desert", "snowy", "savanna", "taiga"};
-    private static final StructureProcessorList HOUSE_PROCESSOR = WorldGenRegistries.register(WorldGenRegistries.STRUCTURE_PROCESSOR_LIST, new ResourceLocation("iceandfire:village_house_processor"), genVillageHouseProcessor());
+    private static final StructureProcessorList HOUSE_PROCESSOR = WorldGenRegistries.register(WorldGenRegistries.PROCESSOR_LIST, new ResourceLocation("iceandfire:village_house_processor"), genVillageHouseProcessor());
     public static PointOfInterestType LECTERN_POI;
     public static VillagerProfession SCRIBE;
 
     private static StructureProcessorList genVillageHouseProcessor() {
-        RuleStructureProcessor mossify = new RuleStructureProcessor(ImmutableList.of(new RuleEntry(new RandomBlockMatchRuleTest(Blocks.COBBLESTONE, 0.1F), AlwaysTrueRuleTest.INSTANCE, Blocks.MOSSY_COBBLESTONE.getDefaultState())));
+        RuleStructureProcessor mossify = new RuleStructureProcessor(ImmutableList.of(new RuleEntry(new RandomBlockMatchRuleTest(Blocks.COBBLESTONE, 0.1F), AlwaysTrueRuleTest.INSTANCE, Blocks.MOSSY_COBBLESTONE.defaultBlockState())));
         return new StructureProcessorList(ImmutableList.of(mossify, new VillageHouseProcessor()));
     }
 
     public static void setup() {
-        if(IafConfig.villagerHouseWeight > 0){
-            PlainsVillagePools.init();
-            SnowyVillagePools.init();
-            SavannaVillagePools.init();
-            DesertVillagePools.init();
-            TaigaVillagePools.init();
+        if(IafConfig.villagerHouseWeight > 0) {
+            PlainsVillagePools.bootstrap();
+            SnowyVillagePools.bootstrap();
+            SavannaVillagePools.bootstrap();
+            DesertVillagePools.bootstrap();
+            TaigaVillagePools.bootstrap();
 
             for (String type : VILLAGE_TYPES) {
                 addStructureToPool(new ResourceLocation("village/" + type + "/houses"), new ResourceLocation("village/" + type + "/terminators"), new ResourceLocation("iceandfire", "village/" + type + "_scriber_1"), IafConfig.villagerHouseWeight);
@@ -68,13 +68,13 @@ public class IafVillagerRegistry {
 
     @SubscribeEvent
     public static void registerPointOfInterests(final RegistryEvent.Register<PointOfInterestType> event) {
-        event.getRegistry().register(LECTERN_POI = new PointOfInterestType("scribe", ImmutableSet.copyOf(IafBlockRegistry.LECTERN.getStateContainer().getValidStates()), 1, 1).setRegistryName(IceAndFire.MODID, "scribe"));
+        event.getRegistry().register(LECTERN_POI = new PointOfInterestType("scribe", ImmutableSet.copyOf(IafBlockRegistry.LECTERN.getStateDefinition().getPossibleStates()), 1, 1).setRegistryName(IceAndFire.MODID, "scribe"));
         PointOfInterestType.registerBlockStates(LECTERN_POI);
     }
 
     @SubscribeEvent
     public static void registerVillagerProfessions(final RegistryEvent.Register<VillagerProfession> event) {
-        event.getRegistry().register(SCRIBE = new VillagerProfession("scribe", LECTERN_POI, ImmutableSet.of(), ImmutableSet.of(), SoundEvents.ENTITY_VILLAGER_WORK_LIBRARIAN).setRegistryName(IceAndFire.MODID, "scribe"));
+        event.getRegistry().register(SCRIBE = new VillagerProfession("scribe", LECTERN_POI, ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_LIBRARIAN).setRegistryName(IceAndFire.MODID, "scribe"));
     }
 
     public static void addScribeTrades(Int2ObjectMap<List<VillagerTrades.ITrade>> trades) {
@@ -112,11 +112,11 @@ public class IafVillagerRegistry {
     }
 
     private static void addStructureToPool(ResourceLocation pool, ResourceLocation terminatorPool, ResourceLocation toAdd, int weight) {
-        JigsawPattern old = WorldGenRegistries.JIGSAW_POOL.getOrDefault(pool);
-        List<JigsawPiece> shuffled = old != null ? old.getShuffledPieces(new Random()) : ImmutableList.of();
+        JigsawPattern old = WorldGenRegistries.TEMPLATE_POOL.get(pool);
+        List<JigsawPiece> shuffled = old != null ? old.getShuffledTemplates(new Random()) : ImmutableList.of();
         List<Pair<JigsawPiece, Integer>> newPieces = shuffled.stream().map(p -> new Pair<>(p, 1)).collect(Collectors.toList());
         newPieces.add(new Pair<>(new LegacySingleJigsawPiece(Either.left(toAdd), () -> HOUSE_PROCESSOR, JigsawPattern.PlacementBehaviour.RIGID), weight));
-        JigsawPatternRegistry.func_244094_a(new JigsawPattern(pool, terminatorPool, newPieces));
+        JigsawPatternRegistry.register(new JigsawPattern(pool, terminatorPool, newPieces));
     }
 
 }

@@ -1,17 +1,16 @@
 package com.github.alexthe666.iceandfire.message;
 
-import java.util.function.Supplier;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class MessageMyrmexSettings {
 
@@ -50,14 +49,14 @@ public class MessageMyrmexSettings {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (player.world != null) {
-                    Entity entity = player.world.getEntityByID(message.queenID);
+                if (player.level != null) {
+                    Entity entity = player.level.getEntity(message.queenID);
                     if (entity != null && entity instanceof EntityMyrmexBase) {
                         MyrmexHive hive = ((EntityMyrmexBase) entity).getHive();
-                        if(hive != null){
+                        if (hive != null) {
                             hive.reproduces = message.reproduces;
-                            if(message.deleteRoom){
-                                hive.removeRoom(BlockPos.fromLong(message.roomToDelete));
+                            if (message.deleteRoom) {
+                                hive.removeRoom(BlockPos.of(message.roomToDelete));
                             }
                         }
                     }

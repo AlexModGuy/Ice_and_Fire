@@ -12,8 +12,8 @@ public class EntityAIWatchClosestIgnoreRider extends LookAtGoal {
         super(entity, type, dist);
     }
 
-    public boolean shouldExecute() {
-        return super.shouldExecute() && closestEntity != null && isRidingOrBeingRiddenBy(closestEntity, entity);
+    public boolean canUse() {
+        return super.canUse() && lookAt != null && isRidingOrBeingRiddenBy(lookAt, entity);
     }
 
     public static boolean isRidingOrBeingRiddenBy(Entity first, Entity entityIn) {

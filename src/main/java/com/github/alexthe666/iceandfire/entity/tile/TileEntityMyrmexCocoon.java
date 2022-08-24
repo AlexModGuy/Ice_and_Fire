@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -20,6 +18,8 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import javax.annotation.Nullable;
+
 public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
     private NonNullList<ItemStack> chestContents = NonNullList.withSize(18, ItemStack.EMPTY);
@@ -29,7 +29,7 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return 18;
     }
 
@@ -45,19 +45,19 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
 
     @Override
-    public void read(BlockState bs, CompoundNBT compound) {
-        super.read(bs, compound);
-        this.chestContents = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
+    public void load(BlockState bs, CompoundNBT compound) {
+        super.load(bs, compound);
+        this.chestContents = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 
-        if (!this.checkLootAndRead(compound)) {
+        if (!this.tryLoadLootTable(compound)) {
             ItemStackHelper.loadAllItems(compound, this.chestContents);
         }
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
-        if (!this.checkLootAndWrite(compound)) {
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
+        if (!this.trySaveLootTable(compound)) {
             ItemStackHelper.saveAllItems(compound, this.chestContents);
         }
 
@@ -71,18 +71,18 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
 
     @Override
     protected Container createMenu(int id, PlayerInventory player) {
-        return new ChestContainer(ContainerType.GENERIC_9X2, id, player, this, 2);
+        return new ChestContainer(ContainerType.GENERIC_9x2, id, player, this, 2);
     }
 
     @Nullable
     @Override
     public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
-        return new ChestContainer(ContainerType.GENERIC_9X2, id, playerInventory, this, 2);
+        return new ChestContainer(ContainerType.GENERIC_9x2, id, playerInventory, this, 2);
     }
 
 
     @Override
-    public int getInventoryStackLimit() {
+    public int getMaxStackSize() {
         return 64;
     }
 
@@ -98,35 +98,35 @@ public class TileEntityMyrmexCocoon extends LockableLootTileEntity {
     }
 
     @Override
-    public void openInventory(PlayerEntity player) {
-        this.fillWithLoot(null);
-        player.world.playSound(this.pos.getX(), this.pos.getY(), this.pos.getZ(), SoundEvents.ENTITY_SLIME_JUMP, SoundCategory.BLOCKS, 1, 1, false);
+    public void startOpen(PlayerEntity player) {
+        this.unpackLootTable(null);
+        player.level.playLocalSound(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), SoundEvents.SLIME_JUMP, SoundCategory.BLOCKS, 1, 1, false);
     }
 
     @Override
-    public void closeInventory(PlayerEntity player) {
-        this.fillWithLoot(null);
-        player.world.playSound(this.pos.getX(), this.pos.getY(), this.pos.getZ(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.BLOCKS, 1, 1, false);
+    public void stopOpen(PlayerEntity player) {
+        this.unpackLootTable(null);
+        player.level.playLocalSound(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), SoundEvents.SLIME_SQUISH, SoundCategory.BLOCKS, 1, 1, false);
     }
 
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+        return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        read(this.getBlockState(), packet.getNbtCompound());
+        load(this.getBlockState(), packet.getTag());
     }
 
     @Override
     public CompoundNBT getUpdateTag() {
-        return this.write(new CompoundNBT());
+        return this.save(new CompoundNBT());
     }
 
     public boolean isFull(ItemStack heldStack) {
         for (ItemStack itemstack : chestContents) {
-            if (itemstack.isEmpty() || heldStack != null && !heldStack.isEmpty() && itemstack.isItemEqual(heldStack) && itemstack.getCount() + heldStack.getCount() < itemstack.getMaxStackSize()) {
+            if (itemstack.isEmpty() || heldStack != null && !heldStack.isEmpty() && itemstack.sameItem(heldStack) && itemstack.getCount() + heldStack.getCount() < itemstack.getMaxStackSize()) {
                 return false;
             }
         }

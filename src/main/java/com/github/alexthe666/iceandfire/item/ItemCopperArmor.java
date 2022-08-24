@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 public class ItemCopperArmor extends ArmorItem {
 
     public ItemCopperArmor(IArmorMaterial material, EquipmentSlotType slot, String name) {
-        super(material, slot, new Item.Properties().group(IceAndFire.TAB_ITEMS));
+        super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.setRegistryName(IceAndFire.MODID, name);
     }
 

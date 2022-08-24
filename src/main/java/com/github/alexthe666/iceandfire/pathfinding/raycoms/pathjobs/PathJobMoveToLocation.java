@@ -2,9 +2,9 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs;
 /*
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Node;
-
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.pathfinding.Path;
@@ -69,7 +69,7 @@ public class PathJobMoveToLocation extends AbstractPathJob {
 
     @Override
     protected double computeHeuristic(final BlockPos pos) {
-        return Math.sqrt(destination.distanceSq(pos));
+        return Math.sqrt(destination.distSqr(pos));
     }
 
     /**
@@ -87,9 +87,9 @@ public class PathJobMoveToLocation extends AbstractPathJob {
         }
 
         if (n.pos.getY() == destination.getY() - 1) {
-            return destination.withinDistance(new Vector3i(n.pos.getX(), destination.getY(), n.pos.getZ()), DESTINATION_SLACK_ADJACENT);
+            return destination.closerThan(new Vector3i(n.pos.getX(), destination.getY(), n.pos.getZ()), DESTINATION_SLACK_ADJACENT);
         }
-        return destination.withinDistance(n.pos, DESTINATION_SLACK_ADJACENT);
+        return destination.closerThan(n.pos, DESTINATION_SLACK_ADJACENT);
     }
 
     /**
@@ -101,6 +101,6 @@ public class PathJobMoveToLocation extends AbstractPathJob {
     @Override
     protected double getNodeResultScore(final Node n) {
         //  For Result Score lower is better
-        return destination.distanceSq(n.pos);
+        return destination.distSqr(n.pos);
     }
 }

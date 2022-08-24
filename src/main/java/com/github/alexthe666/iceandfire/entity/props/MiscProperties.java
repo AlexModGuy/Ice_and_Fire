@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.entity.props;
 import com.github.alexthe666.citadel.Citadel;
 import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
 import com.github.alexthe666.citadel.server.message.PropertiesMessage;
-import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -131,7 +130,7 @@ public class MiscProperties {
         CompoundNBT miscData = getOrCreateMiscData(targetData);
         ListNBT scepterTargetData = getOrCreateScepterTargetedBy(targetData);
         CompoundNBT targetCasterData = new CompoundNBT();
-        targetCasterData.putInt(SCEPTER_ENTITY_ID, caster.getEntityId());
+        targetCasterData.putInt(SCEPTER_ENTITY_ID, caster.getId());
         scepterTargetData.add(targetCasterData);
         miscData.put(TARGETED_BY_SCEPTER_HOLDERS, scepterTargetData);
         targetData.put(MISC_DATA, miscData);
@@ -145,7 +144,7 @@ public class MiscProperties {
         CompoundNBT miscData = getOrCreateMiscData(casterData);
         ListNBT scepterCasterData = getOrCreateScepterTargets(casterData);
         CompoundNBT casterTargetData = new CompoundNBT();
-        casterTargetData.putInt(SCEPTER_ENTITY_ID, target.getEntityId());
+        casterTargetData.putInt(SCEPTER_ENTITY_ID, target.getId());
         scepterCasterData.add(casterTargetData);
         miscData.put(TARGETING_ENTITIES_WITH_SCEPTER, scepterCasterData);
         casterData.put(MISC_DATA, miscData);
@@ -155,7 +154,7 @@ public class MiscProperties {
     public static boolean isTargetedBy(LivingEntity caster, LivingEntity target) {
         CompoundNBT targetData = CitadelEntityData.getOrCreateCitadelTag(target);
         ListNBT scepterData = getOrCreateScepterTargetedBy(targetData);
-        int entityId = caster.getEntityId();
+        int entityId = caster.getId();
         for (INBT scepterDatum : scepterData) {
             CompoundNBT targetedBy = (CompoundNBT) scepterDatum;
             if (!targetedBy.contains(SCEPTER_ENTITY_ID))
@@ -170,7 +169,7 @@ public class MiscProperties {
     public static boolean isTargeting(LivingEntity caster, LivingEntity target) {
         CompoundNBT casterData = CitadelEntityData.getOrCreateCitadelTag(caster);
         ListNBT scepterData = getOrCreateScepterTargets(casterData);
-        int entityId = target.getEntityId();
+        int entityId = target.getId();
         for (INBT scepterDatum : scepterData) {
             CompoundNBT targetedBy = (CompoundNBT) scepterDatum;
             if (!targetedBy.contains(SCEPTER_ENTITY_ID))
@@ -191,7 +190,7 @@ public class MiscProperties {
             if (!targetedBy.contains(SCEPTER_ENTITY_ID))
                 continue;
             int targetedById = targetedBy.getInt(SCEPTER_ENTITY_ID);
-            Entity entity = target.world.getEntityByID(targetedById);
+            Entity entity = target.level.getEntity(targetedById);
             if (entity instanceof LivingEntity)
                 targetedByEntities.add((LivingEntity) entity);
         }
@@ -207,7 +206,7 @@ public class MiscProperties {
             if (!targetedBy.contains(SCEPTER_ENTITY_ID))
                 continue;
             int targetedById = targetedBy.getInt(SCEPTER_ENTITY_ID);
-            Entity entity = caster.world.getEntityByID(targetedById);
+            Entity entity = caster.level.getEntity(targetedById);
             if (entity instanceof LivingEntity)
                 targetingEntities.add((LivingEntity) entity);
         }
@@ -219,7 +218,7 @@ public class MiscProperties {
         CompoundNBT miscData = getOrCreateMiscData(targetData);
         ListNBT scepterData = getOrCreateScepterTargetedBy(targetData);
         ListNBT updatedScepterData = new ListNBT();
-        int entityId = caster.getEntityId();
+        int entityId = caster.getId();
         for (INBT scepterDatum : scepterData) {
             CompoundNBT targetedBy = (CompoundNBT) scepterDatum;
             if (!targetedBy.contains(SCEPTER_ENTITY_ID))
@@ -246,7 +245,7 @@ public class MiscProperties {
         CompoundNBT miscData = getOrCreateMiscData(casterData);
         ListNBT scepterData = getOrCreateScepterTargets(casterData);
         ListNBT updatedScepterData = new ListNBT();
-        int entityId = target.getEntityId();
+        int entityId = target.getId();
         for (INBT scepterDatum : scepterData) {
             CompoundNBT targetedBy = (CompoundNBT) scepterDatum;
             if (!targetedBy.contains(SCEPTER_ENTITY_ID))
@@ -266,18 +265,18 @@ public class MiscProperties {
 
     private static void updateData(LivingEntity entity, CompoundNBT nbt) {
         CitadelEntityData.setCitadelTag(entity, nbt);
-        if (!entity.world.isRemote()) {
-            Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", nbt, entity.getEntityId()));
+        if (!entity.level.isClientSide()) {
+            Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", nbt, entity.getId()));
         }
     }
 
     private static void createLoveParticles(LivingEntity entity) {
         if (rand.nextInt(7) == 0) {
             for (int i = 0; i < 5; i++) {
-                entity.world.addParticle(ParticleTypes.HEART,
-                    entity.getPosX() + ((rand.nextDouble() - 0.5D) * 3),
-                    entity.getPosY() + ((rand.nextDouble() - 0.5D) * 3),
-                    entity.getPosZ() + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
+                entity.level.addParticle(ParticleTypes.HEART,
+                    entity.getX() + ((rand.nextDouble() - 0.5D) * 3),
+                    entity.getY() + ((rand.nextDouble() - 0.5D) * 3),
+                    entity.getZ() + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
             }
         }
     }
@@ -285,7 +284,7 @@ public class MiscProperties {
     public static void tickLove(LivingEntity entity) {
         setLoveTicks(entity, getLoveTicks(entity) - 1);
         if (entity instanceof MobEntity) {
-            ((MobEntity) entity).setAttackTarget(null);
+            ((MobEntity) entity).setTarget(null);
         }
         createLoveParticles(entity);
     }

@@ -52,7 +52,7 @@ public class ShapeBuilder {
                         return this.endOfData();
                     } else {
                         if (isWithinRange(currRX, currRY, phase, offset, r2)) {
-                            BlockPos pos = this.mutablePos.setPos(c1 + currRX, c2 + currRY, c3 + phase * offset);
+                            BlockPos pos = this.mutablePos.set(c1 + currRX, c2 + currRY, c3 + phase * offset);
                             offset++;
                             return pos;
                         } else {
@@ -106,7 +106,7 @@ public class ShapeBuilder {
                 } else {
                     int distance = distance(currRX, currRY, phase, offset);
                     if (distance <= minr2 || distance <= maxr2 * MathHelper.clamp(rand.nextFloat(), rDifference, 1.0F)) {
-                        BlockPos pos = this.mutablePos.setPos(c1 + currRX, c2 + currRY, c3 + phase * offset);
+                        BlockPos pos = this.mutablePos.set(c1 + currRX, c2 + currRY, c3 + phase * offset);
                         offset++;
                         return pos;
                     } else if (distance <= maxr2) {
@@ -152,7 +152,7 @@ public class ShapeBuilder {
                         return this.endOfData();
                     } else {
                         if (isWithinRange(currR, phase, offset, r2)) {
-                            BlockPos pos = this.mutablePos.setPos(c1 + currR, c2, c3 + phase * offset);
+                            BlockPos pos = this.mutablePos.set(c1 + currR, c2, c3 + phase * offset);
                             offset++;
                             return pos;
                         } else {

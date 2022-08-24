@@ -1,9 +1,6 @@
 package com.github.alexthe666.iceandfire.block;
 
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BushBlock;
@@ -18,7 +15,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import java.util.Random;
 
 public class BlockMyrmexBiolight extends BushBlock {
 
@@ -26,50 +23,52 @@ public class BlockMyrmexBiolight extends BushBlock {
 
     public BlockMyrmexBiolight(boolean jungle) {
         super(
-			Properties
-				.create(Material.PLANTS)
-				.notSolid()
-				.doesNotBlockMovement()
-				.variableOpacity()
-				.hardnessAndResistance(0)
-				.setLightLevel((state) -> { return 7; })
-				.sound(SoundType.PLANT).tickRandomly()
-		);
+            Properties
+                .of(Material.PLANT)
+                .noOcclusion()
+                .noCollission()
+                .dynamicShape()
+                .strength(0)
+                .lightLevel((state) -> {
+                    return 7;
+                })
+                .sound(SoundType.GRASS).randomTicks()
+        );
 
         this.setRegistryName(IceAndFire.MODID, jungle ? "myrmex_jungle_biolight" : "myrmex_desert_biolight");
-        this.setDefaultState(this.getStateContainer().getBaseState().with(CONNECTED_DOWN, Boolean.valueOf(false)));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(CONNECTED_DOWN, Boolean.valueOf(false)));
     }
 
-    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-        BlockPos blockpos = pos.up();
-        return worldIn.getBlockState(blockpos).getBlock() == this || worldIn.getBlockState(blockpos).isSolid();
+    public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
+        BlockPos blockpos = pos.above();
+        return worldIn.getBlockState(blockpos).getBlock() == this || worldIn.getBlockState(blockpos).canOcclude();
     }
 
 
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-        boolean flag3 = worldIn.getBlockState(currentPos.down()).getBlock() == this;
-        return stateIn.with(CONNECTED_DOWN, flag3);
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        boolean flag3 = worldIn.getBlockState(currentPos.below()).getBlock() == this;
+        return stateIn.setValue(CONNECTED_DOWN, flag3);
     }
 
     public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
-        if (!worldIn.isRemote) {
+        if (!worldIn.isClientSide) {
             this.updateState(state, worldIn, pos, state.getBlock());
         }
-        if (!worldIn.getBlockState(pos.up()).isSolid() && worldIn.getBlockState(pos.up()).getBlock() != this) {
+        if (!worldIn.getBlockState(pos.above()).canOcclude() && worldIn.getBlockState(pos.above()).getBlock() != this) {
             worldIn.destroyBlock(pos, true);
         }
     }
 
     public void updateState(BlockState state, World worldIn, BlockPos pos, Block blockIn) {
-        boolean flag2 = state.get(CONNECTED_DOWN);
-        boolean flag3 = worldIn.getBlockState(pos.down()).getBlock() == this;
+        boolean flag2 = state.getValue(CONNECTED_DOWN);
+        boolean flag3 = worldIn.getBlockState(pos.below()).getBlock() == this;
         if (flag2 != flag3) {
-            worldIn.setBlockState(pos, state.with(CONNECTED_DOWN, Boolean.valueOf(flag3)), 3);
+            worldIn.setBlock(pos, state.setValue(CONNECTED_DOWN, Boolean.valueOf(flag3)), 3);
         }
 
     }
 
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(CONNECTED_DOWN);
     }
 }

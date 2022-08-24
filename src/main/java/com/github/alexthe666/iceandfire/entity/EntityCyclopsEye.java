@@ -5,7 +5,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.network.FMLPlayMessages;
 
 public class EntityCyclopsEye extends EntityMutlipartPart {
@@ -24,13 +23,13 @@ public class EntityCyclopsEye extends EntityMutlipartPart {
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float damage) {
+    public boolean hurt(DamageSource source, float damage) {
         Entity parent = this.getParent();
         if (parent instanceof EntityCyclops && source.isProjectile()) {
             ((EntityCyclops) parent).onHitEye(source, damage);
             return true;
         } else {
-            return parent != null && parent.attackEntityFrom(source, damage);
+            return parent != null && parent.hurt(source, damage);
         }
     }
 }

@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.world.structure;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.mojang.serialization.Codec;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -28,11 +27,11 @@ public class GorgonTempleStructure extends Structure<NoFeatureConfig> {
         super(p_i51440_1_);
     }
 
-    public GenerationStage.Decoration getDecorationStage() {
+    public GenerationStage.Decoration step() {
         return GenerationStage.Decoration.SURFACE_STRUCTURES;
     }
 
-    public String getStructureName() {
+    public String getFeatureName() {
         return IceAndFire.MODID + ":gorgon_temple";
     }
 
@@ -63,46 +62,46 @@ public class GorgonTempleStructure extends Structure<NoFeatureConfig> {
         }
 
         @Override
-        public void func_230364_a_(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, int x, int z, Biome biome, NoFeatureConfig config) {
-            if(IafConfig.spawnGorgons) {
-                Rotation rotation = Rotation.randomRotation(this.rand);
+        public void generatePieces(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, int x, int z, Biome biome, NoFeatureConfig config) {
+            if (IafConfig.spawnGorgons) {
+                Rotation rotation = Rotation.getRandom(this.random);
                 int i = 5;
                 int j = 5;
                 if (rotation == Rotation.CLOCKWISE_90) {
-                   i = -5;
+                    i = -5;
                 } else if (rotation == Rotation.CLOCKWISE_180) {
-                   i = -5;
-                   j = -5;
+                    i = -5;
+                    j = -5;
                 } else if (rotation == Rotation.COUNTERCLOCKWISE_90) {
-                   j = -5;
+                    j = -5;
                 }
 
                 int k = (x << 4) + 7;
                 int l = (z << 4) + 7;
-                int i1 = chunkGenerator.getNoiseHeightMinusOne(k, l, Heightmap.Type.WORLD_SURFACE_WG);
-                int j1 = chunkGenerator.getNoiseHeightMinusOne(k, l + j, Heightmap.Type.WORLD_SURFACE_WG);
-                int k1 = chunkGenerator.getNoiseHeightMinusOne(k + i, l, Heightmap.Type.WORLD_SURFACE_WG);
-                int l1 = chunkGenerator.getNoiseHeightMinusOne(k + i, l + j, Heightmap.Type.WORLD_SURFACE_WG);
+                int i1 = chunkGenerator.getFirstOccupiedHeight(k, l, Heightmap.Type.WORLD_SURFACE_WG);
+                int j1 = chunkGenerator.getFirstOccupiedHeight(k, l + j, Heightmap.Type.WORLD_SURFACE_WG);
+                int k1 = chunkGenerator.getFirstOccupiedHeight(k + i, l, Heightmap.Type.WORLD_SURFACE_WG);
+                int l1 = chunkGenerator.getFirstOccupiedHeight(k + i, l + j, Heightmap.Type.WORLD_SURFACE_WG);
                 int i2 = Math.min(Math.min(i1, j1), Math.min(k1, l1));
                 BlockPos blockpos = new BlockPos(x * 16 + 8, i2 + 2, z * 16 + 8);
 
                 // All a structure has to do is call this method to turn it into a jigsaw based structure!
                 // No manual pieces class needed.
-                JigsawManager.func_242837_a(
-                        dynamicRegistries,
-                        new VillageConfig(() -> dynamicRegistries.getRegistry(Registry.JIGSAW_POOL_KEY)
-                                .getOrDefault(new ResourceLocation(IceAndFire.MODID, "gorgon_temple/top_pool")),
-                                3), // Depth of jigsaw branches. Gorgon temple has a depth of 3. (start top -> bottom -> gorgon)
-                        AbstractVillagePiece::new,
-                        chunkGenerator,
-                        templateManager,
-                        blockpos,
-                        this.components,
-                        this.rand,
-                        false,
-                        false);
-                
-                this.recalculateStructureSize();
+                JigsawManager.addPieces(
+                    dynamicRegistries,
+                    new VillageConfig(() -> dynamicRegistries.registryOrThrow(Registry.TEMPLATE_POOL_REGISTRY)
+                        .get(new ResourceLocation(IceAndFire.MODID, "gorgon_temple/top_pool")),
+                        3), // Depth of jigsaw branches. Gorgon temple has a depth of 3. (start top -> bottom -> gorgon)
+                    AbstractVillagePiece::new,
+                    chunkGenerator,
+                    templateManager,
+                    blockpos,
+                    this.pieces,
+                    this.random,
+                    false,
+                    false);
+
+                this.calculateBoundingBox();
             }
         }
     }

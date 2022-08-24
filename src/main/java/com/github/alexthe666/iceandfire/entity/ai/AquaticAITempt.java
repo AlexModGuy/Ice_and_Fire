@@ -1,15 +1,14 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.EnumSet;
-import java.util.Set;
-
 import com.google.common.collect.Sets;
-
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import java.util.EnumSet;
+import java.util.Set;
 
 public class AquaticAITempt extends Goal {
     private final MobEntity temptedEntity;
@@ -34,24 +33,24 @@ public class AquaticAITempt extends Goal {
         this.speed = speedIn;
         this.temptItem = temptItemIn;
         this.scaredByPlayerMovement = scaredByPlayerMovementIn;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
     /**
      * Returns whether the Goal should begin execution.
      */
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if (this.delayTemptCounter > 0) {
             --this.delayTemptCounter;
             return false;
         } else {
-            this.temptingPlayer = this.temptedEntity.world.getClosestPlayer(this.temptedEntity, 10.0D);
+            this.temptingPlayer = this.temptedEntity.level.getNearestPlayer(this.temptedEntity, 10.0D);
 
             if (this.temptingPlayer == null) {
                 return false;
             } else {
-                return this.isTempting(this.temptingPlayer.getHeldItemMainhand()) || this.isTempting(this.temptingPlayer.getHeldItemOffhand());
+                return this.isTempting(this.temptingPlayer.getMainHandItem()) || this.isTempting(this.temptingPlayer.getOffhandItem());
             }
         }
     }
@@ -64,38 +63,38 @@ public class AquaticAITempt extends Goal {
      * Returns whether an in-progress Goal should continue executing
      */
     @Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         if (this.scaredByPlayerMovement) {
-            if (this.temptedEntity.getDistanceSq(this.temptingPlayer) < 36.0D) {
-                if (this.temptingPlayer.getDistanceSq(this.targetX, this.targetY, this.targetZ) > 0.010000000000000002D) {
+            if (this.temptedEntity.distanceToSqr(this.temptingPlayer) < 36.0D) {
+                if (this.temptingPlayer.distanceToSqr(this.targetX, this.targetY, this.targetZ) > 0.010000000000000002D) {
                     return false;
                 }
 
-                if (Math.abs(this.temptingPlayer.rotationPitch - this.pitch) > 5.0D
-                    || Math.abs(this.temptingPlayer.rotationYaw - this.yaw) > 5.0D) {
+                if (Math.abs(this.temptingPlayer.xRot - this.pitch) > 5.0D
+                    || Math.abs(this.temptingPlayer.yRot - this.yaw) > 5.0D) {
                     return false;
                 }
             } else {
-                this.targetX = this.temptingPlayer.getPosX();
-                this.targetY = this.temptingPlayer.getPosY();
-                this.targetZ = this.temptingPlayer.getPosZ();
+                this.targetX = this.temptingPlayer.getX();
+                this.targetY = this.temptingPlayer.getY();
+                this.targetZ = this.temptingPlayer.getZ();
             }
 
-            this.pitch = this.temptingPlayer.rotationPitch;
-            this.yaw = this.temptingPlayer.rotationYaw;
+            this.pitch = this.temptingPlayer.xRot;
+            this.yaw = this.temptingPlayer.yRot;
         }
 
-        return this.shouldExecute();
+        return this.canUse();
     }
 
     /**
      * Execute a one shot task or start executing a continuous task
      */
     @Override
-    public void startExecuting() {
-        this.targetX = this.temptingPlayer.getPosX();
-        this.targetY = this.temptingPlayer.getPosY();
-        this.targetZ = this.temptingPlayer.getPosZ();
+    public void start() {
+        this.targetX = this.temptingPlayer.getX();
+        this.targetY = this.temptingPlayer.getY();
+        this.targetZ = this.temptingPlayer.getZ();
         this.isRunning = true;
     }
 
@@ -103,9 +102,9 @@ public class AquaticAITempt extends Goal {
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
     @Override
-    public void resetTask() {
+    public void stop() {
         this.temptingPlayer = null;
-        this.temptedEntity.getNavigator().clearPath();
+        this.temptedEntity.getNavigation().stop();
         this.delayTemptCounter = 100;
         this.isRunning = false;
     }
@@ -115,13 +114,13 @@ public class AquaticAITempt extends Goal {
      */
     @Override
     public void tick() {
-        this.temptedEntity.getLookController().setLookPositionWithEntity(this.temptingPlayer,
-            this.temptedEntity.getHorizontalFaceSpeed() + 20, this.temptedEntity.getVerticalFaceSpeed());
+        this.temptedEntity.getLookControl().setLookAt(this.temptingPlayer,
+            this.temptedEntity.getMaxHeadYRot() + 20, this.temptedEntity.getMaxHeadXRot());
 
-        if (this.temptedEntity.getDistanceSq(this.temptingPlayer) < 6.25D) {
-            this.temptedEntity.getNavigator().clearPath();
+        if (this.temptedEntity.distanceToSqr(this.temptingPlayer) < 6.25D) {
+            this.temptedEntity.getNavigation().stop();
         } else {
-            this.temptedEntity.getNavigator().tryMoveToEntityLiving(this.temptingPlayer, this.speed);
+            this.temptedEntity.getNavigation().moveTo(this.temptingPlayer, this.speed);
         }
     }
 

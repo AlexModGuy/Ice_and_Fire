@@ -21,7 +21,7 @@ public class ContainerPodium extends Container {
     public ContainerPodium(int id, IInventory furnaceInventory, PlayerInventory playerInventory, IIntArray vars) {
         super(IafContainerRegistry.PODIUM_CONTAINER.get(), id);
         this.podium = furnaceInventory;
-        furnaceInventory.openInventory(playerInventory.player);
+        furnaceInventory.startOpen(playerInventory.player);
         byte b0 = 51;
         int i;
 
@@ -39,34 +39,34 @@ public class ContainerPodium extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return this.podium.isUsableByPlayer(playerIn);
+    public boolean stillValid(PlayerEntity playerIn) {
+        return this.podium.stillValid(playerIn);
     }
 
     /**
      * Take a stack from the specified inventory slot.
      */
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
+        Slot slot = this.slots.get(index);
 
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
-            if (index < this.podium.getSizeInventory()) {
-                if (!this.mergeItemStack(itemstack1, this.podium.getSizeInventory(), this.inventorySlots.size(), true)) {
+            if (index < this.podium.getContainerSize()) {
+                if (!this.moveItemStackTo(itemstack1, this.podium.getContainerSize(), this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, this.podium.getSizeInventory(), false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 0, this.podium.getContainerSize(), false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
 
@@ -77,8 +77,8 @@ public class ContainerPodium extends Container {
      * Called when the container is closed.
      */
     @Override
-    public void onContainerClosed(PlayerEntity playerIn) {
-        super.onContainerClosed(playerIn);
-        this.podium.closeInventory(playerIn);
+    public void removed(PlayerEntity playerIn) {
+        super.removed(playerIn);
+        this.podium.stopOpen(playerIn);
     }
 }

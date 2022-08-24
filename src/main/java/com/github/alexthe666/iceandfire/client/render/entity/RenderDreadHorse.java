@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
 import com.github.alexthe666.iceandfire.entity.EntityDreadHorse;
-
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.model.HorseModel;
@@ -23,7 +22,7 @@ public class RenderDreadHorse extends MobRenderer<EntityDreadHorse, HorseModel<E
         this.scale = scaleIn;
     }
 
-    public ResourceLocation getEntityTexture(EntityDreadHorse entity) {
+    public ResourceLocation getTextureLocation(EntityDreadHorse entity) {
         return TEXTURE;
     }
 }

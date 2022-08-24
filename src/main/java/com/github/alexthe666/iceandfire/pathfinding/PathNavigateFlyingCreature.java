@@ -11,7 +11,7 @@ public class PathNavigateFlyingCreature extends FlyingPathNavigator {
         super(entity, world);
     }
 
-    public boolean canEntityStandOnPos(BlockPos pos) {
-        return this.world.isAirBlock(pos.down());
+    public boolean isStableDestination(BlockPos pos) {
+        return this.level.isEmptyBlock(pos.below());
     }
 }

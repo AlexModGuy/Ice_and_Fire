@@ -12,44 +12,44 @@ public class ModelDreadGhoul extends ModelBipedBase<EntityDreadGhoul> {
     public AdvancedModelBox clawsLeft;
 
     public ModelDreadGhoul(float modelScale) {
-        this.textureWidth = 128;
-        this.textureHeight = 64;
+        this.texWidth = 128;
+        this.texHeight = 64;
         this.head = new HideableModelRenderer(this, 0, 0);
-        this.head.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.head.setPos(0.0F, 0.0F, 0.0F);
         this.head.addBox(-4.0F, -7.4F, -4.0F, 8, 8, 8, modelScale);
         this.setRotateAngle(head, 0.045553093477052F, 0.0F, 0.0F);
         this.legLeft = new HideableModelRenderer(this, 0, 16);
         this.legLeft.mirror = true;
-        this.legLeft.setRotationPoint(1.9F, 12.0F, 0.1F);
+        this.legLeft.setPos(1.9F, 12.0F, 0.1F);
         this.legLeft.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, modelScale);
         this.setRotateAngle(legLeft, -0.045553093477052F, 0.0F, 0.0F);
         this.armRight = new HideableModelRenderer(this, 40, 16);
-        this.armRight.setRotationPoint(-4.0F, 2.0F, 0.0F);
+        this.armRight.setPos(-4.0F, 2.0F, 0.0F);
         this.armRight.addBox(-3.0F, -2.0F, -2.0F, 3, 12, 4, modelScale);
         this.setRotateAngle(armRight, -0.136659280431156F, 0.091106186954104F, 0.22759093446006054F);
         this.armLeft = new HideableModelRenderer(this, 40, 16);
         this.armLeft.mirror = true;
-        this.armLeft.setRotationPoint(4.0F, 2.0F, -0.0F);
+        this.armLeft.setPos(4.0F, 2.0F, -0.0F);
         this.armLeft.addBox(0.0F, -2.0F, -2.0F, 3, 12, 4, modelScale);
         this.setRotateAngle(armLeft, -0.136659280431156F, 0.091106186954104F, -0.22759093446006054F);
         this.head2 = new AdvancedModelBox(this, 32, 0);
-        this.head2.setRotationPoint(0.0F, 0.4F, 0.0F);
+        this.head2.setPos(0.0F, 0.4F, 0.0F);
         this.head2.addBox(-4.5F, -6.4F, -4.1F, 9, 8, 8, modelScale);
         this.clawsLeft = new AdvancedModelBox(this, 56, 25);
         this.clawsLeft.mirror = true;
-        this.clawsLeft.setRotationPoint(-0.5F, 11.0F, 0.0F);
+        this.clawsLeft.setPos(-0.5F, 11.0F, 0.0F);
         this.clawsLeft.addBox(-1.0F, -2.0F, -2.0F, 4, 3, 4, modelScale);
         this.setRotateAngle(clawsLeft, -0.0F, 0.0F, 0.2897246558310587F);
         this.body = new HideableModelRenderer(this, 16, 16);
-        this.body.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.body.setPos(0.0F, 0.0F, 0.0F);
         this.body.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, modelScale);
         this.setRotateAngle(body, 0.045553093477052F, 0.0F, 0.0F);
         this.legRight = new HideableModelRenderer(this, 0, 16);
-        this.legRight.setRotationPoint(-1.9F, 12.0F, 0.1F);
+        this.legRight.setPos(-1.9F, 12.0F, 0.1F);
         this.legRight.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, modelScale);
         this.setRotateAngle(legRight, -0.045553093477052F, 0.0F, 0.0F);
         this.clawsRight = new AdvancedModelBox(this, 56, 25);
-        this.clawsRight.setRotationPoint(0.5F, 11.0F, 0.0F);
+        this.clawsRight.setPos(0.5F, 11.0F, 0.0F);
         this.clawsRight.addBox(-3.0F, -2.0F, -2.0F, 4, 3, 4, modelScale);
         this.setRotateAngle(clawsRight, 0.0F, 0.0F, -0.2897246558310587F);
         this.body.addChild(this.head);
@@ -65,7 +65,7 @@ public class ModelDreadGhoul extends ModelBipedBase<EntityDreadGhoul> {
     }
 
     @Override
-    public void setRotationAngles(EntityDreadGhoul thrall, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(EntityDreadGhoul thrall, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetToDefaultPose();
         this.faceTarget(netHeadYaw, headPitch, 1.0F, head);
         animate(thrall, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0f);
@@ -74,17 +74,17 @@ public class ModelDreadGhoul extends ModelBipedBase<EntityDreadGhoul> {
         float degree_walk = 1F;
         if (thrall.getAnimation() == EntityDreadGhoul.ANIMATION_SPAWN) {
             if (thrall.getAnimationTick() < 30) {
-                this.swing(armRight, 0.5F, 0.5F, false, 2, -0.7F, thrall.ticksExisted, 1);
-                this.swing(armLeft, 0.5F, 0.5F, true, 2, -0.7F, thrall.ticksExisted, 1);
-                this.flap(armRight, 0.5F, 0.5F, true, 1, 0, thrall.ticksExisted, 1);
-                this.flap(armLeft, 0.5F, 0.5F, true, 1, 0, thrall.ticksExisted, 1);
+                this.swing(armRight, 0.5F, 0.5F, false, 2, -0.7F, thrall.tickCount, 1);
+                this.swing(armLeft, 0.5F, 0.5F, true, 2, -0.7F, thrall.tickCount, 1);
+                this.flap(armRight, 0.5F, 0.5F, true, 1, 0, thrall.tickCount, 1);
+                this.flap(armLeft, 0.5F, 0.5F, true, 1, 0, thrall.tickCount, 1);
             }
         }
-        this.flap(armLeft, speed_idle, 0.15F, false, 2, -0.1F, thrall.ticksExisted, 1);
-        this.flap(armRight, speed_idle, 0.15F, true, 2, -0.1F, thrall.ticksExisted, 1);
-        this.flap(clawsLeft, speed_idle, 0.05F, false, 3, -0.05F, thrall.ticksExisted, 1);
-        this.flap(clawsRight, speed_idle, 0.05F, true, 3, -0.05F, thrall.ticksExisted, 1);
-        this.walk(head, speed_idle, 0.1F, true, 1, -0.05F, thrall.ticksExisted, 1);
+        this.flap(armLeft, speed_idle, 0.15F, false, 2, -0.1F, thrall.tickCount, 1);
+        this.flap(armRight, speed_idle, 0.15F, true, 2, -0.1F, thrall.tickCount, 1);
+        this.flap(clawsLeft, speed_idle, 0.05F, false, 3, -0.05F, thrall.tickCount, 1);
+        this.flap(clawsRight, speed_idle, 0.05F, true, 3, -0.05F, thrall.tickCount, 1);
+        this.walk(head, speed_idle, 0.1F, true, 1, -0.05F, thrall.tickCount, 1);
 
         this.walk(legRight, speed_walk, degree_walk, false, 0, 0, limbSwing, limbSwingAmount);
         this.walk(legLeft, speed_walk, degree_walk, true, 0, 0, limbSwing, limbSwingAmount);

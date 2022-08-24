@@ -1,11 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,6 +9,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 public class ItemDragonArmor extends Item implements ICustomRendered {
 
     public int type;
@@ -21,7 +19,7 @@ public class ItemDragonArmor extends Item implements ICustomRendered {
     public String name;
 
     public ItemDragonArmor(int type, int dragonSlot, String name) {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
         this.type = type;
         this.dragonSlot = dragonSlot;
         this.name = name;
@@ -29,7 +27,7 @@ public class ItemDragonArmor extends Item implements ICustomRendered {
 
     }
 
-    public String getTranslationKey() {
+    public String getDescriptionId() {
         return "item.iceandfire." + name;
     }
 
@@ -48,7 +46,7 @@ public class ItemDragonArmor extends Item implements ICustomRendered {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         String words;
         switch (dragonSlot) {
             default:
@@ -64,6 +62,6 @@ public class ItemDragonArmor extends Item implements ICustomRendered {
                 words = "dragon.armor_tail";
                 break;
         }
-        tooltip.add(new TranslationTextComponent(words).mergeStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent(words).withStyle(TextFormatting.GRAY));
     }
 }

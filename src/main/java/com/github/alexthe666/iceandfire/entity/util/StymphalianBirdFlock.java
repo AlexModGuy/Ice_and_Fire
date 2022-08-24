@@ -1,20 +1,18 @@
 package com.github.alexthe666.iceandfire.entity.util;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIAirTarget;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 public class StymphalianBirdFlock {
     private EntityStymphalianBird leader;
@@ -22,7 +20,7 @@ public class StymphalianBirdFlock {
     private BlockPos leaderTarget;
     private BlockPos prevLeaderTarget;
     private Random random;
-    private int distance = 15;
+    private final int distance = 15;
 
     private StymphalianBirdFlock() {
     }
@@ -33,14 +31,14 @@ public class StymphalianBirdFlock {
         flock.members = new ArrayList<>();
         flock.members.add(bird);
         flock.leaderTarget = bird.airTarget;
-        flock.random = bird.getRNG();
+        flock.random = bird.getRandom();
         return flock;
     }
 
     @Nullable
     public static StymphalianBirdFlock getNearbyFlock(EntityStymphalianBird bird) {
         float d0 = IafConfig.stymphalianBirdFlockLength;
-        List<Entity> list = bird.world.getEntitiesInAABBexcluding(bird, (new AxisAlignedBB(bird.getPosX(), bird.getPosY(), bird.getPosZ(), bird.getPosX() + 1.0D, bird.getPosY() + 1.0D, bird.getPosZ() + 1.0D)).grow(d0, 10.0D, d0), EntityStymphalianBird.STYMPHALIAN_PREDICATE);
+        List<Entity> list = bird.level.getEntities(bird, (new AxisAlignedBB(bird.getX(), bird.getY(), bird.getZ(), bird.getX() + 1.0D, bird.getY() + 1.0D, bird.getZ() + 1.0D)).inflate(d0, 10.0D, d0), EntityStymphalianBird.STYMPHALIAN_PREDICATE);
         if (!list.isEmpty()) {
             Iterator<Entity> itr = list.iterator();
             while (itr.hasNext()) {
@@ -77,8 +75,8 @@ public class StymphalianBirdFlock {
 
     public void onLeaderAttack(LivingEntity attackTarget) {
         for (EntityStymphalianBird bird : members) {
-            if (bird.getAttackTarget() == null && !isLeader(bird)) {
-                bird.setAttackTarget(attackTarget);
+            if (bird.getTarget() == null && !isLeader(bird)) {
+                bird.setTarget(attackTarget);
             }
         }
     }

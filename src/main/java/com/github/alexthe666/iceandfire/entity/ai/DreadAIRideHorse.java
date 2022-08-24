@@ -1,16 +1,13 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.EnumSet;
-import java.util.List;
-
 import com.github.alexthe666.iceandfire.entity.EntityDreadKnight;
-
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.horse.AbstractHorseEntity;
-import net.minecraft.entity.player.PlayerEntity;
 
 import javax.annotation.Nonnull;
+import java.util.EnumSet;
+import java.util.List;
 
 public class DreadAIRideHorse extends Goal {
     private final EntityDreadKnight knight;
@@ -21,19 +18,19 @@ public class DreadAIRideHorse extends Goal {
 
     public DreadAIRideHorse(EntityDreadKnight knight) {
         this.knight = knight;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if (this.knight.isPassenger()) {
             list = IAFMath.emptyAbstractHorseEntityList;
             return false;
         } else {
 
-            if (this.knight.world.getGameTime() % 4 == 0) // only update the list every 4 ticks
-                list = this.knight.world.getEntitiesWithinAABB(AbstractHorseEntity.class,
-                        this.knight.getBoundingBox().grow(16.0D, 7.0D, 16.0D), entity -> !entity.isBeingRidden());
+            if (this.knight.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
+                list = this.knight.level.getEntitiesOfClass(AbstractHorseEntity.class,
+                    this.knight.getBoundingBox().inflate(16.0D, 7.0D, 16.0D), entity -> !entity.isVehicle());
 
             if (list.isEmpty()) {
                 return false;
@@ -45,30 +42,30 @@ public class DreadAIRideHorse extends Goal {
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return !this.knight.isPassenger() && this.horse != null && !this.horse.isBeingRidden();
+    public boolean canContinueToUse() {
+        return !this.knight.isPassenger() && this.horse != null && !this.horse.isVehicle();
     }
 
     @Override
-    public void startExecuting() {
-        this.horse.getNavigator().clearPath();
+    public void start() {
+        this.horse.getNavigation().stop();
     }
 
     @Override
-    public void resetTask() {
+    public void stop() {
         this.horse = null;
-        this.knight.getNavigator().clearPath();
+        this.knight.getNavigation().stop();
     }
 
     @Override
     public void tick() {
-        this.knight.getLookController().setLookPositionWithEntity(this.horse, 30.0F, 30.0F);
+        this.knight.getLookControl().setLookAt(this.horse, 30.0F, 30.0F);
 
-        this.knight.getNavigator().tryMoveToEntityLiving(this.horse, 1.2D);
+        this.knight.getNavigation().moveTo(this.horse, 1.2D);
 
-        if (this.knight.getDistanceSq(this.horse) < 4.0D) {
-            this.horse.setHorseTamed(true);
-            this.knight.getNavigator().clearPath();
+        if (this.knight.distanceToSqr(this.horse) < 4.0D) {
+            this.horse.setTamed(true);
+            this.knight.getNavigation().stop();
             this.knight.startRiding(horse);
         }
     }

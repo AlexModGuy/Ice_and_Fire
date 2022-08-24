@@ -1,14 +1,9 @@
 package com.github.alexthe666.iceandfire.world.gen.processor;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import com.mojang.serialization.Codec;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
@@ -19,25 +14,28 @@ import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.StructureProcessor;
 import net.minecraft.world.gen.feature.template.Template;
-
 import net.minecraftforge.registries.ForgeRegistries;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class DreadRuinProcessor extends StructureProcessor {
 
-    private float integrity = 1.0F;
+    private final float integrity = 1.0F;
     public static final DreadRuinProcessor INSTANCE = new DreadRuinProcessor();
     public static final Codec<DreadRuinProcessor> CODEC = Codec.unit(() -> INSTANCE);
+
     public DreadRuinProcessor() {
     }
 
     public static BlockState getRandomCrackedBlock(@Nullable BlockState prev, Random random) {
         float rand = random.nextFloat();
         if (rand < 0.5) {
-            return IafBlockRegistry.DREAD_STONE_BRICKS.getDefaultState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS.defaultBlockState();
         } else if (rand < 0.9) {
-            return IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED.getDefaultState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED.defaultBlockState();
         } else {
-            return IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY.getDefaultState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY.defaultBlockState();
         }
     }
 
@@ -58,7 +56,7 @@ public class DreadRuinProcessor extends StructureProcessor {
                     tag.remove("SpawnPotentials");
                     tag.put("SpawnData", spawnData.copy());
                 }
-                Template.BlockInfo newInfo = new Template.BlockInfo(infoIn2.pos, IafBlockRegistry.DREAD_SPAWNER.getDefaultState(), tag);
+                Template.BlockInfo newInfo = new Template.BlockInfo(infoIn2.pos, IafBlockRegistry.DREAD_SPAWNER.defaultBlockState(), tag);
                 return newInfo;
 
             }

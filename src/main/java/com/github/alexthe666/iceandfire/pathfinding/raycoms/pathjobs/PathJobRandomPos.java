@@ -2,9 +2,9 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs;
 /*
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.*;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.Direction;
@@ -35,7 +35,7 @@ public class PathJobRandomPos extends AbstractPathJob
     /**
      * Random pathing rand.
      */
-    private static Random random = new Random();
+    private static final Random random = new Random();
 
 
     /**
@@ -64,7 +64,7 @@ public class PathJobRandomPos extends AbstractPathJob
         this.maxDistToDest = range;
 
         final Tuple<Direction, Direction> dir = getRandomDirectionTuple(random);
-        this.destination = start.offset(dir.getA(), minDistFromStart).offset(dir.getB(), minDistFromStart);
+        this.destination = start.relative(dir.getA(), minDistFromStart).relative(dir.getB(), minDistFromStart);
     }
 
     /**
@@ -115,7 +115,7 @@ public class PathJobRandomPos extends AbstractPathJob
         this.maxDistToDest = range;
 
         final Tuple<Direction, Direction> dir = getRandomDirectionTuple(random);
-        this.destination = start.offset(dir.getA(), minDistFromStart).offset(dir.getB(), minDistFromStart);
+        this.destination = start.relative(dir.getA(), minDistFromStart).relative(dir.getB(), minDistFromStart);
     }
 
     /**
@@ -126,7 +126,7 @@ public class PathJobRandomPos extends AbstractPathJob
      */
     public static Tuple<Direction, Direction> getRandomDirectionTuple(final Random random)
     {
-        return new Tuple<>(Direction.getRandomDirection(random), Direction.getRandomDirection(random));
+        return new Tuple<>(Direction.getRandom(random), Direction.getRandom(random));
     }
 
     @Nullable
@@ -152,26 +152,21 @@ public class PathJobRandomPos extends AbstractPathJob
     @Override
     protected double computeHeuristic(final BlockPos pos)
     {
-        return Math.sqrt(destination.distanceSq(new BlockPos(pos.getX(), destination.getY(), pos.getZ())));
+        return Math.sqrt(destination.distSqr(new BlockPos(pos.getX(), destination.getY(), pos.getZ())));
     }
 
     @Override
-    protected boolean isAtDestination(final Node n)
-    {
-        if (random.nextInt(10) == 0 && isInRestrictedArea(n.pos) && (start.distanceSq(n.pos) > minDistFromStart * minDistFromStart)
-            && SurfaceType.getSurfaceType(world, world.getBlockState(n.pos.down()), n.pos.down()) == SurfaceType.WALKABLE
-            && destination.distanceSq(n.pos) < this.maxDistToDest * this.maxDistToDest)
-        {
-            return true;
-        }
-        return false;
+    protected boolean isAtDestination(final Node n) {
+        return random.nextInt(10) == 0 && isInRestrictedArea(n.pos) && (start.distSqr(n.pos) > minDistFromStart * minDistFromStart)
+            && SurfaceType.getSurfaceType(world, world.getBlockState(n.pos.below()), n.pos.below()) == SurfaceType.WALKABLE
+            && destination.distSqr(n.pos) < this.maxDistToDest * this.maxDistToDest;
     }
 
     @Override
     protected double getNodeResultScore(final Node n)
     {
         //  For Result Score lower is better
-        return destination.distanceSq(n.pos);
+        return destination.distSqr(n.pos);
     }
 
     /**

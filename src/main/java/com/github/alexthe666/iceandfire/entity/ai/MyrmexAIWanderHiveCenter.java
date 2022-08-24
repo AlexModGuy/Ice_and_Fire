@@ -1,14 +1,13 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.EnumSet;
-
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
-
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.EnumSet;
 
 public class MyrmexAIWanderHiveCenter extends Goal {
     private final EntityMyrmexBase myrmex;
@@ -19,46 +18,46 @@ public class MyrmexAIWanderHiveCenter extends Goal {
     public MyrmexAIWanderHiveCenter(EntityMyrmexBase entityIn, double movementSpeedIn) {
         this.myrmex = entityIn;
         this.movementSpeed = movementSpeedIn;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
-    public boolean shouldExecute() {
-        if (!this.myrmex.canMove() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigator().noPath() || this.myrmex.canSeeSky()) {
+    public boolean canUse() {
+        if (!this.myrmex.canMove() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigation().isDone() || this.myrmex.canSeeSky()) {
             return false;
         }
-        MyrmexHive village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(this.myrmex.getPosition(), 300);
+        MyrmexHive village = MyrmexWorldData.get(this.myrmex.level).getNearestHive(this.myrmex.blockPosition(), 300);
         if (village == null) {
             village = this.myrmex.getHive();
         }
         if (village == null) {
             return false;
         } else {
-            target = getNearPos(MyrmexHive.getGroundedPos(this.myrmex.world, village.getCenter()));
+            target = getNearPos(MyrmexHive.getGroundedPos(this.myrmex.level, village.getCenter()));
 
-            this.path = this.myrmex.getNavigator().getPathToPos(target, 0);
+            this.path = this.myrmex.getNavigation().createPath(target, 0);
             return this.path != null;
         }
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return !this.myrmex.getNavigator().noPath() && this.myrmex.getDistanceSq(target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D) > 3 && this.myrmex.shouldEnterHive();
+    public boolean canContinueToUse() {
+        return !this.myrmex.getNavigation().isDone() && this.myrmex.distanceToSqr(target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D) > 3 && this.myrmex.shouldEnterHive();
     }
 
     @Override
-    public void startExecuting() {
-        this.myrmex.getNavigator().setPath(this.path, this.movementSpeed);
+    public void start() {
+        this.myrmex.getNavigation().moveTo(this.path, this.movementSpeed);
     }
 
     @Override
-    public void resetTask() {
+    public void stop() {
         target = BlockPos.ZERO;
-        this.myrmex.getNavigator().setPath(null, this.movementSpeed);
+        this.myrmex.getNavigation().moveTo((Path) null, this.movementSpeed);
 
     }
 
     public BlockPos getNearPos(BlockPos pos) {
-        return pos.add(this.myrmex.getRNG().nextInt(8) - 4, 0, this.myrmex.getRNG().nextInt(8) - 4);
+        return pos.offset(this.myrmex.getRandom().nextInt(8) - 4, 0, this.myrmex.getRandom().nextInt(8) - 4);
     }
 }

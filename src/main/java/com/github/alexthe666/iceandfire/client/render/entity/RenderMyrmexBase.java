@@ -27,17 +27,18 @@ public class RenderMyrmexBase extends MobRenderer<EntityMyrmexBase, SegmentedMod
 
     public void render(EntityMyrmexBase entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         if (entityIn.getGrowthStage() == 0) {
-            entityModel = LARVA_MODEL;
-        }else if (entityIn.getGrowthStage() == 1) {
-            entityModel = PUPA_MODEL;
-        }else{
-            entityModel = adultModel;
+            model = LARVA_MODEL;
+        } else if (entityIn.getGrowthStage() == 1) {
+            model = PUPA_MODEL;
+        } else {
+            model = adultModel;
         }
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
 
     }
-        @Override
-    protected void preRenderCallback(EntityMyrmexBase myrmex, MatrixStack matrixStackIn, float partialTickTime) {
+
+    @Override
+    protected void scale(EntityMyrmexBase myrmex, MatrixStack matrixStackIn, float partialTickTime) {
         float scale = myrmex.getModelScale();
         if (myrmex.getGrowthStage() == 0) {
             scale /= 2;
@@ -47,12 +48,12 @@ public class RenderMyrmexBase extends MobRenderer<EntityMyrmexBase, SegmentedMod
         }
         matrixStackIn.scale(scale, scale, scale);
         if (myrmex.isPassenger() && myrmex.getGrowthStage() < 2) {
-            matrixStackIn.rotate(new Quaternion(Vector3f.YP, 90, true));
+            matrixStackIn.mulPose(new Quaternion(Vector3f.YP, 90, true));
         }
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityMyrmexBase myrmex) {
+    public ResourceLocation getTextureLocation(EntityMyrmexBase myrmex) {
         return myrmex.getTexture();
     }
 

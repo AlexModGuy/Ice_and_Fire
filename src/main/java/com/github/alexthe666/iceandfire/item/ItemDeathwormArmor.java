@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 public class ItemDeathwormArmor extends ArmorItem {
 
     public ItemDeathwormArmor(IArmorMaterial material, EquipmentSlotType slot, String name) {
-        super(material, slot, new Item.Properties().group(IceAndFire.TAB_ITEMS));
+        super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.setRegistryName(IceAndFire.MODID, name);
     }
 
@@ -27,9 +27,9 @@ public class ItemDeathwormArmor extends ArmorItem {
 
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
-        if (this.getArmorMaterial() == IafItemRegistry.DEATHWORM_2_ARMOR_MATERIAL) {
+        if (this.getMaterial() == IafItemRegistry.DEATHWORM_2_ARMOR_MATERIAL) {
             return "iceandfire:textures/models/armor/armor_deathworm_red" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
-        } else if (this.getArmorMaterial() == IafItemRegistry.DEATHWORM_1_ARMOR_MATERIAL) {
+        } else if (this.getMaterial() == IafItemRegistry.DEATHWORM_1_ARMOR_MATERIAL) {
             return "iceandfire:textures/models/armor/armor_deathworm_white" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
         } else {
             return "iceandfire:textures/models/armor/armor_deathworm_yellow" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");

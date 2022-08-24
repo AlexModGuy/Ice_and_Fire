@@ -21,13 +21,13 @@ public class RenderNothing<T extends Entity> extends EntityRenderer<T> {
     // Only render if the debug bboxes are enabled
     @Override
     public boolean shouldRender(T livingEntityIn, ClippingHelper camera, double camX, double camY, double camZ) {
-        if (!this.renderManager.isDebugBoundingBox())
+        if (!this.entityRenderDispatcher.shouldRenderHitBoxes())
             return false;
         return super.shouldRender(livingEntityIn, camera, camX, camY, camZ);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(Entity entity) {
+    public ResourceLocation getTextureLocation(Entity entity) {
         return null;
     }
 }

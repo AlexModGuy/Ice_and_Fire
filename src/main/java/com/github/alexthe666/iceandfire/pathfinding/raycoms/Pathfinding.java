@@ -89,7 +89,7 @@ public final class Pathfinding {
         public Thread newThread(final Runnable runnable) {
             ThreadTaskExecutor<?> workqueue = LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER);
             ClassLoader classLoader;
-            if (workqueue.isOnExecutionThread()) {
+            if (workqueue.isSameThread()) {
                 classLoader = Thread.currentThread().getContextClassLoader();
             } else {
                 classLoader = CompletableFuture.supplyAsync(() -> Thread.currentThread().getContextClassLoader(), workqueue).join();

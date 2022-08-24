@@ -27,7 +27,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.function.Predicate;
 
 public class ItemCockatriceScepter extends Item {
@@ -36,22 +38,22 @@ public class ItemCockatriceScepter extends Item {
     private int specialWeaponDmg;
 
     public ItemCockatriceScepter() {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxDamage(700));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(700));
         this.setRegistryName(IceAndFire.MODID, "cockatrice_scepter");
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.cockatrice_scepter.desc_0").mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.cockatrice_scepter.desc_1").mergeStyle(TextFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.cockatrice_scepter.desc_0").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.cockatrice_scepter.desc_1").withStyle(TextFormatting.GRAY));
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity livingEntity, int timeLeft) {
+    public void releaseUsing(ItemStack stack, World worldIn, LivingEntity livingEntity, int timeLeft) {
         if (specialWeaponDmg > 0) {
-            stack.damageItem(specialWeaponDmg, livingEntity, (player) -> {
-                player.sendBreakAnimation(livingEntity.getActiveHand());
+            stack.hurtAndBreak(specialWeaponDmg, livingEntity, (player) -> {
+                player.broadcastBreakEvent(livingEntity.getUsedItemHand());
             });
             specialWeaponDmg = 0;
         }
@@ -67,14 +69,14 @@ public class ItemCockatriceScepter extends Item {
     }
 
     @Override
-    public UseAction getUseAction(ItemStack stack) {
+    public UseAction getUseAnimation(ItemStack stack) {
         return UseAction.BOW;
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand hand) {
-        ItemStack itemStackIn = playerIn.getHeldItem(hand);
-        playerIn.setActiveHand(hand);
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand hand) {
+        ItemStack itemStackIn = playerIn.getItemInHand(hand);
+        playerIn.startUsingItem(hand);
         return new ActionResult<ItemStack>(ActionResultType.PASS, itemStackIn);
     }
 
@@ -82,20 +84,20 @@ public class ItemCockatriceScepter extends Item {
         if (player instanceof PlayerEntity) {
             double dist = 32;
             Vector3d playerEyePosition = player.getEyePosition(1.0F);
-            Vector3d playerLook = player.getLook(1.0F);
+            Vector3d playerLook = player.getViewVector(1.0F);
             Vector3d Vector3d2 = playerEyePosition.add(playerLook.x * dist, playerLook.y * dist, playerLook.z * dist);
             Entity pointedEntity = null;
-            List<Entity> nearbyEntities = player.world.getEntitiesInAABBexcluding(player, player.getBoundingBox().expand(playerLook.x * dist, playerLook.y * dist, playerLook.z * dist).grow(1.0D, 1.0D, 1.0D), new Predicate<Entity>() {
+            List<Entity> nearbyEntities = player.level.getEntities(player, player.getBoundingBox().expandTowards(playerLook.x * dist, playerLook.y * dist, playerLook.z * dist).inflate(1.0D, 1.0D, 1.0D), new Predicate<Entity>() {
                 @Override
                 public boolean test(Entity entity) {
-                    boolean blindness = entity instanceof LivingEntity && ((LivingEntity) entity).isPotionActive(Effects.BLINDNESS) || (entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entity).canBeTurnedToStone());
-                    return entity != null && entity.canBeCollidedWith() && !blindness && (entity instanceof PlayerEntity || (entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity)));
+                    boolean blindness = entity instanceof LivingEntity && ((LivingEntity) entity).hasEffect(Effects.BLINDNESS) || (entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entity).canBeTurnedToStone());
+                    return entity != null && entity.isPickable() && !blindness && (entity instanceof PlayerEntity || (entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity)));
                 }
             });
             double d2 = dist;
             for (Entity nearbyEntity : nearbyEntities) {
-                AxisAlignedBB axisalignedbb = nearbyEntity.getBoundingBox().grow(nearbyEntity.getCollisionBorderSize());
-                Optional<Vector3d> optional = axisalignedbb.rayTrace(playerEyePosition, Vector3d2);
+                AxisAlignedBB axisalignedbb = nearbyEntity.getBoundingBox().inflate(nearbyEntity.getPickRadius());
+                Optional<Vector3d> optional = axisalignedbb.clip(playerEyePosition, Vector3d2);
 
                 if (axisalignedbb.contains(playerEyePosition)) {
                     if (d2 >= 0.0D) {
@@ -106,7 +108,7 @@ public class ItemCockatriceScepter extends Item {
                     double d3 = playerEyePosition.distanceTo(optional.get());
 
                     if (d3 < d2 || d2 == 0.0D) {
-                        if (nearbyEntity.getLowestRidingEntity() == player.getLowestRidingEntity() && !player.canRiderInteract()) {
+                        if (nearbyEntity.getRootVehicle() == player.getRootVehicle() && !player.canRiderInteract()) {
                             if (d2 == 0.0D) {
                                 pointedEntity = nearbyEntity;
                             }
@@ -134,10 +136,10 @@ public class ItemCockatriceScepter extends Item {
                 MiscProperties.removeTargetedBy(caster, target);
                 MiscProperties.removeTarget(caster, target);
             }
-            target.addPotionEffect(new EffectInstance(Effects.WITHER, 40, 2));
-            if (caster.ticksExisted % 20 == 0) {
+            target.addEffect(new EffectInstance(Effects.WITHER, 40, 2));
+            if (caster.tickCount % 20 == 0) {
                 specialWeaponDmg++;
-                target.attackEntityFrom(DamageSource.WITHER, 2);
+                target.hurt(DamageSource.WITHER, 2);
             }
             drawParticleBeam(caster, target);
             if (!target.isAlive()) {
@@ -149,10 +151,10 @@ public class ItemCockatriceScepter extends Item {
 
     private void drawParticleBeam(LivingEntity origin, LivingEntity target) {
         double d5 = 80F;
-        double d0 = target.getPosX() - origin.getPosX();
-        double d1 = target.getPosY() + (double) (target.getHeight() * 0.5F)
-                - (origin.getPosY() + (double) origin.getEyeHeight() * 0.5D);
-        double d2 = target.getPosZ() - origin.getPosZ();
+        double d0 = target.getX() - origin.getX();
+        double d1 = target.getY() + (double) (target.getBbHeight() * 0.5F)
+            - (origin.getY() + (double) origin.getEyeHeight() * 0.5D);
+        double d2 = target.getZ() - origin.getZ();
         double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
         d0 = d0 / d3;
         d1 = d1 / d3;
@@ -160,7 +162,7 @@ public class ItemCockatriceScepter extends Item {
         double d4 = this.rand.nextDouble();
         while (d4 < d3) {
             d4 += 1.0D;
-            origin.world.addParticle(ParticleTypes.ENTITY_EFFECT, origin.getPosX() + d0 * d4, origin.getPosY() + d1 * d4 + (double) origin.getEyeHeight() * 0.5D, origin.getPosZ() + d2 * d4, 0.0D, 0.0D, 0.0D);
+            origin.level.addParticle(ParticleTypes.ENTITY_EFFECT, origin.getX() + d0 * d4, origin.getY() + d1 * d4 + (double) origin.getEyeHeight() * 0.5D, origin.getZ() + d2 * d4, 0.0D, 0.0D, 0.0D);
         }
     }
 

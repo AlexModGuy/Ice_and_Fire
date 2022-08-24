@@ -1,13 +1,8 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,15 +19,19 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 public class ItemDragonSkull extends Item implements ICustomRendered {
-    private int dragonType;
+    private final int dragonType;
+
     public ItemDragonSkull(int dragonType) {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
         this.dragonType = dragonType;
         this.setRegistryName(IceAndFire.MODID, "dragon_skull_" + getType(dragonType));
     }
 
-    private String getType(int type){
+    private String getType(int type) {
         if(type == 2){
             return "lightning";
         }else if (type == 1){
@@ -43,7 +42,7 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
     }
 
     @Override
-    public void onCreated(ItemStack itemStack, World world, PlayerEntity player) {
+    public void onCraftedBy(ItemStack itemStack, World world, PlayerEntity player) {
         itemStack.setTag(new CompoundNBT());
     }
 
@@ -57,39 +56,39 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         String iceorfire = "dragon." + getType(dragonType);
-        tooltip.add(new TranslationTextComponent(iceorfire).mergeStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent(iceorfire).withStyle(TextFormatting.GRAY));
         if (stack.getTag() != null) {
-            tooltip.add(new TranslationTextComponent("dragon.stage").mergeStyle(TextFormatting.GRAY).appendSibling(new StringTextComponent( " " + stack.getTag().getInt("Stage"))));
+            tooltip.add(new TranslationTextComponent("dragon.stage").withStyle(TextFormatting.GRAY).append(new StringTextComponent(" " + stack.getTag().getInt("Stage"))));
         }
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        ItemStack stack = context.getPlayer().getHeldItem(context.getHand());
+    public ActionResultType useOn(ItemUseContext context) {
+        ItemStack stack = context.getPlayer().getItemInHand(context.getHand());
         /*
          * EntityDragonEgg egg = new EntityDragonEgg(worldIn);
          * egg.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() +
          * 0.5); if(!worldIn.isRemote){ worldIn.spawnEntityInWorld(egg); }
          */
         if (stack.getTag() != null) {
-            EntityDragonSkull skull = new EntityDragonSkull(IafEntityRegistry.DRAGON_SKULL.get(), context.getWorld());
+            EntityDragonSkull skull = new EntityDragonSkull(IafEntityRegistry.DRAGON_SKULL.get(), context.getLevel());
             skull.setDragonType(dragonType);
             skull.setStage(stack.getTag().getInt("Stage"));
             skull.setDragonAge(stack.getTag().getInt("DragonAge"));
-            BlockPos offset = context.getPos().offset(context.getFace(), 1);
-            skull.setLocationAndAngles(offset.getX() + 0.5, offset.getY(), offset.getZ() + 0.5, 0, 0);
-            float yaw = context.getPlayer().rotationYaw;
-            if (context.getFace() != Direction.UP) {
-                yaw = context.getPlayer().getHorizontalFacing().getHorizontalAngle();
+            BlockPos offset = context.getClickedPos().relative(context.getClickedFace(), 1);
+            skull.moveTo(offset.getX() + 0.5, offset.getY(), offset.getZ() + 0.5, 0, 0);
+            float yaw = context.getPlayer().yRot;
+            if (context.getClickedFace() != Direction.UP) {
+                yaw = context.getPlayer().getDirection().toYRot();
             }
             skull.setYaw(yaw);
-            if (stack.hasDisplayName()) {
-                skull.setCustomName(stack.getDisplayName());
+            if (stack.hasCustomHoverName()) {
+                skull.setCustomName(stack.getHoverName());
             }
-            if (!context.getWorld().isRemote) {
-                context.getWorld().addEntity(skull);
+            if (!context.getLevel().isClientSide) {
+                context.getLevel().addFreshEntity(skull);
             }
             if (!context.getPlayer().isCreative()) {
                 stack.shrink(1);

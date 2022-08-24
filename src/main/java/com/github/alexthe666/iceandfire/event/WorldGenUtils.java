@@ -13,8 +13,8 @@ public class WorldGenUtils {
     }
 
     public static BlockPos degradeSurface(IWorld world, BlockPos surface) {
-        while ((!world.getBlockState(surface).isSolid() || canHeightSkipBlock(surface, world)) && surface.getY() > 1) {
-            surface = surface.down();
+        while ((!world.getBlockState(surface).canOcclude() || canHeightSkipBlock(surface, world)) && surface.getY() > 1) {
+            surface = surface.below();
         }
         return surface;
     }

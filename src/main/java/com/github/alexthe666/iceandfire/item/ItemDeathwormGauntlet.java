@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,7 +32,7 @@ public class ItemDeathwormGauntlet extends Item implements ICustomRendered {
     private int specialDamage = 0;
 
     public ItemDeathwormGauntlet(String color) {
-        super(IceAndFire.PROXY.setupISTER(new Item.Properties().maxDamage(500).group(IceAndFire.TAB_ITEMS)));
+        super(IceAndFire.PROXY.setupISTER(new Item.Properties().durability(500).tab(IceAndFire.TAB_ITEMS)));
         this.setRegistryName(IceAndFire.MODID, "deathworm_gauntlet_" + color);
     }
 
@@ -43,14 +42,14 @@ public class ItemDeathwormGauntlet extends Item implements ICustomRendered {
     }
 
     @Override
-    public UseAction getUseAction(ItemStack stack) {
+    public UseAction getUseAnimation(ItemStack stack) {
         return UseAction.BOW;
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand hand) {
-        ItemStack itemStackIn = playerIn.getHeldItem(hand);
-        playerIn.setActiveHand(hand);
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand hand) {
+        ItemStack itemStackIn = playerIn.getItemInHand(hand);
+        playerIn.startUsingItem(hand);
         return new ActionResult<ItemStack>(ActionResultType.PASS, itemStackIn);
     }
 
@@ -60,11 +59,11 @@ public class ItemDeathwormGauntlet extends Item implements ICustomRendered {
                 return;
             } else {
                 if (player instanceof PlayerEntity) {
-                    if (stack.getTag().getInt("HolderID") != player.getEntityId()) {
-                        stack.getTag().putInt("HolderID", player.getEntityId());
+                    if (stack.getTag().getInt("HolderID") != player.getId()) {
+                        stack.getTag().putInt("HolderID", player.getId());
                     }
-                    if (((PlayerEntity) player).getCooldownTracker().getCooldown(this, 0.0F) == 0) {
-                        ((PlayerEntity) player).getCooldownTracker().setCooldown(this, 10);
+                    if (((PlayerEntity) player).getCooldowns().getCooldownPercent(this, 0.0F) == 0) {
+                        ((PlayerEntity) player).getCooldowns().addCooldown(this, 10);
                         player.playSound(IafSoundRegistry.DEATHWORM_ATTACK, 1F, 1F);
                         deathwormReceded = false;
                         deathwormLaunched = true;
@@ -74,10 +73,10 @@ public class ItemDeathwormGauntlet extends Item implements ICustomRendered {
         }
     }
 
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity LivingEntity, int timeLeft) {
+    public void releaseUsing(ItemStack stack, World worldIn, LivingEntity LivingEntity, int timeLeft) {
         if (specialDamage > 0) {
-            stack.damageItem(specialDamage, LivingEntity, (player) -> {
-                player.sendBreakAnimation(LivingEntity.getActiveHand());
+            stack.hurtAndBreak(specialDamage, LivingEntity, (player) -> {
+                player.broadcastBreakEvent(LivingEntity.getUsedItemHand());
             });
             specialDamage = 0;
         }
@@ -87,7 +86,7 @@ public class ItemDeathwormGauntlet extends Item implements ICustomRendered {
     }
 
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return !oldStack.isItemEqual(newStack);
+        return !oldStack.sameItem(newStack);
     }
 
     @Override
@@ -118,21 +117,21 @@ public class ItemDeathwormGauntlet extends Item implements ICustomRendered {
             if (MiscProperties.getLungeTicks((LivingEntity) entity) == 20) {
                 if (entity instanceof PlayerEntity) {
                     PlayerEntity player = (PlayerEntity) entity;
-                    Vector3d Vector3d = player.getLook(1.0F).normalize();
+                    Vector3d Vector3d = player.getViewVector(1.0F).normalize();
                     double range = 5;
-                    for (LivingEntity livingEntity : world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(player.getPosX() - range, player.getPosY() - range, player.getPosZ() - range, player.getPosX() + range, player.getPosY() + range, player.getPosZ() + range))) {
+                    for (LivingEntity livingEntity : world.getEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(player.getX() - range, player.getY() - range, player.getZ() - range, player.getX() + range, player.getY() + range, player.getZ() + range))) {
                         //Let's not pull/hit ourselves
                         if (livingEntity == entity)
                             continue;
-                        Vector3d Vector3d1 = new Vector3d(livingEntity.getPosX() - player.getPosX(), livingEntity.getPosY() - player.getPosY(), livingEntity.getPosZ() - player.getPosZ());
+                        Vector3d Vector3d1 = new Vector3d(livingEntity.getX() - player.getX(), livingEntity.getY() - player.getY(), livingEntity.getZ() - player.getZ());
                         double d0 = Vector3d1.length();
                         Vector3d1 = Vector3d1.normalize();
-                        double d1 = Vector3d.dotProduct(Vector3d1);
-                        boolean canSee = d1 > 1.0D - 0.5D / d0 && player.canEntityBeSeen(livingEntity);
+                        double d1 = Vector3d.dot(Vector3d1);
+                        boolean canSee = d1 > 1.0D - 0.5D / d0 && player.canSee(livingEntity);
                         if (canSee) {
                             specialDamage++;
-                            livingEntity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity) entity), 3F);
-                            livingEntity.applyKnockback(0.5F, livingEntity.getPosX() - player.getPosX(), livingEntity.getPosZ() - player.getPosZ());
+                            livingEntity.hurt(DamageSource.playerAttack((PlayerEntity) entity), 3F);
+                            livingEntity.knockback(0.5F, livingEntity.getX() - player.getX(), livingEntity.getZ() - player.getZ());
                         }
                     }
                 }
@@ -142,9 +141,9 @@ public class ItemDeathwormGauntlet extends Item implements ICustomRendered {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.deathworm_gauntlet.desc_0").mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.deathworm_gauntlet.desc_1").mergeStyle(TextFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.deathworm_gauntlet.desc_0").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.deathworm_gauntlet.desc_1").withStyle(TextFormatting.GRAY));
     }
 }

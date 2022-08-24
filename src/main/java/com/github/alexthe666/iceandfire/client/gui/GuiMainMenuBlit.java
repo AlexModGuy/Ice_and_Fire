@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldVertexBufferUploader;
@@ -23,18 +22,18 @@ public class GuiMainMenuBlit {
     }
 
     protected static void innerBlit(int p_innerBlit_0_, int p_innerBlit_1_, int p_innerBlit_2_, int p_innerBlit_3_, int p_innerBlit_4_, float p_innerBlit_5_, float p_innerBlit_6_, float p_innerBlit_7_, float p_innerBlit_8_, float alpha) {
-        BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
+        BufferBuilder bufferbuilder = Tessellator.getInstance().getBuilder();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR_TEX);
-        bufferbuilder.pos(p_innerBlit_0_, p_innerBlit_3_, p_innerBlit_4_).color(1, 1, 1, alpha)
-            .tex(p_innerBlit_5_, p_innerBlit_8_).endVertex();
-        bufferbuilder.pos(p_innerBlit_1_, p_innerBlit_3_, p_innerBlit_4_).color(1, 1, 1, alpha)
-            .tex(p_innerBlit_6_, p_innerBlit_8_).endVertex();
-        bufferbuilder.pos(p_innerBlit_1_, p_innerBlit_2_, p_innerBlit_4_).color(1, 1, 1, alpha)
-            .tex(p_innerBlit_6_, p_innerBlit_7_).endVertex();
-        bufferbuilder.pos(p_innerBlit_0_, p_innerBlit_2_, p_innerBlit_4_).color(1, 1, 1, alpha)
-            .tex(p_innerBlit_5_, p_innerBlit_7_).endVertex();
-        bufferbuilder.finishDrawing();
+        bufferbuilder.vertex(p_innerBlit_0_, p_innerBlit_3_, p_innerBlit_4_).color(1, 1, 1, alpha)
+            .uv(p_innerBlit_5_, p_innerBlit_8_).endVertex();
+        bufferbuilder.vertex(p_innerBlit_1_, p_innerBlit_3_, p_innerBlit_4_).color(1, 1, 1, alpha)
+            .uv(p_innerBlit_6_, p_innerBlit_8_).endVertex();
+        bufferbuilder.vertex(p_innerBlit_1_, p_innerBlit_2_, p_innerBlit_4_).color(1, 1, 1, alpha)
+            .uv(p_innerBlit_6_, p_innerBlit_7_).endVertex();
+        bufferbuilder.vertex(p_innerBlit_0_, p_innerBlit_2_, p_innerBlit_4_).color(1, 1, 1, alpha)
+            .uv(p_innerBlit_5_, p_innerBlit_7_).endVertex();
+        bufferbuilder.end();
         RenderSystem.enableAlphaTest();
-        WorldVertexBufferUploader.draw(bufferbuilder);
+        WorldVertexBufferUploader.end(bufferbuilder);
     }
 }

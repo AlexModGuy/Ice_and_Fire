@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
@@ -9,25 +7,13 @@ import com.github.alexthe666.iceandfire.entity.ai.DreadAITargetNonDread;
 import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.google.common.base.Predicate;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -47,13 +33,15 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear, IHasArmorVariant {
 
-    private static final DataParameter<Boolean> CUSTOM_ARMOR_HEAD = EntityDataManager.createKey(EntityDreadThrall.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> CUSTOM_ARMOR_CHEST = EntityDataManager.createKey(EntityDreadThrall.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> CUSTOM_ARMOR_LEGS = EntityDataManager.createKey(EntityDreadThrall.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> CUSTOM_ARMOR_FEET = EntityDataManager.createKey(EntityDreadThrall.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> CUSTOM_ARMOR_INDEX = EntityDataManager.createKey(EntityDreadThrall.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> CUSTOM_ARMOR_HEAD = EntityDataManager.defineId(EntityDreadThrall.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> CUSTOM_ARMOR_CHEST = EntityDataManager.defineId(EntityDreadThrall.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> CUSTOM_ARMOR_LEGS = EntityDataManager.defineId(EntityDreadThrall.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> CUSTOM_ARMOR_FEET = EntityDataManager.defineId(EntityDreadThrall.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> CUSTOM_ARMOR_INDEX = EntityDataManager.defineId(EntityDreadThrall.class, DataSerializers.INT);
     public static Animation ANIMATION_SPAWN = Animation.create(40);
     private int animationTick;
     private Animation currentAnimation;
@@ -84,87 +72,87 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
     }
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-                //HEALTH
-                .createMutableAttribute(Attributes.MAX_HEALTH, 20.0D)
-                //SPEED
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.2D)
-                //ATTACK
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2.0D)
-                //FOLLOW RANGE
-                .createMutableAttribute(Attributes.FOLLOW_RANGE, 128.0D)
-                //ARMOR
-                .createMutableAttribute(Attributes.ARMOR, 2.0D);
+        return MobEntity.createMobAttributes()
+            //HEALTH
+            .add(Attributes.MAX_HEALTH, 20.0D)
+            //SPEED
+            .add(Attributes.MOVEMENT_SPEED, 0.2D)
+            //ATTACK
+            .add(Attributes.ATTACK_DAMAGE, 2.0D)
+            //FOLLOW RANGE
+            .add(Attributes.FOLLOW_RANGE, 128.0D)
+            //ARMOR
+            .add(Attributes.ARMOR, 2.0D);
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(CUSTOM_ARMOR_INDEX, Integer.valueOf(0));
-        this.dataManager.register(CUSTOM_ARMOR_HEAD, Boolean.valueOf(false));
-        this.dataManager.register(CUSTOM_ARMOR_CHEST, Boolean.valueOf(false));
-        this.dataManager.register(CUSTOM_ARMOR_LEGS, Boolean.valueOf(false));
-        this.dataManager.register(CUSTOM_ARMOR_FEET, Boolean.valueOf(false));
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(CUSTOM_ARMOR_INDEX, Integer.valueOf(0));
+        this.entityData.define(CUSTOM_ARMOR_HEAD, Boolean.valueOf(false));
+        this.entityData.define(CUSTOM_ARMOR_CHEST, Boolean.valueOf(false));
+        this.entityData.define(CUSTOM_ARMOR_LEGS, Boolean.valueOf(false));
+        this.entityData.define(CUSTOM_ARMOR_FEET, Boolean.valueOf(false));
     }
 
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
-            BlockState belowBlock = world.getBlockState(this.getPosition().down());
+            BlockState belowBlock = level.getBlockState(this.blockPosition().below());
             if (belowBlock.getBlock() != Blocks.AIR) {
                 for (int i = 0; i < 5; i++) {
-                    this.world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, belowBlock), this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getBoundingBox().minY, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
+                    this.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, belowBlock), this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getBoundingBox().minY, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
                 }
             }
-            this.setMotion(0, this.getMotion().y, 0);
+            this.setDeltaMovement(0, this.getDeltaMovement().y, 0);
         }
-        if (this.getHeldItemMainhand().getItem() == Items.BOW) {
-            this.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.BONE));
+        if (this.getMainHandItem().getItem() == Items.BOW) {
+            this.setItemInHand(Hand.MAIN_HAND, new ItemStack(Items.BONE));
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-        super.setEquipmentBasedOnDifficulty(difficulty);
-        if (rand.nextFloat() < 0.75F) {
-            double chance = rand.nextFloat();
+    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+        super.populateDefaultEquipmentSlots(difficulty);
+        if (random.nextFloat() < 0.75F) {
+            double chance = random.nextFloat();
             if (chance < 0.0025F) {
-                this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(IafItemRegistry.DRAGONSTEEL_ICE_SWORD));
+                this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(IafItemRegistry.DRAGONSTEEL_ICE_SWORD));
             }
             if (chance < 0.01F) {
-                this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
+                this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
             }
             if (chance < 0.1F) {
-                this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
+                this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
             }
             if (chance < 0.75F) {
-                this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(IafItemRegistry.DREAD_SWORD));
+                this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(IafItemRegistry.DREAD_SWORD));
             }
         }
-        if (rand.nextFloat() < 0.75F) {
-            this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
-            setCustomArmorHead(rand.nextInt(8) != 0);
+        if (random.nextFloat() < 0.75F) {
+            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
+            setCustomArmorHead(random.nextInt(8) != 0);
         }
-        if (rand.nextFloat() < 0.75F) {
-            this.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
-            setCustomArmorChest(rand.nextInt(8) != 0);
+        if (random.nextFloat() < 0.75F) {
+            this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+            setCustomArmorChest(random.nextInt(8) != 0);
         }
-        if (rand.nextFloat() < 0.75F) {
-            this.setItemStackToSlot(EquipmentSlotType.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
-            setCustomArmorLegs(rand.nextInt(8) != 0);
+        if (random.nextFloat() < 0.75F) {
+            this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
+            setCustomArmorLegs(random.nextInt(8) != 0);
         }
-        if (rand.nextFloat() < 0.75F) {
-            this.setItemStackToSlot(EquipmentSlotType.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-            setCustomArmorFeet(rand.nextInt(8) != 0);
+        if (random.nextFloat() < 0.75F) {
+            this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
+            setCustomArmorFeet(random.nextInt(8) != 0);
         }
-        setBodyArmorVariant(rand.nextInt(8));
+        setBodyArmorVariant(random.nextInt(8));
     }
 
     @Nullable
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        ILivingEntityData data = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+        ILivingEntityData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setAnimation(ANIMATION_SPAWN);
-        this.setEquipmentBasedOnDifficulty(difficultyIn);
+        this.populateDefaultEquipmentSlots(difficultyIn);
         return data;
     }
 
@@ -178,8 +166,8 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
         animationTick = tick;
     }
 
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         compound.putInt("ArmorVariant", getBodyArmorVariant());
         compound.putBoolean("HasCustomHelmet", hasCustomArmorHead());
         compound.putBoolean("HasCustomChestplate", hasCustomArmorChest());
@@ -188,8 +176,8 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         setBodyArmorVariant(compound.getInt("ArmorVariant"));
         setCustomArmorHead(compound.getBoolean("HasCustomHelmet"));
         setCustomArmorChest(compound.getBoolean("HasCustomChestplate"));
@@ -208,45 +196,45 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
     }
 
     public boolean hasCustomArmorHead() {
-        return this.dataManager.get(CUSTOM_ARMOR_HEAD).booleanValue();
+        return this.entityData.get(CUSTOM_ARMOR_HEAD).booleanValue();
     }
 
     public void setCustomArmorHead(boolean head) {
-        this.dataManager.set(CUSTOM_ARMOR_HEAD, head);
+        this.entityData.set(CUSTOM_ARMOR_HEAD, head);
     }
 
     public boolean hasCustomArmorChest() {
-        return this.dataManager.get(CUSTOM_ARMOR_CHEST).booleanValue();
+        return this.entityData.get(CUSTOM_ARMOR_CHEST).booleanValue();
     }
 
     public void setCustomArmorChest(boolean head) {
-        this.dataManager.set(CUSTOM_ARMOR_CHEST, head);
+        this.entityData.set(CUSTOM_ARMOR_CHEST, head);
     }
 
     public boolean hasCustomArmorLegs() {
-        return this.dataManager.get(CUSTOM_ARMOR_LEGS).booleanValue();
+        return this.entityData.get(CUSTOM_ARMOR_LEGS).booleanValue();
     }
 
     public void setCustomArmorLegs(boolean head) {
-        this.dataManager.set(CUSTOM_ARMOR_LEGS, head);
+        this.entityData.set(CUSTOM_ARMOR_LEGS, head);
     }
 
     public boolean hasCustomArmorFeet() {
-        return this.dataManager.get(CUSTOM_ARMOR_FEET).booleanValue();
+        return this.entityData.get(CUSTOM_ARMOR_FEET).booleanValue();
     }
 
     public void setCustomArmorFeet(boolean head) {
-        this.dataManager.set(CUSTOM_ARMOR_FEET, head);
+        this.entityData.set(CUSTOM_ARMOR_FEET, head);
     }
 
     @Override
     public int getBodyArmorVariant() {
-        return this.dataManager.get(CUSTOM_ARMOR_INDEX).intValue();
+        return this.entityData.get(CUSTOM_ARMOR_INDEX).intValue();
     }
 
     @Override
     public void setBodyArmorVariant(int variant) {
-        this.dataManager.set(CUSTOM_ARMOR_INDEX, variant);
+        this.entityData.set(CUSTOM_ARMOR_INDEX, variant);
     }
 
     @Override
@@ -276,21 +264,21 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
 
     @Nullable
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ENTITY_STRAY_AMBIENT;
+        return SoundEvents.STRAY_AMBIENT;
     }
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.ENTITY_STRAY_HURT;
+        return SoundEvents.STRAY_HURT;
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_STRAY_DEATH;
+        return SoundEvents.STRAY_DEATH;
     }
 
     protected void playStepSound(BlockPos pos, Block blockIn) {
-        this.playSound(SoundEvents.ENTITY_STRAY_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEvents.STRAY_STEP, 0.15F, 1.0F);
     }
 
 }

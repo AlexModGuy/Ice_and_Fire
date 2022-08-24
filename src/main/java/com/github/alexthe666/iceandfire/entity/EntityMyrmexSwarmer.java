@@ -1,16 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
-import com.github.alexthe666.iceandfire.entity.ai.EntityAIAttackMeleeNoCooldown;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIFollowSummoner;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAISummonerHurtByTarget;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAISummonerHurtTarget;
-import com.github.alexthe666.iceandfire.entity.ai.MyrmexAIWander;
-
+import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -29,7 +19,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
@@ -37,36 +26,37 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import com.github.alexthe666.iceandfire.entity.EntityMyrmexRoyal.AIFlyAtTarget;
-import com.github.alexthe666.iceandfire.entity.EntityMyrmexRoyal.AIFlyRandom;
+import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.UUID;
 
 public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 
-    private static final DataParameter<Optional<UUID>> SUMMONER_ID = EntityDataManager.createKey(EntityMyrmexSwarmer.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-    private static final DataParameter<Integer> TICKS_ALIVE = EntityDataManager.createKey(EntityMyrmexSwarmer.class, DataSerializers.VARINT);
+    private static final DataParameter<Optional<UUID>> SUMMONER_ID = EntityDataManager.defineId(EntityMyrmexSwarmer.class, DataSerializers.OPTIONAL_UUID);
+    private static final DataParameter<Integer> TICKS_ALIVE = EntityDataManager.defineId(EntityMyrmexSwarmer.class, DataSerializers.INT);
 
     public EntityMyrmexSwarmer(EntityType type, World worldIn) {
         super(type, worldIn);
-        this.moveController = new EntityMyrmexRoyal.FlyMoveHelper(this);
-        this.navigator = createNavigator(world, AdvancedPathNavigate.MovementType.FLYING);
+        this.moveControl = new EntityMyrmexRoyal.FlyMoveHelper(this);
+        this.navigation = createNavigator(level, AdvancedPathNavigate.MovementType.FLYING);
         switchNavigator(false);
     }
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-                //HEALTH
-                .createMutableAttribute(Attributes.MAX_HEALTH, 5)
-                //SPEED
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35D)
-                //ATTACK
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)
-                //FOLLOW RANGE
-                .createMutableAttribute(Attributes.FOLLOW_RANGE, 64.0D)
-                //ARMOR
-                .createMutableAttribute(Attributes.ARMOR, 0D);
+        return MobEntity.createMobAttributes()
+            //HEALTH
+            .add(Attributes.MAX_HEALTH, 5)
+            //SPEED
+            .add(Attributes.MOVEMENT_SPEED, 0.35D)
+            //ATTACK
+            .add(Attributes.ATTACK_DAMAGE, 2)
+            //FOLLOW RANGE
+            .add(Attributes.FOLLOW_RANGE, 64.0D)
+            //ARMOR
+            .add(Attributes.ARMOR, 0D);
     }
 
-    protected int getExperiencePoints(PlayerEntity player) {
+    protected int getExperienceReward(PlayerEntity player) {
         return 0;
     }
 
@@ -91,32 +81,32 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         this.targetSelector.addGoal(3, new MyrmexAISummonerHurtTarget(this));
     }
 
-    protected void collideWithEntity(Entity entityIn) {
+    protected void doPush(Entity entityIn) {
         if (entityIn instanceof EntityMyrmexSwarmer) {
-            super.collideWithEntity(entityIn);
+            super.doPush(entityIn);
         }
     }
 
-    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+    protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(SUMMONER_ID, Optional.empty());
-        this.dataManager.register(TICKS_ALIVE, 0);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SUMMONER_ID, Optional.empty());
+        this.entityData.define(TICKS_ALIVE, 0);
     }
 
     @Nullable
     public LivingEntity getSummoner() {
         try {
             UUID uuid = this.getSummonerUUID();
-            return uuid == null ? null : this.world.getPlayerByUuid(uuid);
+            return uuid == null ? null : this.level.getPlayerByUUID(uuid);
         } catch (IllegalArgumentException var2) {
             return null;
         }
     }
 
-    public boolean isOnSameTeam(Entity entityIn) {
+    public boolean isAlliedTo(Entity entityIn) {
         if (entityIn == null) {
             return false;
         }
@@ -124,18 +114,18 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
             return false;
         }
         if (entityIn instanceof TameableEntity) {
-            UUID ownerID = ((TameableEntity) entityIn).getOwnerId();
+            UUID ownerID = ((TameableEntity) entityIn).getOwnerUUID();
             return ownerID != null && ownerID.equals(this.getSummonerUUID());
         }
-        return entityIn.getUniqueID().equals(this.getSummonerUUID()) || entityIn instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID() != null && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID().equals(this.getSummonerUUID());
+        return entityIn.getUUID().equals(this.getSummonerUUID()) || entityIn instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID() != null && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID().equals(this.getSummonerUUID());
     }
 
     public void setSummonerID(@Nullable UUID uuid) {
-        this.dataManager.set(SUMMONER_ID, Optional.ofNullable(uuid));
+        this.entityData.set(SUMMONER_ID, Optional.ofNullable(uuid));
     }
 
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         if (this.getSummonerUUID() == null) {
             compound.putString("SummonerUUID", "");
         } else {
@@ -145,10 +135,10 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 
     }
 
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         String s = "";
-        if (compound.hasUniqueId("SummonerUUID")) {
+        if (compound.hasUUID("SummonerUUID")) {
             s = compound.getString("SummonerUUID");
         }
         if (!s.isEmpty()) {
@@ -161,58 +151,58 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     }
 
     public void setSummonedBy(PlayerEntity player) {
-        this.setSummonerID(player.getUniqueID());
+        this.setSummonerID(player.getUUID());
     }
 
     @Nullable
     public UUID getSummonerUUID() {
-        return (UUID) ((Optional) this.dataManager.get(SUMMONER_ID)).orElse(null);
+        return (UUID) ((Optional) this.entityData.get(SUMMONER_ID)).orElse(null);
     }
 
     public int getTicksAlive() {
-        return this.dataManager.get(TICKS_ALIVE).intValue();
+        return this.entityData.get(TICKS_ALIVE).intValue();
     }
 
     public void setTicksAlive(int ticks) {
-        this.dataManager.set(TICKS_ALIVE, ticks);
+        this.entityData.set(TICKS_ALIVE, ticks);
     }
 
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         setFlying(true);
         boolean flying = this.isFlying() && !this.onGround;
         setTicksAlive(getTicksAlive() + 1);
         if (flying) {
-            this.setMotion(this.getMotion().add(0, -0.08D, 0));
-            if (this.moveController.getY() > this.getPosY()) {
-                this.setMotion(this.getMotion().add(0, 0.08D, 0));
+            this.setDeltaMovement(this.getDeltaMovement().add(0, -0.08D, 0));
+            if (this.moveControl.getWantedY() > this.getY()) {
+                this.setDeltaMovement(this.getDeltaMovement().add(0, 0.08D, 0));
             }
         }
         if (this.onGround) {
-            this.setMotion(this.getMotion().add(0, 0.2D, 0));
+            this.setDeltaMovement(this.getDeltaMovement().add(0, 0.2D, 0));
         }
-        if (this.getAttackTarget() != null) {
-            this.moveController.setMoveTo(this.getAttackTarget().getPosX(), this.getAttackTarget().getBoundingBox().minY, this.getAttackTarget().getPosZ(), 1.0F);
-            if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
-                this.setAnimation(rand.nextBoolean() ? ANIMATION_BITE : ANIMATION_STING);
+        if (this.getTarget() != null) {
+            this.moveControl.setWantedPosition(this.getTarget().getX(), this.getTarget().getBoundingBox().minY, this.getTarget().getZ(), 1.0F);
+            if (this.getAttackBounds().intersects(this.getTarget().getBoundingBox())) {
+                this.setAnimation(random.nextBoolean() ? ANIMATION_BITE : ANIMATION_STING);
             }
         }
         if (this.getTicksAlive() > 1800) {
-            this.onKillCommand();
+            this.kill();
         }
-        if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
+        if (this.getAnimation() == ANIMATION_BITE && this.getTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
-            double dist = this.getDistanceSq(this.getAttackTarget());
+            double dist = this.distanceToSqr(this.getTarget());
             if (dist < attackDistance()) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                this.getTarget().hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
-        if (this.getAnimation() == ANIMATION_STING && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
+        if (this.getAnimation() == ANIMATION_STING && this.getTarget() != null && this.getAnimationTick() == 6) {
             this.playStingSound();
-            double dist = this.getDistanceSq(this.getAttackTarget());
+            double dist = this.distanceToSqr(this.getTarget());
             if (dist < attackDistance()) {
-                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 2));
-                this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 70, 1));
+                this.getTarget().hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 2));
+                this.getTarget().addEffect(new EffectInstance(Effects.POISON, 70, 1));
             }
         }
     }
@@ -222,7 +212,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     }
 
     @Nullable
-    protected ResourceLocation getLootTable() {
+    protected ResourceLocation getDefaultLootTable() {
         return null;
     }
 
@@ -245,6 +235,6 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     }
 
     public boolean shouldAttackEntity(LivingEntity attacker, LivingEntity LivingEntity) {
-        return !isOnSameTeam(attacker);
+        return !isAlliedTo(attacker);
     }
 }

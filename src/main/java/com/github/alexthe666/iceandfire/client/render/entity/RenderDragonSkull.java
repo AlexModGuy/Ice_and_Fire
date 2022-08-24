@@ -37,9 +37,9 @@ public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
     }
 
     private static void setRotationAngles(ModelRenderer cube, float rotX, float rotY, float rotZ) {
-        cube.rotateAngleX = rotX;
-        cube.rotateAngleY = rotY;
-        cube.rotateAngleZ = rotZ;
+        cube.xRot = rotX;
+        cube.yRot = rotY;
+        cube.zRot = rotZ;
     }
 
     public void render(EntityDragonSkull entity, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
@@ -51,21 +51,22 @@ public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
         } else {
             model = fireDragonModel;
         }
-        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityTranslucent(getEntityTexture(entity)));
-        matrixStackIn.push();
-        matrixStackIn.rotate(new Quaternion(Vector3f.XP, -180, true));
-        matrixStackIn.rotate(new Quaternion(Vector3f.YN, 180 - entity.getYaw(), true));
+        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
+        matrixStackIn.pushPose();
+        matrixStackIn.mulPose(new Quaternion(Vector3f.XP, -180, true));
+        matrixStackIn.mulPose(new Quaternion(Vector3f.YN, 180 - entity.getYaw(), true));
         float f = 0.0625F;
-        matrixStackIn.scale(1.0F,  1.0F, 1.0F);
+        matrixStackIn.scale(1.0F, 1.0F, 1.0F);
         float size = getRenderSize(entity) / 3;
         matrixStackIn.scale(size, size, size);
         matrixStackIn.translate(0, entity.isOnWall() ? -0.24F : -0.12F, entity.isOnWall() ? 0.4F : 0.5F);
         model.resetToDefaultPose();
         setRotationAngles(model.getCube("Head"), entity.isOnWall() ? (float) Math.toRadians(50F) : 0F, 0, 0);
         model.getCube("Head").render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        matrixStackIn.pop();
+        matrixStackIn.popPose();
     }
-    public ResourceLocation getEntityTexture(EntityDragonSkull entity) {
+
+    public ResourceLocation getTextureLocation(EntityDragonSkull entity) {
         if (entity.getDragonType() == 2) {
             return EnumDragonTextures.getLightningDragonSkullTextures(entity);
         }

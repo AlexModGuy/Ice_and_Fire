@@ -2,9 +2,7 @@ package com.github.alexthe666.iceandfire.api.event;
 
 import com.github.alexthe666.iceandfire.client.render.tile.RenderPodium;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
-
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.eventbus.api.Event;
 
 /*
@@ -13,11 +11,11 @@ import net.minecraftforge.eventbus.api.Event;
 public class RenderPodiumItemEvent extends Event {
     float partialTicks;
     double x, y, z;
-    private RenderPodium<?> render;
-    private TileEntityPodium podium;
+    private final RenderPodium<?> render;
+    private final TileEntityPodium podium;
 
     public RenderPodiumItemEvent(RenderPodium<?> renderPodium, TileEntityPodium podium, float partialTicks, double x,
-        double y, double z) {
+                                 double y, double z) {
         this.render = renderPodium;
         this.podium = podium;
         this.partialTicks = partialTicks;
@@ -31,7 +29,7 @@ public class RenderPodiumItemEvent extends Event {
     }
 
     public ItemStack getItemStack() {
-        return podium.getStackInSlot(0);
+        return podium.getItem(0);
     }
 
     public TileEntityPodium getPodium() {

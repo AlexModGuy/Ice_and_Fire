@@ -52,13 +52,13 @@ public class IceAndFire {
     public static String VERSION = "UNKNOWN";
     public static ItemGroup TAB_ITEMS = new ItemGroup(MODID) {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE);
         }
     };
     public static ItemGroup TAB_BLOCKS = new ItemGroup("iceandfire.blocks") {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(IafBlockRegistry.DRAGON_SCALE_RED);
         }
     };
@@ -125,12 +125,12 @@ public class IceAndFire {
 
     public static <MSG> void sendMSGToAll(MSG message) {
         for (ServerPlayerEntity player : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()) {
-            NETWORK_WRAPPER.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+            NETWORK_WRAPPER.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
         }
     }
 
     public static <MSG> void sendMSGToPlayer(MSG message, ServerPlayerEntity player) {
-        NETWORK_WRAPPER.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+        NETWORK_WRAPPER.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
     }
 
     private void setup(final FMLCommonSetupEvent event) {

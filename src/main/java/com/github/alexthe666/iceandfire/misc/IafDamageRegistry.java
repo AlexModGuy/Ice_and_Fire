@@ -20,10 +20,10 @@ public class IafDamageRegistry {
             super(damageTypeIn, damageSourceEntityIn);
         }
 
-        public ITextComponent getDeathMessage(LivingEntity entityLivingBaseIn) {
-            LivingEntity livingentity = entityLivingBaseIn.getAttackingEntity();
-            String s = "death.attack." + this.damageType;
-            int index = entityLivingBaseIn.getRNG().nextInt(2);
+        public ITextComponent getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
+            LivingEntity livingentity = entityLivingBaseIn.getKillCredit();
+            String s = "death.attack." + this.msgId;
+            int index = entityLivingBaseIn.getRandom().nextInt(2);
             String s1 = s + "." + index;
             String s2 = s + ".attacker_" + index;
             return livingentity != null ? new TranslationTextComponent(s2, entityLivingBaseIn.getDisplayName(), livingentity.getDisplayName()) : new TranslationTextComponent(s1, entityLivingBaseIn.getDisplayName());
@@ -36,10 +36,10 @@ public class IafDamageRegistry {
             super(damageTypeIn, source, indirectEntityIn);
         }
 
-        public ITextComponent getDeathMessage(LivingEntity entityLivingBaseIn) {
-            LivingEntity livingentity = entityLivingBaseIn.getAttackingEntity();
-            String s = "death.attack." + this.damageType;
-            int index = entityLivingBaseIn.getRNG().nextInt(2);
+        public ITextComponent getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
+            LivingEntity livingentity = entityLivingBaseIn.getKillCredit();
+            String s = "death.attack." + this.msgId;
+            int index = entityLivingBaseIn.getRandom().nextInt(2);
             String s1 = s + "." + index;
             String s2 = s + ".attacker_" + index;
             return livingentity != null ? new TranslationTextComponent(s2, entityLivingBaseIn.getDisplayName(), livingentity.getDisplayName()) : new TranslationTextComponent(s1, entityLivingBaseIn.getDisplayName());
@@ -47,7 +47,7 @@ public class IafDamageRegistry {
     }
 
     public static CustomEntityDamageSource causeGorgonDamage(@Nullable Entity entity) {
-        return (CustomEntityDamageSource) new CustomEntityDamageSource(GORGON_DMG_TYPE, entity).setDamageBypassesArmor().setDamageIsAbsolute();
+        return (CustomEntityDamageSource) new CustomEntityDamageSource(GORGON_DMG_TYPE, entity).bypassArmor().bypassMagic();
     }
 
     public static CustomEntityDamageSource causeDragonFireDamage(@Nullable Entity entity) {

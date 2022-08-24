@@ -16,16 +16,16 @@ public class RenderGorgon extends MobRenderer<EntityGorgon, ModelGorgon> {
 
     public RenderGorgon(EntityRendererManager renderManager) {
         super(renderManager, new ModelGorgon(), 0.4F);
-        this.layerRenderers.add(new LayerGorgonEyes(this));
+        this.layers.add(new LayerGorgonEyes(this));
     }
 
     @Override
-    public void preRenderCallback(EntityGorgon LivingEntityIn, MatrixStack stack, float partialTickTime) {
+    public void scale(EntityGorgon LivingEntityIn, MatrixStack stack, float partialTickTime) {
         stack.scale(0.85F, 0.85F, 0.85F);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityGorgon gorgon) {
+    public ResourceLocation getTextureLocation(EntityGorgon gorgon) {
         if (gorgon.getAnimation() == EntityGorgon.ANIMATION_SCARE) {
             return AGRESSIVE_TEXTURE;
         } else if (gorgon.deathTime > 0) {

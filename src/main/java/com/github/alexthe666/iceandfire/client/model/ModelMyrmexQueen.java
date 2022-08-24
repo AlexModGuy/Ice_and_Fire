@@ -8,7 +8,6 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexQueen;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
@@ -51,164 +50,164 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
     public AdvancedModelBox legBottomR2;
     public AdvancedModelBox legMidR2_1;
     public AdvancedModelBox legBottomR2_1;
-    private ModelAnimator animator;
+    private final ModelAnimator animator;
 
     public ModelMyrmexQueen() {
-        this.textureWidth = 128;
-        this.textureHeight = 128;
+        this.texWidth = 128;
+        this.texHeight = 128;
         this.Tail3 = new AdvancedModelBox(this, 55, 12);
-        this.Tail3.setRotationPoint(0.0F, 0.3F, 11.0F);
+        this.Tail3.setPos(0.0F, 0.3F, 11.0F);
         this.Tail3.addBox(-4.0F, -2.7F, -0.1F, 8, 8, 11, 0.0F);
         this.setRotateAngle(Tail3, -0.22759093446006054F, 0.0F, 0.0F);
         this.crest1 = new AdvancedModelBox(this, 0, 88);
         this.crest1.mirror = true;
-        this.crest1.setRotationPoint(-1.2F, -0.1F, -1.0F);
+        this.crest1.setPos(-1.2F, -0.1F, -1.0F);
         this.crest1.addBox(-1.5F, -2.51F, -0.1F, 3, 1, 6, 0.0F);
         this.setRotateAngle(crest1, 0.40980330836826856F, -0.17453292519943295F, -0.2792526803190927F);
         this.legBottomR3_1 = new AdvancedModelBox(this, 22, 51);
         this.legBottomR3_1.mirror = true;
-        this.legBottomR3_1.setRotationPoint(0.0F, 10.4F, 0.0F);
+        this.legBottomR3_1.setPos(0.0F, 10.4F, 0.0F);
         this.legBottomR3_1.addBox(-1.01F, 0.0F, -0.9F, 2, 13, 2, 0.0F);
         this.setRotateAngle(legBottomR3_1, 0.0F, 0.0F, 1.3203415791337103F);
         this.Stinger = new AdvancedModelBox(this, 60, 0);
-        this.Stinger.setRotationPoint(0.0F, 1.6F, 11.0F);
+        this.Stinger.setPos(0.0F, 1.6F, 11.0F);
         this.Stinger.addBox(-1.0F, -2.7F, -1.7F, 2, 8, 2, 0.0F);
         this.setRotateAngle(Stinger, 0.6373942428283291F, 0.0F, 0.0F);
         this.Body1 = new AdvancedModelBox(this, 34, 47);
-        this.Body1.setRotationPoint(0.0F, -0.7F, -1.0F);
+        this.Body1.setPos(0.0F, -0.7F, -1.0F);
         this.Body1.addBox(-3.5F, -2.1F, -6.3F, 7, 8, 9, 0.0F);
         this.setRotateAngle(Body1, 0.045553093477052F, 0.0F, 0.0F);
         this.Body2 = new AdvancedModelBox(this, 70, 53);
-        this.Body2.setRotationPoint(0.0F, 10.0F, -6.0F);
+        this.Body2.setPos(0.0F, 10.0F, -6.0F);
         this.Body2.addBox(-3.0F, -2.7F, -0.1F, 6, 7, 4, 0.0F);
         this.setRotateAngle(Body2, -0.045553093477052F, 0.0F, 0.0F);
         this.legTopR2_1 = new AdvancedModelBox(this, 0, 54);
         this.legTopR2_1.mirror = true;
-        this.legTopR2_1.setRotationPoint(-3.3F, 1.0F, 1.6F);
+        this.legTopR2_1.setPos(-3.3F, 1.0F, 1.6F);
         this.legTopR2_1.addBox(-1.0F, 0.0F, -1.5F, 2, 7, 3, 0.0F);
         this.setRotateAngle(legTopR2_1, 0.0F, 0.0F, 0.6981317007977318F);
         this.legBottomR1_1 = new AdvancedModelBox(this, 22, 51);
         this.legBottomR1_1.mirror = true;
-        this.legBottomR1_1.setRotationPoint(0.0F, 10.4F, 0.0F);
+        this.legBottomR1_1.setPos(0.0F, 10.4F, 0.0F);
         this.legBottomR1_1.addBox(-1.01F, 0.0F, -0.9F, 2, 13, 2, 0.0F);
         this.setRotateAngle(legBottomR1_1, 0.0F, 0.0F, 1.3203415791337103F);
         this.Tail2 = new AdvancedModelBox(this, 80, 76);
-        this.Tail2.setRotationPoint(0.0F, 0.3F, 12.2F);
+        this.Tail2.setPos(0.0F, 0.3F, 12.2F);
         this.Tail2.addBox(-5.0F, -2.7F, -0.1F, 10, 10, 13, 0.0F);
         this.setRotateAngle(Tail2, -0.091106186954104F, 0.0F, 0.0F);
         this.legMidR1 = new AdvancedModelBox(this, 11, 50);
-        this.legMidR1.setRotationPoint(0.0F, 6.4F, 0.1F);
+        this.legMidR1.setPos(0.0F, 6.4F, 0.1F);
         this.legMidR1.addBox(-1.5F, 0.0F, -1.0F, 3, 12, 2, 0.0F);
         this.setRotateAngle(legMidR1, 0.0F, 0.0F, 1.1383037381507017F);
         this.MandibleL = new AdvancedModelBox(this, 0, 25);
-        this.MandibleL.setRotationPoint(3.4F, 3.7F, -7.7F);
+        this.MandibleL.setPos(3.4F, 3.7F, -7.7F);
         this.MandibleL.addBox(-2.0F, -2.51F, -5.1F, 4, 2, 6, 0.0F);
         this.setRotateAngle(MandibleL, 0.17453292519943295F, 0.18203784098300857F, 0.0F);
         this.legBottomR2 = new AdvancedModelBox(this, 22, 51);
         this.legBottomR2.mirror = true;
-        this.legBottomR2.setRotationPoint(0.0F, 10.4F, 0.0F);
+        this.legBottomR2.setPos(0.0F, 10.4F, 0.0F);
         this.legBottomR2.addBox(-1.01F, 0.0F, -0.9F, 2, 13, 2, 0.0F);
         this.setRotateAngle(legBottomR2, 0.0F, 0.0F, 1.3203415791337103F);
         this.legMidR3 = new AdvancedModelBox(this, 11, 50);
-        this.legMidR3.setRotationPoint(0.0F, 6.4F, 0.1F);
+        this.legMidR3.setPos(0.0F, 6.4F, 0.1F);
         this.legMidR3.addBox(-1.5F, 0.0F, -1.0F, 3, 12, 2, 0.0F);
         this.setRotateAngle(legMidR3, 0.0F, 0.0F, 1.1383037381507017F);
         this.EyeL = new AdvancedModelBox(this, 40, 0);
-        this.EyeL.setRotationPoint(4.0F, -0.3F, -3.5F);
+        this.EyeL.setPos(4.0F, -0.3F, -3.5F);
         this.EyeL.addBox(-1.5F, -1.0F, -3.0F, 3, 2, 6, 0.0F);
         this.setRotateAngle(EyeL, 0.22689280275926282F, -0.08726646259971647F, 1.5707963267948966F);
         this.Body4 = new AdvancedModelBox(this, 58, 35);
-        this.Body4.setRotationPoint(0.0F, -0.4F, 7.3F);
+        this.Body4.setPos(0.0F, -0.4F, 7.3F);
         this.Body4.addBox(-3.0F, -2.7F, -1.5F, 6, 7, 4, 0.0F);
         this.setRotateAngle(Body4, 0.136659280431156F, 0.0F, 0.0F);
         this.Neck1 = new AdvancedModelBox(this, 32, 22);
-        this.Neck1.setRotationPoint(0.0F, 0.0F, -6.0F);
+        this.Neck1.setPos(0.0F, 0.0F, -6.0F);
         this.Neck1.addBox(-2.5F, -2.0F, -3.5F, 5, 5, 4, 0.0F);
         this.setRotateAngle(Neck1, -0.27314402793711257F, 0.0F, 0.0F);
         this.legMidR2_1 = new AdvancedModelBox(this, 11, 50);
-        this.legMidR2_1.setRotationPoint(0.0F, 6.4F, 0.1F);
+        this.legMidR2_1.setPos(0.0F, 6.4F, 0.1F);
         this.legMidR2_1.addBox(-1.5F, 0.0F, -1.0F, 3, 12, 2, 0.0F);
         this.setRotateAngle(legMidR2_1, 0.0F, 0.0F, 1.1383037381507017F);
         this.legTopR3 = new AdvancedModelBox(this, 0, 54);
         this.legTopR3.mirror = true;
-        this.legTopR3.setRotationPoint(-3.3F, 1.0F, 1.6F);
+        this.legTopR3.setPos(-3.3F, 1.0F, 1.6F);
         this.legTopR3.addBox(-1.0F, 0.0F, -1.5F, 2, 7, 3, 0.0F);
         this.setRotateAngle(legTopR3, 0.5009094953223726F, 0.22759093446006054F, 0.7740535232594852F);
         this.Tail1 = new AdvancedModelBox(this, 80, 51);
-        this.Tail1.setRotationPoint(0.0F, -0.4F, 1.2F);
+        this.Tail1.setPos(0.0F, -0.4F, 1.2F);
         this.Tail1.addBox(-5.5F, -2.7F, -0.1F, 11, 11, 13, 0.0F);
         this.setRotateAngle(Tail1, -0.091106186954104F, 0.0F, 0.0F);
         this.Body5 = new AdvancedModelBox(this, 82, 35);
-        this.Body5.setRotationPoint(0.0F, -0.4F, 4.2F);
+        this.Body5.setPos(0.0F, -0.4F, 4.2F);
         this.Body5.addBox(-3.5F, -2.5F, -2.1F, 7, 8, 6, 0.0F);
         this.setRotateAngle(Body5, -0.045553093477052F, 0.0F, 0.0F);
         this.crest2 = new AdvancedModelBox(this, 0, 88);
-        this.crest2.setRotationPoint(1.2F, -0.1F, -1.0F);
+        this.crest2.setPos(1.2F, -0.1F, -1.0F);
         this.crest2.addBox(-1.5F, -2.51F, -0.1F, 3, 1, 6, 0.0F);
         this.setRotateAngle(crest2, 0.40980330836826856F, 0.17453292519943295F, 0.2792526803190927F);
         this.legTopR2 = new AdvancedModelBox(this, 0, 54);
-        this.legTopR2.setRotationPoint(3.3F, 1.0F, 1.6F);
+        this.legTopR2.setPos(3.3F, 1.0F, 1.6F);
         this.legTopR2.addBox(-1.0F, 0.0F, -1.5F, 2, 7, 3, 0.0F);
         this.setRotateAngle(legTopR2, 0.0F, 0.0F, -0.6981317007977318F);
         this.Body3 = new AdvancedModelBox(this, 0, 67);
-        this.Body3.setRotationPoint(0.0F, 0.2F, 4.1F);
+        this.Body3.setPos(0.0F, 0.2F, 4.1F);
         this.Body3.addBox(-4.5F, -3.4F, -1.4F, 9, 9, 9, 0.0F);
         this.legMidR1_1 = new AdvancedModelBox(this, 11, 50);
         this.legMidR1_1.mirror = true;
-        this.legMidR1_1.setRotationPoint(0.0F, 6.4F, 0.1F);
+        this.legMidR1_1.setPos(0.0F, 6.4F, 0.1F);
         this.legMidR1_1.addBox(-1.5F, 0.0F, -1.0F, 3, 12, 2, 0.0F);
         this.setRotateAngle(legMidR1_1, 0.0F, 0.0F, -1.1383037381507017F);
         this.HeadBase = new AdvancedModelBox(this, 0, 0);
-        this.HeadBase.setRotationPoint(0.0F, -0.1F, -2.4F);
+        this.HeadBase.setPos(0.0F, -0.1F, -2.4F);
         this.HeadBase.addBox(-4.0F, -2.51F, -10.1F, 8, 6, 10, 0.0F);
         this.setRotateAngle(HeadBase, 0.6373942428283291F, 0.0F, 0.0F);
         this.crestbase = new AdvancedModelBox(this, 0, 100);
-        this.crestbase.setRotationPoint(0.0F, -2.9F, 1.0F);
+        this.crestbase.setPos(0.0F, -2.9F, 1.0F);
         this.crestbase.addBox(-3.5F, -2.51F, -6.1F, 7, 2, 6, 0.0F);
         this.setRotateAngle(crestbase, 0.4553564018453205F, 0.0F, 0.0F);
         this.legBottomR2_1 = new AdvancedModelBox(this, 22, 51);
-        this.legBottomR2_1.setRotationPoint(0.0F, 10.4F, 0.0F);
+        this.legBottomR2_1.setPos(0.0F, 10.4F, 0.0F);
         this.legBottomR2_1.addBox(-1.01F, 0.0F, -0.9F, 2, 13, 2, 0.0F);
         this.setRotateAngle(legBottomR2_1, 0.0F, 0.0F, -1.3203415791337103F);
         this.legTopR3_1 = new AdvancedModelBox(this, 0, 54);
-        this.legTopR3_1.setRotationPoint(3.3F, 1.0F, 1.6F);
+        this.legTopR3_1.setPos(3.3F, 1.0F, 1.6F);
         this.legTopR3_1.addBox(-1.0F, 0.0F, -1.5F, 2, 7, 3, 0.0F);
         this.setRotateAngle(legTopR3_1, 0.5009094953223726F, -0.22759093446006054F, -0.7740535232594852F);
         this.legBottomR1 = new AdvancedModelBox(this, 22, 51);
-        this.legBottomR1.setRotationPoint(0.0F, 10.4F, 0.0F);
+        this.legBottomR1.setPos(0.0F, 10.4F, 0.0F);
         this.legBottomR1.addBox(-1.01F, 0.0F, -0.9F, 2, 13, 2, 0.0F);
         this.setRotateAngle(legBottomR1, 0.0F, 0.0F, -1.3203415791337103F);
         this.legBottomR3 = new AdvancedModelBox(this, 22, 51);
-        this.legBottomR3.setRotationPoint(0.0F, 10.4F, 0.0F);
+        this.legBottomR3.setPos(0.0F, 10.4F, 0.0F);
         this.legBottomR3.addBox(-1.01F, 0.0F, -0.9F, 2, 13, 2, 0.0F);
         this.setRotateAngle(legBottomR3, 0.0F, 0.0F, -1.3203415791337103F);
         this.EyeR = new AdvancedModelBox(this, 40, 0);
         this.EyeR.mirror = true;
-        this.EyeR.setRotationPoint(-4.0F, -0.3F, -3.5F);
+        this.EyeR.setPos(-4.0F, -0.3F, -3.5F);
         this.EyeR.addBox(-1.5F, -1.0F, -3.0F, 3, 2, 6, 0.0F);
         this.setRotateAngle(EyeR, 0.22689280275926282F, 0.08726646259971647F, -1.5707963267948966F);
         this.legMidR2 = new AdvancedModelBox(this, 11, 50);
         this.legMidR2.mirror = true;
-        this.legMidR2.setRotationPoint(0.0F, 6.4F, 0.1F);
+        this.legMidR2.setPos(0.0F, 6.4F, 0.1F);
         this.legMidR2.addBox(-1.5F, 0.0F, -1.0F, 3, 12, 2, 0.0F);
         this.setRotateAngle(legMidR2, 0.0F, 0.0F, -1.1383037381507017F);
         this.legTopR1_1 = new AdvancedModelBox(this, 0, 54);
-        this.legTopR1_1.setRotationPoint(3.3F, 1.0F, -1.4F);
+        this.legTopR1_1.setPos(3.3F, 1.0F, -1.4F);
         this.legTopR1_1.addBox(-1.0F, 0.0F, -1.5F, 2, 7, 3, 0.0F);
         this.setRotateAngle(legTopR1_1, -0.5009094953223726F, 0.22759093446006054F, -0.6981317007977318F);
         this.legMidR3_1 = new AdvancedModelBox(this, 11, 50);
         this.legMidR3_1.mirror = true;
-        this.legMidR3_1.setRotationPoint(0.0F, 6.4F, 0.1F);
+        this.legMidR3_1.setPos(0.0F, 6.4F, 0.1F);
         this.legMidR3_1.addBox(-1.5F, 0.0F, -1.0F, 3, 12, 2, 0.0F);
         this.setRotateAngle(legMidR3_1, 0.0F, 0.0F, -1.1383037381507017F);
         this.legTopR1 = new AdvancedModelBox(this, 0, 54);
         this.legTopR1.mirror = true;
-        this.legTopR1.setRotationPoint(-3.3F, 1.0F, -1.4F);
+        this.legTopR1.setPos(-3.3F, 1.0F, -1.4F);
         this.legTopR1.addBox(-1.0F, 0.0F, -1.5F, 2, 7, 3, 0.0F);
         this.setRotateAngle(legTopR1, -0.5009094953223726F, -0.22759093446006054F, 0.6981317007977318F);
         this.MandibleR = new AdvancedModelBox(this, 0, 25);
         this.MandibleR.mirror = true;
-        this.MandibleR.setRotationPoint(-3.4F, 3.7F, -7.7F);
+        this.MandibleR.setPos(-3.4F, 3.7F, -7.7F);
         this.MandibleR.addBox(-2.0F, -2.51F, -5.1F, 4, 2, 6, 0.0F);
         this.setRotateAngle(MandibleR, 0.17453292519943295F, -0.18203784098300857F, 0.0F);
         this.Tail2.addChild(this.Tail3);
@@ -251,7 +250,7 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
     }
 
     @Override
-    public Iterable<ModelRenderer> getParts() {
+    public Iterable<ModelRenderer> parts() {
         return ImmutableList.of(Body2);
     }
 
@@ -347,12 +346,12 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
             this.increaseScale(Tail1, 0.75F * Math.abs(MathHelper.sin(swellToPi)));
             this.increaseScale(Tail2, 0.75F * Math.abs(MathHelper.sin(swellToPi - 0.5F)));
             this.increaseScale(Tail3, 0.75F * Math.abs(MathHelper.sin(swellToPi - 1.0F)));
-            this.Stinger.rotationPointZ += 10 * Math.abs(MathHelper.sin(swellToPi - 1.0F));
+            this.Stinger.z += 10 * Math.abs(MathHelper.sin(swellToPi - 1.0F));
         }
     }
 
     @Override
-    public void setRotationAngles(Entity entity, float f, float f1, float f2, float f3, float f4) {
+    public void setupAnim(Entity entity, float f, float f1, float f2, float f3, float f4) {
         animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, 1);
         this.Body5.setScale(1.0F, 1.0F, 1.0F);
         this.Tail1.setScale(1.0F, 1.0F, 1.0F);
@@ -370,15 +369,15 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
         float speed_idle = 0.05F;
         float degree_walk = 0.7F;
         float degree_idle = 0.15F;
-        float gasterSwell1 = -0.05F + (0.2F * Math.abs(MathHelper.sin(entity.ticksExisted * 0.15F + 1.0F)));
-        float gasterSwell2 = -0.05F + (0.2F * Math.abs(MathHelper.sin(entity.ticksExisted * 0.15F + 0.5F)));
-        float gasterSwell3 = -0.05F + (0.2F * Math.abs(MathHelper.sin(entity.ticksExisted * 0.15F)));
+        float gasterSwell1 = -0.05F + (0.2F * Math.abs(MathHelper.sin(entity.tickCount * 0.15F + 1.0F)));
+        float gasterSwell2 = -0.05F + (0.2F * Math.abs(MathHelper.sin(entity.tickCount * 0.15F + 0.5F)));
+        float gasterSwell3 = -0.05F + (0.2F * Math.abs(MathHelper.sin(entity.tickCount * 0.15F)));
         EntityMyrmexQueen myrmexQueen = (EntityMyrmexQueen) entity;
         if (myrmexQueen.getAnimation() != EntityMyrmexQueen.ANIMATION_EGG) {
             this.increaseScale(Tail1, gasterSwell1);
             this.increaseScale(Tail2, gasterSwell2);
             this.increaseScale(Tail3, gasterSwell3);
-            this.Stinger.rotationPointZ += 20 * gasterSwell3;
+            this.Stinger.z += 20 * gasterSwell3;
         }
         if (myrmexQueen.getAnimation() == EntityMyrmexQueen.ANIMATION_DIGNEST) {
             this.animateLeg(LEGR1, speed_walk * 0.5F, degree_walk * 0.5F, false, 0, 1, f2, 1);
@@ -426,7 +425,7 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
 
     @Override
     public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
-        this.render(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         this.Body5.setScale(1.0F, 1.0F, 1.0F);
         this.Tail1.setScale(1.0F, 1.0F, 1.0F);
         this.Tail2.setScale(1.0F, 1.0F, 1.0F);

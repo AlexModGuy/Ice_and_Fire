@@ -41,81 +41,81 @@ public class EntityHydraBreath extends AbstractFireballEntity implements IDragon
                              double accelX, double accelY, double accelZ) {
         super(t, shooter, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
-        this.accelerationX = accelX / d0 * 0.02D;
-        this.accelerationY = accelY / d0 * 0.02D;
-        this.accelerationZ = accelZ / d0 * 0.02D;
+        this.xPower = accelX / d0 * 0.02D;
+        this.yPower = accelY / d0 * 0.02D;
+        this.zPower = accelZ / d0 * 0.02D;
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
-    protected boolean isFireballFiery() {
+    protected boolean shouldBurn() {
         return false;
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
+    public boolean hurt(DamageSource source, float amount) {
         return false;
     }
 
     @Override
-    public float getCollisionBorderSize() {
+    public float getPickRadius() {
         return 0F;
     }
 
     @Override
-    public boolean canBeCollidedWith() {
+    public boolean isPickable() {
         return false;
     }
 
 
     @Override
     public void tick() {
-        this.extinguish();
-        if (this.ticksExisted > 30) {
+        this.clearFire();
+        if (this.tickCount > 30) {
             this.remove();
         }
-        Entity shootingEntity = this.getShooter();
-        if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.getPosition())) {
+        Entity shootingEntity = this.getOwner();
+        if (this.level.isClientSide || (shootingEntity == null || shootingEntity.isAlive()) && this.level.hasChunkAt(this.blockPosition())) {
             this.baseTick();
-            if (this.isFireballFiery()) {
-                this.setFire(1);
+            if (this.shouldBurn()) {
+                this.setSecondsOnFire(1);
             }
 
-            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
+            RayTraceResult raytraceresult = ProjectileHelper.getHitResult(this, this::canHitEntity);
             if (raytraceresult.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
-                this.onImpact(raytraceresult);
+                this.onHit(raytraceresult);
             }
 
-            Vector3d Vector3d = this.getMotion();
-            double d0 = this.getPosX() + Vector3d.x;
-            double d1 = this.getPosY() + Vector3d.y;
-            double d2 = this.getPosZ() + Vector3d.z;
+            Vector3d Vector3d = this.getDeltaMovement();
+            double d0 = this.getX() + Vector3d.x;
+            double d1 = this.getY() + Vector3d.y;
+            double d2 = this.getZ() + Vector3d.z;
             ProjectileHelper.rotateTowardsMovement(this, 0.2F);
-            float f = this.getMotionFactor();
-            if (this.world.isRemote) {
+            float f = this.getInertia();
+            if (this.level.isClientSide) {
                 for (int i = 0; i < 15; ++i) {
-                    IceAndFire.PROXY.spawnParticle(EnumParticles.Hydra, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth()) - (double) this.getWidth() * 0.5F, this.getPosY() - 0.5D, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth()) - (double) this.getWidth() * 0.5F, 0.1D, 1.0D, 0.1D);
+                    IceAndFire.PROXY.spawnParticle(EnumParticles.Hydra, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth()) - (double) this.getBbWidth() * 0.5F, this.getY() - 0.5D, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth()) - (double) this.getBbWidth() * 0.5F, 0.1D, 1.0D, 0.1D);
                 }
             }
 
-            this.setMotion(Vector3d.add(this.accelerationX, this.accelerationY, this.accelerationZ).scale(f));
+            this.setDeltaMovement(Vector3d.add(this.xPower, this.yPower, this.zPower).scale(f));
 
-            this.accelerationX *= 0.95F;
-            this.accelerationY *= 0.95F;
-            this.accelerationZ *= 0.95F;
-            this.addVelocity(this.accelerationX, this.accelerationY, this.accelerationZ);
+            this.xPower *= 0.95F;
+            this.yPower *= 0.95F;
+            this.zPower *= 0.95F;
+            this.push(this.xPower, this.yPower, this.zPower);
 
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
-                    this.world.addParticle(ParticleTypes.BUBBLE, this.getPosX() - this.getMotion().x * 0.25D, this.getPosY() - this.getMotion().y * 0.25D, this.getPosZ() - this.getMotion().z * 0.25D, this.getMotion().x, this.getMotion().y, this.getMotion().z);
+                    this.level.addParticle(ParticleTypes.BUBBLE, this.getX() - this.getDeltaMovement().x * 0.25D, this.getY() - this.getDeltaMovement().y * 0.25D, this.getZ() - this.getDeltaMovement().z * 0.25D, this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z);
                 }
             }
-            this.setPosition(d0, d1, d2);
-            this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
+            this.setPos(d0, d1, d2);
+            this.setPos(this.getX(), this.getY(), this.getZ());
         }
     }
 
@@ -125,10 +125,10 @@ public class EntityHydraBreath extends AbstractFireballEntity implements IDragon
     }
 
     @Override
-    protected void onImpact(RayTraceResult movingObject) {
-        this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING);
-        Entity shootingEntity = this.getShooter();
-        if (!this.world.isRemote) {
+    protected void onHit(RayTraceResult movingObject) {
+        this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
+        Entity shootingEntity = this.getOwner();
+        if (!this.level.isClientSide) {
             if (movingObject.getType() == RayTraceResult.Type.ENTITY) {
                 Entity entity = ((EntityRayTraceResult) movingObject).getEntity();
 
@@ -137,12 +137,12 @@ public class EntityHydraBreath extends AbstractFireballEntity implements IDragon
                 }
                 if (shootingEntity != null && shootingEntity instanceof EntityHydra) {
                     EntityHydra dragon = (EntityHydra) shootingEntity;
-                    if (dragon.isOnSameTeam(entity) || dragon.isEntityEqual(entity)) {
+                    if (dragon.isAlliedTo(entity) || dragon.is(entity)) {
                         return;
                     }
-                    entity.attackEntityFrom(DamageSource.causeMobDamage(dragon), 2.0F);
+                    entity.hurt(DamageSource.mobAttack(dragon), 2.0F);
                     if (entity instanceof LivingEntity) {
-                        ((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.POISON, 60, 0));
+                        ((LivingEntity) entity).addEffect(new EffectInstance(Effects.POISON, 60, 0));
                     }
 
                 }

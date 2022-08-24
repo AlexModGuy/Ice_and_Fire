@@ -36,9 +36,9 @@ import javax.annotation.Nullable;
 
 public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
 
-    private static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityDreadGhoul.class, DataSerializers.FLOAT);
-    private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityDreadGhoul.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> SCREAMS = EntityDataManager.createKey(EntityDreadGhoul.class, DataSerializers.VARINT);
+    private static final DataParameter<Float> SCALE = EntityDataManager.defineId(EntityDreadGhoul.class, DataSerializers.FLOAT);
+    private static final DataParameter<Integer> VARIANT = EntityDataManager.defineId(EntityDreadGhoul.class, DataSerializers.INT);
+    private static final DataParameter<Integer> SCREAMS = EntityDataManager.defineId(EntityDreadGhoul.class, DataSerializers.INT);
     private static final float INITIAL_WIDTH = 0.6F;
     private static final float INITIAL_HEIGHT = 1.8F;
     public static Animation ANIMATION_SPAWN = Animation.create(40);
@@ -75,77 +75,77 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
     }
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-                //HEALTH
-                .createMutableAttribute(Attributes.MAX_HEALTH, 30.0D)
-                //SPEED
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35D)
-                //ATTACK
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0D)
-                //FOLLOW RANGE
-                .createMutableAttribute(Attributes.FOLLOW_RANGE, 128.0D)
-                //ARMOR
-                .createMutableAttribute(Attributes.ARMOR, 4.0D);
+        return MobEntity.createMobAttributes()
+            //HEALTH
+            .add(Attributes.MAX_HEALTH, 30.0D)
+            //SPEED
+            .add(Attributes.MOVEMENT_SPEED, 0.35D)
+            //ATTACK
+            .add(Attributes.ATTACK_DAMAGE, 5.0D)
+            //FOLLOW RANGE
+            .add(Attributes.FOLLOW_RANGE, 128.0D)
+            //ARMOR
+            .add(Attributes.ARMOR, 4.0D);
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(VARIANT, Integer.valueOf(0));
-        this.dataManager.register(SCREAMS, Integer.valueOf(0));
-        this.dataManager.register(SCALE, Float.valueOf(1F));
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(VARIANT, Integer.valueOf(0));
+        this.entityData.define(SCREAMS, Integer.valueOf(0));
+        this.entityData.define(SCALE, Float.valueOf(1F));
     }
 
-    public float getScale() {
-        return Float.valueOf(this.dataManager.get(SCALE).floatValue());
+    public float getSize() {
+        return Float.valueOf(this.entityData.get(SCALE).floatValue());
     }
 
-    public void setScale(float scale) {
-        this.dataManager.set(SCALE, Float.valueOf(scale));
+    public void setSize(float scale) {
+        this.entityData.set(SCALE, Float.valueOf(scale));
     }
 
-    public boolean attackEntityAsMob(Entity entityIn) {
+    public boolean doHurtTarget(Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             this.setAnimation(ANIMATION_SLASH);
         }
         return true;
     }
 
-    public void livingTick() {
-        super.livingTick();
-        LivingEntity attackTarget = this.getAttackTarget();
-        if (Math.abs(firstWidth - INITIAL_WIDTH * getScale()) > 0.01F || Math.abs(firstHeight - INITIAL_HEIGHT * getScale()) > 0.01F) {
-            firstWidth = INITIAL_WIDTH * getScale();
-            firstHeight = INITIAL_HEIGHT * getScale();
+    public void aiStep() {
+        super.aiStep();
+        LivingEntity attackTarget = this.getTarget();
+        if (Math.abs(firstWidth - INITIAL_WIDTH * getSize()) > 0.01F || Math.abs(firstHeight - INITIAL_HEIGHT * getSize()) > 0.01F) {
+            firstWidth = INITIAL_WIDTH * getSize();
+            firstHeight = INITIAL_HEIGHT * getSize();
         }
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
-            BlockState belowBlock = world.getBlockState(this.getPosition().down());
+            BlockState belowBlock = level.getBlockState(this.blockPosition().below());
             if (belowBlock.getBlock() != Blocks.AIR) {
                 for (int i = 0; i < 5; i++) {
-                    this.world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, belowBlock), this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getBoundingBox().minY, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
+                    this.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, belowBlock), this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getBoundingBox().minY, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
                 }
             }
-            this.setMotion(0, this.getMotion().y, this.getMotion().z);
+            this.setDeltaMovement(0, this.getDeltaMovement().y, this.getDeltaMovement().z);
         }
-        if (attackTarget != null && this.getDistance(attackTarget) < 4 && this.canEntityBeSeen(attackTarget)) {
+        if (attackTarget != null && this.distanceTo(attackTarget) < 4 && this.canSee(attackTarget)) {
             if (this.getAnimation() == NO_ANIMATION) {
                 this.setAnimation(ANIMATION_SLASH);
             }
-            this.faceEntity(attackTarget, 360, 80);
+            this.lookAt(attackTarget, 360, 80);
             if (this.getAnimation() == ANIMATION_SLASH && (this.getAnimationTick() == 9 || this.getAnimationTick() == 19)) {
-                attackTarget.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
-                attackTarget.applyKnockback(0.25F, this.getPosX() - attackTarget.getPosX(), this.getPosZ() - attackTarget.getPosZ());
+                attackTarget.hurt(DamageSource.mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+                attackTarget.knockback(0.25F, this.getX() - attackTarget.getX(), this.getZ() - attackTarget.getZ());
             }
         }
-        if (!world.isRemote) {
-            if (this.getAttackTarget() != null) {
+        if (!level.isClientSide) {
+            if (this.getTarget() != null) {
                 hostileTicks++;
                 if (this.getScreamStage() == 0) {
                     if (hostileTicks > 20) {
                         this.setScreamStage(1);
                     }
                 } else {
-                    if (this.ticksExisted % 20 < 10) {
+                    if (this.tickCount % 20 < 10) {
                         this.setScreamStage(1);
                     } else {
                         this.setScreamStage(2);
@@ -153,7 +153,7 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
                 }
             } else {
                 if (this.getScreamStage() > 0) {
-                    if (this.ticksExisted % 20 < 10 && this.getScreamStage() == 2) {
+                    if (this.tickCount % 20 < 10 && this.getScreamStage() == 2) {
                         this.setScreamStage(1);
                     } else {
                         this.setScreamStage(0);
@@ -166,46 +166,46 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         compound.putInt("Variant", this.getVariant());
         compound.putInt("ScreamStage", this.getScreamStage());
-        compound.putFloat("DreadScale", this.getScale());
+        compound.putFloat("DreadScale", this.getSize());
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         this.setVariant(compound.getInt("Variant"));
         this.setScreamStage(compound.getInt("ScreamStage"));
-        this.setScale(compound.getFloat("DreadScale"));
+        this.setSize(compound.getFloat("DreadScale"));
     }
 
     public int getVariant() {
-        return this.dataManager.get(VARIANT).intValue();
+        return this.entityData.get(VARIANT).intValue();
     }
 
     public void setVariant(int variant) {
-        this.dataManager.set(VARIANT, variant);
+        this.entityData.set(VARIANT, variant);
     }
 
     public int getScreamStage() {
-        return this.dataManager.get(SCREAMS).intValue();
+        return this.entityData.get(SCREAMS).intValue();
     }
 
     public void setScreamStage(int screamStage) {
-        this.dataManager.set(SCREAMS, screamStage);
+        this.entityData.set(SCREAMS, screamStage);
     }
 
-    public float getRenderScale() {
-        return getScale();
+    public float getScale() {
+        return getSize();
     }
 
     @Nullable
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        ILivingEntityData data = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+        ILivingEntityData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setAnimation(ANIMATION_SPAWN);
-        this.setVariant(rand.nextInt(3));
+        this.setVariant(random.nextInt(3));
         return data;
     }
 
@@ -251,19 +251,19 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.ENTITY_ZOMBIE_HURT;
+        return SoundEvents.ZOMBIE_HURT;
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_ZOMBIE_DEATH;
+        return SoundEvents.ZOMBIE_DEATH;
     }
 
     protected void playStepSound(BlockPos pos, Block blockIn) {
-        this.playSound(SoundEvents.ENTITY_ZOMBIE_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEvents.ZOMBIE_STEP, 0.15F, 1.0F);
     }
 
-    protected float getSoundPitch() {
-        return super.getSoundPitch() * 0.70F;
+    protected float getVoicePitch() {
+        return super.getVoicePitch() * 0.70F;
     }
 }

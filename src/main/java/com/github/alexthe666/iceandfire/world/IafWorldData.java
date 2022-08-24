@@ -21,18 +21,18 @@ public class IafWorldData extends WorldSavedData {
     public IafWorldData(World world) {
         super(IDENTIFIER);
         this.world = world;
-        this.markDirty();
+        this.setDirty();
     }
 
     public static IafWorldData get(World world) {
         if (world instanceof ServerWorld) {
-            ServerWorld overworld = world.getServer().getWorld(world.getDimensionKey());
+            ServerWorld overworld = world.getServer().getLevel(world.dimension());
 
-            DimensionSavedDataManager storage = overworld.getSavedData();
-            IafWorldData data = storage.getOrCreate(IafWorldData::new, IDENTIFIER);
+            DimensionSavedDataManager storage = overworld.getDataStorage();
+            IafWorldData data = storage.computeIfAbsent(IafWorldData::new, IDENTIFIER);
             if (data != null) {
                 data.world = world;
-                data.markDirty();
+                data.setDirty();
             }
             return data;
         }
@@ -41,7 +41,7 @@ public class IafWorldData extends WorldSavedData {
 
     public void setLastGeneratedDangerousStructure( BlockPos pos) {
         lastGeneratedDangerousStructure = pos;
-        this.markDirty();
+        this.setDirty();
     }
 
 
@@ -54,13 +54,13 @@ public class IafWorldData extends WorldSavedData {
         ++this.tickCounter;
     }
 
-    public void read(CompoundNBT nbt) {
+    public void load(CompoundNBT nbt) {
         this.tickCounter = nbt.getInt("Tick");
         lastGeneratedDangerousStructure = new BlockPos(nbt.getInt("LastX"), nbt.getInt("LastY"), nbt.getInt("LastZ"));
 
     }
 
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundNBT save(CompoundNBT compound) {
         compound.putInt("Tick", this.tickCounter);
         compound.putInt("LastX", lastGeneratedDangerousStructure.getX());
         compound.putInt("LastY", lastGeneratedDangerousStructure.getY());

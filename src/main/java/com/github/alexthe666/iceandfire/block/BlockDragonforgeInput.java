@@ -1,17 +1,10 @@
 package com.github.alexthe666.iceandfire.block;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,42 +20,42 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import javax.annotation.Nullable;
 
 public class BlockDragonforgeInput extends ContainerBlock implements IDragonProof {
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
-    private int dragonType;
+    private final int dragonType;
 
     public BlockDragonforgeInput(int dragonType) {
         super(
-    		Properties
-    			.create(Material.ROCK)
-    			.variableOpacity()
-    			.hardnessAndResistance(40, 500)
+            Properties
+                .of(Material.STONE)
+                .dynamicShape()
+                .strength(40, 500)
     			.sound(SoundType.METAL)
 		);
 
         this.setRegistryName(IceAndFire.MODID, "dragonforge_" + DragonType.getNameFromInt(dragonType) + "_input");
         this.dragonType = dragonType;
-        this.setDefaultState(this.getStateContainer().getBaseState().with(ACTIVE, Boolean.valueOf(false)));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(ACTIVE, Boolean.valueOf(false)));
     }
 
 
     @Override
-    public PushReaction getPushReaction(BlockState state) {
+    public PushReaction getPistonPushReaction(BlockState state) {
         return PushReaction.BLOCK;
     }
 
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult resultIn) {
-        if (this.getConnectedTileEntity(worldIn, resultIn.getPos()) != null) {
-            TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, resultIn.getPos());
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult resultIn) {
+        if (this.getConnectedTileEntity(worldIn, resultIn.getBlockPos()) != null) {
+            TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, resultIn.getBlockPos());
             if (forge != null && forge.isFire == dragonType) {
-                if (worldIn.isRemote) {
-                    IceAndFire.PROXY.setRefrencedTE(worldIn.getTileEntity(forge.getPos()));
+                if (worldIn.isClientSide) {
+                    IceAndFire.PROXY.setRefrencedTE(worldIn.getBlockEntity(forge.getBlockPos()));
                 } else {
-                    INamedContainerProvider inamedcontainerprovider = this.getContainer(forge.getBlockState(), worldIn, forge.getPos());
+                    INamedContainerProvider inamedcontainerprovider = this.getMenuProvider(forge.getBlockState(), worldIn, forge.getBlockPos());
                     if (inamedcontainerprovider != null) {
-                        player.openContainer(inamedcontainerprovider);
+                        player.openMenu(inamedcontainerprovider);
                     }
                 }
                 return ActionResultType.SUCCESS;
@@ -73,39 +66,39 @@ public class BlockDragonforgeInput extends ContainerBlock implements IDragonProo
 
     private TileEntityDragonforge getConnectedTileEntity(World worldIn, BlockPos pos) {
         for (Direction facing : Direction.values()) {
-            if (worldIn.getTileEntity(pos.offset(facing)) != null && worldIn.getTileEntity(pos.offset(facing)) instanceof TileEntityDragonforge) {
-                return (TileEntityDragonforge) worldIn.getTileEntity(pos.offset(facing));
+            if (worldIn.getBlockEntity(pos.relative(facing)) != null && worldIn.getBlockEntity(pos.relative(facing)) instanceof TileEntityDragonforge) {
+                return (TileEntityDragonforge) worldIn.getBlockEntity(pos.relative(facing));
             }
         }
         return null;
     }
 
     public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().with(ACTIVE, Boolean.valueOf(meta > 0));
+        return this.defaultBlockState().setValue(ACTIVE, Boolean.valueOf(meta > 0));
     }
 
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
     public int getMetaFromState(BlockState state) {
-        return state.get(ACTIVE).booleanValue() ? 1 : 0;
+        return state.getValue(ACTIVE).booleanValue() ? 1 : 0;
     }
 
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(ACTIVE);
     }
 
     @Override
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-        if (worldIn.getTileEntity(pos) instanceof TileEntityDragonforgeInput) {
-            ((TileEntityDragonforgeInput) worldIn.getTileEntity(pos)).resetCore();
+        if (worldIn.getBlockEntity(pos) instanceof TileEntityDragonforgeInput) {
+            ((TileEntityDragonforgeInput) worldIn.getBlockEntity(pos)).resetCore();
         }
     }
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+    public TileEntity newBlockEntity(IBlockReader worldIn) {
         return new TileEntityDragonforgeInput();
     }
 }

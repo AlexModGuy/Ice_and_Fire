@@ -1,15 +1,15 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 
+import java.util.Random;
+
 public class WorldGenRoostArch {
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
-    private Block block;
+    private final Block block;
 
     public WorldGenRoostArch(Block block) {
         this.block = block;
@@ -21,23 +21,23 @@ public class WorldGenRoostArch {
         Direction direction = HORIZONTALS[rand.nextInt(HORIZONTALS.length - 1)];
         boolean diagonal = rand.nextBoolean();
         for (int i = 0; i < height; i++) {
-            worldIn.setBlockState(position.up(i), block.getDefaultState(), 2);
+            worldIn.setBlock(position.above(i), block.defaultBlockState(), 2);
         }
         BlockPos offsetPos = position;
         int placedWidths = 0;
         for (int i = 0; i < width; i++) {
-            offsetPos = position.up(height).offset(direction, i);
+            offsetPos = position.above(height).relative(direction, i);
             if (diagonal) {
-                offsetPos = position.up(height).offset(direction, i).offset(direction.rotateY(), i);
+                offsetPos = position.above(height).relative(direction, i).relative(direction.getClockWise(), i);
             }
             if (placedWidths < width - 1 || rand.nextBoolean()) {
-                worldIn.setBlockState(offsetPos, block.getDefaultState(), 2);
+                worldIn.setBlock(offsetPos, block.defaultBlockState(), 2);
             }
             placedWidths++;
         }
-        while (worldIn.isAirBlock(offsetPos.down()) && offsetPos.getY() > 0) {
-            worldIn.setBlockState(offsetPos.down(), block.getDefaultState(), 2);
-            offsetPos = offsetPos.down();
+        while (worldIn.isEmptyBlock(offsetPos.below()) && offsetPos.getY() > 0) {
+            worldIn.setBlock(offsetPos.below(), block.defaultBlockState(), 2);
+            offsetPos = offsetPos.below();
         }
         return true;
     }

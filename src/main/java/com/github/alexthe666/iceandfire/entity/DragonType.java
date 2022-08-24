@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.block.BlockEggInIce;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityType;
@@ -64,77 +63,77 @@ public class DragonType {
     }
 
     public void updateEggCondition(EntityDragonEgg egg) {
-        BlockPos pos = new BlockPos(egg.getPositionVec());
+        BlockPos pos = new BlockPos(egg.position());
         if (this == FIRE) {
-            if (egg.world.getBlockState(pos).getMaterial() == Material.FIRE) {
+            if (egg.level.getBlockState(pos).getMaterial() == Material.FIRE) {
                 egg.setDragonAge(egg.getDragonAge() + 1);
             }
             if (egg.getDragonAge() > IafConfig.dragonEggTime) {
-                egg.world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                EntityFireDragon dragon = new EntityFireDragon(egg.world);
+                egg.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                EntityFireDragon dragon = new EntityFireDragon(egg.level);
                 if (egg.hasCustomName()) {
                     dragon.setCustomName(egg.getCustomName());
                 }
                 dragon.setVariant(egg.getEggType().ordinal());
-                dragon.setGender(egg.getRNG().nextBoolean());
-                dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+                dragon.setGender(egg.getRandom().nextBoolean());
+                dragon.setPos(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                 dragon.setHunger(50);
-                if (!egg.world.isRemote) {
-                    egg.world.addEntity(dragon);
+                if (!egg.level.isClientSide) {
+                    egg.level.addFreshEntity(dragon);
                 }
                 if (egg.hasCustomName()) {
                     dragon.setCustomName(egg.getCustomName());
                 }
-                dragon.setTamed(true);
-                dragon.setOwnerId(egg.getOwnerId());
-                egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, egg.getSoundCategory(), 2.5F, 1.0F, false);
-                egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), IafSoundRegistry.EGG_HATCH, egg.getSoundCategory(), 2.5F, 1.0F, false);
+                dragon.setTame(true);
+                dragon.setOwnerUUID(egg.getOwnerId());
+                egg.level.playLocalSound(egg.getX(), egg.getY() + egg.getEyeHeight(), egg.getZ(), SoundEvents.FIRE_EXTINGUISH, egg.getSoundSource(), 2.5F, 1.0F, false);
+                egg.level.playLocalSound(egg.getX(), egg.getY() + egg.getEyeHeight(), egg.getZ(), IafSoundRegistry.EGG_HATCH, egg.getSoundSource(), 2.5F, 1.0F, false);
                 egg.remove();
             }
         }
         if (this == ICE) {
-            if (egg.world.getBlockState(pos).getMaterial() == Material.WATER && egg.getRNG().nextInt(500) == 0) {
-                egg.world.setBlockState(pos, IafBlockRegistry.EGG_IN_ICE.getDefaultState());
-                egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), SoundEvents.BLOCK_GLASS_BREAK, egg.getSoundCategory(), 2.5F, 1.0F, false);
-                if (egg.world.getBlockState(pos).getBlock() instanceof BlockEggInIce) {
-                    ((TileEntityEggInIce) egg.world.getTileEntity(pos)).type = egg.getEggType();
-                    ((TileEntityEggInIce) egg.world.getTileEntity(pos)).ownerUUID = egg.getOwnerId();
+            if (egg.level.getBlockState(pos).getMaterial() == Material.WATER && egg.getRandom().nextInt(500) == 0) {
+                egg.level.setBlockAndUpdate(pos, IafBlockRegistry.EGG_IN_ICE.defaultBlockState());
+                egg.level.playLocalSound(egg.getX(), egg.getY() + egg.getEyeHeight(), egg.getZ(), SoundEvents.GLASS_BREAK, egg.getSoundSource(), 2.5F, 1.0F, false);
+                if (egg.level.getBlockState(pos).getBlock() instanceof BlockEggInIce) {
+                    ((TileEntityEggInIce) egg.level.getBlockEntity(pos)).type = egg.getEggType();
+                    ((TileEntityEggInIce) egg.level.getBlockEntity(pos)).ownerUUID = egg.getOwnerId();
                 }
                 egg.remove();
             }
         }
         if (this == LIGHTNING) {
             boolean flag;
-            BlockPos.Mutable blockpos$pooledmutable = new BlockPos.Mutable(egg.getPosX(), egg.getPosY(), egg.getPosZ()) ;
-            flag = egg.world.isRainingAt(blockpos$pooledmutable) || egg.world.isRainingAt(blockpos$pooledmutable.setPos(egg.getPosX(), egg.getPosY() + (double)egg.size.height, egg.getPosZ()));
-            if (egg.world.canSeeSky(egg.getPosition().up()) && flag) {
+            BlockPos.Mutable blockpos$pooledmutable = new BlockPos.Mutable(egg.getX(), egg.getY(), egg.getZ());
+            flag = egg.level.isRainingAt(blockpos$pooledmutable) || egg.level.isRainingAt(blockpos$pooledmutable.set(egg.getX(), egg.getY() + (double) egg.dimensions.height, egg.getZ()));
+            if (egg.level.canSeeSky(egg.blockPosition().above()) && flag) {
                 egg.setDragonAge(egg.getDragonAge() + 1);
             }
             if (egg.getDragonAge() > IafConfig.dragonEggTime) {
-                EntityLightningDragon dragon = new EntityLightningDragon(egg.world);
+                EntityLightningDragon dragon = new EntityLightningDragon(egg.level);
                 if (egg.hasCustomName()) {
                     dragon.setCustomName(egg.getCustomName());
                 }
                 dragon.setVariant(egg.getEggType().ordinal() - 8);
-                dragon.setGender(egg.getRNG().nextBoolean());
-                dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+                dragon.setGender(egg.getRandom().nextBoolean());
+                dragon.setPos(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                 dragon.setHunger(50);
-                if (!egg.world.isRemote) {
-                    egg.world.addEntity(dragon);
+                if (!egg.level.isClientSide) {
+                    egg.level.addFreshEntity(dragon);
                 }
                 if (egg.hasCustomName()) {
                     dragon.setCustomName(egg.getCustomName());
                 }
-                dragon.setTamed(true);
-                dragon.setOwnerId(egg.getOwnerId());
-                LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(egg.world);
-                lightningboltentity.setPosition(egg.getPosX(), egg.getPosY(), egg.getPosZ());
-                lightningboltentity.setEffectOnly(true);
-                if(!egg.world.isRemote){
-                    egg.world.addEntity(lightningboltentity);
+                dragon.setTame(true);
+                dragon.setOwnerUUID(egg.getOwnerId());
+                LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(egg.level);
+                lightningboltentity.setPos(egg.getX(), egg.getY(), egg.getZ());
+                lightningboltentity.setVisualOnly(true);
+                if (!egg.level.isClientSide) {
+                    egg.level.addFreshEntity(lightningboltentity);
                 }
-                egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, egg.getSoundCategory(), 2.5F, 1.0F, false);
-                egg.world.playSound(egg.getPosX(), egg.getPosY() + egg.getEyeHeight(), egg.getPosZ(), IafSoundRegistry.EGG_HATCH, egg.getSoundCategory(), 2.5F, 1.0F, false);
+                egg.level.playLocalSound(egg.getX(), egg.getY() + egg.getEyeHeight(), egg.getZ(), SoundEvents.LIGHTNING_BOLT_THUNDER, egg.getSoundSource(), 2.5F, 1.0F, false);
+                egg.level.playLocalSound(egg.getX(), egg.getY() + egg.getEyeHeight(), egg.getZ(), IafSoundRegistry.EGG_HATCH, egg.getSoundSource(), 2.5F, 1.0F, false);
                 egg.remove();
 
 

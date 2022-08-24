@@ -36,13 +36,13 @@ public class RenderHippocampus extends MobRenderer<EntityHippocampus, ModelHippo
 
     public RenderHippocampus(EntityRendererManager renderManager) {
         super(renderManager, new ModelHippocampus(), 0.8F);
-        this.layerRenderers.add(new RenderHippocampus.LayerHippocampusRainbow(this));
-        this.layerRenderers.add(new RenderHippocampus.LayerHippocampusSaddle(this));
+        this.layers.add(new RenderHippocampus.LayerHippocampusRainbow(this));
+        this.layers.add(new RenderHippocampus.LayerHippocampusSaddle(this));
     }
 
     @Nullable
     @Override
-    public ResourceLocation getEntityTexture(EntityHippocampus entity) {
+    public ResourceLocation getTextureLocation(EntityHippocampus entity) {
         switch (entity.getVariant()) {
             default:
                 return entity.isBlinking() ? VARIANT_0_BLINK : VARIANT_0;
@@ -63,12 +63,12 @@ public class RenderHippocampus extends MobRenderer<EntityHippocampus, ModelHippo
 
     private class LayerHippocampusSaddle extends LayerRenderer<EntityHippocampus, ModelHippocampus> {
         private final RenderHippocampus renderer;
-        private final RenderType SADDLE_TEXTURE = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippocampus/saddle.png"));
-        private final RenderType BRIDLE = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippocampus/bridle.png"));
-        private final RenderType CHEST = RenderType.getEntityTranslucent(new ResourceLocation("iceandfire:textures/models/hippocampus/chest.png"));
-        private final RenderType TEXTURE_DIAMOND = RenderType.getEntityCutout(new ResourceLocation("iceandfire:textures/models/hippocampus/armor_diamond.png"));
-        private final RenderType TEXTURE_GOLD = RenderType.getEntityCutout(new ResourceLocation("iceandfire:textures/models/hippocampus/armor_gold.png"));
-        private final RenderType TEXTURE_IRON = RenderType.getEntityCutout(new ResourceLocation("iceandfire:textures/models/hippocampus/armor_iron.png"));
+        private final RenderType SADDLE_TEXTURE = RenderType.entityNoOutline(new ResourceLocation("iceandfire:textures/models/hippocampus/saddle.png"));
+        private final RenderType BRIDLE = RenderType.entityNoOutline(new ResourceLocation("iceandfire:textures/models/hippocampus/bridle.png"));
+        private final RenderType CHEST = RenderType.entityTranslucent(new ResourceLocation("iceandfire:textures/models/hippocampus/chest.png"));
+        private final RenderType TEXTURE_DIAMOND = RenderType.entityCutout(new ResourceLocation("iceandfire:textures/models/hippocampus/armor_diamond.png"));
+        private final RenderType TEXTURE_GOLD = RenderType.entityCutout(new ResourceLocation("iceandfire:textures/models/hippocampus/armor_gold.png"));
+        private final RenderType TEXTURE_IRON = RenderType.entityCutout(new ResourceLocation("iceandfire:textures/models/hippocampus/armor_iron.png"));
 
         public LayerHippocampusSaddle(RenderHippocampus renderer) {
             super(renderer);
@@ -78,15 +78,15 @@ public class RenderHippocampus extends MobRenderer<EntityHippocampus, ModelHippo
         public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityHippocampus hippo, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if (hippo.isSaddled()) {
                 IVertexBuilder ivertexbuilder = bufferIn.getBuffer(SADDLE_TEXTURE);
-                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
             if (hippo.isSaddled() && hippo.getControllingPassenger() != null) {
                 IVertexBuilder ivertexbuilder = bufferIn.getBuffer(BRIDLE);
-                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
             if (hippo.isChested()) {
                 IVertexBuilder ivertexbuilder = bufferIn.getBuffer(CHEST);
-                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
             if (hippo.getArmor() != 0) {
                 RenderType type = null;
@@ -102,7 +102,7 @@ public class RenderHippocampus extends MobRenderer<EntityHippocampus, ModelHippo
                         break;
                 }
                 IVertexBuilder ivertexbuilder = bufferIn.getBuffer(type);
-                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 
             }
         }
@@ -110,8 +110,8 @@ public class RenderHippocampus extends MobRenderer<EntityHippocampus, ModelHippo
 
     private class LayerHippocampusRainbow extends LayerRenderer<EntityHippocampus, ModelHippocampus> {
         private final RenderHippocampus renderer;
-        private final RenderType TEXTURE = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippocampus/rainbow.png"));
-        private final RenderType TEXTURE_BLINK = RenderType.getEntityNoOutline(new ResourceLocation("iceandfire:textures/models/hippocampus/rainbow_blink.png"));
+        private final RenderType TEXTURE = RenderType.entityNoOutline(new ResourceLocation("iceandfire:textures/models/hippocampus/rainbow.png"));
+        private final RenderType TEXTURE_BLINK = RenderType.entityNoOutline(new ResourceLocation("iceandfire:textures/models/hippocampus/rainbow_blink.png"));
 
         public LayerHippocampusRainbow(RenderHippocampus renderer) {
             super(renderer);
@@ -122,14 +122,14 @@ public class RenderHippocampus extends MobRenderer<EntityHippocampus, ModelHippo
             if (hippo.hasCustomName() && hippo.getCustomName().toString().toLowerCase().contains("rainbow")) {
                 IVertexBuilder ivertexbuilder = bufferIn.getBuffer(hippo.isBlinking() ? TEXTURE_BLINK : TEXTURE);
                 int i1 = 25;
-                int i = hippo.ticksExisted / 25 + hippo.getEntityId();
+                int i = hippo.tickCount / 25 + hippo.getId();
                 int j = DyeColor.values().length;
                 int k = i % j;
                 int l = (i + 1) % j;
-                float f = ((float) (hippo.ticksExisted % 25) + partialTicks) / 25.0F;
-                float[] afloat1 = SheepEntity.getDyeRgb(DyeColor.byId(k));
-                float[] afloat2 = SheepEntity.getDyeRgb(DyeColor.byId(l));
-                this.getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, LivingRenderer.getPackedOverlay(hippo, 0.0F), afloat1[0] * (1.0F - f) + afloat2[0] * f, afloat1[1] * (1.0F - f) + afloat2[1] * f, afloat1[2] * (1.0F - f) + afloat2[2] * f, 1.0F);
+                float f = ((float) (hippo.tickCount % 25) + partialTicks) / 25.0F;
+                float[] afloat1 = SheepEntity.getColorArray(DyeColor.byId(k));
+                float[] afloat2 = SheepEntity.getColorArray(DyeColor.byId(l));
+                this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, LivingRenderer.getOverlayCoords(hippo, 0.0F), afloat1[0] * (1.0F - f) + afloat2[0] * f, afloat1[1] * (1.0F - f) + afloat2[1] * f, afloat1[2] * (1.0F - f) + afloat2[2] * f, 1.0F);
             }
         }
     }

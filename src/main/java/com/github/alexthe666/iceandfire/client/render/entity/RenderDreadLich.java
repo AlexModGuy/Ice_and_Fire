@@ -29,10 +29,10 @@ public class RenderDreadLich extends MobRenderer<EntityDreadLich, ModelDreadLich
     }
 
     @Override
-    protected void preRenderCallback(EntityDreadLich entity, MatrixStack matrixStackIn, float partialTickTime) {
+    protected void scale(EntityDreadLich entity, MatrixStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(0.95F, 0.95F, 0.95F);
-        if (entity.getAnimation() == this.getEntityModel().getSpawnAnimation()) {
-            this.itemLayer.hidden = entity.getAnimationTick() <= this.getEntityModel().getSpawnAnimation().getDuration() - 10;
+        if (entity.getAnimation() == this.getModel().getSpawnAnimation()) {
+            this.itemLayer.hidden = entity.getAnimationTick() <= this.getModel().getSpawnAnimation().getDuration() - 10;
             return;
         }
         this.itemLayer.hidden = false;
@@ -40,7 +40,7 @@ public class RenderDreadLich extends MobRenderer<EntityDreadLich, ModelDreadLich
 
     @Nullable
     @Override
-    public ResourceLocation getEntityTexture(EntityDreadLich entity) {
+    public ResourceLocation getTextureLocation(EntityDreadLich entity) {
         switch (entity.getVariant()) {
             case 1:
                 return TEXTURE_1;

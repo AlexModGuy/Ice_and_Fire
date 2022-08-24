@@ -16,12 +16,12 @@ public class RenderStymphalianBird extends MobRenderer<EntityStymphalianBird, Mo
     }
 
     @Override
-    public void preRenderCallback(EntityStymphalianBird LivingEntityIn, MatrixStack stack, float partialTickTime) {
+    public void scale(EntityStymphalianBird LivingEntityIn, MatrixStack stack, float partialTickTime) {
         stack.scale(0.75F, 0.75F, 0.75F);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityStymphalianBird cyclops) {
+    public ResourceLocation getTextureLocation(EntityStymphalianBird cyclops) {
         return TEXTURE;
     }
 

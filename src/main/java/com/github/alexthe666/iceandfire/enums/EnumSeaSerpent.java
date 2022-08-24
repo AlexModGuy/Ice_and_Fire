@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.block.BlockSeaSerpentScales;
 import com.github.alexthe666.iceandfire.item.IafArmorMaterial;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentScales;
-
 import net.minecraft.block.Block;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
@@ -43,7 +42,7 @@ public enum EnumSeaSerpent {
 
     public static void initArmors() {
         for (EnumSeaSerpent color : EnumSeaSerpent.values()) {
-            color.armorMaterial = new IafArmorMaterial("iceandfire:sea_serpent_scales_" + color.resourceName, 30, new int[]{4, 8, 7, 4}, 25, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 2.5F);
+            color.armorMaterial = new IafArmorMaterial("iceandfire:sea_serpent_scales_" + color.resourceName, 30, new int[]{4, 8, 7, 4}, 25, SoundEvents.ARMOR_EQUIP_GOLD, 2.5F);
             color.scale = new ItemSeaSerpentScales(color.resourceName, color.color);
             color.helmet = new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlotType.HEAD);
             color.chestplate = new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlotType.CHEST);

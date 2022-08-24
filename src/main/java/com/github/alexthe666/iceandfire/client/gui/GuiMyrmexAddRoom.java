@@ -48,29 +48,29 @@ public class GuiMyrmexAddRoom extends Screen {
             this.addButton(new Button(i + 50, j + 35, 150, 20, new TranslationTextComponent("myrmex.message.establishroom_food"), (p_214132_1_) -> {
                 ClientProxy.getReferedClientHive().addRoomWithMessage(player, interactPos, WorldGenMyrmexHive.RoomType.FOOD);
                 onGuiClosed();
-                Minecraft.getInstance().displayGuiScreen(null);
+                Minecraft.getInstance().setScreen(null);
             }));
             this.addButton(new Button(i + 50, j + 60, 150, 20, new TranslationTextComponent("myrmex.message.establishroom_nursery"), (p_214132_1_) -> {
                 ClientProxy.getReferedClientHive().addRoomWithMessage(player, interactPos, WorldGenMyrmexHive.RoomType.NURSERY);
                 onGuiClosed();
-                Minecraft.getInstance().displayGuiScreen(null);
+                Minecraft.getInstance().setScreen(null);
             }));
             this.addButton(new Button(i + 50, j + 85, 150, 20, new TranslationTextComponent("myrmex.message.establishroom_enterance_surface"), (p_214132_1_) -> {
                 ClientProxy.getReferedClientHive().addEnteranceWithMessage(player, false, interactPos, facing);
                 onGuiClosed();
-                Minecraft.getInstance().displayGuiScreen(null);
+                Minecraft.getInstance().setScreen(null);
 
             }));
             this.addButton(new Button(i + 50, j + 110, 150, 20, new TranslationTextComponent("myrmex.message.establishroom_enterance_bottom"), (p_214132_1_) -> {
                 ClientProxy.getReferedClientHive().addEnteranceWithMessage(player, true, interactPos, facing);
                 onGuiClosed();
-                Minecraft.getInstance().displayGuiScreen(null);
+                Minecraft.getInstance().setScreen(null);
 
             }));
             this.addButton(new Button(i + 50, j + 135, 150, 20, new TranslationTextComponent("myrmex.message.establishroom_misc"), (p_214132_1_) -> {
                 ClientProxy.getReferedClientHive().addRoomWithMessage(player, interactPos, WorldGenMyrmexHive.RoomType.EMPTY);
                 onGuiClosed();
-                Minecraft.getInstance().displayGuiScreen(null);
+                Minecraft.getInstance().setScreen(null);
 
             }));
         }
@@ -81,7 +81,7 @@ public class GuiMyrmexAddRoom extends Screen {
     public void renderBackground(MatrixStack ms) {
         super.renderBackground(ms);
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.getMinecraft().getTextureManager().bindTexture(jungle ? JUNGLE_TEXTURE : DESERT_TEXTURE);
+        this.getMinecraft().getTextureManager().bind(jungle ? JUNGLE_TEXTURE : DESERT_TEXTURE);
         int i = (this.width - 248) / 2;
         int j = (this.height - 166) / 2;
         this.blit(ms, i, j, 0, 0, 248, 166);
@@ -97,12 +97,12 @@ public class GuiMyrmexAddRoom extends Screen {
         int color = this.jungle ? 0X35EA15 : 0XFFBF00;
         if (ClientProxy.getReferedClientHive() != null) {
             if (!ClientProxy.getReferedClientHive().colonyName.isEmpty()) {
-                String title = I18n.format("myrmex.message.colony_named", ClientProxy.getReferedClientHive().colonyName);
-                this.getMinecraft().fontRenderer.drawString(ms, title, i + 40 - title.length() / 2, j - 3, color);
+                String title = I18n.get("myrmex.message.colony_named", ClientProxy.getReferedClientHive().colonyName);
+                this.getMinecraft().font.draw(ms, title, i + 40 - title.length() / 2, j - 3, color);
             } else {
-                this.getMinecraft().fontRenderer.drawString(ms, I18n.format("myrmex.message.colony"), i + 80, j - 3, color);
+                this.getMinecraft().font.draw(ms, I18n.get("myrmex.message.colony"), i + 80, j - 3, color);
             }
-            this.getMinecraft().fontRenderer.drawString(ms, I18n.format("myrmex.message.create_new_room", interactPos.getX(), interactPos.getY(), interactPos.getZ()), i + 30, j + 6, color);
+            this.getMinecraft().font.draw(ms, I18n.get("myrmex.message.create_new_room", interactPos.getX(), interactPos.getY(), interactPos.getZ()), i + 30, j + 6, color);
 
         }
 

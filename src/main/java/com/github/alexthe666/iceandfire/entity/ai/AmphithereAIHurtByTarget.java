@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
@@ -15,8 +14,8 @@ public class AmphithereAIHurtByTarget extends HurtByTargetGoal {
 
     protected static void setEntityAttackTarget(MobEntity creatureIn, LivingEntity LivingEntityIn) {
         EntityAmphithere amphithere = (EntityAmphithere) creatureIn;
-        if (amphithere.isTamed() || !(LivingEntityIn instanceof PlayerEntity)) {
-            amphithere.setAttackTarget(LivingEntityIn);
+        if (amphithere.isTame() || !(LivingEntityIn instanceof PlayerEntity)) {
+            amphithere.setTarget(LivingEntityIn);
         }
     }
 }

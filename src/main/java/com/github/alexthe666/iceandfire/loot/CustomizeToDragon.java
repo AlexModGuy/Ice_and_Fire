@@ -1,18 +1,11 @@
 package com.github.alexthe666.iceandfire.loot;
 
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
-import com.github.alexthe666.iceandfire.item.ItemDragonFlesh;
-import com.github.alexthe666.iceandfire.item.ItemDragonScales;
-import com.github.alexthe666.iceandfire.item.ItemDragonSkull;
+import com.github.alexthe666.iceandfire.item.*;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootFunction;
@@ -20,17 +13,19 @@ import net.minecraft.loot.LootFunctionType;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.conditions.ILootCondition;
 
+import java.util.Random;
+
 public class CustomizeToDragon extends LootFunction {
 
     public CustomizeToDragon(ILootCondition[] conditionsIn) {
         super(conditionsIn);
     }
 
-    protected ItemStack doApply(ItemStack stack, LootContext context) {
-        if (!stack.isEmpty() && context.get(LootParameters.THIS_ENTITY) instanceof EntityDragonBase) {
+    protected ItemStack run(ItemStack stack, LootContext context) {
+        if (!stack.isEmpty() && context.getParamOrNull(LootParameters.THIS_ENTITY) instanceof EntityDragonBase) {
             Random random = new Random();
-            EntityDragonBase dragon = (EntityDragonBase) context.get(LootParameters.THIS_ENTITY);
-            if (dragon == null){
+            EntityDragonBase dragon = (EntityDragonBase) context.getParamOrNull(LootParameters.THIS_ENTITY);
+            if (dragon == null) {
                 return stack;
             }
 
@@ -43,7 +38,7 @@ public class CustomizeToDragon extends LootFunction {
                 return new ItemStack(dragon.getVariantScale(dragon.getVariant()), stack.getCount());
             }
             else if (stack.getItem() instanceof ItemDragonEgg) {
-                if (dragon.isAdult()) {
+                if (dragon.shouldDropLoot()) {
                     return new ItemStack(dragon.getVariantEgg(dragon.getVariant()), stack.getCount());
                 } else {
                     stack.setCount(1 + random.nextInt(1 + (dragon.getAgeInDays() / 5)));
@@ -70,7 +65,7 @@ public class CustomizeToDragon extends LootFunction {
     }
 
     @Override
-    public LootFunctionType getFunctionType() {
+    public LootFunctionType getType() {
         return IafLootRegistry.CUSTOMIZE_TO_DRAGON;
     }
 

@@ -15,14 +15,14 @@ public class ItemAmbrosia extends ItemGenericFood {
     }
 
     public void onFoodEaten(ItemStack stack, World worldIn, LivingEntity livingEntity) {
-        livingEntity.addPotionEffect(new EffectInstance(Effects.STRENGTH, 3600, 2));
-        livingEntity.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 3600, 2));
-        livingEntity.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 3600, 2));
-        livingEntity.addPotionEffect(new EffectInstance(Effects.LUCK, 3600, 2));
+        livingEntity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 3600, 2));
+        livingEntity.addEffect(new EffectInstance(Effects.ABSORPTION, 3600, 2));
+        livingEntity.addEffect(new EffectInstance(Effects.JUMP, 3600, 2));
+        livingEntity.addEffect(new EffectInstance(Effects.LUCK, 3600, 2));
     }
 
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity livingEntity) {
-        super.onItemUseFinish(stack, worldIn, livingEntity);
-        return livingEntity instanceof PlayerEntity && ((PlayerEntity) livingEntity).abilities.isCreativeMode ? stack : new ItemStack(Items.BOWL);
+    public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity livingEntity) {
+        super.finishUsingItem(stack, worldIn, livingEntity);
+        return livingEntity instanceof PlayerEntity && ((PlayerEntity) livingEntity).abilities.instabuild ? stack : new ItemStack(Items.BOWL);
     }
 }

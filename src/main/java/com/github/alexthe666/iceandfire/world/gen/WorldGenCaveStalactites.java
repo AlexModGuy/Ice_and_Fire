@@ -1,13 +1,13 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 
+import java.util.Random;
+
 public class WorldGenCaveStalactites {
-    private Block block;
+    private final Block block;
     private int maxHeight = 3;
 
     public WorldGenCaveStalactites(Block block, int maxHeight) {
@@ -19,12 +19,12 @@ public class WorldGenCaveStalactites {
         int height = maxHeight + rand.nextInt(3);
         for (int i = 0; i < height; i++) {
             if (i < height / 2) {
-                worldIn.setBlockState(position.down(i).north(), block.getDefaultState(), 2);
-                worldIn.setBlockState(position.down(i).east(), block.getDefaultState(), 2);
-                worldIn.setBlockState(position.down(i).south(), block.getDefaultState(), 2);
-                worldIn.setBlockState(position.down(i).west(), block.getDefaultState(), 2);
+                worldIn.setBlock(position.below(i).north(), block.defaultBlockState(), 2);
+                worldIn.setBlock(position.below(i).east(), block.defaultBlockState(), 2);
+                worldIn.setBlock(position.below(i).south(), block.defaultBlockState(), 2);
+                worldIn.setBlock(position.below(i).west(), block.defaultBlockState(), 2);
             }
-            worldIn.setBlockState(position.down(i), block.getDefaultState(), 2);
+            worldIn.setBlock(position.below(i), block.defaultBlockState(), 2);
         }
         return true;
     }

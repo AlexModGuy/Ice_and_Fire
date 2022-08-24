@@ -28,28 +28,28 @@ public class GuiDragonForge extends ContainerScreen<ContainerDragonForge> {
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack stack, int mouseX, int mouseY) {
-        FontRenderer font = this.getMinecraft().fontRenderer;
+    protected void renderLabels(MatrixStack stack, int mouseX, int mouseY) {
+        FontRenderer font = this.getMinecraft().font;
         if (tileFurnace != null) {
-            String s = I18n.format("block.iceandfire.dragonforge_" + DragonType.getNameFromInt(dragonType) + "_core");
-            font.drawString(stack, s, this.xSize / 2 - font.getStringWidth(s) / 2, 6, 4210752);
+            String s = I18n.get("block.iceandfire.dragonforge_" + DragonType.getNameFromInt(dragonType) + "_core");
+            font.draw(stack, s, this.imageWidth / 2 - font.width(s) / 2, 6, 4210752);
         }
-        font.drawString(stack, this.playerInventory.getDisplayName().getString(), 8, this.ySize - 96 + 2, 4210752);
+        font.draw(stack, this.inventory.getDisplayName().getString(), 8, this.imageHeight - 96 + 2, 4210752);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         if (dragonType == 0) {
-            this.getMinecraft().getTextureManager().bindTexture(TEXTURE_FIRE);
+            this.getMinecraft().getTextureManager().bind(TEXTURE_FIRE);
         } else if (dragonType == 1) {
-            this.getMinecraft().getTextureManager().bindTexture(TEXTURE_ICE);
+            this.getMinecraft().getTextureManager().bind(TEXTURE_ICE);
         } else {
-            this.getMinecraft().getTextureManager().bindTexture(TEXTURE_LIGHTNING);
+            this.getMinecraft().getTextureManager().bind(TEXTURE_LIGHTNING);
         }
-        int k = (this.width - this.xSize) / 2;
-        int l = (this.height - this.ySize) / 2;
-        this.blit(matrixStack, k, l, 0, 0, this.xSize, this.ySize);
+        int k = (this.width - this.imageWidth) / 2;
+        int l = (this.height - this.imageHeight) / 2;
+        this.blit(matrixStack, k, l, 0, 0, this.imageWidth, this.imageHeight);
         int i1 = this.getCookTime(126);
         this.blit(matrixStack, k + 12, l + 23, 0, 166, i1, 38);
     }
@@ -59,7 +59,7 @@ public class GuiDragonForge extends ContainerScreen<ContainerDragonForge> {
         int j = 0;
         int maxCookTime = 1000;
         if (te instanceof TileEntityDragonforge) {
-            maxCookTime = ((TileEntityDragonforge) te).getMaxCookTime(tileFurnace.getSlot(0).getStack(), tileFurnace.getSlot(1).getStack());
+            maxCookTime = ((TileEntityDragonforge) te).getMaxCookTime(tileFurnace.getSlot(0).getItem(), tileFurnace.getSlot(1).getItem());
             j = Math.min(((TileEntityDragonforge) te).cookTime, maxCookTime);
         }
         return j != 0 ? j * p_175381_1_ / maxCookTime : 0;
@@ -69,7 +69,7 @@ public class GuiDragonForge extends ContainerScreen<ContainerDragonForge> {
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
 }

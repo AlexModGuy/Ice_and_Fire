@@ -34,9 +34,9 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
 
     public static final int HEADS = 9;
     public static final double HEAD_HEALTH_THRESHOLD = 20;
-    private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityHydra.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> HEAD_COUNT = EntityDataManager.createKey(EntityHydra.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> SEVERED_HEAD = EntityDataManager.createKey(EntityHydra.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> VARIANT = EntityDataManager.defineId(EntityHydra.class, DataSerializers.INT);
+    private static final DataParameter<Integer> HEAD_COUNT = EntityDataManager.defineId(EntityHydra.class, DataSerializers.INT);
+    private static final DataParameter<Integer> SEVERED_HEAD = EntityDataManager.defineId(EntityHydra.class, DataSerializers.INT);
     private static final float[][] ROTATE = new float[][]{
         {0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F},// 1 total heads
         {10F, -10F, 0F, 0F, 0F, 0F, 0F, 0F, 0F},// 2 total heads
@@ -77,19 +77,19 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
     }
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
+        return MobEntity.createMobAttributes()
             //HEALTH
-            .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.hydraMaxHealth)
+            .add(Attributes.MAX_HEALTH, IafConfig.hydraMaxHealth)
             //SPEED
-            .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3D)
+            .add(Attributes.MOVEMENT_SPEED, 0.3D)
             //ATTACK
-            .createMutableAttribute(Attributes.ATTACK_DAMAGE, 3.0D)
+            .add(Attributes.ATTACK_DAMAGE, 3.0D)
             //ARMOR
-            .createMutableAttribute(Attributes.ARMOR, 1.0D);
+            .add(Attributes.ARMOR, 1.0D);
     }
 
     @Override
-    public AttributeModifierMap.MutableAttribute getAttributes() {
+    public AttributeModifierMap.MutableAttribute getConfigurableAttributes() {
         return bakeAttributes();
     }
 
@@ -110,28 +110,28 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
     }
 
     @Override
-    public boolean attackEntityAsMob(Entity entityIn) {
+    public boolean doHurtTarget(Entity entityIn) {
         return false;
     }
 
     @Override
-    public void livingTick() {
-        super.livingTick();
-        LivingEntity attackTarget = this.getAttackTarget();
-        if (attackTarget != null && this.canEntityBeSeen(attackTarget)) {
-            int index = rand.nextInt(getHeadCount());
+    public void aiStep() {
+        super.aiStep();
+        LivingEntity attackTarget = this.getTarget();
+        if (attackTarget != null && this.canSee(attackTarget)) {
+            int index = random.nextInt(getHeadCount());
             if (!isBreathing[index] && !isStriking[index]) {
-                if (this.getDistance(attackTarget) < 6) {
+                if (this.distanceTo(attackTarget) < 6) {
                     if (strikeCooldown == 0 && strikingProgress[index] == 0) {
                         isBreathing[index] = false;
                         isStriking[index] = true;
-                        this.world.setEntityState(this, (byte) (40 + index));
+                        this.level.broadcastEntityEvent(this, (byte) (40 + index));
                         strikeCooldown = 3;
                     }
-                } else if (rand.nextBoolean() && breathCooldown == 0) {
+                } else if (random.nextBoolean() && breathCooldown == 0) {
                     isBreathing[index] = true;
                     isStriking[index] = false;
-                    this.world.setEntityState(this, (byte) (50 + index));
+                    this.level.broadcastEntityEvent(this, (byte) (50 + index));
                     breathCooldown = 15;
                 }
 
@@ -144,36 +144,36 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
             prevStrikeProgress[i] = strikingProgress[i];
             if (striking && strikingProgress[i] > 9) {
                 isStriking[i] = false;
-                if (attackTarget != null && this.getDistance(attackTarget) < 6) {
-                    attackTarget.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
-                    attackTarget.addPotionEffect(new EffectInstance(Effects.POISON, 100, 3, false, false));
-                    attackTarget.applyKnockback(0.25F, this.getPosX() - attackTarget.getPosX(), this.getPosZ() - attackTarget.getPosZ());
+                if (attackTarget != null && this.distanceTo(attackTarget) < 6) {
+                    attackTarget.hurt(DamageSource.mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+                    attackTarget.addEffect(new EffectInstance(Effects.POISON, 100, 3, false, false));
+                    attackTarget.knockback(0.25F, this.getX() - attackTarget.getX(), this.getZ() - attackTarget.getZ());
                 }
             }
             if (breathing) {
-                if (ticksExisted % 7 == 0 && attackTarget != null && i < this.getHeadCount()) {
-                    Vector3d Vector3d = this.getLook(1.0F);
-                    if (rand.nextFloat() < 0.2F) {
-                        this.playSound(IafSoundRegistry.HYDRA_SPIT, this.getSoundVolume(), this.getSoundPitch());
+                if (tickCount % 7 == 0 && attackTarget != null && i < this.getHeadCount()) {
+                    Vector3d Vector3d = this.getViewVector(1.0F);
+                    if (random.nextFloat() < 0.2F) {
+                        this.playSound(IafSoundRegistry.HYDRA_SPIT, this.getSoundVolume(), this.getVoicePitch());
                     }
-                    double headPosX = this.headBoxes[i].getPosX() + Vector3d.x * 1.0D;
-                    double headPosY = this.headBoxes[i].getPosY() + 1.3F;
-                    double headPosZ = this.headBoxes[i].getPosZ() + Vector3d.z * 1.0D;
-                    double d2 = attackTarget.getPosX() - headPosX + this.rand.nextGaussian() * 0.4D;
-                    double d3 = attackTarget.getPosY() + attackTarget.getEyeHeight() - headPosY + this.rand.nextGaussian() * 0.4D;
-                    double d4 = attackTarget.getPosZ() - headPosZ + this.rand.nextGaussian() * 0.4D;
+                    double headPosX = this.headBoxes[i].getX() + Vector3d.x * 1.0D;
+                    double headPosY = this.headBoxes[i].getY() + 1.3F;
+                    double headPosZ = this.headBoxes[i].getZ() + Vector3d.z * 1.0D;
+                    double d2 = attackTarget.getX() - headPosX + this.random.nextGaussian() * 0.4D;
+                    double d3 = attackTarget.getY() + attackTarget.getEyeHeight() - headPosY + this.random.nextGaussian() * 0.4D;
+                    double d4 = attackTarget.getZ() - headPosZ + this.random.nextGaussian() * 0.4D;
                     EntityHydraBreath entitylargefireball = new EntityHydraBreath(IafEntityRegistry.HYDRA_BREATH.get(),
-                        world, this, d2, d3, d4);
-                    entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
-                    if (!world.isRemote) {
-                        world.addEntity(entitylargefireball);
+                        level, this, d2, d3, d4);
+                    entitylargefireball.setPos(headPosX, headPosY, headPosZ);
+                    if (!level.isClientSide) {
+                        level.addFreshEntity(entitylargefireball);
                     }
                 }
-                if (isBreathing[i] && (attackTarget == null || !attackTarget.isAlive() || breathTicks[i] > 60) && !world.isRemote) {
+                if (isBreathing[i] && (attackTarget == null || !attackTarget.isAlive() || breathTicks[i] > 60) && !level.isClientSide) {
                     isBreathing[i] = false;
                     breathTicks[i] = 0;
                     breathCooldown = 15;
-                    this.world.setEntityState(this, (byte) (60 + i));
+                    this.level.broadcastEntityEvent(this, (byte) (60 + i));
                 }
                 breathTicks[i]++;
             } else {
@@ -205,7 +205,7 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
         if (this.getHeadCount() == 1 && this.getSeveredHead() != -1) {
             this.setSeveredHead(-1);
         }
-        if (this.getHeadCount() == 1 && !this.isBurning()) {
+        if (this.getHeadCount() == 1 && !this.isOnFire()) {
             this.setHeadCount(2);
             this.setSeveredHead(1);
             onlyRegrowOneHeadNotTwo = true;
@@ -217,10 +217,10 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
             if (regrowHeadCooldown >= 100) {
                 headDamageTracker[this.getSeveredHead()] = 0;
                 this.setSeveredHead(-1);
-                if (this.isBurning()) {
+                if (this.isOnFire()) {
                     this.setHeadCount(this.getHeadCount() - 1);
                 } else {
-                    this.playSound(IafSoundRegistry.HYDRA_REGEN_HEAD, this.getSoundVolume(), this.getSoundPitch());
+                    this.playSound(IafSoundRegistry.HYDRA_REGEN_HEAD, this.getSoundVolume(), this.getVoicePitch());
                     if (!onlyRegrowOneHeadNotTwo) {
                         this.setHeadCount(this.getHeadCount() + 1);
                     }
@@ -240,8 +240,8 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
             float maxAngle = 5;
             headBoxes[i] = new EntityHydraHead(this, 3.2F, ROTATE[getHeadCount() - 1][i] * 1.1F, 1.0F, 0.75F, 1.75F, 1, i, false);
             headBoxes[HEADS + i] = new EntityHydraHead(this, 2.1F, ROTATE[getHeadCount() - 1][i] * 1.1F, 1.0F, 0.75F, 0.75F, 1, i, true);
-            headBoxes[i].copyLocationAndAnglesFrom(this);
-            headBoxes[HEADS + i].copyLocationAndAnglesFrom(this);
+            headBoxes[i].copyPosition(this);
+            headBoxes[HEADS + i].copyPosition(this);
             headBoxes[i].setParent(this);
             headBoxes[HEADS + i].setParent(this);
         }
@@ -254,30 +254,30 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
             resetParts();
         }
         onUpdateParts();
-        float partY = 1.0F - limbSwingAmount * 0.5F;
+        float partY = 1.0F - animationSpeed * 0.5F;
         for (int i = 0; i < getHeadCount(); i++) {
-            headBoxes[i].setPosition(headBoxes[i].getPosX(), this.getPosY() + partY, headBoxes[i].getPosZ());
+            headBoxes[i].setPos(headBoxes[i].getX(), this.getY() + partY, headBoxes[i].getZ());
             headBoxes[i].setParent(this);
             if (!headBoxes[i].shouldContinuePersisting()) {
-                world.addEntity(headBoxes[i]);
+                level.addFreshEntity(headBoxes[i]);
             }
-            headBoxes[HEADS + i].setPosition(headBoxes[HEADS + i].getPosX(), this.getPosY() + partY, headBoxes[HEADS + i].getPosZ());
+            headBoxes[HEADS + i].setPos(headBoxes[HEADS + i].getX(), this.getY() + partY, headBoxes[HEADS + i].getZ());
             headBoxes[HEADS + i].setParent(this);
             if (!headBoxes[HEADS + i].shouldContinuePersisting()) {
-                world.addEntity(headBoxes[HEADS + i]);
+                level.addFreshEntity(headBoxes[HEADS + i]);
             }
         }
-        if (getHeadCount() > 1 && !isBurning()) {
-            if (this.getHealth() < this.getMaxHealth() && this.ticksExisted % 30 == 0) {
+        if (getHeadCount() > 1 && !isOnFire()) {
+            if (this.getHealth() < this.getMaxHealth() && this.tickCount % 30 == 0) {
                 int level = getHeadCount() - 1;
                 if (this.getSeveredHead() != -1) {
                     level--;
                 }
-                this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 30, level, false, false));
+                this.addEffect(new EffectInstance(Effects.REGENERATION, 30, level, false, false));
             }
         }
-        if (isBurning()) {
-            this.removePotionEffect(Effects.REGENERATION);
+        if (isOnFire()) {
+            this.removeEffect(Effects.REGENERATION);
         }
 
         prevHeadCount = this.getHeadCount();
@@ -302,24 +302,24 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
 
     @Override
     protected void playHurtSound(DamageSource source) {
-        speakingProgress[rand.nextInt(getHeadCount())] = 1F;
+        speakingProgress[random.nextInt(getHeadCount())] = 1F;
         super.playHurtSound(source);
     }
 
     @Override
     public void playAmbientSound() {
-        speakingProgress[rand.nextInt(getHeadCount())] = 1F;
+        speakingProgress[random.nextInt(getHeadCount())] = 1F;
         super.playAmbientSound();
     }
 
     @Override
-    public int getTalkInterval() {
+    public int getAmbientSoundInterval() {
         return 100 / getHeadCount();
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         compound.putInt("Variant", this.getVariant());
         compound.putInt("HeadCount", this.getHeadCount());
         compound.putInt("SeveredHead", this.getSeveredHead());
@@ -329,8 +329,8 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         this.setVariant(compound.getInt("Variant"));
         this.setHeadCount(compound.getInt("HeadCount"));
         this.setSeveredHead(compound.getInt("SeveredHead"));
@@ -340,15 +340,15 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(VARIANT, Integer.valueOf(0));
-        this.dataManager.register(HEAD_COUNT, Integer.valueOf(3));
-        this.dataManager.register(SEVERED_HEAD, Integer.valueOf(-1));
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(VARIANT, Integer.valueOf(0));
+        this.entityData.define(HEAD_COUNT, Integer.valueOf(3));
+        this.entityData.define(SEVERED_HEAD, Integer.valueOf(-1));
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
+    public boolean hurt(DamageSource source, float amount) {
         if (lastHitHead > this.getHeadCount()) {
             lastHitHead = this.getHeadCount() - 1;
         }
@@ -359,19 +359,19 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
             headDamageTracker[headIndex] = 0;
             this.regrowHeadCooldown = 0;
             this.setSeveredHead(headIndex);
-            this.playSound(SoundEvents.ENTITY_GUARDIAN_FLOP, this.getSoundVolume(), this.getSoundPitch());
+            this.playSound(SoundEvents.GUARDIAN_FLOP, this.getSoundVolume(), this.getVoicePitch());
         }
-        if (this.getHealth() <= amount + 5 && this.getHeadCount() > 1 && !source.canHarmInCreative()) {
+        if (this.getHealth() <= amount + 5 && this.getHeadCount() > 1 && !source.isBypassInvul()) {
             amount = 0;
         }
-        return super.attackEntityFrom(source, amount);
+        return super.hurt(source, amount);
     }
 
     @Override
     @Nullable
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        ILivingEntityData data = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setVariant(rand.nextInt(3));
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+        ILivingEntityData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+        this.setVariant(random.nextInt(3));
         return data;
     }
 
@@ -406,41 +406,41 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
     }
 
     @Override
-    public boolean isNoDespawnRequired() {
+    public boolean isPersistenceRequired() {
         return true;
     }
 
     @Override
-    public boolean canDespawn(double distanceToClosestPlayer) {
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return false;
     }
 
     public int getVariant() {
-        return this.dataManager.get(VARIANT).intValue();
+        return this.entityData.get(VARIANT).intValue();
     }
 
     public void setVariant(int variant) {
-        this.dataManager.set(VARIANT, variant);
+        this.entityData.set(VARIANT, variant);
     }
 
     public int getHeadCount() {
-        return MathHelper.clamp(this.dataManager.get(HEAD_COUNT).intValue(), 1, HEADS);
+        return MathHelper.clamp(this.entityData.get(HEAD_COUNT).intValue(), 1, HEADS);
     }
 
     public void setHeadCount(int count) {
-        this.dataManager.set(HEAD_COUNT, MathHelper.clamp(count, 1, HEADS));
+        this.entityData.set(HEAD_COUNT, MathHelper.clamp(count, 1, HEADS));
     }
 
     public int getSeveredHead() {
-        return MathHelper.clamp(this.dataManager.get(SEVERED_HEAD).intValue(), -1, HEADS);
+        return MathHelper.clamp(this.entityData.get(SEVERED_HEAD).intValue(), -1, HEADS);
     }
 
     public void setSeveredHead(int count) {
-        this.dataManager.set(SEVERED_HEAD, MathHelper.clamp(count, -1, HEADS));
+        this.entityData.set(SEVERED_HEAD, MathHelper.clamp(count, -1, HEADS));
     }
 
     @Override
-    public void handleStatusUpdate(byte id) {
+    public void handleEntityEvent(byte id) {
         if (id >= 40 && id <= 48) {
             int index = id - 40;
             isStriking[MathHelper.clamp(index, 0, 8)] = true;
@@ -451,13 +451,13 @@ public class EntityHydra extends MonsterEntity implements IAnimatedEntity, IMult
             int index = id - 60;
             isBreathing[MathHelper.clamp(index, 0, 8)] = false;
         } else {
-            super.handleStatusUpdate(id);
+            super.handleEntityEvent(id);
         }
     }
 
     @Override
-    public boolean isPotionApplicable(EffectInstance potioneffectIn) {
-        return potioneffectIn.getPotion() != Effects.POISON && super.isPotionApplicable(potioneffectIn);
+    public boolean canBeAffected(EffectInstance potioneffectIn) {
+        return potioneffectIn.getEffect() != Effects.POISON && super.canBeAffected(potioneffectIn);
     }
 
     public void onHitHead(float damage, int headIndex) {

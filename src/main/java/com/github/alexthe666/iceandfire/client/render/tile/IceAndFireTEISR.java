@@ -44,7 +44,7 @@ public class IceAndFireTEISR extends ItemStackTileEntityRenderer {
     private final Supplier<TileEntityGhostChest> ghostChestDummy = of(TileEntityGhostChest::new);
 
     @Override
-    public void func_239207_a_(ItemStack itemStackIn, ItemCameraTransforms.TransformType p_239207_2_, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void renderByItem(ItemStack itemStackIn, ItemCameraTransforms.TransformType p_239207_2_, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         if (itemStackIn.getItem() == IafItemRegistry.GORGON_HEAD) {
             if (itemStackIn.getTag() != null) {
                 if (itemStackIn.getTag().getBoolean("Active")) {
@@ -82,23 +82,23 @@ public class IceAndFireTEISR extends ItemStackTileEntityRenderer {
                 ItemStack tridentInventory = new ItemStack(IafItemRegistry.TIDE_TRIDENT_INVENTORY);
                 if (itemStackIn.isEnchanted()) {
                     ListNBT enchantments = itemStackIn.getTag().getList("Enchantments", 10);
-                    tridentInventory.setTagInfo("Enchantments", enchantments);
+                    tridentInventory.addTagElement("Enchantments", enchantments);
                 }
-                Minecraft.getInstance().getItemRenderer().renderItem(tridentInventory, p_239207_2_, p_239207_2_ == ItemCameraTransforms.TransformType.GROUND ? combinedLightIn : 240, combinedOverlayIn, matrixStackIn, bufferIn);
+                Minecraft.getInstance().getItemRenderer().renderStatic(tridentInventory, p_239207_2_, p_239207_2_ == ItemCameraTransforms.TransformType.GROUND ? combinedLightIn : 240, combinedOverlayIn, matrixStackIn, bufferIn);
             } else {
-                matrixStackIn.push();
+                matrixStackIn.pushPose();
                 matrixStackIn.translate(0, 0.2F, -0.15F);
-                if(p_239207_2_.isFirstPerson()){
+                if (p_239207_2_.firstPerson()) {
                     matrixStackIn.translate(p_239207_2_ == ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND ? -0.3F : 0.3F, 0.2F, -0.2F);
-                }else{
+                } else {
                     matrixStackIn.translate(0, 0.6F, 0.0F);
                 }
-                matrixStackIn.rotate(Vector3f.XP.rotationDegrees(160));
-                IVertexBuilder glintVertexBuilder = ItemRenderer.getEntityGlintVertexBuilder(bufferIn, RenderType.getEntityCutoutNoCull(RenderTideTrident.TRIDENT), false, itemStackIn.hasEffect());
-                TIDE_TRIDENT_MODEL.get().render(matrixStackIn,
+                matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(160));
+                IVertexBuilder glintVertexBuilder = ItemRenderer.getFoilBufferDirect(bufferIn, RenderType.entityCutoutNoCull(RenderTideTrident.TRIDENT), false, itemStackIn.hasFoil());
+                TIDE_TRIDENT_MODEL.get().renderToBuffer(matrixStackIn,
                     glintVertexBuilder, combinedLightIn,
                     combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
-                matrixStackIn.pop();
+                matrixStackIn.popPose();
             }
 
         }

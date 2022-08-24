@@ -4,7 +4,6 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
-
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 
@@ -531,7 +530,7 @@ public enum EnumDragonTextures {
         }
 
         public static Armor getArmorForDragon(EntityDragonBase dragon, EquipmentSlotType slot) {
-            int armor = dragon.getArmorOrdinal(dragon.getItemStackFromSlot(slot));
+            int armor = dragon.getArmorOrdinal(dragon.getItemBySlot(slot));
             switch (slot) {
                 case CHEST:
                     //neck

@@ -1,13 +1,8 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -20,11 +15,14 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 public class ItemMyrmexSwarm extends Item {
-    private boolean jungle;
+    private final boolean jungle;
 
     public ItemMyrmexSwarm(boolean jungle) {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
         if (jungle) {
             this.setRegistryName(IceAndFire.MODID, "myrmex_jungle_swarm");
         } else {
@@ -34,32 +32,32 @@ public class ItemMyrmexSwarm extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand hand) {
-        ItemStack itemStackIn = playerIn.getHeldItem(hand);
-        playerIn.setActiveHand(hand);
-        playerIn.swingArm(hand);
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand hand) {
+        ItemStack itemStackIn = playerIn.getItemInHand(hand);
+        playerIn.startUsingItem(hand);
+        playerIn.swing(hand);
         if (!playerIn.isCreative()) {
             itemStackIn.shrink(1);
-            playerIn.getCooldownTracker().setCooldown(this, 20);
+            playerIn.getCooldowns().addCooldown(this, 20);
         }
         for (int i = 0; i < 5; i++) {
             EntityMyrmexSwarmer myrmex = new EntityMyrmexSwarmer(IafEntityRegistry.MYRMEX_SWARMER.get(), worldIn);
-            myrmex.setPosition(playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ());
+            myrmex.setPos(playerIn.getX(), playerIn.getY(), playerIn.getZ());
             myrmex.setJungleVariant(jungle);
             myrmex.setSummonedBy(playerIn);
             myrmex.setFlying(true);
-            if (!worldIn.isRemote) {
-                worldIn.addEntity(myrmex);
+            if (!worldIn.isClientSide) {
+                worldIn.addFreshEntity(myrmex);
             }
         }
-        playerIn.getCooldownTracker().setCooldown(this, 1800);
+        playerIn.getCooldowns().addCooldown(this, 1800);
         return new ActionResult<ItemStack>(ActionResultType.PASS, itemStackIn);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.myrmex_swarm.desc_0").mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.myrmex_swarm.desc_1").mergeStyle(TextFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.myrmex_swarm.desc_0").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.myrmex_swarm.desc_1").withStyle(TextFormatting.GRAY));
     }
 }

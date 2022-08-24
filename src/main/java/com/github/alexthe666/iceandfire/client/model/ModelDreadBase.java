@@ -9,18 +9,18 @@ abstract class ModelDreadBase<T extends LivingEntity & IAnimatedEntity> extends 
     public abstract Animation getSpawnAnimation();
 
     @Override
-    public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        super.setRotationAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+    public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        super.setupAnim(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         setRotationAnglesSpawn(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
     }
 
     public void setRotationAnglesSpawn(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         if (entityIn.getAnimation() == getSpawnAnimation()) {
             if (entityIn.getAnimationTick() < 30) {
-                this.flap(armRight, 0.5F, 0.5F, false, 2, -0.7F, entityIn.ticksExisted, 1);
-                this.flap(armLeft, 0.5F, 0.5F, true, 2, -0.7F, entityIn.ticksExisted, 1);
-                this.walk(armRight, 0.5F, 0.5F, true, 1, 0, entityIn.ticksExisted, 1);
-                this.walk(armLeft, 0.5F, 0.5F, true, 1, 0, entityIn.ticksExisted, 1);
+                this.flap(armRight, 0.5F, 0.5F, false, 2, -0.7F, entityIn.tickCount, 1);
+                this.flap(armLeft, 0.5F, 0.5F, true, 2, -0.7F, entityIn.tickCount, 1);
+                this.walk(armRight, 0.5F, 0.5F, true, 1, 0, entityIn.tickCount, 1);
+                this.walk(armLeft, 0.5F, 0.5F, true, 1, 0, entityIn.tickCount, 1);
             }
         }
     }

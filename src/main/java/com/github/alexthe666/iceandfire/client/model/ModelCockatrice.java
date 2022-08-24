@@ -8,7 +8,6 @@ import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
@@ -47,144 +46,144 @@ public class ModelCockatrice extends ModelDragonBase<EntityCockatrice> {
     public AdvancedModelBox leftFoot;
     public AdvancedModelBox rightLeg;
     public AdvancedModelBox rightFoot;
-    private ModelAnimator animator;
+    private final ModelAnimator animator;
 
     public ModelCockatrice() {
-        this.textureWidth = 128;
-        this.textureHeight = 64;
+        this.texWidth = 128;
+        this.texHeight = 64;
         this.lowerBody = new AdvancedModelBox(this, 65, 32);
-        this.lowerBody.setRotationPoint(0.0F, 7.9F, -2.5F);
+        this.lowerBody.setPos(0.0F, 7.9F, -2.5F);
         this.lowerBody.addBox(-4.0F, -1.0F, 0.0F, 8, 8, 9, 0.0F);
         this.setRotateAngle(lowerBody, -0.15550883635269477F, 0.0F, 0.0F);
         this.Wattle = new AdvancedModelBox(this, 47, 9);
         this.Wattle.mirror = true;
-        this.Wattle.setRotationPoint(-0.0F, -2.1F, -2.03F);
+        this.Wattle.setPos(-0.0F, -2.1F, -2.03F);
         this.Wattle.addBox(-0.5F, -1.5F, 0.6F, 1, 4, 5, 0.0F);
         this.setRotateAngle(Wattle, -1.593485607070823F, -0.0F, 0.0F);
         this.TailPlume = new AdvancedModelBox(this, 37, 31);
-        this.TailPlume.setRotationPoint(0.0F, 0.9F, 7.3F);
+        this.TailPlume.setPos(0.0F, 0.9F, 7.3F);
         this.TailPlume.addBox(-0.5F, -9.1F, -0.2F, 1, 7, 5, 0.0F);
         this.setRotateAngle(TailPlume, -0.7740535232594852F, -0.0F, 0.0F);
         this.upperBody = new AdvancedModelBox(this, 67, 5);
-        this.upperBody.setRotationPoint(0.0F, 1.1F, -2.0F);
+        this.upperBody.setPos(0.0F, 1.1F, -2.0F);
         this.upperBody.addBox(-3.0F, -2.0F, -5.0F, 6, 7, 8, 0.0F);
         this.setRotateAngle(upperBody, 0.091106186954104F, -0.0F, 0.0F);
         this.leftLowerArmWing = new AdvancedModelBox(this, 20, 9);
-        this.leftLowerArmWing.setRotationPoint(0.4F, 0.8F, 2.4F);
+        this.leftLowerArmWing.setPos(0.4F, 0.8F, 2.4F);
         this.leftLowerArmWing.addBox(-0.5F, 0.0F, -8.0F, 1, 12, 8, 0.0F);
         this.setRotateAngle(leftLowerArmWing, 0.01361356816555577F, -0.0F, 0.0F);
         this.upperJaw = new AdvancedModelBox(this, 28, 0);
-        this.upperJaw.setRotationPoint(0.0F, -1.0F, -4.93F);
+        this.upperJaw.setPos(0.0F, -1.0F, -4.93F);
         this.upperJaw.addBox(-1.5F, -2.4F, -4.0F, 3, 3, 4, 0.0F);
         this.setRotateAngle(upperJaw, -0.0017453292519943296F, -0.0F, 0.0F);
         this.rightFoot = new AdvancedModelBox(this, 0, 36);
-        this.rightFoot.setRotationPoint(0.0F, 0.9F, -5.7F);
+        this.rightFoot.setPos(0.0F, 0.9F, -5.7F);
         this.rightFoot.addBox(-1.5F, 0.0F, -3.0F, 3, 2, 4, 0.0F);
         this.setRotateAngle(rightFoot, -1.3089969389957472F, -0.0F, 0.0F);
         this.leftUpperArm = new AdvancedModelBox(this, 0, 20);
         this.leftUpperArm.mirror = true;
-        this.leftUpperArm.setRotationPoint(2.5F, 1.3F, -3.3F);
+        this.leftUpperArm.setPos(2.5F, 1.3F, -3.3F);
         this.leftUpperArm.addBox(0.0F, -1.0F, -1.0F, 2, 5, 3, 0.0F);
         this.setRotateAngle(leftUpperArm, 0.0F, 0.22689280275926282F, -0.8726646259971648F);
         this.leftThigh = new AdvancedModelBox(this, 14, 35);
         this.leftThigh.mirror = true;
-        this.leftThigh.setRotationPoint(3.0F, 14.0F, 3.0F);
+        this.leftThigh.setPos(3.0F, 14.0F, 3.0F);
         this.leftThigh.addBox(0.0F, -2.5F, -2.0F, 3, 6, 5, 0.0F);
         this.neck = new AdvancedModelBox(this, 29, 51);
-        this.neck.setRotationPoint(0.0F, 0.8F, -3.5F);
+        this.neck.setPos(0.0F, 0.8F, -3.5F);
         this.neck.addBox(-2.0F, -2.0F, -6.5F, 4, 5, 7, 0.0F);
         this.setRotateAngle(neck, -0.4553564018453205F, -0.0F, 0.0F);
         this.neck2 = new AdvancedModelBox(this, 0, 47);
-        this.neck2.setRotationPoint(0.0F, 0.3F, -5.6F);
+        this.neck2.setPos(0.0F, 0.3F, -5.6F);
         this.neck2.addBox(-2.02F, -2.0F, -8.0F, 4, 4, 8, 0.0F);
         this.setRotateAngle(neck2, -0.31869712141416456F, -0.0F, 0.0F);
         this.RightUpperArm = new AdvancedModelBox(this, 0, 20);
         this.RightUpperArm.mirror = true;
-        this.RightUpperArm.setRotationPoint(-2.5F, 1.3F, -3.3F);
+        this.RightUpperArm.setPos(-2.5F, 1.3F, -3.3F);
         this.RightUpperArm.addBox(-2.0F, -1.0F, -1.0F, 2, 5, 3, 0.0F);
         this.setRotateAngle(RightUpperArm, 0.0F, -0.22689280275926282F, 0.8726646259971648F);
         this.rightThigh = new AdvancedModelBox(this, 14, 35);
-        this.rightThigh.setRotationPoint(-3.0F, 14.0F, 3.0F);
+        this.rightThigh.setPos(-3.0F, 14.0F, 3.0F);
         this.rightThigh.addBox(-3.0F, -2.5F, -2.0F, 3, 6, 5, 0.0F);
         this.Comb1 = new AdvancedModelBox(this, 38, 15);
         this.Comb1.mirror = true;
-        this.Comb1.setRotationPoint(-0.0F, -2.5F, -2.03F);
+        this.Comb1.setPos(-0.0F, -2.5F, -2.03F);
         this.Comb1.addBox(-0.5F, -1.5F, 0.6F, 1, 4, 5, 0.0F);
         this.setRotateAngle(Comb1, 1.2292353921796064F, -0.0F, 0.0F);
         this.rightToeClaw2 = new AdvancedModelBox(this, 0, 40);
-        this.rightToeClaw2.setRotationPoint(0.0F, 0.2F, -2.5F);
+        this.rightToeClaw2.setPos(0.0F, 0.2F, -2.5F);
         this.rightToeClaw2.addBox(-0.5F, -0.5F, 0.0F, 1, 1, 1, 0.0F);
         this.setRotateAngle(rightToeClaw2, -1.7627825445142729F, -0.0F, 0.0F);
         this.RightLowerArm = new AdvancedModelBox(this, 0, 12);
-        this.RightLowerArm.setRotationPoint(-0.9F, 3.0F, 0.0F);
+        this.RightLowerArm.setPos(-0.9F, 3.0F, 0.0F);
         this.RightLowerArm.addBox(-1.0F, 0.0F, -6.0F, 2, 2, 6, 0.0F);
         this.setRotateAngle(RightLowerArm, 0.704240353179712F, -0.0F, 0.0F);
         this.RightUpperArmWing = new AdvancedModelBox(this, 22, 10);
         this.RightUpperArmWing.mirror = true;
-        this.RightUpperArmWing.setRotationPoint(-1.0F, 2.7F, 1.1F);
+        this.RightUpperArmWing.setPos(-1.0F, 2.7F, 1.1F);
         this.RightUpperArmWing.addBox(-0.5F, 0.0F, -3.5F, 1, 4, 7, 0.0F);
         this.setRotateAngle(RightUpperArmWing, 1.5184364492350666F, -0.0F, 0.0F);
         this.head = new AdvancedModelBox(this, 0, 0);
-        this.head.setRotationPoint(0.0F, 0.8F, -6.03F);
+        this.head.setPos(0.0F, 0.8F, -6.03F);
         this.head.addBox(-2.5F, -4.0F, -5.0F, 5, 5, 6, 0.0F);
         this.setRotateAngle(head, 1.1383037381507017F, 0.0F, 0.0F);
         this.rightLeg = new AdvancedModelBox(this, 2, 25);
-        this.rightLeg.setRotationPoint(-1.2F, 2.9F, 1.1F);
+        this.rightLeg.setPos(-1.2F, 2.9F, 1.1F);
         this.rightLeg.addBox(-1.0F, 0.4F, -6.7F, 2, 2, 8, 0.0F);
         this.setRotateAngle(rightLeg, 1.3089969389957472F, -0.0F, 0.0F);
         this.RightLowerArmWing = new AdvancedModelBox(this, 20, 9);
         this.RightLowerArmWing.mirror = true;
-        this.RightLowerArmWing.setRotationPoint(0.4F, 0.8F, 2.4F);
+        this.RightLowerArmWing.setPos(0.4F, 0.8F, 2.4F);
         this.RightLowerArmWing.addBox(-0.5F, 0.0F, -8.0F, 1, 12, 8, 0.0F);
         this.setRotateAngle(RightLowerArmWing, 0.01361356816555577F, -0.0F, 0.0F);
         this.tail3 = new AdvancedModelBox(this, 49, 16);
-        this.tail3.setRotationPoint(0.0F, 0.3F, 7.2F);
+        this.tail3.setPos(0.0F, 0.3F, 7.2F);
         this.tail3.addBox(-1.0F, 0.0F, 0.0F, 2, 3, 12, 0.0F);
         this.setRotateAngle(tail3, -0.05253441048502932F, -0.0F, 0.0F);
         this.tail4 = new AdvancedModelBox(this, 47, 40);
-        this.tail4.setRotationPoint(0.0F, 0.6F, 10.0F);
+        this.tail4.setPos(0.0F, 0.6F, 10.0F);
         this.tail4.addBox(-1.02F, -0.2F, 0.1F, 2, 2, 12, 0.0F);
         this.setRotateAngle(tail4, -0.05253441048502932F, -0.0F, 0.0F);
         this.tail2 = new AdvancedModelBox(this, 90, 13);
-        this.tail2.setRotationPoint(0.0F, 0.2F, 6.7F);
+        this.tail2.setPos(0.0F, 0.2F, 6.7F);
         this.tail2.addBox(-1.5F, 0.0F, 0.0F, 3, 4, 8, 0.0F);
         this.leftLowerArm = new AdvancedModelBox(this, 0, 12);
         this.leftLowerArm.mirror = true;
-        this.leftLowerArm.setRotationPoint(0.9F, 3.0F, 0.0F);
+        this.leftLowerArm.setPos(0.9F, 3.0F, 0.0F);
         this.leftLowerArm.addBox(-1.0F, 0.0F, -6.0F, 2, 2, 6, 0.0F);
         this.setRotateAngle(leftLowerArm, 0.704240353179712F, -0.0F, 0.0F);
         this.tail1 = new AdvancedModelBox(this, 91, 0);
-        this.tail1.setRotationPoint(0.0F, -1.0F, 8.5F);
+        this.tail1.setPos(0.0F, -1.0F, 8.5F);
         this.tail1.addBox(-2.0F, 0.0F, 0.0F, 4, 5, 7, 0.0F);
         this.setRotateAngle(tail1, 0.11903145498601327F, -0.0F, 0.0F);
         this.TailPlume_1 = new AdvancedModelBox(this, 35, 29);
-        this.TailPlume_1.setRotationPoint(0.0F, 1.2F, 3.5F);
+        this.TailPlume_1.setPos(0.0F, 1.2F, 3.5F);
         this.TailPlume_1.addBox(-0.5F, -11.5F, -0.4F, 1, 10, 6, 0.0F);
         this.setRotateAngle(TailPlume_1, -0.5009094953223726F, -0.0F, 0.0F);
         this.Comb2 = new AdvancedModelBox(this, 38, 15);
-        this.Comb2.setRotationPoint(-0.0F, -0.7F, -1.03F);
+        this.Comb2.setPos(-0.0F, -0.7F, -1.03F);
         this.Comb2.addBox(-0.52F, -1.5F, 0.6F, 1, 4, 5, 0.0F);
         this.setRotateAngle(Comb2, 1.1383037381507017F, 0.0F, 0.0F);
         this.leftUpperArmWing = new AdvancedModelBox(this, 22, 10);
-        this.leftUpperArmWing.setRotationPoint(1.4F, 2.7F, 1.1F);
+        this.leftUpperArmWing.setPos(1.4F, 2.7F, 1.1F);
         this.leftUpperArmWing.addBox(-0.5F, 0.0F, -3.5F, 1, 4, 7, 0.0F);
         this.setRotateAngle(leftUpperArmWing, 1.5184364492350666F, -0.0F, 0.0F);
         this.leftFoot = new AdvancedModelBox(this, 0, 36);
-        this.leftFoot.setRotationPoint(0.0F, 0.9F, -5.7F);
+        this.leftFoot.setPos(0.0F, 0.9F, -5.7F);
         this.leftFoot.addBox(-1.5F, 0.0F, -3.1F, 3, 2, 4, 0.0F);
         this.setRotateAngle(leftFoot, -1.3089969389957472F, -0.0F, 0.0F);
         this.lowerJaw = new AdvancedModelBox(this, 49, 0);
-        this.lowerJaw.setRotationPoint(0.0F, 0.1F, -4.53F);
+        this.lowerJaw.setPos(0.0F, 0.1F, -4.53F);
         this.lowerJaw.setScale(0.99F, 0.99F, 0.99F);
         this.lowerJaw.addBox(-1.5F, -0.5F, -4.3F, 3, 1, 4, 0.0F);
         this.setRotateAngle(lowerJaw, -0.091106186954104F, 0.0F, 0.0F);
         this.leftLeg = new AdvancedModelBox(this, 2, 25);
         this.leftLeg.mirror = true;
-        this.leftLeg.setRotationPoint(1.2F, 2.9F, 1.1F);
+        this.leftLeg.setPos(1.2F, 2.9F, 1.1F);
         this.leftLeg.addBox(-1.0F, 0.4F, -6.7F, 2, 2, 8, 0.0F);
         this.setRotateAngle(leftLeg, 1.3089969389957472F, -0.0F, 0.0F);
         this.upperJaw_1 = new AdvancedModelBox(this, 20, 0);
-        this.upperJaw_1.setRotationPoint(-0.0F, -1.0F, -3.83F);
+        this.upperJaw_1.setPos(-0.0F, -1.0F, -3.83F);
         this.upperJaw_1.addBox(-0.5F, -0.5F, -2.9F, 1, 1, 3, 0.0F);
         this.setRotateAngle(upperJaw_1, 1.3658946726107624F, -0.0F, 0.0F);
         this.head.addChild(this.Wattle);
@@ -221,7 +220,7 @@ public class ModelCockatrice extends ModelDragonBase<EntityCockatrice> {
     }
 
     @Override
-    public Iterable<ModelRenderer> getParts() {
+    public Iterable<ModelRenderer> parts() {
         return ImmutableList.of(lowerBody, leftThigh, rightThigh);
     }
 
@@ -386,7 +385,7 @@ public class ModelCockatrice extends ModelDragonBase<EntityCockatrice> {
         this.rotate(animator, leftFoot, 50, 10, 0);
     }
 
-    public void setRotationAngles(EntityCockatrice entity, float f, float f1, float f2, float f3, float f4) {
+    public void setupAnim(EntityCockatrice entity, float f, float f1, float f2, float f3, float f4) {
         animate(entity, f, f1, f2, f3, f4);
         float speed_walk = 0.6F;
         float speed_idle = 0.05F;
@@ -437,6 +436,6 @@ public class ModelCockatrice extends ModelDragonBase<EntityCockatrice> {
 
     @Override
     public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
-        this.render(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

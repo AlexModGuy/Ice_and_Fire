@@ -1,14 +1,13 @@
 package com.github.alexthe666.iceandfire.message;
 
-import java.util.function.Supplier;
-
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class MessageHippogryphArmor {
 
@@ -43,8 +42,8 @@ public class MessageHippogryphArmor {
             context.get().setPacketHandled(true);
             PlayerEntity player = context.get().getSender();
             if (player != null) {
-                if (player.world != null) {
-                    Entity entity = player.world.getEntityByID(message.dragonId);
+                if (player.level != null) {
+                    Entity entity = player.level.getEntity(message.dragonId);
                     if (entity != null && entity instanceof EntityHippogryph) {
                         EntityHippogryph hippo = (EntityHippogryph) entity;
                         if (message.slot_index == 0) {

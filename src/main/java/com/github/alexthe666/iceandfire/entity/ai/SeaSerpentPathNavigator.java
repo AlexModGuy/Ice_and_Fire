@@ -21,124 +21,124 @@ public class SeaSerpentPathNavigator  extends PathNavigator {
     }
 
     @Override
-    protected PathFinder getPathFinder(int p_179679_1_) {
-        this.nodeProcessor = new SwimNodeProcessor(true);
-        return new PathFinder(this.nodeProcessor, p_179679_1_);
+    protected PathFinder createPathFinder(int p_179679_1_) {
+        this.nodeEvaluator = new SwimNodeProcessor(true);
+        return new PathFinder(this.nodeEvaluator, p_179679_1_);
     }
 
     @Override
-    protected boolean canNavigate() {
+    protected boolean canUpdatePath() {
         return true;
     }
 
     @Override
-    protected Vector3d getEntityPosition() {
-        return new Vector3d(this.entity.getPosX(), this.entity.getPosYHeight(0.5D), this.entity.getPosZ());
+    protected Vector3d getTempMobPos() {
+        return new Vector3d(this.mob.getX(), this.mob.getY(0.5D), this.mob.getZ());
     }
 
     @Override
     public void tick() {
-        ++this.totalTicks;
-        if (this.tryUpdatePath) {
-            this.updatePath();
+        ++this.tick;
+        if (this.hasDelayedRecomputation) {
+            this.recomputePath();
         }
 
-        if (!this.noPath()) {
+        if (!this.isDone()) {
             Vector3d lvt_1_2_;
-            if (this.canNavigate()) {
-                this.pathFollow();
-            } else if (this.currentPath != null && !this.currentPath.isFinished()) {
-                lvt_1_2_ = this.currentPath.getPosition(this.entity);
-                if (MathHelper.floor(this.entity.getPosX()) == MathHelper.floor(lvt_1_2_.x) && MathHelper.floor(this.entity.getPosY()) == MathHelper.floor(lvt_1_2_.y) && MathHelper.floor(this.entity.getPosZ()) == MathHelper.floor(lvt_1_2_.z)) {
-                    this.currentPath.incrementPathIndex();
+            if (this.canUpdatePath()) {
+                this.followThePath();
+            } else if (this.path != null && !this.path.isDone()) {
+                lvt_1_2_ = this.path.getNextEntityPos(this.mob);
+                if (MathHelper.floor(this.mob.getX()) == MathHelper.floor(lvt_1_2_.x) && MathHelper.floor(this.mob.getY()) == MathHelper.floor(lvt_1_2_.y) && MathHelper.floor(this.mob.getZ()) == MathHelper.floor(lvt_1_2_.z)) {
+                    this.path.advance();
                 }
             }
 
-            DebugPacketSender.sendPath(this.world, this.entity, this.currentPath, this.maxDistanceToWaypoint);
-            if (!this.noPath()) {
-                lvt_1_2_ = this.currentPath.getPosition(this.entity);
-                this.entity.getMoveHelper().setMoveTo(lvt_1_2_.x, lvt_1_2_.y, lvt_1_2_.z, this.speed);
+            DebugPacketSender.sendPathFindingPacket(this.level, this.mob, this.path, this.maxDistanceToWaypoint);
+            if (!this.isDone()) {
+                lvt_1_2_ = this.path.getNextEntityPos(this.mob);
+                this.mob.getMoveControl().setWantedPosition(lvt_1_2_.x, lvt_1_2_.y, lvt_1_2_.z, this.speedModifier);
             }
         }
     }
 
     @Override
-    protected void pathFollow() {
-        if (this.currentPath != null) {
-            Vector3d entityPos = this.getEntityPosition();
-            final float entityWidth = this.entity.getWidth();
+    protected void followThePath() {
+        if (this.path != null) {
+            Vector3d entityPos = this.getTempMobPos();
+            final float entityWidth = this.mob.getBbWidth();
             float lvt_3_1_ = entityWidth > 0.75F ? entityWidth / 2.0F : 0.75F - entityWidth / 2.0F;
-            Vector3d lvt_4_1_ = this.entity.getMotion();
+            Vector3d lvt_4_1_ = this.mob.getDeltaMovement();
             if (Math.abs(lvt_4_1_.x) > 0.2D || Math.abs(lvt_4_1_.z) > 0.2D) {
                 lvt_3_1_ = (float) (lvt_3_1_ * lvt_4_1_.length() * 6.0D);
             }
-            Vector3d lvt_6_1_ = Vector3d.copyCentered(this.currentPath.func_242948_g());
-            if (Math.abs(this.entity.getPosX() - lvt_6_1_.x) < lvt_3_1_
-                && Math.abs(this.entity.getPosZ() - lvt_6_1_.z) < lvt_3_1_
-                && Math.abs(this.entity.getPosY() - lvt_6_1_.y) < lvt_3_1_ * 2.0F) {
-                this.currentPath.incrementPathIndex();
+            Vector3d lvt_6_1_ = Vector3d.atCenterOf(this.path.getNextNodePos());
+            if (Math.abs(this.mob.getX() - lvt_6_1_.x) < lvt_3_1_
+                && Math.abs(this.mob.getZ() - lvt_6_1_.z) < lvt_3_1_
+                && Math.abs(this.mob.getY() - lvt_6_1_.y) < lvt_3_1_ * 2.0F) {
+                this.path.advance();
             }
 
-            for(int lvt_7_1_ = Math.min(this.currentPath.getCurrentPathIndex() + 6, this.currentPath.getCurrentPathLength() - 1); lvt_7_1_ > this.currentPath.getCurrentPathIndex(); --lvt_7_1_) {
-                lvt_6_1_ = this.currentPath.getVectorFromIndex(this.entity, lvt_7_1_);
-                if (lvt_6_1_.squareDistanceTo(entityPos) <= 36.0D
-                    && this.isDirectPathBetweenPoints(entityPos, lvt_6_1_, 0, 0, 0)) {
-                    this.currentPath.setCurrentPathIndex(lvt_7_1_);
+            for (int lvt_7_1_ = Math.min(this.path.getNextNodeIndex() + 6, this.path.getNodeCount() - 1); lvt_7_1_ > this.path.getNextNodeIndex(); --lvt_7_1_) {
+                lvt_6_1_ = this.path.getEntityPosAtNode(this.mob, lvt_7_1_);
+                if (lvt_6_1_.distanceToSqr(entityPos) <= 36.0D
+                    && this.canMoveDirectly(entityPos, lvt_6_1_, 0, 0, 0)) {
+                    this.path.setNextNodeIndex(lvt_7_1_);
                     break;
                 }
             }
 
-            this.checkForStuck(entityPos);
+            this.doStuckDetection(entityPos);
         }
     }
 
     @Override
-    protected void checkForStuck(Vector3d positionVec3) {
-        if (this.totalTicks - this.ticksAtLastPos > 100) {
-            if (positionVec3.squareDistanceTo(this.lastPosCheck) < 2.25D) {
-                this.clearPath();
+    protected void doStuckDetection(Vector3d positionVec3) {
+        if (this.tick - this.lastStuckCheck > 100) {
+            if (positionVec3.distanceToSqr(this.lastStuckCheckPos) < 2.25D) {
+                this.stop();
             }
 
-            this.ticksAtLastPos = this.totalTicks;
-            this.lastPosCheck = positionVec3;
+            this.lastStuckCheck = this.tick;
+            this.lastStuckCheckPos = positionVec3;
         }
 
-        if (this.currentPath != null && !this.currentPath.isFinished()) {
-            Vector3i lvt_2_1_ = this.currentPath.func_242948_g();
+        if (this.path != null && !this.path.isDone()) {
+            Vector3i lvt_2_1_ = this.path.getNextNodePos();
             if (lvt_2_1_.equals(this.timeoutCachedNode)) {
-                this.timeoutTimer += Util.milliTime() - this.lastTimeoutCheck;
+                this.timeoutTimer += Util.getMillis() - this.lastTimeoutCheck;
             } else {
                 this.timeoutCachedNode = lvt_2_1_;
-                final double lvt_3_1_ = positionVec3.distanceTo(Vector3d.copyCentered(this.timeoutCachedNode));
-                this.timeoutLimit = this.entity.getAIMoveSpeed() > 0.0F
-                    ? lvt_3_1_ / this.entity.getAIMoveSpeed() * 100.0D
+                final double lvt_3_1_ = positionVec3.distanceTo(Vector3d.atCenterOf(this.timeoutCachedNode));
+                this.timeoutLimit = this.mob.getSpeed() > 0.0F
+                    ? lvt_3_1_ / this.mob.getSpeed() * 100.0D
                     : 0.0D;
             }
 
             if (this.timeoutLimit > 0.0D && this.timeoutTimer > this.timeoutLimit * 2.0D) {
-                this.timeoutCachedNode = Vector3i.NULL_VECTOR;
+                this.timeoutCachedNode = Vector3i.ZERO;
                 this.timeoutTimer = 0L;
                 this.timeoutLimit = 0.0D;
-                this.clearPath();
+                this.stop();
             }
 
-            this.lastTimeoutCheck = Util.milliTime();
+            this.lastTimeoutCheck = Util.getMillis();
         }
 
     }
 
     @Override
-    protected boolean isDirectPathBetweenPoints(Vector3d posVec31, Vector3d posVec32, int sizeX, int sizeY, int sizeZ) {
-        Vector3d lvt_6_1_ = new Vector3d(posVec32.x, posVec32.y + this.entity.getHeight() * 0.5D, posVec32.z);
-        return this.world.rayTraceBlocks(new RayTraceContext(posVec31, lvt_6_1_, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this.entity)).getType() == RayTraceResult.Type.MISS;
+    protected boolean canMoveDirectly(Vector3d posVec31, Vector3d posVec32, int sizeX, int sizeY, int sizeZ) {
+        Vector3d lvt_6_1_ = new Vector3d(posVec32.x, posVec32.y + this.mob.getBbHeight() * 0.5D, posVec32.z);
+        return this.level.clip(new RayTraceContext(posVec31, lvt_6_1_, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this.mob)).getType() == RayTraceResult.Type.MISS;
     }
 
     @Override
-    public boolean canEntityStandOnPos(BlockPos pos) {
-        return !this.world.getBlockState(pos).isOpaqueCube(this.world, pos);
+    public boolean isStableDestination(BlockPos pos) {
+        return !this.level.getBlockState(pos).isSolidRender(this.level, pos);
     }
 
     @Override
-    public void setCanSwim(boolean canSwim) {
+    public void setCanFloat(boolean canSwim) {
     }
 }

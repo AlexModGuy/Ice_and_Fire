@@ -36,21 +36,22 @@ public class ItemModPickaxe extends PickaxeItem {
     private final CustomToolMaterial toolMaterial;
 
     public ItemModPickaxe(CustomToolMaterial toolmaterial, String gameName) {
-        super(toolmaterial, 1, -2.8F, new Item.Properties().group(IceAndFire.TAB_ITEMS));
+        super(toolmaterial, 1, -2.8F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.toolMaterial = toolmaterial;
         this.setRegistryName(IceAndFire.MODID, gameName);
     }
 
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
-        return equipmentSlot == EquipmentSlotType.MAINHAND && this.toolMaterial instanceof DragonsteelToolMaterial ? this.bakeDragonsteel() : super.getAttributeModifiers(equipmentSlot);
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
+        return equipmentSlot == EquipmentSlotType.MAINHAND && this.toolMaterial instanceof DragonsteelToolMaterial ? this.bakeDragonsteel() : super.getDefaultAttributeModifiers(equipmentSlot);
     }
 
     private Multimap<Attribute, AttributeModifier> dragonsteelModifiers;
+
     private Multimap<Attribute, AttributeModifier> bakeDragonsteel() {
-        if(toolMaterial.getAttackDamage() != IafConfig.dragonsteelBaseDamage || dragonsteelModifiers == null) {
+        if (toolMaterial.getAttackDamageBonus() != IafConfig.dragonsteelBaseDamage || dragonsteelModifiers == null) {
             ImmutableMultimap.Builder<Attribute, AttributeModifier> lvt_5_1_ = ImmutableMultimap.builder();
-            lvt_5_1_.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", IafConfig.dragonsteelBaseDamage - 1F + 1F, AttributeModifier.Operation.ADDITION));
-            lvt_5_1_.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -2.8F, AttributeModifier.Operation.ADDITION));
+            lvt_5_1_.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", IafConfig.dragonsteelBaseDamage - 1F + 1F, AttributeModifier.Operation.ADDITION));
+            lvt_5_1_.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -2.8F, AttributeModifier.Operation.ADDITION));
             this.dragonsteelModifiers = lvt_5_1_.build();
             return this.dragonsteelModifiers;
         } else {
@@ -60,7 +61,7 @@ public class ItemModPickaxe extends PickaxeItem {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return toolMaterial.getMaxUses();
+        return toolMaterial.getUses();
     }
 
     public float getAttackDamage() {
@@ -68,64 +69,64 @@ public class ItemModPickaxe extends PickaxeItem {
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (toolMaterial == IafItemRegistry.SILVER_TOOL_MATERIAL) {
-            if (target.getCreatureAttribute() == CreatureAttribute.UNDEAD) {
-                target.attackEntityFrom(DamageSource.MAGIC, getAttackDamage() + 3.0F);
+            if (target.getMobType() == CreatureAttribute.UNDEAD) {
+                target.hurt(DamageSource.MAGIC, getAttackDamage() + 3.0F);
             }
         }
         if (this.toolMaterial == IafItemRegistry.MYRMEX_CHITIN_TOOL_MATERIAL) {
-            if (target.getCreatureAttribute() != CreatureAttribute.ARTHROPOD) {
-                target.attackEntityFrom(DamageSource.GENERIC, getAttackDamage() + 5.0F);
+            if (target.getMobType() != CreatureAttribute.ARTHROPOD) {
+                target.hurt(DamageSource.GENERIC, getAttackDamage() + 5.0F);
             }
             if (target instanceof EntityDeathWorm) {
-                target.attackEntityFrom(DamageSource.GENERIC, getAttackDamage() + 5.0F);
+                target.hurt(DamageSource.GENERIC, getAttackDamage() + 5.0F);
             }
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_FIRE_TOOL_MATERIAL && IafConfig.dragonWeaponFireAbility) {
-            target.setFire(15);
-            target.applyKnockback( 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
+            target.setSecondsOnFire(15);
+            target.knockback(1F, attacker.getX() - target.getX(), attacker.getZ() - target.getZ());
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_ICE_TOOL_MATERIAL && IafConfig.dragonWeaponIceAbility) {
             FrozenProperties.setFrozenFor(target, 300);
-            target.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 300, 2));
-            target.applyKnockback( 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
+            target.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 300, 2));
+            target.knockback(1F, attacker.getX() - target.getX(), attacker.getZ() - target.getZ());
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL && IafConfig.dragonWeaponLightningAbility) {
             boolean flag = true;
-            if(attacker instanceof PlayerEntity){
-                if (attacker.swingProgress > 0.2) {
+            if (attacker instanceof PlayerEntity) {
+                if (attacker.attackAnim > 0.2) {
                     flag = false;
                 }
             }
-            if(!attacker.world.isRemote && flag){
-                LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(target.world);
-                lightningboltentity.moveForced(target.getPositionVec());
-                if(!target.world.isRemote){
-                    target.world.addEntity(lightningboltentity);
+            if (!attacker.level.isClientSide && flag) {
+                LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(target.level);
+                lightningboltentity.moveTo(target.position());
+                if (!target.level.isClientSide) {
+                    target.level.addFreshEntity(lightningboltentity);
                 }
             }
-            target.applyKnockback( 1F, attacker.getPosX() - target.getPosX(), attacker.getPosZ() - target.getPosZ());
+            target.knockback(1F, attacker.getX() - target.getX(), attacker.getZ() - target.getZ());
         }
-        return super.hitEntity(stack, target, attacker);
+        return super.hurtEnemy(stack, target, attacker);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (toolMaterial == IafItemRegistry.SILVER_TOOL_MATERIAL) {
-            tooltip.add(new TranslationTextComponent("silvertools.hurt").mergeStyle(TextFormatting.GREEN));
+            tooltip.add(new TranslationTextComponent("silvertools.hurt").withStyle(TextFormatting.GREEN));
         }
         if (toolMaterial == IafItemRegistry.MYRMEX_CHITIN_TOOL_MATERIAL) {
-            tooltip.add(new TranslationTextComponent("myrmextools.hurt").mergeStyle(TextFormatting.GREEN));
+            tooltip.add(new TranslationTextComponent("myrmextools.hurt").withStyle(TextFormatting.GREEN));
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_FIRE_TOOL_MATERIAL && IafConfig.dragonWeaponFireAbility) {
-            tooltip.add(new TranslationTextComponent("dragon_sword_fire.hurt2").mergeStyle(TextFormatting.DARK_RED));
+            tooltip.add(new TranslationTextComponent("dragon_sword_fire.hurt2").withStyle(TextFormatting.DARK_RED));
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_ICE_TOOL_MATERIAL && IafConfig.dragonWeaponIceAbility) {
-            tooltip.add(new TranslationTextComponent("dragon_sword_ice.hurt2").mergeStyle(TextFormatting.AQUA));
+            tooltip.add(new TranslationTextComponent("dragon_sword_ice.hurt2").withStyle(TextFormatting.AQUA));
         }
         if (toolMaterial == IafItemRegistry.DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL && IafConfig.dragonWeaponLightningAbility) {
-            tooltip.add(new TranslationTextComponent("dragon_sword_lightning.hurt2").mergeStyle(TextFormatting.DARK_PURPLE));
+            tooltip.add(new TranslationTextComponent("dragon_sword_lightning.hurt2").withStyle(TextFormatting.DARK_PURPLE));
         }
     }
 }

@@ -16,56 +16,56 @@ public class ModelGhost extends ModelBipedBase<EntityGhost> {
     public AdvancedModelBox sleeveLeft;
 
     public ModelGhost(float modelScale) {
-        this.textureWidth = 128;
-        this.textureHeight = 64;
+        this.texWidth = 128;
+        this.texHeight = 64;
         this.sleeveRight = new AdvancedModelBox(this, 33, 35);
-        this.sleeveRight.setRotationPoint(0.0F, -0.1F, 0.0F);
+        this.sleeveRight.setPos(0.0F, -0.1F, 0.0F);
         this.sleeveRight.addBox(-2.2F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, 0.0F, 0.0F, modelScale);
         this.body = new HideableModelRenderer(this, 16, 16);
-        this.body.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.body.setPos(0.0F, 0.0F, 0.0F);
         this.body.addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, 0.0F, 0.0F, modelScale);
         this.robeLowerRight = new AdvancedModelBox(this, 48, 35);
         this.robeLowerRight.mirror = true;
-        this.robeLowerRight.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.robeLowerRight.setPos(0.0F, 0.0F, 0.0F);
         this.robeLowerRight.addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0.0F, 0.0F, modelScale);
         this.armLeft = new HideableModelRenderer(this, 40, 16);
         this.armLeft.mirror = true;
-        this.armLeft.setRotationPoint(5.0F, 2.0F, -0.0F);
+        this.armLeft.setPos(5.0F, 2.0F, -0.0F);
         this.armLeft.addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, 0.0F, 0.0F, modelScale);
         this.setRotateAngle(armLeft, -1.4570009181544104F, 0.10000736647217022F, -0.10000736647217022F);
         this.jaw = new AdvancedModelBox(this, 98, 8);
-        this.jaw.setRotationPoint(0.0F, -1.4F, 0.2F);
+        this.jaw.setPos(0.0F, -1.4F, 0.2F);
         this.jaw.addBox(-2.0F, 0.0F, -4.5F, 4.0F, 2.0F, 8.0F, 0.0F, 0.0F, modelScale);
         this.setRotateAngle(jaw, 0.13665927909957545F, 0.0F, 0.0F);
         this.hood = new AdvancedModelBox(this, 60, 0);
-        this.hood.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.hood.setPos(0.0F, 0.0F, 0.0F);
         this.hood.addBox(-4.5F, -8.6F, -4.5F, 9.0F, 9.0F, 9.0F, 0.0F, 0.0F, modelScale);
         this.legLeft = new HideableModelRenderer(this, 0, 16);
         this.legLeft.mirror = true;
-        this.legLeft.setRotationPoint(2.2F, 12.0F, 0.1F);
+        this.legLeft.setPos(2.2F, 12.0F, 0.1F);
         this.legLeft.addBox(-1.0F, 0.0F, -1.0F, 2.0F, 12.0F, 2.0F, 0.0F, 0.0F, modelScale);
         this.head = new HideableModelRenderer(this, 0, 0);
-        this.head.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.head.setPos(0.0F, 0.0F, 0.0F);
         this.head.addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, 0.0F, 0.0F, modelScale);
         this.mask = new AdvancedModelBox(this, 40, 8);
-        this.mask.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.mask.setPos(0.0F, 0.0F, 0.0F);
         this.mask.addBox(-4.0F, -8.6F, -4.4F, 8.0F, 8.0F, 0.0F, 0.0F, 0.0F, modelScale);
         this.armRight = new HideableModelRenderer(this, 40, 16);
-        this.armRight.setRotationPoint(-5.0F, 2.0F, 0.0F);
+        this.armRight.setPos(-5.0F, 2.0F, 0.0F);
         this.armRight.addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, 0.0F, 0.0F, modelScale);
         this.setRotateAngle(armRight, -1.4570009181544104F, -0.10000736647217022F, 0.10000736647217022F);
         this.robe = new AdvancedModelBox(this, 4, 34);
-        this.robe.setRotationPoint(0.0F, 0.1F, 0.0F);
+        this.robe.setPos(0.0F, 0.1F, 0.0F);
         this.robe.addBox(-4.5F, 0.0F, -2.5F, 9.0F, 12.0F, 5.0F, 0.0F, 0.0F, modelScale);
         this.legRight = new HideableModelRenderer(this, 0, 16);
-        this.legRight.setRotationPoint(-2.3F, 12.0F, 0.1F);
+        this.legRight.setPos(-2.3F, 12.0F, 0.1F);
         this.legRight.addBox(-1.0F, 0.0F, -1.0F, 2.0F, 12.0F, 2.0F, 0.0F, 0.0F, modelScale);
         this.robeLowerLeft = new AdvancedModelBox(this, 48, 35);
-        this.robeLowerLeft.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.robeLowerLeft.setPos(0.0F, 0.0F, 0.0F);
         this.robeLowerLeft.addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0.0F, 0.0F, modelScale);
         this.sleeveLeft = new AdvancedModelBox(this, 33, 35);
         this.sleeveLeft.mirror = true;
-        this.sleeveLeft.setRotationPoint(0.0F, -0.1F, 0.0F);
+        this.sleeveLeft.setPos(0.0F, -0.1F, 0.0F);
         this.sleeveLeft.addBox(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, 0.0F, 0.0F, modelScale);
         this.armRight.addChild(this.sleeveRight);
         this.legRight.addChild(this.robeLowerRight);
@@ -85,7 +85,7 @@ public class ModelGhost extends ModelBipedBase<EntityGhost> {
     }
 
     @Override
-    public void setRotationAngles(EntityGhost entity, float f, float f1, float f2, float f3, float f4) {
+    public void setupAnim(EntityGhost entity, float f, float f1, float f2, float f3, float f4) {
         this.resetToDefaultPose();
         animate(entity, f, f1, f2, f3, f4, 1);
         this.faceTarget(f3, f4, 1, this.head);
@@ -101,10 +101,10 @@ public class ModelGhost extends ModelBipedBase<EntityGhost> {
         if (f12 > Math.toRadians(20)) {
             f12 = (float) Math.toRadians(20);
         }
-        this.body.rotateAngleX = f12;
-        this.head.rotateAngleX = this.head.rotateAngleX - f12;
-        this.armRight.rotateAngleX = this.armRight.rotateAngleX - f12;
-        this.armLeft.rotateAngleX = this.armLeft.rotateAngleX - f12;
+        this.body.xRot = f12;
+        this.head.xRot = this.head.xRot - f12;
+        this.armRight.xRot = this.armRight.xRot - f12;
+        this.armLeft.xRot = this.armLeft.xRot - f12;
 
         this.walk(jaw, speed_idle * 2F, degree_idle * 0.5F, false, 0, 0.1F, f2, 1);
         this.walk(armRight, speed_idle * 1.5F, degree_idle * 0.4F, false, 2, 0.0F, f2, 1);

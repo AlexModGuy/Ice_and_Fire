@@ -26,12 +26,12 @@ public class ItemTrollArmor extends ArmorItem {
     public EnumTroll troll;
 
     public ItemTrollArmor(EnumTroll troll, CustomArmorMaterial material, EquipmentSlotType slot) {
-        super(material, slot, new Item.Properties().group(IceAndFire.TAB_ITEMS));
+        super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.troll = troll;
         this.setRegistryName(IceAndFire.MODID, troll.name().toLowerCase(Locale.ROOT) + "_troll_leather_" + getArmorPart(slot));
     }
 
-    public IArmorMaterial getArmorMaterial() {
+    public IArmorMaterial getMaterial() {
         return troll.material;
     }
 
@@ -61,7 +61,7 @@ public class ItemTrollArmor extends ArmorItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.troll_leather_armor_" + getArmorPart(slot) + ".desc").mergeStyle(TextFormatting.GREEN));
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.iceandfire.troll_leather_armor_" + getArmorPart(slot) + ".desc").withStyle(TextFormatting.GREEN));
     }
 }

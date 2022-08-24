@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.client.render.entity.RenderMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -33,7 +32,7 @@ public class LayerMyrmexItem extends LayerRenderer<EntityMyrmexBase, SegmentedMo
     }
 
     protected void translateToHand(HandSide side, MatrixStack stack) {
-        ((ModelMyrmexBase) this.livingEntityRenderer.getEntityModel()).postRenderArm(0, stack);
+        ((ModelMyrmexBase) this.livingEntityRenderer.getModel()).postRenderArm(0, stack);
     }
 
     public boolean shouldCombineTextures() {
@@ -43,28 +42,28 @@ public class LayerMyrmexItem extends LayerRenderer<EntityMyrmexBase, SegmentedMo
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityMyrmexBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (entitylivingbaseIn instanceof EntityMyrmexWorker) {
-            ItemStack itemstack = entitylivingbaseIn.getHeldItem(Hand.MAIN_HAND);
+            ItemStack itemstack = entitylivingbaseIn.getItemInHand(Hand.MAIN_HAND);
             if (!itemstack.isEmpty()) {
-                matrixStackIn.push();
+                matrixStackIn.pushPose();
                 if (!itemstack.isEmpty()) {
-                    matrixStackIn.push();
+                    matrixStackIn.pushPose();
 
-                    if (entitylivingbaseIn.isSneaking()) {
+                    if (entitylivingbaseIn.isShiftKeyDown()) {
                         matrixStackIn.translate(0.0F, 0.2F, 0.0F);
                     }
                     this.translateToHand(HandSide.RIGHT, matrixStackIn);
                     matrixStackIn.translate(0F, 0.3F, -1.6F);
-                    if(itemstack.getItem() instanceof BlockItem){
+                    if (itemstack.getItem() instanceof BlockItem) {
                         matrixStackIn.translate(0F, 0, 0.2F);
-                    }else{
+                    } else {
                         matrixStackIn.translate(0F, 0.2F, 0.3F);
                     }
-                    matrixStackIn.rotate(new Quaternion(Vector3f.XP, 160, true));
-                    matrixStackIn.rotate(new Quaternion(Vector3f.YP, 180, true));
-                    Minecraft.getInstance().getItemRenderer().renderItem(itemstack, ItemCameraTransforms.TransformType.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn);
-                    matrixStackIn.pop();
+                    matrixStackIn.mulPose(new Quaternion(Vector3f.XP, 160, true));
+                    matrixStackIn.mulPose(new Quaternion(Vector3f.YP, 180, true));
+                    Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemCameraTransforms.TransformType.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn);
+                    matrixStackIn.popPose();
                 }
-                matrixStackIn.pop();
+                matrixStackIn.popPose();
             }
         }
     }

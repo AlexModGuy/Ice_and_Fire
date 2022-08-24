@@ -22,7 +22,7 @@ public class MessageSwingArm {
             context.get().setPacketHandled(true);
             PlayerEntity player = context.get().getSender();
             if (player != null) {
-                ServerEvents.onLeftClick(player, player.getHeldItem(Hand.MAIN_HAND));
+                ServerEvents.onLeftClick(player, player.getItemInHand(Hand.MAIN_HAND));
             }
         }
     }

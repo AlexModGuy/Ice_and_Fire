@@ -12,26 +12,26 @@ import net.minecraft.util.math.AxisAlignedBB;
 import java.util.EnumSet;
 
 public class DeathWormAITarget<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
-    private EntityDeathWorm deathworm;
+    private final EntityDeathWorm deathworm;
 
     public DeathWormAITarget(EntityDeathWorm entityIn, Class<T> classTarget, boolean checkSight, Predicate<LivingEntity> targetPredicate) {
         super(entityIn, classTarget, 20, checkSight, false, targetPredicate);
         this.deathworm = entityIn;
-        this.setMutexFlags(EnumSet.of(Flag.TARGET));
+        this.setFlags(EnumSet.of(Flag.TARGET));
     }
 
     @Override
-    public boolean shouldExecute() {
-        if (super.shouldExecute() && nearestTarget != null
-            && !nearestTarget.getClass().isAssignableFrom(this.deathworm.getClass())) {
-            if (nearestTarget instanceof PlayerEntity && !deathworm.isOwner(nearestTarget)) {
-                return !deathworm.isTamed();
-            } else if (deathworm.isOwner(nearestTarget)) {
+    public boolean canUse() {
+        if (super.canUse() && target != null
+            && !target.getClass().isAssignableFrom(this.deathworm.getClass())) {
+            if (target instanceof PlayerEntity && !deathworm.isOwnedBy(target)) {
+                return !deathworm.isTame();
+            } else if (deathworm.isOwnedBy(target)) {
                 return false;
             }
 
-            if (nearestTarget instanceof MonsterEntity && deathworm.getWormAge() > 2) {
-                if (nearestTarget instanceof CreatureEntity) {
+            if (target instanceof MonsterEntity && deathworm.getWormAge() > 2) {
+                if (target instanceof CreatureEntity) {
                     return deathworm.getWormAge() > 3;
                 }
                 return true;
@@ -41,7 +41,7 @@ public class DeathWormAITarget<T extends LivingEntity> extends NearestAttackable
     }
 
     @Override
-    protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.deathworm.getBoundingBox().grow(targetDistance, targetDistance, targetDistance);
+    protected AxisAlignedBB getTargetSearchArea(double targetDistance) {
+        return this.deathworm.getBoundingBox().inflate(targetDistance, targetDistance, targetDistance);
     }
 }

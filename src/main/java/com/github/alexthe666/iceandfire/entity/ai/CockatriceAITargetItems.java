@@ -1,21 +1,18 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Predicate;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
-
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Items;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class CockatriceAITargetItems<T extends ItemEntity> extends TargetGoal {
 
@@ -49,16 +46,16 @@ public class CockatriceAITargetItems<T extends ItemEntity> extends TargetGoal {
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 
-        if ((!((EntityCockatrice) this.goalOwner).canMove()) || this.goalOwner.getHealth() >= this.goalOwner.getMaxHealth()) {
+        if ((!((EntityCockatrice) this.mob).canMove()) || this.mob.getHealth() >= this.mob.getMaxHealth()) {
             list = IAFMath.emptyItemEntityList;
             return false;
         }
 
-        if (this.goalOwner.world.getGameTime() % 4 == 0) // only update the list every 4 ticks
-            list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class,
-                    this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+        if (this.mob.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
+            list = this.mob.level.getEntitiesOfClass(ItemEntity.class,
+                this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
 
         if (list.isEmpty()) {
             return false;
@@ -70,34 +67,34 @@ public class CockatriceAITargetItems<T extends ItemEntity> extends TargetGoal {
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.goalOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
+        return this.mob.getBoundingBox().inflate(targetDistance, 4.0D, targetDistance);
     }
 
     @Override
-    public void startExecuting() {
-        this.goalOwner.getNavigator().tryMoveToXYZ(this.targetEntity.getPosX(), this.targetEntity.getPosY(),
-            this.targetEntity.getPosZ(), 1);
-        super.startExecuting();
+    public void start() {
+        this.mob.getNavigation().moveTo(this.targetEntity.getX(), this.targetEntity.getY(),
+            this.targetEntity.getZ(), 1);
+        super.start();
     }
 
     @Override
     public void tick() {
         super.tick();
         if (this.targetEntity == null || !this.targetEntity.isAlive()) {
-            this.resetTask();
-        } else if (this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
-            EntityCockatrice cockatrice = (EntityCockatrice) this.goalOwner;
+            this.stop();
+        } else if (this.mob.distanceToSqr(this.targetEntity) < 1) {
+            EntityCockatrice cockatrice = (EntityCockatrice) this.mob;
             this.targetEntity.getItem().shrink(1);
-            this.goalOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+            this.mob.playSound(SoundEvents.GENERIC_EAT, 1, 1);
             cockatrice.heal(8);
             cockatrice.setAnimation(EntityCockatrice.ANIMATION_EAT);
-            resetTask();
+            stop();
         }
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return !this.goalOwner.getNavigator().noPath();
+    public boolean canContinueToUse() {
+        return !this.mob.getNavigation().isDone();
     }
 
 }

@@ -33,20 +33,20 @@ public class EntityDragonFireCharge extends EntityDragonCharge {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
+    public boolean isPickable() {
         return true;
     }
 
     @Override
     public void tick() {
         for (int i = 0; i < 4; ++i) {
-            this.world.addParticle(ParticleTypes.FLAME, this.getPosX() + ((this.rand.nextDouble() - 0.5D) * getWidth()), this.getPosY() + ((this.rand.nextDouble() - 0.5D) * getWidth()), this.getPosZ() + ((this.rand.nextDouble() - 0.5D) * getWidth()), 0.0D, 0.0D, 0.0D);
+            this.level.addParticle(ParticleTypes.FLAME, this.getX() + ((this.random.nextDouble() - 0.5D) * getBbWidth()), this.getY() + ((this.random.nextDouble() - 0.5D) * getBbWidth()), this.getZ() + ((this.random.nextDouble() - 0.5D) * getBbWidth()), 0.0D, 0.0D, 0.0D);
         }
         if (this.isInWater()) {
             remove();
         }
-        if (this.isFireballFiery()) {
-            this.setFire(1);
+        if (this.shouldBurn()) {
+            this.setSecondsOnFire(1);
         }
         super.tick();
     }

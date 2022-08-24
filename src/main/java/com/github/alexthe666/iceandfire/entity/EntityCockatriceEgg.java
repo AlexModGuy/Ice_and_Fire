@@ -32,15 +32,15 @@ public class EntityCockatriceEgg extends ProjectileItemEntity {
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
-    public void handleStatusUpdate(byte id) {
+    public void handleEntityEvent(byte id) {
         if (id == 3) {
             for (int i = 0; i < 8; ++i) {
-                this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, this.getItem()), this.getPosX(), this.getPosY(), this.getPosZ(), (this.rand.nextFloat() - 0.5D) * 0.08D, (this.rand.nextFloat() - 0.5D) * 0.08D, (this.rand.nextFloat() - 0.5D) * 0.08D);
+                this.level.addParticle(new ItemParticleData(ParticleTypes.ITEM, this.getItem()), this.getX(), this.getY(), this.getZ(), (this.random.nextFloat() - 0.5D) * 0.08D, (this.random.nextFloat() - 0.5D) * 0.08D, (this.random.nextFloat() - 0.5D) * 0.08D);
             }
         }
 
@@ -50,33 +50,33 @@ public class EntityCockatriceEgg extends ProjectileItemEntity {
      * Called when this EntityThrowable hits a block or entity.
      */
     @Override
-    protected void onImpact(RayTraceResult result) {
-        Entity thrower = getShooter();
+    protected void onHit(RayTraceResult result) {
+        Entity thrower = getOwner();
         if (result.getType() == RayTraceResult.Type.ENTITY) {
-            ((EntityRayTraceResult) result).getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, thrower), 0.0F);
+            ((EntityRayTraceResult) result).getEntity().hurt(DamageSource.thrown(this, thrower), 0.0F);
         }
 
-        if (!this.world.isRemote) {
-            if (this.rand.nextInt(4) == 0) {
+        if (!this.level.isClientSide) {
+            if (this.random.nextInt(4) == 0) {
                 int i = 1;
 
-                if (this.rand.nextInt(32) == 0) {
+                if (this.random.nextInt(32) == 0) {
                     i = 4;
                 }
 
                 for (int j = 0; j < i; ++j) {
-                    EntityCockatrice cockatrice = new EntityCockatrice(IafEntityRegistry.COCKATRICE.get(), this.world);
-                    cockatrice.setGrowingAge(-24000);
-                    cockatrice.setHen(this.rand.nextBoolean());
-                    cockatrice.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
+                    EntityCockatrice cockatrice = new EntityCockatrice(IafEntityRegistry.COCKATRICE.get(), this.level);
+                    cockatrice.setAge(-24000);
+                    cockatrice.setHen(this.random.nextBoolean());
+                    cockatrice.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, 0.0F);
                     if (thrower instanceof PlayerEntity) {
-                        cockatrice.setTamedBy((PlayerEntity) thrower);
+                        cockatrice.tame((PlayerEntity) thrower);
                     }
-                    this.world.addEntity(cockatrice);
+                    this.level.addFreshEntity(cockatrice);
                 }
             }
 
-            this.world.setEntityState(this, (byte) 3);
+            this.level.broadcastEntityEvent(this, (byte) 3);
             this.remove();
         }
     }

@@ -1,13 +1,11 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.network.FMLPlayMessages;
 
 public class EntityHydraHead extends EntityMutlipartPart {
@@ -35,12 +33,12 @@ public class EntityHydraHead extends EntityMutlipartPart {
         super.tick();
         if (hydra != null && hydra.getSeveredHead() != -1 && this.neck && !EntityGorgon.isStoneMob(hydra)) {
             if (hydra.getSeveredHead() == headIndex) {
-                if (this.world.isRemote) {
+                if (this.level.isClientSide) {
                     for (int k = 0; k < 5; ++k) {
                         double d2 = 0.4;
                         double d0 = 0.1;
                         double d1 = 0.1;
-                        IceAndFire.PROXY.spawnParticle(EnumParticles.Blood, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth()) - (double) this.getWidth() * 0.5F, this.getPosY() - 0.5D, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth()) - (double) this.getWidth() * 0.5F, d2, d0, d1);
+                        IceAndFire.PROXY.spawnParticle(EnumParticles.Blood, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth()) - (double) this.getBbWidth() * 0.5F, this.getY() - 0.5D, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth()) - (double) this.getBbWidth() * 0.5F, d2, d0, d1);
                     }
                 }
             }
@@ -49,13 +47,13 @@ public class EntityHydraHead extends EntityMutlipartPart {
 
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float damage) {
+    public boolean hurt(DamageSource source, float damage) {
         Entity parent = this.getParent();
         if (parent instanceof EntityHydra) {
             ((EntityHydra) parent).onHitHead(damage, headIndex);
-            return parent.attackEntityFrom(source, damage);
+            return parent.hurt(source, damage);
         } else {
-            return parent != null && parent.attackEntityFrom(source, damage);
+            return parent != null && parent.hurt(source, damage);
         }
     }
 

@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -16,7 +15,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -41,7 +39,7 @@ public class EntityDeathWormEgg extends ProjectileItemEntity implements IEntityA
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -56,10 +54,10 @@ public class EntityDeathWormEgg extends ProjectileItemEntity implements IEntityA
     }
 
     @Override
-    public void handleStatusUpdate(byte id) {
+    public void handleEntityEvent(byte id) {
         if (id == 3) {
             for (int i = 0; i < 8; ++i) {
-                this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, this.getItem()), this.getPosX(), this.getPosY(), this.getPosZ(), (this.rand.nextFloat() - 0.5D) * 0.08D, (this.rand.nextFloat() - 0.5D) * 0.08D, (this.rand.nextFloat() - 0.5D) * 0.08D);
+                this.level.addParticle(new ItemParticleData(ParticleTypes.ITEM, this.getItem()), this.getX(), this.getY(), this.getZ(), (this.random.nextFloat() - 0.5D) * 0.08D, (this.random.nextFloat() - 0.5D) * 0.08D, (this.random.nextFloat() - 0.5D) * 0.08D);
             }
         }
     }
@@ -68,28 +66,28 @@ public class EntityDeathWormEgg extends ProjectileItemEntity implements IEntityA
      * Called when this EntityThrowable hits a block or entity.
      */
     @Override
-    protected void onImpact(RayTraceResult result) {
-        Entity thrower = getShooter();
+    protected void onHit(RayTraceResult result) {
+        Entity thrower = getOwner();
         if (result.getType() == RayTraceResult.Type.ENTITY) {
-            ((EntityRayTraceResult) result).getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, thrower), 0.0F);
+            ((EntityRayTraceResult) result).getEntity().hurt(DamageSource.thrown(this, thrower), 0.0F);
         }
 
-        if (!this.world.isRemote) {
+        if (!this.level.isClientSide) {
             float wormSize = 0.25F + (float) (Math.random() * 0.35F);
 
-            EntityDeathWorm deathworm = new EntityDeathWorm(IafEntityRegistry.DEATH_WORM.get(), this.world);
-            deathworm.setVariant(rand.nextInt(3));
-            deathworm.setTamed(true);
-            deathworm.setWormHome(getPosition());
+            EntityDeathWorm deathworm = new EntityDeathWorm(IafEntityRegistry.DEATH_WORM.get(), this.level);
+            deathworm.setVariant(random.nextInt(3));
+            deathworm.setTame(true);
+            deathworm.setWormHome(blockPosition());
             deathworm.setWormAge(1);
             deathworm.setDeathWormScale(giant ? (wormSize * 4) : wormSize);
-            deathworm.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
+            deathworm.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, 0.0F);
             if (thrower instanceof PlayerEntity) {
-                deathworm.setOwnerId(thrower.getUniqueID());
+                deathworm.setOwnerUUID(thrower.getUUID());
             }
-            this.world.addEntity(deathworm);
+            this.level.addFreshEntity(deathworm);
 
-            this.world.setEntityState(this, (byte) 3);
+            this.level.broadcastEntityEvent(this, (byte) 3);
             this.remove();
         }
     }

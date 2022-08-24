@@ -38,34 +38,34 @@ public class IafBlockRegistry {
     public static final Block SAPPHIRE_ORE = new BlockIafOre(2, 4.0F, 3.0F, "iceandfire.sapphireOre", "sapphire_ore");
     public static final Block COPPER_ORE = new BlockIafOre(0, 3.0F, 3.0F, "iceandfire.copper_ore", "copper_ore");
     public static final Block AMYTHEST_ORE = new BlockIafOre(2, 4.0F, 3.0F, "iceandfire.amythest_ore", "amythest_ore");
-    public static final Block SILVER_BLOCK = new BlockGeneric(Material.IRON, "silver_block", "pickaxe", 2, 3.0F, 5.0F, SoundType.METAL);
-    public static final Block SAPPHIRE_BLOCK = new BlockGeneric(Material.IRON, "sapphire_block", "pickaxe", 2, 3.0F, 6.0F, SoundType.METAL);
-    public static final Block COPPER_BLOCK = new BlockGeneric(Material.IRON, "copper_block", "pickaxe", 0, 4.0F, 5.0F, SoundType.METAL);
-    public static final Block AMYTHEST_BLOCK = new BlockGeneric(Material.IRON, "amythest_block", "pickaxe", 2, 5.0F, 6.0F, SoundType.METAL);
-    public static final Block CHARRED_DIRT = new BlockReturningState(Material.EARTH, "chared_dirt", "shovel", 0, 0.5F, 0.0F, SoundType.GROUND, Blocks.DIRT.getDefaultState());
-    public static final Block CHARRED_GRASS = new BlockReturningState(Material.ORGANIC, "chared_grass", "shovel", 0, 0.6F, 0.0F, SoundType.GROUND, Blocks.GRASS_BLOCK.getDefaultState());
-    public static final Block CHARRED_STONE = new BlockReturningState(Material.ROCK, "chared_stone", "pickaxe", 0, 1.5F, 10.0F, SoundType.STONE, Blocks.STONE.getDefaultState());
-    public static final Block CHARRED_COBBLESTONE = new BlockReturningState(Material.ROCK, "chared_cobblestone", "pickaxe", 0, 2F, 10.0F, SoundType.STONE, Blocks.COBBLESTONE.getDefaultState());
-    public static final Block CHARRED_GRAVEL = new BlockFallingReturningState(Material.EARTH, "chared_gravel", "pickaxe", 0, 0.6F, 0F, SoundType.GROUND, Blocks.GRAVEL.getDefaultState());
+    public static final Block SILVER_BLOCK = new BlockGeneric(Material.METAL, "silver_block", "pickaxe", 2, 3.0F, 5.0F, SoundType.METAL);
+    public static final Block SAPPHIRE_BLOCK = new BlockGeneric(Material.METAL, "sapphire_block", "pickaxe", 2, 3.0F, 6.0F, SoundType.METAL);
+    public static final Block COPPER_BLOCK = new BlockGeneric(Material.METAL, "copper_block", "pickaxe", 0, 4.0F, 5.0F, SoundType.METAL);
+    public static final Block AMYTHEST_BLOCK = new BlockGeneric(Material.METAL, "amythest_block", "pickaxe", 2, 5.0F, 6.0F, SoundType.METAL);
+    public static final Block CHARRED_DIRT = new BlockReturningState(Material.DIRT, "chared_dirt", "shovel", 0, 0.5F, 0.0F, SoundType.GRAVEL, Blocks.DIRT.defaultBlockState());
+    public static final Block CHARRED_GRASS = new BlockReturningState(Material.GRASS, "chared_grass", "shovel", 0, 0.6F, 0.0F, SoundType.GRAVEL, Blocks.GRASS_BLOCK.defaultBlockState());
+    public static final Block CHARRED_STONE = new BlockReturningState(Material.STONE, "chared_stone", "pickaxe", 0, 1.5F, 10.0F, SoundType.STONE, Blocks.STONE.defaultBlockState());
+    public static final Block CHARRED_COBBLESTONE = new BlockReturningState(Material.STONE, "chared_cobblestone", "pickaxe", 0, 2F, 10.0F, SoundType.STONE, Blocks.COBBLESTONE.defaultBlockState());
+    public static final Block CHARRED_GRAVEL = new BlockFallingReturningState(Material.DIRT, "chared_gravel", "pickaxe", 0, 0.6F, 0F, SoundType.GRAVEL, Blocks.GRAVEL.defaultBlockState());
     public static final Block CHARRED_GRASS_PATH = new BlockCharedPath(0);
     public static final Block ASH = new BlockFallingGeneric(Material.SAND, "ash", "shovel", 0, 0.5F, 0F, SoundType.SAND);
-    public static final Block FROZEN_DIRT = new BlockReturningState(Material.EARTH, "frozen_dirt", "shovel", 0, 0.5F, 0.0F, SoundType.GLASS, true, Blocks.DIRT.getDefaultState());
-    public static final Block FROZEN_GRASS = new BlockReturningState(Material.ORGANIC, "frozen_grass", "shovel", 0, 0.6F, 0.0F, SoundType.GLASS, true, Blocks.GRASS_BLOCK.getDefaultState());
-    public static final Block FROZEN_STONE = new BlockReturningState(Material.ROCK, "frozen_stone", "pickaxe", 0, 1.5F, 1.0F, SoundType.GLASS, true, Blocks.STONE.getDefaultState());
-    public static final Block FROZEN_COBBLESTONE = new BlockReturningState(Material.ROCK, "frozen_cobblestone", "pickaxe", 0, 2F, 2.0F, SoundType.GLASS, true, Blocks.COBBLESTONE.getDefaultState());
-    public static final Block FROZEN_GRAVEL = new BlockFallingReturningState(Material.EARTH, "frozen_gravel", "pickaxe", 0, 0.6F, 0F, SoundType.GLASS, true, Blocks.GRAVEL.getDefaultState());
+    public static final Block FROZEN_DIRT = new BlockReturningState(Material.DIRT, "frozen_dirt", "shovel", 0, 0.5F, 0.0F, SoundType.GLASS, true, Blocks.DIRT.defaultBlockState());
+    public static final Block FROZEN_GRASS = new BlockReturningState(Material.GRASS, "frozen_grass", "shovel", 0, 0.6F, 0.0F, SoundType.GLASS, true, Blocks.GRASS_BLOCK.defaultBlockState());
+    public static final Block FROZEN_STONE = new BlockReturningState(Material.STONE, "frozen_stone", "pickaxe", 0, 1.5F, 1.0F, SoundType.GLASS, true, Blocks.STONE.defaultBlockState());
+    public static final Block FROZEN_COBBLESTONE = new BlockReturningState(Material.STONE, "frozen_cobblestone", "pickaxe", 0, 2F, 2.0F, SoundType.GLASS, true, Blocks.COBBLESTONE.defaultBlockState());
+    public static final Block FROZEN_GRAVEL = new BlockFallingReturningState(Material.DIRT, "frozen_gravel", "pickaxe", 0, 0.6F, 0F, SoundType.GLASS, true, Blocks.GRAVEL.defaultBlockState());
     public static final Block FROZEN_GRASS_PATH = new BlockCharedPath(1);
     public static final Block FROZEN_SPLINTERS = new BlockGeneric(Material.WOOD, "frozen_splinters", "pickaxe", 0, 2.0F, 1.0F, SoundType.GLASS, true);
-    public static final Block DRAGON_ICE = new BlockGeneric(Material.PACKED_ICE, "dragon_ice", "pickaxe", 0, 0.5F, 0F, SoundType.GLASS, true);
+    public static final Block DRAGON_ICE = new BlockGeneric(Material.ICE_SOLID, "dragon_ice", "pickaxe", 0, 0.5F, 0F, SoundType.GLASS, true);
     public static final Block DRAGON_ICE_SPIKES = new BlockIceSpikes();
-    public static final Block CRACKLED_DIRT = new BlockReturningState(Material.EARTH, "crackled_dirt", "shovel", 0, 0.5F, 0.0F, SoundType.GROUND, Blocks.DIRT.getDefaultState());
-    public static final Block CRACKLED_GRASS = new BlockReturningState(Material.ORGANIC, "crackled_grass", "shovel", 0, 0.6F, 0.0F, SoundType.GROUND, Blocks.GRASS_BLOCK.getDefaultState());
-    public static final Block CRACKLED_STONE = new BlockReturningState(Material.ROCK, "crackled_stone", "pickaxe", 0, 1.5F, 1.0F, SoundType.STONE, Blocks.STONE.getDefaultState());
-    public static final Block CRACKLED_COBBLESTONE = new BlockReturningState(Material.ROCK, "crackled_cobblestone", "pickaxe", 0, 2F, 2F, SoundType.STONE, Blocks.COBBLESTONE.getDefaultState());
-    public static final Block CRACKLED_GRAVEL = new BlockFallingReturningState(Material.EARTH, "crackled_gravel", "pickaxe", 0, 0.6F, 0F, SoundType.GROUND, Blocks.GRAVEL.getDefaultState());
+    public static final Block CRACKLED_DIRT = new BlockReturningState(Material.DIRT, "crackled_dirt", "shovel", 0, 0.5F, 0.0F, SoundType.GRAVEL, Blocks.DIRT.defaultBlockState());
+    public static final Block CRACKLED_GRASS = new BlockReturningState(Material.GRASS, "crackled_grass", "shovel", 0, 0.6F, 0.0F, SoundType.GRAVEL, Blocks.GRASS_BLOCK.defaultBlockState());
+    public static final Block CRACKLED_STONE = new BlockReturningState(Material.STONE, "crackled_stone", "pickaxe", 0, 1.5F, 1.0F, SoundType.STONE, Blocks.STONE.defaultBlockState());
+    public static final Block CRACKLED_COBBLESTONE = new BlockReturningState(Material.STONE, "crackled_cobblestone", "pickaxe", 0, 2F, 2F, SoundType.STONE, Blocks.COBBLESTONE.defaultBlockState());
+    public static final Block CRACKLED_GRAVEL = new BlockFallingReturningState(Material.DIRT, "crackled_gravel", "pickaxe", 0, 0.6F, 0F, SoundType.GRAVEL, Blocks.GRAVEL.defaultBlockState());
     public static final Block CRACKLED_GRASS_PATH = new BlockCharedPath(2);
 
-    public static final Block NEST = new BlockGeneric(Material.PLANTS, "nest", "axe", 0, 0.5F, 0F, SoundType.GROUND, false);
+    public static final Block NEST = new BlockGeneric(Material.PLANT, "nest", "axe", 0, 0.5F, 0F, SoundType.GRAVEL, false);
 
     public static final Block DRAGON_SCALE_RED = new BlockDragonScales("dragonscale_red", EnumDragonEgg.RED);
     public static final Block DRAGON_SCALE_GREEN = new BlockDragonScales("dragonscale_green", EnumDragonEgg.GREEN);
@@ -81,7 +81,7 @@ public class IafBlockRegistry {
     public static final Block DRAGON_SCALE_BLACK = new BlockDragonScales("dragonscale_black", EnumDragonEgg.BLACK);
 
     public static final Block DRAGON_BONE_BLOCK = new BlockDragonBone();
-    public static final Block DRAGON_BONE_BLOCK_WALL = new BlockDragonBoneWall(AbstractBlock.Properties.from(IafBlockRegistry.DRAGON_BONE_BLOCK));
+    public static final Block DRAGON_BONE_BLOCK_WALL = new BlockDragonBoneWall(AbstractBlock.Properties.copy(IafBlockRegistry.DRAGON_BONE_BLOCK));
     public static final Block DRAGONFORGE_FIRE_BRICK = new BlockDragonforgeBricks(0);
     public static final Block DRAGONFORGE_ICE_BRICK = new BlockDragonforgeBricks(1);
     public static final Block DRAGONFORGE_LIGHTNING_BRICK = new BlockDragonforgeBricks(2);
@@ -119,20 +119,20 @@ public class IafBlockRegistry {
     public static final Block MYRMEX_JUNGLE_RESIN_BLOCK = new BlockMyrmexConnectedResin(true, false);
     public static final Block MYRMEX_DESERT_RESIN_GLASS = new BlockMyrmexConnectedResin(false, true);
     public static final Block MYRMEX_JUNGLE_RESIN_GLASS = new BlockMyrmexConnectedResin(true, true);
-    public static final Block DRAGONSTEEL_FIRE_BLOCK = new BlockGeneric(Material.IRON, "dragonsteel_fire_block", "pickaxe", 3, 10.0F, 1000.0F, SoundType.METAL);
-    public static final Block DRAGONSTEEL_ICE_BLOCK = new BlockGeneric(Material.IRON, "dragonsteel_ice_block", "pickaxe", 3, 10.0F, 1000.0F, SoundType.METAL);
-    public static final Block DRAGONSTEEL_LIGHTNING_BLOCK = new BlockGeneric(Material.IRON, "dragonsteel_lightning_block", "pickaxe", 3, 10.0F, 1000.0F, SoundType.METAL);
-    public static final BlockDreadBase DREAD_STONE = new BlockDreadBase(Material.ROCK, "dread_stone", "pickaxe", 3, -1.0F, 100000.0F, SoundType.STONE);
-    public static final BlockDreadBase DREAD_STONE_BRICKS = new BlockDreadBase(Material.ROCK, "dread_stone_bricks", "pickaxe", 3, -1.0F, 100000.0F, SoundType.STONE);
-    public static final BlockDreadBase DREAD_STONE_BRICKS_CHISELED = new BlockDreadBase(Material.ROCK, "dread_stone_bricks_chiseled", "pickaxe", 3, -1.0F, 100000.0F, SoundType.STONE);
-    public static final BlockDreadBase DREAD_STONE_BRICKS_CRACKED = new BlockDreadBase(Material.ROCK, "dread_stone_bricks_cracked", "pickaxe", 3, -1.0F, 100000.0F, SoundType.STONE);
-    public static final BlockDreadBase DREAD_STONE_BRICKS_MOSSY = new BlockDreadBase(Material.ROCK, "dread_stone_bricks_mossy", "pickaxe", 3, -1.0F, 100000.0F, SoundType.STONE);
-    public static final BlockDreadBase DREAD_STONE_TILE = new BlockDreadBase(Material.ROCK, "dread_stone_tile", "pickaxe", 3, -1.0F, 100000.0F, SoundType.STONE);
+    public static final Block DRAGONSTEEL_FIRE_BLOCK = new BlockGeneric(Material.METAL, "dragonsteel_fire_block", "pickaxe", 3, 10.0F, 1000.0F, SoundType.METAL);
+    public static final Block DRAGONSTEEL_ICE_BLOCK = new BlockGeneric(Material.METAL, "dragonsteel_ice_block", "pickaxe", 3, 10.0F, 1000.0F, SoundType.METAL);
+    public static final Block DRAGONSTEEL_LIGHTNING_BLOCK = new BlockGeneric(Material.METAL, "dragonsteel_lightning_block", "pickaxe", 3, 10.0F, 1000.0F, SoundType.METAL);
+    public static final BlockDreadBase DREAD_STONE = new BlockDreadBase(Material.STONE, "dread_stone", "pickaxe", 3, -1.0F, 100000.0F, SoundType.STONE);
+    public static final BlockDreadBase DREAD_STONE_BRICKS = new BlockDreadBase(Material.STONE, "dread_stone_bricks", "pickaxe", 3, -1.0F, 100000.0F, SoundType.STONE);
+    public static final BlockDreadBase DREAD_STONE_BRICKS_CHISELED = new BlockDreadBase(Material.STONE, "dread_stone_bricks_chiseled", "pickaxe", 3, -1.0F, 100000.0F, SoundType.STONE);
+    public static final BlockDreadBase DREAD_STONE_BRICKS_CRACKED = new BlockDreadBase(Material.STONE, "dread_stone_bricks_cracked", "pickaxe", 3, -1.0F, 100000.0F, SoundType.STONE);
+    public static final BlockDreadBase DREAD_STONE_BRICKS_MOSSY = new BlockDreadBase(Material.STONE, "dread_stone_bricks_mossy", "pickaxe", 3, -1.0F, 100000.0F, SoundType.STONE);
+    public static final BlockDreadBase DREAD_STONE_TILE = new BlockDreadBase(Material.STONE, "dread_stone_tile", "pickaxe", 3, -1.0F, 100000.0F, SoundType.STONE);
     public static final Block DREAD_STONE_FACE = new BlockDreadStoneFace();
     public static final Block DREAD_TORCH = new BlockDreadTorch();
     public static final Block DREAD_TORCH_WALL = new BlockDreadTorchWall();
-    public static final Block DREAD_STONE_BRICKS_STAIRS = new BlockGenericStairs(DREAD_STONE_BRICKS.getDefaultState(), "dread_stone_stairs");
-    public static final Block DREAD_STONE_BRICKS_SLAB = new SlabBlock(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(10F, 10000F)).setRegistryName(IceAndFire.MODID, "dread_stone_slab");
+    public static final Block DREAD_STONE_BRICKS_STAIRS = new BlockGenericStairs(DREAD_STONE_BRICKS.defaultBlockState(), "dread_stone_stairs");
+    public static final Block DREAD_STONE_BRICKS_SLAB = new SlabBlock(AbstractBlock.Properties.of(Material.STONE).strength(10F, 10000F)).setRegistryName(IceAndFire.MODID, "dread_stone_slab");
     public static final Block DREADWOOD_LOG = new BlockDreadWoodLog();
     public static final BlockDreadBase DREADWOOD_PLANKS = new BlockDreadBase(Material.WOOD, "dreadwood_planks", "axe", 3, -1.0F, 100000.0F, SoundType.WOOD);
     public static final Block DREADWOOD_PLANKS_LOCK = new BlockDreadWoodLock();
@@ -176,7 +176,7 @@ public class IafBlockRegistry {
                         props = IceAndFire.PROXY.setupISTER(props);
                     }
                     if (!(obj instanceof INoTab) || ((INoTab) obj).shouldBeInTab()) {
-                        props.group(IceAndFire.TAB_BLOCKS);
+                        props.tab(IceAndFire.TAB_BLOCKS);
                     }
                     BlockItem itemBlock;
                     if(obj instanceof IWallBlock){
@@ -194,7 +194,7 @@ public class IafBlockRegistry {
                                 props = IceAndFire.PROXY.setupISTER(props);
                             }
                             if(!(block instanceof INoTab) || ((INoTab) block).shouldBeInTab()){
-                                props.group(IceAndFire.TAB_BLOCKS);
+                                props.tab(IceAndFire.TAB_BLOCKS);
                             }
                             BlockItem itemBlock = new BlockItem(block, props);
                             itemBlock.setRegistryName(block.getRegistryName());

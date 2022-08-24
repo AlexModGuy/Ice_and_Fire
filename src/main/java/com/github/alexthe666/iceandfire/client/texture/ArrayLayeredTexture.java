@@ -22,7 +22,7 @@ public class ArrayLayeredTexture extends Texture {
     }
 
     @Override
-    public void loadTexture(IResourceManager manager) {
+    public void load(IResourceManager manager) {
         Iterator<String> iterator = this.layeredTextureNames.iterator();
         String s = iterator.next();
 
@@ -32,7 +32,7 @@ public class ArrayLayeredTexture extends Texture {
                 String s1 = iterator.next();
                 if (s1 != null) {
                     try (
-                            IResource iresource1 = manager.getResource(new ResourceLocation(s1));
+                        IResource iresource1 = manager.getResource(new ResourceLocation(s1));
                             NativeImage nativeimage1 = NativeImage.read(iresource1.getInputStream())
                     ) {
                         for (int i = 0; i < Math.min(nativeimage1.getHeight(), nativeimage.getHeight()); i++) {
@@ -59,14 +59,14 @@ public class ArrayLayeredTexture extends Texture {
 
     public static void blendPixel(NativeImage nativeimage, NativeImage nativeimage1, int xIn, int yIn, int colIn) {
         int i = nativeimage.getPixelRGBA(xIn, yIn);
-        float f = NativeImage.getAlpha(colIn) / 255.0F;
-        float f1 = NativeImage.getBlue(colIn) / 255.0F;
-        float f2 = NativeImage.getGreen(colIn) / 255.0F;
-        float f3 = NativeImage.getRed(colIn) / 255.0F;
-        float f4 = NativeImage.getAlpha(i) / 255.0F;
-        float f5 = NativeImage.getBlue(i) / 255.0F;
-        float f6 = NativeImage.getGreen(i) / 255.0F;
-        float f7 = NativeImage.getRed(i) / 255.0F;
+        float f = NativeImage.getA(colIn) / 255.0F;
+        float f1 = NativeImage.getB(colIn) / 255.0F;
+        float f2 = NativeImage.getG(colIn) / 255.0F;
+        float f3 = NativeImage.getR(colIn) / 255.0F;
+        float f4 = NativeImage.getA(i) / 255.0F;
+        float f5 = NativeImage.getB(i) / 255.0F;
+        float f6 = NativeImage.getG(i) / 255.0F;
+        float f7 = NativeImage.getR(i) / 255.0F;
         float f8 = 1.0F - f;
         float f9 = f * f + f4 * f8;
         float f10 = f1 * f + f5 * f8;
@@ -92,12 +92,12 @@ public class ArrayLayeredTexture extends Texture {
         int k = (int) (f10 * 255.0F);
         int l = (int) (f11 * 255.0F);
         int i1 = (int) (f12 * 255.0F);
-        nativeimage.setPixelRGBA(xIn, yIn, NativeImage.getCombined(j, k, l, i1));
+        nativeimage.setPixelRGBA(xIn, yIn, NativeImage.combine(j, k, l, i1));
 
     }
 
     private void loadImage(NativeImage imageIn) {
-        TextureUtil.prepareImage(this.getGlTextureId(), imageIn.getWidth(), imageIn.getHeight());
-        imageIn.uploadTextureSub(0, 0, 0, true);
+        TextureUtil.prepareImage(this.getId(), imageIn.getWidth(), imageIn.getHeight());
+        imageIn.upload(0, 0, 0, true);
     }
 }

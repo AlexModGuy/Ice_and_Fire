@@ -1,16 +1,11 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.util.math.MathHelper;
-import org.apache.commons.lang3.tuple.Pair;
-
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector4f;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.*;
 
 /*
     Lightning bolt effect code used with permission from aidancbrady
@@ -132,13 +127,13 @@ public class LightningBoltData {
 
     private static Vector3d findRandomOrthogonalVector(Vector3d vec, Random rand) {
         Vector3d newVec = new Vector3d(-0.5 + rand.nextDouble(), -0.5 + rand.nextDouble(), -0.5 + rand.nextDouble());
-        return vec.crossProduct(newVec).normalize();
+        return vec.cross(newVec).normalize();
     }
 
     private Pair<BoltQuads, QuadCache> createQuads(QuadCache cache, Vector3d startPos, Vector3d end, float size) {
         Vector3d diff = end.subtract(startPos);
-        Vector3d rightAdd = diff.crossProduct(new Vector3d(0.5, 0.5, 0.5)).normalize().scale(size);
-        Vector3d backAdd = diff.crossProduct(rightAdd).normalize().scale(size), rightAddSplit = rightAdd.scale(0.5F);
+        Vector3d rightAdd = diff.cross(new Vector3d(0.5, 0.5, 0.5)).normalize().scale(size);
+        Vector3d backAdd = diff.cross(rightAdd).normalize().scale(size), rightAddSplit = rightAdd.scale(0.5F);
 
         Vector3d start = cache != null ? cache.prevEnd : startPos;
         Vector3d startRight = cache != null ? cache.prevEndRight : start.add(rightAdd);
@@ -301,25 +296,32 @@ public class LightningBoltData {
 
         /** How much variance is allowed in segment lengths (parallel to straight line). */
         private float parallelNoise = 0.1F;
-        /** How much variance is allowed perpendicular to the straight line vector. Scaled by distance and spread function. */
+        /**
+         * How much variance is allowed perpendicular to the straight line vector. Scaled by distance and spread function.
+         */
         private float spreadFactor = 0.1F;
 
-        /** The chance of creating an additional branch after a certain segment. */
+        /**
+         * The chance of creating an additional branch after a certain segment.
+         */
         private float branchInitiationFactor = 0.0F;
-        /** The chance of a branch continuing (post-initiation). */
+        /**
+         * The chance of a branch continuing (post-initiation).
+         */
         private float branchContinuationFactor = 0.0F;
 
         private Vector4f color = new Vector4f(0.45F, 0.45F, 0.5F, 0.8F);
 
-        private RandomFunction randomFunction = RandomFunction.GAUSSIAN;
-        private SpreadFunction spreadFunction = SpreadFunction.SINE;
+        private final RandomFunction randomFunction = RandomFunction.GAUSSIAN;
+        private final SpreadFunction spreadFunction = SpreadFunction.SINE;
         private SegmentSpreader segmentSpreader = SegmentSpreader.NO_MEMORY;
 
         public static BoltRenderInfo electricity() {
             return new BoltRenderInfo(0.5F, 0.25F, 0.25F, 0.15F, new Vector4f(0.70F, 0.45F, 0.89F, 0.8F), 0.8F);
         }
 
-        public BoltRenderInfo(){}
+        public BoltRenderInfo() {
+        }
 
         public BoltRenderInfo(float parallelNoise, float spreadFactor, float branchInitiationFactor, float branchContinuationFactor, Vector4f color, float closeness) {
             this.parallelNoise = parallelNoise;

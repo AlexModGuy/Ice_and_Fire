@@ -1,11 +1,10 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+
+import javax.annotation.Nullable;
 
 public class TileEntityDragonforgeBrick extends TileEntity {
 
@@ -23,8 +22,8 @@ public class TileEntityDragonforgeBrick extends TileEntity {
 
     private ICapabilityProvider getConnectedTileEntity() {
         for (Direction facing : Direction.values()) {
-            if (world.getTileEntity(pos.offset(facing)) instanceof TileEntityDragonforge) {
-                return world.getTileEntity(pos.offset(facing));
+            if (level.getBlockEntity(worldPosition.relative(facing)) instanceof TileEntityDragonforge) {
+                return level.getBlockEntity(worldPosition.relative(facing));
             }
         }
         return null;

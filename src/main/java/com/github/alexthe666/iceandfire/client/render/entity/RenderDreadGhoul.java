@@ -29,13 +29,13 @@ public class RenderDreadGhoul extends MobRenderer<EntityDreadGhoul, ModelDreadGh
 
 
     @Override
-    protected void preRenderCallback(EntityDreadGhoul entity, MatrixStack matrixStackIn, float partialTickTime) {
-        float scale = entity.getScale() < 0.01F ? 1F : entity.getScale();
+    protected void scale(EntityDreadGhoul entity, MatrixStack matrixStackIn, float partialTickTime) {
+        float scale = entity.getSize() < 0.01F ? 1F : entity.getSize();
         matrixStackIn.scale(scale, scale, scale);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityDreadGhoul ghoul) {
+    public ResourceLocation getTextureLocation(EntityDreadGhoul ghoul) {
         if (ghoul.getScreamStage() == 2) {
             switch (ghoul.getVariant()) {
                 case 1:

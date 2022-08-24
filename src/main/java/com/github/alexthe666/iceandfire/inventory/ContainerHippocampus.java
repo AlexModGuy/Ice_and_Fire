@@ -29,64 +29,64 @@ public class ContainerHippocampus extends Container {
         }
         this.hippocampus = hippocampus;
         this.player = playerInventory.player;
-        hippocampusInventory.openInventory(player);
+        hippocampusInventory.startOpen(player);
         this.addSlot(new Slot(hippocampusInventory, 0, 8, 18) {
             @Override
-            public boolean isItemValid(ItemStack stack) {
-                return stack.getItem() == Items.SADDLE && !this.getHasStack();
+            public boolean mayPlace(ItemStack stack) {
+                return stack.getItem() == Items.SADDLE && !this.hasItem();
             }
 
             @Override
-            public void onSlotChanged() {
+            public void setChanged() {
                 if (ContainerHippocampus.this.hippocampus != null) {
                     ContainerHippocampus.this.hippocampus.refreshInventory();
                 }
             }
 
             @Override
-            public boolean isEnabled() {
+            public boolean isActive() {
                 return true;
             }
         });
         this.addSlot(new Slot(hippocampusInventory, 1, 8, 36) {
             @Override
-            public boolean isItemValid(ItemStack stack) {
-                return stack.getItem() == Blocks.CHEST.asItem() && !this.getHasStack();
+            public boolean mayPlace(ItemStack stack) {
+                return stack.getItem() == Blocks.CHEST.asItem() && !this.hasItem();
             }
 
             @Override
-            public void onSlotChanged() {
+            public void setChanged() {
                 if (ContainerHippocampus.this.hippocampus != null) {
                     ContainerHippocampus.this.hippocampus.refreshInventory();
                 }
             }
 
             @Override
-            public boolean isEnabled() {
+            public boolean isActive() {
                 return true;
             }
         });
         this.addSlot(new Slot(hippocampusInventory, 2, 8, 52) {
 
             @Override
-            public boolean isItemValid(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return EntityHippocampus.getIntFromArmor(stack) != 0;
             }
 
             @Override
-            public void onSlotChanged() {
+            public void setChanged() {
                 if (ContainerHippocampus.this.hippocampus != null) {
                     ContainerHippocampus.this.hippocampus.refreshInventory();
                 }
             }
 
             @Override
-            public int getSlotStackLimit() {
+            public int getMaxStackSize() {
                 return 1;
             }
 
             @Override
-            public boolean isEnabled() {
+            public boolean isActive() {
                 return true;
             }
         });
@@ -95,12 +95,12 @@ public class ContainerHippocampus extends Container {
             for (int l = 0; l < 5; ++l) {
                 this.addSlot(new Slot(hippocampusInventory, 3 + l + k * 5, 80 + l * 18, 18 + k * 18) {
                     @Override
-                    public boolean isEnabled() {
+                    public boolean isActive() {
                         return ContainerHippocampus.this.hippocampus != null && ContainerHippocampus.this.hippocampus.isChested();
                     }
 
                     @Override
-                    public boolean isItemValid(ItemStack stack) {
+                    public boolean mayPlace(ItemStack stack) {
                         return ContainerHippocampus.this.hippocampus != null && ContainerHippocampus.this.hippocampus.isChested();
                     }
                 });
@@ -120,50 +120,50 @@ public class ContainerHippocampus extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
-            if (index < this.hippocampusInventory.getSizeInventory()) {
-                if (!this.mergeItemStack(itemstack1, this.hippocampusInventory.getSizeInventory(), this.inventorySlots.size(), true)) {
+            if (index < this.hippocampusInventory.getContainerSize()) {
+                if (!this.moveItemStackTo(itemstack1, this.hippocampusInventory.getContainerSize(), this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (this.getSlot(1).isItemValid(itemstack1) && !this.getSlot(1).getHasStack()) {
-                if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
-                    return ItemStack.EMPTY;
-                }
-
-            } else if (this.getSlot(2).isItemValid(itemstack1) && !this.getSlot(2).getHasStack()) {
-                if (!this.mergeItemStack(itemstack1, 2, 3, false)) {
+            } else if (this.getSlot(1).mayPlace(itemstack1) && !this.getSlot(1).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 1, 2, false)) {
                     return ItemStack.EMPTY;
                 }
 
-            } else if (this.getSlot(0).isItemValid(itemstack1)) {
-                if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+            } else if (this.getSlot(2).mayPlace(itemstack1) && !this.getSlot(2).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 2, 3, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (this.hippocampusInventory.getSizeInventory() <= 3 || !this.mergeItemStack(itemstack1, 3, this.hippocampusInventory.getSizeInventory(), false)) {
+
+            } else if (this.getSlot(0).mayPlace(itemstack1)) {
+                if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (this.hippocampusInventory.getContainerSize() <= 3 || !this.moveItemStackTo(itemstack1, 3, this.hippocampusInventory.getContainerSize(), false)) {
                 return ItemStack.EMPTY;
             }
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
         return itemstack;
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return this.hippocampusInventory.isUsableByPlayer(playerIn) && this.hippocampus.isAlive() && this.hippocampus.getDistance(playerIn) < 8.0F;
+    public boolean stillValid(PlayerEntity playerIn) {
+        return this.hippocampusInventory.stillValid(playerIn) && this.hippocampus.isAlive() && this.hippocampus.distanceTo(playerIn) < 8.0F;
     }
 
     @Override
-    public void onContainerClosed(PlayerEntity playerIn) {
-        super.onContainerClosed(playerIn);
-        this.hippocampusInventory.closeInventory(playerIn);
+    public void removed(PlayerEntity playerIn) {
+        super.removed(playerIn);
+        this.hippocampusInventory.stopOpen(playerIn);
     }
 }

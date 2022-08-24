@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-
 import net.minecraft.pathfinding.Path;
 
 import javax.annotation.Nullable;
@@ -117,7 +116,7 @@ public class PathResult<T extends Callable<Path>>
      */
     public int getPathLength()
     {
-        return path.getCurrentPathLength();
+        return path.getNodeCount();
     }
 
     /**

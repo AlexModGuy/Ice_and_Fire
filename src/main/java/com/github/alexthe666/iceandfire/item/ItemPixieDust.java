@@ -13,7 +13,7 @@ public class ItemPixieDust extends ItemGenericFood {
     }
 
     public void onFoodEaten(ItemStack stack, World worldIn, LivingEntity livingEntity) {
-        livingEntity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 100, 1));
-        livingEntity.addPotionEffect(new EffectInstance(Effects.GLOWING, 100, 1));
+        livingEntity.addEffect(new EffectInstance(Effects.LEVITATION, 100, 1));
+        livingEntity.addEffect(new EffectInstance(Effects.GLOWING, 100, 1));
     }
 }

@@ -53,13 +53,13 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
     }
 
     public static boolean isEntityLookingAt(LivingEntity looker, LivingEntity seen, double degree) {
-        degree *= 1 + (looker.getDistance(seen) * 0.1);
-        Vector3d Vector3d = looker.getLook(1.0F).normalize();
-        Vector3d Vector3d1 = new Vector3d(seen.getPosX() - looker.getPosX(), seen.getBoundingBox().minY + (double) seen.getEyeHeight() - (looker.getPosY() + (double) looker.getEyeHeight()), seen.getPosZ() - looker.getPosZ());
+        degree *= 1 + (looker.distanceTo(seen) * 0.1);
+        Vector3d Vector3d = looker.getViewVector(1.0F).normalize();
+        Vector3d Vector3d1 = new Vector3d(seen.getX() - looker.getX(), seen.getBoundingBox().minY + (double) seen.getEyeHeight() - (looker.getY() + (double) looker.getEyeHeight()), seen.getZ() - looker.getZ());
         double d0 = Vector3d1.length();
         Vector3d1 = Vector3d1.normalize();
-        double d1 = Vector3d.dotProduct(Vector3d1);
-        return d1 > 1.0D - degree / d0 && (looker.canEntityBeSeen(seen) && !isStoneMob(seen));
+        double d1 = Vector3d.dot(Vector3d1);
+        return d1 > 1.0D - degree / d0 && (looker.canSee(seen) && !isStoneMob(seen));
     }
 
     public static boolean isStoneMob(LivingEntity mob) {
@@ -67,29 +67,29 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
     }
 
     public static boolean isBlindfolded(LivingEntity attackTarget) {
-        return attackTarget != null && (attackTarget.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == IafItemRegistry.BLINDFOLD || attackTarget.isPotionActive(Effects.BLINDNESS) || ServerEvents.isBlindMob(attackTarget));
+        return attackTarget != null && (attackTarget.getItemBySlot(EquipmentSlotType.HEAD).getItem() == IafItemRegistry.BLINDFOLD || attackTarget.hasEffect(Effects.BLINDNESS) || ServerEvents.isBlindMob(attackTarget));
     }
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
+        return MobEntity.createMobAttributes()
             //HEALTH
-            .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.gorgonMaxHealth)
+            .add(Attributes.MAX_HEALTH, IafConfig.gorgonMaxHealth)
             //SPEED
-            .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25D)
+            .add(Attributes.MOVEMENT_SPEED, 0.25D)
             //ATTACK
-            .createMutableAttribute(Attributes.ATTACK_DAMAGE, 3.0D)
+            .add(Attributes.ATTACK_DAMAGE, 3.0D)
             //ARMOR
-            .createMutableAttribute(Attributes.ARMOR, 1.0D);
+            .add(Attributes.ARMOR, 1.0D);
     }
 
     @Override
-    public AttributeModifierMap.MutableAttribute getAttributes() {
+    public AttributeModifierMap.MutableAttribute getConfigurableAttributes() {
         return bakeAttributes();
     }
 
     public boolean isTargetBlocked(Vector3d target) {
-        Vector3d Vector3d = new Vector3d(this.getPosX(), this.getPosYEye(), this.getPosZ());
-        RayTraceResult result = this.world.rayTraceBlocks(new RayTraceContext(Vector3d, target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+        Vector3d Vector3d = new Vector3d(this.getX(), this.getEyeY(), this.getZ());
+        RayTraceResult result = this.level.clip(new RayTraceContext(Vector3d, target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
         return result.getType() != RayTraceResult.Type.MISS;
     }
 
@@ -100,17 +100,17 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
         this.goalSelector.addGoal(3, aiStare = new GorgonAIStareAttack(this, 1.0D, 0, 15.0F));
         this.goalSelector.addGoal(3, aiMelee = new MeleeAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D) {
-            public boolean shouldExecute() {
-                executionChance = 20;
-                return super.shouldExecute();
+            public boolean canUse() {
+                interval = 20;
+                return super.canUse();
             }
         });
         this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F, 1.0F) {
-            public boolean shouldContinueExecuting() {
-                if (this.closestEntity != null && this.closestEntity instanceof PlayerEntity && ((PlayerEntity) this.closestEntity).isCreative()) {
+            public boolean canContinueToUse() {
+                if (this.lookAt != null && this.lookAt instanceof PlayerEntity && ((PlayerEntity) this.lookAt).isCreative()) {
                     return false;
                 }
-                return super.shouldContinueExecuting();
+                return super.canContinueToUse();
             }
         });
         this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
@@ -136,25 +136,25 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
         }
     }
 
-    public boolean attackEntityAsMob(Entity entityIn) {
-        boolean blindness = this.isPotionActive(Effects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(Effects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget() instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone();
+    public boolean doHurtTarget(Entity entityIn) {
+        boolean blindness = this.hasEffect(Effects.BLINDNESS) || this.getTarget() != null && this.getTarget().hasEffect(Effects.BLINDNESS) || this.getTarget() != null && this.getTarget() instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) this.getTarget()).canBeTurnedToStone();
         if (blindness && this.deathTime == 0) {
             if (this.getAnimation() != ANIMATION_HIT) {
                 this.setAnimation(ANIMATION_HIT);
             }
             if (entityIn instanceof LivingEntity) {
-                ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, 100, 2, false, true));
+                ((LivingEntity) entityIn).addEffect(new EffectInstance(Effects.POISON, 100, 2, false, true));
             }
         }
-        return super.attackEntityAsMob(entityIn);
+        return super.doHurtTarget(entityIn);
     }
 
-    public void setAttackTarget(@Nullable LivingEntity LivingEntityIn) {
-        super.setAttackTarget(LivingEntityIn);
-        if (LivingEntityIn != null && !world.isRemote) {
+    public void setTarget(@Nullable LivingEntity LivingEntityIn) {
+        super.setTarget(LivingEntityIn);
+        if (LivingEntityIn != null && !level.isClientSide) {
 
 
-            boolean blindness = this.isPotionActive(Effects.BLINDNESS) || LivingEntityIn.isPotionActive(Effects.BLINDNESS) || LivingEntityIn instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) LivingEntityIn).canBeTurnedToStone() || isBlindfolded(LivingEntityIn);
+            boolean blindness = this.hasEffect(Effects.BLINDNESS) || LivingEntityIn.hasEffect(Effects.BLINDNESS) || LivingEntityIn instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) LivingEntityIn).canBeTurnedToStone() || isBlindfolded(LivingEntityIn);
             if (blindness && this.deathTime == 0) {
                 this.goalSelector.addGoal(3, aiMelee);
                 this.goalSelector.removeGoal(aiStare);
@@ -165,61 +165,61 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
         }
     }
 
-    protected int getExperiencePoints(PlayerEntity player) {
+    protected int getExperienceReward(PlayerEntity player) {
         return 30;
     }
 
-    protected void onDeathUpdate() {
+    protected void tickDeath() {
         ++this.deathTime;
-        this.livingSoundTime = 20;
-        if (this.world.isRemote) {
+        this.ambientSoundTime = 20;
+        if (this.level.isClientSide) {
             for (int k = 0; k < 5; ++k) {
                 double d2 = 0.4;
                 double d0 = 0.1;
                 double d1 = 0.1;
-                IceAndFire.PROXY.spawnParticle(EnumParticles.Blood, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY(), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d2, d0, d1);
+                IceAndFire.PROXY.spawnParticle(EnumParticles.Blood, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getY(), this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), d2, d0, d1);
             }
         }
         if (this.deathTime >= 200) {
-            if (!this.world.isRemote && (this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot() && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS))) {
-                int i = this.getExperiencePoints(this.attackingPlayer);
-                i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
+            if (!this.level.isClientSide && (this.isAlwaysExperienceDropper() || this.lastHurtByPlayerTime > 0 && this.shouldDropExperience() && this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS))) {
+                int i = this.getExperienceReward(this.lastHurtByPlayer);
+                i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.lastHurtByPlayer, i);
                 while (i > 0) {
-                    int j = ExperienceOrbEntity.getXPSplit(i);
+                    int j = ExperienceOrbEntity.getExperienceValue(i);
                     i -= j;
-                    this.world.addEntity(new ExperienceOrbEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ(), j));
+                    this.level.addFreshEntity(new ExperienceOrbEntity(this.level, this.getX(), this.getY(), this.getZ(), j));
                 }
             }
             this.remove();
 
             for (int k = 0; k < 20; ++k) {
-                double d2 = this.rand.nextGaussian() * 0.02D;
-                double d0 = this.rand.nextGaussian() * 0.02D;
-                double d1 = this.rand.nextGaussian() * 0.02D;
-                this.world.addParticle(ParticleTypes.CLOUD, this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getPosY() + (double) (this.rand.nextFloat() * this.getHeight()), this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), d2, d0, d1);
+                double d2 = this.random.nextGaussian() * 0.02D;
+                double d0 = this.random.nextGaussian() * 0.02D;
+                double d1 = this.random.nextGaussian() * 0.02D;
+                this.level.addParticle(ParticleTypes.CLOUD, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()), this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), d2, d0, d1);
             }
         }
     }
 
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         if (playerStatueCooldown > 0) {
             playerStatueCooldown--;
         }
-        LivingEntity attackTarget = this.getAttackTarget();
+        LivingEntity attackTarget = this.getTarget();
         if (attackTarget != null) {
-            boolean blindness = this.isPotionActive(Effects.BLINDNESS) || attackTarget.isPotionActive(Effects.BLINDNESS);
+            boolean blindness = this.hasEffect(Effects.BLINDNESS) || attackTarget.hasEffect(Effects.BLINDNESS);
             if (!blindness && this.deathTime == 0 && attackTarget instanceof MobEntity && !(attackTarget instanceof PlayerEntity)) {
                 forcePreyToLook(attackTarget);
             }
             if (isEntityLookingAt(attackTarget, this, 0.4)) {
-                this.getLookController().setLookPosition(attackTarget.getPosX(), attackTarget.getPosY() + (double) attackTarget.getEyeHeight(), attackTarget.getPosZ(), (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
+                this.getLookControl().setLookAt(attackTarget.getX(), attackTarget.getY() + (double) attackTarget.getEyeHeight(), attackTarget.getZ(), (float) this.getMaxHeadYRot(), (float) this.getMaxHeadXRot());
             }
         }
 
 
         if (attackTarget != null && isEntityLookingAt(this, attackTarget, 0.4) && isEntityLookingAt(attackTarget, this, 0.4) && !isBlindfolded(attackTarget)) {
-            boolean blindness = this.isPotionActive(Effects.BLINDNESS) || attackTarget.isPotionActive(Effects.BLINDNESS) || attackTarget instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) attackTarget).canBeTurnedToStone();
+            boolean blindness = this.hasEffect(Effects.BLINDNESS) || attackTarget.hasEffect(Effects.BLINDNESS) || attackTarget instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) attackTarget).canBeTurnedToStone();
             if (!blindness && this.deathTime == 0) {
                 if (this.getAnimation() != ANIMATION_SCARE) {
                     this.playSound(IafSoundRegistry.GORGON_ATTACK, 1, 1);
@@ -227,26 +227,26 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
                 }
                 if (this.getAnimation() == ANIMATION_SCARE) {
                     if (this.getAnimationTick() > 10) {
-                        if (!world.isRemote) {
+                        if (!level.isClientSide) {
                             if (playerStatueCooldown == 0) {
                                 EntityStoneStatue statue = EntityStoneStatue.buildStatueEntity(attackTarget);
-                                statue.setPositionAndRotation(attackTarget.getPosX(), attackTarget.getPosY(), attackTarget.getPosZ(), attackTarget.rotationYaw, attackTarget.rotationPitch);
-                                if (!world.isRemote) {
-                                    world.addEntity(statue);
+                                statue.absMoveTo(attackTarget.getX(), attackTarget.getY(), attackTarget.getZ(), attackTarget.yRot, attackTarget.xRot);
+                                if (!level.isClientSide) {
+                                    level.addFreshEntity(statue);
                                 }
-                                statue.prevRotationYaw = attackTarget.rotationYaw;
-                                statue.rotationYaw = attackTarget.rotationYaw;
-                                statue.rotationYawHead = attackTarget.rotationYaw;
-                                statue.renderYawOffset = attackTarget.rotationYaw;
-                                statue.prevRenderYawOffset = attackTarget.rotationYaw;
+                                statue.yRotO = attackTarget.yRot;
+                                statue.yRot = attackTarget.yRot;
+                                statue.yHeadRot = attackTarget.yRot;
+                                statue.yBodyRot = attackTarget.yRot;
+                                statue.yBodyRotO = attackTarget.yRot;
                                 playerStatueCooldown = 40;
                                 if (attackTarget instanceof PlayerEntity) {
 
-                                    attackTarget.attackEntityFrom(IafDamageRegistry.causeGorgonDamage(this), Integer.MAX_VALUE);
+                                    attackTarget.hurt(IafDamageRegistry.causeGorgonDamage(this), Integer.MAX_VALUE);
                                 } else {
                                     attackTarget.remove();
                                 }
-                                this.setAttackTarget(null);
+                                this.setTarget(null);
 
                             }
                         }
@@ -257,22 +257,22 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
-    public int getVerticalFaceSpeed() {
+    public int getMaxHeadXRot() {
         return 10;
     }
 
-    public int getHorizontalFaceSpeed() {
+    public int getMaxHeadYRot() {
         return 30;
     }
 
-    public CreatureAttribute getCreatureAttribute() {
+    public CreatureAttribute getMobType() {
         return CreatureAttribute.UNDEAD;
     }
 
     public void forcePreyToLook(LivingEntity mob) {
         if (mob instanceof MobEntity) {
             MobEntity mobEntity = (MobEntity) mob;
-            mobEntity.getLookController().setLookPosition(this.getPosX(), this.getPosY() + (double) this.getEyeHeight(), this.getPosZ(), (float) mobEntity.getHorizontalFaceSpeed(), (float) mobEntity.getVerticalFaceSpeed());
+            mobEntity.getLookControl().setLookAt(this.getX(), this.getY() + (double) this.getEyeHeight(), this.getZ(), (float) mobEntity.getMaxHeadYRot(), (float) mobEntity.getMaxHeadXRot());
 
         }
     }
@@ -324,12 +324,12 @@ public class EntityGorgon extends MonsterEntity implements IAnimatedEntity, IVil
     }
 
     @Override
-    public boolean isNoDespawnRequired() {
+    public boolean isPersistenceRequired() {
         return true;
     }
 
     @Override
-    public boolean canDespawn(double distanceToClosestPlayer) {
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return false;
     }
 }

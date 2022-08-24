@@ -20,22 +20,22 @@ public class RenderPixie extends MobRenderer<EntityPixie, ModelPixie> {
 
     public RenderPixie(EntityRendererManager renderManager) {
         super(renderManager, new ModelPixie(), 0.2F);
-        this.layerRenderers.add(new LayerPixieItem(this));
-        this.layerRenderers.add(new LayerPixieGlow(this));
+        this.layers.add(new LayerPixieItem(this));
+        this.layers.add(new LayerPixieGlow(this));
 
     }
 
     @Override
-    public void preRenderCallback(EntityPixie LivingEntityIn, MatrixStack stack, float partialTickTime) {
+    public void scale(EntityPixie LivingEntityIn, MatrixStack stack, float partialTickTime) {
         stack.scale(0.55F, 0.55F, 0.55F);
-        if (LivingEntityIn.isQueuedToSit()) {
+        if (LivingEntityIn.isOrderedToSit()) {
             stack.translate(0F, 0.5F, 0F);
 
         }
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityPixie pixie) {
+    public ResourceLocation getTextureLocation(EntityPixie pixie) {
         switch (pixie.getColor()) {
             default:
                 return TEXTURE_0;

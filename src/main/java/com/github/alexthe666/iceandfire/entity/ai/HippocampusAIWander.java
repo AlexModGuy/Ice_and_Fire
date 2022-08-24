@@ -10,11 +10,11 @@ public class HippocampusAIWander extends RandomWalkingGoal {
         super(creatureIn, speedIn);
     }
 
-    public boolean shouldExecute() {
-        return !(creature instanceof TameableEntity && ((TameableEntity) creature).isQueuedToSit()) && !this.creature.isInWater() && super.shouldExecute();
+    public boolean canUse() {
+        return !(mob instanceof TameableEntity && ((TameableEntity) mob).isOrderedToSit()) && !this.mob.isInWater() && super.canUse();
     }
 
-    public boolean shouldContinueExecuting() {
-        return !(creature instanceof TameableEntity && ((TameableEntity) creature).isQueuedToSit()) && !this.creature.isInWater() && super.shouldContinueExecuting();
+    public boolean canContinueToUse() {
+        return !(mob instanceof TameableEntity && ((TameableEntity) mob).isOrderedToSit()) && !this.mob.isInWater() && super.canContinueToUse();
     }
 }

@@ -1,13 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.EnumSet;
-
 import com.github.alexthe666.iceandfire.entity.EntityDreadLich;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
+
+import java.util.EnumSet;
 
 public class DreadLichAIStrife extends Goal {
 
@@ -25,7 +24,7 @@ public class DreadLichAIStrife extends Goal {
         this.moveSpeedAmp = moveSpeedAmpIn;
         this.attackCooldown = attackCooldownIn;
         this.maxAttackDistance = maxAttackDistanceIn * maxAttackDistanceIn;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
     public void setAttackCooldown(int attackCooldownIn) {
@@ -33,38 +32,38 @@ public class DreadLichAIStrife extends Goal {
     }
 
     @Override
-    public boolean shouldExecute() {
-        return this.entity.getAttackTarget() != null && this.isStaffInHand();
+    public boolean canUse() {
+        return this.entity.getTarget() != null && this.isStaffInHand();
     }
 
     protected boolean isStaffInHand() {
-        return !this.entity.getHeldItemMainhand().isEmpty() && this.entity.getHeldItemMainhand().getItem() == IafItemRegistry.LICH_STAFF;
+        return !this.entity.getMainHandItem().isEmpty() && this.entity.getMainHandItem().getItem() == IafItemRegistry.LICH_STAFF;
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return (this.shouldExecute() || !this.entity.getNavigator().noPath()) && this.isStaffInHand();
+    public boolean canContinueToUse() {
+        return (this.canUse() || !this.entity.getNavigation().isDone()) && this.isStaffInHand();
     }
 
     @Override
-    public void startExecuting() {
-        super.startExecuting();
+    public void start() {
+        super.start();
     }
 
     @Override
-    public void resetTask() {
-        super.resetTask();
+    public void stop() {
+        super.stop();
         this.seeTime = 0;
-        this.entity.resetActiveHand();
+        this.entity.stopUsingItem();
     }
 
     @Override
     public void tick() {
-        LivingEntity LivingEntity = this.entity.getAttackTarget();
+        LivingEntity LivingEntity = this.entity.getTarget();
 
         if (LivingEntity != null) {
-            final double d0 = this.entity.getDistanceSq(LivingEntity.getPosX(), LivingEntity.getBoundingBox().minY, LivingEntity.getPosZ());
-            final boolean flag = this.entity.getEntitySenses().canSee(LivingEntity);
+            final double d0 = this.entity.distanceToSqr(LivingEntity.getX(), LivingEntity.getBoundingBox().minY, LivingEntity.getZ());
+            final boolean flag = this.entity.getSensing().canSee(LivingEntity);
             final boolean flag1 = this.seeTime > 0;
 
             if (flag != flag1) {
@@ -78,19 +77,19 @@ public class DreadLichAIStrife extends Goal {
             }
 
             if (d0 <= this.maxAttackDistance && this.seeTime >= 20) {
-                this.entity.getNavigator().clearPath();
+                this.entity.getNavigation().stop();
                 ++this.strafingTime;
             } else {
-                this.entity.getNavigator().tryMoveToEntityLiving(LivingEntity, this.moveSpeedAmp);
+                this.entity.getNavigation().moveTo(LivingEntity, this.moveSpeedAmp);
                 this.strafingTime = -1;
             }
 
             if (this.strafingTime >= 20) {
-                if (this.entity.getRNG().nextFloat() < 0.3D) {
+                if (this.entity.getRandom().nextFloat() < 0.3D) {
                     this.strafingClockwise = !this.strafingClockwise;
                 }
 
-                if (this.entity.getRNG().nextFloat() < 0.3D) {
+                if (this.entity.getRandom().nextFloat() < 0.3D) {
                     this.strafingBackwards = !this.strafingBackwards;
                 }
 
@@ -104,17 +103,17 @@ public class DreadLichAIStrife extends Goal {
                     this.strafingBackwards = true;
                 }
 
-                this.entity.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
-                this.entity.faceEntity(LivingEntity, 30.0F, 30.0F);
+                this.entity.getMoveControl().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
+                this.entity.lookAt(LivingEntity, 30.0F, 30.0F);
             } else {
-                this.entity.getLookController().setLookPositionWithEntity(LivingEntity, 30.0F, 30.0F);
+                this.entity.getLookControl().setLookAt(LivingEntity, 30.0F, 30.0F);
             }
 
             if (!flag && this.seeTime < -60) {
-                this.entity.resetActiveHand();
+                this.entity.stopUsingItem();
             } else if (flag) {
-                this.entity.resetActiveHand();
-                ((IRangedAttackMob) this.entity).attackEntityWithRangedAttack(LivingEntity, 0);
+                this.entity.stopUsingItem();
+                ((IRangedAttackMob) this.entity).performRangedAttack(LivingEntity, 0);
             }
         }
     }

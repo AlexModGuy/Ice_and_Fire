@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
@@ -20,10 +19,10 @@ public class CockatriceAIAggroLook extends NearestAttackableTargetGoal<PlayerEnt
         this.predicate = new EntityPredicate() {
 
             @Override
-            public boolean canTarget(LivingEntity attacker, LivingEntity target) {
+            public boolean test(LivingEntity attacker, LivingEntity target) {
                 return EntityGorgon.isEntityLookingAt(target, CockatriceAIAggroLook.this.cockatrice,
                     EntityCockatrice.VIEW_RADIUS)
-                    && CockatriceAIAggroLook.this.cockatrice.getDistance(target) < getTargetDistance();
+                    && CockatriceAIAggroLook.this.cockatrice.distanceTo(target) < getFollowDistance();
             }
 
         };
@@ -33,11 +32,11 @@ public class CockatriceAIAggroLook extends NearestAttackableTargetGoal<PlayerEnt
      * Returns whether the Goal should begin execution.
      */
     @Override
-    public boolean shouldExecute() {
-        if (cockatrice.isTamed())
+    public boolean canUse() {
+        if (cockatrice.isTame())
             return false;
-        this.player = this.cockatrice.world.getClosestPlayer(predicate, this.cockatrice.getPosX(),
-            this.cockatrice.getPosY(), this.cockatrice.getPosZ());
+        this.player = this.cockatrice.level.getNearestPlayer(predicate, this.cockatrice.getX(),
+            this.cockatrice.getY(), this.cockatrice.getZ());
         return this.player != null;
     }
 
@@ -46,29 +45,29 @@ public class CockatriceAIAggroLook extends NearestAttackableTargetGoal<PlayerEnt
      * another one
      */
     @Override
-    public void resetTask() {
+    public void stop() {
         this.player = null;
-        super.resetTask();
+        super.stop();
     }
 
     /**
      * Returns whether an in-progress Goal should continue executing
      */
     @Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         if (this.player != null && !this.player.isCreative() && !this.player.isSpectator()) {
             if (!EntityGorgon.isEntityLookingAt(this.player, this.cockatrice, 0.4F)) {
                 return false;
             } else {
-                this.cockatrice.faceEntity(this.player, 10.0F, 10.0F);
-                if (!this.cockatrice.isTamed()) {
-                    this.cockatrice.setTargetedEntity(this.player.getEntityId());
-                    this.cockatrice.setAttackTarget(this.player);
+                this.cockatrice.lookAt(this.player, 10.0F, 10.0F);
+                if (!this.cockatrice.isTame()) {
+                    this.cockatrice.setTargetedEntity(this.player.getId());
+                    this.cockatrice.setTarget(this.player);
                 }
                 return true;
             }
         } else {
-            return this.target != null && this.target.isAlive() || super.shouldContinueExecuting();
+            return this.targetMob != null && this.targetMob.isAlive() || super.canContinueToUse();
         }
     }
 }

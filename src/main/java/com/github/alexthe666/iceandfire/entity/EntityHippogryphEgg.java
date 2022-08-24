@@ -28,42 +28,42 @@ public class EntityHippogryphEgg extends EggEntity {
     public EntityHippogryphEgg(EntityType<? extends EggEntity> type, World worldIn, double x, double y, double z,
         ItemStack stack) {
         this(type, worldIn);
-        this.setPosition(x, y, z);
+        this.setPos(x, y, z);
         this.itemstack = stack;
     }
 
     public EntityHippogryphEgg(EntityType<? extends EggEntity> type, World worldIn, LivingEntity throwerIn,
         ItemStack stack) {
         this(type, worldIn);
-        this.setPosition(throwerIn.getPosX(), throwerIn.getPosYEye() - 0.1F, throwerIn.getPosZ());
+        this.setPos(throwerIn.getX(), throwerIn.getEyeY() - 0.1F, throwerIn.getZ());
         this.itemstack = stack;
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
-    public void handleStatusUpdate(byte id) {
+    public void handleEntityEvent(byte id) {
         if (id == 3) {
             for (int i = 0; i < 8; ++i) {
-                this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, this.getItem()), this.getPosX(), this.getPosY(), this.getPosZ(), (this.rand.nextFloat() - 0.5D) * 0.08D, (this.rand.nextFloat() - 0.5D) * 0.08D, (this.rand.nextFloat() - 0.5D) * 0.08D);
+                this.level.addParticle(new ItemParticleData(ParticleTypes.ITEM, this.getItem()), this.getX(), this.getY(), this.getZ(), (this.random.nextFloat() - 0.5D) * 0.08D, (this.random.nextFloat() - 0.5D) * 0.08D, (this.random.nextFloat() - 0.5D) * 0.08D);
             }
         }
     }
 
     @Override
-    protected void onImpact(RayTraceResult result) {
-        Entity thrower = getShooter();
+    protected void onHit(RayTraceResult result) {
+        Entity thrower = getOwner();
         if (result.getType() == RayTraceResult.Type.ENTITY) {
-            ((EntityRayTraceResult) result).getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, thrower), 0.0F);
+            ((EntityRayTraceResult) result).getEntity().hurt(DamageSource.thrown(this, thrower), 0.0F);
         }
 
-        if (!this.world.isRemote) {
-            EntityHippogryph hippogryph = new EntityHippogryph(IafEntityRegistry.HIPPOGRYPH.get(), this.world);
-            hippogryph.setGrowingAge(-24000);
-            hippogryph.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
+        if (!this.level.isClientSide) {
+            EntityHippogryph hippogryph = new EntityHippogryph(IafEntityRegistry.HIPPOGRYPH.get(), this.level);
+            hippogryph.setAge(-24000);
+            hippogryph.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, 0.0F);
             if (itemstack != null) {
                 int variant = 0;
                 CompoundNBT tag = itemstack.getTag();
@@ -72,10 +72,10 @@ public class EntityHippogryphEgg extends EggEntity {
                 }
                 hippogryph.setVariant(variant);
             }
-            this.world.addEntity(hippogryph);
+            this.level.addFreshEntity(hippogryph);
         }
 
-        this.world.setEntityState(this, (byte) 3);
+        this.level.broadcastEntityEvent(this, (byte) 3);
         this.remove();
     }
 

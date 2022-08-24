@@ -1,16 +1,15 @@
 package com.github.alexthe666.iceandfire.message;
 
-import java.util.function.Supplier;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class MessagePlayerHitMultipart {
     public int creatureID;
@@ -49,13 +48,13 @@ public class MessagePlayerHitMultipart {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (player.world != null) {
-                    Entity entity = player.world.getEntityByID(message.creatureID);
+                if (player.level != null) {
+                    Entity entity = player.level.getEntity(message.creatureID);
                     if (entity != null && entity instanceof LivingEntity) {
-                        double dist = player.getDistance(entity);
+                        double dist = player.distanceTo(entity);
                         LivingEntity mob = (LivingEntity) entity;
                         if (dist < 100) {
-                            player.attackTargetEntityWithCurrentItem(mob);
+                            player.attack(mob);
                             if (mob instanceof EntityHydra) {
                                 ((EntityHydra) mob).triggerHeadFlags(message.extraData);
                             }

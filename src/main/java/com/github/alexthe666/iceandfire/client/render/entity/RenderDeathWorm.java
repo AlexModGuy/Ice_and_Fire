@@ -21,23 +21,23 @@ public class RenderDeathWorm extends MobRenderer<EntityDeathWorm, ModelDeathWorm
     }
 
     @Override
-    protected void preRenderCallback(EntityDeathWorm entity, MatrixStack matrixStackIn, float partialTickTime) {
-        this.shadowSize = entity.getRenderScale() / 3;
-        matrixStackIn.scale(entity.getRenderScale(), entity.getRenderScale(), entity.getRenderScale());
+    protected void scale(EntityDeathWorm entity, MatrixStack matrixStackIn, float partialTickTime) {
+        this.shadowRadius = entity.getScale() / 3;
+        matrixStackIn.scale(entity.getScale(), entity.getScale(), entity.getScale());
     }
 
 
-    protected int getBlockLight(EntityDeathWorm entityIn, BlockPos partialTicks) {
-        return entityIn.isBurning() ? 15 : entityIn.getWormBrightness(false);
+    protected int getBlockLightLevel(EntityDeathWorm entityIn, BlockPos partialTicks) {
+        return entityIn.isOnFire() ? 15 : entityIn.getWormBrightness(false);
     }
 
-    protected int getSkyLight(EntityDeathWorm entity, BlockPos pos) {
+    protected int getSkyLightLevel(EntityDeathWorm entity, BlockPos pos) {
         return entity.getWormBrightness(true);
     }
 
     @Nullable
     @Override
-    public ResourceLocation getEntityTexture(EntityDeathWorm entity) {
+    public ResourceLocation getTextureLocation(EntityDeathWorm entity) {
         return entity.getVariant() == 2 ? TEXTURE_WHITE : entity.getVariant() == 1 ? TEXTURE_RED : TEXTURE_YELLOW;
     }
 }

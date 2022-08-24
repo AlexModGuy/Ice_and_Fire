@@ -56,8 +56,8 @@ public class SirenProperties {
 
     private static void updateData(LivingEntity entity, CompoundNBT nbt) {
         CitadelEntityData.setCitadelTag(entity, nbt);
-        if (!entity.world.isRemote()) {
-            Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", nbt, entity.getEntityId()));
+        if (!entity.level.isClientSide()) {
+            Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", nbt, entity.getId()));
         }
     }
 
@@ -65,8 +65,8 @@ public class SirenProperties {
         CompoundNBT entityData = CitadelEntityData.getOrCreateCitadelTag(entity);
         entityData.put(SIREN_DATA, nbt);
         CitadelEntityData.setCitadelTag(entity, entityData);
-        if (!entity.world.isRemote()) {
-            Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", entityData, entity.getEntityId()));
+        if (!entity.level.isClientSide()) {
+            Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", entityData, entity.getId()));
         }
     }
 
@@ -80,7 +80,7 @@ public class SirenProperties {
 
     public static void setCharmedBy(LivingEntity entity, LivingEntity charmedBy) {
         CompoundNBT nbt = getOrCreateCharmData(entity);
-        nbt.putInt(SIREN_ID, charmedBy.getEntityId());
+        nbt.putInt(SIREN_ID, charmedBy.getId());
         nbt.putBoolean(SIREN_CHARMED, true);
         updateCharmData(entity, nbt);
     }
@@ -95,7 +95,7 @@ public class SirenProperties {
 
     @Nullable
     public static EntitySiren getSiren(LivingEntity entity) {
-        Entity siren = entity.world.getEntityByID(getCharmedBy(entity));
+        Entity siren = entity.level.getEntity(getCharmedBy(entity));
         if (siren instanceof EntitySiren) {
             return (EntitySiren) siren;
         }
@@ -118,15 +118,15 @@ public class SirenProperties {
                 clearCharmedStatus(entity);
                 siren.singCooldown = IafConfig.sirenTimeBetweenSongs;
             } else {
-                if (!siren.isAlive() || entity.getDistance(siren) > EntitySiren.SEARCH_RANGE * 2 || entity instanceof PlayerEntity && ((PlayerEntity) entity).isCreative()) {
+                if (!siren.isAlive() || entity.distanceTo(siren) > EntitySiren.SEARCH_RANGE * 2 || entity instanceof PlayerEntity && ((PlayerEntity) entity).isCreative()) {
                     clearCharmedStatus(entity);
                     return;
                 }
-                if (entity.getDistance(siren) < 5D) {
+                if (entity.distanceTo(siren) < 5D) {
                     clearCharmedStatus(entity);
                     siren.singCooldown = IafConfig.sirenTimeBetweenSongs;
                     siren.setSinging(false);
-                    siren.setAttackTarget(entity);
+                    siren.setTarget(entity);
                     siren.setAggressive(true);
                     siren.triggerOtherSirens(entity);
                     return;
@@ -138,32 +138,32 @@ public class SirenProperties {
 
                 if (rand.nextInt(7) == 0) {
                     for (int i = 0; i < 5; i++) {
-                        entity.world.addParticle(ParticleTypes.HEART,
-                            entity.getPosX() + ((rand.nextDouble() - 0.5D) * 3),
-                            entity.getPosY() + ((rand.nextDouble() - 0.5D) * 3),
-                            entity.getPosZ() + ((rand.nextDouble() - 0.5D) * 3),
+                        entity.level.addParticle(ParticleTypes.HEART,
+                            entity.getX() + ((rand.nextDouble() - 0.5D) * 3),
+                            entity.getY() + ((rand.nextDouble() - 0.5D) * 3),
+                            entity.getZ() + ((rand.nextDouble() - 0.5D) * 3),
                             0, 0, 0);
                     }
                 }
-                if (entity.collidedHorizontally) {
+                if (entity.horizontalCollision) {
                     entity.setJumping(true);
                 }
-                double motionXAdd = (Math.signum(siren.getPosX() - entity.getPosX()) * 0.5D - entity.getMotion().x) * 0.100000000372529;
-                double motionYAdd = (Math.signum(siren.getPosY() - entity.getPosY() + 1) * 0.5D - entity.getMotion().y) * 0.100000000372529;
-                double motionZAdd = (Math.signum(siren.getPosZ() - entity.getPosZ()) * 0.5D - entity.getMotion().z) * 0.100000000372529;
-                entity.setMotion(entity.getMotion().add(motionXAdd, motionYAdd, motionZAdd));
+                double motionXAdd = (Math.signum(siren.getX() - entity.getX()) * 0.5D - entity.getDeltaMovement().x) * 0.100000000372529;
+                double motionYAdd = (Math.signum(siren.getY() - entity.getY() + 1) * 0.5D - entity.getDeltaMovement().y) * 0.100000000372529;
+                double motionZAdd = (Math.signum(siren.getZ() - entity.getZ()) * 0.5D - entity.getDeltaMovement().z) * 0.100000000372529;
+                entity.setDeltaMovement(entity.getDeltaMovement().add(motionXAdd, motionYAdd, motionZAdd));
                 if (entity.isPassenger()) {
                     entity.stopRiding();
                 }
                 if (!(entity instanceof PlayerEntity)) {
-                    double d0 = siren.getPosX() - entity.getPosX();
-                    double d2 = siren.getPosZ() - entity.getPosZ();
-                    double d1 = siren.getPosY() - 1 - entity.getPosY();
+                    double d0 = siren.getX() - entity.getX();
+                    double d2 = siren.getZ() - entity.getZ();
+                    double d1 = siren.getY() - 1 - entity.getY();
                     double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
                     float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
                     float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
-                    entity.rotationPitch = updateRotation(entity.rotationPitch, f1, 30F);
-                    entity.rotationYaw = updateRotation(entity.rotationYaw, f, 30F);
+                    entity.xRot = updateRotation(entity.xRot, f1, 30F);
+                    entity.yRot = updateRotation(entity.yRot, f, 30F);
                 }
             }
         }

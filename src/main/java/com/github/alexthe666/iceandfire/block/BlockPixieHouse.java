@@ -1,13 +1,8 @@
 package com.github.alexthe666.iceandfire.block;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
@@ -22,37 +17,38 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class BlockPixieHouse extends ContainerBlock implements ICustomRendered {
     public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
 
     public BlockPixieHouse(String type) {
         super(
-    		Properties
-    			.create(Material.WOOD)
-    			.notSolid()
-    			.variableOpacity()
-    			.hardnessAndResistance(2.0F, 5.0F)
-    			.tickRandomly()
+            Properties
+                .of(Material.WOOD)
+                .noOcclusion()
+                .dynamicShape()
+                .strength(2.0F, 5.0F)
+                .randomTicks()
 		);
 
-        this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
         this.setRegistryName(IceAndFire.MODID, "pixie_house_" + type);
     }
 
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
-    
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         dropPixie(worldIn, pos);
-        spawnAsEntity(worldIn, pos, new ItemStack(this, 0));
-        super.onReplaced(state, worldIn, pos, newState, isMoving);
+        popResource(worldIn, pos, new ItemStack(this, 0));
+        super.onRemove(state, worldIn, pos, newState, isMoving);
     }
 
 
@@ -80,14 +76,14 @@ public class BlockPixieHouse extends ContainerBlock implements ICustomRendered {
     }
 
     public void dropPixie(World world, BlockPos pos) {
-        if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityPixieHouse && ((TileEntityPixieHouse) world.getTileEntity(pos)).hasPixie) {
-            ((TileEntityPixieHouse) world.getTileEntity(pos)).releasePixie();
+        if (world.getBlockEntity(pos) != null && world.getBlockEntity(pos) instanceof TileEntityPixieHouse && ((TileEntityPixieHouse) world.getBlockEntity(pos)).hasPixie) {
+            ((TileEntityPixieHouse) world.getBlockEntity(pos)).releasePixie();
         }
     }
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+    public TileEntity newBlockEntity(IBlockReader worldIn) {
         return new TileEntityPixieHouse();
     }
 }

@@ -1,17 +1,16 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.function.Predicate;
-
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.vector.Vector3d;
+
+import java.util.EnumSet;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class StymphalianBirdAIFlee extends Goal {
     private final Predicate<Entity> canBeSeenSelector;
@@ -26,35 +25,35 @@ public class StymphalianBirdAIFlee extends Goal {
 
             @Override
             public boolean test(Entity entity) {
-                return entity instanceof PlayerEntity && entity.isAlive() && StymphalianBirdAIFlee.this.stymphalianBird.getEntitySenses().canSee(entity) && !StymphalianBirdAIFlee.this.stymphalianBird.isOnSameTeam(entity);
+                return entity instanceof PlayerEntity && entity.isAlive() && StymphalianBirdAIFlee.this.stymphalianBird.getSensing().canSee(entity) && !StymphalianBirdAIFlee.this.stymphalianBird.isAlliedTo(entity);
             }
         };
         this.avoidDistance = avoidDistanceIn;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if (this.stymphalianBird.getVictor() == null) {
             return false;
         }
-        List<LivingEntity> list = this.stymphalianBird.world.getEntitiesWithinAABB(LivingEntity.class, this.stymphalianBird.getBoundingBox().grow(this.avoidDistance, 3.0D, this.avoidDistance),
-                this.canBeSeenSelector);
+        List<LivingEntity> list = this.stymphalianBird.level.getEntitiesOfClass(LivingEntity.class, this.stymphalianBird.getBoundingBox().inflate(this.avoidDistance, 3.0D, this.avoidDistance),
+            this.canBeSeenSelector);
 
         if (list.isEmpty())
             return false;
 
         this.closestLivingEntity = list.get(0);
         if (closestLivingEntity != null && this.stymphalianBird.getVictor() != null && this.closestLivingEntity.equals(this.stymphalianBird.getVictor())) {
-            Vector3d Vector3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.stymphalianBird, 32, 7, new Vector3d(this.closestLivingEntity.getPosX(), this.closestLivingEntity.getPosY(), this.closestLivingEntity.getPosZ()));
+            Vector3d Vector3d = RandomPositionGenerator.getPosAvoid(this.stymphalianBird, 32, 7, new Vector3d(this.closestLivingEntity.getX(), this.closestLivingEntity.getY(), this.closestLivingEntity.getZ()));
 
             if (Vector3d == null) {
                 return false;
             } else {
                 Vector3d = Vector3d.add(0, 3, 0);
-                this.stymphalianBird.getMoveHelper().setMoveTo(Vector3d.x, Vector3d.y, Vector3d.z, 3D);
-                this.stymphalianBird.getLookController().setLookPosition(Vector3d.x, Vector3d.y, Vector3d.z, 180.0F, 20.0F);
+                this.stymphalianBird.getMoveControl().setWantedPosition(Vector3d.x, Vector3d.y, Vector3d.z, 3D);
+                this.stymphalianBird.getLookControl().setLookAt(Vector3d.x, Vector3d.y, Vector3d.z, 180.0F, 20.0F);
                 hidePlace = Vector3d;
                 return true;
             }
@@ -63,18 +62,18 @@ public class StymphalianBirdAIFlee extends Goal {
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return hidePlace != null && this.stymphalianBird.getDistanceSq(hidePlace.add(0.5, 0.5, 0.5)) < 2;
+    public boolean canContinueToUse() {
+        return hidePlace != null && this.stymphalianBird.distanceToSqr(hidePlace.add(0.5, 0.5, 0.5)) < 2;
     }
 
     @Override
-    public void startExecuting() {
-        this.stymphalianBird.getMoveHelper().setMoveTo(hidePlace.x, hidePlace.y, hidePlace.z, 3D);
-        this.stymphalianBird.getLookController().setLookPosition(hidePlace.x, hidePlace.y, hidePlace.z, 180.0F, 20.0F);
+    public void start() {
+        this.stymphalianBird.getMoveControl().setWantedPosition(hidePlace.x, hidePlace.y, hidePlace.z, 3D);
+        this.stymphalianBird.getLookControl().setLookAt(hidePlace.x, hidePlace.y, hidePlace.z, 180.0F, 20.0F);
     }
 
     @Override
-    public void resetTask() {
+    public void stop() {
         this.closestLivingEntity = null;
     }
 }

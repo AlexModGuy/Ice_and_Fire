@@ -47,13 +47,13 @@ public class LayerBipedArmor<T extends LivingEntity & IAnimatedEntity,
     }
 
     private void renderEquipment(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, T entityIn, EquipmentSlotType slotType, int packedLightIn, A modelIn) {
-        ItemStack itemstack = entityIn.getItemStackFromSlot(slotType);
+        ItemStack itemstack = entityIn.getItemBySlot(slotType);
         if (itemstack.getItem() instanceof ArmorItem) {
             ArmorItem armoritem = (ArmorItem) itemstack.getItem();
-            if (armoritem.getEquipmentSlot() == slotType) {
-                this.getEntityModel().setModelAttributes(modelIn);
+            if (armoritem.getSlot() == slotType) {
+                this.getParentModel().setModelAttributes(modelIn);
                 this.setModelSlotVisible(modelIn, slotType);
-                boolean flag1 = itemstack.hasEffect();
+                boolean flag1 = itemstack.hasFoil();
                 this.renderArmorItem(matrixStackIn, bufferIn, packedLightIn, flag1, modelIn, 1.0F, 1.0F, 1.0F, this.getArmorResource(entityIn, itemstack, slotType, null));
             }
         }
@@ -83,8 +83,8 @@ public class LayerBipedArmor<T extends LivingEntity & IAnimatedEntity,
     }
 
     private void renderArmorItem(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, boolean p_241738_5_, A modelIn, float red, float green, float blue, ResourceLocation armorResource) {
-        IVertexBuilder ivertexbuilder = ItemRenderer.getArmorVertexBuilder(bufferIn, RenderType.getArmorCutoutNoCull(armorResource), false, p_241738_5_);
-        modelIn.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
+        IVertexBuilder ivertexbuilder = ItemRenderer.getArmorFoilBuffer(bufferIn, RenderType.armorCutoutNoCull(armorResource), false, p_241738_5_);
+        modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
     }
 
     private A getSlotModel(EquipmentSlotType equipmentSlotType) {

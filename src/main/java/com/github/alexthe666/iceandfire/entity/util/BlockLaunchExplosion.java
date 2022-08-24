@@ -34,7 +34,7 @@ public class BlockLaunchExplosion extends Explosion {
     }
 
     public BlockLaunchExplosion(World world, MobEntity entity, double x, double y, double z, float size, Mode mode) {
-        this(world, entity, (DamageSource) null, x, y, z, size, mode);
+        this(world, entity, null, x, y, z, size, mode);
     }
 
     public BlockLaunchExplosion(World world, MobEntity entity, DamageSource source, double x, double y, double z, float size, Mode mode) {
@@ -53,8 +53,8 @@ public class BlockLaunchExplosion extends Explosion {
         for (int j = 0; j < i; ++j) {
             Pair<ItemStack, BlockPos> pair = dropPositionArray.get(j);
             ItemStack itemstack = pair.getFirst();
-            if (ItemEntity.canMergeStacks(itemstack, stack)) {
-                ItemStack itemstack1 = ItemEntity.mergeStacks(itemstack, stack, 16);
+            if (ItemEntity.areMergable(itemstack, stack)) {
+                ItemStack itemstack1 = ItemEntity.merge(itemstack, stack, 16);
                 dropPositionArray.set(j, Pair.of(itemstack1, pair.getSecond()));
                 if (stack.isEmpty()) {
                     return;
@@ -68,9 +68,9 @@ public class BlockLaunchExplosion extends Explosion {
     /**
      * Does the second part of the explosion (sound, particles, drop spawn)
      */
-    public void doExplosionB(boolean spawnParticles) {
-        if (world.isRemote) {
-            this.world.playSound(this.x, this.y, this.z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F, false);
+    public void finalizeExplosion(boolean spawnParticles) {
+        if (world.isClientSide) {
+            this.world.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F, false);
         }
 
         boolean flag = this.mode != Explosion.Mode.NONE;
@@ -84,34 +84,34 @@ public class BlockLaunchExplosion extends Explosion {
 
         if (flag) {
             ObjectArrayList<Pair<ItemStack, BlockPos>> objectarraylist = new ObjectArrayList<>();
-            Collections.shuffle(this.getAffectedBlockPositions(), this.world.rand);
+            Collections.shuffle(this.getToBlow(), this.world.random);
 
-            for (BlockPos blockpos : this.getAffectedBlockPositions()) {
+            for (BlockPos blockpos : this.getToBlow()) {
                 BlockState blockstate = this.world.getBlockState(blockpos);
                 Block block = blockstate.getBlock();
                 if (!blockstate.isAir(this.world, blockpos)) {
-                    BlockPos blockpos1 = blockpos.toImmutable();
-                    this.world.getProfiler().startSection("explosion_blocks");
+                    BlockPos blockpos1 = blockpos.immutable();
+                    this.world.getProfiler().push("explosion_blocks");
 
                     Vector3d Vector3d = new Vector3d(this.x, this.y, this.z);
                     blockstate.onBlockExploded(this.world, blockpos, this);
                     FallingBlockEntity fallingBlockEntity = new FallingBlockEntity(EntityType.FALLING_BLOCK, world);
-                    fallingBlockEntity.setOrigin(blockpos1);
-                    fallingBlockEntity.setPosition(blockpos1.getX() + 0.5D, blockpos1.getY() + 0.5D, blockpos1.getZ() + 0.5D);
-                    double d5 = fallingBlockEntity.getPosX() - this.x;
-                    double d7 = fallingBlockEntity.getPosYEye() - this.y;
-                    double d9 = fallingBlockEntity.getPosZ() - this.z;
+                    fallingBlockEntity.setStartPos(blockpos1);
+                    fallingBlockEntity.setPos(blockpos1.getX() + 0.5D, blockpos1.getY() + 0.5D, blockpos1.getZ() + 0.5D);
+                    double d5 = fallingBlockEntity.getX() - this.x;
+                    double d7 = fallingBlockEntity.getEyeY() - this.y;
+                    double d9 = fallingBlockEntity.getZ() - this.z;
                     float f3 = this.size * 2.0F;
-                    double d12 = MathHelper.sqrt(fallingBlockEntity.getDistanceSq(Vector3d)) / f3;
-                    double d14 = getBlockDensity(Vector3d, fallingBlockEntity);
+                    double d12 = MathHelper.sqrt(fallingBlockEntity.distanceToSqr(Vector3d)) / f3;
+                    double d14 = getSeenPercent(Vector3d, fallingBlockEntity);
                     double d11 = (1.0D - d12) * d14;
-                    fallingBlockEntity.setMotion(fallingBlockEntity.getMotion().add(d5 * d11, d7 * d11, d9 * d11));
-                    this.world.getProfiler().endSection();
+                    fallingBlockEntity.setDeltaMovement(fallingBlockEntity.getDeltaMovement().add(d5 * d11, d7 * d11, d9 * d11));
+                    this.world.getProfiler().pop();
                 }
             }
 
             for (Pair<ItemStack, BlockPos> pair : objectarraylist) {
-                Block.spawnAsEntity(this.world, pair.getSecond(), pair.getFirst());
+                Block.popResource(this.world, pair.getSecond(), pair.getFirst());
             }
         }
     }

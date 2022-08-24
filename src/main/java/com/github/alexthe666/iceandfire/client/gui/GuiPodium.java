@@ -15,16 +15,16 @@ public class GuiPodium extends ContainerScreen<ContainerPodium> {
 
     public GuiPodium(ContainerPodium container, PlayerInventory inv, ITextComponent name) {
         super(container, inv, name);
-        this.ySize = 133;
+        this.imageHeight = 133;
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack ms, int x, int y) {
-        if (container != null) {
-            String s = I18n.format("block.iceandfire.podium");
-            this.getMinecraft().fontRenderer.drawString(ms, s, this.xSize / 2 - this.getMinecraft().fontRenderer.getStringWidth(s) / 2, 6, 4210752);
+    protected void renderLabels(MatrixStack ms, int x, int y) {
+        if (menu != null) {
+            String s = I18n.get("block.iceandfire.podium");
+            this.getMinecraft().font.draw(ms, s, this.imageWidth / 2 - this.getMinecraft().font.width(s) / 2, 6, 4210752);
         }
-        this.getMinecraft().fontRenderer.drawString(ms, this.playerInventory.getDisplayName().getString(), 8, this.ySize - 96 + 2, 4210752);
+        this.getMinecraft().font.draw(ms, this.inventory.getDisplayName().getString(), 8, this.imageHeight - 96 + 2, 4210752);
     }
 
 
@@ -32,16 +32,16 @@ public class GuiPodium extends ContainerScreen<ContainerPodium> {
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.getMinecraft().getTextureManager().bindTexture(PODUIM_TEXTURE);
-        int i = (this.width - this.xSize) / 2;
-        int j = (this.height - this.ySize) / 2;
-        this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+        this.getMinecraft().getTextureManager().bind(PODUIM_TEXTURE);
+        int i = (this.width - this.imageWidth) / 2;
+        int j = (this.height - this.imageHeight) / 2;
+        this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
     }
 
 }

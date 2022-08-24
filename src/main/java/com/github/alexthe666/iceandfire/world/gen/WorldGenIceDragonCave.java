@@ -27,25 +27,25 @@ public class WorldGenIceDragonCave extends WorldGenDragonCave {
         DRAGON_CHEST = ICE_DRAGON_CHEST;
         DRAGON_MALE_CHEST = ICE_DRAGON_CHEST_MALE;
         CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.FROZEN_STONE, 3);
-        PALETTE_BLOCK1 = IafBlockRegistry.FROZEN_STONE.getDefaultState();
-        PALETTE_BLOCK2 = IafBlockRegistry.FROZEN_COBBLESTONE.getDefaultState();
-        TREASURE_PILE = IafBlockRegistry.SILVER_PILE.getDefaultState();
-        PALETTE_ORE1 = IafBlockRegistry.SAPPHIRE_ORE.getDefaultState();
-        PALETTE_ORE2 = Blocks.EMERALD_ORE.getDefaultState();
+        PALETTE_BLOCK1 = IafBlockRegistry.FROZEN_STONE.defaultBlockState();
+        PALETTE_BLOCK2 = IafBlockRegistry.FROZEN_COBBLESTONE.defaultBlockState();
+        TREASURE_PILE = IafBlockRegistry.SILVER_PILE.defaultBlockState();
+        PALETTE_ORE1 = IafBlockRegistry.SAPPHIRE_ORE.defaultBlockState();
+        PALETTE_ORE2 = Blocks.EMERALD_ORE.defaultBlockState();
         generateGemOre = IafConfig.generateSapphireOre;
     }
 
     @Override
     EntityDragonBase createDragon(ISeedReader worldIn, Random rand, BlockPos position, int dragonAge) {
-        EntityIceDragon dragon = new EntityIceDragon(IafEntityRegistry.ICE_DRAGON.get(), worldIn.getWorld());
+        EntityIceDragon dragon = new EntityIceDragon(IafEntityRegistry.ICE_DRAGON.get(), worldIn.getLevel());
         dragon.setGender(isMale);
         dragon.growDragon(dragonAge);
         dragon.setAgingDisabled(true);
         dragon.setHealth(dragon.getMaxHealth());
         dragon.setVariant(rand.nextInt(4));
-        dragon.setPositionAndRotation(position.getX() + 0.5, position.getY() + 0.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
-        dragon.setQueuedToSit(true);
-        dragon.homePos = new HomePosition(position, worldIn.getWorld());
+        dragon.absMoveTo(position.getX() + 0.5, position.getY() + 0.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
+        dragon.setInSittingPose(true);
+        dragon.homePos = new HomePosition(position, worldIn.getLevel());
         dragon.setHunger(50);
         return dragon;
     }

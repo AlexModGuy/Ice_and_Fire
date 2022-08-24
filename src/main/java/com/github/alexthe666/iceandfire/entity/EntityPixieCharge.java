@@ -26,11 +26,11 @@ import net.minecraftforge.fml.network.NetworkHooks;
 public class EntityPixieCharge extends AbstractFireballEntity {
 
     public int ticksInAir;
-    private float[] rgb;
+    private final float[] rgb;
 
     public EntityPixieCharge(EntityType<? extends AbstractFireballEntity> t, World worldIn) {
         super(t, worldIn);
-        rgb = EntityPixie.PARTICLE_RGB[rand.nextInt(EntityPixie.PARTICLE_RGB.length - 1)];
+        rgb = EntityPixie.PARTICLE_RGB[random.nextInt(EntityPixie.PARTICLE_RGB.length - 1)];
     }
 
 
@@ -42,112 +42,112 @@ public class EntityPixieCharge extends AbstractFireballEntity {
                              double posZ, double accelX, double accelY, double accelZ) {
         super(t, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
-        this.accelerationX = accelX / d0 * 0.07D;
-        this.accelerationY = accelY / d0 * 0.07D;
-        this.accelerationZ = accelZ / d0 * 0.07D;
-        rgb = EntityPixie.PARTICLE_RGB[rand.nextInt(EntityPixie.PARTICLE_RGB.length - 1)];
+        this.xPower = accelX / d0 * 0.07D;
+        this.yPower = accelY / d0 * 0.07D;
+        this.zPower = accelZ / d0 * 0.07D;
+        rgb = EntityPixie.PARTICLE_RGB[random.nextInt(EntityPixie.PARTICLE_RGB.length - 1)];
     }
 
     public EntityPixieCharge(EntityType<? extends AbstractFireballEntity> t, World worldIn, PlayerEntity shooter,
                              double accelX, double accelY, double accelZ) {
         super(t, shooter, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
-        this.accelerationX = accelX / d0 * 0.07D;
-        this.accelerationY = accelY / d0 * 0.07D;
-        this.accelerationZ = accelZ / d0 * 0.07D;
-        rgb = EntityPixie.PARTICLE_RGB[rand.nextInt(EntityPixie.PARTICLE_RGB.length - 1)];
+        this.xPower = accelX / d0 * 0.07D;
+        this.yPower = accelY / d0 * 0.07D;
+        this.zPower = accelZ / d0 * 0.07D;
+        rgb = EntityPixie.PARTICLE_RGB[random.nextInt(EntityPixie.PARTICLE_RGB.length - 1)];
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
-    protected boolean isFireballFiery() {
+    protected boolean shouldBurn() {
         return false;
     }
 
     @Override
-    public boolean canBeCollidedWith() {
+    public boolean isPickable() {
         return false;
     }
 
     @Override
     public void tick() {
-        Entity shootingEntity = this.getShooter();
-        if (this.world.isRemote) {
+        Entity shootingEntity = this.getOwner();
+        if (this.level.isClientSide) {
             for (int i = 0; i < 5; ++i) {
-                IceAndFire.PROXY.spawnParticle(EnumParticles.If_Pixie, this.getPosX() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.getPosY() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), this.getPosZ() + this.rand.nextDouble() * 0.15F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
+                IceAndFire.PROXY.spawnParticle(EnumParticles.If_Pixie, this.getX() + this.random.nextDouble() * 0.15F * (this.random.nextBoolean() ? -1 : 1), this.getY() + this.random.nextDouble() * 0.15F * (this.random.nextBoolean() ? -1 : 1), this.getZ() + this.random.nextDouble() * 0.15F * (this.random.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
             }
         }
-        this.extinguish();
-        if (this.ticksExisted > 30) {
+        this.clearFire();
+        if (this.tickCount > 30) {
             this.remove();
         }
-        if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.getPosition())) {
+        if (this.level.isClientSide || (shootingEntity == null || shootingEntity.isAlive()) && this.level.hasChunkAt(this.blockPosition())) {
             this.baseTick();
-            if (this.isFireballFiery()) {
-                this.setFire(1);
+            if (this.shouldBurn()) {
+                this.setSecondsOnFire(1);
             }
 
             ++this.ticksInAir;
-            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
+            RayTraceResult raytraceresult = ProjectileHelper.getHitResult(this, this::canHitEntity);
             if (raytraceresult.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
-                this.onImpact(raytraceresult);
+                this.onHit(raytraceresult);
             }
 
-            Vector3d vector3d = this.getMotion();
-            double d0 = this.getPosX() + vector3d.x;
-            double d1 = this.getPosY() + vector3d.y;
-            double d2 = this.getPosZ() + vector3d.z;
+            Vector3d vector3d = this.getDeltaMovement();
+            double d0 = this.getX() + vector3d.x;
+            double d1 = this.getY() + vector3d.y;
+            double d2 = this.getZ() + vector3d.z;
             ProjectileHelper.rotateTowardsMovement(this, 0.2F);
-            float f = this.getMotionFactor();
-            this.setMotion(vector3d.add(this.accelerationX, this.accelerationY, this.accelerationZ).scale(f));
+            float f = this.getInertia();
+            this.setDeltaMovement(vector3d.add(this.xPower, this.yPower, this.zPower).scale(f));
 
-            this.accelerationX *= 0.95F;
-            this.accelerationY *= 0.95F;
-            this.accelerationZ *= 0.95F;
-            this.addVelocity(this.accelerationX, this.accelerationY, this.accelerationZ);
+            this.xPower *= 0.95F;
+            this.yPower *= 0.95F;
+            this.zPower *= 0.95F;
+            this.push(this.xPower, this.yPower, this.zPower);
             ++this.ticksInAir;
 
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
-                    this.world.addParticle(ParticleTypes.BUBBLE, this.getPosX() - this.getMotion().x * 0.25D, this.getPosY() - this.getMotion().y * 0.25D, this.getPosZ() - this.getMotion().z * 0.25D, this.getMotion().x, this.getMotion().y, this.getMotion().z);
+                    this.level.addParticle(ParticleTypes.BUBBLE, this.getX() - this.getDeltaMovement().x * 0.25D, this.getY() - this.getDeltaMovement().y * 0.25D, this.getZ() - this.getDeltaMovement().z * 0.25D, this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z);
                 }
             }
-            this.setPosition(d0, d1, d2);
-            this.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
+            this.setPos(d0, d1, d2);
+            this.setPos(this.getX(), this.getY(), this.getZ());
         }
     }
 
     @Override
-    protected void onImpact(RayTraceResult movingObject) {
+    protected void onHit(RayTraceResult movingObject) {
         boolean flag = false;
-        Entity shootingEntity = this.getShooter();
-        if (!this.world.isRemote) {
-            if (movingObject.getType() == RayTraceResult.Type.ENTITY && !((EntityRayTraceResult) movingObject).getEntity().isEntityEqual(shootingEntity)) {
+        Entity shootingEntity = this.getOwner();
+        if (!this.level.isClientSide) {
+            if (movingObject.getType() == RayTraceResult.Type.ENTITY && !((EntityRayTraceResult) movingObject).getEntity().is(shootingEntity)) {
                 Entity entity = ((EntityRayTraceResult) movingObject).getEntity();
                 if (shootingEntity != null && shootingEntity.equals(entity)) {
                     flag = true;
                 } else {
                     if (entity instanceof LivingEntity) {
-                        ((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.LEVITATION, 100, 0));
-                        ((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.GLOWING, 100, 0));
-                        entity.attackEntityFrom(DamageSource.causeIndirectMagicDamage(shootingEntity, null), 5.0F);
+                        ((LivingEntity) entity).addEffect(new EffectInstance(Effects.LEVITATION, 100, 0));
+                        ((LivingEntity) entity).addEffect(new EffectInstance(Effects.GLOWING, 100, 0));
+                        entity.hurt(DamageSource.indirectMagic(shootingEntity, null), 5.0F);
                     }
-                    if (this.world.isRemote) {
+                    if (this.level.isClientSide) {
                         for (int i = 0; i < 20; ++i) {
-                            IceAndFire.PROXY.spawnParticle(EnumParticles.If_Pixie, this.getPosX() + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.getPosY() + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), this.getPosZ() + this.rand.nextDouble() * 1F * (this.rand.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
+                            IceAndFire.PROXY.spawnParticle(EnumParticles.If_Pixie, this.getX() + this.random.nextDouble() * 1F * (this.random.nextBoolean() ? -1 : 1), this.getY() + this.random.nextDouble() * 1F * (this.random.nextBoolean() ? -1 : 1), this.getZ() + this.random.nextDouble() * 1F * (this.random.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
                         }
                     }
                     if (shootingEntity == null || !(shootingEntity instanceof PlayerEntity) || !((PlayerEntity) shootingEntity).isCreative()) {
-                        if (rand.nextInt(3) == 0) {
-                            this.entityDropItem(new ItemStack(IafItemRegistry.PIXIE_DUST, 1), 0.45F);
+                        if (random.nextInt(3) == 0) {
+                            this.spawnAtLocation(new ItemStack(IafItemRegistry.PIXIE_DUST, 1), 0.45F);
                         }
                     }
                 }
-                if (!flag && this.ticksExisted > 4) {
+                if (!flag && this.tickCount > 4) {
                     this.remove();
                 }
             }

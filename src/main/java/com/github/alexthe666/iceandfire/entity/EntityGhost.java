@@ -39,14 +39,13 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-
 public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVillagerFear, IAnimalFear, IHumanoid, IBlacklistedFromStatues, IHasCustomizableAttributes {
 
-    private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityGhost.class, DataSerializers.VARINT);
-    private static final DataParameter<Boolean> CHARGING = EntityDataManager.createKey(EntityGhost.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> IS_DAYTIME_MODE = EntityDataManager.createKey(EntityGhost.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> WAS_FROM_CHEST = EntityDataManager.createKey(EntityGhost.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> DAYTIME_COUNTER = EntityDataManager.createKey(EntityGhost.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> COLOR = EntityDataManager.defineId(EntityGhost.class, DataSerializers.INT);
+    private static final DataParameter<Boolean> CHARGING = EntityDataManager.defineId(EntityGhost.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_DAYTIME_MODE = EntityDataManager.defineId(EntityGhost.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> WAS_FROM_CHEST = EntityDataManager.defineId(EntityGhost.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> DAYTIME_COUNTER = EntityDataManager.defineId(EntityGhost.class, DataSerializers.INT);
     public static Animation ANIMATION_SCARE;
     public static Animation ANIMATION_HIT;
     private int animationTick;
@@ -58,12 +57,12 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
         IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         ANIMATION_SCARE = Animation.create(30);
         ANIMATION_HIT = Animation.create(10);
-        this.moveController = new MoveHelper(this);
+        this.moveControl = new MoveHelper(this);
     }
 
 
-    protected ResourceLocation getLootTable() {
-        return this.wasFromChest() ? LootTables.EMPTY : this.getType().getLootTable();
+    protected ResourceLocation getDefaultLootTable() {
+        return this.wasFromChest() ? LootTables.EMPTY : this.getType().getDefaultLootTable();
     }
 
     @Nullable
@@ -82,68 +81,68 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-                //HEALTH
-                .createMutableAttribute(Attributes.MAX_HEALTH, IafConfig.ghostMaxHealth)
-                //FOLLOW_RANGE
-                .createMutableAttribute(Attributes.FOLLOW_RANGE, 64D)
-                //SPEED
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.15D)
-                //ATTACK
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, IafConfig.ghostAttackStrength)
-                //ARMOR
-                .createMutableAttribute(Attributes.ARMOR, 1D);
+        return MobEntity.createMobAttributes()
+            //HEALTH
+            .add(Attributes.MAX_HEALTH, IafConfig.ghostMaxHealth)
+            //FOLLOW_RANGE
+            .add(Attributes.FOLLOW_RANGE, 64D)
+            //SPEED
+            .add(Attributes.MOVEMENT_SPEED, 0.15D)
+            //ATTACK
+            .add(Attributes.ATTACK_DAMAGE, IafConfig.ghostAttackStrength)
+            //ARMOR
+            .add(Attributes.ARMOR, 1D);
     }
 
     @Override
-    public AttributeModifierMap.MutableAttribute getAttributes() {
+    public AttributeModifierMap.MutableAttribute getConfigurableAttributes() {
         return bakeAttributes();
     }
 
-    public boolean isPotionApplicable(EffectInstance potioneffectIn) {
-        return potioneffectIn.getPotion() != Effects.POISON  && potioneffectIn.getPotion() != Effects.WITHER && super.isPotionApplicable(potioneffectIn);
+    public boolean canBeAffected(EffectInstance potioneffectIn) {
+        return potioneffectIn.getEffect() != Effects.POISON && potioneffectIn.getEffect() != Effects.WITHER && super.canBeAffected(potioneffectIn);
     }
 
     public boolean isInvulnerableTo(DamageSource source) {
-        return super.isInvulnerableTo(source) || source.isFireDamage() || source == DamageSource.IN_WALL || source == DamageSource.CACTUS
-                || source == DamageSource.DROWN || source == DamageSource.FALLING_BLOCK || source == DamageSource.ANVIL || source == DamageSource.SWEET_BERRY_BUSH;
+        return super.isInvulnerableTo(source) || source.isFire() || source == DamageSource.IN_WALL || source == DamageSource.CACTUS
+            || source == DamageSource.DROWN || source == DamageSource.FALLING_BLOCK || source == DamageSource.ANVIL || source == DamageSource.SWEET_BERRY_BUSH;
     }
 
-    protected PathNavigator createNavigator(World worldIn) {
+    protected PathNavigator createNavigation(World worldIn) {
         return new GhostPathNavigator(this, worldIn);
     }
 
     public boolean isCharging() {
-        return this.dataManager.get(CHARGING);
+        return this.entityData.get(CHARGING);
     }
 
     public void setCharging(boolean moving) {
-        this.dataManager.set(CHARGING, moving);
+        this.entityData.set(CHARGING, moving);
     }
 
     public boolean isDaytimeMode() {
-        return this.dataManager.get(IS_DAYTIME_MODE);
+        return this.entityData.get(IS_DAYTIME_MODE);
     }
 
     public void setDaytimeMode(boolean moving) {
-        this.dataManager.set(IS_DAYTIME_MODE, moving);
+        this.entityData.set(IS_DAYTIME_MODE, moving);
     }
 
     public boolean wasFromChest() {
-        return this.dataManager.get(WAS_FROM_CHEST);
+        return this.entityData.get(WAS_FROM_CHEST);
     }
 
     public void setFromChest(boolean moving) {
-        this.dataManager.set(WAS_FROM_CHEST, moving);
+        this.entityData.set(WAS_FROM_CHEST, moving);
     }
 
 
-    public CreatureAttribute getCreatureAttribute() {
+    public CreatureAttribute getMobType() {
         return CreatureAttribute.UNDEAD;
     }
 
     @Override
-    public boolean canBePushed() {
+    public boolean isPushable() {
         return false;
     }
 
@@ -153,7 +152,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     @Override
-    protected void collideWithEntity(Entity entity) {
+    protected void doPush(Entity entity) {
     }
 
     protected void registerGoals() {
@@ -162,17 +161,17 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
         this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new GhostAICharge(this));
         this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F, 1.0F) {
-            public boolean shouldContinueExecuting() {
-                if (this.closestEntity != null && this.closestEntity instanceof PlayerEntity && ((PlayerEntity) this.closestEntity).isCreative()) {
+            public boolean canContinueToUse() {
+                if (this.lookAt != null && this.lookAt instanceof PlayerEntity && ((PlayerEntity) this.lookAt).isCreative()) {
                     return false;
                 }
-                return super.shouldContinueExecuting();
+                return super.canContinueToUse();
             }
         });
         this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 0.6D) {
-            public boolean shouldExecute() {
-                executionChance = 60;
-                return super.shouldExecute();
+            public boolean canUse() {
+                interval = 60;
+                return super.canUse();
             }
         });
         this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
@@ -191,71 +190,71 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
         }));
     }
 
-    public void livingTick() {
-        super.livingTick();
-        this.noClip = true;
-        if(!world.isRemote){
-            boolean day = isInDaylight() && !this.wasFromChest();
-            if(day){
-                if(!this.isDaytimeMode()){
+    public void aiStep() {
+        super.aiStep();
+        this.noPhysics = true;
+        if (!level.isClientSide) {
+            boolean day = isSunBurnTick() && !this.wasFromChest();
+            if (day) {
+                if (!this.isDaytimeMode()) {
                     this.setAnimation(ANIMATION_SCARE);
                 }
                 this.setDaytimeMode(true);
-            }else{
+            } else {
                 this.setDaytimeMode(false);
                 this.setDaytimeCounter(0);
             }
-            if(isDaytimeMode()){
-                this.setMotion(Vector3d.ZERO);
+            if (isDaytimeMode()) {
+                this.setDeltaMovement(Vector3d.ZERO);
                 this.setDaytimeCounter(this.getDaytimeCounter() + 1);
                 if(getDaytimeCounter() >= 100){
                     this.setInvisible(true);
                 }
             }else{
-                this.setInvisible(this.isPotionActive(Effects.INVISIBILITY));
+                this.setInvisible(this.hasEffect(Effects.INVISIBILITY));
                 this.setDaytimeCounter(0);
             }
-        }else{
-            if(this.getAnimation() == ANIMATION_SCARE && this.getAnimationTick() == 3 && !this.isHauntedShoppingList() && rand.nextInt(3) == 0){
-                this.playSound(IafSoundRegistry.GHOST_JUMPSCARE, this.getSoundVolume(), this.getSoundPitch());
-                if(world.isRemote){
-                    IceAndFire.PROXY.spawnParticle(EnumParticles.Ghost_Appearance, this.getPosX(), this.getPosY(), this.getPosZ(), this.getEntityId(), 0, 0);
+        } else {
+            if (this.getAnimation() == ANIMATION_SCARE && this.getAnimationTick() == 3 && !this.isHauntedShoppingList() && random.nextInt(3) == 0) {
+                this.playSound(IafSoundRegistry.GHOST_JUMPSCARE, this.getSoundVolume(), this.getVoicePitch());
+                if (level.isClientSide) {
+                    IceAndFire.PROXY.spawnParticle(EnumParticles.Ghost_Appearance, this.getX(), this.getY(), this.getZ(), this.getId(), 0, 0);
                 }
             }
         }
-        if(this.getAnimation() == ANIMATION_HIT && this.getAttackTarget() != null){
-            if(this.getDistance(this.getAttackTarget()) < 1.4D && this.getAnimationTick() >= 4 && this.getAnimationTick() < 6) {
-                this.playSound(IafSoundRegistry.GHOST_ATTACK, this.getSoundVolume(), this.getSoundPitch());
-                this.attackEntityAsMob(this.getAttackTarget());
+        if (this.getAnimation() == ANIMATION_HIT && this.getTarget() != null) {
+            if (this.distanceTo(this.getTarget()) < 1.4D && this.getAnimationTick() >= 4 && this.getAnimationTick() < 6) {
+                this.playSound(IafSoundRegistry.GHOST_ATTACK, this.getSoundVolume(), this.getVoicePitch());
+                this.doHurtTarget(this.getTarget());
             }
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
-    public boolean isAIDisabled() {
-        return this.isDaytimeMode() || super.isAIDisabled();
+    public boolean isNoAi() {
+        return this.isDaytimeMode() || super.isNoAi();
     }
 
     public boolean isSilent() {
         return this.isDaytimeMode() || super.isSilent();
     }
 
-    protected boolean isInDaylight() {
-        if (this.world.isDaytime() && !this.world.isRemote) {
+    protected boolean isSunBurnTick() {
+        if (this.level.isDay() && !this.level.isClientSide) {
             float f = this.getBrightness();
-            BlockPos blockpos = this.getRidingEntity() instanceof BoatEntity ? (new BlockPos(this.getPosX(), (double)Math.round(this.getPosY()), this.getPosZ())).up() : new BlockPos(this.getPosX(), (double)Math.round(this.getPosY() + 4), this.getPosZ());
-            return f > 0.5F && this.world.canSeeSky(blockpos);
+            BlockPos blockpos = this.getVehicle() instanceof BoatEntity ? (new BlockPos(this.getX(), (double) Math.round(this.getY()), this.getZ())).above() : new BlockPos(this.getX(), (double) Math.round(this.getY() + 4), this.getZ());
+            return f > 0.5F && this.level.canSeeSky(blockpos);
         }
 
         return false;
     }
 
-    public boolean hasNoGravity() {
+    public boolean isNoGravity() {
         return true;
     }
 
-    public ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand) {
-        ItemStack itemstack = player.getHeldItem(hand);
+    public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
         if (itemstack != null && itemstack.getItem() == IafItemRegistry.MANUSCRIPT && !this.isHauntedShoppingList()) {
             this.setColor(-1);
             this.playSound(IafSoundRegistry.BESTIARY_PAGE, 1, 1);
@@ -264,7 +263,7 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
             }
             return ActionResultType.SUCCESS;
         }
-        return super.getEntityInteractionResult(player, hand);
+        return super.mobInteract(player, hand);
     }
 
     @Override
@@ -279,10 +278,10 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
 
     @Override
     @Nullable
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setColor(this.rand.nextInt(3));
-        if (rand.nextInt(200) == 0) {
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+        spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+        this.setColor(this.random.nextInt(3));
+        if (random.nextInt(200) == 0) {
             this.setColor(-1);
         }
 
@@ -291,47 +290,47 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
 
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.getDataManager().register(COLOR, Integer.valueOf(0));
-        this.getDataManager().register(CHARGING, false);
-        this.getDataManager().register(IS_DAYTIME_MODE, false);
-        this.getDataManager().register(WAS_FROM_CHEST, false);
-        this.getDataManager().register(DAYTIME_COUNTER, Integer.valueOf(0));
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.getEntityData().define(COLOR, Integer.valueOf(0));
+        this.getEntityData().define(CHARGING, false);
+        this.getEntityData().define(IS_DAYTIME_MODE, false);
+        this.getEntityData().define(WAS_FROM_CHEST, false);
+        this.getEntityData().define(DAYTIME_COUNTER, Integer.valueOf(0));
     }
 
     public int getColor() {
-        return MathHelper.clamp(this.getDataManager().get(COLOR).intValue(), -1, 2);
+        return MathHelper.clamp(this.getEntityData().get(COLOR).intValue(), -1, 2);
     }
 
     public void setColor(int color) {
-        this.getDataManager().set(COLOR, color);
+        this.getEntityData().set(COLOR, color);
     }
 
     public int getDaytimeCounter() {
-        return this.getDataManager().get(DAYTIME_COUNTER).intValue();
+        return this.getEntityData().get(DAYTIME_COUNTER).intValue();
     }
 
     public void setDaytimeCounter(int counter) {
-        this.getDataManager().set(DAYTIME_COUNTER, counter);
+        this.getEntityData().set(DAYTIME_COUNTER, counter);
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundNBT compound) {
         this.setColor(compound.getInt("Color"));
         this.setDaytimeMode(compound.getBoolean("DaytimeMode"));
         this.setDaytimeCounter(compound.getInt("DaytimeCounter"));
         this.setFromChest(compound.getBoolean("FromChest"));
-        super.readAdditional(compound);
+        super.readAdditionalSaveData(compound);
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundNBT compound) {
         compound.putInt("Color", this.getColor());
         compound.putBoolean("DaytimeMode", this.isDaytimeMode());
         compound.putInt("DaytimeCounter", this.getDaytimeCounter());
         compound.putBoolean("FromChest", this.wasFromChest());
-        super.writeAdditional(compound);
+        super.addAdditionalSaveData(compound);
     }
 
     public boolean isHauntedShoppingList() {
@@ -378,24 +377,24 @@ public class EntityGhost extends MonsterEntity implements IAnimatedEntity, IVill
         }
 
         public void tick() {
-            if (this.action == Action.MOVE_TO) {
-                Vector3d vec3d = new Vector3d(this.getX() - ghost.getPosX(), this.getY() - ghost.getPosY(), this.getZ() - ghost.getPosZ());
+            if (this.operation == Action.MOVE_TO) {
+                Vector3d vec3d = new Vector3d(this.getWantedX() - ghost.getX(), this.getWantedY() - ghost.getY(), this.getWantedZ() - ghost.getZ());
                 double d0 = vec3d.length();
-                double edgeLength = ghost.getBoundingBox().getAverageEdgeLength();
+                double edgeLength = ghost.getBoundingBox().getSize();
                 if (d0 < edgeLength) {
-                    this.action = Action.WAIT;
-                    ghost.setMotion(ghost.getMotion().scale(0.5D));
+                    this.operation = Action.WAIT;
+                    ghost.setDeltaMovement(ghost.getDeltaMovement().scale(0.5D));
                 } else {
-                    ghost.setMotion(ghost.getMotion().add(vec3d.scale(this.speed * 0.5D * 0.05D / d0)));
-                    if (ghost.getAttackTarget() == null) {
-                        Vector3d vec3d1 = ghost.getMotion();
-                        ghost.rotationYaw = -((float) MathHelper.atan2(vec3d1.x, vec3d1.z)) * (180F / (float) Math.PI);
-                        ghost.renderYawOffset = ghost.rotationYaw;
+                    ghost.setDeltaMovement(ghost.getDeltaMovement().add(vec3d.scale(this.speedModifier * 0.5D * 0.05D / d0)));
+                    if (ghost.getTarget() == null) {
+                        Vector3d vec3d1 = ghost.getDeltaMovement();
+                        ghost.yRot = -((float) MathHelper.atan2(vec3d1.x, vec3d1.z)) * (180F / (float) Math.PI);
+                        ghost.yBodyRot = ghost.yRot;
                     } else {
-                        double d4 = ghost.getAttackTarget().getPosX() - ghost.getPosX();
-                        double d5 = ghost.getAttackTarget().getPosZ() - ghost.getPosZ();
-                        ghost.rotationYaw = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
-                        ghost.renderYawOffset = ghost.rotationYaw;
+                        double d4 = ghost.getTarget().getX() - ghost.getX();
+                        double d5 = ghost.getTarget().getZ() - ghost.getZ();
+                        ghost.yRot = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
+                        ghost.yBodyRot = ghost.yRot;
                     }
                 }
             }

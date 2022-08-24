@@ -54,11 +54,11 @@ import javax.annotation.Nullable;
 
 public class EntityHippocampus extends TameableEntity implements ISyncMount, IAnimatedEntity, IDropArmor, IHasCustomizableAttributes, ICustomMoveController {
 
-    private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(EntityHippocampus.class, DataSerializers.VARINT);
-    private static final DataParameter<Boolean> SADDLE = EntityDataManager.createKey(EntityHippocampus.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> ARMOR = EntityDataManager.createKey(EntityHippocampus.class, DataSerializers.VARINT);
-    private static final DataParameter<Boolean> CHESTED = EntityDataManager.createKey(EntityHippocampus.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Byte> CONTROL_STATE = EntityDataManager.createKey(EntityHippocampus.class, DataSerializers.BYTE);
+    private static final DataParameter<Integer> VARIANT = EntityDataManager.defineId(EntityHippocampus.class, DataSerializers.INT);
+    private static final DataParameter<Boolean> SADDLE = EntityDataManager.defineId(EntityHippocampus.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> ARMOR = EntityDataManager.defineId(EntityHippocampus.class, DataSerializers.INT);
+    private static final DataParameter<Boolean> CHESTED = EntityDataManager.defineId(EntityHippocampus.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Byte> CONTROL_STATE = EntityDataManager.defineId(EntityHippocampus.class, DataSerializers.BYTE);
     public static Animation ANIMATION_SPEAK;
     public float onLandProgress;
 
@@ -76,10 +76,10 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     public EntityHippocampus(EntityType<EntityHippocampus> t, World worldIn) {
         super(t, worldIn);
         IHasCustomizableAttributes.applyAttributesForEntity(t, this);
-        this.stepHeight = 1;
+        this.maxUpStep = 1;
         ANIMATION_SPEAK = Animation.create(15);
         this.switchNavigator(true);
-        if (worldIn.isRemote) {
+        if (worldIn.isClientSide) {
             tail_buffer = new ChainBuffer();
         }
         initHippocampusInv();
@@ -98,84 +98,84 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     @Override
-    protected int getExperiencePoints(PlayerEntity player) {
+    protected int getExperienceReward(PlayerEntity player) {
         return 2;
     }
 
     @Override
-    public float getBlockPathWeight(BlockPos pos) {
-        return this.world.getBlockState(pos.down()).getMaterial() == Material.WATER ? 10.0F : this.world.getLight(pos) - 0.5F;
+    public float getWalkTargetValue(BlockPos pos) {
+        return this.level.getBlockState(pos.below()).getMaterial() == Material.WATER ? 10.0F : this.level.getMaxLocalRawBrightness(pos) - 0.5F;
     }
 
     @Override
-    public CreatureAttribute getCreatureAttribute() {
+    public CreatureAttribute getMobType() {
         return CreatureAttribute.WATER;
     }
 
     @Override
-    public boolean isPushedByWater() {
+    public boolean isPushedByFluid() {
         return false;
     }
 
 
     private void switchNavigator(boolean onLand) {
         if (onLand) {
-            this.moveController = new MovementController(this);
-            this.navigator = new PathNavigateAmphibious(this, world);
+            this.moveControl = new MovementController(this);
+            this.navigation = new PathNavigateAmphibious(this, level);
             this.isLandNavigator = true;
         } else {
-            this.moveController = new EntityHippocampus.SwimmingMoveHelper();
-            this.navigator = new SwimmerPathNavigator(this, world);
+            this.moveControl = new EntityHippocampus.SwimmingMoveHelper();
+            this.navigation = new SwimmerPathNavigator(this, level);
             this.isLandNavigator = false;
         }
     }
 
     @Override
-    public boolean isOnSameTeam(Entity entityIn) {
-        if (this.isTamed()) {
+    public boolean isAlliedTo(Entity entityIn) {
+        if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
             if (entityIn == livingentity) {
                 return true;
             }
             if (entityIn instanceof TameableEntity) {
-                return ((TameableEntity) entityIn).isOwner(livingentity);
+                return ((TameableEntity) entityIn).isOwnedBy(livingentity);
             }
             if (livingentity != null) {
-                return livingentity.isOnSameTeam(entityIn);
+                return livingentity.isAlliedTo(entityIn);
             }
         }
 
-        return super.isOnSameTeam(entityIn);
+        return super.isAlliedTo(entityIn);
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(VARIANT, Integer.valueOf(0));
-        this.dataManager.register(ARMOR, Integer.valueOf(0));
-        this.dataManager.register(SADDLE, Boolean.valueOf(false));
-        this.dataManager.register(CHESTED, Boolean.valueOf(false));
-        this.dataManager.register(CONTROL_STATE, Byte.valueOf((byte) 0));
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(VARIANT, Integer.valueOf(0));
+        this.entityData.define(ARMOR, Integer.valueOf(0));
+        this.entityData.define(SADDLE, Boolean.valueOf(false));
+        this.entityData.define(CHESTED, Boolean.valueOf(false));
+        this.entityData.define(CONTROL_STATE, Byte.valueOf((byte) 0));
     }
 
     private void initHippocampusInv() {
         Inventory animalchest = this.hippocampusInventory;
         this.hippocampusInventory = new Inventory(18);
         if (animalchest != null) {
-            int i = Math.min(animalchest.getSizeInventory(), this.hippocampusInventory.getSizeInventory());
+            int i = Math.min(animalchest.getContainerSize(), this.hippocampusInventory.getContainerSize());
             for (int j = 0; j < i; ++j) {
-                ItemStack itemstack = animalchest.getStackInSlot(j);
+                ItemStack itemstack = animalchest.getItem(j);
                 if (!itemstack.isEmpty()) {
-                    this.hippocampusInventory.setInventorySlotContents(j, itemstack.copy());
+                    this.hippocampusInventory.setItem(j, itemstack.copy());
                 }
             }
 
-            if (world.isRemote) {
-                ItemStack saddle = animalchest.getStackInSlot(0);
-                ItemStack chest = animalchest.getStackInSlot(1);
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 0, saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty() ? 1 : 0));
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 1, chest != null && chest.getItem() == Blocks.CHEST.asItem() && !chest.isEmpty() ? 1 : 0));
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 2, getIntFromArmor(animalchest.getStackInSlot(2))));
+            if (level.isClientSide) {
+                ItemStack saddle = animalchest.getItem(0);
+                ItemStack chest = animalchest.getItem(1);
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getId(), 0, saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty() ? 1 : 0));
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getId(), 1, chest != null && chest.getItem() == Blocks.CHEST.asItem() && !chest.isEmpty() ? 1 : 0));
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getId(), 2, getIntFromArmor(animalchest.getItem(2))));
             }
         }
     }
@@ -184,7 +184,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     @Nullable
     public Entity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
-            if (passenger instanceof PlayerEntity && this.getAttackTarget() != passenger) {
+            if (passenger instanceof PlayerEntity && this.getTarget() != passenger) {
                 PlayerEntity player = (PlayerEntity) passenger;
                 return player;
             }
@@ -206,10 +206,10 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     @Override
-    public boolean replaceItemInInventory(int inventorySlot, @Nullable ItemStack itemStackIn) {
+    public boolean setSlot(int inventorySlot, @Nullable ItemStack itemStackIn) {
         int j = inventorySlot - 500 + 2;
-        if (j >= 0 && j < this.hippocampusInventory.getSizeInventory()) {
-            this.hippocampusInventory.setInventorySlotContents(j, itemStackIn);
+        if (j >= 0 && j < this.hippocampusInventory.getContainerSize()) {
+            this.hippocampusInventory.setItem(j, itemStackIn);
             return true;
         } else {
             return false;
@@ -217,13 +217,13 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     @Override
-    public void onDeath(DamageSource cause) {
-        super.onDeath(cause);
-        if (hippocampusInventory != null && !this.world.isRemote) {
-            for (int i = 0; i < hippocampusInventory.getSizeInventory(); ++i) {
-                ItemStack itemstack = hippocampusInventory.getStackInSlot(i);
+    public void die(DamageSource cause) {
+        super.die(cause);
+        if (hippocampusInventory != null && !this.level.isClientSide) {
+            for (int i = 0; i < hippocampusInventory.getContainerSize(); ++i) {
+                ItemStack itemstack = hippocampusInventory.getItem(i);
                 if (!itemstack.isEmpty()) {
-                    this.entityDropItem(itemstack, 0.0F);
+                    this.spawnAtLocation(itemstack, 0.0F);
                 }
             }
         }
@@ -231,84 +231,84 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
 
 
     private void setStateField(int i, boolean newState) {
-        byte prevState = dataManager.get(CONTROL_STATE).byteValue();
+        byte prevState = entityData.get(CONTROL_STATE).byteValue();
         if (newState) {
-            dataManager.set(CONTROL_STATE, (byte) (prevState | (1 << i)));
+            entityData.set(CONTROL_STATE, (byte) (prevState | (1 << i)));
         } else {
-            dataManager.set(CONTROL_STATE, (byte) (prevState & ~(1 << i)));
+            entityData.set(CONTROL_STATE, (byte) (prevState & ~(1 << i)));
         }
     }
 
     @Override
     public byte getControlState() {
-        return dataManager.get(CONTROL_STATE).byteValue();
+        return entityData.get(CONTROL_STATE).byteValue();
     }
 
     @Override
     public void setControlState(byte state) {
-        dataManager.set(CONTROL_STATE, state);
+        entityData.set(CONTROL_STATE, state);
     }
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-                //HEALTH
-                .createMutableAttribute(Attributes.MAX_HEALTH, 40.0D)
-                //SPEED
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3D)
-                //ATTACK
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 1.0D);
+        return MobEntity.createMobAttributes()
+            //HEALTH
+            .add(Attributes.MAX_HEALTH, 40.0D)
+            //SPEED
+            .add(Attributes.MOVEMENT_SPEED, 0.3D)
+            //ATTACK
+            .add(Attributes.ATTACK_DAMAGE, 1.0D);
     }
 
     @Override
-    public AttributeModifierMap.MutableAttribute getAttributes() {
+    public AttributeModifierMap.MutableAttribute getConfigurableAttributes() {
         return bakeAttributes();
     }
 
     @Override
-    public boolean canBeRiddenInWater(Entity rider)
-    {
+    public boolean canBeRiddenInWater(Entity rider) {
         return true;
-    }
-    @Override
-    public void updatePassenger(Entity passenger) {
-        super.updatePassenger(passenger);
-        if (this.isPassenger(passenger)) {
-            renderYawOffset = rotationYaw;
-            this.rotationYaw = passenger.rotationYaw;
-        }
-        double ymod1 = this.onLandProgress * -0.02;
-        passenger.setPosition(this.getPosX(), this.getPosY() + 0.6F + ymod1, this.getPosZ());
     }
 
     @Override
-    public void livingTick() {
-        super.livingTick();
-        if (!this.world.isRemote) {
-            if (this.rand.nextInt(900) == 0 && this.deathTime == 0) {
+    public void positionRider(Entity passenger) {
+        super.positionRider(passenger);
+        if (this.hasPassenger(passenger)) {
+            yBodyRot = yRot;
+            this.yRot = passenger.yRot;
+        }
+        double ymod1 = this.onLandProgress * -0.02;
+        passenger.setPos(this.getX(), this.getY() + 0.6F + ymod1, this.getZ());
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (!this.level.isClientSide) {
+            if (this.random.nextInt(900) == 0 && this.deathTime == 0) {
                 this.heal(1.0F);
             }
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
-        if (getControllingPassenger() != null && getControllingPassenger() instanceof LivingEntity && this.ticksExisted % 20 == 0) {
-            ((LivingEntity) getControllingPassenger()).addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 30, 0, true, false));
+        if (getControllingPassenger() != null && getControllingPassenger() instanceof LivingEntity && this.tickCount % 20 == 0) {
+            ((LivingEntity) getControllingPassenger()).addEffect(new EffectInstance(Effects.WATER_BREATHING, 30, 0, true, false));
         }
         if (!this.onGround) {
             airBorneCounter++;
         } else {
             airBorneCounter = 0;
         }
-        if (world.isRemote) {
+        if (level.isClientSide) {
             tail_buffer.calculateChainSwingBuffer(40, 10, 1F, this);
         }
         if (this.up()) {
             if (!this.isInWater() && this.airBorneCounter == 0 && this.onGround) {
-                this.jump();
+                this.jumpFromGround();
             } else if (this.isInWater()) {
-                this.setMotion(this.getMotion().add(0, 0.4D, 0));
+                this.setDeltaMovement(this.getDeltaMovement().add(0, 0.4D, 0));
             }
         }
         if (this.down()) {
-            this.setMotion(this.getMotion().add(0, -0.4D, 0));
+            this.setDeltaMovement(this.getDeltaMovement().add(0, -0.4D, 0));
         }
         if (this.isInWater() && this.isLandNavigator) {
             switchNavigator(false);
@@ -322,7 +322,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         } else if (!inWater && onLandProgress > 0.0F) {
             onLandProgress -= 1F;
         }
-        boolean sitting = isQueuedToSit();
+        boolean sitting = isOrderedToSit();
         if (sitting && sitProgress < 20.0F) {
             sitProgress += 0.5F;
         } else if (!sitting && sitProgress > 0.0F) {
@@ -330,11 +330,11 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
         }
         if (hasChestVarChanged && hippocampusInventory != null && !this.isChested()) {
             for (int i = 3; i < 18; i++) {
-                if (!hippocampusInventory.getStackInSlot(i).isEmpty()) {
-                    if (!world.isRemote) {
-                        this.entityDropItem(hippocampusInventory.getStackInSlot(i), 1);
+                if (!hippocampusInventory.getItem(i).isEmpty()) {
+                    if (!level.isClientSide) {
+                        this.spawnAtLocation(hippocampusInventory.getItem(i), 1);
                     }
-                    hippocampusInventory.removeStackFromSlot(i);
+                    hippocampusInventory.removeItemNoUpdate(i);
                 }
             }
             hasChestVarChanged = false;
@@ -342,41 +342,41 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     public boolean up() {
-        return (Byte.valueOf(dataManager.get(CONTROL_STATE).byteValue()) & 1) == 1;
+        return (Byte.valueOf(entityData.get(CONTROL_STATE).byteValue()) & 1) == 1;
     }
 
     public boolean down() {
-        return (Byte.valueOf(dataManager.get(CONTROL_STATE).byteValue()) >> 1 & 1) == 1;
+        return (Byte.valueOf(entityData.get(CONTROL_STATE).byteValue()) >> 1 & 1) == 1;
     }
 
     public boolean dismountIAF() {
-        return (Byte.valueOf(dataManager.get(CONTROL_STATE).byteValue()) >> 2 & 1) == 1;
+        return (Byte.valueOf(entityData.get(CONTROL_STATE).byteValue()) >> 2 & 1) == 1;
     }
 
 
     public boolean isBlinking() {
-        return this.ticksExisted % 50 > 43;
+        return this.tickCount % 50 > 43;
     }
 
     public boolean getCanSpawnHere() {
-        return this.getPosY() > 30 && this.getPosY() < this.world.getSeaLevel();
+        return this.getY() > 30 && this.getY() < this.level.getSeaLevel();
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         compound.putInt("Variant", this.getVariant());
         compound.putBoolean("Chested", this.isChested());
         compound.putBoolean("Saddled", this.isSaddled());
         compound.putInt("Armor", this.getArmor());
         if (hippocampusInventory != null) {
             ListNBT nbttaglist = new ListNBT();
-            for (int i = 0; i < this.hippocampusInventory.getSizeInventory(); ++i) {
-                ItemStack itemstack = this.hippocampusInventory.getStackInSlot(i);
+            for (int i = 0; i < this.hippocampusInventory.getContainerSize(); ++i) {
+                ItemStack itemstack = this.hippocampusInventory.getItem(i);
                 if (!itemstack.isEmpty()) {
                     CompoundNBT CompoundNBT = new CompoundNBT();
                     CompoundNBT.putByte("Slot", (byte) i);
-                    itemstack.write(CompoundNBT);
+                    itemstack.save(CompoundNBT);
                     nbttaglist.add(CompoundNBT);
                 }
             }
@@ -386,8 +386,8 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         this.setVariant(compound.getInt("Variant"));
         this.setChested(compound.getBoolean("Chested"));
         this.setSaddled(compound.getBoolean("Saddled"));
@@ -398,7 +398,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
             for (int i = 0; i < nbttaglist.size(); ++i) {
                 CompoundNBT CompoundNBT = nbttaglist.getCompound(i);
                 int j = CompoundNBT.getByte("Slot") & 255;
-                this.hippocampusInventory.setInventorySlotContents(j, ItemStack.read(CompoundNBT));
+                this.hippocampusInventory.setItem(j, ItemStack.of(CompoundNBT));
             }
         } else {
             ListNBT nbttaglist = compound.getList("Items", 10);
@@ -407,14 +407,14 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
                 CompoundNBT CompoundNBT = nbttaglist.getCompound(i);
                 int j = CompoundNBT.getByte("Slot") & 255;
                 this.initHippocampusInv();
-                this.hippocampusInventory.setInventorySlotContents(j, ItemStack.read(CompoundNBT));
+                this.hippocampusInventory.setItem(j, ItemStack.of(CompoundNBT));
                 //this.setArmorInSlot(j, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(CompoundNBT)));
-                ItemStack saddle = hippocampusInventory.getStackInSlot(0);
-                ItemStack chest = hippocampusInventory.getStackInSlot(1);
-                if (world.isRemote) {
-                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 0, saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty() ? 1 : 0));
-                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 1, chest != null && chest.getItem() == Blocks.CHEST.asItem() && !chest.isEmpty() ? 1 : 0));
-                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 2, getIntFromArmor(hippocampusInventory.getStackInSlot(2))));
+                ItemStack saddle = hippocampusInventory.getItem(0);
+                ItemStack chest = hippocampusInventory.getItem(1);
+                if (level.isClientSide) {
+                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getId(), 0, saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty() ? 1 : 0));
+                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getId(), 1, chest != null && chest.getItem() == Blocks.CHEST.asItem() && !chest.isEmpty() ? 1 : 0));
+                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getId(), 2, getIntFromArmor(hippocampusInventory.getItem(2))));
                 }
             }
         }
@@ -422,26 +422,26 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
 
 
     public boolean isSaddled() {
-        return this.dataManager.get(SADDLE).booleanValue();
+        return this.entityData.get(SADDLE).booleanValue();
     }
 
     public void setSaddled(boolean saddle) {
-        this.dataManager.set(SADDLE, saddle);
+        this.entityData.set(SADDLE, saddle);
     }
 
     public boolean isChested() {
-        return this.dataManager.get(CHESTED).booleanValue();
+        return this.entityData.get(CHESTED).booleanValue();
     }
 
     public void setChested(boolean chested) {
-        this.dataManager.set(CHESTED, chested);
+        this.entityData.set(CHESTED, chested);
         this.hasChestVarChanged = true;
     }
 
     @Override
-    public boolean isQueuedToSit() {
-        if (world.isRemote) {
-            boolean isSitting = (this.dataManager.get(TAMED).byteValue() & 1) != 0;
+    public boolean isOrderedToSit() {
+        if (level.isClientSide) {
+            boolean isSitting = (this.entityData.get(DATA_FLAGS_ID).byteValue() & 1) != 0;
             this.isSitting = isSitting;
             return isSitting;
         }
@@ -449,24 +449,24 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     @Override
-    public void setSitting(boolean sitting) {
-        if (!world.isRemote) {
+    public void setOrderedToSit(boolean sitting) {
+        if (!level.isClientSide) {
             this.isSitting = sitting;
         }
-        byte b0 = this.dataManager.get(TAMED).byteValue();
+        byte b0 = this.entityData.get(DATA_FLAGS_ID).byteValue();
         if (sitting) {
-            this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 | 1)));
+            this.entityData.set(DATA_FLAGS_ID, Byte.valueOf((byte) (b0 | 1)));
         } else {
-            this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 & -2)));
+            this.entityData.set(DATA_FLAGS_ID, Byte.valueOf((byte) (b0 & -2)));
         }
     }
 
     public int getArmor() {
-        return this.dataManager.get(ARMOR).intValue();
+        return this.entityData.get(ARMOR).intValue();
     }
 
     public void setArmor(int armorType) {
-        this.dataManager.set(ARMOR, armorType);
+        this.entityData.set(ARMOR, armorType);
         double armorValue = 0;
         switch (armorType) {
             case 1:
@@ -482,18 +482,18 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     public int getVariant() {
-        return this.dataManager.get(VARIANT).intValue();
+        return this.entityData.get(VARIANT).intValue();
     }
 
     public void setVariant(int variant) {
-        this.dataManager.set(VARIANT, variant);
+        this.entityData.set(VARIANT, variant);
     }
 
     @Override
     @Nullable
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        ILivingEntityData data = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setVariant(this.getRNG().nextInt(6));
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+        ILivingEntityData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+        this.setVariant(this.getRandom().nextInt(6));
         return data;
     }
 
@@ -524,10 +524,10 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
 
     @Nullable
     @Override
-    public AgeableEntity createChild(ServerWorld serverWorld, AgeableEntity ageable) {
+    public AgeableEntity getBreedOffspring(ServerWorld serverWorld, AgeableEntity ageable) {
         if (ageable instanceof EntityHippocampus) {
-            EntityHippocampus hippo = new EntityHippocampus(IafEntityRegistry.HIPPOCAMPUS.get(), this.world);
-            hippo.setVariant(this.getRNG().nextBoolean() ? this.getVariant() : ((EntityHippocampus) ageable).getVariant());
+            EntityHippocampus hippo = new EntityHippocampus(IafEntityRegistry.HIPPOCAMPUS.get(), this.level);
+            hippo.setVariant(this.getRandom().nextBoolean() ? this.getVariant() : ((EntityHippocampus) ageable).getVariant());
             return hippo;
         }
         return null;
@@ -546,16 +546,16 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     @Override
     public void travel(Vector3d vec) {
         float f4;
-        if (this.isQueuedToSit()) {
+        if (this.isOrderedToSit()) {
             super.travel(Vector3d.ZERO);
             return;
         }
-        if (this.isServerWorld()) {
+        if (this.isEffectiveAi()) {
             float f5;
             if (this.isInWater()) {
                 this.moveRelative(0.1F, vec);
                 f4 = 0.6F;
-                float d0 = EnchantmentHelper.getDepthStriderModifier(this);
+                float d0 = EnchantmentHelper.getDepthStrider(this);
                 if (d0 > 3.0F) {
                     d0 = 3.0F;
                 }
@@ -565,27 +565,27 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
                 if (d0 > 0.0F) {
                     f4 += (0.54600006F - f4) * d0 / 3.0F;
                 }
-                this.move(MoverType.SELF, this.getMotion());
-                this.setMotion(this.getMotion().mul(f4 * 0.9D, f4 * 0.9D, f4 * 0.9D));
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().multiply(f4 * 0.9D, f4 * 0.9D, f4 * 0.9D));
             } else {
                 super.travel(vec);
             }
         }
-        this.prevLimbSwingAmount = this.limbSwingAmount;
-        double deltaX = this.getPosX() - this.prevPosX;
-        double deltaZ = this.getPosZ() - this.prevPosZ;
-        double deltaY = this.getPosY() - this.prevPosY;
+        this.animationSpeedOld = this.animationSpeed;
+        double deltaX = this.getX() - this.xo;
+        double deltaZ = this.getZ() - this.zo;
+        double deltaY = this.getY() - this.yo;
         float delta = MathHelper.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) * 4.0F;
         if (delta > 1.0F) {
             delta = 1.0F;
         }
-        this.limbSwingAmount += (delta - this.limbSwingAmount) * 0.4F;
-        this.limbSwing += this.limbSwingAmount;
+        this.animationSpeed += (delta - this.animationSpeed) * 0.4F;
+        this.animationPosition += this.animationSpeed;
 
     }
 
     @Override
-    public boolean isBreedingItem(ItemStack stack) {
+    public boolean isFood(ItemStack stack) {
         return stack.getItem() == Items.PRISMARINE_CRYSTALS;
     }
 
@@ -606,65 +606,65 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     }
 
     @Override
-    public ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand) {
-        ItemStack itemstack = player.getHeldItem(hand);
-        if (itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
-            this.setSitting(false);
+    public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        if (itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getAge() == 0 && !isInLove()) {
+            this.setOrderedToSit(false);
             this.setInLove(player);
-            this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+            this.playSound(SoundEvents.GENERIC_EAT, 1, 1);
             if (!player.isCreative()) {
                 itemstack.shrink(1);
             }
             return ActionResultType.SUCCESS;
         }
         if (itemstack != null && itemstack.getItem() == Items.KELP) {
-            if (!world.isRemote) {
+            if (!level.isClientSide) {
                 this.heal(5);
-                this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+                this.playSound(SoundEvents.GENERIC_EAT, 1, 1);
                 for (int i = 0; i < 3; i++) {
-                    this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, itemstack), this.getPosX() + this.rand.nextFloat() * this.getWidth() * 2.0F - this.getWidth(), this.getPosY() + this.rand.nextFloat() * this.getHeight(), this.getPosZ() + this.rand.nextFloat() * this.getWidth() * 2.0F - this.getWidth(), 0, 0, 0);
+                    this.level.addParticle(new ItemParticleData(ParticleTypes.ITEM, itemstack), this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(), this.getY() + this.random.nextFloat() * this.getBbHeight(), this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(), 0, 0, 0);
                 }
                 if (!player.isCreative()) {
                     itemstack.shrink(1);
                 }
             }
-            if (!this.isTamed() && this.getRNG().nextInt(3) == 0) {
-                this.setTamedBy(player);
+            if (!this.isTame() && this.getRandom().nextInt(3) == 0) {
+                this.tame(player);
                 for (int i = 0; i < 6; i++) {
-                    this.world.addParticle(ParticleTypes.HEART, this.getPosX() + this.rand.nextFloat() * this.getWidth() * 2.0F - this.getWidth(), this.getPosY() + this.rand.nextFloat() * this.getHeight(), this.getPosZ() + this.rand.nextFloat() * this.getWidth() * 2.0F - this.getWidth(), 0, 0, 0);
+                    this.level.addParticle(ParticleTypes.HEART, this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(), this.getY() + this.random.nextFloat() * this.getBbHeight(), this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(), 0, 0, 0);
                 }
             }
             return ActionResultType.SUCCESS;
 
         }
-        if (isOwner(player) && itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
-            this.setSitting(false);
+        if (isOwnedBy(player) && itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getAge() == 0 && !isInLove()) {
+            this.setOrderedToSit(false);
             this.setInLove(player);
-            this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+            this.playSound(SoundEvents.GENERIC_EAT, 1, 1);
             if (!player.isCreative()) {
                 itemstack.shrink(1);
             }
             return ActionResultType.SUCCESS;
         }
-        if (isOwner(player) && itemstack != null && itemstack.getItem() == Items.STICK) {
-            this.setSitting(!this.isQueuedToSit());
+        if (isOwnedBy(player) && itemstack != null && itemstack.getItem() == Items.STICK) {
+            this.setOrderedToSit(!this.isOrderedToSit());
             return ActionResultType.SUCCESS;
         }
-        if (isOwner(player) && itemstack.isEmpty()) {
-            if (player.isSneaking()) {
+        if (isOwnedBy(player) && itemstack.isEmpty()) {
+            if (player.isShiftKeyDown()) {
                 this.openGUI(player);
                 return ActionResultType.SUCCESS;
-            } else if (this.isSaddled() && !this.isChild() && !player.isPassenger()) {
+            } else if (this.isSaddled() && !this.isBaby() && !player.isPassenger()) {
                 player.startRiding(this, true);
                 return ActionResultType.SUCCESS;
             }
         }
-        return super.getEntityInteractionResult(player, hand);
+        return super.mobInteract(player, hand);
     }
 
     public void openGUI(PlayerEntity playerEntity) {
 
-        if (!this.world.isRemote && (!this.isBeingRidden() || this.isPassenger(playerEntity))) {
+        if (!this.level.isClientSide && (!this.isVehicle() || this.hasPassenger(playerEntity))) {
             NetworkHooks.openGui((ServerPlayerEntity) playerEntity, new INamedContainerProvider() {
                 @Override
                 public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
@@ -706,12 +706,12 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
 
     public void refreshInventory() {
         //This isn't needed (anymore) since it's already being handled by minecraft
-        if (!this.world.isRemote) {
-            ItemStack saddle = this.hippocampusInventory.getStackInSlot(0);
-            ItemStack chest = this.hippocampusInventory.getStackInSlot(1);
+        if (!this.level.isClientSide) {
+            ItemStack saddle = this.hippocampusInventory.getItem(0);
+            ItemStack chest = this.hippocampusInventory.getItem(1);
             this.setSaddled(saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty());
             this.setChested(chest != null && chest.getItem() == Blocks.CHEST.asItem() && !chest.isEmpty());
-            this.setArmor(getIntFromArmor(this.hippocampusInventory.getStackInSlot(2)));
+            this.setArmor(getIntFromArmor(this.hippocampusInventory.getItem(2)));
         }
     }
 
@@ -735,38 +735,38 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
 
     @Override
     public void dropArmor() {
-        if (hippocampusInventory != null && !this.world.isRemote) {
-            for (int i = 0; i < hippocampusInventory.getSizeInventory(); ++i) {
-                ItemStack itemstack = hippocampusInventory.getStackInSlot(i);
+        if (hippocampusInventory != null && !this.level.isClientSide) {
+            for (int i = 0; i < hippocampusInventory.getContainerSize(); ++i) {
+                ItemStack itemstack = hippocampusInventory.getItem(i);
                 if (!itemstack.isEmpty()) {
-                    this.entityDropItem(itemstack, 0.0F);
+                    this.spawnAtLocation(itemstack, 0.0F);
                 }
             }
         }
     }
 
     @Override
-    public boolean isNoDespawnRequired() {
+    public boolean isPersistenceRequired() {
         return true;
     }
 
     @Override
-    public boolean canDespawn(double distanceToClosestPlayer) {
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return false;
     }
 
     @Override
-    public boolean canPassengerSteer() {
+    public boolean isControlledByLocalInstance() {
         return false;
     }
 
     @Override
-    public boolean canBeSteered() {
+    public boolean canBeControlledByRider() {
         return true;
     }
 
     public boolean isRidingPlayer(PlayerEntity player) {
-        return getRidingPlayer() != null && player != null && getRidingPlayer().getUniqueID().equals(player.getUniqueID());
+        return getRidingPlayer() != null && player != null && getRidingPlayer().getUUID().equals(player.getUUID());
     }
 
     @Nullable
@@ -790,44 +790,44 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
 
         @Override
         public void tick() {
-            if (this.hippo.isBeingRidden()) {
+            if (this.hippo.isVehicle()) {
                 double flySpeed = 0.8F * hippo.getRideSpeedModifier();
-                Vector3d dragonVec = hippo.getPositionVec();
-                Vector3d moveVec = new Vector3d(posX, posY, posZ);
+                Vector3d dragonVec = hippo.position();
+                Vector3d moveVec = new Vector3d(wantedX, wantedY, wantedZ);
                 Vector3d normalized = moveVec.subtract(dragonVec).normalize();
                 double dist = dragonVec.distanceTo(moveVec);
-                hippo.setMotion(normalized.x * flySpeed, normalized.y * flySpeed, normalized.z * flySpeed);
+                hippo.setDeltaMovement(normalized.x * flySpeed, normalized.y * flySpeed, normalized.z * flySpeed);
                 if (dist > 2.5E-7) {
                     float yaw = (float) Math.toDegrees(Math.PI * 2 - Math.atan2(normalized.x, normalized.y));
-                    hippo.rotationYaw = limitAngle(hippo.rotationYaw, yaw, 5);
-                    hippo.setAIMoveSpeed((float) (speed));
+                    hippo.yRot = rotlerp(hippo.yRot, yaw, 5);
+                    hippo.setSpeed((float) (speedModifier));
                 }
-                hippo.move(MoverType.SELF, hippo.getMotion());
-            } else if (this.action == MovementController.Action.MOVE_TO && !this.hippo.getNavigator().noPath()) {
-                double distanceX = this.posX - this.hippo.getPosX();
-                double distanceY = this.posY - this.hippo.getPosY();
-                double distanceZ = this.posZ - this.hippo.getPosZ();
+                hippo.move(MoverType.SELF, hippo.getDeltaMovement());
+            } else if (this.operation == MovementController.Action.MOVE_TO && !this.hippo.getNavigation().isDone()) {
+                double distanceX = this.wantedX - this.hippo.getX();
+                double distanceY = this.wantedY - this.hippo.getY();
+                double distanceZ = this.wantedZ - this.hippo.getZ();
                 double distance = Math.abs(distanceX * distanceX + distanceZ * distanceZ);
                 double distanceWithY = MathHelper.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
                 distanceY = distanceY / distanceWithY;
                 float angle = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
-                this.hippo.rotationYaw = this.limitAngle(this.hippo.rotationYaw, angle, 30.0F);
-                this.hippo.setAIMoveSpeed(1F);
+                this.hippo.yRot = this.rotlerp(this.hippo.yRot, angle, 30.0F);
+                this.hippo.setSpeed(1F);
                 float f1 = 0;
                 float f2 = 0;
-                if (distance < Math.max(1.0F, this.hippo.getWidth())) {
-                    float f = this.hippo.rotationYaw * 0.017453292F;
+                if (distance < Math.max(1.0F, this.hippo.getBbWidth())) {
+                    float f = this.hippo.yRot * 0.017453292F;
                     f1 -= (double) (MathHelper.sin(f) * 0.35F);
                     f2 += (double) (MathHelper.cos(f) * 0.35F);
                 }
-                this.hippo.setMotion(this.hippo.getMotion().add(f1, this.hippo.getAIMoveSpeed() * distanceY * 0.1D, f2));
-            } else if (this.action == MovementController.Action.JUMPING) {
-                this.hippo.setAIMoveSpeed((float) (this.speed * this.hippo.getAttribute(Attributes.MOVEMENT_SPEED).getValue()));
+                this.hippo.setDeltaMovement(this.hippo.getDeltaMovement().add(f1, this.hippo.getSpeed() * distanceY * 0.1D, f2));
+            } else if (this.operation == MovementController.Action.JUMPING) {
+                this.hippo.setSpeed((float) (this.speedModifier * this.hippo.getAttribute(Attributes.MOVEMENT_SPEED).getValue()));
                 if (this.hippo.onGround) {
-                    this.action = MovementController.Action.WAIT;
+                    this.operation = MovementController.Action.WAIT;
                 }
             } else {
-                this.hippo.setAIMoveSpeed(0.0F);
+                this.hippo.setSpeed(0.0F);
             }
         }
     }

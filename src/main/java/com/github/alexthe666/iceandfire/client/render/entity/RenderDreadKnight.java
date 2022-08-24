@@ -24,13 +24,13 @@ public class RenderDreadKnight extends MobRenderer<EntityDreadKnight, ModelDread
     }
 
     @Override
-    protected void preRenderCallback(EntityDreadKnight entity, MatrixStack matrixStackIn, float partialTickTime) {
+    protected void scale(EntityDreadKnight entity, MatrixStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(0.95F, 0.95F, 0.95F);
     }
 
     @Nullable
     @Override
-    public ResourceLocation getEntityTexture(EntityDreadKnight entity) {
+    public ResourceLocation getTextureLocation(EntityDreadKnight entity) {
         switch (entity.getArmorVariant()) {
             case 0:
                 return TEXTURE_0;

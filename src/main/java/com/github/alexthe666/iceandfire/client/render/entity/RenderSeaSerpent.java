@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerSeaSerpentAncient;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
@@ -28,18 +27,18 @@ public class RenderSeaSerpent extends MobRenderer<EntitySeaSerpent, SegmentedMod
 
     public RenderSeaSerpent(EntityRendererManager renderManager, SegmentedModel model) {
         super(renderManager, model, 1.6F);
-        this.layerRenderers.add(new LayerSeaSerpentAncient(this));
+        this.layers.add(new LayerSeaSerpentAncient(this));
 
     }
 
     @Override
-    protected void preRenderCallback(EntitySeaSerpent entity, MatrixStack matrixStackIn, float partialTickTime) {
-        this.shadowSize = entity.getSeaSerpentScale();
-        matrixStackIn.scale(shadowSize, shadowSize, shadowSize);
+    protected void scale(EntitySeaSerpent entity, MatrixStack matrixStackIn, float partialTickTime) {
+        this.shadowRadius = entity.getSeaSerpentScale();
+        matrixStackIn.scale(shadowRadius, shadowRadius, shadowRadius);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntitySeaSerpent serpent) {
+    public ResourceLocation getTextureLocation(EntitySeaSerpent serpent) {
         switch (serpent.getVariant()) {
             case 0:
                 if (serpent.isBlinking()) {

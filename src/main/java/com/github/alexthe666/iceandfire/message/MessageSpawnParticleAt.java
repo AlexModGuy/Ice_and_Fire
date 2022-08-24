@@ -1,15 +1,14 @@
 package com.github.alexthe666.iceandfire.message;
 
-import java.util.function.Supplier;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class MessageSpawnParticleAt {
     private double x;
@@ -49,8 +48,8 @@ public class MessageSpawnParticleAt {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() == IafItemRegistry.DRAGON_DEBUG_STICK) {
-                    player.world.addParticle(ParticleTypes.SMOKE, message.x, message.y, message.z, 0, 0, 0);
+                if (!player.getMainHandItem().isEmpty() && player.getMainHandItem().getItem() == IafItemRegistry.DRAGON_DEBUG_STICK) {
+                    player.level.addParticle(ParticleTypes.SMOKE, message.x, message.y, message.z, 0, 0, 0);
                 }
             }
         }

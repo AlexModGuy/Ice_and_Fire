@@ -2,44 +2,43 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 
 public class StymphalianBirdAIAirTarget extends Goal {
-    private EntityStymphalianBird bird;
+    private final EntityStymphalianBird bird;
 
     public StymphalianBirdAIAirTarget(EntityStymphalianBird bird) {
         this.bird = bird;
     }
 
     public static BlockPos getNearbyAirTarget(EntityStymphalianBird bird) {
-        if (bird.getAttackTarget() == null) {
+        if (bird.getTarget() == null) {
             BlockPos pos = DragonUtils.getBlockInViewStymphalian(bird);
-            if (pos != null && bird.world.getBlockState(pos).getMaterial() == Material.AIR) {
+            if (pos != null && bird.level.getBlockState(pos).getMaterial() == Material.AIR) {
                 return pos;
             }
             if (bird.flock != null && bird.flock.isLeader(bird)) {
                 bird.flock.setTarget(bird.airTarget);
             }
         } else {
-            return new BlockPos((int) bird.getAttackTarget().getPosX(), (int) bird.getAttackTarget().getPosY() + bird.getAttackTarget().getEyeHeight(), (int) bird.getAttackTarget().getPosZ());
+            return new BlockPos((int) bird.getTarget().getX(), (int) bird.getTarget().getY() + bird.getTarget().getEyeHeight(), (int) bird.getTarget().getZ());
         }
-        return bird.getPosition();
+        return bird.blockPosition();
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if (bird != null) {
             if (!bird.isFlying()) {
                 return false;
             }
-            if (bird.isChild() || bird.doesWantToLand()) {
+            if (bird.isBaby() || bird.doesWantToLand()) {
                 return false;
             }
-            if (bird.airTarget != null && (bird.isTargetBlocked(Vector3d.copyCentered(bird.airTarget)))) {
+            if (bird.airTarget != null && (bird.isTargetBlocked(Vector3d.atCenterOf(bird.airTarget)))) {
                 bird.airTarget = null;
             }
 
@@ -60,17 +59,17 @@ public class StymphalianBirdAIAirTarget extends Goal {
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         if (!bird.isFlying()) {
             return false;
         }
-        if (bird.isChild()) {
+        if (bird.isBaby()) {
             return false;
         }
         return bird.airTarget != null;
     }
 
     public Vector3d findAirTarget() {
-        return Vector3d.copyCentered(getNearbyAirTarget(bird));
+        return Vector3d.atCenterOf(getNearbyAirTarget(bird));
     }
 }

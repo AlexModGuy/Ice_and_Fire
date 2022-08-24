@@ -20,44 +20,44 @@ public class BlockFallingReturningState extends FallingBlock {
     public BlockFallingReturningState(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, BlockState revertState) {
         super(
             AbstractBlock.Properties
-                .create(materialIn)
+                .of(materialIn)
                 .sound(sound)
-                .hardnessAndResistance(hardness, resistance)
+                .strength(hardness, resistance)
                 .harvestTool(ToolType.get(toolUsed))
                 .harvestLevel(toolStrength)
-                .tickRandomly()
+                .randomTicks()
         );
 
         setRegistryName(IceAndFire.MODID, name);
         this.returnState = revertState;
-        this.setDefaultState(this.stateContainer.getBaseState().with(REVERTS, Boolean.valueOf(false)));
+        this.registerDefaultState(this.stateDefinition.any().setValue(REVERTS, Boolean.valueOf(false)));
     }
 
     @SuppressWarnings("deprecation")
     public BlockFallingReturningState(Material materialIn, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery, BlockState revertState) {
         super(
             AbstractBlock.Properties
-                .create(materialIn)
+                .of(materialIn)
                 .sound(sound)
-                .hardnessAndResistance(hardness, resistance)
+                .strength(hardness, resistance)
                 .harvestTool(ToolType.get(toolUsed))
                 .harvestLevel(toolStrength)
-                .tickRandomly()
+                .randomTicks()
         );
 
         setRegistryName(IceAndFire.MODID, name);
         this.returnState = revertState;
-        this.setDefaultState(this.stateContainer.getBaseState().with(REVERTS, Boolean.valueOf(false)));
+        this.registerDefaultState(this.stateDefinition.any().setValue(REVERTS, Boolean.valueOf(false)));
     }
 
     @Override
     public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
         super.tick(state, worldIn, pos, rand);
-        if (!worldIn.isRemote) {
+        if (!worldIn.isClientSide) {
             if (!worldIn.isAreaLoaded(pos, 3))
                 return;
-            if (state.get(REVERTS) && rand.nextInt(3) == 0) {
-                worldIn.setBlockState(pos, returnState);
+            if (state.getValue(REVERTS) && rand.nextInt(3) == 0) {
+                worldIn.setBlockAndUpdate(pos, returnState);
             }
         }
     }
@@ -68,7 +68,7 @@ public class BlockFallingReturningState extends FallingBlock {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(REVERTS);
     }
 }

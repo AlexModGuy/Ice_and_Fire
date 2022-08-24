@@ -22,12 +22,12 @@ public class BlockSeaSerpentScales extends Block {
     public BlockSeaSerpentScales(String name, TextFormatting color) {
         super(
             Properties
-                .create(Material.ROCK)
-                .hardnessAndResistance(30F, 500F)
+                .of(Material.STONE)
+                .strength(30F, 500F)
                 .sound(SoundType.STONE)
                 .harvestTool(ToolType.PICKAXE)
                 .harvestLevel(2)
-                .setRequiresTool()
+                .requiresCorrectToolForDrops()
         );
 
         this.color = color;
@@ -36,7 +36,7 @@ public class BlockSeaSerpentScales extends Block {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("sea_serpent." + name).mergeStyle(color));
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("sea_serpent." + name).withStyle(color));
     }
 }

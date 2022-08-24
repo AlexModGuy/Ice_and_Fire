@@ -32,57 +32,57 @@ public abstract class EntityDragonCharge extends AbstractFireballEntity implemen
                               double posY, double posZ, double accelX, double accelY, double accelZ) {
         super(type, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
-        this.accelerationX = accelX / d0 * 0.07D;
-        this.accelerationY = accelY / d0 * 0.07D;
-        this.accelerationZ = accelZ / d0 * 0.07D;
+        this.xPower = accelX / d0 * 0.07D;
+        this.yPower = accelY / d0 * 0.07D;
+        this.zPower = accelZ / d0 * 0.07D;
     }
 
     public EntityDragonCharge(EntityType<? extends AbstractFireballEntity> type, World worldIn,
                               EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
         super(type, shooter, accelX, accelY, accelZ, worldIn);
         double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
-        this.accelerationX = accelX / d0 * 0.07D;
-        this.accelerationY = accelY / d0 * 0.07D;
-        this.accelerationZ = accelZ / d0 * 0.07D;
+        this.xPower = accelX / d0 * 0.07D;
+        this.yPower = accelY / d0 * 0.07D;
+        this.zPower = accelZ / d0 * 0.07D;
     }
 
     @Override
     public void tick() {
-        Entity shootingEntity = this.getShooter();
-        if (this.world.isRemote || (shootingEntity == null || shootingEntity.isAlive()) && this.world.isBlockLoaded(this.getPosition())) {
+        Entity shootingEntity = this.getOwner();
+        if (this.level.isClientSide || (shootingEntity == null || shootingEntity.isAlive()) && this.level.hasChunkAt(this.blockPosition())) {
             super.baseTick();
 
-            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::canHitMob);
+            RayTraceResult raytraceresult = ProjectileHelper.getHitResult(this, this::canHitMob);
 
             if (raytraceresult.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
-                this.onImpact(raytraceresult);
+                this.onHit(raytraceresult);
             }
 
-            this.doBlockCollisions();
-            Vector3d vector3d = this.getMotion();
-            double d0 = this.getPosX() + vector3d.x;
-            double d1 = this.getPosY() + vector3d.y;
-            double d2 = this.getPosZ() + vector3d.z;
+            this.checkInsideBlocks();
+            Vector3d vector3d = this.getDeltaMovement();
+            double d0 = this.getX() + vector3d.x;
+            double d1 = this.getY() + vector3d.y;
+            double d2 = this.getZ() + vector3d.z;
             ProjectileHelper.rotateTowardsMovement(this, 0.2F);
-            float f = this.getMotionFactor();
+            float f = this.getInertia();
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
-                    this.world.addParticle(ParticleTypes.BUBBLE, this.getPosX() - this.getMotion().x * 0.25D, this.getPosY() - this.getMotion().y * 0.25D, this.getPosZ() - this.getMotion().z * 0.25D, this.getMotion().x, this.getMotion().y, this.getMotion().z);
+                    this.level.addParticle(ParticleTypes.BUBBLE, this.getX() - this.getDeltaMovement().x * 0.25D, this.getY() - this.getDeltaMovement().y * 0.25D, this.getZ() - this.getDeltaMovement().z * 0.25D, this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z);
                 }
                 f = 0.8F;
             }
-            this.setMotion(vector3d.add(this.accelerationX, this.accelerationY, this.accelerationZ).scale(f));
-            this.world.addParticle(this.getParticle(), this.getPosX(), this.getPosY() + 0.5D, this.getPosZ(), 0.0D, 0.0D, 0.0D);
-            this.setPosition(d0, d1, d2);
+            this.setDeltaMovement(vector3d.add(this.xPower, this.yPower, this.zPower).scale(f));
+            this.level.addParticle(this.getTrailParticle(), this.getX(), this.getY() + 0.5D, this.getZ(), 0.0D, 0.0D, 0.0D);
+            this.setPos(d0, d1, d2);
         } else {
             this.remove();
         }
     }
 
     @Override
-    protected void onImpact(RayTraceResult movingObject) {
-        Entity shootingEntity = this.getShooter();
-        if (!this.world.isRemote) {
+    protected void onHit(RayTraceResult movingObject) {
+        Entity shootingEntity = this.getOwner();
+        if (!this.level.isClientSide) {
             if (movingObject.getType() == RayTraceResult.Type.ENTITY) {
                 Entity entity = ((EntityRayTraceResult) movingObject).getEntity();
 
@@ -91,13 +91,13 @@ public abstract class EntityDragonCharge extends AbstractFireballEntity implemen
                 }
                 if (shootingEntity != null && shootingEntity instanceof EntityDragonBase) {
                     EntityDragonBase dragon = (EntityDragonBase) shootingEntity;
-                    if (dragon.isOnSameTeam(entity) || dragon.isEntityEqual(entity) || dragon.isPart(entity)) {
+                    if (dragon.isAlliedTo(entity) || dragon.is(entity) || dragon.isPart(entity)) {
                         return;
                     }
                 }
                 if (entity == null || !(entity instanceof IDragonProjectile) && entity != shootingEntity && shootingEntity instanceof EntityDragonBase) {
                     EntityDragonBase dragon = (EntityDragonBase) shootingEntity;
-                    if (shootingEntity != null && (entity == shootingEntity || (entity instanceof TameableEntity && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
+                    if (shootingEntity != null && (entity == shootingEntity || (entity instanceof TameableEntity && ((EntityDragonBase) shootingEntity).isOwnedBy(((EntityDragonBase) shootingEntity).getOwner())))) {
                         return;
                     }
                     if (dragon != null) {
@@ -105,8 +105,8 @@ public abstract class EntityDragonCharge extends AbstractFireballEntity implemen
                     }
                     this.remove();
                 }
-                if (entity != null && !(entity instanceof IDragonProjectile) && !entity.isEntityEqual(shootingEntity)) {
-                    if (shootingEntity != null && (entity.isEntityEqual(shootingEntity) || (shootingEntity instanceof EntityDragonBase & entity instanceof TameableEntity && ((EntityDragonBase) shootingEntity).getOwner() == ((TameableEntity) entity).getOwner()))) {
+                if (entity != null && !(entity instanceof IDragonProjectile) && !entity.is(shootingEntity)) {
+                    if (shootingEntity != null && (entity.is(shootingEntity) || (shootingEntity instanceof EntityDragonBase & entity instanceof TameableEntity && ((EntityDragonBase) shootingEntity).getOwner() == ((TameableEntity) entity).getOwner()))) {
                         return;
                     }
                     if (shootingEntity instanceof EntityDragonBase) {
@@ -116,20 +116,20 @@ public abstract class EntityDragonCharge extends AbstractFireballEntity implemen
                         Entity cause = shootingDragon.getRidingPlayer() != null ? shootingDragon.getRidingPlayer() : shootingDragon;
                         DamageSource source = causeDamage(cause);
 
-                        entity.attackEntityFrom(source, damageAmount);
+                        entity.hurt(source, damageAmount);
                         if (entity instanceof LivingEntity && ((LivingEntity) entity).getHealth() == 0) {
                             ((EntityDragonBase) shootingEntity).randomizeAttacks();
                         }
                     }
                     if (shootingEntity instanceof LivingEntity) {
-                        this.applyEnchantments((LivingEntity) shootingEntity, entity);
+                        this.doEnchantDamageEffects((LivingEntity) shootingEntity, entity);
                     }
                     this.remove();
                 }
             }
             if (movingObject.getType() != RayTraceResult.Type.MISS) {
                 if (shootingEntity instanceof EntityDragonBase && IafConfig.dragonGriefing != 2) {
-                    destroyArea(world, new BlockPos(this.getPosX(), this.getPosY(), this.getPosZ()), ((EntityDragonBase) shootingEntity));
+                    destroyArea(level, new BlockPos(this.getX(), this.getY(), this.getZ()), ((EntityDragonBase) shootingEntity));
                 }
                 this.remove();
             }
@@ -144,27 +144,27 @@ public abstract class EntityDragonCharge extends AbstractFireballEntity implemen
     public abstract float getDamage();
 
     @Override
-    public boolean canBeCollidedWith() {
+    public boolean isPickable() {
         return false;
     }
 
     protected boolean canHitMob(Entity hitMob) {
-        Entity shooter = getShooter();
-        return hitMob != this && super.func_230298_a_(hitMob) && !(shooter == null || hitMob.isOnSameTeam(shooter)) && !(hitMob instanceof EntityDragonPart);
+        Entity shooter = getOwner();
+        return hitMob != this && super.canHitEntity(hitMob) && !(shooter == null || hitMob.isAlliedTo(shooter)) && !(hitMob instanceof EntityDragonPart);
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
+    public boolean hurt(DamageSource source, float amount) {
         return false;
     }
 
     @Override
-    public float getCollisionBorderSize() {
+    public float getPickRadius() {
         return 0F;
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

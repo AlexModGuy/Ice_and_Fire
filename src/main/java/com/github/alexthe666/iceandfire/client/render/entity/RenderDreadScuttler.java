@@ -4,7 +4,6 @@ import com.github.alexthe666.iceandfire.client.model.ModelDreadScuttler;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
 import com.github.alexthe666.iceandfire.entity.EntityDreadScuttler;
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
@@ -20,12 +19,12 @@ public class RenderDreadScuttler extends MobRenderer<EntityDreadScuttler, ModelD
     }
 
     @Override
-    public void preRenderCallback(EntityDreadScuttler LivingEntityIn, MatrixStack stack, float partialTickTime) {
-        stack.scale(LivingEntityIn.getScale(), LivingEntityIn.getScale(), LivingEntityIn.getScale());
+    public void scale(EntityDreadScuttler LivingEntityIn, MatrixStack stack, float partialTickTime) {
+        stack.scale(LivingEntityIn.getSize(), LivingEntityIn.getSize(), LivingEntityIn.getSize());
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityDreadScuttler beast) {
+    public ResourceLocation getTextureLocation(EntityDreadScuttler beast) {
         return TEXTURE;
 
     }

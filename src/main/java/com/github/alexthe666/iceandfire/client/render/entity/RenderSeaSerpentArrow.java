@@ -13,7 +13,7 @@ public class RenderSeaSerpentArrow extends ArrowRenderer {
     }
 
     @Override
-    public ResourceLocation getEntityTexture(Entity entity) {
+    public ResourceLocation getTextureLocation(Entity entity) {
         return TEXTURE;
     }
 

@@ -1,14 +1,11 @@
 package com.github.alexthe666.iceandfire.loot;
 
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentScales;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootFunction;
@@ -16,17 +13,19 @@ import net.minecraft.loot.LootFunctionType;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.conditions.ILootCondition;
 
+import java.util.Random;
+
 public class CustomizeToSeaSerpent extends LootFunction {
 
     public CustomizeToSeaSerpent(ILootCondition[] conditionsIn) {
         super(conditionsIn);
     }
 
-    public ItemStack doApply(ItemStack stack, LootContext context) {
-        if (!stack.isEmpty() && context.get(LootParameters.THIS_ENTITY) instanceof EntitySeaSerpent) {
+    public ItemStack run(ItemStack stack, LootContext context) {
+        if (!stack.isEmpty() && context.getParamOrNull(LootParameters.THIS_ENTITY) instanceof EntitySeaSerpent) {
             Random random = new Random();
-            EntitySeaSerpent seaSerpent = (EntitySeaSerpent) context.get(LootParameters.THIS_ENTITY);
-            if (seaSerpent == null){
+            EntitySeaSerpent seaSerpent = (EntitySeaSerpent) context.getParamOrNull(LootParameters.THIS_ENTITY);
+            if (seaSerpent == null) {
                 return stack;
             }
             final int ancientModifier = seaSerpent.isAncient() ? 2 : 1;
@@ -43,7 +42,7 @@ public class CustomizeToSeaSerpent extends LootFunction {
     }
 
     @Override
-    public LootFunctionType getFunctionType() {
+    public LootFunctionType getType() {
         return IafLootRegistry.CUSTOMIZE_TO_SERPENT;
     }
 

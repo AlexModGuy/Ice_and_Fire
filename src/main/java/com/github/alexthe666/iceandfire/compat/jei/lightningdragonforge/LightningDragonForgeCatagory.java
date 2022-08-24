@@ -1,11 +1,7 @@
 package com.github.alexthe666.iceandfire.compat.jei.lightningdragonforge;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.alexthe666.iceandfire.compat.jei.IceAndFireJEIPlugin;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
-
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -13,9 +9,11 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LightningDragonForgeCatagory implements IRecipeCategory<DragonForgeRecipe> {
 
@@ -39,7 +37,7 @@ public class LightningDragonForgeCatagory implements IRecipeCategory<DragonForge
     @SuppressWarnings("deprecation")
     @Override
     public String getTitle() {
-        return I18n.format("iceandfire.lightning_dragon_forge");
+        return I18n.get("iceandfire.lightning_dragon_forge");
     }
 
     @Override

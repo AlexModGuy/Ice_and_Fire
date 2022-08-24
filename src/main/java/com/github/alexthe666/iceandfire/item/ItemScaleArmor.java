@@ -27,13 +27,13 @@ public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonIt
     public EnumDragonEgg eggType;
 
     public ItemScaleArmor(EnumDragonEgg eggType, EnumDragonArmor armorType, CustomArmorMaterial material, EquipmentSlotType slot) {
-        super(material, slot, new Item.Properties().group(IceAndFire.TAB_ITEMS));
+        super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.armor_type = armorType;
         this.eggType = eggType;
     }
 
-    public String getTranslationKey() {
-        switch (this.slot){
+    public String getDescriptionId() {
+        switch (this.slot) {
             case HEAD:
                 return "item.iceandfire.dragon_helmet";
             case CHEST:
@@ -68,8 +68,8 @@ public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonIt
 
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("dragon." + eggType.toString().toLowerCase()).mergeStyle(eggType.color));
-        tooltip.add(new TranslationTextComponent("item.dragonscales_armor.desc").mergeStyle(TextFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("dragon." + eggType.toString().toLowerCase()).withStyle(eggType.color));
+        tooltip.add(new TranslationTextComponent("item.dragonscales_armor.desc").withStyle(TextFormatting.GRAY));
     }
 }

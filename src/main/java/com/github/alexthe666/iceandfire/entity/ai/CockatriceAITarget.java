@@ -1,34 +1,33 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.EnumSet;
-import java.util.function.Predicate;
-
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.Difficulty;
 
+import java.util.EnumSet;
+import java.util.function.Predicate;
+
 public class CockatriceAITarget<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
-    private EntityCockatrice cockatrice;
+    private final EntityCockatrice cockatrice;
 
     public CockatriceAITarget(EntityCockatrice entityIn, Class<T> classTarget, boolean checkSight, Predicate<LivingEntity> targetSelector) {
         super(entityIn, classTarget, 0, checkSight, false, targetSelector);
         this.cockatrice = entityIn;
-        this.setMutexFlags(EnumSet.of(Flag.TARGET));
+        this.setFlags(EnumSet.of(Flag.TARGET));
     }
 
     @Override
-    public boolean shouldExecute() {
-        if (this.goalOwner.getRNG().nextInt(20) != 0 || this.cockatrice.world.getDifficulty() == Difficulty.PEACEFUL) {
+    public boolean canUse() {
+        if (this.mob.getRandom().nextInt(20) != 0 || this.cockatrice.level.getDifficulty() == Difficulty.PEACEFUL) {
             return false;
         }
-        if (super.shouldExecute() && nearestTarget != null && !nearestTarget.getClass().equals(this.cockatrice.getClass())) {
-            if (nearestTarget instanceof PlayerEntity && !cockatrice.isOwner(nearestTarget)) {
-                return !cockatrice.isTamed();
+        if (super.canUse() && target != null && !target.getClass().equals(this.cockatrice.getClass())) {
+            if (target instanceof PlayerEntity && !cockatrice.isOwnedBy(target)) {
+                return !cockatrice.isTame();
             } else {
-                return !cockatrice.isOwner(nearestTarget) && cockatrice.canMove();
+                return !cockatrice.isOwnedBy(target) && cockatrice.canMove();
             }
         }
         return false;

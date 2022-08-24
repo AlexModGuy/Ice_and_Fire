@@ -1,7 +1,5 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeBricks;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeCore;
@@ -11,7 +9,6 @@ import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
 import com.github.alexthe666.iceandfire.message.MessageUpdateDragonforge;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -38,12 +35,14 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
+import javax.annotation.Nullable;
+
 public class TileEntityDragonforge extends LockableTileEntity implements ITickableTileEntity, ISidedInventory {
 
     private static final int[] SLOTS_TOP = new int[]{0, 1};
     private static final int[] SLOTS_BOTTOM = new int[]{2};
-    private static final int[] SLOTS_SIDES = new int[]{0,1};
-    private static final Direction[] HORIZONTALS = new Direction[] {
+    private static final int[] SLOTS_SIDES = new int[]{0, 1};
+    private static final Direction[] HORIZONTALS = new Direction[]{
         Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST
     };
     public int isFire;
@@ -68,7 +67,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return this.forgeItemStacks.size();
     }
 
@@ -84,11 +83,11 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
 
     private void updateGrills(boolean grill) {
         for (Direction facing : HORIZONTALS) {
-            BlockPos grillPos = this.getPos().offset(facing);
-            if (grillMatches(world.getBlockState(grillPos).getBlock())) {
-                BlockState grillState = getGrillBlock().getDefaultState().with(BlockDragonforgeBricks.GRILL, grill);
-                if (world.getBlockState(grillPos) != grillState) {
-                    world.setBlockState(grillPos, grillState);
+            BlockPos grillPos = this.getBlockPos().relative(facing);
+            if (grillMatches(level.getBlockState(grillPos).getBlock())) {
+                BlockState grillState = getGrillBlock().defaultBlockState().setValue(BlockDragonforgeBricks.GRILL, grill);
+                if (level.getBlockState(grillPos) != grillState) {
+                    level.setBlockAndUpdate(grillPos, grillState);
                 }
             }
         }
@@ -112,56 +111,56 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
         return this.forgeItemStacks.get(index);
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count) {
-        return ItemStackHelper.getAndSplit(this.forgeItemStacks, index, count);
+    public ItemStack removeItem(int index, int count) {
+        return ItemStackHelper.removeItem(this.forgeItemStacks, index, count);
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
-        return ItemStackHelper.getAndRemove(this.forgeItemStacks, index);
+    public ItemStack removeItemNoUpdate(int index) {
+        return ItemStackHelper.takeItem(this.forgeItemStacks, index);
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
         ItemStack itemstack = this.forgeItemStacks.get(index);
-        boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack)
-            && ItemStack.areItemStackTagsEqual(stack, itemstack);
+        boolean flag = !stack.isEmpty() && stack.sameItem(itemstack)
+            && ItemStack.tagMatches(stack, itemstack);
         this.forgeItemStacks.set(index, stack);
 
-        if (stack.getCount() > this.getInventoryStackLimit()) {
-            stack.setCount(this.getInventoryStackLimit());
+        if (stack.getCount() > this.getMaxStackSize()) {
+            stack.setCount(this.getMaxStackSize());
         }
 
         if (index == 0 && !flag
             || this.cookTime > this.getMaxCookTime(forgeItemStacks.get(0), forgeItemStacks.get(1))) {
             this.cookTime = 0;
-            this.markDirty();
+            this.setChanged();
         }
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound) {
-        super.read(state, compound);
-        this.forgeItemStacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
+    public void load(BlockState state, CompoundNBT compound) {
+        super.load(state, compound);
+        this.forgeItemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, this.forgeItemStacks);
         this.cookTime = compound.getInt("CookTime");
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         compound.putInt("CookTime", (short) this.cookTime);
         ItemStackHelper.saveAllItems(compound, this.forgeItemStacks);
         return compound;
     }
 
     @Override
-    public int getInventoryStackLimit() {
+    public int getMaxStackSize() {
         return 64;
     }
 
@@ -202,9 +201,9 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
             lastDragonFlameTimer--;
         }
         updateGrills(assembled());
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
             if (prevAssembled != assembled()) {
-                BlockDragonforgeCore.setState(isFire, prevAssembled, world, pos);
+                BlockDragonforgeCore.setState(isFire, prevAssembled, level, worldPosition);
             }
             prevAssembled = this.assembled();
             if (!assembled())
@@ -213,10 +212,10 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         if (cookTime > 0 && this.canSmelt() && lastDragonFlameTimer == 0) {
             this.cookTime--;
         }
-        if (this.getStackInSlot(0).isEmpty() && !world.isRemote) {
+        if (this.getItem(0).isEmpty() && !level.isClientSide) {
             this.cookTime = 0;
         }
-        if (!this.world.isRemote) {
+        if (!this.level.isClientSide) {
             if (this.isBurning()) {
                 if (this.canSmelt()) {
                     ++this.cookTime;
@@ -227,7 +226,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
                     }
                 } else {
                     if (cookTime > 0) {
-                        IceAndFire.sendMSGToAll(new MessageUpdateDragonforge(pos.toLong(), cookTime));
+                        IceAndFire.sendMSGToAll(new MessageUpdateDragonforge(worldPosition.asLong(), cookTime));
                         this.cookTime = 0;
                     }
                 }
@@ -242,7 +241,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         }
 
         if (flag1) {
-            this.markDirty();
+            this.setChanged();
         }
         if (!canAddFlameAgain) {
             canAddFlameAgain = true;
@@ -291,10 +290,10 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
         }
 
         return new DragonForgeRecipe(
-                Ingredient.fromStacks(cookStack),
-                Ingredient.fromStacks(bloodStack),
-                new ItemStack(getDefaultOutput()),
-                getTypeID()
+            Ingredient.of(cookStack),
+            Ingredient.of(bloodStack),
+            new ItemStack(getDefaultOutput()),
+            getTypeID()
         );
     }
 
@@ -315,21 +314,21 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
             return false;
 
         ItemStack outputStack = this.forgeItemStacks.get(2);
-        if (!outputStack.isEmpty() && !outputStack.isItemEqual(forgeRecipeOutput))
+        if (!outputStack.isEmpty() && !outputStack.sameItem(forgeRecipeOutput))
             return false;
 
         int calculatedOutputCount = outputStack.getCount() + forgeRecipeOutput.getCount();
-        return (calculatedOutputCount <= this.getInventoryStackLimit()
+        return (calculatedOutputCount <= this.getMaxStackSize()
             && calculatedOutputCount <= outputStack.getMaxStackSize());
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
-        if (this.world.getTileEntity(this.pos) != this) {
+    public boolean stillValid(PlayerEntity player) {
+        if (this.level.getBlockEntity(this.worldPosition) != this) {
             return false;
         } else {
-            return player.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D,
-                this.pos.getZ() + 0.5D) <= 64.0D;
+            return player.distanceToSqr(this.worldPosition.getX() + 0.5D, this.worldPosition.getY() + 0.5D,
+                this.worldPosition.getZ() + 0.5D) <= 64.0D;
         }
     }
 
@@ -354,19 +353,22 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     @Override
-    public void openInventory(PlayerEntity player) {
+    public void startOpen(PlayerEntity player) {
     }
 
     @Override
-    public void closeInventory(PlayerEntity player) {
+    public void stopOpen(PlayerEntity player) {
     }
 
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
+    public boolean canPlaceItem(int index, ItemStack stack) {
         switch (index) {
-            case 1: return getRecipeForBlood(stack) != null;
-            case 0: return true;
-            default: return false;
+            case 1:
+                return getRecipeForBlood(stack) != null;
+            case 0:
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -380,12 +382,12 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
-        return this.isItemValidForSlot(index, itemStackIn);
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
+        return this.canPlaceItem(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
         if (direction == Direction.DOWN && index == 1) {
             Item item = stack.getItem();
 
@@ -408,14 +410,14 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         this.forgeItemStacks.clear();
     }
 
     @Override
     public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(
         net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-        if (!this.removed && facing != null
+        if (!this.remove && facing != null
             && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (facing == Direction.UP)
                 return handlers[0].cast();
@@ -433,7 +435,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     public void transferPower(int i) {
-        if (!world.isRemote) {
+        if (!level.isClientSide) {
             if (this.canSmelt()) {
                 if (canAddFlameAgain) {
                     cookTime = Math.min(this.getMaxCookTime(forgeItemStacks.get(0), forgeItemStacks.get(1)) + 1,
@@ -443,7 +445,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
             } else {
                 cookTime = 0;
             }
-            IceAndFire.sendMSGToAll(new MessageUpdateDragonforge(pos.toLong(), cookTime));
+            IceAndFire.sendMSGToAll(new MessageUpdateDragonforge(worldPosition.asLong(), cookTime));
         }
         lastDragonFlameTimer = 40;
     }
@@ -466,27 +468,27 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     private boolean checkY(BlockPos pos) {
-        return doesBlockEqual(pos.up(), getBrick()) && doesBlockEqual(pos.down(), getBrick());
+        return doesBlockEqual(pos.above(), getBrick()) && doesBlockEqual(pos.below(), getBrick());
     }
 
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+        return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        read(this.getBlockState(), packet.getNbtCompound());
+        load(this.getBlockState(), packet.getTag());
     }
 
     @Override
     public CompoundNBT getUpdateTag() {
-        return this.write(new CompoundNBT());
+        return this.save(new CompoundNBT());
     }
 
     public boolean assembled() {
-        return checkBoneCorners(pos.down()) && checkBrickSlots(pos.down()) && checkBrickCorners(pos)
-            && atleastThreeAreBricks(pos) && checkY(pos) && checkBoneCorners(pos.up()) && checkBrickSlots(pos.up());
+        return checkBoneCorners(worldPosition.below()) && checkBrickSlots(worldPosition.below()) && checkBrickCorners(worldPosition)
+            && atleastThreeAreBricks(worldPosition) && checkY(worldPosition) && checkBoneCorners(worldPosition.above()) && checkBrickSlots(worldPosition.above());
     }
 
     private Block getBrick() {
@@ -498,13 +500,13 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     private boolean doesBlockEqual(BlockPos pos, Block block) {
-        return world.getBlockState(pos).getBlock() == block;
+        return level.getBlockState(pos).getBlock() == block;
     }
 
     private boolean atleastThreeAreBricks(BlockPos pos) {
         int count = 0;
         for (Direction facing : HORIZONTALS) {
-            if (world.getBlockState(pos.offset(facing)).getBlock() == getBrick()) {
+            if (level.getBlockState(pos.relative(facing)).getBlock() == getBrick()) {
                 count++;
             }
         }

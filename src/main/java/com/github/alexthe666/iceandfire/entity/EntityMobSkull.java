@@ -1,11 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.entity.util.IDeadMob;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
-
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -26,22 +23,24 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+import javax.annotation.Nullable;
+
 public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStatues, IDeadMob {
 
-    private static final DataParameter<Float> SKULL_DIRECTION = EntityDataManager.createKey(EntityMobSkull.class, DataSerializers.FLOAT);
-    private static final DataParameter<Integer> SKULL_ENUM = EntityDataManager.createKey(EntityMobSkull.class, DataSerializers.VARINT);
+    private static final DataParameter<Float> SKULL_DIRECTION = EntityDataManager.defineId(EntityMobSkull.class, DataSerializers.FLOAT);
+    private static final DataParameter<Integer> SKULL_ENUM = EntityDataManager.defineId(EntityMobSkull.class, DataSerializers.INT);
 
     public EntityMobSkull(EntityType t, World worldIn) {
         super(t, worldIn);
-        this.ignoreFrustumCheck = true;
+        this.noCulling = true;
     }
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-                //HEALTH
-                .createMutableAttribute(Attributes.MAX_HEALTH, 10.0D)
-                //SPEED
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.0D);
+        return MobEntity.createMobAttributes()
+            //HEALTH
+            .add(Attributes.MAX_HEALTH, 10.0D)
+            //SPEED
+            .add(Attributes.MOVEMENT_SPEED, 0.0D);
     }
 
     public boolean canBreatheUnderwater() {
@@ -50,46 +49,46 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
 
     @Override
     public boolean isInvulnerableTo(DamageSource i) {
-        return i.getTrueSource() != null;
+        return i.getEntity() != null;
     }
 
     @Override
-    public boolean isAIDisabled() {
+    public boolean isNoAi() {
         return true;
     }
 
     public boolean isOnWall() {
-        return this.world.isAirBlock(this.getPosition().down());
+        return this.level.isEmptyBlock(this.blockPosition().below());
     }
 
     public void onUpdate() {
-        this.prevRenderYawOffset = 0;
-        this.prevRotationYawHead = 0;
-        this.renderYawOffset = 0;
-        this.rotationYawHead = 0;
+        this.yBodyRotO = 0;
+        this.yHeadRotO = 0;
+        this.yBodyRot = 0;
+        this.yHeadRot = 0;
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.getDataManager().register(SKULL_DIRECTION, Float.valueOf(0F));
-        this.getDataManager().register(SKULL_ENUM, Integer.valueOf(0));
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.getEntityData().define(SKULL_DIRECTION, Float.valueOf(0F));
+        this.getEntityData().define(SKULL_ENUM, Integer.valueOf(0));
     }
 
     public float getYaw() {
-        return this.getDataManager().get(SKULL_DIRECTION).floatValue();
+        return this.getEntityData().get(SKULL_DIRECTION).floatValue();
     }
 
     public void setYaw(float var1) {
-        this.getDataManager().set(SKULL_DIRECTION, var1);
+        this.getEntityData().set(SKULL_DIRECTION, var1);
     }
 
     private int getEnumOrdinal() {
-        return this.getDataManager().get(SKULL_ENUM).intValue();
+        return this.getEntityData().get(SKULL_ENUM).intValue();
     }
 
     private void setEnumOrdinal(int var1) {
-        this.getDataManager().set(SKULL_ENUM, var1);
+        this.getEntityData().set(SKULL_ENUM, var1);
     }
 
     public EnumSkullType getSkullType() {
@@ -101,9 +100,9 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource var1, float var2) {
+    public boolean hurt(DamageSource var1, float var2) {
         this.turnIntoItem();
-        return super.attackEntityFrom(var1, var2);
+        return super.hurt(var1, var2);
     }
 
     public void turnIntoItem() {
@@ -111,43 +110,43 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
             return;
         this.remove();
         ItemStack stack = new ItemStack(getSkullType().skull_item, 1);
-        if (!this.world.isRemote)
-            this.entityDropItem(stack, 0.0F);
+        if (!this.level.isClientSide)
+            this.spawnAtLocation(stack, 0.0F);
     }
 
-    public boolean isBreedingItem(ItemStack stack) {
+    public boolean isFood(ItemStack stack) {
         return false;
     }
 
     @Override
-    public ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand) {
-        if (player.isSneaking()) {
-            this.setYaw(player.rotationYaw);
+    public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
+        if (player.isShiftKeyDown()) {
+            this.setYaw(player.yRot);
         }
-        return super.getEntityInteractionResult(player, hand);
+        return super.mobInteract(player, hand);
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundNBT compound) {
         this.setYaw(compound.getFloat("SkullYaw"));
         this.setEnumOrdinal(compound.getInt("SkullType"));
-        super.readAdditional(compound);
+        super.readAdditionalSaveData(compound);
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundNBT compound) {
         compound.putFloat("SkullYaw", this.getYaw());
         compound.putInt("SkullType", this.getEnumOrdinal());
-        super.writeAdditional(compound);
+        super.addAdditionalSaveData(compound);
     }
 
     @Override
-    public boolean canBePushed() {
+    public boolean isPushable() {
         return false;
     }
 
     @Override
-    protected void collideWithEntity(Entity entity) {
+    protected void doPush(Entity entity) {
     }
 
     @Override
@@ -162,17 +161,17 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
 
     @Nullable
     @Override
-    public AgeableEntity createChild(ServerWorld serverWorld, AgeableEntity ageable) {
+    public AgeableEntity getBreedOffspring(ServerWorld serverWorld, AgeableEntity ageable) {
         return null;
     }
 
     @Override
-    public boolean isNoDespawnRequired() {
+    public boolean isPersistenceRequired() {
         return true;
     }
 
     @Override
-    public boolean canDespawn(double distanceToClosestPlayer) {
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return false;
     }
 }

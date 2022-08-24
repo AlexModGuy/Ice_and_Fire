@@ -13,22 +13,21 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-
 public class BlockDreadTorch extends TorchBlock implements IDreadBlock, IWallBlock {
 
     public BlockDreadTorch() {
         super(
             Properties
-                .create(Material.WOOD)
-                .setLightLevel((state) -> {
+                .of(Material.WOOD)
+                .lightLevel((state) -> {
                     return 5;
                 })
                 .sound(SoundType.STONE)
-    			.notSolid()
-    			.variableOpacity()
-                    .doesNotBlockMovement(),
-    		RedstoneParticleData.REDSTONE_DUST
-		);
+                .noOcclusion()
+                .dynamicShape()
+                .noCollission(),
+            RedstoneParticleData.REDSTONE
+        );
 
         setRegistryName(IceAndFire.MODID, "dread_torch");
     }

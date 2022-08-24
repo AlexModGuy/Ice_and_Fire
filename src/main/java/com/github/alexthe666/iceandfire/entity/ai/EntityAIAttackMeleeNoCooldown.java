@@ -11,7 +11,7 @@ public class EntityAIAttackMeleeNoCooldown extends MeleeAttackGoal {
     public void tick() {
         // TODO: investigate why the goal is even running when the attack target is null
         // Probably has something to do with the goal switching
-        if (this.attacker.getAttackTarget() != null)
+        if (this.mob.getTarget() != null)
             super.tick();
     }
 }

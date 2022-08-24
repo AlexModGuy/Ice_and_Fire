@@ -14,17 +14,17 @@ public class BlockDreadSpawner extends SpawnerBlock implements IDreadBlock {
     public BlockDreadSpawner() {
         super(
             AbstractBlock.Properties
-                .create(Material.ROCK)
-                .hardnessAndResistance(10.0F, 10000F)
+                .of(Material.STONE)
+                .strength(10.0F, 10000F)
                 .sound(SoundType.METAL)
-                .notSolid()
-                .variableOpacity()
+                .noOcclusion()
+                .dynamicShape()
         );
 
         this.setRegistryName(IceAndFire.MODID, "dread_spawner");
     }
 
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+    public TileEntity newBlockEntity(IBlockReader worldIn) {
         return new TileEntityDreadSpawner();
     }
 

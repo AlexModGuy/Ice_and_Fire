@@ -27,8 +27,8 @@ public class ChainProperties {
         CompoundNBT entityData = CitadelEntityData.getOrCreateCitadelTag(chained);
         ListNBT chainData = getOrCreateChainData(entityData);
         CompoundNBT currentChainData = new CompoundNBT();
-        currentChainData.putUniqueId(CHAIN_TO_TAG, chainedTo.getUniqueID());
-        currentChainData.putInt(CHAIN_TO_ENTITY_ID_TAG, chainedTo.getEntityId());
+        currentChainData.putUUID(CHAIN_TO_TAG, chainedTo.getUUID());
+        currentChainData.putInt(CHAIN_TO_ENTITY_ID_TAG, chainedTo.getId());
 
         chainData.add(currentChainData);
         entityData.put(CHAIN_DATA, chainData);
@@ -46,7 +46,7 @@ public class ChainProperties {
     public static CompoundNBT getConnectedEntityChainData(ListNBT chainData, Entity entity) {
         for (int i = 0; i < chainData.size(); i++) {
             CompoundNBT nbt = (CompoundNBT) chainData.get(i);
-            if (nbt.contains(CHAIN_TO_TAG) && nbt.getUniqueId(CHAIN_TO_TAG).equals(entity.getUniqueID()))
+            if (nbt.contains(CHAIN_TO_TAG) && nbt.getUUID(CHAIN_TO_TAG).equals(entity.getUUID()))
                 return nbt;
         }
         return null;
@@ -78,8 +78,8 @@ public class ChainProperties {
 
     private static void updateData(LivingEntity entity, CompoundNBT nbt) {
         CitadelEntityData.setCitadelTag(entity, nbt);
-        if (!entity.world.isRemote()) {
-            Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", nbt, entity.getEntityId()));
+        if (!entity.level.isClientSide()) {
+            Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", nbt, entity.getId()));
         }
     }
 
@@ -89,7 +89,7 @@ public class ChainProperties {
         int dataIndex = -1;
         for (int i = 0; i < chainData.size(); i++) {
             CompoundNBT nbt = (CompoundNBT) chainData.get(i);
-            if (nbt.contains(CHAIN_TO_TAG) && nbt.getUniqueId(CHAIN_TO_TAG).equals(connectedTo.getUniqueID())) {
+            if (nbt.contains(CHAIN_TO_TAG) && nbt.getUUID(CHAIN_TO_TAG).equals(connectedTo.getUUID())) {
                 //TODO: might be able to remove in loop
                 dataIndex = i;
                 break;
@@ -110,26 +110,26 @@ public class ChainProperties {
         }
         for (int i = 0; i < chainData.size(); i++) {
             CompoundNBT lassoedTag = (CompoundNBT) chainData.get(i);
-            if (chained.world.isRemote() && lassoedTag.contains(CHAIN_TO_ENTITY_ID_TAG)) {
+            if (chained.level.isClientSide() && lassoedTag.contains(CHAIN_TO_ENTITY_ID_TAG)) {
                 int id = lassoedTag.getInt(CHAIN_TO_ENTITY_ID_TAG);
                 if (id != -1) {
-                    Entity found = chained.world.getEntityByID(id);
+                    Entity found = chained.level.getEntity(id);
                     if (found != null) {
                         chainedTo.add(found);
                     } else {
-                        UUID uuid = lassoedTag.getUniqueId(CHAIN_TO_TAG);
+                        UUID uuid = lassoedTag.getUUID(CHAIN_TO_TAG);
                         if (uuid != null) {
-                            if (chained.world.getPlayerByUuid(uuid) != null)
-                                chainedTo.add(chained.world.getPlayerByUuid(uuid));
+                            if (chained.level.getPlayerByUUID(uuid) != null)
+                                chainedTo.add(chained.level.getPlayerByUUID(uuid));
                         }
                     }
                 }
-            } else if (chained.world instanceof ServerWorld) {
-                UUID uuid = lassoedTag.getUniqueId(CHAIN_TO_TAG);
+            } else if (chained.level instanceof ServerWorld) {
+                UUID uuid = lassoedTag.getUUID(CHAIN_TO_TAG);
                 if (uuid != null) {
-                    Entity found = ((ServerWorld) chained.world).getEntityByUuid(uuid);
+                    Entity found = ((ServerWorld) chained.level).getEntity(uuid);
                     if (found != null) {
-                        lassoedTag.putInt(CHAIN_TO_ENTITY_ID_TAG, found.getEntityId());
+                        lassoedTag.putInt(CHAIN_TO_ENTITY_ID_TAG, found.getId());
                         chainedTo.add(found);
 
                     }
@@ -156,12 +156,12 @@ public class ChainProperties {
         List<Entity> chainedToList = getChainedTo(chained);
         for (Entity chainedOwner : chainedToList) {
             if (chainedOwner != null) {
-                double distance = chained.getDistance(chainedOwner);
+                double distance = chained.distanceTo(chainedOwner);
                 if (distance > 7) {
-                    double d0 = (chainedOwner.getPosX() - chained.getPosX()) / distance;
-                    double d1 = (chainedOwner.getPosY() - chained.getPosY()) / distance;
-                    double d2 = (chainedOwner.getPosZ() - chained.getPosZ()) / distance;
-                    chained.setMotion(chained.getMotion().add(d0 * Math.abs(d0) * 0.4D, d1 * Math.abs(d1) * 0.2D, d2 * Math.abs(d2) * 0.4D));
+                    double d0 = (chainedOwner.getX() - chained.getX()) / distance;
+                    double d1 = (chainedOwner.getY() - chained.getY()) / distance;
+                    double d2 = (chainedOwner.getZ() - chained.getZ()) / distance;
+                    chained.setDeltaMovement(chained.getDeltaMovement().add(d0 * Math.abs(d0) * 0.4D, d1 * Math.abs(d1) * 0.2D, d2 * Math.abs(d2) * 0.4D));
                 }
             }
         }

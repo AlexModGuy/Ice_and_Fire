@@ -1,19 +1,18 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.EnumSet;
-
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.vector.Vector3d;
 
+import java.util.EnumSet;
+
 public class DragonAIWander extends Goal {
-    private EntityDragonBase dragon;
+    private final EntityDragonBase dragon;
     private double xPosition;
     private double yPosition;
     private double zPosition;
-    private double speed;
+    private final double speed;
     private int executionChance;
     private boolean mustUpdate;
 
@@ -25,12 +24,12 @@ public class DragonAIWander extends Goal {
         this.dragon = creatureIn;
         this.speed = speedIn;
         this.executionChance = chance;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE));
 
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if (!dragon.canMove() || dragon.isFuelingForge()) {
             return false;
         }
@@ -41,11 +40,11 @@ public class DragonAIWander extends Goal {
             return false;
         }
         if (!this.mustUpdate) {
-            if (this.dragon.getRNG().nextInt(executionChance) != 0) {
+            if (this.dragon.getRandom().nextInt(executionChance) != 0) {
                 return false;
             }
         }
-        Vector3d Vector3d = RandomPositionGenerator.findRandomTarget(this.dragon, 10, 7);
+        Vector3d Vector3d = RandomPositionGenerator.getPos(this.dragon, 10, 7);
         if (Vector3d == null) {
             return false;
         } else {
@@ -59,13 +58,13 @@ public class DragonAIWander extends Goal {
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return !this.dragon.getNavigator().noPath();
+    public boolean canContinueToUse() {
+        return !this.dragon.getNavigation().isDone();
     }
 
     @Override
-    public void startExecuting() {
-        this.dragon.getNavigator().tryMoveToXYZ(this.xPosition, this.yPosition, this.zPosition, this.speed);
+    public void start() {
+        this.dragon.getNavigation().moveTo(this.xPosition, this.yPosition, this.zPosition, this.speed);
     }
 
     public void makeUpdate() {

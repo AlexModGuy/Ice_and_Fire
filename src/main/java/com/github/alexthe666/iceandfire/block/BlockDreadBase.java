@@ -16,31 +16,31 @@ public class BlockDreadBase extends BlockGeneric implements IDragonProof, IDread
 
     public BlockDreadBase(Material materialIn, String gameName, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound) {
         super(materialIn, gameName, toolUsed, toolStrength, hardness, resistance, sound);
-        this.setDefaultState(this.stateContainer.getBaseState().with(PLAYER_PLACED, Boolean.valueOf(false)));
+        this.registerDefaultState(this.stateDefinition.any().setValue(PLAYER_PLACED, Boolean.valueOf(false)));
     }
 
     public BlockDreadBase(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery) {
         super(materialIn, gameName, toolUsed, toolStrength, hardness, resistance, sound, slippery);
-        this.setDefaultState(this.stateContainer.getBaseState().with(PLAYER_PLACED, Boolean.valueOf(false)));
+        this.registerDefaultState(this.stateDefinition.any().setValue(PLAYER_PLACED, Boolean.valueOf(false)));
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public float getPlayerRelativeBlockHardness(BlockState state, PlayerEntity player, IBlockReader worldIn, BlockPos pos) {
-        if (state.get(PLAYER_PLACED)) {
+    public float getDestroyProgress(BlockState state, PlayerEntity player, IBlockReader worldIn, BlockPos pos) {
+        if (state.getValue(PLAYER_PLACED)) {
             float f = 8f;
             //Code from super method
             return player.getDigSpeed(state, pos) / f / (float) 30;
         }
-        return super.getPlayerRelativeBlockHardness(state,player,worldIn,pos);
+        return super.getDestroyProgress(state, player, worldIn, pos);
     }
 
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(PLAYER_PLACED);
     }
 
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(PLAYER_PLACED, true);
+        return this.defaultBlockState().setValue(PLAYER_PLACED, true);
     }
 
 }

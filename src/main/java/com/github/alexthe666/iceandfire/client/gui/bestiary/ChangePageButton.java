@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.client.gui.bestiary;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
@@ -10,7 +9,7 @@ import net.minecraft.util.text.StringTextComponent;
 public class ChangePageButton extends Button {
     private final boolean right;
     public int lastpage = 1;
-    private int color;
+    private final int color;
 
     public ChangePageButton(int x, int y, boolean right, int color, IPressable press) {
         super(x, y, 23, 10, new StringTextComponent(""), press);
@@ -19,10 +18,10 @@ public class ChangePageButton extends Button {
     }
 
     @Override
-    public void renderWidget(MatrixStack matrixStack,  int mouseX, int mouseY, float partial) {
+    public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partial) {
         if (this.active) {
             boolean flag = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-            Minecraft.getInstance().getTextureManager().bindTexture(new ResourceLocation("iceandfire:textures/gui/bestiary/widgets.png"));
+            Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("iceandfire:textures/gui/bestiary/widgets.png"));
             int i = 0;
             int j = 64;
             if (flag) {

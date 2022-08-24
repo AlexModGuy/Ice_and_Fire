@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.client.render.IafRenderType;
 import com.github.alexthe666.iceandfire.entity.EntityGhost;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -47,21 +46,21 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
 
     @Override
     public void render(EntityGhost entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        shadowSize = 0;
+        shadowRadius = 0;
         if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Pre<EntityGhost, ModelGhost>(entityIn, this, partialTicks, matrixStackIn, bufferIn, packedLightIn)))
             return;
-        matrixStackIn.push();
-        this.entityModel.swingProgress = this.getSwingProgress(entityIn, partialTicks);
+        matrixStackIn.pushPose();
+        this.model.attackTime = this.getAttackAnim(entityIn, partialTicks);
 
-        boolean shouldSit = entityIn.isPassenger() && (entityIn.getRidingEntity() != null && entityIn.getRidingEntity().shouldRiderSit());
-        this.entityModel.isSitting = shouldSit;
-        this.entityModel.isChild = entityIn.isChild();
-        float f = MathHelper.interpolateAngle(partialTicks, entityIn.prevRenderYawOffset, entityIn.renderYawOffset);
-        float f1 = MathHelper.interpolateAngle(partialTicks, entityIn.prevRotationYawHead, entityIn.rotationYawHead);
+        boolean shouldSit = entityIn.isPassenger() && (entityIn.getVehicle() != null && entityIn.getVehicle().shouldRiderSit());
+        this.model.riding = shouldSit;
+        this.model.young = entityIn.isBaby();
+        float f = MathHelper.rotLerp(partialTicks, entityIn.yBodyRotO, entityIn.yBodyRot);
+        float f1 = MathHelper.rotLerp(partialTicks, entityIn.yHeadRotO, entityIn.yHeadRot);
         float f2 = f1 - f;
-        if (shouldSit && entityIn.getRidingEntity() instanceof LivingEntity) {
-            LivingEntity livingentity = (LivingEntity) entityIn.getRidingEntity();
-            f = MathHelper.interpolateAngle(partialTicks, livingentity.prevRenderYawOffset, livingentity.renderYawOffset);
+        if (shouldSit && entityIn.getVehicle() instanceof LivingEntity) {
+            LivingEntity livingentity = (LivingEntity) entityIn.getVehicle();
+            f = MathHelper.rotLerp(partialTicks, livingentity.yBodyRotO, livingentity.yBodyRot);
             f2 = f1 - f;
             float f3 = MathHelper.wrapDegrees(f2);
             if (f3 < -85.0F) {
@@ -80,26 +79,26 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
             f2 = f1 - f;
         }
 
-        float f6 = MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch);
+        float f6 = MathHelper.lerp(partialTicks, entityIn.xRotO, entityIn.xRot);
         if (entityIn.getPose() == Pose.SLEEPING) {
-            Direction direction = entityIn.getBedDirection();
+            Direction direction = entityIn.getBedOrientation();
             if (direction != null) {
                 float f4 = entityIn.getEyeHeight(Pose.STANDING) - 0.1F;
-                matrixStackIn.translate((float) (-direction.getXOffset()) * f4, 0.0D, (float) (-direction.getZOffset()) * f4);
+                matrixStackIn.translate((float) (-direction.getStepX()) * f4, 0.0D, (float) (-direction.getStepZ()) * f4);
             }
         }
 
-        float f7 = this.handleRotationFloat(entityIn, partialTicks);
-        this.applyRotations(entityIn, matrixStackIn, f7, f, partialTicks);
+        float f7 = this.getBob(entityIn, partialTicks);
+        this.setupRotations(entityIn, matrixStackIn, f7, f, partialTicks);
         matrixStackIn.scale(-1.0F, -1.0F, 1.0F);
-        this.preRenderCallback(entityIn, matrixStackIn, partialTicks);
+        this.scale(entityIn, matrixStackIn, partialTicks);
         matrixStackIn.translate(0.0D, -1.501F, 0.0D);
         float f8 = 0.0F;
         float f5 = 0.0F;
         if (!shouldSit && entityIn.isAlive()) {
-            f8 = MathHelper.lerp(partialTicks, entityIn.prevLimbSwingAmount, entityIn.limbSwingAmount);
-            f5 = entityIn.limbSwing - entityIn.limbSwingAmount * (1.0F - partialTicks);
-            if (entityIn.isChild()) {
+            f8 = MathHelper.lerp(partialTicks, entityIn.animationSpeedOld, entityIn.animationSpeed);
+            f5 = entityIn.animationPosition - entityIn.animationSpeed * (1.0F - partialTicks);
+            if (entityIn.isBaby()) {
                 f5 *= 3.0F;
             }
 
@@ -108,65 +107,65 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
             }
         }
 
-        this.entityModel.setLivingAnimations(entityIn, f5, f8, partialTicks);
-        this.entityModel.setRotationAngles(entityIn, f5, f8, f7, f2, f6);
+        this.model.prepareMobModel(entityIn, f5, f8, partialTicks);
+        this.model.setupAnim(entityIn, f5, f8, f7, f2, f6);
         float alphaForRender = this.getAlphaForRender(entityIn, partialTicks);
-        RenderType rendertype = entityIn.isDaytimeMode() ? IafRenderType.getGhostDaytime(getEntityTexture(entityIn)) : IafRenderType.getGhost(getEntityTexture(entityIn));//this.func_230496_a_(entityIn, flag, flag1, flag2);
+        RenderType rendertype = entityIn.isDaytimeMode() ? IafRenderType.getGhostDaytime(getTextureLocation(entityIn)) : IafRenderType.getGhost(getTextureLocation(entityIn));//this.getRenderType(entityIn, flag, flag1, flag2);
         if (rendertype != null && !entityIn.isInvisible()) {
             IVertexBuilder ivertexbuilder = bufferIn.getBuffer(rendertype);
-            int i = getPackedOverlay(entityIn, this.getOverlayProgress(entityIn, partialTicks));
+            int i = getOverlayCoords(entityIn, this.getWhiteOverlayProgress(entityIn, partialTicks));
             if (entityIn.isHauntedShoppingList()) {
-                matrixStackIn.push();
-                matrixStackIn.translate(0, 0.8F + MathHelper.sin((entityIn.ticksExisted + partialTicks) * 0.15F) * 0.1F, 0);
+                matrixStackIn.pushPose();
+                matrixStackIn.translate(0, 0.8F + MathHelper.sin((entityIn.tickCount + partialTicks) * 0.15F) * 0.1F, 0);
                 matrixStackIn.scale(0.6F, 0.6F, 0.6F);
-                matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F));
+                matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F));
                 {
-                    matrixStackIn.push();
-                    MatrixStack.Entry matrixstack$entry = matrixStackIn.getLast();
-                    Matrix4f matrix4f = matrixstack$entry.getMatrix();
-                    Matrix3f matrix3f = matrixstack$entry.getNormal();
+                    matrixStackIn.pushPose();
+                    MatrixStack.Entry matrixstack$entry = matrixStackIn.last();
+                    Matrix4f matrix4f = matrixstack$entry.pose();
+                    Matrix3f matrix3f = matrixstack$entry.normal();
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), -1, -2, 0, 1F, 0.0F, 0, 1, 0, 240);
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), 1, -2, 0, 0.5F, 0.0F, 0, 1, 0, 240);
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), 1, 2, 0, 0.5F, 1, 0, 1, 0, 240);
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), -1, 2, 0, 1F, 1, 0, 1, 0, 240);
-                    matrixStackIn.pop();
+                    matrixStackIn.popPose();
                 }
-                matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F));
+                matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F));
                 {
-                    matrixStackIn.push();
-                    MatrixStack.Entry matrixstack$entry = matrixStackIn.getLast();
-                    Matrix4f matrix4f = matrixstack$entry.getMatrix();
-                    Matrix3f matrix3f = matrixstack$entry.getNormal();
+                    matrixStackIn.pushPose();
+                    MatrixStack.Entry matrixstack$entry = matrixStackIn.last();
+                    Matrix4f matrix4f = matrixstack$entry.pose();
+                    Matrix3f matrix3f = matrixstack$entry.normal();
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), -1, -2, 0, 0.0F, 0.0F, 0, 1, 0, 240);
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), 1, -2, 0, 0.5F, 0.0F, 0, 1, 0, 240);
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), 1, 2, 0, 0.5F, 1, 0, 1, 0, 240);
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), -1, 2, 0, 0.0F, 1, 0, 1, 0, 240);
-                    matrixStackIn.pop();
+                    matrixStackIn.popPose();
                 }
-                matrixStackIn.pop();
+                matrixStackIn.popPose();
 
             } else {
-                this.entityModel.render(matrixStackIn, ivertexbuilder, 240, i, 1.0F, 1.0F, 1.0F, alphaForRender);
+                this.model.renderToBuffer(matrixStackIn, ivertexbuilder, 240, i, 1.0F, 1.0F, 1.0F, alphaForRender);
             }
         }
 
         if (!entityIn.isSpectator()) {
-            for (LayerRenderer<EntityGhost, ModelGhost> layerrenderer : this.layerRenderers) {
+            for (LayerRenderer<EntityGhost, ModelGhost> layerrenderer : this.layers) {
                 layerrenderer.render(matrixStackIn, bufferIn, packedLightIn, entityIn, f5, f8, partialTicks, f7, f2, f6);
             }
         }
 
-        matrixStackIn.pop();
+        matrixStackIn.popPose();
         net.minecraftforge.client.event.RenderNameplateEvent renderNameplateEvent = new net.minecraftforge.client.event.RenderNameplateEvent(entityIn, entityIn.getDisplayName(), this, matrixStackIn, bufferIn, packedLightIn, partialTicks);
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(renderNameplateEvent);
-        if (renderNameplateEvent.getResult() != net.minecraftforge.eventbus.api.Event.Result.DENY && (renderNameplateEvent.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW || this.canRenderName(entityIn))) {
-            this.renderName(entityIn, renderNameplateEvent.getContent(), matrixStackIn, bufferIn, packedLightIn);
+        if (renderNameplateEvent.getResult() != net.minecraftforge.eventbus.api.Event.Result.DENY && (renderNameplateEvent.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW || this.shouldShowName(entityIn))) {
+            this.renderNameTag(entityIn, renderNameplateEvent.getContent(), matrixStackIn, bufferIn, packedLightIn);
         }
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post<EntityGhost, ModelGhost>(entityIn, this, partialTicks, matrixStackIn, bufferIn, packedLightIn));
     }
 
     @Override
-    protected float getDeathMaxRotation(EntityGhost ghost) {
+    protected float getFlipDegrees(EntityGhost ghost) {
         return 0.0F;
     }
 
@@ -174,15 +173,15 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
         if (entityIn.isDaytimeMode()) {
             return MathHelper.clamp((101 - Math.min(entityIn.getDaytimeCounter(), 100)) / 100F, 0, 1);
         }
-        return MathHelper.clamp((MathHelper.sin((entityIn.ticksExisted + partialTicks) * 0.1F) + 1F) * 0.5F + 0.1F, 0F, 1F);
+        return MathHelper.clamp((MathHelper.sin((entityIn.tickCount + partialTicks) * 0.1F) + 1F) * 0.5F + 0.1F, 0F, 1F);
     }
 
     @Override
-    public void preRenderCallback(EntityGhost LivingEntityIn, MatrixStack stack, float partialTickTime) {
+    public void scale(EntityGhost LivingEntityIn, MatrixStack stack, float partialTickTime) {
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityGhost ghost) {
+    public ResourceLocation getTextureLocation(EntityGhost ghost) {
         switch (ghost.getColor()) {
             case 1:
                 return TEXTURE_1;
@@ -196,6 +195,6 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
     }
 
     public void drawVertex(Matrix4f stack, Matrix3f normal, IVertexBuilder builder, int packedRed, int alphaInt, int x, int y, int z, float u, float v, int lightmap, int lightmap3, int lightmap2, int lightmap4) {
-        builder.pos(stack, (float) x, (float) y, (float) z).color(255, 255, 255, alphaInt).tex(u, v).overlay(packedRed).lightmap(lightmap4).normal(normal, (float) lightmap, (float) lightmap2, (float) lightmap3).endVertex();
+        builder.vertex(stack, (float) x, (float) y, (float) z).color(255, 255, 255, alphaInt).uv(u, v).overlayCoords(packedRed).uv2(lightmap4).normal(normal, (float) lightmap, (float) lightmap2, (float) lightmap3).endVertex();
     }
 }

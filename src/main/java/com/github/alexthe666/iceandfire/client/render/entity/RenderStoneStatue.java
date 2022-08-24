@@ -43,12 +43,12 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityStoneStatue entity) {
-        return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
+    public ResourceLocation getTextureLocation(EntityStoneStatue entity) {
+        return AtlasTexture.LOCATION_BLOCKS;
     }
 
     protected void preRenderCallback(EntityStoneStatue entity, MatrixStack matrixStackIn, float partialTickTime) {
-        float scale = entity.getRenderScale() < 0.01F ? 1F : entity.getRenderScale();
+        float scale = entity.getScale() < 0.01F ? 1F : entity.getScale();
         matrixStackIn.scale(scale, scale, scale);
     }
 
@@ -58,9 +58,9 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
         if (modelMap.get(entityIn.getTrappedEntityTypeString()) != null) {
             model = modelMap.get(entityIn.getTrappedEntityTypeString());
         } else {
-            EntityRenderer renderer = Minecraft.getInstance().getRenderManager().renderers.get(entityIn.getTrappedEntityType());
+            EntityRenderer renderer = Minecraft.getInstance().getEntityRenderDispatcher().renderers.get(entityIn.getTrappedEntityType());
             if (renderer instanceof IEntityRenderer) {
-                model = ((IEntityRenderer<?, ?>) renderer).getEntityModel();
+                model = ((IEntityRenderer<?, ?>) renderer).getModel();
             } else if (entityIn.getTrappedEntityType() == EntityType.PLAYER) {
                 model = new ModelStonePlayer(0.0F);
             }
@@ -69,10 +69,10 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
         if (model != null) {
             Entity fakeEntity = null;
             if (this.hollowEntityMap.get(entityIn.getTrappedEntityTypeString()) == null) {
-                Entity build = entityIn.getTrappedEntityType().create(Minecraft.getInstance().world);
+                Entity build = entityIn.getTrappedEntityType().create(Minecraft.getInstance().level);
                 if (build != null) {
                     try {
-                        build.read(entityIn.getTrappedTag());
+                        build.load(entityIn.getTrappedTag());
                     } catch (Exception e) {
                         IceAndFire.LOGGER.warn("Mob " + entityIn.getTrappedEntityTypeString() + " could not build statue NBT");
                     }
@@ -81,58 +81,58 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
             } else {
                 fakeEntity = this.hollowEntityMap.get(entityIn.getTrappedEntityTypeString());
             }
-            float x = Math.max(model.textureWidth, 1) / 16F; //default to 4
-            float y = Math.max(model.textureHeight, 1) / 16F; //default to 2
+            float x = Math.max(model.texWidth, 1) / 16F; //default to 4
+            float y = Math.max(model.texHeight, 1) / 16F; //default to 2
             RenderType tex = IafRenderType.getStoneMobRenderType(x, y);
             if (fakeEntity instanceof EntityTroll) {
-                tex = RenderType.getEntityCutout(((EntityTroll) fakeEntity).getTrollType().TEXTURE_STONE);
+                tex = RenderType.entityCutout(((EntityTroll) fakeEntity).getTrollType().TEXTURE_STONE);
             }
             IVertexBuilder ivertexbuilder = bufferIn.getBuffer(tex);
-            matrixStackIn.push();
-            matrixStackIn.push();
-            matrixStackIn.push();
-            float yaw = entityIn.prevRotationYaw + (entityIn.rotationYaw - entityIn.prevRotationYaw) * partialTicks;
-            boolean shouldSit = entityIn.isPassenger() && (entityIn.getRidingEntity() != null && entityIn.getRidingEntity().shouldRiderSit());
-            model.isChild = entityIn.isChild();
-            model.isSitting = shouldSit;
-            model.swingProgress = entityIn.getSwingProgress(partialTicks);
+            matrixStackIn.pushPose();
+            matrixStackIn.pushPose();
+            matrixStackIn.pushPose();
+            float yaw = entityIn.yRotO + (entityIn.yRot - entityIn.yRotO) * partialTicks;
+            boolean shouldSit = entityIn.isPassenger() && (entityIn.getVehicle() != null && entityIn.getVehicle().shouldRiderSit());
+            model.young = entityIn.isBaby();
+            model.riding = shouldSit;
+            model.attackTime = entityIn.getAttackAnim(partialTicks);
             if (model instanceof AdvancedEntityModel) {
                 ((AdvancedEntityModel) model).resetToDefaultPose();
             } else if (fakeEntity != null) {
-                model.setRotationAngles(fakeEntity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F);
+                model.setupAnim(fakeEntity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F);
             }
             preRenderCallback(entityIn, matrixStackIn, partialTicks);
             matrixStackIn.translate(0, 1.5F, 0);
-            matrixStackIn.rotate(new Quaternion(Vector3f.XP, 180, true));
-            matrixStackIn.rotate(new Quaternion(Vector3f.YP, yaw, true));
+            matrixStackIn.mulPose(new Quaternion(Vector3f.XP, 180, true));
+            matrixStackIn.mulPose(new Quaternion(Vector3f.YP, yaw, true));
             if (model instanceof ICustomStatueModel && fakeEntity != null) {
                 ((ICustomStatueModel) model).renderStatue(matrixStackIn, ivertexbuilder, packedLightIn, fakeEntity);
                 if (model instanceof ModelHydraBody && fakeEntity instanceof EntityHydra) {
                     LayerHydraHead.renderHydraHeads((ModelHydraBody) model, true, matrixStackIn, bufferIn, packedLightIn, (EntityHydra) fakeEntity, 0, 0, partialTicks, 0, 0, 0);
                 }
             } else {
-                model.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
-            matrixStackIn.pop();
-            matrixStackIn.pop();
-            matrixStackIn.pop();
+            matrixStackIn.popPose();
+            matrixStackIn.popPose();
+            matrixStackIn.popPose();
             if (entityIn.getCrackAmount() >= 1) {
                 int i = MathHelper.clamp(entityIn.getCrackAmount() - 1, 0, DESTROY_STAGES.length - 1);
                 RenderType crackTex = IafRenderType.getStoneCrackRenderType(DESTROY_STAGES[i], x, y);
                 IVertexBuilder ivertexbuilder2 = bufferIn.getBuffer(crackTex);
-                matrixStackIn.push();
-                matrixStackIn.push();
+                matrixStackIn.pushPose();
+                matrixStackIn.pushPose();
                 preRenderCallback(entityIn, matrixStackIn, partialTicks);
                 matrixStackIn.translate(0, 1.5F, 0);
-                matrixStackIn.rotate(new Quaternion(Vector3f.XP, 180, true));
-                matrixStackIn.rotate(new Quaternion(Vector3f.YP, yaw, true));
+                matrixStackIn.mulPose(new Quaternion(Vector3f.XP, 180, true));
+                matrixStackIn.mulPose(new Quaternion(Vector3f.YP, yaw, true));
                 if (model instanceof ICustomStatueModel) {
                     ((ICustomStatueModel) model).renderStatue(matrixStackIn, ivertexbuilder2, packedLightIn, fakeEntity);
                 } else {
-                    model.render(matrixStackIn, ivertexbuilder2, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                    model.renderToBuffer(matrixStackIn, ivertexbuilder2, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
                 }
-                matrixStackIn.pop();
-                matrixStackIn.pop();
+                matrixStackIn.popPose();
+                matrixStackIn.popPose();
             }
         }
 

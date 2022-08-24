@@ -33,9 +33,9 @@ public class RenderCockatrice extends MobRenderer<EntityCockatrice, SegmentedMod
 
 
     private Vector3d getPosition(LivingEntity LivingEntityIn, double p_177110_2_, float p_177110_4_) {
-        double d0 = LivingEntityIn.lastTickPosX + (LivingEntityIn.getPosX() - LivingEntityIn.lastTickPosX) * (double) p_177110_4_;
-        double d1 = p_177110_2_ + LivingEntityIn.lastTickPosY + (LivingEntityIn.getPosY() - LivingEntityIn.lastTickPosY) * (double) p_177110_4_;
-        double d2 = LivingEntityIn.lastTickPosZ + (LivingEntityIn.getPosZ() - LivingEntityIn.lastTickPosZ) * (double) p_177110_4_;
+        double d0 = LivingEntityIn.xOld + (LivingEntityIn.getX() - LivingEntityIn.xOld) * (double) p_177110_4_;
+        double d1 = p_177110_2_ + LivingEntityIn.yOld + (LivingEntityIn.getY() - LivingEntityIn.yOld) * (double) p_177110_4_;
+        double d2 = LivingEntityIn.zOld + (LivingEntityIn.getZ() - LivingEntityIn.zOld) * (double) p_177110_4_;
         return new Vector3d(d0, d1, d2);
     }
 
@@ -46,9 +46,9 @@ public class RenderCockatrice extends MobRenderer<EntityCockatrice, SegmentedMod
             if (livingEntityIn.hasTargetedEntity()) {
                 LivingEntity livingentity = livingEntityIn.getTargetedEntity();
                 if (livingentity != null) {
-                    Vector3d Vector3d = this.getPosition(livingentity, (double) livingentity.getHeight() * 0.5D, 1.0F);
+                    Vector3d Vector3d = this.getPosition(livingentity, (double) livingentity.getBbHeight() * 0.5D, 1.0F);
                     Vector3d Vector3d1 = this.getPosition(livingEntityIn, livingEntityIn.getEyeHeight(), 1.0F);
-                    return camera.isBoundingBoxInFrustum(new AxisAlignedBB(Vector3d1.x, Vector3d1.y, Vector3d1.z, Vector3d.x, Vector3d.y, Vector3d.z));
+                    return camera.isVisible(new AxisAlignedBB(Vector3d1.x, Vector3d1.y, Vector3d1.z, Vector3d.x, Vector3d.y, Vector3d.z));
                 }
             }
 
@@ -57,14 +57,14 @@ public class RenderCockatrice extends MobRenderer<EntityCockatrice, SegmentedMod
     }
 
     public void render(EntityCockatrice entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        if (entityIn.isChild()) {
-            entityModel = BABY_MODEL;
+        if (entityIn.isBaby()) {
+            model = BABY_MODEL;
         } else {
-            entityModel = ADULT_MODEL;
+            model = ADULT_MODEL;
         }
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         LivingEntity livingentity = entityIn.getTargetedEntity();
-        boolean blindness = entityIn.isPotionActive(Effects.BLINDNESS) || livingentity != null && livingentity.isPotionActive(Effects.BLINDNESS);
+        boolean blindness = entityIn.hasEffect(Effects.BLINDNESS) || livingentity != null && livingentity.hasEffect(Effects.BLINDNESS);
         if (!blindness && livingentity != null && EntityGorgon.isEntityLookingAt(entityIn, livingentity, EntityCockatrice.VIEW_RADIUS) && EntityGorgon.isEntityLookingAt(livingentity, entityIn, EntityCockatrice.VIEW_RADIUS)) {
             if (livingentity != null) {
                 CockatriceBeamRender.render(entityIn, livingentity, matrixStackIn, bufferIn, partialTicks);
@@ -74,15 +74,15 @@ public class RenderCockatrice extends MobRenderer<EntityCockatrice, SegmentedMod
     }
 
     @Override
-    protected void preRenderCallback(EntityCockatrice entity, MatrixStack matrixStackIn, float partialTickTime) {
-        if (entity.isChild()) {
+    protected void scale(EntityCockatrice entity, MatrixStack matrixStackIn, float partialTickTime) {
+        if (entity.isBaby()) {
             matrixStackIn.scale(0.5F, 0.5F, 0.5F);
         }
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityCockatrice cockatrice) {
-        if (cockatrice.isChild()) {
+    public ResourceLocation getTextureLocation(EntityCockatrice cockatrice) {
+        if (cockatrice.isBaby()) {
             return cockatrice.isHen() ? TEXTURE_HEN_CHICK : TEXTURE_ROOSTER_CHICK;
         } else {
             return cockatrice.isHen() ? TEXTURE_HEN : TEXTURE_ROOSTER;

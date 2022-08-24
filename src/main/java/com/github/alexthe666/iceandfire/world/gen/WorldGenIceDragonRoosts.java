@@ -37,59 +37,59 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
     }
 
     private void transformState(IWorld world, BlockPos blockpos, BlockState state) {
-        float hardness = state.getBlockHardness(world, blockpos);
+        float hardness = state.getDestroySpeed(world, blockpos);
         if (hardness != -1.0F) {
             if (state.getBlock() instanceof ContainerBlock) {
                 return;
             }
-            if (state.getMaterial() == Material.ORGANIC) {
-                world.setBlockState(blockpos, IafBlockRegistry.FROZEN_GRASS.getDefaultState(), 2);
-            } else if (state.getMaterial() == Material.EARTH && state.getBlock() == Blocks.DIRT) {
-                world.setBlockState(blockpos, IafBlockRegistry.FROZEN_DIRT.getDefaultState(), 2);
-            } else if (state.getMaterial() == Material.EARTH && state.getBlock() == Blocks.GRAVEL) {
-                world.setBlockState(blockpos, IafBlockRegistry.FROZEN_GRAVEL.getDefaultState(), 2);
-            } else if (state.getMaterial() == Material.ROCK && (state.getBlock() == Blocks.COBBLESTONE || state.getBlock().getTranslationKey().contains("cobblestone"))) {
-                world.setBlockState(blockpos, IafBlockRegistry.FROZEN_COBBLESTONE.getDefaultState(), 2);
-            } else if (state.getMaterial() == Material.ROCK && state.getBlock() != IafBlockRegistry.FROZEN_COBBLESTONE) {
-                world.setBlockState(blockpos, IafBlockRegistry.FROZEN_STONE.getDefaultState(), 2);
+            if (state.getMaterial() == Material.GRASS) {
+                world.setBlock(blockpos, IafBlockRegistry.FROZEN_GRASS.defaultBlockState(), 2);
+            } else if (state.getMaterial() == Material.DIRT && state.getBlock() == Blocks.DIRT) {
+                world.setBlock(blockpos, IafBlockRegistry.FROZEN_DIRT.defaultBlockState(), 2);
+            } else if (state.getMaterial() == Material.DIRT && state.getBlock() == Blocks.GRAVEL) {
+                world.setBlock(blockpos, IafBlockRegistry.FROZEN_GRAVEL.defaultBlockState(), 2);
+            } else if (state.getMaterial() == Material.STONE && (state.getBlock() == Blocks.COBBLESTONE || state.getBlock().getDescriptionId().contains("cobblestone"))) {
+                world.setBlock(blockpos, IafBlockRegistry.FROZEN_COBBLESTONE.defaultBlockState(), 2);
+            } else if (state.getMaterial() == Material.STONE && state.getBlock() != IafBlockRegistry.FROZEN_COBBLESTONE) {
+                world.setBlock(blockpos, IafBlockRegistry.FROZEN_STONE.defaultBlockState(), 2);
             } else if (state.getBlock() == Blocks.GRASS_PATH) {
-                world.setBlockState(blockpos, IafBlockRegistry.FROZEN_GRASS_PATH.getDefaultState(), 2);
+                world.setBlock(blockpos, IafBlockRegistry.FROZEN_GRASS_PATH.defaultBlockState(), 2);
             } else if (state.getMaterial() == Material.WOOD) {
-                world.setBlockState(blockpos, IafBlockRegistry.FROZEN_SPLINTERS.getDefaultState(), 2);
-            } else if (state.getMaterial() == Material.LEAVES || state.getMaterial() == Material.PLANTS) {
-                world.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 2);
+                world.setBlock(blockpos, IafBlockRegistry.FROZEN_SPLINTERS.defaultBlockState(), 2);
+            } else if (state.getMaterial() == Material.LEAVES || state.getMaterial() == Material.PLANT) {
+                world.setBlock(blockpos, Blocks.AIR.defaultBlockState(), 2);
             }
         }
     }
 
     @Override
-    public boolean generate(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
+    public boolean place(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
         if (!IafWorldRegistry.isDimensionListedForDragons(worldIn)) {
             return false;
         }
         if (!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
             return false;
         }
-        if (!worldIn.getFluidState(worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position).down()).isEmpty()) {
+        if (!worldIn.getFluidState(worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, position).below()).isEmpty()) {
             return false;
         }
-        position = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position);
+        position = worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, position);
         isMale = new Random().nextBoolean();
         int boulders = 0;
         int radius = 12 + rand.nextInt(8);
         BlockPos finalPosition = position;
         {
-            EntityDragonBase dragon = IafEntityRegistry.ICE_DRAGON.get().create(worldIn.getWorld());
+            EntityDragonBase dragon = IafEntityRegistry.ICE_DRAGON.get().create(worldIn.getLevel());
             dragon.setGender(isMale);
             dragon.growDragon(40 + radius);
             dragon.setAgingDisabled(true);
             dragon.setHealth(dragon.getMaxHealth());
             dragon.setVariant(new Random().nextInt(4));
-            dragon.setPositionAndRotation(position.getX() + 0.5, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, position).getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
-            dragon.homePos = new HomePosition(position, worldIn.getWorld());
+            dragon.absMoveTo(position.getX() + 0.5, worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, position).getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
+            dragon.homePos = new HomePosition(position, worldIn.getLevel());
             dragon.hasHomePosition = true;
             dragon.setHunger(50);
-            worldIn.addEntity(dragon);
+            worldIn.addFreshEntity(dragon);
         }
 
         {
@@ -98,13 +98,13 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
             int l = radius;
             float f = (j + k + l) * 0.333F + 0.5F;
 
-            BlockPos.getAllInBox(position.add(-j, k, -l), position.add(j, 0, l)).map(BlockPos::toImmutable).forEach(blockPos -> {
+            BlockPos.betweenClosedStream(position.offset(-j, k, -l), position.offset(j, 0, l)).map(BlockPos::immutable).forEach(blockPos -> {
                 int yAdd = blockPos.getY() - finalPosition.getY();
-                if (blockPos.distanceSq(finalPosition) <= f * f && yAdd < 2 + rand.nextInt(k) && !worldIn.isAirBlock(blockPos.down())) {
-                    if (worldIn.isAirBlock(blockPos.up()))
-                        worldIn.setBlockState(blockPos, IafBlockRegistry.FROZEN_GRASS.getDefaultState(), 2);
+                if (blockPos.distSqr(finalPosition) <= f * f && yAdd < 2 + rand.nextInt(k) && !worldIn.isEmptyBlock(blockPos.below())) {
+                    if (worldIn.isEmptyBlock(blockPos.above()))
+                        worldIn.setBlock(blockPos, IafBlockRegistry.FROZEN_GRASS.defaultBlockState(), 2);
                     else
-                        worldIn.setBlockState(blockPos, IafBlockRegistry.FROZEN_DIRT.getDefaultState(), 2);
+                        worldIn.setBlock(blockPos, IafBlockRegistry.FROZEN_DIRT.defaultBlockState(), 2);
                 }
             });
         }
@@ -113,12 +113,11 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
             int k = (radius / 5);
             int l = radius;
             float f = (j + k + l) * 0.333F + 0.5F;
-            BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, 1, l)).map(BlockPos::toImmutable).forEach(blockPos ->  {
-                if (blockPos.distanceSq(finalPosition) < f * f) {
-                    worldIn.setBlockState(blockPos, rand.nextBoolean() ? IafBlockRegistry.FROZEN_GRAVEL.getDefaultState() : IafBlockRegistry.FROZEN_DIRT.getDefaultState(), 2);
-                }
-                else if (blockPos.distanceSq(finalPosition) == f * f) {
-                    worldIn.setBlockState(blockPos, rand.nextBoolean() ? IafBlockRegistry.FROZEN_COBBLESTONE.getDefaultState() : IafBlockRegistry.FROZEN_COBBLESTONE.getDefaultState(), 2);
+            BlockPos.betweenClosedStream(position.offset(-j, -k, -l), position.offset(j, 1, l)).map(BlockPos::immutable).forEach(blockPos -> {
+                if (blockPos.distSqr(finalPosition) < f * f) {
+                    worldIn.setBlock(blockPos, rand.nextBoolean() ? IafBlockRegistry.FROZEN_GRAVEL.defaultBlockState() : IafBlockRegistry.FROZEN_DIRT.defaultBlockState(), 2);
+                } else if (blockPos.distSqr(finalPosition) == f * f) {
+                    worldIn.setBlock(blockPos, IafBlockRegistry.FROZEN_COBBLESTONE.defaultBlockState(), 2);
                 }
             });
         }
@@ -128,10 +127,10 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
             int k = 2;
             int l = radius;
             float f = (j + k + l) * 0.333F + 0.5F;
-            BlockPos up = position.up(k - 1);
-            BlockPos.getAllInBox(up.add(-j, -k + 2, -l), up.add(j, k, l)).map(BlockPos::toImmutable).forEach(blockPos ->  {
-                if (blockPos.distanceSq(finalPosition) <= f * f) {
-                    worldIn.setBlockState(blockPos, Blocks.AIR.getDefaultState(), 2);
+            BlockPos up = position.above(k - 1);
+            BlockPos.betweenClosedStream(up.offset(-j, -k + 2, -l), up.offset(j, k, l)).map(BlockPos::immutable).forEach(blockPos -> {
+                if (blockPos.distSqr(finalPosition) <= f * f) {
+                    worldIn.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 2);
                 }
             });
         }
@@ -141,36 +140,36 @@ public class WorldGenIceDragonRoosts extends Feature<NoFeatureConfig> {
             int k = (radius / 5);
             int l = radius;
             float f = (j + k + l) * 0.333F + 0.5F;
-            BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l)).map(BlockPos::toImmutable).forEach(blockPos ->  {
-                if (blockPos.distanceSq(finalPosition) <= f * f) {
-                    double dist = blockPos.distanceSq(finalPosition) / (f * f);
-                    if (!worldIn.isAirBlock(finalPosition) && rand.nextDouble() > dist * 0.5D) {
+            BlockPos.betweenClosedStream(position.offset(-j, -k, -l), position.offset(j, k, l)).map(BlockPos::immutable).forEach(blockPos -> {
+                if (blockPos.distSqr(finalPosition) <= f * f) {
+                    double dist = blockPos.distSqr(finalPosition) / (f * f);
+                    if (!worldIn.isEmptyBlock(finalPosition) && rand.nextDouble() > dist * 0.5D) {
                         transformState(worldIn, blockPos, worldIn.getBlockState(blockPos));
                     }
                     if (dist > 0.5D && rand.nextInt(1000) == 0) {
-                        BlockPos height = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockPos);
+                        BlockPos height = worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, blockPos);
                         new WorldGenRoostBoulder(IafBlockRegistry.FROZEN_COBBLESTONE, rand.nextInt(3), true).generate(worldIn, rand, height);
                     }
                     if (rand.nextInt(1000) == 0) {
-                        BlockPos height = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockPos);
+                        BlockPos height = worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, blockPos);
                         new WorldGenRoostPile(IafBlockRegistry.DRAGON_ICE).generate(worldIn, rand, height);
                     }
                     if (dist < 0.3D && rand.nextInt(isMale ? 200 : 300) == 0) {
-                        BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockPos)).up();
+                        BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, blockPos)).above();
                         new WorldGenRoostGoldPile(IafBlockRegistry.SILVER_PILE).generate(worldIn, rand, height);
                     }
                     if (dist < 0.3D && rand.nextInt(isMale ? 500 : 700) == 0) {
-                        BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockPos)).up();
-                        worldIn.setBlockState(height, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, HORIZONTALS[new Random().nextInt(3)]), 2);
+                        BlockPos height = WorldGenUtils.degradeSurface(worldIn, worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, blockPos)).above();
+                        worldIn.setBlock(height, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, HORIZONTALS[new Random().nextInt(3)]), 2);
                         if (worldIn.getBlockState(height).getBlock() instanceof ChestBlock) {
-                            TileEntity tileentity1 = worldIn.getTileEntity(height);
+                            TileEntity tileentity1 = worldIn.getBlockEntity(height);
                             if (tileentity1 instanceof ChestTileEntity) {
                                 ((ChestTileEntity) tileentity1).setLootTable(DRAGON_CHEST, new Random().nextLong());
                             }
                         }
                     }
                     if (rand.nextInt(5000) == 0) {
-                        BlockPos height = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockPos);
+                        BlockPos height = worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, blockPos);
                         new WorldGenRoostArch(IafBlockRegistry.FROZEN_COBBLESTONE).generate(worldIn, rand, height);
                     }
                 }

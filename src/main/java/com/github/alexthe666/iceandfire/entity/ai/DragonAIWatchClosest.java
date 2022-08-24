@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.LookAtGoal;
@@ -13,10 +12,10 @@ public class DragonAIWatchClosest extends LookAtGoal {
     }
 
     @Override
-    public boolean shouldExecute() {
-        if (this.entity instanceof EntityDragonBase && ((EntityDragonBase) this.entity).getAnimation() == EntityDragonBase.ANIMATION_SHAKEPREY) {
+    public boolean canUse() {
+        if (this.mob instanceof EntityDragonBase && ((EntityDragonBase) this.mob).getAnimation() == EntityDragonBase.ANIMATION_SHAKEPREY) {
             return false;
         }
-        return super.shouldExecute();
+        return super.canUse();
     }
 }

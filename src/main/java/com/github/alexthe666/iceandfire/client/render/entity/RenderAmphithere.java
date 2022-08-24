@@ -26,13 +26,13 @@ public class RenderAmphithere extends MobRenderer<EntityAmphithere, ModelAmphith
     }
 
     @Override
-    protected void preRenderCallback(EntityAmphithere entity, MatrixStack matrixStackIn, float partialTickTime) {
+    protected void scale(EntityAmphithere entity, MatrixStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(2.0F, 2.0F, 2.0F);
 
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityAmphithere amphithere) {
+    public ResourceLocation getTextureLocation(EntityAmphithere amphithere) {
         switch (amphithere.getVariant()) {
             case 0:
                 if (amphithere.isBlinking()) {

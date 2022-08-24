@@ -33,14 +33,14 @@ public class ContainerLectern extends Container {
         this.tileFurnace = furnaceInventory;
         this.addSlot(new SlotLectern(furnaceInventory, 0, 15, 47) {
             @Override
-            public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() instanceof ItemBestiary;
+            public boolean mayPlace(ItemStack stack) {
+                return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() instanceof ItemBestiary;
             }
         });
         this.addSlot(new Slot(furnaceInventory, 1, 35, 47) {
             @Override
-            public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() == IafItemRegistry.MANUSCRIPT;
+            public boolean mayPlace(ItemStack stack) {
+                return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() == IafItemRegistry.MANUSCRIPT;
             }
         });
         for (int i = 0; i < 3; ++i) {
@@ -62,8 +62,8 @@ public class ContainerLectern extends Container {
     }
 
     @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
+    public void broadcastChanges() {
+        super.broadcastChanges();
     }
 
     public void onUpdate() {
@@ -73,44 +73,44 @@ public class ContainerLectern extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return this.tileFurnace.isUsableByPlayer(playerIn);
+    public boolean stillValid(PlayerEntity playerIn) {
+        return this.tileFurnace.stillValid(playerIn);
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
-            if (index < this.tileFurnace.getSizeInventory()) {
-                if (!this.mergeItemStack(itemstack1, this.tileFurnace.getSizeInventory(), this.inventorySlots.size(), true)) {
+            if (index < this.tileFurnace.getContainerSize()) {
+                if (!this.moveItemStackTo(itemstack1, this.tileFurnace.getContainerSize(), this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (this.getSlot(0).isItemValid(itemstack1) && !this.getSlot(0).getHasStack()) {
-                if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+            } else if (this.getSlot(0).mayPlace(itemstack1) && !this.getSlot(0).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                     return ItemStack.EMPTY;
                 }
 
-            } else if (this.getSlot(1).isItemValid(itemstack1) && !this.getSlot(1).getHasStack()) {
-                if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
+            } else if (this.getSlot(1).mayPlace(itemstack1) && !this.getSlot(1).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 1, 2, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (this.tileFurnace.getSizeInventory() <= 5 || !this.mergeItemStack(itemstack1, 5, this.tileFurnace.getSizeInventory(), false)) {
+            } else if (this.tileFurnace.getContainerSize() <= 5 || !this.moveItemStackTo(itemstack1, 5, this.tileFurnace.getContainerSize(), false)) {
                 return ItemStack.EMPTY;
             }
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
         return itemstack;
     }
 
     public int getManuscriptAmount() {
-        ItemStack itemstack = this.tileFurnace.getStackInSlot(1);
+        ItemStack itemstack = this.tileFurnace.getItem(1);
         return itemstack.isEmpty() || itemstack.getItem() != IafItemRegistry.MANUSCRIPT ? 0 : itemstack.getCount();
     }
 
@@ -119,7 +119,7 @@ public class ContainerLectern extends Container {
         possiblePagesInt[1] = getPageField(1);
         possiblePagesInt[2] = getPageField(2);
         EnumBestiaryPages[] pages = new EnumBestiaryPages[3];
-        if (this.tileFurnace.getStackInSlot(0).getItem() == IafItemRegistry.BESTIARY) {
+        if (this.tileFurnace.getItem(0).getItem() == IafItemRegistry.BESTIARY) {
             if (possiblePagesInt[0] < 0) {
                 pages[0] = null;
             } else {
@@ -140,18 +140,18 @@ public class ContainerLectern extends Container {
     }
 
     @Override
-    public boolean enchantItem(PlayerEntity playerIn, int id) {
+    public boolean clickMenuButton(PlayerEntity playerIn, int id) {
         possiblePagesInt[0] = getPageField(0);
         possiblePagesInt[1] = getPageField(1);
         possiblePagesInt[2] = getPageField(2);
-        ItemStack itemstack = this.tileFurnace.getStackInSlot(0);
-        ItemStack itemstack1 = this.tileFurnace.getStackInSlot(1);
+        ItemStack itemstack = this.tileFurnace.getItem(0);
+        ItemStack itemstack1 = this.tileFurnace.getItem(1);
         int i = 3;
 
-        if (!playerIn.world.isRemote && !playerIn.isCreative()) {
+        if (!playerIn.level.isClientSide && !playerIn.isCreative()) {
             itemstack1.shrink(i);
             if (itemstack1.isEmpty()) {
-                this.tileFurnace.setInventorySlotContents(1, ItemStack.EMPTY);
+                this.tileFurnace.setItem(1, ItemStack.EMPTY);
             }
             return false;
         }
@@ -165,19 +165,19 @@ public class ContainerLectern extends Container {
             EnumBestiaryPages page = getPossiblePages()[MathHelper.clamp(id, 0, 2)];
             if (page != null) {
                 if (itemstack.getItem() == IafItemRegistry.BESTIARY) {
-                    this.tileFurnace.setInventorySlotContents(0, itemstack);
+                    this.tileFurnace.setItem(0, itemstack);
                     if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern) {
-                        if (playerIn.world.isRemote) {
-                            IceAndFire.sendMSGToServer(new MessageUpdateLectern(IceAndFire.PROXY.getRefrencedTE().getPos().toLong(), 0, 0, 0, true, page.ordinal()));
+                        if (playerIn.level.isClientSide) {
+                            IceAndFire.sendMSGToServer(new MessageUpdateLectern(IceAndFire.PROXY.getRefrencedTE().getBlockPos().asLong(), 0, 0, 0, true, page.ordinal()));
                         }
                         ((TileEntityLectern) IceAndFire.PROXY.getRefrencedTE()).randomizePages(itemstack, itemstack1);
                     }
                 }
 
-                this.tileFurnace.markDirty();
+                this.tileFurnace.setChanged();
                 //this.xpSeed = playerIn.getXPSeed();
-                this.onCraftMatrixChanged(this.tileFurnace);
-                playerIn.world.playSound(null, playerIn.getPosition(), IafSoundRegistry.BESTIARY_PAGE, SoundCategory.BLOCKS, 1.0F, playerIn.world.rand.nextFloat() * 0.1F + 0.9F);
+                this.slotsChanged(this.tileFurnace);
+                playerIn.level.playSound(null, playerIn.blockPosition(), IafSoundRegistry.BESTIARY_PAGE, SoundCategory.BLOCKS, 1.0F, playerIn.level.random.nextFloat() * 0.1F + 0.9F);
             }
             onUpdate();
             return true;

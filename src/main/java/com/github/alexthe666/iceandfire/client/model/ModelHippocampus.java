@@ -8,7 +8,6 @@ import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
@@ -48,137 +47,137 @@ public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
     public AdvancedModelBox StirrupL;
     public AdvancedModelBox StirrupIronR;
     public AdvancedModelBox StirrupIronL;
-    private ModelAnimator animator;
+    private final ModelAnimator animator;
 
     public ModelHippocampus() {
         this.animator = ModelAnimator.create();
-        this.textureWidth = 128;
-        this.textureHeight = 128;
+        this.texWidth = 128;
+        this.texHeight = 128;
         this.Body = new AdvancedModelBox(this, 0, 34);
-        this.Body.setRotationPoint(0.0F, 11.0F, 9.0F);
+        this.Body.setPos(0.0F, 11.0F, 9.0F);
         this.Body.addBox(-5.0F, -8.0F, -19.0F, 10, 10, 24, 0.0F);
         this.Fin = new AdvancedModelBox(this, 57, 33);
-        this.Fin.setRotationPoint(0.0F, 8.2F, -0.7F);
+        this.Fin.setPos(0.0F, 8.2F, -0.7F);
         this.Fin.addBox(0.0F, -10.1F, 3.7F, 1, 18, 5, 0.0F);
         this.setRotateAngle(Fin, -0.091106186954104F, 0.0F, 0.0F);
         this.BottomJaw = new AdvancedModelBox(this, 24, 27);
-        this.BottomJaw.setRotationPoint(0.0F, 0.3F, -5.5F);
+        this.BottomJaw.setPos(0.0F, 0.3F, -5.5F);
         this.BottomJaw.addBox(-2.0F, 0.0F, -6.5F, 4, 2, 5, 0.0F);
         this.Saddleback = new AdvancedModelBox(this, 80, 9);
-        this.Saddleback.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.Saddleback.setPos(0.0F, 0.0F, 0.0F);
         this.Saddleback.addBox(-4.0F, -1.0F, 3.0F, 8, 1, 2, 0.0F);
         this.NoseBand = new AdvancedModelBox(this, 85, 60);
-        this.NoseBand.setRotationPoint(0.0F, 7.9F, -4.5F);
+        this.NoseBand.setPos(0.0F, 7.9F, -4.5F);
         this.NoseBand.addBox(-3.0F, -11.1F, -7.0F, 6, 6, 12, 0.0F);
         this.FlukeL = new AdvancedModelBox(this, 106, 90);
-        this.FlukeL.setRotationPoint(0.0F, 16.2F, 0.1F);
+        this.FlukeL.setPos(0.0F, 16.2F, 0.1F);
         this.FlukeL.addBox(-3.5F, -0.1F, -0.5F, 7, 18, 1, 0.0F);
         this.setRotateAngle(FlukeL, -0.03490658503988659F, -0.08726646259971647F, -0.5235987755982988F);
         this.Saddle = new AdvancedModelBox(this, 80, 0);
-        this.Saddle.setRotationPoint(0.0F, -8.9F, -7.0F);
+        this.Saddle.setPos(0.0F, -8.9F, -7.0F);
         this.Saddle.addBox(-5.0F, 0.0F, -3.0F, 10, 1, 8, 0.0F);
         this.FinL = new AdvancedModelBox(this, 80, 43);
         this.FinL.mirror = true;
-        this.FinL.setRotationPoint(-0.5F, 1.0F, -0.7F);
+        this.FinL.setPos(-0.5F, 1.0F, -0.7F);
         this.FinL.addBox(-0.5F, -7.6F, 2.2F, 1, 9, 5, 0.0F);
         this.StirrupR = new AdvancedModelBox(this, 80, 0);
-        this.StirrupR.setRotationPoint(-5.0F, 1.0F, 0.0F);
+        this.StirrupR.setPos(-5.0F, 1.0F, 0.0F);
         this.StirrupR.addBox(-0.5F, 0.0F, -0.5F, 1, 6, 1, 0.0F);
         this.FrontThighL = new AdvancedModelBox(this, 96, 29);
         this.FrontThighL.mirror = true;
-        this.FrontThighL.setRotationPoint(4.0F, -2.0F, -16.7F);
+        this.FrontThighL.setPos(4.0F, -2.0F, -16.7F);
         this.FrontThighL.addBox(-2.5F, -2.0F, -2.5F, 4, 9, 5, 0.0F);
         this.setRotateAngle(FrontThighL, 0.0F, 0.0F, -0.22689280275926282F);
         this.FrontLegL = new AdvancedModelBox(this, 96, 43);
         this.FrontLegL.mirror = true;
-        this.FrontLegL.setRotationPoint(0.0F, 7.0F, 0.0F);
+        this.FrontLegL.setPos(0.0F, 7.0F, 0.0F);
         this.FrontLegL.addBox(-2.0F, 0.0F, -1.5F, 3, 5, 3, 0.0F);
         this.setRotateAngle(FrontLegL, 0.6283185307179586F, 0.0F, 0.0F);
         this.Tail_3 = new AdvancedModelBox(this, 44, 102);
-        this.Tail_3.setRotationPoint(0.0F, 10.4F, 0.1F);
+        this.Tail_3.setPos(0.0F, 10.4F, 0.1F);
         this.Tail_3.addBox(-3.0F, 0.0F, -1.9F, 6, 16, 4, 0.0F);
         this.setRotateAngle(Tail_3, 0.22759093446006054F, 0.0F, 0.0F);
         this.FrontFootL = new AdvancedModelBox(this, 96, 51);
         this.FrontFootL.mirror = true;
-        this.FrontFootL.setRotationPoint(0.0F, 5.0F, 0.0F);
+        this.FrontFootL.setPos(0.0F, 5.0F, 0.0F);
         this.FrontFootL.addBox(-2.5F, 0.0F, -2.0F, 4, 3, 4, 0.0F);
         this.FinRBack = new AdvancedModelBox(this, 80, 43);
-        this.FinRBack.setRotationPoint(-3.1F, 0.0F, -0.7F);
+        this.FinRBack.setPos(-3.1F, 0.0F, -0.7F);
         this.FinRBack.addBox(-2.0F, -4.5F, 0.4F, 1, 6, 7, 0.0F);
         this.setRotateAngle(FinRBack, -0.5235987755982988F, -0.17453292519943295F, 0.17453292519943295F);
         this.Mane = new AdvancedModelBox(this, 57, 33);
-        this.Mane.setRotationPoint(0.0F, -5.6F, -0.3F);
+        this.Mane.setPos(0.0F, -5.6F, -0.3F);
         this.Mane.addBox(0.0F, -8.6F, 3.5F, 1, 18, 6, 0.0F);
         this.StirrupIronL = new AdvancedModelBox(this, 74, 0);
-        this.StirrupIronL.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.StirrupIronL.setPos(0.0F, 0.0F, 0.0F);
         this.StirrupIronL.addBox(-0.5F, 6.0F, -1.0F, 1, 2, 2, 0.0F);
         this.ChestL = new AdvancedModelBox(this, 0, 47);
-        this.ChestL.setRotationPoint(4.5F, 1.0F, 8.0F);
+        this.ChestL.setPos(4.5F, 1.0F, 8.0F);
         this.ChestL.addBox(-3.0F, 0.0F, 0.0F, 8, 8, 3, 0.0F);
         this.setRotateAngle(ChestL, 0.0F, 1.5707963267948966F, 0.0F);
         this.Head = new AdvancedModelBox(this, 0, 0);
-        this.Head.setRotationPoint(0.0F, -10.6F, 2.7F);
+        this.Head.setPos(0.0F, -10.6F, 2.7F);
         this.Head.addBox(-2.5F, -2.9F, -7.0F, 5, 5, 7, 0.0F);
         this.setRotateAngle(Head, -0.091106186954104F, 0.0F, 0.0F);
         this.Neck = new AdvancedModelBox(this, 0, 12);
-        this.Neck.setRotationPoint(0.0F, -4.4F, -16.3F);
+        this.Neck.setPos(0.0F, -4.4F, -16.3F);
         this.Neck.addBox(-2.05F, -13.1F, -4.0F, 4, 14, 8, 0.0F);
         this.setRotateAngle(Neck, 0.6829473363053812F, 0.0F, 0.0F);
         this.FinR = new AdvancedModelBox(this, 80, 43);
-        this.FinR.setRotationPoint(0.5F, 1.0F, -0.7F);
+        this.FinR.setPos(0.5F, 1.0F, -0.7F);
         this.FinR.addBox(-0.5F, -7.6F, 2.2F, 1, 9, 5, 0.0F);
         this.FrontFootR = new AdvancedModelBox(this, 96, 51);
-        this.FrontFootR.setRotationPoint(0.0F, 5.0F, 0.0F);
+        this.FrontFootR.setPos(0.0F, 5.0F, 0.0F);
         this.FrontFootR.addBox(-1.5F, 0.0F, -2.0F, 4, 3, 4, 0.0F);
         this.TopJaw = new AdvancedModelBox(this, 24, 18);
-        this.TopJaw.setRotationPoint(0.0F, -0.1F, -5.6F);
+        this.TopJaw.setPos(0.0F, -0.1F, -5.6F);
         this.TopJaw.addBox(-2.0F, -2.6F, -7.0F, 4, 3, 6, 0.0F);
         this.Tail_2 = new AdvancedModelBox(this, 37, 80);
-        this.Tail_2.setRotationPoint(0.0F, 11.8F, 0.1F);
+        this.Tail_2.setPos(0.0F, 11.8F, 0.1F);
         this.Tail_2.addBox(-3.5F, 0.0F, -3.0F, 7, 11, 6, 0.0F);
         this.setRotateAngle(Tail_2, -0.091106186954104F, 0.0F, 0.0F);
         this.FlukeR = new AdvancedModelBox(this, 106, 90);
         this.FlukeR.mirror = true;
-        this.FlukeR.setRotationPoint(0.0F, 16.2F, 0.1F);
+        this.FlukeR.setPos(0.0F, 16.2F, 0.1F);
         this.FlukeR.addBox(-3.5F, -0.1F, -0.5F, 7, 18, 1, 0.0F);
         this.setRotateAngle(FlukeR, -0.03490658503988659F, 0.08726646259971647F, 0.5235987755982988F);
         this.StirrupL = new AdvancedModelBox(this, 70, 0);
-        this.StirrupL.setRotationPoint(5.0F, 1.0F, 0.0F);
+        this.StirrupL.setPos(5.0F, 1.0F, 0.0F);
         this.StirrupL.addBox(-0.5F, 0.0F, -0.5F, 1, 6, 1, 0.0F);
         this.FrontThighR = new AdvancedModelBox(this, 96, 29);
-        this.FrontThighR.setRotationPoint(-4.0F, -2.0F, -16.7F);
+        this.FrontThighR.setPos(-4.0F, -2.0F, -16.7F);
         this.FrontThighR.addBox(-1.5F, -2.0F, -2.5F, 4, 9, 5, 0.0F);
         this.setRotateAngle(FrontThighR, 0.0F, 0.0F, 0.22689280275926282F);
         this.FinLBack = new AdvancedModelBox(this, 80, 43);
         this.FinLBack.mirror = true;
-        this.FinLBack.setRotationPoint(3.1F, 0.0F, -0.7F);
+        this.FinLBack.setPos(3.1F, 0.0F, -0.7F);
         this.FinLBack.addBox(1.0F, -4.5F, 0.4F, 1, 6, 7, 0.0F);
         this.setRotateAngle(FinLBack, -0.5235987755982988F, 0.17453292519943295F, -0.17453292519943295F);
         this.ReinL = new AdvancedModelBox(this, 46, 55);
-        this.ReinL.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.ReinL.setPos(0.0F, 0.0F, 0.0F);
         this.ReinL.addBox(3.1F, -6.3F, -3.4F, 0, 3, 19, 0.0F);
         this.setRotateAngle(ReinL, -0.04363323129985824F, 0.0F, 0.0F);
         this.ReinR = new AdvancedModelBox(this, 46, 55);
         this.ReinR.mirror = true;
-        this.ReinR.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.ReinR.setPos(0.0F, 0.0F, 0.0F);
         this.ReinR.addBox(-3.1F, -6.0F, -3.4F, 0, 3, 19, 0.0F);
         this.setRotateAngle(ReinR, -0.04363323129985824F, 0.0F, 0.0F);
         this.Tail_1 = new AdvancedModelBox(this, 0, 80);
-        this.Tail_1.setRotationPoint(0.0F, -3.3F, 2.5F);
+        this.Tail_1.setPos(0.0F, -3.3F, 2.5F);
         this.Tail_1.addBox(-4.0F, 0.0F, -4.0F, 8, 13, 8, 0.0F);
         this.setRotateAngle(Tail_1, 1.5025539530419183F, 0.0F, 0.0F);
         this.FrontLegR = new AdvancedModelBox(this, 96, 43);
-        this.FrontLegR.setRotationPoint(0.0F, 7.0F, 0.0F);
+        this.FrontLegR.setPos(0.0F, 7.0F, 0.0F);
         this.FrontLegR.addBox(-1.0F, 0.0F, -1.5F, 3, 5, 3, 0.0F);
         this.setRotateAngle(FrontLegR, 0.6283185307179586F, 0.0F, 0.0F);
         this.SaddleFront = new AdvancedModelBox(this, 106, 9);
-        this.SaddleFront.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.SaddleFront.setPos(0.0F, 0.0F, 0.0F);
         this.SaddleFront.addBox(-1.5F, -1.0F, -3.0F, 3, 1, 2, 0.0F);
         this.StirrupIronR = new AdvancedModelBox(this, 74, 4);
-        this.StirrupIronR.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.StirrupIronR.setPos(0.0F, 0.0F, 0.0F);
         this.StirrupIronR.addBox(-0.5F, 6.0F, -1.0F, 1, 2, 2, 0.0F);
         this.ChestR = new AdvancedModelBox(this, 0, 34);
-        this.ChestR.setRotationPoint(-4.5F, 1.0F, 8.0F);
+        this.ChestR.setPos(-4.5F, 1.0F, 8.0F);
         this.ChestR.addBox(-3.0F, 0.0F, -3.0F, 8, 8, 3, 0.0F);
         this.setRotateAngle(ChestR, 0.0F, 1.5707963267948966F, 0.0F);
         this.Tail_1.addChild(this.Fin);
@@ -218,7 +217,7 @@ public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
     }
 
     @Override
-    public Iterable<ModelRenderer> getParts() {
+    public Iterable<ModelRenderer> parts() {
         return ImmutableList.of(Body);
     }
 
@@ -240,15 +239,15 @@ public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
     }
 
     @Override
-    public void setRotationAngles(EntityHippocampus entity, float f, float f1, float f2, float f3, float f4) {
+    public void setupAnim(EntityHippocampus entity, float f, float f1, float f2, float f3, float f4) {
         animate(entity, f, f1, f2, f3, f4, 1);
-        if (this.isChild) {
+        if (this.young) {
             this.Body.setShouldScaleChildren(true);
             this.Body.setScale(0.5F, 0.5F, 0.5F);
             this.Head.setScale(1.5F, 1.5F, 1.5F);
-            this.TopJaw.setRotationPoint(0.0F, -0.1F, -7.6F);
-            this.Body.setRotationPoint(0.0F, 12.5F, 4.0F);
-            this.BottomJaw.setRotationPoint(0.0F, 0.3F, -7.5F);
+            this.TopJaw.setPos(0.0F, -0.1F, -7.6F);
+            this.Body.setPos(0.0F, 12.5F, 4.0F);
+            this.BottomJaw.setPos(0.0F, 0.3F, -7.5F);
 
         } else {
             this.Body.setScale(1, 1, 1);
@@ -317,18 +316,18 @@ public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
 
     @Override
     public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
-        this.render(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        this.NoseBand.showModel = false;
-        this.ReinL.showModel = false;
-        this.ReinR.showModel = false;
-        this.ChestL.showModel = false;
-        this.ChestR.showModel = false;
-        this.Saddle.showModel = false;
-        this.Saddleback.showModel = false;
-        this.StirrupIronL.showModel = false;
-        this.StirrupIronR.showModel = false;
-        this.SaddleFront.showModel = false;
-        this.StirrupL.showModel = false;
-        this.StirrupR.showModel = false;
+        this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.NoseBand.visible = false;
+        this.ReinL.visible = false;
+        this.ReinR.visible = false;
+        this.ChestL.visible = false;
+        this.ChestR.visible = false;
+        this.Saddle.visible = false;
+        this.Saddleback.visible = false;
+        this.StirrupIronL.visible = false;
+        this.StirrupIronR.visible = false;
+        this.SaddleFront.visible = false;
+        this.StirrupL.visible = false;
+        this.StirrupR.visible = false;
     }
 }

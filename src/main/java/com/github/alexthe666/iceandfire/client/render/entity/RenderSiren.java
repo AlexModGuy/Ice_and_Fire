@@ -21,13 +21,13 @@ public class RenderSiren extends MobRenderer<EntitySiren, ModelSiren> {
     }
 
     @Override
-    public void preRenderCallback(EntitySiren LivingEntityIn, MatrixStack stack, float partialTickTime) {
+    public void scale(EntitySiren LivingEntityIn, MatrixStack stack, float partialTickTime) {
         stack.translate(0, 0, -0.5F);
 
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntitySiren siren) {
+    public ResourceLocation getTextureLocation(EntitySiren siren) {
         switch (siren.getHairColor()) {
             default:
                 return siren.isAgressive() ? TEXTURE_0_AGGRESSIVE : TEXTURE_0;

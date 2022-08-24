@@ -1,18 +1,11 @@
 package com.github.alexthe666.iceandfire.block;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -30,30 +23,32 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import javax.annotation.Nullable;
 
 public class BlockJar extends ContainerBlock implements ICustomRendered {
-    protected static final VoxelShape AABB = Block.makeCuboidShape(3, 0, 3, 13, 16, 13);
+    protected static final VoxelShape AABB = Block.box(3, 0, 3, 13, 16, 13);
     public Item itemBlock;
-    private boolean empty;
-    private int pixieType;
+    private final boolean empty;
+    private final int pixieType;
 
     public BlockJar(int pixieType) {
         super(
-    		pixieType != -1 ? 
-				Properties
-					.create(Material.GLASS)
-					.notSolid()
-					.variableOpacity()
-					.hardnessAndResistance(1, 2)
-					.sound(SoundType.GLASS)
-					.setLightLevel((state) -> { return pixieType == -1 ? 0 : 10; })
-					.lootFrom(IafBlockRegistry.JAR_EMPTY)
+            pixieType != -1 ?
+                Properties
+                    .of(Material.GLASS)
+                    .noOcclusion()
+                    .dynamicShape()
+                    .strength(1, 2)
+                    .sound(SoundType.GLASS)
+                    .lightLevel((state) -> {
+                        return pixieType == -1 ? 0 : 10;
+                    })
+                    .dropsLike(IafBlockRegistry.JAR_EMPTY)
 				: Properties
-					.create(Material.GLASS)
-					.notSolid()
-					.variableOpacity()
-					.hardnessAndResistance(1, 2)
+                .of(Material.GLASS)
+                .noOcclusion()
+                .dynamicShape()
+                .strength(1, 2)
 					.sound(SoundType.GLASS)
 		);
 
@@ -75,50 +70,50 @@ public class BlockJar extends ContainerBlock implements ICustomRendered {
     }
 
 
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         dropPixie(worldIn, pos);
-        super.onReplaced(state, worldIn, pos, newState, isMoving);
+        super.onRemove(state, worldIn, pos, newState, isMoving);
     }
 
     public void dropPixie(World world, BlockPos pos) {
-        if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar && ((TileEntityJar) world.getTileEntity(pos)).hasPixie) {
-            ((TileEntityJar) world.getTileEntity(pos)).releasePixie();
+        if (world.getBlockEntity(pos) != null && world.getBlockEntity(pos) instanceof TileEntityJar && ((TileEntityJar) world.getBlockEntity(pos)).hasPixie) {
+            ((TileEntityJar) world.getBlockEntity(pos)).releasePixie();
         }
     }
 
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult resultIn) {
-        if (!empty && world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar && ((TileEntityJar) world.getTileEntity(pos)).hasPixie && ((TileEntityJar) world.getTileEntity(pos)).hasProduced) {
-            ((TileEntityJar) world.getTileEntity(pos)).hasProduced = false;
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult resultIn) {
+        if (!empty && world.getBlockEntity(pos) != null && world.getBlockEntity(pos) instanceof TileEntityJar && ((TileEntityJar) world.getBlockEntity(pos)).hasPixie && ((TileEntityJar) world.getBlockEntity(pos)).hasProduced) {
+            ((TileEntityJar) world.getBlockEntity(pos)).hasProduced = false;
             ItemEntity item = new ItemEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(IafItemRegistry.PIXIE_DUST));
-            if (!world.isRemote) {
-                world.addEntity(item);
+            if (!world.isClientSide) {
+                world.addFreshEntity(item);
             }
-            world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, IafSoundRegistry.PIXIE_HURT, SoundCategory.NEUTRAL, 1, 1, false);
+            world.playLocalSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5, IafSoundRegistry.PIXIE_HURT, SoundCategory.NEUTRAL, 1, 1, false);
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.PASS;
     }
 
 
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityJar) {
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        if (world.getBlockEntity(pos) != null && world.getBlockEntity(pos) instanceof TileEntityJar) {
             if (!empty) {
-                ((TileEntityJar) world.getTileEntity(pos)).hasPixie = true;
-                ((TileEntityJar) world.getTileEntity(pos)).pixieType = pixieType;
+                ((TileEntityJar) world.getBlockEntity(pos)).hasPixie = true;
+                ((TileEntityJar) world.getBlockEntity(pos)).pixieType = pixieType;
             } else {
-                ((TileEntityJar) world.getTileEntity(pos)).hasPixie = false;
+                ((TileEntityJar) world.getBlockEntity(pos)).hasPixie = false;
             }
-            world.getTileEntity(pos).markDirty();
+            world.getBlockEntity(pos).setChanged();
         }
     }
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+    public TileEntity newBlockEntity(IBlockReader worldIn) {
         return new TileEntityJar(empty);
     }
 }

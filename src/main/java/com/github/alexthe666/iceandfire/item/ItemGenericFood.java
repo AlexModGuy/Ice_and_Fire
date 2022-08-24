@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
@@ -10,18 +9,18 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.world.World;
 
 public class ItemGenericFood extends Item {
-    private int healAmount;
-    private float saturation;
+    private final int healAmount;
+    private final float saturation;
 
     public ItemGenericFood(int amount, float saturation, boolean isWolfFood, boolean eatFast, boolean alwaysEdible, String name) {
-        super(new Item.Properties().food(createFood(amount, saturation, isWolfFood, eatFast, alwaysEdible, null)).group(IceAndFire.TAB_ITEMS));
+        super(new Item.Properties().food(createFood(amount, saturation, isWolfFood, eatFast, alwaysEdible, null)).tab(IceAndFire.TAB_ITEMS));
         this.setRegistryName(IceAndFire.MODID, name);
         this.healAmount = amount;
         this.saturation = saturation;
     }
 
     public ItemGenericFood(int amount, float saturation, boolean isWolfFood, boolean eatFast, boolean alwaysEdible, String name, int stackSize) {
-        super(new Item.Properties().food(createFood(amount, saturation, isWolfFood, eatFast, alwaysEdible, null)).maxStackSize(stackSize).group(IceAndFire.TAB_ITEMS));
+        super(new Item.Properties().food(createFood(amount, saturation, isWolfFood, eatFast, alwaysEdible, null)).stacksTo(stackSize).tab(IceAndFire.TAB_ITEMS));
         this.setRegistryName(IceAndFire.MODID, name);
         this.healAmount = amount;
         this.saturation = saturation;
@@ -29,16 +28,16 @@ public class ItemGenericFood extends Item {
 
     public static final Food createFood(int amount, float saturation, boolean isWolfFood, boolean eatFast, boolean alwaysEdible, EffectInstance potion) {
         Food.Builder builder = new Food.Builder();
-        builder.hunger(amount);
-        builder.saturation(saturation);
+        builder.nutrition(amount);
+        builder.saturationMod(saturation);
         if (isWolfFood) {
             builder.meat();
         }
         if (eatFast) {
-            builder.fastToEat();
+            builder.fast();
         }
         if (alwaysEdible) {
-            builder.setAlwaysEdible();
+            builder.alwaysEat();
         }
         if (potion != null) {
             builder.effect(potion, 1.0F);
@@ -46,9 +45,9 @@ public class ItemGenericFood extends Item {
         return builder.build();
     }
 
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity LivingEntity) {
+    public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity LivingEntity) {
         this.onFoodEaten(stack, worldIn, LivingEntity);
-        return super.onItemUseFinish(stack, worldIn, LivingEntity);
+        return super.finishUsingItem(stack, worldIn, LivingEntity);
     }
 
     public void onFoodEaten(ItemStack stack, World worldIn, LivingEntity livingEntity) {

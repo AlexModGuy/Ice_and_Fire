@@ -1,9 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.EnumSet;
-
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
@@ -13,6 +10,8 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import java.util.EnumSet;
 
 public class MyrmexAIFollowSummoner extends Goal {
     private final EntityMyrmexSwarmer tameable;
@@ -25,23 +24,23 @@ public class MyrmexAIFollowSummoner extends Goal {
 
     public MyrmexAIFollowSummoner(EntityMyrmexSwarmer tameableIn, double followSpeedIn, float minDistIn, float maxDistIn) {
         this.tameable = tameableIn;
-        this.world = tameableIn.world;
+        this.world = tameableIn.level;
         this.minDist = minDistIn;
         this.maxDist = maxDistIn;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         LivingEntity LivingEntity = this.tameable.getSummoner();
-        if (tameable.getAttackTarget() != null) {
+        if (tameable.getTarget() != null) {
             return false;
         }
         if (LivingEntity == null) {
             return false;
         } else if (LivingEntity instanceof PlayerEntity && LivingEntity.isSpectator()) {
             return false;
-        } else if (this.tameable.getDistanceSq(LivingEntity) < this.minDist * this.minDist) {
+        } else if (this.tameable.distanceToSqr(LivingEntity) < this.minDist * this.minDist) {
             return false;
         } else {
             this.owner = LivingEntity;
@@ -50,50 +49,50 @@ public class MyrmexAIFollowSummoner extends Goal {
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return this.tameable.getAttackTarget() == null
-            && this.tameable.getDistanceSq(this.owner) > this.maxDist * this.maxDist;
+    public boolean canContinueToUse() {
+        return this.tameable.getTarget() == null
+            && this.tameable.distanceToSqr(this.owner) > this.maxDist * this.maxDist;
     }
 
     @Override
-    public void startExecuting() {
+    public void start() {
         this.timeToRecalcPath = 0;
-        this.oldWaterCost = this.tameable.getPathPriority(PathNodeType.WATER);
-        this.tameable.setPathPriority(PathNodeType.WATER, 0.0F);
+        this.oldWaterCost = this.tameable.getPathfindingMalus(PathNodeType.WATER);
+        this.tameable.setPathfindingMalus(PathNodeType.WATER, 0.0F);
     }
 
     @Override
-    public void resetTask() {
+    public void stop() {
         this.owner = null;
-        this.tameable.setPathPriority(PathNodeType.WATER, this.oldWaterCost);
+        this.tameable.setPathfindingMalus(PathNodeType.WATER, this.oldWaterCost);
     }
 
     private boolean isEmptyBlock(BlockPos pos) {
         BlockState BlockState = this.world.getBlockState(pos);
-        return BlockState.getMaterial() == Material.AIR || !BlockState.isSolid();
+        return BlockState.getMaterial() == Material.AIR || !BlockState.canOcclude();
     }
 
     @Override
     public void tick() {
-        if (this.tameable.getAttackTarget() != null) {
+        if (this.tameable.getTarget() != null) {
             return;
         }
-        this.tameable.getLookController().setLookPositionWithEntity(this.owner, 10.0F,
-            this.tameable.getVerticalFaceSpeed());
+        this.tameable.getLookControl().setLookAt(this.owner, 10.0F,
+            this.tameable.getMaxHeadXRot());
         if (--this.timeToRecalcPath <= 0) {
             this.timeToRecalcPath = 10;
-            this.tameable.getMoveHelper().setMoveTo(this.owner.getPosX(), this.owner.getPosY() + this.owner.getEyeHeight(), this.owner.getPosZ(), 0.25D);
-            if (!this.tameable.getLeashed()) {
-                if (this.tameable.getDistanceSq(this.owner) >= 50.0D) {
-                    final int i = MathHelper.floor(this.owner.getPosX()) - 2;
-                    final int j = MathHelper.floor(this.owner.getPosZ()) - 2;
+            this.tameable.getMoveControl().setWantedPosition(this.owner.getX(), this.owner.getY() + this.owner.getEyeHeight(), this.owner.getZ(), 0.25D);
+            if (!this.tameable.isLeashed()) {
+                if (this.tameable.distanceToSqr(this.owner) >= 50.0D) {
+                    final int i = MathHelper.floor(this.owner.getX()) - 2;
+                    final int j = MathHelper.floor(this.owner.getZ()) - 2;
                     final int k = MathHelper.floor(this.owner.getBoundingBox().minY);
 
                     for (int l = 0; l <= 4; ++l) {
                         for (int i1 = 0; i1 <= 4; ++i1) {
                             if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.isEmptyBlock(new BlockPos(i + l, k, j + i1)) && this.isEmptyBlock(new BlockPos(i + l, k + 1, j + i1))) {
-                                this.tameable.setLocationAndAngles(i + l + 0.5F, k + 1.5, j + i1 + 0.5F,
-                                    this.tameable.rotationYaw, this.tameable.rotationPitch);
+                                this.tameable.moveTo(i + l + 0.5F, k + 1.5, j + i1 + 0.5F,
+                                    this.tameable.yRot, this.tameable.xRot);
                                 return;
                             }
                         }

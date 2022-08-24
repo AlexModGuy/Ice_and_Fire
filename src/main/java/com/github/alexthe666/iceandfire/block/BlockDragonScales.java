@@ -21,13 +21,13 @@ public class BlockDragonScales extends Block implements IDragonProof {
     public BlockDragonScales(String name, EnumDragonEgg type) {
         super(
             Properties
-                .create(Material.ROCK)
-                .variableOpacity()
-                .hardnessAndResistance(30F, 500)
+                .of(Material.STONE)
+                .dynamicShape()
+                .strength(30F, 500)
                 .harvestTool(ToolType.PICKAXE)
                 .harvestLevel(2)
                 .sound(SoundType.STONE)
-                .setRequiresTool()
+                .requiresCorrectToolForDrops()
         );
 
         this.setRegistryName(IceAndFire.MODID, name);
@@ -36,7 +36,7 @@ public class BlockDragonScales extends Block implements IDragonProof {
 
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("dragon." + type.toString().toLowerCase()).mergeStyle(type.color));
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("dragon." + type.toString().toLowerCase()).withStyle(type.color));
     }
 }

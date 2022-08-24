@@ -1,16 +1,15 @@
 package com.github.alexthe666.iceandfire.message;
 
-import java.util.function.Supplier;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.util.ISyncMount;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class MessageStartRidingMob {
 
@@ -48,11 +47,11 @@ public class MessageStartRidingMob {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (player.world != null) {
-                    Entity entity = player.world.getEntityByID(message.dragonId);
+                if (player.level != null) {
+                    Entity entity = player.level.getEntity(message.dragonId);
                     if (entity != null && entity instanceof ISyncMount && entity instanceof TameableEntity) {
                         TameableEntity dragon = (TameableEntity) entity;
-                        if (dragon.isOwner(player) && dragon.getDistance(player) < 14) {
+                        if (dragon.isOwnedBy(player) && dragon.distanceTo(player) < 14) {
                             if (message.ride) {
                                 if (message.baby) {
                                     dragon.startRiding(player, true);

@@ -17,26 +17,26 @@ public class TileEntityDreadSpawner extends MobSpawnerTileEntity {
     private final DreadSpawnerBaseLogic spawnerLogic = new DreadSpawnerBaseLogic() {
         @Override
         public void broadcastEvent(int id) {
-            TileEntityDreadSpawner.this.world.addBlockEvent(TileEntityDreadSpawner.this.pos, Blocks.SPAWNER, id, 0);
+            TileEntityDreadSpawner.this.level.blockEvent(TileEntityDreadSpawner.this.worldPosition, Blocks.SPAWNER, id, 0);
         }
 
         @Override
-        public World getWorld() {
-            return TileEntityDreadSpawner.this.world;
+        public World getLevel() {
+            return TileEntityDreadSpawner.this.level;
         }
 
         @Override
-        public BlockPos getSpawnerPosition() {
-            return TileEntityDreadSpawner.this.pos;
+        public BlockPos getPos() {
+            return TileEntityDreadSpawner.this.worldPosition;
         }
 
         @Override
         public void setNextSpawnData(WeightedSpawnerEntity nextSpawnData) {
             super.setNextSpawnData(nextSpawnData);
 
-            if (this.getWorld() != null) {
-                BlockState BlockState = this.getWorld().getBlockState(this.getSpawnerPosition());
-                this.getWorld().notifyBlockUpdate(TileEntityDreadSpawner.this.pos, BlockState, BlockState, 4);
+            if (this.getLevel() != null) {
+                BlockState BlockState = this.getLevel().getBlockState(this.getPos());
+                this.getLevel().sendBlockUpdated(TileEntityDreadSpawner.this.worldPosition, BlockState, BlockState, 4);
             }
         }
     };
@@ -47,15 +47,15 @@ public class TileEntityDreadSpawner extends MobSpawnerTileEntity {
     }
 
     @Override
-    public void read(BlockState blockstate, CompoundNBT compound) {
-        super.read(blockstate, compound);
-        this.spawnerLogic.read(compound);
+    public void load(BlockState blockstate, CompoundNBT compound) {
+        super.load(blockstate, compound);
+        this.spawnerLogic.load(compound);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
-        this.spawnerLogic.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
+        this.spawnerLogic.save(compound);
         return compound;
     }
 
@@ -73,32 +73,32 @@ public class TileEntityDreadSpawner extends MobSpawnerTileEntity {
      */
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+        return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        read(this.getBlockState(), packet.getNbtCompound());
+        load(this.getBlockState(), packet.getTag());
     }
 
     @Override
     public CompoundNBT getUpdateTag() {
-        return this.write(new CompoundNBT());
+        return this.save(new CompoundNBT());
     }
 
 
     @Override
-    public boolean receiveClientEvent(int id, int type) {
-        return this.spawnerLogic.setDelayToMin(id) || super.receiveClientEvent(id, type);
+    public boolean triggerEvent(int id, int type) {
+        return this.spawnerLogic.onEventTriggered(id) || super.triggerEvent(id, type);
     }
 
     @Override
-    public boolean onlyOpsCanSetNbt() {
+    public boolean onlyOpCanSetNbt() {
         return true;
     }
 
     @Override
-    public AbstractSpawner getSpawnerBaseLogic() {
+    public AbstractSpawner getSpawner() {
         return this.spawnerLogic;
     }
 

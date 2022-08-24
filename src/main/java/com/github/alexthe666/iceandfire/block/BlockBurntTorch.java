@@ -16,15 +16,15 @@ public class BlockBurntTorch extends TorchBlock implements IDreadBlock, IWallBlo
 
     public BlockBurntTorch() {
         super(
-            Properties.create(Material.WOOD)
-                .setLightLevel((state) -> {
+            Properties.of(Material.WOOD)
+                .lightLevel((state) -> {
                     return 0;
                 })
                 .sound(SoundType.WOOD)
-                .notSolid()
-                .variableOpacity()
-                .doesNotBlockMovement(),
-            RedstoneParticleData.REDSTONE_DUST
+                .noOcclusion()
+                .dynamicShape()
+                .noCollission(),
+            RedstoneParticleData.REDSTONE
         );
 
         setRegistryName(IceAndFire.MODID, "burnt_torch");

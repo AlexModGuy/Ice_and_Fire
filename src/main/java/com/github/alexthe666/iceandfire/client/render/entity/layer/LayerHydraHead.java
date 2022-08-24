@@ -58,24 +58,24 @@ public class LayerHydraHead extends LayerRenderer<EntityHydra, ModelHydraBody> {
         if (entity.isInvisible()) {
             return;
         }
-        renderHydraHeads(renderer.getEntityModel(), false, matrixStackIn, bufferIn, packedLightIn, entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+        renderHydraHeads(renderer.getModel(), false, matrixStackIn, bufferIn, packedLightIn, entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
     }
 
     public static void renderHydraHeads(ModelHydraBody model, boolean stone, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityHydra hydra, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch){
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         int heads = hydra.getHeadCount();
         translateToBody(model, matrixStackIn);
-        RenderType type = RenderType.getEntityCutout(stone ? TEXTURE_STONE : getHeadTexture(hydra));
+        RenderType type = RenderType.entityCutout(stone ? TEXTURE_STONE : getHeadTexture(hydra));
         for (int head = 1; head <= heads; head++) {
-            matrixStackIn.push();
+            matrixStackIn.pushPose();
             float bodyWidth = 0.5F;
             matrixStackIn.translate(TRANSLATE[heads - 1][head - 1] * bodyWidth, 0, 0);
-            matrixStackIn.rotate(new Quaternion(Vector3f.YP, ROTATE[heads - 1][head - 1], true));
-            modelArr[head - 1].setRotationAngles(hydra, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-            modelArr[head - 1].render(matrixStackIn, bufferIn.getBuffer(type), packedLightIn, LivingRenderer.getPackedOverlay(hydra, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
-            matrixStackIn.pop();
+            matrixStackIn.mulPose(new Quaternion(Vector3f.YP, ROTATE[heads - 1][head - 1], true));
+            modelArr[head - 1].setupAnim(hydra, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+            modelArr[head - 1].renderToBuffer(matrixStackIn, bufferIn.getBuffer(type), packedLightIn, LivingRenderer.getOverlayCoords(hydra, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
+            matrixStackIn.popPose();
         }
-        matrixStackIn.pop();
+        matrixStackIn.popPose();
     }
 
 
@@ -90,7 +90,7 @@ public class LayerHydraHead extends LayerRenderer<EntityHydra, ModelHydraBody> {
         }
     }
 
-    public ResourceLocation getEntityTexture(EntityHydra gorgon) {
+    public ResourceLocation getTextureLocation(EntityHydra gorgon) {
         switch (gorgon.getVariant()) {
             default:
                 return RenderHydra.TEXUTURE_0;
@@ -106,22 +106,22 @@ public class LayerHydraHead extends LayerRenderer<EntityHydra, ModelHydraBody> {
     }
 
     protected static void postRender(AdvancedModelBox renderer, MatrixStack matrixStackIn, float scale) {
-        if (renderer.rotateAngleX == 0.0F && renderer.rotateAngleY == 0.0F && renderer.rotateAngleZ == 0.0F) {
-            if (renderer.rotationPointX != 0.0F || renderer.rotationPointY != 0.0F || renderer.rotationPointZ != 0.0F) {
-                matrixStackIn.translate(renderer.rotationPointX * scale, renderer.rotationPointY * scale, renderer.rotationPointZ * scale);
+        if (renderer.xRot == 0.0F && renderer.yRot == 0.0F && renderer.zRot == 0.0F) {
+            if (renderer.x != 0.0F || renderer.y != 0.0F || renderer.z != 0.0F) {
+                matrixStackIn.translate(renderer.x * scale, renderer.y * scale, renderer.z * scale);
             }
         } else {
-            matrixStackIn.translate(renderer.rotationPointX * scale, renderer.rotationPointY * scale, renderer.rotationPointZ * scale);
-            if (renderer.rotateAngleZ != 0.0F) {
-                matrixStackIn.rotate(Vector3f.ZP.rotation(renderer.rotateAngleZ));
+            matrixStackIn.translate(renderer.x * scale, renderer.y * scale, renderer.z * scale);
+            if (renderer.zRot != 0.0F) {
+                matrixStackIn.mulPose(Vector3f.ZP.rotation(renderer.zRot));
             }
 
-            if (renderer.rotateAngleY != 0.0F) {
-                matrixStackIn.rotate(Vector3f.YP.rotation(renderer.rotateAngleY));
+            if (renderer.yRot != 0.0F) {
+                matrixStackIn.mulPose(Vector3f.YP.rotation(renderer.yRot));
             }
 
-            if (renderer.rotateAngleX != 0.0F) {
-                matrixStackIn.rotate(Vector3f.XP.rotation(renderer.rotateAngleX));
+            if (renderer.xRot != 0.0F) {
+                matrixStackIn.mulPose(Vector3f.XP.rotation(renderer.xRot));
             }
         }
     }

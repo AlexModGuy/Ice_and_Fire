@@ -9,11 +9,11 @@ public class DragonsteelToolMaterial extends CustomToolMaterial {
         super(name, harvestLevel, durability, damage, speed, enchantability);
     }
 
-    public int getMaxUses() {
+    public int getUses() {
         return IafConfig.dragonsteelBaseDurability;
     }
 
-    public float getAttackDamage() {
+    public float getAttackDamageBonus() {
         return (float) IafConfig.dragonsteelBaseDamage - 4.0F;
     }
 

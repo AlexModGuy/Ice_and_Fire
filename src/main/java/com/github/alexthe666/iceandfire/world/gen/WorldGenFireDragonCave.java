@@ -25,25 +25,25 @@ public class WorldGenFireDragonCave extends WorldGenDragonCave {
         DRAGON_CHEST = FIRE_DRAGON_CHEST;
         DRAGON_MALE_CHEST = FIRE_DRAGON_CHEST_MALE;
         CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.CHARRED_STONE, 3);
-        PALETTE_BLOCK1 = IafBlockRegistry.CHARRED_STONE.getDefaultState();
-        PALETTE_BLOCK2 = IafBlockRegistry.CHARRED_COBBLESTONE.getDefaultState();
-        TREASURE_PILE = IafBlockRegistry.GOLD_PILE.getDefaultState();
-        PALETTE_ORE1 = Blocks.EMERALD_ORE.getDefaultState();
-        PALETTE_ORE2 = Blocks.EMERALD_ORE.getDefaultState();
+        PALETTE_BLOCK1 = IafBlockRegistry.CHARRED_STONE.defaultBlockState();
+        PALETTE_BLOCK2 = IafBlockRegistry.CHARRED_COBBLESTONE.defaultBlockState();
+        TREASURE_PILE = IafBlockRegistry.GOLD_PILE.defaultBlockState();
+        PALETTE_ORE1 = Blocks.EMERALD_ORE.defaultBlockState();
+        PALETTE_ORE2 = Blocks.EMERALD_ORE.defaultBlockState();
         generateGemOre = true;
     }
 
     @Override
     EntityDragonBase createDragon(ISeedReader worldIn, Random rand, BlockPos position, int dragonAge) {
-        EntityFireDragon dragon = new EntityFireDragon(IafEntityRegistry.FIRE_DRAGON.get(), worldIn.getWorld());
+        EntityFireDragon dragon = new EntityFireDragon(IafEntityRegistry.FIRE_DRAGON.get(), worldIn.getLevel());
         dragon.setGender(isMale);
         dragon.growDragon(dragonAge);
         dragon.setAgingDisabled(true);
         dragon.setHealth(dragon.getMaxHealth());
         dragon.setVariant(rand.nextInt(4));
-        dragon.setPositionAndRotation(position.getX() + 0.5, position.getY() + 0.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
-        dragon.setQueuedToSit(true);
-        dragon.homePos = new HomePosition(position, worldIn.getWorld());
+        dragon.absMoveTo(position.getX() + 0.5, position.getY() + 0.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
+        dragon.setInSittingPose(true);
+        dragon.homePos = new HomePosition(position, worldIn.getLevel());
         dragon.setHunger(50);
         return dragon;
     }

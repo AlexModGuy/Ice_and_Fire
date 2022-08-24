@@ -27,13 +27,13 @@ public class RenderDragonEgg extends LivingRenderer<EntityDragonEgg, SegmentedMo
         super(renderManager, new ModelDragonEgg(), 0.3F);
     }
 
-    protected boolean canRenderName(EntityDragonEgg entity) {
-        return entity.getAlwaysRenderNameTagForRender() && entity.hasCustomName();
+    protected boolean shouldShowName(EntityDragonEgg entity) {
+        return entity.shouldShowName() && entity.hasCustomName();
     }
 
 
     @Override
-    public ResourceLocation getEntityTexture(EntityDragonEgg entity) {
+    public ResourceLocation getTextureLocation(EntityDragonEgg entity) {
         switch (entity.getEggType()) {
             default:
                 return EGG_RED;

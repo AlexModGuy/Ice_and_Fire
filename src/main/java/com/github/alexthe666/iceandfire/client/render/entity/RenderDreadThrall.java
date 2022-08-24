@@ -67,10 +67,10 @@ public class RenderDreadThrall extends MobRenderer<EntityDreadThrall, ModelDread
     }
 
     @Override
-    public void preRenderCallback(EntityDreadThrall livingEntityIn, MatrixStack stack, float partialTickTime) {
+    public void scale(EntityDreadThrall livingEntityIn, MatrixStack stack, float partialTickTime) {
         stack.scale(0.95F, 0.95F, 0.95F);
-        if (livingEntityIn.getAnimation() == this.getEntityModel().getSpawnAnimation()) {
-            itemLayer.hidden = livingEntityIn.getAnimationTick() <= this.getEntityModel().getSpawnAnimation().getDuration() - 10;
+        if (livingEntityIn.getAnimation() == this.getModel().getSpawnAnimation()) {
+            itemLayer.hidden = livingEntityIn.getAnimationTick() <= this.getModel().getSpawnAnimation().getDuration() - 10;
             return;
         }
         itemLayer.hidden = false;
@@ -79,7 +79,7 @@ public class RenderDreadThrall extends MobRenderer<EntityDreadThrall, ModelDread
 
     @Nullable
     @Override
-    public ResourceLocation getEntityTexture(EntityDreadThrall entity) {
+    public ResourceLocation getTextureLocation(EntityDreadThrall entity) {
         return TEXTURE;
     }
 

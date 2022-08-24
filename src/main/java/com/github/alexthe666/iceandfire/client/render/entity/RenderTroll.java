@@ -12,12 +12,12 @@ public class RenderTroll extends MobRenderer<EntityTroll, ModelTroll> {
 
     public RenderTroll(EntityRendererManager renderManager) {
         super(renderManager, new ModelTroll(), 0.9F);
-        this.layerRenderers.add(new LayerTrollWeapon(this));
-        this.layerRenderers.add(new LayerTrollEyes(this));
+        this.layers.add(new LayerTrollWeapon(this));
+        this.layers.add(new LayerTrollEyes(this));
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityTroll troll) {
+    public ResourceLocation getTextureLocation(EntityTroll troll) {
         return troll.getTrollType().TEXTURE;
     }
 }

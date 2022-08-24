@@ -31,8 +31,8 @@ public class ReversedBuffer {
      */
     public void calculateChainSwingBuffer(float maxAngle, int bufferTime, float angleDecrement, float divisor, LivingEntity entity) {
         this.prevYawVariation = this.yawVariation;
-        if (entity.renderYawOffset != entity.prevRenderYawOffset && MathHelper.abs(this.yawVariation) < maxAngle) {
-            this.yawVariation += (entity.prevRenderYawOffset - entity.renderYawOffset) / divisor;
+        if (entity.yBodyRot != entity.yBodyRotO && MathHelper.abs(this.yawVariation) < maxAngle) {
+            this.yawVariation += (entity.yBodyRotO - entity.yBodyRot) / divisor;
         }
         if (this.yawVariation > 0.7F * angleDecrement) {
             if (this.yawTimer > bufferTime) {
@@ -68,8 +68,8 @@ public class ReversedBuffer {
      */
     public void calculateChainWaveBuffer(float maxAngle, int bufferTime, float angleDecrement, float divisor, LivingEntity entity) {
         this.prevPitchVariation = this.pitchVariation;
-        if (entity.rotationPitch != entity.prevRotationPitch && MathHelper.abs(this.pitchVariation) < maxAngle) {
-            this.pitchVariation += (entity.prevRotationPitch - entity.rotationPitch) / divisor;
+        if (entity.xRot != entity.xRotO && MathHelper.abs(this.pitchVariation) < maxAngle) {
+            this.pitchVariation += (entity.xRotO - entity.xRot) / divisor;
         }
         if (this.pitchVariation > 0.7F * angleDecrement) {
             if (this.pitchTimer > bufferTime) {
@@ -126,7 +126,7 @@ public class ReversedBuffer {
     public void applyChainSwingBuffer(ModelRenderer... boxes) {
         float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
         for (ModelRenderer box : boxes) {
-            box.rotateAngleY -= rotateAmount;
+            box.yRot -= rotateAmount;
         }
     }
 
@@ -138,12 +138,12 @@ public class ReversedBuffer {
     public void applyChainWaveBuffer(ModelRenderer... boxes) {
         float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
         for (ModelRenderer box : boxes) {
-            box.rotateAngleX -= rotateAmount;
+            box.xRot -= rotateAmount;
         }
     }
 
 
     private float getPartialTicks() {
-        return Minecraft.getInstance().getRenderPartialTicks();
+        return Minecraft.getInstance().getFrameTime();
     }
 }

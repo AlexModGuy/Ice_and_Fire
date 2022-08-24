@@ -105,7 +105,7 @@ public class ClientProxy extends CommonProxy {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void spawnDragonParticle(final EnumParticles name, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase) {
-        ClientWorld world = Minecraft.getInstance().world;
+        ClientWorld world = Minecraft.getInstance().level;
         if (world == null) {
             return;
         }
@@ -116,14 +116,14 @@ public class ClientProxy extends CommonProxy {
             particle = new ParticleDragonFrost(world, x, y, z, motX, motY, motZ, entityDragonBase, 0);
         }
         if (particle != null) {
-            Minecraft.getInstance().particles.addEffect(particle);
+            Minecraft.getInstance().particleEngine.add(particle);
         }
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
     public void spawnParticle(final EnumParticles name, double x, double y, double z, double motX, double motY, double motZ, float size) {
-        ClientWorld world = Minecraft.getInstance().world;
+        ClientWorld world = Minecraft.getInstance().level;
         if (world == null) {
             return;
         }
@@ -166,26 +166,26 @@ public class ClientProxy extends CommonProxy {
                 break;
         }
         if (particle != null) {
-            Minecraft.getInstance().particles.addEffect(particle);
+            Minecraft.getInstance().particleEngine.add(particle);
         }
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
     public void openBestiaryGui(ItemStack book) {
-        Minecraft.getInstance().displayGuiScreen(new GuiBestiary(book));
+        Minecraft.getInstance().setScreen(new GuiBestiary(book));
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
     public void openMyrmexStaffGui(ItemStack staff) {
-        Minecraft.getInstance().displayGuiScreen(new GuiMyrmexStaff(staff));
+        Minecraft.getInstance().setScreen(new GuiMyrmexStaff(staff));
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
     public void openMyrmexAddRoomGui(ItemStack staff, BlockPos pos, Direction facing) {
-        Minecraft.getInstance().displayGuiScreen(new GuiMyrmexAddRoom(staff, pos, facing));
+        Minecraft.getInstance().setScreen(new GuiMyrmexAddRoom(staff, pos, facing));
     }
 
     @Override
@@ -242,7 +242,7 @@ public class ClientProxy extends CommonProxy {
     @OnlyIn(Dist.CLIENT)
     @Override
     public Object getFontRenderer() {
-        return Minecraft.getInstance().fontRenderer;
+        return Minecraft.getInstance().font;
     }
 
     @Override
@@ -278,7 +278,7 @@ public class ClientProxy extends CommonProxy {
     @OnlyIn(Dist.CLIENT)
     @Override
     public boolean shouldSeeBestiaryContents() {
-        return InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 340) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 344);
+        return InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), 340) || InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), 344);
     }
 
     @Override

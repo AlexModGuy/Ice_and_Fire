@@ -37,9 +37,9 @@ public class EntityDragonIceCharge extends EntityDragonCharge {
 
     @Override
     public void tick() {
-        if (this.world.isRemote){
+        if (this.level.isClientSide) {
             for (int i = 0; i < 10; ++i) {
-                IceAndFire.PROXY.spawnParticle(EnumParticles.DragonIce, this.getPosX() + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.getPosY() + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.getPosZ() + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
+                IceAndFire.PROXY.spawnParticle(EnumParticles.DragonIce, this.getX() + this.random.nextDouble() * 1 * (this.random.nextBoolean() ? -1 : 1), this.getY() + this.random.nextDouble() * 1 * (this.random.nextBoolean() ? -1 : 1), this.getZ() + this.random.nextDouble() * 1 * (this.random.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
             }
         }
         super.tick();
@@ -61,7 +61,7 @@ public class EntityDragonIceCharge extends EntityDragonCharge {
     }
 
     @Override
-    protected boolean isFireballFiery() {
+    protected boolean shouldBurn() {
         return false;
     }
 

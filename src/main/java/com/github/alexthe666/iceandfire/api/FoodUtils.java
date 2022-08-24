@@ -10,7 +10,7 @@ import net.minecraftforge.common.Tags;
 public class FoodUtils {
 
     public static int getFoodPoints(Entity entity) {
-        int foodPoints = Math.round(entity.getWidth() * entity.getHeight() * 10);
+        int foodPoints = Math.round(entity.getBbWidth() * entity.getBbHeight() * 10);
         if (entity instanceof AgeableEntity) {
             return foodPoints;
         }
@@ -21,11 +21,11 @@ public class FoodUtils {
     }
 
     public static int getFoodPoints(ItemStack item, boolean meatOnly, boolean includeFish) {
-        if (item != null && item != ItemStack.EMPTY && item.getItem() != null && item.getItem().getFood() != null) {
-            int food = item.getItem().getFood().getHealing() * 10;
+        if (item != null && item != ItemStack.EMPTY && item.getItem() != null && item.getItem().getFoodProperties() != null) {
+            int food = item.getItem().getFoodProperties().getNutrition() * 10;
             if (!meatOnly) {
                 return food;
-            } else if (item.getItem().getFood().isMeat()) {
+            } else if (item.getItem().getFoodProperties().isMeat()) {
                 return food;
             } else if (includeFish && item.getItem() == Items.COD) {
                 return food;

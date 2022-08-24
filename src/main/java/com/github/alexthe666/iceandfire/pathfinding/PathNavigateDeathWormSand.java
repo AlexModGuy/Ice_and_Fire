@@ -19,49 +19,49 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 
 public class PathNavigateDeathWormSand extends SwimmerPathNavigator {
-    private EntityDeathWorm worm;
+    private final EntityDeathWorm worm;
 
     public PathNavigateDeathWormSand(EntityDeathWorm deathworm, World worldIn) {
         super(deathworm, worldIn);
         worm = deathworm;
     }
 
-    public boolean getCanSwim() {
-        return this.nodeProcessor.getCanSwim();
+    public boolean canFloat() {
+        return this.nodeEvaluator.canFloat();
     }
 
-    protected PathFinder getPathFinder(int i) {
-        this.nodeProcessor = new NodeProcessorDeathWorm();
-        this.nodeProcessor.setCanEnterDoors(true);
-        this.nodeProcessor.setCanSwim(true);
-        return new PathFinder(this.nodeProcessor, i);
+    protected PathFinder createPathFinder(int i) {
+        this.nodeEvaluator = new NodeProcessorDeathWorm();
+        this.nodeEvaluator.setCanPassDoors(true);
+        this.nodeEvaluator.setCanFloat(true);
+        return new PathFinder(this.nodeEvaluator, i);
     }
 
     /**
      * If on ground or swimming and can swim
      */
-    protected boolean canNavigate() {
+    protected boolean canUpdatePath() {
         return true;
     }
 
-    protected Vector3d getEntityPosition() {
-        return new Vector3d(this.entity.getPosX(), this.entity.getPosY() + 0.5D, this.entity.getPosZ());
+    protected Vector3d getTempMobPos() {
+        return new Vector3d(this.mob.getX(), this.mob.getY() + 0.5D, this.mob.getZ());
     }
 
 
     /**
      * Checks if the specified entity can safely walk to the specified location.
      */
-    protected boolean isDirectPathBetweenPoints(Vector3d posVec31, Vector3d posVec32, int sizeX, int sizeY, int sizeZ) {
-        RayTraceResult raytraceresult = this.world.rayTraceBlocks(new CustomRayTraceContext(posVec31, posVec32, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
+    protected boolean canMoveDirectly(Vector3d posVec31, Vector3d posVec32, int sizeX, int sizeY, int sizeZ) {
+        RayTraceResult raytraceresult = this.level.clip(new CustomRayTraceContext(posVec31, posVec32, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, mob));
         if (raytraceresult != null && raytraceresult.getType() == RayTraceResult.Type.BLOCK) {
-            return entity.world.getBlockState(new BlockPos(raytraceresult.getHitVec())).getMaterial() == Material.SAND;
+            return mob.level.getBlockState(new BlockPos(raytraceresult.getLocation())).getMaterial() == Material.SAND;
         }
         return false;
     }
 
-    public boolean canEntityStandOnPos(BlockPos pos) {
-        return this.world.getBlockState(pos).isSolid();
+    public boolean isStableDestination(BlockPos pos) {
+        return this.level.getBlockState(pos).canOcclude();
     }
 
     public static class CustomRayTraceContext extends RayTraceContext {
@@ -72,7 +72,7 @@ public class PathNavigateDeathWormSand extends SwimmerPathNavigator {
         public CustomRayTraceContext(Vector3d startVecIn, Vector3d endVecIn, BlockMode blockModeIn, FluidMode fluidModeIn, @Nullable Entity entityIn) {
             super(startVecIn, endVecIn, blockModeIn, fluidModeIn, entityIn);
             this.blockMode = blockModeIn;
-            this.context = entityIn == null ? ISelectionContext.dummy() : ISelectionContext.forEntity(entityIn);
+            this.context = entityIn == null ? ISelectionContext.empty() : ISelectionContext.of(entityIn);
         }
 
         @Override

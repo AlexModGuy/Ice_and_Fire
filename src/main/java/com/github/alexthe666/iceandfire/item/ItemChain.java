@@ -28,7 +28,7 @@ public class ItemChain extends Item {
     private final boolean sticky;
 
     public ItemChain(boolean sticky) {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.sticky = sticky;
         this.setRegistryName(IceAndFire.MODID, sticky ? "chain_sticky" : "chain");
     }
@@ -41,7 +41,7 @@ public class ItemChain extends Item {
         int j = fence.getY();
         int k = fence.getZ();
 
-        for (LivingEntity livingEntity : worldIn.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB((double) i - d0, (double) j - d0, (double) k - d0, (double) i + d0, (double) j + d0, (double) k + d0))) {
+        for (LivingEntity livingEntity : worldIn.getEntitiesOfClass(LivingEntity.class, new AxisAlignedBB((double) i - d0, (double) j - d0, (double) k - d0, (double) i + d0, (double) j + d0, (double) k + d0))) {
             if (ChainProperties.isChainedTo(livingEntity, player)) {
                 if (entityleashknot == null) {
                     entityleashknot = EntityChainTie.createTie(worldIn, fence);
@@ -56,32 +56,32 @@ public class ItemChain extends Item {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.chain.desc_0").mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.chain.desc_1").mergeStyle(TextFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.iceandfire.chain.desc_0").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.chain.desc_1").withStyle(TextFormatting.GRAY));
         if (sticky) {
-            tooltip.add(new TranslationTextComponent("item.iceandfire.chain_sticky.desc_2").mergeStyle(TextFormatting.GREEN));
-            tooltip.add(new TranslationTextComponent("item.iceandfire.chain_sticky.desc_3").mergeStyle(TextFormatting.GREEN));
+            tooltip.add(new TranslationTextComponent("item.iceandfire.chain_sticky.desc_2").withStyle(TextFormatting.GREEN));
+            tooltip.add(new TranslationTextComponent("item.iceandfire.chain_sticky.desc_3").withStyle(TextFormatting.GREEN));
         }
     }
 
     @Override
-    public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
+    public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
         if (ChainProperties.isChainedTo(target, playerIn)) {
             return ActionResultType.SUCCESS;
         } else {
             if (sticky) {
 
                 double d0 = 60.0D;
-                double i = playerIn.getPosX();
-                double j = playerIn.getPosY();
-                double k = playerIn.getPosZ();
+                double i = playerIn.getX();
+                double j = playerIn.getY();
+                double k = playerIn.getZ();
                 boolean flag = false;
-                List<LivingEntity> nearbyEntities = playerIn.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(i - d0, j - d0, k - d0, i + d0, j + d0, k + d0));
-                if (playerIn.isCrouching()){
+                List<LivingEntity> nearbyEntities = playerIn.level.getEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(i - d0, j - d0, k - d0, i + d0, j + d0, k + d0));
+                if (playerIn.isCrouching()) {
                     ChainProperties.clearChainData(target);
                     for (LivingEntity livingEntity : nearbyEntities) {
-                        if (ChainProperties.isChainedTo(livingEntity, target)){
+                        if (ChainProperties.isChainedTo(livingEntity, target)) {
                             ChainProperties.removeChain(livingEntity, target);
                         }
                     }
@@ -108,14 +108,14 @@ public class ItemChain extends Item {
         return ActionResultType.SUCCESS;
     }
 
-    public ActionResultType onItemUse(ItemUseContext context) {
-        Block block = context.getWorld().getBlockState(context.getPos()).getBlock();
+    public ActionResultType useOn(ItemUseContext context) {
+        Block block = context.getLevel().getBlockState(context.getClickedPos()).getBlock();
 
         if (!(block instanceof WallBlock)) {
             return ActionResultType.PASS;
         } else {
-            if (!context.getWorld().isRemote) {
-                attachToFence(context.getPlayer(), context.getWorld(), context.getPos());
+            if (!context.getLevel().isClientSide) {
+                attachToFence(context.getPlayer(), context.getLevel(), context.getClickedPos());
             }
             return ActionResultType.SUCCESS;
         }

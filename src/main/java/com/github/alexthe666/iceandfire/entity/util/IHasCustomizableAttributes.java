@@ -21,17 +21,17 @@ public interface IHasCustomizableAttributes {
 
     static <T extends LivingEntity & IHasCustomizableAttributes, M extends LivingEntity & IHasCustomizableAttributes> AttributeModifierMap getAttributesForEntity(EntityType<T> type, M entity) {
         if (!IafConfig.allowAttributeOverriding)
-            return GlobalEntityTypeAttributes.getAttributesForEntity(type);
+            return GlobalEntityTypeAttributes.getSupplier(type);
         if (ATTRIBUTE_MODIFIER_MAP.containsKey(type)) {
             return ATTRIBUTE_MODIFIER_MAP.get(type);
         }
-        AttributeModifierMap originalMap = GlobalEntityTypeAttributes.getAttributesForEntity(type);
+        AttributeModifierMap originalMap = GlobalEntityTypeAttributes.getSupplier(type);
         AttributeModifierMap.MutableAttribute originalMutable = new AttributeModifierMap.MutableAttribute(originalMap);
-        originalMutable.combine(entity.getAttributes());
-        AttributeModifierMap newMap = originalMutable.create();
+        originalMutable.combine(entity.getConfigurableAttributes());
+        AttributeModifierMap newMap = originalMutable.build();
         ATTRIBUTE_MODIFIER_MAP.put(type, newMap);
         return newMap;
     }
 
-    AttributeModifierMap.MutableAttribute getAttributes();
+    AttributeModifierMap.MutableAttribute getConfigurableAttributes();
 }

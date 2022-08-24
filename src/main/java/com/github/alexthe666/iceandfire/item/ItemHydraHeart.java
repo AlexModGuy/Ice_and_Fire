@@ -1,11 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,15 +13,18 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 public class ItemHydraHeart extends Item {
 
     public ItemHydraHeart() {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
         this.setRegistryName(IceAndFire.MODID, "hydra_heart");
     }
 
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return !oldStack.isItemEqual(newStack);
+        return !oldStack.sameItem(newStack);
     }
 
     @Override
@@ -43,16 +41,16 @@ public class ItemHydraHeart extends Item {
                     level = 1;
                 }
                 //Consider using EffectInstance.combine
-                if (!((PlayerEntity) entity).isPotionActive(Effects.REGENERATION) || ((PlayerEntity) entity).getActivePotionEffect(Effects.REGENERATION).getAmplifier() < level)
-                    ((PlayerEntity) entity).addPotionEffect(new EffectInstance(Effects.REGENERATION, 900, level, true, false));
+                if (!((PlayerEntity) entity).hasEffect(Effects.REGENERATION) || ((PlayerEntity) entity).getEffect(Effects.REGENERATION).getAmplifier() < level)
+                    ((PlayerEntity) entity).addEffect(new EffectInstance(Effects.REGENERATION, 900, level, true, false));
             }
             //In hotbar
         }
     }
 
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.hydra_heart.desc_0").mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.hydra_heart.desc_1").mergeStyle(TextFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.hydra_heart.desc_0").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.hydra_heart.desc_1").withStyle(TextFormatting.GRAY));
     }
 }

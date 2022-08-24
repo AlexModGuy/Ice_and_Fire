@@ -1,14 +1,9 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityPixieCharge;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -23,64 +18,67 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 public class ItemPixieWand extends Item {
 
     public ItemPixieWand() {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1).maxDamage(500));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1).durability(500));
         this.setRegistryName(IceAndFire.MODID, "pixie_wand");
     }
 
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand hand) {
-        ItemStack itemStackIn = playerIn.getHeldItem(hand);
-        boolean flag = playerIn.isCreative() || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemStackIn) > 0;
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand hand) {
+        ItemStack itemStackIn = playerIn.getItemInHand(hand);
+        boolean flag = playerIn.isCreative() || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, itemStackIn) > 0;
         ItemStack itemstack = this.findAmmo(playerIn);
-        playerIn.setActiveHand(hand);
-        playerIn.swingArm(hand);
+        playerIn.startUsingItem(hand);
+        playerIn.swing(hand);
         if (!itemstack.isEmpty() || flag) {
             boolean flag1 = playerIn.isCreative() || this.isInfinite(itemstack, itemStackIn, playerIn);
             if (!flag1) {
                 itemstack.shrink(1);
                 if (itemstack.isEmpty()) {
-                    playerIn.inventory.deleteStack(itemstack);
+                    playerIn.inventory.removeItem(itemstack);
                 }
             }
-            double d2 = playerIn.getLookVec().x;
-            double d3 = playerIn.getLookVec().y;
-            double d4 = playerIn.getLookVec().z;
+            double d2 = playerIn.getLookAngle().x;
+            double d3 = playerIn.getLookAngle().y;
+            double d4 = playerIn.getLookAngle().z;
             float inaccuracy = 1.0F;
-            d2 = d2 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * inaccuracy;
-            d3 = d3 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * inaccuracy;
-            d4 = d4 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * inaccuracy;
+            d2 = d2 + playerIn.getRandom().nextGaussian() * 0.007499999832361937D * inaccuracy;
+            d3 = d3 + playerIn.getRandom().nextGaussian() * 0.007499999832361937D * inaccuracy;
+            d4 = d4 + playerIn.getRandom().nextGaussian() * 0.007499999832361937D * inaccuracy;
             EntityPixieCharge charge = new EntityPixieCharge(IafEntityRegistry.PIXIE_CHARGE.get(), worldIn, playerIn,
                 d2, d3, d4);
-            charge.setPosition(playerIn.getPosX(), playerIn.getPosY() + 1, playerIn.getPosZ());
-            if (!worldIn.isRemote) {
-                worldIn.addEntity(charge);
+            charge.setPos(playerIn.getX(), playerIn.getY() + 1, playerIn.getZ());
+            if (!worldIn.isClientSide) {
+                worldIn.addFreshEntity(charge);
             }
-            playerIn.playSound(IafSoundRegistry.PIXIE_WAND, 1F, 0.75F + 0.5F * playerIn.getRNG().nextFloat());
-            itemstack.damageItem(1, playerIn, (player) -> {
-                player.sendBreakAnimation(playerIn.getActiveHand());
+            playerIn.playSound(IafSoundRegistry.PIXIE_WAND, 1F, 0.75F + 0.5F * playerIn.getRandom().nextFloat());
+            itemstack.hurtAndBreak(1, playerIn, (player) -> {
+                player.broadcastBreakEvent(playerIn.getUsedItemHand());
             });
-            playerIn.getCooldownTracker().setCooldown(this, 5);
+            playerIn.getCooldowns().addCooldown(this, 5);
         }
         return new ActionResult<ItemStack>(ActionResultType.PASS, itemStackIn);
     }
 
     public boolean isInfinite(ItemStack stack, ItemStack bow, net.minecraft.entity.player.PlayerEntity player) {
-        int enchant = net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow);
+        int enchant = net.minecraft.enchantment.EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, bow);
         return enchant > 0 && stack.getItem() == IafItemRegistry.PIXIE_DUST;
     }
 
     private ItemStack findAmmo(PlayerEntity player) {
-        if (this.isAmmo(player.getHeldItem(Hand.OFF_HAND))) {
-            return player.getHeldItem(Hand.OFF_HAND);
-        } else if (this.isAmmo(player.getHeldItem(Hand.MAIN_HAND))) {
-            return player.getHeldItem(Hand.MAIN_HAND);
+        if (this.isAmmo(player.getItemInHand(Hand.OFF_HAND))) {
+            return player.getItemInHand(Hand.OFF_HAND);
+        } else if (this.isAmmo(player.getItemInHand(Hand.MAIN_HAND))) {
+            return player.getItemInHand(Hand.MAIN_HAND);
         } else {
-            for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
-                ItemStack itemstack = player.inventory.getStackInSlot(i);
+            for (int i = 0; i < player.inventory.getContainerSize(); ++i) {
+                ItemStack itemstack = player.inventory.getItem(i);
 
                 if (this.isAmmo(itemstack)) {
                     return itemstack;
@@ -97,9 +95,9 @@ public class ItemPixieWand extends Item {
 
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.pixie_wand.desc_0").mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.pixie_wand.desc_1").mergeStyle(TextFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.pixie_wand.desc_0").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.iceandfire.pixie_wand.desc_1").withStyle(TextFormatting.GRAY));
     }
 }

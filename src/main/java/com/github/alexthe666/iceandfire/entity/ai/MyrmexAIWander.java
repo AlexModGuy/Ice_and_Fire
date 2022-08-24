@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
-
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 
 public class MyrmexAIWander extends WaterAvoidingRandomWalkingGoal {
@@ -14,7 +13,7 @@ public class MyrmexAIWander extends WaterAvoidingRandomWalkingGoal {
     }
 
     @Override
-    public boolean shouldExecute() {
-        return myrmex.canMove() && myrmex.shouldWander() && super.shouldExecute();
+    public boolean canUse() {
+        return myrmex.canMove() && myrmex.shouldWander() && super.canUse();
     }
 }

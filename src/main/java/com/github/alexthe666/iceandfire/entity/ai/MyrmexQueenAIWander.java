@@ -9,7 +9,7 @@ public class MyrmexQueenAIWander extends MyrmexAIWander {
     }
 
     @Override
-    public boolean shouldExecute() {
-        return (myrmex.canSeeSky() || myrmex.getHive() == null) && super.shouldExecute();
+    public boolean canUse() {
+        return (myrmex.canSeeSky() || myrmex.getHive() == null) && super.canUse();
     }
 }

@@ -29,7 +29,7 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
 
     public DragonAITargetItems(EntityDragonBase creature, boolean checkSight) {
         this(creature, checkSight, false);
-        this.setMutexFlags(EnumSet.of(Flag.TARGET));
+        this.setFlags(EnumSet.of(Flag.TARGET));
     }
 
     public DragonAITargetItems(EntityDragonBase creature, boolean checkSight, boolean onlyNearby) {
@@ -42,7 +42,7 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
         isIce = creature instanceof EntityIceDragon;
         this.targetChance = chance;
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE));
         this.targetEntitySelector = new Predicate<ItemEntity>() {
 
             @Override
@@ -54,16 +54,16 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
     }
 
     @Override
-    public boolean shouldExecute() {
-        final EntityDragonBase dragon = (EntityDragonBase) this.goalOwner;
-        if (dragon.getHunger() >= 100 || !dragon.canMove() || (this.targetChance > 0 && this.goalOwner.getRNG().nextInt(10) != 0)) {
+    public boolean canUse() {
+        final EntityDragonBase dragon = (EntityDragonBase) this.mob;
+        if (dragon.getHunger() >= 100 || !dragon.canMove() || (this.targetChance > 0 && this.mob.getRandom().nextInt(10) != 0)) {
             list = IAFMath.emptyItemEntityList;
             return false;
         } else {
 
-            if (this.goalOwner.world.getGameTime() % 4 == 0) // only update the list every 4 ticks
-                list = this.goalOwner.world.getLoadedEntitiesWithinAABB(ItemEntity.class,
-                        this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+            if (this.mob.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
+                list = this.mob.level.getLoadedEntitiesOfClass(ItemEntity.class,
+                    this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
 
             if (list.isEmpty()) {
                 return false;
@@ -76,31 +76,31 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.goalOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
+        return this.mob.getBoundingBox().inflate(targetDistance, 4.0D, targetDistance);
     }
 
     @Override
-    public void startExecuting() {
-        this.goalOwner.getNavigator().tryMoveToXYZ(this.targetEntity.getPosX(), this.targetEntity.getPosY(),
-            this.targetEntity.getPosZ(), 1);
-        super.startExecuting();
+    public void start() {
+        this.mob.getNavigation().moveTo(this.targetEntity.getX(), this.targetEntity.getY(),
+            this.targetEntity.getZ(), 1);
+        super.start();
     }
 
     @Override
     public void tick() {
         super.tick();
         if (this.targetEntity == null || !this.targetEntity.isAlive()) {
-            this.resetTask();
-        } else if (this.goalOwner.getDistanceSq(this.targetEntity) < this.goalOwner.getWidth() * 2 + this.goalOwner.getHeight() / 2 ||
-            (this.goalOwner instanceof EntityDragonBase &&
-                ((EntityDragonBase) this.goalOwner).getHeadPosition().squareDistanceTo(this.targetEntity.getPositionVec()) < this.goalOwner.getHeight())) {
+            this.stop();
+        } else if (this.mob.distanceToSqr(this.targetEntity) < this.mob.getBbWidth() * 2 + this.mob.getBbHeight() / 2 ||
+            (this.mob instanceof EntityDragonBase &&
+                ((EntityDragonBase) this.mob).getHeadPosition().distanceToSqr(this.targetEntity.position()) < this.mob.getBbHeight())) {
 
-            this.goalOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+            this.mob.playSound(SoundEvents.GENERIC_EAT, 1, 1);
             final int hunger = FoodUtils.getFoodPoints(this.targetEntity.getItem(), true, isIce);
-            final EntityDragonBase dragon = ((EntityDragonBase) this.goalOwner);
-            dragon.setHunger(Math.min(100, ((EntityDragonBase) this.goalOwner).getHunger() + hunger));
+            final EntityDragonBase dragon = ((EntityDragonBase) this.mob);
+            dragon.setHunger(Math.min(100, ((EntityDragonBase) this.mob).getHunger() + hunger));
             dragon.eatFoodBonus(this.targetEntity.getItem());
-            this.goalOwner.setHealth(Math.min(this.goalOwner.getMaxHealth(), (int) (this.goalOwner.getHealth()
+            this.mob.setHealth(Math.min(this.mob.getMaxHealth(), (int) (this.mob.getHealth()
                 + FoodUtils.getFoodPoints(this.targetEntity.getItem(), true, isIce))));
             if (EntityDragonBase.ANIMATION_EAT != null) {
                 dragon.setAnimation(EntityDragonBase.ANIMATION_EAT);
@@ -109,13 +109,13 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
                 dragon.spawnItemCrackParticles(this.targetEntity.getItem().getItem());
             }
             this.targetEntity.getItem().shrink(1);
-            resetTask();
+            stop();
         }
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return !this.goalOwner.getNavigator().noPath();
+    public boolean canContinueToUse() {
+        return !this.mob.getNavigation().isDone();
     }
 
     public static class Sorter implements Comparator<Entity> {
@@ -128,8 +128,8 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
 
         @Override
         public int compare(Entity p_compare_1_, Entity p_compare_2_) {
-            final double d0 = this.theEntity.getDistanceSq(p_compare_1_);
-            final double d1 = this.theEntity.getDistanceSq(p_compare_2_);
+            final double d0 = this.theEntity.distanceToSqr(p_compare_1_);
+            final double d1 = this.theEntity.distanceToSqr(p_compare_2_);
             return Double.compare(d0, d1);
         }
     }

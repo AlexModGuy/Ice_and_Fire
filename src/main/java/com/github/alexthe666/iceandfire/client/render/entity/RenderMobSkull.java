@@ -46,26 +46,26 @@ public class RenderMobSkull extends EntityRenderer<EntityMobSkull> {
     }
 
     private static void setRotationAngles(ModelRenderer cube, float rotX, float rotY, float rotZ) {
-        cube.rotateAngleX = rotX;
-        cube.rotateAngleY = rotY;
-        cube.rotateAngleZ = rotZ;
+        cube.xRot = rotX;
+        cube.yRot = rotY;
+        cube.zRot = rotZ;
     }
 
     public void render(EntityMobSkull entity, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         super.render(entity, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-        matrixStackIn.push();
-        matrixStackIn.rotate(new Quaternion(Vector3f.XP, -180, true));
-        matrixStackIn.rotate(new Quaternion(Vector3f.YN, 180 - entity.getYaw(), true));
+        matrixStackIn.pushPose();
+        matrixStackIn.mulPose(new Quaternion(Vector3f.XP, -180, true));
+        matrixStackIn.mulPose(new Quaternion(Vector3f.YN, 180 - entity.getYaw(), true));
         float f = 0.0625F;
         float size = 1.0F;
         matrixStackIn.scale(size, size, size);
         matrixStackIn.translate(0, entity.isOnWall() ? -0.24F : -0.12F, 0.5F);
         renderForEnum(entity.getSkullType(), entity.isOnWall(), matrixStackIn, bufferIn, packedLightIn);
-        matrixStackIn.pop();
+        matrixStackIn.popPose();
     }
 
     private void renderForEnum(EnumSkullType skull, boolean onWall, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityTranslucent(getSkullTexture(skull)));
+        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(getSkullTexture(skull)));
         switch (skull) {
             case HIPPOGRYPH:
                 matrixStackIn.translate(0, -0.0F, -0.2F);
@@ -137,7 +137,7 @@ public class RenderMobSkull extends EntityRenderer<EntityMobSkull> {
         }
     }
 
-    public ResourceLocation getEntityTexture(EntityMobSkull entity) {
+    public ResourceLocation getTextureLocation(EntityMobSkull entity) {
         return getSkullTexture(entity.getSkullType());
     }
 

@@ -31,26 +31,26 @@ public class EntityDreadLichSkull extends AbstractArrowEntity {
 
     public EntityDreadLichSkull(EntityType<? extends AbstractArrowEntity> type, World worldIn) {
         super(type, worldIn);
-        this.setDamage(6F);
+        this.setBaseDamage(6F);
     }
 
     public EntityDreadLichSkull(EntityType<? extends AbstractArrowEntity> type, World worldIn, double x, double y,
         double z) {
         this(type, worldIn);
-        this.setPosition(x, y, z);
-        this.setDamage(6F);
+        this.setPos(x, y, z);
+        this.setBaseDamage(6F);
     }
 
     public EntityDreadLichSkull(EntityType<? extends AbstractArrowEntity> type, World worldIn, LivingEntity shooter,
         double x, double y, double z) {
         super(type, shooter, worldIn);
-        this.setDamage(6);
+        this.setBaseDamage(6);
     }
 
     public EntityDreadLichSkull(EntityType<? extends AbstractArrowEntity> type, World worldIn, LivingEntity shooter,
         double dmg) {
         super(type, shooter, worldIn);
-        this.setDamage(dmg);
+        this.setBaseDamage(dmg);
     }
 
     public EntityDreadLichSkull(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
@@ -63,33 +63,33 @@ public class EntityDreadLichSkull extends AbstractArrowEntity {
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
+    protected void defineSynchedData() {
+        super.defineSynchedData();
     }
 
     @Override
     public void tick() {
-        float sqrt = MathHelper.sqrt(this.getMotion().x * this.getMotion().x + this.getMotion().z * this.getMotion().z);
+        float sqrt = MathHelper.sqrt(this.getDeltaMovement().x * this.getDeltaMovement().x + this.getDeltaMovement().z * this.getDeltaMovement().z);
         boolean flag = true;
-        Entity shootingEntity = this.getShooter();
-        if (shootingEntity != null && shootingEntity instanceof MobEntity && ((MobEntity) shootingEntity).getAttackTarget() != null) {
-            LivingEntity target = ((MobEntity) shootingEntity).getAttackTarget();
-            double minusX = target.getPosX() - this.getPosX();
-            double minusY = target.getPosY() - this.getPosY();
-            double minusZ = target.getPosZ() - this.getPosZ();
+        Entity shootingEntity = this.getOwner();
+        if (shootingEntity != null && shootingEntity instanceof MobEntity && ((MobEntity) shootingEntity).getTarget() != null) {
+            LivingEntity target = ((MobEntity) shootingEntity).getTarget();
+            double minusX = target.getX() - this.getX();
+            double minusY = target.getY() - this.getY();
+            double minusZ = target.getZ() - this.getZ();
             double speed = 0.15D;
-            this.setMotion(this.getMotion().add(minusX * speed * 0.1D, minusY * speed * 0.1D, minusZ * speed * 0.1D));
+            this.setDeltaMovement(this.getDeltaMovement().add(minusX * speed * 0.1D, minusY * speed * 0.1D, minusZ * speed * 0.1D));
         }
         if (shootingEntity instanceof PlayerEntity) {
-            LivingEntity target = ((PlayerEntity) shootingEntity).getAttackingEntity();
+            LivingEntity target = ((PlayerEntity) shootingEntity).getKillCredit();
             if (target == null || !target.isAlive()) {
                 double d0 = 10;
-                List<Entity> list = world.getEntitiesInAABBexcluding(shootingEntity, (new AxisAlignedBB(this.getPosX(), this.getPosY(), this.getPosZ(), this.getPosX() + 1.0D, this.getPosY() + 1.0D, this.getPosZ() + 1.0D)).grow(d0, 10.0D, d0), EntityPredicates.IS_ALIVE);
+                List<Entity> list = level.getEntities(shootingEntity, (new AxisAlignedBB(this.getX(), this.getY(), this.getZ(), this.getX() + 1.0D, this.getY() + 1.0D, this.getZ() + 1.0D)).inflate(d0, 10.0D, d0), EntityPredicates.ENTITY_STILL_ALIVE);
                 LivingEntity closest = null;
                 if (!list.isEmpty()) {
-                    for(Entity e : list){
-                        if(e instanceof LivingEntity && !e.getUniqueID().equals(shootingEntity.getUniqueID()) && e instanceof IMob){
-                            if (closest == null || closest.getDistance(shootingEntity) > e.getDistance(shootingEntity)) {
+                    for(Entity e : list) {
+                        if (e instanceof LivingEntity && !e.getUUID().equals(shootingEntity.getUUID()) && e instanceof IMob) {
+                            if (closest == null || closest.distanceTo(shootingEntity) > e.distanceTo(shootingEntity)) {
                                 closest = (LivingEntity) e;
                             }
                         }
@@ -98,26 +98,26 @@ public class EntityDreadLichSkull extends AbstractArrowEntity {
                 target = closest;
             }
             if (target != null && target.isAlive()) {
-                double minusX = target.getPosX() - this.getPosX();
-                double minusY = target.getPosY() + target.getEyeHeight() - this.getPosY();
-                double minusZ = target.getPosZ() - this.getPosZ();
-                double speed = 0.25D * Math.min(this.getDistance(target), 10D) / 10D;
-                this.setMotion(this.getMotion().add((Math.signum(minusX) * 0.5D - this.getMotion().x) * 0.10000000149011612D, (Math.signum(minusY) * 0.5D - this.getMotion().y) * 0.10000000149011612D, (Math.signum(minusZ) * 0.5D - this.getMotion().z) * 0.10000000149011612D));
-                this.rotationYaw = (float) (MathHelper.atan2(this.getMotion().x, this.getMotion().z) * (180D / Math.PI));
-                this.rotationPitch = (float) (MathHelper.atan2(this.getMotion().y, sqrt) * (180D / Math.PI));
+                double minusX = target.getX() - this.getX();
+                double minusY = target.getY() + target.getEyeHeight() - this.getY();
+                double minusZ = target.getZ() - this.getZ();
+                double speed = 0.25D * Math.min(this.distanceTo(target), 10D) / 10D;
+                this.setDeltaMovement(this.getDeltaMovement().add((Math.signum(minusX) * 0.5D - this.getDeltaMovement().x) * 0.10000000149011612D, (Math.signum(minusY) * 0.5D - this.getDeltaMovement().y) * 0.10000000149011612D, (Math.signum(minusZ) * 0.5D - this.getDeltaMovement().z) * 0.10000000149011612D));
+                this.yRot = (float) (MathHelper.atan2(this.getDeltaMovement().x, this.getDeltaMovement().z) * (180D / Math.PI));
+                this.xRot = (float) (MathHelper.atan2(this.getDeltaMovement().y, sqrt) * (180D / Math.PI));
                 flag = false;
             }
         }
-        if ((sqrt < 0.1F || this.collidedHorizontally || this.collidedVertically || this.inGround) && this.ticksExisted > 5 && flag) {
+        if ((sqrt < 0.1F || this.horizontalCollision || this.verticalCollision || this.inGround) && this.tickCount > 5 && flag) {
             this.remove();
         }
         double d0 = 0;
         double d1 = 0.01D;
         double d2 = 0D;
-        double x = this.getPosX() + this.rand.nextFloat() * this.getWidth() * 2.0F - this.getWidth();
-        double y = this.getPosY() + this.rand.nextFloat() * this.getHeight() - this.getHeight();
-        double z = this.getPosZ() + this.rand.nextFloat() * this.getWidth() * 2.0F - this.getWidth();
-        float f = (this.getWidth() + this.getHeight() + this.getWidth()) * 0.333F + 0.5F;
+        double x = this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth();
+        double y = this.getY() + this.random.nextFloat() * this.getBbHeight() - this.getBbHeight();
+        double z = this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth();
+        float f = (this.getBbWidth() + this.getBbHeight() + this.getBbWidth()) * 0.333F + 0.5F;
         if (particleDistSq(x, y, z) < f * f) {
             IceAndFire.PROXY.spawnParticle(EnumParticles.Dread_Torch, x, y + 0.5D, z, d0, d1, d2);
         }
@@ -125,63 +125,63 @@ public class EntityDreadLichSkull extends AbstractArrowEntity {
     }
 
     public double particleDistSq(double toX, double toY, double toZ) {
-        double d0 = getPosX() - toX;
-        double d1 = getPosY() - toY;
-        double d2 = getPosZ() - toZ;
+        double d0 = getX() - toX;
+        double d1 = getY() - toY;
+        double d2 = getZ() - toZ;
         return d0 * d0 + d1 * d1 + d2 * d2;
     }
 
     @Override
     public void playSound(SoundEvent soundIn, float volume, float pitch) {
-        if (!this.isSilent() && soundIn != SoundEvents.ENTITY_ARROW_HIT && soundIn != SoundEvents.ENTITY_ARROW_HIT_PLAYER) {
-            this.world.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), soundIn, this.getSoundCategory(), volume, pitch);
+        if (!this.isSilent() && soundIn != SoundEvents.ARROW_HIT && soundIn != SoundEvents.ARROW_HIT_PLAYER) {
+            this.level.playSound(null, this.getX(), this.getY(), this.getZ(), soundIn, this.getSoundSource(), volume, pitch);
         }
     }
 
     @Override
-    protected void onEntityHit(EntityRayTraceResult raytraceResultIn) {
+    protected void onHitEntity(EntityRayTraceResult raytraceResultIn) {
         if (raytraceResultIn.getType() == RayTraceResult.Type.ENTITY) {
             Entity entity = raytraceResultIn.getEntity();
-            Entity shootingEntity = this.getShooter();
+            Entity shootingEntity = this.getOwner();
             if (entity != null) {
-                if (shootingEntity != null && entity.isOnSameTeam(shootingEntity)) {
+                if (shootingEntity != null && entity.isAlliedTo(shootingEntity)) {
                     return;
                 }
             }
         }
-        super.onEntityHit(raytraceResultIn);
+        super.onHitEntity(raytraceResultIn);
     }
 
     @Override
-    protected void arrowHit(LivingEntity living) {
-        super.arrowHit(living);
-        Entity shootingEntity = this.getShooter();
-        if (living != null && (shootingEntity == null || !living.isEntityEqual(shootingEntity))) {
+    protected void doPostHurtEffects(LivingEntity living) {
+        super.doPostHurtEffects(living);
+        Entity shootingEntity = this.getOwner();
+        if (living != null && (shootingEntity == null || !living.is(shootingEntity))) {
             if (living instanceof PlayerEntity) {
-                this.damageShield((PlayerEntity) living, (float) this.getDamage());
+                this.damageShield((PlayerEntity) living, (float) this.getBaseDamage());
             }
         }
     }
 
     protected void damageShield(PlayerEntity player, float damage) {
-        if (damage >= 3.0F && player.getActiveItemStack().getItem().isShield(player.getActiveItemStack(), player)) {
-            ItemStack copyBeforeUse = player.getActiveItemStack().copy();
+        if (damage >= 3.0F && player.getUseItem().getItem().isShield(player.getUseItem(), player)) {
+            ItemStack copyBeforeUse = player.getUseItem().copy();
             int i = 1 + MathHelper.floor(damage);
-            player.getActiveItemStack().damageItem(i, player, (playerSheild) -> {
-                playerSheild.sendBreakAnimation(playerSheild.getActiveHand());
+            player.getUseItem().hurtAndBreak(i, player, (playerSheild) -> {
+                playerSheild.broadcastBreakEvent(playerSheild.getUsedItemHand());
             });
 
-            if (player.getActiveItemStack().isEmpty()) {
-                Hand Hand = player.getActiveHand();
+            if (player.getUseItem().isEmpty()) {
+                Hand Hand = player.getUsedItemHand();
                 net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, Hand);
 
                 if (Hand == net.minecraft.util.Hand.MAIN_HAND) {
-                    this.setItemStackToSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
+                    this.setItemSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
                 } else {
-                    this.setItemStackToSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
+                    this.setItemSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
                 }
-                player.resetActiveHand();
-                this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+                player.stopUsingItem();
+                this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
             }
         }
     }
@@ -196,17 +196,17 @@ public class EntityDreadLichSkull extends AbstractArrowEntity {
     }
 
     @Override
-    public boolean hasNoGravity() {
+    public boolean isNoGravity() {
         return true;
     }
 
     @Override
-    protected ItemStack getArrowStack() {
+    protected ItemStack getPickupItem() {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

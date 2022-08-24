@@ -45,32 +45,27 @@ public enum SurfaceType
         }
 
         final VoxelShape shape = blockState.getShape(world, pos);
-        if (shape.getEnd(Direction.Axis.Y) > 1.0)
-        {
+        if (shape.max(Direction.Axis.Y) > 1.0) {
             return SurfaceType.NOT_PASSABLE;
         }
 
         final FluidState fluid = world.getFluidState(pos);
-        if (blockState.getBlock() == Blocks.LAVA || (fluid != null && !fluid.isEmpty() && (fluid.getFluid() == Fluids.LAVA || fluid.getFluid() == Fluids.FLOWING_LAVA)))
-        {
+        if (blockState.getBlock() == Blocks.LAVA || (fluid != null && !fluid.isEmpty() && (fluid.getType() == Fluids.LAVA || fluid.getType() == Fluids.FLOWING_LAVA))) {
             return SurfaceType.NOT_PASSABLE;
         }
 
-        if (isWater(world, pos, blockState, fluid))
-        {
+        if (isWater(world, pos, blockState, fluid)) {
             return SurfaceType.WALKABLE;
         }
 
-        if (block instanceof AbstractSignBlock || block instanceof VineBlock)
-        {
+        if (block instanceof AbstractSignBlock || block instanceof VineBlock) {
             return SurfaceType.DROPABLE;
         }
 
-        if ((blockState.getMaterial().isSolid() && (shape.getEnd(Direction.Axis.X) - shape.getStart(Direction.Axis.X)) > 0.75
-            && (shape.getEnd(Direction.Axis.Z) - shape.getStart(Direction.Axis.Z)) > 0.75)
-            || (blockState.getBlock() == Blocks.SNOW && blockState.get(SnowBlock.LAYERS) > 1)
-            || block instanceof CarpetBlock)
-        {
+        if ((blockState.getMaterial().isSolid() && (shape.max(Direction.Axis.X) - shape.min(Direction.Axis.X)) > 0.75
+            && (shape.max(Direction.Axis.Z) - shape.min(Direction.Axis.Z)) > 0.75)
+            || (blockState.getBlock() == Blocks.SNOW && blockState.getValue(SnowBlock.LAYERS) > 1)
+            || block instanceof CarpetBlock) {
             return SurfaceType.WALKABLE;
         }
 
@@ -104,12 +99,10 @@ public enum SurfaceType
             state = world.getBlockState(pos);
         }
 
-        if (state.isSolid())
-        {
+        if (state.canOcclude()) {
             return false;
         }
-        if (state.getBlock() == Blocks.WATER)
-        {
+        if (state.getBlock() == Blocks.WATER) {
             return true;
         }
 
@@ -124,7 +117,7 @@ public enum SurfaceType
             return false;
         }
 
-        final Fluid fluid = fluidState.getFluid();
+        final Fluid fluid = fluidState.getType();
         return fluid == Fluids.WATER || fluid == Fluids.FLOWING_WATER;
     }
 }

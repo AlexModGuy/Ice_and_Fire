@@ -50,7 +50,7 @@ public abstract class WorldGenDragonCave extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean generate(ISeedReader worldIn, ChunkGenerator chunkGenerator, Random rand, BlockPos position, NoFeatureConfig featureConfig) {
+    public boolean place(ISeedReader worldIn, ChunkGenerator chunkGenerator, Random rand, BlockPos position, NoFeatureConfig featureConfig) {
         if (!IafWorldRegistry.isDimensionListedForDragons(worldIn)) {
             return false;
         }
@@ -65,13 +65,13 @@ public abstract class WorldGenDragonCave extends Feature<NoFeatureConfig> {
         int radius = (int) (dragonAge * 0.2F) + rand.nextInt(4);
         generateCave(worldIn, radius, 3, position, rand);
         EntityDragonBase dragon = createDragon(worldIn, rand, position, dragonAge);
-        worldIn.addEntity(dragon);
+        worldIn.addFreshEntity(dragon);
         return false;
     }
 
     public void generateCave(IWorld worldIn, int radius, int amount, BlockPos center, Random rand) {
         List<SphereInfo> sphereList = new ArrayList<>();
-        sphereList.add(new SphereInfo(radius, center.toImmutable()));
+        sphereList.add(new SphereInfo(radius, center.immutable()));
         Stream<BlockPos> sphereBlocks = ShapeBuilder.start().getAllInCutOffSphereMutable(radius, radius / 2, center).toStream(false);
         Stream<BlockPos> hollowBlocks = ShapeBuilder.start().getAllInRandomlyDistributedRangeYCutOffSphereMutable(radius - 2, (int) ((radius - 2) * 0.75), (radius - 2) / 2, rand, center).toStream(false);
         //Get shells
@@ -79,13 +79,13 @@ public abstract class WorldGenDragonCave extends Feature<NoFeatureConfig> {
         for (int i = 0; i < amount + rand.nextInt(2); i++) {
             Direction direction = HORIZONTALS[rand.nextInt(HORIZONTALS.length - 1)];
             int r = 2 * (int) (radius / 3F) + rand.nextInt(8);
-            BlockPos centerOffset = center.offset(direction, radius - 2);
+            BlockPos centerOffset = center.relative(direction, radius - 2);
             sphereBlocks = Stream.concat(sphereBlocks, ShapeBuilder.start().getAllInCutOffSphereMutable(r, r, centerOffset).toStream(false));
             hollowBlocks = Stream.concat(hollowBlocks, ShapeBuilder.start().getAllInRandomlyDistributedRangeYCutOffSphereMutable(r - 2, (int) ((r - 2) * 0.75), (r - 2) / 2, rand, centerOffset).toStream(false));
             sphereList.add(new SphereInfo(r, centerOffset));
         }
-        Set<BlockPos> shellBlocksSet = sphereBlocks.map(BlockPos::toImmutable).collect(Collectors.toSet());
-        Set<BlockPos> hollowBlocksSet = hollowBlocks.map(BlockPos::toImmutable).collect(Collectors.toSet());
+        Set<BlockPos> shellBlocksSet = sphereBlocks.map(BlockPos::immutable).collect(Collectors.toSet());
+        Set<BlockPos> hollowBlocksSet = hollowBlocks.map(BlockPos::immutable).collect(Collectors.toSet());
         shellBlocksSet.removeAll(hollowBlocksSet);
 
         //setBlocks
@@ -99,31 +99,31 @@ public abstract class WorldGenDragonCave extends Feature<NoFeatureConfig> {
 
     public void createShell(IWorld worldIn, Random rand, Set<BlockPos> positions) {
         positions.forEach(blockPos -> {
-            if (!(worldIn.getBlockState(blockPos).getBlock() instanceof ContainerBlock) && worldIn.getBlockState(blockPos).getBlockHardness(worldIn, blockPos) >= 0) {
+            if (!(worldIn.getBlockState(blockPos).getBlock() instanceof ContainerBlock) && worldIn.getBlockState(blockPos).getDestroySpeed(worldIn, blockPos) >= 0) {
                 boolean doOres = rand.nextInt(IafConfig.oreToStoneRatioForDragonCaves + 1) == 0;
                 if (doOres) {
                     int chance = rand.nextInt(199) + 1;
                     if (chance < 30) {
-                        worldIn.setBlockState(blockPos, Blocks.IRON_ORE.getDefaultState(), 2);
+                        worldIn.setBlock(blockPos, Blocks.IRON_ORE.defaultBlockState(), 2);
                     } else if (chance > 30 && chance < 40) {
-                        worldIn.setBlockState(blockPos, Blocks.GOLD_ORE.getDefaultState(), 2);
+                        worldIn.setBlock(blockPos, Blocks.GOLD_ORE.defaultBlockState(), 2);
                     } else if (chance > 40 && chance < 45) {
-                        worldIn.setBlockState(blockPos, IafConfig.generateCopperOre ? IafBlockRegistry.COPPER_ORE.getDefaultState() : PALETTE_BLOCK1, 2);
+                        worldIn.setBlock(blockPos, IafConfig.generateCopperOre ? IafBlockRegistry.COPPER_ORE.defaultBlockState() : PALETTE_BLOCK1, 2);
                     } else if (chance > 45 && chance < 50) {
-                        worldIn.setBlockState(blockPos, IafConfig.generateSilverOre ? IafBlockRegistry.SILVER_ORE.getDefaultState() : PALETTE_BLOCK1, 2);
+                        worldIn.setBlock(blockPos, IafConfig.generateSilverOre ? IafBlockRegistry.SILVER_ORE.defaultBlockState() : PALETTE_BLOCK1, 2);
                     } else if (chance > 50 && chance < 60) {
-                        worldIn.setBlockState(blockPos, Blocks.COAL_ORE.getDefaultState(), 2);
+                        worldIn.setBlock(blockPos, Blocks.COAL_ORE.defaultBlockState(), 2);
                     } else if (chance > 60 && chance < 70) {
-                        worldIn.setBlockState(blockPos, Blocks.REDSTONE_ORE.getDefaultState(), 2);
+                        worldIn.setBlock(blockPos, Blocks.REDSTONE_ORE.defaultBlockState(), 2);
                     } else if (chance > 70 && chance < 80) {
-                        worldIn.setBlockState(blockPos, Blocks.LAPIS_ORE.getDefaultState(), 2);
+                        worldIn.setBlock(blockPos, Blocks.LAPIS_ORE.defaultBlockState(), 2);
                     } else if (chance > 80 && chance < 90) {
-                        worldIn.setBlockState(blockPos, Blocks.DIAMOND_ORE.getDefaultState(), 2);
+                        worldIn.setBlock(blockPos, Blocks.DIAMOND_ORE.defaultBlockState(), 2);
                     } else if (chance > 90) {
-                        worldIn.setBlockState(blockPos, generateGemOre ? PALETTE_ORE1 : PALETTE_ORE2, 2);
+                        worldIn.setBlock(blockPos, generateGemOre ? PALETTE_ORE1 : PALETTE_ORE2, 2);
                     }
                 } else {
-                    worldIn.setBlockState(blockPos, rand.nextBoolean() ? PALETTE_BLOCK1 : PALETTE_BLOCK2, 2);
+                    worldIn.setBlock(blockPos, rand.nextBoolean() ? PALETTE_BLOCK1 : PALETTE_BLOCK2, 2);
                 }
             }
         });
@@ -132,7 +132,7 @@ public abstract class WorldGenDragonCave extends Feature<NoFeatureConfig> {
     public void hollowOut(IWorld worldIn, Set<BlockPos> positions) {
         positions.forEach(blockPos -> {
             if (!(worldIn.getBlockState(blockPos).getBlock() instanceof ContainerBlock)) {
-                worldIn.setBlockState(blockPos, Blocks.AIR.getDefaultState(), 3);
+                worldIn.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 3);
             }
         });
     }
@@ -142,14 +142,14 @@ public abstract class WorldGenDragonCave extends Feature<NoFeatureConfig> {
             BlockPos pos = sphere.pos;
             int radius = sphere.radius;
             for (int i = 0; i < 15 + rand.nextInt(10); i++) {
-                CEILING_DECO.generate(worldIn, rand, pos.up(radius / 2 - 1).add(rand.nextInt(radius) - radius / 2, 0, rand.nextInt(radius) - radius / 2));
+                CEILING_DECO.generate(worldIn, rand, pos.above(radius / 2 - 1).offset(rand.nextInt(radius) - radius / 2, 0, rand.nextInt(radius) - radius / 2));
             }
 
         }
         int y = center.getY();
         positions.forEach(blockPos -> {
             if (blockPos.getY() < y) {
-                if (worldIn.getBlockState(blockPos.down()).getMaterial() == Material.ROCK && worldIn.getBlockState(blockPos).getMaterial() == Material.AIR)
+                if (worldIn.getBlockState(blockPos.below()).getMaterial() == Material.STONE && worldIn.getBlockState(blockPos).getMaterial() == Material.AIR)
                     setGoldPile(worldIn, blockPos, rand);
             }
         });
@@ -161,11 +161,11 @@ public abstract class WorldGenDragonCave extends Feature<NoFeatureConfig> {
             if (chance < 60) {
                 int goldRand = Math.max(1, IafConfig.dragonDenGoldAmount) * (isMale ? 1 : 2);
                 boolean generateGold = rand.nextInt(goldRand) == 0;
-                world.setBlockState(pos, generateGold ? TREASURE_PILE.with(BlockGoldPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
+                world.setBlock(pos, generateGold ? TREASURE_PILE.setValue(BlockGoldPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.defaultBlockState(), 3);
             } else if (chance == 61) {
-                world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, HORIZONTALS[rand.nextInt(3)]), 2);
+                world.setBlock(pos, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, HORIZONTALS[rand.nextInt(3)]), 2);
                 if (world.getBlockState(pos).getBlock() instanceof ChestBlock) {
-                    TileEntity tileentity1 = world.getTileEntity(pos);
+                    TileEntity tileentity1 = world.getBlockEntity(pos);
                     if (tileentity1 instanceof ChestTileEntity) {
                         ((ChestTileEntity) tileentity1).setLootTable(isMale ? DRAGON_MALE_CHEST : DRAGON_CHEST, rand.nextLong());
                     }

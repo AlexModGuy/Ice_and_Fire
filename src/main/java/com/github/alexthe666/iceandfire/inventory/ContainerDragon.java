@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.inventory;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -13,8 +12,8 @@ import net.minecraft.item.BannerItem;
 import net.minecraft.item.ItemStack;
 
 public class ContainerDragon extends Container {
-    private IInventory dragonInventory;
-    private EntityDragonBase dragon;
+    private final IInventory dragonInventory;
+    private final EntityDragonBase dragon;
 
     public ContainerDragon(int i, PlayerInventory playerInventory) {
         this(i, new Inventory(5), playerInventory, null);
@@ -25,61 +24,61 @@ public class ContainerDragon extends Container {
         this.dragonInventory = ratInventory;
         this.dragon = rat;
         byte b0 = 3;
-        dragonInventory.openInventory(playerInventory.player);
+        dragonInventory.startOpen(playerInventory.player);
         int i = (b0 - 4) * 18;
         this.addSlot(new Slot(ratInventory, 0, 8, 54) {
             @Override
-            public void onSlotChanged() {
-                this.inventory.markDirty();
+            public void setChanged() {
+                this.container.setChanged();
             }
 
             @Override
-            public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && stack.getItem() instanceof BannerItem;
+            public boolean mayPlace(ItemStack stack) {
+                return super.mayPlace(stack) && stack.getItem() instanceof BannerItem;
             }
         });
         this.addSlot(new Slot(ratInventory, 1, 8, 18) {
             @Override
-            public void onSlotChanged() {
-                this.inventory.markDirty();
+            public void setChanged() {
+                this.container.setChanged();
             }
 
             @Override
-            public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 0;
+            public boolean mayPlace(ItemStack stack) {
+                return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 0;
             }
         });
         this.addSlot(new Slot(ratInventory, 2, 8, 36) {
             @Override
-            public void onSlotChanged() {
-                this.inventory.markDirty();
+            public void setChanged() {
+                this.container.setChanged();
             }
 
             @Override
-            public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 1;
+            public boolean mayPlace(ItemStack stack) {
+                return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 1;
             }
         });
         this.addSlot(new Slot(ratInventory, 3, 153, 18) {
             @Override
-            public void onSlotChanged() {
-                this.inventory.markDirty();
+            public void setChanged() {
+                this.container.setChanged();
             }
 
             @Override
-            public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 2;
+            public boolean mayPlace(ItemStack stack) {
+                return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 2;
             }
         });
         this.addSlot(new Slot(ratInventory, 4, 153, 36) {
             @Override
-            public void onSlotChanged() {
-                this.inventory.markDirty();
+            public void setChanged() {
+                this.container.setChanged();
             }
 
             @Override
-            public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 3;
+            public boolean mayPlace(ItemStack stack) {
+                return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 3;
             }
         });
         int j;
@@ -96,61 +95,61 @@ public class ContainerDragon extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return this.dragonInventory.isUsableByPlayer(playerIn) && this.dragon.isAlive() && this.dragon.getDistance(playerIn) < 8.0F;
+    public boolean stillValid(PlayerEntity playerIn) {
+        return this.dragonInventory.stillValid(playerIn) && this.dragon.isAlive() && this.dragon.distanceTo(playerIn) < 8.0F;
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
-            if (index < this.dragonInventory.getSizeInventory()) {
-                if (!this.mergeItemStack(itemstack1, this.dragonInventory.getSizeInventory(), this.inventorySlots.size(), true)) {
+            if (index < this.dragonInventory.getContainerSize()) {
+                if (!this.moveItemStackTo(itemstack1, this.dragonInventory.getContainerSize(), this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (this.getSlot(1).isItemValid(itemstack1) && !this.getSlot(1).getHasStack()) {
-                if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
-                    return ItemStack.EMPTY;
-                }
-
-            } else if (this.getSlot(2).isItemValid(itemstack1) && !this.getSlot(2).getHasStack()) {
-                if (!this.mergeItemStack(itemstack1, 2, 3, false)) {
+            } else if (this.getSlot(1).mayPlace(itemstack1) && !this.getSlot(1).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 1, 2, false)) {
                     return ItemStack.EMPTY;
                 }
 
-            } else if (this.getSlot(3).isItemValid(itemstack1) && !this.getSlot(3).getHasStack()) {
-                if (!this.mergeItemStack(itemstack1, 3, 4, false)) {
+            } else if (this.getSlot(2).mayPlace(itemstack1) && !this.getSlot(2).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 2, 3, false)) {
                     return ItemStack.EMPTY;
                 }
 
-            } else if (this.getSlot(4).isItemValid(itemstack1) && !this.getSlot(4).getHasStack()) {
-                if (!this.mergeItemStack(itemstack1, 4, 5, false)) {
+            } else if (this.getSlot(3).mayPlace(itemstack1) && !this.getSlot(3).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 3, 4, false)) {
                     return ItemStack.EMPTY;
                 }
 
-            } else if (this.getSlot(0).isItemValid(itemstack1)) {
-                if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+            } else if (this.getSlot(4).mayPlace(itemstack1) && !this.getSlot(4).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 4, 5, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (this.dragonInventory.getSizeInventory() <= 5 || !this.mergeItemStack(itemstack1, 5, this.dragonInventory.getSizeInventory(), false)) {
+
+            } else if (this.getSlot(0).mayPlace(itemstack1)) {
+                if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (this.dragonInventory.getContainerSize() <= 5 || !this.moveItemStackTo(itemstack1, 5, this.dragonInventory.getContainerSize(), false)) {
                 return ItemStack.EMPTY;
             }
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
         return itemstack;
     }
 
     @Override
-    public void onContainerClosed(PlayerEntity playerIn) {
-        super.onContainerClosed(playerIn);
-        this.dragonInventory.closeInventory(playerIn);
+    public void removed(PlayerEntity playerIn) {
+        super.removed(playerIn);
+        this.dragonInventory.stopOpen(playerIn);
     }
 
 }

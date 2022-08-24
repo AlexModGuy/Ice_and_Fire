@@ -30,17 +30,17 @@ public class ItemDragonFlesh extends ItemGenericFood {
     }
 
     public void onFoodEaten(ItemStack stack, World worldIn, LivingEntity livingEntity) {
-        if (!worldIn.isRemote) {
+        if (!worldIn.isClientSide) {
             if (dragonType == 0) {
-                livingEntity.setFire(5);
-            } else if(dragonType == 1){
-                livingEntity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 2));
-            }else{
-                if(!livingEntity.world.isRemote){
-                    LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(livingEntity.world);
-                    lightningboltentity.moveForced(livingEntity.getPositionVec());
-                    if(!livingEntity.world.isRemote){
-                        livingEntity.world.addEntity(lightningboltentity);
+                livingEntity.setSecondsOnFire(5);
+            } else if (dragonType == 1) {
+                livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 2));
+            } else {
+                if (!livingEntity.level.isClientSide) {
+                    LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(livingEntity.level);
+                    lightningboltentity.moveTo(livingEntity.position());
+                    if (!livingEntity.level.isClientSide) {
+                        livingEntity.level.addFreshEntity(lightningboltentity);
                     }
                 }
             }

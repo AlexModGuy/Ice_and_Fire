@@ -1,10 +1,7 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.mojang.serialization.Codec;
-
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -15,6 +12,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+
+import java.util.Random;
 
 public class WorldGenDreadRuin extends Feature<NoFeatureConfig> {
     private static final ResourceLocation STRUCTURE_0 = new ResourceLocation(IceAndFire.MODID, "dread_ruin_0");
@@ -83,10 +82,10 @@ public class WorldGenDreadRuin extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean generate(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
+    public boolean place(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
         ResourceLocation structure = getRandomStructure(rand);
         Direction facing = HORIZONTALS[rand.nextInt(3)];
-        MinecraftServer server = worldIn.getWorld().getServer();
+        MinecraftServer server = worldIn.getLevel().getServer();
         Biome biome = worldIn.getBiome(position);
         /*TemplateManager templateManager = server.getWorld(worldIn.getDimensionType()).getStructureTemplateManager();
         PlacementSettings settings = new PlacementSettings().setRotation(getRotationFromFacing(facing)).addProcessor(new DreadRuinProcessor());

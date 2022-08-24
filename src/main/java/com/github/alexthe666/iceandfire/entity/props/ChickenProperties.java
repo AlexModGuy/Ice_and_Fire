@@ -41,12 +41,12 @@ public class ChickenProperties {
     public static void tickChicken(LivingEntity entity) {
         int timeUntilNextEgg = getTimeRemaining(entity);
         if (timeUntilNextEgg <= 0) {
-            if (entity.getRNG().nextInt(IafConfig.cockatriceEggChance + 1) == 0 && entity.ticksExisted > 30) {
-                entity.playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F,
+            if (entity.getRandom().nextInt(IafConfig.cockatriceEggChance + 1) == 0 && entity.tickCount > 30) {
+                entity.playSound(SoundEvents.CHICKEN_HURT, 2.0F,
                     (rand.nextFloat() - rand.nextFloat()) * 0.2F + 1.0F);
-                entity.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F,
+                entity.playSound(SoundEvents.CHICKEN_EGG, 1.0F,
                     (rand.nextFloat() - rand.nextFloat()) * 0.2F + 1.0F);
-                entity.entityDropItem(IafItemRegistry.ROTTEN_EGG, 1);
+                entity.spawnAtLocation(IafItemRegistry.ROTTEN_EGG, 1);
             }
             setTimeRemaining(entity, createDefaultTime());
         } else {

@@ -4,7 +4,6 @@ import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.iceandfire.client.model.util.HideableModelRenderer;
 import com.google.common.collect.ImmutableList;
-
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
@@ -17,24 +16,24 @@ public class ModelDreadLichSkull extends AdvancedEntityModel {
     }
 
     public ModelDreadLichSkull(float modelSize) {
-        this.textureHeight = 32;
-        this.textureWidth = 64;
+        this.texHeight = 32;
+        this.texWidth = 64;
         this.bipedHead = new HideableModelRenderer(this, 0, 0);
         this.bipedHead.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, modelSize - 0.5F);
-        this.bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.bipedHead.setPos(0.0F, 0.0F, 0.0F);
         this.bipedHeadwear = new HideableModelRenderer(this, 32, 0);
         this.bipedHeadwear.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, modelSize);
-        this.bipedHeadwear.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.bipedHeadwear.setPos(0.0F, 0.0F, 0.0F);
         this.updateDefaultPose();
     }
 
     @Override
-    public void setRotationAngles(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetToDefaultPose();
     }
 
     @Override
-    public Iterable<ModelRenderer> getParts() {
+    public Iterable<ModelRenderer> parts() {
         return ImmutableList.of(bipedHead, bipedHeadwear);
     }
 

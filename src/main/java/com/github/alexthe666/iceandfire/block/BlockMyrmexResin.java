@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -14,18 +13,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
 public class BlockMyrmexResin extends Block implements ICustomRendered {
 
-    private boolean sticky;
+    private final boolean sticky;
 
     public BlockMyrmexResin(boolean sticky, String suffix) {
         super(
-    		Properties
-    			.create(Material.CLAY)
-    			.hardnessAndResistance(2.5F)
-    			.sound(sticky ? SoundType.SLIME : SoundType.GROUND)
+            Properties
+                .of(Material.CLAY)
+                .strength(2.5F)
+                .sound(sticky ? SoundType.SLIME_BLOCK : SoundType.GRAVEL)
 		);
 
         this.setRegistryName(IceAndFire.MODID, sticky ? "myrmex_resin_sticky_" + suffix : "myrmex_resin_" + suffix);
@@ -37,10 +34,10 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
         return false;
     }
 
-    public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entity) {
         if (sticky) {
             if (!(entity instanceof EntityMyrmexBase)) {
-                entity.setMotion(entity.getMotion().mul(0.4D, 0.4D, 0.4D));
+                entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.4D, 0.4D, 0.4D));
             }
 
         }

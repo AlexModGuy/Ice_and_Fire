@@ -1,23 +1,19 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.function.Predicate;
-
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexRoyal;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nonnull;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
@@ -38,39 +34,39 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
             }
         };
         this.myrmex = myrmex;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if (!this.myrmex.shouldHaveNormalAI()) {
             list = IAFMath.emptyEntityList;
             return false;
         }
-        if (!this.myrmex.canMove() || this.myrmex.getAttackTarget() != null || this.myrmex.releaseTicks < 400 || this.myrmex.mate != null) {
+        if (!this.myrmex.canMove() || this.myrmex.getTarget() != null || this.myrmex.releaseTicks < 400 || this.myrmex.mate != null) {
             list = IAFMath.emptyEntityList;
             return false;
         }
         MyrmexHive village = this.myrmex.getHive();
         if (village == null) {
-            village = MyrmexWorldData.get(this.myrmex.world).getNearestHive(this.myrmex.getPosition(), 100);
+            village = MyrmexWorldData.get(this.myrmex.level).getNearestHive(this.myrmex.blockPosition(), 100);
         }
-        if (village != null && village.getCenter().distanceSq(this.myrmex.getPosX(), village.getCenter().getY(), this.myrmex.getPosZ(), true) < 2000) {
+        if (village != null && village.getCenter().distSqr(this.myrmex.getX(), village.getCenter().getY(), this.myrmex.getZ(), true) < 2000) {
             list = IAFMath.emptyEntityList;
             return false;
         }
 
-        if (this.myrmex.world.getGameTime() % 4 == 0) // only update the list every 4 ticks
-            list = this.goalOwner.world.getEntitiesInAABBexcluding(myrmex, this.getTargetableArea(100), this.targetEntitySelector);
+        if (this.myrmex.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
+            list = this.mob.level.getEntities(myrmex, this.getTargetableArea(100), this.targetEntitySelector);
 
         if (list.isEmpty())
             return false;
 
         list.sort(this.theNearestAttackableTargetSorter);
         for (Entity royal : list) {
-            if (this.myrmex.canMateWith((EntityMyrmexRoyal) royal)) {
+            if (this.myrmex.canMate((EntityMyrmexRoyal) royal)) {
                 this.myrmex.mate = (EntityMyrmexRoyal) royal;
-                this.myrmex.world.setEntityState(this.myrmex, (byte) 76);
+                this.myrmex.level.broadcastEntityEvent(this.myrmex, (byte) 76);
                 return true;
             }
         }
@@ -78,11 +74,11 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.goalOwner.getBoundingBox().grow(targetDistance, targetDistance/2, targetDistance);
+        return this.mob.getBoundingBox().inflate(targetDistance, targetDistance / 2, targetDistance);
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         return false;
     }
 
@@ -95,8 +91,8 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
 
         @Override
         public int compare(Entity p_compare_1_, Entity p_compare_2_) {
-            final double d0 = this.theEntity.getDistanceSq(p_compare_1_);
-            final double d1 = this.theEntity.getDistanceSq(p_compare_2_);
+            final double d0 = this.theEntity.distanceToSqr(p_compare_1_);
+            final double d1 = this.theEntity.distanceToSqr(p_compare_2_);
             return Double.compare(d0, d1);
         }
     }

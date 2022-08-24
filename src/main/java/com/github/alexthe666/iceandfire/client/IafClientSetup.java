@@ -128,69 +128,69 @@ public class IafClientSetup {
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.DREAD_PORTAL.get(), manager -> new RenderDreadPortal(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.DREAD_SPAWNER.get(), manager -> new RenderDreadSpawner(manager));
         ClientRegistry.bindTileEntityRenderer(IafTileEntityRegistry.GHOST_CHEST.get(), manager -> new RenderGhostChest(manager));
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.GOLD_PILE, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.SILVER_PILE, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.LECTERN, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PODIUM_OAK, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PODIUM_BIRCH, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PODIUM_SPRUCE, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PODIUM_JUNGLE, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PODIUM_ACACIA, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PODIUM_DARK_OAK, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.FIRE_LILY, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.FROST_LILY, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.LIGHTNING_LILY, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.DRAGON_ICE_SPIKES, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.MYRMEX_DESERT_RESIN_BLOCK, RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.MYRMEX_DESERT_RESIN_GLASS, RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.MYRMEX_JUNGLE_RESIN_BLOCK, RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.MYRMEX_JUNGLE_RESIN_GLASS, RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.MYRMEX_DESERT_BIOLIGHT, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.MYRMEX_JUNGLE_BIOLIGHT, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.DREAD_STONE_FACE, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.DREAD_TORCH, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.BURNT_TORCH, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.EGG_IN_ICE, RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_EMPTY, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_PIXIE_0, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_PIXIE_1, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_PIXIE_2, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_PIXIE_3, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_PIXIE_4, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_BROWN, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_RED, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_OAK, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_BIRCH, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_SPRUCE, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_DARK_OAK, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.DREAD_SPAWNER, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.DREAD_TORCH_WALL, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(IafBlockRegistry.BURNT_TORCH_WALL, RenderType.getCutout());
-        IItemPropertyGetter pulling = ItemModelsProperties.func_239417_a_(Items.BOW, new ResourceLocation("pulling"));
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.GOLD_PILE, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.SILVER_PILE, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.LECTERN, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PODIUM_OAK, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PODIUM_BIRCH, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PODIUM_SPRUCE, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PODIUM_JUNGLE, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PODIUM_ACACIA, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PODIUM_DARK_OAK, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.FIRE_LILY, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.FROST_LILY, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.LIGHTNING_LILY, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.DRAGON_ICE_SPIKES, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.MYRMEX_DESERT_RESIN_BLOCK, RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.MYRMEX_DESERT_RESIN_GLASS, RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.MYRMEX_JUNGLE_RESIN_BLOCK, RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.MYRMEX_JUNGLE_RESIN_GLASS, RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.MYRMEX_DESERT_BIOLIGHT, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.MYRMEX_JUNGLE_BIOLIGHT, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.DREAD_STONE_FACE, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.DREAD_TORCH, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.BURNT_TORCH, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.EGG_IN_ICE, RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_EMPTY, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_PIXIE_0, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_PIXIE_1, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_PIXIE_2, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_PIXIE_3, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.JAR_PIXIE_4, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_BROWN, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_RED, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_OAK, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_BIRCH, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_SPRUCE, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.PIXIE_HOUSE_DARK_OAK, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.DREAD_SPAWNER, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.DREAD_TORCH_WALL, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(IafBlockRegistry.BURNT_TORCH_WALL, RenderType.cutout());
+        IItemPropertyGetter pulling = ItemModelsProperties.getProperty(Items.BOW, new ResourceLocation("pulling"));
         IItemPropertyGetter pull = (stack, worldIn, entity) -> {
             if (entity == null) {
                 return 0.0F;
             } else {
                 ItemDragonBow item = ((ItemDragonBow) stack.getItem());
-                return entity.getActiveItemStack() != stack ? 0.0F : (stack.getUseDuration() - entity.getItemInUseCount()) / 20.0F;
+                return entity.getUseItem() != stack ? 0.0F : (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F;
             }
         };
-        ItemModelsProperties.registerProperty(IafItemRegistry.DRAGON_BOW.asItem(), new ResourceLocation("pulling"), pulling);
-        ItemModelsProperties.registerProperty(IafItemRegistry.DRAGON_BOW.asItem(), new ResourceLocation("pull"), pull);
-        ItemModelsProperties.registerProperty(IafItemRegistry.DRAGON_HORN, new ResourceLocation("iceorfire"), (p_239428_0_, p_239428_1_, p_239428_2_) -> {
+        ItemModelsProperties.register(IafItemRegistry.DRAGON_BOW.asItem(), new ResourceLocation("pulling"), pulling);
+        ItemModelsProperties.register(IafItemRegistry.DRAGON_BOW.asItem(), new ResourceLocation("pull"), pull);
+        ItemModelsProperties.register(IafItemRegistry.DRAGON_HORN, new ResourceLocation("iceorfire"), (p_239428_0_, p_239428_1_, p_239428_2_) -> {
             return ItemDragonHorn.getDragonType(p_239428_0_) * 0.25F;
         });
-        ItemModelsProperties.registerProperty(IafItemRegistry.SUMMONING_CRYSTAL_FIRE, new ResourceLocation("has_dragon"), (stack, p_239428_1_, p_239428_2_) -> {
+        ItemModelsProperties.register(IafItemRegistry.SUMMONING_CRYSTAL_FIRE, new ResourceLocation("has_dragon"), (stack, p_239428_1_, p_239428_2_) -> {
             return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
         });
-        ItemModelsProperties.registerProperty(IafItemRegistry.SUMMONING_CRYSTAL_ICE, new ResourceLocation("has_dragon"), (stack, p_239428_1_, p_239428_2_) -> {
+        ItemModelsProperties.register(IafItemRegistry.SUMMONING_CRYSTAL_ICE, new ResourceLocation("has_dragon"), (stack, p_239428_1_, p_239428_2_) -> {
             return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
         });
-        ItemModelsProperties.registerProperty(IafItemRegistry.SUMMONING_CRYSTAL_LIGHTNING, new ResourceLocation("has_dragon"), (stack, p_239428_1_, p_239428_2_) -> {
+        ItemModelsProperties.register(IafItemRegistry.SUMMONING_CRYSTAL_LIGHTNING, new ResourceLocation("has_dragon"), (stack, p_239428_1_, p_239428_2_) -> {
             return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
         });
-        ItemModelsProperties.registerProperty(IafItemRegistry.TIDE_TRIDENT, new ResourceLocation("throwing"), (p_239419_0_, p_239419_1_, p_239419_2_) -> {
-            return p_239419_2_ != null && p_239419_2_.isHandActive() && p_239419_2_.getActiveItemStack() == p_239419_0_ ? 1.0F : 0.0F;
+        ItemModelsProperties.register(IafItemRegistry.TIDE_TRIDENT, new ResourceLocation("throwing"), (p_239419_0_, p_239419_1_, p_239419_2_) -> {
+            return p_239419_2_ != null && p_239419_2_.isUsingItem() && p_239419_2_.getUseItem() == p_239419_0_ ? 1.0F : 0.0F;
         });
     }
 }

@@ -1,11 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen.processor;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -16,9 +11,12 @@ import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.StructureProcessor;
 import net.minecraft.world.gen.feature.template.Template;
 
+import javax.annotation.Nullable;
+import java.util.Random;
+
 public class DreadPortalProcessor extends StructureProcessor {
 
-    private float integrity = 1.0F;
+    private final float integrity = 1.0F;
 
     public DreadPortalProcessor(BlockPos position, PlacementSettings settings, Biome biome) {
     }
@@ -26,11 +24,11 @@ public class DreadPortalProcessor extends StructureProcessor {
     public static BlockState getRandomCrackedBlock(@Nullable BlockState prev, Random random) {
         float rand = random.nextFloat();
         if (rand < 0.3) {
-            return IafBlockRegistry.DREAD_STONE_BRICKS.getDefaultState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS.defaultBlockState();
         } else if (rand < 0.6) {
-            return IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED.getDefaultState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED.defaultBlockState();
         } else {
-            return IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY.getDefaultState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY.defaultBlockState();
         }
     }
 
@@ -40,7 +38,7 @@ public class DreadPortalProcessor extends StructureProcessor {
         Random random = settings.getRandom(pos);
         if (random.nextFloat() <= integrity) {
             if (blockInfoIn.state.getBlock() == Blocks.DIAMOND_BLOCK) {
-                return new Template.BlockInfo(pos, IafBlockRegistry.DREAD_PORTAL.getDefaultState(), null);
+                return new Template.BlockInfo(pos, IafBlockRegistry.DREAD_PORTAL.defaultBlockState(), null);
             }
             if (blockInfoIn.state.getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS) {
                 BlockState state = getRandomCrackedBlock(null, random);

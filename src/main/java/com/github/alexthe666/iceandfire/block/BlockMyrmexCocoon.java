@@ -1,10 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityMyrmexCocoon;
-
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
@@ -22,46 +19,46 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import javax.annotation.Nullable;
 
 public class BlockMyrmexCocoon extends ContainerBlock {
 
 
     public BlockMyrmexCocoon(boolean jungle) {
         super(
-    		Properties
-    			.create(Material.EARTH)
-    			.hardnessAndResistance(2.5F)
-    			.notSolid()
-    			.variableOpacity()
-    			.sound(SoundType.SLIME)
-		);
+            Properties
+                .of(Material.DIRT)
+                .strength(2.5F)
+                .noOcclusion()
+                .dynamicShape()
+                .sound(SoundType.SLIME_BLOCK)
+        );
 
         this.setRegistryName(IceAndFire.MODID, jungle ? "jungle_myrmex_cocoon" : "desert_myrmex_cocoon");
     }
 
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        TileEntity tileentity = worldIn.getTileEntity(pos);
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        TileEntity tileentity = worldIn.getBlockEntity(pos);
         if (tileentity instanceof IInventory) {
-            InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) tileentity);
-            worldIn.updateComparatorOutputLevel(pos, this);
+            InventoryHelper.dropContents(worldIn, pos, (IInventory) tileentity);
+            worldIn.updateNeighbourForOutputSignal(pos, this);
         }
-        super.onReplaced(state, worldIn, pos, newState, isMoving);
+        super.onRemove(state, worldIn, pos, newState, isMoving);
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (!player.isSneaking()) {
-            if (worldIn.isRemote) {
-                IceAndFire.PROXY.setRefrencedTE(worldIn.getTileEntity(pos));
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if (!player.isShiftKeyDown()) {
+            if (worldIn.isClientSide) {
+                IceAndFire.PROXY.setRefrencedTE(worldIn.getBlockEntity(pos));
             } else {
-                INamedContainerProvider inamedcontainerprovider = this.getContainer(state, worldIn, pos);
+                INamedContainerProvider inamedcontainerprovider = this.getMenuProvider(state, worldIn, pos);
                 if (inamedcontainerprovider != null) {
-                    player.openContainer(inamedcontainerprovider);
+                    player.openMenu(inamedcontainerprovider);
                 }
             }
             return ActionResultType.SUCCESS;
@@ -71,7 +68,7 @@ public class BlockMyrmexCocoon extends ContainerBlock {
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+    public TileEntity newBlockEntity(IBlockReader worldIn) {
         return new TileEntityMyrmexCocoon();
     }
 }

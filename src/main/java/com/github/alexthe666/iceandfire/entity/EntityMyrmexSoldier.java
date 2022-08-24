@@ -1,26 +1,18 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexTrades;
 import com.google.common.base.Predicate;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
@@ -31,6 +23,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class EntityMyrmexSoldier extends EntityMyrmexBase {
 
@@ -57,16 +51,16 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     }
 
     @Nullable
-    protected ResourceLocation getLootTable() {
+    protected ResourceLocation getDefaultLootTable() {
         return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
     }
 
-    protected int getExperiencePoints(PlayerEntity player) {
+    protected int getExperienceReward(PlayerEntity player) {
         return 5;
     }
 
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         /*if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
             if (this.getAttackBounds().intersects(this.getAttackTarget().getBoundingBox())) {
@@ -117,21 +111,21 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     }
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.func_233666_p_()
-                //HEALTH
-                .createMutableAttribute(Attributes.MAX_HEALTH, 40)
-                //SPEED
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35D)
-                //ATTACK
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, IafConfig.myrmexBaseAttackStrength * 2D)
-                //FOLLOW RANGE
-                .createMutableAttribute(Attributes.FOLLOW_RANGE, 64.0D)
-                //ARMOR
-                .createMutableAttribute(Attributes.ARMOR, 6.0D);
+        return MobEntity.createMobAttributes()
+            //HEALTH
+            .add(Attributes.MAX_HEALTH, 40)
+            //SPEED
+            .add(Attributes.MOVEMENT_SPEED, 0.35D)
+            //ATTACK
+            .add(Attributes.ATTACK_DAMAGE, IafConfig.myrmexBaseAttackStrength * 2D)
+            //FOLLOW RANGE
+            .add(Attributes.FOLLOW_RANGE, 64.0D)
+            //ARMOR
+            .add(Attributes.ARMOR, 6.0D);
     }
 
     @Override
-    public AttributeModifierMap.MutableAttribute getAttributes() {
+    public AttributeModifierMap.MutableAttribute getConfigurableAttributes() {
         return bakeAttributes();
     }
 
@@ -159,28 +153,27 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     }
 
     @Override
-    public boolean attackEntityAsMob(Entity entityIn) {
+    public boolean doHurtTarget(Entity entityIn) {
         if (this.getGrowthStage() < 2) {
             return false;
         }
         if (this.getAnimation() != ANIMATION_STING && this.getAnimation() != ANIMATION_BITE) {
-            this.setAnimation(this.getRNG().nextBoolean() ? ANIMATION_STING : ANIMATION_BITE);
-            float f = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
-            this.setLastAttackedEntity(entityIn);
-            boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), f);
-            if (this.getAnimation() == ANIMATION_STING && flag){
+            this.setAnimation(this.getRandom().nextBoolean() ? ANIMATION_STING : ANIMATION_BITE);
+            float f = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
+            this.setLastHurtMob(entityIn);
+            boolean flag = entityIn.hurt(DamageSource.mobAttack(this), f);
+            if (this.getAnimation() == ANIMATION_STING && flag) {
                 this.playStingSound();
-                if(entityIn instanceof LivingEntity) {
-                    ((LivingEntity)entityIn).addPotionEffect(new EffectInstance(Effects.POISON, 200, 2));
-                    this.setAttackTarget((LivingEntity)entityIn);
+                if (entityIn instanceof LivingEntity) {
+                    ((LivingEntity) entityIn).addEffect(new EffectInstance(Effects.POISON, 200, 2));
+                    this.setTarget((LivingEntity) entityIn);
                 }
-            }
-            else{
+            } else {
                 this.playBiteSound();
             }
-            if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(Hand.MAIN_HAND) != ItemStack.EMPTY) {
-                this.entityDropItem(this.getHeldItem(Hand.MAIN_HAND), 0);
-                this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+            if (!this.level.isClientSide && this.getRandom().nextInt(3) == 0 && this.getItemInHand(Hand.MAIN_HAND) != ItemStack.EMPTY) {
+                this.spawnAtLocation(this.getItemInHand(Hand.MAIN_HAND), 0);
+                this.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
             }
             if (!this.getPassengers().isEmpty()) {
                 for (Entity entity : this.getPassengers()) {
@@ -200,13 +193,14 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     public Animation[] getAnimations() {
         return new Animation[]{ANIMATION_PUPA_WIGGLE, ANIMATION_BITE, ANIMATION_STING};
     }
+
     @Override
-    public int getXp() {
+    public int getVillagerXp() {
         return 0;
     }
 
     @Override
-    public boolean hasXPBar() {
+    public boolean showProgressBar() {
         return false;
     }
 }

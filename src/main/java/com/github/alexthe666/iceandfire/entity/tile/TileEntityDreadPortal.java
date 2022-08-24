@@ -19,8 +19,8 @@ public class TileEntityDreadPortal extends TileEntity implements ITickableTileEn
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         compound.putLong("Age", this.age);
 
         if (this.exitPortal != null) {
@@ -35,8 +35,8 @@ public class TileEntityDreadPortal extends TileEntity implements ITickableTileEn
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound) {
-        super.read(state, compound);
+    public void load(BlockState state, CompoundNBT compound) {
+        super.load(state, compound);
         this.age = compound.getLong("Age");
 
         if (compound.contains("ExitPortal", 10)) {
@@ -47,7 +47,7 @@ public class TileEntityDreadPortal extends TileEntity implements ITickableTileEn
     }
 
     @Override
-    public double getMaxRenderDistanceSquared() {
+    public double getViewDistance() {
         return 65536.0D;
     }
 
@@ -58,17 +58,17 @@ public class TileEntityDreadPortal extends TileEntity implements ITickableTileEn
 
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+        return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        read(this.getBlockState(), packet.getNbtCompound());
+        load(this.getBlockState(), packet.getTag());
     }
 
     @Override
     public CompoundNBT getUpdateTag() {
-        return this.write(new CompoundNBT());
+        return this.save(new CompoundNBT());
     }
 
     public boolean shouldRenderFace(Direction face) {

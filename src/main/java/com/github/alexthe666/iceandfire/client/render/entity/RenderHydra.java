@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericG
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerHydraHead;
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
@@ -24,12 +23,12 @@ public class RenderHydra extends MobRenderer<EntityHydra, ModelHydraBody> {
     }
 
     @Override
-    public void preRenderCallback(EntityHydra LivingEntityIn, MatrixStack stack, float partialTickTime) {
+    public void scale(EntityHydra LivingEntityIn, MatrixStack stack, float partialTickTime) {
         stack.scale(1.75F, 1.75F, 1.75F);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityHydra gorgon) {
+    public ResourceLocation getTextureLocation(EntityHydra gorgon) {
         switch (gorgon.getVariant()) {
             default:
                 return TEXUTURE_0;

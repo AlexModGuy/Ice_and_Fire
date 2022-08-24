@@ -1,11 +1,8 @@
 package com.github.alexthe666.iceandfire.block;
 
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
-
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
@@ -16,7 +13,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -26,22 +22,24 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import java.util.Random;
 
 public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof, INoTab {
     private static boolean keepInventory;
-    private int isFire;
-    private boolean activated;
+    private final int isFire;
+    private final boolean activated;
 
     public BlockDragonforgeCore(int isFire, boolean activated) {
         super(
-    		Properties
-    			.create(Material.IRON)
-    			.variableOpacity()
-    			.hardnessAndResistance(40, 500)
-    			.sound(SoundType.METAL)
-    			.setLightLevel((state) -> { return activated ? 15 : 0; })
-		);
+            Properties
+                .of(Material.METAL)
+                .dynamicShape()
+                .strength(40, 500)
+                .sound(SoundType.METAL)
+                .lightLevel((state) -> {
+                    return activated ? 15 : 0;
+                })
+        );
 
         String disabled = activated ? "" : "_disabled";
         this.setRegistryName(IceAndFire.MODID, "dragonforge_" + DragonType.getNameFromInt(isFire) + "_core" + disabled);
@@ -50,54 +48,54 @@ public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof
     }
 
     public static void setState(int dragonType, boolean active, World worldIn, BlockPos pos) {
-        TileEntity tileentity = worldIn.getTileEntity(pos);
+        TileEntity tileentity = worldIn.getBlockEntity(pos);
         keepInventory = true;
 
         if (active) {
             if (dragonType == 0) {
-                worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE.getDefaultState(), 3);
-                worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE.getDefaultState(), 3);
-            } else if(dragonType == 1){
-                worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE.getDefaultState(), 3);
-                worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE.getDefaultState(), 3);
-            }else if(dragonType == 2){
-                worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE.getDefaultState(), 3);
-                worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE.getDefaultState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE.defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE.defaultBlockState(), 3);
+            } else if(dragonType == 1) {
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE.defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE.defaultBlockState(), 3);
+            }else if(dragonType == 2) {
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE.defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE.defaultBlockState(), 3);
             }
         } else {
             if (dragonType == 0) {
-                worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.getDefaultState(), 3);
-                worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.getDefaultState(), 3);
-            } else if(dragonType == 1){
-                worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED.getDefaultState(), 3);
-                worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED.getDefaultState(), 3);
-            }else if(dragonType == 2){
-                worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.getDefaultState(), 3);
-                worldIn.setBlockState(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.getDefaultState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.defaultBlockState(), 3);
+            } else if(dragonType == 1) {
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED.defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED.defaultBlockState(), 3);
+            }else if(dragonType == 2) {
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.defaultBlockState(), 3);
             }
         }
 
         keepInventory = false;
 
         if (tileentity != null) {
-            tileentity.validate();
-            worldIn.setTileEntity(pos, tileentity);
+            tileentity.clearRemoved();
+            worldIn.setBlockEntity(pos, tileentity);
         }
     }
 
     @Override
-    public PushReaction getPushReaction(BlockState state) {
+    public PushReaction getPistonPushReaction(BlockState state) {
         return PushReaction.BLOCK;
     }
 
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (!player.isSneaking()) {
-            if (worldIn.isRemote) {
-                IceAndFire.PROXY.setRefrencedTE(worldIn.getTileEntity(pos));
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if (!player.isShiftKeyDown()) {
+            if (worldIn.isClientSide) {
+                IceAndFire.PROXY.setRefrencedTE(worldIn.getBlockEntity(pos));
             } else {
-                INamedContainerProvider inamedcontainerprovider = this.getContainer(state, worldIn, pos);
+                INamedContainerProvider inamedcontainerprovider = this.getMenuProvider(state, worldIn, pos);
                 if (inamedcontainerprovider != null) {
-                    player.openContainer(inamedcontainerprovider);
+                    player.openMenu(inamedcontainerprovider);
                 }
             }
             return ActionResultType.SUCCESS;
@@ -118,7 +116,7 @@ public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof
         return new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.asItem());
     }
 
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
@@ -128,25 +126,25 @@ public class BlockDragonforgeCore extends ContainerBlock implements IDragonProof
         }
     }
 
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+    public TileEntity newBlockEntity(IBlockReader worldIn) {
         return new TileEntityDragonforge(isFire);
     }
 
     @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        TileEntity tileentity = worldIn.getTileEntity(pos);
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        TileEntity tileentity = worldIn.getBlockEntity(pos);
         if (tileentity instanceof TileEntityDragonforge) {
-            InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityDragonforge) tileentity);
-            worldIn.updateComparatorOutputLevel(pos, this);
-            worldIn.removeTileEntity(pos);
+            InventoryHelper.dropContents(worldIn, pos, (TileEntityDragonforge) tileentity);
+            worldIn.updateNeighbourForOutputSignal(pos, this);
+            worldIn.removeBlockEntity(pos);
         }
     }
 
-    public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos) {
-        return Container.calcRedstone(worldIn.getTileEntity(pos));
+    public int getAnalogOutputSignal(BlockState blockState, World worldIn, BlockPos pos) {
+        return Container.getRedstoneSignalFromBlockEntity(worldIn.getBlockEntity(pos));
     }
 
-    public boolean hasComparatorInputOverride(BlockState state) {
+    public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 

@@ -17,14 +17,14 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
 
     public EntityAmphithereArrow(EntityType<? extends AbstractArrowEntity> type, World worldIn) {
         super(type, worldIn);
-        this.setDamage(2.5F);
+        this.setBaseDamage(2.5F);
     }
 
     public EntityAmphithereArrow(EntityType<? extends AbstractArrowEntity> type, World worldIn, double x, double y,
                                  double z) {
         this(type, worldIn);
-        this.setPosition(x, y, z);
-        this.setDamage(2.5F);
+        this.setPos(x, y, z);
+        this.setBaseDamage(2.5F);
     }
 
     public EntityAmphithereArrow(FMLPlayMessages.SpawnEntity spawnEntity, World world) {
@@ -33,59 +33,59 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
 
     public EntityAmphithereArrow(EntityType type, LivingEntity shooter, World worldIn) {
         super(type, shooter, worldIn);
-        this.setDamage(2.5F);
+        this.setBaseDamage(2.5F);
     }
 
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
     public void tick() {
         super.tick();
-        if ((ticksExisted == 1 || this.ticksExisted % 70 == 0) && !this.inGround && !this.onGround) {
+        if ((tickCount == 1 || this.tickCount % 70 == 0) && !this.inGround && !this.onGround) {
             this.playSound(IafSoundRegistry.AMPHITHERE_GUST, 1, 1);
         }
-        if (world.isRemote && !this.inGround) {
-            double d0 = this.rand.nextGaussian() * 0.02D;
-            double d1 = this.rand.nextGaussian() * 0.02D;
-            double d2 = this.rand.nextGaussian() * 0.02D;
+        if (level.isClientSide && !this.inGround) {
+            double d0 = this.random.nextGaussian() * 0.02D;
+            double d1 = this.random.nextGaussian() * 0.02D;
+            double d2 = this.random.nextGaussian() * 0.02D;
             double d3 = 10.0D;
-            double xRatio = this.getMotion().x * this.getWidth();
-            double zRatio = this.getMotion().z * this.getWidth();
-            this.world.addParticle(ParticleTypes.CLOUD, this.getPosX() + xRatio + this.rand.nextFloat() * this.getWidth() * 1.0F - this.getWidth() - d0 * 10.0D, this.getPosY() + this.rand.nextFloat() * this.getHeight() - d1 * 10.0D, this.getPosZ() + zRatio + this.rand.nextFloat() * this.getWidth() * 1.0F - this.getWidth() - d2 * 10.0D, d0, d1, d2);
+            double xRatio = this.getDeltaMovement().x * this.getBbWidth();
+            double zRatio = this.getDeltaMovement().z * this.getBbWidth();
+            this.level.addParticle(ParticleTypes.CLOUD, this.getX() + xRatio + this.random.nextFloat() * this.getBbWidth() * 1.0F - this.getBbWidth() - d0 * 10.0D, this.getY() + this.random.nextFloat() * this.getBbHeight() - d1 * 10.0D, this.getZ() + zRatio + this.random.nextFloat() * this.getBbWidth() * 1.0F - this.getBbWidth() - d2 * 10.0D, d0, d1, d2);
 
         }
     }
 
     @Override
-    protected void arrowHit(LivingEntity living) {
-        living.isAirBorne = true;
-        double xRatio = this.getMotion().x;
-        double zRatio = this.getMotion().z;
+    protected void doPostHurtEffects(LivingEntity living) {
+        living.hasImpulse = true;
+        double xRatio = this.getDeltaMovement().x;
+        double zRatio = this.getDeltaMovement().z;
         float strength = -1.4F;
         float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
-        living.setMotion(living.getMotion().mul(0.5D, 1, 0.5D).subtract(xRatio / f * strength, 0, zRatio / f * strength).add(0, 0.6, 0));
+        living.setDeltaMovement(living.getDeltaMovement().multiply(0.5D, 1, 0.5D).subtract(xRatio / f * strength, 0, zRatio / f * strength).add(0, 0.6, 0));
         spawnExplosionParticle();
     }
 
     public void spawnExplosionParticle() {
-        if (this.world.isRemote) {
-            for (int height = 0; height < 1 + rand.nextInt(2); height++) {
+        if (this.level.isClientSide) {
+            for (int height = 0; height < 1 + random.nextInt(2); height++) {
                 for (int i = 0; i < 20; ++i) {
-                    double d0 = this.rand.nextGaussian() * 0.02D;
-                    double d1 = this.rand.nextGaussian() * 0.02D;
-                    double d2 = this.rand.nextGaussian() * 0.02D;
+                    double d0 = this.random.nextGaussian() * 0.02D;
+                    double d1 = this.random.nextGaussian() * 0.02D;
+                    double d2 = this.random.nextGaussian() * 0.02D;
                     double d3 = 10.0D;
-                    double xRatio = this.getMotion().x * this.getWidth();
-                    double zRatio = this.getMotion().z * this.getWidth();
-                    this.world.addParticle(ParticleTypes.CLOUD, this.getPosX() + xRatio + this.rand.nextFloat() * this.getWidth() * 1.0F - this.getWidth() - d0 * 10.0D, this.getPosY() + this.rand.nextFloat() * this.getHeight() - d1 * 10.0D, this.getPosZ() + zRatio + this.rand.nextFloat() * this.getWidth() * 1.0F - this.getWidth() - d2 * 10.0D, d0, d1, d2);
+                    double xRatio = this.getDeltaMovement().x * this.getBbWidth();
+                    double zRatio = this.getDeltaMovement().z * this.getBbWidth();
+                    this.level.addParticle(ParticleTypes.CLOUD, this.getX() + xRatio + this.random.nextFloat() * this.getBbWidth() * 1.0F - this.getBbWidth() - d0 * 10.0D, this.getY() + this.random.nextFloat() * this.getBbHeight() - d1 * 10.0D, this.getZ() + zRatio + this.random.nextFloat() * this.getBbWidth() * 1.0F - this.getBbWidth() - d2 * 10.0D, d0, d1, d2);
                 }
             }
         } else {
-            this.world.setEntityState(this, (byte) 20);
+            this.level.broadcastEntityEvent(this, (byte) 20);
         }
     }
 
@@ -93,16 +93,16 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
      * Handler for {@link World#setEntityState}
      */
     @Override
-    public void handleStatusUpdate(byte id) {
+    public void handleEntityEvent(byte id) {
         if (id == 20) {
             this.spawnExplosionParticle();
         } else {
-            super.handleStatusUpdate(id);
+            super.handleEntityEvent(id);
         }
     }
 
     @Override
-    protected ItemStack getArrowStack() {
+    protected ItemStack getPickupItem() {
         return new ItemStack(IafItemRegistry.AMPHITHERE_ARROW);
     }
 }

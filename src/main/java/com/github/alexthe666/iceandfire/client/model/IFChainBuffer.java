@@ -44,8 +44,8 @@ public class IFChainBuffer {
      */
     public void calculateChainSwingBuffer(float maxAngle, int bufferTime, float angleDecrement, float divisor, LivingEntity entity) {
         this.prevYawVariation = this.yawVariation;
-        if (!compareDouble(entity.renderYawOffset, entity.prevRenderYawOffset) && MathHelper.abs(this.yawVariation) < maxAngle) {
-            this.yawVariation += MathHelper.clamp((entity.prevRenderYawOffset - entity.renderYawOffset) / divisor, -maxAngle, maxAngle);
+        if (!compareDouble(entity.yBodyRot, entity.yBodyRotO) && MathHelper.abs(this.yawVariation) < maxAngle) {
+            this.yawVariation += MathHelper.clamp((entity.yBodyRotO - entity.yBodyRot) / divisor, -maxAngle, maxAngle);
         }
         if (this.yawVariation > 1F * angleDecrement) {
             if (this.yawTimer > bufferTime) {
@@ -71,8 +71,8 @@ public class IFChainBuffer {
     }
 
     public void calculateChainPitchBuffer(float maxAngle, int bufferTime, float angleDecrement, float divisor, LivingEntity entity) {
-        this.prevPitchVariation = entity.prevRotationPitch;
-        this.pitchVariation = entity.rotationPitch;
+        this.prevPitchVariation = entity.xRotO;
+        this.pitchVariation = entity.xRot;
     }
 
     /**
@@ -86,11 +86,11 @@ public class IFChainBuffer {
      */
     public void calculateChainWaveBuffer(float maxAngle, int bufferTime, float angleDecrement, float divisor, LivingEntity entity) {
         this.prevPitchVariation = this.pitchVariation;
-        if (Math.abs(entity.rotationPitch) > maxAngle) {
+        if (Math.abs(entity.xRot) > maxAngle) {
             return;
         }
-        if (!compareDouble(entity.rotationPitch, entity.prevRotationPitch) && MathHelper.abs(this.pitchVariation) < maxAngle) {
-            this.pitchVariation += MathHelper.clamp((entity.prevRotationPitch - entity.rotationPitch) / divisor, -maxAngle, maxAngle);
+        if (!compareDouble(entity.xRot, entity.xRotO) && MathHelper.abs(this.pitchVariation) < maxAngle) {
+            this.pitchVariation += MathHelper.clamp((entity.xRotO - entity.xRot) / divisor, -maxAngle, maxAngle);
         }
         if (this.pitchVariation > 1F * angleDecrement) {
             if (this.pitchTimer > bufferTime) {
@@ -128,9 +128,9 @@ public class IFChainBuffer {
     public void calculateChainFlapBuffer(float maxAngle, int bufferTime, float angleDecrement, float divisor, LivingEntity entity) {
         this.prevYawVariation = this.yawVariation;
 
-        if (!compareDouble(entity.renderYawOffset, entity.prevRenderYawOffset) && MathHelper.abs(this.yawVariation) < maxAngle) {
-            this.yawVariation += MathHelper.clamp((entity.prevRenderYawOffset - entity.renderYawOffset) / divisor, -maxAngle, maxAngle);
-            if (entity instanceof IFlapable && Math.abs(entity.prevRenderYawOffset - entity.renderYawOffset) > 15D) {
+        if (!compareDouble(entity.yBodyRot, entity.yBodyRotO) && MathHelper.abs(this.yawVariation) < maxAngle) {
+            this.yawVariation += MathHelper.clamp((entity.yBodyRotO - entity.yBodyRot) / divisor, -maxAngle, maxAngle);
+            if (entity instanceof IFlapable && Math.abs(entity.yBodyRotO - entity.yBodyRot) > 15D) {
                 ((IFlapable) entity).flapWings();
             }
         }
@@ -201,7 +201,7 @@ public class IFChainBuffer {
     public void applyChainSwingBuffer(ModelRenderer... boxes) {
         float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
         for (ModelRenderer box : boxes) {
-            box.rotateAngleY += rotateAmount;
+            box.yRot += rotateAmount;
         }
     }
 
@@ -213,7 +213,7 @@ public class IFChainBuffer {
     public void applyChainWaveBuffer(ModelRenderer... boxes) {
         float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
         for (ModelRenderer box : boxes) {
-            box.rotateAngleX += rotateAmount;
+            box.xRot += rotateAmount;
         }
     }
 
@@ -225,7 +225,7 @@ public class IFChainBuffer {
     public void applyChainFlapBuffer(ModelRenderer... boxes) {
         float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
         for (ModelRenderer box : boxes) {
-            box.rotateAngleZ += rotateAmount;
+            box.zRot += rotateAmount;
         }
     }
 
@@ -237,27 +237,27 @@ public class IFChainBuffer {
     public void applyChainFlapBufferReverse(ModelRenderer... boxes) {
         float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
         for (ModelRenderer box : boxes) {
-            box.rotateAngleZ -= rotateAmount * 0.5F;
+            box.zRot -= rotateAmount * 0.5F;
         }
     }
 
     public void applyChainSwingBufferReverse(ModelRenderer... boxes) {
         float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
         for (ModelRenderer box : boxes) {
-            box.rotateAngleY -= rotateAmount;
+            box.yRot -= rotateAmount;
         }
     }
 
     public void applyChainWaveBufferReverse(ModelRenderer... boxes) {
         float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
         for (ModelRenderer box : boxes) {
-            box.rotateAngleX -= rotateAmount;
+            box.xRot -= rotateAmount;
         }
     }
 
 
     private float getPartialTicks() {
-        return Minecraft.getInstance().getRenderPartialTicks();
+        return Minecraft.getInstance().getFrameTime();
     }
 
 }

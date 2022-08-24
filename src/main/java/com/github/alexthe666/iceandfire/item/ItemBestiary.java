@@ -1,14 +1,8 @@
 package com.github.alexthe666.iceandfire.item;
 
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.google.common.primitives.Ints;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,23 +20,27 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Set;
+
 public class ItemBestiary extends Item {
 
     public ItemBestiary() {
-        super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
         this.setRegistryName(IceAndFire.MODID, "bestiary");
     }
 
     @Override
-    public void onCreated(ItemStack stack, World worldIn, PlayerEntity playerIn) {
+    public void onCraftedBy(ItemStack stack, World worldIn, PlayerEntity playerIn) {
         stack.setTag(new CompoundNBT());
         stack.getTag().putIntArray("Pages", new int[]{0});
 
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (this.isInGroup(group)) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+        if (this.allowdedIn(group)) {
             items.add(new ItemStack(this));
             ItemStack stack = new ItemStack(IafItemRegistry.BESTIARY);
             stack.setTag(new CompoundNBT());
@@ -56,9 +54,9 @@ public class ItemBestiary extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack itemStackIn = playerIn.getHeldItem(handIn);
-        if (worldIn.isRemote) {
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack itemStackIn = playerIn.getItemInHand(handIn);
+        if (worldIn.isClientSide) {
             IceAndFire.PROXY.openBestiaryGui(itemStackIn);
         }
         return new ActionResult<>(ActionResultType.PASS, itemStackIn);
@@ -74,17 +72,17 @@ public class ItemBestiary extends Item {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (stack.getTag() != null) {
             if (IceAndFire.PROXY.shouldSeeBestiaryContents()) {
-                tooltip.add(new TranslationTextComponent("bestiary.contains").mergeStyle(TextFormatting.GRAY));
+                tooltip.add(new TranslationTextComponent("bestiary.contains").withStyle(TextFormatting.GRAY));
                 final Set<EnumBestiaryPages> pages = EnumBestiaryPages
                     .containedPages(Ints.asList(stack.getTag().getIntArray("Pages")));
                 for (EnumBestiaryPages page : pages) {
-                    tooltip.add(new StringTextComponent(TextFormatting.WHITE + "-").appendSibling(new TranslationTextComponent("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase())).mergeStyle(TextFormatting.GRAY));
+                    tooltip.add(new StringTextComponent(TextFormatting.WHITE + "-").append(new TranslationTextComponent("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase())).withStyle(TextFormatting.GRAY));
                 }
             } else {
-                tooltip.add(new TranslationTextComponent("bestiary.hold_shift").mergeStyle(TextFormatting.GRAY));
+                tooltip.add(new TranslationTextComponent("bestiary.hold_shift").withStyle(TextFormatting.GRAY));
             }
 
         }

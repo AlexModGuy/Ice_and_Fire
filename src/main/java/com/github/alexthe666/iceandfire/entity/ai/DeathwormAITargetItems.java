@@ -41,17 +41,17 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
             @Override
             public boolean test(ItemEntity item) {
                 return item != null && !item.getItem().isEmpty() && item.getItem().getItem() == Blocks.TNT.asItem() &&
-                    item.world.getBlockState(item.getPosition().down()).getMaterial() == Material.SAND;
+                    item.level.getBlockState(item.blockPosition().below()).getMaterial() == Material.SAND;
             }
         };
-        this.setMutexFlags(EnumSet.of(Flag.TARGET));
+        this.setFlags(EnumSet.of(Flag.TARGET));
 
     }
 
     @Override
-    public boolean shouldExecute() {
-        List<ItemEntity> list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class,
-            this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+    public boolean canUse() {
+        List<ItemEntity> list = this.mob.level.getEntitiesOfClass(ItemEntity.class,
+            this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
         if (list.isEmpty()) {
             return false;
         } else {
@@ -62,17 +62,17 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
     }
 
     protected AxisAlignedBB getTargetableArea(double targetDistance) {
-        return this.goalOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
+        return this.mob.getBoundingBox().inflate(targetDistance, 4.0D, targetDistance);
     }
 
     @Override
-    public void startExecuting() {
-        this.goalOwner.getNavigator().tryMoveToXYZ(this.targetEntity.getPosX(), this.targetEntity.getPosY(),
-            this.targetEntity.getPosZ(), 1);
-        super.startExecuting();
+    public void start() {
+        this.mob.getNavigation().moveTo(this.targetEntity.getX(), this.targetEntity.getY(),
+            this.targetEntity.getZ(), 1);
+        super.start();
     }
 
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         Entity itemTarget = targetEntity;
 
         if (itemTarget == null) {
@@ -80,13 +80,13 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
         } else if (!itemTarget.isAlive()) {
             return false;
         } else {
-            Team team = this.goalOwner.getTeam();
+            Team team = this.mob.getTeam();
             Team team1 = itemTarget.getTeam();
             if (team != null && team1 == team) {
                 return false;
             } else {
-                double d0 = this.getTargetDistance();
-                return !(this.goalOwner.getDistanceSq(itemTarget) > d0 * d0);
+                double d0 = this.getFollowDistance();
+                return !(this.mob.distanceToSqr(itemTarget) > d0 * d0);
             }
         }
     }
@@ -95,21 +95,21 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
     public void tick() {
         super.tick();
         if (this.targetEntity == null || !this.targetEntity.isAlive()) {
-            this.resetTask();
-        } else if (this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
-            EntityDeathWorm deathWorm = (EntityDeathWorm) this.goalOwner;
+            this.stop();
+        } else if (this.mob.distanceToSqr(this.targetEntity) < 1) {
+            EntityDeathWorm deathWorm = (EntityDeathWorm) this.mob;
             this.targetEntity.getItem().shrink(1);
-            this.goalOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+            this.mob.playSound(SoundEvents.GENERIC_EAT, 1, 1);
             deathWorm.setAnimation(EntityDeathWorm.ANIMATION_BITE);
             PlayerEntity thrower = null;
-            if (this.targetEntity.getThrowerId() != null)
-                thrower = this.targetEntity.world.getPlayerByUuid(this.targetEntity.getThrowerId());
+            if (this.targetEntity.getThrower() != null)
+                thrower = this.targetEntity.level.getPlayerByUUID(this.targetEntity.getThrower());
             deathWorm.setExplosive(true, thrower);
-            resetTask();
+            stop();
         }
 
-        if (worm.getNavigator().noPath()) {
-            worm.getNavigator().tryMoveToEntityLiving(targetEntity, 1.0F);
+        if (worm.getNavigation().isDone()) {
+            worm.getNavigation().moveTo(targetEntity, 1.0F);
         }
 
     }

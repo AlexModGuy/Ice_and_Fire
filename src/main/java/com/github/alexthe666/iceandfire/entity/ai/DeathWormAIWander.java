@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
-
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 
 public class DeathWormAIWander extends WaterAvoidingRandomWalkingGoal {
@@ -14,12 +13,12 @@ public class DeathWormAIWander extends WaterAvoidingRandomWalkingGoal {
     }
 
     @Override
-    public boolean shouldExecute() {
-        return !worm.isInSand() && !worm.isBeingRidden() && super.shouldExecute();
+    public boolean canUse() {
+        return !worm.isInSand() && !worm.isVehicle() && super.canUse();
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return !worm.isInSand() && !worm.isBeingRidden() && super.shouldContinueExecuting();
+    public boolean canContinueToUse() {
+        return !worm.isInSand() && !worm.isVehicle() && super.canContinueToUse();
     }
 }
