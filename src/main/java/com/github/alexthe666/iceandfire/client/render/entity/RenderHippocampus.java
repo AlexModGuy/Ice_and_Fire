@@ -2,18 +2,18 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelHippocampus;
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.item.DyeColor;
 
 import javax.annotation.Nullable;
 
@@ -34,8 +34,8 @@ public class RenderHippocampus extends MobRenderer<EntityHippocampus, ModelHippo
     private static final ResourceLocation VARIANT_5_BLINK = new ResourceLocation("iceandfire:textures/models/hippocampus/hippocampus_5_blinking.png");
 
 
-    public RenderHippocampus(EntityRendererManager renderManager) {
-        super(renderManager, new ModelHippocampus(), 0.8F);
+    public RenderHippocampus(EntityRendererProvider.Context context) {
+        super(context, new ModelHippocampus(), 0.8F);
         this.layers.add(new RenderHippocampus.LayerHippocampusRainbow(this));
         this.layers.add(new RenderHippocampus.LayerHippocampusSaddle(this));
     }
@@ -61,7 +61,7 @@ public class RenderHippocampus extends MobRenderer<EntityHippocampus, ModelHippo
     }
 
 
-    private class LayerHippocampusSaddle extends LayerRenderer<EntityHippocampus, ModelHippocampus> {
+    private class LayerHippocampusSaddle extends RenderLayer<EntityHippocampus, ModelHippocampus> {
         private final RenderHippocampus renderer;
         private final RenderType SADDLE_TEXTURE = RenderType.entityNoOutline(new ResourceLocation("iceandfire:textures/models/hippocampus/saddle.png"));
         private final RenderType BRIDLE = RenderType.entityNoOutline(new ResourceLocation("iceandfire:textures/models/hippocampus/bridle.png"));
@@ -75,17 +75,17 @@ public class RenderHippocampus extends MobRenderer<EntityHippocampus, ModelHippo
             this.renderer = renderer;
         }
 
-        public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityHippocampus hippo, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityHippocampus hippo, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if (hippo.isSaddled()) {
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(SADDLE_TEXTURE);
+                VertexConsumer ivertexbuilder = bufferIn.getBuffer(SADDLE_TEXTURE);
                 this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
             if (hippo.isSaddled() && hippo.getControllingPassenger() != null) {
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(BRIDLE);
+                VertexConsumer ivertexbuilder = bufferIn.getBuffer(BRIDLE);
                 this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
             if (hippo.isChested()) {
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(CHEST);
+                VertexConsumer ivertexbuilder = bufferIn.getBuffer(CHEST);
                 this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
             if (hippo.getArmor() != 0) {
@@ -101,14 +101,14 @@ public class RenderHippocampus extends MobRenderer<EntityHippocampus, ModelHippo
                         type = TEXTURE_DIAMOND;
                         break;
                 }
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(type);
+                VertexConsumer ivertexbuilder = bufferIn.getBuffer(type);
                 this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 
             }
         }
     }
 
-    private class LayerHippocampusRainbow extends LayerRenderer<EntityHippocampus, ModelHippocampus> {
+    private class LayerHippocampusRainbow extends RenderLayer<EntityHippocampus, ModelHippocampus> {
         private final RenderHippocampus renderer;
         private final RenderType TEXTURE = RenderType.entityNoOutline(new ResourceLocation("iceandfire:textures/models/hippocampus/rainbow.png"));
         private final RenderType TEXTURE_BLINK = RenderType.entityNoOutline(new ResourceLocation("iceandfire:textures/models/hippocampus/rainbow_blink.png"));
@@ -118,18 +118,18 @@ public class RenderHippocampus extends MobRenderer<EntityHippocampus, ModelHippo
             this.renderer = renderer;
         }
 
-        public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityHippocampus hippo, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityHippocampus hippo, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if (hippo.hasCustomName() && hippo.getCustomName().toString().toLowerCase().contains("rainbow")) {
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(hippo.isBlinking() ? TEXTURE_BLINK : TEXTURE);
+                VertexConsumer ivertexbuilder = bufferIn.getBuffer(hippo.isBlinking() ? TEXTURE_BLINK : TEXTURE);
                 int i1 = 25;
                 int i = hippo.tickCount / 25 + hippo.getId();
                 int j = DyeColor.values().length;
                 int k = i % j;
                 int l = (i + 1) % j;
                 float f = ((float) (hippo.tickCount % 25) + partialTicks) / 25.0F;
-                float[] afloat1 = SheepEntity.getColorArray(DyeColor.byId(k));
-                float[] afloat2 = SheepEntity.getColorArray(DyeColor.byId(l));
-                this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, LivingRenderer.getOverlayCoords(hippo, 0.0F), afloat1[0] * (1.0F - f) + afloat2[0] * f, afloat1[1] * (1.0F - f) + afloat2[1] * f, afloat1[2] * (1.0F - f) + afloat2[2] * f, 1.0F);
+                float[] afloat1 = Sheep.getColorArray(DyeColor.byId(k));
+                float[] afloat2 = Sheep.getColorArray(DyeColor.byId(l));
+                this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, LivingEntityRenderer.getOverlayCoords(hippo, 0.0F), afloat1[0] * (1.0F - f) + afloat2[0] * f, afloat1[1] * (1.0F - f) + afloat2[1] * f, afloat1[2] * (1.0F - f) + afloat2[2] * f, 1.0F);
             }
         }
     }

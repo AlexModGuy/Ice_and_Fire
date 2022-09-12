@@ -1,24 +1,24 @@
 package com.github.alexthe666.iceandfire.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class ContainerPodium extends Container {
-    public final IInventory podium;
+public class ContainerPodium extends AbstractContainerMenu {
+    public final Container podium;
 
-    public ContainerPodium(int i, PlayerInventory playerInventory) {
-        this(i, new Inventory(1), playerInventory, new IntArray(0));
+    public ContainerPodium(int i, Inventory playerInventory) {
+        this(i, new SimpleContainer(1), playerInventory, new SimpleContainerData(0));
     }
 
 
-    public ContainerPodium(int id, IInventory furnaceInventory, PlayerInventory playerInventory, IIntArray vars) {
+    public ContainerPodium(int id, Container furnaceInventory, Inventory playerInventory, ContainerData vars) {
         super(IafContainerRegistry.PODIUM_CONTAINER.get(), id);
         this.podium = furnaceInventory;
         furnaceInventory.startOpen(playerInventory.player);
@@ -39,7 +39,7 @@ public class ContainerPodium extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return this.podium.stillValid(playerIn);
     }
 
@@ -47,7 +47,7 @@ public class ContainerPodium extends Container {
      * Take a stack from the specified inventory slot.
      */
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
 
@@ -77,7 +77,7 @@ public class ContainerPodium extends Container {
      * Called when the container is closed.
      */
     @Override
-    public void removed(PlayerEntity playerIn) {
+    public void removed(Player playerIn) {
         super.removed(playerIn);
         this.podium.stopOpen(playerIn);
     }

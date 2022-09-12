@@ -3,15 +3,14 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexQueen;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 
 public class ModelMyrmexQueen extends ModelMyrmexBase {
     public AdvancedModelBox Body2;
@@ -250,13 +249,16 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
     }
 
     @Override
-    public Iterable<ModelRenderer> parts() {
+    public Iterable<BasicModelPart> parts() {
         return ImmutableList.of(Body2);
     }
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(Body2, Body3, Body1, legTopR2, legTopR2_1, Body4, legTopR3, legTopR3_1, Body5,
+            Tail1, Tail2, Tail3, Stinger, legMidR3, legBottomR3, legMidR3_1, legBottomR3_1, Neck1,
+            legTopR1, legTopR1_1, HeadBase, EyeR, MandibleL, MandibleR, EyeL, crestbase, crest1, crest2,
+            legMidR1, legBottomR1, legMidR1_1, legBottomR1_1, legMidR2, legBottomR2, legMidR2_1, legBottomR2_1);
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -340,13 +342,13 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
         EntityMyrmexQueen myrmexQueen = (EntityMyrmexQueen) entity;
 
         if (myrmexQueen.getAnimation() == EntityMyrmexQueen.ANIMATION_EGG) {
-            int animationTick = MathHelper.clamp(myrmexQueen.getAnimationTick(), 0, 20);
+            int animationTick = Mth.clamp(myrmexQueen.getAnimationTick(), 0, 20);
             float swellToPi = (float) (animationTick / 20F * Math.PI);
-            this.increaseScale(Body5, 0.5F * Math.abs(MathHelper.sin(swellToPi + 0.5F)));
-            this.increaseScale(Tail1, 0.75F * Math.abs(MathHelper.sin(swellToPi)));
-            this.increaseScale(Tail2, 0.75F * Math.abs(MathHelper.sin(swellToPi - 0.5F)));
-            this.increaseScale(Tail3, 0.75F * Math.abs(MathHelper.sin(swellToPi - 1.0F)));
-            this.Stinger.z += 10 * Math.abs(MathHelper.sin(swellToPi - 1.0F));
+            this.increaseScale(Body5, 0.5F * Math.abs(Mth.sin(swellToPi + 0.5F)));
+            this.increaseScale(Tail1, 0.75F * Math.abs(Mth.sin(swellToPi)));
+            this.increaseScale(Tail2, 0.75F * Math.abs(Mth.sin(swellToPi - 0.5F)));
+            this.increaseScale(Tail3, 0.75F * Math.abs(Mth.sin(swellToPi - 1.0F)));
+            this.Stinger.rotationPointZ += 10 * Math.abs(Mth.sin(swellToPi - 1.0F));
         }
     }
 
@@ -369,15 +371,15 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
         float speed_idle = 0.05F;
         float degree_walk = 0.7F;
         float degree_idle = 0.15F;
-        float gasterSwell1 = -0.05F + (0.2F * Math.abs(MathHelper.sin(entity.tickCount * 0.15F + 1.0F)));
-        float gasterSwell2 = -0.05F + (0.2F * Math.abs(MathHelper.sin(entity.tickCount * 0.15F + 0.5F)));
-        float gasterSwell3 = -0.05F + (0.2F * Math.abs(MathHelper.sin(entity.tickCount * 0.15F)));
+        float gasterSwell1 = -0.05F + (0.2F * Math.abs(Mth.sin(entity.tickCount * 0.15F + 1.0F)));
+        float gasterSwell2 = -0.05F + (0.2F * Math.abs(Mth.sin(entity.tickCount * 0.15F + 0.5F)));
+        float gasterSwell3 = -0.05F + (0.2F * Math.abs(Mth.sin(entity.tickCount * 0.15F)));
         EntityMyrmexQueen myrmexQueen = (EntityMyrmexQueen) entity;
         if (myrmexQueen.getAnimation() != EntityMyrmexQueen.ANIMATION_EGG) {
             this.increaseScale(Tail1, gasterSwell1);
             this.increaseScale(Tail2, gasterSwell2);
             this.increaseScale(Tail3, gasterSwell3);
-            this.Stinger.z += 20 * gasterSwell3;
+            this.Stinger.rotationPointZ += 20 * gasterSwell3;
         }
         if (myrmexQueen.getAnimation() == EntityMyrmexQueen.ANIMATION_DIGNEST) {
             this.animateLeg(LEGR1, speed_walk * 0.5F, degree_walk * 0.5F, false, 0, 1, f2, 1);
@@ -424,7 +426,7 @@ public class ModelMyrmexQueen extends ModelMyrmexBase {
     }
 
     @Override
-    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+    public void renderStatue(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, Entity living) {
         this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         this.Body5.setScale(1.0F, 1.0F, 1.0F);
         this.Tail1.setScale(1.0F, 1.0F, 1.0F);

@@ -3,30 +3,30 @@ package com.github.alexthe666.iceandfire.message;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 public class MessageGetMyrmexHive {
 
-    public CompoundNBT hive;
+    public CompoundTag hive;
 
-    public MessageGetMyrmexHive(CompoundNBT hive) {
+    public MessageGetMyrmexHive(CompoundTag hive) {
         this.hive = hive;
     }
 
     public MessageGetMyrmexHive() {
     }
 
-    public static MessageGetMyrmexHive read(PacketBuffer buf) {
+    public static MessageGetMyrmexHive read(FriendlyByteBuf buf) {
         return new MessageGetMyrmexHive(buf.readNbt());
     }
 
-    public static void write(MessageGetMyrmexHive message, PacketBuffer buf) {
+    public static void write(MessageGetMyrmexHive message, FriendlyByteBuf buf) {
         buf.writeNbt(message.hive);
     }
 
@@ -35,9 +35,9 @@ public class MessageGetMyrmexHive {
         }
 
         public static void handle(MessageGetMyrmexHive message, Supplier<NetworkEvent.Context> context) {
-            PlayerEntity player = context.get().getSender();
+            Player player = context.get().getSender();
             MyrmexHive serverHive = MyrmexHive.fromNBT(message.hive);
-            CompoundNBT tag = new CompoundNBT();
+            CompoundTag tag = new CompoundTag();
             serverHive.writeVillageDataToNBT(tag);
             serverHive.readVillageDataFromNBT(tag);
             IceAndFire.PROXY.setReferencedHive(serverHive);

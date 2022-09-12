@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.LevelAccessor;
 
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -16,9 +16,9 @@ public class WorldGenRoostSpike {
         this.direction = direction;
     }
 
-    public boolean generate(IWorld worldIn, Random rand, BlockPos position) {
+    public boolean generate(LevelAccessor worldIn, Random rand, BlockPos position) {
         int radius = 5;
-        for(int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             int j = Math.max(0, radius - (int) (i * 1.75F));
             int l = radius - i;
             int k = Math.max(0, radius - (int) (i * 1.5F));

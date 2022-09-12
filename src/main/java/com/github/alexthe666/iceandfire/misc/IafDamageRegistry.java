@@ -1,11 +1,11 @@
 package com.github.alexthe666.iceandfire.misc;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.IndirectEntityDamageSource;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.world.damagesource.IndirectEntityDamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 
 import javax.annotation.Nullable;
 
@@ -20,13 +20,13 @@ public class IafDamageRegistry {
             super(damageTypeIn, damageSourceEntityIn);
         }
 
-        public ITextComponent getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
+        public Component getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
             LivingEntity livingentity = entityLivingBaseIn.getKillCredit();
             String s = "death.attack." + this.msgId;
             int index = entityLivingBaseIn.getRandom().nextInt(2);
             String s1 = s + "." + index;
             String s2 = s + ".attacker_" + index;
-            return livingentity != null ? new TranslationTextComponent(s2, entityLivingBaseIn.getDisplayName(), livingentity.getDisplayName()) : new TranslationTextComponent(s1, entityLivingBaseIn.getDisplayName());
+            return livingentity != null ? new TranslatableComponent(s2, entityLivingBaseIn.getDisplayName(), livingentity.getDisplayName()) : new TranslatableComponent(s1, entityLivingBaseIn.getDisplayName());
         }
     }
 
@@ -36,13 +36,13 @@ public class IafDamageRegistry {
             super(damageTypeIn, source, indirectEntityIn);
         }
 
-        public ITextComponent getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
+        public Component getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
             LivingEntity livingentity = entityLivingBaseIn.getKillCredit();
             String s = "death.attack." + this.msgId;
             int index = entityLivingBaseIn.getRandom().nextInt(2);
             String s1 = s + "." + index;
             String s2 = s + ".attacker_" + index;
-            return livingentity != null ? new TranslationTextComponent(s2, entityLivingBaseIn.getDisplayName(), livingentity.getDisplayName()) : new TranslationTextComponent(s1, entityLivingBaseIn.getDisplayName());
+            return livingentity != null ? new TranslatableComponent(s2, entityLivingBaseIn.getDisplayName(), livingentity.getDisplayName()) : new TranslatableComponent(s1, entityLivingBaseIn.getDisplayName());
         }
     }
 

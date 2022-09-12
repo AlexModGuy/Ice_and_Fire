@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 
-public class SirenAIWander extends RandomWalkingGoal {
+public class SirenAIWander extends RandomStrollGoal {
 
     private final EntitySiren siren;
 

@@ -4,10 +4,10 @@ import com.github.alexthe666.iceandfire.client.model.ModelPixie;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerPixieGlow;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerPixieItem;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class RenderPixie extends MobRenderer<EntityPixie, ModelPixie> {
 
@@ -18,15 +18,15 @@ public class RenderPixie extends MobRenderer<EntityPixie, ModelPixie> {
     public static final ResourceLocation TEXTURE_4 = new ResourceLocation("iceandfire:textures/models/pixie/pixie_4.png");
     public static final ResourceLocation TEXTURE_5 = new ResourceLocation("iceandfire:textures/models/pixie/pixie_5.png");
 
-    public RenderPixie(EntityRendererManager renderManager) {
-        super(renderManager, new ModelPixie(), 0.2F);
+    public RenderPixie(EntityRendererProvider.Context context) {
+        super(context, new ModelPixie(), 0.2F);
         this.layers.add(new LayerPixieItem(this));
         this.layers.add(new LayerPixieGlow(this));
 
     }
 
     @Override
-    public void scale(EntityPixie LivingEntityIn, MatrixStack stack, float partialTickTime) {
+    public void scale(EntityPixie LivingEntityIn, PoseStack stack, float partialTickTime) {
         stack.scale(0.55F, 0.55F, 0.55F);
         if (LivingEntityIn.isOrderedToSit()) {
             stack.translate(0F, 0.5F, 0F);

@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator implements ITabulaModelAnimator<EntitySeaSerpent> {
 
     public TabulaModel[] swimPose = {EnumSeaSerpentAnimations.SWIM1.seaserpent_model, EnumSeaSerpentAnimations.SWIM3.seaserpent_model, EnumSeaSerpentAnimations.SWIM4.seaserpent_model, EnumSeaSerpentAnimations.SWIM6.seaserpent_model};
+
     public SeaSerpentTabulaModelAnimator() {
         super(EnumSeaSerpentAnimations.T_POSE.seaserpent_model);
     }
@@ -17,7 +18,7 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
     @Override
     public void setRotationAngles(TabulaModel model, EntitySeaSerpent entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         model.resetToDefaultPose();
-        model.getCube("BodyUpper").y += 9;//model was made too high
+        model.getCube("BodyUpper").offsetY += 9;//model was made too high
         model.llibAnimator.update(entity);
         animate(model, entity, limbSwing, limbSwingAmount, ageInTicks, rotationYaw, rotationPitch, scale);
         int currentIndex = entity.swimCycle / 10;
@@ -45,12 +46,12 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
             }
             AdvancedModelBox prevPositionCube = prevPosition.getCube(cube.boxName);
             AdvancedModelBox currPositionCube = currentPosition.getCube(cube.boxName);
-            float prevX = prevPositionCube.xRot;
-            float prevY = prevPositionCube.yRot;
-            float prevZ = prevPositionCube.zRot;
-            float x = currPositionCube.xRot;
-            float y = currPositionCube.yRot;
-            float z = currPositionCube.zRot;
+            float prevX = prevPositionCube.rotateAngleX;
+            float prevY = prevPositionCube.rotateAngleY;
+            float prevZ = prevPositionCube.rotateAngleZ;
+            float x = currPositionCube.rotateAngleX;
+            float y = currPositionCube.rotateAngleY;
+            float z = currPositionCube.rotateAngleZ;
             this.addToRotateAngle(cube, limbSwingAmount, prevX + delta * distance(prevX, x), prevY + delta * distance(prevY, y), prevZ + delta * distance(prevZ, z));
 
         }
@@ -62,31 +63,31 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
         if (entity.jumpRot > 0.0F) {
             float jumpRot = entity.prevJumpRot + (entity.jumpRot - entity.prevJumpRot) * partialTicks;
             float turn = (float) entity.getDeltaMovement().y * -4F;
-            model.getCube("BodyUpper").xRot += (float) Math.toRadians(22.5F * turn) * jumpRot;
-            model.getCube("Tail1").xRot -= (float) Math.toRadians(turn) * jumpRot;
-            model.getCube("Tail2").xRot -= (float) Math.toRadians(turn) * jumpRot;
-            model.getCube("Tail3").xRot -= (float) Math.toRadians(turn) * jumpRot;
-            model.getCube("Tail4").xRot -= (float) Math.toRadians(turn) * jumpRot;
+            model.getCube("BodyUpper").rotateAngleX += (float) Math.toRadians(22.5F * turn) * jumpRot;
+            model.getCube("Tail1").rotateAngleX -= (float) Math.toRadians(turn) * jumpRot;
+            model.getCube("Tail2").rotateAngleX -= (float) Math.toRadians(turn) * jumpRot;
+            model.getCube("Tail3").rotateAngleX -= (float) Math.toRadians(turn) * jumpRot;
+            model.getCube("Tail4").rotateAngleX -= (float) Math.toRadians(turn) * jumpRot;
         }
         float prevRenderOffset = entity.yBodyRotO + (entity.yBodyRot - entity.yBodyRotO) * partialTicks;
 
-        model.getCube("Tail1").yRot += (entity.getPieceYaw(1, partialTicks) - prevRenderOffset) * ((float) Math.PI / 180F);
-        model.getCube("Tail2").yRot += (entity.getPieceYaw(2, partialTicks) - prevRenderOffset) * ((float) Math.PI / 180F);
-        model.getCube("Tail3").yRot += (entity.getPieceYaw(3, partialTicks) - prevRenderOffset) * ((float) Math.PI / 180F);
-        model.getCube("Tail4").yRot += (entity.getPieceYaw(4, partialTicks) - prevRenderOffset) * ((float) Math.PI / 180F);
-        model.getCube("BodyUpper").xRot -= rotationPitch * ((float) Math.PI / 180F);
+        model.getCube("Tail1").rotateAngleY += (entity.getPieceYaw(1, partialTicks) - prevRenderOffset) * ((float) Math.PI / 180F);
+        model.getCube("Tail2").rotateAngleY += (entity.getPieceYaw(2, partialTicks) - prevRenderOffset) * ((float) Math.PI / 180F);
+        model.getCube("Tail3").rotateAngleY += (entity.getPieceYaw(3, partialTicks) - prevRenderOffset) * ((float) Math.PI / 180F);
+        model.getCube("Tail4").rotateAngleY += (entity.getPieceYaw(4, partialTicks) - prevRenderOffset) * ((float) Math.PI / 180F);
+        model.getCube("BodyUpper").rotateAngleX -= rotationPitch * ((float) Math.PI / 180F);
         if (!entity.isJumpingOutOfWater() || entity.isInWater()) {
-            model.getCube("Tail1").xRot -= (entity.getPiecePitch(1, partialTicks) - 0) * ((float) Math.PI / 180F);
-            model.getCube("Tail2").xRot -= (entity.getPiecePitch(2, partialTicks) - 0) * ((float) Math.PI / 180F);
-            model.getCube("Tail3").xRot -= (entity.getPiecePitch(3, partialTicks) - 0) * ((float) Math.PI / 180F);
-            model.getCube("Tail4").xRot -= (entity.getPiecePitch(4, partialTicks) - 0) * ((float) Math.PI / 180F);
+            model.getCube("Tail1").rotateAngleX -= (entity.getPiecePitch(1, partialTicks) - 0) * ((float) Math.PI / 180F);
+            model.getCube("Tail2").rotateAngleX -= (entity.getPiecePitch(2, partialTicks) - 0) * ((float) Math.PI / 180F);
+            model.getCube("Tail3").rotateAngleX -= (entity.getPiecePitch(3, partialTicks) - 0) * ((float) Math.PI / 180F);
+            model.getCube("Tail4").rotateAngleX -= (entity.getPiecePitch(4, partialTicks) - 0) * ((float) Math.PI / 180F);
         }
     }
 
     public void progressRotation(AdvancedModelBox model, float progress, float rotX, float rotY, float rotZ) {
-        model.xRot += progress * (rotX - model.defaultRotationX) / 20.0F;
-        model.yRot += progress * (rotY - model.defaultRotationY) / 20.0F;
-        model.zRot += progress * (rotZ - model.defaultRotationZ) / 20.0F;
+        model.rotateAngleX += progress * (rotX - model.defaultRotationX) / 20.0F;
+        model.rotateAngleY += progress * (rotY - model.defaultRotationY) / 20.0F;
+        model.rotateAngleZ += progress * (rotZ - model.defaultRotationZ) / 20.0F;
     }
 
     private void animate(TabulaModel model, EntitySeaSerpent entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {

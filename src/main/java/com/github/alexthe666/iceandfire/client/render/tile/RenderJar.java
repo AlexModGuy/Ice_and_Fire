@@ -3,16 +3,16 @@ package com.github.alexthe666.iceandfire.client.render.tile;
 import com.github.alexthe666.iceandfire.client.model.ModelPixie;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderPixie;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 
-public class RenderJar<T extends TileEntityJar> extends TileEntityRenderer<T> {
+public class RenderJar<T extends TileEntityJar> implements BlockEntityRenderer<T> {
 
     public static final RenderType TEXTURE_0 = RenderType.entityCutoutNoCull(RenderPixie.TEXTURE_0, false);
     public static final RenderType TEXTURE_1 = RenderType.entityCutoutNoCull(RenderPixie.TEXTURE_1, false);
@@ -28,12 +28,12 @@ public class RenderJar<T extends TileEntityJar> extends TileEntityRenderer<T> {
     public static final RenderType TEXTURE_5_GLO = RenderType.eyes(RenderPixie.TEXTURE_5);
     private static ModelPixie MODEL_PIXIE;
 
-    public RenderJar(TileEntityRendererDispatcher p_i226016_1_) {
-        super(p_i226016_1_);
+    public RenderJar(BlockEntityRendererProvider.Context context) {
+
     }
 
     @Override
-    public void render(T entity, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(T entity, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         int meta = 0;
         boolean hasPixie = false;
         if (MODEL_PIXIE == null) {
@@ -72,7 +72,7 @@ public class RenderJar<T extends TileEntityJar> extends TileEntityRenderer<T> {
                     typeGlow = TEXTURE_4_GLO;
                     break;
             }
-            IVertexBuilder ivertexbuilder = bufferIn.getBuffer(type);
+            VertexConsumer ivertexbuilder = bufferIn.getBuffer(type);
             if (entity != null && entity.getLevel() != null) {
 
                 if (entity.hasProduced) {

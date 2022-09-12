@@ -1,109 +1,90 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.MobSpawnerTileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.WeightedSpawnerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.spawner.AbstractSpawner;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.BaseSpawner;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.SpawnData;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class TileEntityDreadSpawner extends MobSpawnerTileEntity {
-    private final TileEntityType<?> type;
-    private final DreadSpawnerBaseLogic spawnerLogic = new DreadSpawnerBaseLogic() {
-        @Override
-        public void broadcastEvent(int id) {
-            TileEntityDreadSpawner.this.level.blockEvent(TileEntityDreadSpawner.this.worldPosition, Blocks.SPAWNER, id, 0);
+import javax.annotation.Nullable;
+
+public class TileEntityDreadSpawner extends SpawnerBlockEntity {
+    private final BlockEntityType<?> type;
+    private final DreadSpawnerBaseLogic spawner = new DreadSpawnerBaseLogic() {
+        public void broadcastEvent(Level p_155767_, BlockPos p_155768_, int p_155769_) {
+            p_155767_.blockEvent(p_155768_, Blocks.SPAWNER, p_155769_, 0);
         }
 
-        @Override
-        public World getLevel() {
-            return TileEntityDreadSpawner.this.level;
-        }
-
-        @Override
-        public BlockPos getPos() {
-            return TileEntityDreadSpawner.this.worldPosition;
-        }
-
-        @Override
-        public void setNextSpawnData(WeightedSpawnerEntity nextSpawnData) {
-            super.setNextSpawnData(nextSpawnData);
-
-            if (this.getLevel() != null) {
-                BlockState BlockState = this.getLevel().getBlockState(this.getPos());
-                this.getLevel().sendBlockUpdated(TileEntityDreadSpawner.this.worldPosition, BlockState, BlockState, 4);
+        public void setNextSpawnData(@Nullable Level p_155771_, BlockPos p_155772_, SpawnData p_155773_) {
+            super.setNextSpawnData(p_155771_, p_155772_, p_155773_);
+            if (p_155771_ != null) {
+                BlockState blockstate = p_155771_.getBlockState(p_155772_);
+                p_155771_.sendBlockUpdated(p_155772_, blockstate, blockstate, 4);
             }
+
+        }
+
+        @javax.annotation.Nullable
+        public net.minecraft.world.level.block.entity.BlockEntity getSpawnerBlockEntity() {
+            return TileEntityDreadSpawner.this;
         }
     };
 
-    public TileEntityDreadSpawner() {
-        super();
+    public TileEntityDreadSpawner(BlockPos pos, BlockState state) {
+        super(pos, state);
         this.type = IafTileEntityRegistry.DREAD_SPAWNER.get();
     }
 
-    @Override
-    public void load(BlockState blockstate, CompoundNBT compound) {
-        super.load(blockstate, compound);
-        this.spawnerLogic.load(compound);
+    public void load(CompoundTag p_155760_) {
+        super.load(p_155760_);
+        this.spawner.load(this.level, this.worldPosition, p_155760_);
     }
 
-    @Override
-    public CompoundNBT save(CompoundNBT compound) {
-        super.save(compound);
-        this.spawnerLogic.save(compound);
-        return compound;
+    public CompoundTag save(CompoundTag p_59795_) {
+        super.save(p_59795_);
+        this.spawner.save(this.level, this.worldPosition, p_59795_);
+        return p_59795_;
     }
 
-    /**
-     * Like the old updateEntity(), except more generic.
-     */
-    @Override
-    public void tick() {
-        this.spawnerLogic.updateSpawner();
+    public static void clientTick(Level p_155755_, BlockPos p_155756_, BlockState p_155757_, TileEntityDreadSpawner p_155758_) {
+        p_155758_.spawner.clientTick(p_155755_, p_155756_);
     }
 
-    /**
-     * Retrieves packet to send to the client whenever this Tile Entity is resynced via World.notifyBlockUpdate. For
-     * modded TE's, this packet comes back to you clientside in {@link #onDataPacket}
-     */
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
+    public static void serverTick(Level p_155762_, BlockPos p_155763_, BlockState p_155764_, TileEntityDreadSpawner p_155765_) {
+        p_155765_.spawner.serverTick((ServerLevel) p_155762_, p_155763_);
     }
 
-    @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        load(this.getBlockState(), packet.getTag());
+    @Nullable
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return new ClientboundBlockEntityDataPacket(this.worldPosition, 1, this.getUpdateTag());
     }
 
-    @Override
-    public CompoundNBT getUpdateTag() {
-        return this.save(new CompoundNBT());
+    public CompoundTag getUpdateTag() {
+        CompoundTag compoundtag = this.save(new CompoundTag());
+        compoundtag.remove("SpawnPotentials");
+        return compoundtag;
     }
 
-
-    @Override
-    public boolean triggerEvent(int id, int type) {
-        return this.spawnerLogic.onEventTriggered(id) || super.triggerEvent(id, type);
+    public boolean triggerEvent(int p_59797_, int p_59798_) {
+        return this.spawner.onEventTriggered(this.level, p_59797_) || super.triggerEvent(p_59797_, p_59798_);
     }
 
-    @Override
     public boolean onlyOpCanSetNbt() {
         return true;
     }
 
-    @Override
-    public AbstractSpawner getSpawner() {
-        return this.spawnerLogic;
+    public BaseSpawner getSpawner() {
+        return this.spawner;
     }
 
     @Override
-    public TileEntityType<?> getType() {
+    public BlockEntityType<?> getType() {
         return this.type != null ? this.type : super.getType();
     }
 }

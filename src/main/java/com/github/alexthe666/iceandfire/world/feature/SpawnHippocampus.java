@@ -5,29 +5,32 @@ import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.material.Fluids;
 
 import java.util.Random;
 
-public class SpawnHippocampus extends Feature<NoFeatureConfig> {
+public class SpawnHippocampus extends Feature<NoneFeatureConfiguration> {
 
-    public SpawnHippocampus(Codec<NoFeatureConfig> configFactoryIn) {
+    public SpawnHippocampus(Codec<NoneFeatureConfiguration> configFactoryIn) {
         super(configFactoryIn);
     }
 
     @Override
-    public boolean place(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        WorldGenLevel worldIn = context.level();
+        Random rand = context.random();
+        BlockPos position = context.origin();
         if (!IafWorldRegistry.isDimensionListedForMobs(worldIn)) {
             return false;
         }
-        position = worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, position.offset(8, 0, 8));
-        BlockPos oceanPos = worldIn.getHeightmapPos(Heightmap.Type.OCEAN_FLOOR_WG, position.offset(8, 0, 8));
+        position = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position.offset(8, 0, 8));
+        BlockPos oceanPos = worldIn.getHeightmapPos(Heightmap.Types.OCEAN_FLOOR_WG, position.offset(8, 0, 8));
 
         if (IafConfig.spawnHippocampus && rand.nextInt(IafConfig.hippocampusSpawnChance + 1) == 0) {
             for (int i = 0; i < rand.nextInt(5); i++) {

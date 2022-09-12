@@ -4,8 +4,8 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public enum EnumDragonTextures {
     VARIANT1("red_", "blue_", "electric_"),
@@ -529,7 +529,7 @@ public enum EnumDragonTextures {
             }
         }
 
-        public static Armor getArmorForDragon(EntityDragonBase dragon, EquipmentSlotType slot) {
+        public static Armor getArmorForDragon(EntityDragonBase dragon, EquipmentSlot slot) {
             int armor = dragon.getArmorOrdinal(dragon.getItemBySlot(slot));
             switch (slot) {
                 case CHEST:

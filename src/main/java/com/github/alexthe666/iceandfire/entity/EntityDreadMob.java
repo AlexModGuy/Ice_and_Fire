@@ -2,77 +2,76 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.entity.util.IDreadMob;
 import com.github.alexthe666.iceandfire.entity.util.IHumanoid;
-import net.minecraft.entity.*;
-import net.minecraft.entity.monster.AbstractSkeletonEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.horse.AbstractHorseEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.server.management.PreYggdrasilConverter;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.players.OldUsersConverter;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
-public class EntityDreadMob extends MonsterEntity implements IDreadMob {
-    protected static final DataParameter<Optional<UUID>> COMMANDER_UNIQUE_ID = EntityDataManager.defineId(EntityDreadMob.class, DataSerializers.OPTIONAL_UUID);
+public class EntityDreadMob extends Monster implements IDreadMob {
+    protected static final EntityDataAccessor<Optional<UUID>> COMMANDER_UNIQUE_ID = SynchedEntityData.defineId(EntityDreadMob.class, EntityDataSerializers.OPTIONAL_UUID);
 
-    public EntityDreadMob(EntityType<? extends MonsterEntity> t, World worldIn) {
+    public EntityDreadMob(EntityType<? extends Monster> t, Level worldIn) {
         super(t, worldIn);
     }
 
     public static Entity necromancyEntity(LivingEntity entity) {
         Entity lichSummoned = null;
-        if (entity.getMobType() == CreatureAttribute.ARTHROPOD) {
+        if (entity.getMobType() == MobType.ARTHROPOD) {
             lichSummoned = new EntityDreadScuttler(IafEntityRegistry.DREAD_SCUTTLER.get(), entity.level);
             float readInScale = (entity.getBbWidth() / 1.5F);
-            if (entity.level instanceof IServerWorld) {
-                ((EntityDreadScuttler) lichSummoned).finalizeSpawn((IServerWorld) entity.level, entity.level.getCurrentDifficultyAt(entity.blockPosition()), SpawnReason.MOB_SUMMONED, null, null);
+            if (entity.level instanceof ServerLevelAccessor) {
+                ((EntityDreadScuttler) lichSummoned).finalizeSpawn((ServerLevelAccessor) entity.level, entity.level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
             }
             ((EntityDreadScuttler) lichSummoned).setSize(readInScale);
             return lichSummoned;
         }
-        if (entity instanceof ZombieEntity || entity instanceof IHumanoid) {
+        if (entity instanceof Zombie || entity instanceof IHumanoid) {
             lichSummoned = new EntityDreadGhoul(IafEntityRegistry.DREAD_GHOUL.get(), entity.level);
             float readInScale = (entity.getBbWidth() / 0.6F);
-            if (entity.level instanceof IServerWorld) {
-                ((EntityDreadGhoul) lichSummoned).finalizeSpawn((IServerWorld) entity.level, entity.level.getCurrentDifficultyAt(entity.blockPosition()), SpawnReason.MOB_SUMMONED, null, null);
+            if (entity.level instanceof ServerLevelAccessor) {
+                ((EntityDreadGhoul) lichSummoned).finalizeSpawn((ServerLevelAccessor) entity.level, entity.level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
             }
             ((EntityDreadGhoul) lichSummoned).setSize(readInScale);
             return lichSummoned;
         }
-        if (entity.getMobType() == CreatureAttribute.UNDEAD || entity instanceof AbstractSkeletonEntity || entity instanceof PlayerEntity) {
+        if (entity.getMobType() == MobType.UNDEAD || entity instanceof AbstractSkeleton || entity instanceof Player) {
             lichSummoned = new EntityDreadThrall(IafEntityRegistry.DREAD_THRALL.get(), entity.level);
             EntityDreadThrall thrall = (EntityDreadThrall) lichSummoned;
-            if (entity.level instanceof IServerWorld) {
-                thrall.finalizeSpawn((IServerWorld) entity.level, entity.level.getCurrentDifficultyAt(entity.blockPosition()), SpawnReason.MOB_SUMMONED, null, null);
+            if (entity.level instanceof ServerLevelAccessor) {
+                thrall.finalizeSpawn((ServerLevelAccessor) entity.level, entity.level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
             }
             thrall.setCustomArmorHead(false);
             thrall.setCustomArmorChest(false);
             thrall.setCustomArmorLegs(false);
             thrall.setCustomArmorFeet(false);
-            for (EquipmentSlotType slot : EquipmentSlotType.values()) {
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
                 thrall.setItemSlot(slot, entity.getItemBySlot(slot));
             }
             return thrall;
         }
-        if (entity instanceof AbstractHorseEntity) {
+        if (entity instanceof AbstractHorse) {
             lichSummoned = new EntityDreadHorse(IafEntityRegistry.DREAD_HORSE.get(), entity.level);
             return lichSummoned;
         }
-        if (entity instanceof AnimalEntity) {
+        if (entity instanceof Animal) {
             lichSummoned = new EntityDreadBeast(IafEntityRegistry.DREAD_BEAST.get(), entity.level);
             float readInScale = (entity.getBbWidth() / 1.2F);
-            if (entity.level instanceof IServerWorld) {
-                ((EntityDreadBeast) lichSummoned).finalizeSpawn((IServerWorld) entity.level, entity.level.getCurrentDifficultyAt(entity.blockPosition()), SpawnReason.MOB_SUMMONED, null, null);
+            if (entity.level instanceof ServerLevelAccessor) {
+                ((EntityDreadBeast) lichSummoned).finalizeSpawn((ServerLevelAccessor) entity.level, entity.level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
             }
             ((EntityDreadBeast) lichSummoned).setSize(readInScale);
             return lichSummoned;
@@ -87,7 +86,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if (this.getCommanderId() != null) {
             compound.putUUID("CommanderUUID", this.getCommanderId());
@@ -95,14 +94,14 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         UUID uuid;
         if (compound.hasUUID("CommanderUUID")) {
             uuid = compound.getUUID("CommanderUUID");
         } else {
             String s = compound.getString("CommanderUUID");
-            uuid = PreYggdrasilConverter.convertMobOwnerIfNecessary(this.getServer(), s);
+            uuid = OldUsersConverter.convertMobOwnerIfNecessary(this.getServer(), s);
         }
 
         if (uuid != null) {
@@ -182,16 +181,16 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
     }
 
     @Override
-    public void remove() {
-        if (!removed && this.getCommander() != null && this.getCommander() instanceof EntityDreadLich) {
+    public void remove(RemovalReason reason) {
+        if (!isRemoved() && this.getCommander() != null && this.getCommander() instanceof EntityDreadLich) {
             EntityDreadLich lich = (EntityDreadLich) this.getCommander();
             lich.setMinionCount(lich.getMinionCount() - 1);
         }
-        super.remove();
+        super.remove(reason);
     }
 
     @Override
-    public CreatureAttribute getMobType() {
-        return CreatureAttribute.UNDEAD;
+    public MobType getMobType() {
+        return MobType.UNDEAD;
     }
 }

@@ -12,31 +12,23 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.block.Blocks;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.resources.IResource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -61,10 +53,10 @@ public class GuiBestiary extends Screen {
     public int indexPagesTotal = 1;
     protected ItemStack book;
     protected boolean index;
-    protected FontRenderer font = getFont();
+    protected Font font = getFont();
 
     public GuiBestiary(ItemStack book) {
-        super(new TranslationTextComponent("bestiary_gui"));
+        super(new TranslatableComponent("bestiary_gui"));
         this.book = book;
         if (!book.isEmpty() && book.getItem() != null && book.getItem() == IafItemRegistry.BESTIARY) {
             if (book.getTag() != null) {
@@ -77,12 +69,16 @@ public class GuiBestiary extends Screen {
         index = true;
     }
 
-    private static FontRenderer getFont() {
+    private static Font getFont() {
         if (IafConfig.useVanillaFont || !Minecraft.getInstance().options.languageCode.equalsIgnoreCase("en_us")) {
             return Minecraft.getInstance().font;
         } else {
-            return (FontRenderer) IceAndFire.PROXY.getFontRenderer();
+            return (Font) IceAndFire.PROXY.getFontRenderer();
         }
+    }
+
+    private static Item getItemByRegistryName(String registryName) {
+        return ForgeRegistries.ITEMS.getValue(new ResourceLocation(registryName));
     }
 
     @Override
@@ -90,33 +86,34 @@ public class GuiBestiary extends Screen {
         super.init();
         int centerX = (width - X) / 2;
         int centerY = (height - Y) / 2;
-        this.addButton(
-            this.previousPage = new ChangePageButton(centerX + 15, centerY + 215, false, 0, (p_214132_1_) -> {
-                if ((this.index ? this.indexPages > 0 : this.pageType != null)) {
-                    if (this.index) {
-                        this.indexPages--;
-                        Minecraft.getInstance().getSoundManager().play(SimpleSound.forUI(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+        this.previousPage = new ChangePageButton(centerX + 15, centerY + 215, false, 0, (p_214132_1_) -> {
+            if ((this.index ? this.indexPages > 0 : this.pageType != null)) {
+                if (this.index) {
+                    this.indexPages--;
+                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+                } else {
+                    if (this.bookPages > 0) {
+                        this.bookPages--;
+                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
                     } else {
-                        if (this.bookPages > 0) {
-                            this.bookPages--;
-                            Minecraft.getInstance().getSoundManager().play(SimpleSound.forUI(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
-                        } else {
-                            this.index = true;
-                        }
+                        this.index = true;
                     }
                 }
-            }));
-        this.addButton(this.nextPage = new ChangePageButton(centerX + 357, centerY + 215, true, 0, (p_214132_1_) -> {
+            }
+        });
+        this.addRenderableWidget(previousPage);
+        this.nextPage = new ChangePageButton(centerX + 357, centerY + 215, true, 0, (p_214132_1_) -> {
             if ((this.index ? this.indexPages < this.indexPagesTotal - 1 : this.pageType != null && this.bookPages < this.pageType.pages)) {
                 if (this.index) {
                     this.indexPages++;
-                    Minecraft.getInstance().getSoundManager().play(SimpleSound.forUI(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
                 } else {
                     this.bookPages++;
-                    Minecraft.getInstance().getSoundManager().play(SimpleSound.forUI(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
                 }
             }
-        }));
+        });
+        this.addRenderableWidget(this.nextPage);
         if (!allPageTypes.isEmpty()) {
             for (int i = 0; i < allPageTypes.size(); i++) {
                 int xIndex = i % -2;
@@ -124,52 +121,46 @@ public class GuiBestiary extends Screen {
                 int id = 2 + i;
                 IndexPageButton button = new IndexPageButton(centerX + 15 + (xIndex * 200),
                     centerY + 10 + (yIndex * 20) - (xIndex == 1 ? 20 : 0),
-                    new TranslationTextComponent("bestiary."
+                    new TranslatableComponent("bestiary."
                         + EnumBestiaryPages.values()[allPageTypes.get(i).ordinal()].toString().toLowerCase()),
                     (p_214132_1_) -> {
                         if (this.indexButtons.get(id - 2) != null && allPageTypes.get(id - 2) != null) {
-                            Minecraft.getInstance().getSoundManager().play(SimpleSound.forUI(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+                            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
                             this.index = false;
                             this.bookPages = 0;
                             this.pageType = allPageTypes.get(id - 2);
                         }
                     });
                 this.indexButtons.add(button);
-                this.addButton(button);
+                this.addRenderableWidget(button);
             }
         }
     }
 
     @Override
-    public void render(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(ms);
-        for (Widget button : this.buttons) {
-            if (button instanceof IndexPageButton) {
+        for (Widget widget : this.renderables) {
+            if (widget instanceof IndexPageButton) {
+                IndexPageButton button = (IndexPageButton) widget;
                 button.active = index;
                 button.visible = index;
             }
+
         }
         for (int i = 0; i < this.indexButtons.size(); i++) {
             this.indexButtons.get(i).active = i < 10 * (this.indexPages + 1) && i >= 10 * (this.indexPages) && this.index;
         }
-        this.renderBackground(ms);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.getMinecraft().getTextureManager().bind(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         int cornerX = (width - X) / 2;
         int cornerY = (height - Y) / 2;
         blit(ms, cornerX, cornerY, 0, 0, X, Y, 390, 390);
-        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        RenderHelper.turnOff();
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        RenderSystem.disableDepthTest();
         super.render(ms, mouseX, mouseY, partialTicks);
-        RenderHelper.turnBackOn();
         ms.pushPose();
         ms.translate(cornerX, cornerY, 0.0F);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glDisable(GL11.GL_LIGHTING);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         int centerX = (width - X) / 2;
         int centerY = (height - Y) / 2;
         if (!index) {
@@ -179,14 +170,12 @@ public class GuiBestiary extends Screen {
             font.draw(ms, "" + pageLeft, centerX, centerY - (int) (Y * 0.13), 0X303030);
             font.draw(ms, "" + pageRight, centerX, centerY - (int) (Y * 0.13), 0X303030);
         }
-        GL11.glEnable(GL11.GL_LIGHTING);
         ms.popPose();
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        RenderHelper.turnBackOn();
+        this.renderables.forEach((widget -> widget.render(ms, mouseX, mouseY, partialTicks)));
+        RenderSystem.enableDepthTest();
     }
 
-    public void drawPerPage(MatrixStack ms, int bookPages) {
+    public void drawPerPage(PoseStack ms, int bookPages) {
         imageFromTxt(ms);
         switch (this.pageType) {
             case INTRODUCTION:
@@ -790,12 +779,12 @@ public class GuiBestiary extends Screen {
         writeFromTxt(ms);
     }
 
-    public void imageFromTxt(MatrixStack ms) {
+    public void imageFromTxt(PoseStack ms) {
         String fileName = this.pageType.toString().toLowerCase(Locale.ROOT) + "_" + this.bookPages + ".txt";
         String languageName = Minecraft.getInstance().options.languageCode.toLowerCase(Locale.ROOT);
         ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + languageName + "_0/" + fileName);
         ResourceLocation backupLoc = new ResourceLocation("iceandfire:lang/bestiary/en_us_0/" + fileName);
-        IResource resource = null;
+        Resource resource = null;
 
         try {
             resource = Minecraft.getInstance().getResourceManager().getResource(fileLoc);
@@ -829,20 +818,20 @@ public class GuiBestiary extends Screen {
                 if (line.contains("<item>")) {
                     line = line.substring(7, line.length() - 1);
                     String[] split = line.split(" ");
-                    RenderHelper.turnBackOn();
+                    RenderSystem.enableDepthTest();
                     drawItemStack(ms, new ItemStack(getItemByRegistryName(split[0]), 1), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Float.parseFloat(split[4]) * 2F);
                 }
                 if (line.contains("<block>")) {
                     zLevelAdd += 1;
                     line = line.substring(8, line.length() - 1);
                     String[] split = line.split(" ");
-                    RenderHelper.turnBackOn();
+                    RenderSystem.enableDepthTest();
                     drawBlockStack(ms, new ItemStack(getItemByRegistryName(split[0]), 1), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Float.parseFloat(split[4]) * 2F, zLevelAdd);
                 }
                 if (line.contains("<recipe>")) {
                     line = line.substring(9, line.length() - 1);
                     String[] split = line.split(" ");
-                    RenderHelper.turnBackOn();
+                    RenderSystem.enableDepthTest();
                     float scale = Float.parseFloat(split[split.length - 1]);
                     int x = Integer.parseInt(split[split.length - 3]);
                     int y = Integer.parseInt(split[split.length - 2]);
@@ -853,7 +842,7 @@ public class GuiBestiary extends Screen {
                         ingredients[j] = new ItemStack(getItemByRegistryName(split[i]), 1);
                         j--;
                     }
-                    RenderHelper.turnBackOn();
+                    RenderSystem.enableDepthTest();
                     ms.pushPose();
                     drawRecipe(ms, result, ingredients, x, y, scale);
                     ms.popPose();
@@ -864,19 +853,16 @@ public class GuiBestiary extends Screen {
         }
     }
 
-    private static Item getItemByRegistryName(String registryName) {
-        return ForgeRegistries.ITEMS.getValue(new ResourceLocation(registryName));
-    }
-
-    private void drawRecipe(MatrixStack ms, ItemStack result, ItemStack[] ingredients, int x, int y, float scale) {
-        RenderSystem.pushMatrix();
-        RenderSystem.translatef(x, y, 0);
-        RenderSystem.scalef(scale, scale, 0);
+    private void drawRecipe(PoseStack ms, ItemStack result, ItemStack[] ingredients, int x, int y, float scale) {
+        ms.pushPose();
+        ms.translate(x, y, 0);
+        ms.scale(scale, scale, 0);
         drawItemStack(ms, result, 62, 17, 2F);
+        //TODO: Values used to be better
         for (int i = 0; i < 9; i++) {
-            drawItemStack(ms, ingredients[i], ((i % 3) * 22 + 30), ((i / 3) * 22 + 10), 1.25F);
+            drawItemStack(ms, ingredients[i], ((i % 3) * 22 + 130), ((i / 3) * 22 + 210), 1.25F);
         }
-        RenderSystem.popMatrix();
+        ms.popPose();
         ms.pushPose();
         ms.translate(x, y, 0);
         ms.scale(scale, scale, 0);
@@ -887,12 +873,12 @@ public class GuiBestiary extends Screen {
 
     }
 
-    public void writeFromTxt(MatrixStack ms) {
+    public void writeFromTxt(PoseStack ms) {
         String fileName = this.pageType.toString().toLowerCase(Locale.ROOT) + "_" + this.bookPages + ".txt";
         String languageName = Minecraft.getInstance().options.languageCode.toLowerCase(Locale.ROOT);
         ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + languageName + "_0/" + fileName);
         ResourceLocation backupLoc = new ResourceLocation("iceandfire:lang/bestiary/en_us_0/" + fileName);
-        IResource resource = null;
+        Resource resource = null;
 
         try {
             resource = Minecraft.getInstance().getResourceManager().getResource(fileLoc);
@@ -939,81 +925,82 @@ public class GuiBestiary extends Screen {
         return font == Minecraft.getInstance().font;
     }
 
-    public void drawImage(MatrixStack ms, ResourceLocation texture, int x, int y, int u, int v, int width, int height, float scale) {
+    public void drawImage(PoseStack ms, ResourceLocation texture, int x, int y, int u, int v, int width, int height, float scale) {
         ms.pushPose();
-        this.getMinecraft().getTextureManager().bind(texture);
+        RenderSystem.setShaderTexture(0, texture);
         ms.scale(scale / 512F, scale / 512F, scale / 512F);
         blit(ms, x, y, u, v, width, height, 512, 512);
         ms.popPose();
     }
 
-    private void drawItemStack(MatrixStack ms, ItemStack stack, int x, int y, float scale) {
+    private void drawItemStack(PoseStack ms, ItemStack stack, int x, int y, float scale) {
         int cornerX = (width - X) / 2;
         int cornerY = (height - Y) / 2;
-        RenderSystem.pushMatrix();
-        RenderSystem.translatef(cornerX, cornerY, 32.0F);
+        PoseStack posestack = RenderSystem.getModelViewStack();
+        posestack.pushPose();
+        posestack.translate(0.0D, 0.0D, 32.0D);
+        posestack.scale(scale, scale, 1.0F);
+        RenderSystem.applyModelViewMatrix();
+        this.setBlitOffset(200);
         this.itemRenderer.blitOffset = 200.0F;
-        net.minecraft.client.gui.FontRenderer font = null;
-        if (!stack.isEmpty()) font = stack.getItem().getFontRenderer(stack);
-        if (font == null) font = getFont();
-        RenderSystem.scalef(scale, scale, scale);
-        this.itemRenderer.blitOffset = -100;
-        RenderSystem.depthMask(true);
-        this.itemRenderer.renderAndDecorateItem(stack, x, y);
+        this.itemRenderer.renderAndDecorateItem(stack, cornerX + x, cornerY + y);
+        this.setBlitOffset(0);
         this.itemRenderer.blitOffset = 0.0F;
-        RenderSystem.popMatrix();
+        posestack.popPose();
+        RenderSystem.applyModelViewMatrix();
+
     }
 
-    protected void renderItemModelIntoGUI(MatrixStack ms, ItemStack stack, int x, int y, IBakedModel bakedmodel, float scale) {
-        RenderSystem.pushMatrix();
+    /*protected void renderItemModelIntoGUI(PoseStack ms, ItemStack stack, int x, int y, BakedModel bakedmodel, float scale) {
+        ms.pushPose();
         // PlayerContainer.LOCATION_BLOCKS_TEXTURE is equivalent to
         // AtlasTexture.LOCATION_BLOCKS_TEXTURE, but the latter is deprecated
-        this.getMinecraft().getTextureManager().bind(PlayerContainer.BLOCK_ATLAS);
-        this.getMinecraft().getTextureManager().getTexture(PlayerContainer.BLOCK_ATLAS)
+        RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
+        this.getMinecraft().getTextureManager().getTexture(InventoryMenu.BLOCK_ATLAS)
             .setFilter(false, false);
         RenderSystem.enableRescaleNormal();
         RenderSystem.enableAlphaTest();
         RenderSystem.defaultAlphaFunc();
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        RenderSystem.scalef(16.0F * scale, 16.0F * scale, 16.0F * scale);
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.translatef(x, y, 100.0F + itemRenderer.blitOffset);
-        RenderSystem.scalef(1.0F, -1.0F, 1.0F);
-        MatrixStack matrixstack = new MatrixStack();
-        IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().renderBuffers().bufferSource();
+        ms.scale(16.0F * scale, 16.0F * scale, 16.0F * scale);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        ms.translate(x, y, 100.0F + itemRenderer.blitOffset);
+        ms.scale(1.0F, -1.0F, 1.0F);
+        PoseStack matrixstack = new PoseStack();
+        MultiBufferSource.BufferSource irendertypebuffer$impl = Minecraft.getInstance().renderBuffers().bufferSource();
         boolean flag = !bakedmodel.usesBlockLight();
         if (flag) {
-            RenderHelper.setupForFlatItems();
+            Lighting.setupForFlatItems();
         }
 
-        this.itemRenderer.render(stack, ItemCameraTransforms.TransformType.GUI, false, matrixstack, irendertypebuffer$impl, 15728880, OverlayTexture.NO_OVERLAY, bakedmodel);
+        this.itemRenderer.render(stack, ItemTransforms.TransformType.GUI, false, matrixstack, irendertypebuffer$impl, 15728880, OverlayTexture.NO_OVERLAY, bakedmodel);
         irendertypebuffer$impl.endBatch();
         RenderSystem.enableDepthTest();
         if (flag) {
-            RenderHelper.setupFor3DItems();
+            Lighting.setupFor3DItems();
         }
 
         RenderSystem.disableAlphaTest();
         RenderSystem.disableRescaleNormal();
-        RenderSystem.popMatrix();
-    }
+        ms.popPose();
+    }*/
 
 
-    private void drawBlockStack(MatrixStack ms, ItemStack stack, int x, int y, float scale, int zScale) {
+    private void drawBlockStack(PoseStack ms, ItemStack stack, int x, int y, float scale, int zScale) {
         int cornerX = (width - X) / 2;
         int cornerY = (height - Y) / 2;
-        RenderSystem.pushMatrix();
-        RenderSystem.translatef(cornerX, cornerY, 32.0F);
+        ms.pushPose();
+        ms.translate(cornerX, cornerY, 32.0F);
         this.itemRenderer.blitOffset = 200.0F;
-        net.minecraft.client.gui.FontRenderer font = null;
-        if (!stack.isEmpty()) font = stack.getItem().getFontRenderer(stack);
+        net.minecraft.client.gui.Font font = null;
+        //TODO: if (!stack.isEmpty()) font = stack.getItem().getFontRenderer(stack);
         if (font == null) font = getFont();
         GL11.glScalef(scale, scale, scale);
         this.itemRenderer.blitOffset = -100 + zScale * 10;
         this.itemRenderer.renderAndDecorateItem(stack, x, y);
         this.itemRenderer.blitOffset = 0.0F;
-        RenderSystem.popMatrix();
+        ms.popPose();
 
     }
 }

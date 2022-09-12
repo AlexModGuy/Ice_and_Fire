@@ -2,12 +2,12 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import com.github.alexthe666.iceandfire.util.IAFMath;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
 import java.util.EnumSet;
@@ -18,11 +18,11 @@ public class AmphithereAIFleePlayer extends Goal {
     private final double nearSpeed;
     private final float avoidDistance;
     protected EntityAmphithere entity;
-    protected PlayerEntity closestLivingEntity;
+    protected Player closestLivingEntity;
     private Path path;
 
     @Nonnull
-    private List<PlayerEntity> list = IAFMath.emptyPlayerEntityList;
+    private List<Player> list = IAFMath.emptyPlayerEntityList;
 
     public AmphithereAIFleePlayer(EntityAmphithere entityIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
         this.entity = entityIn;
@@ -37,13 +37,13 @@ public class AmphithereAIFleePlayer extends Goal {
         if (!this.entity.isFlying() && !this.entity.isTame()) {
 
             if (this.entity.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
-                list = this.entity.level.getEntitiesOfClass(PlayerEntity.class, this.entity.getBoundingBox().inflate(this.avoidDistance, 6D, this.avoidDistance), EntityPredicates.NO_CREATIVE_OR_SPECTATOR);
+                list = this.entity.level.getEntitiesOfClass(Player.class, this.entity.getBoundingBox().inflate(this.avoidDistance, 6D, this.avoidDistance), EntitySelector.NO_CREATIVE_OR_SPECTATOR);
 
             if (list.isEmpty())
                 return false;
 
             this.closestLivingEntity = list.get(0);
-            Vector3d Vector3d = RandomPositionGenerator.getPosAvoid(this.entity, 20, 7, new Vector3d(this.closestLivingEntity.getX(), this.closestLivingEntity.getY(), this.closestLivingEntity.getZ()));
+            Vec3 Vector3d = DefaultRandomPos.getPosAway(this.entity, 20, 7, new Vec3(this.closestLivingEntity.getX(), this.closestLivingEntity.getY(), this.closestLivingEntity.getZ()));
 
             if (Vector3d == null) {
                 return false;

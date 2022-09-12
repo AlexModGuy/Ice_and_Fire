@@ -1,12 +1,12 @@
 package com.github.alexthe666.iceandfire.client.model.util;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /*
        Code from JurassiCraft, used with permission
@@ -25,11 +25,11 @@ public class LegSolver {
 
     public final void update(EntityDragonBase entity, float yaw, float scale) {
         double sideTheta = yaw / (180 / Math.PI);
-        double sideX = MathHelper.cos((float) sideTheta) * scale;
-        double sideZ = MathHelper.sin((float) sideTheta) * scale;
+        double sideX = Mth.cos((float) sideTheta) * scale;
+        double sideZ = Mth.sin((float) sideTheta) * scale;
         double forwardTheta = sideTheta + Math.PI / 2;
-        double forwardX = MathHelper.cos((float) forwardTheta) * scale;
-        double forwardZ = MathHelper.sin((float) forwardTheta) * scale;
+        double forwardX = Mth.cos((float) forwardTheta) * scale;
+        double forwardZ = Mth.sin((float) forwardTheta) * scale;
         for (Leg leg : this.legs) {
             leg.update(entity, sideX, sideZ, forwardX, forwardZ, scale);
         }
@@ -59,7 +59,7 @@ public class LegSolver {
             this.prevHeight = this.height;
             double posY = entity.getY();
             float settledHeight = this.settle(entity, entity.getX() + sideX * this.side + forwardX * this.forward, posY, entity.getZ() + sideZ * this.side + forwardZ * this.forward, this.height);
-            this.height = MathHelper.clamp(settledHeight, -this.range * scale, this.range * scale);
+            this.height = Mth.clamp(settledHeight, -this.range * scale, this.range * scale);
         }
 
 
@@ -79,7 +79,7 @@ public class LegSolver {
             return height;
         }
 
-        private float getDistance(World world, BlockPos pos) {
+        private float getDistance(Level world, BlockPos pos) {
             BlockState state = world.getBlockState(pos);
             VoxelShape aabb = state.getCollisionShape(world, pos);
             return aabb.isEmpty() ? 1 : 1 - Math.min((float) aabb.max(Direction.Axis.Y, 0.5D, 0.5D), 1);

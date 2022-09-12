@@ -1,17 +1,16 @@
 package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
-import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 
 public class ModelDeathWormGauntlet extends ModelDragonBase {
     public AdvancedModelBox Head;
@@ -97,13 +96,13 @@ public class ModelDeathWormGauntlet extends ModelDragonBase {
     }
 
     @Override
-    public Iterable<ModelRenderer> parts() {
+    public Iterable<BasicModelPart> parts() {
         return ImmutableList.of(Head, JawExtender);
     }
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(Head, JawExtender, HeadInner, ToothB, ToothT, ToothL, ToothL_1, JawExtender2, JawExtender3, JawExtender4, TopJaw, BottomJaw, JawHook);
     }
 
     public void animate(ItemStack stack, float partialTick) {
@@ -144,7 +143,7 @@ public class ModelDeathWormGauntlet extends ModelDragonBase {
     }
 
     @Override
-    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+    public void renderStatue(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, Entity living) {
         this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

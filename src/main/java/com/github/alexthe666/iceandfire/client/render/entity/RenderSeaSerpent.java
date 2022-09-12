@@ -1,14 +1,14 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerSeaSerpentAncient;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.model.SegmentedModel;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
-public class RenderSeaSerpent extends MobRenderer<EntitySeaSerpent, SegmentedModel<EntitySeaSerpent>> {
+public class RenderSeaSerpent extends MobRenderer<EntitySeaSerpent, AdvancedEntityModel<EntitySeaSerpent>> {
 
     public static final ResourceLocation TEXTURE_BLUE = new ResourceLocation("iceandfire:textures/models/seaserpent/seaserpent_blue.png");
     public static final ResourceLocation TEXTURE_BLUE_BLINK = new ResourceLocation("iceandfire:textures/models/seaserpent/seaserpent_blue_blink.png");
@@ -25,14 +25,14 @@ public class RenderSeaSerpent extends MobRenderer<EntitySeaSerpent, SegmentedMod
     public static final ResourceLocation TEXTURE_TEAL = new ResourceLocation("iceandfire:textures/models/seaserpent/seaserpent_teal.png");
     public static final ResourceLocation TEXTURE_TEAL_BLINK = new ResourceLocation("iceandfire:textures/models/seaserpent/seaserpent_teal_blink.png");
 
-    public RenderSeaSerpent(EntityRendererManager renderManager, SegmentedModel model) {
-        super(renderManager, model, 1.6F);
+    public RenderSeaSerpent(EntityRendererProvider.Context context, AdvancedEntityModel<EntitySeaSerpent> model) {
+        super(context, model, 1.6F);
         this.layers.add(new LayerSeaSerpentAncient(this));
 
     }
 
     @Override
-    protected void scale(EntitySeaSerpent entity, MatrixStack matrixStackIn, float partialTickTime) {
+    protected void scale(EntitySeaSerpent entity, PoseStack matrixStackIn, float partialTickTime) {
         this.shadowRadius = entity.getSeaSerpentScale();
         matrixStackIn.scale(shadowRadius, shadowRadius, shadowRadius);
     }

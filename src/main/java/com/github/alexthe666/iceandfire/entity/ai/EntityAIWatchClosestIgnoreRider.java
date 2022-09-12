@@ -1,14 +1,14 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 
-public class EntityAIWatchClosestIgnoreRider extends LookAtGoal {
+public class EntityAIWatchClosestIgnoreRider extends LookAtPlayerGoal {
     LivingEntity entity;
 
-    public EntityAIWatchClosestIgnoreRider(MobEntity entity, Class<? extends LivingEntity> type, float dist) {
+    public EntityAIWatchClosestIgnoreRider(Mob entity, Class<? extends LivingEntity> type, float dist) {
         super(entity, type, dist);
     }
 

@@ -1,19 +1,19 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BushBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.Material;
 
 import java.util.Random;
 
@@ -39,18 +39,18 @@ public class BlockMyrmexBiolight extends BushBlock {
         this.registerDefaultState(this.getStateDefinition().any().setValue(CONNECTED_DOWN, Boolean.valueOf(false)));
     }
 
-    public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
         BlockPos blockpos = pos.above();
         return worldIn.getBlockState(blockpos).getBlock() == this || worldIn.getBlockState(blockpos).canOcclude();
     }
 
 
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
         boolean flag3 = worldIn.getBlockState(currentPos.below()).getBlock() == this;
         return stateIn.setValue(CONNECTED_DOWN, flag3);
     }
 
-    public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
+    public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, Random rand) {
         if (!worldIn.isClientSide) {
             this.updateState(state, worldIn, pos, state.getBlock());
         }
@@ -59,7 +59,7 @@ public class BlockMyrmexBiolight extends BushBlock {
         }
     }
 
-    public void updateState(BlockState state, World worldIn, BlockPos pos, Block blockIn) {
+    public void updateState(BlockState state, Level worldIn, BlockPos pos, Block blockIn) {
         boolean flag2 = state.getValue(CONNECTED_DOWN);
         boolean flag3 = worldIn.getBlockState(pos.below()).getBlock() == this;
         if (flag2 != flag3) {
@@ -68,7 +68,7 @@ public class BlockMyrmexBiolight extends BushBlock {
 
     }
 
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(CONNECTED_DOWN);
     }
 }

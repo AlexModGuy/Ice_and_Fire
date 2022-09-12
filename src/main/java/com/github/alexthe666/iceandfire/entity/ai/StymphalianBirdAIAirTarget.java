@@ -2,10 +2,10 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.Vec3;
 
 public class StymphalianBirdAIAirTarget extends Goal {
     private final EntityStymphalianBird bird;
@@ -38,14 +38,14 @@ public class StymphalianBirdAIAirTarget extends Goal {
             if (bird.isBaby() || bird.doesWantToLand()) {
                 return false;
             }
-            if (bird.airTarget != null && (bird.isTargetBlocked(Vector3d.atCenterOf(bird.airTarget)))) {
+            if (bird.airTarget != null && (bird.isTargetBlocked(Vec3.atCenterOf(bird.airTarget)))) {
                 bird.airTarget = null;
             }
 
             if (bird.airTarget != null) {
                 return false;
             } else {
-                Vector3d vec = this.findAirTarget();
+                Vec3 vec = this.findAirTarget();
 
                 if (vec == null) {
                     return false;
@@ -69,7 +69,7 @@ public class StymphalianBirdAIAirTarget extends Goal {
         return bird.airTarget != null;
     }
 
-    public Vector3d findAirTarget() {
-        return Vector3d.atCenterOf(getNearbyAirTarget(bird));
+    public Vec3 findAirTarget() {
+        return Vec3.atCenterOf(getNearbyAirTarget(bird));
     }
 }

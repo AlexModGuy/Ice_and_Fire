@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+    "iceandfire:graveyard_soil",
+    "iceandfire:chared_dirt",
+    "iceandfire:chared_dirt_path",
+    "iceandfire:chared_grass",
+    "iceandfire:chared_gravel",
+    "iceandfire:frozen_dirt",
+    "iceandfire:frozen_dirt_path",
+    "iceandfire:frozen_grass",
+    "iceandfire:frozen_gravel",
+    "iceandfire:crackled_dirt",
+    "iceandfire:crackled_dirt_path",
+    "iceandfire:crackled_grass",
+    "iceandfire:crackled_gravel",
+    "iceandfire:ash"
+  ]
+}

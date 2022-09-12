@@ -3,17 +3,17 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 
 public class ModelGorgon extends ModelDragonBase<EntityGorgon> {
+    private final ModelAnimator animator;
     public AdvancedModelBox Tail_1;
     public AdvancedModelBox Tail_2;
     public AdvancedModelBox Body;
@@ -113,7 +113,6 @@ public class ModelGorgon extends ModelDragonBase<EntityGorgon> {
     public AdvancedModelBox SnakeJawL5;
     public AdvancedModelBox SnakeFang1L5;
     public AdvancedModelBox SnakeFang2L5;
-    private final ModelAnimator animator;
 
     public ModelGorgon() {
         this.texWidth = 128;
@@ -634,8 +633,8 @@ public class ModelGorgon extends ModelDragonBase<EntityGorgon> {
         this.walk(Left_Arm, speed_idle * 1.5F, degree_idle * 0.4F, true, 2, 0.3F, f2, 1);
         this.flap(Right_Arm, speed_idle * 1.5F, degree_idle * 0.2F, false, 2, 0.2F, f2, 1);
         this.flap(Left_Arm, speed_idle * 1.5F, degree_idle * 0.2F, true, 2, 0.2F, f2, 1);
-        this.Right_Arm.xRot = MathHelper.cos(f * 0.6662F + (float) Math.PI) * 2.0F * f1 * 0.5F / 1;
-        this.Left_Arm.xRot = MathHelper.cos(f * 0.6662F) * 2.0F * f1 * 0.5F / 1;
+        this.Right_Arm.rotateAngleX = Mth.cos(f * 0.6662F + (float) Math.PI) * 2.0F * f1 * 0.5F / 1;
+        this.Left_Arm.rotateAngleX = Mth.cos(f * 0.6662F) * 2.0F * f1 * 0.5F / 1;
 
         float f12 = (float) Math.toRadians(-1.29f) + f1;
         if (f12 < 0.0F) {
@@ -644,9 +643,9 @@ public class ModelGorgon extends ModelDragonBase<EntityGorgon> {
         if (f12 > Math.toRadians(20)) {
             f12 = (float) Math.toRadians(20);
         }
-        this.Tail_1.xRot = f12;
-        this.Tail_3.xRot = this.Tail_3.xRot - f12;
-        this.Head.xRot = this.Head.xRot - f12;
+        this.Tail_1.rotateAngleX = f12;
+        this.Tail_3.rotateAngleX = this.Tail_3.rotateAngleX - f12;
+        this.Head.rotateAngleX = this.Head.rotateAngleX - f12;
         f12 = 0.0F;
 
         this.chainFlap(SNAKEL1, speed_idle, degree_idle * 0.75F, -3, f2, 1);
@@ -700,22 +699,33 @@ public class ModelGorgon extends ModelDragonBase<EntityGorgon> {
         this.progressRotation(Body, deathProg, (float) Math.toRadians(-9), (float) Math.toRadians(36), 0);
         this.progressRotation(Right_Arm, deathProg, 0, 0, (float) Math.toRadians(20));
         this.progressRotation(Left_Arm, deathProg, 0, 0, (float) Math.toRadians(-20));
-        this.Neck.visible = deathProg <= 0;
+        this.Neck.showModel = deathProg <= 0;
     }
 
     @Override
-    public Iterable<ModelRenderer> parts() {
+    public Iterable<BasicModelPart> parts() {
         return ImmutableList.of(Tail_1);
     }
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), "gorgon");
+        return ImmutableList.of(Tail_1, Tail_2, Body, Tail_3, Tail_4, Tail_5, Tail_6, Tail_7, Tail_8, Tail_9, Left_Arm,
+            Head, Right_Arm, Neck, Head_Details, SnakeBaseR2, SnakeBaseR7, SnakeBaseR6, SnakeBaseR5, SnakeBaseR4,
+            SnakeBaseR3, SnakeBaseR1, SnakeBaseL1, SnakeBaseL2, SnakeBaseL4, SnakeBaseL3, SnakeBaseL7, SnakeBaseL6,
+            SnakeBaseL5, SnakeBodyR2, SnakeHeadR2, SnakeJawR2, SnakeFang1R2, SnakeFang2R2, SnakeBodyR7, SnakeHeadR7,
+            SnakeJawR7, SnakeFang1R7, SnakeFang2R7, SnakeBodyR6, SnakeHeadR6, SnakeJawR6, SnakeFang1R6, SnakeFang2R6,
+            SnakeBodyR5, SnakeHeadR5, SnakeJawR5, SnakeFang1R5, SnakeFang2R5, SnakeBodyR4, SnakeHeadR4, SnakeJawR4,
+            SnakeFang1R4, SnakeFang2R4, SnakeBodyR3, SnakeHeadR3, SnakeJawR3, SnakeFang1R3, SnakeFang2R3, SnakeBodyR1,
+            SnakeHeadR1, SnakeJawR1, SnakeFang1R1, SnakeFang2R1, SnakeBodyL1, SnakeHeadL1, SnakeJawL1, SnakeFang1L1,
+            SnakeFang2L1, SnakeBodyL2, SnakeHeadL2, SnakeJawL2, SnakeFang1L2, SnakeFang2L2, SnakeBodyL4, SnakeHeadR4_1,
+            SnakeJawR4_1, SnakeFang1R4_1, SnakeFang2R4_1, SnakeBodyL3, SnakeHeadL3, SnakeJawL3, SnakeFang1L3,
+            SnakeFang2L3, SnakeBodyL7, SnakeHeadL7, SnakeJawL7, SnakeFang1L7, SnakeFang2L7, snakeBodyL6, SnakeHeadL6,
+            SnakeJawL6, SnakeFang1L6, SnakeFang2L6, SnakeBodyL5, SnakeHeadL5, SnakeJawL5, SnakeFang1L5, SnakeFang2L5);
     }
 
 
     @Override
-    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+    public void renderStatue(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, Entity living) {
         this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

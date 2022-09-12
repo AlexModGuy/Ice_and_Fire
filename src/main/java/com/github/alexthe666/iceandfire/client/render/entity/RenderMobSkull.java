@@ -1,22 +1,22 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.citadel.client.model.TabulaModel;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.client.model.*;
 import com.github.alexthe666.iceandfire.entity.EntityMobSkull;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.google.common.collect.Maps;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.model.SegmentedModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Locale;
 import java.util.Map;
@@ -33,8 +33,8 @@ public class RenderMobSkull extends EntityRenderer<EntityMobSkull> {
     private final ModelHydraHead hydraModel;
     private final TabulaModel seaSerpentModel;
 
-    public RenderMobSkull(EntityRendererManager renderManager, SegmentedModel seaSerpentModel) {
-        super(renderManager);
+    public RenderMobSkull(EntityRendererProvider.Context context, AdvancedEntityModel seaSerpentModel) {
+        super(context);
         this.hippogryphModel = new ModelHippogryph();
         this.cyclopsModel = new ModelCyclops();
         this.cockatriceModel = new ModelCockatrice();
@@ -45,13 +45,13 @@ public class RenderMobSkull extends EntityRenderer<EntityMobSkull> {
         this.hydraModel = new ModelHydraHead(0);
     }
 
-    private static void setRotationAngles(ModelRenderer cube, float rotX, float rotY, float rotZ) {
-        cube.xRot = rotX;
-        cube.yRot = rotY;
-        cube.zRot = rotZ;
+    private static void setRotationAngles(BasicModelPart cube, float rotX, float rotY, float rotZ) {
+        cube.rotateAngleX = rotX;
+        cube.rotateAngleY = rotY;
+        cube.rotateAngleZ = rotZ;
     }
 
-    public void render(EntityMobSkull entity, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(EntityMobSkull entity, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         super.render(entity, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         matrixStackIn.pushPose();
         matrixStackIn.mulPose(new Quaternion(Vector3f.XP, -180, true));
@@ -64,8 +64,8 @@ public class RenderMobSkull extends EntityRenderer<EntityMobSkull> {
         matrixStackIn.popPose();
     }
 
-    private void renderForEnum(EnumSkullType skull, boolean onWall, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(getSkullTexture(skull)));
+    private void renderForEnum(EnumSkullType skull, boolean onWall, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+        VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(getSkullTexture(skull)));
         switch (skull) {
             case HIPPOGRYPH:
                 matrixStackIn.translate(0, -0.0F, -0.2F);

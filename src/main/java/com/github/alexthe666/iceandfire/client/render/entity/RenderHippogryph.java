@@ -2,27 +2,27 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelHippogryph;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
 
 public class RenderHippogryph extends MobRenderer<EntityHippogryph, ModelHippogryph> {
 
-    public RenderHippogryph(EntityRendererManager renderManager) {
-        super(renderManager, new ModelHippogryph(), 0.8F);
+    public RenderHippogryph(EntityRendererProvider.Context context) {
+        super(context, new ModelHippogryph(), 0.8F);
         this.layers.add(new LayerHippogriffSaddle(this));
 
     }
 
-    protected void scale(EntityHippogryph entity, MatrixStack matrix, float partialTickTime) {
+    protected void scale(EntityHippogryph entity, PoseStack matrix, float partialTickTime) {
         matrix.scale(1.2F, 1.2F, 1.2F);
     }
 
@@ -33,7 +33,7 @@ public class RenderHippogryph extends MobRenderer<EntityHippogryph, ModelHippogr
     }
 
 
-    private class LayerHippogriffSaddle extends LayerRenderer<EntityHippogryph, ModelHippogryph> {
+    private class LayerHippogriffSaddle extends RenderLayer<EntityHippogryph, ModelHippogryph> {
         private final RenderHippogryph renderer;
         private final RenderType SADDLE_TEXTURE = RenderType.entityNoOutline(new ResourceLocation("iceandfire:textures/models/hippogryph/saddle.png"));
         private final RenderType BRIDLE = RenderType.entityNoOutline(new ResourceLocation("iceandfire:textures/models/hippogryph/bridle.png"));
@@ -48,7 +48,7 @@ public class RenderHippogryph extends MobRenderer<EntityHippogryph, ModelHippogr
             this.renderer = renderer;
         }
 
-        public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityHippogryph hippo, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityHippogryph hippo, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if (hippo.getArmor() != 0) {
                 RenderType type = null;
                 switch (hippo.getArmor()) {
@@ -62,19 +62,19 @@ public class RenderHippogryph extends MobRenderer<EntityHippogryph, ModelHippogr
                         type = TEXTURE_DIAMOND;
                         break;
                 }
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(type);
+                VertexConsumer ivertexbuilder = bufferIn.getBuffer(type);
                 this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
             if (hippo.isSaddled()) {
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(SADDLE_TEXTURE);
+                VertexConsumer ivertexbuilder = bufferIn.getBuffer(SADDLE_TEXTURE);
                 this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
             if (hippo.isSaddled() && hippo.getControllingPassenger() != null) {
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(BRIDLE);
+                VertexConsumer ivertexbuilder = bufferIn.getBuffer(BRIDLE);
                 this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
             if (hippo.isChested()) {
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(CHEST);
+                VertexConsumer ivertexbuilder = bufferIn.getBuffer(CHEST);
                 this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             }
         }

@@ -1,15 +1,15 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.scores.Team;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -61,7 +61,7 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
         }
     }
 
-    protected AxisAlignedBB getTargetableArea(double targetDistance) {
+    protected AABB getTargetableArea(double targetDistance) {
         return this.mob.getBoundingBox().inflate(targetDistance, 4.0D, targetDistance);
     }
 
@@ -101,7 +101,7 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
             this.targetEntity.getItem().shrink(1);
             this.mob.playSound(SoundEvents.GENERIC_EAT, 1, 1);
             deathWorm.setAnimation(EntityDeathWorm.ANIMATION_BITE);
-            PlayerEntity thrower = null;
+            Player thrower = null;
             if (this.targetEntity.getThrower() != null)
                 thrower = this.targetEntity.level.getPlayerByUUID(this.targetEntity.getThrower());
             deathWorm.setExplosive(true, thrower);

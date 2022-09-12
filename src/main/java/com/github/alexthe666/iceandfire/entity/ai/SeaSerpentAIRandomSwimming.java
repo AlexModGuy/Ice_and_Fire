@@ -1,18 +1,18 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
+import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class SeaSerpentAIRandomSwimming extends RandomWalkingGoal {
-    public SeaSerpentAIRandomSwimming(CreatureEntity creature, double speed, int chance) {
+public class SeaSerpentAIRandomSwimming extends RandomStrollGoal {
+    public SeaSerpentAIRandomSwimming(PathfinderMob creature, double speed, int chance) {
         super(creature, speed, chance, false);
     }
 
@@ -26,7 +26,7 @@ public class SeaSerpentAIRandomSwimming extends RandomWalkingGoal {
                     return false;
                 }
             }
-            Vector3d vector3d = this.getPosition();
+            Vec3 vector3d = this.getPosition();
             if (vector3d == null) {
                 return false;
             } else {
@@ -41,9 +41,9 @@ public class SeaSerpentAIRandomSwimming extends RandomWalkingGoal {
 
     @Override
     @Nullable
-    protected Vector3d getPosition() {
+    protected Vec3 getPosition() {
         if (((EntitySeaSerpent) this.mob).jumpCooldown <= 0) {
-            Vector3d vector3d = findSurfaceTarget(this.mob, 32, 16);
+            Vec3 vector3d = findSurfaceTarget(this.mob, 32, 16);
             if (vector3d != null) {
                 return vector3d.add(0, 1, 0);
             }
@@ -60,7 +60,7 @@ public class SeaSerpentAIRandomSwimming extends RandomWalkingGoal {
                     blockpos = blockpos1;
                 }
             }
-            return blockpos == null ? null : new Vector3d(blockpos.getX() + 0.5D, blockpos.getY() + 0.5D, blockpos.getZ() + 0.5D);
+            return blockpos == null ? null : new Vec3(blockpos.getX() + 0.5D, blockpos.getY() + 0.5D, blockpos.getZ() + 0.5D);
         }
         return null;
     }
@@ -74,13 +74,13 @@ public class SeaSerpentAIRandomSwimming extends RandomWalkingGoal {
         return this.mob.level.getBlockState(pos.offset(dx * scale, 1, dz * scale)).isAir() && this.mob.level.getBlockState(pos.offset(dx * scale, 2, dz * scale)).isAir();
     }
 
-    private Vector3d findSurfaceTarget(CreatureEntity creature, int i, int i1) {
+    private Vec3 findSurfaceTarget(PathfinderMob creature, int i, int i1) {
         BlockPos upPos = creature.blockPosition();
         while (creature.level.getFluidState(upPos).is(FluidTags.WATER)) {
             upPos = upPos.above();
         }
         if (isAirAbove(upPos.below(), 0, 0, 0) && canJumpTo(upPos.below(), 0, 0, 0)) {
-            return new Vector3d(upPos.getX() + 0.5F, upPos.getY() + 3.5F, upPos.getZ() + 0.5F);
+            return new Vec3(upPos.getX() + 0.5F, upPos.getY() + 3.5F, upPos.getZ() + 0.5F);
         }
         return null;
     }

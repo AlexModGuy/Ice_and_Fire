@@ -7,26 +7,28 @@ import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class TileEntityPixieHouse extends TileEntity implements ITickableTileEntity {
+public class TileEntityPixieHouse extends BlockEntity {
 
     private static final float PARTICLE_WIDTH = 0.3F;
     private static final float PARTICLE_HEIGHT = 0.6F;
+    private final Random rand;
     public int houseType;
     public boolean hasPixie;
     public boolean tamedPixie;
@@ -34,10 +36,9 @@ public class TileEntityPixieHouse extends TileEntity implements ITickableTileEnt
     public int pixieType;
     public int ticksExisted;
     public NonNullList<ItemStack> pixieItems = NonNullList.withSize(1, ItemStack.EMPTY);
-    private final Random rand;
 
-    public TileEntityPixieHouse() {
-        super(IafTileEntityRegistry.PIXIE_HOUSE.get());
+    public TileEntityPixieHouse(BlockPos pos, BlockState state) {
+        super(IafTileEntityRegistry.PIXIE_HOUSE.get(), pos, state);
         this.rand = new Random();
     }
 
@@ -51,8 +52,23 @@ public class TileEntityPixieHouse extends TileEntity implements ITickableTileEnt
         else return 0;
     }
 
+    public static void tick(Level level, BlockPos pos, BlockState state, TileEntityPixieHouse entityPixieHouse) {
+        entityPixieHouse.ticksExisted++;
+        if (!level.isClientSide && entityPixieHouse.hasPixie && ThreadLocalRandom.current().nextInt(100) == 0) {
+            entityPixieHouse.releasePixie();
+        }
+        if (level.isClientSide && entityPixieHouse.hasPixie) {
+            IceAndFire.PROXY.spawnParticle(EnumParticles.If_Pixie,
+                pos.getX() + 0.5F + (double) (entityPixieHouse.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH,
+                pos.getY() + (double) (entityPixieHouse.rand.nextFloat() * PARTICLE_HEIGHT),
+                pos.getZ() + 0.5F + (double) (entityPixieHouse.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH,
+                EntityPixie.PARTICLE_RGB[entityPixieHouse.pixieType][0], EntityPixie.PARTICLE_RGB[entityPixieHouse.pixieType][1],
+                EntityPixie.PARTICLE_RGB[entityPixieHouse.pixieType][2]);
+        }
+    }
+
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
         compound.putInt("HouseType", houseType);
         compound.putBoolean("HasPixie", hasPixie);
@@ -61,18 +77,18 @@ public class TileEntityPixieHouse extends TileEntity implements ITickableTileEnt
         if (pixieOwnerUUID != null) {
             compound.putUUID("PixieOwnerUUID", pixieOwnerUUID);
         }
-        ItemStackHelper.saveAllItems(compound, this.pixieItems);
+        ContainerHelper.saveAllItems(compound, this.pixieItems);
         return compound;
     }
 
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return new ClientboundBlockEntityDataPacket(worldPosition, 1, getUpdateTag());
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        load(this.getBlockState(), packet.getTag());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
+        load(packet.getTag());
         if (!level.isClientSide) {
             IceAndFire.sendMSGToAll(
                 new MessageUpdatePixieHouseModel(worldPosition.asLong(), packet.getTag().getInt("HouseType")));
@@ -80,12 +96,12 @@ public class TileEntityPixieHouse extends TileEntity implements ITickableTileEnt
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        return this.save(new CompoundNBT());
+    public CompoundTag getUpdateTag() {
+        return this.save(new CompoundTag());
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT compound) {
+    public void load(CompoundTag compound) {
         houseType = compound.getInt("HouseType");
         hasPixie = compound.getBoolean("HasPixie");
         pixieType = compound.getInt("PixieType");
@@ -94,31 +110,15 @@ public class TileEntityPixieHouse extends TileEntity implements ITickableTileEnt
             pixieOwnerUUID = compound.getUUID("PixieOwnerUUID");
         }
         this.pixieItems = NonNullList.withSize(1, ItemStack.EMPTY);
-        ItemStackHelper.loadAllItems(compound, pixieItems);
-        super.load(state, compound);
-    }
-
-    @Override
-    public void tick() {
-        ticksExisted++;
-        if (!level.isClientSide && this.hasPixie && ThreadLocalRandom.current().nextInt(100) == 0) {
-            releasePixie();
-        }
-        if (this.level.isClientSide && this.hasPixie) {
-            IceAndFire.PROXY.spawnParticle(EnumParticles.If_Pixie,
-                this.worldPosition.getX() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH,
-                this.worldPosition.getY() + (double) (this.rand.nextFloat() * PARTICLE_HEIGHT),
-                this.worldPosition.getZ() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH,
-                EntityPixie.PARTICLE_RGB[this.pixieType][0], EntityPixie.PARTICLE_RGB[this.pixieType][1],
-                EntityPixie.PARTICLE_RGB[this.pixieType][2]);
-        }
+        ContainerHelper.loadAllItems(compound, pixieItems);
+        super.load(compound);
     }
 
     public void releasePixie() {
         EntityPixie pixie = new EntityPixie(IafEntityRegistry.PIXIE.get(), this.level);
         pixie.absMoveTo(this.worldPosition.getX() + 0.5F, this.worldPosition.getY() + 1F, this.worldPosition.getZ() + 0.5F,
             ThreadLocalRandom.current().nextInt(360), 0);
-        pixie.setItemInHand(Hand.MAIN_HAND, pixieItems.get(0));
+        pixie.setItemInHand(InteractionHand.MAIN_HAND, pixieItems.get(0));
         pixie.setColor(this.pixieType);
         if (!level.isClientSide) {
             level.addFreshEntity(pixie);

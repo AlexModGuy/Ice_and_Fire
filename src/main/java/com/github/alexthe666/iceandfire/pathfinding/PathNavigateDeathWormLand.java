@@ -1,29 +1,30 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.pathfinding.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.pathfinder.*;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.stream.Collectors;
 
-public class PathNavigateDeathWormLand extends PathNavigator {
+public class PathNavigateDeathWormLand extends PathNavigation {
     private boolean shouldAvoidSun;
     private final EntityDeathWorm worm;
 
-    public PathNavigateDeathWormLand(EntityDeathWorm worm, World worldIn) {
+    public PathNavigateDeathWormLand(EntityDeathWorm worm, Level worldIn) {
         super(worm, worldIn);
         this.worm = worm;
     }
 
     protected PathFinder createPathFinder(int i) {
-        this.nodeEvaluator = new WalkNodeProcessor();
+        this.nodeEvaluator = new WalkNodeEvaluator();
         this.nodeEvaluator.setCanPassDoors(true);
         this.nodeEvaluator.setCanFloat(true);
         return new PathFinder(this.nodeEvaluator, i);
@@ -36,8 +37,8 @@ public class PathNavigateDeathWormLand extends PathNavigator {
         return this.mob.isOnGround() || this.worm.isInSand() || this.mob.isPassenger();
     }
 
-    protected Vector3d getTempMobPos() {
-        return new Vector3d(this.mob.getX(), this.getPathablePosY(), this.mob.getZ());
+    protected Vec3 getTempMobPos() {
+        return new Vec3(this.mob.getX(), this.getPathablePosY(), this.mob.getZ());
     }
 
     /**
@@ -86,12 +87,12 @@ public class PathNavigateDeathWormLand extends PathNavigator {
     private int getPathablePosY() {
         if (this.worm.isInSand()) {
             int i = (int) this.mob.getBoundingBox().minY;
-            BlockState blockstate = this.level.getBlockState(new BlockPos(MathHelper.floor(this.mob.getX()), i, MathHelper.floor(this.mob.getZ())));
+            BlockState blockstate = this.level.getBlockState(new BlockPos(Mth.floor(this.mob.getX()), i, Mth.floor(this.mob.getZ())));
             int j = 0;
 
             while (blockstate.getMaterial() == Material.SAND) {
                 ++i;
-                blockstate = this.level.getBlockState(new BlockPos(MathHelper.floor(this.mob.getX()), i, MathHelper.floor(this.mob.getZ())));
+                blockstate = this.level.getBlockState(new BlockPos(Mth.floor(this.mob.getX()), i, Mth.floor(this.mob.getZ())));
                 ++j;
 
                 if (j > 16) {
@@ -108,12 +109,12 @@ public class PathNavigateDeathWormLand extends PathNavigator {
     protected void removeSunnyPath() {
 
         if (this.shouldAvoidSun) {
-            if (this.level.canSeeSky(new BlockPos(MathHelper.floor(this.mob.getX()), (int) (this.mob.getBoundingBox().minY + 0.5D), MathHelper.floor(this.mob.getZ())))) {
+            if (this.level.canSeeSky(new BlockPos(Mth.floor(this.mob.getX()), (int) (this.mob.getBoundingBox().minY + 0.5D), Mth.floor(this.mob.getZ())))) {
                 return;
             }
 
             for (int i = 0; i < this.path.getNodeCount(); ++i) {
-                PathPoint pathpoint = this.path.getNode(i);
+                Node pathpoint = this.path.getNode(i);
 
                 if (this.level.canSeeSky(new BlockPos(pathpoint.x, pathpoint.y, pathpoint.z))) {
                     this.path.truncateNodes(i - 1);
@@ -126,9 +127,9 @@ public class PathNavigateDeathWormLand extends PathNavigator {
     /**
      * Checks if the specified entity can safely walk to the specified location.
      */
-    protected boolean canMoveDirectly(Vector3d posVec31, Vector3d posVec32, int sizeX, int sizeY, int sizeZ) {
-        int i = MathHelper.floor(posVec31.x);
-        int j = MathHelper.floor(posVec31.z);
+    protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32, int sizeX, int sizeY, int sizeZ) {
+        int i = Mth.floor(posVec31.x);
+        int j = Mth.floor(posVec31.z);
         double d0 = posVec32.x - posVec31.x;
         double d1 = posVec32.z - posVec31.z;
         double d2 = d0 * d0 + d1 * d1;
@@ -164,8 +165,8 @@ public class PathNavigateDeathWormLand extends PathNavigator {
                 d7 = d7 / d1;
                 int k = d0 < 0.0D ? -1 : 1;
                 int l = d1 < 0.0D ? -1 : 1;
-                int i1 = MathHelper.floor(posVec32.x);
-                int j1 = MathHelper.floor(posVec32.z);
+                int i1 = Mth.floor(posVec32.x);
+                int j1 = Mth.floor(posVec32.z);
                 int k1 = i1 - i;
                 int l1 = j1 - j;
 
@@ -193,7 +194,7 @@ public class PathNavigateDeathWormLand extends PathNavigator {
     /**
      * Returns true when an entity could stand at a position, including solid blocks under the entire entity.
      */
-    private boolean isSafeToStandAt(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vector3d vec31, double p_179683_8_, double p_179683_10_) {
+    private boolean isSafeToStandAt(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3 vec31, double p_179683_8_, double p_179683_10_) {
         int i = x - sizeX / 2;
         int j = z - sizeZ / 2;
 
@@ -206,8 +207,8 @@ public class PathNavigateDeathWormLand extends PathNavigator {
                     double d1 = (double) l + 0.5D - vec31.z;
 
                     if (d0 * p_179683_8_ + d1 * p_179683_10_ >= 0.0D) {
-                        PathNodeType pathnodetype = this.nodeEvaluator.getBlockPathType(this.level, k, y - 1, l, this.mob, sizeX, sizeY, sizeZ, true, true);
-                        if (pathnodetype == PathNodeType.LAVA) {
+                        BlockPathTypes pathnodetype = this.nodeEvaluator.getBlockPathType(this.level, k, y - 1, l, this.mob, sizeX, sizeY, sizeZ, true, true);
+                        if (pathnodetype == BlockPathTypes.LAVA) {
                             return false;
                         }
 
@@ -218,7 +219,7 @@ public class PathNavigateDeathWormLand extends PathNavigator {
                             return false;
                         }
 
-                        if (pathnodetype == PathNodeType.DAMAGE_FIRE || pathnodetype == PathNodeType.DANGER_FIRE || pathnodetype == PathNodeType.DAMAGE_OTHER) {
+                        if (pathnodetype == BlockPathTypes.DAMAGE_FIRE || pathnodetype == BlockPathTypes.DANGER_FIRE || pathnodetype == BlockPathTypes.DAMAGE_OTHER) {
                             return false;
                         }
                     }
@@ -232,7 +233,7 @@ public class PathNavigateDeathWormLand extends PathNavigator {
     /**
      * Returns true if an entity does not collide with any solid blocks at the position.
      */
-    private boolean isPositionClear(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vector3d p_179692_7_, double p_179692_8_, double p_179692_10_) {
+    private boolean isPositionClear(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3 p_179692_7_, double p_179692_8_, double p_179692_10_) {
         for (BlockPos blockpos : BlockPos.betweenClosedStream(new BlockPos(x, y, z), new BlockPos(x + sizeX - 1, y + sizeY - 1, z + sizeZ - 1)).collect(Collectors.toList())) {
             double d0 = (double) blockpos.getX() + 0.5D - p_179692_7_.x;
             double d1 = (double) blockpos.getZ() + 0.5D - p_179692_7_.z;

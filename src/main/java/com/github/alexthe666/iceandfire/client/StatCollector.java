@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.client;
 
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.language.I18n;
 
 /*
     Legacy translations helper

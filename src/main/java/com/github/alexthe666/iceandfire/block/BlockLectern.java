@@ -2,26 +2,34 @@ package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockLectern extends ContainerBlock {
+import static com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry.IAF_LECTERN;
+
+public class BlockLectern extends BaseEntityBlock {
     public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
     protected static final VoxelShape AABB = Block.box(4, 0, 4, 12, 19, 12);
 
@@ -39,7 +47,7 @@ public class BlockLectern extends ContainerBlock {
         this.setRegistryName(IceAndFire.MODID, "lectern");
     }
 
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return AABB;
     }
 
@@ -51,37 +59,33 @@ public class BlockLectern extends ContainerBlock {
         return p_185471_1_.rotate(p_185471_2_.getRotation(p_185471_1_.getValue(FACING)));
     }
 
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return AABB;
     }
 
 
-    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        TileEntity tileentity = worldIn.getBlockEntity(pos);
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        BlockEntity tileentity = worldIn.getBlockEntity(pos);
 
         if (tileentity instanceof TileEntityLectern) {
-            InventoryHelper.dropContents(worldIn, pos, (TileEntityLectern) tileentity);
+            Containers.dropContents(worldIn, pos, (TileEntityLectern) tileentity);
             worldIn.updateNeighbourForOutputSignal(pos, this);
         }
         super.onRemove(state, worldIn, pos, newState, isMoving);
     }
 
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+    public boolean canPlaceBlockAt(Level worldIn, BlockPos pos) {
         BlockState BlockState = worldIn.getBlockState(pos.below());
         Block block = BlockState.getBlock();
         return BlockState.isFaceSturdy(worldIn, pos, Direction.UP);
     }
 
-    @Deprecated
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        //worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
-    }
 
-    public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
+    public void updateTick(Level worldIn, BlockPos pos, BlockState state, Random rand) {
         this.checkFall(worldIn, pos);
     }
 
-    private boolean checkFall(World worldIn, BlockPos pos) {
+    private boolean checkFall(Level worldIn, BlockPos pos) {
         if (!this.canPlaceBlockAt(worldIn, pos)) {
             worldIn.destroyBlock(pos, true);
             return false;
@@ -90,35 +94,43 @@ public class BlockLectern extends ContainerBlock {
         }
     }
 
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153182_, BlockState p_153183_, BlockEntityType<T> entityType) {
+        return p_153182_.isClientSide ? createTickerHelper(entityType, IAF_LECTERN.get(), TileEntityLectern::bookAnimationTick) : null;
+    }
+
+
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (!player.isShiftKeyDown()) {
             if (worldIn.isClientSide) {
                 IceAndFire.PROXY.setRefrencedTE(worldIn.getBlockEntity(pos));
             } else {
-                INamedContainerProvider inamedcontainerprovider = this.getMenuProvider(state, worldIn, pos);
+                MenuProvider inamedcontainerprovider = this.getMenuProvider(state, worldIn, pos);
                 if (inamedcontainerprovider != null) {
                     player.openMenu(inamedcontainerprovider);
                 }
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
+    @Nullable
     @Override
-    public TileEntity newBlockEntity(IBlockReader worldIn) {
-        return new TileEntityLectern();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileEntityLectern(pos, state);
     }
 }

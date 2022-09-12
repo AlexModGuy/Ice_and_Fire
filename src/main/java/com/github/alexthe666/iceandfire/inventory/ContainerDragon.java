@@ -2,24 +2,24 @@ package com.github.alexthe666.iceandfire.inventory;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.BannerItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.BannerItem;
+import net.minecraft.world.item.ItemStack;
 
-public class ContainerDragon extends Container {
-    private final IInventory dragonInventory;
+public class ContainerDragon extends AbstractContainerMenu {
+    private final Container dragonInventory;
     private final EntityDragonBase dragon;
 
-    public ContainerDragon(int i, PlayerInventory playerInventory) {
-        this(i, new Inventory(5), playerInventory, null);
+    public ContainerDragon(int i, Inventory playerInventory) {
+        this(i, new SimpleContainer(5), playerInventory, null);
     }
 
-    public ContainerDragon(int id, IInventory ratInventory, PlayerInventory playerInventory, EntityDragonBase rat) {
+    public ContainerDragon(int id, Container ratInventory, Inventory playerInventory, EntityDragonBase rat) {
         super(IafContainerRegistry.DRAGON_CONTAINER.get(), id);
         this.dragonInventory = ratInventory;
         this.dragon = rat;
@@ -95,12 +95,12 @@ public class ContainerDragon extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return this.dragonInventory.stillValid(playerIn) && this.dragon.isAlive() && this.dragon.distanceTo(playerIn) < 8.0F;
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -147,7 +147,7 @@ public class ContainerDragon extends Container {
     }
 
     @Override
-    public void removed(PlayerEntity playerIn) {
+    public void removed(Player playerIn) {
         super.removed(playerIn);
         this.dragonInventory.stopOpen(playerIn);
     }

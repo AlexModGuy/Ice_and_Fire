@@ -1,18 +1,17 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
 
 public class EntityDragonPart extends EntityMutlipartPart {
     private EntityDragonBase dragon;
 
-    public EntityDragonPart(EntityType<?> t, World world) {
+    public EntityDragonPart(EntityType<?> t, Level world) {
         super(t, world);
     }
 
-    public EntityDragonPart(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+    public EntityDragonPart(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
         this(IafEntityRegistry.DRAGON_MULTIPART.get(), worldIn);
     }
 

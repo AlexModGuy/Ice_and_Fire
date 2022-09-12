@@ -2,18 +2,12 @@ package com.github.alexthe666.iceandfire.world.gen.processor;
 
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.IWaterLoggable;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.gen.feature.template.IStructureProcessorType;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
-import net.minecraft.world.gen.feature.template.StructureProcessor;
-import net.minecraft.world.gen.feature.template.Template;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import javax.annotation.Nullable;
 
@@ -26,36 +20,36 @@ public class GorgonTempleProcessor extends StructureProcessor {
     }
 
 
-    public Template.BlockInfo process(IWorldReader worldReader, BlockPos pos, BlockPos pos2, Template.BlockInfo infoIn1, Template.BlockInfo infoIn2, PlacementSettings settings, @Nullable Template template) {
-
+    public StructureTemplate.StructureBlockInfo process(LevelReader worldReader, BlockPos pos, BlockPos pos2, StructureTemplate.StructureBlockInfo infoIn1, StructureTemplate.StructureBlockInfo infoIn2, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
+        /*
         // Workaround for https://bugs.mojang.com/browse/MC-130584
         // Due to a hardcoded field in Templates, any waterloggable blocks in structures replacing water in the world will become waterlogged.
         // Idea of workaround is detect if we are placing a waterloggable block and if so, remove the water in the world instead.
         ChunkPos currentChunk = new ChunkPos(infoIn2.pos);
-        if(infoIn2.state.getBlock() instanceof IWaterLoggable) {
+        if (infoIn2.state.getBlock() instanceof SimpleWaterloggedBlock) {
             if (worldReader.getFluidState(infoIn2.pos).is(FluidTags.WATER)) {
                 worldReader.getChunk(currentChunk.x, currentChunk.z).setBlockState(infoIn2.pos, Blocks.AIR.defaultBlockState(), false);
             }
         }
 
         // Needed as waterloggable blocks will get waterlogged from neighboring chunk's water too.
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
         for(Direction direction : Direction.Plane.HORIZONTAL){
             mutable.set(infoIn2.pos).move(direction);
             if(currentChunk.x != mutable.getX() >> 4 || currentChunk.z != mutable.getZ() >> 4) {
-                IChunk sideChunk = worldReader.getChunk(mutable);
+                ChunkAccess sideChunk = worldReader.getChunk(mutable);
                 if (sideChunk.getFluidState(mutable).is(FluidTags.WATER)) {
                     sideChunk.setBlockState(mutable, Blocks.STONE_BRICKS.defaultBlockState(), false);
                 }
             }
-        }
+        }*/
 
         return infoIn2;
     }
 
 
     @Override
-    protected IStructureProcessorType getType() {
+    protected StructureProcessorType getType() {
         return IafProcessors.GORGONTEMPLEPROCESSOR;
     }
 }

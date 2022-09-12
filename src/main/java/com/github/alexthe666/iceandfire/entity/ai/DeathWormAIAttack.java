@@ -1,13 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
@@ -68,7 +67,7 @@ public class DeathWormAIAttack extends Goal {
             double d0 = this.worm.getDeltaMovement().y;
             if (distanceXZSqrt < 12 && distanceXZSqrt > 2) {
                 return jumpCooldown <= 0
-                    && (d0 * d0 >= 0.03F || this.worm.xRot == 0.0F || Math.abs(this.worm.xRot) >= 10.0F
+                    && (d0 * d0 >= 0.03F || this.worm.getXRot() == 0.0F || Math.abs(this.worm.getXRot()) >= 10.0F
                     || !this.worm.isInWater())
                     && !this.worm.isOnGround();
             }
@@ -81,9 +80,9 @@ public class DeathWormAIAttack extends Goal {
         if (target == null)
             return;
         worm.lookAt(target, 260, 30);
-        final double smoothX = MathHelper.clamp(Math.abs(target.getX() - worm.getX()), 0, 1);
+        final double smoothX = Mth.clamp(Math.abs(target.getX() - worm.getX()), 0, 1);
         //MathHelper.clamp(Math.abs(target.getPosY() - worm.getPosY()), 0, 1);
-        final double smoothZ = MathHelper.clamp(Math.abs(target.getZ() - worm.getZ()), 0, 1);
+        final double smoothZ = Mth.clamp(Math.abs(target.getZ() - worm.getZ()), 0, 1);
         final double d0 = (target.getX() - this.worm.getX()) * 0.2 * smoothX;
         //Math.signum(target.getPosY() - this.worm.getPosY());
         final double d2 = (target.getZ() - this.worm.getZ()) * 0.2 * smoothZ;
@@ -96,7 +95,7 @@ public class DeathWormAIAttack extends Goal {
 
     @Override
     public void stop() {
-        this.worm.xRot = 0.0F;
+        this.worm.setXRot(0.0F);
     }
 
     @Override
@@ -105,19 +104,19 @@ public class DeathWormAIAttack extends Goal {
             jumpCooldown--;
         }
         LivingEntity target = this.worm.getTarget();
-        if (target != null && this.worm.canSee(target)) {
+        if (target != null && this.worm.hasLineOfSight(target)) {
             if (this.worm.distanceTo(target) < 3F) {
                 this.worm.doHurtTarget(target);
             }
         }
 
-        Vector3d vector3d = this.worm.getDeltaMovement();
-        if (vector3d.y * vector3d.y < 0.1F && this.worm.xRot != 0.0F) {
-            this.worm.xRot = MathHelper.rotlerp(this.worm.xRot, 0.0F, 0.2F);
+        Vec3 vector3d = this.worm.getDeltaMovement();
+        if (vector3d.y * vector3d.y < 0.1F && this.worm.getXRot() != 0.0F) {
+            this.worm.setXRot(Mth.rotLerp(this.worm.getXRot(), 0.0F, 0.2F));
         } else {
-            final double d0 = Math.sqrt(Entity.getHorizontalDistanceSqr(vector3d));
+            final double d0 = vector3d.horizontalDistance();
             final double d1 = Math.signum(-vector3d.y) * Math.acos(d0 / vector3d.length()) * (180F / (float) Math.PI);
-            this.worm.xRot = (float) d1;
+            this.worm.setXRot((float) d1);
         }
         if (shouldJump())
             jumpAttack();

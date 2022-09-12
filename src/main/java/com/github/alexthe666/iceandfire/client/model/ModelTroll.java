@@ -3,16 +3,16 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 public class ModelTroll extends ModelDragonBase<EntityTroll> {
+    private final ModelAnimator animator;
     public AdvancedModelBox body;
     public AdvancedModelBox upperBody;
     public AdvancedModelBox loin;
@@ -46,7 +46,6 @@ public class ModelTroll extends ModelDragonBase<EntityTroll> {
     public AdvancedModelBox leftarm2;
     public AdvancedModelBox rightleg2;
     public AdvancedModelBox leftleg2;
-    private final ModelAnimator animator;
 
     public ModelTroll() {
         this.texWidth = 256;
@@ -220,17 +219,20 @@ public class ModelTroll extends ModelDragonBase<EntityTroll> {
 
 
     @Override
-    public Iterable<ModelRenderer> parts() {
+    public Iterable<BasicModelPart> parts() {
         return ImmutableList.of(body);
     }
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(body, upperBody, loin, rightleg, leftleg, head, rightarm,
+            leftarm, chest, jaw, mouth, nose, teeth, hornL, hornR, hornL2, hornR2, nose2,
+            rightarm2, log1, log2, handle, column, blade1, blade2, blade2_1, block, blade2_2,
+            bottom, top, leftarm2, rightleg2, leftleg2);
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        this.log1.visible = true;
+        this.log1.showModel = true;
         this.resetToDefaultPose();
         animator.update(entity);
         if (animator.setAnimation(EntityTroll.ANIMATION_SPEAK)) {
@@ -342,10 +344,11 @@ public class ModelTroll extends ModelDragonBase<EntityTroll> {
         }
     }
 
-    public void setupAnim(EntityTroll entity, float f, float f1, float f2, float f3, float f4) {
-        this.log1.visible = true;
+    public void setupAnim(EntityTroll entity, float limbSwing, float limbSwingAmount, float ageInTicks, float f3, float f4) {
+        this.resetToDefaultPose();
+        this.log1.showModel = true;
 
-        animate(entity, f, f1, f2, f3, f4, 1);
+        animate(entity, limbSwing, limbSwingAmount, ageInTicks, f3, f4, 1);
 
         this.progressRotation(head, entity.stoneProgress, (float) Math.toRadians(-31), 0.0F, 0.0F);
         this.progressRotation(jaw, entity.stoneProgress, (float) Math.toRadians(54), 0.0F, 0.0F);
@@ -358,26 +361,26 @@ public class ModelTroll extends ModelDragonBase<EntityTroll> {
         float speed_idle = 0.05F;
         float degree_walk = 0.75F;
         float degree_idle = 0.5F;
-        this.walk(this.rightleg, speed_walk, degree_walk * -0.75F, true, 0, 0F, f, f1);
-        this.walk(this.leftleg, speed_walk, degree_walk * -0.75F, false, 0, 0F, f, f1);
-        this.walk(this.rightleg2, speed_walk, degree_walk * -0.5F, true, 1, -0.3F, f, f1);
-        this.walk(this.leftleg2, speed_walk, degree_walk * -0.5F, false, 1, 0.3F, f, f1);
-        this.walk(this.leftarm, speed_walk, degree_walk * -0.75F, true, 0, 0F, f, f1);
-        this.walk(this.leftarm2, speed_walk, degree_walk * -0.5F, true, 1, 0.3F, f, f1);
-        this.swing(this.body, speed_walk, degree_walk * -0.5F, false, 0, 0F, f, f1);
-        this.swing(this.upperBody, speed_walk, degree_walk * -0.25F, true, 0, 0F, f, f1);
-        this.walk(this.rightarm, speed_walk, degree_walk * -0.25F, false, 0, 0F, f, f1);
-        this.walk(this.rightarm2, speed_walk, degree_walk * -0.125F, false, 1, -0.3F, f, f1);
-        this.walk(this.body, speed_idle, degree_idle * -0.1F, true, 0F, -0.1F, f2, 1);
-        this.walk(this.rightleg, speed_idle, degree_idle * 0.1F, true, 0F, 0.1F, f2, 1);
-        this.walk(this.leftleg, speed_idle, degree_idle * 0.1F, true, 0F, 0.1F, f2, 1);
+        this.walk(this.rightleg, speed_walk, degree_walk * -0.75F, true, 0, 0F, limbSwing, limbSwingAmount);
+        this.walk(this.leftleg, speed_walk, degree_walk * -0.75F, false, 0, 0F, limbSwing, limbSwingAmount);
+        this.walk(this.rightleg2, speed_walk, degree_walk * -0.5F, true, 1, -0.3F, limbSwing, limbSwingAmount);
+        this.walk(this.leftleg2, speed_walk, degree_walk * -0.5F, false, 1, 0.3F, limbSwing, limbSwingAmount);
+        this.walk(this.leftarm, speed_walk, degree_walk * -0.75F, true, 0, 0F, limbSwing, limbSwingAmount);
+        this.walk(this.leftarm2, speed_walk, degree_walk * -0.5F, true, 1, 0.3F, limbSwing, limbSwingAmount);
+        this.swing(this.body, speed_walk, degree_walk * -0.5F, false, 0, 0F, limbSwing, limbSwingAmount);
+        this.swing(this.upperBody, speed_walk, degree_walk * -0.25F, true, 0, 0F, limbSwing, limbSwingAmount);
+        this.walk(this.rightarm, speed_walk, degree_walk * -0.25F, false, 0, 0F, limbSwing, limbSwingAmount);
+        this.walk(this.rightarm2, speed_walk, degree_walk * -0.125F, false, 1, -0.3F, limbSwing, limbSwingAmount);
+        this.walk(this.body, speed_idle, degree_idle * -0.1F, true, 0F, -0.1F, ageInTicks, 1);
+        this.walk(this.rightleg, speed_idle, degree_idle * 0.1F, true, 0F, 0.1F, ageInTicks, 1);
+        this.walk(this.leftleg, speed_idle, degree_idle * 0.1F, true, 0F, 0.1F, ageInTicks, 1);
 
-        this.flap(this.leftarm, speed_idle, degree_idle * -0.1F, true, 0, 0F, f2, 1);
-        this.flap(this.rightarm, speed_idle, degree_idle * -0.1F, false, 0, 0F, f2, 1);
-        this.flap(this.leftarm2, speed_idle, degree_idle * -0.1F, true, 0, -0.1F, f2, 1);
-        this.flap(this.rightarm2, speed_idle, degree_idle * -0.1F, false, 0, -0.1F, f2, 1);
-        this.walk(this.jaw, speed_idle, degree_idle * -0.15F, true, 0F, -0.1F, f2, 1);
-        this.walk(this.mouth, speed_idle, degree_idle * -0.15F, false, 0F, -0.1F, f2, 1);
+        //this.flap(this.leftarm, speed_idle, degree_idle * -0.1F, true, 0, 0F, f2, 1);
+        //this.flap(this.rightarm, speed_idle, degree_idle * -0.1F, false, 0, 0F, f2, 1);
+        //this.flap(this.leftarm2, speed_idle, degree_idle * -0.1F, true, 0, -0.1F, f2, 1);
+        //this.flap(this.rightarm2, speed_idle, degree_idle * -0.1F, false, 0, -0.1F, f2, 1);
+        this.walk(this.jaw, speed_idle, degree_idle * -0.15F, true, 0F, -0.1F, ageInTicks, 1);
+        this.walk(this.mouth, speed_idle, degree_idle * -0.15F, false, 0F, -0.1F, ageInTicks, 1);
         this.faceTarget(f3, f4, 1, this.head);
 
     }
@@ -392,9 +395,9 @@ public class ModelTroll extends ModelDragonBase<EntityTroll> {
     }
 
     @Override
-    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+    public void renderStatue(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, Entity living) {
         animateStatue((EntityTroll) living);
-        this.log1.visible = false;
+        this.log1.showModel = false;
         this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

@@ -2,11 +2,11 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelDeathWorm;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
 
@@ -16,12 +16,12 @@ public class RenderDeathWorm extends MobRenderer<EntityDeathWorm, ModelDeathWorm
     public static final ResourceLocation TEXTURE_WHITE = new ResourceLocation("iceandfire:textures/models/deathworm/deathworm_white.png");
     public static final ResourceLocation TEXTURE_YELLOW = new ResourceLocation("iceandfire:textures/models/deathworm/deathworm_yellow.png");
 
-    public RenderDeathWorm(EntityRendererManager renderManager) {
-        super(renderManager, new ModelDeathWorm(), 0);
+    public RenderDeathWorm(EntityRendererProvider.Context context) {
+        super(context, new ModelDeathWorm(), 0);
     }
 
     @Override
-    protected void scale(EntityDeathWorm entity, MatrixStack matrixStackIn, float partialTickTime) {
+    protected void scale(EntityDeathWorm entity, PoseStack matrixStackIn, float partialTickTime) {
         this.shadowRadius = entity.getScale() / 3;
         matrixStackIn.scale(entity.getScale(), entity.getScale(), entity.getScale());
     }

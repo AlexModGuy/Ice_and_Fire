@@ -11,25 +11,25 @@ import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.AbstractPat
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.PathJobMoveAwayFromLocation;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.PathJobMoveToLocation;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.PathJobRandomPos;
-import net.minecraft.block.LadderBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.network.DebugPacketSender;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.pathfinding.WalkNodeProcessor;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.game.DebugPackets;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.LadderBlock;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.PathFinder;
+import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -88,25 +88,26 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         FLYING,
         CLIMBING
     }
+
     /**
      * Instantiates the navigation of an ourEntity.
      *
      * @param entity the ourEntity.
      * @param world  the world it is in.
      */
-    public AdvancedPathNavigate(final MobEntity entity, final World world) {
+    public AdvancedPathNavigate(final Mob entity, final Level world) {
         this(entity, world, MovementType.WALKING);
     }
 
-    public AdvancedPathNavigate(final MobEntity entity, final World world, MovementType type) {
+    public AdvancedPathNavigate(final Mob entity, final Level world, MovementType type) {
         this(entity, world, type, 1, 1);
     }
 
-    public AdvancedPathNavigate(final MobEntity entity, final World world, MovementType type, float width, float height) {
+    public AdvancedPathNavigate(final Mob entity, final Level world, MovementType type, float width, float height) {
         this(entity, world, type, width, height, PathingStuckHandler.createStuckHandler().withTeleportSteps(6).withTeleportOnFullStuck());
     }
 
-    public AdvancedPathNavigate(final MobEntity entity, final World world, MovementType type, float width, float height, PathingStuckHandler stuckHandler) {
+    public AdvancedPathNavigate(final Mob entity, final Level world, MovementType type, float width, float height, PathingStuckHandler stuckHandler) {
         super(entity, world);
         switch (type) {
             case FLYING:
@@ -298,16 +299,16 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             if (this.canUpdatePath()) {
                 this.followThePath();
             } else if (this.path != null && !this.path.isDone()) {
-                Vector3d vector3d = this.getTempMobPos();
-                Vector3d vector3d1 = this.path.getNextEntityPos(this.mob);
-                if (vector3d.y > vector3d1.y && !this.mob.isOnGround() && MathHelper.floor(vector3d.x) == MathHelper.floor(vector3d1.x) && MathHelper.floor(vector3d.z) == MathHelper.floor(vector3d1.z)) {
+                Vec3 vector3d = this.getTempMobPos();
+                Vec3 vector3d1 = this.path.getNextEntityPos(this.mob);
+                if (vector3d.y > vector3d1.y && !this.mob.isOnGround() && Mth.floor(vector3d.x) == Mth.floor(vector3d1.x) && Mth.floor(vector3d.z) == Mth.floor(vector3d1.z)) {
                     this.path.advance();
                 }
             }
 
-            DebugPacketSender.sendPathFindingPacket(this.level, this.mob, this.path, this.maxDistanceToWaypoint);
+            DebugPackets.sendPathFindingPacket(this.level, this.mob, this.path, this.maxDistanceToWaypoint);
             if (!this.isDone()) {
-                Vector3d vector3d2 = this.path.getNextEntityPos(this.mob);
+                Vec3 vector3d2 = this.path.getNextEntityPos(this.mob);
                 BlockPos blockpos = new BlockPos(vector3d2);
                 if (isEntityBlockLoaded(this.level, blockpos)) {
                     this.mob.getMoveControl()
@@ -328,8 +329,8 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         }
         // TODO: should probably get updated
         // Make sure the entity isn't sleeping, tamed or chained when checking if it's stuck
-        if (this.mob instanceof TameableEntity) {
-            if (((TameableEntity) this.mob).isTame())
+        if (this.mob instanceof TamableAnimal) {
+            if (((TamableAnimal) this.mob).isTame())
                 return;
             if (this.mob instanceof EntityDragonBase) {
                 if (((EntityDragonBase) this.mob).isChained())
@@ -346,11 +347,12 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     /**
      * Similar to WalkNodeProcessor.getGroundY but not broken.
      * This checks if the block below the position we're trying to move to reaches into the block above, if so, it has to aim a little bit higher.
+     *
      * @param world the world.
-     * @param pos the position to check.
+     * @param pos   the position to check.
      * @return the next y level to go to.
      */
-    public static double getSmartGroundY(final IBlockReader world, final BlockPos pos) {
+    public static double getSmartGroundY(final BlockGetter world, final BlockPos pos) {
         final BlockPos blockpos = pos.below();
         final VoxelShape voxelshape = world.getBlockState(blockpos).getBlockSupportShape(world, blockpos);
         if (voxelshape.isEmpty() || voxelshape.max(Direction.Axis.Y) < 1.0) {
@@ -361,9 +363,9 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
 
     @Nullable
     public PathResult moveToXYZ(final double x, final double y, final double z, final double speedFactor) {
-        final int newX = MathHelper.floor(x);
+        final int newX = Mth.floor(x);
         final int newY = (int) y;
-        final int newZ = MathHelper.floor(z);
+        final int newZ = Mth.floor(z);
 
         if (pathResult != null && pathResult.getJob() instanceof PathJobMoveToLocation &&
             (
@@ -398,7 +400,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     //has a passenger this method get's called and returning null is not a great idea
     @Override
     protected PathFinder createPathFinder(final int p_179679_1_) {
-        return new PathFinder(new WalkNodeProcessor(), p_179679_1_);
+        return new PathFinder(new WalkNodeEvaluator(), p_179679_1_);
     }
 
     @Override
@@ -409,7 +411,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             if (pEx.isRailsExit()) {
                 final Entity entity = ourEntity.getVehicle();
                 ourEntity.stopRiding();
-                entity.remove();
+                entity.remove(Entity.RemovalReason.DISCARDED);
             } else if (!pEx.isOnRails()) {
                 if (destination == null || mob.distanceToSqr(destination.getX(), destination.getY(), destination.getZ()) > 2) {
                     ourEntity.stopRiding();
@@ -418,7 +420,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             } else if ((Math.abs(pEx.x - mob.getX()) > 7 || Math.abs(pEx.z - mob.getZ()) > 7) && ourEntity.getVehicle() != null) {
                 final Entity entity = ourEntity.getVehicle();
                 ourEntity.stopRiding();
-                entity.remove();
+                entity.remove(Entity.RemovalReason.DISCARDED);
             }
         }
         return true;
@@ -426,7 +428,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
 
 
     @Override
-    protected Vector3d getTempMobPos() {
+    protected Vec3 getTempMobPos() {
         return this.ourEntity.position();
     }
 
@@ -436,7 +438,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     }
 
     @Override
-    protected boolean canMoveDirectly(final Vector3d start, final Vector3d end, final int sizeX, final int sizeY, final int sizeZ) {
+    protected boolean canMoveDirectly(final Vec3 start, final Vec3 end, final int sizeX, final int sizeY, final int sizeZ) {
         // TODO improve road walking. This is better in some situations, but still not great.
         return super.canMoveDirectly(start, end, sizeX, sizeY, sizeZ);
     }
@@ -508,7 +510,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             final PathPointExtended[] newPoints = new PathPointExtended[pathLength];
 
             for (int i = 0; i < pathLength; ++i) {
-                final PathPoint point = path.getNode(i);
+                final Node point = path.getNode(i);
                 if (!(point instanceof PathPointExtended)) {
                     newPoints[i] = new PathPointExtended(new BlockPos(point.x, point.y, point.z));
                 } else {
@@ -566,7 +568,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
      */
     private BlockPos findBlockUnderEntity(final Entity parEntity) {
         int blockX = (int) Math.round(parEntity.getX());
-        int blockY = MathHelper.floor(parEntity.getY() - 0.2D);
+        int blockY = Mth.floor(parEntity.getY() - 0.2D);
         int blockZ = (int) Math.round(parEntity.getZ());
         return new BlockPos(blockX, blockY, blockZ);
     }
@@ -612,7 +614,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     }
 
     private boolean handlePathPointOnLadder(final PathPointExtended pEx) {
-        Vector3d vec3 = this.getPath().getNextEntityPos(this.ourEntity);
+        Vec3 vec3 = this.getPath().getNextEntityPos(this.ourEntity);
         final BlockPos entityPos = new BlockPos(this.ourEntity.blockPosition());
         if (vec3.distanceToSqr(ourEntity.getX(), vec3.y, ourEntity.getZ()) < 0.6 && Math.abs(vec3.y - entityPos.getY()) <= 2.0) {
             //This way he is less nervous and gets up the ladder
@@ -675,9 +677,9 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
 
         this.getPath().setNextNodeIndex(oldIndex);
 
-        Vector3d vec3d = this.getPath().getNextEntityPos(this.ourEntity);
+        Vec3 vec3d = this.getPath().getNextEntityPos(this.ourEntity);
 
-        if (vec3d.distanceToSqr(new Vector3d(ourEntity.getX(), vec3d.y, ourEntity.getZ())) < 0.1
+        if (vec3d.distanceToSqr(new Vec3(ourEntity.getX(), vec3d.y, ourEntity.getZ())) < 0.1
             && Math.abs(ourEntity.getY() - vec3d.y) < 0.5) {
             this.getPath().advance();
             if (this.isDone()) {
@@ -708,7 +710,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             //  the ourEntity reaches the bottom, otherwise they will try to head out early
             if (pEx.isOnLadder() && pEx.getLadderFacing() == Direction.DOWN
                 && !pExNext.isOnLadder()) {
-                final Vector3d vec3 = getTempMobPos();
+                final Vec3 vec3 = getTempMobPos();
                 if ((vec3.y - (double) pEx.y) < MIN_Y_DISTANCE) {
                     this.path.setNextNodeIndex(curNodeNext);
                 }
@@ -723,7 +725,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         final HashSet<BlockPos> reached = new HashSet<>();
         // Look at multiple points, incase we're too fast
         for (int i = this.path.getNextNodeIndex(); i < Math.min(this.path.getNodeCount(), this.path.getNextNodeIndex() + 4); i++) {
-            Vector3d next = this.path.getEntityPosAtNode(this.mob, i);
+            Vec3 next = this.path.getEntityPosAtNode(this.mob, i);
             if (Math.abs(this.mob.getX() - next.x) < (double) this.maxDistanceToWaypoint - Math.abs(this.mob.getY() - (next.y)) * 0.1
                 && Math.abs(this.mob.getZ() - next.z) < (double) this.maxDistanceToWaypoint - Math.abs(this.mob.getY() - (next.y)) * 0.1 &&
                 Math.abs(this.mob.getY() - next.y) <= Math.min(1.0F, Math.ceil(this.mob.getBbHeight() / 2.0F))) {
@@ -731,7 +733,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
                 wentAhead = true;
 
                 if (isTracking) {
-                    final PathPoint point = path.getNode(i);
+                    final Node point = path.getNode(i);
                     reached.add(new BlockPos(point.x, point.y, point.z));
                 }
             }
@@ -757,13 +759,13 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         }
 
         // Check some past nodes case we fell behind.
-        final Vector3d curr = this.path.getEntityPosAtNode(this.mob, curNode - 1);
-        final Vector3d next = this.path.getEntityPosAtNode(this.mob, curNode);
+        final Vec3 curr = this.path.getEntityPosAtNode(this.mob, curNode - 1);
+        final Vec3 next = this.path.getEntityPosAtNode(this.mob, curNode);
 
         if (mob.blockPosition().closerThan(curr, 2.0) && mob.blockPosition().closerThan(next, 2.0)) {
             int currentIndex = curNode - 1;
             while (currentIndex > 0) {
-                final Vector3d tempoPos = this.path.getEntityPosAtNode(this.mob, currentIndex);
+                final Vec3 tempoPos = this.path.getEntityPosAtNode(this.mob, currentIndex);
                 if (mob.blockPosition().closerThan(tempoPos, 1.0)) {
                     this.path.setNextNodeIndex(currentIndex);
                 } else if (isTracking) {
@@ -783,22 +785,22 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     /**
      * Called upon reaching the path end, reset values
      */
-    private void onPathFinish()
-    {
+    private void onPathFinish() {
         stop();
     }
 
-    public void recomputePath() {}
+    public void recomputePath() {
+    }
 
     /**
      * Don't let vanilla rapidly discard paths, set a timeout before its allowed to use stuck.
      */
     @Override
-    protected void doStuckDetection(final Vector3d positionVec3) {
+    protected void doStuckDetection(final Vec3 positionVec3) {
         // Do nothing, unstuck is checked on tick, not just when we have a path
     }
 
-    public boolean entityOnAndBelowPath(Entity entity, Vector3d slack) {
+    public boolean entityOnAndBelowPath(Entity entity, Vec3 slack) {
         Path path = getPath();
         if (path == null) {
             return false;
@@ -808,13 +810,13 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         //Search through path from the current index outwards to improve performance
         for (int i = 0; i < path.getNodeCount() - 1; i++) {
             if (closest + i < path.getNodeCount()) {
-                PathPoint currentPoint = path.getNode(closest + i);
+                Node currentPoint = path.getNode(closest + i);
                 if (entityNearAndBelowPoint(currentPoint, entity, slack)) {
                     return true;
                 }
             }
             if (closest - i >= 0) {
-                PathPoint currentPoint = path.getNode(closest - i);
+                Node currentPoint = path.getNode(closest - i);
                 if (entityNearAndBelowPoint(currentPoint, entity, slack)) {
                     return true;
                 }
@@ -823,7 +825,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         return false;
     }
 
-    private boolean entityNearAndBelowPoint(PathPoint currentPoint, Entity entity, Vector3d slack) {
+    private boolean entityNearAndBelowPoint(Node currentPoint, Entity entity, Vec3 slack) {
         return Math.abs(currentPoint.x - entity.getX()) < slack.x()
             && currentPoint.y - entity.getY() + slack.y() > 0
             && Math.abs(currentPoint.z - entity.getZ()) < slack.z();
@@ -875,43 +877,17 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     }
 
     @Override
-    public void setSwimSpeedFactor(final double factor)
-    {
+    public void setSwimSpeedFactor(final double factor) {
         this.swimSpeedFactor = factor;
     }
 
-    public static boolean isEqual(final BlockPos coords, final int x, final int y, final int z)
-    {
+    public static boolean isEqual(final BlockPos coords, final int x, final int y, final int z) {
         return coords.getX() == x && coords.getY() == y && coords.getZ() == z;
     }
 
-    public static boolean isEntityBlockLoaded(final IWorld world, final BlockPos pos)
-    {
-        return isEntityChunkLoaded(world, pos.getX() >> 4, pos.getZ() >> 4);
+    public static boolean isEntityBlockLoaded(final LevelAccessor world, final BlockPos pos) {
+        return WorldUtil.isEntityBlockLoaded(world, pos);
     }
 
-    /**
-     * Returns whether an entity ticking chunk is loaded at the position
-     *
-     * @param world world to check on
-     * @param x     chunk position
-     * @param z     chunk position
-     * @return true if loaded
-     */
-    public static boolean isEntityChunkLoaded(final IWorld world, final int x, final int z)
-    {
-        return isEntityChunkLoaded(world, new ChunkPos(x, z));
-    }
 
-    /**
-     * Returns whether an entity ticking chunk is loaded at the position
-     *
-     * @param world world to check on
-     * @param pos   chunk position
-     * @return true if loaded
-     */
-    public static boolean isEntityChunkLoaded(final IWorld world, final ChunkPos pos)
-    {
-        return world.getChunkSource().isEntityTickingChunk(pos);
-    }
 }

@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.pathfinding.Path;
+import net.minecraft.world.level.pathfinder.Path;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.Callable;

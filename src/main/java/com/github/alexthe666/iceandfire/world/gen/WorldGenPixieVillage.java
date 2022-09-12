@@ -7,36 +7,39 @@ import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import java.util.Random;
 
-public class WorldGenPixieVillage extends Feature<NoFeatureConfig> {
+public class WorldGenPixieVillage extends Feature<NoneFeatureConfiguration> {
 
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
-    public WorldGenPixieVillage(Codec<NoFeatureConfig> configFactoryIn) {
+    public WorldGenPixieVillage(Codec<NoneFeatureConfiguration> configFactoryIn) {
         super(configFactoryIn);
     }
 
     @Override
-    public boolean place(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        WorldGenLevel worldIn = context.level();
+        Random rand = context.random();
+        BlockPos position = context.origin();
         if (!IafWorldRegistry.isDimensionListedForFeatures(worldIn)) {
             return false;
         }
         if (!IafConfig.spawnPixies || rand.nextInt(IafConfig.spawnPixiesChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)) {
             return false;
         }
-        position = worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, position);
+        position = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position);
         int maxRoads = IafConfig.pixieVillageSize + rand.nextInt(5);
         BlockPos buildPosition = position;
         int placedRoads = 0;
@@ -45,9 +48,9 @@ public class WorldGenPixieVillage extends Feature<NoFeatureConfig> {
             Direction buildingDirection = Direction.from2DDataValue(rand.nextInt(3));
             for(int i = 0; i < roadLength; i++) {
                 BlockPos buildPosition2 = buildPosition.relative(buildingDirection, i);
-                buildPosition2 = worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, buildPosition2).below();
+                buildPosition2 = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, buildPosition2).below();
                 if (worldIn.getBlockState(buildPosition2).getFluidState().isEmpty()) {
-                    worldIn.setBlock(buildPosition2, Blocks.GRASS_PATH.defaultBlockState(), 2);
+                    worldIn.setBlock(buildPosition2, Blocks.DIRT_PATH.defaultBlockState(), 2);
                 } else {
                     worldIn.setBlock(buildPosition2, Blocks.SPRUCE_PLANKS.defaultBlockState(), 2);
                 }
@@ -76,7 +79,7 @@ public class WorldGenPixieVillage extends Feature<NoFeatureConfig> {
                             break;
                     }
                     EntityPixie pixie = IafEntityRegistry.PIXIE.get().create(worldIn.getLevel());
-                    pixie.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(buildPosition2.above()), SpawnReason.SPAWNER, null, null);
+                    pixie.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(buildPosition2.above()), MobSpawnType.SPAWNER, null, null);
                     pixie.setPos(buildPosition2.getX(), buildPosition2.getY() + 2, buildPosition2.getZ());
                     pixie.setPersistenceRequired();
                     worldIn.addFreshEntity(pixie);

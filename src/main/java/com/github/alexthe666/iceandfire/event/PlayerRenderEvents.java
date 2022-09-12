@@ -1,14 +1,14 @@
 package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -59,12 +59,12 @@ public class PlayerRenderEvents {
         if (event.getEntityLiving().getUUID().equals(ServerEvents.ALEX_UUID)) {
             event.getMatrixStack().pushPose();
             float f2 = ((float) event.getEntityLiving().tickCount - 1 + event.getPartialRenderTick());
-            float f3 = MathHelper.sin(f2 / 10.0F) * 0.1F + 0.1F;
+            float f3 = Mth.sin(f2 / 10.0F) * 0.1F + 0.1F;
             event.getMatrixStack().translate((float) 0, event.getEntityLiving().getBbHeight() * 1.25F, (float) 0);
             float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
             event.getMatrixStack().mulPose(new Quaternion(Vector3f.YP, f4, true));
             event.getMatrixStack().pushPose();
-            Minecraft.getInstance().getItemRenderer().renderStatic(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM), ItemCameraTransforms.TransformType.GROUND, false, event.getMatrixStack(), event.getBuffers(), event.getEntityLiving().level, event.getLight(), OverlayTexture.NO_OVERLAY);
+            Minecraft.getInstance().getItemRenderer().renderStatic(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM), ItemTransforms.TransformType.GROUND, false, event.getMatrixStack(), event.getBuffers(), event.getEntityLiving().level, event.getLight(), OverlayTexture.NO_OVERLAY, 0);
             event.getMatrixStack().popPose();
             event.getMatrixStack().popPose();
 

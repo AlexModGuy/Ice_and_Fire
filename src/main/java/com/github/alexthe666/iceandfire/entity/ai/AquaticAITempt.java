@@ -1,17 +1,17 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.google.common.collect.Sets;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
 import java.util.Set;
 
 public class AquaticAITempt extends Goal {
-    private final MobEntity temptedEntity;
+    private final Mob temptedEntity;
     private final double speed;
     private final Set<Item> temptItem;
     private final boolean scaredByPlayerMovement;
@@ -20,15 +20,15 @@ public class AquaticAITempt extends Goal {
     private double targetZ;
     private double pitch;
     private double yaw;
-    private PlayerEntity temptingPlayer;
+    private Player temptingPlayer;
     private int delayTemptCounter;
     private boolean isRunning;
 
-    public AquaticAITempt(MobEntity temptedEntityIn, double speedIn, Item temptItemIn, boolean scaredByPlayerMovementIn) {
+    public AquaticAITempt(Mob temptedEntityIn, double speedIn, Item temptItemIn, boolean scaredByPlayerMovementIn) {
         this(temptedEntityIn, speedIn, scaredByPlayerMovementIn, Sets.newHashSet(temptItemIn));
     }
 
-    public AquaticAITempt(MobEntity temptedEntityIn, double speedIn, boolean scaredByPlayerMovementIn, Set<Item> temptItemIn) {
+    public AquaticAITempt(Mob temptedEntityIn, double speedIn, boolean scaredByPlayerMovementIn, Set<Item> temptItemIn) {
         this.temptedEntity = temptedEntityIn;
         this.speed = speedIn;
         this.temptItem = temptItemIn;
@@ -70,8 +70,8 @@ public class AquaticAITempt extends Goal {
                     return false;
                 }
 
-                if (Math.abs(this.temptingPlayer.xRot - this.pitch) > 5.0D
-                    || Math.abs(this.temptingPlayer.yRot - this.yaw) > 5.0D) {
+                if (Math.abs(this.temptingPlayer.getXRot() - this.pitch) > 5.0D
+                    || Math.abs(this.temptingPlayer.getYRot() - this.yaw) > 5.0D) {
                     return false;
                 }
             } else {
@@ -80,8 +80,8 @@ public class AquaticAITempt extends Goal {
                 this.targetZ = this.temptingPlayer.getZ();
             }
 
-            this.pitch = this.temptingPlayer.xRot;
-            this.yaw = this.temptingPlayer.yRot;
+            this.pitch = this.temptingPlayer.getXRot();
+            this.yaw = this.temptingPlayer.getYRot();
         }
 
         return this.canUse();

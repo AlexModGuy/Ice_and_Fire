@@ -1,15 +1,14 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.goal.JumpGoal;
-import net.minecraft.fluid.FluidState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.ai.goal.JumpGoal;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.Vec3;
 
 public class SeaSerpentAIJump extends JumpGoal {
 
@@ -61,8 +60,8 @@ public class SeaSerpentAIJump extends JumpGoal {
     @Override
     public boolean canContinueToUse() {
         double d0 = this.serpent.getDeltaMovement().y;
-        return serpent.jumpCooldown > 0 && (d0 * d0 >= 0.03F || this.serpent.xRot == 0.0F
-            || Math.abs(this.serpent.xRot) >= 10.0F || !this.serpent.isInWater())
+        return serpent.jumpCooldown > 0 && (d0 * d0 >= 0.03F || this.serpent.getXRot() == 0.0F
+            || Math.abs(this.serpent.getXRot()) >= 10.0F || !this.serpent.isInWater())
             && !this.serpent.isOnGround();
     }
 
@@ -92,7 +91,7 @@ public class SeaSerpentAIJump extends JumpGoal {
     @Override
     public void stop() {
         this.serpent.setJumpingOutOfWater(false);
-        this.serpent.xRot = 0.0F;
+        this.serpent.setXRot(0.0F);
     }
 
     /**
@@ -110,13 +109,13 @@ public class SeaSerpentAIJump extends JumpGoal {
             this.serpent.playSound(SoundEvents.DOLPHIN_JUMP, 1.0F, 1.0F);
         }
 
-        Vector3d vector3d = this.serpent.getDeltaMovement();
-        if (vector3d.y * vector3d.y < 0.1F && this.serpent.xRot != 0.0F) {
-            this.serpent.xRot = MathHelper.rotlerp(this.serpent.xRot, 0.0F, 0.2F);
+        Vec3 vector3d = this.serpent.getDeltaMovement();
+        if (vector3d.y * vector3d.y < 0.1F && this.serpent.getXRot() != 0.0F) {
+            this.serpent.setXRot(Mth.rotLerp(this.serpent.getXRot(), 0.0F, 0.2F));
         } else {
-            final double d0 = Math.sqrt(Entity.getHorizontalDistanceSqr(vector3d));
+            final double d0 = vector3d.horizontalDistance();
             final double d1 = Math.signum(-vector3d.y) * Math.acos(d0 / vector3d.length()) * (180F / (float) Math.PI);
-            this.serpent.xRot = (float) d1;
+            this.serpent.setXRot((float) d1);
         }
 
     }

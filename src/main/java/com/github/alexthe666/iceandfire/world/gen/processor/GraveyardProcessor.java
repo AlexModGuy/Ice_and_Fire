@@ -2,14 +2,14 @@ package com.github.alexthe666.iceandfire.world.gen.processor;
 
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.gen.feature.template.IStructureProcessorType;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
-import net.minecraft.world.gen.feature.template.StructureProcessor;
-import net.minecraft.world.gen.feature.template.Template;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -45,22 +45,22 @@ public class GraveyardProcessor extends StructureProcessor {
         }
     }
 
-    public Template.BlockInfo process(IWorldReader worldReader, BlockPos pos, BlockPos pos2, Template.BlockInfo infoIn1, Template.BlockInfo infoIn2, PlacementSettings settings,@Nullable Template template) {
+    public StructureTemplate.StructureBlockInfo process(LevelReader worldReader, BlockPos pos, BlockPos pos2, StructureTemplate.StructureBlockInfo infoIn1, StructureTemplate.StructureBlockInfo infoIn2, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
         Random random = settings.getRandom(infoIn2.pos);
         if (infoIn2.state.getBlock() == Blocks.STONE_BRICKS) {
             BlockState state = getRandomCrackedBlock(null, random);
-            return new Template.BlockInfo(infoIn2.pos, state, null);
+            return new StructureTemplate.StructureBlockInfo(infoIn2.pos, state, null);
         }
         if (infoIn2.state.getBlock() == Blocks.COBBLESTONE) {
             BlockState state = getRandomCobblestone(null, random);
-            return new Template.BlockInfo(infoIn2.pos, state, null);
+            return new StructureTemplate.StructureBlockInfo(infoIn2.pos, state, null);
         }
         return infoIn2;
     }
 
 
     @Override
-    protected IStructureProcessorType getType() {
+    protected StructureProcessorType getType() {
         return IafProcessors.GRAVEYARDPROCESSOR;
     }
 

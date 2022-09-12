@@ -6,25 +6,25 @@ import com.github.alexthe666.iceandfire.block.BlockSeaSerpentScales;
 import com.github.alexthe666.iceandfire.item.IafArmorMaterial;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentScales;
-import net.minecraft.block.Block;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 
 import java.util.Locale;
 
 public enum EnumSeaSerpent {
-    BLUE(TextFormatting.BLUE),
-    BRONZE(TextFormatting.GOLD),
-    DEEPBLUE(TextFormatting.DARK_BLUE),
-    GREEN(TextFormatting.DARK_GREEN),
-    PURPLE(TextFormatting.DARK_PURPLE),
-    RED(TextFormatting.DARK_RED),
-    TEAL(TextFormatting.AQUA);
+    BLUE(ChatFormatting.BLUE),
+    BRONZE(ChatFormatting.GOLD),
+    DEEPBLUE(ChatFormatting.DARK_BLUE),
+    GREEN(ChatFormatting.DARK_GREEN),
+    PURPLE(ChatFormatting.DARK_PURPLE),
+    RED(ChatFormatting.DARK_RED),
+    TEAL(ChatFormatting.AQUA);
 
     public String resourceName;
-    public TextFormatting color;
+    public ChatFormatting color;
     public CustomArmorMaterial armorMaterial;
     public Item scale;
     public Item helmet;
@@ -33,7 +33,7 @@ public enum EnumSeaSerpent {
     public Item boots;
     public Block scaleBlock;
 
-    EnumSeaSerpent(TextFormatting color) {
+    EnumSeaSerpent(ChatFormatting color) {
         this.resourceName = this.name().toLowerCase(Locale.ROOT);
         this.color = color;
         this.scaleBlock = new BlockSeaSerpentScales(this.resourceName, this.color);
@@ -44,10 +44,10 @@ public enum EnumSeaSerpent {
         for (EnumSeaSerpent color : EnumSeaSerpent.values()) {
             color.armorMaterial = new IafArmorMaterial("iceandfire:sea_serpent_scales_" + color.resourceName, 30, new int[]{4, 8, 7, 4}, 25, SoundEvents.ARMOR_EQUIP_GOLD, 2.5F);
             color.scale = new ItemSeaSerpentScales(color.resourceName, color.color);
-            color.helmet = new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlotType.HEAD);
-            color.chestplate = new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlotType.CHEST);
-            color.leggings = new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlotType.LEGS);
-            color.boots = new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlotType.FEET);
+            color.helmet = new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlot.HEAD);
+            color.chestplate = new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlot.CHEST);
+            color.leggings = new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlot.LEGS);
+            color.boots = new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlot.FEET);
             color.helmet.setRegistryName(IceAndFire.MODID, "tide_" + color.resourceName + "_helmet");
             color.chestplate.setRegistryName(IceAndFire.MODID, "tide_" + color.resourceName + "_chestplate");
             color.leggings.setRegistryName(IceAndFire.MODID, "tide_" + color.resourceName + "_leggings");

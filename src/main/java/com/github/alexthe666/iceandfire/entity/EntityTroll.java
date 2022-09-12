@@ -13,42 +13,46 @@ import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.BlockParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.*;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVillagerFear, IHumanoid, IHasCustomizableAttributes {
+public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFear, IHumanoid, IHasCustomizableAttributes {
 
     public static final Animation ANIMATION_STRIKE_HORIZONTAL = Animation.create(20);
     public static final Animation ANIMATION_STRIKE_VERTICAL = Animation.create(20);
@@ -57,25 +61,25 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
     public static final ResourceLocation FOREST_LOOT = new ResourceLocation("iceandfire", "entities/troll_forest");
     public static final ResourceLocation FROST_LOOT = new ResourceLocation("iceandfire", "entities/troll_frost");
     public static final ResourceLocation MOUNTAIN_LOOT = new ResourceLocation("iceandfire", "entities/troll_mountain");
-    private static final DataParameter<Integer> VARIANT = EntityDataManager.defineId(EntityTroll.class, DataSerializers.INT);
-    private static final DataParameter<Integer> WEAPON = EntityDataManager.defineId(EntityTroll.class, DataSerializers.INT);
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(EntityTroll.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> WEAPON = SynchedEntityData.defineId(EntityTroll.class, EntityDataSerializers.INT);
     public float stoneProgress;
     private int animationTick;
     private Animation currentAnimation;
     private boolean avoidSun = true;
 
-    public EntityTroll(EntityType<EntityTroll> t, World worldIn) {
+    public EntityTroll(EntityType<EntityTroll> t, Level worldIn) {
         super(t, worldIn);
         IHasCustomizableAttributes.applyAttributesForEntity(t, this);
     }
 
-    public static boolean canTrollSpawnOn(EntityType<? extends MobEntity> typeIn, IServerWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
+    public static boolean canTrollSpawnOn(EntityType<? extends Mob> typeIn, ServerLevelAccessor worldIn, MobSpawnType reason, BlockPos pos, Random randomIn) {
         return worldIn.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(worldIn, pos, randomIn)
             && checkMobSpawnRules(IafEntityRegistry.TROLL.get(), worldIn, reason, pos, randomIn);
     }
 
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.createMobAttributes()
+    public static AttributeSupplier.Builder bakeAttributes() {
+        return Mob.createMobAttributes()
             //HEALTH
             .add(Attributes.MAX_HEALTH, IafConfig.trollMaxHealth)
             //SPEED
@@ -89,35 +93,35 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     @Override
-    public AttributeModifierMap.MutableAttribute getConfigurableAttributes() {
+    public AttributeSupplier.Builder getConfigurableAttributes() {
         return bakeAttributes();
     }
 
     private void setAvoidSun(boolean day) {
         if (day && !avoidSun) {
-            ((GroundPathNavigator) this.getNavigation()).setAvoidSun(true);
+            ((GroundPathNavigation) this.getNavigation()).setAvoidSun(true);
             avoidSun = true;
         }
         if (!day && avoidSun) {
-            ((GroundPathNavigator) this.getNavigation()).setAvoidSun(false);
+            ((GroundPathNavigation) this.getNavigation()).setAvoidSun(false);
             avoidSun = false;
         }
     }
 
     @Override
-    public boolean checkSpawnObstruction(IWorldReader worldIn) {
+    public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
 
     @Override
-    public boolean checkSpawnRules(IWorld worldIn, SpawnReason spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         BlockPos pos = this.blockPosition();
-        BlockPos heightAt = worldIn.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, pos);
+        BlockPos heightAt = worldIn.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos);
         boolean rngCheck = true;
         if (IafConfig.trollSpawnCheckChance > 0) {
             rngCheck = this.getRandom().nextInt(IafConfig.trollSpawnCheckChance) == 0;
         }
-        if (worldIn instanceof IServerWorld && !IafWorldRegistry.isDimensionListedForMobs((IServerWorld) level)) {
+        if (worldIn instanceof ServerLevelAccessor && !IafWorldRegistry.isDimensionListedForMobs((ServerLevelAccessor) level)) {
             return false;
         }
         return rngCheck && pos.getY() < heightAt.getY() - 10 && super.checkSpawnRules(worldIn, spawnReasonIn);
@@ -125,15 +129,15 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new SwimGoal(this));
+        this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new TrollAIFleeSun(this, 1.0D));
         this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(4, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 8.0F, 1.0F));
-        this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8.0F, 1.0F));
+        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, AbstractVillagerEntity.class, false));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, PlayerEntity.class, false));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, AbstractVillager.class, false));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, Player.class, false));
         setAvoidSun(true);
     }
 
@@ -188,7 +192,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Variant", this.getVariant());
         compound.putInt("Weapon", this.getWeapon());
@@ -196,7 +200,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setVariant(compound.getInt("Variant"));
         this.setWeapon(compound.getInt("Weapon"));
@@ -205,7 +209,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
 
     @Override
     @Nullable
-    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setTrollType(EnumTroll.getBiomeType(level.getBiome(this.blockPosition())));
         this.setWeaponType(EnumTroll.getWeaponForType(this.getTrollType()));
@@ -235,7 +239,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     @Override
-    protected int getExperienceReward(PlayerEntity player) {
+    protected int getExperienceReward(Player player) {
         return 15;
     }
 
@@ -302,7 +306,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
     @Override
     public void aiStep() {
         super.aiStep();
-        if (level.getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof PlayerEntity) {
+        if (level.getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
             this.setTarget(null);
         }
         boolean stone = EntityGorgon.isStoneMob(this);
@@ -318,12 +322,12 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
             this.playSound(IafSoundRegistry.TROLL_ROAR, 1, 1);
         }
         if (!stone && this.getHealth() < this.getMaxHealth() && this.tickCount % 30 == 0) {
-            this.addEffect(new EffectInstance(Effects.REGENERATION, 30, 1, false, false));
+            this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 30, 1, false, false));
         }
         setAvoidSun(this.level.isDay());
         if (this.level.isDay() && !this.level.isClientSide) {
             float f = this.getBrightness();
-            BlockPos blockpos = this.getVehicle() instanceof BoatEntity ? (new BlockPos(this.getX(), Math.round(this.getY()), this.getZ())).above() : new BlockPos(this.getX(), Math.round(this.getY()), this.getZ());
+            BlockPos blockpos = this.getVehicle() instanceof Boat ? (new BlockPos(this.getX(), Math.round(this.getY()), this.getZ())).above() : new BlockPos(this.getX(), Math.round(this.getY()), this.getZ());
             if (f > 0.5F && this.level.canSeeSky(blockpos)) {
                 this.setDeltaMovement(0, 0, 0);
                 this.setAnimation(NO_ANIMATION);
@@ -331,21 +335,21 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
                 this.stoneProgress = 20;
                 EntityStoneStatue statue = EntityStoneStatue.buildStatueEntity(this);
                 statue.getTrappedTag().putFloat("StoneProgress", 20);
-                statue.absMoveTo(this.getX(), this.getY(), this.getZ(), this.yRot, this.xRot);
+                statue.absMoveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), this.getXRot());
                 if (!level.isClientSide) {
                     level.addFreshEntity(statue);
                 }
-                statue.yRotO = this.yRot;
-                statue.yRot = this.yRot;
-                statue.yHeadRot = this.yRot;
-                statue.yBodyRot = this.yRot;
-                statue.yBodyRotO = this.yRot;
-                this.remove();
+                statue.yRotO = this.getYRot();
+                statue.setYRot(this.getYRot());
+                statue.yHeadRot = this.getYRot();
+                statue.yBodyRot = this.getYRot();
+                statue.yBodyRotO = this.getYRot();
+                this.remove(RemovalReason.KILLED);
             }
         }
         if (this.getAnimation() == ANIMATION_STRIKE_VERTICAL && this.getAnimationTick() == 10) {
-            float weaponX = (float) (getX() + 1.9F * MathHelper.cos((float) ((yBodyRot + 90) * Math.PI / 180)));
-            float weaponZ = (float) (getZ() + 1.9F * MathHelper.sin((float) ((yBodyRot + 90) * Math.PI / 180)));
+            float weaponX = (float) (getX() + 1.9F * Mth.cos((float) ((yBodyRot + 90) * Math.PI / 180)));
+            float weaponZ = (float) (getZ() + 1.9F * Mth.sin((float) ((yBodyRot + 90) * Math.PI / 180)));
             float weaponY = (float) (getY() + (0.2F));
             BlockState state = level.getBlockState(new BlockPos(weaponX, weaponY - 1, weaponZ));
             for (int i = 0; i < 20; i++) {
@@ -353,7 +357,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
                 double motionY = getRandom().nextGaussian() * 0.07D;
                 double motionZ = getRandom().nextGaussian() * 0.07D;
                 if (state.getMaterial().isSolid() && level.isClientSide) {
-                    this.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, state), weaponX + (this.getRandom().nextFloat() - 0.5F), weaponY + (this.getRandom().nextFloat() - 0.5F), weaponZ + (this.getRandom().nextFloat() - 0.5F), motionX, motionY, motionZ);
+                    this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, state), weaponX + (this.getRandom().nextFloat() - 0.5F), weaponY + (this.getRandom().nextFloat() - 0.5F), weaponZ + (this.getRandom().nextFloat() - 0.5F), motionX, motionY, motionZ);
                 }
             }
         }
@@ -365,7 +369,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
             float f1 = 0.5F;
             float f2 = this.getTarget().zza;
             float f3 = 0.6F;
-            float f4 = MathHelper.sqrt(f2 * f2 + f3 * f3);
+            float f4 = Mth.sqrt(f2 * f2 + f3 * f3);
 
             if (f4 < 1.0F) {
                 f4 = 1.0F;
@@ -374,8 +378,8 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
             f4 = f1 / f4;
             f2 = f2 * f4;
             f3 = f3 * f4;
-            float f5 = MathHelper.sin(this.yRot * 0.017453292F);
-            float f6 = MathHelper.cos(this.yRot * 0.017453292F);
+            float f5 = Mth.sin(this.getYRot() * 0.017453292F);
+            float f6 = Mth.cos(this.getYRot() * 0.017453292F);
             float f7 = f2 * f6 - f3 * f5;
             float f8 = f3 * f6 + f2 * f5;
             this.getTarget().setDeltaMovement(f5, f6, 0.4F);
@@ -386,8 +390,8 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
                 this.setAnimation(ANIMATION_STRIKE_VERTICAL);
             }
             if (this.getAnimation() == ANIMATION_STRIKE_VERTICAL && this.getAnimationTick() == 10) {
-                float weaponX = (float) (getX() + 1.9F * MathHelper.cos((float) ((yBodyRot + 90) * Math.PI / 180)));
-                float weaponZ = (float) (getZ() + 1.9F * MathHelper.sin((float) ((yBodyRot + 90) * Math.PI / 180)));
+                float weaponX = (float) (getX() + 1.9F * Mth.cos((float) ((yBodyRot + 90) * Math.PI / 180)));
+                float weaponZ = (float) (getZ() + 1.9F * Mth.sin((float) ((yBodyRot + 90) * Math.PI / 180)));
                 float weaponY = (float) (getY() + (this.getEyeHeight() / 2));
                 BlockBreakExplosion explosion = new BlockBreakExplosion(level, this, weaponX, weaponY, weaponZ, 1F + this.getRandom().nextFloat());
                 if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, weaponX, weaponY, weaponZ))) {

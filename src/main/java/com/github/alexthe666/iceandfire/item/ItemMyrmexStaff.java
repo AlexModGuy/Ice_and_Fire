@@ -5,16 +5,16 @@ import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.message.MessageGetMyrmexHive;
 import com.github.alexthe666.iceandfire.message.MessageSetMyrmexHiveNull;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 
 import java.util.UUID;
 
@@ -30,20 +30,20 @@ public class ItemMyrmexStaff extends Item {
     }
 
     @Override
-    public void onCraftedBy(ItemStack itemStack, World world, PlayerEntity player) {
-        itemStack.setTag(new CompoundNBT());
+    public void onCraftedBy(ItemStack itemStack, Level world, Player player) {
+        itemStack.setTag(new CompoundTag());
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, Level world, Entity entity, int itemSlot, boolean isSelected) {
         if (stack.getTag() == null) {
-            stack.setTag(new CompoundNBT());
+            stack.setTag(new CompoundTag());
             stack.getTag().putUUID("HiveUUID", new UUID(0, 0));
         }
     }
 
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
         ItemStack itemStackIn = playerIn.getItemInHand(hand);
         if (playerIn.isShiftKeyDown()) {
             return super.use(worldIn, playerIn, hand);
@@ -63,11 +63,11 @@ public class ItemMyrmexStaff extends Item {
             }
         }
         playerIn.swing(hand);
-        return new ActionResult<ItemStack>(ActionResultType.PASS, itemStackIn);
+        return new InteractionResultHolder<ItemStack>(InteractionResult.PASS, itemStackIn);
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         if (!context.getPlayer().isShiftKeyDown()) {
             return super.useOn(context);
         } else {
@@ -83,7 +83,7 @@ public class ItemMyrmexStaff extends Item {
                 IceAndFire.PROXY.openMyrmexAddRoomGui(context.getPlayer().getItemInHand(context.getHand()), context.getClickedPos(), context.getPlayer().getDirection());
             }
             context.getPlayer().swing(context.getHand());
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
     }
 }

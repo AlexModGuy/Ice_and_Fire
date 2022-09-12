@@ -6,25 +6,25 @@ import com.github.alexthe666.iceandfire.item.ItemSeaSerpentScales;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootFunction;
-import net.minecraft.loot.LootFunctionType;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.Random;
 
-public class CustomizeToSeaSerpent extends LootFunction {
+public class CustomizeToSeaSerpent extends LootItemConditionalFunction {
 
-    public CustomizeToSeaSerpent(ILootCondition[] conditionsIn) {
+    public CustomizeToSeaSerpent(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
     }
 
     public ItemStack run(ItemStack stack, LootContext context) {
-        if (!stack.isEmpty() && context.getParamOrNull(LootParameters.THIS_ENTITY) instanceof EntitySeaSerpent) {
+        if (!stack.isEmpty() && context.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof EntitySeaSerpent) {
             Random random = new Random();
-            EntitySeaSerpent seaSerpent = (EntitySeaSerpent) context.getParamOrNull(LootParameters.THIS_ENTITY);
+            EntitySeaSerpent seaSerpent = (EntitySeaSerpent) context.getParamOrNull(LootContextParams.THIS_ENTITY);
             if (seaSerpent == null) {
                 return stack;
             }
@@ -42,11 +42,11 @@ public class CustomizeToSeaSerpent extends LootFunction {
     }
 
     @Override
-    public LootFunctionType getType() {
+    public LootItemFunctionType getType() {
         return IafLootRegistry.CUSTOMIZE_TO_SERPENT;
     }
 
-    public static class Serializer extends LootFunction.Serializer<CustomizeToSeaSerpent> {
+    public static class Serializer extends LootItemConditionalFunction.Serializer<CustomizeToSeaSerpent> {
         public Serializer() {
             super();
         }
@@ -54,7 +54,7 @@ public class CustomizeToSeaSerpent extends LootFunction {
         public void serialize(JsonObject object, CustomizeToSeaSerpent functionClazz, JsonSerializationContext serializationContext) {
         }
 
-        public CustomizeToSeaSerpent deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
+        public CustomizeToSeaSerpent deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditionsIn) {
             return new CustomizeToSeaSerpent(conditionsIn);
         }
     }

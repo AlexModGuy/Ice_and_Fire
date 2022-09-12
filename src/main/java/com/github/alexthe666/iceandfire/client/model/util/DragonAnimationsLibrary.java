@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model.util;
 
 import com.github.alexthe666.citadel.client.model.TabulaModel;
-import com.github.alexthe666.citadel.client.model.TabulaModelHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
 
 import java.io.IOException;
@@ -11,7 +10,7 @@ import java.util.HashMap;
  * A library containing all animations for all dragons. Contains methods for registering and retrieving models
  */
 public class DragonAnimationsLibrary {
-    private static HashMap<String, TabulaModel> models = new HashMap<>();
+    private static final HashMap<String, TabulaModel> models = new HashMap<>();
     private static String toKey(IEnumDragonPoses p, IEnumDragonModelTypes m) {
         return p.getPose() + m.getModelType();
     }
@@ -74,7 +73,7 @@ public class DragonAnimationsLibrary {
         TabulaModel result;
         String location = "/assets/" + modID + "/models/tabula/" + modelType.getModelType() + "dragon/" + modelType.getModelType() + "dragon_" + pose.getPose() + ".tbl";
         try{
-            result = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel(location));
+            result = new TabulaModel(TabulaModelHandlerHelper.loadTabulaModel(location));
         }
         catch(IOException | NullPointerException e) {
             IceAndFire.LOGGER.warn("Could not load " + location + ": " + e.getMessage());

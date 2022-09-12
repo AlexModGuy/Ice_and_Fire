@@ -4,19 +4,27 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.*;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -49,18 +57,18 @@ public class ItemDragonHorn extends Item {
 
 
     @Override
-    public void onCraftedBy(ItemStack itemStack, World world, PlayerEntity player) {
-        itemStack.setTag(new CompoundNBT());
+    public void onCraftedBy(ItemStack itemStack, Level world, Player player) {
+        itemStack.setTag(new CompoundTag());
     }
 
 
     @Override
-    public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
+    public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity target, InteractionHand hand) {
         ItemStack trueStack = playerIn.getItemInHand(hand);
-        if (!playerIn.level.isClientSide && hand == Hand.MAIN_HAND && target instanceof EntityDragonBase && ((EntityDragonBase) target).isOwnedBy(playerIn) && (trueStack.getTag() == null || (trueStack.getTag() != null && trueStack.getTag().getCompound("EntityTag").isEmpty()))) {
-            CompoundNBT newTag = new CompoundNBT();
+        if (!playerIn.level.isClientSide && hand == InteractionHand.MAIN_HAND && target instanceof EntityDragonBase && ((EntityDragonBase) target).isOwnedBy(playerIn) && (trueStack.getTag() == null || (trueStack.getTag() != null && trueStack.getTag().getCompound("EntityTag").isEmpty()))) {
+            CompoundTag newTag = new CompoundTag();
 
-            CompoundNBT entityTag = new CompoundNBT();
+            CompoundTag entityTag = new CompoundTag();
             target.save(entityTag);
             newTag.put("EntityTag", entityTag);
 
@@ -68,22 +76,22 @@ public class ItemDragonHorn extends Item {
             trueStack.setTag(newTag);
 
             playerIn.swing(hand);
-            playerIn.level.playSound(playerIn, playerIn.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3.0F, 0.75F);
-            target.remove();
-            return ActionResultType.SUCCESS;
+            playerIn.level.playSound(playerIn, playerIn.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundSource.NEUTRAL, 3.0F, 0.75F);
+            target.remove(Entity.RemovalReason.DISCARDED);
+            return InteractionResult.SUCCESS;
         }
 
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         if (context.getClickedFace() != Direction.UP)
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         ItemStack stack = context.getItemInHand();
         if (stack.getTag() != null && !stack.getTag().getString("DragonHornEntityID").isEmpty()) {
-            World world = context.getLevel();
+            Level world = context.getLevel();
             String id = stack.getTag().getString("DragonHornEntityID");
             EntityType type = EntityType.byString(id).orElse(null);
             if (type != null) {
@@ -98,7 +106,7 @@ public class ItemDragonHorn extends Item {
 
                 entity.absMoveTo(context.getClickedPos().getX() + 0.5D, (context.getClickedPos().getY() + 1), context.getClickedPos().getZ() + 0.5D, 180 + (context.getHorizontalDirection()).toYRot(), 0.0F);
                 if (world.addFreshEntity(entity)) {
-                    CompoundNBT tag = stack.getTag();
+                    CompoundTag tag = stack.getTag();
                     tag.remove("DragonHornEntityID");
                     tag.remove("EntityTag");
                     tag.remove("EntityUUID");
@@ -106,28 +114,28 @@ public class ItemDragonHorn extends Item {
                 }
             }
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if (stack.getTag() != null) {
-            CompoundNBT entityTag = stack.getTag().getCompound("EntityTag");
+            CompoundTag entityTag = stack.getTag().getCompound("EntityTag");
             if (!entityTag.isEmpty()) {
                 String id = stack.getTag().getString("DragonHornEntityID");
                 if (EntityType.byString(id).isPresent()) {
                     EntityType type = EntityType.byString(id).get();
-                    tooltip.add((new TranslationTextComponent(type.getDescriptionId())).withStyle(getTextColorForEntityType(type)));
-                    String name = (new TranslationTextComponent("dragon.unnamed")).getString();
+                    tooltip.add((new TranslatableComponent(type.getDescriptionId())).withStyle(getTextColorForEntityType(type)));
+                    String name = (new TranslatableComponent("dragon.unnamed")).getString();
                     if (!entityTag.getString("CustomName").isEmpty()) {
-                        IFormattableTextComponent component = ITextComponent.Serializer.fromJson(entityTag.getString("CustomName"));
+                        MutableComponent component = Component.Serializer.fromJson(entityTag.getString("CustomName"));
                         if (component != null)
                             name = component.getString();
                     }
 
-                    tooltip.add((new StringTextComponent(name)).withStyle(TextFormatting.GRAY));
-                    String gender = (new TranslationTextComponent("dragon.gender")).getString() + " " + (new TranslationTextComponent(entityTag.getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female")).getString();
-                    tooltip.add((new StringTextComponent(gender)).withStyle(TextFormatting.GRAY));
+                    tooltip.add((new TextComponent(name)).withStyle(ChatFormatting.GRAY));
+                    String gender = (new TranslatableComponent("dragon.gender")).getString() + " " + (new TranslatableComponent(entityTag.getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female")).getString();
+                    tooltip.add((new TextComponent(gender)).withStyle(ChatFormatting.GRAY));
                     int stagenumber = entityTag.getInt("AgeTicks") / 24000;
                     int stage1 = 0;
                     if (stagenumber >= 100) {
@@ -141,24 +149,24 @@ public class ItemDragonHorn extends Item {
                     } else {
                         stage1 = 1;
                     }
-                    String stage = (new TranslationTextComponent("dragon.stage")).getString() + " " + stage1 + " " + (new TranslationTextComponent("dragon.days.front")).getString() + stagenumber + " " + (new TranslationTextComponent("dragon.days.back")).getString();
-                    tooltip.add((new StringTextComponent(stage)).withStyle(TextFormatting.GRAY));
+                    String stage = (new TranslatableComponent("dragon.stage")).getString() + " " + stage1 + " " + (new TranslatableComponent("dragon.days.front")).getString() + stagenumber + " " + (new TranslatableComponent("dragon.days.back")).getString();
+                    tooltip.add((new TextComponent(stage)).withStyle(ChatFormatting.GRAY));
                 }
             }
 
         }
     }
 
-    private TextFormatting getTextColorForEntityType(EntityType type) {
+    private ChatFormatting getTextColorForEntityType(EntityType type) {
         if (type == IafEntityRegistry.FIRE_DRAGON.get())
-            return TextFormatting.DARK_RED;
+            return ChatFormatting.DARK_RED;
 
         if (type == IafEntityRegistry.ICE_DRAGON.get())
-            return TextFormatting.BLUE;
+            return ChatFormatting.BLUE;
 
         if (type == IafEntityRegistry.LIGHTNING_DRAGON.get())
-            return TextFormatting.DARK_PURPLE;
+            return ChatFormatting.DARK_PURPLE;
 
-        return TextFormatting.GRAY;
+        return ChatFormatting.GRAY;
     }
 }

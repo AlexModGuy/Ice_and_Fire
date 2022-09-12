@@ -1,12 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSentinel;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -50,12 +50,12 @@ public class MyrmexAIFindHidingSpot extends Goal {
        if (targetBlock != null) {
            this.myrmex.getNavigation().moveTo(this.targetBlock.getX() + 0.5D, this.targetBlock.getY(), this.targetBlock.getZ() + 0.5D, 1D);
            if (areMyrmexNear(5) || this.myrmex.isOnResin()) {
-               if (this.myrmex.distanceToSqr(Vector3d.atCenterOf(this.targetBlock)) < 9) {
+               if (this.myrmex.distanceToSqr(Vec3.atCenterOf(this.targetBlock)) < 9) {
                    this.wanderRadius += RADIUS;
                    this.targetBlock = getTargetPosition(wanderRadius);
                }
            } else {
-               if (this.myrmex.getTarget() == null && this.myrmex.getTradingPlayer() == null && myrmex.visibleTicks == 0 && this.myrmex.distanceToSqr(Vector3d.atCenterOf(this.targetBlock)) < 9) {
+               if (this.myrmex.getTarget() == null && this.myrmex.getTradingPlayer() == null && myrmex.visibleTicks == 0 && this.myrmex.distanceToSqr(Vec3.atCenterOf(this.targetBlock)) < 9) {
                    myrmex.setHiding(true);
                    myrmex.getNavigation().stop();
                }
@@ -70,14 +70,14 @@ public class MyrmexAIFindHidingSpot extends Goal {
         wanderRadius = RADIUS;
     }
 
-    protected AxisAlignedBB getTargetableArea(double targetDistance) {
+    protected AABB getTargetableArea(double targetDistance) {
         return this.myrmex.getBoundingBox().inflate(targetDistance, 14.0D, targetDistance);
     }
 
     public BlockPos getTargetPosition(int radius) {
         final int x = (int) myrmex.getX() + myrmex.getRandom().nextInt(radius * 2) - radius;
         final int z = (int) myrmex.getZ() + myrmex.getRandom().nextInt(radius * 2) - radius;
-        return myrmex.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, new BlockPos(x, 0, z));
+        return myrmex.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, new BlockPos(x, 0, z));
     }
 
     private boolean areMyrmexNear(double distance) {

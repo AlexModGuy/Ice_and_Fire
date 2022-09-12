@@ -6,9 +6,9 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.AbstractPathJob;
-import net.minecraft.util.concurrent.ThreadTaskExecutor;
+import net.minecraft.util.thread.BlockableEventLoop;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.LogicalSidedProvider;
+import net.minecraftforge.fmllegacy.LogicalSidedProvider;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,17 +25,17 @@ public final class Pathfinding {
     /**
      * Set of visited nodes.
      */
-    public static Set<Node> lastDebugNodesVisited = new HashSet<>();
+    public static Set<MNode> lastDebugNodesVisited = new HashSet<>();
 
     /**
      * Set of not visited nodes.
      */
-    public static Set<Node> lastDebugNodesNotVisited  = new HashSet<>();
+    public static Set<MNode> lastDebugNodesNotVisited = new HashSet<>();
 
     /**
      * Set of nodes that belong to the chosen path.
      */
-    public static Set<Node> lastDebugNodesPath = new HashSet<>();
+    public static Set<MNode> lastDebugNodesPath = new HashSet<>();
 
     private Pathfinding() {
         //Hides default constructor.
@@ -87,7 +87,7 @@ public final class Pathfinding {
 
         @Override
         public Thread newThread(final Runnable runnable) {
-            ThreadTaskExecutor<?> workqueue = LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER);
+            BlockableEventLoop<?> workqueue = LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER);
             ClassLoader classLoader;
             if (workqueue.isSameThread()) {
                 classLoader = Thread.currentThread().getContextClassLoader();

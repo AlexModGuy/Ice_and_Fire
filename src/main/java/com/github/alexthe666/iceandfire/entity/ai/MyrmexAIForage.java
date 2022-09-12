@@ -6,16 +6,16 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
@@ -113,7 +113,7 @@ public class MyrmexAIForage extends Goal {
                 if (distance < 6) {
                     block.getBlock();
                     // Routine to break block and add item to myrmex
-                    List<ItemStack> drops = Block.getDrops(block, (ServerWorld) this.myrmex.level, this.targetBlock,
+                    List<ItemStack> drops = Block.getDrops(block, (ServerLevel) this.myrmex.level, this.targetBlock,
                         this.myrmex.level.getBlockEntity(targetBlock)); // use the old method until it gets removed, for
                     // backward compatibility
                     if (!drops.isEmpty()) {
@@ -121,7 +121,7 @@ public class MyrmexAIForage extends Goal {
                         ItemStack heldStack = drops.get(0).copy();
                         heldStack.setCount(1);
                         drops.get(0).shrink(1);
-                        this.myrmex.setItemInHand(Hand.MAIN_HAND, heldStack);
+                        this.myrmex.setItemInHand(InteractionHand.MAIN_HAND, heldStack);
                         for (ItemStack stack : drops) {
                             ItemEntity itemEntity = new ItemEntity(this.myrmex.level,
                                 this.targetBlock.getX() + this.myrmex.getRandom().nextDouble(),
@@ -216,7 +216,7 @@ public class MyrmexAIForage extends Goal {
                 this.myrmex.setWaitTicks(800 + ThreadLocalRandom.current().nextInt(40));
             }
         }
-        Vector3d vec = RandomPositionGenerator.getPos(this.myrmex, wanderRadius, 7);
+        Vec3 vec = DefaultRandomPos.getPos(this.myrmex, wanderRadius, 7);
         if (vec != null) {
             this.targetBlock = new BlockPos(vec);
         }

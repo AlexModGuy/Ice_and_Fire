@@ -2,9 +2,13 @@ package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 
 abstract class ModelDreadBase<T extends LivingEntity & IAnimatedEntity> extends ModelBipedBase<T> {
+
+    ModelDreadBase() {
+        super();
+    }
 
     public abstract Animation getSpawnAnimation();
 
@@ -42,4 +46,5 @@ abstract class ModelDreadBase<T extends LivingEntity & IAnimatedEntity> extends 
             animator.resetKeyframe(5);
         }
     }
+
 }

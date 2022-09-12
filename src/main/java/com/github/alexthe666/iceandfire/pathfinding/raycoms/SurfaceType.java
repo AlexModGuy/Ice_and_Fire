@@ -1,14 +1,15 @@
 package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 
-import net.minecraft.block.*;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
@@ -29,8 +30,7 @@ public enum SurfaceType
      * @param pos        the position.
      * @return true if the block at that location can be walked on.
      */
-    public static SurfaceType getSurfaceType(final IBlockReader world, final BlockState blockState, final BlockPos pos)
-    {
+    public static SurfaceType getSurfaceType(final BlockGetter world, final BlockState blockState, final BlockPos pos) {
         final Block block = blockState.getBlock();
         if (block instanceof FenceBlock
             || block instanceof FenceGateBlock
@@ -39,8 +39,7 @@ public enum SurfaceType
             || block instanceof CampfireBlock
             || block instanceof BambooBlock
             || block instanceof DoorBlock
-            || block instanceof MagmaBlock)
-        {
+            || block instanceof MagmaBlock) {
             return SurfaceType.NOT_PASSABLE;
         }
 
@@ -58,14 +57,14 @@ public enum SurfaceType
             return SurfaceType.WALKABLE;
         }
 
-        if (block instanceof AbstractSignBlock || block instanceof VineBlock) {
+        if (block instanceof SignBlock || block instanceof VineBlock) {
             return SurfaceType.DROPABLE;
         }
 
         if ((blockState.getMaterial().isSolid() && (shape.max(Direction.Axis.X) - shape.min(Direction.Axis.X)) > 0.75
             && (shape.max(Direction.Axis.Z) - shape.min(Direction.Axis.Z)) > 0.75)
-            || (blockState.getBlock() == Blocks.SNOW && blockState.getValue(SnowBlock.LAYERS) > 1)
-            || block instanceof CarpetBlock) {
+            || (blockState.getBlock() == Blocks.SNOW && blockState.getValue(SnowLayerBlock.LAYERS) > 1)
+            || block instanceof WoolCarpetBlock) {
             return SurfaceType.WALKABLE;
         }
 
@@ -78,8 +77,7 @@ public enum SurfaceType
      * @param pos the pos in the world.
      * @return true if so.
      */
-    public static boolean isWater(final IWorldReader world, final BlockPos pos)
-    {
+    public static boolean isWater(final LevelReader world, final BlockPos pos) {
         return isWater(world, pos, null, null);
     }
 
@@ -91,11 +89,9 @@ public enum SurfaceType
      * @param pFluidState existing fluidstate or null
      * @return true if so.
      */
-    public static boolean isWater(final IBlockReader world, final BlockPos pos, @Nullable BlockState pState, @Nullable FluidState pFluidState)
-    {
+    public static boolean isWater(final BlockGetter world, final BlockPos pos, @Nullable BlockState pState, @Nullable FluidState pFluidState) {
         BlockState state = pState;
-        if (state == null)
-        {
+        if (state == null) {
             state = world.getBlockState(pos);
         }
 

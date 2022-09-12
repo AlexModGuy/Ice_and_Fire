@@ -1,39 +1,39 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.TridentEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.FMLPlayMessages;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
-public class EntityTideTrident extends TridentEntity {
+public class EntityTideTrident extends ThrownTrident {
 
     private static final int ADDITIONALPIERCING = 2;
     private int entitiesHit = 0;
 
-    public EntityTideTrident(EntityType<? extends TridentEntity> type, World worldIn) {
+    public EntityTideTrident(EntityType<? extends ThrownTrident> type, Level worldIn) {
         super(type, worldIn);
         tridentItem = new ItemStack(IafItemRegistry.TIDE_TRIDENT);
     }
 
-    public EntityTideTrident(World worldIn, LivingEntity thrower, ItemStack thrownStackIn) {
+    public EntityTideTrident(Level worldIn, LivingEntity thrower, ItemStack thrownStackIn) {
         this(IafEntityRegistry.TIDE_TRIDENT.get(), worldIn);
         this.setPos(thrower.getX(), thrower.getEyeY() - 0.1F, thrower.getZ());
         this.setOwner(thrower);
@@ -44,17 +44,17 @@ public class EntityTideTrident extends TridentEntity {
         this.setPierceLevel((byte) piercingLevel);
     }
 
-    public EntityTideTrident(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+    public EntityTideTrident(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
         this(IafEntityRegistry.TIDE_TRIDENT.get(), worldIn);
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
-    protected void onHitEntity(EntityRayTraceResult result) {
+    protected void onHitEntity(EntityHitResult result) {
         Entity entity = result.getEntity();
         float f = 12.0F;
         if (entity instanceof LivingEntity) {
@@ -85,12 +85,12 @@ public class EntityTideTrident extends TridentEntity {
         }
 
         float f1 = 1.0F;
-        if (this.level instanceof ServerWorld && this.level.isThundering() && EnchantmentHelper.hasChanneling(this.tridentItem)) {
+        if (this.level instanceof ServerLevel && this.level.isThundering() && EnchantmentHelper.hasChanneling(this.tridentItem)) {
             BlockPos blockpos = entity.blockPosition();
             if (this.level.canSeeSky(blockpos)) {
-                LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.level);
-                lightningboltentity.moveTo(Vector3d.atCenterOf(blockpos));
-                lightningboltentity.setCause(entity1 instanceof ServerPlayerEntity ? (ServerPlayerEntity) entity1 : null);
+                LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.level);
+                lightningboltentity.moveTo(Vec3.atCenterOf(blockpos));
+                lightningboltentity.setCause(entity1 instanceof ServerPlayer ? (ServerPlayer) entity1 : null);
                 this.level.addFreshEntity(lightningboltentity);
                 soundevent = SoundEvents.TRIDENT_THUNDER;
                 f1 = 5.0F;

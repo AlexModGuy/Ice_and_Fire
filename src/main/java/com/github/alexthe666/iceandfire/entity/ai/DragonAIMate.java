@@ -3,15 +3,15 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.Random;
 public class DragonAIMate extends Goal {
     private static final BlockState NEST = IafBlockRegistry.NEST.defaultBlockState();
     private final EntityDragonBase dragon;
-    World theWorld;
+    Level theWorld;
     int spawnBabyDelay;
     double moveSpeed;
     private EntityDragonBase targetMate;
@@ -78,7 +78,7 @@ public class DragonAIMate extends Goal {
      * valid mate found.
      */
     private EntityDragonBase getNearbyMate() {
-        List<EntityDragonBase> list = this.theWorld.getEntitiesOfClass(this.dragon.getClass(), this.dragon.getBoundingBox().inflate(180.0D, 180.0D, 180.0D));
+        List<? extends EntityDragonBase> list = this.theWorld.getEntitiesOfClass(this.dragon.getClass(), this.dragon.getBoundingBox().inflate(180.0D, 180.0D, 180.0D));
         double d0 = Double.MAX_VALUE;
         EntityDragonBase mate = null;
         for (EntityDragonBase partner : list) {
@@ -141,10 +141,10 @@ public class DragonAIMate extends Goal {
                 }
             }
             if (theWorld.getBlockState(dirtPos).getMaterial().isReplaceable() || theWorld.getBlockState(dirtPos) == NEST) {
-                theWorld.setBlockAndUpdate(dirtPos, Blocks.GRASS_PATH.defaultBlockState());
+                theWorld.setBlockAndUpdate(dirtPos, Blocks.DIRT_PATH.defaultBlockState());
             }
             if (this.theWorld.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-                this.theWorld.addFreshEntity(new ExperienceOrbEntity(this.theWorld, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ(), random.nextInt(15) + 10));
+                this.theWorld.addFreshEntity(new ExperienceOrb(this.theWorld, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ(), random.nextInt(15) + 10));
             }
         }
     }

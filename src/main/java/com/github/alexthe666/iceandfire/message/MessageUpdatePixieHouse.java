@@ -3,11 +3,11 @@ package com.github.alexthe666.iceandfire.message;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -27,11 +27,11 @@ public class MessageUpdatePixieHouse {
     public MessageUpdatePixieHouse() {
     }
 
-    public static MessageUpdatePixieHouse read(PacketBuffer buf) {
+    public static MessageUpdatePixieHouse read(FriendlyByteBuf buf) {
         return new MessageUpdatePixieHouse(buf.readLong(), buf.readBoolean(), buf.readInt());
     }
 
-    public static void write(MessageUpdatePixieHouse message, PacketBuffer buf) {
+    public static void write(MessageUpdatePixieHouse message, FriendlyByteBuf buf) {
         buf.writeLong(message.blockPos);
         buf.writeBoolean(message.hasPixie);
         buf.writeInt(message.pixieType);
@@ -43,7 +43,7 @@ public class MessageUpdatePixieHouse {
 
         public static void handle(MessageUpdatePixieHouse message, Supplier<NetworkEvent.Context> context) {
             context.get().setPacketHandled(true);
-            PlayerEntity player = context.get().getSender();
+            Player player = context.get().getSender();
             if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }

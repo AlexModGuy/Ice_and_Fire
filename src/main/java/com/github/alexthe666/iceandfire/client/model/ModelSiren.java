@@ -3,14 +3,13 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 public class ModelSiren extends ModelDragonBase<EntitySiren> {
     public AdvancedModelBox Tail_1;
@@ -133,13 +132,14 @@ public class ModelSiren extends ModelDragonBase<EntitySiren> {
     }
 
     @Override
-    public Iterable<ModelRenderer> parts() {
+    public Iterable<BasicModelPart> parts() {
         return ImmutableList.of(Tail_1);
     }
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(Tail_1, Tail_2, Body, Fin1, Tail_3, Fin2, FlukeL, FlukeR, Fin3,
+            Left_Arm, Head, Right_Arm, Neck, Hair1, HairR, HairL, Mouth, Jaw, Hair2);
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -258,7 +258,7 @@ public class ModelSiren extends ModelDragonBase<EntitySiren> {
     }
 
     @Override
-    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+    public void renderStatue(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, Entity living) {
         this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

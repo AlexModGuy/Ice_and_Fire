@@ -3,15 +3,14 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 public class ModelHippogryph extends ModelDragonBase<EntityHippogryph> {
     public AdvancedModelBox Body;
@@ -388,7 +387,7 @@ public class ModelHippogryph extends ModelDragonBase<EntityHippogryph> {
         this.updateDefaultPose();
     }
 
-    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+    public void renderStatue(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, Entity living) {
         this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         if (this.young) {
             this.Body.setShouldScaleChildren(true);
@@ -403,18 +402,18 @@ public class ModelHippogryph extends ModelDragonBase<EntityHippogryph> {
             this.Body.setScale(1, 1, 1);
             this.Head.setScale(1, 1, 1);
         }
-        this.NoseBand.visible = false;
-        this.ReinL.visible = false;
-        this.ReinR.visible = false;
-        this.ChestL.visible = false;
-        this.ChestR.visible = false;
-        this.Saddle.visible = false;
-        this.Saddleback.visible = false;
-        this.StirrupIronL.visible = false;
-        this.StirrupIronR.visible = false;
-        this.SaddleFront.visible = false;
-        this.StirrupL.visible = false;
-        this.StirrupR.visible = false;
+        this.NoseBand.showModel = false;
+        this.ReinL.showModel = false;
+        this.ReinR.showModel = false;
+        this.ChestL.showModel = false;
+        this.ChestR.showModel = false;
+        this.Saddle.showModel = false;
+        this.Saddleback.showModel = false;
+        this.StirrupIronL.showModel = false;
+        this.StirrupIronR.showModel = false;
+        this.SaddleFront.showModel = false;
+        this.StirrupL.showModel = false;
+        this.StirrupR.showModel = false;
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -744,17 +743,22 @@ public class ModelHippogryph extends ModelDragonBase<EntityHippogryph> {
         if (f12 < Math.toRadians(-80)) {
             f12 = (float) Math.toRadians(-80);
         }
-        this.Tail1.xRot = f12;
+        this.Tail1.rotateAngleX = f12;
         f12 = 0.0F;
     }
 
     @Override
-    public Iterable<ModelRenderer> parts() {
+    public Iterable<BasicModelPart> parts() {
         return ImmutableList.of(Body);
     }
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(Body, Neck, HindThighR, Tail1, HindThighL, BackLegR1, BackLegR1_1, WingL, WingR,
+            Saddle, Neck2, Crest1, Head, HeadPivot, Jaw, Beak, Quill_R, Quill_L, Crest1_1, NoseBand, BeakTip, Beak2,
+            ReinL, ReinR, HindLegR, HindFootR, Tail2, Tail3, HindLegL, HindFootL, BackLegR2, ToeR3, ToeL4, ToeR2,
+            ToeR1, BackLegR2_1, ToeR3_1, ToeL4_1, ToeR2_1, ToeR1_1, WingL2, WingL3, WingL21, FingerL1, FingerL2,
+            FingerL3, FingerL4, WingR2, WingR3, WingR21, FingerR1, FingerR2, FingerR3, FingerR4, ChestR, ChestL,
+            Saddleback, SaddleFront, StirrupL, StirrupR, StirrupIronL, StirrupIronR);
     }
 }

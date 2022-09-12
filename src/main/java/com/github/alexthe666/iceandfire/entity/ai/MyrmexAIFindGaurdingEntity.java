@@ -2,9 +2,9 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSoldier;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.phys.AABB;
 
 import java.util.Comparator;
 import java.util.EnumSet;
@@ -47,7 +47,7 @@ public class MyrmexAIFindGaurdingEntity<T extends EntityMyrmexBase> extends Targ
         }
     }
 
-    protected AxisAlignedBB getTargetableArea(double targetDistance) {
+    protected AABB getTargetableArea(double targetDistance) {
         return this.mob.getBoundingBox().inflate(targetDistance, 4.0D, targetDistance);
     }
 

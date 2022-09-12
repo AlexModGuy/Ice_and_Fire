@@ -3,24 +3,24 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexEgg;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemMyrmexEgg extends Item implements ICustomRendered {
+public class ItemMyrmexEgg extends Item {
 
     boolean isJungle;
 
@@ -31,11 +31,11 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if (this.allowdedIn(group)) {
             for (int i = 0; i < 5; i++) {
                 ItemStack stack = new ItemStack(this);
-                CompoundNBT tag = new CompoundNBT();
+                CompoundTag tag = new CompoundTag();
                 tag.putInt("EggOrdinal", i);
                 stack.setTag(tag);
                 items.add(stack);
@@ -45,9 +45,9 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         String caste;
-        CompoundNBT tag = stack.getTag();
+        CompoundTag tag = stack.getTag();
         int eggOrdinal = 0;
         if (tag != null) {
             eggOrdinal = tag.getInt("EggOrdinal");
@@ -69,18 +69,18 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
                 caste = "queen";
         }
         if (eggOrdinal == 4) {
-            tooltip.add(new TranslationTextComponent("myrmex.caste_" + caste + ".name").withStyle(TextFormatting.LIGHT_PURPLE));
+            tooltip.add(new TranslatableComponent("myrmex.caste_" + caste + ".name").withStyle(ChatFormatting.LIGHT_PURPLE));
         } else {
-            tooltip.add(new TranslationTextComponent("myrmex.caste_" + caste + ".name").withStyle(TextFormatting.GRAY));
+            tooltip.add(new TranslatableComponent("myrmex.caste_" + caste + ".name").withStyle(ChatFormatting.GRAY));
         }
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         ItemStack itemstack = context.getPlayer().getItemInHand(context.getHand());
         BlockPos offset = context.getClickedPos().relative(context.getClickedFace());
         EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG.get(), context.getLevel());
-        CompoundNBT tag = itemstack.getTag();
+        CompoundTag tag = itemstack.getTag();
         int eggOrdinal = 0;
         if (tag != null) {
             eggOrdinal = tag.getInt("EggOrdinal");
@@ -96,12 +96,12 @@ public class ItemMyrmexEgg extends Item implements ICustomRendered {
             context.getLevel().addFreshEntity(egg);
         }
         itemstack.shrink(1);
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
     public boolean isFoil(ItemStack stack) {
-        CompoundNBT tag = stack.getTag();
+        CompoundTag tag = stack.getTag();
         int eggOrdinal = 0;
         if (tag != null) {
             eggOrdinal = tag.getInt("EggOrdinal");

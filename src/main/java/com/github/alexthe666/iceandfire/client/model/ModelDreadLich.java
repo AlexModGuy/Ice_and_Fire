@@ -5,15 +5,15 @@ import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.HideableModelRenderer;
 import com.github.alexthe666.iceandfire.entity.EntityDreadLich;
 import com.github.alexthe666.iceandfire.entity.EntityDreadThrall;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.entity.model.IHasArm;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.model.ArmedModel;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
-public class ModelDreadLich extends ModelDreadBase<EntityDreadLich> implements IHasArm {
+public class ModelDreadLich extends ModelDreadBase<EntityDreadLich> implements ArmedModel {
     public HideableModelRenderer robe;
     public HideableModelRenderer mask;
     public HideableModelRenderer hood;
@@ -25,8 +25,8 @@ public class ModelDreadLich extends ModelDreadBase<EntityDreadLich> implements I
     public ModelDreadLich(float modelScale) {
         this.texWidth = 128;
         this.texHeight = 64;
-        this.leftArmPose = BipedModel.ArmPose.EMPTY;
-        this.rightArmPose = BipedModel.ArmPose.EMPTY;
+        this.leftArmPose = HumanoidModel.ArmPose.EMPTY;
+        this.rightArmPose = HumanoidModel.ArmPose.EMPTY;
         this.sleeveLeft = new HideableModelRenderer(this, 33, 35);
         this.sleeveLeft.mirror = true;
         this.sleeveLeft.setPos(0.0F, -0.1F, 0.0F);
@@ -89,15 +89,15 @@ public class ModelDreadLich extends ModelDreadBase<EntityDreadLich> implements I
     }
 
     public void setLivingAnimations(EntityDreadThrall LivingEntityIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
-        this.rightArmPose = BipedModel.ArmPose.EMPTY;
-        this.leftArmPose = BipedModel.ArmPose.EMPTY;
-        ItemStack itemstack = LivingEntityIn.getItemInHand(Hand.MAIN_HAND);
+        this.rightArmPose = HumanoidModel.ArmPose.EMPTY;
+        this.leftArmPose = HumanoidModel.ArmPose.EMPTY;
+        ItemStack itemstack = LivingEntityIn.getItemInHand(InteractionHand.MAIN_HAND);
 
         if (itemstack.getItem() == Items.BOW) {
-            if (LivingEntityIn.getMainArm() == HandSide.RIGHT) {
-                this.rightArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
+            if (LivingEntityIn.getMainArm() == HumanoidArm.RIGHT) {
+                this.rightArmPose = HumanoidModel.ArmPose.BOW_AND_ARROW;
             } else {
-                this.leftArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
+                this.leftArmPose = HumanoidModel.ArmPose.BOW_AND_ARROW;
             }
         }
     }
@@ -111,16 +111,16 @@ public class ModelDreadLich extends ModelDreadBase<EntityDreadLich> implements I
     public void setupAnim(EntityDreadLich entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         super.setupAnim(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         if (entityIn.getAnimation() == EntityDreadLich.ANIMATION_SUMMON) {
-            this.armRight.z = 0.0F;
-            this.armRight.x = -5.0F;
-            this.armLeft.z = 0.0F;
-            this.armLeft.x = 5.0F;
-            this.armRight.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-            this.armLeft.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-            this.armRight.zRot = 2.3561945F;
-            this.armLeft.zRot = -2.3561945F;
-            this.armRight.yRot = 0.0F;
-            this.armLeft.yRot = 0.0F;
+            this.armRight.rotationPointZ = 0.0F;
+            this.armRight.rotationPointX = -5.0F;
+            this.armLeft.rotationPointZ = 0.0F;
+            this.armLeft.rotationPointX = 5.0F;
+            this.armRight.rotateAngleX = Mth.cos(ageInTicks * 0.6662F) * 0.25F;
+            this.armLeft.rotateAngleX = Mth.cos(ageInTicks * 0.6662F) * 0.25F;
+            this.armRight.rotateAngleZ = 2.3561945F;
+            this.armLeft.rotateAngleZ = -2.3561945F;
+            this.armRight.rotateAngleY = 0.0F;
+            this.armLeft.rotateAngleY = 0.0F;
         }
     }
 

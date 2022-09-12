@@ -8,24 +8,24 @@ import com.github.alexthe666.iceandfire.entity.util.IHasCustomizableAttributes;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonProxy {
 
     @SubscribeEvent
-    public static void onModConfigEvent(final ModConfig.ModConfigEvent event) {
+    public static void onModConfigEvent(final ModConfigEvent.Loading event) {
         final ModConfig config = event.getConfig();
         // Rebake the configs when they change
         if (config.getSpec() == ConfigHolder.CLIENT_SPEC) {
@@ -38,7 +38,7 @@ public class CommonProxy {
     }
 
     @SubscribeEvent
-    public static void onModConfigChanged(final ModConfig.Reloading event) {
+    public static void onModConfigChanged(final ModConfigEvent.Reloading event) {
         final ModConfig config = event.getConfig();
         // In case we reload the config clear the attribute cache to allow for values to be modified
         if (config.getSpec() == ConfigHolder.SERVER_SPEC) {
@@ -77,10 +77,6 @@ public class CommonProxy {
     public void openMyrmexStaffGui(ItemStack staff) {
     }
 
-    public Object getArmorModel(int armorId) {
-        return null;
-    }
-
     public Object getFontRenderer() {
         return null;
     }
@@ -93,11 +89,6 @@ public class CommonProxy {
     }
 
     public void openMyrmexAddRoomGui(ItemStack staff, BlockPos pos, Direction facing) {
-    }
-
-
-    public Object getDreadlandsRender(int i) {
-        return null;
     }
 
     public int getPreviousViewType() {
@@ -121,18 +112,14 @@ public class CommonProxy {
     public void setReferencedMob(Entity dragonBase) {
     }
 
-    public TileEntity getRefrencedTE() {
+    public BlockEntity getRefrencedTE() {
         return null;
     }
 
-    public void setRefrencedTE(TileEntity tileEntity) {
+    public void setRefrencedTE(BlockEntity tileEntity) {
     }
 
-    public Item.Properties setupISTER(Item.Properties group) {
-        return group;
-    }
-
-    public PlayerEntity getClientSidePlayer(){
+    public Player getClientSidePlayer() {
         return null;
     }
 

@@ -1,20 +1,19 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.citadel.client.model.TabulaModel;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.model.SegmentedModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.resources.ResourceLocation;
 
 public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
 
@@ -23,26 +22,26 @@ public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
     public static final float[] growth_stage_3 = new float[]{7F, 12.5F};
     public static final float[] growth_stage_4 = new float[]{12.5F, 20F};
     public static final float[] growth_stage_5 = new float[]{20F, 30F};
-    public float[][] growth_stages;
     private final TabulaModel fireDragonModel;
     private final TabulaModel lightningDragonModel;
     private final TabulaModel iceDragonModel;
+    public float[][] growth_stages;
 
-    public RenderDragonSkull(EntityRendererManager renderManager, SegmentedModel fireDragonModel, SegmentedModel iceDragonModel, SegmentedModel lightningDragonModel) {
-        super(renderManager);
+    public RenderDragonSkull(EntityRendererProvider.Context context, TabulaModel fireDragonModel, TabulaModel iceDragonModel, TabulaModel lightningDragonModel) {
+        super(context);
         growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
-        this.fireDragonModel = (TabulaModel) fireDragonModel;
-        this.iceDragonModel = (TabulaModel) iceDragonModel;
-        this.lightningDragonModel = (TabulaModel) lightningDragonModel;
+        this.fireDragonModel = fireDragonModel;
+        this.iceDragonModel = iceDragonModel;
+        this.lightningDragonModel = lightningDragonModel;
     }
 
-    private static void setRotationAngles(ModelRenderer cube, float rotX, float rotY, float rotZ) {
-        cube.xRot = rotX;
-        cube.yRot = rotY;
-        cube.zRot = rotZ;
+    private static void setRotationAngles(BasicModelPart cube, float rotX, float rotY, float rotZ) {
+        cube.rotateAngleX = rotX;
+        cube.rotateAngleY = rotY;
+        cube.rotateAngleZ = rotZ;
     }
 
-    public void render(EntityDragonSkull entity, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(EntityDragonSkull entity, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         TabulaModel model;
         if (entity.getDragonType() == 2) {
             model = lightningDragonModel;
@@ -51,7 +50,7 @@ public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
         } else {
             model = fireDragonModel;
         }
-        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
+        VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
         matrixStackIn.pushPose();
         matrixStackIn.mulPose(new Quaternion(Vector3f.XP, -180, true));
         matrixStackIn.mulPose(new Quaternion(Vector3f.YN, 180 - entity.getYaw(), true));

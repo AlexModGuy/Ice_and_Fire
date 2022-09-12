@@ -1,31 +1,25 @@
 package com.github.alexthe666.iceandfire.client.model;
 
-import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.client.model.util.HideableModelRenderer;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.entity.model.IHasArm;
-import net.minecraft.client.renderer.entity.model.IHasHead;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.ArmedModel;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 
-import java.util.ArrayList;
-import java.util.List;
+public abstract class ModelBipedBase<T extends LivingEntity> extends AdvancedEntityModel<T> implements ICustomStatueModel, BasicHeadedModel, ArmedModel {
 
-public abstract class ModelBipedBase<T extends LivingEntity & IAnimatedEntity> extends AdvancedEntityModel<T> implements ICustomStatueModel, IHasHead, IHasArm {
-
-    private final List<AdvancedModelBox> advancedPartList = new ArrayList<>();
     public HideableModelRenderer head;
     public HideableModelRenderer headware;
     public HideableModelRenderer body;
@@ -33,32 +27,43 @@ public abstract class ModelBipedBase<T extends LivingEntity & IAnimatedEntity> e
     public HideableModelRenderer armLeft;
     public HideableModelRenderer legRight;
     public HideableModelRenderer legLeft;
-    public BipedModel.ArmPose leftArmPose;
-    public BipedModel.ArmPose rightArmPose;
+    public HumanoidModel.ArmPose leftArmPose;
+    public HumanoidModel.ArmPose rightArmPose;
     public boolean isSneak;
     protected ModelAnimator animator;
 
+    //Make sure we don't have any null boxes which would cause issues with getAllParts()
+    protected ModelBipedBase() {
+        this.head = new HideableModelRenderer(this, 0, 0);
+        this.headware = new HideableModelRenderer(this, 0, 0);
+        this.body = new HideableModelRenderer(this, 0, 0);
+        this.armRight = new HideableModelRenderer(this, 0, 0);
+        this.armLeft = new HideableModelRenderer(this, 0, 0);
+        this.legRight = new HideableModelRenderer(this, 0, 0);
+        this.legLeft = new HideableModelRenderer(this, 0, 0);
+    }
+
     @Override
-    public ModelRenderer getHead() {
+    public BasicModelPart getHead() {
         return this.head;
     }
 
     @Override
-    public void translateToHand(HandSide sideIn, MatrixStack matrixStackIn) {
+    public void translateToHand(HumanoidArm sideIn, PoseStack matrixStackIn) {
         this.getArmForSide(sideIn).translateAndRotate(matrixStackIn);
     }
 
-    protected ModelRenderer getArmForSide(HandSide side) {
-        return side == HandSide.LEFT ? this.armLeft : this.armRight;
+    protected HideableModelRenderer getArmForSide(HumanoidArm side) {
+        return side == HumanoidArm.LEFT ? this.armLeft : this.armRight;
     }
 
-    protected HandSide getMainHand(Entity entityIn) {
+    protected HumanoidArm getMainHand(Entity entityIn) {
         if (entityIn instanceof LivingEntity) {
             LivingEntity LivingEntity = (LivingEntity) entityIn;
-            HandSide Handside = LivingEntity.getMainArm();
-            return LivingEntity.swingingArm == Hand.MAIN_HAND ? Handside : Handside.getOpposite();
+            HumanoidArm Handside = LivingEntity.getMainArm();
+            return LivingEntity.swingingArm == InteractionHand.MAIN_HAND ? Handside : Handside.getOpposite();
         } else {
-            return HandSide.RIGHT;
+            return HumanoidArm.RIGHT;
         }
     }
 
@@ -73,67 +78,62 @@ public abstract class ModelBipedBase<T extends LivingEntity & IAnimatedEntity> e
     }
 
     public void progressRotationInterp(AdvancedModelBox model, float progress, float rotX, float rotY, float rotZ, float max) {
-        model.xRot += progress * (rotX - model.defaultRotationX) / max;
-        model.yRot += progress * (rotY - model.defaultRotationY) / max;
-        model.zRot += progress * (rotZ - model.defaultRotationZ) / max;
+        model.rotateAngleX += progress * (rotX - model.defaultRotationX) / max;
+        model.rotateAngleY += progress * (rotY - model.defaultRotationY) / max;
+        model.rotateAngleZ += progress * (rotZ - model.defaultRotationZ) / max;
     }
 
     public void progresPositionInterp(AdvancedModelBox model, float progress, float x, float y, float z, float max) {
-        model.x += progress * (x) / max;
-        model.y += progress * (y) / max;
-        model.z += progress * (z) / max;
+        model.rotationPointX += progress * (x) / max;
+        model.rotationPointY += progress * (y) / max;
+        model.rotationPointZ += progress * (z) / max;
     }
 
     public void progressRotation(AdvancedModelBox model, float progress, float rotX, float rotY, float rotZ) {
-        model.xRot += progress * (rotX - model.defaultRotationX) / 20.0F;
-        model.yRot += progress * (rotY - model.defaultRotationY) / 20.0F;
-        model.zRot += progress * (rotZ - model.defaultRotationZ) / 20.0F;
+        model.rotateAngleX += progress * (rotX - model.defaultRotationX) / 20.0F;
+        model.rotateAngleY += progress * (rotY - model.defaultRotationY) / 20.0F;
+        model.rotateAngleZ += progress * (rotZ - model.defaultRotationZ) / 20.0F;
     }
 
     public void progressRotationPrev(AdvancedModelBox model, float progress, float rotX, float rotY, float rotZ) {
-        model.xRot += progress * (rotX) / 20.0F;
-        model.yRot += progress * (rotY) / 20.0F;
-        model.zRot += progress * (rotZ) / 20.0F;
+        model.rotateAngleX += progress * (rotX) / 20.0F;
+        model.rotateAngleY += progress * (rotY) / 20.0F;
+        model.rotateAngleZ += progress * (rotZ) / 20.0F;
     }
 
     public void progressPosition(AdvancedModelBox model, float progress, float x, float y, float z) {
-        model.x += progress * (x - model.defaultPositionX) / 20.0F;
-        model.y += progress * (y - model.defaultPositionY) / 20.0F;
-        model.z += progress * (z - model.defaultPositionZ) / 20.0F;
+        model.rotationPointX += progress * (x - model.defaultPositionX) / 20.0F;
+        model.rotationPointY += progress * (y - model.defaultPositionY) / 20.0F;
+        model.rotationPointZ += progress * (z - model.defaultPositionZ) / 20.0F;
     }
 
     public void progressPositionPrev(AdvancedModelBox model, float progress, float x, float y, float z) {
-        model.x += progress * x / 20.0F;
-        model.y += progress * y / 20.0F;
-        model.z += progress * z / 20.0F;
+        model.rotationPointX += progress * x / 20.0F;
+        model.rotationPointY += progress * y / 20.0F;
+        model.rotationPointZ += progress * z / 20.0F;
     }
 
     @Override
     public void setRotateAngle(AdvancedModelBox modelRenderer, float x, float y, float z) {
-        modelRenderer.xRot = x;
-        modelRenderer.yRot = y;
-        modelRenderer.zRot = z;
+        modelRenderer.rotateAngleX = x;
+        modelRenderer.rotateAngleY = y;
+        modelRenderer.rotateAngleZ = z;
     }
 
-    @Override
-    public void accept(ModelRenderer p_accept_1_) {
-        if (p_accept_1_ instanceof AdvancedModelBox) {
-            advancedPartList.add((AdvancedModelBox) p_accept_1_);
-        }
+    public <T extends BasicModelPart> T copyFrom(T modelIn, T currentModel) {
+        modelIn.copyModelAngles(currentModel);
+        modelIn.rotationPointX = currentModel.rotationPointX;
+        modelIn.rotationPointY = currentModel.rotationPointY;
+        modelIn.rotationPointZ = currentModel.rotationPointZ;
+        return modelIn;
     }
 
-    @Override
-    public void updateDefaultPose() {
-        advancedPartList.forEach((modelRenderer) -> {
-            modelRenderer.updateDefaultPose();
-        });
-    }
-
-    @Override
-    public void resetToDefaultPose() {
-        advancedPartList.forEach((modelRenderer) -> {
-            modelRenderer.resetToDefaultPose();
-        });
+    public <M extends ModelPart, T extends BasicModelPart> M copyFrom(M modelIn, T currentModel) {
+        modelIn.setRotation(currentModel.rotateAngleX, currentModel.rotateAngleY, currentModel.rotateAngleZ);
+        modelIn.x = currentModel.rotationPointX;
+        modelIn.y = currentModel.rotationPointY;
+        modelIn.z = currentModel.rotationPointZ;
+        return modelIn;
     }
 
     public void setModelAttributes(ModelBipedBase<T> modelIn) {
@@ -142,27 +142,27 @@ public abstract class ModelBipedBase<T extends LivingEntity & IAnimatedEntity> e
         modelIn.leftArmPose = this.leftArmPose;
         modelIn.rightArmPose = this.rightArmPose;
         modelIn.isSneak = this.isSneak;
-        modelIn.head.copyFrom(this.head);
-        modelIn.headware.copyFrom(this.headware);
-        modelIn.body.copyFrom(this.body);
-        modelIn.armRight.copyFrom(this.armRight);
-        modelIn.armLeft.copyFrom(this.armLeft);
-        modelIn.legRight.copyFrom(this.legRight);
-        modelIn.legLeft.copyFrom(this.legLeft);
+        copyFrom(modelIn.head, this.head);
+        copyFrom(modelIn.headware, this.headware);
+        copyFrom(modelIn.body, this.body);
+        copyFrom(modelIn.armRight, this.armRight);
+        copyFrom(modelIn.armLeft, this.armLeft);
+        copyFrom(modelIn.legRight, this.legRight);
+        copyFrom(modelIn.legLeft, this.legLeft);
     }
 
-    public void setModelAttributes(BipedModel<T> modelIn) {
+    public void setModelAttributes(HumanoidModel<T> modelIn) {
         super.copyPropertiesTo(modelIn);
         modelIn.leftArmPose = this.leftArmPose;
         modelIn.rightArmPose = this.rightArmPose;
         modelIn.crouching = this.isSneak;
-        modelIn.head.copyFrom(this.head);
-        modelIn.hat.copyFrom(this.headware);
-        modelIn.body.copyFrom(this.body);
-        modelIn.rightArm.copyFrom(this.armRight);
-        modelIn.leftArm.copyFrom(this.armLeft);
-        modelIn.rightLeg.copyFrom(this.legRight);
-        modelIn.leftLeg.copyFrom(this.legLeft);
+        copyFrom(modelIn.head, this.head);
+        copyFrom(modelIn.hat, this.headware);
+        copyFrom(modelIn.body, this.body);
+        copyFrom(modelIn.rightArm, this.armRight);
+        copyFrom(modelIn.leftArm, this.armLeft);
+        copyFrom(modelIn.rightLeg, this.legRight);
+        copyFrom(modelIn.leftLeg, this.legLeft);
     }
 
     public void setVisible(boolean visible) {
@@ -180,92 +180,92 @@ public abstract class ModelBipedBase<T extends LivingEntity & IAnimatedEntity> e
         animate(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 0);
         this.faceTarget(netHeadYaw, headPitch, 1.0F, head);
         float f = 1.0F;
-        this.armRight.xRot += MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI) * 2.0F * limbSwingAmount * 0.5F / f;
-        this.armLeft.xRot += MathHelper.cos(limbSwing * 0.6662F) * 2.0F * limbSwingAmount * 0.5F / f;
-        this.legRight.xRot = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount / f;
-        this.legLeft.xRot = MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI) * 1.4F * limbSwingAmount / f;
-        this.legRight.yRot = 0.0F;
-        this.legLeft.yRot = 0.0F;
-        this.legRight.zRot = 0.0F;
-        this.legLeft.zRot = 0.0F;
+        this.armRight.rotateAngleX += Mth.cos(limbSwing * 0.6662F + (float) Math.PI) * 2.0F * limbSwingAmount * 0.5F / f;
+        this.armLeft.rotateAngleX += Mth.cos(limbSwing * 0.6662F) * 2.0F * limbSwingAmount * 0.5F / f;
+        this.legRight.rotateAngleX = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount / f;
+        this.legLeft.rotateAngleX = Mth.cos(limbSwing * 0.6662F + (float) Math.PI) * 1.4F * limbSwingAmount / f;
+        this.legRight.rotateAngleY = 0.0F;
+        this.legLeft.rotateAngleY = 0.0F;
+        this.legRight.rotateAngleZ = 0.0F;
+        this.legLeft.rotateAngleZ = 0.0F;
 
         if (entityIn.isPassenger()) {
-            this.armRight.xRot += -((float) Math.PI / 5F);
-            this.armLeft.xRot += -((float) Math.PI / 5F);
-            this.legRight.xRot = -1.4137167F;
-            this.legRight.yRot = ((float) Math.PI / 10F);
-            this.legRight.zRot = 0.07853982F;
-            this.legLeft.xRot = -1.4137167F;
-            this.legLeft.yRot = -((float) Math.PI / 10F);
-            this.legLeft.zRot = -0.07853982F;
+            this.armRight.rotateAngleX += -((float) Math.PI / 5F);
+            this.armLeft.rotateAngleX += -((float) Math.PI / 5F);
+            this.legRight.rotateAngleX = -1.4137167F;
+            this.legRight.rotateAngleY = ((float) Math.PI / 10F);
+            this.legRight.rotateAngleZ = 0.07853982F;
+            this.legLeft.rotateAngleX = -1.4137167F;
+            this.legLeft.rotateAngleY = -((float) Math.PI / 10F);
+            this.legLeft.rotateAngleZ = -0.07853982F;
         }
         if (this.attackTime > 0.0F) {
-            HandSide handSide = this.getMainHand(entityIn);
-            ModelRenderer modelrenderer = this.getArmForSide(handSide);
+            HumanoidArm handSide = this.getMainHand(entityIn);
+            HideableModelRenderer modelrenderer = this.getArmForSide(handSide);
             float f1 = this.attackTime;
-            this.body.yRot = MathHelper.sin(MathHelper.sqrt(f1) * ((float) Math.PI * 2F)) * 0.2F;
+            this.body.rotateAngleY = Mth.sin(Mth.sqrt(f1) * ((float) Math.PI * 2F)) * 0.2F;
 
-            if (handSide == HandSide.LEFT) {
-                this.body.yRot *= -1.0F;
+            if (handSide == HumanoidArm.LEFT) {
+                this.body.rotateAngleY *= -1.0F;
             }
 
-            this.armRight.z = MathHelper.sin(this.body.yRot) * 5.0F;
-            this.armRight.x = -MathHelper.cos(this.body.yRot) * 5.0F;
-            this.armLeft.z = -MathHelper.sin(this.body.yRot) * 5.0F;
-            this.armLeft.x = MathHelper.cos(this.body.yRot) * 5.0F;
-            this.armRight.yRot += this.body.yRot;
-            this.armLeft.yRot += this.body.yRot;
-            this.armLeft.xRot += this.body.xRot;
+            this.armRight.rotationPointZ = Mth.sin(this.body.rotateAngleY) * 5.0F;
+            this.armRight.rotationPointX = -Mth.cos(this.body.rotateAngleY) * 5.0F;
+            this.armLeft.rotationPointZ = -Mth.sin(this.body.rotateAngleY) * 5.0F;
+            this.armLeft.rotationPointX = Mth.cos(this.body.rotateAngleY) * 5.0F;
+            this.armRight.rotateAngleY += this.body.rotateAngleY;
+            this.armLeft.rotateAngleY += this.body.rotateAngleY;
+            this.armLeft.rotateAngleX += this.body.rotateAngleX;
             f1 = 1.0F - this.attackTime;
             f1 = f1 * f1;
             f1 = f1 * f1;
             f1 = 1.0F - f1;
-            float f2 = MathHelper.sin(f1 * (float) Math.PI);
-            float f3 = MathHelper.sin(this.attackTime * (float) Math.PI) * -(this.head.xRot - 0.7F) * 0.75F;
-            modelrenderer.xRot = (float) ((double) modelrenderer.xRot - ((double) f2 * 1.2D + (double) f3));
-            modelrenderer.yRot += this.body.yRot * 2.0F;
-            modelrenderer.zRot += MathHelper.sin(this.attackTime * (float) Math.PI) * -0.4F;
+            float f2 = Mth.sin(f1 * (float) Math.PI);
+            float f3 = Mth.sin(this.attackTime * (float) Math.PI) * -(this.head.rotateAngleX - 0.7F) * 0.75F;
+            modelrenderer.rotateAngleX = (float) ((double) modelrenderer.rotateAngleX - ((double) f2 * 1.2D + (double) f3));
+            modelrenderer.rotateAngleY += this.body.rotateAngleY * 2.0F;
+            modelrenderer.rotateAngleZ += Mth.sin(this.attackTime * (float) Math.PI) * -0.4F;
         }
         if (this.isSneak) {
-            this.body.xRot = 0.5F;
-            this.armRight.xRot += 0.4F;
-            this.armLeft.xRot += 0.4F;
-            this.legRight.z = 4.0F;
-            this.legLeft.z = 4.0F;
-            this.legRight.y = 9.0F;
-            this.legLeft.y = 9.0F;
-            this.head.y = 1.0F;
+            this.body.rotateAngleX = 0.5F;
+            this.armRight.rotateAngleX += 0.4F;
+            this.armLeft.rotateAngleX += 0.4F;
+            this.legRight.rotationPointZ = 4.0F;
+            this.legLeft.rotationPointZ = 4.0F;
+            this.legRight.rotationPointY = 9.0F;
+            this.legLeft.rotationPointY = 9.0F;
+            this.head.rotationPointY = 1.0F;
         } else {
-            this.body.xRot = 0.0F;
-            this.legRight.z = 0.1F;
-            this.legLeft.z = 0.1F;
-            this.legRight.y = 12.0F;
-            this.legLeft.y = 12.0F;
-            this.head.y = 0.0F;
+            this.body.rotateAngleX = 0.0F;
+            this.legRight.rotationPointZ = 0.1F;
+            this.legLeft.rotationPointZ = 0.1F;
+            this.legRight.rotationPointY = 12.0F;
+            this.legLeft.rotationPointY = 12.0F;
+            this.head.rotationPointY = 0.0F;
         }
 
-        this.armRight.zRot += MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
-        this.armLeft.zRot -= MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
-        this.armRight.xRot += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
-        this.armLeft.xRot -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
+        this.armRight.rotateAngleZ += Mth.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
+        this.armLeft.rotateAngleZ -= Mth.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
+        this.armRight.rotateAngleX += Mth.sin(ageInTicks * 0.067F) * 0.05F;
+        this.armLeft.rotateAngleX -= Mth.sin(ageInTicks * 0.067F) * 0.05F;
 
     }
 
     @Override
-    public Iterable<ModelRenderer> parts() {
-        return ImmutableList.of(body);
-    }
-
-    @Override
-    public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
-    }
-
-    @Override
-    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+    public void renderStatue(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, Entity living) {
         this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
     }
 
     abstract void animate(T entity, float limbSwing, float limbSwingAmount,
                           float ageInTicks, float netHeadYaw, float headPitch, float f);
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return ImmutableList.of(head, headware, body, armRight, armLeft, legRight, legLeft);
+    }
+
+    @Override
+    public Iterable<BasicModelPart> parts() {
+        return ImmutableList.of(body);
+    }
 }

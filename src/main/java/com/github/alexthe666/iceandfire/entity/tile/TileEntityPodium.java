@@ -5,52 +5,53 @@ import com.github.alexthe666.iceandfire.inventory.ContainerPodium;
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
 import com.github.alexthe666.iceandfire.item.ItemMyrmexEgg;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePodium;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.LockableTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nullable;
 
-public class TileEntityPodium extends LockableTileEntity implements ITickableTileEntity, ISidedInventory {
+public class TileEntityPodium extends BaseContainerBlockEntity implements WorldlyContainer {
 
     private static final int[] slotsTop = new int[]{0};
     public int ticksExisted;
     public int prevTicksExisted;
-    IItemHandler handlerUp = new SidedInvWrapper(this, net.minecraft.util.Direction.UP);
+    IItemHandler handlerUp = new SidedInvWrapper(this, net.minecraft.core.Direction.UP);
     IItemHandler handlerDown = new SidedInvWrapper(this, Direction.DOWN);
     net.minecraftforge.common.util.LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper
         .create(this, Direction.UP, Direction.DOWN);
     private NonNullList<ItemStack> stacks = NonNullList.withSize(1, ItemStack.EMPTY);
 
-    public TileEntityPodium() {
-        super(IafTileEntityRegistry.PODIUM.get());
+    public TileEntityPodium(BlockPos pos, BlockState state) {
+        super(IafTileEntityRegistry.PODIUM.get(), pos, state);
+    }
+
+    //TODO: This must be easier to do
+    public static void tick(Level level, BlockPos pos, BlockState state, TileEntityPodium entityPodium) {
+        entityPodium.prevTicksExisted = entityPodium.ticksExisted;
+        entityPodium.ticksExisted++;
     }
 
     @Override
-    public void tick() {
-        prevTicksExisted = ticksExisted;
-        ticksExisted++;
-    }
-
-    @Override
-    public net.minecraft.util.math.AxisAlignedBB getRenderBoundingBox() {
-        return new net.minecraft.util.math.AxisAlignedBB(worldPosition, worldPosition.offset(1, 3, 1));
+    public net.minecraft.world.phys.AABB getRenderBoundingBox() {
+        return new net.minecraft.world.phys.AABB(worldPosition, worldPosition.offset(1, 3, 1));
     }
 
     @Override
@@ -110,25 +111,25 @@ public class TileEntityPodium extends LockableTileEntity implements ITickableTil
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT compound) {
-        super.load(state, compound);
+    public void load(CompoundTag compound) {
+        super.load(compound);
         this.stacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ItemStackHelper.loadAllItems(compound, this.stacks);
+        ContainerHelper.loadAllItems(compound, this.stacks);
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
-        ItemStackHelper.saveAllItems(compound, this.stacks);
+        ContainerHelper.saveAllItems(compound, this.stacks);
         return compound;
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
     }
 
     @Override
@@ -142,7 +143,7 @@ public class TileEntityPodium extends LockableTileEntity implements ITickableTil
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 
@@ -172,18 +173,18 @@ public class TileEntityPodium extends LockableTileEntity implements ITickableTil
     }
 
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(worldPosition, -1, getUpdateTag());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return new ClientboundBlockEntityDataPacket(worldPosition, -1, getUpdateTag());
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        load(this.getBlockState(), packet.getTag());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
+        load(packet.getTag());
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        return this.save(new CompoundNBT());
+    public CompoundTag getUpdateTag() {
+        return this.save(new CompoundTag());
     }
 
     @Override
@@ -192,17 +193,17 @@ public class TileEntityPodium extends LockableTileEntity implements ITickableTil
     }
 
     @Override
-    public ITextComponent getDisplayName() {
+    public Component getDisplayName() {
         return getDefaultName();
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("block.iceandfire.podium");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("block.iceandfire.podium");
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
+    protected AbstractContainerMenu createMenu(int id, Inventory player) {
         return null;
     }
 
@@ -230,7 +231,7 @@ public class TileEntityPodium extends LockableTileEntity implements ITickableTil
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
-        return new ContainerPodium(id, this, playerInventory, new IntArray(0));
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+        return new ContainerPodium(id, this, playerInventory, new SimpleContainerData(0));
     }
 }

@@ -1,15 +1,17 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.MainMenuScreen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextFormatting;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraftforge.client.ForgeHooksClient;
 import org.apache.commons.io.IOUtils;
 
@@ -25,7 +27,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class IceAndFireMainMenu extends MainMenuScreen {
+public class IceAndFireMainMenu extends TitleScreen {
     public static final int LAYER_COUNT = 2;
     public static final ResourceLocation splash = new ResourceLocation(IceAndFire.MODID, "splashes.txt");
     private static final ResourceLocation MINECRAFT_TITLE_TEXTURES = new ResourceLocation("textures/gui/title/minecraft.png");
@@ -52,7 +54,7 @@ public class IceAndFireMainMenu extends MainMenuScreen {
             drawingTextures[i] = new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/drawing_" + (i + 1) + ".png");
         }
         resetDrawnImages();
-        final String branch = "1.16.3";
+        final String branch = "1.17";
         try (final BufferedReader reader = getURLContents("https://raw.githubusercontent.com/Alex-the-666/Ice_and_Fire/"
             + branch + "/src/main/resources/assets/iceandfire/splashes.txt", "assets/iceandfire/splashes.txt")) {
             List<String> list = IOUtils.readLines(reader);
@@ -158,20 +160,21 @@ public class IceAndFireMainMenu extends MainMenuScreen {
         this.layerTick++;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public void render(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
         RenderSystem.enableTexture();
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableBlend();
-        this.getMinecraft().getTextureManager().bind(TABLE_TEXTURE);
+        RenderSystem.setShaderTexture(0, TABLE_TEXTURE);
         int width = this.width;
         int height = this.height;
         blit(ms, 0, 0, 0, 0, width, height, width, height);
-        this.getMinecraft().getTextureManager().bind(BESTIARY_TEXTURE);
+        RenderSystem.setShaderTexture(0, BESTIARY_TEXTURE);
         blit(ms, 50, 0, 0, 0, width - 100, height, width - 100, height);
+        float f11 = 1.0F;
+        int l = Mth.ceil(f11 * 255.0F) << 24;
         if (this.isFlippingPage) {
-            this.getMinecraft().getTextureManager().bind(pageFlipTextures[Math.min(5, pageFlip)]);
+            RenderSystem.setShaderTexture(0, pageFlipTextures[Math.min(5, pageFlip)]);
             blit(ms, 50, 0, 0, 0, width - 100, height, width - 100, height);
         } else {
             int middleX = width / 2;
@@ -182,41 +185,43 @@ public class IceAndFireMainMenu extends MainMenuScreen {
             for (Picture picture : drawnPictures) {
                 float alpha = (picture.alpha * globalAlpha + 0.01F);
                 RenderSystem.enableBlend();
-                this.getMinecraft().getTextureManager().bind(drawingTextures[picture.image]);
-                //3 -> 1
-                //1 -> 3
-                GuiMainMenuBlit.blit((int) ((picture.x * widthScale) + middleX), (int) ((picture.y * heightScale) + middleY), 0, 0, (int) imageScale, (int) imageScale, (int) imageScale, (int) imageScale, alpha);
+                RenderSystem.setShaderTexture(0, drawingTextures[picture.image]);
+                RenderSystem.setShaderColor(1, 1, 1, 1);
+                GUIColoredBlit.blit(ms, (int) ((picture.x * widthScale) + middleX), (int) ((picture.y * heightScale) + middleY), 0, 0, (int) imageScale, (int) imageScale, (int) imageScale, (int) imageScale, alpha);
+                RenderSystem.disableBlend();
             }
         }
         GlStateManager._enableTexture();
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager._enableBlend();
-        this.getMinecraft().font.draw(ms, "Ice and Fire " + TextFormatting.YELLOW + IceAndFire.VERSION, 2, height - 10, 0xFFFFFFFF);
-        GlStateManager._pushMatrix();
-        this.getMinecraft().getTextureManager().bind(MINECRAFT_TITLE_TEXTURES);
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        this.getMinecraft().font.draw(ms, "Ice and Fire " + ChatFormatting.YELLOW + IceAndFire.VERSION, 2, height - 10, 0xFFFFFFFF);
+        RenderSystem.setShaderTexture(0, MINECRAFT_TITLE_TEXTURES);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         blit(ms, width / 2 - 274 / 2, 10, 0, 0, 155, 44);
         blit(ms, width / 2 - 274 / 2 + 155, 10, 0, 45, 155, 44);
-        GlStateManager._translatef(width / 2 + 100, 85.0F, 0.0F);
-        GlStateManager._rotatef(-20.0F, 0.0F, 0.0F, 1.0F);
-        float f1 = 1.8F - MathHelper
-            .abs(MathHelper.sin(System.currentTimeMillis() % 1000L / 1000.0F * (float) Math.PI * 2.0F) * 0.1F);
-        f1 = f1 * 100.0F / (this.getMinecraft().font.width(this.splashText) + 32);
-        RenderSystem.translatef(0, f1 * 10, 0.0F);
-        RenderSystem.scalef(f1, f1, f1);
-        drawCenteredString(ms, this.getMinecraft().font, this.splashText, 0, -40, TextFormatting.YELLOW.getColor());
-        GlStateManager._popMatrix();
 
-        ForgeHooksClient.renderMainMenu(this, ms, this.getMinecraft().font, width, height);
-        String s1 = "Copyright Mojang AB. Do not distribute!";
-        FontRenderer font = this.getMinecraft().font;
-        AbstractGui.drawString(ms, font, s1, width - this.getMinecraft().font.width(s1) - 2,
-            height - 10, 0xFFFFFFFF);
-        for (int i = 0; i < this.buttons.size(); ++i) {
-            this.buttons.get(i).render(ms, mouseX, mouseY, partialTicks);
+        ForgeHooksClient.renderMainMenu(this, ms, this.getMinecraft().font, width, height, l);
+        if (this.splashText != null) {
+            ms.pushPose();
+            ms.translate((this.width / 2 + 90), 70.0D, 0.0D);
+            ms.mulPose(Vector3f.ZP.rotationDegrees(-20.0F));
+            float f2 = 1.8F - Mth.abs(Mth.sin((float) (Util.getMillis() % 1000L) / 1000.0F * ((float) Math.PI * 2F)) * 0.1F);
+            f2 = f2 * 100.0F / (float) (this.font.width(this.splashText) + 32);
+            ms.scale(f2, f2, f2);
+            drawCenteredString(ms, this.font, this.splashText, 0, -8, 16776960 | l);
+            ms.popPose();
         }
-        for (int i = 0; i < this.buttons.size(); i++) {
-            buttons.get(i).render(ms, mouseX, mouseY, getMinecraft().getFrameTime());
+
+
+        String s1 = "Copyright Mojang AB. Do not distribute!";
+        Font font = this.getMinecraft().font;
+        GuiComponent.drawString(ms, font, s1, width - this.getMinecraft().font.width(s1) - 2,
+            height - 10, 0xFFFFFFFF);
+        for (int i = 0; i < this.renderables.size(); ++i) {
+            this.renderables.get(i).render(ms, mouseX, mouseY, partialTicks);
+        }
+        for (int i = 0; i < this.renderables.size(); i++) {
+            renderables.get(i).render(ms, mouseX, mouseY, getMinecraft().getFrameTime());
         }
     }
 

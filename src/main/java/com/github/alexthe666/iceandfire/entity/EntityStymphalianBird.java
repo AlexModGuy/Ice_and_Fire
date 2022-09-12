@@ -12,38 +12,39 @@ import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.entity.util.StymphalianBirdFlock;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.server.management.PreYggdrasilConverter;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.players.OldUsersConverter;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
-public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEntity, IMob, IVillagerFear, IAnimalFear {
+public class EntityStymphalianBird extends Monster implements IAnimatedEntity, Enemy, IVillagerFear, IAnimalFear {
 
     public static final Predicate<Entity> STYMPHALIAN_PREDICATE = new Predicate<Entity>() {
         @Override
@@ -52,8 +53,8 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         }
     };
     private static final int FLIGHT_CHANCE_PER_TICK = 100;
-    private static final DataParameter<Optional<UUID>> VICTOR_ENTITY = EntityDataManager.defineId(EntityStymphalianBird.class, DataSerializers.OPTIONAL_UUID);
-    private static final DataParameter<Boolean> FLYING = EntityDataManager.defineId(EntityStymphalianBird.class, DataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Optional<UUID>> VICTOR_ENTITY = SynchedEntityData.defineId(EntityStymphalianBird.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<Boolean> FLYING = SynchedEntityData.defineId(EntityStymphalianBird.class, EntityDataSerializers.BOOLEAN);
     public static Animation ANIMATION_PECK = Animation.create(20);
     public static Animation ANIMATION_SHOOT_ARROWS = Animation.create(30);
     public static Animation ANIMATION_SPEAK = Animation.create(10);
@@ -69,7 +70,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     private boolean aiFlightLaunch = false;
     private int airBorneCounter;
 
-    public EntityStymphalianBird(EntityType<? extends MonsterEntity> t, World worldIn) {
+    public EntityStymphalianBird(EntityType<? extends Monster> t, Level worldIn) {
         super(t, worldIn);
     }
 
@@ -79,20 +80,20 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new SwimGoal(this));
+        this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new StymphalianBirdAIFlee(this, 10));
         this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.5D, false));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new StymphalianBirdAIAirTarget(this));
-        this.goalSelector.addGoal(7, new LookAtGoal(this, LivingEntity.class, 6.0F));
-        this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, LivingEntity.class, 6.0F));
+        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new StymphalianBirdAITarget(this, LivingEntity.class, true));
     }
 
 
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.createMobAttributes()
+    public static AttributeSupplier.Builder bakeAttributes() {
+        return Mob.createMobAttributes()
             //HEALTH
             .add(Attributes.MAX_HEALTH, 24.0D)
             //SPEED
@@ -113,7 +114,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     }
 
     @Override
-    protected int getExperienceReward(PlayerEntity player) {
+    protected int getExperienceReward(Player player) {
         return 10;
     }
 
@@ -121,12 +122,12 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     public void tick() {
         super.tick();
         if (!this.level.isClientSide && this.level.getDifficulty() == Difficulty.PEACEFUL) {
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
         }
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT tag) {
+    public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         if (this.getVictorId() != null) {
             tag.putUUID("VictorUUID", this.getVictorId());
@@ -135,7 +136,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT tag) {
+    public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         UUID s;
 
@@ -143,7 +144,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
             s = tag.getUUID("VictorUUID");
         } else {
             String s1 = tag.getString("VictorUUID");
-            s = PreYggdrasilConverter.convertMobOwnerIfNecessary(this.getServer(), s1);
+            s = OldUsersConverter.convertMobOwnerIfNecessary(this.getServer(), s1);
         }
 
         if (s != null) {
@@ -212,8 +213,8 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         return entityIn == this.getVictor();
     }
 
-    public boolean isTargetBlocked(Vector3d target) {
-        return level.clip(new RayTraceContext(target, this.getEyePosition(1.0F), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
+    public boolean isTargetBlocked(Vec3 target) {
+        return level.clip(new ClipContext(target, this.getEyePosition(1.0F), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).getType() == HitResult.Type.MISS;
     }
 
     @Override
@@ -228,10 +229,10 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     @Override
     public void aiStep() {
         super.aiStep();
-        if (level.getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof PlayerEntity) {
+        if (level.getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
             this.setTarget(null);
         }
-        if (this.getTarget() != null && (this.getTarget() instanceof PlayerEntity && ((PlayerEntity) this.getTarget()).isCreative() || this.getVictor() != null && this.isVictor(this.getTarget()))) {
+        if (this.getTarget() != null && (this.getTarget() instanceof Player && ((Player) this.getTarget()).isCreative() || this.getVictor() != null && this.isVictor(this.getTarget()))) {
             this.setTarget(null);
         }
         if (this.flock == null) {
@@ -278,17 +279,17 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
                 LivingEntity target = this.getTarget();
                 this.lookAt(target, 360, 360);
                 if (this.isFlying()) {
-                    yRot = yBodyRot;
+                    setYRot(yBodyRot);
                     if ((this.getAnimationTick() == 7 || this.getAnimationTick() == 14) && isDirectPathBetweenPoints(this, this.position(), target.position())) {
                         this.playSound(IafSoundRegistry.STYMPHALIAN_BIRD_ATTACK, 1, 1);
                         for (int i = 0; i < 4; i++) {
-                            float wingX = (float) (getX() + 1.8F * 0.5F * MathHelper.cos((float) ((yRot + 180 * (i % 2)) * Math.PI / 180)));
-                            float wingZ = (float) (getZ() + 1.8F * 0.5F * MathHelper.sin((float) ((yRot + 180 * (i % 2)) * Math.PI / 180)));
+                            float wingX = (float) (getX() + 1.8F * 0.5F * Mth.cos((float) ((getYRot() + 180 * (i % 2)) * Math.PI / 180)));
+                            float wingZ = (float) (getZ() + 1.8F * 0.5F * Mth.sin((float) ((getYRot() + 180 * (i % 2)) * Math.PI / 180)));
                             float wingY = (float) (getY() + 1F);
                             double d0 = target.getX() - wingX;
                             double d1 = target.getBoundingBox().minY - wingY;
                             double d2 = target.getZ() - wingZ;
-                            double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
+                            double d3 = Math.sqrt(d0 * d0 + d2 * d2);
                             EntityStymphalianFeather entityarrow = new EntityStymphalianFeather(
                                 IafEntityRegistry.STYMPHALIAN_FEATHER.get(), level, this);
                             entityarrow.setPos(wingX, wingY, wingZ);
@@ -362,8 +363,8 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
-    public boolean isDirectPathBetweenPoints(Entity entity, Vector3d vec1, Vector3d vec2) {
-        return level.clip(new RayTraceContext(vec1, vec2, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
+    public boolean isDirectPathBetweenPoints(Entity entity, Vec3 vec1, Vec3 vec2) {
+        return level.clip(new ClipContext(vec1, vec2, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).getType() == HitResult.Type.MISS;
     }
 
     public void flyAround() {
@@ -376,7 +377,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
     }
 
     public void flyTowardsTarget() {
-        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vector3d(airTarget.getX(), this.getY(), airTarget.getZ())) > 3) {
+        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3(airTarget.getX(), this.getY(), airTarget.getZ())) > 3) {
             double targetX = airTarget.getX() + 0.5D - getX();
             double targetY = Math.min(airTarget.getY(), 256) + 1D - getY();
             double targetZ = airTarget.getZ() + 0.5D - getZ();
@@ -385,17 +386,17 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
             double motionZ = (Math.signum(targetZ) * 0.5D - this.getDeltaMovement().z) * 0.100000000372529 * getFlySpeed(false);
             this.setDeltaMovement(this.getDeltaMovement().add(motionX, motionY, motionZ));
             float angle = (float) (Math.atan2(this.getDeltaMovement().z, this.getDeltaMovement().x) * 180.0D / Math.PI) - 90.0F;
-            float rotation = MathHelper.wrapDegrees(angle - yRot);
+            float rotation = Mth.wrapDegrees(angle - getYRot());
             zza = 0.5F;
-            yRotO = yRot;
-            yRot += rotation;
+            yRotO = getYRot();
+            setYRot(getYRot() + rotation);
             if (!this.isFlying()) {
                 this.setFlying(true);
             }
         } else {
             this.airTarget = null;
         }
-        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vector3d(airTarget.getX(), this.getY(), airTarget.getZ())) < 3 && this.doesWantToLand()) {
+        if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3(airTarget.getX(), this.getY(), airTarget.getZ())) < 3 && this.doesWantToLand()) {
             this.setFlying(false);
         }
     }
@@ -450,7 +451,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
 
     @Override
     @Nullable
-    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(IafConfig.stymphalianBirdTargetSearchLength);
         return spawnDataIn;
@@ -467,7 +468,7 @@ public class EntityStymphalianBird extends MonsterEntity implements IAnimatedEnt
         }
     }
 
-    public float getDistanceSquared(Vector3d Vector3d) {
+    public float getDistanceSquared(Vec3 Vector3d) {
         float f = (float) (this.getX() - Vector3d.x);
         float f1 = (float) (this.getY() - Vector3d.y);
         float f2 = (float) (this.getZ() - Vector3d.z);

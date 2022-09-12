@@ -1,12 +1,12 @@
 package com.github.alexthe666.iceandfire.item;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.world.World;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class ItemDragonFlesh extends ItemGenericFood {
 
@@ -29,15 +29,15 @@ public class ItemDragonFlesh extends ItemGenericFood {
         return "fire_dragon_flesh";
     }
 
-    public void onFoodEaten(ItemStack stack, World worldIn, LivingEntity livingEntity) {
+    public void onFoodEaten(ItemStack stack, Level worldIn, LivingEntity livingEntity) {
         if (!worldIn.isClientSide) {
             if (dragonType == 0) {
                 livingEntity.setSecondsOnFire(5);
             } else if (dragonType == 1) {
-                livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 2));
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 2));
             } else {
                 if (!livingEntity.level.isClientSide) {
-                    LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(livingEntity.level);
+                    LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(livingEntity.level);
                     lightningboltentity.moveTo(livingEntity.position());
                     if (!livingEntity.level.isClientSide) {
                         livingEntity.level.addFreshEntity(lightningboltentity);

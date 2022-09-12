@@ -1,15 +1,15 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityGhost;
-import net.minecraft.entity.Entity;
-import net.minecraft.pathfinding.FlyingPathNavigator;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.level.Level;
 
-public class GhostPathNavigator extends FlyingPathNavigator {
+public class GhostPathNavigator extends FlyingPathNavigation {
 
     public EntityGhost ghost;
 
-    public GhostPathNavigator(EntityGhost entityIn, World worldIn) {
+    public GhostPathNavigator(EntityGhost entityIn, Level worldIn) {
         super(entityIn, worldIn);
         ghost = entityIn;
 

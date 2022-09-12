@@ -20,52 +20,55 @@ import com.github.alexthe666.iceandfire.message.MessageSirenSong;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateAmphibious;
 import com.google.common.base.Predicate;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.SwimmerPathNavigator;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVillagerFear, IHasCustomizableAttributes {
+public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFear, IHasCustomizableAttributes {
 
     public static final int SEARCH_RANGE = 32;
     public static final Predicate<Entity> SIREN_PREY = new Predicate<Entity>() {
         public boolean apply(@Nullable Entity p_apply_1_) {
-            return (p_apply_1_ instanceof PlayerEntity && !((PlayerEntity) p_apply_1_).isCreative() && !p_apply_1_.isSpectator()) || p_apply_1_ instanceof AbstractVillagerEntity || p_apply_1_ instanceof IHearsSiren;
+            return (p_apply_1_ instanceof Player && !((Player) p_apply_1_).isCreative() && !p_apply_1_.isSpectator()) || p_apply_1_ instanceof AbstractVillager || p_apply_1_ instanceof IHearsSiren;
         }
     };
-    private static final DataParameter<Integer> HAIR_COLOR = EntityDataManager.defineId(EntitySiren.class, DataSerializers.INT);
-    private static final DataParameter<Boolean> AGGRESSIVE = EntityDataManager.defineId(EntitySiren.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> SING_POSE = EntityDataManager.defineId(EntitySiren.class, DataSerializers.INT);
-    private static final DataParameter<Boolean> SINGING = EntityDataManager.defineId(EntitySiren.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> SWIMMING = EntityDataManager.defineId(EntitySiren.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> CHARMED = EntityDataManager.defineId(EntitySiren.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Byte> CLIMBING = EntityDataManager.defineId(EntitySiren.class, DataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> HAIR_COLOR = SynchedEntityData.defineId(EntitySiren.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> AGGRESSIVE = SynchedEntityData.defineId(EntitySiren.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> SING_POSE = SynchedEntityData.defineId(EntitySiren.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> SINGING = SynchedEntityData.defineId(EntitySiren.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> SWIMMING = SynchedEntityData.defineId(EntitySiren.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> CHARMED = SynchedEntityData.defineId(EntitySiren.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> CLIMBING = SynchedEntityData.defineId(EntitySiren.class, EntityDataSerializers.BYTE);
     public static Animation ANIMATION_BITE = Animation.create(20);
     public static Animation ANIMATION_PULL = Animation.create(20);
     public ChainBuffer tail_buffer;
@@ -79,7 +82,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     private boolean isLandNavigator;
     private int ticksAgressive;
 
-    public EntitySiren(EntityType<EntitySiren> t, World worldIn) {
+    public EntitySiren(EntityType<EntitySiren> t, Level worldIn) {
         super(t, worldIn);
         IHasCustomizableAttributes.applyAttributesForEntity(t, this);
         this.switchNavigator(true);
@@ -88,19 +91,19 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
         this.goalSelector.addGoal(1, new AquaticAIGetInWater(this, 1.0D));
         this.goalSelector.addGoal(1, new AquaticAIGetOutOfWater(this, 1.0D));
         this.goalSelector.addGoal(2, new SirenAIWander(this, 1));
-        this.goalSelector.addGoal(3, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F, 1.0F));
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F, 1.0F));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, PlayerEntity.class, 10, true, false, new Predicate<PlayerEntity>() {
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, Player.class, 10, true, false, new Predicate<Player>() {
             @Override
-            public boolean apply(@Nullable PlayerEntity entity) {
+            public boolean apply(@Nullable Player entity) {
                 return EntitySiren.this.isAgressive() && !(entity.isCreative() || entity.isSpectator());
             }
         }));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, AbstractVillagerEntity.class, 10, true, false, new Predicate<AbstractVillagerEntity>() {
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, AbstractVillager.class, 10, true, false, new Predicate<AbstractVillager>() {
             @Override
-            public boolean apply(@Nullable AbstractVillagerEntity entity) {
+            public boolean apply(@Nullable AbstractVillager entity) {
                 return EntitySiren.this.isAgressive();
             }
         }));
@@ -110,15 +113,15 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     public static boolean isWearingEarplugs(LivingEntity entity) {
-        ItemStack helmet = entity.getItemBySlot(EquipmentSlotType.HEAD);
+        ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
         return helmet.getItem() == IafItemRegistry.EARPLUGS || helmet != ItemStack.EMPTY && helmet.getItem().getDescriptionId().contains("earmuff");
     }
 
     public static boolean isDrawnToSong(Entity entity) {
-        return entity instanceof PlayerEntity && !((PlayerEntity) entity).isCreative() || entity instanceof AbstractVillagerEntity || entity instanceof IHearsSiren;
+        return entity instanceof Player && !((Player) entity).isCreative() || entity instanceof AbstractVillager || entity instanceof IHearsSiren;
     }
 
-    protected int getExperienceReward(PlayerEntity player) {
+    protected int getExperienceReward(Player player) {
         return 8;
     }
 
@@ -141,23 +144,23 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
         return true;
     }
 
-    public boolean isDirectPathBetweenPoints(Vector3d vec1, Vector3d pos) {
-        Vector3d Vector3d1 = new Vector3d(pos.x() + 0.5D, pos.y() + 0.5D, pos.z() + 0.5D);
-        return this.level.clip(new RayTraceContext(vec1, Vector3d1, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
+    public boolean isDirectPathBetweenPoints(Vec3 vec1, Vec3 pos) {
+        Vec3 Vector3d1 = new Vec3(pos.x() + 0.5D, pos.y() + 0.5D, pos.z() + 0.5D);
+        return this.level.clip(new ClipContext(vec1, Vector3d1, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).getType() == HitResult.Type.MISS;
     }
 
-    public float getPathfindingMalus(PathNodeType nodeType) {
-        return nodeType == PathNodeType.WATER ? 0F : super.getPathfindingMalus(nodeType);
+    public float getPathfindingMalus(BlockPathTypes nodeType) {
+        return nodeType == BlockPathTypes.WATER ? 0F : super.getPathfindingMalus(nodeType);
     }
 
     private void switchNavigator(boolean onLand) {
         if (onLand) {
-            this.moveControl = new MovementController(this);
+            this.moveControl = new MoveControl(this);
             this.navigation = new PathNavigateAmphibious(this, level);
             this.isLandNavigator = true;
         } else {
             this.moveControl = new EntitySiren.SwimmingMoveHelper();
-            this.navigation = new SwimmerPathNavigator(this, level);
+            this.navigation = new WaterBoundPathNavigation(this, level);
             this.isLandNavigator = false;
         }
     }
@@ -179,7 +182,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     @Override
     public void aiStep() {
         super.aiStep();
-        yBodyRot = yRot;
+        yBodyRot = getYRot();
 
         LivingEntity attackTarget = this.getTarget();
         if (singCooldown > 0) {
@@ -204,11 +207,11 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
             double d0 = this.getX() - attackTarget.getX();
             double d2 = this.getZ() - attackTarget.getZ();
             double d1 = this.getY() - 1 - attackTarget.getY();
-            double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
-            float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
-            float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
-            attackTarget.xRot = updateRotation(attackTarget.xRot, f1, 30F);
-            attackTarget.yRot = updateRotation(attackTarget.yRot, f, 30F);
+            double d3 = Math.sqrt((float) (d0 * d0 + d2 * d2));
+            float f = (float) (Mth.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
+            float f1 = (float) (-(Mth.atan2(d1, d3) * (180D / Math.PI)));
+            attackTarget.setXRot(updateRotation(attackTarget.getXRot(), f1, 30F));
+            attackTarget.setYRot(updateRotation(attackTarget.getYRot(), f, 30F));
         }
         if (level.isClientSide) {
             tail_buffer.calculateChainSwingBuffer(40, 10, 2.5F, this);
@@ -244,7 +247,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
         if ((!this.isInWater() || pathOnHighGround) && !this.isLandNavigator) {
             switchNavigator(true);
         }
-        if (target instanceof PlayerEntity && ((PlayerEntity) target).isCreative()) {
+        if (target instanceof Player && ((Player) target).isCreative()) {
             this.setTarget(null);
             this.setAggressive(false);
         }
@@ -273,13 +276,13 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
         }
         if (isActuallySinging() && !this.isInWater()) {
             if (this.getRandom().nextInt(3) == 0) {
-                yBodyRot = yRot;
+                yBodyRot = getYRot();
                 if (this.level.isClientSide) {
                     float radius = -0.9F;
                     float angle = (0.01745329251F * this.yBodyRot) - 3F;
-                    double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+                    double extraX = radius * Mth.sin((float) (Math.PI + angle));
                     double extraY = 1.2F;
-                    double extraZ = radius * MathHelper.cos(angle);
+                    double extraZ = radius * Mth.cos(angle);
                     IceAndFire.PROXY.spawnParticle(EnumParticles.Siren_Music, this.getX() + extraX + this.random.nextFloat() - 0.5, this.getY() + extraY + this.random.nextFloat() - 0.5, this.getZ() + extraZ + this.random.nextFloat() - 0.5, 0, 0, 0);
                 }
             }
@@ -325,7 +328,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT tag) {
+    public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("HairColor", this.getHairColor());
         tag.putBoolean("Aggressive", this.isAgressive());
@@ -337,7 +340,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT tag) {
+    public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setHairColor(tag.getInt("HairColor"));
         this.setAggressive(tag.getBoolean("Aggressive"));
@@ -417,12 +420,12 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     public void setSingingPose(int pose) {
-        this.entityData.set(SING_POSE, MathHelper.clamp(pose, 0, 2));
+        this.entityData.set(SING_POSE, Mth.clamp(pose, 0, 2));
     }
 
 
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.createMobAttributes()
+    public static AttributeSupplier.Builder bakeAttributes() {
+        return Mob.createMobAttributes()
             //HEALTH
             .add(Attributes.MAX_HEALTH, IafConfig.sirenMaxHealth)
             //SPEED
@@ -432,7 +435,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     @Override
-    public AttributeModifierMap.MutableAttribute getConfigurableAttributes() {
+    public AttributeSupplier.Builder getConfigurableAttributes() {
         return bakeAttributes();
     }
 
@@ -450,7 +453,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
 
     @Override
     @Nullable
-    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setHairColor(this.getRandom().nextInt(3));
         this.setSingingPose(this.getRandom().nextInt(3));
@@ -458,7 +461,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     public static float updateRotation(float angle, float targetAngle, float maxIncrease) {
-        float f = MathHelper.wrapDegrees(targetAngle - angle);
+        float f = Mth.wrapDegrees(targetAngle - angle);
         if (f > maxIncrease) {
             f = maxIncrease;
         }
@@ -509,8 +512,8 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
     }
 
     @Override
-    public void travel(Vector3d motion) {
-      super.travel(motion);
+    public void travel(Vec3 motion) {
+        super.travel(motion);
     }
 
     @Override
@@ -528,7 +531,7 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
         return isAgressive();
     }
 
-    class SwimmingMoveHelper extends MovementController {
+    class SwimmingMoveHelper extends MoveControl {
         private final EntitySiren siren = EntitySiren.this;
 
         public SwimmingMoveHelper() {
@@ -537,28 +540,28 @@ public class EntitySiren extends MonsterEntity implements IAnimatedEntity, IVill
 
         @Override
         public void tick() {
-            if (this.operation == MovementController.Action.MOVE_TO) {
+            if (this.operation == MoveControl.Operation.MOVE_TO) {
                 double distanceX = this.wantedX - siren.getX();
                 double distanceY = this.wantedY - siren.getY();
                 double distanceZ = this.wantedZ - siren.getZ();
                 double distance = Math.abs(distanceX * distanceX + distanceZ * distanceZ);
-                double distanceWithY = MathHelper.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
+                double distanceWithY = Math.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
                 distanceY = distanceY / distanceWithY;
                 float angle = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
-                siren.yRot = this.rotlerp(siren.yRot, angle, 30.0F);
+                siren.setYRot(this.rotlerp(siren.getYRot(), angle, 30.0F));
                 siren.setSpeed(1F);
                 float f1 = 0;
                 float f2 = 0;
                 if (distance < (double) Math.max(1.0F, siren.getBbWidth())) {
-                    float f = siren.yRot * 0.017453292F;
-                    f1 -= (double) (MathHelper.sin(f) * 0.35F);
-                    f2 += (double) (MathHelper.cos(f) * 0.35F);
+                    float f = siren.getYRot() * 0.017453292F;
+                    f1 -= (double) (Mth.sin(f) * 0.35F);
+                    f2 += (double) (Mth.cos(f) * 0.35F);
                 }
                 siren.setDeltaMovement(siren.getDeltaMovement().add(f1, siren.getSpeed() * distanceY * 0.1D, f2));
-            } else if (this.operation == MovementController.Action.JUMPING) {
+            } else if (this.operation == MoveControl.Operation.JUMPING) {
                 siren.setSpeed((float) (this.speedModifier * siren.getAttribute(Attributes.MOVEMENT_SPEED).getValue()));
                 if (siren.onGround) {
-                    this.operation = MovementController.Action.WAIT;
+                    this.operation = MoveControl.Operation.WAIT;
                 }
             } else {
                 siren.setSpeed(0.0F);

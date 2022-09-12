@@ -1,11 +1,11 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 import java.util.Random;
@@ -29,11 +29,11 @@ public class PixieAIMoveRandom extends Goal {
 
     protected boolean isDirectPathBetweenPoints(BlockPos posVec31, BlockPos posVec32) {
         return this.pixie.level.clip(
-                new RayTraceContext(new Vector3d(posVec31.getX() + 0.5D, posVec31.getY() + 0.5D, posVec31.getZ() + 0.5D),
-                    new Vector3d(posVec32.getX() + 0.5D, posVec32.getY() + this.pixie.getBbHeight() * 0.5D,
+                new ClipContext(new Vec3(posVec31.getX() + 0.5D, posVec31.getY() + 0.5D, posVec31.getZ() + 0.5D),
+                    new Vec3(posVec32.getX() + 0.5D, posVec32.getY() + this.pixie.getBbHeight() * 0.5D,
                         posVec32.getZ() + 0.5D),
-                    RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this.pixie))
-            .getType() == RayTraceResult.Type.MISS;
+                    ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.pixie))
+            .getType() == HitResult.Type.MISS;
     }
 
     @Override

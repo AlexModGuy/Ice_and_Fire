@@ -13,8 +13,9 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 @JeiPlugin
 public class IceAndFireJEIPlugin implements IModPlugin {
@@ -25,7 +26,7 @@ public class IceAndFireJEIPlugin implements IModPlugin {
     public static final ResourceLocation LIGHTNING_DRAGON_FORGE_ID = new ResourceLocation("iceandfire:lightning_dragon_forge");
 
     private void addDescription(IRecipeRegistration registry, ItemStack itemStack) {
-        registry.addIngredientInfo(itemStack, VanillaTypes.ITEM, itemStack.getDescriptionId() + ".jei_desc");
+        registry.addIngredientInfo(itemStack, VanillaTypes.ITEM, new TranslatableComponent(itemStack.getDescriptionId() + ".jei_desc"));
     }
 
     @SuppressWarnings("deprecation")
@@ -58,7 +59,7 @@ public class IceAndFireJEIPlugin implements IModPlugin {
             addDescription(registry, new ItemStack(skull.skull_item));
         }
         for (ItemStack stack : IafRecipeRegistry.BANNER_ITEMS) {
-            registry.addIngredientInfo(stack, VanillaTypes.ITEM, "item.iceandfire.custom_banner.jei_desc");
+            registry.addIngredientInfo(stack, VanillaTypes.ITEM, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
         }
     }
 

@@ -10,31 +10,31 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.Random;
@@ -50,20 +50,20 @@ public class EntityLightningDragon extends EntityDragonBase {
     public static final ResourceLocation FEMALE_LOOT = new ResourceLocation("iceandfire", "entities/dragon/lightning_dragon_female");
     public static final ResourceLocation MALE_LOOT = new ResourceLocation("iceandfire", "entities/dragon/lightning_dragon_male");
     public static final ResourceLocation SKELETON_LOOT = new ResourceLocation("iceandfire", "entities/dragon/lightning_dragon_skeleton");
-    private static final DataParameter<Boolean> HAS_LIGHTNING_TARGET = EntityDataManager.defineId(EntityLightningDragon.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Float> LIGHTNING_TARGET_X = EntityDataManager.defineId(EntityLightningDragon.class, DataSerializers.FLOAT);
-    private static final DataParameter<Float> LIGHTNING_TARGET_Y = EntityDataManager.defineId(EntityLightningDragon.class, DataSerializers.FLOAT);
-    private static final DataParameter<Float> LIGHTNING_TARGET_Z = EntityDataManager.defineId(EntityLightningDragon.class, DataSerializers.FLOAT);
+    private static final EntityDataAccessor<Boolean> HAS_LIGHTNING_TARGET = SynchedEntityData.defineId(EntityLightningDragon.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Float> LIGHTNING_TARGET_X = SynchedEntityData.defineId(EntityLightningDragon.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> LIGHTNING_TARGET_Y = SynchedEntityData.defineId(EntityLightningDragon.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> LIGHTNING_TARGET_Z = SynchedEntityData.defineId(EntityLightningDragon.class, EntityDataSerializers.FLOAT);
 
-    public EntityLightningDragon(World worldIn) {
+    public EntityLightningDragon(Level worldIn) {
         this(IafEntityRegistry.LIGHTNING_DRAGON.get(), worldIn);
     }
 
-    public EntityLightningDragon(EntityType<?> t, World worldIn) {
+    public EntityLightningDragon(EntityType<?> t, Level worldIn) {
         super(t, worldIn, DragonType.LIGHTNING, 1, 1 + IafConfig.dragonAttackDamage, IafConfig.dragonHealth * 0.04, IafConfig.dragonHealth, 0.15F, 0.4F);
-        this.setPathfindingMalus(PathNodeType.DANGER_FIRE, 0.0F);
-        this.setPathfindingMalus(PathNodeType.DAMAGE_FIRE, 0.0F);
-        this.setPathfindingMalus(PathNodeType.LAVA, 8.0F);
+        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, 0.0F);
+        this.setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, 0.0F);
+        this.setPathfindingMalus(BlockPathTypes.LAVA, 8.0F);
         ANIMATION_SPEAK = Animation.create(20);
         ANIMATION_BITE = Animation.create(35);
         ANIMATION_SHAKEPREY = Animation.create(65);
@@ -75,7 +75,7 @@ public class EntityLightningDragon extends EntityDragonBase {
         this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
     }
 
-    public void onStruckByLightning(LightningBoltEntity lightningBolt) {
+    public void onStruckByLightning(LightningBolt lightningBolt) {
         this.heal(15F);
     }
 
@@ -98,7 +98,7 @@ public class EntityLightningDragon extends EntityDragonBase {
         if (entity instanceof EntityDragonBase && !this.isTame()) {
             return entity.getType() != this.getType() && this.getBbWidth() >= entity.getBbWidth() && !((EntityDragonBase) entity).isMobDead();
         }
-        return entity instanceof PlayerEntity || DragonUtils.isDragonTargetable(entity, IafTagRegistry.LIGHTNING_DRAGON_TARGETS) || !this.isTame() && DragonUtils.isVillager(entity);
+        return entity instanceof Player || DragonUtils.isDragonTargetable(entity, IafTagRegistry.LIGHTNING_DRAGON_TARGETS) || !this.isTame() && DragonUtils.isVillager(entity);
     }
 
     @Override
@@ -109,7 +109,7 @@ public class EntityLightningDragon extends EntityDragonBase {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
     }
 
     @Override
@@ -129,7 +129,7 @@ public class EntityLightningDragon extends EntityDragonBase {
     public boolean isInvulnerableTo(DamageSource i) {
         if (i.msgId.equals(DamageSource.LIGHTNING_BOLT.msgId)) {
             this.heal(15F);
-            this.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 20, 1));
+            this.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20, 1));
             return true;
         }
         return super.isInvulnerableTo(i);
@@ -265,7 +265,7 @@ public class EntityLightningDragon extends EntityDragonBase {
     protected void breathFireAtPos(BlockPos burningTarget) {
         if (this.isBreathingFire()) {
             if (this.isActuallyBreathingFire()) {
-                yRot = yBodyRot;
+                setYRot(yBodyRot);
                 if (this.fireTicks % 7 == 0) {
                     this.playSound(IafSoundRegistry.LIGHTNINGDRAGON_BREATH, 4, 1);
                 }
@@ -282,8 +282,8 @@ public class EntityLightningDragon extends EntityDragonBase {
             if (this.getAnimation() != ANIMATION_FIRECHARGE) {
                 this.setAnimation(ANIMATION_FIRECHARGE);
             } else if (this.getAnimationTick() == 20) {
-                yRot = yBodyRot;
-                Vector3d headVec = this.getHeadPosition();
+                setYRot(yBodyRot);
+                Vec3 headVec = this.getHeadPosition();
                 this.playSound(IafSoundRegistry.LIGHTNINGDRAGON_BREATH_CRACKLE, 4, 1);
                 double d2 = controller.getLookAngle().x;
                 double d3 = controller.getLookAngle().y;
@@ -303,11 +303,11 @@ public class EntityLightningDragon extends EntityDragonBase {
         } else {
             if (this.isBreathingFire()) {
                 if (this.isActuallyBreathingFire()) {
-                    yRot = yBodyRot;
+                    setYRot(yBodyRot);
                     if (this.fireTicks % 7 == 0) {
                         this.playSound(IafSoundRegistry.LIGHTNINGDRAGON_BREATH, 4, 1);
                     }
-                    RayTraceResult mop = rayTraceRider(controller, 10 * this.getDragonStage(), 1.0F);
+                    HitResult mop = rayTraceRider(controller, 10 * this.getDragonStage(), 1.0F);
                     if (mop != null) {
                         stimulateFire(mop.getLocation().x, mop.getLocation().y, mop.getLocation().z, 1);
                     }
@@ -324,7 +324,7 @@ public class EntityLightningDragon extends EntityDragonBase {
     }
 
     @Override
-    protected IItemProvider getHeartItem() {
+    protected ItemLike getHeartItem() {
         return IafItemRegistry.LIGHTNING_DRAGON_HEART;
     }
 
@@ -343,8 +343,8 @@ public class EntityLightningDragon extends EntityDragonBase {
                 if (this.getAnimation() != ANIMATION_FIRECHARGE) {
                     this.setAnimation(ANIMATION_FIRECHARGE);
                 } else if (this.getAnimationTick() == 20) {
-                    yRot = yBodyRot;
-                    Vector3d headVec = this.getHeadPosition();
+                    setYRot(yBodyRot);
+                    Vec3 headVec = this.getHeadPosition();
                     double d2 = entity.getX() - headVec.x;
                     double d3 = entity.getY() - headVec.y;
                     double d4 = entity.getZ() - headVec.z;
@@ -368,7 +368,7 @@ public class EntityLightningDragon extends EntityDragonBase {
             } else {
                 if (this.isBreathingFire()) {
                     if (this.isActuallyBreathingFire()) {
-                        yRot = yBodyRot;
+                        setYRot(yBodyRot);
                         if (this.tickCount % 5 == 0) {
                             this.playSound(IafSoundRegistry.LIGHTNINGDRAGON_BREATH, 4, 1);
                         }
@@ -409,8 +409,8 @@ public class EntityLightningDragon extends EntityDragonBase {
             if (this.getAnimation() != ANIMATION_FIRECHARGE) {
                 this.setAnimation(ANIMATION_FIRECHARGE);
             } else if (this.getAnimationTick() == 20) {
-                yRot = yBodyRot;
-                Vector3d headVec = this.getHeadPosition();
+                setYRot(yBodyRot);
+                Vec3 headVec = this.getHeadPosition();
                 double d2 = burnX - headVec.x;
                 double d3 = burnY - headVec.y;
                 double d4 = burnZ - headVec.z;
@@ -432,11 +432,11 @@ public class EntityLightningDragon extends EntityDragonBase {
         this.burnParticleX = burnX;
         this.burnParticleY = burnY;
         this.burnParticleZ = burnZ;
-        Vector3d headPos = getHeadPosition();
+        Vec3 headPos = getHeadPosition();
         double d2 = burnX - headPos.x;
         double d3 = burnY - headPos.y;
         double d4 = burnZ - headPos.z;
-        float particleScale = MathHelper.clamp(this.getRenderSize() * 0.08F, 0.55F, 3F);
+        float particleScale = Mth.clamp(this.getRenderSize() * 0.08F, 0.55F, 3F);
         double distance = Math.max(2.5F * this.distanceToSqr(burnX, burnY, burnZ), 0);
         double conqueredDistance = burnProgress / 40D * distance;
         int increment = (int) Math.ceil(conqueredDistance / 100);
@@ -449,10 +449,10 @@ public class EntityLightningDragon extends EntityDragonBase {
                 setLightningTargetVec((float)burnX, (float)burnY, (float)burnZ);
             } else {
                 if (!level.isClientSide) {
-                    RayTraceResult result = this.level.clip(new RayTraceContext(
-                        new Vector3d(this.getX(), this.getY() + this.getEyeHeight(), this.getZ()),
-                        new Vector3d(progressX, progressY, progressZ), RayTraceContext.BlockMode.COLLIDER,
-                        RayTraceContext.FluidMode.NONE, this));
+                    HitResult result = this.level.clip(new ClipContext(
+                        new Vec3(this.getX(), this.getY() + this.getEyeHeight(), this.getZ()),
+                        new Vec3(progressX, progressY, progressZ), ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE, this));
                     BlockPos pos = new BlockPos(result.getLocation());
                     IafDragonDestructionManager.destroyAreaLightning(level, pos, this);
                     setHasLightningTarget(true);
@@ -521,8 +521,8 @@ public class EntityLightningDragon extends EntityDragonBase {
     protected void spawnBabyParticles() {
         for (int i = 0; i < 5; i++) {
             float radiusAdd = i * 0.15F;
-            float headPosX = (float) (this.getX() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * MathHelper.cos((float) ((yRot + 90) * Math.PI / 180)));
-            float headPosZ = (float) (this.getY() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * MathHelper.sin((float) ((yRot + 90) * Math.PI / 180)));
+            float headPosX = (float) (this.getX() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Mth.cos((float) ((getYRot() + 90) * Math.PI / 180)));
+            float headPosZ = (float) (this.getY() + 1.8F * getRenderSize() * (0.3F + radiusAdd) * Mth.sin((float) ((getYRot() + 90) * Math.PI / 180)));
             float headPosY = (float) (this.getZ() + 0.5 * getRenderSize() * 0.3F);
             level.addParticle(ParticleTypes.LARGE_SMOKE, headPosX, headPosY, headPosZ, 0, 0, 0);
         }
@@ -535,7 +535,7 @@ public class EntityLightningDragon extends EntityDragonBase {
 
 
     @Override
-    public Vector3d getHeadPosition() {
+    public Vec3 getHeadPosition() {
         //this.setDragonPitch(this.ticksExisted % 180 - 90);
         float sitProg = this.sitProgress * 0.005F;
         float deadProg = this.modelDeadProgress * -0.02F;
@@ -556,7 +556,7 @@ public class EntityLightningDragon extends EntityDragonBase {
         float pitchMinus = 0;
         float dragonPitch = -getDragonPitch();// -90 = down, 0 = straight, 90 = up
         if (this.isFlying() || this.isHovering()) {
-            if(dragonPitch > 0){
+            if (dragonPitch > 0) {
                 pitchY = (dragonPitch / 90F) * 1.2F;
             } else {
                 pitchY = (dragonPitch / 90F) * 3F;
@@ -566,10 +566,10 @@ public class EntityLightningDragon extends EntityDragonBase {
         float absPitch = Math.abs(dragonPitch) / 90F;//1 down/up, 0 straight
         float minXZ = dragonPitch > 20 ? (dragonPitch - 20) * 0.009F : 0;
         float xzMod = (0.58F - hoverProg * 0.45F + flyProg * 0.2F + absPitch * 0.3F - sitProg) * flightXz * getRenderSize();
-        float xzModSine = xzMod * (Math.max(0.25F, MathHelper.cos((float) Math.toRadians(dragonPitch))) - minXZ);
-        float headPosX = (float) (getX() + (xzModSine) * MathHelper.cos((float) ((yBodyRot + 90) * Math.PI / 180)));
+        float xzModSine = xzMod * (Math.max(0.25F, Mth.cos((float) Math.toRadians(dragonPitch))) - minXZ);
+        float headPosX = (float) (getX() + (xzModSine) * Mth.cos((float) ((yBodyRot + 90) * Math.PI / 180)));
         float headPosY = (float) (getY() + (0.7F + (sitProg * 5F) + hoverProg + deadProg + epicRoarProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F);
-        float headPosZ = (float) (getZ() + (xzModSine) * MathHelper.sin((float) ((yBodyRot + 90) * Math.PI / 180)));
-        return new Vector3d(headPosX, headPosY, headPosZ);
+        float headPosZ = (float) (getZ() + (xzModSine) * Mth.sin((float) ((yBodyRot + 90) * Math.PI / 180)));
+        return new Vec3(headPosX, headPosY, headPosZ);
     }
 }

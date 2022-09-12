@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -20,7 +20,7 @@ public class WorldGenRoostBoulder {
         this.replaceAir = replaceAir;
     }
 
-    public boolean generate(IWorld worldIn, Random rand, BlockPos position) {
+    public boolean generate(LevelAccessor worldIn, Random rand, BlockPos position) {
         while (true) {
             label50:
             {

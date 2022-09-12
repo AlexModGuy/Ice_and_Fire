@@ -1,38 +1,37 @@
 package com.github.alexthe666.iceandfire.enums;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.ThreadLocalRandom;
-
 import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
 import com.github.alexthe666.iceandfire.item.ItemTrollLeather;
 import com.github.alexthe666.iceandfire.item.ItemTrollWeapon;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
 
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.ThreadLocalRandom;
 
 public enum EnumTroll {
     FOREST(IafItemRegistry.TROLL_FOREST_ARMOR_MATERIAL, Weapon.TRUNK, Weapon.COLUMN_FOREST, Weapon.AXE, Weapon.HAMMER),
     FROST(IafItemRegistry.TROLL_FROST_ARMOR_MATERIAL, Weapon.COLUMN_FROST, Weapon.TRUNK_FROST, Weapon.AXE, Weapon.HAMMER),
     MOUNTAIN(IafItemRegistry.TROLL_MOUNTAIN_ARMOR_MATERIAL, Weapon.COLUMN, Weapon.AXE, Weapon.HAMMER);
 
+    private final Weapon[] weapons;
     public ResourceLocation TEXTURE;
     public ResourceLocation TEXTURE_STONE;
     public ResourceLocation TEXTURE_EYES;
-    public IArmorMaterial material;
+    public ArmorMaterial material;
     public Item leather;
     public Item helmet;
     public Item chestplate;
     public Item leggings;
     public Item boots;
-    private Weapon[] weapons;
 
     EnumTroll(CustomArmorMaterial material, Weapon... weapons) {
         this.weapons = weapons;
@@ -41,10 +40,10 @@ public enum EnumTroll {
         TEXTURE_STONE = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase(Locale.ROOT) + "_stone.png");
         TEXTURE_EYES = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase(Locale.ROOT) + "_eyes.png");
         leather = new ItemTrollLeather(this);
-        helmet = new ItemTrollArmor(this, material, EquipmentSlotType.HEAD);
-        chestplate = new ItemTrollArmor(this, material, EquipmentSlotType.CHEST);
-        leggings = new ItemTrollArmor(this, material, EquipmentSlotType.LEGS);
-        boots = new ItemTrollArmor(this, material, EquipmentSlotType.FEET);
+        helmet = new ItemTrollArmor(this, material, EquipmentSlot.HEAD);
+        chestplate = new ItemTrollArmor(this, material, EquipmentSlot.CHEST);
+        leggings = new ItemTrollArmor(this, material, EquipmentSlot.LEGS);
+        boots = new ItemTrollArmor(this, material, EquipmentSlot.FEET);
 
     }
 

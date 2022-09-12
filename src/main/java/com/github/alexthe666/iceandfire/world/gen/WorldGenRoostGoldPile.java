@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
-import net.minecraft.block.Block;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -16,7 +16,7 @@ public class WorldGenRoostGoldPile {
         this.block = block;
     }
 
-    public boolean generate(IWorld worldIn, Random rand, BlockPos position) {
+    public boolean generate(LevelAccessor worldIn, Random rand, BlockPos position) {
         int radius = rand.nextInt(3);
         int layers = radius;
         for (int i = 0; i < layers; i++) {
@@ -26,7 +26,7 @@ public class WorldGenRoostGoldPile {
             BlockPos up = position.above(i);
             for (BlockPos blockpos : BlockPos.betweenClosedStream(up.offset(-j, 0, -l), up.offset(j, 0, l)).map(BlockPos::immutable).collect(Collectors.toSet())) {
                 if (blockpos.distSqr(position) <= (double) (f * f)) {
-                    blockpos = worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, blockpos);
+                    blockpos = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, blockpos);
                     if (block instanceof BlockGoldPile) {
                         if (worldIn.isEmptyBlock(blockpos)) {
                             worldIn.setBlock(blockpos, block.defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + rand.nextInt(7)), 2);

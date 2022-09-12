@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.util;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 
 
 public class HomePosition {
@@ -12,19 +12,19 @@ public class HomePosition {
     BlockPos pos;
     String dimension;
 
-    public HomePosition(CompoundNBT compound) {
+    public HomePosition(CompoundTag compound) {
         read(compound);
     }
 
-    public HomePosition(CompoundNBT compound, World world) {
+    public HomePosition(CompoundTag compound, Level world) {
         read(compound, world);
     }
 
-    public HomePosition(BlockPos pos, World world) {
+    public HomePosition(BlockPos pos, Level world) {
         this(pos.getX(), pos.getY(), pos.getZ(), world);
     }
 
-    public HomePosition(int x, int y, int z, World world) {
+    public HomePosition(int x, int y, int z, Level world) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -40,7 +40,7 @@ public class HomePosition {
         return dimension == null ? "" : dimension;
     }
 
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundTag write(CompoundTag compound) {
         compound.putInt("HomeAreaX", this.x);
         compound.putInt("HomeAreaY", this.y);
         compound.putInt("HomeAreaZ", this.z);
@@ -49,14 +49,14 @@ public class HomePosition {
         return compound;
     }
 
-    public HomePosition read(CompoundNBT compound, World world) {
+    public HomePosition read(CompoundTag compound, Level world) {
         read(compound);
         if (this.dimension == null)
             this.dimension = DragonUtils.getDimensionName(world);
         return this;
     }
 
-    public HomePosition read(CompoundNBT compound) {
+    public HomePosition read(CompoundTag compound) {
         if (compound.contains("HomeAreaX"))
             this.x = compound.getInt("HomeAreaX");
         if (compound.contains("HomeAreaY"))

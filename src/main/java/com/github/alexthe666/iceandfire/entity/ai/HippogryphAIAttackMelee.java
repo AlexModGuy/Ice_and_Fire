@@ -1,20 +1,20 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.Path;
 
 import java.util.EnumSet;
 
 public class HippogryphAIAttackMelee extends Goal {
     protected final int attackInterval = 20;
-    protected MobEntity attacker;
+    protected Mob attacker;
     protected int attackTick;
-    World world;
+    Level world;
     double speedTowardsTarget;
     boolean longMemory;
     Path path;
@@ -25,7 +25,7 @@ public class HippogryphAIAttackMelee extends Goal {
     private int failedPathFindingPenalty = 0;
     private final boolean canPenalize = false;
 
-    public HippogryphAIAttackMelee(MobEntity creature, double speedIn, boolean useLongMemory) {
+    public HippogryphAIAttackMelee(Mob creature, double speedIn, boolean useLongMemory) {
         this.attacker = creature;
         this.world = creature.level;
         this.speedTowardsTarget = speedIn;
@@ -80,7 +80,7 @@ public class HippogryphAIAttackMelee extends Goal {
         } else if (!this.attacker.isWithinRestriction(LivingEntity.blockPosition())) {
             return false;
         } else {
-            return !(LivingEntity instanceof PlayerEntity) || !LivingEntity.isSpectator() && !((PlayerEntity) LivingEntity).isCreative();
+            return !(LivingEntity instanceof Player) || !LivingEntity.isSpectator() && !((Player) LivingEntity).isCreative();
         }
     }
 
@@ -100,7 +100,7 @@ public class HippogryphAIAttackMelee extends Goal {
     public void stop() {
         LivingEntity LivingEntity = this.attacker.getTarget();
 
-        if (LivingEntity instanceof PlayerEntity && (LivingEntity.isSpectator() || ((PlayerEntity) LivingEntity).isCreative())) {
+        if (LivingEntity instanceof Player && (LivingEntity.isSpectator() || ((Player) LivingEntity).isCreative())) {
             this.attacker.setTarget(null);
         }
 
@@ -118,7 +118,7 @@ public class HippogryphAIAttackMelee extends Goal {
             final double d0 = this.attacker.distanceToSqr(LivingEntity.getX(), LivingEntity.getBoundingBox().minY, LivingEntity.getZ());
             --this.delayCounter;
 
-            if ((this.longMemory || this.attacker.getSensing().canSee(LivingEntity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || LivingEntity.distanceToSqr(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.attacker.getRandom().nextFloat() < 0.05F)) {
+            if ((this.longMemory || this.attacker.getSensing().hasLineOfSight(LivingEntity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || LivingEntity.distanceToSqr(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.attacker.getRandom().nextFloat() < 0.05F)) {
                 this.targetX = LivingEntity.getX();
                 this.targetY = LivingEntity.getBoundingBox().minY;
                 this.targetZ = LivingEntity.getZ();
@@ -127,7 +127,7 @@ public class HippogryphAIAttackMelee extends Goal {
                 if (this.canPenalize) {
                     this.delayCounter += failedPathFindingPenalty;
                     if (this.attacker.getNavigation().getPath() != null) {
-                        net.minecraft.pathfinding.PathPoint finalPathPoint = this.attacker.getNavigation().getPath().getEndNode();
+                        net.minecraft.world.level.pathfinder.Node finalPathPoint = this.attacker.getNavigation().getPath().getEndNode();
                         if (finalPathPoint != null && LivingEntity.distanceToSqr(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1)
                             failedPathFindingPenalty = 0;
                         else
@@ -158,7 +158,7 @@ public class HippogryphAIAttackMelee extends Goal {
 
         if (distToEnemySqr <= d0) {
             this.attackTick = 20;
-            this.attacker.swing(Hand.MAIN_HAND);
+            this.attacker.swing(InteractionHand.MAIN_HAND);
             this.attacker.doHurtTarget(enemy);
         }
     }

@@ -5,24 +5,19 @@ import com.github.alexthe666.iceandfire.entity.util.IDeadMob;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.server.management.PreYggdrasilConverter;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.players.OldUsersConverter;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -30,16 +25,16 @@ import java.util.UUID;
 
 public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromStatues, IDeadMob {
 
-    protected static final DataParameter<java.util.Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(EntityDragonEgg.class, DataSerializers.OPTIONAL_UUID);
-    private static final DataParameter<Integer> DRAGON_TYPE = EntityDataManager.defineId(EntityDragonEgg.class, DataSerializers.INT);
-    private static final DataParameter<Integer> DRAGON_AGE = EntityDataManager.defineId(EntityDragonEgg.class, DataSerializers.INT);
+    protected static final EntityDataAccessor<java.util.Optional<UUID>> OWNER_UNIQUE_ID = SynchedEntityData.defineId(EntityDragonEgg.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<Integer> DRAGON_TYPE = SynchedEntityData.defineId(EntityDragonEgg.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DRAGON_AGE = SynchedEntityData.defineId(EntityDragonEgg.class, EntityDataSerializers.INT);
 
-    public EntityDragonEgg(EntityType type, World worldIn) {
+    public EntityDragonEgg(EntityType type, Level worldIn) {
         super(type, worldIn);
     }
 
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.createMobAttributes()
+    public static AttributeSupplier.Builder bakeAttributes() {
+        return Mob.createMobAttributes()
             //HEALTH
             .add(Attributes.MAX_HEALTH, 10.0D)
             //SPEED
@@ -47,7 +42,7 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT tag) {
+    public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Color", (byte) this.getEggType().ordinal());
         tag.putInt("DragonAge", this.getDragonAge());
@@ -63,7 +58,7 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT tag) {
+    public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setEggType(EnumDragonEgg.values()[tag.getInt("Color")]);
         this.setDragonAge(tag.getInt("DragonAge"));
@@ -73,7 +68,7 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
             s = tag.getString("OwnerUUID");
         } else {
             String s1 = tag.getString("Owner");
-            UUID converedUUID = PreYggdrasilConverter.convertMobOwnerIfNecessary(this.getServer(), s1);
+            UUID converedUUID = OldUsersConverter.convertMobOwnerIfNecessary(this.getServer(), s1);
             s = converedUUID == null ? s1 : converedUUID.toString();
         }
         if (!s.isEmpty()) {
@@ -139,21 +134,21 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public ItemStack getItemBySlot(EquipmentSlotType slotIn) {
+    public ItemStack getItemBySlot(EquipmentSlot slotIn) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack) {
+    public void setItemSlot(EquipmentSlot slotIn, ItemStack stack) {
 
     }
 
     @Override
     public boolean hurt(DamageSource var1, float var2) {
-        if (!level.isClientSide && !var1.isBypassInvul() && !removed) {
+        if (!level.isClientSide && !var1.isBypassInvul() && !isRemoved()) {
             this.spawnAtLocation(this.getItem().getItem(), 1);
         }
-        this.remove();
+        this.remove(RemovalReason.KILLED);
         return true;
     }
 
@@ -192,8 +187,8 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public HandSide getMainArm() {
-        return HandSide.RIGHT;
+    public HumanoidArm getMainArm() {
+        return HumanoidArm.RIGHT;
     }
 
     @Override
@@ -205,7 +200,7 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
         return false;
     }
 
-    public void onPlayerPlace(PlayerEntity player) {
+    public void onPlayerPlace(Player player) {
         this.setOwnerId(player.getUUID());
     }
 

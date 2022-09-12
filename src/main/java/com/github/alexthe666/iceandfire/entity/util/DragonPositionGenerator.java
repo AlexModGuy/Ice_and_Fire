@@ -1,30 +1,30 @@
 package com.github.alexthe666.iceandfire.entity.util;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
 public class DragonPositionGenerator {
 
-    public static Vector3d findRandomTargetBlock(MobEntity MobEntityIn, int xz, int y, @Nullable Vector3d targetVec3) {
-        Vector3d vec = generateRandomPos(MobEntityIn, xz, y, targetVec3, false);
+    public static Vec3 findRandomTargetBlock(Mob MobEntityIn, int xz, int y, @Nullable Vec3 targetVec3) {
+        Vec3 vec = generateRandomPos(MobEntityIn, xz, y, targetVec3, false);
         return vec == null ? MobEntityIn.position() : vec;
     }
 
     @Nullable
-    public static Vector3d generateRandomPos(MobEntity mob, int xz, int y, @Nullable Vector3d vec, boolean skipWater) {
-        PathNavigator pathnavigate = mob.getNavigation();
+    public static Vec3 generateRandomPos(Mob mob, int xz, int y, @Nullable Vec3 vec, boolean skipWater) {
+        PathNavigation pathnavigate = mob.getNavigation();
         Random random = mob.getRandom();
         boolean flag;
 
         if (mob.hasRestriction()) {
-            double d0 = mob.getRestrictCenter().distSqr(MathHelper.floor(mob.getX()), MathHelper.floor(mob.getY()), MathHelper.floor(mob.getZ()), true) + 4.0D;
+            double d0 = mob.getRestrictCenter().distSqr(Mth.floor(mob.getX()), Mth.floor(mob.getY()), Mth.floor(mob.getZ()), true) + 4.0D;
             double d1 = mob.getRestrictRadius() + (float) xz;
             flag = d0 < d1 * d1;
         } else {
@@ -83,13 +83,13 @@ public class DragonPositionGenerator {
         }
 
         if (flag1) {
-            return new Vector3d((double) k1 + mob.getX(), (double) i + mob.getY(), (double) j + mob.getZ());
+            return new Vec3((double) k1 + mob.getX(), (double) i + mob.getY(), (double) j + mob.getZ());
         } else {
             return null;
         }
     }
 
-    private static BlockPos moveAboveSolid(BlockPos pos, MobEntity mob) {
+    private static BlockPos moveAboveSolid(BlockPos pos, Mob mob) {
         if (!mob.level.getBlockState(pos).getMaterial().isSolid()) {
             return pos;
         } else {
@@ -102,7 +102,7 @@ public class DragonPositionGenerator {
         }
     }
 
-    private static boolean isWaterDestination(BlockPos pos, MobEntity mob) {
+    private static boolean isWaterDestination(BlockPos pos, Mob mob) {
         return mob.level.getBlockState(pos).getMaterial() == Material.WATER;
     }
 }

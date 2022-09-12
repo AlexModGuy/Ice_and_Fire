@@ -1,14 +1,18 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Random;
 
@@ -30,31 +34,31 @@ public class BlockElementalFlower extends BushBlock {
         setRegistryName(IceAndFire.MODID, name);
     }
 
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
-    protected boolean mayPlaceOn(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    protected boolean mayPlaceOn(BlockState state, BlockGetter worldIn, BlockPos pos) {
         Block block = state.getBlock();
         return block == Blocks.GRASS_BLOCK || block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL || block == Blocks.FARMLAND || state.getMaterial() == Material.SAND;
     }
 
-    public boolean canStay(World worldIn, BlockPos pos) {
+    public boolean canStay(Level worldIn, BlockPos pos) {
         BlockState soil = worldIn.getBlockState(pos.below());
         if (this == IafBlockRegistry.FIRE_LILY) {
             return soil.getMaterial() == Material.SAND || soil.getBlock() == Blocks.NETHERRACK;
-        } else  if (this == IafBlockRegistry.LIGHTNING_LILY) {
+        } else if (this == IafBlockRegistry.LIGHTNING_LILY) {
             return soil.getMaterial() == Material.DIRT || soil.getBlock() == Blocks.GRASS;
         } else {
             return soil.getMaterial() == Material.ICE_SOLID || soil.getMaterial() == Material.ICE;
         }
     }
 
-    public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
+    public void updateTick(Level worldIn, BlockPos pos, BlockState state, Random rand) {
         this.checkFall(worldIn, pos);
     }
 
-    private boolean checkFall(World worldIn, BlockPos pos) {
+    private boolean checkFall(Level worldIn, BlockPos pos) {
         if (!this.canStay(worldIn, pos)) {
             worldIn.destroyBlock(pos, true);
             return false;

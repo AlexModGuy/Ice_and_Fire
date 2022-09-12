@@ -4,16 +4,16 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.util.IDragonFlute;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 
 import java.util.*;
 
@@ -24,12 +24,12 @@ public class ItemDragonFlute extends Item {
         this.setRegistryName(IceAndFire.MODID, "dragon_flute");
     }
 
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity player, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player player, InteractionHand hand) {
         ItemStack itemStackIn = player.getItemInHand(hand);
         player.getCooldowns().addCooldown(this, 60);
 
         float chunksize = 16 * IafConfig.dragonFluteDistance;
-        List<Entity> list = worldIn.getEntities(player, (new AxisAlignedBB(player.getX(), player.getY(), player.getZ(), player.getX() + 1.0D, player.getY() + 1.0D, player.getZ() + 1.0D)).inflate(chunksize, 256, chunksize));
+        List<Entity> list = worldIn.getEntities(player, (new AABB(player.getX(), player.getY(), player.getZ(), player.getX() + 1.0D, player.getY() + 1.0D, player.getZ() + 1.0D)).inflate(chunksize, 256, chunksize));
         Collections.sort(list, new Sorter(player));
         List<IDragonFlute> dragons = new ArrayList<IDragonFlute>();
         Iterator<Entity> itr_entities = list.iterator();
@@ -52,9 +52,9 @@ public class ItemDragonFlute extends Item {
                 }
             }*/
         }
-        worldIn.playSound(player, player.blockPosition(), IafSoundRegistry.DRAGONFLUTE, SoundCategory.NEUTRAL, 1, 1.75F);
+        worldIn.playSound(player, player.blockPosition(), IafSoundRegistry.DRAGONFLUTE, SoundSource.NEUTRAL, 1, 1.75F);
 
-        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, itemStackIn);
+        return new InteractionResultHolder<ItemStack>(InteractionResult.SUCCESS, itemStackIn);
     }
 
     public static class Sorter implements Comparator<Entity> {

@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSwarmer;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.TargetGoal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 
 import java.util.EnumSet;
 
@@ -27,7 +27,7 @@ public class MyrmexAISummonerHurtTarget extends TargetGoal {
         } else {
             this.attacker = living.getLastHurtMob();
             int i = living.getLastHurtMobTimestamp();
-            return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT)
+            return i != this.timestamp && this.canAttack(this.attacker, TargetingConditions.DEFAULT)
                 && this.tameable.shouldAttackEntity(this.attacker, living);
         }
     }

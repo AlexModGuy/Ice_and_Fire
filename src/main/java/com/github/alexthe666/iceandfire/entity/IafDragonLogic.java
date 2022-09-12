@@ -6,15 +6,15 @@ import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 
 /*
     dragon logic separation for client, server and shared sides.
@@ -31,7 +31,7 @@ public class IafDragonLogic {
     logic done exclusively on server.
     */
     public void updateDragonServer() {
-        PlayerEntity ridingPlayer = dragon.getRidingPlayer();
+        Player ridingPlayer = dragon.getRidingPlayer();
         if (ridingPlayer != null) {
             if (dragon.isGoingUp()) {
                 if (!dragon.isFlying() && !dragon.isHovering()) {
@@ -53,8 +53,8 @@ public class IafDragonLogic {
             dragon.riderShootFire(dragon.getControllingPassenger());
             dragon.fireStopTicks = 10;
         }
-        if (dragon.isAttacking() && dragon.getControllingPassenger() != null && dragon.getControllingPassenger() instanceof PlayerEntity) {
-            LivingEntity target = DragonUtils.riderLookingAtEntity(dragon, (PlayerEntity) dragon.getControllingPassenger(), dragon.getDragonStage() + (dragon.getBoundingBox().maxX - dragon.getBoundingBox().minX));
+        if (dragon.isAttacking() && dragon.getControllingPassenger() != null && dragon.getControllingPassenger() instanceof Player) {
+            LivingEntity target = DragonUtils.riderLookingAtEntity(dragon, (Player) dragon.getControllingPassenger(), dragon.getDragonStage() + (dragon.getBoundingBox().maxX - dragon.getBoundingBox().minX));
             if (dragon.getAnimation() != EntityDragonBase.ANIMATION_BITE) {
                 dragon.setAnimation(EntityDragonBase.ANIMATION_BITE);
             }
@@ -90,7 +90,7 @@ public class IafDragonLogic {
             if (!dragon.isHovering()) {
                 dragon.incrementDragonPitch((float) (ydist) * 10);
             }
-            dragon.setDragonPitch(MathHelper.clamp(dragon.getDragonPitch(), -60, 40));
+            dragon.setDragonPitch(Mth.clamp(dragon.getDragonPitch(), -60, 40));
             final float plateau = 2;
             final float planeDist = (float) ((Math.abs(dragon.getDeltaMovement().x) + Math.abs(dragon.getDeltaMovement().z)) * 6F);
             if (dragon.getDragonPitch() > plateau) {
@@ -122,7 +122,7 @@ public class IafDragonLogic {
             if (dragon.hasHomePosition
                 && dragon.getRestrictCenter() != null
                 && DragonUtils.isInHomeDimension(dragon)
-                && dragon.getDistanceSquared(Vector3d.atCenterOf(dragon.getRestrictCenter())) > dragon.getBbWidth() * 10
+                && dragon.getDistanceSquared(Vec3.atCenterOf(dragon.getRestrictCenter())) > dragon.getBbWidth() * 10
                 && this.dragon.getCommand() != 2 && this.dragon.getCommand() != 1) {
                 dragon.lookingForRoostAIFlag = true;
             } else {
@@ -356,7 +356,7 @@ public class IafDragonLogic {
 
     }
 
-    public void attackTarget(Entity target, PlayerEntity ridingPlayer, float damage) {
+    public void attackTarget(Entity target, Player ridingPlayer, float damage) {
         if (ridingPlayer == null)
             target.hurt(DamageSource.mobAttack(dragon), damage);
         else
@@ -493,7 +493,7 @@ public class IafDragonLogic {
                 dragon.modelDeadProgress -= 0.5F;
         }
 
-        final boolean riding = dragon.isPassenger() && dragon.getVehicle() != null && dragon.getVehicle() instanceof PlayerEntity;
+        final boolean riding = dragon.isPassenger() && dragon.getVehicle() != null && dragon.getVehicle() instanceof Player;
         if (riding) {
             if (dragon.ridingProgress < 20.0F)
                 dragon.ridingProgress += 0.5F;
@@ -519,8 +519,8 @@ public class IafDragonLogic {
     logic handler for the dragon's melee attacks.
     */
     public void updateDragonAttack() {
-        PlayerEntity ridingPlayer = dragon.getRidingPlayer();
-        if (dragon.isPlayingAttackAnimation() && dragon.getTarget() != null && dragon.canSee(dragon.getTarget())) {
+        Player ridingPlayer = dragon.getRidingPlayer();
+        if (dragon.isPlayingAttackAnimation() && dragon.getTarget() != null && dragon.hasLineOfSight(dragon.getTarget())) {
             LivingEntity target = dragon.getTarget();
             final double dist = dragon.distanceTo(target);
             if (dist < dragon.getRenderSize() * 0.2574 * 2 + 2) {
@@ -533,14 +533,14 @@ public class IafDragonLogic {
                 } else if (dragon.getAnimation() == EntityDragonBase.ANIMATION_TAILWHACK) {
                     if (dragon.getAnimationTick() > 20 && dragon.getAnimationTick() < 30) {
                         attackTarget(target, ridingPlayer, (int) dragon.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
-                        target.knockback(dragon.getDragonStage() * 0.6F, MathHelper.sin(dragon.yRot * 0.017453292F), -MathHelper.cos(dragon.yRot * 0.017453292F));
+                        target.knockback(dragon.getDragonStage() * 0.6F, Mth.sin(dragon.getYRot() * 0.017453292F), -Mth.cos(dragon.getYRot() * 0.017453292F));
                         dragon.usingGroundAttack = dragon.getRandom().nextBoolean();
                         dragon.randomizeAttacks();
                     }
                 } else if (dragon.getAnimation() == EntityDragonBase.ANIMATION_WINGBLAST) {
                     if ((dragon.getAnimationTick() == 15 || dragon.getAnimationTick() == 25 || dragon.getAnimationTick() == 35)) {
                         attackTarget(target, ridingPlayer, (int) dragon.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
-                        target.knockback(dragon.getDragonStage() * 0.6F, MathHelper.sin(dragon.yRot * 0.017453292F), -MathHelper.cos(dragon.yRot * 0.017453292F));
+                        target.knockback(dragon.getDragonStage() * 0.6F, Mth.sin(dragon.getYRot() * 0.017453292F), -Mth.cos(dragon.getYRot() * 0.017453292F));
                         dragon.usingGroundAttack = dragon.getRandom().nextBoolean();
                         dragon.randomizeAttacks();
                     }
@@ -575,11 +575,11 @@ public class IafDragonLogic {
         if (IceAndFire.DEBUG) {
             try {
                 for (int i = 0; i < currentPath.getNodeCount(); i++) {
-                    final PathPoint point = currentPath.getNode(i);
+                    final Node point = currentPath.getNode(i);
                     IceAndFire.sendMSGToAll(new MessageSpawnParticleAt(point.x, point.y, point.z, 2));
                 }
                 if (currentPath.getNextNodePos() != null) {
-                    final Vector3d point = Vector3d.atCenterOf(currentPath.getNextNodePos());
+                    final Vec3 point = Vec3.atCenterOf(currentPath.getNextNodePos());
                     IceAndFire.sendMSGToAll(new MessageSpawnParticleAt(point.x, point.y, point.z, 1));
 
                 }

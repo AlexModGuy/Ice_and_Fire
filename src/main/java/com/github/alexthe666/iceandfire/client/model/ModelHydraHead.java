@@ -3,17 +3,16 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 
 public class ModelHydraHead extends ModelDragonBase<EntityHydra> {
     public AdvancedModelBox Neck1;
@@ -136,7 +135,7 @@ public class ModelHydraHead extends ModelDragonBase<EntityHydra> {
         this.walk(neckSpike2, speed_idle * 1.5F, degree_idle * 0.4F, false, 3, -0.1F, f2, 1);
         this.chainSwing(ENTIRE_HEAD, speed_walk, degree_walk * 0.75F, -3, f, f1);
         float speakProgress = entity.prevSpeakingProgress[headIndex] + partialTicks * (entity.speakingProgress[headIndex] - entity.prevSpeakingProgress[headIndex]);
-        this.progressRotationInterp(LowerJaw1, MathHelper.sin((float) (speakProgress * Math.PI)) * 10F, (float) Math.toRadians(25), 0.0F, 0.0F, 10F);
+        this.progressRotationInterp(LowerJaw1, Mth.sin((float) (speakProgress * Math.PI)) * 10F, (float) Math.toRadians(25), 0.0F, 0.0F, 10F);
         float limbSwingProgress = f1;
         /*
         this.progressRotationInterp(Neck1, (float)limbSwingProgress, (float) Math.toRadians(5), 0.0F, 0.0F, 1F);
@@ -150,32 +149,33 @@ public class ModelHydraHead extends ModelDragonBase<EntityHydra> {
         this.progressRotationInterp(Neck4, strikeProgress, (float) Math.toRadians(5), 0.0F, 0.0F, 10F);
         this.progressRotationInterp(Head1, strikeProgress, (float) Math.toRadians(-15), 0.0F, 0.0F, 10F);
         this.progressRotationInterp(LowerJaw1, strikeProgress, (float) Math.toRadians(45), 0.0F, 0.0F, 10F);
-        this.progresPositionInterp(TeethTR1, strikeProgress, 0.5F, 0.0F, 0.0F, 10F);
+        this.progressPositionInterp(TeethTR1, strikeProgress, 0.5F, 0.0F, 0.0F, 10F);
         float breathProgress = entity.prevBreathProgress[headIndex] + partialTicks * (entity.breathProgress[headIndex] - entity.prevBreathProgress[headIndex]);
         this.progressRotationInterp(Neck4, breathProgress, (float) Math.toRadians(15), 0.0F, 0.0F, 10F);
         this.progressRotationInterp(Neck3, breathProgress, (float) Math.toRadians(15), 0.0F, 0.0F, 10F);
-        this.progresPositionInterp(TeethTR1, breathProgress, 0.5F, 0.0F, 0.0F, 10F);
+        this.progressPositionInterp(TeethTR1, breathProgress, 0.5F, 0.0F, 0.0F, 10F);
         this.progressRotationInterp(Head1, breathProgress, (float) Math.toRadians(15), 0.0F, 0.0F, 10F);
         this.progressRotationInterp(UpperJaw1, breathProgress, (float) Math.toRadians(-10), 0.0F, 0.0F, 10F);
         this.progressRotationInterp(LowerJaw1, breathProgress, (float) Math.toRadians(50), 0.0F, 0.0F, 10F);
 
 
-        this.Neck2.visible = entity.getSeveredHead() != headIndex && entity.isAlive();
+        this.Neck2.showModel = entity.getSeveredHead() != headIndex && entity.isAlive();
     }
 
     @Override
-    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+    public void renderStatue(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, Entity living) {
         this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 
 
     @Override
-    public Iterable<ModelRenderer> parts() {
+    public Iterable<BasicModelPart> parts() {
         return ImmutableList.of(Neck1);
     }
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(Neck1, Neck2, Neck3, Neck4, Head1, HeadPivot, neckSpike1, neckSpike2, UpperJaw1,
+            LowerJaw1, TeethTR1, TeethL1, TeethR1, TeethTL1);
     }
 }

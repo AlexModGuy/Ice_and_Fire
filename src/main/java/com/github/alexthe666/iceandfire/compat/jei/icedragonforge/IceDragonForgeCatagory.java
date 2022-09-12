@@ -8,9 +8,10 @@ import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +36,8 @@ public class IceDragonForgeCatagory implements IRecipeCategory<DragonForgeRecipe
 
     @SuppressWarnings("deprecation")
     @Override
-    public String getTitle() {
-        return I18n.get("iceandfire.ice_dragon_forge");
+    public Component getTitle() {
+        return new TranslatableComponent("iceandfire.ice_dragon_forge");
     }
 
     @Override

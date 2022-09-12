@@ -5,9 +5,9 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexRoyal;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nonnull;
 import java.util.Comparator;
@@ -73,7 +73,7 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
         return false;
     }
 
-    protected AxisAlignedBB getTargetableArea(double targetDistance) {
+    protected AABB getTargetableArea(double targetDistance) {
         return this.mob.getBoundingBox().inflate(targetDistance, targetDistance / 2, targetDistance);
     }
 

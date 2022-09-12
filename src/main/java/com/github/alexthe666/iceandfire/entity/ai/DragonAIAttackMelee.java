@@ -2,10 +2,10 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.EnumSet;
 
@@ -68,7 +68,7 @@ public class DragonAIAttackMelee extends Goal {
     @Override
     public void stop() {
         LivingEntity LivingEntity = this.dragon.getTarget();
-        if (LivingEntity instanceof PlayerEntity && (LivingEntity.isSpectator() || ((PlayerEntity) LivingEntity).isCreative())) {
+        if (LivingEntity instanceof Player && (LivingEntity.isSpectator() || ((Player) LivingEntity).isCreative())) {
             this.dragon.setTarget(null);
         }
         this.dragon.getNavigation().stop();
@@ -91,7 +91,7 @@ public class DragonAIAttackMelee extends Goal {
             final double d0 = this.dragon.distanceToSqr(entity.getX(), entity.getBoundingBox().minY, entity.getZ());
             final double d1 = this.getAttackReachSqr(entity);
             --this.delayCounter;
-            if ((this.longMemory || this.dragon.getSensing().canSee(entity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || entity.distanceToSqr(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.dragon.getRandom().nextFloat() < 0.05F)) {
+            if ((this.longMemory || this.dragon.getSensing().hasLineOfSight(entity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || entity.distanceToSqr(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.dragon.getRandom().nextFloat() < 0.05F)) {
                 this.targetX = entity.getX();
                 this.targetY = entity.getBoundingBox().minY;
                 this.targetZ = entity.getZ();
@@ -100,7 +100,7 @@ public class DragonAIAttackMelee extends Goal {
                 if (this.canPenalize) {
                     this.delayCounter += failedPathFindingPenalty;
                     if (this.dragon.getNavigation().getPath() != null) {
-                        net.minecraft.pathfinding.PathPoint finalPathPoint = this.dragon.getNavigation().getPath().getEndNode();
+                        net.minecraft.world.level.pathfinder.Node finalPathPoint = this.dragon.getNavigation().getPath().getEndNode();
                         if (finalPathPoint != null && entity.distanceToSqr(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1)
                             failedPathFindingPenalty = 0;
                         else
@@ -124,7 +124,7 @@ public class DragonAIAttackMelee extends Goal {
 
             if (d0 <= d1 && this.attackTick <= 0) {
                 this.attackTick = 20;
-                this.dragon.swing(Hand.MAIN_HAND);
+                this.dragon.swing(InteractionHand.MAIN_HAND);
                 this.dragon.doHurtTarget(entity);
             }
         }

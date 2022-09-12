@@ -4,26 +4,29 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeBrick;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.PushReaction;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockDragonforgeBricks extends ContainerBlock implements IDragonProof {
+public class BlockDragonforgeBricks extends BaseEntityBlock implements IDragonProof {
 
     public static final BooleanProperty GRILL = BooleanProperty.create("grill");
     private final int isFire;
@@ -47,42 +50,42 @@ public class BlockDragonforgeBricks extends ContainerBlock implements IDragonPro
         return PushReaction.BLOCK;
     }
 
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult resultIn) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult resultIn) {
         if (this.getConnectedTileEntity(worldIn, resultIn.getBlockPos()) != null) {
             TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, resultIn.getBlockPos());
             if (forge != null && forge.isFire == isFire) {
                 if (worldIn.isClientSide) {
                     IceAndFire.PROXY.setRefrencedTE(worldIn.getBlockEntity(forge.getBlockPos()));
                 } else {
-                    INamedContainerProvider inamedcontainerprovider = this.getMenuProvider(forge.getBlockState(), worldIn, forge.getBlockPos());
+                    MenuProvider inamedcontainerprovider = this.getMenuProvider(forge.getBlockState(), worldIn, forge.getBlockPos());
                     if (inamedcontainerprovider != null) {
                         player.openMenu(inamedcontainerprovider);
                     }
                 }
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
-    public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
+    public void updateTick(Level worldIn, BlockPos pos, BlockState state, Random rand) {
         if (!worldIn.isClientSide) {
             this.checkGrill(worldIn, pos);
         }
     }
 
-    public int tickRate(World worldIn) {
+    public int tickRate(Level worldIn) {
         return 3;
     }
 
-    private void checkGrill(World worldIn, BlockPos pos) {
+    private void checkGrill(Level worldIn, BlockPos pos) {
         BlockState state = worldIn.getBlockState(pos);
         boolean missingFurnace = getConnectedTileEntity(worldIn, pos) == null;
         worldIn.setBlockAndUpdate(pos, state.setValue(GRILL, !missingFurnace));
 
     }
 
-    private TileEntityDragonforge getConnectedTileEntity(World worldIn, BlockPos pos) {
+    private TileEntityDragonforge getConnectedTileEntity(Level worldIn, BlockPos pos) {
         for (Direction facing : Direction.values()) {
             if (worldIn.getBlockEntity(pos.relative(facing)) != null && worldIn.getBlockEntity(pos.relative(facing)) instanceof TileEntityDragonforge) {
                 TileEntityDragonforge forge = (TileEntityDragonforge) worldIn.getBlockEntity(pos.relative(facing));
@@ -102,18 +105,17 @@ public class BlockDragonforgeBricks extends ContainerBlock implements IDragonPro
         return state.getValue(GRILL).booleanValue() ? 1 : 0;
     }
 
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(GRILL);
     }
 
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
-
 
     @Nullable
     @Override
-    public TileEntity newBlockEntity(IBlockReader worldIn) {
-        return new TileEntityDragonforgeBrick();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileEntityDragonforgeBrick(pos, state);
     }
 }

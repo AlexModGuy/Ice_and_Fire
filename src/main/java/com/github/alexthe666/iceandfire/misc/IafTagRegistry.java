@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.misc;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class IafTagRegistry {
     public static final ResourceLocation DRAGON_ARROWS = new ResourceLocation("iceandfire", "dragon_arrows");

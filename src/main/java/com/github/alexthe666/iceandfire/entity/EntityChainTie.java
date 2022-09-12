@@ -2,40 +2,39 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.entity.props.ChainProperties;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.minecraft.block.WallBlock;
-import net.minecraft.entity.*;
-import net.minecraft.entity.item.HangingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.decoration.HangingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.WallBlock;
+import net.minecraft.world.phys.AABB;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class EntityChainTie extends HangingEntity {
 
-    public EntityChainTie(EntityType<? extends HangingEntity> type, World worldIn) {
+    public EntityChainTie(EntityType<? extends HangingEntity> type, Level worldIn) {
         super(type, worldIn);
     }
 
-    public EntityChainTie(EntityType<? extends HangingEntity> type, World worldIn, BlockPos hangingPositionIn) {
+    public EntityChainTie(EntityType<? extends HangingEntity> type, Level worldIn, BlockPos hangingPositionIn) {
         super(type, worldIn, hangingPositionIn);
         this.setPos(hangingPositionIn.getX() + 0.5D, hangingPositionIn.getY(), hangingPositionIn.getZ() + 0.5D);
-        this.forcedLoading = true;
     }
 
-    public static EntityChainTie createTie(World worldIn, BlockPos fence) {
+    public static EntityChainTie createTie(Level worldIn, BlockPos fence) {
         EntityChainTie entityChainTie = new EntityChainTie(IafEntityRegistry.CHAIN_TIE.get(), worldIn, fence);
         worldIn.addFreshEntity(entityChainTie);
         entityChainTie.playPlacementSound();
@@ -43,13 +42,13 @@ public class EntityChainTie extends HangingEntity {
     }
 
     @Nullable
-    public static EntityChainTie getKnotForPosition(World worldIn, BlockPos pos) {
+    public static EntityChainTie getKnotForPosition(Level worldIn, BlockPos pos) {
         int i = pos.getX();
         int j = pos.getY();
         int k = pos.getZ();
 
         for (EntityChainTie entityleashknot : worldIn.getEntitiesOfClass(EntityChainTie.class,
-            new AxisAlignedBB(i - 1.0D, j - 1.0D, k - 1.0D, i + 1.0D, j + 1.0D, k + 1.0D))) {
+            new AABB(i - 1.0D, j - 1.0D, k - 1.0D, i + 1.0D, j + 1.0D, k + 1.0D))) {
             if (entityleashknot != null && entityleashknot.getPos() != null && entityleashknot.getPos().equals(pos)) {
                 return entityleashknot;
             }
@@ -59,7 +58,7 @@ public class EntityChainTie extends HangingEntity {
 
     @Override
     public void setPos(double x, double y, double z) {
-        super.setPos(MathHelper.floor(x) + 0.5D, MathHelper.floor(y) + 0.5D, MathHelper.floor(z) + 0.5D);
+        super.setPos(Mth.floor(x) + 0.5D, Mth.floor(y) + 0.5D, Mth.floor(z) + 0.5D);
     }
 
     @Override
@@ -69,15 +68,13 @@ public class EntityChainTie extends HangingEntity {
         double xSize = 0.3D;
         double ySize = 0.875D;
         double zSize = xSize;
-        this.setBoundingBox(new AxisAlignedBB(this.getX() - xSize, this.getY() - 0.5, this.getZ() - zSize,
+        this.setBoundingBox(new AABB(this.getX() - xSize, this.getY() - 0.5, this.getZ() - zSize,
             this.getX() + xSize, this.getY() + ySize - 0.5, this.getZ() + zSize));
-        if (this.isAddedToWorld() && this.level instanceof net.minecraft.world.server.ServerWorld)
-            ((net.minecraft.world.server.ServerWorld) this.level).updateChunkPos(this); // Forge - Process chunk registration after moving.
     }
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source.getEntity() != null && source.getEntity() instanceof PlayerEntity) {
+        if (source.getEntity() != null && source.getEntity() instanceof Player) {
             return super.hurt(source, amount);
         }
         return false;
@@ -94,7 +91,7 @@ public class EntityChainTie extends HangingEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         BlockPos blockpos = this.getPos();
         compound.putInt("TileX", blockpos.getX());
         compound.putInt("TileY", blockpos.getY());
@@ -102,12 +99,12 @@ public class EntityChainTie extends HangingEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         this.pos = new BlockPos(compound.getInt("TileX"), compound.getInt("TileY"), compound.getInt("TileZ"));
     }
 
     @Override
-    protected float getEyeHeight(Pose poseIn, EntitySize sizeIn) {
+    protected float getEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return -0.0625F;
     }
 
@@ -122,15 +119,10 @@ public class EntityChainTie extends HangingEntity {
     }
 
     @Override
-    public void remove() {
-        this.remove(false);
-    }
-
-    @Override
-    public void remove(boolean keepData) {
-        super.remove(keepData);
+    public void remove(Entity.RemovalReason removalReason) {
+        super.remove(removalReason);
         double d0 = 30D;
-        List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(this.getX() - d0, this.getY() - d0, this.getZ() - d0, this.getX() + d0, this.getY() + d0, this.getZ() + d0));
+        List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, new AABB(this.getX() - d0, this.getY() - d0, this.getZ() - d0, this.getX() + d0, this.getY() + d0, this.getZ() + d0));
         for (LivingEntity livingEntity : list) {
             if (ChainProperties.isChainedTo(livingEntity, this)) {
                 ChainProperties.removeChain(livingEntity, this);
@@ -143,13 +135,13 @@ public class EntityChainTie extends HangingEntity {
     }
 
     @Override
-    public ActionResultType interact(PlayerEntity player, Hand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand) {
         if (this.level.isClientSide) {
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else {
             boolean flag = false;
             double d0 = 30D;
-            List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(this.getX() - d0, this.getY() - d0, this.getZ() - d0, this.getX() + d0, this.getY() + d0, this.getZ() + d0));
+            List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, new AABB(this.getX() - d0, this.getY() - d0, this.getZ() - d0, this.getX() + d0, this.getY() + d0, this.getZ() + d0));
 
             for (LivingEntity livingEntity : list) {
                 if (ChainProperties.isChainedTo(livingEntity, player)) {
@@ -160,17 +152,17 @@ public class EntityChainTie extends HangingEntity {
             }
 
             if (!flag) {
-                this.remove();
-                return ActionResultType.SUCCESS;
+                this.remove(RemovalReason.DISCARDED);
+                return InteractionResult.SUCCESS;
             }
 
-            return ActionResultType.CONSUME;
+            return InteractionResult.CONSUME;
         }
     }
 
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

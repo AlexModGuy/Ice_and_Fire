@@ -3,14 +3,13 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 public class ModelDeathWorm extends ModelDragonBase<EntityDeathWorm> {
     public AdvancedModelBox Body;
@@ -294,22 +293,22 @@ public class ModelDeathWorm extends ModelDragonBase<EntityDeathWorm> {
             worm.tail_buffer.applyChainSwingBuffer(WORM);
 
         if(worm.getWormJumping() > 0){
-            this.Body.xRot += f4 * ((float) Math.PI / 180F);
+            this.Body.rotateAngleX += f4 * ((float) Math.PI / 180F);
         }
     }
 
     @Override
-    public Iterable<ModelRenderer> parts() {
+    public Iterable<BasicModelPart> parts() {
         return ImmutableList.of(Body);
     }
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(Body, Head, Spine1, Body2, JawExtender, HeadInner, ToothB, ToothT, ToothL, ToothL_1, Spine2, Body3, Spine3, Body4, Spine4, Body5, Spine5, Body6, Spine6, Body7, Spine7, Body8, Spine8, Body9, Spine9, Tail1, TailSpine1, Tail2, TailSpine2, Tail3, TailSpine3, Tail4, TailSpine4, TailSpine5, JawExtender2, TopJaw, BottomJaw, JawHook);
     }
 
     @Override
-    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+    public void renderStatue(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, Entity living) {
         this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

@@ -8,21 +8,21 @@ import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
 import com.github.alexthe666.iceandfire.item.ItemMyrmexEgg;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.util.Mth;
 
-public class RenderPodium<T extends TileEntityPodium> extends TileEntityRenderer<T> {
+public class RenderPodium<T extends TileEntityPodium> implements BlockEntityRenderer<T> {
 
-    public RenderPodium(TileEntityRendererDispatcher rendererDispatcherIn) {
-        super(rendererDispatcherIn);
+    public RenderPodium(BlockEntityRendererProvider.Context context) {
+
     }
 
     protected static RenderType getEggTexture(EnumDragonEgg type) {
@@ -55,7 +55,7 @@ public class RenderPodium<T extends TileEntityPodium> extends TileEntityRenderer
     }
 
     @Override
-    public void render(T entity, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(T entity, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         ModelDragonEgg model = new ModelDragonEgg();
         TileEntityPodium podium = entity;
 
@@ -86,14 +86,14 @@ public class RenderPodium<T extends TileEntityPodium> extends TileEntityRenderer
                 //if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new RenderPodiumItemEvent(this, podium, f, x, y, z))) {
                 matrixStackIn.pushPose();
                 float f2 = ((float) podium.prevTicksExisted + (podium.ticksExisted - podium.prevTicksExisted) * partialTicks);
-                float f3 = MathHelper.sin(f2 / 10.0F) * 0.1F + 0.1F;
+                float f3 = Mth.sin(f2 / 10.0F) * 0.1F + 0.1F;
                 matrixStackIn.translate(0.5F, 1.55F + f3, 0.5F);
                 float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
                 matrixStackIn.mulPose(new Quaternion(Vector3f.YP, f4, true));
                 matrixStackIn.pushPose();
                 matrixStackIn.translate(0, 0.2F, 0);
                 matrixStackIn.scale(0.65F, 0.65F, 0.65F);
-                Minecraft.getInstance().getItemRenderer().renderStatic(podium.getItem(0), ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
+                Minecraft.getInstance().getItemRenderer().renderStatic(podium.getItem(0), ItemTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn, 0);
                 matrixStackIn.popPose();
                 matrixStackIn.popPose();
                 //}

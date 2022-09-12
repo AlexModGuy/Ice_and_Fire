@@ -1,14 +1,14 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 public class HippocampusAIRide extends Goal {
 
     private final EntityHippocampus dragon;
-    private PlayerEntity player;
+    private Player player;
 
     public HippocampusAIRide(EntityHippocampus dragon) {
         this.dragon = dragon;
@@ -35,7 +35,7 @@ public class HippocampusAIRide extends Goal {
         double z = dragon.getZ();
         double speed = 1.8F * dragon.getRideSpeedModifier();
         if (player.xxa != 0 || player.zza != 0) {
-            Vector3d lookVec = player.getLookAngle();
+            Vec3 lookVec = player.getLookAngle();
             if (player.zza < 0) {
                 lookVec = lookVec.yRot((float) Math.PI);
             } else if (player.xxa > 0) {

@@ -1,15 +1,15 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 import java.util.Random;
+
 
 public class BlockIafOre extends Block {
     public Item itemBlock;
@@ -18,8 +18,6 @@ public class BlockIafOre extends Block {
         super(
             Properties
                 .of(Material.STONE)
-                .harvestTool(ToolType.PICKAXE)
-                .harvestLevel(toollevel)
                 .strength(hardness, resistance)
                 .requiresCorrectToolForDrops()
 		);
@@ -28,13 +26,13 @@ public class BlockIafOre extends Block {
     }
 
     @Override
-    public int getExpDrop(BlockState state, net.minecraft.world.IWorldReader reader, BlockPos pos, int fortune, int silktouch) {
+    public int getExpDrop(BlockState state, net.minecraft.world.level.LevelReader reader, BlockPos pos, int fortune, int silktouch) {
         return silktouch == 0 ? this.getExperience(RANDOM) : 0;
     }
 
     protected int getExperience(Random rand) {
         if (this == IafBlockRegistry.SAPPHIRE_ORE || this == IafBlockRegistry.AMYTHEST_ORE) {
-            return MathHelper.nextInt(rand, 3, 7);
+            return Mth.nextInt(rand, 3, 7);
         }
         return 0;
     }

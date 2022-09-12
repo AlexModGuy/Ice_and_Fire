@@ -3,17 +3,17 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 public class ModelCockatrice extends ModelDragonBase<EntityCockatrice> {
 
+    private final ModelAnimator animator;
     public AdvancedModelBox lowerBody;
     public AdvancedModelBox leftThigh;
     public AdvancedModelBox rightThigh;
@@ -46,7 +46,6 @@ public class ModelCockatrice extends ModelDragonBase<EntityCockatrice> {
     public AdvancedModelBox leftFoot;
     public AdvancedModelBox rightLeg;
     public AdvancedModelBox rightFoot;
-    private final ModelAnimator animator;
 
     public ModelCockatrice() {
         this.texWidth = 128;
@@ -220,13 +219,16 @@ public class ModelCockatrice extends ModelDragonBase<EntityCockatrice> {
     }
 
     @Override
-    public Iterable<ModelRenderer> parts() {
+    public Iterable<BasicModelPart> parts() {
         return ImmutableList.of(lowerBody, leftThigh, rightThigh);
     }
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(lowerBody, leftThigh, rightThigh, upperBody, tail1, neck, leftUpperArm,
+            RightUpperArm, neck2, head, upperJaw, lowerJaw, Comb1, Comb2, Wattle, upperJaw_1, leftLowerArm,
+            leftUpperArmWing, leftLowerArmWing, RightLowerArm, RightUpperArmWing, RightLowerArmWing,
+            tail2, tail3, rightToeClaw2, tail4, TailPlume, TailPlume_1, leftLeg, leftFoot, rightLeg, rightFoot);
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4) {
@@ -435,7 +437,7 @@ public class ModelCockatrice extends ModelDragonBase<EntityCockatrice> {
 
 
     @Override
-    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+    public void renderStatue(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, Entity living) {
         this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

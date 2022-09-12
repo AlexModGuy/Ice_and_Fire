@@ -2,30 +2,30 @@ package com.github.alexthe666.iceandfire.inventory;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 
-public class ContainerHippogryph extends Container {
-    private final IInventory hippogryphInventory;
+public class ContainerHippogryph extends AbstractContainerMenu {
+    private final Container hippogryphInventory;
     private final EntityHippogryph hippogryph;
-    private final PlayerEntity player;
+    private final Player player;
 
-    public ContainerHippogryph(int i, PlayerInventory playerInventory) {
-        this(i, new Inventory(18), playerInventory, null);
+    public ContainerHippogryph(int i, Inventory playerInventory) {
+        this(i, new SimpleContainer(18), playerInventory, null);
     }
 
-    public ContainerHippogryph(int id, IInventory ratInventory, PlayerInventory playerInventory, EntityHippogryph hippogryph) {
+    public ContainerHippogryph(int id, Container ratInventory, Inventory playerInventory, EntityHippogryph hippogryph) {
         super(IafContainerRegistry.HIPPOGRYPH_CONTAINER.get(), id);
         this.hippogryphInventory = ratInventory;
-        if(hippogryph == null && IceAndFire.PROXY.getReferencedMob() instanceof EntityHippogryph){
-            hippogryph = (EntityHippogryph)IceAndFire.PROXY.getReferencedMob();
+        if (hippogryph == null && IceAndFire.PROXY.getReferencedMob() instanceof EntityHippogryph) {
+            hippogryph = (EntityHippogryph) IceAndFire.PROXY.getReferencedMob();
         }
         this.hippogryph = hippogryph;
         this.player = playerInventory.player;
@@ -109,18 +109,18 @@ public class ContainerHippogryph extends Container {
 
         for (int i1 = 0; i1 < 3; ++i1) {
             for (int k1 = 0; k1 < 9; ++k1) {
-                this.addSlot(new Slot(player.inventory, k1 + i1 * 9 + 9, 8 + k1 * 18, 102 + i1 * 18 + -18));
+                this.addSlot(new Slot(player.getInventory(), k1 + i1 * 9 + 9, 8 + k1 * 18, 102 + i1 * 18 + -18));
             }
         }
 
         for (int j1 = 0; j1 < 9; ++j1) {
-            this.addSlot(new Slot(player.inventory, j1, 8 + j1 * 18, 142));
+            this.addSlot(new Slot(player.getInventory(), j1, 8 + j1 * 18, 142));
         }
     }
 
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -157,12 +157,12 @@ public class ContainerHippogryph extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return this.hippogryphInventory.stillValid(playerIn) && this.hippogryph.isAlive() && this.hippogryph.distanceTo(playerIn) < 8.0F;
     }
 
     @Override
-    public void removed(PlayerEntity playerIn) {
+    public void removed(Player playerIn) {
         super.removed(playerIn);
         this.hippogryphInventory.stopOpen(playerIn);
     }

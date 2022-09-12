@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.util;
 
 import com.google.common.collect.AbstractIterator;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 
 import java.util.Random;
 import java.util.stream.Stream;
@@ -41,7 +41,7 @@ public class ShapeBuilder {
         int r2 = radiusX * radiusX;
         this.blocks = () -> {
             return new AbstractIterator<BlockPos>() {
-                private final BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+                private final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
                 private int currRX = radiusX;
                 private int currRY = yCutOffMax;
                 private int offset = 0;
@@ -94,7 +94,7 @@ public class ShapeBuilder {
         int minr2 = minRadiusX * minRadiusX;
         float rDifference = (float) minRadiusX / maxRadiusX;
         this.blocks = () -> new AbstractIterator<BlockPos>() {
-            private final BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+            private final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
             private int currRX = maxRadiusX;
             private int currRY = yCutOffMax;
             private int offset = 0;
@@ -105,7 +105,7 @@ public class ShapeBuilder {
                     return this.endOfData();
                 } else {
                     int distance = distance(currRX, currRY, phase, offset);
-                    if (distance <= minr2 || distance <= maxr2 * MathHelper.clamp(rand.nextFloat(), rDifference, 1.0F)) {
+                    if (distance <= minr2 || distance <= maxr2 * Mth.clamp(rand.nextFloat(), rDifference, 1.0F)) {
                         BlockPos pos = this.mutablePos.set(c1 + currRX, c2 + currRY, c3 + phase * offset);
                         offset++;
                         return pos;
@@ -141,7 +141,7 @@ public class ShapeBuilder {
         int r2 = radius * radius;
         this.blocks = () -> {
             return new AbstractIterator<BlockPos>() {
-                private final BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+                private final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
                 private int totalAmount;
                 private int currR = radius;
                 private int offset = 0;

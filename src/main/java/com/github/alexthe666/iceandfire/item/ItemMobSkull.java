@@ -4,15 +4,15 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMobSkull;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 
-public class ItemMobSkull extends Item implements ICustomRendered {
+public class ItemMobSkull extends Item {
 
     private final EnumSkullType skull;
 
@@ -23,13 +23,13 @@ public class ItemMobSkull extends Item implements ICustomRendered {
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
-        PlayerEntity player = context.getPlayer();
+    public InteractionResult useOn(UseOnContext context) {
+        Player player = context.getPlayer();
         EntityMobSkull skull = new EntityMobSkull(IafEntityRegistry.MOB_SKULL.get(), context.getLevel());
         ItemStack stack = player.getItemInHand(context.getHand());
         BlockPos offset = context.getClickedPos().relative(context.getClickedFace(), 1);
         skull.moveTo(offset.getX() + 0.5, offset.getY(), offset.getZ() + 0.5, 0, 0);
-        float yaw = player.yRot;
+        float yaw = player.getYRot();
         if (context.getClickedFace() != Direction.UP) {
             yaw = player.getDirection().toYRot();
         }
@@ -44,6 +44,6 @@ public class ItemMobSkull extends Item implements ICustomRendered {
         if (!player.isCreative()) {
             stack.shrink(1);
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 }

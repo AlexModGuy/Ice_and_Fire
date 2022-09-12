@@ -1,21 +1,21 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 
 import java.util.EnumSet;
 
 public class AmphithereAIFollowOwner extends Goal {
     private final EntityAmphithere ampithere;
     private final double followSpeed;
-    World world;
+    Level world;
     float maxDist;
     float minDist;
     private LivingEntity owner;
@@ -39,7 +39,7 @@ public class AmphithereAIFollowOwner extends Goal {
         }
         if (LivingEntity == null) {
             return false;
-        } else if (LivingEntity instanceof PlayerEntity && LivingEntity.isSpectator()) {
+        } else if (LivingEntity instanceof Player && LivingEntity.isSpectator()) {
             return false;
         } else if (this.ampithere.isOrderedToSit()) {
             return false;
@@ -68,15 +68,15 @@ public class AmphithereAIFollowOwner extends Goal {
     @Override
     public void start() {
         this.timeToRecalcPath = 0;
-        this.oldWaterCost = this.ampithere.getPathfindingMalus(PathNodeType.WATER);
-        this.ampithere.setPathfindingMalus(PathNodeType.WATER, 0.0F);
+        this.oldWaterCost = this.ampithere.getPathfindingMalus(BlockPathTypes.WATER);
+        this.ampithere.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
     }
 
     @Override
     public void stop() {
         this.owner = null;
         this.ampithere.getNavigation().stop();
-        this.ampithere.setPathfindingMalus(PathNodeType.WATER, this.oldWaterCost);
+        this.ampithere.setPathfindingMalus(BlockPathTypes.WATER, this.oldWaterCost);
     }
 
     @Override
@@ -90,15 +90,15 @@ public class AmphithereAIFollowOwner extends Goal {
                 tryMoveTo();
                 if (!this.ampithere.isLeashed() && !this.ampithere.isPassenger()) {
                     if (this.ampithere.distanceToSqr(this.owner) >= 144.0D) {
-                        final int i = MathHelper.floor(this.owner.getX()) - 2;
-                        final int j = MathHelper.floor(this.owner.getZ()) - 2;
-                        final int k = MathHelper.floor(this.owner.getBoundingBox().minY);
+                        final int i = Mth.floor(this.owner.getX()) - 2;
+                        final int j = Mth.floor(this.owner.getZ()) - 2;
+                        final int k = Mth.floor(this.owner.getBoundingBox().minY);
 
                         for (int l = 0; l <= 4; ++l) {
                             for (int i1 = 0; i1 <= 4; ++i1) {
                                 if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.canTeleportToBlock(new BlockPos(i, j, k))) {
                                     this.ampithere.moveTo(i + l + 0.5F, k, j + i1 + 0.5F,
-                                        this.ampithere.yRot, this.ampithere.xRot);
+                                        this.ampithere.getYRot(), this.ampithere.getXRot());
                                     ampithere.getNavigation().stop();
                                     return;
                                 }

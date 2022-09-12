@@ -1,18 +1,18 @@
 package com.github.alexthe666.iceandfire.loot;
 
-import net.minecraft.loot.ILootSerializer;
-import net.minecraft.loot.LootFunctionType;
-import net.minecraft.loot.functions.ILootFunction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.Serializer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
 public class IafLootRegistry {
 
-    public static LootFunctionType CUSTOMIZE_TO_DRAGON;
-    public static LootFunctionType CUSTOMIZE_TO_SERPENT;
+    public static LootItemFunctionType CUSTOMIZE_TO_DRAGON;
+    public static LootItemFunctionType CUSTOMIZE_TO_SERPENT;
 
-    private static LootFunctionType register(String p_237451_0_, ILootSerializer<? extends ILootFunction> p_237451_1_) {
-        return Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(p_237451_0_), new LootFunctionType(p_237451_1_));
+    private static LootItemFunctionType register(String p_237451_0_, Serializer<? extends LootItemFunction> p_237451_1_) {
+        return Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(p_237451_0_), new LootItemFunctionType(p_237451_1_));
     }
 
     public static void init() {

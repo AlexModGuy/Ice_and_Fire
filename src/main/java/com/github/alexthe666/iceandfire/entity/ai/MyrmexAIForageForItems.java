@@ -2,11 +2,11 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.github.alexthe666.iceandfire.util.IAFMath;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nonnull;
 import java.util.Comparator;
@@ -54,7 +54,7 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
         return true;
     }
 
-    protected AxisAlignedBB getTargetableArea(double targetDistance) {
+    protected AABB getTargetableArea(double targetDistance) {
         return this.mob.getBoundingBox().inflate(targetDistance, 5, targetDistance);
     }
 
@@ -71,8 +71,8 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
             this.stop();
         } else if (this.mob.distanceToSqr(this.targetEntity) < 8F) {
             this.myrmex.onPickupItem(targetEntity);
-            this.myrmex.setItemInHand(Hand.MAIN_HAND, this.targetEntity.getItem());
-            this.targetEntity.remove();
+            this.myrmex.setItemInHand(InteractionHand.MAIN_HAND, this.targetEntity.getItem());
+            this.targetEntity.remove(Entity.RemovalReason.DISCARDED);
             stop();
         }
     }

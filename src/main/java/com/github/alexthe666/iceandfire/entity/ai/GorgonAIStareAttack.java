@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 
@@ -62,7 +62,7 @@ public class GorgonAIStareAttack extends Goal {
                 this.entity.getMaxHeadYRot(), this.entity.getMaxHeadXRot());
 
             final double d0 = this.entity.distanceToSqr(LivingEntity.getX(), LivingEntity.getBoundingBox().minY, LivingEntity.getZ());
-            final boolean flag = this.entity.getSensing().canSee(LivingEntity);
+            final boolean flag = this.entity.getSensing().hasLineOfSight(LivingEntity);
             final boolean flag1 = this.seeTime > 0;
 
             if (flag != flag1) {

@@ -3,10 +3,10 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 import com.github.alexthe666.iceandfire.client.model.ModelDreadGhoul;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
 import com.github.alexthe666.iceandfire.entity.EntityDreadGhoul;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class RenderDreadGhoul extends MobRenderer<EntityDreadGhoul, ModelDreadGhoul> {
 
@@ -22,14 +22,14 @@ public class RenderDreadGhoul extends MobRenderer<EntityDreadGhoul, ModelDreadGh
     public static final ResourceLocation TEXTURE_1_OPEN = new ResourceLocation("iceandfire:textures/models/dread/dread_ghoul_open_2.png");
     public static final ResourceLocation TEXTURE_2_OPEN = new ResourceLocation("iceandfire:textures/models/dread/dread_ghoul_open_3.png");
 
-    public RenderDreadGhoul(EntityRendererManager renderManager) {
-        super(renderManager, new ModelDreadGhoul(0.0F), 0.5F);
+    public RenderDreadGhoul(EntityRendererProvider.Context context) {
+        super(context, new ModelDreadGhoul(0.0F), 0.5F);
         this.addLayer(new LayerGenericGlowing<>(this, TEXTURE_EYES));
     }
 
 
     @Override
-    protected void scale(EntityDreadGhoul entity, MatrixStack matrixStackIn, float partialTickTime) {
+    protected void scale(EntityDreadGhoul entity, PoseStack matrixStackIn, float partialTickTime) {
         float scale = entity.getSize() < 0.01F ? 1F : entity.getSize();
         matrixStackIn.scale(scale, scale, scale);
     }

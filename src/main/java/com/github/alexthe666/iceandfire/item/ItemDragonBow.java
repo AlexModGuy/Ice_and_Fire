@@ -2,18 +2,18 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Predicate;
 
-public class ItemDragonBow extends BowItem implements ICustomRendered {
+public class ItemDragonBow extends BowItem {
     public static final Predicate<ItemStack> DRAGON_ARROWS = (stack) -> {
-        ITag<Item> tag = ItemTags.getAllTags().getTag(IafTagRegistry.DRAGON_ARROWS);
-        return stack.getItem().is(tag);
+        Tag<Item> tag = ItemTags.getAllTags().getTag(IafTagRegistry.DRAGON_ARROWS);
+        return stack.is(tag);
     };
 
     public ItemDragonBow() {

@@ -3,9 +3,9 @@ package com.github.alexthe666.iceandfire.entity.props;
 import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Random;
 
@@ -17,13 +17,13 @@ public class ChickenProperties {
         return rand.nextInt(6000) + 6000;
     }
 
-    private static CompoundNBT createDefaultData(CompoundNBT nbt) {
+    private static CompoundTag createDefaultData(CompoundTag nbt) {
         nbt.putInt(CHICKEN_DATA, createDefaultTime());
         return nbt;
     }
 
     public static int getTimeRemaining(LivingEntity entity) {
-        CompoundNBT nbt = CitadelEntityData.getOrCreateCitadelTag(entity);
+        CompoundTag nbt = CitadelEntityData.getOrCreateCitadelTag(entity);
         if (!nbt.contains(CHICKEN_DATA)) {
             createDefaultData(nbt);
             CitadelEntityData.setCitadelTag(entity, nbt);
@@ -32,7 +32,7 @@ public class ChickenProperties {
     }
 
     public static void setTimeRemaining(LivingEntity entity, int time) {
-        CompoundNBT nbt = CitadelEntityData.getOrCreateCitadelTag(entity);
+        CompoundTag nbt = CitadelEntityData.getOrCreateCitadelTag(entity);
         nbt.putInt(CHICKEN_DATA, time);
         CitadelEntityData.setCitadelTag(entity, nbt);
         // No need to message clients since this can stay server only

@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 
@@ -33,8 +33,8 @@ public class DragonAILookIdle extends Goal {
     @Override
     public void start() {
         final double d0 = (Math.PI * 2D) * this.dragon.getRandom().nextDouble();
-        this.lookX = MathHelper.cos((float) d0);
-        this.lookZ = MathHelper.sin((float) d0);
+        this.lookX = Mth.cos((float) d0);
+        this.lookZ = Mth.sin((float) d0);
         this.idleTime = 20 + this.dragon.getRandom().nextInt(20);
     }
 

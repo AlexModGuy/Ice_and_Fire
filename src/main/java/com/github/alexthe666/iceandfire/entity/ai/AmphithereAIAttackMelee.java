@@ -1,12 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.Path;
 
 import java.util.EnumSet;
 
@@ -17,7 +17,7 @@ public class AmphithereAIAttackMelee extends Goal {
      * An amount of decrementing ticks that allows the entity to attack once the tick reaches 0.
      */
     protected int attackTick;
-    World world;
+    Level world;
     /**
      * The speed with which the mob will approach the target
      */
@@ -94,7 +94,7 @@ public class AmphithereAIAttackMelee extends Goal {
         } else if (!this.attacker.isWithinRestriction(living.blockPosition())) {
             return false;
         } else {
-            return !(living instanceof PlayerEntity) || !living.isSpectator() && !((PlayerEntity) living).isCreative();
+            return !(living instanceof Player) || !living.isSpectator() && !((Player) living).isCreative();
         }
     }
 
@@ -118,7 +118,7 @@ public class AmphithereAIAttackMelee extends Goal {
     public void stop() {
         LivingEntity LivingEntity = this.attacker.getTarget();
 
-        if (LivingEntity instanceof PlayerEntity && (LivingEntity.isSpectator() || ((PlayerEntity) LivingEntity).isCreative())) {
+        if (LivingEntity instanceof Player && (LivingEntity.isSpectator() || ((Player) LivingEntity).isCreative())) {
             this.attacker.setTarget(null);
         }
 
@@ -135,7 +135,7 @@ public class AmphithereAIAttackMelee extends Goal {
         double d0 = this.attacker.distanceToSqr(LivingEntity.getX(), LivingEntity.getBoundingBox().minY, LivingEntity.getZ());
         --this.delayCounter;
 
-        if ((this.longMemory || this.attacker.getSensing().canSee(LivingEntity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || LivingEntity.distanceToSqr(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.attacker.getRandom().nextFloat() < 0.05F)) {
+        if ((this.longMemory || this.attacker.getSensing().hasLineOfSight(LivingEntity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || LivingEntity.distanceToSqr(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.attacker.getRandom().nextFloat() < 0.05F)) {
             this.targetX = LivingEntity.getX();
             this.targetY = LivingEntity.getBoundingBox().minY;
             this.targetZ = LivingEntity.getZ();
@@ -144,7 +144,7 @@ public class AmphithereAIAttackMelee extends Goal {
             if (this.canPenalize) {
                 this.delayCounter += failedPathFindingPenalty;
                 if (this.attacker.getNavigation().getPath() != null) {
-                    net.minecraft.pathfinding.PathPoint finalPathPoint = this.attacker.getNavigation().getPath().getEndNode();
+                    net.minecraft.world.level.pathfinder.Node finalPathPoint = this.attacker.getNavigation().getPath().getEndNode();
                     if (finalPathPoint != null && LivingEntity.distanceToSqr(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1)
                         failedPathFindingPenalty = 0;
                     else
@@ -172,7 +172,7 @@ public class AmphithereAIAttackMelee extends Goal {
         double d0 = this.getAttackReachSqr(enemy);
         if (distToEnemySqr <= d0) {
             this.attackTick = 20;
-            this.attacker.swing(Hand.MAIN_HAND);
+            this.attacker.swing(InteractionHand.MAIN_HAND);
             this.attacker.doHurtTarget(enemy);
         }
     }

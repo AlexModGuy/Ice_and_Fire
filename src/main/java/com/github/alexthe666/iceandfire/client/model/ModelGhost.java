@@ -4,6 +4,7 @@ import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.HideableModelRenderer;
 import com.github.alexthe666.iceandfire.entity.EntityGhost;
+import com.google.common.collect.ImmutableList;
 
 public class ModelGhost extends ModelBipedBase<EntityGhost> {
     public AdvancedModelBox robe;
@@ -16,6 +17,7 @@ public class ModelGhost extends ModelBipedBase<EntityGhost> {
     public AdvancedModelBox sleeveLeft;
 
     public ModelGhost(float modelScale) {
+        super();
         this.texWidth = 128;
         this.texHeight = 64;
         this.sleeveRight = new AdvancedModelBox(this, 33, 35);
@@ -101,10 +103,10 @@ public class ModelGhost extends ModelBipedBase<EntityGhost> {
         if (f12 > Math.toRadians(20)) {
             f12 = (float) Math.toRadians(20);
         }
-        this.body.xRot = f12;
-        this.head.xRot = this.head.xRot - f12;
-        this.armRight.xRot = this.armRight.xRot - f12;
-        this.armLeft.xRot = this.armLeft.xRot - f12;
+        this.body.rotateAngleX = f12;
+        this.head.rotateAngleX = this.head.rotateAngleX - f12;
+        this.armRight.rotateAngleX = this.armRight.rotateAngleX - f12;
+        this.armLeft.rotateAngleX = this.armLeft.rotateAngleX - f12;
 
         this.walk(jaw, speed_idle * 2F, degree_idle * 0.5F, false, 0, 0.1F, f2, 1);
         this.walk(armRight, speed_idle * 1.5F, degree_idle * 0.4F, false, 2, 0.0F, f2, 1);
@@ -120,7 +122,6 @@ public class ModelGhost extends ModelBipedBase<EntityGhost> {
     }
 
     public void animate(EntityGhost entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        this.resetToDefaultPose();
         animator.update(entity);
         if (animator.setAnimation(EntityGhost.ANIMATION_SCARE)) {
             animator.startKeyframe(5);
@@ -173,4 +174,11 @@ public class ModelGhost extends ModelBipedBase<EntityGhost> {
             animator.resetKeyframe(5);
         }
     }
+
+    @Override
+    public Iterable<AdvancedModelBox> getAllParts() {
+        return ImmutableList.of(head, headware, body, armRight, armLeft, legRight, legLeft, robe, mask, hood, jaw,
+            sleeveRight, robeLowerRight, robeLowerLeft, sleeveLeft);
+    }
+
 }

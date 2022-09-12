@@ -2,42 +2,41 @@ package com.github.alexthe666.iceandfire.entity.util;
 
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.item.FallingBlockEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Collections;
 
 public class BlockLaunchExplosion extends Explosion {
     private final float size;
-    private final World world;
+    private final Level world;
     private final double x;
     private final double y;
     private final double z;
-    private final Mode mode;
+    private final BlockInteraction mode;
 
-    public BlockLaunchExplosion(World world, MobEntity entity, double x, double y, double z, float size) {
-        this(world, entity, x, y, z, size, Mode.DESTROY);
+    public BlockLaunchExplosion(Level world, Mob entity, double x, double y, double z, float size) {
+        this(world, entity, x, y, z, size, BlockInteraction.DESTROY);
     }
 
-    public BlockLaunchExplosion(World world, MobEntity entity, double x, double y, double z, float size, Mode mode) {
+    public BlockLaunchExplosion(Level world, Mob entity, double x, double y, double z, float size, BlockInteraction mode) {
         this(world, entity, null, x, y, z, size, mode);
     }
 
-    public BlockLaunchExplosion(World world, MobEntity entity, DamageSource source, double x, double y, double z, float size, Mode mode) {
+    public BlockLaunchExplosion(Level world, Mob entity, DamageSource source, double x, double y, double z, float size, BlockInteraction mode) {
         super(world, entity, source, null, x, y, z, size, false, mode);
         this.world = world;
         this.size = size;
@@ -70,10 +69,10 @@ public class BlockLaunchExplosion extends Explosion {
      */
     public void finalizeExplosion(boolean spawnParticles) {
         if (world.isClientSide) {
-            this.world.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F, false);
+            this.world.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F, false);
         }
 
-        boolean flag = this.mode != Explosion.Mode.NONE;
+        boolean flag = this.mode != Explosion.BlockInteraction.NONE;
         if (spawnParticles) {
             if (!(this.size < 2.0F) && flag) {
                 this.world.addParticle(ParticleTypes.EXPLOSION_EMITTER, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
@@ -89,11 +88,11 @@ public class BlockLaunchExplosion extends Explosion {
             for (BlockPos blockpos : this.getToBlow()) {
                 BlockState blockstate = this.world.getBlockState(blockpos);
                 Block block = blockstate.getBlock();
-                if (!blockstate.isAir(this.world, blockpos)) {
+                if (!blockstate.isAir()) {
                     BlockPos blockpos1 = blockpos.immutable();
                     this.world.getProfiler().push("explosion_blocks");
 
-                    Vector3d Vector3d = new Vector3d(this.x, this.y, this.z);
+                    Vec3 Vector3d = new Vec3(this.x, this.y, this.z);
                     blockstate.onBlockExploded(this.world, blockpos, this);
                     FallingBlockEntity fallingBlockEntity = new FallingBlockEntity(EntityType.FALLING_BLOCK, world);
                     fallingBlockEntity.setStartPos(blockpos1);
@@ -102,7 +101,7 @@ public class BlockLaunchExplosion extends Explosion {
                     double d7 = fallingBlockEntity.getEyeY() - this.y;
                     double d9 = fallingBlockEntity.getZ() - this.z;
                     float f3 = this.size * 2.0F;
-                    double d12 = MathHelper.sqrt(fallingBlockEntity.distanceToSqr(Vector3d)) / f3;
+                    double d12 = Math.sqrt(fallingBlockEntity.distanceToSqr(Vector3d)) / f3;
                     double d14 = getSeenPercent(Vector3d, fallingBlockEntity);
                     double d11 = (1.0D - d12) * d14;
                     fallingBlockEntity.setDeltaMovement(fallingBlockEntity.getDeltaMovement().add(d5 * d11, d7 * d11, d9 * d11));

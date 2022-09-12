@@ -12,6 +12,7 @@ public class ModelDreadGhoul extends ModelBipedBase<EntityDreadGhoul> {
     public AdvancedModelBox clawsLeft;
 
     public ModelDreadGhoul(float modelScale) {
+        super();
         this.texWidth = 128;
         this.texHeight = 64;
         this.head = new HideableModelRenderer(this, 0, 0);

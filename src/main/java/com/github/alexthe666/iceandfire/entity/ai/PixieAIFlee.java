@@ -1,12 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -19,7 +19,7 @@ public class PixieAIFlee<T extends Entity> extends Goal {
     private final Class<T> classToAvoid;
     protected EntityPixie pixie;
     protected T closestLivingEntity;
-    private Vector3d hidePlace;
+    private Vec3 hidePlace;
 
     @Nonnull
     private List<T> list = Collections.emptyList();
@@ -33,20 +33,20 @@ public class PixieAIFlee<T extends Entity> extends Goal {
 
     @Override
     public boolean canUse() {
-        if (this.pixie.getItemInHand(Hand.MAIN_HAND).isEmpty() || this.pixie.isTame()) {
+        if (this.pixie.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() || this.pixie.isTame()) {
             list = Collections.emptyList();
             return false;
         }
 
         if (this.pixie.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
-            list = this.pixie.level.getEntitiesOfClass(this.classToAvoid, this.pixie.getBoundingBox().inflate(this.avoidDistance, 3.0D, this.avoidDistance), EntityPredicates.NO_SPECTATORS);
+            list = this.pixie.level.getEntitiesOfClass(this.classToAvoid, this.pixie.getBoundingBox().inflate(this.avoidDistance, 3.0D, this.avoidDistance), EntitySelector.NO_SPECTATORS);
 
         if (list.isEmpty())
             return false;
 
         this.closestLivingEntity = list.get(0);
         if (closestLivingEntity != null) {
-            Vector3d Vector3d = RandomPositionGenerator.getPosAvoid(this.pixie, 16, 4, new Vector3d(this.closestLivingEntity.getX(), this.closestLivingEntity.getY(), this.closestLivingEntity.getZ()));
+            Vec3 Vector3d = DefaultRandomPos.getPosAway(this.pixie, 16, 4, new Vec3(this.closestLivingEntity.getX(), this.closestLivingEntity.getY(), this.closestLivingEntity.getZ()));
 
             if (Vector3d == null) {
                 return false;

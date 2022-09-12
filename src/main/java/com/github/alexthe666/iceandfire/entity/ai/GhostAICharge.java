@@ -3,10 +3,10 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.entity.EntityGhost;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
@@ -14,8 +14,8 @@ public class GhostAICharge extends Goal {
 
     private final EntityGhost ghost;
     public boolean firstPhase = true;
-    public Vector3d moveToPos = null;
-    public Vector3d offsetOf = Vector3d.ZERO;
+    public Vec3 moveToPos = null;
+    public Vec3 offsetOf = Vec3.ZERO;
 
     public GhostAICharge(EntityGhost ghost) {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
@@ -54,7 +54,7 @@ public class GhostAICharge extends Goal {
             if (firstPhase) {
                 if (this.moveToPos == null) {
                     BlockPos moveToPos = DragonUtils.getBlockInTargetsViewGhost(ghost, target);
-                    this.moveToPos = Vector3d.atCenterOf(moveToPos);
+                    this.moveToPos = Vec3.atCenterOf(moveToPos);
                 } else {
                     this.ghost.getNavigation().moveTo(this.moveToPos.x + 0.5D, this.moveToPos.y + 0.5D,
                         this.moveToPos.z + 0.5D, 1F);
@@ -68,8 +68,8 @@ public class GhostAICharge extends Goal {
                     }
                 }
             } else {
-                Vector3d fin = target.position();
-                this.moveToPos = new Vector3d(fin.x, target.getY() + target.getEyeHeight() / 2, fin.z);
+                Vec3 fin = target.position();
+                this.moveToPos = new Vec3(fin.x, target.getY() + target.getEyeHeight() / 2, fin.z);
                 this.ghost.getNavigation().moveTo(target, 1.2F);
                 if (this.ghost.distanceToSqr(this.moveToPos.add(0.5D, 0.5D, 0.5D)) < 3D) {
                     this.stop();

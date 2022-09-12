@@ -4,11 +4,11 @@ import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.util.IAFMath;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nonnull;
 import java.util.Comparator;
@@ -62,7 +62,7 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
         } else {
 
             if (this.mob.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
-                list = this.mob.level.getLoadedEntitiesOfClass(ItemEntity.class,
+                list = this.mob.level.getEntitiesOfClass(ItemEntity.class,
                     this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
 
             if (list.isEmpty()) {
@@ -75,7 +75,7 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
         }
     }
 
-    protected AxisAlignedBB getTargetableArea(double targetDistance) {
+    protected AABB getTargetableArea(double targetDistance) {
         return this.mob.getBoundingBox().inflate(targetDistance, 4.0D, targetDistance);
     }
 

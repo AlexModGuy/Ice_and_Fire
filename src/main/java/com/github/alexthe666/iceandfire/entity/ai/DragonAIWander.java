@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
@@ -44,7 +44,7 @@ public class DragonAIWander extends Goal {
                 return false;
             }
         }
-        Vector3d Vector3d = RandomPositionGenerator.getPos(this.dragon, 10, 7);
+        Vec3 Vector3d = DefaultRandomPos.getPos(this.dragon, 10, 7);
         if (Vector3d == null) {
             return false;
         } else {

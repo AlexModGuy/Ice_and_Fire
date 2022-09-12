@@ -1,38 +1,38 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.network.IPacket;
-import net.minecraft.particles.ItemParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
-public class EntityCockatriceEgg extends ProjectileItemEntity {
+public class EntityCockatriceEgg extends ThrowableItemProjectile {
 
-    public EntityCockatriceEgg(EntityType<? extends ProjectileItemEntity> type, World worldIn) {
+    public EntityCockatriceEgg(EntityType<? extends ThrowableItemProjectile> type, Level worldIn) {
         super(type, worldIn);
     }
 
-    public EntityCockatriceEgg(EntityType<? extends ProjectileItemEntity> type, World worldIn, LivingEntity throwerIn) {
+    public EntityCockatriceEgg(EntityType<? extends ThrowableItemProjectile> type, Level worldIn, LivingEntity throwerIn) {
         super(type, throwerIn, worldIn);
     }
 
-    public EntityCockatriceEgg(EntityType<? extends ProjectileItemEntity> type, double x, double y, double z,
-        World worldIn) {
+    public EntityCockatriceEgg(EntityType<? extends ThrowableItemProjectile> type, double x, double y, double z,
+                               Level worldIn) {
         super(type, x, y, z, worldIn);
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -40,7 +40,7 @@ public class EntityCockatriceEgg extends ProjectileItemEntity {
     public void handleEntityEvent(byte id) {
         if (id == 3) {
             for (int i = 0; i < 8; ++i) {
-                this.level.addParticle(new ItemParticleData(ParticleTypes.ITEM, this.getItem()), this.getX(), this.getY(), this.getZ(), (this.random.nextFloat() - 0.5D) * 0.08D, (this.random.nextFloat() - 0.5D) * 0.08D, (this.random.nextFloat() - 0.5D) * 0.08D);
+                this.level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, this.getItem()), this.getX(), this.getY(), this.getZ(), (this.random.nextFloat() - 0.5D) * 0.08D, (this.random.nextFloat() - 0.5D) * 0.08D, (this.random.nextFloat() - 0.5D) * 0.08D);
             }
         }
 
@@ -50,10 +50,10 @@ public class EntityCockatriceEgg extends ProjectileItemEntity {
      * Called when this EntityThrowable hits a block or entity.
      */
     @Override
-    protected void onHit(RayTraceResult result) {
+    protected void onHit(HitResult result) {
         Entity thrower = getOwner();
-        if (result.getType() == RayTraceResult.Type.ENTITY) {
-            ((EntityRayTraceResult) result).getEntity().hurt(DamageSource.thrown(this, thrower), 0.0F);
+        if (result.getType() == HitResult.Type.ENTITY) {
+            ((EntityHitResult) result).getEntity().hurt(DamageSource.thrown(this, thrower), 0.0F);
         }
 
         if (!this.level.isClientSide) {
@@ -68,16 +68,16 @@ public class EntityCockatriceEgg extends ProjectileItemEntity {
                     EntityCockatrice cockatrice = new EntityCockatrice(IafEntityRegistry.COCKATRICE.get(), this.level);
                     cockatrice.setAge(-24000);
                     cockatrice.setHen(this.random.nextBoolean());
-                    cockatrice.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, 0.0F);
-                    if (thrower instanceof PlayerEntity) {
-                        cockatrice.tame((PlayerEntity) thrower);
+                    cockatrice.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+                    if (thrower instanceof Player) {
+                        cockatrice.tame((Player) thrower);
                     }
                     this.level.addFreshEntity(cockatrice);
                 }
             }
 
             this.level.broadcastEntityEvent(this, (byte) 3);
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
         }
     }
 

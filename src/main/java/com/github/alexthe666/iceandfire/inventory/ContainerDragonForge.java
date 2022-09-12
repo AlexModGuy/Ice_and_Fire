@@ -3,33 +3,29 @@ package com.github.alexthe666.iceandfire.inventory;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.FurnaceResultSlot;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.ItemStack;
 
-public class ContainerDragonForge extends Container {
+public class ContainerDragonForge extends AbstractContainerMenu {
 
-    private final IInventory tileFurnace;
+    private final Container tileFurnace;
     public int isFire;
 
-    public ContainerDragonForge(int i, PlayerInventory playerInventory) {
-        this(i, new Inventory(3), playerInventory, new IntArray(0));
+    public ContainerDragonForge(int i, Inventory playerInventory) {
+        this(i, new SimpleContainer(3), playerInventory, new SimpleContainerData(0));
     }
 
 
-    public ContainerDragonForge(int id, IInventory furnaceInventory, PlayerInventory playerInventory, IIntArray vars) {
+    public ContainerDragonForge(int id, Container furnaceInventory, Inventory playerInventory, ContainerData vars) {
         super(IafContainerRegistry.DRAGON_FORGE_CONTAINER.get(), id);
         this.tileFurnace = furnaceInventory;
-        if(furnaceInventory instanceof TileEntityDragonforge){
+        if (furnaceInventory instanceof TileEntityDragonforge) {
             isFire = ((TileEntityDragonforge) furnaceInventory).isFire;
-        }else if(IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityDragonforge){
+        } else if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityDragonforge) {
             isFire = ((TileEntityDragonforge) IceAndFire.PROXY.getRefrencedTE()).isFire;
         }
         this.addSlot(new Slot(furnaceInventory, 0, 68, 34));
@@ -48,12 +44,12 @@ public class ContainerDragonForge extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return this.tileFurnace.stillValid(playerIn);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
 

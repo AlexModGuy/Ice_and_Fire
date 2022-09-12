@@ -2,8 +2,8 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
@@ -22,14 +22,14 @@ public class DragonAIReturnToRoost extends Goal {
             && (dragon.getTarget() == null || !dragon.getTarget().isAlive())
             && dragon.getRestrictCenter() != null
             && DragonUtils.isInHomeDimension(dragon)
-            && dragon.getDistanceSquared(Vector3d.atCenterOf(dragon.getRestrictCenter())) > dragon.getBbWidth()
+            && dragon.getDistanceSquared(Vec3.atCenterOf(dragon.getRestrictCenter())) > dragon.getBbWidth()
             * dragon.getBbWidth();
     }
 
     @Override
     public void tick() {
         if (this.dragon.getRestrictCenter() != null) {
-            final double dist = Math.sqrt(dragon.getDistanceSquared(Vector3d.atCenterOf(dragon.getRestrictCenter())));
+            final double dist = Math.sqrt(dragon.getDistanceSquared(Vec3.atCenterOf(dragon.getRestrictCenter())));
             final double xDist = Math.abs(dragon.getX() - dragon.getRestrictCenter().getX() - 0.5F);
             final double zDist = Math.abs(dragon.getZ() - dragon.getRestrictCenter().getZ() - 0.5F);
             final double xzDist = Math.sqrt(xDist * xDist + zDist * zDist);
@@ -47,7 +47,7 @@ public class DragonAIReturnToRoost extends Goal {
                         this.dragon.setFlying(false);
                         this.dragon.setHovering(false);
                         this.dragon.flightManager.setFlightTarget(
-                            Vector3d.upFromBottomCenterOf(this.dragon.getRestrictCenter(), yAddition));
+                            Vec3.upFromBottomCenterOf(this.dragon.getRestrictCenter(), yAddition));
                         this.dragon.getNavigation().moveTo(this.dragon.getRestrictCenter().getX(),
                             this.dragon.getRestrictCenter().getY(), this.dragon.getRestrictCenter().getZ(), 1.0F);
                         return;
@@ -58,7 +58,7 @@ public class DragonAIReturnToRoost extends Goal {
                 }
                 if (this.dragon.isFlying()) {
                     this.dragon.flightManager.setFlightTarget(
-                        Vector3d.upFromBottomCenterOf(this.dragon.getRestrictCenter(), yAddition));
+                        Vec3.upFromBottomCenterOf(this.dragon.getRestrictCenter(), yAddition));
                     this.dragon.getNavigation().moveTo(this.dragon.getRestrictCenter().getX(),
                         yAddition + this.dragon.getRestrictCenter().getY(), this.dragon.getRestrictCenter().getZ(), 1F);
                 }

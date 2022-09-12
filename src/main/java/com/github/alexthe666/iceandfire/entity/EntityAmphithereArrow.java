@@ -2,43 +2,43 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.IPacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.FMLPlayMessages;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
-public class EntityAmphithereArrow extends AbstractArrowEntity {
+public class EntityAmphithereArrow extends AbstractArrow {
 
-    public EntityAmphithereArrow(EntityType<? extends AbstractArrowEntity> type, World worldIn) {
+    public EntityAmphithereArrow(EntityType<? extends AbstractArrow> type, Level worldIn) {
         super(type, worldIn);
         this.setBaseDamage(2.5F);
     }
 
-    public EntityAmphithereArrow(EntityType<? extends AbstractArrowEntity> type, World worldIn, double x, double y,
+    public EntityAmphithereArrow(EntityType<? extends AbstractArrow> type, Level worldIn, double x, double y,
                                  double z) {
         this(type, worldIn);
         this.setPos(x, y, z);
         this.setBaseDamage(2.5F);
     }
 
-    public EntityAmphithereArrow(FMLPlayMessages.SpawnEntity spawnEntity, World world) {
+    public EntityAmphithereArrow(FMLPlayMessages.SpawnEntity spawnEntity, Level world) {
         this(IafEntityRegistry.AMPHITHERE_ARROW.get(), world);
     }
 
-    public EntityAmphithereArrow(EntityType type, LivingEntity shooter, World worldIn) {
+    public EntityAmphithereArrow(EntityType type, LivingEntity shooter, Level worldIn) {
         super(type, shooter, worldIn);
         this.setBaseDamage(2.5F);
     }
 
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -66,7 +66,7 @@ public class EntityAmphithereArrow extends AbstractArrowEntity {
         double xRatio = this.getDeltaMovement().x;
         double zRatio = this.getDeltaMovement().z;
         float strength = -1.4F;
-        float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
+        float f = Mth.sqrt((float) (xRatio * xRatio + zRatio * zRatio));
         living.setDeltaMovement(living.getDeltaMovement().multiply(0.5D, 1, 0.5D).subtract(xRatio / f * strength, 0, zRatio / f * strength).add(0, 0.6, 0));
         spawnExplosionParticle();
     }

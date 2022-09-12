@@ -2,13 +2,13 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.item.ItemHippogryphEgg;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.Random;
 public class HippogryphAIMate extends Goal {
 
     private final EntityHippogryph hippo;
-    World world;
+    Level world;
     int spawnBabyDelay;
     double moveSpeed;
     private EntityHippogryph targetMate;
@@ -26,7 +26,7 @@ public class HippogryphAIMate extends Goal {
         this(animal, speedIn, animal.getClass());
     }
 
-    public HippogryphAIMate(EntityHippogryph hippogryph, double speed, Class<? extends AnimalEntity> mate) {
+    public HippogryphAIMate(EntityHippogryph hippogryph, double speed, Class<? extends Animal> mate) {
         this.hippo = hippogryph;
         this.world = hippogryph.level;
         this.moveSpeed = speed;
@@ -107,7 +107,7 @@ public class HippogryphAIMate extends Goal {
         }
 
         if (this.world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-            this.world.addFreshEntity(new ExperienceOrbEntity(this.world, this.hippo.getX(), this.hippo.getY(),
+            this.world.addFreshEntity(new ExperienceOrb(this.world, this.hippo.getX(), this.hippo.getY(),
                 this.hippo.getZ(), random.nextInt(7) + 1));
         }
     }

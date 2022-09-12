@@ -1,21 +1,21 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 
 import java.util.EnumSet;
 
 public class PixieAIFollowOwner extends Goal {
     private final EntityPixie tameable;
-    World world;
+    Level world;
     float maxDist;
     float minDist;
     private LivingEntity owner;
@@ -36,7 +36,7 @@ public class PixieAIFollowOwner extends Goal {
 
         if (LivingEntity == null) {
             return false;
-        } else if (LivingEntity instanceof PlayerEntity && LivingEntity.isSpectator()) {
+        } else if (LivingEntity instanceof Player && LivingEntity.isSpectator()) {
             return false;
         } else if (this.tameable.isPixieSitting()) {
             return false;
@@ -57,14 +57,14 @@ public class PixieAIFollowOwner extends Goal {
     @Override
     public void start() {
         this.timeToRecalcPath = 0;
-        this.oldWaterCost = this.tameable.getPathfindingMalus(PathNodeType.WATER);
-        this.tameable.setPathfindingMalus(PathNodeType.WATER, 0.0F);
+        this.oldWaterCost = this.tameable.getPathfindingMalus(BlockPathTypes.WATER);
+        this.tameable.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
     }
 
     @Override
     public void stop() {
         this.owner = null;
-        this.tameable.setPathfindingMalus(PathNodeType.WATER, this.oldWaterCost);
+        this.tameable.setPathfindingMalus(BlockPathTypes.WATER, this.oldWaterCost);
         this.tameable.slowSpeed = false;
     }
 
@@ -86,15 +86,15 @@ public class PixieAIFollowOwner extends Goal {
                 this.tameable.slowSpeed = true;
                 if (!this.tameable.isLeashed()) {
                     if (this.tameable.distanceToSqr(this.owner) >= 50.0D) {
-                        final int i = MathHelper.floor(this.owner.getX()) - 2;
-                        final int j = MathHelper.floor(this.owner.getZ()) - 2;
-                        final int k = MathHelper.floor(this.owner.getBoundingBox().minY);
+                        final int i = Mth.floor(this.owner.getX()) - 2;
+                        final int j = Mth.floor(this.owner.getZ()) - 2;
+                        final int k = Mth.floor(this.owner.getBoundingBox().minY);
 
                         for (int l = 0; l <= 4; ++l) {
                             for (int i1 = 0; i1 <= 4; ++i1) {
                                 if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.isEmptyBlock(new BlockPos(i + l, k, j + i1)) && this.isEmptyBlock(new BlockPos(i + l, k + 1, j + i1))) {
                                     this.tameable.moveTo(i + l + 0.5F, k + 1.5, j + i1 + 0.5F,
-                                        this.tameable.yRot, this.tameable.xRot);
+                                        this.tameable.getYRot(), this.tameable.getXRot());
                                     return;
                                 }
                             }

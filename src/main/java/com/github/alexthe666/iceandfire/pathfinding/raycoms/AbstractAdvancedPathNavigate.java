@@ -2,32 +2,32 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 /*
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 
-public abstract class AbstractAdvancedPathNavigate extends GroundPathNavigator {
+public abstract class AbstractAdvancedPathNavigate extends GroundPathNavigation {
     /**
      * Type of restriction.
      */
-    public enum RestrictionType
-    {
+    public enum RestrictionType {
         NONE,
         XZ,
         XYZ
     }
 
     //  Parent class private members
-    protected final MobEntity    ourEntity;
+    protected final Mob ourEntity;
     @Nullable
-    protected       BlockPos     destination;
-    protected       double       walkSpeedFactor = 1.0D;
+    protected BlockPos destination;
+    protected double walkSpeedFactor = 1.0D;
     @Nullable
-    protected       BlockPos     originalDestination;
+    protected BlockPos originalDestination;
 
     /**
      * The navigators node costs
@@ -35,8 +35,8 @@ public abstract class AbstractAdvancedPathNavigate extends GroundPathNavigator {
     private final PathingOptions pathingOptions = new PathingOptions();
 
     public AbstractAdvancedPathNavigate(
-            final MobEntity entityLiving,
-            final World worldIn) {
+        final Mob entityLiving,
+        final Level worldIn) {
         super(entityLiving, worldIn);
         this.ourEntity = mob;
     }
@@ -144,7 +144,7 @@ public abstract class AbstractAdvancedPathNavigate extends GroundPathNavigator {
      *
      * @return mobentity
      */
-    public MobEntity getOurEntity() {
+    public Mob getOurEntity() {
         return ourEntity;
     }
 

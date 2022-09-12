@@ -2,25 +2,30 @@ package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
-import com.github.alexthe666.iceandfire.item.ICustomRendered;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraftforge.client.IBlockRenderProperties;
 
 import javax.annotation.Nullable;
 import java.util.Random;
+import java.util.function.Consumer;
 
-public class BlockPixieHouse extends ContainerBlock implements ICustomRendered {
+import static com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry.PIXIE_HOUSE;
+
+public class BlockPixieHouse extends BaseEntityBlock {
     public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
 
     public BlockPixieHouse(String type) {
@@ -32,36 +37,29 @@ public class BlockPixieHouse extends ContainerBlock implements ICustomRendered {
                 .strength(2.0F, 5.0F)
                 .randomTicks()
 		);
-
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
         this.setRegistryName(IceAndFire.MODID, "pixie_house_" + type);
     }
 
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
-    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         dropPixie(worldIn, pos);
         popResource(worldIn, pos, new ItemStack(this, 0));
         super.onRemove(state, worldIn, pos, newState, isMoving);
     }
 
-
-    @SuppressWarnings("deprecation")
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        //worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
-    }
-
-    public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
+    public void updateTick(Level worldIn, BlockPos pos, BlockState state, Random rand) {
         this.checkFall(worldIn, pos);
     }
 
-    private boolean checkFall(World worldIn, BlockPos pos) {
+    private boolean checkFall(Level worldIn, BlockPos pos) {
         if (!this.canPlaceBlockAt(worldIn, pos)) {
             worldIn.destroyBlock(pos, true);
             dropPixie(worldIn, pos);
@@ -71,11 +69,21 @@ public class BlockPixieHouse extends ContainerBlock implements ICustomRendered {
         }
     }
 
-    private boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+    @Override
+    public void initializeClient(Consumer<IBlockRenderProperties> consumer) {
+        super.initializeClient(consumer);
+    }
+
+    @Override
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
+    }
+
+    private boolean canPlaceBlockAt(Level worldIn, BlockPos pos) {
         return true;
     }
 
-    public void dropPixie(World world, BlockPos pos) {
+    public void dropPixie(Level world, BlockPos pos) {
         if (world.getBlockEntity(pos) != null && world.getBlockEntity(pos) instanceof TileEntityPixieHouse && ((TileEntityPixieHouse) world.getBlockEntity(pos)).hasPixie) {
             ((TileEntityPixieHouse) world.getBlockEntity(pos)).releasePixie();
         }
@@ -83,7 +91,13 @@ public class BlockPixieHouse extends ContainerBlock implements ICustomRendered {
 
     @Nullable
     @Override
-    public TileEntity newBlockEntity(IBlockReader worldIn) {
-        return new TileEntityPixieHouse();
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
+        return level.isClientSide ? createTickerHelper(entityType, PIXIE_HOUSE.get(), TileEntityPixieHouse::tick) : null;
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileEntityPixieHouse(pos, state);
     }
 }

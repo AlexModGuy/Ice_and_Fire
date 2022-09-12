@@ -2,19 +2,19 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.props.ChainProperties;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Matrix3f;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class RenderChain {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/misc/chain_link.png");
 
-    public static void render(LivingEntity entityLivingIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int lightIn) {
+    public static void render(LivingEntity entityLivingIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int lightIn) {
         List<Entity> chainTargets = ChainProperties.getChainedTo(entityLivingIn);
         for (Entity chainTarget : chainTargets) {
             if (chainTarget == null) {
@@ -37,14 +37,14 @@ public class RenderChain {
         }
     }
 
-    public static <E extends Entity> void renderLink(LivingEntity entityLivingIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int lightIn, E chainTarget) {
+    public static <E extends Entity> void renderLink(LivingEntity entityLivingIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int lightIn, E chainTarget) {
         // Most of this code stems from the guardian lasers
         float f3 = entityLivingIn.getEyeHeight();
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.0D, f3, 0.0D);
-        Vector3d vector3d = getPosition(chainTarget, (double) chainTarget.getBbHeight() * 0.5D, partialTicks);
-        Vector3d vector3d1 = getPosition(entityLivingIn, f3, partialTicks);
-        Vector3d vector3d2 = vector3d.subtract(vector3d1);
+        Vec3 vector3d = getPosition(chainTarget, (double) chainTarget.getBbHeight() * 0.5D, partialTicks);
+        Vec3 vector3d1 = getPosition(entityLivingIn, f3, partialTicks);
+        Vec3 vector3d2 = vector3d.subtract(vector3d1);
         float f4 = (float) (vector3d2.length() + 0.0D);
         vector3d2 = vector3d2.normalize();
         float f5 = (float) Math.acos(vector3d2.y);
@@ -59,17 +59,17 @@ public class RenderChain {
         float f20 = 0.2F;
         float f21 = 0F;
         float f22 = -0.2F;
-        float f23 = MathHelper.cos(f7 + ((float) Math.PI / 2F)) * 0.2F;
-        float f24 = MathHelper.sin(f7 + ((float) Math.PI / 2F)) * 0.2F;
-        float f25 = MathHelper.cos(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
-        float f26 = MathHelper.sin(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
+        float f23 = Mth.cos(f7 + ((float) Math.PI / 2F)) * 0.2F;
+        float f24 = Mth.sin(f7 + ((float) Math.PI / 2F)) * 0.2F;
+        float f25 = Mth.cos(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
+        float f26 = Mth.sin(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
         float f29 = 0;
         float f30 = f4 + f29;
         float f32 = 0.75F;
         float f31 = f4 + f32;
 
-        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(getTexture()));
-        MatrixStack.Entry matrixstack$entry = matrixStackIn.last();
+        VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(getTexture()));
+        PoseStack.Pose matrixstack$entry = matrixStackIn.last();
         Matrix4f matrix4f = matrixstack$entry.pose();
         Matrix3f matrix3f = matrixstack$entry.normal();
         matrixStackIn.pushPose();
@@ -86,15 +86,15 @@ public class RenderChain {
         matrixStackIn.popPose();
     }
 
-    private static void vertex(IVertexBuilder p_229108_0_, Matrix4f p_229108_1_, Matrix3f p_229108_2_, float p_229108_3_, float p_229108_4_, float p_229108_5_, int p_229108_6_, int p_229108_7_, int p_229108_8_, float p_229108_9_, float p_229108_10_, int packedLight) {
+    private static void vertex(VertexConsumer p_229108_0_, Matrix4f p_229108_1_, Matrix3f p_229108_2_, float p_229108_3_, float p_229108_4_, float p_229108_5_, int p_229108_6_, int p_229108_7_, int p_229108_8_, float p_229108_9_, float p_229108_10_, int packedLight) {
         p_229108_0_.vertex(p_229108_1_, p_229108_3_, p_229108_4_, p_229108_5_).color(p_229108_6_, p_229108_7_, p_229108_8_, 255).uv(p_229108_9_, p_229108_10_).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(p_229108_2_, 0.0F, 1.0F, 0.0F).endVertex();
     }
 
-    private static Vector3d getPosition(Entity LivingEntityIn, double p_177110_2_, float p_177110_4_) {
+    private static Vec3 getPosition(Entity LivingEntityIn, double p_177110_2_, float p_177110_4_) {
         double d0 = LivingEntityIn.xOld + (LivingEntityIn.getX() - LivingEntityIn.xOld) * (double) p_177110_4_;
         double d1 = p_177110_2_ + LivingEntityIn.yOld + (LivingEntityIn.getY() - LivingEntityIn.yOld) * (double) p_177110_4_;
         double d2 = LivingEntityIn.zOld + (LivingEntityIn.getZ() - LivingEntityIn.zOld) * (double) p_177110_4_;
-        return new Vector3d(d0, d1, d2);
+        return new Vec3(d0, d1, d2);
     }
 
     public static ResourceLocation getTexture() {

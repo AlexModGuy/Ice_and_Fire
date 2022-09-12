@@ -1,44 +1,45 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.FMLPlayMessages;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.common.ToolActions;
+import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
-public class EntityStymphalianArrow extends AbstractArrowEntity {
+public class EntityStymphalianArrow extends AbstractArrow {
 
-    public EntityStymphalianArrow(EntityType<? extends AbstractArrowEntity> t, World worldIn) {
+    public EntityStymphalianArrow(EntityType<? extends AbstractArrow> t, Level worldIn) {
         super(t, worldIn);
         this.setBaseDamage(3.5F);
     }
 
-    public EntityStymphalianArrow(EntityType<? extends AbstractArrowEntity> t, World worldIn, double x, double y,
-        double z) {
+    public EntityStymphalianArrow(EntityType<? extends AbstractArrow> t, Level worldIn, double x, double y,
+                                  double z) {
         this(t, worldIn);
         this.setPos(x, y, z);
         this.setBaseDamage(3.5F);
     }
 
-    public EntityStymphalianArrow(FMLPlayMessages.SpawnEntity spawnEntity, World world) {
+    public EntityStymphalianArrow(FMLPlayMessages.SpawnEntity spawnEntity, Level world) {
         this(IafEntityRegistry.STYMPHALIAN_ARROW.get(), world);
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
-    public EntityStymphalianArrow(EntityType t, World worldIn, LivingEntity shooter) {
+    public EntityStymphalianArrow(EntityType t, Level worldIn, LivingEntity shooter) {
         super(t, shooter, worldIn);
         this.setBaseDamage(3.5F);
     }
@@ -46,27 +47,27 @@ public class EntityStymphalianArrow extends AbstractArrowEntity {
     @Override
     public void tick() {
         super.tick();
-        float sqrt = MathHelper.sqrt(this.getDeltaMovement().x * this.getDeltaMovement().x + this.getDeltaMovement().z * this.getDeltaMovement().z);
+        float sqrt = Mth.sqrt((float) (this.getDeltaMovement().x * this.getDeltaMovement().x + this.getDeltaMovement().z * this.getDeltaMovement().z));
         if (sqrt < 0.1F) {
             this.setDeltaMovement(this.getDeltaMovement().add(0, -0.01F, 0));
         }
     }
 
-    protected void damageShield(PlayerEntity player, float damage) {
-        if (damage >= 3.0F && player.getUseItem().getItem().isShield(player.getUseItem(), player)) {
+    protected void damageShield(Player player, float damage) {
+        if (damage >= 3.0F && player.getUseItem().getItem().canPerformAction(player.getUseItem(), ToolActions.SHIELD_BLOCK)) {
             ItemStack copyBeforeUse = player.getUseItem().copy();
-            int i = 1 + MathHelper.floor(damage);
+            int i = 1 + Mth.floor(damage);
             player.getUseItem().hurtAndBreak(i, player, (entity) -> {
-                entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+                entity.broadcastBreakEvent(EquipmentSlot.MAINHAND);
             });
             if (player.getUseItem().isEmpty()) {
-                Hand Hand = player.getUsedItemHand();
+                InteractionHand Hand = player.getUsedItemHand();
                 net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, Hand);
 
-                if (Hand == net.minecraft.util.Hand.MAIN_HAND) {
-                    this.setItemSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
+                if (Hand == net.minecraft.world.InteractionHand.MAIN_HAND) {
+                    this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
                 } else {
-                    this.setItemSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
+                    this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
                 }
                 player.stopUsingItem();
                 this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);

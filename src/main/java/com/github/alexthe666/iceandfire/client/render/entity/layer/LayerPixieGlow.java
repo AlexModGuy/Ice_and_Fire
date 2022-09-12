@@ -3,15 +3,15 @@ package com.github.alexthe666.iceandfire.client.render.entity.layer;
 import com.github.alexthe666.iceandfire.client.model.ModelPixie;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderPixie;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
-public class LayerPixieGlow extends LayerRenderer<EntityPixie, ModelPixie> {
+public class LayerPixieGlow extends RenderLayer<EntityPixie, ModelPixie> {
 
     private final RenderPixie render;
 
@@ -21,7 +21,7 @@ public class LayerPixieGlow extends LayerRenderer<EntityPixie, ModelPixie> {
     }
 
     @Override
-    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityPixie pixie, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityPixie pixie, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         ResourceLocation texture = RenderPixie.TEXTURE_0;
         switch (pixie.getColor()) {
             default:
@@ -44,7 +44,7 @@ public class LayerPixieGlow extends LayerRenderer<EntityPixie, ModelPixie> {
                 break;
         }
         RenderType eyes = RenderType.eyes(texture);
-        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(eyes);
+        VertexConsumer ivertexbuilder = bufferIn.getBuffer(eyes);
         this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

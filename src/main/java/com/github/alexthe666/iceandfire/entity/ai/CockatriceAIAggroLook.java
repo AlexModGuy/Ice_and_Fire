@@ -2,30 +2,27 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.player.Player;
 
-public class CockatriceAIAggroLook extends NearestAttackableTargetGoal<PlayerEntity> {
+import java.util.function.Predicate;
+
+public class CockatriceAIAggroLook extends NearestAttackableTargetGoal<Player> {
 
     private final EntityCockatrice cockatrice;
-    private PlayerEntity player;
-    private final EntityPredicate predicate;
+    private final TargetingConditions predicate;
+    private Player player;
 
-    public CockatriceAIAggroLook(EntityCockatrice endermanIn) {
-        super(endermanIn, PlayerEntity.class, false);
-        this.cockatrice = endermanIn;
-        this.predicate = new EntityPredicate() {
-
-            @Override
-            public boolean test(LivingEntity attacker, LivingEntity target) {
-                return EntityGorgon.isEntityLookingAt(target, CockatriceAIAggroLook.this.cockatrice,
-                    EntityCockatrice.VIEW_RADIUS)
-                    && CockatriceAIAggroLook.this.cockatrice.distanceTo(target) < getFollowDistance();
-            }
-
+    public CockatriceAIAggroLook(EntityCockatrice cockatriceIn) {
+        super(cockatriceIn, Player.class, false);
+        this.cockatrice = cockatriceIn;
+        Predicate<LivingEntity> LIVING_ENTITY_SELECTOR = (target) -> {
+            return EntityGorgon.isEntityLookingAt(target, this.cockatrice,
+                EntityCockatrice.VIEW_RADIUS) && cockatrice.distanceTo(target) < getFollowDistance();
         };
+        this.predicate = TargetingConditions.forCombat().range(25.0D).selector(LIVING_ENTITY_SELECTOR);
     }
 
     /**

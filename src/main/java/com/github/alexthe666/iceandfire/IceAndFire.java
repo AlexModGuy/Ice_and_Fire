@@ -12,12 +12,12 @@ import com.github.alexthe666.iceandfire.loot.IafLootRegistry;
 import com.github.alexthe666.iceandfire.message.*;
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -32,12 +32,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.fmllegacy.server.ServerLifecycleHooks;
+import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,13 +50,13 @@ public class IceAndFire {
     private static final String PROTOCOL_VERSION = Integer.toString(1);
     public static boolean DEBUG = true;
     public static String VERSION = "UNKNOWN";
-    public static ItemGroup TAB_ITEMS = new ItemGroup(MODID) {
+    public static CreativeModeTab TAB_ITEMS = new CreativeModeTab(MODID) {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE);
         }
     };
-    public static ItemGroup TAB_BLOCKS = new ItemGroup("iceandfire.blocks") {
+    public static CreativeModeTab TAB_BLOCKS = new CreativeModeTab("iceandfire.blocks") {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(IafBlockRegistry.DRAGON_SCALE_RED);
@@ -100,8 +100,8 @@ public class IceAndFire {
 
         modBus.addListener(this::setup);
         modBus.addListener(this::setupComplete);
-        modBus.addGenericListener(Structure.class, EventPriority.LOW,
-            (final RegistryEvent.Register<Structure<?>> event) -> IafWorldRegistry
+        modBus.addGenericListener(StructureFeature.class, EventPriority.LOW,
+            (final RegistryEvent.Register<StructureFeature<?>> event) -> IafWorldRegistry
                 .registerStructureConfiguredFeatures());
         modBus.addGenericListener(Feature.class, EventPriority.LOW,
             (final RegistryEvent.Register<Feature<?>> event) -> IafWorldRegistry.registerConfiguredFeatures());
@@ -124,12 +124,12 @@ public class IceAndFire {
     }
 
     public static <MSG> void sendMSGToAll(MSG message) {
-        for (ServerPlayerEntity player : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()) {
+        for (ServerPlayer player : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()) {
             NETWORK_WRAPPER.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
         }
     }
 
-    public static <MSG> void sendMSGToPlayer(MSG message, ServerPlayerEntity player) {
+    public static <MSG> void sendMSGToPlayer(MSG message, ServerPlayer player) {
         NETWORK_WRAPPER.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
     }
 

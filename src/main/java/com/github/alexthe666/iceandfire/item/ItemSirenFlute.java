@@ -5,23 +5,23 @@ import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -36,31 +36,31 @@ public class ItemSirenFlute extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity player, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player player, InteractionHand hand) {
         ItemStack itemStackIn = player.getItemInHand(hand);
         player.startUsingItem(hand);
         player.getCooldowns().addCooldown(this, 900);
 
         double dist = 32;
-        Vector3d Vector3d = player.getEyePosition(1.0F);
-        Vector3d Vector3d1 = player.getViewVector(1.0F);
-        Vector3d Vector3d2 = Vector3d.add(Vector3d1.x * dist, Vector3d1.y * dist, Vector3d1.z * dist);
+        Vec3 Vector3d = player.getEyePosition(1.0F);
+        Vec3 Vector3d1 = player.getViewVector(1.0F);
+        Vec3 Vector3d2 = Vector3d.add(Vector3d1.x * dist, Vector3d1.y * dist, Vector3d1.z * dist);
 
         double d1 = dist;
         Entity pointedEntity = null;
         List<Entity> list = player.level.getEntities(player, player.getBoundingBox().expandTowards(Vector3d1.x * dist, Vector3d1.y * dist, Vector3d1.z * dist).inflate(1.0D, 1.0D, 1.0D), new Predicate<Entity>() {
             @Override
             public boolean test(Entity entity) {
-                boolean blindness = entity instanceof LivingEntity && ((LivingEntity) entity).hasEffect(Effects.BLINDNESS) || (entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entity).canBeTurnedToStone());
-                return entity != null && entity.isPickable() && !blindness && (entity instanceof PlayerEntity || (entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity)));
+                boolean blindness = entity instanceof LivingEntity && ((LivingEntity) entity).hasEffect(MobEffects.BLINDNESS) || (entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entity).canBeTurnedToStone());
+                return entity != null && entity.isPickable() && !blindness && (entity instanceof Player || (entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity)));
             }
         });
 
         double d2 = d1;
         for (int j = 0; j < list.size(); ++j) {
             Entity entity1 = list.get(j);
-            AxisAlignedBB axisalignedbb = entity1.getBoundingBox().inflate(entity1.getPickRadius());
-            Optional<Vector3d> raytraceresult = axisalignedbb.clip(Vector3d, Vector3d2);
+            AABB axisalignedbb = entity1.getBoundingBox().inflate(entity1.getPickRadius());
+            Optional<Vec3> raytraceresult = axisalignedbb.clip(Vector3d, Vector3d2);
 
             if (axisalignedbb.contains(Vector3d)) {
                 if (d2 >= 0.0D) {
@@ -85,19 +85,19 @@ public class ItemSirenFlute extends Item {
             if (pointedEntity instanceof LivingEntity) {
                 MiscProperties.setLoveTicks((LivingEntity) pointedEntity, 600);
                 itemStackIn.hurtAndBreak(2, player, (entity) -> {
-                    entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+                    entity.broadcastBreakEvent(EquipmentSlot.MAINHAND);
                 });
             }
         }
         player.playSound(IafSoundRegistry.SIREN_SONG, 1, 1);
-        return new ActionResult<ItemStack>(ActionResultType.PASS, itemStackIn);
+        return new InteractionResultHolder<ItemStack>(InteractionResult.PASS, itemStackIn);
     }
 
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.iceandfire.legendary_weapon.desc").withStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.siren_flute.desc_0").withStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.iceandfire.siren_flute.desc_1").withStyle(TextFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        tooltip.add(new TranslatableComponent("item.iceandfire.legendary_weapon.desc").withStyle(ChatFormatting.GRAY));
+        tooltip.add(new TranslatableComponent("item.iceandfire.siren_flute.desc_0").withStyle(ChatFormatting.GRAY));
+        tooltip.add(new TranslatableComponent("item.iceandfire.siren_flute.desc_1").withStyle(ChatFormatting.GRAY));
     }
 }

@@ -3,14 +3,14 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.util.IAFMath;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Items;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -70,7 +70,7 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
         }
     }
 
-    protected AxisAlignedBB getTargetableArea(double targetDistance) {
+    protected AABB getTargetableArea(double targetDistance) {
         return this.mob.getBoundingBox().inflate(targetDistance, 4.0, targetDistance);
     }
 
@@ -98,7 +98,7 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
                     pixie.heal(5);
                 } else if (this.targetEntity.getItem().getItem() == Items.CAKE) {
                     if (!pixie.isTame() && this.targetEntity.getThrower() != null && this.mob.level.getPlayerByUUID(this.targetEntity.getThrower()) != null) {
-                        PlayerEntity owner = this.mob.level.getPlayerByUUID(this.targetEntity.getThrower());
+                        Player owner = this.mob.level.getPlayerByUUID(this.targetEntity.getThrower());
                         pixie.setTame(true);
                         if (owner != null) {
                             pixie.tame(owner);
@@ -108,7 +108,7 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
                     }
                 }
 
-            pixie.setItemInHand(Hand.MAIN_HAND, this.targetEntity.getItem());
+            pixie.setItemInHand(InteractionHand.MAIN_HAND, this.targetEntity.getItem());
             this.targetEntity.getItem().shrink(1);
             pixie.playSound(IafSoundRegistry.PIXIE_TAUNT, 1F, 1F);
             stop();

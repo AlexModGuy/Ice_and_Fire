@@ -3,47 +3,48 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.IPacket;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.FMLPlayMessages;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.common.ToolActions;
+import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
-public class EntityHydraArrow extends AbstractArrowEntity {
+public class EntityHydraArrow extends AbstractArrow {
 
-    public EntityHydraArrow(EntityType<? extends AbstractArrowEntity> t, World worldIn) {
+    public EntityHydraArrow(EntityType<? extends AbstractArrow> t, Level worldIn) {
         super(t, worldIn);
         this.setBaseDamage(5F);
     }
 
-    public EntityHydraArrow(EntityType<? extends AbstractArrowEntity> t, World worldIn, double x, double y, double z) {
+    public EntityHydraArrow(EntityType<? extends AbstractArrow> t, Level worldIn, double x, double y, double z) {
         this(t, worldIn);
         this.setPos(x, y, z);
         this.setBaseDamage(5F);
     }
 
-    public EntityHydraArrow(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+    public EntityHydraArrow(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
         this(IafEntityRegistry.HYDRA_ARROW.get(), worldIn);
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
 
-    public EntityHydraArrow(EntityType t, World worldIn, LivingEntity shooter) {
+    public EntityHydraArrow(EntityType t, Level worldIn, LivingEntity shooter) {
         super(t, shooter, worldIn);
         this.setBaseDamage(5F);
     }
@@ -63,22 +64,22 @@ public class EntityHydraArrow extends AbstractArrowEntity {
         }
     }
 
-    protected void damageShield(PlayerEntity player, float damage) {
-        if (damage >= 3.0F && player.getUseItem().getItem().isShield(player.getUseItem(), player)) {
+    protected void damageShield(Player player, float damage) {
+        if (damage >= 3.0F && player.getUseItem().getItem().canPerformAction(player.getUseItem(), ToolActions.SHIELD_BLOCK)) {
             ItemStack copyBeforeUse = player.getUseItem().copy();
-            int i = 1 + MathHelper.floor(damage);
+            int i = 1 + Mth.floor(damage);
             player.getUseItem().hurtAndBreak(i, player, (p_213360_0_) -> {
-                p_213360_0_.broadcastBreakEvent(EquipmentSlotType.CHEST);
+                p_213360_0_.broadcastBreakEvent(EquipmentSlot.CHEST);
             });
 
             if (player.getUseItem().isEmpty()) {
-                Hand Hand = player.getUsedItemHand();
+                InteractionHand Hand = player.getUsedItemHand();
                 net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, Hand);
 
-                if (Hand == net.minecraft.util.Hand.MAIN_HAND) {
-                    this.setItemSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
+                if (Hand == net.minecraft.world.InteractionHand.MAIN_HAND) {
+                    this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
                 } else {
-                    this.setItemSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
+                    this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
                 }
                 player.stopUsingItem();
                 this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
@@ -88,10 +89,10 @@ public class EntityHydraArrow extends AbstractArrowEntity {
 
     @Override
     protected void doPostHurtEffects(LivingEntity living) {
-        if (living instanceof PlayerEntity) {
-            this.damageShield((PlayerEntity) living, (float) this.getBaseDamage());
+        if (living instanceof Player) {
+            this.damageShield((Player) living, (float) this.getBaseDamage());
         }
-        living.addEffect(new EffectInstance(Effects.POISON, 300, 0));
+        living.addEffect(new MobEffectInstance(MobEffects.POISON, 300, 0));
         Entity shootingEntity = this.getOwner();
         if (shootingEntity instanceof LivingEntity) {
             ((LivingEntity) shootingEntity).heal((float) this.getBaseDamage());

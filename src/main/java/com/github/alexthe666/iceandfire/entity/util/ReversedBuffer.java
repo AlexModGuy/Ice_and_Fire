@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.util;
 
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 
 public class ReversedBuffer {
     private int yawTimer;
@@ -31,13 +31,13 @@ public class ReversedBuffer {
      */
     public void calculateChainSwingBuffer(float maxAngle, int bufferTime, float angleDecrement, float divisor, LivingEntity entity) {
         this.prevYawVariation = this.yawVariation;
-        if (entity.yBodyRot != entity.yBodyRotO && MathHelper.abs(this.yawVariation) < maxAngle) {
+        if (entity.yBodyRot != entity.yBodyRotO && Mth.abs(this.yawVariation) < maxAngle) {
             this.yawVariation += (entity.yBodyRotO - entity.yBodyRot) / divisor;
         }
         if (this.yawVariation > 0.7F * angleDecrement) {
             if (this.yawTimer > bufferTime) {
                 this.yawVariation -= angleDecrement;
-                if (MathHelper.abs(this.yawVariation) < angleDecrement) {
+                if (Mth.abs(this.yawVariation) < angleDecrement) {
                     this.yawVariation = 0.0F;
                     this.yawTimer = 0;
                 }
@@ -47,7 +47,7 @@ public class ReversedBuffer {
         } else if (this.yawVariation < -0.7F * angleDecrement) {
             if (this.yawTimer > bufferTime) {
                 this.yawVariation += angleDecrement;
-                if (MathHelper.abs(this.yawVariation) < angleDecrement) {
+                if (Mth.abs(this.yawVariation) < angleDecrement) {
                     this.yawVariation = 0.0F;
                     this.yawTimer = 0;
                 }
@@ -68,13 +68,13 @@ public class ReversedBuffer {
      */
     public void calculateChainWaveBuffer(float maxAngle, int bufferTime, float angleDecrement, float divisor, LivingEntity entity) {
         this.prevPitchVariation = this.pitchVariation;
-        if (entity.xRot != entity.xRotO && MathHelper.abs(this.pitchVariation) < maxAngle) {
-            this.pitchVariation += (entity.xRotO - entity.xRot) / divisor;
+        if (entity.getXRot() != entity.xRotO && Mth.abs(this.pitchVariation) < maxAngle) {
+            this.pitchVariation += (entity.xRotO - entity.getXRot()) / divisor;
         }
         if (this.pitchVariation > 0.7F * angleDecrement) {
             if (this.pitchTimer > bufferTime) {
                 this.pitchVariation -= angleDecrement;
-                if (MathHelper.abs(this.pitchVariation) < angleDecrement) {
+                if (Mth.abs(this.pitchVariation) < angleDecrement) {
                     this.pitchVariation = 0.0F;
                     this.pitchTimer = 0;
                 }
@@ -84,7 +84,7 @@ public class ReversedBuffer {
         } else if (this.pitchVariation < -0.7F * angleDecrement) {
             if (this.pitchTimer > bufferTime) {
                 this.pitchVariation += angleDecrement;
-                if (MathHelper.abs(this.pitchVariation) < angleDecrement) {
+                if (Mth.abs(this.pitchVariation) < angleDecrement) {
                     this.pitchVariation = 0.0F;
                     this.pitchTimer = 0;
                 }
@@ -123,10 +123,10 @@ public class ReversedBuffer {
      *
      * @param boxes the box array
      */
-    public void applyChainSwingBuffer(ModelRenderer... boxes) {
-        float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
-        for (ModelRenderer box : boxes) {
-            box.yRot -= rotateAmount;
+    public void applyChainSwingBuffer(BasicModelPart... boxes) {
+        float rotateAmount = 0.01745329251F * Mth.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
+        for (BasicModelPart box : boxes) {
+            box.rotateAngleY -= rotateAmount;
         }
     }
 
@@ -135,10 +135,10 @@ public class ReversedBuffer {
      *
      * @param boxes the box array
      */
-    public void applyChainWaveBuffer(ModelRenderer... boxes) {
-        float rotateAmount = 0.01745329251F * MathHelper.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
-        for (ModelRenderer box : boxes) {
-            box.xRot -= rotateAmount;
+    public void applyChainWaveBuffer(BasicModelPart... boxes) {
+        float rotateAmount = 0.01745329251F * Mth.lerp(getPartialTicks(), this.prevYawVariation, this.yawVariation) / boxes.length;
+        for (BasicModelPart box : boxes) {
+            box.rotateAngleX -= rotateAmount;
         }
     }
 

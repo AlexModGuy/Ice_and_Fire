@@ -2,13 +2,12 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.LivingRenderer;
-import net.minecraft.client.renderer.entity.model.SegmentedModel;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.resources.ResourceLocation;
 
 
-public class RenderDragonEgg extends LivingRenderer<EntityDragonEgg, SegmentedModel<EntityDragonEgg>> {
+public class RenderDragonEgg extends LivingEntityRenderer<EntityDragonEgg, ModelDragonEgg<EntityDragonEgg>> {
 
     public static final ResourceLocation EGG_RED = new ResourceLocation("iceandfire:textures/models/firedragon/egg_red.png");
     public static final ResourceLocation EGG_GREEN = new ResourceLocation("iceandfire:textures/models/firedragon/egg_green.png");
@@ -23,8 +22,8 @@ public class RenderDragonEgg extends LivingRenderer<EntityDragonEgg, SegmentedMo
     public static final ResourceLocation EGG_BLACK = new ResourceLocation("iceandfire:textures/models/lightningdragon/egg_black.png");
     public static final ResourceLocation EGG_COPPER = new ResourceLocation("iceandfire:textures/models/lightningdragon/egg_copper.png");
 
-    public RenderDragonEgg(EntityRendererManager renderManager) {
-        super(renderManager, new ModelDragonEgg(), 0.3F);
+    public RenderDragonEgg(EntityRendererProvider.Context context) {
+        super(context, new ModelDragonEgg(), 0.3F);
     }
 
     protected boolean shouldShowName(EntityDragonEgg entity) {

@@ -4,28 +4,29 @@ import com.github.alexthe666.iceandfire.block.BlockDragonforgeInput;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public class TileEntityDragonforgeInput extends TileEntity implements ITickableTileEntity {
+public class TileEntityDragonforgeInput extends BlockEntity {
     private static final int LURE_DISTANCE = 50;
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private int ticksSinceDragonFire;
     private TileEntityDragonforge core = null;
 
-    public TileEntityDragonforgeInput() {
-        super(IafTileEntityRegistry.DRAGONFORGE_INPUT.get());
+    public TileEntityDragonforgeInput(BlockPos pos, BlockState state) {
+        super(IafTileEntityRegistry.DRAGONFORGE_INPUT.get(), pos, state);
     }
 
     public void onHitWithFlame() {
@@ -34,50 +35,49 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
         }
     }
 
-    @Override
-    public void tick() {
-        if (core == null) {
-            core = getConnectedTileEntity();
+    public static void tick(Level level, BlockPos pos, BlockState state, TileEntityDragonforgeInput entityDragonforge) {
+        if (entityDragonforge.core == null) {
+            entityDragonforge.core = entityDragonforge.getConnectedTileEntity();
         }
-        if (ticksSinceDragonFire > 0) {
-            ticksSinceDragonFire--;
+        if (entityDragonforge.ticksSinceDragonFire > 0) {
+            entityDragonforge.ticksSinceDragonFire--;
         }
-        if ((ticksSinceDragonFire == 0 || core == null) && this.isActive()) {
-            TileEntity tileentity = level.getBlockEntity(worldPosition);
-            level.setBlockAndUpdate(worldPosition, getDeactivatedState());
+        if ((entityDragonforge.ticksSinceDragonFire == 0 || entityDragonforge.core == null) && entityDragonforge.isActive()) {
+            BlockEntity tileentity = level.getBlockEntity(pos);
+            level.setBlockAndUpdate(pos, entityDragonforge.getDeactivatedState());
             if (tileentity != null) {
                 tileentity.clearRemoved();
-                level.setBlockEntity(worldPosition, tileentity);
+                level.setBlockEntity(tileentity);
             }
         }
-        if (isAssembled())
-            lureDragons();
+        if (entityDragonforge.isAssembled())
+            entityDragonforge.lureDragons();
 
     }
 
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return new ClientboundBlockEntityDataPacket(worldPosition, 1, getUpdateTag());
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        load(this.getBlockState(), packet.getTag());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
+        load(packet.getTag());
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        return this.save(new CompoundNBT());
+    public CompoundTag getUpdateTag() {
+        return this.save(new CompoundTag());
     }
 
     protected void lureDragons() {
-        Vector3d targetPosition = new Vector3d(
+        Vec3 targetPosition = new Vec3(
             this.getBlockPos().getX() + 0.5F,
             this.getBlockPos().getY() + 0.5F,
             this.getBlockPos().getZ() + 0.5F
         );
 
-        AxisAlignedBB searchArea = new AxisAlignedBB(
+        AABB searchArea = new AABB(
             (double) worldPosition.getX() - LURE_DISTANCE,
             (double) worldPosition.getY() - LURE_DISTANCE,
             (double) worldPosition.getZ() - LURE_DISTANCE,
@@ -114,9 +114,9 @@ public class TileEntityDragonforgeInput extends TileEntity implements ITickableT
         core = null;
     }
 
-    private boolean canSeeInput(EntityDragonBase dragon, Vector3d target) {
+    private boolean canSeeInput(EntityDragonBase dragon, Vec3 target) {
         if (target != null) {
-            RayTraceResult rayTrace = this.level.clip(new RayTraceContext(dragon.getHeadPosition(), target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, dragon));
+            HitResult rayTrace = this.level.clip(new ClipContext(dragon.getHeadPosition(), target, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, dragon));
             if (rayTrace != null && rayTrace.getLocation() != null) {
                 double distance = dragon.getHeadPosition().distanceTo(rayTrace.getLocation());
                 return distance < 10.0F + dragon.getBbWidth();

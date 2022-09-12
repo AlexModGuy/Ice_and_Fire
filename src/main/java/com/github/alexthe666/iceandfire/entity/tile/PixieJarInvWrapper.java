@@ -1,18 +1,16 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import javax.annotation.Nonnull;
-
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-
-import net.minecraft.item.ItemStack;
-
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
+import javax.annotation.Nonnull;
+
 public class PixieJarInvWrapper implements IItemHandlerModifiable {
 
-    private TileEntityJar tile;
+    private final TileEntityJar tile;
 
     public PixieJarInvWrapper(TileEntityJar tile) {
         this.tile = tile;

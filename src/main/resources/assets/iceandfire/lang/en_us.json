@@ -30,14 +30,14 @@
   "block.iceandfire.chared_stone": "Charred Stone",
   "block.iceandfire.chared_cobblestone": "Charred Cobblestone",
   "block.iceandfire.chared_gravel": "Charred Gravel",
-  "block.iceandfire.chared_grass_path": "Charred Grass Path",
+  "block.iceandfire.chared_dirt_path": "Charred Dirt Path",
   "block.iceandfire.ash": "Ash",
   "block.iceandfire.frozen_dirt": "Frozen Dirt",
   "block.iceandfire.frozen_grass": "Frozen Grass",
   "block.iceandfire.frozen_stone": "Frozen Stone",
   "block.iceandfire.frozen_cobblestone": "Frozen Cobblestone",
   "block.iceandfire.frozen_gravel": "Frozen Gravel",
-  "block.iceandfire.frozen_grass_path": "Frozen Grass Path",
+  "block.iceandfire.frozen_dirt_path": "Frozen Dirt Path",
   "block.iceandfire.frozen_splinters": "Frozen Splinters",
   "block.iceandfire.dragon_ice": "Dragon Ice",
   "block.iceandfire.dragon_ice_spikes": "Dragon Ice Spikes",
@@ -46,7 +46,7 @@
   "block.iceandfire.crackled_stone": "Crackled Stone",
   "block.iceandfire.crackled_cobblestone": "Crackled Cobblestone",
   "block.iceandfire.crackled_gravel": "Crackled Gravel",
-  "block.iceandfire.crackled_grass_path": "Crackled Grass Path",
+  "block.iceandfire.crackled_dirt_path": "Crackled Dirt Path",
   "block.iceandfire.egginice": "Frozen Dragon Egg",
   "block.iceandfire.pixie_house_mushroom_brown": "Brown Mushroom Pixie Hovel",
   "block.iceandfire.pixie_house_mushroom_red": "Red Mushroom Pixie Hovel",
@@ -1345,5 +1345,6 @@
   "iceandfire.sound.subtitle.icedragon_hurt": "Ice Dragon hurts",
   "iceandfire.sound.subtitle.icedragon_death": "Ice Dragon dies",
   "iceandfire.sound.subtitle.dragonegg_hatch": "Dragon egg hatches",
-  "iceandfire.sound.subtitle.dragonflute": "Dragon flute plays"
+  "iceandfire.sound.subtitle.dragonflute": "Dragon flute plays",
+  "bestiary_gui": "Bestiary"
 }

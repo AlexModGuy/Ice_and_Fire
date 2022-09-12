@@ -6,12 +6,12 @@ import com.github.alexthe666.iceandfire.client.render.entity.layer.IHasArmorVari
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerBipedArmorMultiple;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGenericGlowing;
 import com.github.alexthe666.iceandfire.entity.EntityDreadThrall;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
 
 import javax.annotation.Nullable;
 
@@ -27,13 +27,13 @@ public class RenderDreadThrall extends MobRenderer<EntityDreadThrall, ModelDread
     public static final ResourceLocation TEXTURE_ARMOR_5 = new ResourceLocation("iceandfire:textures/models/dread/thrall_chest_6.png");
     public static final ResourceLocation TEXTURE_ARMOR_6 = new ResourceLocation("iceandfire:textures/models/dread/thrall_chest_7.png");
     public static final ResourceLocation TEXTURE_ARMOR_7 = new ResourceLocation("iceandfire:textures/models/dread/thrall_chest_8.png");
-    public final HideableLayer<EntityDreadThrall, ModelDreadThrall, HeldItemLayer<EntityDreadThrall, ModelDreadThrall>> itemLayer;
+    public final HideableLayer<EntityDreadThrall, ModelDreadThrall, ItemInHandLayer<EntityDreadThrall, ModelDreadThrall>> itemLayer;
 
-    public RenderDreadThrall(EntityRendererManager renderManager) {
-        super(renderManager, new ModelDreadThrall(0.0F, false), 0.6F);
+    public RenderDreadThrall(EntityRendererProvider.Context context) {
+        super(context, new ModelDreadThrall(0.0F, false), 0.6F);
 
         this.addLayer(new LayerGenericGlowing<>(this, TEXTURE_EYES));
-        this.itemLayer = new HideableLayer<>(new HeldItemLayer<>(this), this);
+        this.itemLayer = new HideableLayer<>(new ItemInHandLayer<>(this), this);
         this.addLayer(this.itemLayer);
         this.addLayer(new LayerBipedArmorMultiple<>(this,
             new ModelDreadThrall(0.5F, true), new ModelDreadThrall(1.0F, true),
@@ -41,8 +41,8 @@ public class RenderDreadThrall extends MobRenderer<EntityDreadThrall, ModelDread
     }
 
     @Override
-    public ResourceLocation getArmorResource(int variant, EquipmentSlotType equipmentSlotType) {
-        if (equipmentSlotType == EquipmentSlotType.LEGS)
+    public ResourceLocation getArmorResource(int variant, EquipmentSlot equipmentSlotType) {
+        if (equipmentSlotType == EquipmentSlot.LEGS)
             return TEXTURE_LEG_ARMOR;
         switch (variant) {
             case 0:
@@ -67,7 +67,7 @@ public class RenderDreadThrall extends MobRenderer<EntityDreadThrall, ModelDread
     }
 
     @Override
-    public void scale(EntityDreadThrall livingEntityIn, MatrixStack stack, float partialTickTime) {
+    public void scale(EntityDreadThrall livingEntityIn, PoseStack stack, float partialTickTime) {
         stack.scale(0.95F, 0.95F, 0.95F);
         if (livingEntityIn.getAnimation() == this.getModel().getSpawnAnimation()) {
             itemLayer.hidden = livingEntityIn.getAnimationTick() <= this.getModel().getSpawnAnimation().getDuration() - 10;

@@ -1,23 +1,23 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
 public class EntitySheepAIFollowCyclops extends Goal {
-    AnimalEntity childAnimal;
+    Animal childAnimal;
     EntityCyclops cyclops;
     double moveSpeed;
     private int delayCounter;
 
-    public EntitySheepAIFollowCyclops(AnimalEntity animal, double speed) {
+    public EntitySheepAIFollowCyclops(Animal animal, double speed) {
         this.childAnimal = animal;
         this.moveSpeed = speed;
     }
@@ -76,9 +76,9 @@ public class EntitySheepAIFollowCyclops extends Goal {
         }
     }
 
-    public Path getPathToLivingEntity(AnimalEntity entityIn, EntityCyclops cyclops) {
-        PathNavigator navi = entityIn.getNavigation();
-        Vector3d Vector3d = RandomPositionGenerator.getPosTowards(entityIn, 2, 7, new Vector3d(cyclops.getX(), cyclops.getY(), cyclops.getZ()));
+    public Path getPathToLivingEntity(Animal entityIn, EntityCyclops cyclops) {
+        PathNavigation navi = entityIn.getNavigation();
+        Vec3 Vector3d = DefaultRandomPos.getPosTowards(entityIn, 2, 7, cyclops.position(), (float) Math.PI / 2F);
         if (Vector3d != null) {
             BlockPos blockpos = new BlockPos(Vector3d);
             return navi.createPath(blockpos, 0);

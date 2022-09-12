@@ -2,29 +2,25 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -32,18 +28,18 @@ import java.util.UUID;
 
 public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 
-    private static final DataParameter<Optional<UUID>> SUMMONER_ID = EntityDataManager.defineId(EntityMyrmexSwarmer.class, DataSerializers.OPTIONAL_UUID);
-    private static final DataParameter<Integer> TICKS_ALIVE = EntityDataManager.defineId(EntityMyrmexSwarmer.class, DataSerializers.INT);
+    private static final EntityDataAccessor<Optional<UUID>> SUMMONER_ID = SynchedEntityData.defineId(EntityMyrmexSwarmer.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<Integer> TICKS_ALIVE = SynchedEntityData.defineId(EntityMyrmexSwarmer.class, EntityDataSerializers.INT);
 
-    public EntityMyrmexSwarmer(EntityType type, World worldIn) {
+    public EntityMyrmexSwarmer(EntityType type, Level worldIn) {
         super(type, worldIn);
         this.moveControl = new EntityMyrmexRoyal.FlyMoveHelper(this);
         this.navigation = createNavigator(level, AdvancedPathNavigate.MovementType.FLYING);
         switchNavigator(false);
     }
 
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.createMobAttributes()
+    public static AttributeSupplier.Builder bakeAttributes() {
+        return Mob.createMobAttributes()
             //HEALTH
             .add(Attributes.MAX_HEALTH, 5)
             //SPEED
@@ -56,7 +52,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
             .add(Attributes.ARMOR, 0D);
     }
 
-    protected int getExperienceReward(PlayerEntity player) {
+    protected int getExperienceReward(Player player) {
         return 0;
     }
 
@@ -68,14 +64,14 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     }
 
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new MyrmexAIFollowSummoner(this, 1.0D, 10.0F, 5.0F));
         this.goalSelector.addGoal(2, new AIFlyAtTarget());
         this.goalSelector.addGoal(3, new AIFlyRandom());
         this.goalSelector.addGoal(4, new EntityAIAttackMeleeNoCooldown(this, 1.0D, true));
         this.goalSelector.addGoal(5, new MyrmexAIWander(this, 1D));
-        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F));
-        this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new MyrmexAISummonerHurtByTarget(this));
         this.targetSelector.addGoal(3, new MyrmexAISummonerHurtTarget(this));
@@ -113,8 +109,8 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         if (this.getSummonerUUID() == null || entityIn instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID() == null) {
             return false;
         }
-        if (entityIn instanceof TameableEntity) {
-            UUID ownerID = ((TameableEntity) entityIn).getOwnerUUID();
+        if (entityIn instanceof TamableAnimal) {
+            UUID ownerID = ((TamableAnimal) entityIn).getOwnerUUID();
             return ownerID != null && ownerID.equals(this.getSummonerUUID());
         }
         return entityIn.getUUID().equals(this.getSummonerUUID()) || entityIn instanceof EntityMyrmexSwarmer && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID() != null && ((EntityMyrmexSwarmer) entityIn).getSummonerUUID().equals(this.getSummonerUUID());
@@ -124,7 +120,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         this.entityData.set(SUMMONER_ID, Optional.ofNullable(uuid));
     }
 
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if (this.getSummonerUUID() == null) {
             compound.putString("SummonerUUID", "");
@@ -135,7 +131,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 
     }
 
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         String s = "";
         if (compound.hasUUID("SummonerUUID")) {
@@ -150,7 +146,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         this.setTicksAlive(compound.getInt("SummonTicks"));
     }
 
-    public void setSummonedBy(PlayerEntity player) {
+    public void setSummonedBy(Player player) {
         this.setSummonerID(player.getUUID());
     }
 
@@ -202,7 +198,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
             double dist = this.distanceToSqr(this.getTarget());
             if (dist < attackDistance()) {
                 this.getTarget().hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 2));
-                this.getTarget().addEffect(new EffectInstance(Effects.POISON, 70, 1));
+                this.getTarget().addEffect(new MobEffectInstance(MobEffects.POISON, 70, 1));
             }
         }
     }

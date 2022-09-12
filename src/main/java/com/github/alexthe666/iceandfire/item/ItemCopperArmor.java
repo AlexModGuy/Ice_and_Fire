@@ -1,33 +1,40 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import com.github.alexthe666.iceandfire.client.model.armor.ModelCopperArmor;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.IItemRenderProperties;
 
 import javax.annotation.Nullable;
 
-public class ItemCopperArmor extends ArmorItem {
+public class ItemCopperArmor extends ArmorItem implements IItemRenderProperties {
 
-    public ItemCopperArmor(IArmorMaterial material, EquipmentSlotType slot, String name) {
+    public ItemCopperArmor(ArmorMaterial material, EquipmentSlot slot, String name) {
         super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.setRegistryName(IceAndFire.MODID, name);
     }
 
     @Override
-    @Nullable
-    public <A extends BipedModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
-        return (A) IceAndFire.PROXY.getArmorModel(slot == EquipmentSlotType.LEGS ? 17 : 16);
+    public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
+        consumer.accept(new IItemRenderProperties() {
+            @Override
+            @Nullable
+            public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
+                return (A) new ModelCopperArmor(armorSlot == EquipmentSlot.LEGS || armorSlot == EquipmentSlot.HEAD);
+            }
+        });
     }
 
     @Nullable
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
-        return "iceandfire:textures/models/armor/" + (slot == EquipmentSlotType.LEGS ? "armor_copper_metal_layer_2" : "armor_copper_metal_layer_1") + ".png";
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
+        return "iceandfire:textures/models/armor/" + (slot == EquipmentSlot.LEGS ? "armor_copper_metal_layer_2" : "armor_copper_metal_layer_1") + ".png";
     }
 
 

@@ -2,19 +2,19 @@ package com.github.alexthe666.iceandfire.client.render.tile;
 
 import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 
-public class RenderEggInIce<T extends TileEntityEggInIce> extends TileEntityRenderer<T> {
+public class RenderEggInIce<T extends TileEntityEggInIce> implements BlockEntityRenderer<T> {
 
-    public RenderEggInIce(TileEntityRendererDispatcher p_i226016_1_) {
-        super(p_i226016_1_);
+    public RenderEggInIce(BlockEntityRendererProvider.Context context) {
+
     }
 
     @Override
-    public void render(T egg, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(T egg, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         ModelDragonEgg model = new ModelDragonEgg();
         if (egg.type != null) {
             matrixStackIn.pushPose();

@@ -1,36 +1,36 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.Blocks;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.projectile.AbstractFireballEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.projectile.Fireball;
+import net.minecraft.world.level.block.Blocks;
 
-public class RenderDragonFireCharge extends EntityRenderer<AbstractFireballEntity> {
+public class RenderDragonFireCharge extends EntityRenderer<Fireball> {
 
     public boolean isFire;
 
-    public RenderDragonFireCharge(EntityRendererManager renderManager, boolean isFire) {
-        super(renderManager);
+    public RenderDragonFireCharge(EntityRendererProvider.Context context, boolean isFire) {
+        super(context);
         this.isFire = isFire;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(AbstractFireballEntity entity) {
-        return AtlasTexture.LOCATION_BLOCKS;
+    public ResourceLocation getTextureLocation(Fireball entity) {
+        return TextureAtlas.LOCATION_BLOCKS;
     }
 
     @Override
-    public void render(AbstractFireballEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRenderer();
+    public void render(Fireball entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+        BlockRenderDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRenderer();
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.0D, 0.5D, 0.0D);
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(-90.0F));

@@ -1,24 +1,21 @@
 package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.RotatedPillarBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.PushReaction;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.PushReaction;
 
 public class BlockDragonBone extends RotatedPillarBlock implements IDragonProof {
 
     public BlockDragonBone() {
         super(
-            AbstractBlock.Properties
+            BlockBehaviour.Properties
                 .of(Material.STONE)
                 .sound(SoundType.WOOD)
                 .strength(30F, 500F)
-                .harvestTool(ToolType.PICKAXE)
-                .harvestLevel(1)
                 .requiresCorrectToolForDrops()
 		);
 

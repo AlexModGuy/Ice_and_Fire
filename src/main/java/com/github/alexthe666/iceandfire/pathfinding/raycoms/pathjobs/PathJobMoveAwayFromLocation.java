@@ -4,12 +4,12 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs;
  */
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.pathfinding.raycoms.Node;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.MNode;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.Path;
 
 import javax.annotation.Nullable;
 
@@ -39,12 +39,12 @@ public class PathJobMoveAwayFromLocation extends AbstractPathJob
      * @param entity        the entity.
      */
     public PathJobMoveAwayFromLocation(
-      final World world,
-      final BlockPos start,
-      final BlockPos avoid,
-      final int avoidDistance,
-      final int range,
-      final LivingEntity entity)
+        final Level world,
+        final BlockPos start,
+        final BlockPos avoid,
+        final int avoidDistance,
+        final int range,
+        final LivingEntity entity)
     {
         super(world, start, avoid, range, entity);
 
@@ -89,8 +89,7 @@ public class PathJobMoveAwayFromLocation extends AbstractPathJob
      * @return true if so.
      */
     @Override
-    protected boolean isAtDestination(final Node n)
-    {
+    protected boolean isAtDestination(final MNode n) {
         return Math.sqrt(avoid.distSqr(n.pos)) > avoidDistance;
     }
 
@@ -101,8 +100,7 @@ public class PathJobMoveAwayFromLocation extends AbstractPathJob
      * @return double amount.
      */
     @Override
-    protected double getNodeResultScore(final Node n)
-    {
+    protected double getNodeResultScore(final MNode n) {
         return -avoid.distSqr(n.pos);
     }
 }

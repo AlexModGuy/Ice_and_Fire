@@ -3,14 +3,13 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.EntityDreadBeast;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 public class ModelDreadBeast extends ModelDragonBase<EntityDreadBeast> {
     private final ModelAnimator animator;
@@ -193,13 +192,15 @@ public class ModelDreadBeast extends ModelDragonBase<EntityDreadBeast> {
     }
 
     @Override
-    public Iterable<ModelRenderer> parts() {
+    public Iterable<BasicModelPart> parts() {
         return ImmutableList.of(Body);
     }
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(Body, LegL1, LowerBody, Neck1, LegR1, pelt, pelt_1, pelt_2, LegL2, Tail, BackLegR1,
+            BackLegL1, pelt_3, Tail2, Tail3, BackLegR2, BackLegL2, HeadBase, HeadFront, Jaw, ChopsR, ChopsL, EarR,
+            EarL, pelt_4, EarR2, EarL2, LegR2);
     }
 
     @Override
@@ -235,7 +236,7 @@ public class ModelDreadBeast extends ModelDragonBase<EntityDreadBeast> {
         if (f12 > Math.toRadians(-20)) {
             f12 = (float) Math.toRadians(-20);
         }
-        this.Tail.xRot = f12;
+        this.Tail.rotateAngleX = f12;
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -266,7 +267,7 @@ public class ModelDreadBeast extends ModelDragonBase<EntityDreadBeast> {
     }
 
     @Override
-    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+    public void renderStatue(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, Entity living) {
         this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

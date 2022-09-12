@@ -2,18 +2,19 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 /*
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LadderBlock;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.Direction;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LadderBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 import java.util.List;
@@ -152,7 +153,7 @@ public class PathingStuckHandler implements IStuckHandler
 
 
         final double distanceToGoal =
-            navigator.getOurEntity().position().distanceTo(new Vector3d(navigator.getDesiredPos().getX(), navigator.getDesiredPos().getY(), navigator.getDesiredPos().getZ()));
+            navigator.getOurEntity().position().distanceTo(new Vec3(navigator.getDesiredPos().getX(), navigator.getDesiredPos().getY(), navigator.getDesiredPos().getZ()));
 
         // Close enough to be considered at the goal
         if (distanceToGoal < MIN_TARGET_DIST)
@@ -224,25 +225,21 @@ public class PathingStuckHandler implements IStuckHandler
     /**
      * Final action when completly stuck before resetting stuck handler and path
      */
-    private void completeStuckAction(final AbstractAdvancedPathNavigate navigator)
-    {
+    private void completeStuckAction(final AbstractAdvancedPathNavigate navigator) {
         final BlockPos desired = navigator.getDesiredPos();
-        final World world = navigator.getOurEntity().level;
-        final MobEntity entity = navigator.getOurEntity();
+        final Level world = navigator.getOurEntity().level;
+        final Mob entity = navigator.getOurEntity();
 
-        if (canTeleportGoal)
-        {
+        if (canTeleportGoal) {
             final BlockPos tpPos = findAround(world, desired, 10, 10,
                 (posworld, pos) -> SurfaceType.getSurfaceType(posworld, posworld.getBlockState(pos.below()), pos.below()) == SurfaceType.WALKABLE
                     && SurfaceType.getSurfaceType(posworld, posworld.getBlockState(pos), pos) == SurfaceType.DROPABLE
                     && SurfaceType.getSurfaceType(posworld, posworld.getBlockState(pos.above()), pos.above()) == SurfaceType.DROPABLE);
-            if (tpPos != null)
-            {
+            if (tpPos != null) {
                 entity.teleportTo(tpPos.getX() + 0.5, tpPos.getY(), tpPos.getZ() + 0.5);
             }
         }
-        if (takeDamageOnCompleteStuck)
-        {
+        if (takeDamageOnCompleteStuck) {
             entity.hurt(new EntityDamageSource("Stuck-damage", entity), entity.getMaxHealth() * damagePct);
         }
 
@@ -297,7 +294,7 @@ public class PathingStuckHandler implements IStuckHandler
         // Skip ahead
         if (stuckLevel == 2 && teleportRange > 0 && hadPath) {
             int index = Math.min(navigator.getPath().getNextNodeIndex() + teleportRange, navigator.getPath().getNodeCount() - 1);
-            final PathPoint togo = navigator.getPath().getNode(index);
+            final Node togo = navigator.getPath().getNode(index);
             navigator.getOurEntity().teleportTo(togo.x + 0.5d, togo.y, togo.z + 0.5d);
             delayToNextUnstuckAction = 300;
         }
@@ -365,8 +362,7 @@ public class PathingStuckHandler implements IStuckHandler
      * @param start  the position the entity is at.
      * @param facing the direction the goal is in.
      */
-    private void breakBlocksAhead(final World world, final BlockPos start, final Direction facing)
-    {
+    private void breakBlocksAhead(final Level world, final BlockPos start, final Direction facing) {
         // Above entity
         if (!world.isEmptyBlock(start.above(3))) {
             setAirIfPossible(world, start.above(3));
@@ -391,8 +387,7 @@ public class PathingStuckHandler implements IStuckHandler
      * @param world the world the block is in.
      * @param pos   the pos the block is at.
      */
-    private void setAirIfPossible(final World world, final BlockPos pos)
-    {
+    private void setAirIfPossible(final Level world, final BlockPos pos) {
         final Block blockAtPos = world.getBlockState(pos).getBlock();
         world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
     }
@@ -402,10 +397,9 @@ public class PathingStuckHandler implements IStuckHandler
      *
      * @param navigator navigator to use
      */
-    private void placeLadders(final AbstractAdvancedPathNavigate navigator)
-    {
-        final World world = navigator.getOurEntity().level;
-        final MobEntity entity = navigator.getOurEntity();
+    private void placeLadders(final AbstractAdvancedPathNavigate navigator) {
+        final Level world = navigator.getOurEntity().level;
+        final Mob entity = navigator.getOurEntity();
 
         BlockPos entityPos = entity.blockPosition();
 
@@ -423,17 +417,14 @@ public class PathingStuckHandler implements IStuckHandler
      *
      * @param navigator navigator to use
      */
-    private void placeLeaves(final AbstractAdvancedPathNavigate navigator)
-    {
-        final World world = navigator.getOurEntity().level;
-        final MobEntity entity = navigator.getOurEntity();
+    private void placeLeaves(final AbstractAdvancedPathNavigate navigator) {
+        final Level world = navigator.getOurEntity().level;
+        final Mob entity = navigator.getOurEntity();
 
         final Direction badFacing = getFacing(entity.blockPosition(), navigator.getDesiredPos()).getOpposite();
 
-        for (final Direction dir : directions)
-        {
-            if (dir == badFacing)
-            {
+        for (final Direction dir : directions) {
+            if (dir == badFacing) {
                 continue;
             }
 
@@ -448,16 +439,15 @@ public class PathingStuckHandler implements IStuckHandler
         final BlockPos vector = neighbor.subtract(pos);
         return Direction.getNearest(vector.getX(), vector.getY(), -vector.getZ());
     }
-    
+
     /**
      * Tries to randomly break blocks
      *
      * @param navigator navigator to use
      */
-    private void breakBlocks(final AbstractAdvancedPathNavigate navigator)
-    {
-        final World world = navigator.getOurEntity().level;
-        final MobEntity entity = navigator.getOurEntity();
+    private void breakBlocks(final AbstractAdvancedPathNavigate navigator) {
+        final Level world = navigator.getOurEntity().level;
+        final Mob entity = navigator.getOurEntity();
 
         final Direction facing = getFacing(entity.blockPosition(), navigator.getDesiredPos());
 
@@ -470,8 +460,7 @@ public class PathingStuckHandler implements IStuckHandler
      * @param world world to use
      * @param pos   position to set
      */
-    private void tryPlaceLadderAt(final World world, final BlockPos pos)
-    {
+    private void tryPlaceLadderAt(final Level world, final BlockPos pos) {
         final BlockState state = world.getBlockState(pos);
         if (state.getBlock() != Blocks.LADDER && !state.canOcclude() && world.getFluidState(pos).isEmpty()) {
             for (final Direction dir : directions) {
@@ -572,15 +561,12 @@ public class PathingStuckHandler implements IStuckHandler
      * @param predicate check predicate for the right block
      * @return position or null
      */
-    public static BlockPos findAround(final World world, final BlockPos start, final int vRange, final int hRange, final BiPredicate<IBlockReader, BlockPos> predicate)
-    {
-        if (vRange < 1 && hRange < 1)
-        {
+    public static BlockPos findAround(final Level world, final BlockPos start, final int vRange, final int hRange, final BiPredicate<BlockGetter, BlockPos> predicate) {
+        if (vRange < 1 && hRange < 1) {
             return null;
         }
 
-        if (predicate.test(world, start))
-        {
+        if (predicate.test(world, start)) {
             return start;
         }
 

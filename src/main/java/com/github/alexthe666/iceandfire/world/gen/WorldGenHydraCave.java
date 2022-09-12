@@ -5,46 +5,51 @@ import com.github.alexthe666.iceandfire.entity.EntityHydra;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.SkullBlock;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.Features;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.data.worldgen.Features;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.SkullBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
+public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> {
 
     public static final ResourceLocation HYDRA_CHEST = new ResourceLocation("iceandfire", "chest/hydra_cave");
-    protected static final ConfiguredFeature SWAMP_FEATURE = Features.SWAMP_TREE;
+    protected static final ConfiguredFeature SWAMP_FEATURE = Features.SWAMP_OAK;
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
-    public WorldGenHydraCave(Codec<NoFeatureConfig> configFactoryIn) {
+    public WorldGenHydraCave(Codec<NoneFeatureConfiguration> configFactoryIn) {
         super(configFactoryIn);
     }
 
     @Override
-    public boolean place(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        WorldGenLevel worldIn = context.level();
+        Random rand = context.random();
+        BlockPos position = context.origin();
+        ChunkGenerator generator = context.chunkGenerator();
         if (!IafWorldRegistry.isDimensionListedForFeatures(worldIn)) {
             return false;
         }
         if (!IafConfig.generateHydraCaves || rand.nextInt(IafConfig.generateHydraChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
             return false;
         }
-        position = worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, position);
+        position = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position);
         int i1 = 8;
         int i2 = i1 - 2;
         int dist = 6;
@@ -74,7 +79,7 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
                             worldIn.setBlock(blockpos.above(), Blocks.GRASS.defaultBlockState(), 2);
                         }
                         if (rand.nextInt(9) == 0) {
-                            SWAMP_FEATURE.place(worldIn, p_230362_3_, rand, blockpos.above());
+                            SWAMP_FEATURE.place(worldIn, generator, rand, blockpos.above());
                         }
 
                     }
@@ -109,16 +114,16 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
                     if (rand.nextInt(30) == 0 && isTouchingAir(worldIn, blockpos.above())) {
                         worldIn.setBlock(blockpos.above(1), Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, HORIZONTALS[new Random().nextInt(3)]), 2);
                         if (worldIn.getBlockState(blockpos.above(1)).getBlock() instanceof ChestBlock) {
-                            TileEntity tileentity1 = worldIn.getBlockEntity(blockpos.above(1));
-                            if (tileentity1 instanceof ChestTileEntity) {
-                                ((ChestTileEntity) tileentity1).setLootTable(HYDRA_CHEST, rand.nextLong());
+                            BlockEntity tileentity1 = worldIn.getBlockEntity(blockpos.above(1));
+                            if (tileentity1 instanceof ChestBlockEntity) {
+                                ((ChestBlockEntity) tileentity1).setLootTable(HYDRA_CHEST, rand.nextLong());
                             }
                         }
                         continue;
                     }
                     if (rand.nextInt(45) == 0 && isTouchingAir(worldIn, blockpos.above())) {
                         worldIn.setBlock(blockpos.above(), Blocks.SKELETON_SKULL.defaultBlockState().setValue(SkullBlock.ROTATION, rand.nextInt(15)), 2);
-                        TileEntity tileentity1 = worldIn.getBlockEntity(blockpos.above(1));
+                        BlockEntity tileentity1 = worldIn.getBlockEntity(blockpos.above(1));
                         continue;
                     }
                     if (rand.nextInt(35) == 0 && isTouchingAir(worldIn, blockpos.above())) {
@@ -149,7 +154,7 @@ public class WorldGenHydraCave extends Feature<NoFeatureConfig> {
         return true;
     }
 
-    private boolean isTouchingAir(IWorld worldIn, BlockPos pos) {
+    private boolean isTouchingAir(LevelAccessor worldIn, BlockPos pos) {
         boolean isTouchingAir = true;
         for (Direction direction : HORIZONTALS) {
             if (!worldIn.isEmptyBlock(pos.relative(direction))) {

@@ -3,40 +3,40 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.entity.util.IDeadMob;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 
-public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromStatues, IDeadMob {
+public class EntityDragonSkull extends Animal implements IBlacklistedFromStatues, IDeadMob {
 
-    private static final DataParameter<Integer> DRAGON_TYPE = EntityDataManager.defineId(EntityDragonSkull.class, DataSerializers.INT);
-    private static final DataParameter<Integer> DRAGON_AGE = EntityDataManager.defineId(EntityDragonSkull.class, DataSerializers.INT);
-    private static final DataParameter<Integer> DRAGON_STAGE = EntityDataManager.defineId(EntityDragonSkull.class, DataSerializers.INT);
-    private static final DataParameter<Float> DRAGON_DIRECTION = EntityDataManager.defineId(EntityDragonSkull.class, DataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> DRAGON_TYPE = SynchedEntityData.defineId(EntityDragonSkull.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DRAGON_AGE = SynchedEntityData.defineId(EntityDragonSkull.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DRAGON_STAGE = SynchedEntityData.defineId(EntityDragonSkull.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Float> DRAGON_DIRECTION = SynchedEntityData.defineId(EntityDragonSkull.class, EntityDataSerializers.FLOAT);
 
     public final float minSize = 0.3F;
     public final float maxSize = 8.58F;
 
-    public EntityDragonSkull(EntityType type, World worldIn) {
+    public EntityDragonSkull(EntityType type, Level worldIn) {
         super(type, worldIn);
         this.noCulling = true;
         // setScale(this.getDragonAge());
@@ -46,8 +46,8 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
         return false;
     }
 
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.createMobAttributes()
+    public static AttributeSupplier.Builder bakeAttributes() {
+        return Mob.createMobAttributes()
             //HEALTH
             .add(Attributes.MAX_HEALTH, 10)
             //SPEED
@@ -132,11 +132,11 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
     }
 
     public void turnIntoItem() {
-        if (removed)
+        if (isRemoved())
             return;
-        this.remove();
+        this.remove(RemovalReason.DISCARDED);
         ItemStack stack = new ItemStack(getDragonSkullItem());
-        stack.setTag(new CompoundNBT());
+        stack.setTag(new CompoundTag());
         stack.getTag().putInt("Stage", this.getStage());
         stack.getTag().putInt("DragonAge", this.getDragonAge());
         if (!this.level.isClientSide)
@@ -159,20 +159,20 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
 
     @Nullable
     @Override
-    public AgeableEntity getBreedOffspring(ServerWorld serverWorld, AgeableEntity ageable) {
+    public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
         return null;
     }
 
     @Override
-    public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (player.isShiftKeyDown()) {
-            this.setYaw(player.yRot);
+            this.setYaw(player.getYRot());
         }
         return super.mobInteract(player, hand);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         this.setDragonType(compound.getInt("Type"));
         this.setStage(compound.getInt("Stage"));
         this.setDragonAge(compound.getInt("DragonAge"));
@@ -181,7 +181,7 @@ public class EntityDragonSkull extends AnimalEntity implements IBlacklistedFromS
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         compound.putInt("Type", this.getDragonType());
         compound.putInt("Stage", this.getStage());
         compound.putInt("DragonAge", this.getDragonAge());

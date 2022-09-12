@@ -2,28 +2,29 @@ package com.github.alexthe666.iceandfire.client.render.tile;
 
 import com.github.alexthe666.iceandfire.block.BlockLectern;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.model.BookModel;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.model.BookModel;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
-public class RenderLectern<T extends TileEntityLectern> extends TileEntityRenderer<T> {
+public class RenderLectern<T extends TileEntityLectern> implements BlockEntityRenderer<T> {
 
     private static final RenderType ENCHANTMENT_TABLE_BOOK_TEXTURE = RenderType.entityCutoutNoCull(new ResourceLocation("iceandfire:textures/models/lectern_book.png"));
-    private final BookModel book = new BookModel();
+    private final BookModel bookModel;
 
-    public RenderLectern(TileEntityRendererDispatcher rendererDispatcherIn) {
-        super(rendererDispatcherIn);
+    public RenderLectern(BlockEntityRendererProvider.Context context) {
+        this.bookModel = new BookModel(context.bakeLayer(ModelLayers.BOOK));
     }
 
     @Override
-    public void render(T entity, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(T entity, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         TileEntityLectern lectern = entity;
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5F, 1.1F, 0.5F);
@@ -33,8 +34,8 @@ public class RenderLectern<T extends TileEntityLectern> extends TileEntityRender
         matrixStackIn.mulPose(new Quaternion(Vector3f.YP, 90, true));
         float f4 = lectern.pageFlipPrev + (lectern.pageFlip - lectern.pageFlipPrev) * partialTicks + 0.25F;
         float f5 = lectern.pageFlipPrev + (lectern.pageFlip - lectern.pageFlipPrev) * partialTicks + 0.75F;
-        f4 = (f4 - MathHelper.fastFloor(f4)) * 1.6F - 0.3F;
-        f5 = (f5 - MathHelper.fastFloor(f5)) * 1.6F - 0.3F;
+        f4 = (f4 - Mth.fastFloor(f4)) * 1.6F - 0.3F;
+        f5 = (f5 - Mth.fastFloor(f5)) * 1.6F - 0.3F;
 
         if (f4 < 0.0F) {
             f4 = 0.0F;
@@ -53,8 +54,8 @@ public class RenderLectern<T extends TileEntityLectern> extends TileEntityRender
         }
         float f6 = 1.29F;
 
-        this.book.setupAnim(partialTicks, MathHelper.clamp(f4, 0.0F, 1.0F), MathHelper.clamp(f5, 0.0F, 1.0F), f6);
-        this.book.renderToBuffer(matrixStackIn, bufferIn.getBuffer(ENCHANTMENT_TABLE_BOOK_TEXTURE), combinedLightIn, combinedOverlayIn, 1, 1F, 1, 1);
+        this.bookModel.setupAnim(partialTicks, Mth.clamp(f4, 0.0F, 1.0F), Mth.clamp(f5, 0.0F, 1.0F), f6);
+        this.bookModel.renderToBuffer(matrixStackIn, bufferIn.getBuffer(ENCHANTMENT_TABLE_BOOK_TEXTURE), combinedLightIn, combinedOverlayIn, 1, 1F, 1, 1);
         matrixStackIn.popPose();
     }
 

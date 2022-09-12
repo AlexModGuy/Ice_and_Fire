@@ -1,19 +1,19 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
-import net.minecraft.entity.MobEntity;
-import net.minecraft.pathfinding.FlyingNodeProcessor;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.Region;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.PathNavigationRegion;
+import net.minecraft.world.level.pathfinder.FlyNodeEvaluator;
 
-public class NodeProcessorFly extends FlyingNodeProcessor {
+public class NodeProcessorFly extends FlyNodeEvaluator {
 
-    public void prepare(Region p_225578_1_, MobEntity p_225578_2_) {
+    public void prepare(PathNavigationRegion p_225578_1_, Mob p_225578_2_) {
         super.prepare(p_225578_1_, p_225578_2_);
     }
 
     public void setEntitySize(float width, float height) {
-        this.entityWidth = MathHelper.floor(width + 1.0F);
-        this.entityHeight = MathHelper.floor(height + 1.0F);
-        this.entityDepth = MathHelper.floor(width + 1.0F);
+        this.entityWidth = Mth.floor(width + 1.0F);
+        this.entityHeight = Mth.floor(height + 1.0F);
+        this.entityDepth = Mth.floor(width + 1.0F);
     }
 }

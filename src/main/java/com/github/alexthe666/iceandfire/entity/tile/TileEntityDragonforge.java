@@ -9,35 +9,35 @@ import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
 import com.github.alexthe666.iceandfire.message.MessageUpdateDragonforge;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.LockableTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.util.Mth;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nullable;
 
-public class TileEntityDragonforge extends LockableTileEntity implements ITickableTileEntity, ISidedInventory {
+public class TileEntityDragonforge extends BaseContainerBlockEntity implements WorldlyContainer {
 
     private static final int[] SLOTS_TOP = new int[]{0, 1};
     private static final int[] SLOTS_BOTTOM = new int[]{2};
@@ -47,23 +47,78 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     };
     public int isFire;
     public int cookTime;
-    IItemHandler handlerTop = new SidedInvWrapper(this, net.minecraft.util.Direction.UP);
-    IItemHandler handlerBottom = new SidedInvWrapper(this, net.minecraft.util.Direction.DOWN);
-    IItemHandler handlerSide = new SidedInvWrapper(this, net.minecraft.util.Direction.WEST);
+    public int lastDragonFlameTimer = 0;
+    IItemHandler handlerTop = new SidedInvWrapper(this, net.minecraft.core.Direction.UP);
+    IItemHandler handlerBottom = new SidedInvWrapper(this, net.minecraft.core.Direction.DOWN);
+    IItemHandler handlerSide = new SidedInvWrapper(this, net.minecraft.core.Direction.WEST);
     net.minecraftforge.common.util.LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper
         .create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
     private NonNullList<ItemStack> forgeItemStacks = NonNullList.withSize(3, ItemStack.EMPTY);
-    public int lastDragonFlameTimer = 0;
     private boolean prevAssembled;
     private boolean canAddFlameAgain = true;
 
-    public TileEntityDragonforge() {
-        super(IafTileEntityRegistry.DRAGONFORGE_CORE.get());
+    public TileEntityDragonforge(BlockPos pos, BlockState state) {
+        super(IafTileEntityRegistry.DRAGONFORGE_CORE.get(), pos, state);
     }
 
-    public TileEntityDragonforge(int isFire) {
-        super(IafTileEntityRegistry.DRAGONFORGE_CORE.get());
+    public TileEntityDragonforge(BlockPos pos, BlockState state, int isFire) {
+        super(IafTileEntityRegistry.DRAGONFORGE_CORE.get(), pos, state);
         this.isFire = isFire;
+    }
+
+    public static void tick(Level level, BlockPos pos, BlockState state, TileEntityDragonforge entityDragonforge) {
+        boolean flag = entityDragonforge.isBurning();
+        boolean flag1 = false;
+        entityDragonforge.isFire = entityDragonforge.getFireType(entityDragonforge.getBlockState().getBlock());
+        if (entityDragonforge.lastDragonFlameTimer > 0) {
+            entityDragonforge.lastDragonFlameTimer--;
+        }
+        entityDragonforge.updateGrills(entityDragonforge.assembled());
+        if (!level.isClientSide) {
+            if (entityDragonforge.prevAssembled != entityDragonforge.assembled()) {
+                BlockDragonforgeCore.setState(entityDragonforge.isFire, entityDragonforge.prevAssembled, level, pos);
+            }
+            entityDragonforge.prevAssembled = entityDragonforge.assembled();
+            if (!entityDragonforge.assembled())
+                return;
+        }
+        if (entityDragonforge.cookTime > 0 && entityDragonforge.canSmelt() && entityDragonforge.lastDragonFlameTimer == 0) {
+            entityDragonforge.cookTime--;
+        }
+        if (entityDragonforge.getItem(0).isEmpty() && !level.isClientSide) {
+            entityDragonforge.cookTime = 0;
+        }
+        if (!entityDragonforge.level.isClientSide) {
+            if (entityDragonforge.isBurning()) {
+                if (entityDragonforge.canSmelt()) {
+                    ++entityDragonforge.cookTime;
+                    if (entityDragonforge.cookTime >= entityDragonforge.getMaxCookTime(entityDragonforge.forgeItemStacks.get(0), entityDragonforge.forgeItemStacks.get(1))) {
+                        entityDragonforge.cookTime = 0;
+                        entityDragonforge.smeltItem();
+                        flag1 = true;
+                    }
+                } else {
+                    if (entityDragonforge.cookTime > 0) {
+                        IceAndFire.sendMSGToAll(new MessageUpdateDragonforge(pos.asLong(), entityDragonforge.cookTime));
+                        entityDragonforge.cookTime = 0;
+                    }
+                }
+            } else if (!entityDragonforge.isBurning() && entityDragonforge.cookTime > 0) {
+                entityDragonforge.cookTime = Mth.clamp(entityDragonforge.cookTime - 2, 0,
+                    entityDragonforge.getMaxCookTime(entityDragonforge.forgeItemStacks.get(0), entityDragonforge.forgeItemStacks.get(1)));
+            }
+
+            if (flag != entityDragonforge.isBurning()) {
+                flag1 = true;
+            }
+        }
+
+        if (flag1) {
+            entityDragonforge.setChanged();
+        }
+        if (!entityDragonforge.canAddFlameAgain) {
+            entityDragonforge.canAddFlameAgain = true;
+        }
     }
 
     @Override
@@ -95,18 +150,25 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
 
     public Block getGrillBlock() {
         switch (isFire) {
-            case 1: return IafBlockRegistry.DRAGONFORGE_ICE_BRICK;
-            case 2: return IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK;
-            default: return IafBlockRegistry.DRAGONFORGE_FIRE_BRICK; // isFire == 0
+            case 1:
+                return IafBlockRegistry.DRAGONFORGE_ICE_BRICK;
+            case 2:
+                return IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK;
+            default:
+                return IafBlockRegistry.DRAGONFORGE_FIRE_BRICK; // isFire == 0
         }
     }
 
     public boolean grillMatches(Block block) {
         switch (isFire) {
-            case 0: return block == IafBlockRegistry.DRAGONFORGE_FIRE_BRICK;
-            case 1: return block == IafBlockRegistry.DRAGONFORGE_ICE_BRICK;
-            case 2: return block == IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK;
-            default: return false;
+            case 0:
+                return block == IafBlockRegistry.DRAGONFORGE_FIRE_BRICK;
+            case 1:
+                return block == IafBlockRegistry.DRAGONFORGE_ICE_BRICK;
+            case 2:
+                return block == IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK;
+            default:
+                return false;
         }
     }
 
@@ -117,12 +179,12 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
 
     @Override
     public ItemStack removeItem(int index, int count) {
-        return ItemStackHelper.removeItem(this.forgeItemStacks, index, count);
+        return ContainerHelper.removeItem(this.forgeItemStacks, index, count);
     }
 
     @Override
     public ItemStack removeItemNoUpdate(int index) {
-        return ItemStackHelper.takeItem(this.forgeItemStacks, index);
+        return ContainerHelper.takeItem(this.forgeItemStacks, index);
     }
 
     @Override
@@ -144,18 +206,18 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT compound) {
-        super.load(state, compound);
+    public void load(CompoundTag compound) {
+        super.load(compound);
         this.forgeItemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ItemStackHelper.loadAllItems(compound, this.forgeItemStacks);
+        ContainerHelper.loadAllItems(compound, this.forgeItemStacks);
         this.cookTime = compound.getInt("CookTime");
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
         compound.putInt("CookTime", (short) this.cookTime);
-        ItemStackHelper.saveAllItems(compound, this.forgeItemStacks);
+        ContainerHelper.saveAllItems(compound, this.forgeItemStacks);
         return compound;
     }
 
@@ -185,66 +247,14 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
 
     public String getTypeID() {
         switch (getFireType(this.getBlockState().getBlock())) {
-            case 0: return "fire";
-            case 1: return "ice";
-            case 2: return "lightning";
-            default: return "";
-        }
-    }
-
-    @Override
-    public void tick() {
-        boolean flag = this.isBurning();
-        boolean flag1 = false;
-        isFire = getFireType(this.getBlockState().getBlock());
-        if (lastDragonFlameTimer > 0) {
-            lastDragonFlameTimer--;
-        }
-        updateGrills(assembled());
-        if (!level.isClientSide) {
-            if (prevAssembled != assembled()) {
-                BlockDragonforgeCore.setState(isFire, prevAssembled, level, worldPosition);
-            }
-            prevAssembled = this.assembled();
-            if (!assembled())
-                return;
-        }
-        if (cookTime > 0 && this.canSmelt() && lastDragonFlameTimer == 0) {
-            this.cookTime--;
-        }
-        if (this.getItem(0).isEmpty() && !level.isClientSide) {
-            this.cookTime = 0;
-        }
-        if (!this.level.isClientSide) {
-            if (this.isBurning()) {
-                if (this.canSmelt()) {
-                    ++this.cookTime;
-                    if (this.cookTime >= getMaxCookTime(forgeItemStacks.get(0), forgeItemStacks.get(1))) {
-                        this.cookTime = 0;
-                        this.smeltItem();
-                        flag1 = true;
-                    }
-                } else {
-                    if (cookTime > 0) {
-                        IceAndFire.sendMSGToAll(new MessageUpdateDragonforge(worldPosition.asLong(), cookTime));
-                        this.cookTime = 0;
-                    }
-                }
-            } else if (!this.isBurning() && this.cookTime > 0) {
-                this.cookTime = MathHelper.clamp(this.cookTime - 2, 0,
-                    getMaxCookTime(forgeItemStacks.get(0), forgeItemStacks.get(1)));
-            }
-
-            if (flag != this.isBurning()) {
-                flag1 = true;
-            }
-        }
-
-        if (flag1) {
-            this.setChanged();
-        }
-        if (!canAddFlameAgain) {
-            canAddFlameAgain = true;
+            case 0:
+                return "fire";
+            case 1:
+                return "ice";
+            case 2:
+                return "lightning";
+            default:
+                return "";
         }
     }
 
@@ -259,19 +269,27 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
 
     private DragonForgeRecipe getRecipeForInput(ItemStack cookStack) {
         switch (this.isFire) {
-            case 0: return IafRecipeRegistry.getFireForgeRecipe(cookStack);
-            case 1: return IafRecipeRegistry.getIceForgeRecipe(cookStack);
-            case 2: return IafRecipeRegistry.getLightningForgeRecipe(cookStack);
-            default: return null;
+            case 0:
+                return IafRecipeRegistry.getFireForgeRecipe(cookStack);
+            case 1:
+                return IafRecipeRegistry.getIceForgeRecipe(cookStack);
+            case 2:
+                return IafRecipeRegistry.getLightningForgeRecipe(cookStack);
+            default:
+                return null;
         }
     }
 
     private DragonForgeRecipe getRecipeForBlood(ItemStack bloodStack) {
         switch (this.isFire) {
-            case 0: return IafRecipeRegistry.getFireForgeRecipeForBlood(bloodStack);
-            case 1: return IafRecipeRegistry.getIceForgeRecipeForBlood(bloodStack);
-            case 2: return IafRecipeRegistry.getLightningForgeRecipeForBlood(bloodStack);
-            default: return null;
+            case 0:
+                return IafRecipeRegistry.getFireForgeRecipeForBlood(bloodStack);
+            case 1:
+                return IafRecipeRegistry.getIceForgeRecipeForBlood(bloodStack);
+            case 2:
+                return IafRecipeRegistry.getLightningForgeRecipeForBlood(bloodStack);
+            default:
+                return null;
         }
     }
 
@@ -282,7 +300,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     private DragonForgeRecipe getCurrentRecipe(ItemStack cookStack, ItemStack bloodStack) {
         DragonForgeRecipe forgeRecipe = getRecipeForInput(cookStack);
         if (forgeRecipe != null &&
-        // Item input and quantity match
+            // Item input and quantity match
             forgeRecipe.getInput().test(cookStack) && cookStack.getCount() > 0 &&
             // Blood item and quantity match
             forgeRecipe.getBlood().test(bloodStack) && bloodStack.getCount() > 0) {
@@ -323,7 +341,7 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         if (this.level.getBlockEntity(this.worldPosition) != this) {
             return false;
         } else {
@@ -353,11 +371,11 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
     }
 
     @Override
-    public void stopOpen(PlayerEntity player) {
+    public void stopOpen(Player player) {
     }
 
     @Override
@@ -430,8 +448,8 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("container.dragonforge_fire" + DragonType.getNameFromInt(isFire));
+    protected Component getDefaultName() {
+        return new TranslatableComponent("container.dragonforge_fire" + DragonType.getNameFromInt(isFire));
     }
 
     public void transferPower(int i) {
@@ -472,18 +490,18 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
     }
 
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return new ClientboundBlockEntityDataPacket(worldPosition, 1, getUpdateTag());
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        load(this.getBlockState(), packet.getTag());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
+        load(packet.getTag());
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        return this.save(new CompoundNBT());
+    public CompoundTag getUpdateTag() {
+        return this.save(new CompoundTag());
     }
 
     public boolean assembled() {
@@ -493,9 +511,12 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
 
     private Block getBrick() {
         switch (isFire) {
-            case 0: return IafBlockRegistry.DRAGONFORGE_FIRE_BRICK;
-            case 1: return IafBlockRegistry.DRAGONFORGE_ICE_BRICK;
-            default: return IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK;
+            case 0:
+                return IafBlockRegistry.DRAGONFORGE_FIRE_BRICK;
+            case 1:
+                return IafBlockRegistry.DRAGONFORGE_ICE_BRICK;
+            default:
+                return IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK;
         }
     }
 
@@ -515,12 +536,12 @@ public class TileEntityDragonforge extends LockableTileEntity implements ITickab
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
-        return new ContainerDragonForge(id, this, playerInventory, new IntArray(0));
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+        return new ContainerDragonForge(id, this, playerInventory, new SimpleContainerData(0));
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
-        return new ContainerDragonForge(id, this, player, new IntArray(0));
+    protected AbstractContainerMenu createMenu(int id, Inventory player) {
+        return new ContainerDragonForge(id, this, player, new SimpleContainerData(0));
     }
 }

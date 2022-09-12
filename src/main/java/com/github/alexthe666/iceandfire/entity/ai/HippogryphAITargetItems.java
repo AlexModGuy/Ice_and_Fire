@@ -2,14 +2,14 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.util.IAFMath;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Items;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,15 +25,15 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
     @Nonnull
     private List<ItemEntity> list = IAFMath.emptyItemEntityList;
 
-    public HippogryphAITargetItems(MobEntity creature, boolean checkSight) {
+    public HippogryphAITargetItems(Mob creature, boolean checkSight) {
         this(creature, checkSight, false);
     }
 
-    public HippogryphAITargetItems(MobEntity creature, boolean checkSight, boolean onlyNearby) {
+    public HippogryphAITargetItems(Mob creature, boolean checkSight, boolean onlyNearby) {
         this(creature, 20, checkSight, onlyNearby, null);
     }
 
-    public HippogryphAITargetItems(MobEntity creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
+    public HippogryphAITargetItems(Mob creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
         super(creature, checkSight, onlyNearby);
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
         this.targetEntitySelector = new Predicate<ItemEntity>() {
@@ -64,7 +64,7 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
         }
     }
 
-    protected AxisAlignedBB getTargetableArea(double targetDistance) {
+    protected AABB getTargetableArea(double targetDistance) {
         return this.mob.getBoundingBox().inflate(targetDistance, 4.0D, targetDistance);
     }
 
@@ -87,7 +87,7 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
             hippo.feedings++;
             hippo.heal(4);
             if (hippo.feedings > 3 && (hippo.feedings > 7 || hippo.getRandom().nextInt(3) == 0) && !hippo.isTame() && this.targetEntity.getThrower() != null && this.mob.level.getPlayerByUUID(this.targetEntity.getThrower()) != null) {
-                PlayerEntity owner = this.mob.level.getPlayerByUUID(this.targetEntity.getThrower());
+                Player owner = this.mob.level.getPlayerByUUID(this.targetEntity.getThrower());
                 if (owner != null) {
                     hippo.tame(owner);
                     hippo.setTarget(null);

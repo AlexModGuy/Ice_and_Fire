@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.item;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.world.World;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class ItemPixieDust extends ItemGenericFood {
 
@@ -12,8 +12,8 @@ public class ItemPixieDust extends ItemGenericFood {
         super(1, 0.3F, false, false, true, "pixie_dust");
     }
 
-    public void onFoodEaten(ItemStack stack, World worldIn, LivingEntity livingEntity) {
-        livingEntity.addEffect(new EffectInstance(Effects.LEVITATION, 100, 1));
-        livingEntity.addEffect(new EffectInstance(Effects.GLOWING, 100, 1));
+    public void onFoodEaten(ItemStack stack, Level worldIn, LivingEntity livingEntity) {
+        livingEntity.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 100, 1));
+        livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 1));
     }
 }

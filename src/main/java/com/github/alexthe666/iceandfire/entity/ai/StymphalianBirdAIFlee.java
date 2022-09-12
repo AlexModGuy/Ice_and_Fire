@@ -1,12 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -17,7 +17,7 @@ public class StymphalianBirdAIFlee extends Goal {
     private final float avoidDistance;
     protected EntityStymphalianBird stymphalianBird;
     protected LivingEntity closestLivingEntity;
-    private Vector3d hidePlace;
+    private Vec3 hidePlace;
 
     public StymphalianBirdAIFlee(EntityStymphalianBird stymphalianBird, float avoidDistanceIn) {
         this.stymphalianBird = stymphalianBird;
@@ -25,7 +25,7 @@ public class StymphalianBirdAIFlee extends Goal {
 
             @Override
             public boolean test(Entity entity) {
-                return entity instanceof PlayerEntity && entity.isAlive() && StymphalianBirdAIFlee.this.stymphalianBird.getSensing().canSee(entity) && !StymphalianBirdAIFlee.this.stymphalianBird.isAlliedTo(entity);
+                return entity instanceof Player && entity.isAlive() && StymphalianBirdAIFlee.this.stymphalianBird.getSensing().hasLineOfSight(entity) && !StymphalianBirdAIFlee.this.stymphalianBird.isAlliedTo(entity);
             }
         };
         this.avoidDistance = avoidDistanceIn;
@@ -46,7 +46,7 @@ public class StymphalianBirdAIFlee extends Goal {
 
         this.closestLivingEntity = list.get(0);
         if (closestLivingEntity != null && this.stymphalianBird.getVictor() != null && this.closestLivingEntity.equals(this.stymphalianBird.getVictor())) {
-            Vector3d Vector3d = RandomPositionGenerator.getPosAvoid(this.stymphalianBird, 32, 7, new Vector3d(this.closestLivingEntity.getX(), this.closestLivingEntity.getY(), this.closestLivingEntity.getZ()));
+            Vec3 Vector3d = DefaultRandomPos.getPosAway(this.stymphalianBird, 32, 7, new Vec3(this.closestLivingEntity.getX(), this.closestLivingEntity.getY(), this.closestLivingEntity.getZ()));
 
             if (Vector3d == null) {
                 return false;

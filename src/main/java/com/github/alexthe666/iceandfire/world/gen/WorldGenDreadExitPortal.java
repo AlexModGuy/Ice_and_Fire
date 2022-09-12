@@ -1,17 +1,16 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
-import java.util.Random;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import java.util.Random;
 
 public class WorldGenDreadExitPortal {
     private static final ResourceLocation STRUCTURE = new ResourceLocation(IceAndFire.MODID, "dread_exit_portal");
 
-    public boolean generate(World worldIn, Random rand, BlockPos position) {
+    public boolean generate(Level worldIn, Random rand, BlockPos position) {
         /*
         MinecraftServer server = worldIn.getMinecraftServer();
         TemplateManager templateManager = worldIn.getSaveHandler().getStructureTemplateManager();

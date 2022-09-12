@@ -3,13 +3,13 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 public class ModelStymphalianBird extends ModelDragonBase<EntityStymphalianBird> {
     public AdvancedModelBox Body;
@@ -476,19 +476,21 @@ public class ModelStymphalianBird extends ModelDragonBase<EntityStymphalianBird>
 
 
     @Override
-    public Iterable<ModelRenderer> parts() {
+    public Iterable<BasicModelPart> parts() {
         return ImmutableList.of(Body);
     }
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return ImmutableList.of(Body, LowerBody, Neck1, WingL, WingR, BackLegL1, BackLegR1, Lowerbodytilt, TailR1, TailL1, TailR2
-                , TailL2, BackLegL2, ToeL3, ToeL2, ToeL4, ToeL1, BackLegR2, ToeR3, ToeL4_1, ToeR2, ToeR1, Neck2, HeadBase, HeadFront, Jaw, Crest1, uppernail, Crest2, Crest3, WingL2
-                , WingL3, WingL21, FingerL1, FingerL2, FingerL3, FingerL4, WingR2, WingR3, WingR21, FingerR1, FingerR2, FingerR3, FingerR4, HeadPivot, NeckPivot);
+        return ImmutableList.of(Body, LowerBody, Neck1, WingL, WingR, BackLegL1, BackLegR1, Lowerbodytilt,
+            TailR1, TailL1, TailR2, TailL2, BackLegL2, ToeL3, ToeL2, ToeL4, ToeL1, BackLegR2, ToeR3,
+            ToeL4_1, ToeR2, ToeR1, Neck2, HeadBase, HeadFront, Jaw, Crest1, uppernail, Crest2, Crest3, WingL2,
+            WingL3, WingL21, FingerL1, FingerL2, FingerL3, FingerL4, WingR2, WingR3, WingR21, FingerR1,
+            FingerR2, FingerR3, FingerR4, HeadPivot, NeckPivot);
     }
 
     @Override
-    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+    public void renderStatue(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, Entity living) {
         this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

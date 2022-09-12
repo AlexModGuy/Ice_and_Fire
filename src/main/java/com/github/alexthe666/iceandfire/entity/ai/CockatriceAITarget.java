@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.EnumSet;
 import java.util.function.Predicate;
@@ -24,7 +24,7 @@ public class CockatriceAITarget<T extends LivingEntity> extends NearestAttackabl
             return false;
         }
         if (super.canUse() && target != null && !target.getClass().equals(this.cockatrice.getClass())) {
-            if (target instanceof PlayerEntity && !cockatrice.isOwnedBy(target)) {
+            if (target instanceof Player && !cockatrice.isOwnedBy(target)) {
                 return !cockatrice.isTame();
             } else {
                 return !cockatrice.isOwnedBy(target) && cockatrice.canMove();

@@ -5,12 +5,13 @@ import com.github.alexthe666.iceandfire.block.BlockEggInIce;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
 
 public class DragonType {
 
@@ -88,7 +89,7 @@ public class DragonType {
                 dragon.setOwnerUUID(egg.getOwnerId());
                 egg.level.playLocalSound(egg.getX(), egg.getY() + egg.getEyeHeight(), egg.getZ(), SoundEvents.FIRE_EXTINGUISH, egg.getSoundSource(), 2.5F, 1.0F, false);
                 egg.level.playLocalSound(egg.getX(), egg.getY() + egg.getEyeHeight(), egg.getZ(), IafSoundRegistry.EGG_HATCH, egg.getSoundSource(), 2.5F, 1.0F, false);
-                egg.remove();
+                egg.remove(Entity.RemovalReason.DISCARDED);
             }
         }
         if (this == ICE) {
@@ -99,12 +100,12 @@ public class DragonType {
                     ((TileEntityEggInIce) egg.level.getBlockEntity(pos)).type = egg.getEggType();
                     ((TileEntityEggInIce) egg.level.getBlockEntity(pos)).ownerUUID = egg.getOwnerId();
                 }
-                egg.remove();
+                egg.remove(Entity.RemovalReason.DISCARDED);
             }
         }
         if (this == LIGHTNING) {
             boolean flag;
-            BlockPos.Mutable blockpos$pooledmutable = new BlockPos.Mutable(egg.getX(), egg.getY(), egg.getZ());
+            BlockPos.MutableBlockPos blockpos$pooledmutable = new BlockPos.MutableBlockPos(egg.getX(), egg.getY(), egg.getZ());
             flag = egg.level.isRainingAt(blockpos$pooledmutable) || egg.level.isRainingAt(blockpos$pooledmutable.set(egg.getX(), egg.getY() + (double) egg.dimensions.height, egg.getZ()));
             if (egg.level.canSeeSky(egg.blockPosition().above()) && flag) {
                 egg.setDragonAge(egg.getDragonAge() + 1);
@@ -126,7 +127,7 @@ public class DragonType {
                 }
                 dragon.setTame(true);
                 dragon.setOwnerUUID(egg.getOwnerId());
-                LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(egg.level);
+                LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(egg.level);
                 lightningboltentity.setPos(egg.getX(), egg.getY(), egg.getZ());
                 lightningboltentity.setVisualOnly(true);
                 if (!egg.level.isClientSide) {
@@ -134,7 +135,7 @@ public class DragonType {
                 }
                 egg.level.playLocalSound(egg.getX(), egg.getY() + egg.getEyeHeight(), egg.getZ(), SoundEvents.LIGHTNING_BOLT_THUNDER, egg.getSoundSource(), 2.5F, 1.0F, false);
                 egg.level.playLocalSound(egg.getX(), egg.getY() + egg.getEyeHeight(), egg.getZ(), IafSoundRegistry.EGG_HATCH, egg.getSoundSource(), 2.5F, 1.0F, false);
-                egg.remove();
+                egg.remove(Entity.RemovalReason.DISCARDED);
 
 
             }

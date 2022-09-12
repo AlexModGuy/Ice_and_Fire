@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -14,7 +14,7 @@ public class WorldGenRoostPile {
         this.block = block;
     }
 
-    public boolean generate(IWorld worldIn, Random rand, BlockPos position) {
+    public boolean generate(LevelAccessor worldIn, Random rand, BlockPos position) {
         int radius = rand.nextInt(4);
         int layers = radius;
         for (int i = 0; i < layers; i++) {

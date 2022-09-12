@@ -2,17 +2,17 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.github.alexthe666.iceandfire.entity.util.IGroundMount;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
-public class EntityGroundAIRide<T extends MobEntity & IGroundMount> extends Goal {
+public class EntityGroundAIRide<T extends Mob & IGroundMount> extends Goal {
 
     private final T dragon;
-    private PlayerEntity player;
+    private Player player;
 
     public EntityGroundAIRide(T dragon) {
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
@@ -43,7 +43,7 @@ public class EntityGroundAIRide<T extends MobEntity & IGroundMount> extends Goal
         double z = dragon.getZ();
         double speed = 1.8F * dragon.getRideSpeedModifier();
         if (player.xxa != 0 || player.zza != 0) {
-            Vector3d lookVec = player.getLookAngle();
+            Vec3 lookVec = player.getLookAngle();
             if (player.zza < 0) {
                 lookVec = lookVec.yRot((float) Math.PI);
             } else if (player.xxa > 0) {

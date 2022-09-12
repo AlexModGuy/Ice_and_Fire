@@ -1,70 +1,68 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
-import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.client.renderer.entity.model.SegmentedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.item.BannerItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.BannerItem;
+import net.minecraft.world.item.ItemStack;
 
-public class LayerDragonBanner extends LayerRenderer<EntityDragonBase, SegmentedModel<EntityDragonBase>> {
+import java.util.stream.StreamSupport;
 
+public class LayerDragonBanner extends RenderLayer<EntityDragonBase, AdvancedEntityModel<EntityDragonBase>> {
+    private final RenderLayerParent<EntityDragonBase, AdvancedEntityModel<EntityDragonBase>> renderer;
 
-    private final IEntityRenderer<EntityDragonBase, SegmentedModel<EntityDragonBase>> renderer;
-
-    public LayerDragonBanner(MobRenderer renderIn) {
+    public LayerDragonBanner(RenderLayerParent<EntityDragonBase, AdvancedEntityModel<EntityDragonBase>> renderIn) {
         super(renderIn);
         this.renderer = renderIn;
     }
 
     @Override
-    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityDragonBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        ItemStack itemstack = entity.getItemInHand(Hand.OFF_HAND);
+    public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityDragonBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        ItemStack itemstack = entity.getItemInHand(InteractionHand.OFF_HAND);
         matrixStackIn.pushPose();
         if (!itemstack.isEmpty() && itemstack.getItem() instanceof BannerItem) {
             float f = (entity.getRenderSize() / 3F);
             float f2 = 1F / f;
             matrixStackIn.pushPose();
-            postRender(((TabulaModel) this.renderer.getModel()).getCube("BodyUpper"), matrixStackIn, 0.0625F);
+            postRender(StreamSupport.stream(this.renderer.getModel().getAllParts().spliterator(), false).filter(cube -> cube.boxName.equals("BodyUpper")).findFirst().get(), matrixStackIn, 0.0625F);
             matrixStackIn.translate(0, -0.2F, 0.4F);
             matrixStackIn.mulPose(new Quaternion(Vector3f.XP, 180, true));
             matrixStackIn.pushPose();
             matrixStackIn.scale(f2, f2, f2);
-            Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemCameraTransforms.TransformType.NONE, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn);
+            Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemTransforms.TransformType.NONE, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
             matrixStackIn.popPose();
             matrixStackIn.popPose();
         }
         matrixStackIn.popPose();
     }
 
-    protected void postRender(AdvancedModelBox renderer, MatrixStack matrixStackIn, float scale) {
-        if (renderer.xRot == 0.0F && renderer.yRot == 0.0F && renderer.zRot == 0.0F) {
-            if (renderer.x != 0.0F || renderer.y != 0.0F || renderer.z != 0.0F) {
-                matrixStackIn.translate(renderer.x * scale, renderer.y * scale, renderer.z * scale);
+    protected void postRender(AdvancedModelBox renderer, PoseStack matrixStackIn, float scale) {
+        if (renderer.rotateAngleX == 0.0F && renderer.rotateAngleY == 0.0F && renderer.rotateAngleZ == 0.0F) {
+            if (renderer.rotationPointX != 0.0F || renderer.rotationPointY != 0.0F || renderer.offsetZ != 0.0F) {
+                matrixStackIn.translate(renderer.rotationPointX * scale, renderer.rotationPointY * scale, renderer.rotationPointZ * scale);
             }
         } else {
-            matrixStackIn.translate(renderer.x * scale, renderer.y * scale, renderer.z * scale);
-            if (renderer.zRot != 0.0F) {
-                matrixStackIn.mulPose(Vector3f.ZP.rotation(renderer.zRot));
+            matrixStackIn.translate(renderer.rotationPointX * scale, renderer.rotationPointY * scale, renderer.rotationPointZ * scale);
+            if (renderer.rotateAngleZ != 0.0F) {
+                matrixStackIn.mulPose(Vector3f.ZP.rotation(renderer.rotateAngleZ));
             }
 
-            if (renderer.yRot != 0.0F) {
-                matrixStackIn.mulPose(Vector3f.YP.rotation(renderer.yRot));
+            if (renderer.rotateAngleY != 0.0F) {
+                matrixStackIn.mulPose(Vector3f.YP.rotation(renderer.rotateAngleY));
             }
 
-            if (renderer.xRot != 0.0F) {
-                matrixStackIn.mulPose(Vector3f.XP.rotation(renderer.xRot));
+            if (renderer.rotateAngleX != 0.0F) {
+                matrixStackIn.mulPose(Vector3f.XP.rotation(renderer.rotateAngleX));
             }
         }
     }

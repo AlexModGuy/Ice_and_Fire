@@ -11,32 +11,31 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.client.resources.JsonReloadListener;
-import net.minecraft.dispenser.IPosition;
-import net.minecraft.dispenser.ProjectileDispenseBehavior;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.tileentity.BannerPattern;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.core.Position;
+import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import org.apache.logging.log4j.Level;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class IafRecipeRegistry extends JsonReloadListener {
+public class IafRecipeRegistry extends SimpleJsonResourceReloadListener {
 
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(DragonForgeRecipe.class, new DragonForgeRecipe.Deserializer()).create();
     public static final BannerPattern PATTERN_FIRE = addBanner("fire", new ItemStack(IafItemRegistry.FIRE_DRAGON_HEART));
@@ -69,10 +68,10 @@ public class IafRecipeRegistry extends JsonReloadListener {
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, JsonElement> splashList, IResourceManager resourceManagerIn, IProfiler profilerIn) {
+    protected void apply(Map<ResourceLocation, JsonElement> splashList, ResourceManager resourceManagerIn, ProfilerFiller profilerIn) {
         ImmutableMap.Builder<ResourceLocation, DragonForgeRecipe> builder = ImmutableMap.builder();
         ALL_FORGE_RECIPES.clear();
-        IceAndFire.LOGGER.log(Level.ALL, "Loading in dragonforge_recipes jsons...");
+        IceAndFire.LOGGER.info("Loading in dragonforge_recipes jsons...");
         splashList.forEach((p_223385_1_, p_223385_2_) -> {
             try {
                 DragonForgeRecipe fold = GSON.fromJson(p_223385_2_, DragonForgeRecipe.class);
@@ -102,103 +101,103 @@ public class IafRecipeRegistry extends JsonReloadListener {
     }
 
     public static void preInit() {
-        DispenserBlock.registerBehavior(IafItemRegistry.STYMPHALIAN_ARROW, new ProjectileDispenseBehavior() {
+        DispenserBlock.registerBehavior(IafItemRegistry.STYMPHALIAN_ARROW, new AbstractProjectileDispenseBehavior() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected ProjectileEntity getProjectile(World worldIn, IPosition position, ItemStack stackIn) {
+            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 EntityStymphalianArrow entityarrow = new EntityStymphalianArrow(
                     IafEntityRegistry.STYMPHALIAN_ARROW.get(), worldIn, position.x(), position.y(),
                     position.z());
-                entityarrow.pickup = AbstractArrowEntity.PickupStatus.ALLOWED;
+                entityarrow.pickup = AbstractArrow.Pickup.ALLOWED;
                 return entityarrow;
             }
         });
-        DispenserBlock.registerBehavior(IafItemRegistry.AMPHITHERE_ARROW, new ProjectileDispenseBehavior() {
+        DispenserBlock.registerBehavior(IafItemRegistry.AMPHITHERE_ARROW, new AbstractProjectileDispenseBehavior() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected ProjectileEntity getProjectile(World worldIn, IPosition position, ItemStack stackIn) {
+            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 EntityAmphithereArrow entityarrow = new EntityAmphithereArrow(IafEntityRegistry.AMPHITHERE_ARROW.get(),
                     worldIn, position.x(), position.y(), position.z());
-                entityarrow.pickup = AbstractArrowEntity.PickupStatus.ALLOWED;
+                entityarrow.pickup = AbstractArrow.Pickup.ALLOWED;
                 return entityarrow;
             }
         });
-        DispenserBlock.registerBehavior(IafItemRegistry.SEA_SERPENT_ARROW, new ProjectileDispenseBehavior() {
+        DispenserBlock.registerBehavior(IafItemRegistry.SEA_SERPENT_ARROW, new AbstractProjectileDispenseBehavior() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected ProjectileEntity getProjectile(World worldIn, IPosition position, ItemStack stackIn) {
+            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 EntitySeaSerpentArrow entityarrow = new EntitySeaSerpentArrow(IafEntityRegistry.SEA_SERPENT_ARROW.get(),
                     worldIn, position.x(), position.y(), position.z());
-                entityarrow.pickup = AbstractArrowEntity.PickupStatus.ALLOWED;
+                entityarrow.pickup = AbstractArrow.Pickup.ALLOWED;
                 return entityarrow;
             }
         });
-        DispenserBlock.registerBehavior(IafItemRegistry.DRAGONBONE_ARROW, new ProjectileDispenseBehavior() {
+        DispenserBlock.registerBehavior(IafItemRegistry.DRAGONBONE_ARROW, new AbstractProjectileDispenseBehavior() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected ProjectileEntity getProjectile(World worldIn, IPosition position, ItemStack stackIn) {
+            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 EntityDragonArrow entityarrow = new EntityDragonArrow(IafEntityRegistry.DRAGON_ARROW.get(),
                     position.x(), position.y(), position.z(), worldIn);
-                entityarrow.pickup = AbstractArrowEntity.PickupStatus.ALLOWED;
+                entityarrow.pickup = AbstractArrow.Pickup.ALLOWED;
                 return entityarrow;
             }
         });
-        DispenserBlock.registerBehavior(IafItemRegistry.HYDRA_ARROW, new ProjectileDispenseBehavior() {
+        DispenserBlock.registerBehavior(IafItemRegistry.HYDRA_ARROW, new AbstractProjectileDispenseBehavior() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected ProjectileEntity getProjectile(World worldIn, IPosition position, ItemStack stackIn) {
+            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 EntityHydraArrow entityarrow = new EntityHydraArrow(IafEntityRegistry.HYDRA_ARROW.get(), worldIn,
                     position.x(), position.y(), position.z());
-                entityarrow.pickup = AbstractArrowEntity.PickupStatus.ALLOWED;
+                entityarrow.pickup = AbstractArrow.Pickup.ALLOWED;
                 return entityarrow;
             }
         });
-        DispenserBlock.registerBehavior(IafItemRegistry.HIPPOGRYPH_EGG, new ProjectileDispenseBehavior() {
+        DispenserBlock.registerBehavior(IafItemRegistry.HIPPOGRYPH_EGG, new AbstractProjectileDispenseBehavior() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected ProjectileEntity getProjectile(World worldIn, IPosition position, ItemStack stackIn) {
+            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 return new EntityHippogryphEgg(IafEntityRegistry.HIPPOGRYPH_EGG.get(), worldIn, position.x(),
                     position.y(), position.z(), stackIn);
             }
         });
-        DispenserBlock.registerBehavior(IafItemRegistry.ROTTEN_EGG, new ProjectileDispenseBehavior() {
+        DispenserBlock.registerBehavior(IafItemRegistry.ROTTEN_EGG, new AbstractProjectileDispenseBehavior() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected ProjectileEntity getProjectile(World worldIn, IPosition position, ItemStack stackIn) {
+            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 return new EntityCockatriceEgg(IafEntityRegistry.COCKATRICE_EGG.get(), position.x(), position.y(),
                     position.z(), worldIn);
             }
         });
-        DispenserBlock.registerBehavior(IafItemRegistry.DEATHWORM_EGG, new ProjectileDispenseBehavior() {
+        DispenserBlock.registerBehavior(IafItemRegistry.DEATHWORM_EGG, new AbstractProjectileDispenseBehavior() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected ProjectileEntity getProjectile(World worldIn, IPosition position, ItemStack stackIn) {
+            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 return new EntityDeathWormEgg(IafEntityRegistry.DEATH_WORM_EGG.get(), position.x(), position.y(),
                     position.z(), worldIn, false);
             }
         });
-        DispenserBlock.registerBehavior(IafItemRegistry.DEATHWORM_EGG_GIGANTIC, new ProjectileDispenseBehavior() {
+        DispenserBlock.registerBehavior(IafItemRegistry.DEATHWORM_EGG_GIGANTIC, new AbstractProjectileDispenseBehavior() {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected ProjectileEntity getProjectile(World worldIn, IPosition position, ItemStack stackIn) {
+            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 return new EntityDeathWormEgg(IafEntityRegistry.DEATH_WORM_EGG.get(), position.x(), position.y(),
                     position.z(), worldIn, true);
             }
@@ -227,9 +226,6 @@ public class IafRecipeRegistry extends JsonReloadListener {
         IafItemRegistry.HIPPOGRYPH_SWORD_TOOL_MATERIAL.setRepairMaterial(Ingredient.of(new ItemStack(IafItemRegistry.HIPPOGRYPH_TALON)));
         IafItemRegistry.HIPPOCAMPUS_SWORD_TOOL_MATERIAL.setRepairMaterial(Ingredient.of(new ItemStack(IafItemRegistry.SHINY_SCALES)));
         IafItemRegistry.AMPHITHERE_SWORD_TOOL_MATERIAL.setRepairMaterial(Ingredient.of(new ItemStack(IafItemRegistry.AMPHITHERE_FEATHER)));
-        IafItemRegistry.DRAGONSTEEL_FIRE_TOOL_MATERIAL.setRepairMaterial(Ingredient.of(new ItemStack(IafItemRegistry.DRAGONSTEEL_FIRE_INGOT)));
-        IafItemRegistry.DRAGONSTEEL_ICE_TOOL_MATERIAL.setRepairMaterial(Ingredient.of(new ItemStack(IafItemRegistry.DRAGONSTEEL_ICE_INGOT)));
-        IafItemRegistry.DRAGONSTEEL_LIGHTNING_TOOL_MATERIAL.setRepairMaterial(Ingredient.of(new ItemStack(IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT)));
         IafItemRegistry.STYMHALIAN_SWORD_TOOL_MATERIAL.setRepairMaterial(Ingredient.of(new ItemStack(IafItemRegistry.STYMPHALIAN_BIRD_FEATHER)));
         IafItemRegistry.MYRMEX_CHITIN_TOOL_MATERIAL.setRepairMaterial(Ingredient.of(new ItemStack(IafItemRegistry.MYRMEX_DESERT_CHITIN)));
         IafItemRegistry.MYRMEX_DESERT_ARMOR_MATERIAL.setRepairMaterial(Ingredient.of(new ItemStack(IafItemRegistry.MYRMEX_DESERT_CHITIN)));

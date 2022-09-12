@@ -9,11 +9,11 @@ import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathFindingStatus;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -37,7 +37,7 @@ public class MyrmexAIStoreItems extends Goal {
 
     @Override
     public boolean canUse() {
-        if (!this.myrmex.canMove() || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigation().isDone() || this.myrmex.getItemInHand(Hand.MAIN_HAND).isEmpty()) {
+        if (!this.myrmex.canMove() || this.myrmex instanceof EntityMyrmexWorker && ((EntityMyrmexWorker) this.myrmex).holdingBaby() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigation().isDone() || this.myrmex.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
             return false;
         }
         if (!(this.myrmex.getNavigation() instanceof AdvancedPathNavigate) || this.myrmex.isPassenger()) {
@@ -68,7 +68,7 @@ public class MyrmexAIStoreItems extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return !this.myrmex.getItemInHand(Hand.MAIN_HAND).isEmpty() && nextCocoon != null && isUseableCocoon(nextCocoon) && !this.myrmex.isCloseEnoughToTarget(nextCocoon, 3) && this.myrmex.shouldEnterHive();
+        return !this.myrmex.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && nextCocoon != null && isUseableCocoon(nextCocoon) && !this.myrmex.isCloseEnoughToTarget(nextCocoon, 3) && this.myrmex.shouldEnterHive();
     }
 
     @Override
@@ -85,9 +85,9 @@ public class MyrmexAIStoreItems extends Goal {
 
         if (!first && nextCocoon != null) {
             final double dist = 9.0D; // 3 * 3
-            if (this.myrmex.isCloseEnoughToTarget(nextCocoon, dist) && !this.myrmex.getItemInHand(Hand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
+            if (this.myrmex.isCloseEnoughToTarget(nextCocoon, dist) && !this.myrmex.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
                 TileEntityMyrmexCocoon cocoon = (TileEntityMyrmexCocoon) this.myrmex.level.getBlockEntity(nextCocoon);
-                ItemStack itemstack = this.myrmex.getItemInHand(Hand.MAIN_HAND);
+                ItemStack itemstack = this.myrmex.getItemInHand(InteractionHand.MAIN_HAND);
                 if (!itemstack.isEmpty()) {
                     for (int i = 0; i < cocoon.getContainerSize(); ++i) {
                         if (!itemstack.isEmpty()) {
@@ -96,7 +96,7 @@ public class MyrmexAIStoreItems extends Goal {
                                 cocoon.setItem(i, itemstack.copy());
                                 cocoon.setChanged();
 
-                                this.myrmex.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
+                                this.myrmex.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
                                 this.myrmex.isEnteringHive = false;
                                 return;
                             } else if (cocoonStack.getItem() == itemstack.getItem()) {
@@ -109,7 +109,7 @@ public class MyrmexAIStoreItems extends Goal {
                                     if (itemstack.isEmpty()) {
                                         cocoon.setChanged();
                                     }
-                                    this.myrmex.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
+                                    this.myrmex.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
                                     this.myrmex.isEnteringHive = false;
                                     return;
                                 }
@@ -119,7 +119,7 @@ public class MyrmexAIStoreItems extends Goal {
                 }
             }
             //In case the myrmex isn't close enough to the cocoon and walked to it's destination try a different one
-            else if (!this.myrmex.getItemInHand(Hand.MAIN_HAND).isEmpty() && this.path.getStatus() == PathFindingStatus.COMPLETE && !this.myrmex.pathReachesTarget(path, nextCocoon, dist)) {
+            else if (!this.myrmex.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && this.path.getStatus() == PathFindingStatus.COMPLETE && !this.myrmex.pathReachesTarget(path, nextCocoon, dist)) {
                 nextCocoon = getNearbyCocoon(nextRoom);
                 if (nextCocoon != null) {
                     this.path = ((AdvancedPathNavigate) this.myrmex.getNavigation()).moveToXYZ(nextCocoon.getX() + 0.5D, nextCocoon.getY() + 0.5D, nextCocoon.getZ() + 0.5D, this.movementSpeed);
@@ -143,9 +143,9 @@ public class MyrmexAIStoreItems extends Goal {
         int RADIUS_Y = 7;
         List<BlockPos> closeCocoons = new ArrayList<>();
         BlockPos.betweenClosedStream(roomCenter.offset(-RADIUS_XZ, -RADIUS_Y, -RADIUS_XZ), roomCenter.offset(RADIUS_XZ, RADIUS_Y, RADIUS_XZ)).forEach(blockpos -> {
-            TileEntity te = this.myrmex.level.getBlockEntity(blockpos);
+            BlockEntity te = this.myrmex.level.getBlockEntity(blockpos);
             if (te instanceof TileEntityMyrmexCocoon) {
-                if (!((TileEntityMyrmexCocoon) te).isFull(this.myrmex.getItemInHand(Hand.MAIN_HAND))) {
+                if (!((TileEntityMyrmexCocoon) te).isFull(this.myrmex.getItemInHand(InteractionHand.MAIN_HAND))) {
                     closeCocoons.add(te.getBlockPos());
                 }
             }
@@ -158,7 +158,7 @@ public class MyrmexAIStoreItems extends Goal {
 
     public boolean isUseableCocoon(BlockPos blockpos) {
         if (this.myrmex.level.getBlockState(blockpos).getBlock() instanceof BlockMyrmexCocoon && this.myrmex.level.getBlockEntity(blockpos) != null && this.myrmex.level.getBlockEntity(blockpos) instanceof TileEntityMyrmexCocoon) {
-            return !((TileEntityMyrmexCocoon) this.myrmex.level.getBlockEntity(blockpos)).isFull(this.myrmex.getItemInHand(Hand.MAIN_HAND));
+            return !((TileEntityMyrmexCocoon) this.myrmex.level.getBlockEntity(blockpos)).isFull(this.myrmex.getItemInHand(InteractionHand.MAIN_HAND));
         }
         return false;
     }

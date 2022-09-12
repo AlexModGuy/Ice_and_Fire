@@ -6,25 +6,25 @@ import com.github.alexthe666.iceandfire.item.*;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootFunction;
-import net.minecraft.loot.LootFunctionType;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.Random;
 
-public class CustomizeToDragon extends LootFunction {
+public class CustomizeToDragon extends LootItemConditionalFunction {
 
-    public CustomizeToDragon(ILootCondition[] conditionsIn) {
+    public CustomizeToDragon(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
     }
 
     protected ItemStack run(ItemStack stack, LootContext context) {
-        if (!stack.isEmpty() && context.getParamOrNull(LootParameters.THIS_ENTITY) instanceof EntityDragonBase) {
+        if (!stack.isEmpty() && context.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof EntityDragonBase) {
             Random random = new Random();
-            EntityDragonBase dragon = (EntityDragonBase) context.getParamOrNull(LootParameters.THIS_ENTITY);
+            EntityDragonBase dragon = (EntityDragonBase) context.getParamOrNull(LootContextParams.THIS_ENTITY);
             if (dragon == null) {
                 return stack;
             }
@@ -65,12 +65,12 @@ public class CustomizeToDragon extends LootFunction {
     }
 
     @Override
-    public LootFunctionType getType() {
+    public LootItemFunctionType getType() {
         return IafLootRegistry.CUSTOMIZE_TO_DRAGON;
     }
 
 
-    public static class Serializer extends LootFunction.Serializer<CustomizeToDragon> {
+    public static class Serializer extends LootItemConditionalFunction.Serializer<CustomizeToDragon> {
         public Serializer() {
             super();
         }
@@ -79,7 +79,7 @@ public class CustomizeToDragon extends LootFunction {
         }
 
         @Override
-        public CustomizeToDragon deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
+        public CustomizeToDragon deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditionsIn) {
             return new CustomizeToDragon(conditionsIn);
         }
     }

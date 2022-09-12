@@ -4,12 +4,12 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -35,11 +35,11 @@ public class MessageUpdateLectern {
     public MessageUpdateLectern() {
     }
 
-    public static MessageUpdateLectern read(PacketBuffer buf) {
+    public static MessageUpdateLectern read(FriendlyByteBuf buf) {
         return new MessageUpdateLectern(buf.readLong(), buf.readInt(), buf.readInt(), buf.readInt(), buf.readBoolean(), buf.readInt());
     }
 
-    public static void write(MessageUpdateLectern message, PacketBuffer buf) {
+    public static void write(MessageUpdateLectern message, FriendlyByteBuf buf) {
         buf.writeLong(message.blockPos);
         buf.writeInt(message.selectedPages1);
         buf.writeInt(message.selectedPages2);
@@ -54,7 +54,7 @@ public class MessageUpdateLectern {
 
         public static void handle(MessageUpdateLectern message, Supplier<NetworkEvent.Context> context) {
             context.get().setPacketHandled(true);
-            PlayerEntity player = context.get().getSender();
+            Player player = context.get().getSender();
             if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }

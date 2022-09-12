@@ -1,22 +1,16 @@
 package com.github.alexthe666.iceandfire.enums;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.item.ItemBestiary;
 import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.Ints;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public enum EnumBestiaryPages {
 
@@ -86,7 +80,7 @@ public enum EnumBestiaryPages {
 
     public static List<EnumBestiaryPages> possiblePages(ItemStack book) {
         if (book.getItem() instanceof ItemBestiary) {
-            CompoundNBT tag = book.getTag();
+            CompoundTag tag = book.getTag();
             Collection<EnumBestiaryPages> containedPages = containedPages(Ints.asList(tag.getIntArray("Pages")));
             List<EnumBestiaryPages> possiblePages = new ArrayList<>(ALL_PAGES);
             possiblePages.removeAll(containedPages);
@@ -99,7 +93,7 @@ public enum EnumBestiaryPages {
     public static boolean addPage(EnumBestiaryPages page, ItemStack book) {
         boolean flag = false;
         if (book.getItem() instanceof ItemBestiary) {
-            CompoundNBT tag = book.getTag();
+            CompoundTag tag = book.getTag();
             final List<Integer> already = new ArrayList<>(Ints.asList(tag.getIntArray("Pages")));
             if (!already.contains(page.ordinal())) {
                 already.add(page.ordinal());

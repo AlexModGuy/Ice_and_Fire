@@ -3,42 +3,39 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
-
 public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromStatues {
 
     public boolean smallArms;
-    private static final DataParameter<String> TRAPPED_ENTITY_TYPE = EntityDataManager.defineId(EntityStoneStatue.class, DataSerializers.STRING);
-    private static final DataParameter<CompoundNBT> TRAPPED_ENTITY_DATA = EntityDataManager.defineId(EntityStoneStatue.class, DataSerializers.COMPOUND_TAG);
-    private static final DataParameter<Float> TRAPPED_ENTITY_WIDTH = EntityDataManager.defineId(EntityStoneStatue.class, DataSerializers.FLOAT);
-    private static final DataParameter<Float> TRAPPED_ENTITY_HEIGHT = EntityDataManager.defineId(EntityStoneStatue.class, DataSerializers.FLOAT);
-    private static final DataParameter<Float> TRAPPED_ENTITY_SCALE = EntityDataManager.defineId(EntityStoneStatue.class, DataSerializers.FLOAT);
-    private static final DataParameter<Integer> CRACK_AMOUNT = EntityDataManager.defineId(EntityStoneStatue.class, DataSerializers.INT);
-    private EntitySize stoneStatueSize = EntitySize.fixed(0.5F, 0.5F);
+    private static final EntityDataAccessor<String> TRAPPED_ENTITY_TYPE = SynchedEntityData.defineId(EntityStoneStatue.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<CompoundTag> TRAPPED_ENTITY_DATA = SynchedEntityData.defineId(EntityStoneStatue.class, EntityDataSerializers.COMPOUND_TAG);
+    private static final EntityDataAccessor<Float> TRAPPED_ENTITY_WIDTH = SynchedEntityData.defineId(EntityStoneStatue.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> TRAPPED_ENTITY_HEIGHT = SynchedEntityData.defineId(EntityStoneStatue.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> TRAPPED_ENTITY_SCALE = SynchedEntityData.defineId(EntityStoneStatue.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> CRACK_AMOUNT = SynchedEntityData.defineId(EntityStoneStatue.class, EntityDataSerializers.INT);
+    private EntityDimensions stoneStatueSize = EntityDimensions.fixed(0.5F, 0.5F);
 
-    public EntityStoneStatue(EntityType<? extends LivingEntity> t, World worldIn) {
+    public EntityStoneStatue(EntityType<? extends LivingEntity> t, Level worldIn) {
         super(t, worldIn);
     }
 
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.createMobAttributes()
+    public static AttributeSupplier.Builder bakeAttributes() {
+        return Mob.createMobAttributes()
             //HEALTH
             .add(Attributes.MAX_HEALTH, 20)
             //SPEED
@@ -55,7 +52,7 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(TRAPPED_ENTITY_TYPE, "minecraft:pig");
-        this.entityData.define(TRAPPED_ENTITY_DATA, new CompoundNBT());
+        this.entityData.define(TRAPPED_ENTITY_DATA, new CompoundTag());
         this.entityData.define(TRAPPED_ENTITY_WIDTH, 0.5F);
         this.entityData.define(TRAPPED_ENTITY_HEIGHT, 0.5F);
         this.entityData.define(TRAPPED_ENTITY_SCALE, 1F);
@@ -76,11 +73,11 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
         this.entityData.set(TRAPPED_ENTITY_TYPE, string);
     }
 
-    public CompoundNBT getTrappedTag() {
+    public CompoundTag getTrappedTag() {
         return this.entityData.get(TRAPPED_ENTITY_DATA);
     }
 
-    public void setTrappedTag(CompoundNBT tag) {
+    public void setTrappedTag(CompoundTag tag) {
         this.entityData.set(TRAPPED_ENTITY_DATA, tag);
     }
 
@@ -110,9 +107,9 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
 
     public static EntityStoneStatue buildStatueEntity(LivingEntity parent){
         EntityStoneStatue statue = IafEntityRegistry.STONE_STATUE.get().create(parent.level);
-        CompoundNBT entityTag = new CompoundNBT();
+        CompoundTag entityTag = new CompoundTag();
         try {
-            if (!(parent instanceof PlayerEntity)) {
+            if (!(parent instanceof Player)) {
                 parent.saveWithoutId(entityTag);
             }
         } catch (Exception e) {
@@ -128,12 +125,12 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     }
 
     @Nullable
-    public AxisAlignedBB getCollisionBox(Entity entityIn) {
+    public AABB getCollisionBox(Entity entityIn) {
         return this.getCollisionBoundingBox();
     }
 
     @Nullable
-    public AxisAlignedBB getCollisionBoundingBox() {
+    public AABB getCollisionBoundingBox() {
         return this.getBoundingBox();
     }
 
@@ -142,7 +139,7 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT tag) {
+    public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("CrackAmount", this.getCrackAmount());
         tag.putFloat("StatueWidth", this.getTrappedWidth());
@@ -158,7 +155,7 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT tag) {
+    public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setCrackAmount(tag.getByte("CrackAmount"));
         this.setTrappedEntityWidth(tag.getFloat("StatueWidth"));
@@ -177,19 +174,19 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     }
 
     @Override
-    public EntitySize getDimensions(Pose poseIn) {
+    public EntityDimensions getDimensions(Pose poseIn) {
         return stoneStatueSize;
     }
 
     @Override
     public void tick() {
         super.tick();
-        this.yRot = this.yBodyRot;
-        this.yHeadRot = this.yRot;
+        this.setYRot(this.yBodyRot);
+        this.yHeadRot = this.getYRot();
         if (Math.abs(this.getBbWidth() - getTrappedWidth()) > 0.01 || Math.abs(this.getBbHeight() - getTrappedHeight()) > 0.01) {
             double prevX = this.getX();
             double prevZ = this.getZ();
-            this.stoneStatueSize = EntitySize.scalable(getTrappedWidth(), getTrappedHeight());
+            this.stoneStatueSize = EntityDimensions.scalable(getTrappedWidth(), getTrappedHeight());
             refreshDimensions();
             this.setPos(prevX, this.getY(), prevZ);
         }
@@ -197,7 +194,7 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
 
     @Override
     public void kill() {
-        this.remove();
+        this.remove(RemovalReason.KILLED);
     }
 
     @Override
@@ -206,18 +203,18 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     }
 
     @Override
-    public ItemStack getItemBySlot(EquipmentSlotType slotIn) {
+    public ItemStack getItemBySlot(EquipmentSlot slotIn) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack) {
+    public void setItemSlot(EquipmentSlot slotIn, ItemStack stack) {
 
     }
 
     @Override
-    public HandSide getMainArm() {
-        return HandSide.RIGHT;
+    public HumanoidArm getMainArm() {
+        return HumanoidArm.RIGHT;
     }
 
     public int getCrackAmount() {

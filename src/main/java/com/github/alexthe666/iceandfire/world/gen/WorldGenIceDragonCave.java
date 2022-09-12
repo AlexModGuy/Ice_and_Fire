@@ -8,11 +8,11 @@ import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.util.HomePosition;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import java.util.Random;
 
@@ -22,7 +22,7 @@ public class WorldGenIceDragonCave extends WorldGenDragonCave {
     public static ResourceLocation ICE_DRAGON_CHEST_MALE = new ResourceLocation(IceAndFire.MODID, "chest/ice_dragon_male_cave");
 
 
-    public WorldGenIceDragonCave(Codec<NoFeatureConfig> codec) {
+    public WorldGenIceDragonCave(Codec<NoneFeatureConfiguration> codec) {
         super(codec);
         DRAGON_CHEST = ICE_DRAGON_CHEST;
         DRAGON_MALE_CHEST = ICE_DRAGON_CHEST_MALE;
@@ -36,7 +36,7 @@ public class WorldGenIceDragonCave extends WorldGenDragonCave {
     }
 
     @Override
-    EntityDragonBase createDragon(ISeedReader worldIn, Random rand, BlockPos position, int dragonAge) {
+    EntityDragonBase createDragon(WorldGenLevel worldIn, Random rand, BlockPos position, int dragonAge) {
         EntityIceDragon dragon = new EntityIceDragon(IafEntityRegistry.ICE_DRAGON.get(), worldIn.getLevel());
         dragon.setGender(isMale);
         dragon.growDragon(dragonAge);

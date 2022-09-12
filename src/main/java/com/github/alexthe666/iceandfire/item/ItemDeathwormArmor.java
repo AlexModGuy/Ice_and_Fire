@@ -1,38 +1,47 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import com.github.alexthe666.iceandfire.client.model.armor.ModelDeathWormArmor;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.IItemRenderProperties;
 
 import javax.annotation.Nullable;
 
-public class ItemDeathwormArmor extends ArmorItem {
+public class ItemDeathwormArmor extends ArmorItem implements IItemRenderProperties {
 
-    public ItemDeathwormArmor(IArmorMaterial material, EquipmentSlotType slot, String name) {
+    public ItemDeathwormArmor(ArmorMaterial material, EquipmentSlot slot, String name) {
         super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.setRegistryName(IceAndFire.MODID, name);
     }
 
-    @Override
-    @Nullable
-    public <A extends BipedModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
-        return (A) IceAndFire.PROXY.getArmorModel(slot == EquipmentSlotType.LEGS ? 5 : 4);
-    }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+    public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
+        consumer.accept(new IItemRenderProperties() {
+            @Override
+            @Nullable
+            public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
+                return (A) new ModelDeathWormArmor(ModelDeathWormArmor.getBakedModel(armorSlot == EquipmentSlot.LEGS || armorSlot == EquipmentSlot.HEAD));
+            }
+        });
+    }
+
+
+    @Override
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         if (this.getMaterial() == IafItemRegistry.DEATHWORM_2_ARMOR_MATERIAL) {
-            return "iceandfire:textures/models/armor/armor_deathworm_red" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
+            return "iceandfire:textures/models/armor/armor_deathworm_red" + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png");
         } else if (this.getMaterial() == IafItemRegistry.DEATHWORM_1_ARMOR_MATERIAL) {
-            return "iceandfire:textures/models/armor/armor_deathworm_white" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
+            return "iceandfire:textures/models/armor/armor_deathworm_white" + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png");
         } else {
-            return "iceandfire:textures/models/armor/armor_deathworm_yellow" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
+            return "iceandfire:textures/models/armor/armor_deathworm_yellow" + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png");
         }
     }
 }

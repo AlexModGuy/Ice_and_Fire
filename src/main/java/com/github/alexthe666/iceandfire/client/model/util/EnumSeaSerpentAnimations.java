@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model.util;
 
 import com.github.alexthe666.citadel.client.model.TabulaModel;
-import com.github.alexthe666.citadel.client.model.TabulaModelHandler;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -25,8 +24,8 @@ public enum EnumSeaSerpentAnimations {
     JUMPING2("Jumping2");
 
 
-    public TabulaModel seaserpent_model;
     private final String fileSuffix;
+    public TabulaModel seaserpent_model;
 
     EnumSeaSerpentAnimations(String fileSuffix) {
         this.fileSuffix = fileSuffix;
@@ -37,7 +36,7 @@ public enum EnumSeaSerpentAnimations {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             for (EnumSeaSerpentAnimations animation : values()) {
                 try {
-                    animation.seaserpent_model = new TabulaModel(TabulaModelHandler.INSTANCE.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent" + animation.fileSuffix));
+                    animation.seaserpent_model = new TabulaModel(TabulaModelHandlerHelper.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent" + animation.fileSuffix));
                 } catch (Exception e) {
                     IceAndFire.LOGGER.warn("sea serpent model at: seaserpent" + animation.fileSuffix + ".tbl doesn't exist!");
                     e.printStackTrace();

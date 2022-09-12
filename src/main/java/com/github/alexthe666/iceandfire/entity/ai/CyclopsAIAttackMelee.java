@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 
 public class CyclopsAIAttackMelee extends MeleeAttackGoal {
 
@@ -19,7 +19,7 @@ public class CyclopsAIAttackMelee extends MeleeAttackGoal {
             return;
         }
         if (distance <= d0) {
-            this.mob.swing(Hand.MAIN_HAND);
+            this.mob.swing(InteractionHand.MAIN_HAND);
             this.mob.doHurtTarget(entity);
         }
     }

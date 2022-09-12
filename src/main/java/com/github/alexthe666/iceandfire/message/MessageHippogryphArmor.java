@@ -2,10 +2,10 @@ package com.github.alexthe666.iceandfire.message;
 
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -24,11 +24,11 @@ public class MessageHippogryphArmor {
     public MessageHippogryphArmor() {
     }
 
-    public static MessageHippogryphArmor read(PacketBuffer buf) {
+    public static MessageHippogryphArmor read(FriendlyByteBuf buf) {
         return new MessageHippogryphArmor(buf.readInt(), buf.readInt(), buf.readInt());
     }
 
-    public static void write(MessageHippogryphArmor message, PacketBuffer buf) {
+    public static void write(MessageHippogryphArmor message, FriendlyByteBuf buf) {
         buf.writeInt(message.dragonId);
         buf.writeInt(message.slot_index);
         buf.writeInt(message.armor_type);
@@ -40,7 +40,7 @@ public class MessageHippogryphArmor {
 
         public static void handle(MessageHippogryphArmor message, Supplier<NetworkEvent.Context> context) {
             context.get().setPacketHandled(true);
-            PlayerEntity player = context.get().getSender();
+            Player player = context.get().getSender();
             if (player != null) {
                 if (player.level != null) {
                     Entity entity = player.level.getEntity(message.dragonId);

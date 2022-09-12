@@ -1,15 +1,17 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
-public class TileEntityDragonforgeBrick extends TileEntity {
+public class TileEntityDragonforgeBrick extends BlockEntity {
 
-    public TileEntityDragonforgeBrick() {
-        super(IafTileEntityRegistry.DRAGONFORGE_BRICK.get());
+    public TileEntityDragonforgeBrick(BlockPos pos, BlockState state) {
+        super(IafTileEntityRegistry.DRAGONFORGE_BRICK.get(), pos, state);
     }
 
     @Override

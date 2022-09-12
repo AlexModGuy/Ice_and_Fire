@@ -2,17 +2,17 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.util.IFlyingMount;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
-public class DragonAIRide<T extends MobEntity & IFlyingMount> extends Goal {
+public class DragonAIRide<T extends Mob & IFlyingMount> extends Goal {
 
     private final T dragon;
-    private PlayerEntity player;
+    private Player player;
 
     public DragonAIRide(T dragon) {
         this.dragon = dragon;
@@ -39,7 +39,7 @@ public class DragonAIRide<T extends MobEntity & IFlyingMount> extends Goal {
         double y = dragon.getY();
         double z = dragon.getZ();
         double speed = 1.8F * dragon.getFlightSpeedModifier();
-        Vector3d lookVec = player.getLookAngle();
+        Vec3 lookVec = player.getLookAngle();
         if (player.zza < 0) {
             lookVec = lookVec.yRot((float) Math.PI);
         } else if (player.xxa > 0) {

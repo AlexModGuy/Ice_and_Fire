@@ -3,51 +3,50 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.util.IDragonProjectile;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.AbstractFireballEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.network.IPacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.FMLPlayMessages;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Fireball;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
-public class EntityHydraBreath extends AbstractFireballEntity implements IDragonProjectile {
+public class EntityHydraBreath extends Fireball implements IDragonProjectile {
 
-    public EntityHydraBreath(EntityType<? extends AbstractFireballEntity> t, World worldIn) {
+    public EntityHydraBreath(EntityType<? extends Fireball> t, Level worldIn) {
         super(t, worldIn);
     }
 
-    public EntityHydraBreath(EntityType<? extends AbstractFireballEntity> t, World worldIn, double posX, double posY,
+    public EntityHydraBreath(EntityType<? extends Fireball> t, Level worldIn, double posX, double posY,
                              double posZ, double accelX, double accelY, double accelZ) {
         super(t, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
     }
 
-    public EntityHydraBreath(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+    public EntityHydraBreath(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
         this(IafEntityRegistry.HYDRA_BREATH.get(), worldIn);
     }
 
-    public EntityHydraBreath(EntityType<? extends AbstractFireballEntity> t, World worldIn, EntityHydra shooter,
+    public EntityHydraBreath(EntityType<? extends Fireball> t, Level worldIn, EntityHydra shooter,
                              double accelX, double accelY, double accelZ) {
         super(t, shooter, accelX, accelY, accelZ, worldIn);
-        double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
+        double d0 = Math.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.xPower = accelX / d0 * 0.02D;
         this.yPower = accelY / d0 * 0.02D;
         this.zPower = accelZ / d0 * 0.02D;
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -76,7 +75,7 @@ public class EntityHydraBreath extends AbstractFireballEntity implements IDragon
     public void tick() {
         this.clearFire();
         if (this.tickCount > 30) {
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
         }
         Entity shootingEntity = this.getOwner();
         if (this.level.isClientSide || (shootingEntity == null || shootingEntity.isAlive()) && this.level.hasChunkAt(this.blockPosition())) {
@@ -85,16 +84,16 @@ public class EntityHydraBreath extends AbstractFireballEntity implements IDragon
                 this.setSecondsOnFire(1);
             }
 
-            RayTraceResult raytraceresult = ProjectileHelper.getHitResult(this, this::canHitEntity);
-            if (raytraceresult.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
+            HitResult raytraceresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
+            if (raytraceresult.getType() != HitResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                 this.onHit(raytraceresult);
             }
 
-            Vector3d Vector3d = this.getDeltaMovement();
+            Vec3 Vector3d = this.getDeltaMovement();
             double d0 = this.getX() + Vector3d.x;
             double d1 = this.getY() + Vector3d.y;
             double d2 = this.getZ() + Vector3d.z;
-            ProjectileHelper.rotateTowardsMovement(this, 0.2F);
+            ProjectileUtil.rotateTowardsMovement(this, 0.2F);
             float f = this.getInertia();
             if (this.level.isClientSide) {
                 for (int i = 0; i < 15; ++i) {
@@ -125,12 +124,12 @@ public class EntityHydraBreath extends AbstractFireballEntity implements IDragon
     }
 
     @Override
-    protected void onHit(RayTraceResult movingObject) {
+    protected void onHit(HitResult movingObject) {
         this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
         Entity shootingEntity = this.getOwner();
         if (!this.level.isClientSide) {
-            if (movingObject.getType() == RayTraceResult.Type.ENTITY) {
-                Entity entity = ((EntityRayTraceResult) movingObject).getEntity();
+            if (movingObject.getType() == HitResult.Type.ENTITY) {
+                Entity entity = ((EntityHitResult) movingObject).getEntity();
 
                 if (entity != null && entity instanceof EntityHydraHead) {
                     return;
@@ -142,7 +141,7 @@ public class EntityHydraBreath extends AbstractFireballEntity implements IDragon
                     }
                     entity.hurt(DamageSource.mobAttack(dragon), 2.0F);
                     if (entity instanceof LivingEntity) {
-                        ((LivingEntity) entity).addEffect(new EffectInstance(Effects.POISON, 60, 0));
+                        ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.POISON, 60, 0));
                     }
 
                 }

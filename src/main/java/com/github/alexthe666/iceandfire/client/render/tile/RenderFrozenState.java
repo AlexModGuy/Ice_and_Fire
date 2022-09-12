@@ -2,15 +2,15 @@ package com.github.alexthe666.iceandfire.client.render.tile;
 
 import com.github.alexthe666.iceandfire.client.render.IafRenderType;
 import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.AABB;
 
 public class RenderFrozenState {
     private static final ResourceLocation TEXTURE_0 = new ResourceLocation("textures/block/frosted_ice_0.png");
@@ -18,10 +18,10 @@ public class RenderFrozenState {
     private static final ResourceLocation TEXTURE_2 = new ResourceLocation("textures/block/frosted_ice_2.png");
     private static final ResourceLocation TEXTURE_3 = new ResourceLocation("textures/block/frosted_ice_3.png");
 
-    public static void render(LivingEntity entity, MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int light) {
+    public static void render(LivingEntity entity, PoseStack matrixStack, MultiBufferSource bufferIn, int light) {
         float sideExpand = -0.125F;
         float sideExpandY = 0.325F;
-        AxisAlignedBB axisalignedbb1 = new AxisAlignedBB(-entity.getBbWidth() / 2F - sideExpand, 0, -entity.getBbWidth() / 2F - sideExpand,
+        AABB axisalignedbb1 = new AABB(-entity.getBbWidth() / 2F - sideExpand, 0, -entity.getBbWidth() / 2F - sideExpand,
             entity.getBbWidth() / 2F + sideExpand, entity.getBbHeight() + sideExpandY, entity.getBbWidth() / 2F + sideExpand);
         matrixStack.pushPose();
         renderMovingAABB(axisalignedbb1, matrixStack, bufferIn, entity, light, 255);
@@ -41,9 +41,9 @@ public class RenderFrozenState {
         return TEXTURE_0;
     }
 
-    public static void renderMovingAABB(AxisAlignedBB boundingBox, MatrixStack stack, IRenderTypeBuffer bufferIn, LivingEntity entity, int light, int alpha) {
+    public static void renderMovingAABB(AABB boundingBox, PoseStack stack, MultiBufferSource bufferIn, LivingEntity entity, int light, int alpha) {
         RenderType rendertype = IafRenderType.getIce(getIceTexture(FrozenProperties.ticksUntilUnfrozen(entity)));
-        IVertexBuilder vertexbuffer = bufferIn.getBuffer(rendertype);
+        VertexConsumer vertexbuffer = bufferIn.getBuffer(rendertype);
         Matrix4f matrix4f = stack.last().pose();
         float maxX = (float) boundingBox.maxX * 0.425F;
         float minX = (float) boundingBox.minX * 0.425F;

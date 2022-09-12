@@ -4,15 +4,15 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 
 public class ModelCyclops extends ModelDragonBase<EntityCyclops> {
     public AdvancedModelBox body;
@@ -178,7 +178,7 @@ public class ModelCyclops extends ModelDragonBase<EntityCyclops> {
     }
 
     @Override
-    public Iterable<ModelRenderer> parts() {
+    public Iterable<BasicModelPart> parts() {
         return ImmutableList.of(body);
     }
 
@@ -372,8 +372,8 @@ public class ModelCyclops extends ModelDragonBase<EntityCyclops> {
             animator.move(Head, 0, 0, -0.5F);
             animator.endKeyframe();
             animator.resetKeyframe(5);
-            this.Loin.xRot = Math.min(0, Math.min(this.leftleg.xRot, this.rightleg.xRot));
-            this.LoinBack.xRot = this.Loin.xRot - Math.max(this.leftleg.xRot, this.rightleg.xRot);
+            this.Loin.rotateAngleX = Math.min(0, Math.min(this.leftleg.rotateAngleX, this.rightleg.rotateAngleX));
+            this.LoinBack.rotateAngleX = this.Loin.rotateAngleX - Math.max(this.leftleg.rotateAngleX, this.rightleg.rotateAngleX);
         }
     }
 
@@ -405,26 +405,26 @@ public class ModelCyclops extends ModelDragonBase<EntityCyclops> {
         this.walk(this.Jaw, speed_idle, degree_idle * -0.15F, true, 0F, -0.1F, f2, 1);
 
         if (entity != null) {
-            Vector3d Vector3d = entity.getEyePosition(0.0F);
-            Vector3d Vector3d1 = entity.getEyePosition(0.0F);
+            Vec3 Vector3d = entity.getEyePosition(0.0F);
+            Vec3 Vector3d1 = entity.getEyePosition(0.0F);
             double d0 = Vector3d.y - Vector3d1.y;
 
             if (d0 > 0.0D) {
-                this.Eye.y = -4.1F;
+                this.Eye.offsetY = -4.1F;
             } else {
-                this.Eye.y = -5.1F;
+                this.Eye.offsetY = -5.1F;
             }
 
-            Vector3d Vector3d2 = entity.getViewVector(0.0F);
-            Vector3d2 = new Vector3d(Vector3d2.x, 0.0D, Vector3d2.z);
-            Vector3d Vector3d3 = (new Vector3d(Vector3d1.x - Vector3d.x, 0.0D, Vector3d1.z - Vector3d.z)).normalize().yRot(((float) Math.PI / 2F));
+            Vec3 Vector3d2 = entity.getViewVector(0.0F);
+            Vector3d2 = new Vec3(Vector3d2.x, 0.0D, Vector3d2.z);
+            Vec3 Vector3d3 = (new Vec3(Vector3d1.x - Vector3d.x, 0.0D, Vector3d1.z - Vector3d.z)).normalize().yRot(((float) Math.PI / 2F));
             double d1 = Vector3d2.dot(Vector3d3);
-            this.Eye.x = MathHelper.sqrt((float) Math.abs(d1)) * 2.0F * (float) Math.signum(d1);
+            this.Eye.offsetX = Mth.sqrt((float) Math.abs(d1)) * 2.0F * (float) Math.signum(d1);
         }
     }
 
     @Override
-    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+    public void renderStatue(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, Entity living) {
         this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

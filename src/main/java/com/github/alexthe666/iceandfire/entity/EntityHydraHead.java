@@ -2,22 +2,22 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
 
 public class EntityHydraHead extends EntityMutlipartPart {
     public int headIndex;
     public EntityHydra hydra;
     private boolean neck;
 
-    public EntityHydraHead(EntityType<?> t, World world) {
+    public EntityHydraHead(EntityType<?> t, Level world) {
         super(t, world);
     }
 
-    public EntityHydraHead(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+    public EntityHydraHead(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
         this(IafEntityRegistry.HYDRA_MULTIPART.get(), worldIn);
     }
 

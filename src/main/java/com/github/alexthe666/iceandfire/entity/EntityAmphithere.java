@@ -12,46 +12,52 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.ClimberPathNavigator;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.*;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.util.Mth;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
+import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class EntityAmphithere extends TameableEntity implements ISyncMount, IAnimatedEntity, IPhasesThroughBlock, IFlapable, IDragonFlute, IFlyingMount, IHasCustomizableAttributes, ICustomMoveController {
+public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnimatedEntity, IPhasesThroughBlock, IFlapable, IDragonFlute, IFlyingMount, IHasCustomizableAttributes, ICustomMoveController {
 
-    private static final DataParameter<Integer> VARIANT = EntityDataManager.defineId(EntityAmphithere.class, DataSerializers.INT);
-    private static final DataParameter<Boolean> FLYING = EntityDataManager.defineId(EntityAmphithere.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> FLAP_TICKS = EntityDataManager.defineId(EntityAmphithere.class, DataSerializers.INT);
-    private static final DataParameter<Byte> CONTROL_STATE = EntityDataManager.defineId(EntityAmphithere.class, DataSerializers.BYTE);
-    private static final DataParameter<Integer> COMMAND = EntityDataManager.defineId(EntityAmphithere.class, DataSerializers.INT);
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(EntityAmphithere.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> FLYING = SynchedEntityData.defineId(EntityAmphithere.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> FLAP_TICKS = SynchedEntityData.defineId(EntityAmphithere.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Byte> CONTROL_STATE = SynchedEntityData.defineId(EntityAmphithere.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> COMMAND = SynchedEntityData.defineId(EntityAmphithere.class, EntityDataSerializers.INT);
     public static Animation ANIMATION_BITE = Animation.create(15);
     public static Animation ANIMATION_BITE_RIDER = Animation.create(15);
     public static Animation ANIMATION_WING_BLAST = Animation.create(30);
@@ -90,7 +96,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
        */
     private int navigatorType = 0;
 
-    public EntityAmphithere(EntityType<EntityAmphithere> type, World worldIn) {
+    public EntityAmphithere(EntityType<EntityAmphithere> type, Level worldIn) {
         super(type, worldIn);
         IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         this.maxUpStep = 1;
@@ -102,7 +108,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         switchNavigator(0);
     }
 
-    public static BlockPos getPositionRelativetoGround(Entity entity, World world, double x, double z, Random rand) {
+    public static BlockPos getPositionRelativetoGround(Entity entity, Level world, double x, double z, Random rand) {
         BlockPos pos = new BlockPos(x, entity.getY(), z);
         for (int yDown = 0; yDown < 6 + rand.nextInt(6); yDown++) {
             if (!world.isEmptyBlock(pos.below(yDown))) {
@@ -113,20 +119,20 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
-    public boolean checkSpawnRules(IWorld worldIn, SpawnReason spawnReasonIn) {
-        if (worldIn instanceof IServerWorld && !IafWorldRegistry.isDimensionListedForMobs((IServerWorld) level)) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+        if (worldIn instanceof ServerLevelAccessor && !IafWorldRegistry.isDimensionListedForMobs((ServerLevelAccessor) level)) {
             return false;
         }
         return super.checkSpawnRules(worldIn, spawnReasonIn);
     }
 
-    public static boolean canAmphithereSpawnOn(EntityType<EntityAmphithere> parrotIn, IWorld worldIn, SpawnReason reason, BlockPos p_223317_3_, Random random) {
+    public static boolean canAmphithereSpawnOn(EntityType<EntityAmphithere> parrotIn, LevelAccessor worldIn, MobSpawnType reason, BlockPos p_223317_3_, Random random) {
         Block block = worldIn.getBlockState(p_223317_3_.below()).getBlock();
-        return (block.is(BlockTags.LEAVES) || block == Blocks.GRASS_BLOCK || block.is(BlockTags.LOGS) || block == Blocks.AIR);
+        return (block.getTags().contains(BlockTags.LEAVES) || block == Blocks.GRASS_BLOCK || block.getTags().contains(BlockTags.LOGS) || block == Blocks.AIR);
     }
 
     @Override
-    public boolean checkSpawnObstruction(IWorldReader worldIn) {
+    public boolean checkSpawnObstruction(LevelReader worldIn) {
         if (worldIn.isUnobstructed(this) && !worldIn.containsAnyLiquid(this.getBoundingBox())) {
             BlockPos blockpos = this.blockPosition();
             if (blockpos.getY() < worldIn.getSeaLevel()) {
@@ -140,7 +146,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         return false;
     }
 
-    public static BlockPos getPositionInOrbit(EntityAmphithere entity, World world, BlockPos orbit, Random rand) {
+    public static BlockPos getPositionInOrbit(EntityAmphithere entity, Level world, BlockPos orbit, Random rand) {
         float possibleOrbitRadius = (entity.orbitRadius + 10.0F);
         float radius = 10;
         if (entity.getCommand() == 2) {
@@ -153,8 +159,8 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
             radius = 30;
         }
         float angle = (0.01745329251F * possibleOrbitRadius);
-        double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
-        double extraZ = radius * MathHelper.cos(angle);
+        double extraX = radius * Mth.sin((float) (Math.PI + angle));
+        double extraZ = radius * Mth.cos(angle);
         BlockPos radialPos = new BlockPos(orbit.getX() + extraX, orbit.getY(), orbit.getZ() + extraZ);
         //world.setBlockState(radialPos.down(4), Blocks.QUARTZ_BLOCK.getDefaultState());
         // world.setBlockState(orbit.down(4), Blocks.GOLD_BLOCK.getDefaultState());
@@ -180,7 +186,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
-    public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
 
         if (itemstack != null && itemstack.getItem() == Items.COOKIE) {
@@ -192,7 +198,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
                     itemstack.shrink(1);
                 }
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         if (itemstack != null && itemstack.getItem() == Items.COCOA_BEANS && this.getHealth() < this.getMaxHealth()) {
             this.heal(5);
@@ -200,18 +206,18 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
             if (!player.isCreative()) {
                 itemstack.shrink(1);
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        if (super.mobInteract(player, hand) == ActionResultType.PASS) {
+        if (super.mobInteract(player, hand) == InteractionResult.PASS) {
             if (itemstack != null && itemstack.getItem() == IafItemRegistry.DRAGON_STAFF && this.isOwnedBy(player)) {
                 if (player.isShiftKeyDown()) {
                     BlockPos pos = this.blockPosition();
                     this.homePos = pos;
                     this.hasHomePosition = true;
-                    player.displayClientMessage(new TranslationTextComponent("amphithere.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
-                    return ActionResultType.SUCCESS;
+                    player.displayClientMessage(new TranslatableComponent("amphithere.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
+                    return InteractionResult.SUCCESS;
                 }
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
             if (player.isShiftKeyDown() && this.isOwnedBy(player)) {
                 if (player.getItemInHand(hand).isEmpty()) {
@@ -219,14 +225,14 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
                     if (this.getCommand() > 2) {
                         this.setCommand(0);
                     }
-                    player.displayClientMessage(new TranslationTextComponent("amphithere.command." + this.getCommand()), true);
+                    player.displayClientMessage(new TranslatableComponent("amphithere.command." + this.getCommand()), true);
                     this.playSound(SoundEvents.ZOMBIE_INFECT, 1, 1);
-                    return ActionResultType.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             } else if ((!this.isTame() || this.isOwnedBy(player)) && !this.isBaby() && itemstack.isEmpty()) {
                 player.startRiding(this);
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
 
         }
@@ -236,8 +242,8 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new DragonAIRide(this));
-        this.goalSelector.addGoal(0, new SitGoal(this));
-        this.goalSelector.addGoal(1, new SwimGoal(this));
+        this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
+        this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(1, new AmphithereAIAttackMelee(this, 1.0D, true));
         this.goalSelector.addGoal(2, new AmphithereAIFollowOwner(this, 1.0D, 10.0F, 2.0F));
         this.goalSelector.addGoal(3, new AmphithereAIFleePlayer(this, 32.0F, 0.8D, 1.8D));
@@ -258,8 +264,8 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
 
     protected void switchNavigator(int navigatorType) {
         if (navigatorType == 0) {
-            this.moveControl = new MovementController(this);
-            this.navigation = new ClimberPathNavigator(this, level);
+            this.moveControl = new MoveControl(this);
+            this.navigation = new WallClimberNavigation(this, level);
             this.navigatorType = 0;
         } else if (navigatorType == 1) {
             this.moveControl = new EntityAmphithere.FlyMoveHelper(this);
@@ -292,26 +298,26 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     public void positionRider(Entity passenger) {
         super.positionRider(passenger);
         if (this.hasPassenger(passenger) && this.isTame()) {
-            this.yRot = passenger.yRot;
+            this.setYRot(passenger.getYRot());
             //renderYawOffset = rotationYaw;
         }
-        if (!this.level.isClientSide && !this.isTame() && passenger instanceof PlayerEntity && this.getAnimation() == NO_ANIMATION && random.nextInt(15) == 0) {
+        if (!this.level.isClientSide && !this.isTame() && passenger instanceof Player && this.getAnimation() == NO_ANIMATION && random.nextInt(15) == 0) {
             this.setAnimation(ANIMATION_BITE_RIDER);
         }
         if (!this.level.isClientSide && this.getAnimation() == ANIMATION_BITE_RIDER && this.getAnimationTick() == 6 && !this.isTame()) {
             passenger.hurt(DamageSource.mobAttack(this), 1);
         }
         float pitch_forward = 0;
-        if (this.xRot > 0 && this.isFlying()) {
-            pitch_forward = (xRot / 45F) * 0.45F;
+        if (this.getXRot() > 0 && this.isFlying()) {
+            pitch_forward = (getXRot() / 45F) * 0.45F;
         } else {
             pitch_forward = 0;
         }
         float scaled_ground = this.groundProgress * 0.1F;
         float radius = (this.isTame() ? 0.5F : 0.3F) - scaled_ground * 0.5F + pitch_forward;
         float angle = (0.01745329251F * this.yBodyRot);
-        double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
-        double extraZ = radius * MathHelper.cos(angle);
+        double extraX = radius * Mth.sin((float) (Math.PI + angle));
+        double extraZ = radius * Mth.cos(angle);
         passenger.setPos(this.getX() + extraX, this.getY() + 0.7F - scaled_ground * 0.14F + pitch_forward, this.getZ() + extraZ);
 
     }
@@ -324,7 +330,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     @Override
     public void aiStep() {
         super.aiStep();
-        if (level.getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof PlayerEntity) {
+        if (level.getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
             this.setTarget(null);
         }
         if (this.isInWater() && this.jumping) {
@@ -386,9 +392,9 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         if (this.getUntamedRider() == null) {
             ridingTime = 0;
         }
-        if (!this.isTame() && ridingTime > IafConfig.amphithereTameTime && this.getUntamedRider() != null && this.getUntamedRider() instanceof PlayerEntity) {
+        if (!this.isTame() && ridingTime > IafConfig.amphithereTameTime && this.getUntamedRider() != null && this.getUntamedRider() instanceof Player) {
             this.level.broadcastEntityEvent(this, (byte) 45);
-            this.tame((PlayerEntity) this.getUntamedRider());
+            this.tame((Player) this.getUntamedRider());
             if (this.getTarget() == this.getUntamedRider())
                 this.setTarget(null);
         }
@@ -402,13 +408,13 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
             this.setFlying(true);
         }
         if (this.getControllingPassenger() != null && this.isFlying() && !this.onGround) {
-            this.xRot = this.getControllingPassenger().xRot / 2;
+            this.setXRot(this.getControllingPassenger().getXRot() / 2);
 
-            if (this.getControllingPassenger().xRot > 25 && this.getDeltaMovement().y > -1.0F) {
+            if (this.getControllingPassenger().getXRot() > 25 && this.getDeltaMovement().y > -1.0F) {
                 this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y - 0.1D, this.getDeltaMovement().z);
 
             }
-            if (this.getControllingPassenger().xRot < -25 && this.getDeltaMovement().y < 1.0F) {
+            if (this.getControllingPassenger().getXRot() < -25 && this.getDeltaMovement().y < 1.0F) {
                 this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y + 0.1D, this.getDeltaMovement().z);
 
             }
@@ -434,7 +440,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         }
         if (this.isFlying() && !this.isOnGround() && this.isFallen && this.getControllingPassenger() == null) {
             this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y - 0.2D, this.getDeltaMovement().z);
-            this.xRot = Math.max(this.xRot + 5, 75);
+            this.setXRot(Math.max(this.getXRot() + 5, 75));
         }
         if (this.isFallen && this.onGround) {
             this.setFlying(false);
@@ -467,7 +473,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         if (flapTicks > 0) {
             flapTicks--;
         }
-        yBodyRot = yRot;
+        yBodyRot = getYRot();
         if (level.isClientSide) {
             if (!onGround) {
                 roll_buffer.calculateChainFlapBuffer(this.isVehicle() ? 55 : 90, 1, 10F, 0.5F, this);
@@ -530,8 +536,8 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     @Nullable
     public Entity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
-            if (passenger instanceof PlayerEntity && this.getTarget() != passenger) {
-                PlayerEntity player = (PlayerEntity) passenger;
+            if (passenger instanceof Player && this.getTarget() != passenger) {
+                Player player = (Player) passenger;
                 if (this.isTame() && this.getOwnerUUID() != null && this.getOwnerUUID().equals(player.getUUID())) {
                     return player;
                 }
@@ -543,7 +549,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     @Nullable
     public Entity getUntamedRider() {
         for (Entity passenger : this.getPassengers()) {
-            if (passenger instanceof PlayerEntity) {
+            if (passenger instanceof Player) {
                 return passenger;
             }
         }
@@ -557,8 +563,8 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
             if (entityIn == livingentity) {
                 return true;
             }
-            if (entityIn instanceof TameableEntity) {
-                return ((TameableEntity) entityIn).isOwnedBy(livingentity);
+            if (entityIn instanceof TamableAnimal) {
+                return ((TamableAnimal) entityIn).isOwnedBy(livingentity);
             }
             if (livingentity != null) {
                 return livingentity.isAlliedTo(entityIn);
@@ -568,8 +574,8 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         return super.isAlliedTo(entityIn);
     }
 
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.createMobAttributes()
+    public static AttributeSupplier.Builder bakeAttributes() {
+        return Mob.createMobAttributes()
             //HEALTH
             .add(Attributes.MAX_HEALTH, IafConfig.amphithereMaxHealth)
             //SPEED
@@ -581,7 +587,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
-    public AttributeModifierMap.MutableAttribute getConfigurableAttributes() {
+    public AttributeSupplier.Builder getConfigurableAttributes() {
         return bakeAttributes();
     }
 
@@ -596,7 +602,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Variant", this.getVariant());
         compound.putBoolean("Flying", this.isFlying());
@@ -612,7 +618,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setVariant(compound.getInt("Variant"));
         this.setFlying(compound.getBoolean("Flying"));
@@ -626,9 +632,9 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     }
 
     public boolean getCanSpawnHere() {
-        int i = MathHelper.floor(this.getX());
-        int j = MathHelper.floor(this.getBoundingBox().minY);
-        int k = MathHelper.floor(this.getZ());
+        int i = Mth.floor(this.getX());
+        int j = Mth.floor(this.getBoundingBox().minY);
+        int k = Mth.floor(this.getZ());
         BlockPos blockpos = new BlockPos(i, j, k);
         Block block = this.level.getBlockState(blockpos.below()).getBlock();
         return this.level.canSeeSkyFromBelowWater(blockpos.above());
@@ -641,7 +647,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         if (target != null && this.getAnimation() == ANIMATION_BITE && this.getAnimationTick() == 7) {
             double dist = this.distanceToSqr(target);
             if (dist < 10) {
-                target.knockback(0.6F, MathHelper.sin(this.yRot * 0.017453292F), -MathHelper.cos(this.yRot * 0.017453292F));
+                target.knockback(0.6F, Mth.sin(this.getYRot() * 0.017453292F), -Mth.cos(this.getYRot() * 0.017453292F));
                 target.hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
@@ -665,8 +671,8 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
                     for (d0 = target.getZ() - this.getZ(); d1 * d1 + d0 * d0 < 1.0E-4D; d0 = (Math.random() - Math.random()) * 0.01D) {
                         d1 = (Math.random() - Math.random()) * 0.01D;
                     }
-                    Vector3d Vector3d = this.getDeltaMovement();
-                    Vector3d Vector3d1 = (new Vector3d(d0, 0.0D, d1)).normalize().scale(0.5);
+                    Vec3 Vector3d = this.getDeltaMovement();
+                    Vec3 Vector3d1 = (new Vec3(d0, 0.0D, d1)).normalize().scale(0.5);
                     this.setDeltaMovement(Vector3d.x / 2.0D - Vector3d1.x, this.isOnGround() ? Math.min(0.4D, Vector3d.y / 2.0D + 0.5) : Vector3d.y, Vector3d.z / 2.0D - Vector3d1.z);
                 }
             }
@@ -676,14 +682,14 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
             if (dist < 10) {
                 target.hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
                 target.hasImpulse = true;
-                float f = MathHelper.sqrt(0.5 * 0.5 + 0.5 * 0.5);
+                float f = Mth.sqrt((float) (0.5 * 0.5 + 0.5 * 0.5));
                 double d0;
                 double d1 = target.getX() - this.getX();
                 for (d0 = target.getZ() - this.getZ(); d1 * d1 + d0 * d0 < 1.0E-4D; d0 = (Math.random() - Math.random()) * 0.01D) {
                     d1 = (Math.random() - Math.random()) * 0.01D;
                 }
-                Vector3d Vector3d = this.getDeltaMovement();
-                Vector3d Vector3d1 = (new Vector3d(d0, 0.0D, d1)).normalize().scale(0.5);
+                Vec3 Vector3d = this.getDeltaMovement();
+                Vec3 Vector3d1 = (new Vec3(d0, 0.0D, d1)).normalize().scale(0.5);
                 this.setDeltaMovement(Vector3d.x / 2.0D - Vector3d1.x, this.isOnGround() ? Math.min(0.4D, Vector3d.y / 2.0D + 0.5) : Vector3d.y, Vector3d.z / 2.0D - Vector3d1.z);
 
             }
@@ -709,8 +715,8 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
                 MiscProperties.setDismountedDragon((LivingEntity) this.getUntamedRider(), true);
             this.getUntamedRider().stopRiding();
         }
-        if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof PlayerEntity) {
-            LivingEntity riderTarget = DragonUtils.riderLookingAtEntity(this, (PlayerEntity) this.getControllingPassenger(), 2.5D);
+        if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof Player) {
+            LivingEntity riderTarget = DragonUtils.riderLookingAtEntity(this, (Player) this.getControllingPassenger(), 2.5D);
             if (this.getAnimation() != ANIMATION_BITE) {
                 this.setAnimation(ANIMATION_BITE);
             }
@@ -739,15 +745,15 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         return false;
     }
 
-    public boolean isRidingPlayer(PlayerEntity player) {
+    public boolean isRidingPlayer(Player player) {
         return getRidingPlayer() != null && player != null && getRidingPlayer().getUUID().equals(player.getUUID());
     }
 
     @Override
     @Nullable
-    public PlayerEntity getRidingPlayer() {
-        if (this.getControllingPassenger() instanceof PlayerEntity) {
-            return (PlayerEntity) this.getControllingPassenger();
+    public Player getRidingPlayer() {
+        if (this.getControllingPassenger() instanceof Player) {
+            return (Player) this.getControllingPassenger();
         }
         return null;
     }
@@ -902,20 +908,20 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
 
     @Nullable
     @Override
-    public AgeableEntity getBreedOffspring(ServerWorld serverWorld, AgeableEntity ageableEntity) {
+    public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
         EntityAmphithere amphithere = new EntityAmphithere(IafEntityRegistry.AMPHITHERE.get(), level);
         amphithere.setVariant(this.getVariant());
         return amphithere;
     }
 
     @Override
-    protected int getExperienceReward(PlayerEntity player) {
+    protected int getExperienceReward(Player player) {
         return 10;
     }
 
     @Override
     @Nullable
-    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setVariant(this.getRandom().nextInt(5));
         return spawnDataIn;
@@ -927,12 +933,12 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
-    public boolean canPhaseThroughBlock(IWorld world, BlockPos pos) {
+    public boolean canPhaseThroughBlock(LevelAccessor world, BlockPos pos) {
         return world.getBlockState(pos).getBlock() instanceof LeavesBlock;
     }
 
     @Override
-    public void travel(Vector3d travelVector) {
+    public void travel(Vec3 travelVector) {
         if (!this.canMove() && !this.isVehicle()) {
             super.travel(travelVector.multiply(0, 1, 0));
             return;
@@ -964,7 +970,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     }
 
     @Override
-    public void onHearFlute(PlayerEntity player) {
+    public void onHearFlute(Player player) {
         if (!this.isOnGround() && this.isTame()) {
             this.isFallen = true;
         }
@@ -1005,9 +1011,9 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     }
 
     public boolean canBlockPosBeSeen(BlockPos pos) {
-        Vector3d Vector3d = new Vector3d(this.getX(), this.getEyeY(), this.getZ());
-        Vector3d Vector3d1 = new Vector3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
-        return this.level.clip(new RayTraceContext(Vector3d, Vector3d1, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this)).getType() == RayTraceResult.Type.MISS;
+        Vec3 Vector3d = new Vec3(this.getX(), this.getEyeY(), this.getZ());
+        Vec3 Vector3d1 = new Vec3(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+        return this.level.clip(new ClipContext(Vector3d, Vector3d1, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).getType() == HitResult.Type.MISS;
     }
 
     public enum FlightBehavior {
@@ -1016,8 +1022,8 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         NONE
     }
 
-    class AILandWander extends WaterAvoidingRandomWalkingGoal {
-        public AILandWander(CreatureEntity creature, double speed) {
+    class AILandWander extends WaterAvoidingRandomStrollGoal {
+        public AILandWander(PathfinderMob creature, double speed) {
             super(creature, speed, 10);
         }
 
@@ -1115,7 +1121,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
         }
     }
 
-    class FlyMoveHelper extends MovementController {
+    class FlyMoveHelper extends MoveControl {
         public FlyMoveHelper(EntityAmphithere entity) {
             super(entity);
             this.speedModifier = 1.75F;
@@ -1127,20 +1133,20 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
                 return;
             }
             if (EntityAmphithere.this.horizontalCollision) {
-                EntityAmphithere.this.yRot += 180.0F;
+                EntityAmphithere.this.setYRot(getYRot() + 180.0F);
                 this.speedModifier = 0.1F;
                 BlockPos target = EntityAmphithere.getPositionRelativetoGround(EntityAmphithere.this, EntityAmphithere.this.level, EntityAmphithere.this.getX() + EntityAmphithere.this.random.nextInt(15) - 7, EntityAmphithere.this.getZ() + EntityAmphithere.this.random.nextInt(15) - 7, EntityAmphithere.this.random);
                 this.wantedX = target.getX();
                 this.wantedY = target.getY();
                 this.wantedZ = target.getZ();
             }
-            if (this.operation == MovementController.Action.MOVE_TO) {
+            if (this.operation == MoveControl.Operation.MOVE_TO) {
 
                 double d0 = this.wantedX - EntityAmphithere.this.getX();
                 double d1 = this.wantedY - EntityAmphithere.this.getY();
                 double d2 = this.wantedZ - EntityAmphithere.this.getZ();
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-                d3 = MathHelper.sqrt(d3);
+                d3 = Mth.sqrt((float) d3);
                 if (d3 < 6 && EntityAmphithere.this.getTarget() == null) {
                     if (!EntityAmphithere.this.changedFlightBehavior && EntityAmphithere.this.flightBehavior == FlightBehavior.WANDER && EntityAmphithere.this.random.nextInt(30) == 0) {
                         EntityAmphithere.this.flightBehavior = FlightBehavior.CIRCLE;
@@ -1155,20 +1161,20 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
                     }
                 }
                 if (d3 < 1 && EntityAmphithere.this.getTarget() == null) {
-                    this.operation = MovementController.Action.WAIT;
+                    this.operation = MoveControl.Operation.WAIT;
                     EntityAmphithere.this.setDeltaMovement(EntityAmphithere.this.getDeltaMovement().multiply(0.5D, 0.5D, 0.5D));
                 } else {
                     EntityAmphithere.this.setDeltaMovement(EntityAmphithere.this.getDeltaMovement().add(d0 / d3 * 0.5D * this.speedModifier, d1 / d3 * 0.5D * this.speedModifier, d2 / d3 * 0.5D * this.speedModifier));
-                    float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
-                    EntityAmphithere.this.xRot = f1;
+                    float f1 = (float) (-(Mth.atan2(d1, d3) * (180D / Math.PI)));
+                    EntityAmphithere.this.setXRot(f1);
                     if (EntityAmphithere.this.getTarget() == null) {
-                        EntityAmphithere.this.yRot = -((float) MathHelper.atan2(EntityAmphithere.this.getDeltaMovement().x, EntityAmphithere.this.getDeltaMovement().z)) * (180F / (float) Math.PI);
-                        EntityAmphithere.this.yBodyRot = EntityAmphithere.this.yRot;
+                        EntityAmphithere.this.setYRot(-((float) Mth.atan2(EntityAmphithere.this.getDeltaMovement().x, EntityAmphithere.this.getDeltaMovement().z)) * (180F / (float) Math.PI));
+                        EntityAmphithere.this.yBodyRot = EntityAmphithere.this.getYRot();
                     } else {
                         double d4 = EntityAmphithere.this.getTarget().getX() - EntityAmphithere.this.getX();
                         double d5 = EntityAmphithere.this.getTarget().getZ() - EntityAmphithere.this.getZ();
-                        EntityAmphithere.this.yRot = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
-                        EntityAmphithere.this.yBodyRot = EntityAmphithere.this.yRot;
+                        EntityAmphithere.this.setYRot(-((float) Mth.atan2(d4, d5)) * (180F / (float) Math.PI));
+                        EntityAmphithere.this.yBodyRot = EntityAmphithere.this.getYRot();
                     }
                 }
             }

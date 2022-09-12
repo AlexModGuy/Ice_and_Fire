@@ -1,13 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.goal.JumpGoal;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.ai.goal.JumpGoal;
+import net.minecraft.world.phys.Vec3;
 
 public class DeathWormAIJump extends JumpGoal {
 
@@ -63,8 +62,8 @@ public class DeathWormAIJump extends JumpGoal {
     @Override
     public boolean canContinueToUse() {
         final double d0 = this.dolphin.getDeltaMovement().y;
-        return jumpCooldown > 0 && (d0 * d0 >= 0.03F || this.dolphin.xRot == 0.0F
-            || Math.abs(this.dolphin.xRot) >= 10.0F || !this.dolphin.isInSand()) && !this.dolphin.isOnGround();
+        return jumpCooldown > 0 && (d0 * d0 >= 0.03F || this.dolphin.getXRot() == 0.0F
+            || Math.abs(this.dolphin.getXRot()) >= 10.0F || !this.dolphin.isInSand()) && !this.dolphin.isOnGround();
     }
 
     @Override
@@ -92,7 +91,7 @@ public class DeathWormAIJump extends JumpGoal {
      */
     @Override
     public void stop() {
-        this.dolphin.xRot = 0.0F;
+        this.dolphin.setXRot(0.0F);
     }
 
     /**
@@ -104,13 +103,14 @@ public class DeathWormAIJump extends JumpGoal {
         if (!flag) {
             this.inWater = this.dolphin.level.getBlockState(this.dolphin.blockPosition()).is(BlockTags.SAND);
         }
-        Vector3d vector3d = this.dolphin.getDeltaMovement();
-        if (vector3d.y * vector3d.y < 0.1F && this.dolphin.xRot != 0.0F) {
-            this.dolphin.xRot = MathHelper.rotlerp(this.dolphin.xRot, 0.0F, 0.2F);
+        Vec3 vector3d = this.dolphin.getDeltaMovement();
+        if (vector3d.y * vector3d.y < 0.1F && this.dolphin.getXRot() != 0.0F) {
+            this.dolphin.setXRot(Mth.rotLerp(this.dolphin.getXRot(), 0.0F, 0.2F));
         } else {
-            final double d0 = Math.sqrt(Entity.getHorizontalDistanceSqr(vector3d));
+
+            final double d0 = (vector3d.horizontalDistance());
             final double d1 = Math.signum(-vector3d.y) * Math.acos(d0 / vector3d.length()) * (180F / (float) Math.PI);
-            this.dolphin.xRot = (float) d1;
+            this.dolphin.setXRot((float) d1);
         }
 
     }

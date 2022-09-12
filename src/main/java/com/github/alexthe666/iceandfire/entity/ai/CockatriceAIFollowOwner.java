@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
-import net.minecraft.entity.ai.goal.FollowOwnerGoal;
+import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 
 public class CockatriceAIFollowOwner extends FollowOwnerGoal {
     EntityCockatrice cockatrice;

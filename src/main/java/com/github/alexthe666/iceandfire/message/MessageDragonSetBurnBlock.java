@@ -2,12 +2,12 @@ package com.github.alexthe666.iceandfire.message;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -31,11 +31,11 @@ public class MessageDragonSetBurnBlock {
     }
 
 
-    public static MessageDragonSetBurnBlock read(PacketBuffer buf) {
+    public static MessageDragonSetBurnBlock read(FriendlyByteBuf buf) {
         return new MessageDragonSetBurnBlock(buf.readInt(), buf.readBoolean(), new BlockPos(buf.readInt(), buf.readInt(), buf.readInt()));
     }
 
-    public static void write(MessageDragonSetBurnBlock message, PacketBuffer buf) {
+    public static void write(MessageDragonSetBurnBlock message, FriendlyByteBuf buf) {
         buf.writeInt(message.dragonId);
         buf.writeBoolean(message.breathingFire);
         buf.writeInt(message.posX);
@@ -49,7 +49,7 @@ public class MessageDragonSetBurnBlock {
 
         public static void handle(MessageDragonSetBurnBlock message, Supplier<NetworkEvent.Context> context) {
             context.get().setPacketHandled(true);
-            PlayerEntity player = context.get().getSender();
+            Player player = context.get().getSender();
             if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }

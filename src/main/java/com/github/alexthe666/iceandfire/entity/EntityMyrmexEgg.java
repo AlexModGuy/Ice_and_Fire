@@ -9,40 +9,35 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import java.util.UUID;
 
 public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromStatues, IDeadMob {
 
-    private static final DataParameter<Boolean> MYRMEX_TYPE = EntityDataManager.defineId(EntityMyrmexEgg.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> MYRMEX_AGE = EntityDataManager.defineId(EntityMyrmexEgg.class, DataSerializers.INT);
-    private static final DataParameter<Integer> MYRMEX_CASTE = EntityDataManager.defineId(EntityMyrmexEgg.class, DataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> MYRMEX_TYPE = SynchedEntityData.defineId(EntityMyrmexEgg.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> MYRMEX_AGE = SynchedEntityData.defineId(EntityMyrmexEgg.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> MYRMEX_CASTE = SynchedEntityData.defineId(EntityMyrmexEgg.class, EntityDataSerializers.INT);
     public UUID hiveUUID;
 
-    public EntityMyrmexEgg(EntityType t, World worldIn) {
+    public EntityMyrmexEgg(EntityType t, Level worldIn) {
         super(t, worldIn);
     }
 
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.createMobAttributes()
+    public static AttributeSupplier.Builder bakeAttributes() {
+        return Mob.createMobAttributes()
             //HEALTH
             .add(Attributes.MAX_HEALTH, 10.0D)
             //SPEED
@@ -50,7 +45,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT tag) {
+    public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("Jungle", this.isJungle());
         tag.putInt("MyrmexAge", this.getMyrmexAge());
@@ -59,7 +54,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT tag) {
+    public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setJungle(tag.getBoolean("Jungle"));
         this.setMyrmexAge(tag.getInt("MyrmexAge"));
@@ -111,7 +106,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
             this.setMyrmexAge(this.getMyrmexAge() + 1);
         }
         if (this.getMyrmexAge() > IafConfig.myrmexEggTicks) {
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
             EntityMyrmexBase myrmex;
             switch (this.getMyrmexCaste()) {
                 default:
@@ -135,7 +130,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
             myrmex.absMoveTo(this.getX(), this.getY(), this.getZ(), 0, 0);
             if (myrmex instanceof EntityMyrmexQueen) {
                 MyrmexHive hive = new MyrmexHive(level, this.blockPosition(), 100);
-                PlayerEntity player = level.getNearestPlayer(this, 30);
+                Player player = level.getNearestPlayer(this, 30);
                 if (player != null) {
                     hive.hasOwner = true;
                     hive.ownerUUID = player.getUUID();
@@ -179,12 +174,12 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public ItemStack getItemBySlot(EquipmentSlotType slotIn) {
+    public ItemStack getItemBySlot(EquipmentSlot slotIn) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack) {
+    public void setItemSlot(EquipmentSlot slotIn, ItemStack stack) {
 
     }
 
@@ -196,13 +191,13 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
         if (!level.isClientSide && !dmg.isBypassInvul()) {
             this.spawnAtLocation(this.getItem(), 0);
         }
-        this.remove();
+        this.remove(RemovalReason.KILLED);
         return super.hurt(dmg, var2);
     }
 
     private ItemStack getItem() {
         ItemStack egg = new ItemStack(this.isJungle() ? IafItemRegistry.MYRMEX_JUNGLE_EGG : IafItemRegistry.MYRMEX_DESERT_EGG, 1);
-        CompoundNBT newTag = new CompoundNBT();
+        CompoundTag newTag = new CompoundTag();
         newTag.putInt("EggOrdinal", this.getMyrmexCaste());
         egg.setTag(newTag);
         return egg;
@@ -214,7 +209,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public HandSide getMainArm() {
+    public HumanoidArm getMainArm() {
         return null;
     }
 
@@ -227,7 +222,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
         return false;
     }
 
-    public void onPlayerPlace(PlayerEntity player) {
+    public void onPlayerPlace(Player player) {
     }
 
     @Override

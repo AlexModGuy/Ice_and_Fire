@@ -4,10 +4,10 @@ import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.client.model.ModelBipedBase;
 import com.github.alexthe666.iceandfire.entity.util.IHasArmorVariant;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
@@ -25,7 +25,7 @@ public class LayerBipedArmorMultiple<R extends MobRenderer & IHasArmorVariantRes
     }
 
     @Override
-    public ResourceLocation getArmorResource(T entity, ItemStack stack, EquipmentSlotType slot, @Nullable String type) {
+    public ResourceLocation getArmorResource(T entity, ItemStack stack, EquipmentSlot slot, @Nullable String type) {
         return this.mobRenderer.getArmorResource(entity.getBodyArmorVariant(), slot);
     }
 }

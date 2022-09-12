@@ -1,11 +1,11 @@
 package com.github.alexthe666.iceandfire.message;
 
-import com.github.alexthe666.iceandfire.pathfinding.raycoms.Node;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.MNode;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,24 +36,20 @@ public class MessageSyncPathReached
     public MessageSyncPathReached(final Set<BlockPos> reached)
     {
         super();
-        this.reached = reached;
+        MessageSyncPathReached.reached = reached;
     }
 
-    public void write(final PacketBuffer buf)
-    {
+    public void write(final FriendlyByteBuf buf) {
         buf.writeInt(reached.size());
-        for (final BlockPos node : reached)
-        {
+        for (final BlockPos node : reached) {
             buf.writeBlockPos(node);
         }
 
     }
 
-    public static MessageSyncPathReached read(final PacketBuffer buf)
-    {
+    public static MessageSyncPathReached read(final FriendlyByteBuf buf) {
         int size = buf.readInt();
-        for (int i = 0; i < size; i++)
-        {
+        for (int i = 0; i < size; i++) {
             reached.add(buf.readBlockPos());
         }
         return new MessageSyncPathReached();
@@ -69,11 +65,9 @@ public class MessageSyncPathReached
         }
 
         public static void handle(MessageSyncPathReached message, Supplier<NetworkEvent.Context> context) {
-            for (final Node node : Pathfinding.lastDebugNodesPath)
-            {
-                if (reached.contains(node.pos))
-                {
-                    node.setReachedByWorker(true);
+            for (final MNode MNode : Pathfinding.lastDebugNodesPath) {
+                if (reached.contains(MNode.pos)) {
+                    MNode.setReachedByWorker(true);
                 }
             }
             context.get().setPacketHandled(true);

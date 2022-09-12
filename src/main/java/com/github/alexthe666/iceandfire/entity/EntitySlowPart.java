@@ -1,19 +1,19 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
 
-import net.minecraftforge.fml.network.FMLPlayMessages;
 
 public class EntitySlowPart extends EntityMutlipartPart{
 
-    public EntitySlowPart(EntityType<?> t, World world) {
+    public EntitySlowPart(EntityType<?> t, Level world) {
         super(t, world);
     }
 
-    public EntitySlowPart(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+    public EntitySlowPart(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
         this(IafEntityRegistry.SLOW_MULTIPART.get(), worldIn);
     }
 

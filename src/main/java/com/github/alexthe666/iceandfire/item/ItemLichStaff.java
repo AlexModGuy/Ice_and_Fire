@@ -3,14 +3,14 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDreadLichSkull;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class ItemLichStaff extends Item {
 
@@ -25,7 +25,7 @@ public class ItemLichStaff extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
         ItemStack itemStackIn = playerIn.getItemInHand(hand);
         if (!worldIn.isClientSide) {
             playerIn.startUsingItem(hand);
@@ -39,7 +39,7 @@ public class ItemLichStaff extends Item {
             d4 = d4 + playerIn.getRandom().nextGaussian() * 0.007499999832361937D * inaccuracy;
             EntityDreadLichSkull charge = new EntityDreadLichSkull(IafEntityRegistry.DREAD_LICH_SKULL.get(), worldIn,
                 playerIn, 6);
-            charge.shoot(playerIn.xRot, playerIn.yRot, 0.0F, 7.0F, 1.0F);
+            charge.shoot(playerIn.getXRot(), playerIn.getYRot(), 0.0F, 7.0F, 1.0F);
             charge.setPos(playerIn.getX(), playerIn.getY() + 1, playerIn.getZ());
             worldIn.addFreshEntity(charge);
             charge.shoot(d2, d3, d4, 1, 1);
@@ -49,6 +49,6 @@ public class ItemLichStaff extends Item {
             });
             playerIn.getCooldowns().addCooldown(this, 4);
         }
-        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, itemStackIn);
+        return new InteractionResultHolder<ItemStack>(InteractionResult.SUCCESS, itemStackIn);
     }
 }

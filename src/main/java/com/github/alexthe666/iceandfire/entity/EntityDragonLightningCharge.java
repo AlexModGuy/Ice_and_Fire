@@ -3,33 +3,33 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.util.IDragonProjectile;
 import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.projectile.AbstractFireballEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.projectile.Fireball;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
 
 import javax.annotation.Nullable;
 
 public class EntityDragonLightningCharge extends EntityDragonCharge implements IDragonProjectile {
 
 
-    public EntityDragonLightningCharge(EntityType<? extends AbstractFireballEntity> type, World worldIn) {
+    public EntityDragonLightningCharge(EntityType<? extends Fireball> type, Level worldIn) {
         super(type, worldIn);
     }
 
-    public EntityDragonLightningCharge(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+    public EntityDragonLightningCharge(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
         this(IafEntityRegistry.LIGHTNING_DRAGON_CHARGE.get(), worldIn);
     }
 
-    public EntityDragonLightningCharge(EntityType<? extends AbstractFireballEntity> type, World worldIn, double posX,
+    public EntityDragonLightningCharge(EntityType<? extends Fireball> type, Level worldIn, double posX,
                                        double posY, double posZ, double accelX, double accelY, double accelZ) {
         super(type, worldIn, posX, posY, posZ, accelX, accelY, accelZ);
     }
 
-    public EntityDragonLightningCharge(EntityType<? extends AbstractFireballEntity> type, World worldIn,
+    public EntityDragonLightningCharge(EntityType<? extends Fireball> type, Level worldIn,
                                        EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
         super(type, worldIn, shooter, accelX, accelY, accelZ);
     }
@@ -40,7 +40,7 @@ public class EntityDragonLightningCharge extends EntityDragonCharge implements I
     }
 
     @Override
-    public void destroyArea(World world, BlockPos center, EntityDragonBase destroyer) {
+    public void destroyArea(Level world, BlockPos center, EntityDragonBase destroyer) {
         IafDragonDestructionManager.destroyAreaLightningCharge(world, center, destroyer);
     }
 

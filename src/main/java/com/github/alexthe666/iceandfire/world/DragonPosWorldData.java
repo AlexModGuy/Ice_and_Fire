@@ -1,41 +1,43 @@
 package com.github.alexthe666.iceandfire.world;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DimensionSavedDataManager;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.DimensionDataStorage;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class DragonPosWorldData extends WorldSavedData {
+public class DragonPosWorldData extends SavedData {
 
     private static final String IDENTIFIER = "iceandfire_dragonPositions";
     protected final Map<UUID, BlockPos> lastDragonPositions = new HashMap<>();
-    private World world;
+    private Level world;
     private int tickCounter;
 
     public DragonPosWorldData() {
-        super(IDENTIFIER);
     }
 
-    public DragonPosWorldData(World world) {
-        super(IDENTIFIER);
+    public DragonPosWorldData(Level world) {
         this.world = world;
         this.setDirty();
     }
 
-    public static DragonPosWorldData get(World world) {
-        if (world instanceof ServerWorld) {
-            ServerWorld overworld = world.getServer().getLevel(world.dimension());
+    public DragonPosWorldData(CompoundTag compoundTag) {
+        this.load(compoundTag);
+    }
 
-            DimensionSavedDataManager storage = overworld.getDataStorage();
-            DragonPosWorldData data = storage.computeIfAbsent(DragonPosWorldData::new, IDENTIFIER);
+    public static DragonPosWorldData get(Level world) {
+        if (world instanceof ServerLevel) {
+            ServerLevel overworld = world.getServer().getLevel(world.dimension());
+
+            DimensionDataStorage storage = overworld.getDataStorage();
+            DragonPosWorldData data = storage.computeIfAbsent(DragonPosWorldData::new, DragonPosWorldData::new, IDENTIFIER);
             if (data != null) {
                 data.world = world;
                 data.setDirty();
@@ -68,23 +70,24 @@ public class DragonPosWorldData extends WorldSavedData {
         ++this.tickCounter;
     }
 
-    public void load(CompoundNBT nbt) {
+    public DragonPosWorldData load(CompoundTag nbt) {
         this.tickCounter = nbt.getInt("Tick");
-        ListNBT nbttaglist = nbt.getList("DragonMap", 10);
+        ListTag nbttaglist = nbt.getList("DragonMap", 10);
         this.lastDragonPositions.clear();
         for (int i = 0; i < nbttaglist.size(); ++i) {
-            CompoundNBT CompoundNBT = nbttaglist.getCompound(i);
+            CompoundTag CompoundNBT = nbttaglist.getCompound(i);
             UUID uuid = CompoundNBT.getUUID("DragonUUID");
             BlockPos pos = new BlockPos(CompoundNBT.getInt("DragonPosX"), CompoundNBT.getInt("DragonPosY"), CompoundNBT.getInt("DragonPosZ"));
             this.lastDragonPositions.put(uuid, pos);
         }
+        return this;
     }
 
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         compound.putInt("Tick", this.tickCounter);
-        ListNBT nbttaglist = new ListNBT();
+        ListTag nbttaglist = new ListTag();
         for (Map.Entry<UUID, BlockPos> pair : lastDragonPositions.entrySet()) {
-            CompoundNBT CompoundNBT = new CompoundNBT();
+            CompoundTag CompoundNBT = new CompoundTag();
             CompoundNBT.putUUID("DragonUUID", pair.getKey());
             CompoundNBT.putInt("DragonPosX", pair.getValue().getX());
             CompoundNBT.putInt("DragonPosY", pair.getValue().getY());

@@ -1,20 +1,20 @@
 package com.github.alexthe666.iceandfire.api;
 
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 
 public class FoodUtils {
 
     public static int getFoodPoints(Entity entity) {
         int foodPoints = Math.round(entity.getBbWidth() * entity.getBbHeight() * 10);
-        if (entity instanceof AgeableEntity) {
+        if (entity instanceof AgeableMob) {
             return foodPoints;
         }
-        if (entity instanceof PlayerEntity) {
+        if (entity instanceof Player) {
             return 15;
         }
         return 0;

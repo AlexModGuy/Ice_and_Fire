@@ -2,22 +2,22 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -26,34 +26,29 @@ import java.util.UUID;
 
 public abstract class EntityMutlipartPart extends Entity {
 
-    private static final DataParameter<Optional<UUID>> PARENT_UUID = EntityDataManager.defineId(EntityMutlipartPart.class, DataSerializers.OPTIONAL_UUID);
-    private static final DataParameter<Float> SCALE_WIDTH = EntityDataManager.defineId(EntityMutlipartPart.class, DataSerializers.FLOAT);
-    private static final DataParameter<Float> SCALE_HEIGHT = EntityDataManager.defineId(EntityMutlipartPart.class, DataSerializers.FLOAT);
-    private static final DataParameter<Float> PART_YAW = EntityDataManager.defineId(EntityMutlipartPart.class, DataSerializers.FLOAT);
-    public EntitySize multipartSize;
+    private static final EntityDataAccessor<Optional<UUID>> PARENT_UUID = SynchedEntityData.defineId(EntityMutlipartPart.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<Float> SCALE_WIDTH = SynchedEntityData.defineId(EntityMutlipartPart.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> SCALE_HEIGHT = SynchedEntityData.defineId(EntityMutlipartPart.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> PART_YAW = SynchedEntityData.defineId(EntityMutlipartPart.class, EntityDataSerializers.FLOAT);
+    public EntityDimensions multipartSize;
     protected float radius;
     protected float angleYaw;
     protected float offsetY;
     protected float damageMultiplier;
 
-    protected EntityMutlipartPart(EntityType<?> t, World world) {
+    protected EntityMutlipartPart(EntityType<?> t, Level world) {
         super(t, world);
         multipartSize = t.getDimensions();
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundNBT compound) {
+    protected void readAdditionalSaveData(CompoundTag compound) {
 
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundNBT compound) {
+    protected void addAdditionalSaveData(CompoundTag compound) {
 
-    }
-
-    @Override
-    public Entity getEntity() {
-        return this;
     }
 
     @Override
@@ -75,8 +70,8 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
 
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.createMobAttributes()
+    public static AttributeSupplier.Builder bakeAttributes() {
+        return Mob.createMobAttributes()
             //HEALTH
             .add(Attributes.MAX_HEALTH, 2D)
             //SPEED
@@ -84,8 +79,8 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     @Override
-    public EntitySize getDimensions(Pose poseIn) {
-        return new EntitySize(getScaleX(), getScaleY(), false);
+    public EntityDimensions getDimensions(Pose poseIn) {
+        return new EntityDimensions(getScaleX(), getScaleY(), false);
     }
 
     @Override
@@ -136,36 +131,36 @@ public abstract class EntityMutlipartPart extends Entity {
             Entity parent = getParent();
             refreshDimensions();
             if (parent != null && !level.isClientSide) {
-                float renderYawOffset = parent.yRot;
+                float renderYawOffset = parent.getYRot();
                 if (parent instanceof LivingEntity) {
                     renderYawOffset = ((LivingEntity) parent).yBodyRot;
                 }
                 if (isSlowFollow()) {
-                    this.setPos(parent.xo + this.radius * MathHelper.cos((float) (renderYawOffset * (Math.PI / 180.0F) + this.angleYaw)), parent.yo + this.offsetY, parent.zo + this.radius * MathHelper.sin((float) (renderYawOffset * (Math.PI / 180.0F) + this.angleYaw)));
+                    this.setPos(parent.xo + this.radius * Mth.cos((float) (renderYawOffset * (Math.PI / 180.0F) + this.angleYaw)), parent.yo + this.offsetY, parent.zo + this.radius * Mth.sin((float) (renderYawOffset * (Math.PI / 180.0F) + this.angleYaw)));
                     double d0 = parent.getX() - this.getX();
                     double d1 = parent.getY() - this.getY();
                     double d2 = parent.getZ() - this.getZ();
-                    MathHelper.atan2(d2, d0);
-                    float f2 = -((float) (MathHelper.atan2(d1, MathHelper.sqrt(d0 * d0 + d2 * d2)) * (180F / (float) Math.PI)));
-                    this.xRot = this.limitAngle(this.xRot, f2, 5.0F);
+                    Mth.atan2(d2, d0);
+                    float f2 = -((float) (Mth.atan2(d1, Mth.sqrt((float) (d0 * d0 + d2 * d2))) * (180F / (float) Math.PI)));
+                    this.setXRot(this.limitAngle(this.getXRot(), f2, 5.0F));
                     this.markHurt();
-                    this.yRot = renderYawOffset;
-                    this.setPartYaw(yRot);
+                    this.setYRot(renderYawOffset);
+                    this.setPartYaw(getYRot());
                     if (!this.level.isClientSide) {
                         this.collideWithNearbyEntities();
                     }
                 } else {
-                    this.setPos(parent.getX() + this.radius * MathHelper.cos((float) (renderYawOffset * (Math.PI / 180.0F) + this.angleYaw)), parent.getY() + this.offsetY, parent.getZ() + this.radius * MathHelper.sin((float) (renderYawOffset * (Math.PI / 180.0F) + this.angleYaw)));
+                    this.setPos(parent.getX() + this.radius * Mth.cos((float) (renderYawOffset * (Math.PI / 180.0F) + this.angleYaw)), parent.getY() + this.offsetY, parent.getZ() + this.radius * Mth.sin((float) (renderYawOffset * (Math.PI / 180.0F) + this.angleYaw)));
                     this.markHurt();
                 }
                 if (!this.level.isClientSide) {
                     this.collideWithNearbyEntities();
                 }
-                if (parent.removed && !level.isClientSide) {
-                    this.remove();
+                if (parent.isRemoved() && !level.isClientSide) {
+                    this.remove(RemovalReason.DISCARDED);
                 }
             } else if (tickCount > 20 && !level.isClientSide) {
-                remove();
+                remove(RemovalReason.DISCARDED);
             }
         }
         super.tick();
@@ -176,7 +171,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     protected float limitAngle(float sourceAngle, float targetAngle, float maximumChange) {
-        float f = MathHelper.wrapDegrees(targetAngle - sourceAngle);
+        float f = Mth.wrapDegrees(targetAngle - sourceAngle);
         if (f > maximumChange) {
             f = maximumChange;
         }
@@ -197,14 +192,14 @@ public abstract class EntityMutlipartPart extends Entity {
 
 
     @Override
-    public void remove() {
-        this.remove(false);
+    public void remove(RemovalReason reason) {
+        super.remove(RemovalReason.DISCARDED);
     }
 
     public Entity getParent() {
         UUID id = getParentId();
         if (id != null && !level.isClientSide) {
-            return ((ServerWorld) level).getEntity(id);
+            return ((ServerLevel) level).getEntity(id);
         }
         return null;
     }
@@ -224,7 +219,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -256,18 +251,18 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     @Override
-    public ActionResultType interact(PlayerEntity player, Hand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand) {
         Entity parent = getParent();
         if (level.isClientSide && parent != null) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(parent.getId(), 0));
         }
-        return parent != null ? parent.interact(player, hand) : ActionResultType.PASS;
+        return parent != null ? parent.interact(player, hand) : InteractionResult.PASS;
     }
 
     @Override
     public boolean hurt(DamageSource source, float damage) {
         Entity parent = getParent();
-        if (level.isClientSide && source.getEntity() instanceof PlayerEntity && parent != null) {
+        if (level.isClientSide && source.getEntity() instanceof Player && parent != null) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(parent.getId(), damage * damageMultiplier));
         }
         return parent != null && parent.hurt(source, damage * this.damageMultiplier);
@@ -284,6 +279,6 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     public boolean shouldContinuePersisting() {
-        return isAddedToWorld() || this.removed;
+        return isAddedToWorld() || this.isRemoved();
     }
 }

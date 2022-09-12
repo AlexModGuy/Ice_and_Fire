@@ -3,20 +3,20 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -29,42 +29,42 @@ public class ItemStoneStatue extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if (stack.getTag() != null) {
             boolean isPlayer = stack.getTag().getBoolean("IAFStoneStatuePlayerEntity");
             String id = stack.getTag().getString("IAFStoneStatueEntityID");
             if (EntityType.byString(id).orElse(null) != null) {
                 EntityType type = EntityType.byString(id).orElse(null);
-                TranslationTextComponent untranslated = isPlayer ? new TranslationTextComponent("entity.player.name") : new TranslationTextComponent(type.getDescriptionId());
-                tooltip.add(untranslated.withStyle(TextFormatting.GRAY));
+                TranslatableComponent untranslated = isPlayer ? new TranslatableComponent("entity.player.name") : new TranslatableComponent(type.getDescriptionId());
+                tooltip.add(untranslated.withStyle(ChatFormatting.GRAY));
             }
         }
     }
 
     @Override
-    public void onCraftedBy(ItemStack itemStack, World world, PlayerEntity player) {
-        itemStack.setTag(new CompoundNBT());
+    public void onCraftedBy(ItemStack itemStack, Level world, Player player) {
+        itemStack.setTag(new CompoundTag());
         itemStack.getTag().putBoolean("IAFStoneStatuePlayerEntity", true);
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         if (context.getClickedFace() != Direction.UP) {
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         } else {
             ItemStack stack = context.getPlayer().getItemInHand(context.getHand());
             if (stack.getTag() != null) {
                 String id = stack.getTag().getString("IAFStoneStatueEntityID");
-                CompoundNBT statueNBT = stack.getTag().getCompound("IAFStoneStatueNBT");
+                CompoundTag statueNBT = stack.getTag().getCompound("IAFStoneStatueNBT");
                 EntityStoneStatue statue = new EntityStoneStatue(IafEntityRegistry.STONE_STATUE.get(),
                     context.getLevel());
                 statue.readAdditionalSaveData(statueNBT);
                 statue.setTrappedEntityTypeString(id);
                 double d1 = context.getPlayer().getX() - (context.getClickedPos().getX() + 0.5);
                 double d2 = context.getPlayer().getZ() - (context.getClickedPos().getZ() + 0.5);
-                float yaw = (float) (MathHelper.atan2(d2, d1) * (180F / (float) Math.PI)) - 90;
+                float yaw = (float) (Mth.atan2(d2, d1) * (180F / (float) Math.PI)) - 90;
                 statue.yRotO = yaw;
-                statue.yRot = yaw;
+                statue.setYRot(yaw);
                 statue.yHeadRot = yaw;
                 statue.yBodyRot = yaw;
                 statue.yBodyRotO = yaw;
@@ -78,9 +78,9 @@ public class ItemStoneStatue extends Item {
                 if (!context.getPlayer().isCreative()) {
                     stack.shrink(1);
                 }
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 }

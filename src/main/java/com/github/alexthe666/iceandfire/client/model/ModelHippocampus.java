@@ -3,14 +3,13 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
     public AdvancedModelBox Body;
@@ -217,13 +216,16 @@ public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
     }
 
     @Override
-    public Iterable<ModelRenderer> parts() {
+    public Iterable<BasicModelPart> parts() {
         return ImmutableList.of(Body);
     }
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(Body, FrontThighR, FrontThighL, Neck, Tail_1, FinRBack, FinLBack, Saddle,
+            FrontLegR, FrontFootR, FinR, FrontLegL, FrontFootL, FinL, Head, Mane, TopJaw, BottomJaw, NoseBand,
+            ReinL, ReinR, Tail_2, Fin, Tail_3, FlukeR, FlukeL, StirrupR, ChestR, ChestL, Saddleback, SaddleFront,
+            StirrupL, StirrupIronR, StirrupIronL);
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -315,19 +317,19 @@ public class ModelHippocampus extends ModelDragonBase<EntityHippocampus> {
     }
 
     @Override
-    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+    public void renderStatue(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, Entity living) {
         this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        this.NoseBand.visible = false;
-        this.ReinL.visible = false;
-        this.ReinR.visible = false;
-        this.ChestL.visible = false;
-        this.ChestR.visible = false;
-        this.Saddle.visible = false;
-        this.Saddleback.visible = false;
-        this.StirrupIronL.visible = false;
-        this.StirrupIronR.visible = false;
-        this.SaddleFront.visible = false;
-        this.StirrupL.visible = false;
-        this.StirrupR.visible = false;
+        this.NoseBand.showModel = false;
+        this.ReinL.showModel = false;
+        this.ReinR.showModel = false;
+        this.ChestL.showModel = false;
+        this.ChestR.showModel = false;
+        this.Saddle.showModel = false;
+        this.Saddleback.showModel = false;
+        this.StirrupIronL.showModel = false;
+        this.StirrupIronR.showModel = false;
+        this.SaddleFront.showModel = false;
+        this.StirrupL.showModel = false;
+        this.StirrupR.showModel = false;
     }
 }

@@ -3,14 +3,15 @@ package com.github.alexthe666.iceandfire.world.gen;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
-import net.minecraft.block.*;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.LockableLootTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -23,7 +24,7 @@ public class WorldGenMyrmexDecoration {
     public static final ResourceLocation MYRMEX_TRASH_CHEST = new ResourceLocation("iceandfire", "chest/myrmex_trash_chest");
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
-    public static void generateSkeleton(IWorld worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
+    public static void generateSkeleton(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
         if (worldIn.getBlockState(blockpos.below()).isFaceSturdy(worldIn, blockpos.below(), Direction.UP)) {
             Direction direction = Direction.from2DDataValue(rand.nextInt(3));
             Direction.Axis oppositeAxis = direction.getAxis() == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
@@ -61,7 +62,7 @@ public class WorldGenMyrmexDecoration {
         }
     }
 
-    public static void generateLeaves(IWorld worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand, boolean jungle) {
+    public static void generateLeaves(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand, boolean jungle) {
         if (worldIn.getBlockState(blockpos.below()).isFaceSturdy(worldIn, blockpos.below(), Direction.UP)) {
             BlockState leaf = Blocks.OAK_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, Boolean.valueOf(true));
             if (jungle) {
@@ -83,31 +84,31 @@ public class WorldGenMyrmexDecoration {
         }
     }
 
-    public static void generatePumpkins(IWorld worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand, boolean jungle) {
+    public static void generatePumpkins(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand, boolean jungle) {
         if (worldIn.getBlockState(blockpos.below()).isFaceSturdy(worldIn, blockpos.below(), Direction.UP)) {
             worldIn.setBlock(blockpos, jungle ? Blocks.MELON.defaultBlockState() : Blocks.PUMPKIN.defaultBlockState(), 2);
         }
     }
 
-    public static void generateCocoon(IWorld worldIn, BlockPos blockpos, Random rand, boolean jungle, ResourceLocation lootTable) {
+    public static void generateCocoon(LevelAccessor worldIn, BlockPos blockpos, Random rand, boolean jungle, ResourceLocation lootTable) {
         if (worldIn.getBlockState(blockpos.below()).isFaceSturdy(worldIn, blockpos.below(), Direction.UP)) {
             worldIn.setBlock(blockpos, jungle ? IafBlockRegistry.JUNGLE_MYRMEX_COCOON.defaultBlockState() : IafBlockRegistry.DESERT_MYRMEX_COCOON.defaultBlockState(), 3);
 
-            if (worldIn.getBlockEntity(blockpos) != null && worldIn.getBlockEntity(blockpos) instanceof LockableLootTileEntity) {
-                TileEntity tileentity1 = worldIn.getBlockEntity(blockpos);
-                ((LockableLootTileEntity) tileentity1).setLootTable(lootTable, rand.nextLong());
+            if (worldIn.getBlockEntity(blockpos) != null && worldIn.getBlockEntity(blockpos) instanceof RandomizableContainerBlockEntity) {
+                BlockEntity tileentity1 = worldIn.getBlockEntity(blockpos);
+                ((RandomizableContainerBlockEntity) tileentity1).setLootTable(lootTable, rand.nextLong());
 
             }
         }
     }
 
-    public static void generateMushrooms(IWorld worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
+    public static void generateMushrooms(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
         if (worldIn.getBlockState(blockpos.below()).isFaceSturdy(worldIn, blockpos.below(), Direction.UP)) {
             worldIn.setBlock(blockpos, rand.nextBoolean() ? Blocks.BROWN_MUSHROOM.defaultBlockState() : Blocks.RED_MUSHROOM.defaultBlockState(), 2);
         }
     }
 
-    public static void generateGold(IWorld worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
+    public static void generateGold(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
         BlockState gold = IafBlockRegistry.GOLD_PILE.defaultBlockState();
         int choice = rand.nextInt(2);
         if (choice == 1) {
@@ -124,16 +125,16 @@ public class WorldGenMyrmexDecoration {
             if (rand.nextInt(3) == 0) {
                 worldIn.setBlock(blockpos.above(), Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, HORIZONTALS[new Random().nextInt(3)]), 2);
                 if (worldIn.getBlockState(blockpos.above()).getBlock() instanceof ChestBlock) {
-                    TileEntity tileentity1 = worldIn.getBlockEntity(blockpos.above());
-                    if (tileentity1 instanceof ChestTileEntity) {
-                        ((ChestTileEntity) tileentity1).setLootTable(MYRMEX_GOLD_CHEST, rand.nextLong());
+                    BlockEntity tileentity1 = worldIn.getBlockEntity(blockpos.above());
+                    if (tileentity1 instanceof ChestBlockEntity) {
+                        ((ChestBlockEntity) tileentity1).setLootTable(MYRMEX_GOLD_CHEST, rand.nextLong());
                     }
                 }
             }
         }
     }
 
-    public static void generateTrashHeap(IWorld worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
+    public static void generateTrashHeap(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
         if (worldIn.getBlockState(blockpos.below()).isFaceSturdy(worldIn, blockpos.below(), Direction.UP)) {
             Block blob = Blocks.DIRT;
             switch (rand.nextInt(3)) {
@@ -167,7 +168,7 @@ public class WorldGenMyrmexDecoration {
         }
     }
 
-    public static void generateTrashOre(IWorld worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
+    public static void generateTrashOre(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
         Block current = worldIn.getBlockState(blockpos).getBlock();
         if (origin.distSqr(blockpos) <= (double) (radius * radius)) {
             if (current == Blocks.DIRT || current == Blocks.SAND || current == Blocks.COBBLESTONE || current == Blocks.GRAVEL) {

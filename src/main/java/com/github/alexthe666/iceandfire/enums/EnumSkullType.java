@@ -1,8 +1,7 @@
 package com.github.alexthe666.iceandfire.enums;
 
 import com.github.alexthe666.iceandfire.item.ItemMobSkull;
-
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 import java.util.Locale;
 

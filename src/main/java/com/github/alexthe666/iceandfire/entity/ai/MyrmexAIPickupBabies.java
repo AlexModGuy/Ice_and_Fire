@@ -4,11 +4,11 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexEgg;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.github.alexthe666.iceandfire.util.IAFMath;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.phys.AABB;
 
 import java.util.Comparator;
 import java.util.EnumSet;
@@ -46,7 +46,7 @@ public class MyrmexAIPickupBabies<T extends ItemEntity> extends TargetGoal {
         }
 
         if (this.myrmex.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
-            listBabies = this.mob.level.getLoadedEntitiesOfClass(LivingEntity.class, this.getTargetableArea(20), this.targetEntitySelector);
+            listBabies = this.mob.level.getEntitiesOfClass(LivingEntity.class, this.getTargetableArea(20), this.targetEntitySelector);
 
         if (listBabies.isEmpty())
             return false;
@@ -56,7 +56,7 @@ public class MyrmexAIPickupBabies<T extends ItemEntity> extends TargetGoal {
         return true;
     }
 
-    protected AxisAlignedBB getTargetableArea(double targetDistance) {
+    protected AABB getTargetableArea(double targetDistance) {
         return this.mob.getBoundingBox().inflate(targetDistance, 4.0D, targetDistance);
     }
 

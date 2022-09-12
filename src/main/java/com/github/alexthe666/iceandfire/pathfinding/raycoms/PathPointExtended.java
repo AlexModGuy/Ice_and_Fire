@@ -2,19 +2,19 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 /*
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
-import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.pathfinder.Node;
 
 /**
  * Class extending pathPoint for our usage with ladders.
  */
-public class PathPointExtended extends PathPoint
-{
+public class PathPointExtended extends Node {
     /**
      * Is the point on a ladder.
      */
-    private boolean   onLadder     = false;
+    private boolean onLadder = false;
     /**
      * What direction does the ladder face. Should be instantiated to something he doesn't recognize as climbable.
      */

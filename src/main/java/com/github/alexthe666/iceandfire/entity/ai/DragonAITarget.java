@@ -3,12 +3,12 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 
 import java.util.EnumSet;
 import java.util.function.Predicate;
@@ -36,7 +36,7 @@ public class DragonAITarget<T extends LivingEntity> extends NearestAttackableTar
 
             final float dragonSize = Math.max(this.dragon.getBbWidth(), this.dragon.getBbWidth() * dragon.getRenderSize());
             if (dragonSize >= target.getBbWidth()) {
-                if (target instanceof PlayerEntity && !dragon.isTame()) {
+                if (target instanceof Player && !dragon.isTame()) {
                     return true;
                 }
                 if (target instanceof EntityDragonBase) {
@@ -46,10 +46,10 @@ public class DragonAITarget<T extends LivingEntity> extends NearestAttackableTar
                     }
                     return !dragon.isModelDead();
                 }
-                if (target instanceof PlayerEntity && dragon.isTame()) {
+                if (target instanceof Player && dragon.isTame()) {
                     return false;
                 } else {
-                    if (!dragon.isOwnedBy(target) && FoodUtils.getFoodPoints(target) > 0 && dragon.canMove() && (dragon.getHunger() < 90 || !dragon.isTame() && target instanceof PlayerEntity)) {
+                    if (!dragon.isOwnedBy(target) && FoodUtils.getFoodPoints(target) > 0 && dragon.canMove() && (dragon.getHunger() < 90 || !dragon.isTame() && target instanceof Player)) {
                         if (dragon.isTame()) {
                             return DragonUtils.canTameDragonAttack(dragon, target);
                         } else {
@@ -63,13 +63,13 @@ public class DragonAITarget<T extends LivingEntity> extends NearestAttackableTar
     }
 
     @Override
-    protected AxisAlignedBB getTargetSearchArea(double targetDistance) {
+    protected AABB getTargetSearchArea(double targetDistance) {
         return this.dragon.getBoundingBox().inflate(targetDistance, targetDistance, targetDistance);
     }
 
     @Override
     protected double getFollowDistance() {
-        ModifiableAttributeInstance iattributeinstance = this.mob.getAttribute(Attributes.FOLLOW_RANGE);
+        AttributeInstance iattributeinstance = this.mob.getAttribute(Attributes.FOLLOW_RANGE);
         return iattributeinstance == null ? 64.0D : iattributeinstance.getValue();
     }
 }

@@ -5,12 +5,12 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.*;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.Path;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -53,11 +53,11 @@ public class PathJobRandomPos extends AbstractPathJob
      * @param entity        the entity.
      */
     public PathJobRandomPos(
-      final World world,
-      final BlockPos start,
-      final int minDistFromStart,
-      final int range,
-      final LivingEntity entity)
+        final Level world,
+        final BlockPos start,
+        final int minDistFromStart,
+        final int range,
+        final LivingEntity entity)
     {
         super(world, start, start, range, new PathResult<PathJobRandomPos>(), entity);
         this.minDistFromStart = minDistFromStart;
@@ -77,7 +77,7 @@ public class PathJobRandomPos extends AbstractPathJob
      * @param entity           the entity.
      */
     public PathJobRandomPos(
-        final World world,
+        final Level world,
         final BlockPos start,
         final int minDistFromStart,
         final int searchRange,
@@ -101,7 +101,7 @@ public class PathJobRandomPos extends AbstractPathJob
      * @param entity   the entity.
      */
     public PathJobRandomPos(
-        final World world,
+        final Level world,
         final BlockPos start,
         final int minDistFromStart,
         final int range,
@@ -156,15 +156,14 @@ public class PathJobRandomPos extends AbstractPathJob
     }
 
     @Override
-    protected boolean isAtDestination(final Node n) {
+    protected boolean isAtDestination(final MNode n) {
         return random.nextInt(10) == 0 && isInRestrictedArea(n.pos) && (start.distSqr(n.pos) > minDistFromStart * minDistFromStart)
             && SurfaceType.getSurfaceType(world, world.getBlockState(n.pos.below()), n.pos.below()) == SurfaceType.WALKABLE
             && destination.distSqr(n.pos) < this.maxDistToDest * this.maxDistToDest;
     }
 
     @Override
-    protected double getNodeResultScore(final Node n)
-    {
+    protected double getNodeResultScore(final MNode n) {
         //  For Result Score lower is better
         return destination.distSqr(n.pos);
     }

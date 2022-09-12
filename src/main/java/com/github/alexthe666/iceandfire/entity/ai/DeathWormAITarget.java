@@ -2,12 +2,12 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.google.common.base.Predicate;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 
 import java.util.EnumSet;
 
@@ -24,14 +24,14 @@ public class DeathWormAITarget<T extends LivingEntity> extends NearestAttackable
     public boolean canUse() {
         if (super.canUse() && target != null
             && !target.getClass().isAssignableFrom(this.deathworm.getClass())) {
-            if (target instanceof PlayerEntity && !deathworm.isOwnedBy(target)) {
+            if (target instanceof Player && !deathworm.isOwnedBy(target)) {
                 return !deathworm.isTame();
             } else if (deathworm.isOwnedBy(target)) {
                 return false;
             }
 
-            if (target instanceof MonsterEntity && deathworm.getWormAge() > 2) {
-                if (target instanceof CreatureEntity) {
+            if (target instanceof Monster && deathworm.getWormAge() > 2) {
+                if (target instanceof PathfinderMob) {
                     return deathworm.getWormAge() > 3;
                 }
                 return true;
@@ -41,7 +41,7 @@ public class DeathWormAITarget<T extends LivingEntity> extends NearestAttackable
     }
 
     @Override
-    protected AxisAlignedBB getTargetSearchArea(double targetDistance) {
+    protected AABB getTargetSearchArea(double targetDistance) {
         return this.deathworm.getBoundingBox().inflate(targetDistance, targetDistance, targetDistance);
     }
 }

@@ -1,19 +1,20 @@
 package com.github.alexthe666.iceandfire.client.texture;
 
+import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.blaze3d.platform.TextureUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.renderer.texture.NativeImage;
-import net.minecraft.client.renderer.texture.Texture;
-import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.resources.IResource;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-public class ArrayLayeredTexture extends Texture {
+
+public class ArrayLayeredTexture extends AbstractTexture {
     private static final Logger LOGGER = LogManager.getLogger();
     public final List<String> layeredTextureNames;
 
@@ -22,18 +23,18 @@ public class ArrayLayeredTexture extends Texture {
     }
 
     @Override
-    public void load(IResourceManager manager) {
+    public void load(ResourceManager manager) {
         Iterator<String> iterator = this.layeredTextureNames.iterator();
         String s = iterator.next();
 
-        try (IResource iresource = manager.getResource(new ResourceLocation(s))) {
+        try (Resource iresource = manager.getResource(new ResourceLocation(s))) {
             NativeImage nativeimage = net.minecraftforge.client.MinecraftForgeClient.getImageLayer(new ResourceLocation(s), manager);
             while (iterator.hasNext()) {
                 String s1 = iterator.next();
                 if (s1 != null) {
                     try (
-                        IResource iresource1 = manager.getResource(new ResourceLocation(s1));
-                            NativeImage nativeimage1 = NativeImage.read(iresource1.getInputStream())
+                        Resource iresource1 = manager.getResource(new ResourceLocation(s1));
+                        NativeImage nativeimage1 = NativeImage.read(iresource1.getInputStream())
                     ) {
                         for (int i = 0; i < Math.min(nativeimage1.getHeight(), nativeimage.getHeight()); i++) {
                             for (int j = 0; j < Math.min(nativeimage1.getWidth(), nativeimage.getWidth()); j++) {

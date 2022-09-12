@@ -1,11 +1,11 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -14,7 +14,7 @@ import java.util.Random;
 public class DeathWormAIGetInSand extends Goal {
     private final EntityDeathWorm creature;
     private final double movementSpeed;
-    private final World world;
+    private final Level world;
     private double shelterX;
     private double shelterY;
     private double shelterZ;
@@ -31,7 +31,7 @@ public class DeathWormAIGetInSand extends Goal {
         if (creature.isVehicle() || creature.isInSand() || creature.getTarget() != null && !creature.getTarget().isInWater() || creature.targetItemsGoal.targetEntity != null) {
             return false;
         } else {
-            Vector3d Vector3d = this.findPossibleShelter();
+            Vec3 Vector3d = this.findPossibleShelter();
 
             if (Vector3d == null) {
                 return false;
@@ -61,7 +61,7 @@ public class DeathWormAIGetInSand extends Goal {
     }
 
     @Nullable
-    private Vector3d findPossibleShelter() {
+    private Vec3 findPossibleShelter() {
         Random random = this.creature.getRandom();
         BlockPos blockpos = new BlockPos(this.creature.getX(), this.creature.getBoundingBox().minY, this.creature.getZ());
 
@@ -69,7 +69,7 @@ public class DeathWormAIGetInSand extends Goal {
             BlockPos blockpos1 = blockpos.offset(random.nextInt(20) - 10, random.nextInt(6) - 3, random.nextInt(20) - 10);
 
             if (this.world.getBlockState(blockpos1).getMaterial() == Material.SAND) {
-                return new Vector3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
+                return new Vec3(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
             }
         }
 

@@ -1,28 +1,32 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.iceandfire.client.ClientProxy;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDreadQueen;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import net.minecraft.CrashReport;
+import net.minecraft.CrashReportCategory;
+import net.minecraft.ReportedException;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HorseModel;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.QuadrupedModel;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.client.renderer.entity.model.*;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.crash.ReportedException;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 
-
-public class LayerDragonRider extends LayerRenderer<EntityDragonBase, SegmentedModel<EntityDragonBase>> {
+public class LayerDragonRider extends RenderLayer<EntityDragonBase, AdvancedEntityModel<EntityDragonBase>> {
     private final MobRenderer render;
     private final boolean excludeDreadQueenMob;
 
@@ -33,7 +37,7 @@ public class LayerDragonRider extends LayerRenderer<EntityDragonBase, SegmentedM
     }
 
     @Override
-    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         matrixStackIn.pushPose();
         if (!dragon.getPassengers().isEmpty()) {
             float dragonScale = dragon.getRenderSize() / 3;
@@ -43,7 +47,7 @@ public class LayerDragonRider extends LayerRenderer<EntityDragonBase, SegmentedM
                     prey = false;
                 }
                 ClientProxy.currentDragonRiders.remove(passenger.getUUID());
-                float riderRot = passenger.yRotO + (passenger.yRot - passenger.yRotO) * partialTicks;
+                float riderRot = passenger.yRotO + (passenger.getYRot() - passenger.yRotO) * partialTicks;
                 int animationTicks = 0;
                 if (dragon.getAnimation() == EntityDragonBase.ANIMATION_SHAKEPREY) {
                     animationTicks = dragon.getAnimationTick();
@@ -60,7 +64,7 @@ public class LayerDragonRider extends LayerRenderer<EntityDragonBase, SegmentedM
                         if (render instanceof MobRenderer) {
                             modelBase = ((MobRenderer) render).getModel();
                         }
-                        if ((passenger.getBbHeight() > passenger.getBbWidth() || modelBase instanceof BipedModel) && !(modelBase instanceof QuadrupedModel) && !(modelBase instanceof HorseModel)) {
+                        if ((passenger.getBbHeight() > passenger.getBbWidth() || modelBase instanceof HumanoidModel) && !(modelBase instanceof QuadrupedModel) && !(modelBase instanceof HorseModel)) {
                             matrixStackIn.translate(-0.15F * passenger.getBbHeight(), 0.1F * dragonScale - 0.1F * passenger.getBbHeight(), -0.1F * dragonScale - 0.1F * passenger.getBbWidth());
                             matrixStackIn.mulPose(new Quaternion(Vector3f.ZP, 90, true));
                             matrixStackIn.mulPose(new Quaternion(Vector3f.YP, 45, true));
@@ -89,49 +93,49 @@ public class LayerDragonRider extends LayerRenderer<EntityDragonBase, SegmentedM
         matrixStackIn.popPose();
     }
 
-    protected void translateToBody(MatrixStack stack) {
+    protected void translateToBody(PoseStack stack) {
         postRender(((TabulaModel) this.render.getModel()).getCube("BodyUpper"), stack, 0.0625F);
         postRender(((TabulaModel) this.render.getModel()).getCube("Neck1"), stack, 00.0625F);
     }
 
-    protected void translateToHead(MatrixStack stack) {
+    protected void translateToHead(PoseStack stack) {
         postRender(((TabulaModel) this.render.getModel()).getCube("Neck2"), stack, 0.0625F);
         postRender(((TabulaModel) this.render.getModel()).getCube("Neck3"), stack, 0.0625F);
         postRender(((TabulaModel) this.render.getModel()).getCube("Head"), stack, 0.0625F);
     }
 
-    protected void postRender(AdvancedModelBox renderer, MatrixStack matrixStackIn, float scale) {
-        if (renderer.xRot == 0.0F && renderer.yRot == 0.0F && renderer.zRot == 0.0F) {
-            if (renderer.x != 0.0F || renderer.y != 0.0F || renderer.z != 0.0F) {
-                matrixStackIn.translate(renderer.x * scale, renderer.y * scale, renderer.z * scale);
+    protected void postRender(AdvancedModelBox renderer, PoseStack matrixStackIn, float scale) {
+        if (renderer.rotateAngleX == 0.0F && renderer.rotateAngleY == 0.0F && renderer.rotateAngleZ == 0.0F) {
+            if (renderer.rotationPointX != 0.0F || renderer.rotationPointY != 0.0F || renderer.rotationPointZ != 0.0F) {
+                matrixStackIn.translate(renderer.rotationPointX * scale, renderer.rotationPointY * scale, renderer.rotationPointZ * scale);
             }
         } else {
-            matrixStackIn.translate(renderer.x * scale, renderer.y * scale, renderer.z * scale);
+            matrixStackIn.translate(renderer.rotationPointX * scale, renderer.rotationPointY * scale, renderer.rotationPointZ * scale);
 
-            if (renderer.zRot != 0.0F) {
-                matrixStackIn.mulPose(Vector3f.ZP.rotation(renderer.zRot));
+            if (renderer.rotateAngleZ != 0.0F) {
+                matrixStackIn.mulPose(Vector3f.ZP.rotation(renderer.rotateAngleZ));
             }
 
-            if (renderer.yRot != 0.0F) {
-                matrixStackIn.mulPose(Vector3f.YP.rotation(renderer.yRot));
+            if (renderer.rotateAngleY != 0.0F) {
+                matrixStackIn.mulPose(Vector3f.YP.rotation(renderer.rotateAngleY));
             }
 
-            if (renderer.xRot != 0.0F) {
-                matrixStackIn.mulPose(Vector3f.XP.rotation(renderer.xRot));
+            if (renderer.rotateAngleX != 0.0F) {
+                matrixStackIn.mulPose(Vector3f.XP.rotation(renderer.rotateAngleX));
             }
         }
     }
 
-    private void offsetPerDragonType(DragonType dragonType, MatrixStack stackIn){
-        if(dragonType == DragonType.LIGHTNING){
+    private void offsetPerDragonType(DragonType dragonType, PoseStack stackIn) {
+        if (dragonType == DragonType.LIGHTNING) {
             stackIn.translate(0.1F, -0.2F, -0.1F);
         }
     }
 
 
-    public <E extends Entity> void renderEntity(E entityIn, double x, double y, double z, float yaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int packedLight) {
+    public <E extends Entity> void renderEntity(E entityIn, double x, double y, double z, float yaw, float partialTicks, PoseStack matrixStack, MultiBufferSource bufferIn, int packedLight) {
         EntityRenderer<? super E> render = null;
-        EntityRendererManager manager = Minecraft.getInstance().getEntityRenderDispatcher();
+        EntityRenderDispatcher manager = Minecraft.getInstance().getEntityRenderDispatcher();
         try {
             render = manager.getRenderer(entityIn);
 
@@ -148,7 +152,7 @@ public class LayerDragonRider extends LayerRenderer<EntityDragonBase, SegmentedM
             entityIn.fillCrashReportCategory(crashreportcategory);
             CrashReportCategory crashreportcategory1 = crashreport.addCategory("Renderer details");
             crashreportcategory1.setDetail("Assigned renderer", render);
-            crashreportcategory1.setDetail("Location", CrashReportCategory.formatLocation(x, y, z));
+            crashreportcategory1.setDetail("Location", new BlockPos(x, y, z));
             crashreportcategory1.setDetail("Rotation", Float.valueOf(yaw));
             crashreportcategory1.setDetail("Delta", Float.valueOf(partialTicks));
             throw new ReportedException(crashreport);

@@ -1,19 +1,19 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexEgg;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.LivingRenderer;
-import net.minecraft.client.renderer.entity.model.SegmentedModel;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.resources.ResourceLocation;
 
-public class RenderMyrmexEgg extends LivingRenderer<EntityMyrmexEgg, SegmentedModel<EntityMyrmexEgg>> {
+public class RenderMyrmexEgg extends LivingEntityRenderer<EntityMyrmexEgg, AdvancedEntityModel<EntityMyrmexEgg>> {
 
     public static final ResourceLocation EGG_JUNGLE = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_egg.png");
     public static final ResourceLocation EGG_DESERT = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_egg.png");
 
-    public RenderMyrmexEgg(EntityRendererManager renderManager) {
-        super(renderManager, new ModelDragonEgg(), 0.3F);
+    public RenderMyrmexEgg(EntityRendererProvider.Context context) {
+        super(context, new ModelDragonEgg(), 0.3F);
     }
 
     protected boolean shouldShowName(EntityMyrmexEgg entity) {

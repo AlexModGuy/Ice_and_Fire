@@ -1,23 +1,23 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Comparator;
 import java.util.EnumSet;
 
 public class AquaticAIFindWaterTarget extends Goal {
     protected AquaticAIFindWaterTarget.Sorter fleePosSorter;
-    private final MobEntity mob;
+    private final Mob mob;
 
-    public AquaticAIFindWaterTarget(MobEntity mob, int range, boolean avoidAttacker) {
+    public AquaticAIFindWaterTarget(Mob mob, int range, boolean avoidAttacker) {
         this.mob = mob;
         this.setFlags(EnumSet.of(Flag.MOVE));
         fleePosSorter = new Sorter(mob);
@@ -30,7 +30,7 @@ public class AquaticAIFindWaterTarget extends Goal {
         }
         Path path = this.mob.getNavigation().getPath();
         if (this.mob.getRandom().nextFloat() < 0.15F || path != null && path.getEndNode() != null && this.mob.distanceToSqr(path.getEndNode().x, path.getEndNode().y, path.getEndNode().z) < 3) {
-            if (path != null && path.getEndNode() != null || !this.mob.getNavigation().isDone() && !isDirectPathBetweenPoints(this.mob, this.mob.position(), new Vector3d(path.getEndNode().x, path.getEndNode().y, path.getEndNode().z))) {
+            if (path != null && path.getEndNode() != null || !this.mob.getNavigation().isDone() && !isDirectPathBetweenPoints(this.mob, this.mob.position(), new Vec3(path.getEndNode().x, path.getEndNode().y, path.getEndNode().z))) {
                 this.mob.getNavigation().stop();
             }
             if (this.mob.getNavigation().isDone()) {
@@ -64,8 +64,8 @@ public class AquaticAIFindWaterTarget extends Goal {
         return null;
     }
 
-    public boolean isDirectPathBetweenPoints(Entity entity, Vector3d vec1, Vector3d vec2) {
-        return mob.level.clip(new RayTraceContext(vec1, vec2, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity)).getType() == RayTraceResult.Type.MISS;
+    public boolean isDirectPathBetweenPoints(Entity entity, Vec3 vec1, Vec3 vec2) {
+        return mob.level.clip(new ClipContext(vec1, vec2, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity)).getType() == HitResult.Type.MISS;
 
     }
 

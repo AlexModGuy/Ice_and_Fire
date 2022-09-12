@@ -2,10 +2,10 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
@@ -31,10 +31,10 @@ public class HippogryphAITarget<T extends LivingEntity> extends NearestAttackabl
         }
         if (super.canUse() && target != null && !target.getClass().equals(this.hippogryph.getClass())) {
             if (this.hippogryph.getBbWidth() >= target.getBbWidth()) {
-                if (target instanceof PlayerEntity) {
+                if (target instanceof Player) {
                     return !hippogryph.isTame();
                 } else {
-                    if (!hippogryph.isOwnedBy(target) && hippogryph.canMove() && target instanceof AnimalEntity) {
+                    if (!hippogryph.isOwnedBy(target) && hippogryph.canMove() && target instanceof Animal) {
                         if (hippogryph.isTame()) {
                             return DragonUtils.canTameDragonAttack(hippogryph, target);
                         } else {

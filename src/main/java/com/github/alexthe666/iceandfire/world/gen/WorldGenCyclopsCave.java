@@ -7,36 +7,37 @@ import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.*;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
+public class WorldGenCyclopsCave extends Feature<NoneFeatureConfiguration> {
 
     public static final ResourceLocation CYCLOPS_CHEST = new ResourceLocation("iceandfire", "chest/cyclops_cave");
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
-    public WorldGenCyclopsCave(Codec<NoFeatureConfig> configFactoryIn) {
+    public WorldGenCyclopsCave(Codec<NoneFeatureConfiguration> configFactoryIn) {
         super(configFactoryIn);
     }
 
-    private void genSheepPen(IServerWorld worldIn, BlockPos blockpos, Random rand, BlockPos origin, float radius) {
+    private void genSheepPen(ServerLevelAccessor worldIn, BlockPos blockpos, Random rand, BlockPos origin, float radius) {
 
         int width = 5 + rand.nextInt(3);
         int sheeps = 2 + rand.nextInt(3);
@@ -50,7 +51,7 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
                     if (worldIn.isEmptyBlock(end.relative(direction, side).relative(direction.getClockWise())) && sheepsSpawned < sheeps) {
                         BlockPos sheepPos = end.relative(direction, side).relative(direction.getClockWise());
 
-                        SheepEntity entitySheep = new SheepEntity(EntityType.SHEEP, worldIn.getLevel());
+                        Sheep entitySheep = new Sheep(EntityType.SHEEP, worldIn.getLevel());
                         entitySheep.setPos(sheepPos.getX() + 0.5F, sheepPos.getY() + 0.5F, sheepPos.getZ() + 0.5F);
                         entitySheep.setColor(rand.nextInt(4) == 0 ? DyeColor.YELLOW : DyeColor.WHITE);
                         worldIn.addFreshEntity(entitySheep);
@@ -80,7 +81,7 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
         }
     }
 
-    private boolean isTouchingAir(IWorld worldIn, BlockPos pos) {
+    private boolean isTouchingAir(LevelAccessor worldIn, BlockPos pos) {
         boolean isTouchingAir = true;
         for (Direction direction : HORIZONTALS) {
             if (!worldIn.isEmptyBlock(pos.relative(direction))) {
@@ -90,7 +91,7 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
         return isTouchingAir;
     }
 
-    private void genSkeleton(IWorld worldIn, BlockPos blockpos, Random rand, BlockPos origin, float radius) {
+    private void genSkeleton(LevelAccessor worldIn, BlockPos blockpos, Random rand, BlockPos origin, float radius) {
         Direction direction = HORIZONTALS[new Random().nextInt(3)];
         Direction.Axis oppositeAxis = direction.getAxis() == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
         int maxRibHeight = rand.nextInt(2);
@@ -128,14 +129,17 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean place(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        WorldGenLevel worldIn = context.level();
+        Random rand = context.random();
+        BlockPos position = context.origin();
         if (!IafWorldRegistry.isDimensionListedForFeatures(worldIn)) {
             return false;
         }
         if (!IafConfig.generateCyclopsCaves || rand.nextInt(IafConfig.spawnCyclopsCaveChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)) {
             return false;
         }
-        position = worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, position);
+        position = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position);
         if (!worldIn.getFluidState(position.below()).isEmpty()) {
             return false;
         }
@@ -206,9 +210,9 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
                         worldIn.setBlock(blockpos.above().east(), IafBlockRegistry.GOLD_PILE.defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
                         worldIn.setBlock(blockpos.above(2), Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, HORIZONTALS[new Random().nextInt(3)]), 2);
                         if (worldIn.getBlockState(blockpos.above(2)).getBlock() instanceof AbstractChestBlock) {
-                            TileEntity tileentity1 = worldIn.getBlockEntity(blockpos.above(2));
-                            if (tileentity1 instanceof ChestTileEntity) {
-                                ((ChestTileEntity) tileentity1).setLootTable(CYCLOPS_CHEST, rand.nextLong());
+                            BlockEntity tileentity1 = worldIn.getBlockEntity(blockpos.above(2));
+                            if (tileentity1 instanceof ChestBlockEntity) {
+                                ((ChestBlockEntity) tileentity1).setLootTable(CYCLOPS_CHEST, rand.nextLong());
                             }
                         }
 
@@ -231,7 +235,7 @@ public class WorldGenCyclopsCave extends Feature<NoFeatureConfig> {
         return true;
     }
 
-    public BlockState getFenceState(IWorld world, BlockPos pos) {
+    public BlockState getFenceState(LevelAccessor world, BlockPos pos) {
         boolean east = world.getBlockState(pos.east()).getBlock() == Blocks.OAK_FENCE;
         boolean west = world.getBlockState(pos.west()).getBlock() == Blocks.OAK_FENCE;
         boolean north = world.getBlockState(pos.north()).getBlock() == Blocks.OAK_FENCE;

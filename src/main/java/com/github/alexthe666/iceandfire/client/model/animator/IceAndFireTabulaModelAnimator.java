@@ -4,7 +4,7 @@ import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.iceandfire.util.IAFMath;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 
 public class IceAndFireTabulaModelAnimator {
 
@@ -15,50 +15,46 @@ public class IceAndFireTabulaModelAnimator {
     }
 
     public void setRotateAngle(AdvancedModelBox model, float limbSwingAmount, float x, float y, float z) {
-        model.xRot += limbSwingAmount * distance(model.xRot, x);
-        model.yRot += limbSwingAmount * distance(model.yRot, y);
-        model.zRot += limbSwingAmount * distance(model.zRot, z);
+        model.rotateAngleX += limbSwingAmount * distance(model.rotateAngleX, x);
+        model.rotateAngleY += limbSwingAmount * distance(model.rotateAngleY, y);
+        model.rotateAngleZ += limbSwingAmount * distance(model.rotateAngleZ, z);
     }
 
     public void addToRotateAngle(AdvancedModelBox model, float limbSwingAmount, float x, float y, float z) {
-        model.xRot += Math.min(limbSwingAmount * 2, 1) * distance(model.defaultRotationX, x);
-        model.yRot += Math.min(limbSwingAmount * 2, 1) * distance(model.defaultRotationY, y);
-        model.zRot += Math.min(limbSwingAmount * 2, 1) * distance(model.defaultRotationZ, z);
+        model.rotateAngleX += Math.min(limbSwingAmount * 2, 1) * distance(model.defaultRotationX, x);
+        model.rotateAngleY += Math.min(limbSwingAmount * 2, 1) * distance(model.defaultRotationY, y);
+        model.rotateAngleZ += Math.min(limbSwingAmount * 2, 1) * distance(model.defaultRotationZ, z);
     }
 
     public boolean isRotationEqual(AdvancedModelBox original, AdvancedModelBox pose) {
-        return pose != null && pose.xRot == original.defaultRotationX && pose.yRot == original.defaultRotationY && pose.zRot == original.defaultRotationZ;
+        return pose != null && pose.rotateAngleX == original.defaultRotationX && pose.rotateAngleY == original.defaultRotationY && pose.rotateAngleZ == original.defaultRotationZ;
     }
 
     public boolean isPositionEqual(AdvancedModelBox original, AdvancedModelBox pose) {
-        return pose.x == original.defaultPositionX && pose.y == original.defaultPositionY && pose.z == original.defaultPositionZ;
+        return pose.rotationPointX == original.defaultPositionX && pose.rotationPointY == original.defaultPositionY && pose.rotationPointZ == original.defaultPositionZ;
     }
 
     public void transitionTo(AdvancedModelBox from, AdvancedModelBox to, float timer, float maxTime, boolean oldFashioned) {
         if (oldFashioned) {
-            from.xRot += ((to.xRot - from.xRot) / maxTime) * timer;
-            from.yRot += ((to.yRot - from.yRot) / maxTime) * timer;
-            from.zRot += ((to.zRot - from.zRot) / maxTime) * timer;
+            from.rotateAngleX += ((to.rotateAngleX - from.rotateAngleX) / maxTime) * timer;
+            from.rotateAngleY += ((to.rotateAngleY - from.rotateAngleY) / maxTime) * timer;
+            from.rotateAngleZ += ((to.rotateAngleZ - from.rotateAngleZ) / maxTime) * timer;
         } else {
             transitionAngles(from, to, timer, maxTime);
         }
-        from.x += ((to.x - from.x) / maxTime) * timer;
-        from.y += ((to.y - from.y) / maxTime) * timer;
-        from.z += ((to.z - from.z) / maxTime) * timer;
-
-        //from.offsetX += ((to.offsetX - from.offsetX) / maxTime) * timer;
-        //from.offsetY += ((to.offsetY - from.offsetY) / maxTime) * timer;
-        //from.offsetZ += ((to.offsetZ - from.offsetZ) / maxTime) * timer;
+        from.rotationPointX += ((to.rotationPointX - from.rotationPointX) / maxTime) * timer;
+        from.rotationPointY += ((to.rotationPointY - from.rotationPointY) / maxTime) * timer;
+        from.rotationPointZ += ((to.rotationPointZ - from.rotationPointZ) / maxTime) * timer;
     }
 
     public void transitionAngles(AdvancedModelBox from, AdvancedModelBox to, float timer, float maxTime) {
-        from.xRot += ((distance(from.xRot, to.xRot)) / maxTime) * timer;
-        from.yRot += ((distance(from.yRot, to.yRot)) / maxTime) * timer;
-        from.zRot += ((distance(from.zRot, to.zRot)) / maxTime) * timer;
+        from.rotateAngleX += ((distance(from.rotateAngleX, to.rotateAngleX)) / maxTime) * timer;
+        from.rotateAngleY += ((distance(from.rotateAngleY, to.rotateAngleY)) / maxTime) * timer;
+        from.rotateAngleZ += ((distance(from.rotateAngleZ, to.rotateAngleZ)) / maxTime) * timer;
     }
 
     public float distance(float rotateAngleFrom, float rotateAngleTo) {
-        return (float) IAFMath.atan2_accurate(MathHelper.sin(rotateAngleTo - rotateAngleFrom), MathHelper.cos(rotateAngleTo - rotateAngleFrom));
+        return (float) IAFMath.atan2_accurate(Mth.sin(rotateAngleTo - rotateAngleFrom), Mth.cos(rotateAngleTo - rotateAngleFrom));
     }
 
     public void rotate(ModelAnimator animator, AdvancedModelBox model, float x, float y, float z) {
@@ -69,16 +65,16 @@ public class IceAndFireTabulaModelAnimator {
         for (AdvancedModelBox cube : model.getCubes().values()) {
             AdvancedModelBox cubeTo = modelTo.getCube(cube.boxName);
             if (!isRotationEqual(baseModel.getCube(cube.boxName), cubeTo)) {
-                float toX = cubeTo.xRot;
-                float toY = cubeTo.yRot;
-                float toZ = cubeTo.zRot;
-                model.llibAnimator.rotate(cube, distance(cube.xRot, toX), distance(cube.yRot, toY), distance(cube.zRot, toZ));
+                float toX = cubeTo.rotateAngleX;
+                float toY = cubeTo.rotateAngleY;
+                float toZ = cubeTo.rotateAngleZ;
+                model.llibAnimator.rotate(cube, distance(cube.rotateAngleX, toX), distance(cube.rotateAngleY, toY), distance(cube.rotateAngleZ, toZ));
             }
             if (!isPositionEqual(baseModel.getCube(cube.boxName), cubeTo)) {
-                float toX = cubeTo.x;
-                float toY = cubeTo.y;
-                float toZ = cubeTo.z;
-                model.llibAnimator.move(cube, toX - cube.x, toY - cube.y, toZ - cube.z);
+                float toX = cubeTo.rotationPointX;
+                float toY = cubeTo.rotationPointY;
+                float toZ = cubeTo.rotationPointZ;
+                model.llibAnimator.move(cube, toX - cube.rotationPointX, toY - cube.rotationPointY, toZ - cube.rotationPointZ);
             }
         }
     }

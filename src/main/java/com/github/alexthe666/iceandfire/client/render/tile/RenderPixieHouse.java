@@ -4,17 +4,17 @@ import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.client.model.ModelPixie;
 import com.github.alexthe666.iceandfire.client.model.ModelPixieHouse;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.item.BlockItem;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
 
-public class RenderPixieHouse<T extends TileEntityPixieHouse> extends TileEntityRenderer<T> {
+public class RenderPixieHouse<T extends TileEntityPixieHouse> implements BlockEntityRenderer<T> {
 
     private static final ModelPixieHouse MODEL = new ModelPixieHouse();
     private static ModelPixie MODEL_PIXIE;
@@ -26,12 +26,12 @@ public class RenderPixieHouse<T extends TileEntityPixieHouse> extends TileEntity
     private static final RenderType TEXTURE_5 = RenderType.entityCutoutNoCull(new ResourceLocation("iceandfire:textures/models/pixie/house/pixie_house_5.png"), false);
     public BlockItem metaOverride;
 
-    public RenderPixieHouse(TileEntityRendererDispatcher rendererDispatcherIn) {
-        super(rendererDispatcherIn);
+    public RenderPixieHouse(BlockEntityRendererProvider.Context context) {
+
     }
 
     @Override
-    public void render(T entity, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(T entity, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         int rotation = 0;
         int meta = 0;
         if (MODEL_PIXIE == null) {

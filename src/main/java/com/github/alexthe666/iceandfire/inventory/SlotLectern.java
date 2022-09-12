@@ -1,13 +1,13 @@
 package com.github.alexthe666.iceandfire.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 public class SlotLectern extends Slot {
 
-    public SlotLectern(IInventory inv, int slotIndex, int xPosition, int yPosition) {
+    public SlotLectern(Container inv, int slotIndex, int xPosition, int yPosition) {
         super(inv, slotIndex, xPosition, yPosition);
     }
 
@@ -17,9 +17,9 @@ public class SlotLectern extends Slot {
     }
 
     @Override
-    public ItemStack onTake(PlayerEntity playerIn, ItemStack stack) {
+    public void onTake(Player playerIn, ItemStack stack) {
         this.checkTakeAchievements(stack);
-        return super.onTake(playerIn, stack);
+        super.onTake(playerIn, stack);
     }
 
     /**

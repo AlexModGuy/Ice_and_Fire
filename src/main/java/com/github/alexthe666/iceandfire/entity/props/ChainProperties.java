@@ -3,11 +3,11 @@ package com.github.alexthe666.iceandfire.entity.props;
 import com.github.alexthe666.citadel.Citadel;
 import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
 import com.github.alexthe666.citadel.server.message.PropertiesMessage;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -24,9 +24,9 @@ public class ChainProperties {
         if (isChainedTo(chained, chainedTo)) {
             return;
         }
-        CompoundNBT entityData = CitadelEntityData.getOrCreateCitadelTag(chained);
-        ListNBT chainData = getOrCreateChainData(entityData);
-        CompoundNBT currentChainData = new CompoundNBT();
+        CompoundTag entityData = CitadelEntityData.getOrCreateCitadelTag(chained);
+        ListTag chainData = getOrCreateChainData(entityData);
+        CompoundTag currentChainData = new CompoundTag();
         currentChainData.putUUID(CHAIN_TO_TAG, chainedTo.getUUID());
         currentChainData.putInt(CHAIN_TO_ENTITY_ID_TAG, chainedTo.getId());
 
@@ -35,17 +35,17 @@ public class ChainProperties {
         updateData(chained, entityData);
     }
 
-    public static CompoundNBT getConnectedEntityChainData(LivingEntity host, Entity target) {
-        ListNBT chainData = getOrCreateChainData(host);
+    public static CompoundTag getConnectedEntityChainData(LivingEntity host, Entity target) {
+        ListTag chainData = getOrCreateChainData(host);
         if (chainData.isEmpty())
             return null;
         return getConnectedEntityChainData(chainData, target);
     }
 
     @Nullable
-    public static CompoundNBT getConnectedEntityChainData(ListNBT chainData, Entity entity) {
+    public static CompoundTag getConnectedEntityChainData(ListTag chainData, Entity entity) {
         for (int i = 0; i < chainData.size(); i++) {
-            CompoundNBT nbt = (CompoundNBT) chainData.get(i);
+            CompoundTag nbt = (CompoundTag) chainData.get(i);
             if (nbt.contains(CHAIN_TO_TAG) && nbt.getUUID(CHAIN_TO_TAG).equals(entity.getUUID()))
                 return nbt;
         }
@@ -56,27 +56,27 @@ public class ChainProperties {
         return !getOrCreateChainData(entity).isEmpty();
     }
 
-    public static boolean hasEntityData(ListNBT chainData, Entity entity) {
+    public static boolean hasEntityData(ListTag chainData, Entity entity) {
         return getConnectedEntityChainData(chainData, entity) != null;
     }
 
-    private static ListNBT getOrCreateChainData(LivingEntity entity) {
+    private static ListTag getOrCreateChainData(LivingEntity entity) {
         return getOrCreateChainData(CitadelEntityData.getOrCreateCitadelTag(entity));
     }
 
-    private static ListNBT getOrCreateChainData(CompoundNBT entityData) {
+    private static ListTag getOrCreateChainData(CompoundTag entityData) {
         //TODO: Look at type
         if (entityData.contains(CHAIN_DATA, 9)) {
             return entityData.getList(CHAIN_DATA, 10);
         }
-        return new ListNBT();
+        return new ListTag();
     }
 
     public static void updateData(LivingEntity entity) {
         updateData(entity, CitadelEntityData.getOrCreateCitadelTag(entity));
     }
 
-    private static void updateData(LivingEntity entity, CompoundNBT nbt) {
+    private static void updateData(LivingEntity entity, CompoundTag nbt) {
         CitadelEntityData.setCitadelTag(entity, nbt);
         if (!entity.level.isClientSide()) {
             Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", nbt, entity.getId()));
@@ -84,11 +84,11 @@ public class ChainProperties {
     }
 
     public static void removeChain(LivingEntity entity, Entity connectedTo) {
-        CompoundNBT entityData = CitadelEntityData.getOrCreateCitadelTag(entity);
-        ListNBT chainData = getOrCreateChainData(entityData);
+        CompoundTag entityData = CitadelEntityData.getOrCreateCitadelTag(entity);
+        ListTag chainData = getOrCreateChainData(entityData);
         int dataIndex = -1;
         for (int i = 0; i < chainData.size(); i++) {
-            CompoundNBT nbt = (CompoundNBT) chainData.get(i);
+            CompoundTag nbt = (CompoundTag) chainData.get(i);
             if (nbt.contains(CHAIN_TO_TAG) && nbt.getUUID(CHAIN_TO_TAG).equals(connectedTo.getUUID())) {
                 //TODO: might be able to remove in loop
                 dataIndex = i;
@@ -103,13 +103,13 @@ public class ChainProperties {
     }
 
     public static List<Entity> getChainedTo(LivingEntity chained) {
-        ListNBT chainData = getOrCreateChainData(chained);
+        ListTag chainData = getOrCreateChainData(chained);
         List<Entity> chainedTo = new ArrayList<>();
         if (chainData.isEmpty()) {
             return chainedTo;
         }
         for (int i = 0; i < chainData.size(); i++) {
-            CompoundNBT lassoedTag = (CompoundNBT) chainData.get(i);
+            CompoundTag lassoedTag = (CompoundTag) chainData.get(i);
             if (chained.level.isClientSide() && lassoedTag.contains(CHAIN_TO_ENTITY_ID_TAG)) {
                 int id = lassoedTag.getInt(CHAIN_TO_ENTITY_ID_TAG);
                 if (id != -1) {
@@ -124,10 +124,10 @@ public class ChainProperties {
                         }
                     }
                 }
-            } else if (chained.level instanceof ServerWorld) {
+            } else if (chained.level instanceof ServerLevel) {
                 UUID uuid = lassoedTag.getUUID(CHAIN_TO_TAG);
                 if (uuid != null) {
-                    Entity found = ((ServerWorld) chained.level).getEntity(uuid);
+                    Entity found = ((ServerLevel) chained.level).getEntity(uuid);
                     if (found != null) {
                         lassoedTag.putInt(CHAIN_TO_ENTITY_ID_TAG, found.getId());
                         chainedTo.add(found);
@@ -140,8 +140,8 @@ public class ChainProperties {
     }
 
     public static void clearChainData(LivingEntity chained) {
-        CompoundNBT entityData = CitadelEntityData.getOrCreateCitadelTag(chained);
-        entityData.put(CHAIN_DATA, new ListNBT());
+        CompoundTag entityData = CitadelEntityData.getOrCreateCitadelTag(chained);
+        entityData.put(CHAIN_DATA, new ListTag());
         updateData(chained, entityData);
     }
 

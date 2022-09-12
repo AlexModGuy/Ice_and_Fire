@@ -3,40 +3,40 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.entity.util.IDeadMob;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 
-public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStatues, IDeadMob {
+public class EntityMobSkull extends Animal implements IBlacklistedFromStatues, IDeadMob {
 
-    private static final DataParameter<Float> SKULL_DIRECTION = EntityDataManager.defineId(EntityMobSkull.class, DataSerializers.FLOAT);
-    private static final DataParameter<Integer> SKULL_ENUM = EntityDataManager.defineId(EntityMobSkull.class, DataSerializers.INT);
+    private static final EntityDataAccessor<Float> SKULL_DIRECTION = SynchedEntityData.defineId(EntityMobSkull.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> SKULL_ENUM = SynchedEntityData.defineId(EntityMobSkull.class, EntityDataSerializers.INT);
 
-    public EntityMobSkull(EntityType t, World worldIn) {
+    public EntityMobSkull(EntityType t, Level worldIn) {
         super(t, worldIn);
         this.noCulling = true;
     }
 
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
-        return MobEntity.createMobAttributes()
+    public static AttributeSupplier.Builder bakeAttributes() {
+        return Mob.createMobAttributes()
             //HEALTH
             .add(Attributes.MAX_HEALTH, 10.0D)
             //SPEED
@@ -92,7 +92,7 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
     }
 
     public EnumSkullType getSkullType() {
-        return EnumSkullType.values()[MathHelper.clamp(getEnumOrdinal(), 0, EnumSkullType.values().length - 1)];
+        return EnumSkullType.values()[Mth.clamp(getEnumOrdinal(), 0, EnumSkullType.values().length - 1)];
     }
 
     public void setSkullType(EnumSkullType skullType) {
@@ -106,9 +106,9 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
     }
 
     public void turnIntoItem() {
-        if (removed)
+        if (isRemoved())
             return;
-        this.remove();
+        this.remove(RemovalReason.DISCARDED);
         ItemStack stack = new ItemStack(getSkullType().skull_item, 1);
         if (!this.level.isClientSide)
             this.spawnAtLocation(stack, 0.0F);
@@ -119,22 +119,22 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
     }
 
     @Override
-    public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (player.isShiftKeyDown()) {
-            this.setYaw(player.yRot);
+            this.setYaw(player.getYRot());
         }
         return super.mobInteract(player, hand);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         this.setYaw(compound.getFloat("SkullYaw"));
         this.setEnumOrdinal(compound.getInt("SkullType"));
         super.readAdditionalSaveData(compound);
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         compound.putFloat("SkullYaw", this.getYaw());
         compound.putInt("SkullType", this.getEnumOrdinal());
         super.addAdditionalSaveData(compound);
@@ -161,7 +161,7 @@ public class EntityMobSkull extends AnimalEntity implements IBlacklistedFromStat
 
     @Nullable
     @Override
-    public AgeableEntity getBreedOffspring(ServerWorld serverWorld, AgeableEntity ageable) {
+    public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
         return null;
     }
 

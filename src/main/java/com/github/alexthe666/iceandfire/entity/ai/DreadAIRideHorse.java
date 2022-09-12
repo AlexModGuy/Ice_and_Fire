@@ -2,8 +2,8 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDreadKnight;
 import com.github.alexthe666.iceandfire.util.IAFMath;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.horse.AbstractHorseEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 
 import javax.annotation.Nonnull;
 import java.util.EnumSet;
@@ -11,10 +11,10 @@ import java.util.List;
 
 public class DreadAIRideHorse extends Goal {
     private final EntityDreadKnight knight;
-    private AbstractHorseEntity horse;
+    private AbstractHorse horse;
 
     @Nonnull
-    private List<AbstractHorseEntity> list = IAFMath.emptyAbstractHorseEntityList;
+    private List<AbstractHorse> list = IAFMath.emptyAbstractHorseEntityList;
 
     public DreadAIRideHorse(EntityDreadKnight knight) {
         this.knight = knight;
@@ -29,7 +29,7 @@ public class DreadAIRideHorse extends Goal {
         } else {
 
             if (this.knight.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
-                list = this.knight.level.getEntitiesOfClass(AbstractHorseEntity.class,
+                list = this.knight.level.getEntitiesOfClass(AbstractHorse.class,
                     this.knight.getBoundingBox().inflate(16.0D, 7.0D, 16.0D), entity -> !entity.isVehicle());
 
             if (list.isEmpty()) {

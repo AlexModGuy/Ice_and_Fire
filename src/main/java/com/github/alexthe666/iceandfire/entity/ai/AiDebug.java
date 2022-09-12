@@ -1,20 +1,19 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import net.minecraft.world.entity.Mob;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.entity.MobEntity;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
  * Class to easily list the current tasks/goals of entities and identify potential issues
  */
 public class AiDebug {
-    private static List<MobEntity> entities = new ArrayList<>();
+    private static final List<Mob> entities = new ArrayList<>();
     private static final Logger LOGGER = LogManager.getLogger();
 
     private AiDebug() {
@@ -26,9 +25,9 @@ public class AiDebug {
     }
 
     public static void logData() {
-        List<MobEntity> entitiesCopy = new ArrayList<>(entities);
-        for (MobEntity entity : entitiesCopy) {
-            if (!entity.isAlive()){
+        List<Mob> entitiesCopy = new ArrayList<>(entities);
+        for (Mob entity : entitiesCopy) {
+            if (!entity.isAlive()) {
                 entities.remove(entity);
                 continue;
             }
@@ -46,15 +45,14 @@ public class AiDebug {
         }
     }
 
-    public static boolean contains(MobEntity entity) {
+    public static boolean contains(Mob entity) {
         return entities.contains(entity);
     }
 
-    public static void addEntity(MobEntity entity) {
-        if (entities.contains(entity)){
+    public static void addEntity(Mob entity) {
+        if (entities.contains(entity)) {
             entities.remove(entity);
-        }
-        else {
+        } else {
             entities.add(entity);
         }
     }

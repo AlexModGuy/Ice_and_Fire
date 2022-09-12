@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -13,7 +13,7 @@ import java.util.Random;
 public class TrollAIFleeSun extends Goal {
     private final EntityTroll troll;
     private final double movementSpeed;
-    private final World world;
+    private final Level world;
     private double shelterX;
     private double shelterY;
     private double shelterZ;
@@ -32,7 +32,7 @@ public class TrollAIFleeSun extends Goal {
         } else if (!this.world.canSeeSky(new BlockPos(this.troll.getX(), this.troll.getBoundingBox().minY, this.troll.getZ()))) {
             return false;
         } else {
-            Vector3d Vector3d = this.findPossibleShelter();
+            Vec3 Vector3d = this.findPossibleShelter();
 
             if (Vector3d == null) {
                 return false;
@@ -62,7 +62,7 @@ public class TrollAIFleeSun extends Goal {
     }
 
     @Nullable
-    private Vector3d findPossibleShelter() {
+    private Vec3 findPossibleShelter() {
         Random random = this.troll.getRandom();
         BlockPos blockpos = new BlockPos(this.troll.getX(), this.troll.getBoundingBox().minY, this.troll.getZ());
 
@@ -70,7 +70,7 @@ public class TrollAIFleeSun extends Goal {
             BlockPos blockpos1 = blockpos.offset(random.nextInt(20) - 10, random.nextInt(6) - 3, random.nextInt(20) - 10);
 
             if (!this.world.canSeeSky(blockpos1) && this.troll.getWalkTargetValue(blockpos1) < 0.0F) {
-                return new Vector3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
+                return new Vec3(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
             }
         }
 

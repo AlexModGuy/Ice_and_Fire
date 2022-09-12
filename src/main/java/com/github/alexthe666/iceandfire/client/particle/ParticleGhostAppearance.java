@@ -4,25 +4,26 @@ import com.github.alexthe666.iceandfire.client.model.ModelGhost;
 import com.github.alexthe666.iceandfire.client.render.IafRenderType;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderGhost;
 import com.github.alexthe666.iceandfire.entity.EntityGhost;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.Camera;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.settings.PointOfView;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 
 public class ParticleGhostAppearance extends Particle {
     private final ModelGhost model = new ModelGhost(0.0F);
     private final int ghost;
     private boolean fromLeft = false;
-    public ParticleGhostAppearance(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int ghost) {
+
+    public ParticleGhostAppearance(ClientLevel worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int ghost) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn);
         this.gravity = 0.0F;
         this.lifetime = 15;
@@ -30,17 +31,17 @@ public class ParticleGhostAppearance extends Particle {
         fromLeft = worldIn.random.nextBoolean();
     }
 
-    public IParticleRenderType getRenderType() {
-        return IParticleRenderType.CUSTOM;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.CUSTOM;
     }
 
-    public void render(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
+    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
         float f = ((float) this.age + partialTicks) / (float) this.lifetime;
-        float f1 = 0.05F + 0.5F * MathHelper.sin(f * (float) Math.PI);
+        float f1 = 0.05F + 0.5F * Mth.sin(f * (float) Math.PI);
         Entity entity = level.getEntity(ghost);
-        if (entity instanceof EntityGhost && Minecraft.getInstance().options.getCameraType() == PointOfView.FIRST_PERSON) {
+        if (entity instanceof EntityGhost && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON) {
             EntityGhost ghostEntity = (EntityGhost) entity;
-            MatrixStack matrixstack = new MatrixStack();
+            PoseStack matrixstack = new PoseStack();
             matrixstack.mulPose(renderInfo.rotation());
             if (fromLeft) {
                 matrixstack.mulPose(Vector3f.YN.rotationDegrees(150.0F * f - 60.0F));
@@ -53,9 +54,9 @@ public class ParticleGhostAppearance extends Particle {
             }
             matrixstack.scale(-1.0F, -1.0F, 1.0F);
             matrixstack.translate(0.0D, 0.3F, 1.25D);
-            IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().renderBuffers().bufferSource();
+            MultiBufferSource.BufferSource irendertypebuffer$impl = Minecraft.getInstance().renderBuffers().bufferSource();
 
-            IVertexBuilder ivertexbuilder = irendertypebuffer$impl.getBuffer(IafRenderType.getGhost(RenderGhost.getGhostOverlayForType(ghostEntity.getColor())));
+            VertexConsumer ivertexbuilder = irendertypebuffer$impl.getBuffer(IafRenderType.getGhost(RenderGhost.getGhostOverlayForType(ghostEntity.getColor())));
             this.model.setupAnim(ghostEntity, 0, 0, entity.tickCount + partialTicks, 0, 0);
             this.model.renderToBuffer(matrixstack, ivertexbuilder, 240, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, f1);
             irendertypebuffer$impl.endBatch();

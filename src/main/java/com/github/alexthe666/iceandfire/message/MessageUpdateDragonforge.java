@@ -2,11 +2,11 @@ package com.github.alexthe666.iceandfire.message;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -24,11 +24,11 @@ public class MessageUpdateDragonforge {
     public MessageUpdateDragonforge() {
     }
 
-    public static MessageUpdateDragonforge read(PacketBuffer buf) {
+    public static MessageUpdateDragonforge read(FriendlyByteBuf buf) {
         return new MessageUpdateDragonforge(buf.readLong(), buf.readInt());
     }
 
-    public static void write(MessageUpdateDragonforge message, PacketBuffer buf) {
+    public static void write(MessageUpdateDragonforge message, FriendlyByteBuf buf) {
         buf.writeLong(message.blockPos);
         buf.writeInt(message.cookTime);
     }
@@ -40,7 +40,7 @@ public class MessageUpdateDragonforge {
 
         public static void handle(MessageUpdateDragonforge message, Supplier<NetworkEvent.Context> context) {
             context.get().setPacketHandled(true);
-            PlayerEntity player = context.get().getSender();
+            Player player = context.get().getSender();
             if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }

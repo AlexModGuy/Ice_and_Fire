@@ -1,36 +1,38 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.client.model.armor.ModelDragonsteelFireArmor;
+import com.github.alexthe666.iceandfire.client.model.armor.ModelDragonsteelIceArmor;
+import com.github.alexthe666.iceandfire.client.model.armor.ModelDragonsteelLightningArmor;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.client.IItemRenderProperties;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDragonItem {
+import static com.github.alexthe666.iceandfire.item.IafItemRegistry.*;
 
-    private final IArmorMaterial material;
-    private Multimap<Attribute, AttributeModifier> attributeModifierMultimap;
+public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDragonItem, IItemRenderProperties {
+
     private static final UUID[] ARMOR_MODIFIERS = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
+    private final ArmorMaterial material;
+    private Multimap<Attribute, AttributeModifier> attributeModifierMultimap;
 
-    public ItemDragonsteelArmor(IArmorMaterial material, int renderIndex, EquipmentSlotType slot, String gameName, String name) {
+    public ItemDragonsteelArmor(ArmorMaterial material, int renderIndex, EquipmentSlot slot, String gameName, String name) {
         super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.material = material;
         this.setRegistryName(IceAndFire.MODID, gameName);
@@ -38,8 +40,31 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
 
     }
 
+    @Override
+    public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
+        consumer.accept(new IItemRenderProperties() {
+            @Override
+            @Nullable
+            public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
+                boolean inner = armorSlot == EquipmentSlot.LEGS || armorSlot == EquipmentSlot.HEAD;
+                if (itemStack.getItem() instanceof ArmorItem) {
+                    ArmorMaterial armorMaterial = ((ArmorItem) itemStack.getItem()).getMaterial();
+                    if (DRAGONSTEEL_FIRE_ARMOR_MATERIAL.equals(armorMaterial))
+                        return (A) new ModelDragonsteelFireArmor(inner);
+                    if (DRAGONSTEEL_ICE_ARMOR_MATERIAL.equals(armorMaterial))
+                        return (A) new ModelDragonsteelIceArmor(inner);
+                    if (DRAGONSTEEL_LIGHTNING_ARMOR_MATERIAL.equals(armorMaterial))
+                        return (A) new ModelDragonsteelLightningArmor(inner);
+                }
+                return _default;
+
+            }
+        });
+    }
+
+
     //Workaround for armor attributes being registered before the config gets loaded
-    private Multimap<Attribute, AttributeModifier> createAttributeMap(){
+    private Multimap<Attribute, AttributeModifier> createAttributeMap() {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         UUID uuid = ARMOR_MODIFIERS[slot.getIndex()];
         builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", material.getDefenseForSlot(slot), AttributeModifier.Operation.ADDITION));
@@ -50,15 +75,14 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
         return builder.build();
     }
 
-    private Multimap<Attribute, AttributeModifier> getOrUpdateAttributeMap(){
+    private Multimap<Attribute, AttributeModifier> getOrUpdateAttributeMap() {
         //If the armor values have changed recreate the map
         //There might be a prettier way of accomplishing this but it works
         if (this.attributeModifierMultimap.containsKey(Attributes.ARMOR)
             && !this.attributeModifierMultimap.get(Attributes.ARMOR).isEmpty()
             && this.attributeModifierMultimap.get(Attributes.ARMOR).toArray()[0] instanceof AttributeModifier
             && ((AttributeModifier) this.attributeModifierMultimap.get(Attributes.ARMOR).toArray()[0]).getAmount() != getDefense()
-        )
-        {
+        ) {
             this.attributeModifierMultimap = createAttributeMap();
         }
         return attributeModifierMultimap;
@@ -66,34 +90,18 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        if (this.slot !=null) {
+        if (this.slot != null) {
             return (this.getMaterial()).getDurabilityForSlot(this.slot);
         }
         return super.getMaxDamage(stack);
     }
 
     @Override
-    @Nullable
-    public <A extends BipedModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
-        int legs = 11;
-        int armor = 10;
-        if (material == IafItemRegistry.DRAGONSTEEL_ICE_ARMOR_MATERIAL) {
-            legs = 13;
-            armor = 12;
-        }
-        if (material == IafItemRegistry.DRAGONSTEEL_LIGHTNING_ARMOR_MATERIAL) {
-            legs = 21;
-            armor = 20;
-        }
-        return (A) IceAndFire.PROXY.getArmorModel(slot == EquipmentSlotType.LEGS ? legs : armor);
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        tooltip.add(new TranslatableComponent("item.dragonscales_armor.desc").withStyle(ChatFormatting.GRAY));
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.dragonscales_armor.desc").withStyle(TextFormatting.GRAY));
-    }
-
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
         return equipmentSlot == this.slot ? getOrUpdateAttributeMap() : super.getDefaultAttributeModifiers(equipmentSlot);
     }
 
@@ -105,13 +113,13 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
     }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
-        if (material == IafItemRegistry.DRAGONSTEEL_FIRE_ARMOR_MATERIAL) {
-            return "iceandfire:textures/models/armor/armor_dragonsteel_fire" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
+        if (material == DRAGONSTEEL_FIRE_ARMOR_MATERIAL) {
+            return "iceandfire:textures/models/armor/armor_dragonsteel_fire" + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png");
         } else if (material == IafItemRegistry.DRAGONSTEEL_ICE_ARMOR_MATERIAL) {
-            return "iceandfire:textures/models/armor/armor_dragonsteel_ice" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
+            return "iceandfire:textures/models/armor/armor_dragonsteel_ice" + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png");
         } else {
-            return "iceandfire:textures/models/armor/armor_dragonsteel_lightning" + (slot == EquipmentSlotType.LEGS ? "_legs.png" : ".png");
+            return "iceandfire:textures/models/armor/armor_dragonsteel_lightning" + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png");
         }
     }
 }

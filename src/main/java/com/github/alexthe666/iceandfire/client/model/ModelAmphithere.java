@@ -3,14 +3,13 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
-import com.github.alexthe666.iceandfire.client.model.util.EntityModelPartBuilder;
+import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 public class ModelAmphithere extends ModelDragonBase<EntityAmphithere> {
     public AdvancedModelBox BodyUpper;
@@ -298,13 +297,17 @@ public class ModelAmphithere extends ModelDragonBase<EntityAmphithere> {
     }
 
     @Override
-    public Iterable<ModelRenderer> parts() {
+    public Iterable<BasicModelPart> parts() {
         return ImmutableList.of(BodyUpper);
     }
 
     @Override
     public Iterable<AdvancedModelBox> getAllParts() {
-        return EntityModelPartBuilder.getAllPartsFromClass(this.getClass(), this.getClass().getName());
+        return ImmutableList.of(BodyUpper, BodyLower, Neck1, WingL, WingR, Tail1, Tail2, Tail3, Tail4,
+            Club, TailR1, TailL1, TailL2, TailR2, Neck2, Neck3, Head, HeadFront, Jaw,
+            CrestL1, CrestL2, CrestR2, CrestR1, CrestR3, CrestL3, CrestRB, CrestLB,
+            Beak, Teeth2, Teeth1, WingL2, WingL3, WingL21, FingerL1, FingerL2, FingerL3,
+            FingerL4, WingR2, WingR3, WingR21, FingerR1, FingerR2, FingerR3, FingerR4);
     }
 
     public void animate(IAnimatedEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
@@ -438,8 +441,8 @@ public class ModelAmphithere extends ModelDragonBase<EntityAmphithere> {
             this.BodyUpper.setScale(0.5F, 0.5F, 0.5F);
             this.Head.setScale(1.5F, 1.5F, 1.5F);
             this.HeadFront.setScale(1, 1, 1);
-            this.HeadFront.z = -2F;
-            this.Jaw.z = -4.5F;
+            this.HeadFront.offsetZ = -2F;
+            this.Jaw.offsetZ = -4.5F;
         } else {
             this.BodyUpper.setScale(1F, 1F, 1F);
             this.Head.setScale(1F, 1F, 1F);
@@ -566,7 +569,7 @@ public class ModelAmphithere extends ModelDragonBase<EntityAmphithere> {
     }
 
     @Override
-    public void renderStatue(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, Entity living) {
+    public void renderStatue(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, Entity living) {
         this.renderToBuffer(matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 
     }

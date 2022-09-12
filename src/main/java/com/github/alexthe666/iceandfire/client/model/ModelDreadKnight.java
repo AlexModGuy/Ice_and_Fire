@@ -4,12 +4,12 @@ import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.client.model.ModelAnimator;
 import com.github.alexthe666.iceandfire.client.model.util.HideableModelRenderer;
 import com.github.alexthe666.iceandfire.entity.EntityDreadKnight;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class ModelDreadKnight extends ModelDreadBase<EntityDreadKnight> {
     public HideableModelRenderer chestplate;
@@ -23,8 +23,8 @@ public class ModelDreadKnight extends ModelDreadBase<EntityDreadKnight> {
     public ModelDreadKnight(float modelScale) {
         this.texWidth = 128;
         this.texHeight = 64;
-        this.leftArmPose = BipedModel.ArmPose.EMPTY;
-        this.rightArmPose = BipedModel.ArmPose.EMPTY;
+        this.leftArmPose = HumanoidModel.ArmPose.EMPTY;
+        this.rightArmPose = HumanoidModel.ArmPose.EMPTY;
         this.sleeveRight = new HideableModelRenderer(this, 35, 33);
         this.sleeveRight.setPos(0.0F, -0.1F, 0.0F);
         this.sleeveRight.addBox(-4.0F, -2.1F, -2.5F, 5, 6, 5, modelScale);
@@ -89,15 +89,15 @@ public class ModelDreadKnight extends ModelDreadBase<EntityDreadKnight> {
 
     @Override
     public void prepareMobModel(EntityDreadKnight livingEntityIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
-        this.rightArmPose = BipedModel.ArmPose.EMPTY;
-        this.leftArmPose = BipedModel.ArmPose.EMPTY;
-        ItemStack itemstack = livingEntityIn.getItemInHand(Hand.MAIN_HAND);
+        this.rightArmPose = HumanoidModel.ArmPose.EMPTY;
+        this.leftArmPose = HumanoidModel.ArmPose.EMPTY;
+        ItemStack itemstack = livingEntityIn.getItemInHand(InteractionHand.MAIN_HAND);
 
         if (itemstack.getItem() == Items.BOW && livingEntityIn.swinging) {
-            if (livingEntityIn.getMainArm() == HandSide.RIGHT) {
-                this.rightArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
+            if (livingEntityIn.getMainArm() == HumanoidArm.RIGHT) {
+                this.rightArmPose = HumanoidModel.ArmPose.BOW_AND_ARROW;
             } else {
-                this.leftArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
+                this.leftArmPose = HumanoidModel.ArmPose.BOW_AND_ARROW;
             }
         }
         super.prepareMobModel(livingEntityIn, limbSwing, limbSwingAmount, partialTickTime);
@@ -121,8 +121,8 @@ public class ModelDreadKnight extends ModelDreadBase<EntityDreadKnight> {
     @Override
     public void copyPropertiesTo(EntityModel<EntityDreadKnight> p_217111_1_) {
         super.copyPropertiesTo(p_217111_1_);
-        if (p_217111_1_ instanceof BipedModel) {
-            BipedModel modelbiped = (BipedModel) p_217111_1_;
+        if (p_217111_1_ instanceof HumanoidModel) {
+            HumanoidModel modelbiped = (HumanoidModel) p_217111_1_;
             modelbiped.leftArmPose = this.leftArmPose;
             modelbiped.rightArmPose = this.rightArmPose;
             modelbiped.crouching = this.isSneak;

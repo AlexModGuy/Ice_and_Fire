@@ -3,19 +3,19 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PixieAISteal extends Goal {
     private final EntityPixie temptedEntity;
-    private PlayerEntity temptingPlayer;
+    private Player temptingPlayer;
     private int delayTemptCounter = 0;
     private boolean isRunning;
 
@@ -39,7 +39,7 @@ public class PixieAISteal extends Goal {
             return false;
         } else {
             this.temptingPlayer = this.temptedEntity.level.getNearestPlayer(this.temptedEntity, 10.0D);
-            return this.temptingPlayer != null && (this.temptedEntity.getItemInHand(Hand.MAIN_HAND).isEmpty() && !this.temptingPlayer.inventory.isEmpty() && !this.temptingPlayer.isCreative());
+            return this.temptingPlayer != null && (this.temptedEntity.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !this.temptingPlayer.getInventory().isEmpty() && !this.temptingPlayer.isCreative());
         }
     }
 
@@ -65,11 +65,11 @@ public class PixieAISteal extends Goal {
     public void tick() {
         this.temptedEntity.getLookControl().setLookAt(this.temptingPlayer, this.temptedEntity.getMaxHeadYRot() + 20, this.temptedEntity.getMaxHeadXRot());
         ArrayList<Integer> slotlist = new ArrayList<>();
-        if (this.temptedEntity.distanceToSqr(this.temptingPlayer) < 3D && !this.temptingPlayer.inventory.isEmpty()) {
+        if (this.temptedEntity.distanceToSqr(this.temptingPlayer) < 3D && !this.temptingPlayer.getInventory().isEmpty()) {
 
-            for (int i = 0; i < this.temptingPlayer.inventory.getContainerSize(); i++) {
-                ItemStack targetStack = this.temptingPlayer.inventory.getItem(i);
-                if (!PlayerInventory.isHotbarSlot(i) && !targetStack.isEmpty() && targetStack.isStackable()) {
+            for (int i = 0; i < this.temptingPlayer.getInventory().getContainerSize(); i++) {
+                ItemStack targetStack = this.temptingPlayer.getInventory().getItem(i);
+                if (!Inventory.isHotbarSlot(i) && !targetStack.isEmpty() && targetStack.isStackable()) {
                     slotlist.add(i);
                 }
             }
@@ -80,9 +80,9 @@ public class PixieAISteal extends Goal {
                 } else {
                     slot = slotlist.get(ThreadLocalRandom.current().nextInt(slotlist.size()));
                 }
-                ItemStack randomItem = this.temptingPlayer.inventory.getItem(slot);
-                this.temptedEntity.setItemInHand(Hand.MAIN_HAND, randomItem);
-                this.temptingPlayer.inventory.removeItemNoUpdate(slot);
+                ItemStack randomItem = this.temptingPlayer.getInventory().getItem(slot);
+                this.temptedEntity.setItemInHand(InteractionHand.MAIN_HAND, randomItem);
+                this.temptingPlayer.getInventory().removeItemNoUpdate(slot);
                 this.temptedEntity.flipAI(true);
                 this.temptedEntity.playSound(IafSoundRegistry.PIXIE_TAUNT, 1F, 1F);
 
@@ -90,7 +90,7 @@ public class PixieAISteal extends Goal {
                     pixie.stealCooldown = 1000 + pixie.getRandom().nextInt(3000);
                 }
                 if (temptingPlayer != null) {
-                    this.temptingPlayer.addEffect(new EffectInstance(this.temptedEntity.negativePotions[this.temptedEntity.getColor()], 100));
+                    this.temptingPlayer.addEffect(new MobEffectInstance(this.temptedEntity.negativePotions[this.temptedEntity.getColor()], 100));
                 }
             } else {
                 //If the pixie couldn't steal anything

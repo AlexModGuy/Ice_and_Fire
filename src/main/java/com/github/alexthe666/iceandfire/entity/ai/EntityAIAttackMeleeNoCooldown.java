@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 
 public class EntityAIAttackMeleeNoCooldown extends MeleeAttackGoal {
-    public EntityAIAttackMeleeNoCooldown(CreatureEntity creature, double speed, boolean memory) {
+    public EntityAIAttackMeleeNoCooldown(PathfinderMob creature, double speed, boolean memory) {
         super(creature, speed, memory);
     }
 

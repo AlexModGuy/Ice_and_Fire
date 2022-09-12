@@ -16,6 +16,8 @@ jobs:
         run: chmod +x gradlew
       - name: Get date
         run: echo "DATE=$(date --rfc-3339=date)" >> ${GITHUB_ENV}
+      - name: Set Minecraft Version
+        run: echo "MINECRAFT_VERSION=${GITHUB_REF##*/}" >> ${GITHUB_ENV}
       - name: Build jar
         run: ./gradlew build
         env:
@@ -25,7 +27,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest-snapshot"
+          automatic_release_tag: "${{env.MINECRAFT_VERSION}}-latest-snapshot"
           prerelease: true
           title: Development Build ${{env.DATE}}
           files: |

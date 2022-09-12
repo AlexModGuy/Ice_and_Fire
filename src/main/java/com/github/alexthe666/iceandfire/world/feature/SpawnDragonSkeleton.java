@@ -4,31 +4,34 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import java.util.Random;
 
-public class SpawnDragonSkeleton extends Feature<NoFeatureConfig> {
+public class SpawnDragonSkeleton extends Feature<NoneFeatureConfiguration> {
 
     protected EntityType<? extends EntityDragonBase> dragonType;
 
-    public SpawnDragonSkeleton(EntityType<? extends EntityDragonBase> dt, Codec<NoFeatureConfig> configFactoryIn) {
+    public SpawnDragonSkeleton(EntityType<? extends EntityDragonBase> dt, Codec<NoneFeatureConfiguration> configFactoryIn) {
         super(configFactoryIn);
         dragonType = dt;
     }
 
     @Override
-    public boolean place(ISeedReader worldIn, ChunkGenerator p_230362_3_, Random rand, BlockPos position, NoFeatureConfig p_230362_6_) {
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        WorldGenLevel worldIn = context.level();
+        Random rand = context.random();
+        BlockPos position = context.origin();
         if (!IafWorldRegistry.isDimensionListedForMobs(worldIn)) {
             return false;
         }
-        position = worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, position.offset(8, 0, 8));
+        position = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position.offset(8, 0, 8));
 
         if (IafConfig.generateDragonSkeletons) {
             if (rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
@@ -39,7 +42,7 @@ public class SpawnDragonSkeleton extends Feature<NoFeatureConfig> {
                 dragon.modelDeadProgress = 20;
                 dragon.setModelDead(true);
                 dragon.setDeathStage((dragonage / 5) / 2);
-                dragon.yRot = rand.nextInt(360);
+                dragon.setYRot(rand.nextInt(360));
                 worldIn.addFreshEntity(dragon);
             }
         }

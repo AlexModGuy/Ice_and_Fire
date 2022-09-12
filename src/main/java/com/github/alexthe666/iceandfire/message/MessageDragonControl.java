@@ -3,11 +3,11 @@ package com.github.alexthe666.iceandfire.message;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -31,11 +31,11 @@ public class MessageDragonControl {
     public MessageDragonControl() {
     }
 
-    public static MessageDragonControl read(PacketBuffer buf) {
+    public static MessageDragonControl read(FriendlyByteBuf buf) {
         return new MessageDragonControl(buf.readInt(), buf.readByte(), buf.readDouble(), buf.readDouble(), buf.readDouble());
     }
 
-    public static void write(MessageDragonControl message, PacketBuffer buf) {
+    public static void write(MessageDragonControl message, FriendlyByteBuf buf) {
         buf.writeInt(message.dragonId);
         buf.writeByte(message.controlState);
         buf.writeDouble(message.posX);
@@ -61,7 +61,7 @@ public class MessageDragonControl {
 
         public static void handle(MessageDragonControl message, Supplier<NetworkEvent.Context> context) {
             context.get().setPacketHandled(true);
-            PlayerEntity player = context.get().getSender();
+            Player player = context.get().getSender();
             if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }

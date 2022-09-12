@@ -8,11 +8,11 @@ import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.util.HomePosition;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import java.util.Random;
 
@@ -21,7 +21,7 @@ public class WorldGenLightningDragonCave extends WorldGenDragonCave {
     public static ResourceLocation LIGHTNING_DRAGON_CHEST = new ResourceLocation(IceAndFire.MODID, "chest/lightning_dragon_female_cave");
     public static ResourceLocation LIGHTNING_DRAGON_CHEST_MALE = new ResourceLocation(IceAndFire.MODID, "chest/lightning_dragon_male_cave");
 
-    public WorldGenLightningDragonCave(Codec<NoFeatureConfig> configFactoryIn) {
+    public WorldGenLightningDragonCave(Codec<NoneFeatureConfiguration> configFactoryIn) {
         super(configFactoryIn);
         DRAGON_CHEST = LIGHTNING_DRAGON_CHEST;
         DRAGON_MALE_CHEST = LIGHTNING_DRAGON_CHEST_MALE;
@@ -35,7 +35,7 @@ public class WorldGenLightningDragonCave extends WorldGenDragonCave {
     }
 
     @Override
-    EntityDragonBase createDragon(ISeedReader worldIn, Random rand, BlockPos position, int dragonAge) {
+    EntityDragonBase createDragon(WorldGenLevel worldIn, Random rand, BlockPos position, int dragonAge) {
         EntityLightningDragon dragon = new EntityLightningDragon(IafEntityRegistry.LIGHTNING_DRAGON.get(),
             worldIn.getLevel());
         dragon.setGender(isMale);

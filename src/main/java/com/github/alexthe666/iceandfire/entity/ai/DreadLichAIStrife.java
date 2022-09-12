@@ -2,9 +2,9 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDreadLich;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.RangedAttackMob;
 
 import java.util.EnumSet;
 
@@ -63,7 +63,7 @@ public class DreadLichAIStrife extends Goal {
 
         if (LivingEntity != null) {
             final double d0 = this.entity.distanceToSqr(LivingEntity.getX(), LivingEntity.getBoundingBox().minY, LivingEntity.getZ());
-            final boolean flag = this.entity.getSensing().canSee(LivingEntity);
+            final boolean flag = this.entity.getSensing().hasLineOfSight(LivingEntity);
             final boolean flag1 = this.seeTime > 0;
 
             if (flag != flag1) {
@@ -113,7 +113,7 @@ public class DreadLichAIStrife extends Goal {
                 this.entity.stopUsingItem();
             } else if (flag) {
                 this.entity.stopUsingItem();
-                ((IRangedAttackMob) this.entity).performRangedAttack(LivingEntity, 0);
+                ((RangedAttackMob) this.entity).performRangedAttack(LivingEntity, 0);
             }
         }
     }

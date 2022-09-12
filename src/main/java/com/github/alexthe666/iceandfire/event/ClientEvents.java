@@ -18,14 +18,14 @@ import com.github.alexthe666.iceandfire.entity.util.ICustomMoveController;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.MainMenuScreen;
+import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.settings.PointOfView;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -63,13 +63,13 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onCameraSetup(EntityViewRenderEvent.CameraSetup event) {
-        PlayerEntity player = Minecraft.getInstance().player;
+        Player player = Minecraft.getInstance().player;
         if (player.getVehicle() != null) {
             if (player.getVehicle() instanceof EntityDragonBase) {
                 int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
                 float scale = ((EntityDragonBase) player.getVehicle()).getRenderSize() / 3;
-                if (Minecraft.getInstance().options.getCameraType() == PointOfView.THIRD_PERSON_BACK ||
-                    Minecraft.getInstance().options.getCameraType() == PointOfView.THIRD_PERSON_FRONT) {
+                if (Minecraft.getInstance().options.getCameraType() == CameraType.THIRD_PERSON_BACK ||
+                    Minecraft.getInstance().options.getCameraType() == CameraType.THIRD_PERSON_FRONT) {
                     if (currentView == 1) {
                         event.getInfo().move(-event.getInfo().getMaxZoom(scale * 1.2F), 0F, 0);
                     } else if (currentView == 2) {
@@ -97,8 +97,8 @@ public class ClientEvents {
                 }
             }
         }
-        if (event.getEntityLiving() instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+        if (event.getEntityLiving() instanceof Player) {
+            Player player = (Player) event.getEntityLiving();
             if (player.level.isClientSide) {
 
                 if (player.getVehicle() instanceof ICustomMoveController) {
@@ -183,7 +183,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onGuiOpened(GuiOpenEvent event) {
-        if (IafConfig.customMainMenu && event.getGui() instanceof MainMenuScreen && !(event.getGui() instanceof IceAndFireMainMenu)) {
+        if (IafConfig.customMainMenu && event.getGui() instanceof TitleScreen && !(event.getGui() instanceof IceAndFireMainMenu)) {
             event.setGui(new IceAndFireMainMenu());
         }
     }
@@ -195,10 +195,10 @@ public class ClientEvents {
                 EntityDragonBase dragon = (EntityDragonBase) event.getEntityBeingMounted();
                 if (dragon.isTame() && dragon.isOwnedBy(Minecraft.getInstance().player)) {
                     if (event.isDismounting()) {
-                        Minecraft.getInstance().options.setCameraType(PointOfView.values()[IceAndFire.PROXY.getPreviousViewType()]);
+                        Minecraft.getInstance().options.setCameraType(CameraType.values()[IceAndFire.PROXY.getPreviousViewType()]);
                     } else {
                         IceAndFire.PROXY.setPreviousViewType(Minecraft.getInstance().options.getCameraType().ordinal());
-                        Minecraft.getInstance().options.setCameraType(PointOfView.values()[1]);
+                        Minecraft.getInstance().options.setCameraType(CameraType.values()[1]);
                         IceAndFire.PROXY.setDragon3rdPersonView(2);
                     }
                 }

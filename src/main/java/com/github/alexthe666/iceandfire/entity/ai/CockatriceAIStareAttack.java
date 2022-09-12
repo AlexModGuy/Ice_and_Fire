@@ -3,10 +3,10 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
@@ -23,8 +23,8 @@ public class CockatriceAIStareAttack extends Goal {
     }
 
     public static boolean isEntityLookingAt(LivingEntity looker, LivingEntity seen, double degree) {
-        Vector3d Vector3d = looker.getViewVector(1.0F).normalize();
-        Vector3d Vector3d1 = new Vector3d(seen.getX() - looker.getX(), seen.getBoundingBox().minY + seen.getEyeHeight() - (looker.getY() + looker.getEyeHeight()), seen.getZ() - looker.getZ());
+        Vec3 Vector3d = looker.getViewVector(1.0F).normalize();
+        Vec3 Vector3d1 = new Vec3(seen.getX() - looker.getX(), seen.getBoundingBox().minY + seen.getEyeHeight() - (looker.getY() + looker.getEyeHeight()), seen.getZ() - looker.getZ());
         Vector3d1 = Vector3d1.normalize();
         final double d0 = Vector3d1.length();
         final double d1 = Vector3d.dot(Vector3d1);
@@ -75,7 +75,7 @@ public class CockatriceAIStareAttack extends Goal {
 
             this.entity.distanceToSqr(LivingEntity.getX(), LivingEntity.getBoundingBox().minY,
                 LivingEntity.getZ());
-            final boolean flag = this.entity.getSensing().canSee(LivingEntity);
+            final boolean flag = this.entity.getSensing().hasLineOfSight(LivingEntity);
             final boolean flag1 = this.seeTime > 0;
 
             if (flag != flag1) {

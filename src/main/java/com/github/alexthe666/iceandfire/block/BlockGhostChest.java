@@ -3,40 +3,39 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityGhostChest;
-import com.github.alexthe666.iceandfire.item.ICustomRendered;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
-public class BlockGhostChest extends ChestBlock implements ICustomRendered {
+public class BlockGhostChest extends ChestBlock {
 
     public BlockGhostChest() {
         super(
-    		Properties
+            Properties
                 .of(Material.WOOD)
                 .strength(2.5F)
-    			.sound(SoundType.WOOD),
-			() -> {
+                .sound(SoundType.WOOD),
+            () -> {
                 return IafTileEntityRegistry.GHOST_CHEST.get();
-	        }
-		);
+            }
+        );
 
         setRegistryName(IceAndFire.MODID, "ghost_chest");
     }
 
     @Override
-    public TileEntity newBlockEntity(IBlockReader worldIn) {
-        return new TileEntityGhostChest();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileEntityGhostChest(pos, state);
     }
 
     @Override
@@ -50,12 +49,12 @@ public class BlockGhostChest extends ChestBlock implements ICustomRendered {
     }
 
     @Override
-    public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-        return MathHelper.clamp(ChestTileEntity.getOpenCount(blockAccess, pos), 0, 15);
+    public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
+        return Mth.clamp(ChestBlockEntity.getOpenCount(blockAccess, pos), 0, 15);
     }
 
     @Override
-    public int getDirectSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+    public int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
         return side == Direction.UP ? blockState.getSignal(blockAccess, pos, side) : 0;
     }
 }

@@ -2,42 +2,44 @@ package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.entity.EntityGhost;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class TileEntityGhostChest extends ChestTileEntity {
+public class TileEntityGhostChest extends ChestBlockEntity {
 
-    public TileEntityGhostChest() {
-        super(IafTileEntityRegistry.GHOST_CHEST.get());
+    public TileEntityGhostChest(BlockPos pos, BlockState state) {
+        super(IafTileEntityRegistry.GHOST_CHEST.get(), pos, state);
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
-        super.load(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
         return compound;
     }
 
     @Override
-    public void startOpen(PlayerEntity player) {
+    public void startOpen(Player player) {
         super.startOpen(player);
         if (this.level.getDifficulty() != Difficulty.PEACEFUL) {
             EntityGhost ghost = IafEntityRegistry.GHOST.get().create(level);
             ghost.absMoveTo(this.worldPosition.getX() + 0.5F, this.worldPosition.getY() + 0.5F, this.worldPosition.getZ() + 0.5F,
                 ThreadLocalRandom.current().nextFloat() * 360F, 0);
             if (!this.level.isClientSide) {
-                ghost.finalizeSpawn((ServerWorld) level, level.getCurrentDifficultyAt(this.worldPosition), SpawnReason.SPAWNER, null, null);
+                ghost.finalizeSpawn((ServerLevel) level, level.getCurrentDifficultyAt(this.worldPosition), MobSpawnType.SPAWNER, null, null);
                 if (!player.isCreative()) {
                     ghost.setTarget(player);
                 }
@@ -51,8 +53,8 @@ public class TileEntityGhostChest extends ChestTileEntity {
     }
 
     @Override
-    protected void signalOpenCount() {
-        super.signalOpenCount();
-        this.level.updateNeighborsAt(this.worldPosition.below(), this.getBlockState().getBlock());
+    protected void signalOpenCount(Level level, BlockPos pos, BlockState state, int p_155336_, int p_155337_) {
+        super.signalOpenCount(level, pos, state, p_155336_, p_155337_);
+        level.updateNeighborsAt(pos.below(), state.getBlock());
     }
 }
