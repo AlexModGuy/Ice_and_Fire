@@ -144,13 +144,6 @@ public class PathingStuckHandler implements IStuckHandler
             return;
         }
 
-        if (navigator.getOurEntity() instanceof IStuckHandlerEntity && !((IStuckHandlerEntity) navigator.getOurEntity()).canBeStuck())
-        {
-            resetGlobalStuckTimers();
-            return;
-        }
-
-
         final double distanceToGoal =
                 navigator.getOurEntity().getPositionVec().distanceTo(new Vector3d(navigator.getDesiredPos().getX(), navigator.getDesiredPos().getY(), navigator.getDesiredPos().getZ()));
 

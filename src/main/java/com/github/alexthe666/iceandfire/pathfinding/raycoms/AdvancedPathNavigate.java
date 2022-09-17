@@ -249,11 +249,10 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
 
     @Override
     public void tick() {
-        if (nodeProcessor instanceof  NodeProcessorWalk){
-            ((NodeProcessorWalk)nodeProcessor).setEntitySize(width, height);
-        }
-        else{
-            ((NodeProcessorFly)nodeProcessor).setEntitySize(width, height);
+        if (nodeProcessor instanceof NodeProcessorWalk) {
+            ((NodeProcessorWalk) nodeProcessor).setEntitySize(width, height);
+        } else {
+            ((NodeProcessorFly) nodeProcessor).setEntitySize(width, height);
         }
         if (desiredPosTimeout > 0) {
             if (desiredPosTimeout-- <= 0) {
