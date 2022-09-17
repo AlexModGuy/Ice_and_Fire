@@ -71,6 +71,8 @@ public class GuiBestiary extends Screen {
                 Set<EnumBestiaryPages> pages = EnumBestiaryPages
                     .containedPages(Ints.asList(book.getTag().getIntArray("Pages")));
                 allPageTypes.addAll(pages);
+                // Make sure the pages are sorted according to the enum
+                allPageTypes.sort(Comparator.comparingInt(Enum::ordinal));
                 indexPagesTotal = (int) Math.ceil(pages.size() / 10D);
             }
         }
