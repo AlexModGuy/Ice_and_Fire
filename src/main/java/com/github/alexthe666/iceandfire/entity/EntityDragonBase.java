@@ -1097,6 +1097,8 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     @Override
     public boolean isAlive() {
+        if (this.isModelDead())
+            return !this.removed;
         return super.isAlive();
     }
 
@@ -1634,7 +1636,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     @Override
     public boolean attackEntityFrom(DamageSource dmg, float i) {
-        if (this.isModelDead()) {
+        if (this.isModelDead() && dmg != DamageSource.OUT_OF_WORLD) {
             return false;
         }
         if (this.isBeingRidden() && dmg.getTrueSource() != null && this.getControllingPassenger() != null && dmg.getTrueSource() == this.getControllingPassenger()) {
@@ -2022,11 +2024,6 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     @Override
     public void onDeath(DamageSource cause) {
-//        if (cause.getTrueSource() != null) {
-//            if (cause.getTrueSource() instanceof PlayerEntity) {
-//            	((PlayerEntity) cause.getTrueSource()).addStat(ModAchievements.dragonSlayer, 1);
-//            }
-//        }
         super.onDeath(cause);
     }
 
@@ -2133,22 +2130,6 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return;
     }
 
-    /*
-    public boolean shouldRender(ICamera camera) {
-        boolean render = false;
-        return inFrustrum(camera, headPart) || inFrustrum(camera, neckPart) ||
-                inFrustrum(camera, leftWingLowerPart) || inFrustrum(camera, rightWingLowerPart) ||
-                inFrustrum(camera, leftWingUpperPart) || inFrustrum(camera, rightWingUpperPart) ||
-                inFrustrum(camera, tail1Part) || inFrustrum(camera, tail2Part) ||
-                inFrustrum(camera, tail3Part) || inFrustrum(camera, tail4Part);
-    }
-
-    private boolean inFrustrum(ICamera camera, Entity entity) {
-        return camera != null && entity != null && camera.isBoundingBoxInFrustum(entity.getBoundingBox());
-    }
-
-    */
-
     public RayTraceResult rayTraceRider(Entity rider, double blockReachDistance, float partialTicks) {
         Vector3d Vector3d = rider.getEyePosition(partialTicks);
         Vector3d Vector3d1 = rider.getLook(partialTicks);
@@ -2183,12 +2164,13 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     @Override
     public void onKillCommand() {
         this.remove();
-        this.setDeathStage(this.getAgeInDays() / 5);
-        this.setModelDead(false);
     }
 
     @Override
     public boolean isOnSameTeam(Entity entityIn) {
+        // Workaround to make sure dragons won't be attacked when dead
+        if (this.isModelDead())
+            return true;
         if (this.isTamed()) {
             LivingEntity livingentity = this.getOwner();
             if (entityIn == livingentity) {
