@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EggEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -37,6 +38,7 @@ public class EntityHippogryphEgg extends EggEntity {
         this(type, worldIn);
         this.setPosition(throwerIn.getPosX(), throwerIn.getPosYEye() - 0.1F, throwerIn.getPosZ());
         this.itemstack = stack;
+        this.setShooter(throwerIn);
     }
 
     @Override
@@ -72,6 +74,11 @@ public class EntityHippogryphEgg extends EggEntity {
                 }
                 hippogryph.setVariant(variant);
             }
+
+            if (thrower instanceof PlayerEntity) {
+                hippogryph.setTamedBy((PlayerEntity) thrower);
+            }
+
             this.world.addEntity(hippogryph);
         }
 
