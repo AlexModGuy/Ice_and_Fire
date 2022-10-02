@@ -1,5 +1,5 @@
 {
-  "pools":[
+  "pools": [
     {
       "name": "hydra",
       "rolls": 3,

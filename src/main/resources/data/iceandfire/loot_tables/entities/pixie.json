@@ -26,7 +26,8 @@
           ]
         }
       ]
-    }, {
+    },
+    {
       "name": "if_pixie",
       "conditions": [
         {

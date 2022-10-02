@@ -7,10 +7,10 @@
   ],
   "key": {
     "G": {
-      "tag" : "forge:glass/colorless"
+      "tag": "forge:glass/colorless"
     },
     "P": {
-      "tag" : "minecraft:planks"
+      "tag": "minecraft:planks"
     }
   },
   "result": {

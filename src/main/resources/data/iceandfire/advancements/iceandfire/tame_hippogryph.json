@@ -1,24 +1,24 @@
 {
-    "display": {
-        "icon": {
-            "item": "iceandfire:hippogryph_talon"
-        },
-        "title": {
-            "translate": "advancements.iceandfire.tame_hippogryph.title"
-        },
-        "description": {
-            "translate": "advancements.iceandfire.tame_hippogryph.description"
-        }
+  "display": {
+    "icon": {
+      "item": "iceandfire:hippogryph_talon"
     },
-    "parent": "iceandfire:iceandfire/bestiary",
-    "criteria": {
-        "tame_rat": {
-            "trigger": "minecraft:tame_animal",
-            "conditions": {
-                "entity": {
-                    "type": "iceandfire:hippogryph"
-                }
-            }
-        }
+    "title": {
+      "translate": "advancements.iceandfire.tame_hippogryph.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.tame_hippogryph.description"
     }
+  },
+  "parent": "iceandfire:iceandfire/bestiary",
+  "criteria": {
+    "tame_rat": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "iceandfire:hippogryph"
+        }
+      }
+    }
+  }
 }

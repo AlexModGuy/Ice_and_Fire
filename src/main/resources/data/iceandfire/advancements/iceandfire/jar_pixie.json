@@ -1,75 +1,37 @@
 {
-    "display": {
-        "icon": {
-            "item": "iceandfire:pixie_jar_0"
-        },
-        "title": {
-            "translate": "advancements.iceandfire.jar_pixie.title"
-        },
-        "description": {
-            "translate": "advancements.iceandfire.jar_pixie.description"
-        }
+  "display": {
+    "icon": {
+      "item": "iceandfire:pixie_jar_0"
     },
-    "parent": "iceandfire:iceandfire/tame_pixie",
-    "criteria": {
-        "jar_0": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:pixie_jar_0"
-                    }
-                ]
-            }
-        },
-        "jar_1": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:pixie_jar_1"
-                    }
-                ]
-            }
-        },
-        "jar_2": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:pixie_jar_2"
-                    }
-                ]
-            }
-        },
-        "jar_3": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:pixie_jar_3"
-                    }
-                ]
-            }
-        },
-        "jar_4": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:pixie_jar_4"
-                    }
-                ]
-            }
-        }
+    "title": {
+      "translate": "advancements.iceandfire.jar_pixie.title"
     },
-    "requirements": [
-        [
-            "jar_0",
-            "jar_1",
-            "jar_2",
-            "jar_3",
-            "jar_4"
+    "description": {
+      "translate": "advancements.iceandfire.jar_pixie.description"
+    }
+  },
+  "parent": "iceandfire:iceandfire/tame_pixie",
+  "criteria": {
+    "jar": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "iceandfire:pixie_jar_0",
+              "iceandfire:pixie_jar_1",
+              "iceandfire:pixie_jar_2",
+              "iceandfire:pixie_jar_3",
+              "iceandfire:pixie_jar_4"
+            ]
+          }
         ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "jar"
     ]
+  ]
 }

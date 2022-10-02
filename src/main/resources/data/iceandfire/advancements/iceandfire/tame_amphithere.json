@@ -1,24 +1,24 @@
 {
-    "display": {
-        "icon": {
-            "item": "iceandfire:amphithere_feather"
-        },
-        "title": {
-            "translate": "advancements.iceandfire.tame_amphithere.title"
-        },
-        "description": {
-            "translate": "advancements.iceandfire.tame_amphithere.description"
-        }
+  "display": {
+    "icon": {
+      "item": "iceandfire:amphithere_feather"
     },
-    "parent": "iceandfire:iceandfire/bestiary",
-    "criteria": {
-        "tame_rat": {
-            "trigger": "minecraft:tame_animal",
-            "conditions": {
-                "entity": {
-                    "type": "iceandfire:amphithere"
-                }
-            }
-        }
+    "title": {
+      "translate": "advancements.iceandfire.tame_amphithere.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.tame_amphithere.description"
     }
+  },
+  "parent": "iceandfire:iceandfire/bestiary",
+  "criteria": {
+    "tame_rat": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "iceandfire:amphithere"
+        }
+      }
+    }
+  }
 }

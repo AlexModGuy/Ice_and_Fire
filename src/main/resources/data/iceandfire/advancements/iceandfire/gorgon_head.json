@@ -1,26 +1,28 @@
 {
-    "display": {
-        "icon": {
-            "item": "iceandfire:gorgon_head"
-        },
-        "title": {
-            "translate": "advancements.iceandfire.gorgon_head.title"
-        },
-        "description": {
-            "translate": "advancements.iceandfire.gorgon_head.description"
-        }
+  "display": {
+    "icon": {
+      "item": "iceandfire:gorgon_head"
     },
-    "parent": "iceandfire:iceandfire/bestiary",
-    "criteria": {
-        "bestiary": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:gorgon_head"
-                    }
-                ]
-            }
-        }
+    "title": {
+      "translate": "advancements.iceandfire.gorgon_head.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.gorgon_head.description"
     }
+  },
+  "parent": "iceandfire:iceandfire/bestiary",
+  "criteria": {
+    "bestiary": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "iceandfire:gorgon_head"
+            ]
+          }
+        ]
+      }
+    }
+  }
 }

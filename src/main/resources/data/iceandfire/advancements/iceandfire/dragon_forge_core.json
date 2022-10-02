@@ -1,53 +1,35 @@
 {
-    "display": {
-        "icon": {
-            "item": "iceandfire:dragonforge_fire_core"
-        },
-        "title": {
-            "translate": "advancements.iceandfire.dragon_forge_core.title"
-        },
-        "description": {
-            "translate": "advancements.iceandfire.dragon_forge_core.description"
-        }
+  "display": {
+    "icon": {
+      "item": "iceandfire:dragonforge_fire_core"
     },
-    "parent": "iceandfire:iceandfire/dragon_forge_brick",
-    "criteria": {
-        "fire": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:dragonforge_fire_core_disabled"
-                    }
-                ]
-            }
-        },
-        "ice": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:dragonforge_ice_core_disabled"
-                    }
-                ]
-            }
-        },
-        "lightning": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:dragonforge_lightning_core_disabled"
-                    }
-                ]
-            }
-        }
+    "title": {
+      "translate": "advancements.iceandfire.dragon_forge_core.title"
     },
-    "requirements": [
-        [
-            "ice",
-            "fire",
-            "lightning"
+    "description": {
+      "translate": "advancements.iceandfire.dragon_forge_core.description"
+    }
+  },
+  "parent": "iceandfire:iceandfire/dragon_forge_brick",
+  "criteria": {
+    "core": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "iceandfire:dragonforge_fire_core_disabled",
+              "iceandfire:dragonforge_ice_core_disabled",
+              "iceandfire:dragonforge_lightning_core_disabled"
+            ]
+          }
         ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "core"
     ]
+  ]
 }

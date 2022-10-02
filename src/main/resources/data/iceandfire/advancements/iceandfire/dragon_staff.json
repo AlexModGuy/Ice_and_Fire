@@ -1,26 +1,28 @@
 {
-    "display": {
-        "icon": {
-            "item": "iceandfire:dragon_stick"
-        },
-        "title": {
-            "translate": "advancements.iceandfire.dragon_stick.title"
-        },
-        "description": {
-            "translate": "advancements.iceandfire.dragon_stick.description"
-        }
+  "display": {
+    "icon": {
+      "item": "iceandfire:dragon_stick"
     },
-    "parent": "iceandfire:iceandfire/dragon_egg",
-    "criteria": {
-        "bestiary": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:dragon_stick"
-                    }
-                ]
-            }
-        }
+    "title": {
+      "translate": "advancements.iceandfire.dragon_stick.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.dragon_stick.description"
     }
+  },
+  "parent": "iceandfire:iceandfire/dragon_egg",
+  "criteria": {
+    "bestiary": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "iceandfire:dragon_stick"
+            ]
+          }
+        ]
+      }
+    }
+  }
 }

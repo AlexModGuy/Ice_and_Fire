@@ -1,26 +1,28 @@
 {
-    "display": {
-        "icon": {
-            "item": "iceandfire:dragon_flute"
-        },
-        "title": {
-            "translate": "advancements.iceandfire.dragon_flute.title"
-        },
-        "description": {
-            "translate": "advancements.iceandfire.dragon_flute.description"
-        }
+  "display": {
+    "icon": {
+      "item": "iceandfire:dragon_flute"
     },
-    "parent": "iceandfire:iceandfire/dragon_egg",
-    "criteria": {
-        "bestiary": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:dragon_flute"
-                    }
-                ]
-            }
-        }
+    "title": {
+      "translate": "advancements.iceandfire.dragon_flute.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.dragon_flute.description"
     }
+  },
+  "parent": "iceandfire:iceandfire/dragon_egg",
+  "criteria": {
+    "bestiary": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "iceandfire:dragon_flute"
+            ]
+          }
+        ]
+      }
+    }
+  }
 }

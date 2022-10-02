@@ -1,26 +1,28 @@
 {
-    "display": {
-        "icon": {
-            "item": "iceandfire:dragon_meal"
-        },
-        "title": {
-            "translate": "advancements.iceandfire.dragon_meal.title"
-        },
-        "description": {
-            "translate": "advancements.iceandfire.dragon_meal.description"
-        }
+  "display": {
+    "icon": {
+      "item": "iceandfire:dragon_meal"
     },
-    "parent": "iceandfire:iceandfire/dragon_egg",
-    "criteria": {
-        "bestiary": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:dragon_meal"
-                    }
-                ]
-            }
-        }
+    "title": {
+      "translate": "advancements.iceandfire.dragon_meal.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.dragon_meal.description"
     }
+  },
+  "parent": "iceandfire:iceandfire/dragon_egg",
+  "criteria": {
+    "bestiary": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "iceandfire:dragon_meal"
+            ]
+          }
+        ]
+      }
+    }
+  }
 }

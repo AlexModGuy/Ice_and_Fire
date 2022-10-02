@@ -1,24 +1,24 @@
 {
-    "display": {
-        "icon": {
-            "item": "iceandfire:hippocampus_fin"
-        },
-        "title": {
-            "translate": "advancements.iceandfire.tame_hippocampus.title"
-        },
-        "description": {
-            "translate": "advancements.iceandfire.tame_hippocampus.description"
-        }
+  "display": {
+    "icon": {
+      "item": "iceandfire:hippocampus_fin"
     },
-    "parent": "iceandfire:iceandfire/bestiary",
-    "criteria": {
-        "tame_rat": {
-            "trigger": "minecraft:tame_animal",
-            "conditions": {
-                "entity": {
-                    "type": "iceandfire:hippocampus"
-                }
-            }
-        }
+    "title": {
+      "translate": "advancements.iceandfire.tame_hippocampus.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.tame_hippocampus.description"
     }
+  },
+  "parent": "iceandfire:iceandfire/bestiary",
+  "criteria": {
+    "tame_rat": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "iceandfire:hippocampus"
+        }
+      }
+    }
+  }
 }

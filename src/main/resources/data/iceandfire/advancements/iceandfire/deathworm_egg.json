@@ -1,26 +1,28 @@
 {
-    "display": {
-        "icon": {
-            "item": "iceandfire:deathworm_egg"
-        },
-        "title": {
-            "translate": "advancements.iceandfire.deathworm_egg.title"
-        },
-        "description": {
-            "translate": "advancements.iceandfire.deathworm_egg.description"
-        }
+  "display": {
+    "icon": {
+      "item": "iceandfire:deathworm_egg"
     },
-    "parent": "iceandfire:iceandfire/kill_deathworm",
-    "criteria": {
-        "egg": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:deathworm_egg"
-                    }
-                ]
-            }
-        }
+    "title": {
+      "translate": "advancements.iceandfire.deathworm_egg.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.deathworm_egg.description"
     }
+  },
+  "parent": "iceandfire:iceandfire/kill_deathworm",
+  "criteria": {
+    "egg": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "iceandfire:deathworm_egg"
+            ]
+          }
+        ]
+      }
+    }
+  }
 }

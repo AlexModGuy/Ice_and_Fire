@@ -12,15 +12,15 @@
   },
   "parent": "iceandfire:iceandfire/dragon_egg",
   "criteria": {
-  "iron": {
-    "trigger": "minecraft:inventory_changed",
-    "conditions": {
-      "items": [
-        {
-          "tag": "iceandfire:dragon_armors"
-        }
-      ]
+    "iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "iceandfire:dragon_armors"
+          }
+        ]
+      }
     }
-  }
   }
 }

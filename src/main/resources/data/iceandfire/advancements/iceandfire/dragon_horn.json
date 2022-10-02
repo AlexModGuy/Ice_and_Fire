@@ -1,26 +1,28 @@
 {
-    "display": {
-        "icon": {
-            "item": "iceandfire:dragon_horn"
-        },
-        "title": {
-            "translate": "advancements.iceandfire.dragon_horn.title"
-        },
-        "description": {
-            "translate": "advancements.iceandfire.dragon_horn.description"
-        }
+  "display": {
+    "icon": {
+      "item": "iceandfire:dragon_horn"
     },
-    "parent": "iceandfire:iceandfire/dragon_egg",
-    "criteria": {
-        "bestiary": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:dragon_horn"
-                    }
-                ]
-            }
-        }
+    "title": {
+      "translate": "advancements.iceandfire.dragon_horn.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.dragon_horn.description"
     }
+  },
+  "parent": "iceandfire:iceandfire/dragon_egg",
+  "criteria": {
+    "bestiary": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "iceandfire:dragon_horn"
+            ]
+          }
+        ]
+      }
+    }
+  }
 }

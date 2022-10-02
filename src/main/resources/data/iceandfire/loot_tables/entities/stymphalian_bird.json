@@ -1,4 +1,3 @@
-
 {
   "__comment": "Keep in mind the stymphalian bird drops OreDictionary nuggetCopper, nuggetBronze, ingotCopper, etc. That can be disabled in ice_and_fire.cfg",
   "pools": [

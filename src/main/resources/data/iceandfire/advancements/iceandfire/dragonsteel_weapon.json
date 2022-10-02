@@ -12,62 +12,30 @@
   },
   "parent": "iceandfire:iceandfire/dragonsteel",
   "criteria": {
-  "fire_sword": {
-    "trigger": "minecraft:inventory_changed",
-    "conditions": {
-      "items": [
-        {
-          "item": "iceandfire:dragonsteel_fire_sword"
-        }
-      ]
-    }
-  },
-  "ice_sword": {
-    "trigger": "minecraft:inventory_changed",
-    "conditions": {
-      "items": [
-        {
-          "item": "iceandfire:dragonsteel_ice_sword"
-        }
-      ]
-    }
-  },
-  "fire_axe": {
-    "trigger": "minecraft:inventory_changed",
-    "conditions": {
-      "items": [
-        {
-          "item": "iceandfire:dragonsteel_fire_axe"
-        }
-      ]
-    }
-  },
-  "ice_axe": {
-    "trigger": "minecraft:inventory_changed",
-    "conditions": {
-      "items": [
-        {
-          "item": "iceandfire:dragonsteel_ice_axe"
-        }
-      ]
-    }
-  },
-    "lightning_sword": {
+    "sword": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "iceandfire:dragonsteel_lightning_sword"
+            "items": [
+              "iceandfire:dragonsteel_fire_sword",
+              "iceandfire:dragonsteel_ice_sword",
+              "iceandfire:dragonsteel_lightning_sword"
+            ]
           }
         ]
       }
     },
-    "lightning_axe": {
+    "axe": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "iceandfire:dragonsteel_lightning_axe"
+            "items": [
+              "iceandfire:dragonsteel_fire_axe",
+              "iceandfire:dragonsteel_ice_axe",
+              "iceandfire:dragonsteel_lightning_axe"
+            ]
           }
         ]
       }
@@ -75,12 +43,8 @@
   },
   "requirements": [
     [
-      "ice_sword",
-      "fire_sword",
-      "ice_axe",
-      "fire_axe",
-      "lightning_sword",
-      "lightning_axe"
+      "sword",
+      "axe"
     ]
   ]
 }

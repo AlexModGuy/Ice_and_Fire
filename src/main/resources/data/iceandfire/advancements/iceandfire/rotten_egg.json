@@ -1,26 +1,28 @@
 {
-    "display": {
-        "icon": {
-            "item": "iceandfire:rotten_egg"
-        },
-        "title": {
-            "translate": "advancements.iceandfire.rotten_egg.title"
-        },
-        "description": {
-            "translate": "advancements.iceandfire.rotten_egg.description"
-        }
+  "display": {
+    "icon": {
+      "item": "iceandfire:rotten_egg"
     },
-    "parent": "iceandfire:iceandfire/bestiary",
-    "criteria": {
-        "bestiary": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:rotten_egg"
-                    }
-                ]
-            }
-        }
+    "title": {
+      "translate": "advancements.iceandfire.rotten_egg.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.rotten_egg.description"
     }
+  },
+  "parent": "iceandfire:iceandfire/bestiary",
+  "criteria": {
+    "bestiary": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "iceandfire:rotten_egg"
+            ]
+          }
+        ]
+      }
+    }
+  }
 }

@@ -1,53 +1,35 @@
 {
-    "display": {
-        "icon": {
-            "item": "iceandfire:dragonforge_fire_brick"
-        },
-        "title": {
-            "translate": "advancements.iceandfire.dragon_forge_brick.title"
-        },
-        "description": {
-            "translate": "advancements.iceandfire.dragon_forge_brick.description"
-        }
+  "display": {
+    "icon": {
+      "item": "iceandfire:dragonforge_fire_brick"
     },
-    "parent": "iceandfire:iceandfire/kill_if_dragon",
-    "criteria": {
-        "fire": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:dragonforge_fire_brick"
-                    }
-                ]
-            }
-        },
-        "ice": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:dragonforge_ice_brick"
-                    }
-                ]
-            }
-        },
-        "lightning": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:dragonforge_lightning_brick"
-                    }
-                ]
-            }
-        }
+    "title": {
+      "translate": "advancements.iceandfire.dragon_forge_brick.title"
     },
-    "requirements": [
-        [
-            "ice",
-            "fire",
-            "lightning"
+    "description": {
+      "translate": "advancements.iceandfire.dragon_forge_brick.description"
+    }
+  },
+  "parent": "iceandfire:iceandfire/kill_if_dragon",
+  "criteria": {
+    "forge": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "iceandfire:dragonforge_fire_brick",
+              "iceandfire:dragonforge_ice_brick",
+              "iceandfire:dragonforge_lightning_brick"
+            ]
+          }
         ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "forge"
     ]
+  ]
 }

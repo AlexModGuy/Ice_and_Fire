@@ -12,22 +12,14 @@
   },
   "parent": "iceandfire:iceandfire/kill_myrmex",
   "criteria": {
-    "desert": {
+    "resin": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "iceandfire:myrmex_desert_resin"
-          }
-        ]
-      }
-    },
-    "jungle": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "iceandfire:myrmex_jungle_resin"
+            "items": [
+              "iceandfire:myrmex_desert_resin"
+            ]
           }
         ]
       }
@@ -35,8 +27,7 @@
   },
   "requirements": [
     [
-      "desert",
-      "jungle"
+      "resin"
     ]
   ]
 }

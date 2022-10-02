@@ -12,22 +12,15 @@
   },
   "parent": "iceandfire:iceandfire/bestiary",
   "criteria": {
-    "desert": {
+    "chitin": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "iceandfire:myrmex_desert_chitin"
-          }
-        ]
-      }
-    },
-    "jungle": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "iceandfire:myrmex_jungle_chitin"
+            "items": [
+              "iceandfire:myrmex_desert_chitin",
+              "iceandfire:myrmex_jungle_chitin"
+            ]
           }
         ]
       }
@@ -35,8 +28,7 @@
   },
   "requirements": [
     [
-      "desert",
-      "jungle"
+      "chitin"
     ]
   ]
 }

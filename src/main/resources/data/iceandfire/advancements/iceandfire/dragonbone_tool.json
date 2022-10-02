@@ -12,52 +12,18 @@
   },
   "parent": "iceandfire:iceandfire/kill_if_dragon",
   "criteria": {
-  "sword": {
-    "trigger": "minecraft:inventory_changed",
-    "conditions": {
-      "items": [
-        {
-          "item": "iceandfire:dragonbone_sword"
-        }
-      ]
-    }
-  },
-  "axe": {
-    "trigger": "minecraft:inventory_changed",
-    "conditions": {
-      "items": [
-        {
-          "item": "iceandfire:dragonbone_axe"
-        }
-      ]
-    }
-  },
-  "pickaxe": {
-    "trigger": "minecraft:inventory_changed",
-    "conditions": {
-      "items": [
-        {
-          "item": "iceandfire:dragonbone_pickaxe"
-        }
-      ]
-    }
-  },
-  "shovel": {
-    "trigger": "minecraft:inventory_changed",
-    "conditions": {
-      "items": [
-        {
-          "item": "iceandfire:dragonbone_shovel"
-        }
-      ]
-    }
-  },
-    "hoe": {
+    "tool": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "iceandfire:dragonbone_hoe"
+            "items": [
+              "iceandfire:dragonbone_sword",
+              "iceandfire:dragonbone_axe",
+              "iceandfire:dragonbone_pickaxe",
+              "iceandfire:dragonbone_shovel",
+              "iceandfire:dragonbone_hoe"
+            ]
           }
         ]
       }
@@ -65,11 +31,7 @@
   },
   "requirements": [
     [
-      "sword",
-      "axe",
-      "pickaxe",
-      "shovel",
-      "hoe"
+      "tool"
     ]
   ]
 }

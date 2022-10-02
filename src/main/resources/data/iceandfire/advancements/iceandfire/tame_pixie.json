@@ -1,24 +1,24 @@
 {
-    "display": {
-        "icon": {
-            "item": "iceandfire:pixie_dust"
-        },
-        "title": {
-            "translate": "advancements.iceandfire.tame_pixie.title"
-        },
-        "description": {
-            "translate": "advancements.iceandfire.tame_pixie.description"
-        }
+  "display": {
+    "icon": {
+      "item": "iceandfire:pixie_dust"
     },
-    "parent": "iceandfire:iceandfire/bestiary",
-    "criteria": {
-        "tame_rat": {
-            "trigger": "minecraft:tame_animal",
-            "conditions": {
-                "entity": {
-                    "type": "iceandfire:pixie"
-                }
-            }
-        }
+    "title": {
+      "translate": "advancements.iceandfire.tame_pixie.title"
+    },
+    "description": {
+      "translate": "advancements.iceandfire.tame_pixie.description"
     }
+  },
+  "parent": "iceandfire:iceandfire/bestiary",
+  "criteria": {
+    "tame_rat": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "iceandfire:pixie"
+        }
+      }
+    }
+  }
 }

@@ -1,53 +1,35 @@
 {
-    "display": {
-        "icon": {
-            "item": "iceandfire:dragonsteel_fire_ingot"
-        },
-        "title": {
-            "translate": "advancements.iceandfire.dragonsteel.title"
-        },
-        "description": {
-            "translate": "advancements.iceandfire.dragonsteel.description"
-        }
+  "display": {
+    "icon": {
+      "item": "iceandfire:dragonsteel_fire_ingot"
     },
-    "parent": "iceandfire:iceandfire/dragon_forge_core",
-    "criteria": {
-        "fire": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:dragonsteel_fire_ingot"
-                    }
-                ]
-            }
-        },
-        "ice": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:dragonsteel_ice_ingot"
-                    }
-                ]
-            }
-        },
-        "lightning": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "iceandfire:dragonsteel_lightning_ingot"
-                    }
-                ]
-            }
-        }
+    "title": {
+      "translate": "advancements.iceandfire.dragonsteel.title"
     },
-    "requirements": [
-        [
-            "ice",
-            "fire",
-            "lightning"
+    "description": {
+      "translate": "advancements.iceandfire.dragonsteel.description"
+    }
+  },
+  "parent": "iceandfire:iceandfire/dragon_forge_core",
+  "criteria": {
+    "steel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "iceandfire:dragonsteel_fire_ingot",
+              "iceandfire:dragonsteel_ice_ingot",
+              "iceandfire:dragonsteel_lightning_ingot"
+            ]
+          }
         ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "steel"
     ]
+  ]
 }

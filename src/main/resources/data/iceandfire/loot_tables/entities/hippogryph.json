@@ -53,7 +53,8 @@
           ]
         }
       ]
-    }, {
+    },
+    {
       "name": "hippogryph",
       "conditions": [
         {
