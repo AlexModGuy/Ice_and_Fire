@@ -1,14 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.function.Predicate;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
-
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
@@ -19,11 +11,17 @@ import net.minecraft.item.Items;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Predicate;
+
 public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super ItemEntity> targetEntitySelector;
     protected ItemEntity targetEntity;
-
+    protected final int targetChance;
     @Nonnull
     private List<ItemEntity> list = IAFMath.emptyItemEntityList;
 
@@ -38,6 +36,7 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
     public HippogryphAITargetItems(MobEntity creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
         super(creature, checkSight, onlyNearby);
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
+        this.targetChance = chance;
         this.targetEntitySelector = new Predicate<ItemEntity>() {
             @Override
             public boolean test(ItemEntity item) {
@@ -48,7 +47,9 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
 
     @Override
     public boolean shouldExecute() {
-
+        if (this.targetChance > 0 && this.goalOwner.getRNG().nextInt(this.targetChance) != 0) {
+            return false;
+        }
         if (!((EntityHippogryph) this.goalOwner).canMove()) {
             list = IAFMath.emptyItemEntityList;
             return false;

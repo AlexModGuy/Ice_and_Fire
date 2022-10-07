@@ -1,16 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.function.Predicate;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import com.github.alexthe666.iceandfire.util.IAFMath;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
@@ -19,11 +10,18 @@ import net.minecraft.item.Items;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.function.Predicate;
+
 public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super ItemEntity> targetEntitySelector;
     protected ItemEntity targetEntity;
-
+    protected final int targetChance;
     @Nonnull
     private List<ItemEntity> list = IAFMath.emptyItemEntityList;
 
@@ -38,8 +36,8 @@ public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
     public AmphithereAITargetItems(MobEntity creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
         super(creature, checkSight, onlyNearby);
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
+        this.targetChance = chance;
         this.targetEntitySelector = new Predicate<ItemEntity>() {
-
             @Override
             public boolean test(ItemEntity item) {
                 return item != null && !item.getItem().isEmpty() && item.getItem().getItem() == Items.COCOA_BEANS;
@@ -50,6 +48,9 @@ public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
 
     @Override
     public boolean shouldExecute() {
+        if (this.targetChance > 0 && this.goalOwner.getRNG().nextInt(this.targetChance) != 0) {
+            return false;
+        }
         if (!((EntityAmphithere) this.goalOwner).canMove()) {
             list = IAFMath.emptyItemEntityList;
             return false;

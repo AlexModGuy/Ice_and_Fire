@@ -1,15 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Predicate;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
-
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.ItemEntity;
@@ -17,12 +9,17 @@ import net.minecraft.item.Items;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.function.Predicate;
+
 public class CockatriceAITargetItems<T extends ItemEntity> extends TargetGoal {
 
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super ItemEntity> targetEntitySelector;
     protected ItemEntity targetEntity;
-
+    protected final int targetChance;
     @Nonnull
     private List<ItemEntity> list = IAFMath.emptyItemEntityList;
 
@@ -31,15 +28,15 @@ public class CockatriceAITargetItems<T extends ItemEntity> extends TargetGoal {
     }
 
     public CockatriceAITargetItems(EntityCockatrice creature, boolean checkSight, boolean onlyNearby) {
-        this(creature, 0, checkSight, onlyNearby, null);
+        this(creature, 10, checkSight, onlyNearby, null);
     }
 
     public CockatriceAITargetItems(EntityCockatrice creature, int chance, boolean checkSight, boolean onlyNearby,
         @Nullable final Predicate<? super T> targetSelector) {
         super(creature, checkSight, onlyNearby);
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
+        this.targetChance = chance;
         this.targetEntitySelector = new Predicate<ItemEntity>() {
-
             @Override
             public boolean test(ItemEntity item) {
                 return item != null && !item.getItem().isEmpty()
@@ -50,7 +47,9 @@ public class CockatriceAITargetItems<T extends ItemEntity> extends TargetGoal {
 
     @Override
     public boolean shouldExecute() {
-
+        if (this.targetChance > 0 && this.goalOwner.getRNG().nextInt(this.targetChance) != 0) {
+            return false;
+        }
         if ((!((EntityCockatrice) this.goalOwner).canMove()) || this.goalOwner.getHealth() >= this.goalOwner.getMaxHealth()) {
             list = IAFMath.emptyItemEntityList;
             return false;
@@ -58,7 +57,7 @@ public class CockatriceAITargetItems<T extends ItemEntity> extends TargetGoal {
 
         if (this.goalOwner.world.getGameTime() % 4 == 0) // only update the list every 4 ticks
             list = this.goalOwner.world.getEntitiesWithinAABB(ItemEntity.class,
-                    this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+                this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
         if (list.isEmpty()) {
             return false;
