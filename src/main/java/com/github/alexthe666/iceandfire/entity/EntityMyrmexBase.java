@@ -75,9 +75,9 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     public boolean isEnteringHive = false;
     public boolean isBeingGuarded = false;
     protected int growthTicks = 1;
-    private int waitTicks = 0;
     @Nullable
     protected MerchantOffers offers;
+    private int waitTicks = 0;
     private int animationTick;
     private Animation currentAnimation;
     private MyrmexHive hive;
@@ -95,6 +95,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         this.navigator = createNavigator(worldIn, AdvancedPathNavigate.MovementType.CLIMBING);
         //this.moveController = new GroundMoveHelper(this);
     }
+
     private static boolean isJungleBiome(World world, BlockPos position) {
         return BiomeConfig.test(BiomeConfig.jungleMyrmexBiomes, world.getBiome(position));
     }
@@ -193,19 +194,23 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     public float getBlockPathWeight(BlockPos pos) {
         return this.world.getBlockState(pos.down()).getBlock() instanceof BlockMyrmexResin ? 10.0F : super.getBlockPathWeight(pos);
     }
+
     protected PathNavigator createNavigator(World worldIn) {
         return createNavigator(worldIn, AdvancedPathNavigate.MovementType.CLIMBING);
     }
+
     protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type) {
-        return createNavigator(worldIn,type,1,1);
+        return createNavigator(worldIn, type, getWidth(), getHeight());
     }
-    protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type,float width, float height) {
-        AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, world, type,width,height);
+
+    protected PathNavigator createNavigator(World worldIn, AdvancedPathNavigate.MovementType type, float width, float height) {
+        AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, world, type, width, height);
         this.navigator = newNavigator;
         newNavigator.setCanSwim(true);
         newNavigator.getNodeProcessor().setCanOpenDoors(true);
         return newNavigator;
     }
+
     protected void registerData() {
         super.registerData();
         this.dataManager.register(CLIMBING, Byte.valueOf((byte) 0));
@@ -244,12 +249,12 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
             this.setAttackTarget(null);
         }
         if (this.getAttackTarget() != null && (haveSameHive(this, this.getAttackTarget()) ||
-                this.getAttackTarget() instanceof TameableEntity && !canAttackTamable((TameableEntity) this.getAttackTarget()) ||
-                this.getAttackTarget() instanceof PlayerEntity && this.getHive() != null && !this.getHive().isPlayerReputationLowEnoughToFight(this.getAttackTarget().getUniqueID()))) {
+            this.getAttackTarget() instanceof TameableEntity && !canAttackTamable((TameableEntity) this.getAttackTarget()) ||
+            this.getAttackTarget() instanceof PlayerEntity && this.getHive() != null && !this.getHive().isPlayerReputationLowEnoughToFight(this.getAttackTarget().getUniqueID()))) {
             this.setAttackTarget(null);
         }
-        if (this.getWaitTicks() > 0){
-            this.setWaitTicks(this.getWaitTicks()-1);
+        if (this.getWaitTicks() > 0) {
+            this.setWaitTicks(this.getWaitTicks() - 1);
         }
         if (this.getHealth() < this.getMaxHealth() && this.ticksExisted % 500 == 0 && this.isOnResin()) {
             this.heal(1);
@@ -330,12 +335,12 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         this.dataManager.set(GROWTH_STAGE, stage);
     }
 
-    public void setWaitTicks(int waitTicks) {
-        this.waitTicks = waitTicks;
-    }
-
     public int getWaitTicks() {
         return waitTicks;
+    }
+
+    public void setWaitTicks(int waitTicks) {
+        this.waitTicks = waitTicks;
     }
 
     public boolean isJungle() {
@@ -367,7 +372,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public boolean isOnLadder() {
-        if (this.getNavigator() instanceof AdvancedPathNavigate ){
+        if (this.getNavigator() instanceof AdvancedPathNavigate) {
             //Make sure the entity can only climb when it's on or below the path. This prevents the entity from getting stuck
             if (((AdvancedPathNavigate) this.getNavigator()).entityOnAndBelowPath(this, new Vector3d(1.1, 0, 1.1)))
                 return true;
@@ -456,8 +461,8 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
             if (this.getOffers().isEmpty()) {
                 return super.getEntityInteractionResult(player, hand);
             } else {
-                if (!this.world.isRemote && (this.getAttackTarget() == null || !this.getAttackTarget().equals(player))&& hand == Hand.MAIN_HAND) {
-                    if (this.getHive()!=null && !this.getHive().isPlayerReputationTooLowToTrade(player.getUniqueID())) {
+                if (!this.world.isRemote && (this.getAttackTarget() == null || !this.getAttackTarget().equals(player)) && hand == Hand.MAIN_HAND) {
+                    if (this.getHive() != null && !this.getHive().isPlayerReputationTooLowToTrade(player.getUniqueID())) {
                         this.setCustomer(player);
                         this.openMerchantContainer(player, this.getDisplayName(), 1);
                         return ActionResultType.SUCCESS;
@@ -472,7 +477,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
     }
 
     public void onStaffInteract(PlayerEntity player, ItemStack itemstack) {
-        if(itemstack.getTag() == null){
+        if (itemstack.getTag() == null) {
             return;
         }
         UUID staffUUID = itemstack.getTag().hasUniqueId("HiveUUID") ? itemstack.getTag().getUniqueId("HiveUUID") : null;
@@ -584,7 +589,7 @@ public abstract class EntityMyrmexBase extends AnimalEntity implements IAnimated
         return false;
     }
 
-    public boolean isInHive(){
+    public boolean isInHive() {
         if (getHive() != null) {
             for (BlockPos pos : getHive().getAllRooms()) {
                 if (isCloseEnoughToTarget(MyrmexHive.getGroundedPos(getWorld(), pos), 50))

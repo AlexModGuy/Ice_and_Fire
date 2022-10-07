@@ -318,4 +318,5 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
     public boolean hasXPBar() {
         return false;
     }
+
 }
