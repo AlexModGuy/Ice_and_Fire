@@ -21,10 +21,9 @@ public class ItemModAxe extends AxeItem implements DragonSteelOverrides<ItemModA
     private final Tier tier;
     private Multimap<Attribute, AttributeModifier> dragonsteelModifiers;
 
-    public ItemModAxe(Tier toolmaterial, String gameName) {
+    public ItemModAxe(Tier toolmaterial) {
         super(toolmaterial, 5.0F, -3.0F, (new Item.Properties()).tab(IceAndFire.TAB_ITEMS));
         this.tier = toolmaterial;
-        this.setRegistryName(IceAndFire.MODID, gameName);
     }
 
     @Override

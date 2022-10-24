@@ -82,6 +82,6 @@ public class EntityStymphalianArrow extends AbstractArrow {
 
     @Override
     protected ItemStack getPickupItem() {
-        return new ItemStack(IafItemRegistry.STYMPHALIAN_ARROW);
+        return new ItemStack(IafItemRegistry.STYMPHALIAN_ARROW.get());
     }
 }

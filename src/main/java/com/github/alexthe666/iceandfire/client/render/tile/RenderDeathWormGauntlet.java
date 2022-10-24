@@ -24,9 +24,9 @@ public class RenderDeathWormGauntlet extends BlockEntityWithoutLevelRenderer {
     public void renderByItem(ItemStack stack, ItemTransforms.TransformType type, PoseStack stackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         RenderType texture;
 
-        if (stack.getItem() == IafItemRegistry.DEATHWORM_GAUNTLET_RED) {
+        if (stack.getItem() == IafItemRegistry.DEATHWORM_GAUNTLET_RED.get()) {
             texture = RenderType.entityCutout(RenderDeathWorm.TEXTURE_RED);
-        } else if (stack.getItem() == IafItemRegistry.DEATHWORM_GAUNTLET_WHITE) {
+        } else if (stack.getItem() == IafItemRegistry.DEATHWORM_GAUNTLET_WHITE.get()) {
             texture = RenderType.entityCutout(RenderDeathWorm.TEXTURE_WHITE);
         } else {
             texture = RenderType.entityCutout(RenderDeathWorm.TEXTURE_YELLOW);

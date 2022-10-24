@@ -147,13 +147,13 @@ public class EntityDragonSkull extends Animal implements IBlacklistedFromStatues
     public Item getDragonSkullItem() {
         switch (getDragonType()) {
             case 0:
-                return IafItemRegistry.DRAGON_SKULL_FIRE;
+                return IafItemRegistry.DRAGON_SKULL_FIRE.get();
             case 1:
-                return IafItemRegistry.DRAGON_SKULL_ICE;
+                return IafItemRegistry.DRAGON_SKULL_ICE.get();
             case 2:
-                return IafItemRegistry.DRAGON_SKULL_LIGHTNING;
+                return IafItemRegistry.DRAGON_SKULL_LIGHTNING.get();
             default:
-                return IafItemRegistry.DRAGON_SKULL_FIRE;
+                return IafItemRegistry.DRAGON_SKULL_FIRE.get();
         }
     }
 

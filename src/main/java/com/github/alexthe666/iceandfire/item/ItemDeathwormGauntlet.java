@@ -37,9 +37,8 @@ public class ItemDeathwormGauntlet extends Item {
     private boolean deathwormLaunched = false;
     private int specialDamage = 0;
 
-    public ItemDeathwormGauntlet(String color) {
+    public ItemDeathwormGauntlet() {
         super(new Item.Properties().durability(500).tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "deathworm_gauntlet_" + color);
     }
 
     @Override

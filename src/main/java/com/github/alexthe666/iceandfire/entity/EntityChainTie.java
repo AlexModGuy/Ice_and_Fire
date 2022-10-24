@@ -127,7 +127,7 @@ public class EntityChainTie extends HangingEntity {
             if (ChainProperties.isChainedTo(livingEntity, this)) {
                 ChainProperties.removeChain(livingEntity, this);
                 ItemEntity entityitem = new ItemEntity(this.level, this.getX(), this.getY() + 1, this.getZ(),
-                    new ItemStack(IafItemRegistry.CHAIN));
+                    new ItemStack(IafItemRegistry.CHAIN.get()));
                 entityitem.setDefaultPickUpDelay();
                 this.level.addFreshEntity(entityitem);
             }

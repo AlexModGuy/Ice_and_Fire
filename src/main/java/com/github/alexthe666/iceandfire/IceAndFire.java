@@ -12,7 +12,6 @@ import com.github.alexthe666.iceandfire.loot.IafLootRegistry;
 import com.github.alexthe666.iceandfire.message.*;
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
-import com.github.alexthe666.iceandfire.world.biome.IafBiomeTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.CreativeModeTab;
@@ -54,7 +53,7 @@ public class IceAndFire {
     public static CreativeModeTab TAB_ITEMS = new CreativeModeTab(MODID) {
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE);
+            return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE.get());
         }
     };
     public static CreativeModeTab TAB_BLOCKS = new CreativeModeTab("iceandfire.blocks") {

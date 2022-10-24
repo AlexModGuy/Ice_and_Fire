@@ -22,10 +22,9 @@ import java.util.List;
 public class ItemDragonEgg extends Item {
     public EnumDragonEgg type;
 
-    public ItemDragonEgg(String name, EnumDragonEgg type) {
+    public ItemDragonEgg(EnumDragonEgg type) {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
         this.type = type;
-        this.setRegistryName(IceAndFire.MODID, name);
     }
 
     @Override

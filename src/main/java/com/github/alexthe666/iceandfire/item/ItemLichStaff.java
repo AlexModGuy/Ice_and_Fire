@@ -21,7 +21,7 @@ public class ItemLichStaff extends Item {
 
     @Override
     public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
-        return repair.getItem() == IafItemRegistry.DREAD_SHARD || super.isValidRepairItem(toRepair, repair);
+        return repair.getItem() == IafItemRegistry.DREAD_SHARD.get() || super.isValidRepairItem(toRepair, repair);
     }
 
     @Override

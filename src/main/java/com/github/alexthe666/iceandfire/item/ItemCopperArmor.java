@@ -16,9 +16,8 @@ import javax.annotation.Nullable;
 
 public class ItemCopperArmor extends ArmorItem implements IItemRenderProperties {
 
-    public ItemCopperArmor(ArmorMaterial material, EquipmentSlot slot, String name) {
+    public ItemCopperArmor(ArmorMaterial material, EquipmentSlot slot) {
         super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, name);
     }
 
     @Override

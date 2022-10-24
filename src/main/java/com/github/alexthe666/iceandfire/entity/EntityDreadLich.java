@@ -156,7 +156,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         super.populateDefaultEquipmentSlots(difficulty);
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.LICH_STAFF));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.LICH_STAFF.get()));
     }
 
     @Override
@@ -255,7 +255,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
             this.goalSelector.removeGoal(this.aiAttackOnCollide);
             this.goalSelector.removeGoal(this.aiArrowAttack);
             ItemStack itemstack = this.getMainHandItem();
-            if (itemstack.getItem() == IafItemRegistry.LICH_STAFF) {
+            if (itemstack.getItem() == IafItemRegistry.LICH_STAFF.get()) {
                 int i = 100;
                 this.aiArrowAttack.setAttackCooldown(i);
                 this.goalSelector.addGoal(4, this.aiArrowAttack);

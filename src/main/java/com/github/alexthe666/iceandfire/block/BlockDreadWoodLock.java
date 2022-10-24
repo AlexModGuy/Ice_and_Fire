@@ -49,7 +49,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
 
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult resultIn) {
         ItemStack stack = player.getItemInHand(handIn);
-        if (stack.getItem() == IafItemRegistry.DREAD_KEY) {
+        if (stack.getItem() == IafItemRegistry.DREAD_KEY.get()) {
             if (!player.isCreative()) {
                 stack.shrink(1);
             }

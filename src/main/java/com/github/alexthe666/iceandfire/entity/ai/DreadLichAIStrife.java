@@ -37,7 +37,7 @@ public class DreadLichAIStrife extends Goal {
     }
 
     protected boolean isStaffInHand() {
-        return !this.entity.getMainHandItem().isEmpty() && this.entity.getMainHandItem().getItem() == IafItemRegistry.LICH_STAFF;
+        return !this.entity.getMainHandItem().isEmpty() && this.entity.getMainHandItem().getItem() == IafItemRegistry.LICH_STAFF.get();
     }
 
     @Override

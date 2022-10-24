@@ -20,9 +20,8 @@ public class ItemModHoe extends HoeItem implements DragonSteelOverrides<ItemModH
 
     private Multimap<Attribute, AttributeModifier> dragonsteelModifiers;
 
-    public ItemModHoe(Tier toolmaterial, String gameName) {
+    public ItemModHoe(Tier toolmaterial) {
         super(toolmaterial, 5, -3.0F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, gameName);
     }
 
     @Override

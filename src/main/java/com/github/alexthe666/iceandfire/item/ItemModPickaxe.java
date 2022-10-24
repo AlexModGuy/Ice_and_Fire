@@ -20,9 +20,8 @@ public class ItemModPickaxe extends PickaxeItem implements DragonSteelOverrides<
 
     private Multimap<Attribute, AttributeModifier> dragonsteelModifiers;
 
-    public ItemModPickaxe(Tier toolmaterial, String gameName) {
+    public ItemModPickaxe(Tier toolmaterial) {
         super(toolmaterial, 1, -2.8F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, gameName);
     }
 
     @Override

@@ -81,6 +81,6 @@ public class EntityHippogryphEgg extends ThrownEgg {
 
     @Override
     protected Item getDefaultItem() {
-      return IafItemRegistry.HIPPOGRYPH_EGG;
+      return IafItemRegistry.HIPPOGRYPH_EGG.get();
     }
 }

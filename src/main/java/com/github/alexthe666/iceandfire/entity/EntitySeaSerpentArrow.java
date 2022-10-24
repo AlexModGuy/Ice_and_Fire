@@ -92,6 +92,6 @@ public class EntitySeaSerpentArrow extends AbstractArrow {
 
     @Override
     protected ItemStack getPickupItem() {
-        return new ItemStack(IafItemRegistry.SEA_SERPENT_ARROW);
+        return new ItemStack(IafItemRegistry.SEA_SERPENT_ARROW.get());
     }
 }

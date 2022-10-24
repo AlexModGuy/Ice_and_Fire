@@ -107,7 +107,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         }*/
         if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
             if (this.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ItemMyrmexEgg) {
-                boolean isJungle = this.getItemInHand(InteractionHand.MAIN_HAND).getItem() == IafItemRegistry.MYRMEX_JUNGLE_EGG;
+                boolean isJungle = this.getItemInHand(InteractionHand.MAIN_HAND).getItem() == IafItemRegistry.MYRMEX_JUNGLE_EGG.get();
                 CompoundTag tag = this.getItemInHand(InteractionHand.MAIN_HAND).getTag();
                 int metadata = 0;
                 if (tag != null) {
@@ -294,7 +294,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     public void onPickupItem(ItemEntity itemEntity) {
         Item item = itemEntity.getItem().getItem();
-        if (item == IafItemRegistry.MYRMEX_JUNGLE_RESIN && this.isJungle() || item == IafItemRegistry.MYRMEX_DESERT_RESIN && !this.isJungle()) {
+        if (item == IafItemRegistry.MYRMEX_JUNGLE_RESIN.get() && this.isJungle() || item == IafItemRegistry.MYRMEX_DESERT_RESIN.get() && !this.isJungle()) {
 
             Player owner = null;
             try {

@@ -20,9 +20,8 @@ public class ItemModSword extends SwordItem implements DragonSteelOverrides<Item
 
     private Multimap<Attribute, AttributeModifier> dragonsteelModifiers;
 
-    public ItemModSword(Tier toolmaterial, String gameName) {
+    public ItemModSword(Tier toolmaterial) {
         super(toolmaterial, 3, -2.4F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, gameName);
     }
 
     @Override

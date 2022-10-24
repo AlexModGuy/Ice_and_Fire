@@ -83,6 +83,6 @@ public class EntityCockatriceEgg extends ThrowableItemProjectile {
 
     @Override
     protected Item getDefaultItem() {
-        return IafItemRegistry.ROTTEN_EGG;
+        return IafItemRegistry.ROTTEN_EGG.get();
     }
 }

@@ -68,7 +68,7 @@ public class ItemPixieWand extends Item {
 
     public boolean isInfinite(ItemStack stack, ItemStack bow, net.minecraft.world.entity.player.Player player) {
         int enchant = net.minecraft.world.item.enchantment.EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, bow);
-        return enchant > 0 && stack.getItem() == IafItemRegistry.PIXIE_DUST;
+        return enchant > 0 && stack.getItem() == IafItemRegistry.PIXIE_DUST.get();
     }
 
     private ItemStack findAmmo(Player player) {
@@ -90,7 +90,7 @@ public class ItemPixieWand extends Item {
     }
 
     protected boolean isAmmo(ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() == IafItemRegistry.PIXIE_DUST;
+        return !stack.isEmpty() && stack.getItem() == IafItemRegistry.PIXIE_DUST.get();
     }
 
 

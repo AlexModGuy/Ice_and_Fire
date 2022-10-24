@@ -18,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class RenderGhostSword extends EntityRenderer<EntityGhostSword> {
 
-    private final ItemStack SWORD_STACK = new ItemStack(IafItemRegistry.GHOST_SWORD);
+    private final ItemStack SWORD_STACK = new ItemStack(IafItemRegistry.GHOST_SWORD.get());
 
     public RenderGhostSword(EntityRendererProvider.Context context) {
         super(context);

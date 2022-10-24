@@ -48,7 +48,7 @@ public class MessageSpawnParticleAt {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (!player.getMainHandItem().isEmpty() && player.getMainHandItem().getItem() == IafItemRegistry.DRAGON_DEBUG_STICK) {
+                if (!player.getMainHandItem().isEmpty() && player.getMainHandItem().getItem() == IafItemRegistry.DRAGON_DEBUG_STICK.get()) {
                     player.level.addParticle(ParticleTypes.SMOKE, message.x, message.y, message.z, 0, 0, 0);
                 }
             }

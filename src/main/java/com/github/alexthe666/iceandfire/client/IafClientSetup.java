@@ -54,7 +54,7 @@ public class IafClientSetup {
     public static final ResourceLocation GHOST_CHEST_RIGHT_LOCATION = new ResourceLocation(IceAndFire.MODID, "models/ghost/ghost_chest_right");
 
 
-    @SubscribeEvent
+    //@SubscribeEvent
     public static void setupLayer(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(IafEntityRegistry.FIRE_DRAGON.get(), manager -> new RenderDragonBase(manager, FIRE_DRAGON_BASE_MODEL, 0));
         event.registerEntityRenderer(IafEntityRegistry.ICE_DRAGON.get(), manager -> new RenderDragonBase(manager, ICE_DRAGON_BASE_MODEL, 1));
@@ -220,22 +220,25 @@ public class IafClientSetup {
                 return entity.getUseItem() != stack ? 0.0F : (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F;
             }
         };
-        ItemProperties.register(IafItemRegistry.DRAGON_BOW.asItem(), new ResourceLocation("pulling"), pulling);
-        ItemProperties.register(IafItemRegistry.DRAGON_BOW.asItem(), new ResourceLocation("pull"), pull);
-        ItemProperties.register(IafItemRegistry.DRAGON_HORN, new ResourceLocation("iceorfire"), (stack, level, entity, p) -> {
-            return ItemDragonHorn.getDragonType(stack) * 0.25F;
-        });
-        ItemProperties.register(IafItemRegistry.SUMMONING_CRYSTAL_FIRE, new ResourceLocation("has_dragon"), (stack, level, entity, p) -> {
-            return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
-        });
-        ItemProperties.register(IafItemRegistry.SUMMONING_CRYSTAL_ICE, new ResourceLocation("has_dragon"), (stack, level, entity, p) -> {
-            return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
-        });
-        ItemProperties.register(IafItemRegistry.SUMMONING_CRYSTAL_LIGHTNING, new ResourceLocation("has_dragon"), (stack, level, entity, p) -> {
-            return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
-        });
-        ItemProperties.register(IafItemRegistry.TIDE_TRIDENT, new ResourceLocation("throwing"), (stack, level, entity, p) -> {
-            return entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F;
+        event.enqueueWork(() -> {
+
+            ItemProperties.register(IafItemRegistry.DRAGON_BOW.get().asItem(), new ResourceLocation("pulling"), pulling);
+            ItemProperties.register(IafItemRegistry.DRAGON_BOW.get().asItem(), new ResourceLocation("pull"), pull);
+            ItemProperties.register(IafItemRegistry.DRAGON_HORN.get(), new ResourceLocation("iceorfire"), (stack, level, entity, p) -> {
+                return ItemDragonHorn.getDragonType(stack) * 0.25F;
+            });
+            ItemProperties.register(IafItemRegistry.SUMMONING_CRYSTAL_FIRE.get(), new ResourceLocation("has_dragon"), (stack, level, entity, p) -> {
+                return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
+            });
+            ItemProperties.register(IafItemRegistry.SUMMONING_CRYSTAL_ICE.get(), new ResourceLocation("has_dragon"), (stack, level, entity, p) -> {
+                return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
+            });
+            ItemProperties.register(IafItemRegistry.SUMMONING_CRYSTAL_LIGHTNING.get(), new ResourceLocation("has_dragon"), (stack, level, entity, p) -> {
+                return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
+            });
+            ItemProperties.register(IafItemRegistry.TIDE_TRIDENT.get(), new ResourceLocation("throwing"), (stack, level, entity, p) -> {
+                return entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F;
+            });
         });
     }
 

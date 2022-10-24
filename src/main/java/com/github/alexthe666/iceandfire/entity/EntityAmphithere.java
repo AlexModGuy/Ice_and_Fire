@@ -213,7 +213,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
             return InteractionResult.SUCCESS;
         }
         if (super.mobInteract(player, hand) == InteractionResult.PASS) {
-            if (itemstack != null && itemstack.getItem() == IafItemRegistry.DRAGON_STAFF && this.isOwnedBy(player)) {
+            if (itemstack != null && itemstack.getItem() == IafItemRegistry.DRAGON_STAFF.get() && this.isOwnedBy(player)) {
                 if (player.isShiftKeyDown()) {
                     BlockPos pos = this.blockPosition();
                     this.homePos = pos;

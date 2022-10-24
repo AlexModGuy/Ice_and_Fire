@@ -30,7 +30,7 @@ public class EntityTideTrident extends ThrownTrident {
 
     public EntityTideTrident(EntityType<? extends ThrownTrident> type, Level worldIn) {
         super(type, worldIn);
-        tridentItem = new ItemStack(IafItemRegistry.TIDE_TRIDENT);
+        tridentItem = new ItemStack(IafItemRegistry.TIDE_TRIDENT.get());
     }
 
     public EntityTideTrident(Level worldIn, LivingEntity thrower, ItemStack thrownStackIn) {
@@ -106,7 +106,7 @@ public class EntityTideTrident extends ThrownTrident {
 
     @Override
     protected ItemStack getPickupItem() {
-        return this.tridentItem.getItem() == Items.TRIDENT ? new ItemStack(IafItemRegistry.TIDE_TRIDENT) : this.tridentItem.copy();
+        return this.tridentItem.getItem() == Items.TRIDENT ? new ItemStack(IafItemRegistry.TIDE_TRIDENT.get()) : this.tridentItem.copy();
     }
 
 }

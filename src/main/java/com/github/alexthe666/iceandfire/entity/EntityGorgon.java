@@ -66,7 +66,7 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
     }
 
     public static boolean isBlindfolded(LivingEntity attackTarget) {
-        return attackTarget != null && (attackTarget.getItemBySlot(EquipmentSlot.HEAD).getItem() == IafItemRegistry.BLINDFOLD || attackTarget.hasEffect(MobEffects.BLINDNESS) || ServerEvents.isBlindMob(attackTarget));
+        return attackTarget != null && (attackTarget.getItemBySlot(EquipmentSlot.HEAD).getItem() == IafItemRegistry.BLINDFOLD.get() || attackTarget.hasEffect(MobEffects.BLINDNESS) || ServerEvents.isBlindMob(attackTarget));
     }
 
     public static AttributeSupplier.Builder bakeAttributes() {

@@ -46,7 +46,7 @@ public class ChickenProperties {
                     (rand.nextFloat() - rand.nextFloat()) * 0.2F + 1.0F);
                 entity.playSound(SoundEvents.CHICKEN_EGG, 1.0F,
                     (rand.nextFloat() - rand.nextFloat()) * 0.2F + 1.0F);
-                entity.spawnAtLocation(IafItemRegistry.ROTTEN_EGG, 1);
+                entity.spawnAtLocation(IafItemRegistry.ROTTEN_EGG.get(), 1);
             }
             setTimeRemaining(entity, createDefaultTime());
         } else {

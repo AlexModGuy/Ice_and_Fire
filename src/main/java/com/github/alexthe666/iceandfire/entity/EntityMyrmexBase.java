@@ -446,7 +446,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         if (!shouldHaveNormalAI()) {
             return InteractionResult.PASS;
         }
-        boolean flag2 = itemstack.getItem() == IafItemRegistry.MYRMEX_JUNGLE_STAFF || itemstack.getItem() == IafItemRegistry.MYRMEX_DESERT_STAFF;
+        boolean flag2 = itemstack.getItem() == IafItemRegistry.MYRMEX_JUNGLE_STAFF.get() || itemstack.getItem() == IafItemRegistry.MYRMEX_DESERT_STAFF.get();
 
         if (flag2) {
             this.onStaffInteract(player, itemstack);

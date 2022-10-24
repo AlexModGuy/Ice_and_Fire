@@ -1,7 +1,9 @@
 package com.github.alexthe666.iceandfire.enums;
 
+import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemMobSkull;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Locale;
 
@@ -16,7 +18,7 @@ public enum EnumSkullType {
     HYDRA;
 
     public String itemResourceName;
-    public Item skull_item;
+    public RegistryObject<Item> skull_item;
 
     EnumSkullType() {
         itemResourceName = this.name().toLowerCase(Locale.ROOT) + "_skull";
@@ -24,8 +26,7 @@ public enum EnumSkullType {
 
     public static void initItems() {
         for (EnumSkullType skull : EnumSkullType.values()) {
-            skull.skull_item = new ItemMobSkull(skull);
-
+            skull.skull_item = IafItemRegistry.deferredRegister.register(skull.itemResourceName, () -> new ItemMobSkull(skull));
         }
     }
 }

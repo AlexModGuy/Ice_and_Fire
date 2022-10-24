@@ -103,6 +103,6 @@ public class EntityAmphithereArrow extends AbstractArrow {
 
     @Override
     protected ItemStack getPickupItem() {
-        return new ItemStack(IafItemRegistry.AMPHITHERE_ARROW);
+        return new ItemStack(IafItemRegistry.AMPHITHERE_ARROW.get());
     }
 }

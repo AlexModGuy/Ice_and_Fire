@@ -52,7 +52,7 @@ public class EntityDragonArrow extends AbstractArrow {
 
     @Override
     protected ItemStack getPickupItem() {
-        return new ItemStack(IafItemRegistry.DRAGONBONE_ARROW);
+        return new ItemStack(IafItemRegistry.DRAGONBONE_ARROW.get());
     }
 
 }

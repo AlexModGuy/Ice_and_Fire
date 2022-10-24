@@ -208,7 +208,7 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
         if (index == 0)
             return stack.getItem() instanceof ItemBestiary;
         if (index == 1)
-            return stack.getItem() == IafItemRegistry.MANUSCRIPT;
+            return stack.getItem() == IafItemRegistry.MANUSCRIPT.get();
         return false;
     }
 

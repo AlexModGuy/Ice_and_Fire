@@ -15,10 +15,9 @@ import java.util.List;
 public class ItemDragonScales extends Item {
     EnumDragonEgg type;
 
-    public ItemDragonScales(String name, EnumDragonEgg type) {
+    public ItemDragonScales(EnumDragonEgg type) {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.type = type;
-        this.setRegistryName(IceAndFire.MODID, name);
     }
 
     public String getDescriptionId() {

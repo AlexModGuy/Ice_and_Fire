@@ -102,6 +102,6 @@ public class EntityStymphalianFeather extends AbstractArrow {
 
     @Override
     protected ItemStack getPickupItem() {
-        return new ItemStack(IafItemRegistry.STYMPHALIAN_BIRD_FEATHER);
+        return new ItemStack(IafItemRegistry.STYMPHALIAN_BIRD_FEATHER.get());
     }
 }

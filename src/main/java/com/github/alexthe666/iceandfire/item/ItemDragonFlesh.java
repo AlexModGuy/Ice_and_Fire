@@ -17,16 +17,13 @@ public class ItemDragonFlesh extends ItemGenericFood {
         this.dragonType = dragonType;
     }
 
-    private static String getNameForType(int dragonType) {
-        switch (dragonType){
-            case 0:
-                return "fire_dragon_flesh";
-            case 1:
-                return "ice_dragon_flesh";
-            case 2:
-                return "lightning_dragon_flesh";
-        }
-        return "fire_dragon_flesh";
+    static String getNameForType(int dragonType) {
+        return switch (dragonType) {
+            case 0 -> "fire_dragon_flesh";
+            case 1 -> "ice_dragon_flesh";
+            case 2 -> "lightning_dragon_flesh";
+            default -> "fire_dragon_flesh";
+        };
     }
 
     public void onFoodEaten(ItemStack stack, Level worldIn, LivingEntity livingEntity) {

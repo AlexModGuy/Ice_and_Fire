@@ -40,7 +40,7 @@ public class ContainerLectern extends AbstractContainerMenu {
         this.addSlot(new Slot(furnaceInventory, 1, 35, 47) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() == IafItemRegistry.MANUSCRIPT;
+                return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() == IafItemRegistry.MANUSCRIPT.get();
             }
         });
         for (int i = 0; i < 3; ++i) {
@@ -111,7 +111,7 @@ public class ContainerLectern extends AbstractContainerMenu {
 
     public int getManuscriptAmount() {
         ItemStack itemstack = this.tileFurnace.getItem(1);
-        return itemstack.isEmpty() || itemstack.getItem() != IafItemRegistry.MANUSCRIPT ? 0 : itemstack.getCount();
+        return itemstack.isEmpty() || itemstack.getItem() != IafItemRegistry.MANUSCRIPT.get() ? 0 : itemstack.getCount();
     }
 
     public EnumBestiaryPages[] getPossiblePages() {
@@ -158,7 +158,7 @@ public class ContainerLectern extends AbstractContainerMenu {
 
         if ((itemstack1.isEmpty() ||
             itemstack1.getCount() < i ||
-            itemstack1.getItem() != IafItemRegistry.MANUSCRIPT)
+            itemstack1.getItem() != IafItemRegistry.MANUSCRIPT.get())
             && !playerIn.isCreative()) {
             return false;
         } else if (this.possiblePagesInt[id] > 0 && !itemstack.isEmpty()) {

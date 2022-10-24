@@ -291,7 +291,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         this.goalSelector.addGoal(3, new DragonAIReturnToRoost(this, 1.0D));
         this.goalSelector.addGoal(4, new DragonAIEscort(this, 1.0D));
         this.goalSelector.addGoal(5, new DragonAIAttackMelee(this, 1.5D, false));
-        this.goalSelector.addGoal(6, new AquaticAITempt(this, 1.0D, IafItemRegistry.FIRE_STEW, false));
+        this.goalSelector.addGoal(6, new AquaticAITempt(this, 1.0D, IafItemRegistry.FIRE_STEW.get(), false));
         this.goalSelector.addGoal(7, new DragonAIWander(this, 1.0D));
         this.goalSelector.addGoal(8, new DragonAIWatchClosest(this, LivingEntity.class, 6.0F));
         this.goalSelector.addGoal(8, new DragonAILookIdle(this));
@@ -1105,7 +1105,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public InteractionResult interactAt(Player player, Vec3 vec, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         int lastDeathStage = Math.min(this.getAgeInDays() / 5, 25);
-        if (stack.getItem() == IafItemRegistry.DRAGON_DEBUG_STICK) {
+        if (stack.getItem() == IafItemRegistry.DRAGON_DEBUG_STICK.get()) {
             logic.debug();
             return InteractionResult.SUCCESS;
         }
@@ -1156,12 +1156,12 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         int lastDeathStage = this.getAgeInDays() / 5;
-        if (stack.getItem() == IafItemRegistry.DRAGON_DEBUG_STICK) {
+        if (stack.getItem() == IafItemRegistry.DRAGON_DEBUG_STICK.get()) {
             logic.debug();
             return InteractionResult.SUCCESS;
         }
         if (!this.isModelDead()) {
-            if (stack.getItem() == IafItemRegistry.CREATIVE_DRAGON_MEAL) {
+            if (stack.getItem() == IafItemRegistry.CREATIVE_DRAGON_MEAL.get()) {
                 this.setTame(true);
                 this.tame(player);
                 this.setHunger(this.getHunger() + 20);
@@ -1201,7 +1201,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     return InteractionResult.SUCCESS;
                 }
                 this.tame(player);
-                if (stack.getItem() == IafItemRegistry.DRAGON_HORN) {
+                if (stack.getItem() == IafItemRegistry.DRAGON_HORN.get()) {
                     return super.mobInteract(player, hand);
                 }
                 if (stack.isEmpty() && !player.isShiftKeyDown()) {
@@ -1237,7 +1237,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                         return InteractionResult.SUCCESS;
                     }
                     final Item stackItem = stack.getItem();
-                    if (stackItem == IafItemRegistry.DRAGON_MEAL) {
+                    if (stackItem == IafItemRegistry.DRAGON_MEAL.get()) {
                         this.growDragon(1);
                         this.setHunger(this.getHunger() + 20);
                         this.heal(Math.min(this.getHealth(), (int) (this.getMaxHealth() / 2)));
@@ -1250,7 +1250,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                             stack.shrink(1);
                         }
                         return InteractionResult.SUCCESS;
-                    } else if (stackItem == IafItemRegistry.SICKLY_DRAGON_MEAL && !this.isAgingDisabled()) {
+                    } else if (stackItem == IafItemRegistry.SICKLY_DRAGON_MEAL.get() && !this.isAgingDisabled()) {
                         this.setHunger(this.getHunger() + 20);
                         this.heal(this.getMaxHealth());
                         this.playSound(SoundEvents.ZOMBIE_VILLAGER_CURE, this.getSoundVolume(), this.getVoicePitch());
@@ -1265,7 +1265,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                             stack.shrink(1);
                         }
                         return InteractionResult.SUCCESS;
-                    } else if (stackItem == IafItemRegistry.DRAGON_STAFF) {
+                    } else if (stackItem == IafItemRegistry.DRAGON_STAFF.get()) {
                         if (player.isShiftKeyDown()) {
                             if (this.hasHomePosition) {
                                 this.hasHomePosition = false;
@@ -1313,7 +1313,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     private ItemStack getRandomDrop() {
         ItemStack stack = getItemFromLootTable();
-        if (stack.getItem() == IafItemRegistry.DRAGON_BONE) {
+        if (stack.getItem() == IafItemRegistry.DRAGON_BONE.get()) {
             this.playSound(SoundEvents.SKELETON_AMBIENT, 1, 1);
         } else {
             this.playSound(SoundEvents.ARMOR_EQUIP_LEATHER, 1, 1);
@@ -2063,7 +2063,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                         if (this.isOwnedBy(living) || this.isOwnersPet(living)) {
                             living.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 50 * size));
                         } else {
-                            if (living.getItemBySlot(EquipmentSlot.HEAD).getItem() != IafItemRegistry.EARPLUGS) {
+                            if (living.getItemBySlot(EquipmentSlot.HEAD).getItem() != IafItemRegistry.EARPLUGS.get()) {
                                 living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 50 * size));
                             }
                         }

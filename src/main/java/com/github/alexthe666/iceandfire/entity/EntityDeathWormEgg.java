@@ -94,6 +94,6 @@ public class EntityDeathWormEgg extends ThrowableItemProjectile implements IEnti
 
     @Override
     protected Item getDefaultItem() {
-        return giant ? IafItemRegistry.DEATHWORM_EGG_GIGANTIC : IafItemRegistry.DEATHWORM_EGG;
+        return giant ? IafItemRegistry.DEATHWORM_EGG_GIGANTIC.get() : IafItemRegistry.DEATHWORM_EGG.get();
     }
 }

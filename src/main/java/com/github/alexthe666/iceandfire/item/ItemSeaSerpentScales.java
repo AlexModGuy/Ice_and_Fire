@@ -16,7 +16,7 @@ public class ItemSeaSerpentScales extends ItemGeneric {
     private final String colorName;
 
     public ItemSeaSerpentScales(String colorName, ChatFormatting color) {
-        super("sea_serpent_scales_" + colorName);
+        //super("sea_serpent_scales_" + colorName);
         this.color = color;
         this.colorName = colorName;
     }

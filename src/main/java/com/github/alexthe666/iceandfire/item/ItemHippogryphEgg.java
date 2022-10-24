@@ -35,7 +35,7 @@ public class ItemHippogryphEgg extends Item {
 
     public static ItemStack createEggStack(EnumHippogryphTypes parent1, EnumHippogryphTypes parent2) {
         EnumHippogryphTypes eggType = ThreadLocalRandom.current().nextBoolean() ? parent1 : parent2;
-        ItemStack stack = new ItemStack(IafItemRegistry.HIPPOGRYPH_EGG);
+        ItemStack stack = new ItemStack(IafItemRegistry.HIPPOGRYPH_EGG.get());
         CompoundTag tag = new CompoundTag();
         tag.putInt("EggOrdinal", eggType.ordinal());
         stack.setTag(tag);

@@ -32,12 +32,10 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
     private final ArmorMaterial material;
     private Multimap<Attribute, AttributeModifier> attributeModifierMultimap;
 
-    public ItemDragonsteelArmor(ArmorMaterial material, int renderIndex, EquipmentSlot slot, String gameName, String name) {
+    public ItemDragonsteelArmor(ArmorMaterial material, int renderIndex, EquipmentSlot slot) {
         super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.material = material;
-        this.setRegistryName(IceAndFire.MODID, gameName);
         this.attributeModifierMultimap = createAttributeMap();
-
     }
 
     @Override

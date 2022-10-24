@@ -18,13 +18,13 @@ public class ItemDragonArmor extends Item {
     public int dragonSlot;
     public String name;
 
-    public ItemDragonArmor(int type, int dragonSlot, String name) {
+    public ItemDragonArmor(int type, int dragonSlot) {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
         this.type = type;
         this.dragonSlot = dragonSlot;
-        this.name = name;
+        this.name = this.getRegistryName().getPath();
         this.setRegistryName(IceAndFire.MODID, name + "_" + getNameForSlot(dragonSlot));
-
+        // TODO: fix registry name here
     }
 
     public String getDescriptionId() {
@@ -32,18 +32,14 @@ public class ItemDragonArmor extends Item {
     }
 
 
-    private String getNameForSlot(int slot){
-        switch (slot){
-            case 0:
-                return "head";
-            case 1:
-                return "neck";
-            case 2:
-                return "body";
-            case 3:
-                return "tail";
-        }
-        return "";
+    static String getNameForSlot(int slot){
+        return switch (slot) {
+            case 0 -> "head";
+            case 1 -> "neck";
+            case 2 -> "body";
+            case 3 -> "tail";
+            default -> "";
+        };
     }
 
     @Override

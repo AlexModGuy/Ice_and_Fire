@@ -142,7 +142,7 @@ public class EntityPixieCharge extends Fireball {
                     }
                     if (shootingEntity == null || !(shootingEntity instanceof Player) || !((Player) shootingEntity).isCreative()) {
                         if (random.nextInt(3) == 0) {
-                            this.spawnAtLocation(new ItemStack(IafItemRegistry.PIXIE_DUST, 1), 0.45F);
+                            this.spawnAtLocation(new ItemStack(IafItemRegistry.PIXIE_DUST.get(), 1), 0.45F);
                         }
                     }
                 }

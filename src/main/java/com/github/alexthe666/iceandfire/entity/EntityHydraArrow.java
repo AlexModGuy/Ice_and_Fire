@@ -101,6 +101,6 @@ public class EntityHydraArrow extends AbstractArrow {
 
     @Override
     protected ItemStack getPickupItem() {
-        return new ItemStack(IafItemRegistry.HYDRA_ARROW);
+        return new ItemStack(IafItemRegistry.HYDRA_ARROW.get());
     }
 }

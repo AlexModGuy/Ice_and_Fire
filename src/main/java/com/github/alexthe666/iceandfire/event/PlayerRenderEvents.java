@@ -64,7 +64,7 @@ public class PlayerRenderEvents {
             float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
             event.getPoseStack().mulPose(new Quaternion(Vector3f.YP, f4, true));
             event.getPoseStack().pushPose();
-            Minecraft.getInstance().getItemRenderer().renderStatic(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM), ItemTransforms.TransformType.GROUND, false, event.getPoseStack(), event.getMultiBufferSource(), event.getEntityLiving().level, event.getPackedLight(), OverlayTexture.NO_OVERLAY, 0);
+            Minecraft.getInstance().getItemRenderer().renderStatic(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM.get()), ItemTransforms.TransformType.GROUND, false, event.getPoseStack(), event.getMultiBufferSource(), event.getEntityLiving().level, event.getPackedLight(), OverlayTexture.NO_OVERLAY, 0);
             event.getPoseStack().popPose();
             event.getPoseStack().popPose();
 

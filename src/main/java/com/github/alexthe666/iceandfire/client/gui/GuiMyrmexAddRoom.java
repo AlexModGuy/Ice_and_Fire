@@ -27,7 +27,7 @@ public class GuiMyrmexAddRoom extends Screen {
 
     public GuiMyrmexAddRoom(ItemStack staff, BlockPos interactPos, Direction facing) {
         super(new TranslatableComponent("myrmex_add_room"));
-        this.jungle = staff.getItem() == IafItemRegistry.MYRMEX_JUNGLE_STAFF;
+        this.jungle = staff.getItem() == IafItemRegistry.MYRMEX_JUNGLE_STAFF.get();
         this.interactPos = interactPos;
         this.facing = facing;
         init();
