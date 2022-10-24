@@ -7,7 +7,8 @@ import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.data.worldgen.Features;
+//import net.minecraft.data.worldgen.Features;
+import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
 public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> {
 
     public static final ResourceLocation HYDRA_CHEST = new ResourceLocation("iceandfire", "chest/hydra_cave");
-    protected static final ConfiguredFeature SWAMP_FEATURE = Features.SWAMP_OAK;
+    protected static final ConfiguredFeature SWAMP_FEATURE = TreeFeatures.SWAMP_OAK.value();
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
     public WorldGenHydraCave(Codec<NoneFeatureConfiguration> configFactoryIn) {

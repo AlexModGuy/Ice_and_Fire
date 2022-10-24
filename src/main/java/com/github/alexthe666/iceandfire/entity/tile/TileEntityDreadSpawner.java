@@ -47,8 +47,8 @@ public class TileEntityDreadSpawner extends SpawnerBlockEntity {
     }
 
     public CompoundTag save(CompoundTag p_59795_) {
-        super.save(p_59795_);
-        this.spawner.save(this.level, this.worldPosition, p_59795_);
+        super.saveAdditional(p_59795_);
+        this.spawner.save(p_59795_);
         return p_59795_;
     }
 
@@ -62,7 +62,7 @@ public class TileEntityDreadSpawner extends SpawnerBlockEntity {
 
     @Nullable
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(this.worldPosition, 1, this.getUpdateTag());
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     public CompoundTag getUpdateTag() {

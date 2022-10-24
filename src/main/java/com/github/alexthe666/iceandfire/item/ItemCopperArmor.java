@@ -26,8 +26,8 @@ public class ItemCopperArmor extends ArmorItem implements IItemRenderProperties 
         consumer.accept(new IItemRenderProperties() {
             @Override
             @Nullable
-            public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
-                return (A) new ModelCopperArmor(armorSlot == EquipmentSlot.LEGS || armorSlot == EquipmentSlot.HEAD);
+            public HumanoidModel<?> getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
+                return new ModelCopperArmor(armorSlot == EquipmentSlot.LEGS || armorSlot == EquipmentSlot.HEAD);
             }
         });
     }

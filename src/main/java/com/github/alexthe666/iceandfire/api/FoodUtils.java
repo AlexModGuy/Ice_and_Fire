@@ -35,6 +35,6 @@ public class FoodUtils {
     }
 
     public static boolean isSeeds(ItemStack stack) {
-        return Tags.Items.SEEDS.contains(stack.getItem());
+        return stack.is(Tags.Items.SEEDS);
     }
 }

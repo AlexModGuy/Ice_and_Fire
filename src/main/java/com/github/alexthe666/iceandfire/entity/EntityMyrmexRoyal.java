@@ -533,4 +533,9 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
         }
     }
+
+    @Override
+    public boolean isClientSide() {
+        return this.getLevel().isClientSide;
+    }
 }

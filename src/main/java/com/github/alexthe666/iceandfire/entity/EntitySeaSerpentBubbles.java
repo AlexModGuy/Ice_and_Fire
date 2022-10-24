@@ -16,8 +16,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.network.NetworkHooks;
 
 public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjectile {
 
@@ -30,7 +30,7 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
         super(t, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
     }
 
-    public EntitySeaSerpentBubbles(FMLPlayMessages.SpawnEntity spawnEntity, Level world) {
+    public EntitySeaSerpentBubbles(PlayMessages.SpawnEntity spawnEntity, Level world) {
         this(IafEntityRegistry.SEA_SERPENT_BUBBLES.get(), world);
     }
 

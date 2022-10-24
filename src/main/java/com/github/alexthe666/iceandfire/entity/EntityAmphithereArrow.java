@@ -10,8 +10,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.network.NetworkHooks;
 
 public class EntityAmphithereArrow extends AbstractArrow {
 
@@ -27,7 +27,7 @@ public class EntityAmphithereArrow extends AbstractArrow {
         this.setBaseDamage(2.5F);
     }
 
-    public EntityAmphithereArrow(FMLPlayMessages.SpawnEntity spawnEntity, Level world) {
+    public EntityAmphithereArrow(PlayMessages.SpawnEntity spawnEntity, Level world) {
         this(IafEntityRegistry.AMPHITHERE_ARROW.get(), world);
     }
 

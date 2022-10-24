@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.enums.*;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.BannerPatternItem;
@@ -16,6 +17,9 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.lang.reflect.Field;
 import java.util.Locale;
@@ -57,7 +61,9 @@ public class IafItemRegistry {
     public static CustomToolMaterial DREAD_KNIGHT_TOOL_MATERIAL = new CustomToolMaterial("DreadKnightSword", 0, 1200, 13F, 0F, 10);
     public static CustomToolMaterial GHOST_SWORD_TOOL_MATERIAL = new CustomToolMaterial("GhostSword", 2, 3000, 5, 10.0F, 25);
 
-    public static final Item BESTIARY = new ItemBestiary();
+    static DeferredRegister<Item> deferredRegister = DeferredRegister.create(ForgeRegistries.ITEMS, IceAndFire.MODID);
+
+    public static final RegistryObject<Item> BESTIARY = deferredRegister.register("bestiary", ItemBestiary::new);
     public static final Item MANUSCRIPT = new ItemGeneric("manuscript");
     public static final Item SAPPHIRE_GEM = new ItemGeneric("sapphire_gem");
     public static final Item SILVER_INGOT = new ItemGeneric("silver_ingot");

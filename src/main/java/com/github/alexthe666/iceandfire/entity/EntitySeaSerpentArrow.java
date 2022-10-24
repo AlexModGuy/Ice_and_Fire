@@ -14,8 +14,8 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.network.NetworkHooks;
 
 public class EntitySeaSerpentArrow extends AbstractArrow {
 
@@ -31,7 +31,7 @@ public class EntitySeaSerpentArrow extends AbstractArrow {
         this.setBaseDamage(3F);
     }
 
-    public EntitySeaSerpentArrow(FMLPlayMessages.SpawnEntity spawnEntity, Level world) {
+    public EntitySeaSerpentArrow(PlayMessages.SpawnEntity spawnEntity, Level world) {
         this(IafEntityRegistry.SEA_SERPENT_ARROW.get(), world);
     }
 

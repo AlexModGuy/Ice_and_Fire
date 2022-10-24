@@ -56,13 +56,10 @@ public class TileEntityMyrmexCocoon extends RandomizableContainerBlockEntity {
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    public void saveAdditional(CompoundTag compound) {
         if (!this.trySaveLootTable(compound)) {
             ContainerHelper.saveAllItems(compound, this.chestContents);
         }
-
-        return compound;
     }
 
     @Override
@@ -112,7 +109,7 @@ public class TileEntityMyrmexCocoon extends RandomizableContainerBlockEntity {
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(worldPosition, 1, getUpdateTag());
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
@@ -122,7 +119,7 @@ public class TileEntityMyrmexCocoon extends RandomizableContainerBlockEntity {
 
     @Override
     public CompoundTag getUpdateTag() {
-        return this.save(new CompoundTag());
+        return this.saveWithFullMetadata();
     }
 
     public boolean isFull(ItemStack heldStack) {

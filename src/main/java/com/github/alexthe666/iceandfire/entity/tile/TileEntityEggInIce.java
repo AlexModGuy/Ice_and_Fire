@@ -54,8 +54,7 @@ public class TileEntityEggInIce extends BlockEntity {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
-        super.save(tag);
+    public void saveAdditional(CompoundTag tag) {
         if (type != null) {
             tag.putByte("Color", (byte) type.ordinal());
         } else {
@@ -67,7 +66,6 @@ public class TileEntityEggInIce extends BlockEntity {
         } else {
             tag.putUUID("OwnerUUID", ownerUUID);
         }
-        return tag;
     }
 
     @Override
@@ -98,7 +96,7 @@ public class TileEntityEggInIce extends BlockEntity {
 
     public CompoundTag getUpdateTag() {
         CompoundTag nbtTagCompound = new CompoundTag();
-        save(nbtTagCompound);
+        saveAdditional(nbtTagCompound);
         return nbtTagCompound;
     }
 
@@ -106,8 +104,8 @@ public class TileEntityEggInIce extends BlockEntity {
     @Nullable
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         CompoundTag nbtTagCompound = new CompoundTag();
-        save(nbtTagCompound);
-        return new ClientboundBlockEntityDataPacket(this.worldPosition, -1, nbtTagCompound);
+        saveAdditional(nbtTagCompound);
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override

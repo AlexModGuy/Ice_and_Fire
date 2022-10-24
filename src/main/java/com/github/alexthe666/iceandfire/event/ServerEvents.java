@@ -31,6 +31,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.CombatEntry;
 import net.minecraft.world.damagesource.CombatTracker;
 import net.minecraft.world.damagesource.DamageSource;
@@ -72,12 +73,10 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)
 public class ServerEvents {
@@ -139,9 +138,8 @@ public class ServerEvents {
         }
     }
 
-    private static boolean isInEntityTag(ResourceLocation loc, EntityType type) {
-        Tag<EntityType<?>> tag = EntityTypeTags.getAllTags().getTag(loc);
-        return tag != null && tag.contains(type);
+    private static boolean isInEntityTag(ResourceLocation loc, EntityType<?> type) {
+        return type.is(Objects.requireNonNull(ForgeRegistries.ENTITIES.tags()).createTagKey(loc));
     }
 
     public static boolean isLivestock(Entity entity) {

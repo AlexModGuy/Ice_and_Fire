@@ -21,8 +21,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.network.NetworkHooks;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class EntityGhostSword extends AbstractArrow {
         this.setBaseDamage(dmg);
     }
 
-    public EntityGhostSword(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
+    public EntityGhostSword(PlayMessages.SpawnEntity spawnEntity, Level worldIn) {
         this(IafEntityRegistry.GHOST_SWORD.get(), worldIn);
     }
 

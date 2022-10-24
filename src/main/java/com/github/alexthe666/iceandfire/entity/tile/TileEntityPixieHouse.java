@@ -68,8 +68,7 @@ public class TileEntityPixieHouse extends BlockEntity {
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    public void saveAdditional(CompoundTag compound) {
         compound.putInt("HouseType", houseType);
         compound.putBoolean("HasPixie", hasPixie);
         compound.putInt("PixieType", pixieType);
@@ -78,12 +77,11 @@ public class TileEntityPixieHouse extends BlockEntity {
             compound.putUUID("PixieOwnerUUID", pixieOwnerUUID);
         }
         ContainerHelper.saveAllItems(compound, this.pixieItems);
-        return compound;
     }
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(worldPosition, 1, getUpdateTag());
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
@@ -97,7 +95,7 @@ public class TileEntityPixieHouse extends BlockEntity {
 
     @Override
     public CompoundTag getUpdateTag() {
-        return this.save(new CompoundTag());
+        return this.saveWithFullMetadata();
     }
 
     @Override

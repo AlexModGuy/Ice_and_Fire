@@ -219,7 +219,9 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
     private void generateEntrance(LevelAccessor world, Random rand, BlockPos position, int size, int height, Direction direction) {
         BlockPos up = position.above();
         hive.getEntranceBottoms().put(up, direction);
-        while (up.getY() < world.getHeightmapPos(small ? Heightmap.Types.MOTION_BLOCKING_NO_LEAVES : Heightmap.Types.WORLD_SURFACE_WG, up).getY() && !BlockTags.LOGS.contains(world.getBlockState(up).getBlock())) {
+        while (up.getY() < world.getHeightmapPos(small ? Heightmap.Types.MOTION_BLOCKING_NO_LEAVES : Heightmap.Types.WORLD_SURFACE_WG, up).getY()
+                && ! world.getBlockState(up).is(BlockTags.LOGS))
+        {
             generateCircleRespectSky(world, rand, up, size, height, direction);
             up = up.above().relative(direction);
         }

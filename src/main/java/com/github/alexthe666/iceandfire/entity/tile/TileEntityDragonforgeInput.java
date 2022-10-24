@@ -57,7 +57,7 @@ public class TileEntityDragonforgeInput extends BlockEntity {
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(worldPosition, 1, getUpdateTag());
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class TileEntityDragonforgeInput extends BlockEntity {
 
     @Override
     public CompoundTag getUpdateTag() {
-        return this.save(new CompoundTag());
+        return this.saveWithFullMetadata();
     }
 
     protected void lureDragons() {

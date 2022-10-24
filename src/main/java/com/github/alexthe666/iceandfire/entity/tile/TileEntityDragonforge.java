@@ -214,11 +214,9 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    public void saveAdditional(CompoundTag compound) {
         compound.putInt("CookTime", (short) this.cookTime);
         ContainerHelper.saveAllItems(compound, this.forgeItemStacks);
-        return compound;
     }
 
     @Override
@@ -491,7 +489,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(worldPosition, 1, getUpdateTag());
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
@@ -501,7 +499,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
 
     @Override
     public CompoundTag getUpdateTag() {
-        return this.save(new CompoundTag());
+        return this.saveWithFullMetadata();
     }
 
     public boolean assembled() {

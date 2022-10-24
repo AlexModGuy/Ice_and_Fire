@@ -12,6 +12,7 @@ import com.github.alexthe666.iceandfire.loot.IafLootRegistry;
 import com.github.alexthe666.iceandfire.message.*;
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
+import com.github.alexthe666.iceandfire.world.biome.IafBiomeTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.CreativeModeTab;
@@ -33,11 +34,11 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmllegacy.network.NetworkDirection;
-import net.minecraftforge.fmllegacy.network.NetworkRegistry;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
-import net.minecraftforge.fmllegacy.server.ServerLifecycleHooks;
-import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -108,7 +109,7 @@ public class IceAndFire {
     }
 
     @SubscribeEvent
-    public void onServerStarted(FMLServerStartedEvent event) {
+    public void onServerStarted(ServerStartedEvent event) {
         LOGGER.info(IafWorldRegistry.LOADED_FEATURES);
         LOGGER.info(IafEntityRegistry.LOADED_ENTITIES);
     }

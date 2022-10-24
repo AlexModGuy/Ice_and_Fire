@@ -95,7 +95,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
     }
 
     private static boolean isJungleBiome(Level world, BlockPos position) {
-        return BiomeConfig.test(BiomeConfig.jungleMyrmexBiomes, world.getBiome(position));
+        return BiomeConfig.test(BiomeConfig.jungleMyrmexBiomes, world.getBiome(position).value());
     }
 
     public static boolean haveSameHive(EntityMyrmexBase myrmex, Entity entity) {
@@ -114,7 +114,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
     }
 
     public static boolean isEdibleBlock(BlockState blockState) {
-        return BlockTags.getAllTags().getTag(IafTagRegistry.MYRMEX_HARVESTABLES).contains(blockState.getBlock());
+        return blockState.is(BlockTags.create(IafTagRegistry.MYRMEX_HARVESTABLES));
     }
 
     public static int getRandomCaste(Level world, Random random, boolean royal) {

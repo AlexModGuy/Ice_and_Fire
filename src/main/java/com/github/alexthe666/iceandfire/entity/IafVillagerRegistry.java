@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.core.Holder;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.*;
 import net.minecraft.resources.ResourceLocation;
@@ -20,8 +21,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.levelgen.feature.structures.StructurePoolElement;
-import net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
 public class IafVillagerRegistry {
 
     private static final String[] VILLAGE_TYPES = new String[]{"plains", "desert", "snowy", "savanna", "taiga"};
-    private static final StructureProcessorList HOUSE_PROCESSOR = BuiltinRegistries.register(BuiltinRegistries.PROCESSOR_LIST, new ResourceLocation("iceandfire:village_house_processor"), genVillageHouseProcessor());
+    private static final Holder<StructureProcessorList> HOUSE_PROCESSOR = BuiltinRegistries.register(BuiltinRegistries.PROCESSOR_LIST, new ResourceLocation("iceandfire:village_house_processor"), genVillageHouseProcessor());
     public static PoiType LECTERN_POI;
     public static VillagerProfession SCRIBE;
 

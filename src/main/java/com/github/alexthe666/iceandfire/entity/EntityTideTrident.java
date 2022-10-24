@@ -20,8 +20,8 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.network.NetworkHooks;
 
 public class EntityTideTrident extends ThrownTrident {
 
@@ -44,7 +44,7 @@ public class EntityTideTrident extends ThrownTrident {
         this.setPierceLevel((byte) piercingLevel);
     }
 
-    public EntityTideTrident(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
+    public EntityTideTrident(PlayMessages.SpawnEntity spawnEntity, Level worldIn) {
         this(IafEntityRegistry.TIDE_TRIDENT.get(), worldIn);
     }
 

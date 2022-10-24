@@ -323,4 +323,9 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     public boolean showProgressBar() {
         return false;
     }
+
+    @Override
+    public boolean isClientSide() {
+        return this.getLevel().isClientSide;
+    }
 }

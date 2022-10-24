@@ -152,7 +152,7 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
 
     public EnumBestiaryPages[] randomizePages(ItemStack bestiary, ItemStack manuscript) {
         if (!level.isClientSide) {
-            if (bestiary.getItem() == IafItemRegistry.BESTIARY) {
+            if (bestiary.getItem() == IafItemRegistry.BESTIARY.get()) {
                 List<EnumBestiaryPages> possibleList = getPossiblePages();
                 localRand.setSeed(this.level.getGameTime());
                 Collections.shuffle(possibleList, localRand);
@@ -189,10 +189,8 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    public void saveAdditional(CompoundTag compound) {
         ContainerHelper.saveAllItems(compound, this.stacks);
-        return compound;
     }
 
     @Override
@@ -261,7 +259,7 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(worldPosition, 1, getUpdateTag());
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
@@ -271,7 +269,7 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
 
     @Override
     public CompoundTag getUpdateTag() {
-        return this.save(new CompoundTag());
+        return this.saveWithFullMetadata();
     }
 
     @Override

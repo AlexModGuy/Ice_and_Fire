@@ -19,8 +19,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.network.NetworkHooks;
 
 public class EntityPixieCharge extends Fireball {
 
@@ -33,7 +33,7 @@ public class EntityPixieCharge extends Fireball {
     }
 
 
-    public EntityPixieCharge(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
+    public EntityPixieCharge(PlayMessages.SpawnEntity spawnEntity, Level worldIn) {
         this(IafEntityRegistry.PIXIE_CHARGE.get(), worldIn);
     }
 

@@ -127,8 +127,12 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     public static boolean canAmphithereSpawnOn(EntityType<EntityAmphithere> parrotIn, LevelAccessor worldIn, MobSpawnType reason, BlockPos p_223317_3_, Random random) {
-        Block block = worldIn.getBlockState(p_223317_3_.below()).getBlock();
-        return (block.getTags().contains(BlockTags.LEAVES) || block == Blocks.GRASS_BLOCK || block.getTags().contains(BlockTags.LOGS) || block == Blocks.AIR);
+        BlockState blockState = worldIn.getBlockState(p_223317_3_.below());
+        Block block = blockState.getBlock();
+        return (blockState.is(BlockTags.LEAVES)
+                || block == Blocks.GRASS_BLOCK
+                || blockState.is(BlockTags.LOGS)
+                || block == Blocks.AIR);
     }
 
     @Override

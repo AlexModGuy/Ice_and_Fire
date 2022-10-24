@@ -82,7 +82,7 @@ public class SeaSerpentPathNavigator extends PathNavigation {
             for (int lvt_7_1_ = Math.min(this.path.getNextNodeIndex() + 6, this.path.getNodeCount() - 1); lvt_7_1_ > this.path.getNextNodeIndex(); --lvt_7_1_) {
                 lvt_6_1_ = this.path.getEntityPosAtNode(this.mob, lvt_7_1_);
                 if (lvt_6_1_.distanceToSqr(entityPos) <= 36.0D
-                    && this.canMoveDirectly(entityPos, lvt_6_1_, 0, 0, 0)) {
+                    && this.canMoveDirectly(entityPos, lvt_6_1_)) {
                     this.path.setNextNodeIndex(lvt_7_1_);
                     break;
                 }
@@ -128,7 +128,7 @@ public class SeaSerpentPathNavigator extends PathNavigation {
     }
 
     @Override
-    protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32, int sizeX, int sizeY, int sizeZ) {
+    protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32) {
         Vec3 lvt_6_1_ = new Vec3(posVec32.x, posVec32.y + this.mob.getBbHeight() * 0.5D, posVec32.z);
         return this.level.clip(new ClipContext(posVec31, lvt_6_1_, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.mob)).getType() == HitResult.Type.MISS;
     }

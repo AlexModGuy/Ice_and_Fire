@@ -8,8 +8,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.network.NetworkHooks;
 
 public class EntityDragonArrow extends AbstractArrow {
 
@@ -24,7 +24,7 @@ public class EntityDragonArrow extends AbstractArrow {
         this.setBaseDamage(10);
     }
 
-    public EntityDragonArrow(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
+    public EntityDragonArrow(PlayMessages.SpawnEntity spawnEntity, Level worldIn) {
         this(IafEntityRegistry.DRAGON_ARROW.get(), worldIn);
     }
 

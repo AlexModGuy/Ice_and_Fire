@@ -13,8 +13,8 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.network.NetworkHooks;
 
 public class EntityStymphalianArrow extends AbstractArrow {
 
@@ -30,7 +30,7 @@ public class EntityStymphalianArrow extends AbstractArrow {
         this.setBaseDamage(3.5F);
     }
 
-    public EntityStymphalianArrow(FMLPlayMessages.SpawnEntity spawnEntity, Level world) {
+    public EntityStymphalianArrow(PlayMessages.SpawnEntity spawnEntity, Level world) {
         this(IafEntityRegistry.STYMPHALIAN_ARROW.get(), world);
     }
 

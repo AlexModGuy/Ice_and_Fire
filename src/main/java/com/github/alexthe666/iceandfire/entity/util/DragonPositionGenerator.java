@@ -24,7 +24,7 @@ public class DragonPositionGenerator {
         boolean flag;
 
         if (mob.hasRestriction()) {
-            double d0 = mob.getRestrictCenter().distSqr(Mth.floor(mob.getX()), Mth.floor(mob.getY()), Mth.floor(mob.getZ()), true) + 4.0D;
+            double d0 = mob.getRestrictCenter().distToCenterSqr(Mth.floor(mob.getX()), Mth.floor(mob.getY()), Mth.floor(mob.getZ())) + 4.0D;
             double d1 = mob.getRestrictRadius() + (float) xz;
             flag = d0 < d1 * d1;
         } else {

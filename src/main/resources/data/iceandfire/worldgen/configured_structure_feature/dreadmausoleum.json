@@ -1,0 +1,10 @@
+{
+  "type": "iceandfire:mausoleum",
+  "config": {
+    "start_pool": "iceandfire:dread_mausoleum/start_pool",
+    "size": 5
+  },
+
+  "adapt_noise": false,
+  "spawn_overrides": {}
+}

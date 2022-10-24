@@ -15,7 +15,7 @@ modId = "citadel" #mandatory
 # Does this dependency have to exist - if not, ordering below must be specified
 mandatory = true #mandatory
 # The version range of the dependency
-versionRange = "[1.9.5,1.9.99]" #mandatory
+versionRange = "[1.11.1,1.11.99]" #mandatory
 # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
 ordering = "AFTER"
 # Side this dependency is applied on - BOTH, CLIENT or SERVER

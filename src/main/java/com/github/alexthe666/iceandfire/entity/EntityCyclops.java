@@ -20,9 +20,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -51,6 +53,8 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
@@ -161,7 +165,11 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
             this.setAnimation(ANIMATION_STOMP);
             return true;
         } else if (attackDescision == 1) {
-            if (!entityIn.hasPassenger(this) && entityIn.getBbWidth() < 1.95F && !(entityIn instanceof EntityDragonBase) && !EntityTypeTags.getAllTags().getTag(IafTagRegistry.CYCLOPS_UNLIFTABLES).contains(entityIn.getType())) {
+            if (!entityIn.hasPassenger(this)
+                    && entityIn.getBbWidth() < 1.95F
+                    && !(entityIn instanceof EntityDragonBase)
+                    && !entityIn.getType().is((ForgeRegistries.ENTITIES.tags().createTagKey(IafTagRegistry.CYCLOPS_UNLIFTABLES))))
+            {
                 this.setAnimation(ANIMATION_EATPLAYER);
                 entityIn.stopRiding();
                 entityIn.startRiding(this, true);
@@ -338,7 +346,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
                         BlockPos pos = new BlockPos(a, b, c);
                         BlockState state = level.getBlockState(pos);
                         Block block = state.getBlock();
-                        if (!state.isAir() && !state.getShape(level, pos).isEmpty() && !(block instanceof BushBlock) && block != Blocks.BEDROCK && (state.getBlock() instanceof LeavesBlock || BlockTags.LOGS.contains(state.getBlock()))) {
+                        if (!state.isAir() && !state.getShape(level, pos).isEmpty() && !(block instanceof BushBlock) && block != Blocks.BEDROCK && (state.getBlock() instanceof LeavesBlock || state.is(BlockTags.LOGS))) {
                             this.getDeltaMovement().scale(0.6D);
                             if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, a, b, c))) continue;
                             if (block != Blocks.AIR) {

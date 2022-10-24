@@ -59,7 +59,7 @@ public class GuiBestiary extends Screen {
     public GuiBestiary(ItemStack book) {
         super(new TranslatableComponent("bestiary_gui"));
         this.book = book;
-        if (!book.isEmpty() && book.getItem() != null && book.getItem() == IafItemRegistry.BESTIARY) {
+        if (!book.isEmpty() && book.getItem() != null && book.getItem() == IafItemRegistry.BESTIARY.get()) {
             if (book.getTag() != null) {
                 Set<EnumBestiaryPages> pages = EnumBestiaryPages
                     .containedPages(Ints.asList(book.getTag().getIntArray("Pages")));

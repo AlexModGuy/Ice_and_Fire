@@ -119,7 +119,7 @@ public class ContainerLectern extends AbstractContainerMenu {
         possiblePagesInt[1] = getPageField(1);
         possiblePagesInt[2] = getPageField(2);
         EnumBestiaryPages[] pages = new EnumBestiaryPages[3];
-        if (this.tileFurnace.getItem(0).getItem() == IafItemRegistry.BESTIARY) {
+        if (this.tileFurnace.getItem(0).getItem() == IafItemRegistry.BESTIARY.get()) {
             if (possiblePagesInt[0] < 0) {
                 pages[0] = null;
             } else {
@@ -164,7 +164,7 @@ public class ContainerLectern extends AbstractContainerMenu {
         } else if (this.possiblePagesInt[id] > 0 && !itemstack.isEmpty()) {
             EnumBestiaryPages page = getPossiblePages()[Mth.clamp(id, 0, 2)];
             if (page != null) {
-                if (itemstack.getItem() == IafItemRegistry.BESTIARY) {
+                if (itemstack.getItem() == IafItemRegistry.BESTIARY.get()) {
                     this.tileFurnace.setItem(0, itemstack);
                     if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern) {
                         if (playerIn.level.isClientSide) {
