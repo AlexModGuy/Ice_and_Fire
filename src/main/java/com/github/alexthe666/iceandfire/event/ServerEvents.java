@@ -55,6 +55,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
@@ -530,7 +532,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onBreakBlock(BlockEvent.BreakEvent event) {
-        if (event.getPlayer() != null && (event.getState().getBlock() instanceof AbstractChestBlock || event.getState().getBlock() == IafBlockRegistry.GOLD_PILE || event.getState().getBlock() == IafBlockRegistry.SILVER_PILE || event.getState().getBlock() == IafBlockRegistry.COPPER_PILE)) {
+        if (event.getPlayer() != null && (event.getState().getBlock() instanceof AbstractChestBlock || event.getState().getBlock() == IafBlockRegistry.GOLD_PILE.get() || event.getState().getBlock() == IafBlockRegistry.SILVER_PILE.get() || event.getState().getBlock() == IafBlockRegistry.COPPER_PILE.get())) {
             final float dist = IafConfig.dragonGoldSearchLength;
             List<Entity> list = event.getWorld().getEntities(event.getPlayer(), event.getPlayer().getBoundingBox().inflate(dist, dist, dist));
             if (list.isEmpty()) return;
@@ -548,8 +550,8 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
-    public void onChestGenerated(LootTableLoadEvent event) {
+    //@SubscribeEvent
+    public static void onChestGenerated(LootTableLoadEvent event) {
         final ResourceLocation eventName = event.getName();
         final boolean condition1 = eventName.equals(BuiltInLootTables.SIMPLE_DUNGEON)
             || eventName.equals(BuiltInLootTables.ABANDONED_MINESHAFT)

@@ -20,7 +20,7 @@ public class BlockElementalFlower extends BushBlock {
     public Item itemBlock;
     protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 13.0D, 14.0D);
 
-    public BlockElementalFlower(String name) {
+    public BlockElementalFlower() {
         super(
             Properties
                 .of(Material.REPLACEABLE_PLANT)
@@ -30,8 +30,6 @@ public class BlockElementalFlower extends BushBlock {
                 .randomTicks()
                 .sound(SoundType.GRASS)
 		);
-
-        setRegistryName(IceAndFire.MODID, name);
     }
 
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
@@ -45,9 +43,9 @@ public class BlockElementalFlower extends BushBlock {
 
     public boolean canStay(Level worldIn, BlockPos pos) {
         BlockState soil = worldIn.getBlockState(pos.below());
-        if (this == IafBlockRegistry.FIRE_LILY) {
+        if (this == IafBlockRegistry.FIRE_LILY.get()) {
             return soil.getMaterial() == Material.SAND || soil.getBlock() == Blocks.NETHERRACK;
-        } else if (this == IafBlockRegistry.LIGHTNING_LILY) {
+        } else if (this == IafBlockRegistry.LIGHTNING_LILY.get()) {
             return soil.getMaterial() == Material.DIRT || soil.getBlock() == Blocks.GRASS;
         } else {
             return soil.getMaterial() == Material.ICE_SOLID || soil.getMaterial() == Material.ICE;

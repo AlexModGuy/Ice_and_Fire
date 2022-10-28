@@ -40,7 +40,6 @@ public class ItemGorgonHead extends Item implements IItemRenderProperties {
 
     public ItemGorgonHead() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(1));
-        this.setRegistryName(IceAndFire.MODID, "gorgon_head");
     }
 
     @Override

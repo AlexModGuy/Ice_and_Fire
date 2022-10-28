@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 public class ItemPixieDust extends ItemGenericFood {
 
     public ItemPixieDust() {
-        super(1, 0.3F, false, false, true, "pixie_dust");
+        super(1, 0.3F, false, false, true);
     }
 
     public void onFoodEaten(ItemStack stack, Level worldIn, LivingEntity livingEntity) {

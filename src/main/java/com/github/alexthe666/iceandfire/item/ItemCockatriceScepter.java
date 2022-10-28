@@ -39,7 +39,6 @@ public class ItemCockatriceScepter extends Item {
 
     public ItemCockatriceScepter() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(700));
-        this.setRegistryName(IceAndFire.MODID, "cockatrice_scepter");
     }
 
     @Override

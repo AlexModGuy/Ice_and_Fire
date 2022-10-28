@@ -25,7 +25,6 @@ public class ItemPixieWand extends Item {
 
     public ItemPixieWand() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1).durability(500));
-        this.setRegistryName(IceAndFire.MODID, "pixie_wand");
     }
 
 

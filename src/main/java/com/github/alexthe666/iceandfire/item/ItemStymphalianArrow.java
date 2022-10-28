@@ -21,7 +21,6 @@ public class ItemStymphalianArrow extends ArrowItem {
 
     public ItemStymphalianArrow() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "stymphalian_arrow");
     }
 
     @Override

@@ -23,7 +23,6 @@ public class ItemStymphalianFeatherBundle extends Item {
 
     public ItemStymphalianFeatherBundle() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "stymphalian_feather_bundle");
     }
 
     @Override

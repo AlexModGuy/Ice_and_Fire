@@ -22,13 +22,10 @@ public class ItemDragonArmor extends Item {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
         this.type = type;
         this.dragonSlot = dragonSlot;
-        this.name = this.getRegistryName().getPath();
-        this.setRegistryName(IceAndFire.MODID, name + "_" + getNameForSlot(dragonSlot));
-        // TODO: fix registry name here
     }
 
     public String getDescriptionId() {
-        return "item.iceandfire." + name;
+        return "item.iceandfire." + this.getRegistryName().getPath();
     }
 
 

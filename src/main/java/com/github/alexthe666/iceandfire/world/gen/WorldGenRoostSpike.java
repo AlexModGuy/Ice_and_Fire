@@ -31,10 +31,10 @@ public class WorldGenRoostSpike {
                     int height = Math.max(blockpos.getY() - up.getY(), 0);
                     if (i <= 0) {
                         if (rand.nextFloat() < height * 0.3F) {
-                            worldIn.setBlock(blockpos, IafBlockRegistry.CRACKLED_STONE.defaultBlockState(), 2);
+                            worldIn.setBlock(blockpos, IafBlockRegistry.CRACKLED_STONE.get().defaultBlockState(), 2);
                         }
                     } else {
-                        worldIn.setBlock(blockpos, IafBlockRegistry.CRACKLED_STONE.defaultBlockState(), 2);
+                        worldIn.setBlock(blockpos, IafBlockRegistry.CRACKLED_STONE.get().defaultBlockState(), 2);
                     }
                 }
             }

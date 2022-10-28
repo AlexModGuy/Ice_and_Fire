@@ -16,7 +16,6 @@ public class ItemLichStaff extends Item {
 
     public ItemLichStaff() {
         super(new Item.Properties().durability(100).tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "lich_staff");
     }
 
     @Override

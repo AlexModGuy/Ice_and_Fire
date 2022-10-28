@@ -27,7 +27,6 @@ public class ItemMyrmexEgg extends Item {
     public ItemMyrmexEgg(boolean isJungle) {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
         this.isJungle = isJungle;
-        this.setRegistryName(IceAndFire.MODID, isJungle ? "myrmex_jungle_egg" : "myrmex_desert_egg");
     }
 
     @Override

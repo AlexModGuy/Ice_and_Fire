@@ -21,7 +21,6 @@ public class ItemHippocampusSlapper extends SwordItem {
 
     public ItemHippocampusSlapper() {
         super(IafItemRegistry.HIPPOCAMPUS_SWORD_TOOL_MATERIAL, 3, -2.4F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "hippocampus_slapper");
     }
 
     @Override

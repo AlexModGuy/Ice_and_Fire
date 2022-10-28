@@ -7,6 +7,5 @@ public class ItemFishingSpear extends Item {
 
     public ItemFishingSpear() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(64));
-        this.setRegistryName(IceAndFire.MODID, "fishing_spear");
     }
 }

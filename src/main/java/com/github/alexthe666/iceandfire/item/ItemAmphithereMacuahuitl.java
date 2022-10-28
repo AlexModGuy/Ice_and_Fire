@@ -23,7 +23,6 @@ public class ItemAmphithereMacuahuitl extends SwordItem {
 
     public ItemAmphithereMacuahuitl() {
         super(IafItemRegistry.AMPHITHERE_SWORD_TOOL_MATERIAL, 3, -2.4F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "amphithere_macuahuitl");
     }
 
     @Override

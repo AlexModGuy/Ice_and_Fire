@@ -30,7 +30,6 @@ public class BlockSeaSerpentScales extends Block {
 
         this.color = color;
         this.name = name;
-        this.setRegistryName(IceAndFire.MODID, "sea_serpent_scale_block_" + name);
     }
 
     @Override

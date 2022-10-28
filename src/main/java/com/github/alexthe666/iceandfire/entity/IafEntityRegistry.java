@@ -12,6 +12,8 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.eventbus.EventBus;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -94,6 +96,11 @@ public class IafEntityRegistry {
 
     public static void setup() {
     }
+
+    public static void addToBus(IEventBus modBus) {
+        //modBus.addListener(IafEntityRegistry::bakeAttributes);
+    }
+
 
     @SubscribeEvent
     public static void bakeAttributes(EntityAttributeCreationEvent creationEvent) {

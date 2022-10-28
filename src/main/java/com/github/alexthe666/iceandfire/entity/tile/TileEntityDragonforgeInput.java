@@ -128,25 +128,25 @@ public class TileEntityDragonforgeInput extends BlockEntity {
     private BlockState getDeactivatedState() {
         switch (getDragonType()){
             case 0:
-                return IafBlockRegistry.DRAGONFORGE_FIRE_INPUT.defaultBlockState().setValue(BlockDragonforgeInput.ACTIVE, false);
+                return IafBlockRegistry.DRAGONFORGE_FIRE_INPUT.get().defaultBlockState().setValue(BlockDragonforgeInput.ACTIVE, false);
             case 1:
-                return IafBlockRegistry.DRAGONFORGE_ICE_INPUT.defaultBlockState().setValue(BlockDragonforgeInput.ACTIVE, false);
+                return IafBlockRegistry.DRAGONFORGE_ICE_INPUT.get().defaultBlockState().setValue(BlockDragonforgeInput.ACTIVE, false);
             case 2:
-                return IafBlockRegistry.DRAGONFORGE_LIGHTNING_INPUT.defaultBlockState().setValue(BlockDragonforgeInput.ACTIVE, false);
+                return IafBlockRegistry.DRAGONFORGE_LIGHTNING_INPUT.get().defaultBlockState().setValue(BlockDragonforgeInput.ACTIVE, false);
             default:
-                return IafBlockRegistry.DRAGONFORGE_FIRE_INPUT.defaultBlockState().setValue(BlockDragonforgeInput.ACTIVE,
+                return IafBlockRegistry.DRAGONFORGE_FIRE_INPUT.get().defaultBlockState().setValue(BlockDragonforgeInput.ACTIVE,
                     false);
         }
     }
 
     private int getDragonType() {
-        if (level.getBlockState(worldPosition).getBlock() == IafBlockRegistry.DRAGONFORGE_FIRE_INPUT) {
+        if (level.getBlockState(worldPosition).getBlock() == IafBlockRegistry.DRAGONFORGE_FIRE_INPUT.get()) {
             return 0;
         }
-        if (level.getBlockState(worldPosition).getBlock() == IafBlockRegistry.DRAGONFORGE_ICE_INPUT) {
+        if (level.getBlockState(worldPosition).getBlock() == IafBlockRegistry.DRAGONFORGE_ICE_INPUT.get()) {
             return 1;
         }
-        if (level.getBlockState(worldPosition).getBlock() == IafBlockRegistry.DRAGONFORGE_LIGHTNING_INPUT) {
+        if (level.getBlockState(worldPosition).getBlock() == IafBlockRegistry.DRAGONFORGE_LIGHTNING_INPUT.get()) {
             return 2;
         }
         return 0;

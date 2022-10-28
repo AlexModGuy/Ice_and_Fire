@@ -87,8 +87,8 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new HippocampusAIRide(this));
-        this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, Items.KELP, false));
-        this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, Items.PRISMARINE_CRYSTALS, false));
+        this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, () -> Items.KELP, false));
+        this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, () -> Items.PRISMARINE_CRYSTALS, false));
         this.goalSelector.addGoal(1, new AquaticAIFindWaterTarget(this, 10, true));
         this.goalSelector.addGoal(2, new AquaticAIGetInWater(this, 1.0D));
         this.goalSelector.addGoal(3, new HippocampusAIWander(this, 1));

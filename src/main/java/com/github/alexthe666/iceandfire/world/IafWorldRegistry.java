@@ -25,6 +25,7 @@ import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -36,12 +37,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.WorldGenerationContext;
 import net.minecraft.world.level.levelgen.feature.*;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
 import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType.StructureTemplateType;
 import net.minecraft.world.level.storage.LevelData;
@@ -98,14 +101,21 @@ public class IafWorldRegistry {
     //public static final RegistryObject<StructureFeature<NoneFeatureConfiguration>> GRAVEYARD = STRUCTURES.register("graveyard",
     //    () -> new GraveyardStructure(NoneFeatureConfiguration.CODEC));
 
-    public static final DeferredRegister<StructureFeature<?>> DEFERRED_REGISTRY_STRUCTURE = DeferredRegister.create(
-            ForgeRegistries.STRUCTURE_FEATURES,
-            IceAndFire.MODID
-    );
+    //public static final DeferredRegister<StructureFeature<?>> DEFERRED_REGISTRY_STRUCTURE = DeferredRegister.create(
+    //        ForgeRegistries.STRUCTURE_FEATURES,
+    //        IceAndFire.MODID
+    //);
 
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> GORGON_TEMPLE = DEFERRED_REGISTRY_STRUCTURE.register("gorgon_temple", GorgonTempleStructure::new);
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> MAUSOLEUM = DEFERRED_REGISTRY_STRUCTURE.register("mausoleum", DreadMausoleumStructure::new);
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> GRAVEYARD = DEFERRED_REGISTRY_STRUCTURE.register("graveyard", GraveyardStructure::new);
+    public static final RegistryObject<StructureFeature<JigsawConfiguration>> GORGON_TEMPLE = STRUCTURES.register("gorgon_temple", GorgonTempleStructure::new);
+    public static final RegistryObject<StructureFeature<JigsawConfiguration>> MAUSOLEUM = STRUCTURES.register("mausoleum", DreadMausoleumStructure::new);
+    public static final RegistryObject<StructureFeature<JigsawConfiguration>> GRAVEYARD = STRUCTURES.register("graveyard", GraveyardStructure::new);
+
+    public static final TagKey<Biome> HAS_GORGON_TEMPLE = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(IceAndFire.MODID, "has_structure/gorgon_temple"));
+    public static final TagKey<Biome> HAS_MAUSOLEUM = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(IceAndFire.MODID, "has_structure/mausoleum"));
+    public static final TagKey<Biome> HAS_GRAVEYARD = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(IceAndFire.MODID, "has_structure/graveyard"));
+
+    public static final ResourceLocation RL_IAF_STRUCTURE_SET = new ResourceLocation(IceAndFire.MODID, "iaf_structure_set");
+    public static final TagKey<StructureSet> IAF_STRUCTURE_SET = TagKey.create(Registry.STRUCTURE_SET_REGISTRY, RL_IAF_STRUCTURE_SET);
 
     public static StructurePieceType DUMMY_PIECE;
     public static Holder<PlacedFeature> FIRE_LILY_CF;
@@ -178,7 +188,7 @@ public class IafWorldRegistry {
     }
 
     private static HeightRangePlacement maxHeight(int max) {
-        return HeightRangePlacement.uniform(WorldGenerationContext::getMinGenY, absolute(max));
+        return HeightRangePlacement.uniform(VerticalAnchor.bottom(), absolute(max));
     }
 
     private static HeightRangePlacement minMaxHeight(int min, int max) {
@@ -194,6 +204,10 @@ public class IafWorldRegistry {
         return Holder.direct(PlacementUtils.register(registerName, Holder.direct(feature), modifiers).value());
     }
 
+    private static BiFunction<String, Feature, Holder<PlacedFeature>> registerSimple = (name, feat) -> {
+        return register("%s:%s".formatted(IceAndFire.MODID, name), new ConfiguredFeature<>(feat, FeatureConfiguration.NONE));
+    };
+
     public static void registerConfiguredFeatures() {
         // Technically we don't need the piece classes anymore but we should register
         // dummy pieces
@@ -204,41 +218,39 @@ public class IafWorldRegistry {
         Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:graveyard_piece", (StructureTemplateType) DummyPiece::new);
 
         COPPER_ORE_CF = register("iceandfire:copper_ore",
-                new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(OreFeatures.NATURAL_STONE, COPPER_ORE.defaultBlockState(), 8)),
+                new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(OreFeatures.NATURAL_STONE, COPPER_ORE.get().defaultBlockState(), 8)),
                 CountPlacement.of(2), maxHeight(128), spread());
 
         SILVER_ORE_CF = register("iceandfire:silver_ore",
-                new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(OreFeatures.NATURAL_STONE, SILVER_ORE.defaultBlockState(), 8)),
+                new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(OreFeatures.NATURAL_STONE, SILVER_ORE.get().defaultBlockState(), 8)),
                 CountPlacement.of(2), maxHeight(32), spread()
         );
 
         SAPPHIRE_ORE_CF = register("iceandfire:sapphire_ore",
-                new ConfiguredFeature<>(Feature.REPLACE_SINGLE_BLOCK, new ReplaceBlockConfiguration(STONE.defaultBlockState(), SAPPHIRE_ORE.defaultBlockState())),
+                new ConfiguredFeature<>(Feature.REPLACE_SINGLE_BLOCK, new ReplaceBlockConfiguration(STONE.defaultBlockState(), SAPPHIRE_ORE.get().defaultBlockState())),
                 CountPlacement.of(UniformInt.of(3, 8))
         );
 
         AMETHYST_ORE_CF = register("%s:amethyst_ore".formatted(IceAndFire.MODID),
-                new ConfiguredFeature<>(Feature.REPLACE_SINGLE_BLOCK, new ReplaceBlockConfiguration(STONE.defaultBlockState(), AMYTHEST_ORE.defaultBlockState())),
+                new ConfiguredFeature<>(Feature.REPLACE_SINGLE_BLOCK, new ReplaceBlockConfiguration(STONE.defaultBlockState(), AMYTHEST_ORE.get().defaultBlockState())),
                 CountPlacement.of(UniformInt.of(3, 8))
         );
 
         Function<Block, RandomPatchConfiguration> flowerConf = (block) -> FeatureUtils.simpleRandomPatchConfiguration(1, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(block.defaultBlockState().getBlock()))));
 
         FIRE_LILY_CF = register("%s:fire_lily".formatted(IceAndFire.MODID),
-                new ConfiguredFeature<>(Feature.FLOWER, flowerConf.apply(FIRE_LILY)),
+                new ConfiguredFeature<>(Feature.FLOWER, flowerConf.apply(FIRE_LILY.get())),
                 PlacementUtils.HEIGHTMAP);
 
         FROST_LILY_CF = register("%s:fire_lily".formatted(IceAndFire.MODID),
-                new ConfiguredFeature<>(Feature.FLOWER, flowerConf.apply(FROST_LILY)),
+                new ConfiguredFeature<>(Feature.FLOWER, flowerConf.apply(FROST_LILY.get())),
                 PlacementUtils.HEIGHTMAP);
 
         LIGHTNING_LILY_CF = register("%s:lightning_lily".formatted(IceAndFire.MODID),
-                new ConfiguredFeature<>(Feature.FLOWER, flowerConf.apply(LIGHTNING_LILY)),
+                new ConfiguredFeature<>(Feature.FLOWER, flowerConf.apply(LIGHTNING_LILY.get())),
                 PlacementUtils.HEIGHTMAP);
 
-        BiFunction<String, Feature, Holder<PlacedFeature>> registerSimple = (name, feat) -> {
-            return register("%s:%s".formatted(IceAndFire.MODID, name), new ConfiguredFeature<>(feat, FeatureConfiguration.NONE));
-        };
+
 
         FIRE_DRAGON_ROOST_CF = registerSimple.apply("fire_dragon_roost", FIRE_DRAGON_ROOST.get());
         ICE_DRAGON_ROOST_CF = registerSimple.apply("ice_dragon_roost", ICE_DRAGON_ROOST.get());

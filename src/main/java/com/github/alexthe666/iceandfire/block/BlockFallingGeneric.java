@@ -11,20 +11,17 @@ import net.minecraft.world.level.material.Material;
 public class BlockFallingGeneric extends FallingBlock {
     public Item itemBlock;
 
-    public BlockFallingGeneric(Material materialIn, String name, float hardness, float resistance, SoundType sound) {
+    public BlockFallingGeneric(Material materialIn, float hardness, float resistance, SoundType sound) {
         super(
             BlockBehaviour.Properties
                 .of(materialIn)
                 .sound(sound)
                 .strength(hardness, resistance)
         );
-
-        setRegistryName(IceAndFire.MODID, name);
-
     }
 
     @SuppressWarnings("deprecation")
-    public BlockFallingGeneric(Material materialIn, String gameName, String name, float hardness, float resistance, SoundType sound, boolean slippery) {
+    public BlockFallingGeneric(Material materialIn, float hardness, float resistance, SoundType sound, boolean slippery) {
         super(
             BlockBehaviour.Properties
                 .of(materialIn)
@@ -32,8 +29,6 @@ public class BlockFallingGeneric extends FallingBlock {
                 .strength(hardness, resistance)
                 .friction(0.98F)
         );
-
-        setRegistryName(IceAndFire.MODID, name);
     }
 
 

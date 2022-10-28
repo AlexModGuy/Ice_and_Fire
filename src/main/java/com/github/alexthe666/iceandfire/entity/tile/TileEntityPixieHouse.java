@@ -43,12 +43,12 @@ public class TileEntityPixieHouse extends BlockEntity {
     }
 
     public static int getHouseTypeFromBlock(Block block) {
-        if (block == IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_RED) return 1;
-        if (block == IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_BROWN) return 0;
-        if (block == IafBlockRegistry.PIXIE_HOUSE_OAK) return 3;
-        if (block == IafBlockRegistry.PIXIE_HOUSE_BIRCH) return 2;
-        if (block == IafBlockRegistry.PIXIE_HOUSE_SPRUCE) return 5;
-        if (block == IafBlockRegistry.PIXIE_HOUSE_DARK_OAK) return 4;
+        if (block == IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_RED.get()) return 1;
+        if (block == IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_BROWN.get()) return 0;
+        if (block == IafBlockRegistry.PIXIE_HOUSE_OAK.get()) return 3;
+        if (block == IafBlockRegistry.PIXIE_HOUSE_BIRCH.get()) return 2;
+        if (block == IafBlockRegistry.PIXIE_HOUSE_SPRUCE.get()) return 5;
+        if (block == IafBlockRegistry.PIXIE_HOUSE_DARK_OAK.get()) return 4;
         else return 0;
     }
 

@@ -18,8 +18,6 @@ import net.minecraft.world.item.ItemStack;
 
 public class RenderGhostSword extends EntityRenderer<EntityGhostSword> {
 
-    private final ItemStack SWORD_STACK = new ItemStack(IafItemRegistry.GHOST_SWORD.get());
-
     public RenderGhostSword(EntityRendererProvider.Context context) {
         super(context);
     }
@@ -40,7 +38,7 @@ public class RenderGhostSword extends EntityRenderer<EntityGhostSword> {
         matrixStackIn.mulPose(new Quaternion(Vector3f.YP, 0F, true));
         matrixStackIn.mulPose(new Quaternion(Vector3f.ZN, (entityIn.tickCount + partialTicks) * 30F, true));
         matrixStackIn.translate(0, -0.15F, 0);
-        Minecraft.getInstance().getItemRenderer().renderStatic(SWORD_STACK, ItemTransforms.TransformType.GROUND, 240, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
+        Minecraft.getInstance().getItemRenderer().renderStatic(new ItemStack(IafItemRegistry.GHOST_SWORD.get()), ItemTransforms.TransformType.GROUND, 240, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
         matrixStackIn.popPose();
 
 

@@ -7,8 +7,5 @@ public class ItemDragonBone extends Item {
 
     public ItemDragonBone() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "dragonbone");
     }
-
-
 }

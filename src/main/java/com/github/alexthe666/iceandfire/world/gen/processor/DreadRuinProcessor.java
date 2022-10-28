@@ -31,11 +31,11 @@ public class DreadRuinProcessor extends StructureProcessor {
     public static BlockState getRandomCrackedBlock(@Nullable BlockState prev, Random random) {
         float rand = random.nextFloat();
         if (rand < 0.5) {
-            return IafBlockRegistry.DREAD_STONE_BRICKS.defaultBlockState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS.get().defaultBlockState();
         } else if (rand < 0.9) {
-            return IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED.defaultBlockState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED.get().defaultBlockState();
         } else {
-            return IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY.defaultBlockState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY.get().defaultBlockState();
         }
     }
 
@@ -43,11 +43,11 @@ public class DreadRuinProcessor extends StructureProcessor {
     public StructureTemplate.StructureBlockInfo process(LevelReader worldReader, BlockPos pos, BlockPos pos2, StructureTemplate.StructureBlockInfo infoIn1, StructureTemplate.StructureBlockInfo infoIn2, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
         Random random = settings.getRandom(infoIn2.pos);
         if (random.nextFloat() <= integrity) {
-            if (infoIn2.state.getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS) {
+            if (infoIn2.state.getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS.get()) {
                 BlockState state = getRandomCrackedBlock(null, random);
                 return new StructureTemplate.StructureBlockInfo(infoIn2.pos, state, null);
             }
-            if (infoIn2.state.getBlock() == IafBlockRegistry.DREAD_SPAWNER) {
+            if (infoIn2.state.getBlock() == IafBlockRegistry.DREAD_SPAWNER.get()) {
                 CompoundTag tag = new CompoundTag();
                 CompoundTag spawnData = new CompoundTag();
                 ResourceLocation spawnerMobId = ForgeRegistries.ENTITIES.getKey(getRandomMobForMobSpawner(random));
@@ -56,7 +56,7 @@ public class DreadRuinProcessor extends StructureProcessor {
                     tag.remove("SpawnPotentials");
                     tag.put("SpawnData", spawnData.copy());
                 }
-                StructureTemplate.StructureBlockInfo newInfo = new StructureTemplate.StructureBlockInfo(infoIn2.pos, IafBlockRegistry.DREAD_SPAWNER.defaultBlockState(), tag);
+                StructureTemplate.StructureBlockInfo newInfo = new StructureTemplate.StructureBlockInfo(infoIn2.pos, IafBlockRegistry.DREAD_SPAWNER.get().defaultBlockState(), tag);
                 return newInfo;
 
             }

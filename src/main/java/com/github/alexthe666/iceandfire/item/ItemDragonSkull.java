@@ -28,7 +28,6 @@ public class ItemDragonSkull extends Item {
     public ItemDragonSkull(int dragonType) {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
         this.dragonType = dragonType;
-        this.setRegistryName(IceAndFire.MODID, "dragon_skull_" + getType(dragonType));
     }
 
     static String getName(int type) {

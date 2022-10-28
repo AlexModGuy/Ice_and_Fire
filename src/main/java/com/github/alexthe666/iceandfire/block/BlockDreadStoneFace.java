@@ -27,7 +27,6 @@ public class BlockDreadStoneFace extends HorizontalDirectionalBlock implements I
         );
 
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(PLAYER_PLACED, Boolean.valueOf(false)));
-        setRegistryName(IceAndFire.MODID, "dread_stone_face");
     }
 
     @SuppressWarnings("deprecation")

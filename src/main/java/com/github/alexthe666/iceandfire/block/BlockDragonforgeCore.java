@@ -45,10 +45,12 @@ public class BlockDragonforgeCore extends BaseEntityBlock implements IDragonProo
                 })
         );
 
-        String disabled = activated ? "" : "_disabled";
-        this.setRegistryName(IceAndFire.MODID, "dragonforge_" + DragonType.getNameFromInt(isFire) + "_core" + disabled);
         this.isFire = isFire;
         this.activated = activated;
+    }
+
+    static String name(int dragonType, boolean activated) {
+        return "dragonforge_%s_core%s".formatted(DragonType.getNameFromInt(dragonType), activated ? "": "_disabled");
     }
 
     public static void setState(int dragonType, boolean active, Level worldIn, BlockPos pos) {
@@ -57,25 +59,25 @@ public class BlockDragonforgeCore extends BaseEntityBlock implements IDragonProo
 
         if (active) {
             if (dragonType == 0) {
-                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE.defaultBlockState(), 3);
-                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE.defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE.get().defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE.get().defaultBlockState(), 3);
             } else if (dragonType == 1) {
-                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE.defaultBlockState(), 3);
-                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE.defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE.get().defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE.get().defaultBlockState(), 3);
             } else if (dragonType == 2) {
-                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE.defaultBlockState(), 3);
-                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE.defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE.get().defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE.get().defaultBlockState(), 3);
             }
         } else {
             if (dragonType == 0) {
-                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.defaultBlockState(), 3);
-                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.get().defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.get().defaultBlockState(), 3);
             } else if(dragonType == 1) {
-                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED.defaultBlockState(), 3);
-                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED.defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED.get().defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED.get().defaultBlockState(), 3);
             }else if(dragonType == 2) {
-                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.defaultBlockState(), 3);
-                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.get().defaultBlockState(), 3);
+                worldIn.setBlock(pos, IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.get().defaultBlockState(), 3);
             }
         }
 
@@ -109,15 +111,15 @@ public class BlockDragonforgeCore extends BaseEntityBlock implements IDragonProo
 
     public ItemStack getItem(Level worldIn, BlockPos pos, BlockState state) {
         if (isFire == 0) {
-            return new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.asItem());
+            return new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.get().asItem());
         }
         if (isFire == 1) {
-            return new ItemStack(IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED.asItem());
+            return new ItemStack(IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED.get().asItem());
         }
         if (isFire == 2) {
-            return new ItemStack(IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.asItem());
+            return new ItemStack(IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.get().asItem());
         }
-        return new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.asItem());
+        return new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.get().asItem());
     }
 
     public RenderShape getRenderShape(BlockState state) {

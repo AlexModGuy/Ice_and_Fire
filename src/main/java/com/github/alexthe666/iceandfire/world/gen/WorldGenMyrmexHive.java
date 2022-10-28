@@ -32,10 +32,10 @@ import java.util.stream.Collectors;
 
 public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
 
-    private static final BlockState DESERT_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN.defaultBlockState();
-    private static final BlockState STICKY_DESERT_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN_STICKY.defaultBlockState();
-    private static final BlockState JUNGLE_RESIN = IafBlockRegistry.MYRMEX_JUNGLE_RESIN.defaultBlockState();
-    private static final BlockState STICKY_JUNGLE_RESIN = IafBlockRegistry.MYRMEX_JUNGLE_RESIN_STICKY.defaultBlockState();
+    private static final BlockState DESERT_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN.get().defaultBlockState();
+    private static final BlockState STICKY_DESERT_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN_STICKY.get().defaultBlockState();
+    private static final BlockState JUNGLE_RESIN = IafBlockRegistry.MYRMEX_JUNGLE_RESIN.get().defaultBlockState();
+    private static final BlockState STICKY_JUNGLE_RESIN = IafBlockRegistry.MYRMEX_JUNGLE_RESIN_STICKY.get().defaultBlockState();
     public MyrmexHive hive;
     private int entrances = 0;
     private int totalRooms;
@@ -491,7 +491,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
             for (int i = 0; i < tuberLength; i++) {
                 if (world.isEmptyBlock(blockpos.below(i))) {
                     boolean connected = i != tuberLength - 1;
-                    world.setBlock(blockpos.below(i), jungle ? IafBlockRegistry.MYRMEX_JUNGLE_BIOLIGHT.defaultBlockState().setValue(BlockMyrmexBiolight.CONNECTED_DOWN, connected) : IafBlockRegistry.MYRMEX_DESERT_BIOLIGHT.defaultBlockState().setValue(BlockMyrmexBiolight.CONNECTED_DOWN, connected), 2);
+                    world.setBlock(blockpos.below(i), jungle ? IafBlockRegistry.MYRMEX_JUNGLE_BIOLIGHT.get().defaultBlockState().setValue(BlockMyrmexBiolight.CONNECTED_DOWN, connected) : IafBlockRegistry.MYRMEX_DESERT_BIOLIGHT.get().defaultBlockState().setValue(BlockMyrmexBiolight.CONNECTED_DOWN, connected), 2);
                 }
             }
         }

@@ -5,6 +5,7 @@
     "size": 5
   },
 
+  "biomes": "#iceandfire:has_structure/mausoleum",
   "adapt_noise": false,
   "spawn_overrides": {}
 }

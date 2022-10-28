@@ -39,7 +39,7 @@ public class FrozenProperties {
             for (int i = 0; i < 15; i++) {
                 entity.level.addParticle(
                     new BlockParticleOption(ParticleTypes.BLOCK,
-                        IafBlockRegistry.DRAGON_ICE.defaultBlockState()),
+                        IafBlockRegistry.DRAGON_ICE.get().defaultBlockState()),
                     entity.getX() + ((rand.nextDouble() - 0.5D) * entity.getBbWidth()),
                     entity.getY() + ((rand.nextDouble()) * entity.getBbHeight()),
                     entity.getZ() + ((rand.nextDouble() - 0.5D) * entity.getBbWidth()),

@@ -32,7 +32,6 @@ public class ItemSirenFlute extends Item {
 
     public ItemSirenFlute() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(200));
-        this.setRegistryName(IceAndFire.MODID, "siren_flute");
     }
 
     @Override

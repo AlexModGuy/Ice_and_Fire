@@ -28,8 +28,6 @@ public class BlockDreadTorch extends TorchBlock implements IDreadBlock, IWallBlo
                 .noCollission(),
             DustParticleOptions.REDSTONE
         );
-
-        setRegistryName(IceAndFire.MODID, "dread_torch");
     }
 
     @Override
@@ -53,6 +51,6 @@ public class BlockDreadTorch extends TorchBlock implements IDreadBlock, IWallBlo
 
     @Override
     public Block wallBlock() {
-        return IafBlockRegistry.DREAD_TORCH_WALL;
+        return IafBlockRegistry.DREAD_TORCH_WALL.get();
     }
 }

@@ -181,7 +181,7 @@ public class GuiBestiary extends Screen {
         switch (this.pageType) {
             case INTRODUCTION:
                 if (bookPages == 1) {
-                    drawItemStack(ms, new ItemStack(IafBlockRegistry.SAPPHIRE_ORE), 30, 20, 2.5F);
+                    drawItemStack(ms, new ItemStack(IafBlockRegistry.SAPPHIRE_ORE.get()), 30, 20, 2.5F);
                     drawItemStack(ms, new ItemStack(IafItemRegistry.SAPPHIRE_GEM.get()), 40, 60, 2F);
                     ms.pushPose();
                     ms.scale(1.5F, 1.5F, 1F);
@@ -190,7 +190,7 @@ public class GuiBestiary extends Screen {
                     boolean drawGold = Minecraft.getInstance().player.tickCount % 20 < 10;
                     drawItemStack(ms, new ItemStack(drawGold ? Items.GOLD_NUGGET : IafItemRegistry.SILVER_NUGGET.get()), 144, 34, 1.5F);
                     drawItemStack(ms, new ItemStack(drawGold ? Items.GOLD_NUGGET : IafItemRegistry.SILVER_NUGGET.get()), 161, 34, 1.5F);
-                    drawItemStack(ms, new ItemStack(drawGold ? IafBlockRegistry.GOLD_PILE : IafBlockRegistry.SILVER_PILE), 151, 7, 2F);
+                    drawItemStack(ms, new ItemStack(drawGold ? IafBlockRegistry.GOLD_PILE.get() : IafBlockRegistry.SILVER_PILE.get()), 151, 7, 2F);
                     ms.pushPose();
                     ms.scale(1.5F, 1.5F, 1F);
                     drawImage(ms, DRAWINGS_0, 144, 90, 389, 1, 50, 50, 512F);
@@ -198,7 +198,7 @@ public class GuiBestiary extends Screen {
                     drawItemStack(ms, new ItemStack(Blocks.OAK_PLANKS), 161, 124, 1.5F);
                     drawItemStack(ms, new ItemStack(Blocks.OAK_PLANKS), 161, 107, 1.5F);
                     drawItemStack(ms, new ItemStack(IafItemRegistry.MANUSCRIPT.get()), 161, 91, 1.5F);
-                    drawItemStack(ms, new ItemStack(IafBlockRegistry.LECTERN), 151, 78, 2F);
+                    drawItemStack(ms, new ItemStack(IafBlockRegistry.LECTERN.get()), 151, 78, 2F);
                 }
                 break;
             case FIREDRAGON:
@@ -241,15 +241,15 @@ public class GuiBestiary extends Screen {
                 }
                 if (bookPages == 2) {
                     ms.pushPose();
-                    drawItemStack(ms, new ItemStack(IafBlockRegistry.FIRE_LILY), 5, 14, 3.75F);
-                    drawItemStack(ms, new ItemStack(IafBlockRegistry.FROST_LILY), 30, 14, 3.75F);
+                    drawItemStack(ms, new ItemStack(IafBlockRegistry.FIRE_LILY.get()), 5, 14, 3.75F);
+                    drawItemStack(ms, new ItemStack(IafBlockRegistry.FROST_LILY.get()), 30, 14, 3.75F);
                     ms.popPose();
                     ms.pushPose();
                     ms.scale(1.5F, 1.5F, 1F);
                     drawImage(ms, DRAWINGS_0, 144, 0, 389, 1, 50, 50, 512F);
                     ms.popPose();
                     boolean drawFire = Minecraft.getInstance().player.tickCount % 40 < 20;
-                    drawItemStack(ms, new ItemStack(drawFire ? IafBlockRegistry.FIRE_LILY : IafBlockRegistry.FROST_LILY), 161, 17, 1.5F);
+                    drawItemStack(ms, new ItemStack(drawFire ? IafBlockRegistry.FIRE_LILY.get() : IafBlockRegistry.FROST_LILY.get()), 161, 17, 1.5F);
                     drawItemStack(ms, new ItemStack(Items.BOWL), 161, 32, 1.5F);
                     drawItemStack(ms, new ItemStack(drawFire ? Items.BLAZE_ROD : Items.PRISMARINE_CRYSTALS), 177, 17, 1.5F);
                     drawItemStack(ms, new ItemStack(drawFire ? IafItemRegistry.FIRE_STEW.get() : IafItemRegistry.FROST_STEW.get()), 151, 10, 2F);
@@ -416,7 +416,7 @@ public class GuiBestiary extends Screen {
                     drawItemStack(ms, new ItemStack(Blocks.GLASS), 180, 150, 1.35F);
                     drawItemStack(ms, new ItemStack(Blocks.GLASS), 160, 150, 1.35F);
                     drawItemStack(ms, new ItemStack(Blocks.GLASS), 199, 150, 1.35F);
-                    drawItemStack(ms, new ItemStack(IafBlockRegistry.JAR_EMPTY), 171, 85, 2F);
+                    drawItemStack(ms, new ItemStack(IafBlockRegistry.JAR_EMPTY.get()), 171, 85, 2F);
                     ms.popPose();
                     ms.popPose();
 
@@ -648,17 +648,17 @@ public class GuiBestiary extends Screen {
                 }
                 if (bookPages == 1) {
                     int i = (Minecraft.getInstance().player.tickCount % (EnumTroll.Weapon.values().length * 20)) / 20;
-                    drawItemStack(ms, new ItemStack(EnumTroll.Weapon.values()[i].item), 30, 7, 2.5F);
+                    drawItemStack(ms, new ItemStack(EnumTroll.Weapon.values()[i].item.get()), 30, 7, 2.5F);
                     int j = (Minecraft.getInstance().player.tickCount % (EnumTroll.values().length * 20)) / 20;
-                    drawItemStack(ms, new ItemStack(EnumTroll.values()[j].leather), 100, 30, 2.5F);
+                    drawItemStack(ms, new ItemStack(EnumTroll.values()[j].leather.get()), 100, 30, 2.5F);
                     drawItemStack(ms, new ItemStack(IafItemRegistry.TROLL_TUSK.get()), 120, 30, 2.5F);
                 }
                 if (bookPages == 2) {
                     int j = (Minecraft.getInstance().player.tickCount % (EnumTroll.values().length * 20)) / 20;
-                    drawItemStack(ms, new ItemStack(EnumTroll.values()[j].helmet), 27, 15, 1.5F);
-                    drawItemStack(ms, new ItemStack(EnumTroll.values()[j].chestplate), 47, 15, 1.5F);
-                    drawItemStack(ms, new ItemStack(EnumTroll.values()[j].leggings), 67, 15, 1.5F);
-                    drawItemStack(ms, new ItemStack(EnumTroll.values()[j].boots), 87, 15, 1.5F);
+                    drawItemStack(ms, new ItemStack(EnumTroll.values()[j].helmet.get()), 27, 15, 1.5F);
+                    drawItemStack(ms, new ItemStack(EnumTroll.values()[j].chestplate.get()), 47, 15, 1.5F);
+                    drawItemStack(ms, new ItemStack(EnumTroll.values()[j].leggings.get()), 67, 15, 1.5F);
+                    drawItemStack(ms, new ItemStack(EnumTroll.values()[j].boots.get()), 87, 15, 1.5F);
                 }
                 break;
             case MYRMEX:

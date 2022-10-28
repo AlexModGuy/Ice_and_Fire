@@ -19,7 +19,7 @@ public class BlockReturningState extends Block {
     public Item itemBlock;
     private final BlockState returnState;
 
-    public BlockReturningState(Material materialIn, String name, float hardness, float resistance, SoundType sound, BlockState returnToState) {
+    public BlockReturningState(Material materialIn, float hardness, float resistance, SoundType sound, BlockState returnToState) {
         super(
             BlockBehaviour.Properties
                 .of(materialIn)
@@ -28,15 +28,13 @@ public class BlockReturningState extends Block {
                 .randomTicks()
         );
 
-        setRegistryName(IceAndFire.MODID, name);
         this.returnState = returnToState;
         this.registerDefaultState(this.stateDefinition.any().setValue(REVERTS, Boolean.valueOf(false)));
     }
 
     @SuppressWarnings("deprecation")
-    public BlockReturningState(Material materialIn, String name, float hardness, float resistance, SoundType sound, boolean slippery, BlockState returnToState) {
+    public BlockReturningState(Material materialIn, float hardness, float resistance, SoundType sound, boolean slippery, BlockState returnToState) {
         super(BlockBehaviour.Properties.of(materialIn).sound(sound).strength(hardness, resistance).friction(0.98F).randomTicks());
-        setRegistryName(IceAndFire.MODID, name);
         this.returnState = returnToState;
         this.registerDefaultState(this.stateDefinition.any().setValue(REVERTS, Boolean.valueOf(false)));
     }

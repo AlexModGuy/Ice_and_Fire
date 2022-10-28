@@ -42,9 +42,12 @@ public class BlockDragonforgeInput extends BaseEntityBlock implements IDragonPro
                 .sound(SoundType.METAL)
 		);
 
-        this.setRegistryName(IceAndFire.MODID, "dragonforge_" + DragonType.getNameFromInt(dragonType) + "_input");
         this.dragonType = dragonType;
         this.registerDefaultState(this.getStateDefinition().any().setValue(ACTIVE, Boolean.valueOf(false)));
+    }
+
+    static String name (int dragonType) {
+        return "dragonforge_%s_input".formatted(DragonType.getNameFromInt(dragonType));
     }
 
 

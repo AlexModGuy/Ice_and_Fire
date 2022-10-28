@@ -17,7 +17,6 @@ public class ItemRottenEgg extends Item {
 
     public ItemRottenEgg() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "rotten_egg");
     }
 
     @Override

@@ -203,11 +203,11 @@ public class WorldGenCyclopsCave extends Feature<NoneFeatureConfiguration> {
                         sheepPenCount++;
                     }
                     if (rand.nextInt(80) == 0 && isTouchingAir(worldIn, blockpos.above())) {
-                        worldIn.setBlock(blockpos.above(), IafBlockRegistry.GOLD_PILE.defaultBlockState().setValue(BlockGoldPile.LAYERS, 8), 3);
-                        worldIn.setBlock(blockpos.above().north(), IafBlockRegistry.GOLD_PILE.defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-                        worldIn.setBlock(blockpos.above().south(), IafBlockRegistry.GOLD_PILE.defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-                        worldIn.setBlock(blockpos.above().west(), IafBlockRegistry.GOLD_PILE.defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-                        worldIn.setBlock(blockpos.above().east(), IafBlockRegistry.GOLD_PILE.defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+                        worldIn.setBlock(blockpos.above(), IafBlockRegistry.GOLD_PILE.get().defaultBlockState().setValue(BlockGoldPile.LAYERS, 8), 3);
+                        worldIn.setBlock(blockpos.above().north(), IafBlockRegistry.GOLD_PILE.get().defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+                        worldIn.setBlock(blockpos.above().south(), IafBlockRegistry.GOLD_PILE.get().defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+                        worldIn.setBlock(blockpos.above().west(), IafBlockRegistry.GOLD_PILE.get().defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+                        worldIn.setBlock(blockpos.above().east(), IafBlockRegistry.GOLD_PILE.get().defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
                         worldIn.setBlock(blockpos.above(2), Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, HORIZONTALS[new Random().nextInt(3)]), 2);
                         if (worldIn.getBlockState(blockpos.above(2)).getBlock() instanceof AbstractChestBlock) {
                             BlockEntity tileentity1 = worldIn.getBlockEntity(blockpos.above(2));

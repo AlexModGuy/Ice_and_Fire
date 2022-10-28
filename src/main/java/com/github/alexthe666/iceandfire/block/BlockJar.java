@@ -50,7 +50,7 @@ public class BlockJar extends BaseEntityBlock {
                     .lightLevel((state) -> {
                         return pixieType == -1 ? 0 : 10;
                     })
-                    .dropsLike(IafBlockRegistry.JAR_EMPTY)
+                    .dropsLike(IafBlockRegistry.JAR_EMPTY.get())
 				: Properties
                 .of(Material.GLASS)
                 .noOcclusion()
@@ -61,11 +61,12 @@ public class BlockJar extends BaseEntityBlock {
 
         this.empty = pixieType == -1;
         this.pixieType = pixieType;
-        if (empty) {
-            this.setRegistryName(IceAndFire.MODID, "pixie_jar_empty");
-        } else {
-            this.setRegistryName(IceAndFire.MODID, "pixie_jar_" + pixieType);
-        }
+    }
+    
+    static String name(int pixieType) {
+        if (pixieType == -1)
+            return "pixie_jar_empty";
+        return "pixie_jar_%d".formatted(pixieType);
     }
 
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {

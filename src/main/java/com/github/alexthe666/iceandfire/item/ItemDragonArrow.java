@@ -12,7 +12,6 @@ import net.minecraft.world.level.Level;
 public class ItemDragonArrow extends ArrowItem {
     public ItemDragonArrow() {
         super(new Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "dragonbone_arrow");
     }
 
     @Override

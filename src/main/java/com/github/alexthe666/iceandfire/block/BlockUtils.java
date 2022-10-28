@@ -7,12 +7,12 @@ public class BlockUtils {
 
     public static boolean isDreadBlock(BlockState state) {
         Block block = state.getBlock();
-        return block instanceof IDreadBlock || block == IafBlockRegistry.DREAD_STONE || block == IafBlockRegistry.DREAD_STONE_BRICKS || block == IafBlockRegistry.DREAD_STONE_BRICKS_CHISELED
-                || block == IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED || block == IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY || block == IafBlockRegistry.DREAD_STONE_TILE
-                || block == IafBlockRegistry.DREADWOOD_PLANKS || block == IafBlockRegistry.DREAD_STONE_BRICKS_STAIRS;
+        return block instanceof IDreadBlock || block == IafBlockRegistry.DREAD_STONE.get() || block == IafBlockRegistry.DREAD_STONE_BRICKS.get() || block == IafBlockRegistry.DREAD_STONE_BRICKS_CHISELED.get()
+                || block == IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED.get() || block == IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY.get() || block == IafBlockRegistry.DREAD_STONE_TILE.get()
+                || block == IafBlockRegistry.DREADWOOD_PLANKS.get() || block == IafBlockRegistry.DREAD_STONE_BRICKS_STAIRS.get();
     }
 
     public static boolean canSnowUpon(BlockState state) {
-        return !isDreadBlock(state) && state.getBlock() != IafBlockRegistry.DRAGON_ICE_SPIKES;
+        return !isDreadBlock(state) && state.getBlock() != IafBlockRegistry.DRAGON_ICE_SPIKES.get();
     }
 }

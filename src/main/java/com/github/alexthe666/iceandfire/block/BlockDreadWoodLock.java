@@ -31,8 +31,6 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
                 .strength(-1.0F, 1000000F)
     			.sound(SoundType.WOOD)
 		);
-
-        this.setRegistryName(IceAndFire.MODID, "dreadwood_planks_lock");
         this.registerDefaultState(this.getStateDefinition().any().setValue(PLAYER_PLACED, Boolean.valueOf(false)));
     }
 
@@ -62,7 +60,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
 
     private void deleteNearbyWood(Level worldIn, BlockPos pos, BlockPos startPos) {
         if (pos.distSqr(startPos) < 32) {
-            if (worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.DREADWOOD_PLANKS || worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.DREADWOOD_PLANKS_LOCK) {
+            if (worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.DREADWOOD_PLANKS.get() || worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.DREADWOOD_PLANKS_LOCK.get()) {
                 worldIn.destroyBlock(pos, false);
                 for (Direction facing : Direction.values()) {
                     deleteNearbyWood(worldIn, pos.relative(facing), startPos);

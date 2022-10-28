@@ -25,11 +25,11 @@ public class WorldGenLightningDragonCave extends WorldGenDragonCave {
         super(configFactoryIn);
         DRAGON_CHEST = LIGHTNING_DRAGON_CHEST;
         DRAGON_MALE_CHEST = LIGHTNING_DRAGON_CHEST_MALE;
-        CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.CRACKLED_STONE, 9);
-        PALETTE_BLOCK1 = IafBlockRegistry.CRACKLED_STONE.defaultBlockState();
-        PALETTE_BLOCK2 = IafBlockRegistry.CRACKLED_COBBLESTONE.defaultBlockState();
-        TREASURE_PILE = IafBlockRegistry.COPPER_PILE.defaultBlockState();
-        PALETTE_ORE1 = IafBlockRegistry.AMYTHEST_ORE.defaultBlockState();
+        CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.CRACKLED_STONE.get(), 9);
+        PALETTE_BLOCK1 = IafBlockRegistry.CRACKLED_STONE.get().defaultBlockState();
+        PALETTE_BLOCK2 = IafBlockRegistry.CRACKLED_COBBLESTONE.get().defaultBlockState();
+        TREASURE_PILE = IafBlockRegistry.COPPER_PILE.get().defaultBlockState();
+        PALETTE_ORE1 = IafBlockRegistry.AMYTHEST_ORE.get().defaultBlockState();
         PALETTE_ORE2 = Blocks.EMERALD_ORE.defaultBlockState();
         generateGemOre = IafConfig.generateAmythestOre;
     }

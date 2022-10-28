@@ -7,14 +7,12 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockGenericStairs extends StairBlock {
 
-    public BlockGenericStairs(BlockState modelState, String name) {
+    public BlockGenericStairs(BlockState modelState) {
         super(
             modelState,
             BlockBehaviour.Properties
                 .of(modelState.getMaterial())
                 .strength(20F)
         );
-
-        this.setRegistryName(IceAndFire.MODID, name);
     }
 }

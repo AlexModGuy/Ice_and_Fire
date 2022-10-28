@@ -18,7 +18,6 @@ public class ItemStymphalianDagger extends SwordItem {
 
     public ItemStymphalianDagger() {
         super(IafItemRegistry.STYMHALIAN_SWORD_TOOL_MATERIAL, 3, -1.0F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "stymphalian_bird_dagger");
     }
 
 

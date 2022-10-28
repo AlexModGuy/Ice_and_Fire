@@ -7,6 +7,5 @@ public class ItemDreadQueenStaff extends Item {
 
     public ItemDreadQueenStaff() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
-        this.setRegistryName(IceAndFire.MODID, "dread_queen_staff");
     }
 }

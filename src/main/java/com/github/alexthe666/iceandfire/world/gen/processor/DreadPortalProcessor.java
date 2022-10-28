@@ -24,11 +24,11 @@ public class DreadPortalProcessor extends StructureProcessor {
     public static BlockState getRandomCrackedBlock(@Nullable BlockState prev, Random random) {
         float rand = random.nextFloat();
         if (rand < 0.3) {
-            return IafBlockRegistry.DREAD_STONE_BRICKS.defaultBlockState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS.get().defaultBlockState();
         } else if (rand < 0.6) {
-            return IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED.defaultBlockState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED.get().defaultBlockState();
         } else {
-            return IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY.defaultBlockState();
+            return IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY.get().defaultBlockState();
         }
     }
 
@@ -38,9 +38,9 @@ public class DreadPortalProcessor extends StructureProcessor {
         Random random = settings.getRandom(pos);
         if (random.nextFloat() <= integrity) {
             if (blockInfoIn.state.getBlock() == Blocks.DIAMOND_BLOCK) {
-                return new StructureTemplate.StructureBlockInfo(pos, IafBlockRegistry.DREAD_PORTAL.defaultBlockState(), null);
+                return new StructureTemplate.StructureBlockInfo(pos, IafBlockRegistry.DREAD_PORTAL.get().defaultBlockState(), null);
             }
-            if (blockInfoIn.state.getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS) {
+            if (blockInfoIn.state.getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS.get()) {
                 BlockState state = getRandomCrackedBlock(null, random);
                 return new StructureTemplate.StructureBlockInfo(pos, state, null);
             }

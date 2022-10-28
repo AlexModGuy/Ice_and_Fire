@@ -444,7 +444,7 @@ public class IafDragonDestructionManager {
             if (world.random.nextInt(9) == 0 && transformState.getMaterial().isSolid() &&
                 world.getFluidState(pos.above()).isEmpty() && !world.getBlockState(pos.above()).canOcclude() &&
                 world.getBlockState(pos).canOcclude() && DragonUtils.canDragonBreak(world.getBlockState(pos.above()).getBlock())) {
-                world.setBlockAndUpdate(pos.above(), IafBlockRegistry.DRAGON_ICE_SPIKES.defaultBlockState());
+                world.setBlockAndUpdate(pos.above(), IafBlockRegistry.DRAGON_ICE_SPIKES.get().defaultBlockState());
             }
         }
     }
@@ -470,19 +470,19 @@ public class IafDragonDestructionManager {
 
     public static BlockState transformBlockFire(BlockState in) {
         if (in.getBlock() instanceof SpreadingSnowyDirtBlock) {
-            return IafBlockRegistry.CHARRED_GRASS.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.CHARRED_GRASS.get().defaultBlockState().setValue(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.DIRT && in.getBlock() == Blocks.DIRT) {
-            return IafBlockRegistry.CHARRED_DIRT.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.CHARRED_DIRT.get().defaultBlockState().setValue(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.SAND && in.getBlock() == Blocks.GRAVEL) {
-            return IafBlockRegistry.CHARRED_GRAVEL.defaultBlockState().setValue(BlockFallingReturningState.REVERTS, true);
+            return IafBlockRegistry.CHARRED_GRAVEL.get().defaultBlockState().setValue(BlockFallingReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.STONE && (in.getBlock() == Blocks.COBBLESTONE || in.getBlock().getDescriptionId().contains("cobblestone"))) {
-            return IafBlockRegistry.CHARRED_COBBLESTONE.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
-        } else if (in.getMaterial() == Material.STONE && in.getBlock() != IafBlockRegistry.CHARRED_COBBLESTONE) {
-            return IafBlockRegistry.CHARRED_STONE.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.CHARRED_COBBLESTONE.get().defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+        } else if (in.getMaterial() == Material.STONE && in.getBlock() != IafBlockRegistry.CHARRED_COBBLESTONE.get()) {
+            return IafBlockRegistry.CHARRED_STONE.get().defaultBlockState().setValue(BlockReturningState.REVERTS, true);
         } else if (in.getBlock() == Blocks.DIRT_PATH) {
-            return IafBlockRegistry.CHARRED_DIRT_PATH.defaultBlockState().setValue(BlockCharedPath.REVERTS, true);
+            return IafBlockRegistry.CHARRED_DIRT_PATH.get().defaultBlockState().setValue(BlockCharedPath.REVERTS, true);
         } else if (in.getMaterial() == Material.WOOD) {
-            return IafBlockRegistry.ASH.defaultBlockState();
+            return IafBlockRegistry.ASH.get().defaultBlockState();
         } else if (in.getMaterial() == Material.LEAVES || in.getMaterial() == Material.PLANT || in.getBlock() == Blocks.SNOW) {
             return Blocks.AIR.defaultBlockState();
         }
@@ -491,21 +491,21 @@ public class IafDragonDestructionManager {
 
     public static BlockState transformBlockIce(BlockState in) {
         if (in.getBlock() instanceof SpreadingSnowyDirtBlock) {
-            return IafBlockRegistry.FROZEN_GRASS.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.FROZEN_GRASS.get().defaultBlockState().setValue(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.DIRT && in.getBlock() == Blocks.DIRT || in.getMaterial() == Material.SNOW) {
-            return IafBlockRegistry.FROZEN_DIRT.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.FROZEN_DIRT.get().defaultBlockState().setValue(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.SAND && in.getBlock() == Blocks.GRAVEL) {
-            return IafBlockRegistry.FROZEN_GRAVEL.defaultBlockState().setValue(BlockFallingReturningState.REVERTS, true);
+            return IafBlockRegistry.FROZEN_GRAVEL.get().defaultBlockState().setValue(BlockFallingReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.SAND && in.getBlock() != Blocks.GRAVEL) {
             return in;
         } else if (in.getMaterial() == Material.STONE && (in.getBlock() == Blocks.COBBLESTONE || in.getBlock().getDescriptionId().contains("cobblestone"))) {
-            return IafBlockRegistry.FROZEN_COBBLESTONE.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
-        } else if (in.getMaterial() == Material.STONE && in.getBlock() != IafBlockRegistry.FROZEN_COBBLESTONE) {
-            return IafBlockRegistry.FROZEN_STONE.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.FROZEN_COBBLESTONE.get().defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+        } else if (in.getMaterial() == Material.STONE && in.getBlock() != IafBlockRegistry.FROZEN_COBBLESTONE.get()) {
+            return IafBlockRegistry.FROZEN_STONE.get().defaultBlockState().setValue(BlockReturningState.REVERTS, true);
         } else if (in.getBlock() == Blocks.DIRT_PATH) {
-            return IafBlockRegistry.FROZEN_DIRT_PATH.defaultBlockState().setValue(BlockCharedPath.REVERTS, true);
+            return IafBlockRegistry.FROZEN_DIRT_PATH.get().defaultBlockState().setValue(BlockCharedPath.REVERTS, true);
         } else if (in.getMaterial() == Material.WOOD) {
-            return IafBlockRegistry.FROZEN_SPLINTERS.defaultBlockState();
+            return IafBlockRegistry.FROZEN_SPLINTERS.get().defaultBlockState();
         } else if (in.getMaterial() == Material.WATER) {
             return Blocks.ICE.defaultBlockState();
         } else if (in.getMaterial() == Material.LEAVES || in.getMaterial() == Material.PLANT || in.getBlock() == Blocks.SNOW) {
@@ -516,19 +516,19 @@ public class IafDragonDestructionManager {
 
     public static BlockState transformBlockLightning(BlockState in) {
         if (in.getBlock() instanceof SpreadingSnowyDirtBlock) {
-            return IafBlockRegistry.CRACKLED_GRASS.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.CRACKLED_GRASS.get().defaultBlockState().setValue(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.DIRT && in.getBlock() == Blocks.DIRT) {
-            return IafBlockRegistry.CRACKLED_DIRT.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.CRACKLED_DIRT.get().defaultBlockState().setValue(BlockReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.SAND && in.getBlock() == Blocks.GRAVEL) {
-            return IafBlockRegistry.CRACKLED_GRAVEL.defaultBlockState().setValue(BlockFallingReturningState.REVERTS, true);
+            return IafBlockRegistry.CRACKLED_GRAVEL.get().defaultBlockState().setValue(BlockFallingReturningState.REVERTS, true);
         } else if (in.getMaterial() == Material.STONE && (in.getBlock() == Blocks.COBBLESTONE || in.getBlock().getDescriptionId().contains("cobblestone"))) {
-            return IafBlockRegistry.CRACKLED_COBBLESTONE.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
-        } else if (in.getMaterial() == Material.STONE && in.getBlock() != IafBlockRegistry.CRACKLED_COBBLESTONE) {
-            return IafBlockRegistry.CRACKLED_STONE.defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+            return IafBlockRegistry.CRACKLED_COBBLESTONE.get().defaultBlockState().setValue(BlockReturningState.REVERTS, true);
+        } else if (in.getMaterial() == Material.STONE && in.getBlock() != IafBlockRegistry.CRACKLED_COBBLESTONE.get()) {
+            return IafBlockRegistry.CRACKLED_STONE.get().defaultBlockState().setValue(BlockReturningState.REVERTS, true);
         } else if (in.getBlock() == Blocks.DIRT_PATH) {
-            return IafBlockRegistry.CRACKLED_DIRT_PATH.defaultBlockState().setValue(BlockCharedPath.REVERTS, true);
+            return IafBlockRegistry.CRACKLED_DIRT_PATH.get().defaultBlockState().setValue(BlockCharedPath.REVERTS, true);
         } else if (in.getMaterial() == Material.WOOD) {
-            return IafBlockRegistry.ASH.defaultBlockState();
+            return IafBlockRegistry.ASH.get().defaultBlockState();
         } else if (in.getMaterial() == Material.LEAVES || in.getMaterial() == Material.PLANT || in.getBlock() == Blocks.SNOW) {
             return Blocks.AIR.defaultBlockState();
         }

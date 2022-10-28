@@ -203,26 +203,26 @@ public class EntityPixie extends TamableAnimal {
 
                 return InteractionResult.SUCCESS;
             }
-        } else if (player.getItemInHand(hand).getItem() == IafBlockRegistry.JAR_EMPTY.asItem() && !this.isTame()) {
+        } else if (player.getItemInHand(hand).getItem() == IafBlockRegistry.JAR_EMPTY.get().asItem() && !this.isTame()) {
             if (!player.isCreative()) {
                 player.getItemInHand(hand).shrink(1);
             }
-            Block jar = IafBlockRegistry.JAR_PIXIE_0;
+            Block jar = IafBlockRegistry.JAR_PIXIE_0.get();
             switch (this.getColor()) {
                 case 0:
-                    jar = IafBlockRegistry.JAR_PIXIE_0;
+                    jar = IafBlockRegistry.JAR_PIXIE_0.get();
                     break;
                 case 1:
-                    jar = IafBlockRegistry.JAR_PIXIE_1;
+                    jar = IafBlockRegistry.JAR_PIXIE_1.get();
                     break;
                 case 2:
-                    jar = IafBlockRegistry.JAR_PIXIE_2;
+                    jar = IafBlockRegistry.JAR_PIXIE_2.get();
                     break;
                 case 3:
-                    jar = IafBlockRegistry.JAR_PIXIE_3;
+                    jar = IafBlockRegistry.JAR_PIXIE_3.get();
                     break;
                 case 4:
-                    jar = IafBlockRegistry.JAR_PIXIE_4;
+                    jar = IafBlockRegistry.JAR_PIXIE_4.get();
                     break;
             }
             ItemStack stack = new ItemStack(jar, 1);

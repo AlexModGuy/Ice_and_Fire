@@ -4,6 +4,7 @@ import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.citadel.server.item.CustomToolMaterial;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.enums.*;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
@@ -11,11 +12,14 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.BannerPatternItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.IModBusEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -235,7 +239,7 @@ public class IafItemRegistry {
     public static final RegistryObject<Item> STYMPHALIAN_BIRD_FEATHER = deferredRegister.register("stymphalian_bird_feather", ItemGeneric::new);
     public static final RegistryObject<Item> STYMPHALIAN_ARROW = deferredRegister.register("stymphalian_arrow", () -> new ItemStymphalianArrow());
     public static final RegistryObject<Item> STYMPHALIAN_FEATHER_BUNDLE = deferredRegister.register("stymphalian_feather_bundle", () -> new ItemStymphalianFeatherBundle());
-    public static final RegistryObject<Item> STYMPHALIAN_DAGGER = deferredRegister.register("stymphalian_dagger", () -> new ItemStymphalianDagger());
+    public static final RegistryObject<Item> STYMPHALIAN_DAGGER = deferredRegister.register("stymphalian_bird_dagger", () -> new ItemStymphalianDagger());
     public static final RegistryObject<Item> TROLL_TUSK = deferredRegister.register("troll_tusk", ItemGeneric::new);
     public static final RegistryObject<Item> MYRMEX_DESERT_EGG = deferredRegister.register("myrmex_desert_egg", () -> new ItemMyrmexEgg(false));
     public static final RegistryObject<Item> MYRMEX_JUNGLE_EGG = deferredRegister.register("myrmex_jungle_egg", () -> new ItemMyrmexEgg(true));
@@ -333,7 +337,11 @@ public class IafItemRegistry {
         EnumSkullType.initItems();
     }
 
-    @SubscribeEvent
+    public static void addToBus(IEventBus modBus) {
+        modBus.addGenericListener(Item.class, IafItemRegistry::registerItems);
+        modBus.addGenericListener(Item.class, IafBlockRegistry::registerBlockItems);
+    }
+
     public static void registerItems(RegistryEvent.Register<Item> event) {
         // Items
         try {
@@ -354,33 +362,27 @@ public class IafItemRegistry {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-        //for (EnumDragonArmor armor : EnumDragonArmor.values()) {
-        //    event.getRegistry().register(armor.helmet.get());
-        //    event.getRegistry().register(armor.chestplate.get());
-        //    event.getRegistry().register(armor.leggings.get());
-        //    event.getRegistry().register(armor.boots.get());
-        //}
-        //for (EnumSeaSerpent armor : EnumSeaSerpent.values()) {
-        //    event.getRegistry().register(armor.scale.get());
-        //    event.getRegistry().register(armor.helmet.get());
-        //    event.getRegistry().register(armor.chestplate.get());
-        //    event.getRegistry().register(armor.leggings.get());
-        //    event.getRegistry().register(armor.boots.get());
-        //}
-        //for (EnumTroll.Weapon weapon : EnumTroll.Weapon.values()) {
-        //    event.getRegistry().register(weapon.item);
-        //}
-        //for (EnumTroll troll : EnumTroll.values()) {
-        //    event.getRegistry().register(troll.leather);
-        //    event.getRegistry().register(troll.helmet);
-        //    event.getRegistry().register(troll.chestplate);
-        //    event.getRegistry().register(troll.leggings);
-        //    event.getRegistry().register(troll.boots);
-        //}
-        //for (EnumSkullType skull : EnumSkullType.values()) {
-        //    event.getRegistry().register(skull.skull_item.get());
-        //}
-        //IafRecipeRegistry.preInit();
+        for (EnumDragonArmor armor : EnumDragonArmor.values()) {
+            event.getRegistry().register(armor.helmet.get());
+            event.getRegistry().register(armor.chestplate.get());
+            event.getRegistry().register(armor.leggings.get());
+            event.getRegistry().register(armor.boots.get());
+        }
+        for (EnumSeaSerpent armor : EnumSeaSerpent.values()) {
+            event.getRegistry().register(armor.scale.get());
+            event.getRegistry().register(armor.helmet.get());
+            event.getRegistry().register(armor.chestplate.get());
+            event.getRegistry().register(armor.leggings.get());
+            event.getRegistry().register(armor.boots.get());
+        }
+        for (EnumTroll.Weapon weapon : EnumTroll.Weapon.values()) {
+        }
+        for (EnumTroll troll : EnumTroll.values()) {
+        }
+        for (EnumSkullType skull : EnumSkullType.values()) {
+            event.getRegistry().register(skull.skull_item.get());
+        }
+        IafRecipeRegistry.preInit();
         //Banner Patterns
         try {
             for (Field f : IafRecipeRegistry.class.getFields()) {

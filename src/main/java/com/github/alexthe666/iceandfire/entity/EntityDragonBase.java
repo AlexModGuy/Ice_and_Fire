@@ -291,7 +291,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         this.goalSelector.addGoal(3, new DragonAIReturnToRoost(this, 1.0D));
         this.goalSelector.addGoal(4, new DragonAIEscort(this, 1.0D));
         this.goalSelector.addGoal(5, new DragonAIAttackMelee(this, 1.5D, false));
-        this.goalSelector.addGoal(6, new AquaticAITempt(this, 1.0D, IafItemRegistry.FIRE_STEW.get(), false));
+        this.goalSelector.addGoal(6, new AquaticAITempt(this, 1.0D, IafItemRegistry.FIRE_STEW, false));
         this.goalSelector.addGoal(7, new DragonAIWander(this, 1.0D));
         this.goalSelector.addGoal(8, new DragonAIWatchClosest(this, LivingEntity.class, 6.0F));
         this.goalSelector.addGoal(8, new DragonAILookIdle(this));

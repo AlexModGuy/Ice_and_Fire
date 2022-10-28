@@ -417,11 +417,11 @@ public class DragonUtils {
 
     public static boolean isDreadBlock(BlockState state) {
         Block block = state.getBlock();
-        return block == IafBlockRegistry.DREAD_STONE || block == IafBlockRegistry.DREAD_STONE_BRICKS || block == IafBlockRegistry.DREAD_STONE_BRICKS_CHISELED ||
-                block == IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED || block == IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY || block == IafBlockRegistry.DREAD_STONE_TILE ||
-                block == IafBlockRegistry.DREAD_STONE_FACE || block == IafBlockRegistry.DREAD_TORCH || block == IafBlockRegistry.DREAD_STONE_BRICKS_STAIRS ||
-                block == IafBlockRegistry.DREAD_STONE_BRICKS_SLAB || block == IafBlockRegistry.DREADWOOD_LOG ||
-                block == IafBlockRegistry.DREADWOOD_PLANKS || block == IafBlockRegistry.DREADWOOD_PLANKS_LOCK || block == IafBlockRegistry.DREAD_PORTAL ||
-                block == IafBlockRegistry.DREAD_SPAWNER;
+        return block == IafBlockRegistry.DREAD_STONE.get() || block == IafBlockRegistry.DREAD_STONE_BRICKS.get() || block == IafBlockRegistry.DREAD_STONE_BRICKS_CHISELED.get() ||
+                block == IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED.get() || block == IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY.get() || block == IafBlockRegistry.DREAD_STONE_TILE.get() ||
+                block == IafBlockRegistry.DREAD_STONE_FACE.get() || block == IafBlockRegistry.DREAD_TORCH.get() || block == IafBlockRegistry.DREAD_STONE_BRICKS_STAIRS.get() ||
+                block == IafBlockRegistry.DREAD_STONE_BRICKS_SLAB.get() || block == IafBlockRegistry.DREADWOOD_LOG.get() ||
+                block == IafBlockRegistry.DREADWOOD_PLANKS.get() || block == IafBlockRegistry.DREADWOOD_PLANKS_LOCK.get() || block == IafBlockRegistry.DREAD_PORTAL.get() ||
+                block == IafBlockRegistry.DREAD_SPAWNER.get();
     }
 }

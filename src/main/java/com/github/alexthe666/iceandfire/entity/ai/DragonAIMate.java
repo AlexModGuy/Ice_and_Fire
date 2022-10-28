@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Random;
 
 public class DragonAIMate extends Goal {
-    private static final BlockState NEST = IafBlockRegistry.NEST.defaultBlockState();
+    private static final BlockState NEST = IafBlockRegistry.NEST.get().defaultBlockState();
     private final EntityDragonBase dragon;
     Level theWorld;
     int spawnBabyDelay;

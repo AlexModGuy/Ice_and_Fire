@@ -22,11 +22,6 @@ public class ItemMyrmexStaff extends Item {
 
     public ItemMyrmexStaff(boolean jungle) {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
-        if (jungle) {
-            this.setRegistryName(IceAndFire.MODID, "myrmex_jungle_staff");
-        } else {
-            this.setRegistryName(IceAndFire.MODID, "myrmex_desert_staff");
-        }
     }
 
     @Override

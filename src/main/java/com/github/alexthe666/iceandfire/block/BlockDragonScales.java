@@ -17,7 +17,7 @@ import java.util.List;
 public class BlockDragonScales extends Block implements IDragonProof {
     EnumDragonEgg type;
 
-    public BlockDragonScales(String name, EnumDragonEgg type) {
+    public BlockDragonScales(EnumDragonEgg type) {
         super(
             Properties
                 .of(Material.STONE)
@@ -27,7 +27,6 @@ public class BlockDragonScales extends Block implements IDragonProof {
                 .requiresCorrectToolForDrops()
         );
 
-        this.setRegistryName(IceAndFire.MODID, name);
         this.type = type;
     }
 

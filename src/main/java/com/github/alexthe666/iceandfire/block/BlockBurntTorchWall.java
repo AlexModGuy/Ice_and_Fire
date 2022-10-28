@@ -20,12 +20,10 @@ public class BlockBurntTorchWall extends WallTorchBlock implements IDreadBlock {
                     return 0;
                 })
                 .sound(SoundType.WOOD).noOcclusion().dynamicShape()
-                .dropsLike(IafBlockRegistry.BURNT_TORCH)
+                .dropsLike(IafBlockRegistry.BURNT_TORCH.get())
                 .noCollission(),
             DustParticleOptions.REDSTONE
         );
-
-        setRegistryName(IceAndFire.MODID, "burnt_torch_wall");
     }
 
     @Override

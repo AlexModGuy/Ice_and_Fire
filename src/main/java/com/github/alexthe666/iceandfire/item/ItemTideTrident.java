@@ -42,7 +42,6 @@ public class ItemTideTrident extends TridentItem {
 
     public ItemTideTrident() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(400));
-        this.setRegistryName(IceAndFire.MODID, "tide_trident");
     }
 
     @Override

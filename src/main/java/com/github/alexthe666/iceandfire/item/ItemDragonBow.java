@@ -15,7 +15,6 @@ public class ItemDragonBow extends BowItem {
 
     public ItemDragonBow() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(584));
-        this.setRegistryName(IceAndFire.MODID, "dragonbone_bow");
     }
 
     public Predicate<ItemStack> getAllSupportedProjectiles() {

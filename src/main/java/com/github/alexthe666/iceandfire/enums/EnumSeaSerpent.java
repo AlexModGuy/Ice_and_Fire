@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.enums;
 import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockSeaSerpentScales;
+import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.item.IafArmorMaterial;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
@@ -33,11 +34,12 @@ public enum EnumSeaSerpent {
     public RegistryObject<Item> chestplate;
     public RegistryObject<Item> leggings;
     public RegistryObject<Item> boots;
-    public Block scaleBlock;
+    public RegistryObject<Block> scaleBlock;
 
     EnumSeaSerpent(ChatFormatting color) {
         this.resourceName = this.name().toLowerCase(Locale.ROOT);
         this.color = color;
+        this.scaleBlock = IafBlockRegistry.deferredRegister.register("sea_serpent_scale_block_%s".formatted(this.resourceName), () -> new BlockSeaSerpentScales(resourceName, color));
         //this.scaleBlock = new BlockSeaSerpentScales(this.resourceName, this.color);
     }
 
@@ -45,7 +47,7 @@ public enum EnumSeaSerpent {
     public static void initArmors() {
         for (EnumSeaSerpent color : EnumSeaSerpent.values()) {
             color.armorMaterial = new IafArmorMaterial("iceandfire:sea_serpent_scales_" + color.resourceName, 30, new int[]{4, 8, 7, 4}, 25, SoundEvents.ARMOR_EQUIP_GOLD, 2.5F);
-            color.scale = IafItemRegistry.deferredRegister.register("tide_" + color.resourceName + "_scale", () ->
+            color.scale = IafItemRegistry.deferredRegister.register("sea_serpent_scales_" + color.resourceName, () ->
                     new ItemSeaSerpentScales(color.resourceName, color.color));
             color.helmet = IafItemRegistry.deferredRegister.register("tide_" + color.resourceName + "_helmet", () ->
                     new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlot.HEAD));

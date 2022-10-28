@@ -16,7 +16,7 @@ import java.util.List;
 public class ItemCannoli extends ItemGenericFood {
 
     public ItemCannoli() {
-        super(20, 2.0F, false, false, true, "cannoli");
+        super(20, 2.0F, false, false, true);
     }
 
     public void onFoodEaten(ItemStack stack, Level worldIn, LivingEntity livingEntity) {

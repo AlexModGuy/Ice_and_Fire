@@ -14,15 +14,13 @@ import java.util.Random;
 public class BlockIafOre extends Block {
     public Item itemBlock;
 
-    public BlockIafOre(int toollevel, float hardness, float resistance, String name, String gameName) {
+    public BlockIafOre(int toollevel, float hardness, float resistance) {
         super(
             Properties
                 .of(Material.STONE)
                 .strength(hardness, resistance)
                 .requiresCorrectToolForDrops()
 		);
-
-        setRegistryName(IceAndFire.MODID, gameName);
     }
 
     @Override
@@ -31,7 +29,7 @@ public class BlockIafOre extends Block {
     }
 
     protected int getExperience(Random rand) {
-        if (this == IafBlockRegistry.SAPPHIRE_ORE || this == IafBlockRegistry.AMYTHEST_ORE) {
+        if (this == IafBlockRegistry.SAPPHIRE_ORE.get() || this == IafBlockRegistry.AMYTHEST_ORE.get()) {
             return Mth.nextInt(rand, 3, 7);
         }
         return 0;

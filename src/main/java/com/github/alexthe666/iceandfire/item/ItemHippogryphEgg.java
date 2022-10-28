@@ -30,7 +30,6 @@ public class ItemHippogryphEgg extends Item {
 
     public ItemHippogryphEgg() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
-        this.setRegistryName(IceAndFire.MODID, "hippogryph_egg");
     }
 
     public static ItemStack createEggStack(EnumHippogryphTypes parent1, EnumHippogryphTypes parent2) {

@@ -8,13 +8,17 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class AquaticAITempt extends Goal {
     private final Mob temptedEntity;
     private final double speed;
-    private final Set<Item> temptItem;
+    private Set<Item> temptItems = null;
     private final boolean scaredByPlayerMovement;
+    private final Set<Supplier<Item>> temptItemSuppliers;
     private double targetX;
     private double targetY;
     private double targetZ;
@@ -24,14 +28,14 @@ public class AquaticAITempt extends Goal {
     private int delayTemptCounter;
     private boolean isRunning;
 
-    public AquaticAITempt(Mob temptedEntityIn, double speedIn, Item temptItemIn, boolean scaredByPlayerMovementIn) {
-        this(temptedEntityIn, speedIn, scaredByPlayerMovementIn, Sets.newHashSet(temptItemIn));
+    public AquaticAITempt(Mob temptedEntityIn, double speedIn, Supplier<Item> temptItemSupplier, boolean scaredByPlayerMovementIn) {
+        this(temptedEntityIn, speedIn, scaredByPlayerMovementIn, Sets.newHashSet(temptItemSupplier));
     }
 
-    public AquaticAITempt(Mob temptedEntityIn, double speedIn, boolean scaredByPlayerMovementIn, Set<Item> temptItemIn) {
+    public AquaticAITempt(Mob temptedEntityIn, double speedIn, boolean scaredByPlayerMovementIn, Set<Supplier<Item>> temptItemSuppliers) {
         this.temptedEntity = temptedEntityIn;
         this.speed = speedIn;
-        this.temptItem = temptItemIn;
+        this.temptItemSuppliers = temptItemSuppliers;
         this.scaredByPlayerMovement = scaredByPlayerMovementIn;
         this.setFlags(EnumSet.of(Flag.MOVE));
     }
@@ -56,7 +60,9 @@ public class AquaticAITempt extends Goal {
     }
 
     protected boolean isTempting(ItemStack stack) {
-        return this.temptItem.contains(stack.getItem());
+        if (this.temptItems == null)
+            this.temptItems = temptItemSuppliers.stream().map(Supplier::get).collect(Collectors.toSet());
+        return this.temptItems.contains(stack.getItem());
     }
 
     /**

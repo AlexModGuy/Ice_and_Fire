@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 public class ItemAmbrosia extends ItemGenericFood {
 
     public ItemAmbrosia() {
-        super(5, 0.6F, false, false, true, "ambrosia", 1);
+        super(5, 0.6F, false, false, true, 1);
     }
 
     public void onFoodEaten(ItemStack stack, Level worldIn, LivingEntity livingEntity) {

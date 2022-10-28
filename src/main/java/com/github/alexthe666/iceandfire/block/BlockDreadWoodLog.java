@@ -14,7 +14,5 @@ public class BlockDreadWoodLog extends RotatedPillarBlock implements IDragonProo
 				.strength(2F, 10000F)
     			.sound(SoundType.WOOD)
 		);
-
-        this.setRegistryName(IceAndFire.MODID, "dreadwood_log");
     }
 }

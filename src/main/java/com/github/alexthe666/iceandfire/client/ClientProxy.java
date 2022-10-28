@@ -61,6 +61,12 @@ public class ClientProxy extends CommonProxy {
 
     }
 
+    @Override
+    public void clientInit() {
+        super.clientInit();
+        IafClientSetup.clientInit();
+    }
+
     @OnlyIn(Dist.CLIENT)
     @Override
     public void spawnDragonParticle(final EnumParticles name, double x, double y, double z, double motX, double motY, double motZ, EntityDragonBase entityDragonBase) {

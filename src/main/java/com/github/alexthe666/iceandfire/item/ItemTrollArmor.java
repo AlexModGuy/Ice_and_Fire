@@ -26,7 +26,10 @@ public class ItemTrollArmor extends ArmorItem implements IItemRenderProperties {
     public ItemTrollArmor(EnumTroll troll, CustomArmorMaterial material, EquipmentSlot slot) {
         super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.troll = troll;
-        this.setRegistryName(IceAndFire.MODID, troll.name().toLowerCase(Locale.ROOT) + "_troll_leather_" + getArmorPart(slot));
+    }
+
+    public static String getName(EnumTroll troll, EquipmentSlot slot) {
+        return "%s_troll_leather_%s".formatted(troll.name().toLowerCase(Locale.ROOT), getArmorPart(slot));
     }
 
     public ArmorMaterial getMaterial() {
@@ -34,18 +37,14 @@ public class ItemTrollArmor extends ArmorItem implements IItemRenderProperties {
     }
 
 
-    private String getArmorPart(EquipmentSlot slot) {
-        switch (slot) {
-            case HEAD:
-                return "helmet";
-            case CHEST:
-                return "chestplate";
-            case LEGS:
-                return "leggings";
-            case FEET:
-                return "boots";
-        }
-        return "";
+    private static String getArmorPart(EquipmentSlot slot) {
+        return switch (slot) {
+            case HEAD -> "helmet";
+            case CHEST -> "chestplate";
+            case LEGS -> "leggings";
+            case FEET -> "boots";
+            default -> "";
+        };
     }
 
     @Override

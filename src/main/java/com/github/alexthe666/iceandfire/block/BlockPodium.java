@@ -25,7 +25,7 @@ public class BlockPodium extends BaseEntityBlock {
 
     protected static final VoxelShape AABB = Block.box(2, 0, 2, 14, 23, 14);
 
-    public BlockPodium(String type) {
+    public BlockPodium() {
         super(
             Properties
                 .of(Material.WOOD)
@@ -34,8 +34,6 @@ public class BlockPodium extends BaseEntityBlock {
                 .strength(2.0F)
                 .sound(SoundType.WOOD)
         );
-
-        this.setRegistryName(IceAndFire.MODID, "podium_" + type);
     }
 
 

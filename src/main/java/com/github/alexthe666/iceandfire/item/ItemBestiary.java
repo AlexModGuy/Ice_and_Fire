@@ -29,7 +29,6 @@ public class ItemBestiary extends Item {
 
     public ItemBestiary() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
-        this.setRegistryName(IceAndFire.MODID, "bestiary");
     }
 
     @Override

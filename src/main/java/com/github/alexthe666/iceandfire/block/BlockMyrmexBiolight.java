@@ -21,7 +21,7 @@ public class BlockMyrmexBiolight extends BushBlock {
 
     public static final BooleanProperty CONNECTED_DOWN = BooleanProperty.create("down");
 
-    public BlockMyrmexBiolight(boolean jungle) {
+    public BlockMyrmexBiolight() {
         super(
             Properties
                 .of(Material.PLANT)
@@ -35,7 +35,6 @@ public class BlockMyrmexBiolight extends BushBlock {
                 .sound(SoundType.GRASS).randomTicks()
         );
 
-        this.setRegistryName(IceAndFire.MODID, jungle ? "myrmex_jungle_biolight" : "myrmex_desert_biolight");
         this.registerDefaultState(this.getStateDefinition().any().setValue(CONNECTED_DOWN, Boolean.valueOf(false)));
     }
 
