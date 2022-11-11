@@ -106,7 +106,7 @@ public abstract class EntityDragonCharge extends AbstractFireballEntity implemen
                     this.remove();
                 }
                 if (entity != null && !(entity instanceof IDragonProjectile) && !entity.isEntityEqual(shootingEntity)) {
-                    if (shootingEntity != null && (entity.isEntityEqual(shootingEntity) || (shootingEntity instanceof EntityDragonBase & entity instanceof TameableEntity && ((EntityDragonBase) shootingEntity).getOwner() == ((TameableEntity) entity).getOwner()))) {
+                    if (shootingEntity != null && (entity.isEntityEqual(shootingEntity) || (shootingEntity instanceof EntityDragonBase && entity instanceof TameableEntity && ((EntityDragonBase) shootingEntity).getOwner() == ((TameableEntity) entity).getOwner()))) {
                         return;
                     }
                     if (shootingEntity instanceof EntityDragonBase) {
