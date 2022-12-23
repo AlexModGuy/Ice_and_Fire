@@ -32,7 +32,7 @@ public enum EnumTroll {
     public ResourceLocation TEXTURE;
     public ResourceLocation TEXTURE_STONE;
     public ResourceLocation TEXTURE_EYES;
-    public ArmorMaterial material;
+    public CustomArmorMaterial material;
     public Supplier<Item> leather;
     public Supplier<Item> helmet;
     public Supplier<Item> chestplate;
@@ -85,6 +85,16 @@ public enum EnumTroll {
 
     public static Weapon getWeaponForType(EnumTroll troll) {
         return troll.weapons[ThreadLocalRandom.current().nextInt(troll.weapons.length)];
+    }
+
+    public static void initArmors() {
+        for (EnumTroll troll: EnumTroll.values()) {
+            troll.leather = IafItemRegistry.deferredRegister.register("troll_leather_%s".formatted(troll.name().toLowerCase(Locale.ROOT)), () -> new ItemTrollLeather(troll));
+            troll.helmet = IafItemRegistry.deferredRegister.register(ItemTrollArmor.getName(troll, EquipmentSlot.HEAD), () -> new ItemTrollArmor(troll, troll.material, EquipmentSlot.HEAD));
+            troll.chestplate = IafItemRegistry.deferredRegister.register(ItemTrollArmor.getName(troll, EquipmentSlot.CHEST), () -> new ItemTrollArmor(troll, troll.material, EquipmentSlot.CHEST));
+            troll.leggings = IafItemRegistry.deferredRegister.register(ItemTrollArmor.getName(troll, EquipmentSlot.LEGS), () -> new ItemTrollArmor(troll, troll.material, EquipmentSlot.LEGS));
+            troll.boots = IafItemRegistry.deferredRegister.register(ItemTrollArmor.getName(troll, EquipmentSlot.FEET), () -> new ItemTrollArmor(troll, troll.material, EquipmentSlot.FEET));
+        }
     }
 
     public enum Weapon {

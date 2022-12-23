@@ -35,12 +35,12 @@ public class IafBlockRegistry {
     public static final SoundType SOUND_TYPE_GOLD = new SoundType(1.0F, 1.0F, IafSoundRegistry.GOLD_PILE_BREAK, IafSoundRegistry.GOLD_PILE_STEP, IafSoundRegistry.GOLD_PILE_BREAK, IafSoundRegistry.GOLD_PILE_STEP, IafSoundRegistry.GOLD_PILE_STEP);
 
     public static final RegistryObject<Block> LECTERN = deferredRegister.register("lectern", () -> new BlockLectern());
-    public static final RegistryObject<Block> PODIUM_OAK = deferredRegister.register("oak", () -> new BlockPodium());
-    public static final RegistryObject<Block> PODIUM_BIRCH = deferredRegister.register("birch", () -> new BlockPodium());
-    public static final RegistryObject<Block> PODIUM_SPRUCE = deferredRegister.register("spruce", () -> new BlockPodium());
-    public static final RegistryObject<Block> PODIUM_JUNGLE = deferredRegister.register("jungle", () -> new BlockPodium());
-    public static final RegistryObject<Block> PODIUM_DARK_OAK = deferredRegister.register("dark_oak", () -> new BlockPodium());
-    public static final RegistryObject<Block> PODIUM_ACACIA = deferredRegister.register("acacia", () -> new BlockPodium());
+    public static final RegistryObject<Block> PODIUM_OAK = deferredRegister.register("podium_oak", () -> new BlockPodium());
+    public static final RegistryObject<Block> PODIUM_BIRCH = deferredRegister.register("podium_birch", () -> new BlockPodium());
+    public static final RegistryObject<Block> PODIUM_SPRUCE = deferredRegister.register("podium_spruce", () -> new BlockPodium());
+    public static final RegistryObject<Block> PODIUM_JUNGLE = deferredRegister.register("podium_jungle", () -> new BlockPodium());
+    public static final RegistryObject<Block> PODIUM_DARK_OAK = deferredRegister.register("podium_dark_oak", () -> new BlockPodium());
+    public static final RegistryObject<Block> PODIUM_ACACIA = deferredRegister.register("podium_acacia", () -> new BlockPodium());
     public static final RegistryObject<Block> FIRE_LILY = deferredRegister.register("fire_lily", () -> new BlockElementalFlower());
     public static final RegistryObject<Block> FROST_LILY = deferredRegister.register("frost_lily", () -> new BlockElementalFlower());
     public static final RegistryObject<Block> LIGHTNING_LILY = deferredRegister.register("lightning_lily", () -> new BlockElementalFlower());
@@ -156,43 +156,15 @@ public class IafBlockRegistry {
     public static final RegistryObject<Block> GHOST_CHEST = deferredRegister.register("ghost_chest", () -> new BlockGhostChest());
     public static final RegistryObject<Block> GRAVEYARD_SOIL = deferredRegister.register("graveyard_soil", () -> new BlockGraveyardSoil());
 
-    @SubscribeEvent
-    public static void registerBlocks(RegistryEvent.Register<Block> event) {
-        try {
-            for (Field f : IafBlockRegistry.class.getFields()) {
-                Object obj = f.get(null);
-                if (obj instanceof Block) {
-                    event.getRegistry().register((Block) obj);
-                } else if (obj instanceof Block[]) {
-                    for (Block block : (Block[]) obj) {
-                        event.getRegistry().register(block);
-                    }
-                }
-            }
-            for (EnumSeaSerpent color : EnumSeaSerpent.values()) {
-                //deferredRegister.register("block_sea_serpent_scale_block_%s".formatted(color.name().toLowerCase()), () -> color.scaleBlock.get());
-                //event.getRegistry().register(color.scaleBlock.get());
-            }
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    //@SubscribeEvent(priority = EventPriority.HIGHEST)
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void registerBlockItems(RegistryEvent.Register<Item> event) {
         IafBlockRegistry.deferredRegister.getEntries().stream()
                 .map(RegistryObject::get)
-                .forEach(block -> event.getRegistry().register(registerItemBlock(block)));
-        // ItemBlocks
-        for (EnumSeaSerpent color : EnumSeaSerpent.values()) {
-            Item.Properties props = new Item.Properties();
-            props.tab(IceAndFire.TAB_BLOCKS);
-            Supplier<BlockItem> lambda = () -> new BlockItem(color.scaleBlock.get(), props);
-            //RegistryObject<?> itemBlock = IafItemRegistry.deferredRegister.register(color.resourceName, lambda);
-            BlockItem itemBlock = new BlockItem(color.scaleBlock.get(), props);
-            itemBlock.setRegistryName(color.scaleBlock.get().getRegistryName());
-            event.getRegistry().register(itemBlock);
-        }
+                .forEach(block -> {
+                    Supplier<? extends Item> sup = () -> registerItemBlock(block);
+                    IafItemRegistry.deferredRegister.register(block.getRegistryName().getPath(), sup);
+                });
+
     }
     public static Item registerItemBlock(Block block) {
         if (!(block instanceof WallTorchBlock)) {
@@ -208,7 +180,6 @@ public class IafBlockRegistry {
             } else {
                 itemBlock = new BlockItem((Block) block, props);
             }
-            itemBlock.setRegistryName(((Block) block).getRegistryName());
             return itemBlock;
         }
         return new BlockItem(block, new Item.Properties());

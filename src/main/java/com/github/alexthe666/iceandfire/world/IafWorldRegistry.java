@@ -239,7 +239,7 @@ public class IafWorldRegistry {
                 new ConfiguredFeature<>(Feature.FLOWER, flowerConf.apply(FIRE_LILY.get())),
                 PlacementUtils.HEIGHTMAP);
 
-        FROST_LILY_CF = register("%s:fire_lily".formatted(IceAndFire.MODID),
+        FROST_LILY_CF = register("%s:frost_lily".formatted(IceAndFire.MODID),
                 new ConfiguredFeature<>(Feature.FLOWER, flowerConf.apply(FROST_LILY.get())),
                 PlacementUtils.HEIGHTMAP);
 
@@ -251,14 +251,12 @@ public class IafWorldRegistry {
 
         FIRE_DRAGON_ROOST_CF = registerSimple.apply("fire_dragon_roost", FIRE_DRAGON_ROOST.get());
         ICE_DRAGON_ROOST_CF = registerSimple.apply("ice_dragon_roost", ICE_DRAGON_ROOST.get());
-        LIGHTNING_DRAGON_ROOST_CF = registerSimple.apply("ice_dragon_roost", ICE_DRAGON_ROOST.get());
+        LIGHTNING_DRAGON_ROOST_CF = registerSimple.apply("lightning_dragon_roost", ICE_DRAGON_ROOST.get());
         FIRE_DRAGON_CAVE_CF = registerSimple.apply("fire_dragon_cave", FIRE_DRAGON_CAVE.get());
         ICE_DRAGON_CAVE_CF = registerSimple.apply("ice_dragon_cave", ICE_DRAGON_CAVE.get());
         LIGHTNING_DRAGON_CAVE_CF = registerSimple.apply("lightning_dragon_cave", LIGHTNING_DRAGON_CAVE.get());
 
         CYCLOPS_CAVE_CF = registerSimple.apply("cyclops_cave", CYCLOPS_CAVE.get());
-        PIXIE_VILLAGE_CF = registerSimple.apply("pixie_village", PIXIE_VILLAGE.get());
-        SIREN_ISLAND_CF = registerSimple.apply("siren_island", SIREN_ISLAND.get());
         PIXIE_VILLAGE_CF = registerSimple.apply("pixie_village", PIXIE_VILLAGE.get());
         SIREN_ISLAND_CF = registerSimple.apply("siren_island", SIREN_ISLAND.get());
         HYDRA_CAVE_CF = registerSimple.apply("hydra_cave", HYDRA_CAVE.get());

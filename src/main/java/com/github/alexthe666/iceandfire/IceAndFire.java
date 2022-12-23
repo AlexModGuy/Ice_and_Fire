@@ -11,11 +11,13 @@ import com.github.alexthe666.iceandfire.inventory.IafContainerRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.loot.IafLootRegistry;
 import com.github.alexthe666.iceandfire.message.*;
+import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -112,6 +114,8 @@ public class IceAndFire {
 
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
         MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadFromJSON);
+        MinecraftForge.EVENT_BUS.register(IafBlockRegistry.class);
+        MinecraftForge.EVENT_BUS.register(IafRecipeRegistry.class);
 
         IafWorldRegistry.FEATURES.register(modBus);
 
@@ -120,8 +124,6 @@ public class IceAndFire {
                         .registerStructureConfiguredFeatures());
         modBus.addGenericListener(Feature.class, EventPriority.LOW,
                 (final RegistryEvent.Register<Feature<?>> event) -> IafWorldRegistry.registerConfiguredFeatures());
-
-        IafItemRegistry.addToBus(MinecraftForge.EVENT_BUS);
     }
 
 

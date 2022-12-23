@@ -12,6 +12,5 @@ public class DataGenerators {
     public static void gatherData(GatherDataEvent event) {
         DataGenerator generator = event.getGenerator();
         generator.addProvider(new IafBiomeTagsProvider(generator, IceAndFire.MODID, event.getExistingFileHelper()));
-        generator.addProvider(new IafStructureProvider(generator, IceAndFire.MODID, event.getExistingFileHelper()));
     }
 }
