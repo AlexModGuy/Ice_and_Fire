@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
 import com.github.alexthe666.iceandfire.item.ItemTrollLeather;
 import com.github.alexthe666.iceandfire.item.ItemTrollWeapon;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorMaterial;
@@ -63,7 +64,7 @@ public enum EnumTroll {
 
     }
 
-    public static EnumTroll getBiomeType(Biome biome) {
+    public static EnumTroll getBiomeType(Holder<Biome> biome) {
         List<EnumTroll> types = new ArrayList<>();
         if (BiomeConfig.test(BiomeConfig.snowyTrollBiomes, biome)) {
             types.add(EnumTroll.FROST);

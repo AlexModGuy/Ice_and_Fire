@@ -95,7 +95,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
     }
 
     private static boolean isJungleBiome(Level world, BlockPos position) {
-        return BiomeConfig.test(BiomeConfig.jungleMyrmexBiomes, world.getBiome(position).value());
+        return BiomeConfig.test(BiomeConfig.jungleMyrmexBiomes, world.getBiome(position));
     }
 
     public static boolean haveSameHive(EntityMyrmexBase myrmex, Entity entity) {

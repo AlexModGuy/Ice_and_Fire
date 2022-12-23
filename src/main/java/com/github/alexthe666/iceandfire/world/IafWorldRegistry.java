@@ -1,10 +1,8 @@
 package com.github.alexthe666.iceandfire.world;
 
-import com.github.alexthe666.citadel.config.biome.CitadelBiomeDefinitions;
 import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.feature.*;
@@ -13,65 +11,64 @@ import com.github.alexthe666.iceandfire.world.structure.DreadMausoleumStructure;
 import com.github.alexthe666.iceandfire.world.structure.DummyPiece;
 import com.github.alexthe666.iceandfire.world.structure.GorgonTempleStructure;
 import com.github.alexthe666.iceandfire.world.structure.GraveyardStructure;
-import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.data.worldgen.StructureFeatures;
+import net.minecraft.data.worldgen.PlainVillagePools;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeResolver;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.WorldGenerationContext;
-import net.minecraft.world.level.levelgen.feature.*;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
-import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType.StructureTemplateType;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import net.minecraft.world.level.storage.LevelData;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.sql.Struct;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 import static com.github.alexthe666.iceandfire.block.IafBlockRegistry.*;
-import static com.github.alexthe666.iceandfire.block.IafBlockRegistry.COPPER_ORE;
-import static net.minecraft.world.level.block.Blocks.*;
+import static net.minecraft.world.level.block.Blocks.STONE;
 import static net.minecraft.world.level.levelgen.VerticalAnchor.absolute;
-import static net.minecraft.world.level.levelgen.placement.InSquarePlacement.*;
+import static net.minecraft.world.level.levelgen.placement.InSquarePlacement.spread;
 
 public class IafWorldRegistry {
 
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES,
-        IceAndFire.MODID);
+            IceAndFire.MODID);
     public static final DeferredRegister<StructureFeature<?>> STRUCTURES = DeferredRegister
-        .create(ForgeRegistries.STRUCTURE_FEATURES, IceAndFire.MODID);
+            .create(ForgeRegistries.STRUCTURE_FEATURES, IceAndFire.MODID);
 
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> FIRE_DRAGON_ROOST;
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> ICE_DRAGON_ROOST;
@@ -145,41 +142,41 @@ public class IafWorldRegistry {
     public static Holder<PlacedFeature> SPAWN_SEA_SERPENT_CF;
     public static Holder<PlacedFeature> SPAWN_STYMPHALIAN_BIRD_CF;
     public static Holder<PlacedFeature> SPAWN_WANDERING_CYCLOPS_CF;
-    public static ConfiguredStructureFeature GORGON_TEMPLE_CF;
-    public static ConfiguredStructureFeature MAUSOLEUM_CF;
-    public static ConfiguredStructureFeature GRAVEYARD_CF;
+    public static Holder<ConfiguredStructureFeature<?, ?>> GORGON_TEMPLE_CF;
+    public static Holder<ConfiguredStructureFeature<?, ?>> MAUSOLEUM_CF;
+    public static Holder<ConfiguredStructureFeature<?, ?>> GRAVEYARD_CF;
 
     static {
         FIRE_DRAGON_ROOST = register("fire_dragon_roost", () -> new WorldGenFireDragonRoosts(NoneFeatureConfiguration.CODEC));
         ICE_DRAGON_ROOST = register("ice_dragon_roost", () -> new WorldGenIceDragonRoosts(NoneFeatureConfiguration.CODEC));
         LIGHTNING_DRAGON_ROOST = register("lightning_dragon_roost",
-            () -> new WorldGenLightningDragonRoosts(NoneFeatureConfiguration.CODEC));
+                () -> new WorldGenLightningDragonRoosts(NoneFeatureConfiguration.CODEC));
         FIRE_DRAGON_CAVE = register("fire_dragon_cave", () -> new WorldGenFireDragonCave(NoneFeatureConfiguration.CODEC));
         ICE_DRAGON_CAVE = register("ice_dragon_cave", () -> new WorldGenIceDragonCave(NoneFeatureConfiguration.CODEC));
         LIGHTNING_DRAGON_CAVE = register("lightning_dragon_cave",
-            () -> new WorldGenLightningDragonCave(NoneFeatureConfiguration.CODEC));
+                () -> new WorldGenLightningDragonCave(NoneFeatureConfiguration.CODEC));
         CYCLOPS_CAVE = register("cyclops_cave", () -> new WorldGenCyclopsCave(NoneFeatureConfiguration.CODEC));
         PIXIE_VILLAGE = register("pixie_village", () -> new WorldGenPixieVillage(NoneFeatureConfiguration.CODEC));
         SIREN_ISLAND = register("siren_island", () -> new WorldGenSirenIsland(NoneFeatureConfiguration.CODEC));
         HYDRA_CAVE = register("hydra_cave", () -> new WorldGenHydraCave(NoneFeatureConfiguration.CODEC));
         MYRMEX_HIVE_DESERT = register("myrmex_hive_desert",
-            () -> new WorldGenMyrmexHive(false, false, NoneFeatureConfiguration.CODEC));
+                () -> new WorldGenMyrmexHive(false, false, NoneFeatureConfiguration.CODEC));
         MYRMEX_HIVE_JUNGLE = register("myrmex_hive_jungle",
-            () -> new WorldGenMyrmexHive(false, true, NoneFeatureConfiguration.CODEC));
+                () -> new WorldGenMyrmexHive(false, true, NoneFeatureConfiguration.CODEC));
 
         SPAWN_DEATH_WORM = register("spawn_death_worm", () -> new SpawnDeathWorm(NoneFeatureConfiguration.CODEC));
         SPAWN_DRAGON_SKELETON_L = register("spawn_dragon_skeleton_l",
-            () -> new SpawnDragonSkeleton(IafEntityRegistry.LIGHTNING_DRAGON.get(), NoneFeatureConfiguration.CODEC));
+                () -> new SpawnDragonSkeleton(IafEntityRegistry.LIGHTNING_DRAGON.get(), NoneFeatureConfiguration.CODEC));
         SPAWN_DRAGON_SKELETON_F = register("spawn_dragon_skeleton_f",
-            () -> new SpawnDragonSkeleton(IafEntityRegistry.FIRE_DRAGON.get(), NoneFeatureConfiguration.CODEC));
+                () -> new SpawnDragonSkeleton(IafEntityRegistry.FIRE_DRAGON.get(), NoneFeatureConfiguration.CODEC));
         SPAWN_DRAGON_SKELETON_I = register("spawn_dragon_skeleton_i",
-            () -> new SpawnDragonSkeleton(IafEntityRegistry.ICE_DRAGON.get(), NoneFeatureConfiguration.CODEC));
+                () -> new SpawnDragonSkeleton(IafEntityRegistry.ICE_DRAGON.get(), NoneFeatureConfiguration.CODEC));
         SPAWN_HIPPOCAMPUS = register("spawn_hippocampus", () -> new SpawnHippocampus(NoneFeatureConfiguration.CODEC));
         SPAWN_SEA_SERPENT = register("spawn_sea_serpent", () -> new SpawnSeaSerpent(NoneFeatureConfiguration.CODEC));
         SPAWN_STYMPHALIAN_BIRD = register("spawn_stymphalian_bird",
-            () -> new SpawnStymphalianBird(NoneFeatureConfiguration.CODEC));
+                () -> new SpawnStymphalianBird(NoneFeatureConfiguration.CODEC));
         SPAWN_WANDERING_CYCLOPS = register("spawn_wandering_cyclops",
-            () -> new SpawnWanderingCyclops(NoneFeatureConfiguration.CODEC));
+                () -> new SpawnWanderingCyclops(NoneFeatureConfiguration.CODEC));
     }
 
     private static <C extends FeatureConfiguration, F extends Feature<C>> RegistryObject<F> register(String name,
@@ -275,10 +272,43 @@ public class IafWorldRegistry {
         SPAWN_SEA_SERPENT_CF = registerSimple.apply("spawn_sea_serpent_misc", SPAWN_SEA_SERPENT.get());
         SPAWN_STYMPHALIAN_BIRD_CF = registerSimple.apply("spawn_stymphalian_bird_misc", SPAWN_STYMPHALIAN_BIRD.get());
         SPAWN_WANDERING_CYCLOPS_CF = registerSimple.apply("spawn_wandering_cyclops_misc", SPAWN_WANDERING_CYCLOPS.get());
+
+
     }
 
+    public static void registerStructureSet(Holder<ConfiguredStructureFeature<?, ?>> structure, String name, int spacing, int separation, int seed) {
+        BuiltinRegistries.register(BuiltinRegistries.STRUCTURE_SETS, new ResourceLocation(IceAndFire.MODID, name), new StructureSet(structure, new RandomSpreadStructurePlacement(spacing, separation, RandomSpreadType.LINEAR, seed)));
+        //BuiltinRegistries.register(
+        //        BuiltinRegistries.STRUCTURE_SETS,
+        //        ResourceKey.create(Registry.STRUCTURE_SET_REGISTRY, new ResourceLocation("%s/%s".formatted(IceAndFire.MODID, name))),
+        //        new StructureSet(structure,
+        //                new RandomSpreadStructurePlacement(spacing, separation, RandomSpreadType.LINEAR, seed)));
+    }
 
-    public static void registerStructureConfiguredFeatures() {
+    public static Holder<ConfiguredStructureFeature<?, ?>> registerConfiguredStructureFeature(String name, RegistryObject<StructureFeature<JigsawConfiguration>> structure, TagKey<Biome> biomeTag) {
+        // Placeholder pools since we haven't loaded our own json files at this stage
+        var DUMMY_CONFIG = new JigsawConfiguration(PlainVillagePools.START, 0);
+        return BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, "%s:%s".formatted(IceAndFire.MODID, name), structure.get().configured(DUMMY_CONFIG, biomeTag, true));
+    }
+
+    public static void registerStructureConfiguredFeatures()
+    {
+
+        GORGON_TEMPLE_CF = registerConfiguredStructureFeature("gorgon_temple", GORGON_TEMPLE, HAS_GORGON_TEMPLE);
+        MAUSOLEUM_CF = registerConfiguredStructureFeature("mausoleum", MAUSOLEUM, HAS_MAUSOLEUM);
+        GRAVEYARD_CF = registerConfiguredStructureFeature("graveyard", GRAVEYARD, HAS_GRAVEYARD);
+
+        int average = (int) Math.ceil(IntStream.of(IafConfig.spawnGorgonsChance, IafConfig.generateMausoleumChance, IafConfig.generateGraveyardChance * 3).average().getAsDouble());
+
+        StructureSet structures = new StructureSet(
+                List.of(
+                        new StructureSet.StructureSelectionEntry(GRAVEYARD_CF, IafConfig.generateGraveyardChance * 3),
+                        new StructureSet.StructureSelectionEntry(MAUSOLEUM_CF, IafConfig.generateMausoleumChance),
+                        new StructureSet.StructureSelectionEntry(GORGON_TEMPLE_CF, IafConfig.spawnGorgonsChance)
+                ),
+                new RandomSpreadStructurePlacement(Math.max(average, 2), Math.max(average / 2, 1), RandomSpreadType.LINEAR, 342226450));
+
+        BuiltinRegistries.register(BuiltinRegistries.STRUCTURE_SETS, new ResourceLocation(IceAndFire.MODID, "structures"), structures);
     }
 
 
@@ -375,54 +405,61 @@ public class IafWorldRegistry {
 
     public static HashMap<String, Boolean> LOADED_FEATURES;
     static {
-    	LOADED_FEATURES = new HashMap<String, Boolean>();
-    	LOADED_FEATURES.put("FIRE_LILY_CF", false);
-    	LOADED_FEATURES.put("FROST_LILY_CF", false);
-    	LOADED_FEATURES.put("LIGHTNING_LILY_CF", false);
-    	LOADED_FEATURES.put("COPPER_ORE_CF", false);
-    	LOADED_FEATURES.put("SILVER_ORE_CF", false);
-    	LOADED_FEATURES.put("SAPPHIRE_ORE_CF", false);
-    	LOADED_FEATURES.put("AMETHYST_ORE_CF", false);
-    	LOADED_FEATURES.put("FIRE_DRAGON_ROOST_CF", false);
-    	LOADED_FEATURES.put("ICE_DRAGON_ROOST_CF", false);
-    	LOADED_FEATURES.put("LIGHTNING_DRAGON_ROOST_CF", false);
-    	LOADED_FEATURES.put("FIRE_DRAGON_CAVE_CF", false);
-    	LOADED_FEATURES.put("ICE_DRAGON_CAVE_CF", false);
-    	LOADED_FEATURES.put("LIGHTNING_DRAGON_CAVE_CF", false);
-    	LOADED_FEATURES.put("CYCLOPS_CAVE_CF", false);
-    	LOADED_FEATURES.put("PIXIE_VILLAGE_CF", false);
-    	LOADED_FEATURES.put("SIREN_ISLAND_CF", false);
-    	LOADED_FEATURES.put("HYDRA_CAVE_CF", false);
-    	LOADED_FEATURES.put("MYRMEX_HIVE_DESERT_CF", false);
-    	LOADED_FEATURES.put("MYRMEX_HIVE_JUNGLE_CF", false);
-    	LOADED_FEATURES.put("SPAWN_DEATH_WORM_CF", false);
-    	LOADED_FEATURES.put("SPAWN_DRAGON_SKELETON_L_CF", false);
-    	LOADED_FEATURES.put("SPAWN_DRAGON_SKELETON_F_CF", false);
-    	LOADED_FEATURES.put("SPAWN_DRAGON_SKELETON_I_CF", false);
-    	LOADED_FEATURES.put("SPAWN_HIPPOCAMPUS_CF", false);
-    	LOADED_FEATURES.put("SPAWN_SEA_SERPENT_CF", false);
-    	LOADED_FEATURES.put("SPAWN_STYMPHALIAN_BIRD_CF", false);
-    	LOADED_FEATURES.put("SPAWN_WANDERING_CYCLOPS_CF", false);
-    	LOADED_FEATURES.put("GORGON_TEMPLE_CF", false);
-    	LOADED_FEATURES.put("MAUSOLEUM_CF", false);
-    	LOADED_FEATURES.put("GRAVEYARD_CF", false);
+        LOADED_FEATURES = new HashMap<String, Boolean>();
+        LOADED_FEATURES.put("FIRE_LILY_CF", false);
+        LOADED_FEATURES.put("FROST_LILY_CF", false);
+        LOADED_FEATURES.put("LIGHTNING_LILY_CF", false);
+        LOADED_FEATURES.put("COPPER_ORE_CF", false);
+        LOADED_FEATURES.put("SILVER_ORE_CF", false);
+        LOADED_FEATURES.put("SAPPHIRE_ORE_CF", false);
+        LOADED_FEATURES.put("AMETHYST_ORE_CF", false);
+        LOADED_FEATURES.put("FIRE_DRAGON_ROOST_CF", false);
+        LOADED_FEATURES.put("ICE_DRAGON_ROOST_CF", false);
+        LOADED_FEATURES.put("LIGHTNING_DRAGON_ROOST_CF", false);
+        LOADED_FEATURES.put("FIRE_DRAGON_CAVE_CF", false);
+        LOADED_FEATURES.put("ICE_DRAGON_CAVE_CF", false);
+        LOADED_FEATURES.put("LIGHTNING_DRAGON_CAVE_CF", false);
+        LOADED_FEATURES.put("CYCLOPS_CAVE_CF", false);
+        LOADED_FEATURES.put("PIXIE_VILLAGE_CF", false);
+        LOADED_FEATURES.put("SIREN_ISLAND_CF", false);
+        LOADED_FEATURES.put("HYDRA_CAVE_CF", false);
+        LOADED_FEATURES.put("MYRMEX_HIVE_DESERT_CF", false);
+        LOADED_FEATURES.put("MYRMEX_HIVE_JUNGLE_CF", false);
+        LOADED_FEATURES.put("SPAWN_DEATH_WORM_CF", false);
+        LOADED_FEATURES.put("SPAWN_DRAGON_SKELETON_L_CF", false);
+        LOADED_FEATURES.put("SPAWN_DRAGON_SKELETON_F_CF", false);
+        LOADED_FEATURES.put("SPAWN_DRAGON_SKELETON_I_CF", false);
+        LOADED_FEATURES.put("SPAWN_HIPPOCAMPUS_CF", false);
+        LOADED_FEATURES.put("SPAWN_SEA_SERPENT_CF", false);
+        LOADED_FEATURES.put("SPAWN_STYMPHALIAN_BIRD_CF", false);
+        LOADED_FEATURES.put("SPAWN_WANDERING_CYCLOPS_CF", false);
+        LOADED_FEATURES.put("GORGON_TEMPLE_CF", false);
+        LOADED_FEATURES.put("MAUSOLEUM_CF", false);
+        LOADED_FEATURES.put("GRAVEYARD_CF", false);
     }
     public static void onBiomesLoad(BiomeLoadingEvent event) {
-    	Biome biome = ForgeRegistries.BIOMES.getValue(event.getName());
+        Optional<Holder<Biome>> optionalBiome = ForgeRegistries.BIOMES.getHolder(event.getName());
 
-    	if (safelyTestBiome(BiomeConfig.fireLilyBiomes, biome)) {
+        if (optionalBiome.isEmpty()) {
+            IceAndFire.LOGGER.warn("Invalid biome: " + event.getName());
+            return;
+        }
+
+        Holder<Biome> biome = optionalBiome.get();
+
+        if (safelyTestBiome(BiomeConfig.fireLilyBiomes, biome)) {
             event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, FIRE_LILY_CF);
             LOADED_FEATURES.put("FIRE_LILY_CF", true);
         }
-    	if (safelyTestBiome(BiomeConfig.lightningLilyBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.lightningLilyBiomes, biome)) {
             event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, LIGHTNING_LILY_CF);
             LOADED_FEATURES.put("LIGHTNING_LILY_CF", true);
         }
-    	if (safelyTestBiome(BiomeConfig.iceLilyBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.iceLilyBiomes, biome)) {
             event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, FROST_LILY_CF);
             LOADED_FEATURES.put("FROST_LILY_CF", true);
         }
-    	if (safelyTestBiome(BiomeConfig.oreGenBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.oreGenBiomes, biome)) {
             if (IafConfig.generateSilverOre) {
                 event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, SILVER_ORE_CF);
                 LOADED_FEATURES.put("SILVER_ORE_CF", true);
@@ -508,10 +545,10 @@ public class IafWorldRegistry {
             event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SIREN_ISLAND_CF);
             LOADED_FEATURES.put("SIREN_ISLAND_CF", true);
         }
-    	if (IafConfig.spawnDeathWorm && safelyTestBiome(BiomeConfig.deathwormBiomes, biome)) {
+        if (IafConfig.spawnDeathWorm && safelyTestBiome(BiomeConfig.deathwormBiomes, biome)) {
             event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_DEATH_WORM_CF);
             LOADED_FEATURES.put("SPAWN_DEATH_WORM_CF", true);
-    	}
+        }
         if (IafConfig.generateWanderingCyclops && safelyTestBiome(BiomeConfig.wanderingCyclopsBiomes, biome)) {
             event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_WANDERING_CYCLOPS_CF);
             LOADED_FEATURES.put("SPAWN_WANDERING_CYCLOPS_CF", true);
@@ -530,10 +567,10 @@ public class IafWorldRegistry {
                 LOADED_FEATURES.put("SPAWN_DRAGON_SKELETON_I_CF", true);
             }
         }
-    	if (IafConfig.spawnHippocampus && safelyTestBiome(BiomeConfig.hippocampusBiomes, biome)) {
+        if (IafConfig.spawnHippocampus && safelyTestBiome(BiomeConfig.hippocampusBiomes, biome)) {
             event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_HIPPOCAMPUS_CF);
             LOADED_FEATURES.put("SPAWN_HIPPOCAMPUS_CF", true);
-    	}
+        }
         if (IafConfig.spawnSeaSerpents && safelyTestBiome(BiomeConfig.seaSerpentBiomes, biome)) {
             event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_SEA_SERPENT_CF);
             LOADED_FEATURES.put("SPAWN_SEA_SERPENT_CF", true);
@@ -544,7 +581,7 @@ public class IafWorldRegistry {
         }
     }
 
-    private static boolean safelyTestBiome(Pair<String, SpawnBiomeData> entry, Biome biome){
+    private static boolean safelyTestBiome(Pair<String, SpawnBiomeData> entry, Holder<Biome> biome){
         try{
             return BiomeConfig.test(entry, biome);
         }catch (Exception e){

@@ -5,9 +5,12 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -16,21 +19,24 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.PostPlacementProcessor;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GraveyardStructure extends StructureFeature<JigsawConfiguration> {
 
     public GraveyardStructure() {
-        super(JigsawConfiguration.CODEC, DreadMausoleumStructure::createPiecesGenerator, PostPlacementProcessor.NONE);
+        super(JigsawConfiguration.CODEC, GraveyardStructure::createPiecesGenerator, new placementProcessor());
     }
 
     @Override
@@ -38,6 +44,14 @@ public class GraveyardStructure extends StructureFeature<JigsawConfiguration> {
         return GenerationStep.Decoration.SURFACE_STRUCTURES;
     }
 
+    public static class placementProcessor implements PostPlacementProcessor {
+        @Override
+        public void afterPlace(WorldGenLevel level, StructureFeatureManager structureFeatureManager, ChunkGenerator generator, Random random, BoundingBox box, ChunkPos pos, PiecesContainer container) {
+            container.pieces().forEach(structurePiece -> {
+                structurePiece.getBoundingBox().moved(0, 3, 0);
+            });
+        }
+    }
     public static Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context)
     {
         Rotation rotation = Rotation.getRandom(ThreadLocalRandom.current());
@@ -55,6 +69,12 @@ public class GraveyardStructure extends StructureFeature<JigsawConfiguration> {
         ChunkPos pos = context.chunkPos();
         ChunkGenerator generator = context.chunkGenerator();
         LevelHeightAccessor height = context.heightAccessor();
+
+        context = Pool.replaceContext(context, new JigsawConfiguration(
+                context.registryAccess().ownedRegistryOrThrow(Registry.TEMPLATE_POOL_REGISTRY).getOrCreateHolder(Pool.graveyard_pool),
+                5 // Depth of jigsaw branches. Can be set to any number greater than 1 but won't change anything as this is a single piece Jigsaw Structure.
+                )
+        );
 
         int k = pos.x + 7;
         int l = pos.z + 7;
