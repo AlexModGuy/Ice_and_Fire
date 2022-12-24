@@ -20,8 +20,10 @@ build
 # other
 eclipse
 run
-data
+/data
 server
 
 # Files from Forge MDK
 forge*changelog.txt
+
+!src/generated/resources/data/*
