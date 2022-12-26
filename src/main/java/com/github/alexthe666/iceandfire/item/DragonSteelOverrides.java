@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -19,7 +18,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
@@ -48,20 +46,19 @@ public interface DragonSteelOverrides<T extends TieredItem> {
     }
 
     default boolean isDragonsteel(Tier tier) {
-        return ImmutableList.of(IafItemRegistry.DRAGONSTEEL_FIRE_INGOT, IafItemRegistry.DRAGONSTEEL_ICE_INGOT,
-            IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT).contains(tier.getRepairIngredient());
+        return tier.getTag() == DragonSteelTier.DRAGONSTEEL_TIER_TAG;
     }
 
     default boolean isDragonsteelFire(Tier tier) {
-        return tier.getRepairIngredient() == Ingredient.of(IafItemRegistry.DRAGONSTEEL_FIRE_INGOT);
+        return tier == DragonSteelTier.DRAGONSTEEL_TIER_FIRE;
     }
 
     default boolean isDragonsteelIce(Tier tier) {
-        return tier.getRepairIngredient() == Ingredient.of(IafItemRegistry.DRAGONSTEEL_ICE_INGOT);
+        return tier == DragonSteelTier.DRAGONSTEEL_TIER_ICE;
     }
 
     default boolean isDragonsteelLightning(Tier tier) {
-        return tier.getRepairIngredient() == Ingredient.of(IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT);
+        return tier == DragonSteelTier.DRAGONSTEEL_TIER_LIGHTNING;
     }
 
     default void hurtEnemy(T item, ItemStack stack, LivingEntity target, LivingEntity attacker) {
