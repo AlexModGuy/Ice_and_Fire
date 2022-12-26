@@ -18,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -28,7 +29,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
-import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -41,6 +41,7 @@ public class GuiBestiary extends Screen {
     private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/bestiary/bestiary.png");
     private static final ResourceLocation DRAWINGS_0 = new ResourceLocation("iceandfire:textures/gui/bestiary/drawings_0.png");
     private static final ResourceLocation DRAWINGS_1 = new ResourceLocation("iceandfire:textures/gui/bestiary/drawings_1.png");
+    private static final ResourceLocation BOOK_WIDGET_TEXTURE = new ResourceLocation("citadel:textures/gui/book/widgets.png");
     private static final Map<String, ResourceLocation> PICTURE_LOCATION_CACHE = Maps.newHashMap();
     public List<EnumBestiaryPages> allPageTypes = new ArrayList<>();
     public EnumBestiaryPages pageType;
@@ -854,15 +855,35 @@ public class GuiBestiary extends Screen {
     }
 
     private void drawRecipe(PoseStack ms, ItemStack result, ItemStack[] ingredients, int x, int y, float scale) {
+        // Code snippet based on Citadels GuiBasicBook
+        int k = (this.width - X + 84) / 2;
+        int l = (this.height - Y + 40) / 2;
         ms.pushPose();
-        ms.translate(x, y, 0);
-        ms.scale(scale, scale, 0);
-        drawItemStack(ms, result, 62, 17, 2F);
-        //TODO: Values used to be better
-        for (int i = 0; i < 9; i++) {
-            drawItemStack(ms, ingredients[i], ((i % 3) * 22 + 130), ((i / 3) * 22 + 210), 1.25F);
-        }
+        ms.translate(k + x, l + y, 0.0D);
+        ms.scale(scale, scale, scale);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         ms.popPose();
+        PoseStack poseStack = RenderSystem.getModelViewStack();
+        for (int i = 0; i < 9; i++) {
+            poseStack.pushPose();
+            poseStack.translate(k, l, 32.0D);
+            poseStack.translate(((x + (i % 3 * 22) * scale)), ((y + (i / 3 * 22) * scale)), 0.0D);
+            poseStack.scale(scale, scale, scale);
+            this.itemRenderer.blitOffset = 100.0F;
+            this.itemRenderer.renderAndDecorateItem(ingredients[i], 0, 0);
+            this.itemRenderer.blitOffset = 0.0F;
+            poseStack.popPose();
+        }
+        poseStack.pushPose();
+        poseStack.translate(k, l, 32.0D);
+        float finScale = scale * 1.5F;
+        poseStack.translate((x + 70.0F * finScale), (y + 10.0F * finScale), 0.0D);
+        poseStack.scale(finScale, finScale, finScale);
+        this.itemRenderer.blitOffset = 100.0F;
+        this.itemRenderer.renderAndDecorateItem(result, 0, 0);
+        this.itemRenderer.blitOffset = 0.0F;
+        poseStack.popPose();
+        RenderSystem.applyModelViewMatrix();
         ms.pushPose();
         ms.translate(x, y, 0);
         ms.scale(scale, scale, 0);
@@ -870,7 +891,6 @@ public class GuiBestiary extends Screen {
         ms.scale(1.5F, 1.5F, 1F);
         drawImage(ms, DRAWINGS_0, 0, 0, 389, 1, 50, 50, 512F);
         ms.popPose();
-
     }
 
     public void writeFromTxt(PoseStack ms) {
@@ -934,19 +954,20 @@ public class GuiBestiary extends Screen {
     }
 
     private void drawItemStack(PoseStack ms, ItemStack stack, int x, int y, float scale) {
+        // Code snippet based on Citadels GuiBasicBook
         int cornerX = (width - X) / 2;
         int cornerY = (height - Y) / 2;
-        PoseStack posestack = RenderSystem.getModelViewStack();
-        posestack.pushPose();
-        posestack.translate(0.0D, 0.0D, 32.0D);
-        posestack.scale(scale, scale, 1.0F);
-        RenderSystem.applyModelViewMatrix();
-        this.setBlitOffset(200);
-        this.itemRenderer.blitOffset = 200.0F;
-        this.itemRenderer.renderAndDecorateItem(stack, cornerX + x, cornerY + y);
-        this.setBlitOffset(0);
+
+        this.itemRenderer.blitOffset = 100.0F;
+        ms.pushPose();
+        PoseStack poseStack = RenderSystem.getModelViewStack();
+        poseStack.pushPose();
+        poseStack.translate(cornerX, cornerY, 0.0D);
+        poseStack.scale(scale, scale, scale);
+        this.itemRenderer.renderAndDecorateItem(stack, x, y);
         this.itemRenderer.blitOffset = 0.0F;
-        posestack.popPose();
+        poseStack.popPose();
+        ms.popPose();
         RenderSystem.applyModelViewMatrix();
 
     }
@@ -986,21 +1007,22 @@ public class GuiBestiary extends Screen {
         ms.popPose();
     }*/
 
-
     private void drawBlockStack(PoseStack ms, ItemStack stack, int x, int y, float scale, int zScale) {
         int cornerX = (width - X) / 2;
         int cornerY = (height - Y) / 2;
+
+        this.itemRenderer.blitOffset = 100.0F;
         ms.pushPose();
-        ms.translate(cornerX, cornerY, 32.0F);
-        this.itemRenderer.blitOffset = 200.0F;
-        net.minecraft.client.gui.Font font = null;
-        //TODO: if (!stack.isEmpty()) font = stack.getItem().getFontRenderer(stack);
-        if (font == null) font = getFont();
-        GL11.glScalef(scale, scale, scale);
+        PoseStack poseStack = RenderSystem.getModelViewStack();
+        poseStack.pushPose();
+        poseStack.translate(cornerX, cornerY, 0.0D);
+        poseStack.scale(scale, scale, scale);
         this.itemRenderer.blitOffset = -100 + zScale * 10;
         this.itemRenderer.renderAndDecorateItem(stack, x, y);
         this.itemRenderer.blitOffset = 0.0F;
+        poseStack.popPose();
         ms.popPose();
+        RenderSystem.applyModelViewMatrix();
 
     }
 }
