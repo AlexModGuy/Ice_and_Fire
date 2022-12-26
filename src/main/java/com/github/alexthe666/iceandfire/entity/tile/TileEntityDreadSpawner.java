@@ -87,4 +87,5 @@ public class TileEntityDreadSpawner extends SpawnerBlockEntity {
     public BlockEntityType<?> getType() {
         return this.type != null ? this.type : super.getType();
     }
+
 }
