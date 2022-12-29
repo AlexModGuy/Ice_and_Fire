@@ -52,7 +52,9 @@ public class DreadRuinProcessor extends StructureProcessor {
                 CompoundTag spawnData = new CompoundTag();
                 ResourceLocation spawnerMobId = ForgeRegistries.ENTITIES.getKey(getRandomMobForMobSpawner(random));
                 if (spawnerMobId != null) {
-                    spawnData.putString("id", spawnerMobId.toString());
+                    CompoundTag entity = new CompoundTag();
+                    entity.putString("id", spawnerMobId.toString());
+                    spawnData.put("entity", entity);
                     tag.remove("SpawnPotentials");
                     tag.put("SpawnData", spawnData.copy());
                 }
