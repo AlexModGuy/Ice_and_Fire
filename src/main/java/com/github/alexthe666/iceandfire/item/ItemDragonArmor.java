@@ -8,9 +8,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ItemDragonArmor extends Item {
 
@@ -24,10 +27,15 @@ public class ItemDragonArmor extends Item {
         this.dragonSlot = dragonSlot;
     }
 
-    public String getDescriptionId() {
-        return "item.iceandfire." + this.getRegistryName().getPath();
-    }
+    Pattern baseName = Pattern.compile("[a-z]+_[a-z]+");
 
+    @Override
+    public @NotNull String getDescriptionId() {
+        String fullName = this.getRegistryName().getPath();
+        Matcher matcher = baseName.matcher(fullName);
+        name = matcher.find() ? matcher.group() : fullName;
+        return "item.iceandfire." + name;
+    }
 
     static String getNameForSlot(int slot){
         return switch (slot) {
@@ -41,21 +49,12 @@ public class ItemDragonArmor extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        String words;
-        switch (dragonSlot) {
-            default:
-                words = "dragon.armor_head";
-                break;
-            case 1:
-                words = "dragon.armor_neck";
-                break;
-            case 2:
-                words = "dragon.armor_body";
-                break;
-            case 3:
-                words = "dragon.armor_tail";
-                break;
-        }
+        String words = switch (dragonSlot) {
+            case 1 -> "dragon.armor_neck";
+            case 2 -> "dragon.armor_body";
+            case 3 -> "dragon.armor_tail";
+            default -> "dragon.armor_head";
+        };
         tooltip.add(new TranslatableComponent(words).withStyle(ChatFormatting.GRAY));
     }
 }

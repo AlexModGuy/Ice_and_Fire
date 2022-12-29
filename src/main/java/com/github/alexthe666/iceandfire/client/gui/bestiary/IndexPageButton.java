@@ -28,7 +28,7 @@ public class IndexPageButton extends Button {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.setShaderTexture(0, new ResourceLocation("iceandfire:textures/gui/bestiary/widgets.png"));
-            boolean flag = isHovered();
+            boolean flag = isHoveredOrFocused();
             this.blit(matrixStack, this.x, this.y, 0, flag ? 32 : 0, this.width, this.height);
             int j = flag ? 0XFAE67D : 0X303030;
             font.draw(matrixStack, this.getMessage().getVisualOrderText(), (this.x + this.width / 2 - font.width(this.getMessage().getString()) / 2), this.y + (this.height - 8) / 2, j | Mth.ceil(this.alpha * 255.0F) << 24);
