@@ -30,7 +30,6 @@ public class ItemTrollWeapon extends SwordItem {
 
     public ItemTrollWeapon(EnumTroll.Weapon weapon) {
         super(IafItemRegistry.TROLL_WEAPON_TOOL_MATERIAL, 15, -3.5F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "troll_weapon_" + weapon.name().toLowerCase(Locale.ROOT));
         this.weapon = weapon;
     }
 

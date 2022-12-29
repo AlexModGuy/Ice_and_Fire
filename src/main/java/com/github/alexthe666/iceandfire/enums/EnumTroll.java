@@ -104,8 +104,7 @@ public enum EnumTroll {
 
         Weapon() {
             TEXTURE = new ResourceLocation("iceandfire:textures/models/troll/weapon/weapon_" + this.name().toLowerCase(Locale.ROOT) + ".png");
-            //item = IafItemRegistry.deferredRegister.register("troll_weapon_" + this.name().toLowerCase(Locale.ROOT), () -> new ItemTrollWeapon(this));
-            item = () -> new ItemTrollWeapon(this);
+            item = IafItemRegistry.deferredRegister.register("troll_weapon_" + this.name().toLowerCase(Locale.ROOT), () -> new ItemTrollWeapon(this));
         }
 
     }
