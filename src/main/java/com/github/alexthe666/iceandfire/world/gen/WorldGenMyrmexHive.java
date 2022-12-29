@@ -91,7 +91,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         centerOfHive = undergroundPos;
         generateMainRoom(worldIn, rand, undergroundPos);
         this.small = false;
-        return false;
+        return true;
     }
 
     private void generateMainRoom(ServerLevelAccessor world, Random rand, BlockPos position) {
