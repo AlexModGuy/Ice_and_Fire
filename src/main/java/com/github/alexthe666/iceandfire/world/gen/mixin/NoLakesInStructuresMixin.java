@@ -16,27 +16,25 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
+
 // Based on code from TelepathicGrunts RepurposedStructures
 @Mixin(LakeFeature.class)
 public class NoLakesInStructuresMixin {
 
-    // TODO: morguldir: Revisit this later
-    //@Inject(
-    //    method = "place(Lnet/minecraft/world/level/levelgen/feature/FeaturePlaceContext;)Z",
-    //    at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/WorldGenLevel;startsForFeature(Lnet/minecraft/core/SectionPos;Lnet/minecraft/world/level/levelgen/feature/StructureFeature;)Ljava/util/stream/Stream;"),
-    //    cancellable = true
-    //)
-    //private void iaf_noLakesInMausoleum(FeaturePlaceContext<BlockStateConfiguration> context, CallbackInfoReturnable<Boolean> cir) {
-    //    if (!(context.level() instanceof WorldGenRegion))
-    //        return;
+    @Inject(
+            method = "place(Lnet/minecraft/world/level/levelgen/feature/FeaturePlaceContext;)Z",
+            at = @At(value = "HEAD"),
+            cancellable = true
+    )
+    private void iaf_noLakesInMausoleum(FeaturePlaceContext<BlockStateConfiguration> context, CallbackInfoReturnable<Boolean> cir) {
+        if (!(context.level() instanceof WorldGenRegion))
+            return;
 
-    //
-    //    context.level().registryAccess().
-    //    SectionPos sectionPos = SectionPos.of(context.origin());
-    //    WorldGenLevel level = context.level();
-    //    StructureFeature<JigsawConfiguration> structure = IafWorldRegistry.MAUSOLEUM.get();
-    //    if (level.startsForFeature(sectionPos, structure).findAny().isPresent()) {
-    //        cir.setReturnValue(false);
-    //    }
-    //}
+        for (var structure : List.of(IafWorldRegistry.MAUSOLEUM_CF, IafWorldRegistry.GORGON_TEMPLE_CF, IafWorldRegistry.GRAVEYARD_CF)) {
+            var structureStart = context.level().getChunk(context.origin()).getStartForFeature(structure.value());
+            if (structureStart != null && structureStart.isValid())
+                cir.setReturnValue(false);
+        }
+    }
 }
