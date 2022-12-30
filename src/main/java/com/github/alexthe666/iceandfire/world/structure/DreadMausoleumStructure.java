@@ -103,8 +103,7 @@ public class DreadMausoleumStructure extends StructureFeature<JigsawConfiguratio
         int k1 = generator.getFirstOccupiedHeight(k + i, l, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor());
         int l1 = generator.getFirstOccupiedHeight(k + i, l + j, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor());
         int i2 = Math.min(Math.min(i1, j1), Math.min(k1, l1));
-        BlockPos blockpos = new BlockPos(pos.x * 16 + 8, i2 + 1, pos.z * 16 + 8);
-        blockpos = context.chunkPos().getMiddleBlockPosition(i2);
+        BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(i2 + 1);
 
         // All a structure has to do is call this method to turn it into a jigsaw based structure!
         // No manual pieces class needed.

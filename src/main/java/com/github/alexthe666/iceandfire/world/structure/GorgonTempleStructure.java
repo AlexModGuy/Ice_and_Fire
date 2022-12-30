@@ -28,7 +28,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class GorgonTempleStructure extends StructureFeature<JigsawConfiguration> {
 
     public GorgonTempleStructure() {
-        super(JigsawConfiguration.CODEC, GorgonTempleStructure::createPiecesGenerator, PostPlacementProcessor.NONE);
+        super(JigsawConfiguration.CODEC, GorgonTempleStructure::createPiecesGenerator, new postPlacement());
     }
 
     public GenerationStep.Decoration step() {
@@ -37,9 +37,9 @@ public class GorgonTempleStructure extends StructureFeature<JigsawConfiguration>
 
 
     static class postPlacement implements PostPlacementProcessor {
-
         @Override
-        public void afterPlace(WorldGenLevel p_192438_, StructureFeatureManager p_192439_, ChunkGenerator p_192440_, Random p_192441_, BoundingBox p_192442_, ChunkPos p_192443_, PiecesContainer p_192444_) {
+        public void afterPlace(WorldGenLevel pLevel, StructureFeatureManager pManager, ChunkGenerator pGenerator, Random pRandom, BoundingBox pBoundingBox, ChunkPos pChunkPos, PiecesContainer pContainer) {
+            pContainer.calculateBoundingBox();
         }
     }
    /*
@@ -81,15 +81,14 @@ public class GorgonTempleStructure extends StructureFeature<JigsawConfiguration>
         ChunkGenerator chunkGenerator = context.chunkGenerator();
         LevelHeightAccessor height = context.heightAccessor();
 
-        int k = pos.x + 7;
-        int l = pos.z + 7;
+        int k = pos.getBlockX(7);
+        int l = pos.getBlockZ(7);
         int i1 = chunkGenerator.getFirstOccupiedHeight(k, l, Heightmap.Types.WORLD_SURFACE_WG, height);
         int j1 = chunkGenerator.getFirstOccupiedHeight(k, l + j, Heightmap.Types.WORLD_SURFACE_WG, height);
         int k1 = chunkGenerator.getFirstOccupiedHeight(k + i, l, Heightmap.Types.WORLD_SURFACE_WG, height);
         int l1 = chunkGenerator.getFirstOccupiedHeight(k + i, l + j, Heightmap.Types.WORLD_SURFACE_WG, height);
         int i2 = Math.min(Math.min(i1, j1), Math.min(k1, l1));
-        BlockPos blockpos = new BlockPos(pos.x * 16 + 8, i2 + 2, pos.z * 16 + 8);
-        blockpos = pos.getMiddleBlockPosition(i2 + 2);
+        BlockPos blockpos = pos.getMiddleBlockPosition(i2 + 2);
 
 
         context = Pool.replaceContext(context, new JigsawConfiguration(
@@ -101,9 +100,5 @@ public class GorgonTempleStructure extends StructureFeature<JigsawConfiguration>
         // All a structure has to do is call this method to turn it into a jigsaw based structure!
         // No manual pieces class needed.
         return JigsawPlacement.addPieces(context, PoolElementStructurePiece::new, blockpos, false, false);
-
-        //TODO: Is this needed?
-        //TODO: morguldir: I hope not!
-        //this.createBoundingBox();
     }
 }

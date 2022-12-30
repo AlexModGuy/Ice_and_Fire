@@ -283,7 +283,7 @@ public class IafWorldRegistry {
     public static Holder<ConfiguredStructureFeature<?, ?>> registerConfiguredStructureFeature(String name, RegistryObject<StructureFeature<JigsawConfiguration>> structure, TagKey<Biome> biomeTag) {
         // Placeholder pools since we haven't loaded our own json files at this stage
         var DUMMY_CONFIG = new JigsawConfiguration(PlainVillagePools.START, 0);
-        return BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, "%s:%s".formatted(IceAndFire.MODID, name), structure.get().configured(DUMMY_CONFIG, biomeTag, true));
+        return BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, "%s:%s".formatted(IceAndFire.MODID, name), structure.get().configured(DUMMY_CONFIG, biomeTag, false));
     }
 
     public static void registerStructureConfiguredFeatures()
