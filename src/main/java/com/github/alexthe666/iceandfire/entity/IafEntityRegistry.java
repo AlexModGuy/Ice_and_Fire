@@ -13,6 +13,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.EventBus;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -94,12 +95,6 @@ public class IafEntityRegistry {
         return ENTITIES.register(entityName, () -> builder.build(entityName));
     }
 
-    public static void setup() {
-    }
-
-    public static void addToBus(IEventBus modBus) {
-        //modBus.addListener(IafEntityRegistry::bakeAttributes);
-    }
 
 
     @SubscribeEvent

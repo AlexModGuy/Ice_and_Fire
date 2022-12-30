@@ -90,23 +90,8 @@ public class IceAndFire {
         }
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        modBus.addListener(this::setup);
-        modBus.addListener(this::setupComplete);
 
         final ModLoadingContext modLoadingContext = ModLoadingContext.get();
-        //MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadFromJSON);
-
-
-        //modBus.addListener(IceAndFire::onBiomeLoadFromJSON);
-
-        IafContainerRegistry.CONTAINERS.register(modBus);
-        IafTileEntityRegistry.TYPES.register(modBus);
-        IafWorldRegistry.STRUCTURES.register(modBus);
-        IafBlockRegistry.deferredRegister.register(modBus);
-        IafEntityRegistry.ENTITIES.register(modBus);
-        IafItemRegistry.deferredRegister.register(modBus);
-
-        IafEntityRegistry.addToBus(MinecraftForge.EVENT_BUS);
 
         modLoadingContext.registerConfig(ModConfig.Type.CLIENT, ConfigHolder.CLIENT_SPEC);
         modLoadingContext.registerConfig(ModConfig.Type.COMMON, ConfigHolder.SERVER_SPEC);
@@ -114,16 +99,26 @@ public class IceAndFire {
 
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
         MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadFromJSON);
-        MinecraftForge.EVENT_BUS.register(IafBlockRegistry.class);
-        MinecraftForge.EVENT_BUS.register(IafRecipeRegistry.class);
-
-        IafWorldRegistry.FEATURES.register(modBus);
 
         modBus.addGenericListener(StructureFeature.class, EventPriority.LOW,
                 (final RegistryEvent.Register<StructureFeature<?>> event) -> IafWorldRegistry
                         .registerStructureConfiguredFeatures());
         modBus.addGenericListener(Feature.class, EventPriority.LOW,
                 (final RegistryEvent.Register<Feature<?>> event) -> IafWorldRegistry.registerConfiguredFeatures());
+
+        IafItemRegistry.deferredRegister.register(modBus);
+        IafBlockRegistry.deferredRegister.register(modBus);
+        IafEntityRegistry.ENTITIES.register(modBus);
+        IafTileEntityRegistry.TYPES.register(modBus);
+        IafWorldRegistry.FEATURES.register(modBus);
+        IafWorldRegistry.STRUCTURES.register(modBus);
+        IafContainerRegistry.CONTAINERS.register(modBus);
+
+        MinecraftForge.EVENT_BUS.register(IafBlockRegistry.class);
+        MinecraftForge.EVENT_BUS.register(IafRecipeRegistry.class);
+
+        modBus.addListener(this::setup);
+        modBus.addListener(this::setupComplete);
     }
 
 
@@ -133,7 +128,7 @@ public class IceAndFire {
         LOGGER.info(IafEntityRegistry.LOADED_ENTITIES);
     }
 
-    //@SubscribeEvent
+    @SubscribeEvent
     public void onBiomeLoadFromJSON(BiomeLoadingEvent event) {
         IafWorldRegistry.onBiomesLoad(event);
         IafEntityRegistry.onBiomesLoad(event);

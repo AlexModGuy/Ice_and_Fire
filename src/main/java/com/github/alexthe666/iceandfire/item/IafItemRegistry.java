@@ -340,7 +340,7 @@ public class IafItemRegistry {
         EnumTroll.initArmors();
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public static void registerItems(RegistryEvent.Register<Item> event) {
         //Banner Patterns
         try {
