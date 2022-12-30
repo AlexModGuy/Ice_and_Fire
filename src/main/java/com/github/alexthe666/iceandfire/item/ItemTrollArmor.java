@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.armor.ModelTrollArmor;
+import com.github.alexthe666.iceandfire.client.render.entity.RenderTroll;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.model.HumanoidModel;
@@ -13,13 +14,12 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.IItemRenderProperties;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
-public class ItemTrollArmor extends ArmorItem implements IItemRenderProperties {
+public class ItemTrollArmor extends ArmorItem{
 
     public EnumTroll troll;
 
@@ -49,7 +49,7 @@ public class ItemTrollArmor extends ArmorItem implements IItemRenderProperties {
 
     @Override
     public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
-        consumer.accept(new IItemRenderProperties() {
+        consumer.accept(new net.minecraftforge.client.IItemRenderProperties() {
             @Override
             @Nullable
             public HumanoidModel<?> getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {

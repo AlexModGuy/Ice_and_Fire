@@ -18,7 +18,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.IItemRenderProperties;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.UUID;
 
 import static com.github.alexthe666.iceandfire.item.IafItemRegistry.*;
 
-public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDragonItem, IItemRenderProperties {
+public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDragonItem {
 
     private static final UUID[] ARMOR_MODIFIERS = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
     private final ArmorMaterial material;
@@ -40,7 +39,7 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
 
     @Override
     public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
-        consumer.accept(new IItemRenderProperties() {
+        consumer.accept(new net.minecraftforge.client.IItemRenderProperties() {
             @Override
             @Nullable
             public HumanoidModel<?> getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {

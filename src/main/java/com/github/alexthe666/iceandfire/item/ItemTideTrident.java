@@ -31,7 +31,6 @@ import net.minecraft.world.item.enchantment.ArrowPiercingEnchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.common.util.NonNullLazy;
 
 import javax.annotation.Nullable;
@@ -45,9 +44,9 @@ public class ItemTideTrident extends TridentItem {
     }
 
     @Override
-    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+    public void initializeClient(Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
 
-        consumer.accept(new IItemRenderProperties() {
+        consumer.accept(new net.minecraftforge.client.IItemRenderProperties() {
             static final NonNullLazy<BlockEntityWithoutLevelRenderer> renderer = NonNullLazy.of(() -> new RenderTideTridentItem(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
             @Override

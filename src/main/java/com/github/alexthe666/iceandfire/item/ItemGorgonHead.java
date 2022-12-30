@@ -28,7 +28,6 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.common.util.NonNullLazy;
 
 import javax.annotation.Nullable;
@@ -36,16 +35,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class ItemGorgonHead extends Item implements IItemRenderProperties {
+public class ItemGorgonHead extends Item {
 
     public ItemGorgonHead() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(1));
     }
 
     @Override
-    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+    public void initializeClient(Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
 
-        consumer.accept(new IItemRenderProperties() {
+        consumer.accept(new net.minecraftforge.client.IItemRenderProperties() {
             static final NonNullLazy<BlockEntityWithoutLevelRenderer> renderer = NonNullLazy.of(() -> new RenderGorgonHead(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
             @Override

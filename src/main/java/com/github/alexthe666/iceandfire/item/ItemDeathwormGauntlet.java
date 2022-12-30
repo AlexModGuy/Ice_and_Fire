@@ -24,7 +24,6 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.common.util.NonNullLazy;
 
 import javax.annotation.Nullable;
@@ -42,9 +41,9 @@ public class ItemDeathwormGauntlet extends Item {
     }
 
     @Override
-    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+    public void initializeClient(Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
 
-        consumer.accept(new IItemRenderProperties() {
+        consumer.accept(new net.minecraftforge.client.IItemRenderProperties() {
             static final NonNullLazy<BlockEntityWithoutLevelRenderer> renderer = NonNullLazy.of(() -> new RenderDeathWormGauntlet(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
             @Override

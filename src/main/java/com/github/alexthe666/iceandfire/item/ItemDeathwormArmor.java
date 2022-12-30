@@ -10,11 +10,10 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.IItemRenderProperties;
 
 import javax.annotation.Nullable;
 
-public class ItemDeathwormArmor extends ArmorItem implements IItemRenderProperties {
+public class ItemDeathwormArmor extends ArmorItem {
 
     public ItemDeathwormArmor(ArmorMaterial material, EquipmentSlot slot) {
         super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
@@ -23,7 +22,7 @@ public class ItemDeathwormArmor extends ArmorItem implements IItemRenderProperti
 
     @Override
     public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
-        consumer.accept(new IItemRenderProperties() {
+        consumer.accept(new net.minecraftforge.client.IItemRenderProperties() {
             @Override
             @Nullable
             public HumanoidModel<?> getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {

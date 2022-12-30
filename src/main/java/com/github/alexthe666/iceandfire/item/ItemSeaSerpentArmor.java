@@ -19,12 +19,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.IItemRenderProperties;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemSeaSerpentArmor extends ArmorItem implements IItemRenderProperties {
+public class ItemSeaSerpentArmor extends ArmorItem {
 
     public EnumSeaSerpent armor_type;
 
@@ -49,7 +48,7 @@ public class ItemSeaSerpentArmor extends ArmorItem implements IItemRenderPropert
 
     @Override
     public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
-        consumer.accept(new IItemRenderProperties() {
+        consumer.accept(new net.minecraftforge.client.IItemRenderProperties() {
             @Override
             @Nullable
             public HumanoidModel<?> getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {

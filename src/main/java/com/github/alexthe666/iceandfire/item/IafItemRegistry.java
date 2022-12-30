@@ -340,12 +340,6 @@ public class IafItemRegistry {
         EnumTroll.initArmors();
     }
 
-    public static void addToBus(IEventBus modBus) {
-        modBus.addGenericListener(Item.class, IafItemRegistry::registerItems);
-        modBus.addGenericListener(Item.class, IafBlockRegistry::registerBlockItems);
-    }
-
-
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void registerItems(RegistryEvent.Register<Item> event) {
         //Banner Patterns
