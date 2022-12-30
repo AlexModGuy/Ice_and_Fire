@@ -79,6 +79,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -2471,5 +2472,12 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         if (!this.level.isClientSide) {
             updateAttributes();
         }
+    }
+
+    @Override
+    public @NotNull Vec3 handleRelativeFrictionAndCalculateMovement(@NotNull Vec3 pDeltaMovement, float pFriction) {
+        if (this.moveControl instanceof IafDragonFlightManager.PlayerFlightMoveHelper)
+            return pDeltaMovement;
+        return super.handleRelativeFrictionAndCalculateMovement(pDeltaMovement, pFriction);
     }
 }
