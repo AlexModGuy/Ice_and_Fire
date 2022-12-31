@@ -51,7 +51,7 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
         if (village == null) {
             village = MyrmexWorldData.get(this.myrmex.level).getNearestHive(this.myrmex.blockPosition(), 100);
         }
-        if (village != null && village.getCenter().distSqr(this.myrmex.getX(), village.getCenter().getY(), this.myrmex.getZ(), true) < 2000) {
+        if (village != null && village.getCenter().distToCenterSqr(this.myrmex.getX(), village.getCenter().getY(), this.myrmex.getZ()) < 2000) {
             list = IAFMath.emptyEntityList;
             return false;
         }

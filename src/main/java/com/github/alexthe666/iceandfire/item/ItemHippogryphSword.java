@@ -24,7 +24,6 @@ public class ItemHippogryphSword extends SwordItem {
 
     public ItemHippogryphSword() {
         super(IafItemRegistry.HIPPOGRYPH_SWORD_TOOL_MATERIAL, 3, -2.4F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "hippogryph_sword");
     }
 
     @Override

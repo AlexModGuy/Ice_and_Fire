@@ -21,7 +21,6 @@ public class ItemSeaSerpentArrow extends ArrowItem {
 
     public ItemSeaSerpentArrow() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "sea_serpent_arrow");
     }
 
     @Override

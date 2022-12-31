@@ -33,7 +33,6 @@ public class ItemDragonHorn extends Item {
 
     public ItemDragonHorn() {
         super((new Item.Properties()).tab(IceAndFire.TAB_ITEMS).stacksTo(1));
-        setRegistryName("iceandfire", "dragon_horn");
     }
 
     public static int getDragonType(ItemStack stack) {

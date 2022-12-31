@@ -6,6 +6,5 @@ import net.minecraft.world.item.Item;
 public class ItemDragonStaff extends Item {
     public ItemDragonStaff() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
-        this.setRegistryName(IceAndFire.MODID, "dragon_stick");
     }
 }

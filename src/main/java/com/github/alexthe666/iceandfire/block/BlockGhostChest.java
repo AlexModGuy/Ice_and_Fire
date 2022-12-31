@@ -29,8 +29,6 @@ public class BlockGhostChest extends ChestBlock {
                 return IafTileEntityRegistry.GHOST_CHEST.get();
             }
         );
-
-        setRegistryName(IceAndFire.MODID, "ghost_chest");
     }
 
     @Override

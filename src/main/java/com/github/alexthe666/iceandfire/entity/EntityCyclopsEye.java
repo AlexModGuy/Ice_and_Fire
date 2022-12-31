@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
+import net.minecraftforge.network.PlayMessages;
 
 public class EntityCyclopsEye extends EntityMutlipartPart {
 
@@ -13,7 +13,7 @@ public class EntityCyclopsEye extends EntityMutlipartPart {
         super(t, world);
     }
 
-    public EntityCyclopsEye(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
+    public EntityCyclopsEye(PlayMessages.SpawnEntity spawnEntity, Level worldIn) {
         this(IafEntityRegistry.CYCLOPS_MULTIPART.get(), worldIn);
     }
 

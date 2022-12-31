@@ -28,7 +28,7 @@ import static com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry
 public class BlockPixieHouse extends BaseEntityBlock {
     public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
 
-    public BlockPixieHouse(String type) {
+    public BlockPixieHouse() {
         super(
             Properties
                 .of(Material.WOOD)
@@ -38,7 +38,10 @@ public class BlockPixieHouse extends BaseEntityBlock {
                 .randomTicks()
 		);
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
-        this.setRegistryName(IceAndFire.MODID, "pixie_house_" + type);
+    }
+
+    static String name(String type) {
+        return "pixie_house_%s".formatted(type);
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

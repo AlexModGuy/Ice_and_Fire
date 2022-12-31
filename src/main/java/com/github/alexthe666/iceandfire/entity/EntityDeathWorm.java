@@ -158,7 +158,10 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         int j = Mth.floor(this.getBoundingBox().minY);
         int k = Mth.floor(this.getZ());
         BlockPos blockpos = new BlockPos(i, j, k);
-        return BlockTags.SAND.contains(this.level.getBlockState(blockpos.below()).getBlock()) && this.getRandom().nextInt(1 + IafConfig.deathWormSpawnCheckChance) == 0 && this.level.getMaxLocalRawBrightness(blockpos) > 8;
+        this.level.getBlockState(blockpos.below()).is(BlockTags.SAND);
+        return this.level.getBlockState(blockpos.below()).is(BlockTags.SAND)
+                && this.getRandom().nextInt(1 + IafConfig.deathWormSpawnCheckChance) == 0
+                && this.level.getMaxLocalRawBrightness(blockpos) > 8;
     }
 
     public void onUpdateParts() {
@@ -454,7 +457,8 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
 
         for (Direction direction1 : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.UP}) {
             blockpos$mutable.setWithOffset(blockpos, direction1);
-            if (!this.level.getBlockState(blockpos$mutable).isCollisionShapeFullBlock(this.level, blockpos$mutable) || BlockTags.SAND.contains(level.getBlockState(blockpos$mutable).getBlock())) {
+            if (!this.level.getBlockState(blockpos$mutable).isCollisionShapeFullBlock(this.level, blockpos$mutable)
+                    || level.getBlockState(blockpos$mutable).is(BlockTags.SAND)) {
                 double d1 = vector3d.get(direction1.getAxis());
                 double d2 = direction1.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 1.0D - d1 : d1;
                 if (d2 < d0) {

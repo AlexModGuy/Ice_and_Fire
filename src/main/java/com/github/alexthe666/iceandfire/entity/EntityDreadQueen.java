@@ -114,8 +114,8 @@ public class EntityDreadQueen extends EntityDreadMob implements IAnimatedEntity,
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         super.populateDefaultEquipmentSlots(difficulty);
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DREAD_QUEEN_SWORD));
-        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(IafItemRegistry.DREAD_QUEEN_STAFF));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DREAD_QUEEN_SWORD.get()));
+        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(IafItemRegistry.DREAD_QUEEN_STAFF.get()));
     }
 
     @Override

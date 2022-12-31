@@ -44,7 +44,6 @@ public class BlockLectern extends BaseEntityBlock {
 		);
 
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
-        this.setRegistryName(IceAndFire.MODID, "lectern");
     }
 
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {

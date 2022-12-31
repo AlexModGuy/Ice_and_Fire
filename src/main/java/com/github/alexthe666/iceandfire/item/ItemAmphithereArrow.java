@@ -21,7 +21,6 @@ public class ItemAmphithereArrow extends ArrowItem {
 
     public ItemAmphithereArrow() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "amphithere_arrow");
     }
 
     @Override

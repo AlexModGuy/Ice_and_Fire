@@ -20,7 +20,7 @@ public class BlockFallingReturningState extends FallingBlock {
     public Item itemBlock;
     private final BlockState returnState;
 
-    public BlockFallingReturningState(Material materialIn, String name, float hardness, float resistance, SoundType sound, BlockState revertState) {
+    public BlockFallingReturningState(Material materialIn, float hardness, float resistance, SoundType sound, BlockState revertState) {
         super(
             BlockBehaviour.Properties
                 .of(materialIn)
@@ -29,13 +29,12 @@ public class BlockFallingReturningState extends FallingBlock {
                 .randomTicks()
         );
 
-        setRegistryName(IceAndFire.MODID, name);
         this.returnState = revertState;
         this.registerDefaultState(this.stateDefinition.any().setValue(REVERTS, Boolean.valueOf(false)));
     }
 
     @SuppressWarnings("deprecation")
-    public BlockFallingReturningState(Material materialIn, String name, float hardness, float resistance, SoundType sound, boolean slippery, BlockState revertState) {
+    public BlockFallingReturningState(Material materialIn, float hardness, float resistance, SoundType sound, boolean slippery, BlockState revertState) {
         super(
             BlockBehaviour.Properties
                 .of(materialIn)
@@ -44,7 +43,6 @@ public class BlockFallingReturningState extends FallingBlock {
                 .randomTicks()
         );
 
-        setRegistryName(IceAndFire.MODID, name);
         this.returnState = revertState;
         this.registerDefaultState(this.stateDefinition.any().setValue(REVERTS, Boolean.valueOf(false)));
     }

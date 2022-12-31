@@ -29,10 +29,8 @@ import java.util.UUID;
 public class ItemSummoningCrystal extends Item {
 
 
-    public ItemSummoningCrystal(String variant) {
+    public ItemSummoningCrystal() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
-        this.setRegistryName(IceAndFire.MODID, "summoning_crystal_" + variant);
-
     }
 
     public static boolean hasDragon(ItemStack stack) {
@@ -60,10 +58,10 @@ public class ItemSummoningCrystal extends Item {
 
         boolean flag = false;
         String desc = "entity.firedragon.name";
-        if (stack.getItem() == IafItemRegistry.SUMMONING_CRYSTAL_ICE) {
+        if (stack.getItem() == IafItemRegistry.SUMMONING_CRYSTAL_ICE.get()) {
             desc = "entity.icedragon.name";
         }
-        if (stack.getItem() == IafItemRegistry.SUMMONING_CRYSTAL_LIGHTNING) {
+        if (stack.getItem() == IafItemRegistry.SUMMONING_CRYSTAL_LIGHTNING.get()) {
             desc = "entity.lightningdragon.name";
         }
         if (stack.getTag() != null) {

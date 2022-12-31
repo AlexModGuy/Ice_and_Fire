@@ -41,12 +41,12 @@ public class BlockMyrmexConnectedResin extends HalfTransparentBlock {
             .setValue(SOUTH, Boolean.valueOf(false))
             .setValue(WEST, Boolean.valueOf(false))
         );
-        if (glass) {
-            this.setRegistryName(IceAndFire.MODID, jungle ? "myrmex_jungle_resin_glass" : "myrmex_desert_resin_glass");
-        } else {
-            this.setRegistryName(IceAndFire.MODID, jungle ? "myrmex_jungle_resin_block" : "myrmex_desert_resin_block");
-        }
+    }
 
+    static String name(boolean glass, boolean jungle) {
+        String biome = jungle ? "jungle" : "desert";
+        String type = glass ? "glass" : "block";
+        return "myrmex_%s_resin_%s".formatted(biome, type);
     }
 
     public BlockState getStateForPlacement(BlockPlaceContext context) {

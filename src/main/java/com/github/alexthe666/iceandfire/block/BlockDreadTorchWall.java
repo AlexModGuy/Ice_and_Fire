@@ -26,11 +26,9 @@ public class BlockDreadTorchWall extends WallTorchBlock implements IDreadBlock {
                 .noOcclusion()
                 .dynamicShape()
                 .noCollission()
-                .dropsLike(IafBlockRegistry.DREAD_TORCH),
+                .dropsLike(IafBlockRegistry.DREAD_TORCH.get()),
             DustParticleOptions.REDSTONE
         );
-
-        setRegistryName(IceAndFire.MODID, "dread_torch_wall");
     }
 
     @Override

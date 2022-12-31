@@ -125,6 +125,8 @@ public class CommonProxy {
 
     public void setup() {
         MinecraftForge.EVENT_BUS.register(new ServerEvents());
-        IafEntityRegistry.setup();
+    }
+
+    public void clientInit() {
     }
 }

@@ -5,7 +5,7 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.data.worldgen.biome.Biomes;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
@@ -14,6 +14,8 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
+import net.minecraft.world.level.biome.BiomeResolver;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,8 +30,11 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -144,14 +149,15 @@ public class ChunkCache implements LevelReader {
     }
 
     @Override
-    public Biome getBiome(BlockPos pos) {
-        if (world.isClientSide())
-            return Biomes.PLAINS;
+    public Holder<Biome> getBiome(BlockPos pos) {
+        var plains = ForgeRegistries.BIOMES.getHolder(Biomes.PLAINS);
+        if (world.isClientSide() && plains.isPresent())
+            return plains.get();
         return this.getBiomeManager().getBiome(pos);
     }
 
     @Override
-    public Biome getUncachedNoiseBiome(final int x, final int y, final int z) {
+    public Holder<Biome> getUncachedNoiseBiome(final int x, final int y, final int z) {
         return null;
     }
 
@@ -215,8 +221,8 @@ public class ChunkCache implements LevelReader {
     }
 
     @Override
-    public Stream<VoxelShape> getEntityCollisions(@Nullable Entity p_230318_1_, AABB p_230318_2_, Predicate<Entity> p_230318_3_) {
-        return null;
+    public List<VoxelShape> getEntityCollisions(@Nullable Entity p_230318_1_, AABB p_230318_2_) {
+        return Collections.emptyList();
     }
 
     @Override

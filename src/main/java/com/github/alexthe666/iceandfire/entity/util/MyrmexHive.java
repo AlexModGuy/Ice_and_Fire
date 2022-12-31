@@ -11,6 +11,7 @@ import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -555,7 +556,8 @@ public class MyrmexHive {
     public BlockPos getClosestEntranceBottomToEntity(Entity entity, Random random) {
         Map.Entry<BlockPos, Direction> closest = null;
         for (Map.Entry<BlockPos, Direction> entry : this.entranceBottoms.entrySet()) {
-            if (closest == null || closest.getKey().distSqr(entity.getX(), entity.getY(), entity.getZ(), false) > entry.getKey().distSqr(entity.getX(), entity.getY(), entity.getZ(), false)) {
+            Vec3i vec = new Vec3i(entity.getX(), entity.getY(), entity.getZ());
+            if (closest == null || closest.getKey().distSqr(vec) > entry.getKey().distSqr(vec)) {
                 closest = entry;
             }
         }
@@ -580,7 +582,8 @@ public class MyrmexHive {
     private Map.Entry<BlockPos, Direction> getClosestEntrance(Entity entity) {
         Map.Entry<BlockPos, Direction> closest = null;
         for (Map.Entry<BlockPos, Direction> entry : this.entrances.entrySet()) {
-            if (closest == null || closest.getKey().distSqr(entity.getX(), entity.getY(), entity.getZ(), false) > entry.getKey().distSqr(entity.getX(), entity.getY(), entity.getZ(), false)) {
+            Vec3i vec = new Vec3i(entity.getX(), entity.getY(), entity.getZ());
+            if (closest == null || closest.getKey().distSqr(vec) > entry.getKey().distSqr(vec)) {
                 closest = entry;
             }
         }

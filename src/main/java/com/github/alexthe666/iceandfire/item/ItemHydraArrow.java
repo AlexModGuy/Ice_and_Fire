@@ -21,7 +21,6 @@ public class ItemHydraArrow extends ArrowItem {
 
     public ItemHydraArrow() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "hydra_arrow");
     }
 
     @Override

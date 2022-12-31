@@ -31,8 +31,6 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
                 .strength(-1.0F, 1000000F)
     			.sound(SoundType.WOOD)
 		);
-
-        this.setRegistryName(IceAndFire.MODID, "dreadwood_planks_lock");
         this.registerDefaultState(this.getStateDefinition().any().setValue(PLAYER_PLACED, Boolean.valueOf(false)));
     }
 
@@ -49,7 +47,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
 
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult resultIn) {
         ItemStack stack = player.getItemInHand(handIn);
-        if (stack.getItem() == IafItemRegistry.DREAD_KEY) {
+        if (stack.getItem() == IafItemRegistry.DREAD_KEY.get()) {
             if (!player.isCreative()) {
                 stack.shrink(1);
             }
@@ -62,7 +60,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
 
     private void deleteNearbyWood(Level worldIn, BlockPos pos, BlockPos startPos) {
         if (pos.distSqr(startPos) < 32) {
-            if (worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.DREADWOOD_PLANKS || worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.DREADWOOD_PLANKS_LOCK) {
+            if (worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.DREADWOOD_PLANKS.get() || worldIn.getBlockState(pos).getBlock() == IafBlockRegistry.DREADWOOD_PLANKS_LOCK.get()) {
                 worldIn.destroyBlock(pos, false);
                 for (Direction facing : Direction.values()) {
                     deleteNearbyWood(worldIn, pos.relative(facing), startPos);

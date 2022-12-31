@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
@@ -26,11 +27,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class DragonUtils {
 
@@ -269,7 +272,7 @@ public class DragonUtils {
     }
 
     public static boolean canTameDragonAttack(TamableAnimal dragon, Entity entity) {
-        if (EntityTypeTags.getAllTags().getTag(IafTagRegistry.VILLAGERS).contains(entity.getType())) {
+        if (entity.getType().is(Objects.requireNonNull(ForgeRegistries.ENTITIES.tags()).createTagKey(IafTagRegistry.VILLAGERS))) {
             return false;
         }
         if (entity instanceof AbstractVillager || entity instanceof AbstractGolem || entity instanceof Player) {
@@ -282,7 +285,7 @@ public class DragonUtils {
     }
 
     public static boolean isVillager(Entity entity) {
-        return EntityTypeTags.getAllTags().getTag(IafTagRegistry.VILLAGERS).contains(entity.getType());
+        return entity.getType().is(ForgeRegistries.ENTITIES.tags().createTagKey(IafTagRegistry.VILLAGERS));
     }
 
     public static boolean isAnimaniaMob(Entity entity) {
@@ -290,8 +293,7 @@ public class DragonUtils {
     }
 
     public static boolean isDragonTargetable(Entity entity, ResourceLocation tag) {
-        return EntityTypeTags.getAllTags().getTag(tag).contains(entity.getType());
-
+        return entity.getType().is(ForgeRegistries.ENTITIES.tags().createTagKey(tag));
     }
 
     public static String getDimensionName(Level world) {
@@ -415,11 +417,11 @@ public class DragonUtils {
 
     public static boolean isDreadBlock(BlockState state) {
         Block block = state.getBlock();
-        return block == IafBlockRegistry.DREAD_STONE || block == IafBlockRegistry.DREAD_STONE_BRICKS || block == IafBlockRegistry.DREAD_STONE_BRICKS_CHISELED ||
-                block == IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED || block == IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY || block == IafBlockRegistry.DREAD_STONE_TILE ||
-                block == IafBlockRegistry.DREAD_STONE_FACE || block == IafBlockRegistry.DREAD_TORCH || block == IafBlockRegistry.DREAD_STONE_BRICKS_STAIRS ||
-                block == IafBlockRegistry.DREAD_STONE_BRICKS_SLAB || block == IafBlockRegistry.DREADWOOD_LOG ||
-                block == IafBlockRegistry.DREADWOOD_PLANKS || block == IafBlockRegistry.DREADWOOD_PLANKS_LOCK || block == IafBlockRegistry.DREAD_PORTAL ||
-                block == IafBlockRegistry.DREAD_SPAWNER;
+        return block == IafBlockRegistry.DREAD_STONE.get() || block == IafBlockRegistry.DREAD_STONE_BRICKS.get() || block == IafBlockRegistry.DREAD_STONE_BRICKS_CHISELED.get() ||
+                block == IafBlockRegistry.DREAD_STONE_BRICKS_CRACKED.get() || block == IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY.get() || block == IafBlockRegistry.DREAD_STONE_TILE.get() ||
+                block == IafBlockRegistry.DREAD_STONE_FACE.get() || block == IafBlockRegistry.DREAD_TORCH.get() || block == IafBlockRegistry.DREAD_STONE_BRICKS_STAIRS.get() ||
+                block == IafBlockRegistry.DREAD_STONE_BRICKS_SLAB.get() || block == IafBlockRegistry.DREADWOOD_LOG.get() ||
+                block == IafBlockRegistry.DREADWOOD_PLANKS.get() || block == IafBlockRegistry.DREADWOOD_PLANKS_LOCK.get() || block == IafBlockRegistry.DREAD_PORTAL.get() ||
+                block == IafBlockRegistry.DREAD_SPAWNER.get();
     }
 }

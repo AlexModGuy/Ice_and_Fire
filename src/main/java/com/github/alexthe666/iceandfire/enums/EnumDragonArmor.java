@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.item.ItemScaleArmor;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.registries.RegistryObject;
 
 public enum EnumDragonArmor {
 
@@ -27,10 +28,10 @@ public enum EnumDragonArmor {
     public CustomArmorMaterial material;
     public int armorId;
     public EnumDragonEgg eggType;
-    public Item helmet;
-    public Item chestplate;
-    public Item leggings;
-    public Item boots;
+    public RegistryObject<Item> helmet;
+    public RegistryObject<Item> chestplate;
+    public RegistryObject<Item> leggings;
+    public RegistryObject<Item> boots;
     public CustomArmorMaterial armorMaterial;
 
     EnumDragonArmor(int armorId, EnumDragonEgg eggType) {
@@ -43,47 +44,46 @@ public enum EnumDragonArmor {
             EnumDragonArmor.values()[i].armorMaterial = new IafArmorMaterial("iceandfire:armor_dragon_scales" + (i + 1), 36, new int[]{5, 7, 9, 5}, 15, SoundEvents.ARMOR_EQUIP_CHAIN, 2);
             String sub = EnumDragonArmor.values()[i].name();
 
-            EnumDragonArmor.values()[i].helmet = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, EquipmentSlot.HEAD);
-            EnumDragonArmor.values()[i].chestplate = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, EquipmentSlot.CHEST);
-            EnumDragonArmor.values()[i].leggings = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, EquipmentSlot.LEGS);
-            EnumDragonArmor.values()[i].boots = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, EquipmentSlot.FEET);
-
-            EnumDragonArmor.values()[i].helmet.setRegistryName(IceAndFire.MODID, sub + "_helmet");
-            EnumDragonArmor.values()[i].chestplate.setRegistryName(IceAndFire.MODID, sub + "_chestplate");
-            EnumDragonArmor.values()[i].leggings.setRegistryName(IceAndFire.MODID, sub + "_leggings");
-            EnumDragonArmor.values()[i].boots.setRegistryName(IceAndFire.MODID, sub + "_boots");
-
+            int finalI = i;
+            EnumDragonArmor.values()[finalI].helmet = IafItemRegistry.deferredRegister.register(sub + "_helmet", () ->
+                    new ItemScaleArmor(EnumDragonArmor.values()[finalI].eggType, EnumDragonArmor.values()[finalI], EnumDragonArmor.values()[finalI].armorMaterial, EquipmentSlot.HEAD));
+            EnumDragonArmor.values()[finalI].chestplate = IafItemRegistry.deferredRegister.register(sub + "_chestplate", () ->
+                    new ItemScaleArmor(EnumDragonArmor.values()[finalI].eggType, EnumDragonArmor.values()[finalI], EnumDragonArmor.values()[finalI].armorMaterial, EquipmentSlot.CHEST));
+            EnumDragonArmor.values()[finalI].leggings = IafItemRegistry.deferredRegister.register(sub + "_leggings", () ->
+                    new ItemScaleArmor(EnumDragonArmor.values()[finalI].eggType, EnumDragonArmor.values()[finalI], EnumDragonArmor.values()[finalI].armorMaterial, EquipmentSlot.LEGS));
+            EnumDragonArmor.values()[finalI].boots = IafItemRegistry.deferredRegister.register(sub + "_boots", () ->
+                    new ItemScaleArmor(EnumDragonArmor.values()[finalI].eggType, EnumDragonArmor.values()[finalI], EnumDragonArmor.values()[finalI].armorMaterial, EquipmentSlot.FEET));
         }
     }
 
     public static Item getScaleItem(EnumDragonArmor armor) {
         switch (armor) {
             case armor_red:
-                return IafItemRegistry.DRAGONSCALES_RED;
+                return IafItemRegistry.DRAGONSCALES_RED.get();
             case armor_bronze:
-                return IafItemRegistry.DRAGONSCALES_BRONZE;
+                return IafItemRegistry.DRAGONSCALES_BRONZE.get();
             case armor_green:
-                return IafItemRegistry.DRAGONSCALES_GREEN;
+                return IafItemRegistry.DRAGONSCALES_GREEN.get();
             case armor_gray:
-                return IafItemRegistry.DRAGONSCALES_GRAY;
+                return IafItemRegistry.DRAGONSCALES_GRAY.get();
             case armor_blue:
-                return IafItemRegistry.DRAGONSCALES_BLUE;
+                return IafItemRegistry.DRAGONSCALES_BLUE.get();
             case armor_white:
-                return IafItemRegistry.DRAGONSCALES_WHITE;
+                return IafItemRegistry.DRAGONSCALES_WHITE.get();
             case armor_sapphire:
-                return IafItemRegistry.DRAGONSCALES_SAPPHIRE;
+                return IafItemRegistry.DRAGONSCALES_SAPPHIRE.get();
             case armor_silver:
-                return IafItemRegistry.DRAGONSCALES_SILVER;
+                return IafItemRegistry.DRAGONSCALES_SILVER.get();
             case armor_electric:
-                return IafItemRegistry.DRAGONSCALES_ELECTRIC;
+                return IafItemRegistry.DRAGONSCALES_ELECTRIC.get();
             case armor_amythest:
-                return IafItemRegistry.DRAGONSCALES_AMYTHEST;
+                return IafItemRegistry.DRAGONSCALES_AMYTHEST.get();
             case armor_copper:
-                return IafItemRegistry.DRAGONSCALES_COPPER;
+                return IafItemRegistry.DRAGONSCALES_COPPER.get();
             case armor_black:
-                return IafItemRegistry.DRAGONSCALES_BLACK;
+                return IafItemRegistry.DRAGONSCALES_BLACK.get();
             default:
-                return IafItemRegistry.DRAGONSCALES_RED;
+                return IafItemRegistry.DRAGONSCALES_RED.get();
         }
     }
 }

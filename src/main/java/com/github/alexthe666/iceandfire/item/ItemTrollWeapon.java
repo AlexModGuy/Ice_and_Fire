@@ -16,12 +16,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.common.util.NonNullLazy;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Consumer;
 
 public class ItemTrollWeapon extends SwordItem {
@@ -30,14 +28,13 @@ public class ItemTrollWeapon extends SwordItem {
 
     public ItemTrollWeapon(EnumTroll.Weapon weapon) {
         super(IafItemRegistry.TROLL_WEAPON_TOOL_MATERIAL, 15, -3.5F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "troll_weapon_" + weapon.name().toLowerCase(Locale.ROOT));
         this.weapon = weapon;
     }
 
     @Override
-    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+    public void initializeClient(Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
 
-        consumer.accept(new IItemRenderProperties() {
+        consumer.accept(new net.minecraftforge.client.IItemRenderProperties() {
             static final NonNullLazy<BlockEntityWithoutLevelRenderer> renderer = NonNullLazy.of(() -> new RenderTrollWeapon(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
             @Override

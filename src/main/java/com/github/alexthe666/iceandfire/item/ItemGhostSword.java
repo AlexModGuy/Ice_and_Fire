@@ -30,7 +30,6 @@ public class ItemGhostSword extends SwordItem {
 
     public ItemGhostSword() {
         super(IafItemRegistry.GHOST_SWORD_TOOL_MATERIAL, 5, -1.0F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "ghost_sword");
     }
 
     public static void spawnGhostSwordEntity(ItemStack stack, Player playerEntity) {

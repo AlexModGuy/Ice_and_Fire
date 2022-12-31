@@ -14,13 +14,13 @@ import net.minecraft.world.level.material.Material;
 public class BlockDreadBase extends BlockGeneric implements IDragonProof, IDreadBlock {
     public static final BooleanProperty PLAYER_PLACED = BooleanProperty.create("player_placed");
 
-    public BlockDreadBase(Material materialIn, String gameName, float hardness, float resistance, SoundType sound) {
-        super(materialIn, gameName, hardness, resistance, sound);
+    public BlockDreadBase(Material materialIn, float hardness, float resistance, SoundType sound) {
+        super(materialIn, hardness, resistance, sound);
         this.registerDefaultState(this.stateDefinition.any().setValue(PLAYER_PLACED, Boolean.valueOf(false)));
     }
 
-    public BlockDreadBase(Material materialIn, String gameName, String name, float hardness, float resistance, SoundType sound, boolean slippery) {
-        super(materialIn, gameName, hardness, resistance, sound, slippery);
+    public BlockDreadBase(Material materialIn, float hardness, float resistance, SoundType sound, boolean slippery) {
+        super(materialIn, hardness, resistance, sound, slippery);
         this.registerDefaultState(this.stateDefinition.any().setValue(PLAYER_PLACED, Boolean.valueOf(false)));
     }
 

@@ -35,30 +35,27 @@ public class BlockCharedPath extends DirtPathBlock {
 		);
 
         this.dragonType = dragonType;
-        setRegistryName(IceAndFire.MODID, getNameFromType(dragonType));
+        //setRegistryName(IceAndFire.MODID, getNameFromType(dragonType));
         this.registerDefaultState(stateDefinition.any().setValue(REVERTS, Boolean.valueOf(false)));
     }
 
-    public String getNameFromType(int dragonType){
-        switch (dragonType){
-            case 0:
-                return "chared_dirt_path";
-            case 1:
-                return "frozen_dirt_path";
-            case 2:
-                return "crackled_dirt_path";
-        }
-        return "";
+    public static String getNameFromType(int dragonType){
+        return switch (dragonType) {
+            case 0 -> "chared_dirt_path";
+            case 1 -> "frozen_dirt_path";
+            case 2 -> "crackled_dirt_path";
+            default -> "";
+        };
     }
 
     public BlockState getSmushedState(int dragonType){
         switch (dragonType){
             case 0:
-                return IafBlockRegistry.CHARRED_DIRT.defaultBlockState();
+                return IafBlockRegistry.CHARRED_DIRT.get().defaultBlockState();
             case 1:
-                return IafBlockRegistry.FROZEN_DIRT.defaultBlockState();
+                return IafBlockRegistry.FROZEN_DIRT.get().defaultBlockState();
             case 2:
-                return IafBlockRegistry.CRACKLED_DIRT.defaultBlockState();
+                return IafBlockRegistry.CRACKLED_DIRT.get().defaultBlockState();
         }
         return null;
     }

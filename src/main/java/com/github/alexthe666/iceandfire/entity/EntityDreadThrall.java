@@ -118,7 +118,7 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
         if (random.nextFloat() < 0.75F) {
             double chance = random.nextFloat();
             if (chance < 0.0025F) {
-                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DRAGONSTEEL_ICE_SWORD));
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DRAGONSTEEL_ICE_SWORD.get()));
             }
             if (chance < 0.01F) {
                 this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
@@ -127,7 +127,7 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
                 this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
             }
             if (chance < 0.75F) {
-                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DREAD_SWORD));
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DREAD_SWORD.get()));
             }
         }
         if (random.nextFloat() < 0.75F) {

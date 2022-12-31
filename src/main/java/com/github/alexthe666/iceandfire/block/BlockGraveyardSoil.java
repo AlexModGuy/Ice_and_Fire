@@ -26,8 +26,6 @@ public class BlockGraveyardSoil extends Block {
                 .strength(5, 1F)
                 .randomTicks()
 		);
-
-        setRegistryName(IceAndFire.MODID, "graveyard_soil");
     }
 
 

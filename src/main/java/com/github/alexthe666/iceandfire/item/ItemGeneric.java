@@ -15,31 +15,27 @@ import java.util.List;
 public class ItemGeneric extends Item {
     int description = 0;
 
-    public ItemGeneric(String name) {
+    public ItemGeneric() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, name);
     }
 
-    public ItemGeneric(String name, int textLength) {
+    public ItemGeneric(int textLength) {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, name);
         this.description = textLength;
     }
 
-    public ItemGeneric(String name, int textLength, boolean hide) {
+    public ItemGeneric(int textLength, boolean hide) {
         super(new Item.Properties());
-        this.setRegistryName(IceAndFire.MODID, name);
         this.description = textLength;
     }
 
-    public ItemGeneric(String name, int textLength, int stacksize) {
+    public ItemGeneric(int textLength, int stacksize) {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
-        this.setRegistryName(IceAndFire.MODID, name);
         this.description = textLength;
     }
 
     public boolean isFoil(ItemStack stack) {
-        if (this == IafItemRegistry.CREATIVE_DRAGON_MEAL) {
+        if (this == IafItemRegistry.CREATIVE_DRAGON_MEAL.get()) {
             return true;
         } else {
             return super.isFoil(stack);

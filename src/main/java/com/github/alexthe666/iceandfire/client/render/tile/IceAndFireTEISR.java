@@ -20,8 +20,8 @@ public class IceAndFireTEISR extends BlockEntityWithoutLevelRenderer {
     private final RenderPixieHouse PIXIE_HOUSE_RENDERER;
     private final BlockEntityRenderDispatcher blockEntityRenderDispatcher;
     private final EntityModelSet entityModelSet;
-    private final TileEntityGhostChest chest = new TileEntityGhostChest(BlockPos.ZERO, IafBlockRegistry.GHOST_CHEST.defaultBlockState());
-    private final TileEntityDreadPortal portal = new TileEntityDreadPortal(BlockPos.ZERO, IafBlockRegistry.DREAD_PORTAL.defaultBlockState());
+    private final TileEntityGhostChest chest = new TileEntityGhostChest(BlockPos.ZERO, IafBlockRegistry.GHOST_CHEST.get().defaultBlockState());
+    private final TileEntityDreadPortal portal = new TileEntityDreadPortal(BlockPos.ZERO, IafBlockRegistry.DREAD_PORTAL.get().defaultBlockState());
 
     public IceAndFireTEISR() {
         this(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
@@ -37,10 +37,10 @@ public class IceAndFireTEISR extends BlockEntityWithoutLevelRenderer {
 
     @Override
     public void renderByItem(ItemStack stack, ItemTransforms.TransformType type, PoseStack stackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        if (stack.getItem() == IafBlockRegistry.GHOST_CHEST.asItem()) {
+        if (stack.getItem() == IafBlockRegistry.GHOST_CHEST.get().asItem()) {
             blockEntityRenderDispatcher.renderItem(chest, stackIn, bufferIn, combinedLightIn, combinedOverlayIn);
         }
-        if (stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() == IafBlockRegistry.DREAD_PORTAL) {
+        if (stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() == IafBlockRegistry.DREAD_PORTAL.get()) {
             blockEntityRenderDispatcher.renderItem(portal, stackIn, bufferIn, combinedLightIn, combinedOverlayIn);
         }
         if (stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() instanceof BlockPixieHouse) {

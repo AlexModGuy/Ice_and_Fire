@@ -24,7 +24,6 @@ public class ItemCyclopsEye extends Item {
 
     public ItemCyclopsEye() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(500));
-        this.setRegistryName(IceAndFire.MODID, "cyclops_eye");
     }
 
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {

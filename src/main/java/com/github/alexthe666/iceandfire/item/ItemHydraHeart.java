@@ -20,7 +20,6 @@ public class ItemHydraHeart extends Item {
 
     public ItemHydraHeart() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
-        this.setRegistryName(IceAndFire.MODID, "hydra_heart");
     }
 
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {

@@ -20,12 +20,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.IItemRenderProperties;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonItem, IItemRenderProperties {
+public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonItem {
 
     public EnumDragonArmor armor_type;
     public EnumDragonEgg eggType;
@@ -52,20 +51,20 @@ public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonIt
 
     @Override
     public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
-        consumer.accept(new IItemRenderProperties() {
+        consumer.accept(new net.minecraftforge.client.IItemRenderProperties() {
             @Override
             @Nullable
-            public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
+            public HumanoidModel<?> getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
                 boolean inner = armorSlot == EquipmentSlot.LEGS || armorSlot == EquipmentSlot.HEAD;
                 if (itemStack.getItem() instanceof ItemScaleArmor) {
                     DragonType dragonType = ((ItemScaleArmor) itemStack.getItem()).armor_type.eggType.dragonType;
 
                     if (DragonType.FIRE == dragonType)
-                        return (A) new ModelFireDragonScaleArmor(inner);
+                        return new ModelFireDragonScaleArmor(inner);
                     if (DragonType.ICE == dragonType)
-                        return (A) new ModelIceDragonScaleArmor(inner);
+                        return new ModelIceDragonScaleArmor(inner);
                     if (DragonType.LIGHTNING == dragonType)
-                        return (A) new ModelLightningDragonScaleArmor(inner);
+                        return new ModelLightningDragonScaleArmor(inner);
                 }
                 return _default;
 

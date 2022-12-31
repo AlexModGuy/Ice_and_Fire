@@ -16,13 +16,12 @@ import java.util.List;
 
 public class ItemModArmor extends ArmorItem {
 
-    public ItemModArmor(ArmorMaterial material, EquipmentSlot slot, String name) {
+    public ItemModArmor(ArmorMaterial material, EquipmentSlot slot) {
         super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, name);
     }
 
     public String getDescriptionId(ItemStack stack) {
-        if (this == IafItemRegistry.EARPLUGS) {
+        if (this == IafItemRegistry.EARPLUGS.get()) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             if (calendar.get(2) + 1 == 4 && calendar.get(5) == 1) {
@@ -51,7 +50,7 @@ public class ItemModArmor extends ArmorItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        if (this == IafItemRegistry.EARPLUGS) {
+        if (this == IafItemRegistry.EARPLUGS.get()) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             if (calendar.get(2) + 1 == 4 && calendar.get(5) == 1) {

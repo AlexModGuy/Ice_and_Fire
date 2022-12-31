@@ -40,9 +40,12 @@ public class BlockDragonforgeBricks extends BaseEntityBlock implements IDragonPr
     			.sound(SoundType.METAL)
 		);
 
-        this.setRegistryName(IceAndFire.MODID, "dragonforge_" + DragonType.getNameFromInt(isFire) + "_brick");
         this.isFire = isFire;
         this.registerDefaultState(this.getStateDefinition().any().setValue(GRILL, Boolean.valueOf(false)));
+    }
+
+    static String name(int dragonType) {
+        return "dragonforge_%s_brick".formatted(DragonType.getNameFromInt(dragonType));
     }
 
     @Override

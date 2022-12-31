@@ -104,7 +104,7 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
         if (!stack.isEmpty() && stack.getCount() > this.getMaxStackSize()) {
             stack.setCount(this.getMaxStackSize());
         }
-        this.save(this.getUpdateTag());
+        this.saveAdditional(this.getUpdateTag());
         if (!level.isClientSide) {
             IceAndFire.sendMSGToAll(new MessageUpdatePodium(this.getBlockPos().asLong(), stacks.get(0)));
         }
@@ -118,10 +118,8 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    public void saveAdditional(CompoundTag compound) {
         ContainerHelper.saveAllItems(compound, this.stacks);
-        return compound;
     }
 
     @Override
@@ -174,7 +172,7 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(worldPosition, -1, getUpdateTag());
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
@@ -184,7 +182,7 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
 
     @Override
     public CompoundTag getUpdateTag() {
-        return this.save(new CompoundTag());
+        return this.saveWithFullMetadata();
     }
 
     @Override

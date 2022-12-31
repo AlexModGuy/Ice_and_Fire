@@ -34,8 +34,6 @@ public class BlockDreadPortal extends BaseEntityBlock implements IDreadBlock {
                 })
                 .randomTicks()
 		);
-
-        this.setRegistryName(IceAndFire.MODID, "dread_portal");
     }
 
     @Override

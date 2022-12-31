@@ -7,7 +7,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
 
-//TODO: This only serves the purpose to replace the particles of the default spawner
+// This class only servers the point of changing the particles spawned
 public abstract class DreadSpawnerBaseLogic extends BaseSpawner {
 
     private short spawnDelay = 20;
@@ -33,9 +33,17 @@ public abstract class DreadSpawnerBaseLogic extends BaseSpawner {
 
     }
 
-    //TODO:
     private boolean isNearPlayer(Level p_151344_, BlockPos p_151345_) {
         return p_151344_.hasNearbyAlivePlayer((double) p_151345_.getX() + 0.5D, (double) p_151345_.getY() + 0.5D, (double) p_151345_.getZ() + 0.5D, 20);
     }
 
+    @Override
+    public double getSpin() {
+        return spin;
+    }
+
+    @Override
+    public double getoSpin() {
+        return oSpin;
+    }
 }

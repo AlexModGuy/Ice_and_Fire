@@ -31,9 +31,9 @@ public class CustomizeToSeaSerpent extends LootItemConditionalFunction {
             final int ancientModifier = seaSerpent.isAncient() ? 2 : 1;
             if (stack.getItem() instanceof ItemSeaSerpentScales) {
                 stack.setCount(1 + random.nextInt(1 + (int) Math.ceil(seaSerpent.getSeaSerpentScale() * 3 * ancientModifier)));
-                return new ItemStack(seaSerpent.getEnum().scale, stack.getCount());
+                return new ItemStack(seaSerpent.getEnum().scale.get(), stack.getCount());
             }
-            if (stack.getItem() == IafItemRegistry.SERPENT_FANG) {
+            if (stack.getItem() == IafItemRegistry.SERPENT_FANG.get()) {
                 stack.setCount(1 + random.nextInt(1 + (int) Math.ceil(seaSerpent.getSeaSerpentScale() * 2 * ancientModifier)));
                 return stack;
             }

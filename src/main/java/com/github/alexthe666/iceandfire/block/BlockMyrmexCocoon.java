@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 public class BlockMyrmexCocoon extends BaseEntityBlock {
 
 
-    public BlockMyrmexCocoon(boolean jungle) {
+    public BlockMyrmexCocoon() {
         super(
             Properties
                 .of(Material.DIRT)
@@ -28,8 +28,6 @@ public class BlockMyrmexCocoon extends BaseEntityBlock {
                 .dynamicShape()
                 .sound(SoundType.SLIME_BLOCK)
         );
-
-        this.setRegistryName(IceAndFire.MODID, jungle ? "jungle_myrmex_cocoon" : "desert_myrmex_cocoon");
     }
 
     public RenderShape getRenderShape(BlockState state) {

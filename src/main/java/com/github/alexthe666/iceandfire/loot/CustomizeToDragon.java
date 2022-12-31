@@ -29,7 +29,7 @@ public class CustomizeToDragon extends LootItemConditionalFunction {
                 return stack;
             }
 
-            if (stack.getItem() == IafItemRegistry.DRAGON_BONE) {
+            if (stack.getItem() == IafItemRegistry.DRAGON_BONE.get()) {
                 stack.setCount(1 + random.nextInt(1 + (dragon.getAgeInDays() / 25)));
                 return stack;
             }
@@ -50,15 +50,15 @@ public class CustomizeToDragon extends LootItemConditionalFunction {
                 return new ItemStack(stack.getItem(), stack.getCount());
             }
             else if (stack.getItem() instanceof ItemDragonSkull) {
-                ItemStack stack1 = new ItemStack(dragon.dragonType == DragonType.FIRE ? IafItemRegistry.DRAGON_SKULL_FIRE : IafItemRegistry.DRAGON_SKULL_ICE, stack.getCount());
+                ItemStack stack1 = new ItemStack(dragon.dragonType == DragonType.FIRE ? IafItemRegistry.DRAGON_SKULL_FIRE.get() : IafItemRegistry.DRAGON_SKULL_ICE.get(), stack.getCount());
                 stack1.setTag(stack.getTag());
                 return stack1;
             }
-            if (stack.getItem() == IafItemRegistry.FIRE_DRAGON_BLOOD || stack.getItem() == IafItemRegistry.ICE_DRAGON_BLOOD) {
-                return new ItemStack(dragon.dragonType == DragonType.FIRE ? IafItemRegistry.FIRE_DRAGON_BLOOD : IafItemRegistry.ICE_DRAGON_BLOOD, stack.getCount());
+            if (stack.getItem() == IafItemRegistry.FIRE_DRAGON_BLOOD.get() || stack.getItem() == IafItemRegistry.ICE_DRAGON_BLOOD.get()) {
+                return new ItemStack(dragon.dragonType == DragonType.FIRE ? IafItemRegistry.FIRE_DRAGON_BLOOD.get() : IafItemRegistry.ICE_DRAGON_BLOOD.get(), stack.getCount());
             }
-            else if (stack.getItem() == IafItemRegistry.FIRE_DRAGON_HEART || stack.getItem() == IafItemRegistry.ICE_DRAGON_HEART) {
-                return new ItemStack(dragon.dragonType == DragonType.FIRE ? IafItemRegistry.FIRE_DRAGON_HEART : IafItemRegistry.ICE_DRAGON_HEART, stack.getCount());
+            else if (stack.getItem() == IafItemRegistry.FIRE_DRAGON_HEART.get() || stack.getItem() == IafItemRegistry.ICE_DRAGON_HEART.get()) {
+                return new ItemStack(dragon.dragonType == DragonType.FIRE ? IafItemRegistry.FIRE_DRAGON_HEART.get() : IafItemRegistry.ICE_DRAGON_HEART.get(), stack.getCount());
             }
         }
         return stack;

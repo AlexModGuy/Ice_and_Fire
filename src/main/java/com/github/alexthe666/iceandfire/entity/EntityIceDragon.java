@@ -102,13 +102,13 @@ public class EntityIceDragon extends EntityDragonBase {
     public Item getVariantScale(int variant) {
         switch (variant) {
             default:
-                return IafItemRegistry.DRAGONSCALES_BLUE;
+                return IafItemRegistry.DRAGONSCALES_BLUE.get();
             case 1:
-                return IafItemRegistry.DRAGONSCALES_WHITE;
+                return IafItemRegistry.DRAGONSCALES_WHITE.get();
             case 2:
-                return IafItemRegistry.DRAGONSCALES_SAPPHIRE;
+                return IafItemRegistry.DRAGONSCALES_SAPPHIRE.get();
             case 3:
-                return IafItemRegistry.DRAGONSCALES_SILVER;
+                return IafItemRegistry.DRAGONSCALES_SILVER.get();
         }
     }
 
@@ -116,13 +116,13 @@ public class EntityIceDragon extends EntityDragonBase {
     public Item getVariantEgg(int variant) {
         switch (variant) {
             default:
-                return IafItemRegistry.DRAGONEGG_BLUE;
+                return IafItemRegistry.DRAGONEGG_BLUE.get();
             case 1:
-                return IafItemRegistry.DRAGONEGG_WHITE;
+                return IafItemRegistry.DRAGONEGG_WHITE.get();
             case 2:
-                return IafItemRegistry.DRAGONEGG_SAPPHIRE;
+                return IafItemRegistry.DRAGONEGG_SAPPHIRE.get();
             case 3:
-                return IafItemRegistry.DRAGONEGG_SILVER;
+                return IafItemRegistry.DRAGONEGG_SILVER.get();
         }
     }
 
@@ -526,7 +526,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
     @Override
     public boolean isFood(@Nullable ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.FROST_STEW;
+        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.FROST_STEW.get();
     }
 
     @Override
@@ -592,7 +592,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
     @Override
     protected ItemStack getSkull() {
-        return new ItemStack(IafItemRegistry.DRAGON_SKULL_ICE);
+        return new ItemStack(IafItemRegistry.DRAGON_SKULL_ICE.get());
     }
 
     @Override
@@ -602,16 +602,16 @@ public class EntityIceDragon extends EntityDragonBase {
 
     @Override
     public Item getSummoningCrystal() {
-        return IafItemRegistry.SUMMONING_CRYSTAL_ICE;
+        return IafItemRegistry.SUMMONING_CRYSTAL_ICE.get();
     }
 
     @Override
     protected Item getBloodItem() {
-        return IafItemRegistry.ICE_DRAGON_BLOOD;
+        return IafItemRegistry.ICE_DRAGON_BLOOD.get();
     }
 
     @Override
     protected ItemLike getHeartItem() {
-        return IafItemRegistry.ICE_DRAGON_HEART;
+        return IafItemRegistry.ICE_DRAGON_HEART.get();
     }
 }

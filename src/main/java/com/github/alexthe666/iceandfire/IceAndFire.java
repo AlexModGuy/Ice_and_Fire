@@ -6,16 +6,20 @@ import com.github.alexthe666.iceandfire.config.ConfigHolder;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
+import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.github.alexthe666.iceandfire.inventory.IafContainerRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.loot.IafLootRegistry;
 import com.github.alexthe666.iceandfire.message.*;
+import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.common.MinecraftForge;
@@ -30,14 +34,15 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.IModBusEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmllegacy.network.NetworkDirection;
-import net.minecraftforge.fmllegacy.network.NetworkRegistry;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
-import net.minecraftforge.fmllegacy.server.ServerLifecycleHooks;
-import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -53,13 +58,13 @@ public class IceAndFire {
     public static CreativeModeTab TAB_ITEMS = new CreativeModeTab(MODID) {
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE);
+            return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE.get());
         }
     };
     public static CreativeModeTab TAB_BLOCKS = new CreativeModeTab("iceandfire.blocks") {
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(IafBlockRegistry.DRAGON_SCALE_RED);
+            return new ItemStack(IafBlockRegistry.DRAGON_SCALE_RED.get());
         }
     };
     public static CommonProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
@@ -83,32 +88,42 @@ public class IceAndFire {
             VERSION = mod.getModInfo().getVersion().toString();
         } catch (Exception ignored) {
         }
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+
 
         final ModLoadingContext modLoadingContext = ModLoadingContext.get();
+
         modLoadingContext.registerConfig(ModConfig.Type.CLIENT, ConfigHolder.CLIENT_SPEC);
         modLoadingContext.registerConfig(ModConfig.Type.COMMON, ConfigHolder.SERVER_SPEC);
-        MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadFromJSON);
-        MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
         PROXY.init();
 
-        final IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-        IafContainerRegistry.CONTAINERS.register(modBus);
+        MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
+        MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadFromJSON);
+
+        modBus.addGenericListener(StructureFeature.class, EventPriority.LOW,
+                (final RegistryEvent.Register<StructureFeature<?>> event) -> IafWorldRegistry
+                        .registerStructureConfiguredFeatures());
+        modBus.addGenericListener(Feature.class, EventPriority.LOW,
+                (final RegistryEvent.Register<Feature<?>> event) -> IafWorldRegistry.registerConfiguredFeatures());
+
+        IafItemRegistry.deferredRegister.register(modBus);
+        IafBlockRegistry.deferredRegister.register(modBus);
         IafEntityRegistry.ENTITIES.register(modBus);
         IafTileEntityRegistry.TYPES.register(modBus);
-        IafWorldRegistry.STRUCTURES.register(modBus);
         IafWorldRegistry.FEATURES.register(modBus);
+        IafWorldRegistry.STRUCTURES.register(modBus);
+        IafContainerRegistry.CONTAINERS.register(modBus);
+
+        MinecraftForge.EVENT_BUS.register(IafBlockRegistry.class);
+        MinecraftForge.EVENT_BUS.register(IafRecipeRegistry.class);
 
         modBus.addListener(this::setup);
         modBus.addListener(this::setupComplete);
-        modBus.addGenericListener(StructureFeature.class, EventPriority.LOW,
-            (final RegistryEvent.Register<StructureFeature<?>> event) -> IafWorldRegistry
-                .registerStructureConfiguredFeatures());
-        modBus.addGenericListener(Feature.class, EventPriority.LOW,
-            (final RegistryEvent.Register<Feature<?>> event) -> IafWorldRegistry.registerConfiguredFeatures());
     }
 
+
     @SubscribeEvent
-    public void onServerStarted(FMLServerStartedEvent event) {
+    public void onServerStarted(ServerStartedEvent event) {
         LOGGER.info(IafWorldRegistry.LOADED_FEATURES);
         LOGGER.info(IafEntityRegistry.LOADED_ENTITIES);
     }
@@ -163,6 +178,7 @@ public class IceAndFire {
             IafWorldRegistry.setup();
             IafVillagerRegistry.setup();
             IafLootRegistry.init();
+            PROXY.clientInit();
         });
     }
 

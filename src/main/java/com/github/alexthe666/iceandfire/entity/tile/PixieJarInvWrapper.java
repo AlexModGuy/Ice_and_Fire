@@ -33,7 +33,7 @@ public class PixieJarInvWrapper implements IItemHandlerModifiable {
     @Nonnull
     @Override
     public ItemStack getStackInSlot(int slot) {
-        return this.tile.hasProduced ? new ItemStack(IafItemRegistry.PIXIE_DUST) : ItemStack.EMPTY;
+        return this.tile.hasProduced ? new ItemStack(IafItemRegistry.PIXIE_DUST.get()) : ItemStack.EMPTY;
     }
 
     @Nonnull
@@ -48,7 +48,7 @@ public class PixieJarInvWrapper implements IItemHandlerModifiable {
         if (this.tile.hasProduced) {
             if (!simulate)
                 this.tile.hasProduced = false;
-            return new ItemStack(IafItemRegistry.PIXIE_DUST);
+            return new ItemStack(IafItemRegistry.PIXIE_DUST.get());
         }
         return ItemStack.EMPTY;
     }

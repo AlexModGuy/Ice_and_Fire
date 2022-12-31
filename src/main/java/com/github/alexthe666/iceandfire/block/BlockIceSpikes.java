@@ -35,8 +35,6 @@ public class BlockIceSpikes extends Block {
                 .strength(2.5F)
                 .requiresCorrectToolForDrops()
         );
-
-        this.setRegistryName(IceAndFire.MODID, "dragon_ice_spikes");
     }
 
     public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {

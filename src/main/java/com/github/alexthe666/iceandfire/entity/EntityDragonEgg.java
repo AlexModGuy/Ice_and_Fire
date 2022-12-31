@@ -153,32 +153,20 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     private ItemStack getItem() {
-        switch (getEggType().ordinal()) {
-            default:
-                return new ItemStack(IafItemRegistry.DRAGONEGG_RED);
-            case 1:
-                return new ItemStack(IafItemRegistry.DRAGONEGG_GREEN);
-            case 2:
-                return new ItemStack(IafItemRegistry.DRAGONEGG_BRONZE);
-            case 3:
-                return new ItemStack(IafItemRegistry.DRAGONEGG_GRAY);
-            case 4:
-                return new ItemStack(IafItemRegistry.DRAGONEGG_BLUE);
-            case 5:
-                return new ItemStack(IafItemRegistry.DRAGONEGG_WHITE);
-            case 6:
-                return new ItemStack(IafItemRegistry.DRAGONEGG_SAPPHIRE);
-            case 7:
-                return new ItemStack(IafItemRegistry.DRAGONEGG_SILVER);
-            case 8:
-                return new ItemStack(IafItemRegistry.DRAGONEGG_ELECTRIC);
-            case 9:
-                return new ItemStack(IafItemRegistry.DRAGONEGG_AMYTHEST);
-            case 10:
-                return new ItemStack(IafItemRegistry.DRAGONEGG_COPPER);
-            case 11:
-                return new ItemStack(IafItemRegistry.DRAGONEGG_BLACK);
-        }
+        return switch (getEggType().ordinal()) {
+            default -> new ItemStack(IafItemRegistry.DRAGONEGG_RED.get());
+            case 1 -> new ItemStack(IafItemRegistry.DRAGONEGG_GREEN.get());
+            case 2 -> new ItemStack(IafItemRegistry.DRAGONEGG_BRONZE.get());
+            case 3 -> new ItemStack(IafItemRegistry.DRAGONEGG_GRAY.get());
+            case 4 -> new ItemStack(IafItemRegistry.DRAGONEGG_BLUE.get());
+            case 5 -> new ItemStack(IafItemRegistry.DRAGONEGG_WHITE.get());
+            case 6 -> new ItemStack(IafItemRegistry.DRAGONEGG_SAPPHIRE.get());
+            case 7 -> new ItemStack(IafItemRegistry.DRAGONEGG_SILVER.get());
+            case 8 -> new ItemStack(IafItemRegistry.DRAGONEGG_ELECTRIC.get());
+            case 9 -> new ItemStack(IafItemRegistry.DRAGONEGG_AMYTHEST.get());
+            case 10 -> new ItemStack(IafItemRegistry.DRAGONEGG_COPPER.get());
+            case 11 -> new ItemStack(IafItemRegistry.DRAGONEGG_BLACK.get());
+        };
     }
 
     @Override

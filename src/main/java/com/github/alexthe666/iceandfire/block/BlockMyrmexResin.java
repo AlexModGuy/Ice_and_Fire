@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
+import com.sun.jna.WString;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -16,7 +17,7 @@ public class BlockMyrmexResin extends Block {
 
     private final boolean sticky;
 
-    public BlockMyrmexResin(boolean sticky, String suffix) {
+    public BlockMyrmexResin(boolean sticky) {
         super(
             Properties
                 .of(Material.CLAY)
@@ -24,8 +25,14 @@ public class BlockMyrmexResin extends Block {
                 .sound(sticky ? SoundType.SLIME_BLOCK : SoundType.GRAVEL)
         );
 
-        this.setRegistryName(IceAndFire.MODID, sticky ? "myrmex_resin_sticky_" + suffix : "myrmex_resin_" + suffix);
         this.sticky = sticky;
+    }
+
+    static String name(boolean sticky, String suffix) {
+        if (sticky) {
+            return "myrmex_resin_sticky_%s".formatted(suffix);
+        }
+        return "myrmex_resin_%s".formatted(suffix);
     }
 
     @Deprecated

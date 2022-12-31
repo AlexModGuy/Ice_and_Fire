@@ -173,7 +173,7 @@ public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
                 int j2 = 6839882;
                 if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern) {
                     IceAndFire.PROXY.getRefrencedTE();
-                    if (menu.getSlot(0).getItem().getItem() == IafItemRegistry.BESTIARY) { // Forge: render buttons as disabled when enchantable but enchantability not met on lower levels
+                    if (menu.getSlot(0).getItem().getItem() == IafItemRegistry.BESTIARY.get()) { // Forge: render buttons as disabled when enchantable but enchantability not met on lower levels
                         int k2 = mouseX - (i + 60);
                         int l2 = mouseY - (j + 14 + 19 * i1);
                         int j3 = 0X9F988C;

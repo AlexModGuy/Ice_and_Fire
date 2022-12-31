@@ -8,6 +8,5 @@ public class BlockDragonBoneWall extends WallBlock implements IDragonProof {
 
     public BlockDragonBoneWall(BlockBehaviour.Properties props) {
         super(props);
-        this.setRegistryName(IceAndFire.MODID, "dragon_bone_wall");
     }
 }

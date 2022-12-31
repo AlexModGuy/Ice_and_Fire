@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.config;
 import com.github.alexthe666.citadel.config.biome.SpawnBiomeConfig;
 import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import org.apache.commons.lang3.tuple.Pair;
@@ -74,10 +75,14 @@ public class BiomeConfig {
         init = true;
     }
 
-    public static boolean test(Pair<String, SpawnBiomeData> entry, Biome biome){
+    public static boolean test(Pair<String, SpawnBiomeData> entry, Biome.BiomeCategory category, ResourceLocation name) {
         if(!init){
-            return false;
+            init();
         }
-        return biomeConfigValues.get(entry.getKey()).matches(biome);
+        return biomeConfigValues.get(entry.getKey()).matches(category, name);
+    }
+
+    public static boolean test(Pair<String, SpawnBiomeData> spawns, Holder<Biome> biome) {
+        return test(spawns, Biome.getBiomeCategory(biome), biome.value().getRegistryName());
     }
 }

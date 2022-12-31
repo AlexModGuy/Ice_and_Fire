@@ -72,7 +72,7 @@ public class RenderPodium<T extends TileEntityPodium> implements BlockEntityRend
                 matrixStackIn.popPose();
                 matrixStackIn.popPose();
             } else if (podium.getItem(0).getItem() instanceof ItemMyrmexEgg) {
-                boolean jungle = podium.getItem(0).getItem() == IafItemRegistry.MYRMEX_JUNGLE_EGG;
+                boolean jungle = podium.getItem(0).getItem() == IafItemRegistry.MYRMEX_JUNGLE_EGG.get();
                 matrixStackIn.pushPose();
                 matrixStackIn.translate(0.5F, 0.475F, 0.5F);
                 matrixStackIn.pushPose();

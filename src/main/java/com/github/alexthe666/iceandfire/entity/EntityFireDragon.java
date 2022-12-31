@@ -98,13 +98,13 @@ public class EntityFireDragon extends EntityDragonBase {
     public Item getVariantScale(int variant) {
         switch (variant) {
             default:
-                return IafItemRegistry.DRAGONSCALES_RED;
+                return IafItemRegistry.DRAGONSCALES_RED.get();
             case 1:
-                return IafItemRegistry.DRAGONSCALES_GREEN;
+                return IafItemRegistry.DRAGONSCALES_GREEN.get();
             case 2:
-                return IafItemRegistry.DRAGONSCALES_BRONZE;
+                return IafItemRegistry.DRAGONSCALES_BRONZE.get();
             case 3:
-                return IafItemRegistry.DRAGONSCALES_GRAY;
+                return IafItemRegistry.DRAGONSCALES_GRAY.get();
         }
     }
 
@@ -112,19 +112,19 @@ public class EntityFireDragon extends EntityDragonBase {
     public Item getVariantEgg(int variant) {
         switch (variant) {
             default:
-                return IafItemRegistry.DRAGONEGG_RED;
+                return IafItemRegistry.DRAGONEGG_RED.get();
             case 1:
-                return IafItemRegistry.DRAGONEGG_GREEN;
+                return IafItemRegistry.DRAGONEGG_GREEN.get();
             case 2:
-                return IafItemRegistry.DRAGONEGG_BRONZE;
+                return IafItemRegistry.DRAGONEGG_BRONZE.get();
             case 3:
-                return IafItemRegistry.DRAGONEGG_GRAY;
+                return IafItemRegistry.DRAGONEGG_GRAY.get();
         }
     }
 
     @Override
     public Item getSummoningCrystal() {
-        return IafItemRegistry.SUMMONING_CRYSTAL_FIRE;
+        return IafItemRegistry.SUMMONING_CRYSTAL_FIRE.get();
     }
 
     @Override
@@ -252,7 +252,7 @@ public class EntityFireDragon extends EntityDragonBase {
 
     @Override
     protected ItemLike getHeartItem() {
-        return IafItemRegistry.FIRE_DRAGON_HEART;
+        return IafItemRegistry.FIRE_DRAGON_HEART.get();
     }
 
     @Override
@@ -423,7 +423,7 @@ public class EntityFireDragon extends EntityDragonBase {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.FIRE_STEW;
+        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.FIRE_STEW.get();
     }
 
     @Override
@@ -451,11 +451,11 @@ public class EntityFireDragon extends EntityDragonBase {
 
     @Override
     protected ItemStack getSkull() {
-        return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE);
+        return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE.get());
     }
 
     @Override
     protected Item getBloodItem() {
-        return IafItemRegistry.FIRE_DRAGON_BLOOD;
+        return IafItemRegistry.FIRE_DRAGON_BLOOD.get();
     }
 }

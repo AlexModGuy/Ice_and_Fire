@@ -3,10 +3,17 @@ buildscript {
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        maven { url = 'https://maven.parchmentmc.org' } // Add this line
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+        classpath 'org.parchmentmc:librarian:1.+'
+    }
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xmaxerrs" << "1000"
+        }
     }
 }
 plugins {
@@ -15,6 +22,7 @@ plugins {
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 repositories {
     maven {
@@ -34,7 +42,7 @@ repositories {
 def build_snapshot = System.getenv("BUILD_SNAPSHOT") == "true"
 def build_id = System.getenv("BUILD_ID")
 
-version = '2.1.11-1.17.1'
+version = '2.1.11-1.18.2'
 
 if (build_snapshot) {
     version += '-SNAPSHOT'
@@ -46,11 +54,11 @@ if (build_id != null) {
 group = 'com.github.alexthe667' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'iceandfire'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
-    mappings channel: 'official', version: '1.17.1'
+    mappings channel: 'parchment', version: '2022.11.06-1.18.2'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -69,7 +77,7 @@ minecraft {
             // "SCAN": For mods scan.
             // "REGISTRIES": For firing of registry events.
             // "REGISTRYDUMP": For getting the contents of all registries.
-            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.markers', 'REGISTRYDUMP'
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
@@ -86,7 +94,7 @@ minecraft {
             property 'mixin.env.disableRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
             arg "-mixin.config=citadel.mixins.json"
-            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
             property 'forge.logging.console.level', 'debug'
 
@@ -103,7 +111,8 @@ minecraft {
             properties 'mixin.env.remapRefMap': 'true'
             property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
 
-            property 'forge.logging.markers', 'REGISTRIES'
+            //property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.markers', 'REGISTRYDUMP'
 
             property 'forge.logging.console.level', 'debug'
 
@@ -129,12 +138,12 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 processResources {}
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.1.1'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
 
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
-    compileOnly fg.deobf("mezz.jei:jei-1.17.1:8.3.1.62:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.17.1:8.3.1.62")
-    implementation "curse.maven:citadel-331936:3537055"
+    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.1.255:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.1.255")
+    implementation "curse.maven:citadel-331936:3783098"
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

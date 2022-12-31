@@ -94,7 +94,7 @@ public class DragonType {
         }
         if (this == ICE) {
             if (egg.level.getBlockState(pos).getMaterial() == Material.WATER && egg.getRandom().nextInt(500) == 0) {
-                egg.level.setBlockAndUpdate(pos, IafBlockRegistry.EGG_IN_ICE.defaultBlockState());
+                egg.level.setBlockAndUpdate(pos, IafBlockRegistry.EGG_IN_ICE.get().defaultBlockState());
                 egg.level.playLocalSound(egg.getX(), egg.getY() + egg.getEyeHeight(), egg.getZ(), SoundEvents.GLASS_BREAK, egg.getSoundSource(), 2.5F, 1.0F, false);
                 if (egg.level.getBlockState(pos).getBlock() instanceof BlockEggInIce) {
                     ((TileEntityEggInIce) egg.level.getBlockEntity(pos)).type = egg.getEggType();

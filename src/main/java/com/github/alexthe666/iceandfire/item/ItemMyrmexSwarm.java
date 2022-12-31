@@ -23,11 +23,6 @@ public class ItemMyrmexSwarm extends Item {
 
     public ItemMyrmexSwarm(boolean jungle) {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
-        if (jungle) {
-            this.setRegistryName(IceAndFire.MODID, "myrmex_jungle_swarm");
-        } else {
-            this.setRegistryName(IceAndFire.MODID, "myrmex_desert_swarm");
-        }
         this.jungle = jungle;
     }
 

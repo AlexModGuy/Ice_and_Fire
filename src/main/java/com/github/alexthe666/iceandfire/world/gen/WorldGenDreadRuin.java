@@ -89,7 +89,7 @@ public class WorldGenDreadRuin extends Feature<NoneFeatureConfiguration> {
         ResourceLocation structure = getRandomStructure(rand);
         Direction facing = HORIZONTALS[rand.nextInt(3)];
         MinecraftServer server = worldIn.getLevel().getServer();
-        Biome biome = worldIn.getBiome(position);
+        Biome biome = worldIn.getBiome(position).value();
         /*TemplateManager templateManager = server.getWorld(worldIn.getDimensionType()).getStructureTemplateManager();
         PlacementSettings settings = new PlacementSettings().setRotation(getRotationFromFacing(facing)).addProcessor(new DreadRuinProcessor());
         Template template = templateManager.getTemplate(structure);

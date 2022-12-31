@@ -31,12 +31,12 @@ public class IafRenderType extends RenderType {
 
     public static RenderType getGhost(ResourceLocation locationIn) {
         TextureStateShard lvt_1_1_ = new TextureStateShard(locationIn, false, false);
-        return create("ghost_iaf", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder().setShaderState(RenderStateShard.NEW_ENTITY_SHADER).setTextureState(lvt_1_1_).setWriteMaskState(COLOR_DEPTH_WRITE).setDepthTestState(LEQUAL_DEPTH_TEST).setLightmapState(NO_LIGHTMAP).setOverlayState(OVERLAY).setTransparencyState(GHOST_TRANSPARANCY).setCullState(RenderStateShard.CULL).createCompositeState(true));
+        return create("ghost_iaf", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_CUTOUT_NO_CULL_SHADER).setTextureState(lvt_1_1_).setTransparencyState(GHOST_TRANSPARANCY).setCullState(NO_CULL).setLightmapState(LIGHTMAP).setOverlayState(OVERLAY).createCompositeState(true));
     }
 
     public static RenderType getGhostDaytime(ResourceLocation locationIn) {
         TextureStateShard lvt_1_1_ = new TextureStateShard(locationIn, false, false);
-        return create("ghost_iaf_day", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder().setShaderState(RenderStateShard.NEW_ENTITY_SHADER).setTextureState(lvt_1_1_).setWriteMaskState(COLOR_DEPTH_WRITE).setDepthTestState(LEQUAL_DEPTH_TEST).setLightmapState(NO_LIGHTMAP).setOverlayState(OVERLAY).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setCullState(RenderStateShard.CULL).createCompositeState(true));
+        return create("ghost_iaf_day", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_CUTOUT_NO_CULL_SHADER).setTextureState(lvt_1_1_).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setCullState(NO_CULL).setLightmapState(LIGHTMAP).setOverlayState(OVERLAY).createCompositeState(true));
     }
 
     public static RenderType getDreadlandsPortal() {

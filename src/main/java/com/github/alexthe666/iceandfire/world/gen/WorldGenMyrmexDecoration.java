@@ -92,7 +92,7 @@ public class WorldGenMyrmexDecoration {
 
     public static void generateCocoon(LevelAccessor worldIn, BlockPos blockpos, Random rand, boolean jungle, ResourceLocation lootTable) {
         if (worldIn.getBlockState(blockpos.below()).isFaceSturdy(worldIn, blockpos.below(), Direction.UP)) {
-            worldIn.setBlock(blockpos, jungle ? IafBlockRegistry.JUNGLE_MYRMEX_COCOON.defaultBlockState() : IafBlockRegistry.DESERT_MYRMEX_COCOON.defaultBlockState(), 3);
+            worldIn.setBlock(blockpos, jungle ? IafBlockRegistry.JUNGLE_MYRMEX_COCOON.get().defaultBlockState() : IafBlockRegistry.DESERT_MYRMEX_COCOON.get().defaultBlockState(), 3);
 
             if (worldIn.getBlockEntity(blockpos) != null && worldIn.getBlockEntity(blockpos) instanceof RandomizableContainerBlockEntity) {
                 BlockEntity tileentity1 = worldIn.getBlockEntity(blockpos);
@@ -109,12 +109,12 @@ public class WorldGenMyrmexDecoration {
     }
 
     public static void generateGold(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
-        BlockState gold = IafBlockRegistry.GOLD_PILE.defaultBlockState();
+        BlockState gold = IafBlockRegistry.GOLD_PILE.get().defaultBlockState();
         int choice = rand.nextInt(2);
         if (choice == 1) {
-            gold = IafBlockRegistry.SILVER_PILE.defaultBlockState();
+            gold = IafBlockRegistry.SILVER_PILE.get().defaultBlockState();
         } else if (choice == 2) {
-            gold = IafBlockRegistry.COPPER_PILE.defaultBlockState();
+            gold = IafBlockRegistry.COPPER_PILE.get().defaultBlockState();
         }
         if (worldIn.getBlockState(blockpos.below()).isFaceSturdy(worldIn, blockpos.below(), Direction.UP)) {
             worldIn.setBlock(blockpos, gold.setValue(BlockGoldPile.LAYERS, 8), 3);
@@ -174,16 +174,16 @@ public class WorldGenMyrmexDecoration {
             if (current == Blocks.DIRT || current == Blocks.SAND || current == Blocks.COBBLESTONE || current == Blocks.GRAVEL) {
                 Block ore = Blocks.REDSTONE_ORE;
                 if (rand.nextInt(3) == 0) {
-                    ore = rand.nextBoolean() ? Blocks.GOLD_ORE : IafBlockRegistry.SILVER_ORE;
+                    ore = rand.nextBoolean() ? Blocks.GOLD_ORE : IafBlockRegistry.SILVER_ORE.get();
                     if (rand.nextInt(2) == 0) {
-                        ore = IafBlockRegistry.COPPER_ORE;
+                        ore = IafBlockRegistry.COPPER_ORE.get();
                     }
                 } else if (rand.nextInt(3) == 0) {
                     ore = Blocks.DIAMOND_ORE;
                 } else if (rand.nextInt(2) == 0) {
-                    ore = rand.nextBoolean() ? Blocks.EMERALD_ORE : IafBlockRegistry.SAPPHIRE_ORE;
+                    ore = rand.nextBoolean() ? Blocks.EMERALD_ORE : IafBlockRegistry.SAPPHIRE_ORE.get();
                     if(rand.nextInt(2) == 0){
-                        ore = IafBlockRegistry.AMYTHEST_ORE;
+                        ore = IafBlockRegistry.AMYTHEST_ORE.get();
                     }
                 }
                 worldIn.setBlock(blockpos, ore.defaultBlockState(), 2);

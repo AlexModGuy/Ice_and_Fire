@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.enums;
 
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 
@@ -40,7 +41,7 @@ public enum EnumHippogryphTypes {
         return getWildTypes()[ThreadLocalRandom.current().nextInt(getWildTypes().length - 1)];
     }
 
-    public static EnumHippogryphTypes getBiomeType(Biome biome) {
+    public static EnumHippogryphTypes getBiomeType(Holder<Biome> biome) {
         List<EnumHippogryphTypes> types = new ArrayList<>();
         if (BiomeConfig.test(BiomeConfig.blackHippogryphBiomes, biome)) {
             types.add(BLACK);

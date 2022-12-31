@@ -29,9 +29,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.ScreenOpenEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -55,9 +55,9 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void renderWorldLastEvent(RenderWorldLastEvent event) {
+    public void renderWorldLastEvent(RenderLevelLastEvent event) {
         if (Pathfinding.isDebug()) {
-            RenderPath.debugDraw(event.getPartialTicks(), event.getMatrixStack());
+            RenderPath.debugDraw(event.getPartialTick(), event.getPoseStack());
         }
     }
 
@@ -71,11 +71,11 @@ public class ClientEvents {
                 if (Minecraft.getInstance().options.getCameraType() == CameraType.THIRD_PERSON_BACK ||
                     Minecraft.getInstance().options.getCameraType() == CameraType.THIRD_PERSON_FRONT) {
                     if (currentView == 1) {
-                        event.getInfo().move(-event.getInfo().getMaxZoom(scale * 1.2F), 0F, 0);
+                        event.getCamera().move(-event.getCamera().getMaxZoom(scale * 1.2F), 0F, 0);
                     } else if (currentView == 2) {
-                        event.getInfo().move(-event.getInfo().getMaxZoom(scale * 3F), 0F, 0);
+                        event.getCamera().move(-event.getCamera().getMaxZoom(scale * 3F), 0F, 0);
                     } else if (currentView == 3) {
-                        event.getInfo().move(-event.getInfo().getMaxZoom(scale * 5F), 0F, 0);
+                        event.getCamera().move(-event.getCamera().getMaxZoom(scale * 5F), 0F, 0);
                     }
                 }
             }
@@ -173,18 +173,18 @@ public class ClientEvents {
         }
         LivingEntity entity = event.getEntity();
         MiscProperties.getTargetedBy(entity).forEach(caster -> {
-            CockatriceBeamRender.render(entity, caster, event.getMatrixStack(), event.getBuffers(), event.getPartialRenderTick());
+            CockatriceBeamRender.render(entity, caster, event.getPoseStack(), event.getMultiBufferSource(), event.getPartialTick());
         });
         if (FrozenProperties.isFrozen(event.getEntity())) {
-            RenderFrozenState.render(event.getEntity(), event.getMatrixStack(), event.getBuffers(), event.getLight());
+            RenderFrozenState.render(event.getEntity(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight());
         }
-        RenderChain.render(entity, event.getPartialRenderTick(), event.getMatrixStack(), event.getBuffers(), event.getLight());
+        RenderChain.render(entity, event.getPartialTick(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight());
     }
 
     @SubscribeEvent
-    public void onGuiOpened(GuiOpenEvent event) {
-        if (IafConfig.customMainMenu && event.getGui() instanceof TitleScreen && !(event.getGui() instanceof IceAndFireMainMenu)) {
-            event.setGui(new IceAndFireMainMenu());
+    public void onGuiOpened(ScreenOpenEvent event) {
+        if (IafConfig.customMainMenu && event.getScreen() instanceof TitleScreen && !(event.getScreen() instanceof IceAndFireMainMenu)) {
+            event.setScreen(new IceAndFireMainMenu());
         }
     }
 

@@ -31,6 +31,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.CombatEntry;
 import net.minecraft.world.damagesource.CombatTracker;
 import net.minecraft.world.damagesource.DamageSource;
@@ -54,6 +55,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
@@ -72,12 +75,10 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)
 public class ServerEvents {
@@ -139,9 +140,8 @@ public class ServerEvents {
         }
     }
 
-    private static boolean isInEntityTag(ResourceLocation loc, EntityType type) {
-        Tag<EntityType<?>> tag = EntityTypeTags.getAllTags().getTag(loc);
-        return tag != null && tag.contains(type);
+    private static boolean isInEntityTag(ResourceLocation loc, EntityType<?> type) {
+        return type.is(Objects.requireNonNull(ForgeRegistries.ENTITIES.tags()).createTagKey(loc));
     }
 
     public static boolean isLivestock(Entity entity) {
@@ -277,7 +277,7 @@ public class ServerEvents {
     public void onEntityDrop(LivingDropsEvent event) {
         if (event.getEntityLiving() instanceof WitherSkeleton) {
             event.getDrops().add(new ItemEntity(event.getEntity().level, event.getEntity().getX(), event.getEntity().getY(), event.getEntity().getZ(),
-                new ItemStack(IafItemRegistry.WITHERBONE, event.getEntityLiving().getRandom().nextInt(2))));
+                new ItemStack(IafItemRegistry.WITHERBONE.get(), event.getEntityLiving().getRandom().nextInt(2))));
         }
     }
 
@@ -346,7 +346,7 @@ public class ServerEvents {
                         event.getTarget().remove(Entity.RemovalReason.KILLED);
                         boolean silkTouch = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0;
                         if (silkTouch) {
-                            ItemStack statuette = new ItemStack(IafItemRegistry.STONE_STATUE);
+                            ItemStack statuette = new ItemStack(IafItemRegistry.STONE_STATUE.get());
                             statuette.setTag(new CompoundTag());
                             statuette.getTag().putBoolean("IAFStoneStatuePlayerEntity", statue.getTrappedEntityTypeString().equalsIgnoreCase("minecraft:player"));
                             statuette.getTag().putString("IAFStoneStatueEntityID", statue.getTrappedEntityTypeString());
@@ -374,13 +374,13 @@ public class ServerEvents {
                 event.getEntity().getX(),
                 event.getEntity().getY() + 1,
                 event.getEntity().getZ(),
-                new ItemStack(IafItemRegistry.CHAIN, ChainProperties.getChainedTo(event.getEntityLiving()).size()));
+                new ItemStack(IafItemRegistry.CHAIN.get(), ChainProperties.getChainedTo(event.getEntityLiving()).size()));
             entityitem.setDefaultPickUpDelay();
             event.getEntity().level.addFreshEntity(entityitem);
             ChainProperties.clearChainData(event.getEntityLiving());
         }
         if (event.getEntityLiving().getUUID().equals(ServerEvents.ALEX_UUID)) {
-            event.getEntityLiving().spawnAtLocation(new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM), 1);
+            event.getEntityLiving().spawnAtLocation(new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM.get()), 1);
         }
         if (event.getEntityLiving() instanceof Player && IafConfig.ghostsFromPlayerDeaths) {
             Entity attacker = event.getEntityLiving().getLastHurtByMob();
@@ -465,7 +465,7 @@ public class ServerEvents {
             if (ChainProperties.isChainedTo(target, event.getPlayer())) {
                 ChainProperties.removeChain(target, event.getPlayer());
                 if (!event.getWorld().isClientSide) {
-                    event.getTarget().spawnAtLocation(IafItemRegistry.CHAIN, 1);
+                    event.getTarget().spawnAtLocation(IafItemRegistry.CHAIN.get(), 1);
                 }
             }
         }
@@ -502,7 +502,7 @@ public class ServerEvents {
     }
 
     public static void onLeftClick(final Player playerEntity, final ItemStack stack) {
-        if (stack.getItem() == IafItemRegistry.GHOST_SWORD) {
+        if (stack.getItem() == IafItemRegistry.GHOST_SWORD.get()) {
             ItemGhostSword.spawnGhostSwordEntity(stack, playerEntity);
         }
     }
@@ -532,7 +532,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onBreakBlock(BlockEvent.BreakEvent event) {
-        if (event.getPlayer() != null && (event.getState().getBlock() instanceof AbstractChestBlock || event.getState().getBlock() == IafBlockRegistry.GOLD_PILE || event.getState().getBlock() == IafBlockRegistry.SILVER_PILE || event.getState().getBlock() == IafBlockRegistry.COPPER_PILE)) {
+        if (event.getPlayer() != null && (event.getState().getBlock() instanceof AbstractChestBlock || event.getState().getBlock() == IafBlockRegistry.GOLD_PILE.get() || event.getState().getBlock() == IafBlockRegistry.SILVER_PILE.get() || event.getState().getBlock() == IafBlockRegistry.COPPER_PILE.get())) {
             final float dist = IafConfig.dragonGoldSearchLength;
             List<Entity> list = event.getWorld().getEntities(event.getPlayer(), event.getPlayer().getBoundingBox().inflate(dist, dist, dist));
             if (list.isEmpty()) return;
@@ -550,8 +550,8 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
-    public void onChestGenerated(LootTableLoadEvent event) {
+    //@SubscribeEvent
+    public static void onChestGenerated(LootTableLoadEvent event) {
         final ResourceLocation eventName = event.getName();
         final boolean condition1 = eventName.equals(BuiltInLootTables.SIMPLE_DUNGEON)
             || eventName.equals(BuiltInLootTables.ABANDONED_MINESHAFT)
@@ -561,7 +561,7 @@ public class ServerEvents {
             || eventName.equals(BuiltInLootTables.STRONGHOLD_CROSSING);
 
         if (condition1 || eventName.equals(BuiltInLootTables.VILLAGE_CARTOGRAPHER)) {
-            LootPoolEntryContainer.Builder item = LootItem.lootTableItem(IafItemRegistry.MANUSCRIPT).setQuality(20).setWeight(5);
+            LootPoolEntryContainer.Builder item = LootItem.lootTableItem(IafItemRegistry.MANUSCRIPT.get()).setQuality(20).setWeight(5);
             LootPool.Builder builder = new LootPool.Builder().name("iaf_manuscript").add(item).when(LootItemRandomChanceCondition.randomChance(0.35f)).setRolls(UniformGenerator.between(1, 4)).setBonusRolls(UniformGenerator.between(0, 3));
             event.getTable().addPool(builder.build());
         }
@@ -572,11 +572,11 @@ public class ServerEvents {
             || eventName.equals(BuiltInLootTables.VILLAGE_ARMORER)) {
 
             if (IafConfig.generateSilverOre) {
-                LootPoolEntryContainer.Builder item = LootItem.lootTableItem(IafItemRegistry.SILVER_INGOT).setQuality(15).setWeight(12);
+                LootPoolEntryContainer.Builder item = LootItem.lootTableItem(IafItemRegistry.SILVER_INGOT.get()).setQuality(15).setWeight(12);
                 LootPool.Builder builder = new LootPool.Builder().name("iaf_silver_ingot").add(item).when(LootItemRandomChanceCondition.randomChance(0.5f)).setRolls(UniformGenerator.between(1, 3)).setBonusRolls(UniformGenerator.between(0, 3));
                 event.getTable().addPool(builder.build());
             } else if (IafConfig.generateCopperOre) {
-                LootPoolEntryContainer.Builder item = LootItem.lootTableItem(IafItemRegistry.COPPER_INGOT).setQuality(10).setWeight(14);
+                LootPoolEntryContainer.Builder item = LootItem.lootTableItem(IafItemRegistry.COPPER_INGOT.get()).setQuality(10).setWeight(14);
                 LootPool.Builder builder = new LootPool.Builder().name("iaf_copper_ingot").add(item).when(LootItemRandomChanceCondition.randomChance(0.6f)).setRolls(UniformGenerator.between(1, 2)).setBonusRolls(UniformGenerator.between(0, 3));
                 event.getTable().addPool(builder.build());
             }
@@ -586,7 +586,7 @@ public class ServerEvents {
             || event.getName().equals(WorldGenIceDragonCave.ICE_DRAGON_CHEST_MALE)
             || event.getName().equals(WorldGenLightningDragonCave.LIGHTNING_DRAGON_CHEST)
             || event.getName().equals(WorldGenLightningDragonCave.LIGHTNING_DRAGON_CHEST_MALE))) {
-            LootPoolEntryContainer.Builder item = LootItem.lootTableItem(IafItemRegistry.WEEZER_BLUE_ALBUM).setQuality(100).setWeight(1);
+            LootPoolEntryContainer.Builder item = LootItem.lootTableItem(IafItemRegistry.WEEZER_BLUE_ALBUM.get()).setQuality(100).setWeight(1);
             LootPool.Builder builder = new LootPool.Builder().name("iaf_weezer").add(item).when(LootItemRandomChanceCondition.randomChance(0.01f)).setRolls(UniformGenerator.between(1, 1));
             event.getTable().addPool(builder.build());
         }

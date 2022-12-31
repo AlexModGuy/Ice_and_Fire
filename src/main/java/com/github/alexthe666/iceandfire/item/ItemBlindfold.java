@@ -15,7 +15,6 @@ public class ItemBlindfold extends ArmorItem {
 
     public ItemBlindfold() {
         super(IafItemRegistry.BLINDFOLD_ARMOR_MATERIAL, EquipmentSlot.HEAD, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "blindfold");
     }
 
     @Override

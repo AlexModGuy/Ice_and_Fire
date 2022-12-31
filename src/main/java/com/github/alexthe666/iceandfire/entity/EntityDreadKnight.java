@@ -123,7 +123,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         super.populateDefaultEquipmentSlots(difficulty);
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DREAD_KNIGHT_SWORD));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DREAD_KNIGHT_SWORD.get()));
         if (random.nextBoolean()) {
             this.setItemSlot(EquipmentSlot.OFFHAND, SHIELD.copy());
         }

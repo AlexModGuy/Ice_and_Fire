@@ -372,4 +372,9 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     public boolean showProgressBar() {
         return false;
     }
+
+    @Override
+    public boolean isClientSide() {
+        return false;
+    }
 }

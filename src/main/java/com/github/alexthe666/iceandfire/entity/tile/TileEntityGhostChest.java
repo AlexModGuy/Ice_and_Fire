@@ -26,12 +26,6 @@ public class TileEntityGhostChest extends ChestBlockEntity {
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
-        return compound;
-    }
-
-    @Override
     public void startOpen(Player player) {
         super.startOpen(player);
         if (this.level.getDifficulty() != Difficulty.PEACEFUL) {

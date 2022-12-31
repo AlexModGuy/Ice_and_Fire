@@ -60,7 +60,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -114,13 +114,13 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
     }
 
     public static int getIntFromArmor(ItemStack stack) {
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.IRON_HIPPOGRYPH_ARMOR) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.IRON_HIPPOGRYPH_ARMOR.get()) {
             return 1;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.GOLD_HIPPOGRYPH_ARMOR) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.GOLD_HIPPOGRYPH_ARMOR.get()) {
             return 2;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.DIAMOND_HIPPOGRYPH_ARMOR) {
+        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.DIAMOND_HIPPOGRYPH_ARMOR.get()) {
             return 3;
         }
         return 0;
@@ -767,7 +767,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         int i = Mth.floor(this.getX());
         int j = Mth.floor(this.getY());
         int k = Mth.floor(this.getZ());
-        ItemStack stack = new ItemStack(IafItemRegistry.HIPPOGRYPH_EGG);
+        ItemStack stack = new ItemStack(IafItemRegistry.HIPPOGRYPH_EGG.get());
         ItemEntity egg = new ItemEntity(this.level, i, j, k, stack);
         return egg;
     }

@@ -18,7 +18,6 @@ public class ItemMobSkull extends Item {
 
     public ItemMobSkull(EnumSkullType skull) {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
-        this.setRegistryName(IceAndFire.MODID, skull.itemResourceName);
         this.skull = skull;
     }
 

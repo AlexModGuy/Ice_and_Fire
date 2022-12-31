@@ -21,7 +21,6 @@ public class ItemDragonFlute extends Item {
 
     public ItemDragonFlute() {
         super(new Item.Properties().stacksTo(1).tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "dragon_flute");
     }
 
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player player, InteractionHand hand) {

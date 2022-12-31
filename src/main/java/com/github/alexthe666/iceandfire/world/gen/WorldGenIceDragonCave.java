@@ -26,11 +26,11 @@ public class WorldGenIceDragonCave extends WorldGenDragonCave {
         super(codec);
         DRAGON_CHEST = ICE_DRAGON_CHEST;
         DRAGON_MALE_CHEST = ICE_DRAGON_CHEST_MALE;
-        CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.FROZEN_STONE, 3);
-        PALETTE_BLOCK1 = IafBlockRegistry.FROZEN_STONE.defaultBlockState();
-        PALETTE_BLOCK2 = IafBlockRegistry.FROZEN_COBBLESTONE.defaultBlockState();
-        TREASURE_PILE = IafBlockRegistry.SILVER_PILE.defaultBlockState();
-        PALETTE_ORE1 = IafBlockRegistry.SAPPHIRE_ORE.defaultBlockState();
+        CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.FROZEN_STONE.get(), 3);
+        PALETTE_BLOCK1 = IafBlockRegistry.FROZEN_STONE.get().defaultBlockState();
+        PALETTE_BLOCK2 = IafBlockRegistry.FROZEN_COBBLESTONE.get().defaultBlockState();
+        TREASURE_PILE = IafBlockRegistry.SILVER_PILE.get().defaultBlockState();
+        PALETTE_ORE1 = IafBlockRegistry.SAPPHIRE_ORE.get().defaultBlockState();
         PALETTE_ORE2 = Blocks.EMERALD_ORE.defaultBlockState();
         generateGemOre = IafConfig.generateSapphireOre;
     }

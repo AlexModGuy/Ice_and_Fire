@@ -18,7 +18,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.IItemRenderProperties;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -26,35 +25,33 @@ import java.util.UUID;
 
 import static com.github.alexthe666.iceandfire.item.IafItemRegistry.*;
 
-public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDragonItem, IItemRenderProperties {
+public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDragonItem {
 
     private static final UUID[] ARMOR_MODIFIERS = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
     private final ArmorMaterial material;
     private Multimap<Attribute, AttributeModifier> attributeModifierMultimap;
 
-    public ItemDragonsteelArmor(ArmorMaterial material, int renderIndex, EquipmentSlot slot, String gameName, String name) {
+    public ItemDragonsteelArmor(ArmorMaterial material, int renderIndex, EquipmentSlot slot) {
         super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.material = material;
-        this.setRegistryName(IceAndFire.MODID, gameName);
         this.attributeModifierMultimap = createAttributeMap();
-
     }
 
     @Override
     public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
-        consumer.accept(new IItemRenderProperties() {
+        consumer.accept(new net.minecraftforge.client.IItemRenderProperties() {
             @Override
             @Nullable
-            public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
+            public HumanoidModel<?> getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
                 boolean inner = armorSlot == EquipmentSlot.LEGS || armorSlot == EquipmentSlot.HEAD;
                 if (itemStack.getItem() instanceof ArmorItem) {
                     ArmorMaterial armorMaterial = ((ArmorItem) itemStack.getItem()).getMaterial();
                     if (DRAGONSTEEL_FIRE_ARMOR_MATERIAL.equals(armorMaterial))
-                        return (A) new ModelDragonsteelFireArmor(inner);
+                        return new ModelDragonsteelFireArmor(inner);
                     if (DRAGONSTEEL_ICE_ARMOR_MATERIAL.equals(armorMaterial))
-                        return (A) new ModelDragonsteelIceArmor(inner);
+                        return new ModelDragonsteelIceArmor(inner);
                     if (DRAGONSTEEL_LIGHTNING_ARMOR_MATERIAL.equals(armorMaterial))
-                        return (A) new ModelDragonsteelLightningArmor(inner);
+                        return new ModelDragonsteelLightningArmor(inner);
                 }
                 return _default;
 

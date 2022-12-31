@@ -19,7 +19,6 @@ public class BlockDragonBone extends RotatedPillarBlock implements IDragonProof 
                 .requiresCorrectToolForDrops()
 		);
 
-        this.setRegistryName(IceAndFire.MODID, "dragon_bone_block");
     }
 
     @Override

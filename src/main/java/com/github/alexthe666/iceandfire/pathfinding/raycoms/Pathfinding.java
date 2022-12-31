@@ -8,7 +8,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.AbstractPathJob;
 import net.minecraft.util.thread.BlockableEventLoop;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fmllegacy.LogicalSidedProvider;
+import net.minecraftforge.common.util.LogicalSidedProvider;
 
 import java.util.HashSet;
 import java.util.Set;

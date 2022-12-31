@@ -231,6 +231,7 @@ public class IafDragonFlightManager {
             this.dragon = dragonBase;
         }
 
+        @Override
         public void tick() {
             if (dragon.horizontalCollision) {
                 dragon.setYRot(dragon.getYRot() + 180.0F);

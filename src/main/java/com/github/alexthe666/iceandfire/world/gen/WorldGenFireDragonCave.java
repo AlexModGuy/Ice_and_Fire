@@ -24,10 +24,10 @@ public class WorldGenFireDragonCave extends WorldGenDragonCave {
         super(configFactoryIn);
         DRAGON_CHEST = FIRE_DRAGON_CHEST;
         DRAGON_MALE_CHEST = FIRE_DRAGON_CHEST_MALE;
-        CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.CHARRED_STONE, 3);
-        PALETTE_BLOCK1 = IafBlockRegistry.CHARRED_STONE.defaultBlockState();
-        PALETTE_BLOCK2 = IafBlockRegistry.CHARRED_COBBLESTONE.defaultBlockState();
-        TREASURE_PILE = IafBlockRegistry.GOLD_PILE.defaultBlockState();
+        CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.CHARRED_STONE.get(), 3);
+        PALETTE_BLOCK1 = IafBlockRegistry.CHARRED_STONE.get().defaultBlockState();
+        PALETTE_BLOCK2 = IafBlockRegistry.CHARRED_COBBLESTONE.get().defaultBlockState();
+        TREASURE_PILE = IafBlockRegistry.GOLD_PILE.get().defaultBlockState();
         PALETTE_ORE1 = Blocks.EMERALD_ORE.defaultBlockState();
         PALETTE_ORE2 = Blocks.EMERALD_ORE.defaultBlockState();
         generateGemOre = true;

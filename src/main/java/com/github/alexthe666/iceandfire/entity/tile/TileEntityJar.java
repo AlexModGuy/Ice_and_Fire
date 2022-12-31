@@ -57,8 +57,7 @@ public class TileEntityJar extends BlockEntity {
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    public void saveAdditional(CompoundTag compound) {
         compound.putBoolean("HasPixie", hasPixie);
         compound.putInt("PixieType", pixieType);
         compound.putBoolean("HasProduced", hasProduced);
@@ -68,12 +67,11 @@ public class TileEntityJar extends BlockEntity {
         }
         compound.putInt("TicksExisted", ticksExisted);
         ContainerHelper.saveAllItems(compound, this.pixieItems);
-        return compound;
     }
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(worldPosition, 1, getUpdateTag());
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
@@ -82,11 +80,6 @@ public class TileEntityJar extends BlockEntity {
         if (!level.isClientSide) {
             IceAndFire.sendMSGToAll(new MessageUpdatePixieHouseModel(worldPosition.asLong(), packet.getTag().getInt("PixieType")));
         }
-    }
-
-    @Override
-    public CompoundTag getUpdateTag() {
-        return this.save(new CompoundTag());
     }
 
     @Override

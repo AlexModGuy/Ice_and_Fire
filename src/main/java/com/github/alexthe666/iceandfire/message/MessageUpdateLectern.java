@@ -9,7 +9,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -66,7 +66,7 @@ public class MessageUpdateLectern {
                             TileEntityLectern lectern = (TileEntityLectern) player.level.getBlockEntity(pos);
                             if (message.updateStack) {
                                 ItemStack bookStack = lectern.getItem(0);
-                                if (bookStack.getItem() == IafItemRegistry.BESTIARY) {
+                                if (bookStack.getItem() == IafItemRegistry.BESTIARY.get()) {
                                     EnumBestiaryPages.addPage(EnumBestiaryPages.fromInt(message.pageOrdinal), bookStack);
                                 }
                                 lectern.randomizePages(bookStack, lectern.getItem(1));

@@ -17,8 +17,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.network.NetworkHooks;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class EntityDreadLichSkull extends AbstractArrow {
         this.setBaseDamage(dmg);
     }
 
-    public EntityDreadLichSkull(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
+    public EntityDreadLichSkull(PlayMessages.SpawnEntity spawnEntity, Level worldIn) {
         this(IafEntityRegistry.DREAD_LICH_SKULL.get(), worldIn);
     }
 

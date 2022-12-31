@@ -25,7 +25,6 @@ public class ItemStoneStatue extends Item {
 
     public ItemStoneStatue() {
         super(new Item.Properties().stacksTo(1));
-        this.setRegistryName(IceAndFire.MODID, "stone_statue");
     }
 
     @Override

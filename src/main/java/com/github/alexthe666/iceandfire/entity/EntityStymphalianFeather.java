@@ -16,8 +16,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.network.NetworkHooks;
 
 public class EntityStymphalianFeather extends AbstractArrow {
 
@@ -30,7 +30,7 @@ public class EntityStymphalianFeather extends AbstractArrow {
         this.setBaseDamage(IafConfig.stymphalianBirdFeatherAttackStength);
     }
 
-    public EntityStymphalianFeather(FMLPlayMessages.SpawnEntity spawnEntity, Level world) {
+    public EntityStymphalianFeather(PlayMessages.SpawnEntity spawnEntity, Level world) {
         this(IafEntityRegistry.STYMPHALIAN_FEATHER.get(), world);
     }
 
@@ -102,6 +102,6 @@ public class EntityStymphalianFeather extends AbstractArrow {
 
     @Override
     protected ItemStack getPickupItem() {
-        return new ItemStack(IafItemRegistry.STYMPHALIAN_BIRD_FEATHER);
+        return new ItemStack(IafItemRegistry.STYMPHALIAN_BIRD_FEATHER.get());
     }
 }

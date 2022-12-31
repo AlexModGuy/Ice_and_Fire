@@ -20,8 +20,8 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.network.NetworkHooks;
 
 public class EntityTideTrident extends ThrownTrident {
 
@@ -30,7 +30,7 @@ public class EntityTideTrident extends ThrownTrident {
 
     public EntityTideTrident(EntityType<? extends ThrownTrident> type, Level worldIn) {
         super(type, worldIn);
-        tridentItem = new ItemStack(IafItemRegistry.TIDE_TRIDENT);
+        tridentItem = new ItemStack(IafItemRegistry.TIDE_TRIDENT.get());
     }
 
     public EntityTideTrident(Level worldIn, LivingEntity thrower, ItemStack thrownStackIn) {
@@ -44,7 +44,7 @@ public class EntityTideTrident extends ThrownTrident {
         this.setPierceLevel((byte) piercingLevel);
     }
 
-    public EntityTideTrident(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
+    public EntityTideTrident(PlayMessages.SpawnEntity spawnEntity, Level worldIn) {
         this(IafEntityRegistry.TIDE_TRIDENT.get(), worldIn);
     }
 
@@ -106,7 +106,7 @@ public class EntityTideTrident extends ThrownTrident {
 
     @Override
     protected ItemStack getPickupItem() {
-        return this.tridentItem.getItem() == Items.TRIDENT ? new ItemStack(IafItemRegistry.TIDE_TRIDENT) : this.tridentItem.copy();
+        return this.tridentItem.getItem() == Items.TRIDENT ? new ItemStack(IafItemRegistry.TIDE_TRIDENT.get()) : this.tridentItem.copy();
     }
 
 }

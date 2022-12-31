@@ -27,7 +27,7 @@ public class RenderTideTridentItem extends BlockEntityWithoutLevelRenderer {
     public void renderByItem(ItemStack stack, ItemTransforms.TransformType type, PoseStack stackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         stackIn.translate(0.5F, 0.5f, 0.5f);
         if (type == ItemTransforms.TransformType.GUI || type == ItemTransforms.TransformType.FIXED || type == ItemTransforms.TransformType.NONE || type == ItemTransforms.TransformType.GROUND) {
-            ItemStack tridentInventory = new ItemStack(IafItemRegistry.TIDE_TRIDENT_INVENTORY);
+            ItemStack tridentInventory = new ItemStack(IafItemRegistry.TIDE_TRIDENT_INVENTORY.get());
             if (stack.isEnchanted()) {
                 ListTag enchantments = stack.getTag().getList("Enchantments", 10);
                 tridentInventory.addTagElement("Enchantments", enchantments);

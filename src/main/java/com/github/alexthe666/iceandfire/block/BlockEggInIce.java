@@ -35,8 +35,6 @@ public class BlockEggInIce extends BaseEntityBlock {
                 .dynamicShape()
                 .sound(SoundType.GLASS)
         );
-
-        setRegistryName(IceAndFire.MODID, "egginice");
     }
 
     @Override

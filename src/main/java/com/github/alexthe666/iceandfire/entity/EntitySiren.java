@@ -114,7 +114,7 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
 
     public static boolean isWearingEarplugs(LivingEntity entity) {
         ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
-        return helmet.getItem() == IafItemRegistry.EARPLUGS || helmet != ItemStack.EMPTY && helmet.getItem().getDescriptionId().contains("earmuff");
+        return helmet.getItem() == IafItemRegistry.EARPLUGS.get() || helmet != ItemStack.EMPTY && helmet.getItem().getDescriptionId().contains("earmuff");
     }
 
     public static boolean isDrawnToSong(Entity entity) {

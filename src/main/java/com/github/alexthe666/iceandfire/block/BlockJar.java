@@ -50,7 +50,7 @@ public class BlockJar extends BaseEntityBlock {
                     .lightLevel((state) -> {
                         return pixieType == -1 ? 0 : 10;
                     })
-                    .dropsLike(IafBlockRegistry.JAR_EMPTY)
+                    .dropsLike(IafBlockRegistry.JAR_EMPTY.get())
 				: Properties
                 .of(Material.GLASS)
                 .noOcclusion()
@@ -61,11 +61,12 @@ public class BlockJar extends BaseEntityBlock {
 
         this.empty = pixieType == -1;
         this.pixieType = pixieType;
-        if (empty) {
-            this.setRegistryName(IceAndFire.MODID, "pixie_jar_empty");
-        } else {
-            this.setRegistryName(IceAndFire.MODID, "pixie_jar_" + pixieType);
-        }
+    }
+    
+    static String name(int pixieType) {
+        if (pixieType == -1)
+            return "pixie_jar_empty";
+        return "pixie_jar_%d".formatted(pixieType);
     }
 
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
@@ -91,7 +92,7 @@ public class BlockJar extends BaseEntityBlock {
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult resultIn) {
         if (!empty && world.getBlockEntity(pos) != null && world.getBlockEntity(pos) instanceof TileEntityJar && ((TileEntityJar) world.getBlockEntity(pos)).hasPixie && ((TileEntityJar) world.getBlockEntity(pos)).hasProduced) {
             ((TileEntityJar) world.getBlockEntity(pos)).hasProduced = false;
-            ItemEntity item = new ItemEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(IafItemRegistry.PIXIE_DUST));
+            ItemEntity item = new ItemEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(IafItemRegistry.PIXIE_DUST.get()));
             if (!world.isClientSide) {
                 world.addFreshEntity(item);
             }

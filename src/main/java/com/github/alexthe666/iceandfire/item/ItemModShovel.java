@@ -20,9 +20,8 @@ public class ItemModShovel extends ShovelItem implements DragonSteelOverrides<It
 
     private Multimap<Attribute, AttributeModifier> dragonsteelModifiers;
 
-    public ItemModShovel(Tier toolmaterial, String gameName) {
+    public ItemModShovel(Tier toolmaterial) {
         super(toolmaterial, 1.5F, -3.0F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, gameName);
     }
 
     @Override

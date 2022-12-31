@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.armor.ModelTrollArmor;
+import com.github.alexthe666.iceandfire.client.render.entity.RenderTroll;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.model.HumanoidModel;
@@ -13,20 +14,22 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.IItemRenderProperties;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
-public class ItemTrollArmor extends ArmorItem implements IItemRenderProperties {
+public class ItemTrollArmor extends ArmorItem{
 
     public EnumTroll troll;
 
     public ItemTrollArmor(EnumTroll troll, CustomArmorMaterial material, EquipmentSlot slot) {
         super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.troll = troll;
-        this.setRegistryName(IceAndFire.MODID, troll.name().toLowerCase(Locale.ROOT) + "_troll_leather_" + getArmorPart(slot));
+    }
+
+    public static String getName(EnumTroll troll, EquipmentSlot slot) {
+        return "%s_troll_leather_%s".formatted(troll.name().toLowerCase(Locale.ROOT), getArmorPart(slot));
     }
 
     public ArmorMaterial getMaterial() {
@@ -34,27 +37,23 @@ public class ItemTrollArmor extends ArmorItem implements IItemRenderProperties {
     }
 
 
-    private String getArmorPart(EquipmentSlot slot) {
-        switch (slot) {
-            case HEAD:
-                return "helmet";
-            case CHEST:
-                return "chestplate";
-            case LEGS:
-                return "leggings";
-            case FEET:
-                return "boots";
-        }
-        return "";
+    private static String getArmorPart(EquipmentSlot slot) {
+        return switch (slot) {
+            case HEAD -> "helmet";
+            case CHEST -> "chestplate";
+            case LEGS -> "leggings";
+            case FEET -> "boots";
+            default -> "";
+        };
     }
 
     @Override
     public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
-        consumer.accept(new IItemRenderProperties() {
+        consumer.accept(new net.minecraftforge.client.IItemRenderProperties() {
             @Override
             @Nullable
-            public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
-                return (A) new ModelTrollArmor(armorSlot == EquipmentSlot.LEGS || armorSlot == EquipmentSlot.HEAD);
+            public HumanoidModel<?> getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
+                return new ModelTrollArmor(armorSlot == EquipmentSlot.LEGS || armorSlot == EquipmentSlot.HEAD);
             }
         });
     }

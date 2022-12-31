@@ -16,12 +16,11 @@ public class ItemLichStaff extends Item {
 
     public ItemLichStaff() {
         super(new Item.Properties().durability(100).tab(IceAndFire.TAB_ITEMS));
-        this.setRegistryName(IceAndFire.MODID, "lich_staff");
     }
 
     @Override
     public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
-        return repair.getItem() == IafItemRegistry.DREAD_SHARD || super.isValidRepairItem(toRepair, repair);
+        return repair.getItem() == IafItemRegistry.DREAD_SHARD.get() || super.isValidRepairItem(toRepair, repair);
     }
 
     @Override

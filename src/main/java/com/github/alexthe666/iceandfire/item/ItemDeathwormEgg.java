@@ -18,7 +18,6 @@ public class ItemDeathwormEgg extends Item {
 
     public ItemDeathwormEgg(boolean gigantic) {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
-        this.setRegistryName(IceAndFire.MODID, gigantic ? "deathworm_egg_giant" : "deathworm_egg");
         this.gigantic = gigantic;
     }
 

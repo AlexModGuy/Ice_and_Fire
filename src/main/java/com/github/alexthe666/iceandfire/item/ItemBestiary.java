@@ -19,6 +19,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.DeferredRegister;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -28,7 +29,6 @@ public class ItemBestiary extends Item {
 
     public ItemBestiary() {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
-        this.setRegistryName(IceAndFire.MODID, "bestiary");
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ItemBestiary extends Item {
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if (this.allowdedIn(group)) {
             items.add(new ItemStack(this));
-            ItemStack stack = new ItemStack(IafItemRegistry.BESTIARY);
+            ItemStack stack = new ItemStack(IafItemRegistry.BESTIARY.get());
             stack.setTag(new CompoundTag());
             int[] pages = new int[EnumBestiaryPages.values().length];
             for (int i = 0; i < EnumBestiaryPages.values().length; i++) {

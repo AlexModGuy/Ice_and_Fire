@@ -82,7 +82,7 @@ public class PathNavigateCyclops extends GroundPathNavigation {
         int i1 = k;
 
         for (int j1 = i - 1; j1 >= this.path.getNextNodeIndex(); --j1) {
-            if (this.canMoveDirectly(vector3d, this.path.getEntityPosAtNode(this.mob, j1), k, l, i1)) {
+            if (this.canMoveDirectly(vector3d, this.path.getEntityPosAtNode(this.mob, j1))) {
                 this.path.setNextNodeIndex(j1);
                 break;
             }
@@ -128,7 +128,10 @@ public class PathNavigateCyclops extends GroundPathNavigation {
     }
 
     @Override
-    protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32, int sizeX, int sizeY, int sizeZ) {
+    protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32) {
+        double sizeX = this.mob.getBbHeight();
+        double sizeY = this.mob.getBbWidth();
+        double sizeZ = posVec32.z;
         int i = Mth.floor(posVec31.x);
         int j = Mth.floor(posVec31.z);
         double d0 = posVec32.x - posVec31.x;
@@ -191,9 +194,9 @@ public class PathNavigateCyclops extends GroundPathNavigation {
         }
     }
 
-    private boolean isSafeToStandAt(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3 vec31, double p_179683_8_, double p_179683_10_) {
-        int i = x - sizeX / 2;
-        int j = z - sizeZ / 2;
+    private boolean isSafeToStandAt(int x, int y, int z, double sizeX, double sizeY, double sizeZ, Vec3 vec31, double p_179683_8_, double p_179683_10_) {
+        int i = Mth.floor(x - sizeX / 2);
+        int j = Mth.floor(z - sizeZ / 2);
 
         if (!this.isPositionClear(i, y, j, sizeX, sizeY, sizeZ, vec31, p_179683_8_, p_179683_10_)) {
             return false;
@@ -206,7 +209,7 @@ public class PathNavigateCyclops extends GroundPathNavigation {
                     if (d0 * p_179683_8_ + d1 * p_179683_10_ >= 0.0D) {
                         BlockPathTypes pathnodetype;
                         try {
-                            pathnodetype = this.nodeEvaluator.getBlockPathType(this.level, k, y - 1, l, this.mob, sizeX, sizeY, sizeZ, true, true);
+                            pathnodetype = this.nodeEvaluator.getBlockPathType(this.level, k, y - 1, l, this.mob, Mth.floor(sizeX), Mth.floor(sizeY), Mth.floor(sizeZ), true, true);
                         } catch (Exception e) {
                             pathnodetype = BlockPathTypes.BLOCKED;
                         }
@@ -222,7 +225,7 @@ public class PathNavigateCyclops extends GroundPathNavigation {
                             return false;
                         }
                         try {
-                            pathnodetype = this.nodeEvaluator.getBlockPathType(this.level, k, y, l, this.mob, sizeX, sizeY, sizeZ, true, true);
+                            pathnodetype = this.nodeEvaluator.getBlockPathType(this.level, k, y, l, this.mob, Mth.floor(sizeX), Mth.floor(sizeY), Mth.floor(sizeZ), true, true);
                         } catch (Exception e) {
                             pathnodetype = BlockPathTypes.BLOCKED;
                         }
@@ -246,7 +249,7 @@ public class PathNavigateCyclops extends GroundPathNavigation {
     /**
      * Returns true if an entity does not collide with any solid blocks at the position.
      */
-    private boolean isPositionClear(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3 p_179692_7_, double p_179692_8_, double p_179692_10_) {
+    private boolean isPositionClear(int x, int y, int z, double sizeX, double sizeY, double sizeZ, Vec3 p_179692_7_, double p_179692_8_, double p_179692_10_) {
         for (BlockPos blockpos : BlockPos.betweenClosedStream(new BlockPos(x, y, z), new BlockPos(x + sizeX - 1, y + sizeY - 1, z + sizeZ - 1)).collect(Collectors.toList())) {
             double d0 = (double) blockpos.getX() + 0.5D - p_179692_7_.x;
             double d1 = (double) blockpos.getZ() + 0.5D - p_179692_7_.z;

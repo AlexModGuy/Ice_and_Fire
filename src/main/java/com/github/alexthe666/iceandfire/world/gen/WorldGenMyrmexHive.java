@@ -32,10 +32,10 @@ import java.util.stream.Collectors;
 
 public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
 
-    private static final BlockState DESERT_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN.defaultBlockState();
-    private static final BlockState STICKY_DESERT_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN_STICKY.defaultBlockState();
-    private static final BlockState JUNGLE_RESIN = IafBlockRegistry.MYRMEX_JUNGLE_RESIN.defaultBlockState();
-    private static final BlockState STICKY_JUNGLE_RESIN = IafBlockRegistry.MYRMEX_JUNGLE_RESIN_STICKY.defaultBlockState();
+    private static final BlockState DESERT_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN.get().defaultBlockState();
+    private static final BlockState STICKY_DESERT_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN_STICKY.get().defaultBlockState();
+    private static final BlockState JUNGLE_RESIN = IafBlockRegistry.MYRMEX_JUNGLE_RESIN.get().defaultBlockState();
+    private static final BlockState STICKY_JUNGLE_RESIN = IafBlockRegistry.MYRMEX_JUNGLE_RESIN_STICKY.get().defaultBlockState();
     public MyrmexHive hive;
     private int entrances = 0;
     private int totalRooms;
@@ -91,7 +91,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         centerOfHive = undergroundPos;
         generateMainRoom(worldIn, rand, undergroundPos);
         this.small = false;
-        return false;
+        return true;
     }
 
     private void generateMainRoom(ServerLevelAccessor world, Random rand, BlockPos position) {
@@ -219,7 +219,9 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
     private void generateEntrance(LevelAccessor world, Random rand, BlockPos position, int size, int height, Direction direction) {
         BlockPos up = position.above();
         hive.getEntranceBottoms().put(up, direction);
-        while (up.getY() < world.getHeightmapPos(small ? Heightmap.Types.MOTION_BLOCKING_NO_LEAVES : Heightmap.Types.WORLD_SURFACE_WG, up).getY() && !BlockTags.LOGS.contains(world.getBlockState(up).getBlock())) {
+        while (up.getY() < world.getHeightmapPos(small ? Heightmap.Types.MOTION_BLOCKING_NO_LEAVES : Heightmap.Types.WORLD_SURFACE_WG, up).getY()
+                && ! world.getBlockState(up).is(BlockTags.LOGS))
+        {
             generateCircleRespectSky(world, rand, up, size, height, direction);
             up = up.above().relative(direction);
         }
@@ -489,7 +491,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
             for (int i = 0; i < tuberLength; i++) {
                 if (world.isEmptyBlock(blockpos.below(i))) {
                     boolean connected = i != tuberLength - 1;
-                    world.setBlock(blockpos.below(i), jungle ? IafBlockRegistry.MYRMEX_JUNGLE_BIOLIGHT.defaultBlockState().setValue(BlockMyrmexBiolight.CONNECTED_DOWN, connected) : IafBlockRegistry.MYRMEX_DESERT_BIOLIGHT.defaultBlockState().setValue(BlockMyrmexBiolight.CONNECTED_DOWN, connected), 2);
+                    world.setBlock(blockpos.below(i), jungle ? IafBlockRegistry.MYRMEX_JUNGLE_BIOLIGHT.get().defaultBlockState().setValue(BlockMyrmexBiolight.CONNECTED_DOWN, connected) : IafBlockRegistry.MYRMEX_DESERT_BIOLIGHT.get().defaultBlockState().setValue(BlockMyrmexBiolight.CONNECTED_DOWN, connected), 2);
                 }
             }
         }

@@ -6,7 +6,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
+import net.minecraftforge.network.PlayMessages;
 
 public class EntityHydraHead extends EntityMutlipartPart {
     public int headIndex;
@@ -17,7 +17,7 @@ public class EntityHydraHead extends EntityMutlipartPart {
         super(t, world);
     }
 
-    public EntityHydraHead(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
+    public EntityHydraHead(PlayMessages.SpawnEntity spawnEntity, Level worldIn) {
         this(IafEntityRegistry.HYDRA_MULTIPART.get(), worldIn);
     }
 

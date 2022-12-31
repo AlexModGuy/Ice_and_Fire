@@ -138,13 +138,13 @@ public class EntityLightningDragon extends EntityDragonBase {
     public Item getVariantScale(int variant) {
         switch (variant) {
             default:
-                return IafItemRegistry.DRAGONSCALES_ELECTRIC;
+                return IafItemRegistry.DRAGONSCALES_ELECTRIC.get();
             case 1:
-                return IafItemRegistry.DRAGONSCALES_AMYTHEST;
+                return IafItemRegistry.DRAGONSCALES_AMYTHEST.get();
             case 2:
-                return IafItemRegistry.DRAGONSCALES_COPPER;
+                return IafItemRegistry.DRAGONSCALES_COPPER.get();
             case 3:
-                return IafItemRegistry.DRAGONSCALES_BLACK;
+                return IafItemRegistry.DRAGONSCALES_BLACK.get();
         }
     }
 
@@ -152,13 +152,13 @@ public class EntityLightningDragon extends EntityDragonBase {
     public Item getVariantEgg(int variant) {
         switch (variant) {
             default:
-                return IafItemRegistry.DRAGONEGG_ELECTRIC;
+                return IafItemRegistry.DRAGONEGG_ELECTRIC.get();
             case 1:
-                return IafItemRegistry.DRAGONEGG_AMYTHEST;
+                return IafItemRegistry.DRAGONEGG_AMYTHEST.get();
             case 2:
-                return IafItemRegistry.DRAGONEGG_COPPER;
+                return IafItemRegistry.DRAGONEGG_COPPER.get();
             case 3:
-                return IafItemRegistry.DRAGONEGG_BLACK;
+                return IafItemRegistry.DRAGONEGG_BLACK.get();
         }
     }
 
@@ -190,7 +190,7 @@ public class EntityLightningDragon extends EntityDragonBase {
 
     @Override
     public Item getSummoningCrystal() {
-        return IafItemRegistry.SUMMONING_CRYSTAL_LIGHTNING;
+        return IafItemRegistry.SUMMONING_CRYSTAL_LIGHTNING.get();
     }
 
     @Override
@@ -320,12 +320,12 @@ public class EntityLightningDragon extends EntityDragonBase {
 
     @Override
     protected Item getBloodItem() {
-        return IafItemRegistry.LIGHTNING_DRAGON_BLOOD;
+        return IafItemRegistry.LIGHTNING_DRAGON_BLOOD.get();
     }
 
     @Override
     protected ItemLike getHeartItem() {
-        return IafItemRegistry.LIGHTNING_DRAGON_HEART;
+        return IafItemRegistry.LIGHTNING_DRAGON_HEART.get();
     }
 
     @Override
@@ -499,7 +499,7 @@ public class EntityLightningDragon extends EntityDragonBase {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.LIGHTNING_STEW;
+        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == IafItemRegistry.LIGHTNING_STEW.get();
     }
 
     @Override
@@ -530,7 +530,7 @@ public class EntityLightningDragon extends EntityDragonBase {
 
     @Override
     protected ItemStack getSkull() {
-        return new ItemStack(IafItemRegistry.DRAGON_SKULL_LIGHTNING);
+        return new ItemStack(IafItemRegistry.DRAGON_SKULL_LIGHTNING.get());
     }
 
 

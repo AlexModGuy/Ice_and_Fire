@@ -14,6 +14,7 @@ import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.PathJobRand
 import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -438,9 +439,9 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     }
 
     @Override
-    protected boolean canMoveDirectly(final Vec3 start, final Vec3 end, final int sizeX, final int sizeY, final int sizeZ) {
+    protected boolean canMoveDirectly(final Vec3 start, final Vec3 end) {
         // TODO improve road walking. This is better in some situations, but still not great.
-        return super.canMoveDirectly(start, end, sizeX, sizeY, sizeZ);
+        return super.canMoveDirectly(start, end);
     }
 
     public double getSpeedFactor() {
@@ -762,11 +763,15 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         final Vec3 curr = this.path.getEntityPosAtNode(this.mob, curNode - 1);
         final Vec3 next = this.path.getEntityPosAtNode(this.mob, curNode);
 
-        if (mob.blockPosition().closerThan(curr, 2.0) && mob.blockPosition().closerThan(next, 2.0)) {
+        final Vec3i currI = new Vec3i(curr.x, curr.y, curr.z);
+        final Vec3i nextI = new Vec3i(next.x, next.y, next.z);
+
+        if (mob.blockPosition().closerThan(currI, 2.0) && mob.blockPosition().closerThan(nextI, 2.0)) {
             int currentIndex = curNode - 1;
             while (currentIndex > 0) {
                 final Vec3 tempoPos = this.path.getEntityPosAtNode(this.mob, currentIndex);
-                if (mob.blockPosition().closerThan(tempoPos, 1.0)) {
+                final Vec3i tempoPosI = new Vec3i(tempoPos.x, tempoPos.y, tempoPos.z);
+                if (mob.blockPosition().closerThan(tempoPosI, 1.0)) {
                     this.path.setNextNodeIndex(currentIndex);
                 } else if (isTracking) {
                     reached.add(new BlockPos(tempoPos.x, tempoPos.y, tempoPos.z));

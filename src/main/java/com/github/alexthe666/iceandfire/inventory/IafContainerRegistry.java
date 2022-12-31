@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.inventory;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 

@@ -56,26 +56,26 @@ public class WorldGenPixieVillage extends Feature<NoneFeatureConfiguration> {
                 }
                 if (rand.nextInt(8) == 0) {
                     Direction houseDir = rand.nextBoolean() ? buildingDirection.getClockWise() : buildingDirection.getCounterClockWise();
-                    BlockState houseState = IafBlockRegistry.PIXIE_HOUSE_OAK.defaultBlockState();
+                    BlockState houseState = IafBlockRegistry.PIXIE_HOUSE_OAK.get().defaultBlockState();
                     int houseColor = rand.nextInt(5);
                     switch (houseColor) {
                         case 0:
-                            houseState = IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_RED.defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
+                            houseState = IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_RED.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
                             break;
                         case 1:
-                            houseState = IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_BROWN.defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
+                            houseState = IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_BROWN.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
                             break;
                         case 2:
-                            houseState = IafBlockRegistry.PIXIE_HOUSE_OAK.defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
+                            houseState = IafBlockRegistry.PIXIE_HOUSE_OAK.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
                             break;
                         case 3:
-                            houseState = IafBlockRegistry.PIXIE_HOUSE_BIRCH.defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
+                            houseState = IafBlockRegistry.PIXIE_HOUSE_BIRCH.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
                             break;
                         case 4:
-                            houseState = IafBlockRegistry.PIXIE_HOUSE_SPRUCE.defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
+                            houseState = IafBlockRegistry.PIXIE_HOUSE_SPRUCE.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
                             break;
                         case 5:
-                            houseState = IafBlockRegistry.PIXIE_HOUSE_DARK_OAK.defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
+                            houseState = IafBlockRegistry.PIXIE_HOUSE_DARK_OAK.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
                             break;
                     }
                     EntityPixie pixie = IafEntityRegistry.PIXIE.get().create(worldIn.getLevel());
