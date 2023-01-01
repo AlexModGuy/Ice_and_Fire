@@ -22,7 +22,7 @@ public class BiomeConfig {
     public static Pair<String, SpawnBiomeData> fireDragonBiomes = Pair.of("iceandfire:fire_dragon_biomes", DefaultBiomes.FIREDRAGON_ROOST);
     public static Pair<String, SpawnBiomeData> iceDragonBiomes = Pair.of("iceandfire:ice_dragon_biomes", DefaultBiomes.ICEDRAGON_ROOST);
     public static Pair<String, SpawnBiomeData> lightningDragonBiomes = Pair.of("iceandfire:lightning_dragon_biomes", DefaultBiomes.LIGHTNING_ROOST);
-    public static Pair<String, SpawnBiomeData> gorgonTempleBiomes = Pair.of("iceandfire:gorgon_temple_biomes", DefaultBiomes.BEACHES);
+
     public static Pair<String, SpawnBiomeData> cyclopsCaveBiomes = Pair.of("iceandfire:cyclops_cave_biomes", DefaultBiomes.BEACHES);
     public static Pair<String, SpawnBiomeData> hippogryphBiomes = Pair.of("iceandfire:hippogryph_biomes", DefaultBiomes.HILLS);
     public static Pair<String, SpawnBiomeData> pixieBiomes = Pair.of("iceandfire:pixie_village_biomes", DefaultBiomes.PIXIES);
@@ -38,8 +38,12 @@ public class BiomeConfig {
 
     public static Pair<String, SpawnBiomeData> stymphalianBiomes = Pair.of("iceandfire:stymphalian_bird_biomes", DefaultBiomes.SWAMPS);
     public static Pair<String, SpawnBiomeData> hydraBiomes = Pair.of("iceandfire:hydra_cave_biomes", DefaultBiomes.SWAMPS);
+
+    // TODO: Either remove or use these to dynamically create the new biome tags
     public static Pair<String, SpawnBiomeData> mausoleumBiomes = Pair.of("iceandfire:mausoleum_biomes", DefaultBiomes.VERY_SNOWY);
     public static Pair<String, SpawnBiomeData> graveyardBiomes = Pair.of("iceandfire:graveyard_biomes", DefaultBiomes.GRAVEYARD);
+    public static Pair<String, SpawnBiomeData> gorgonTempleBiomes = Pair.of("iceandfire:gorgon_temple_biomes", DefaultBiomes.BEACHES);
+
     public static Pair<String, SpawnBiomeData> cockatriceBiomes = Pair.of("iceandfire:cockatrice_biomes", DefaultBiomes.SAVANNAS);
     public static Pair<String, SpawnBiomeData> deathwormBiomes = Pair.of("iceandfire:deathworm_biomes", DefaultBiomes.DESERT);
     public static Pair<String, SpawnBiomeData> wanderingCyclopsBiomes = Pair.of("iceandfire:wandering_cyclops_biomes", DefaultBiomes.PLAINS);
@@ -47,7 +51,7 @@ public class BiomeConfig {
     public static Pair<String, SpawnBiomeData> fireDragonSkeletonBiomes = Pair.of("iceandfire:fire_dragon_skeleton_biomes", DefaultBiomes.DESERT);
     public static Pair<String, SpawnBiomeData> iceDragonSkeletonBiomes = Pair.of("iceandfire:ice_dragon_skeleton_biomes", DefaultBiomes.VERY_SNOWY);
 
-    public static Pair<String, SpawnBiomeData> blackHippogryphBiomes = Pair.of("iceandfire:hippogryph_black_biomes",DefaultBiomes.HIPPOGRYPH_BLACK);
+    public static Pair<String, SpawnBiomeData> blackHippogryphBiomes = Pair.of("iceandfire:hippogryph_black_biomes", DefaultBiomes.HIPPOGRYPH_BLACK);
     public static Pair<String, SpawnBiomeData> brownHippogryphBiomes = Pair.of("iceandfire:hippogryph_brown_biomes", DefaultBiomes.VERY_HILLY);
     public static Pair<String, SpawnBiomeData> grayHippogryphBiomes = Pair.of("iceandfire:hippogryph_gray_biomes", DefaultBiomes.HIPPOGRYPH_GRAY);
     public static Pair<String, SpawnBiomeData> chestnutHippogryphBiomes = Pair.of("iceandfire:hippogryph_chestnut_biomes", DefaultBiomes.HIPPOGRYPH_CHESTNUT);
