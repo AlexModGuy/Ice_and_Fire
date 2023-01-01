@@ -178,7 +178,7 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
             //Ugly hack to make sure ice dragon models are touching the ground when dead
             if (this instanceof IceDragonTabulaModelAnimator){
                 if (cube.boxName.equals("BodyUpper")) {
-                    cube.offsetY += 0.35F * Mth.lerp(partialTick, entity.prevModelDeadProgress, entity.modelDeadProgress);
+                    cube.rotationPointY += 0.35F * Mth.lerp(partialTick, entity.prevModelDeadProgress, entity.modelDeadProgress);
                 }
             }
         }

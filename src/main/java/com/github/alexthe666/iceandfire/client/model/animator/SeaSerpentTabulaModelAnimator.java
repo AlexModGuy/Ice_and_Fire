@@ -18,7 +18,7 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
     @Override
     public void setRotationAngles(TabulaModel model, EntitySeaSerpent entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
         model.resetToDefaultPose();
-        model.getCube("BodyUpper").offsetY += 9;//model was made too high
+        model.getCube("BodyUpper").rotationPointY += 9;//model was made too high
         model.llibAnimator.update(entity);
         animate(model, entity, limbSwing, limbSwingAmount, ageInTicks, rotationYaw, rotationPitch, scale);
         int currentIndex = entity.swimCycle / 10;
@@ -30,8 +30,8 @@ public class SeaSerpentTabulaModelAnimator extends IceAndFireTabulaModelAnimator
         TabulaModel currentPosition = swimPose[currentIndex];
         float partialTicks = Minecraft.getInstance().getFrameTime();
         float delta = ((entity.swimCycle) / 10.0F) % 1.0F + (partialTicks / 10.0F);
-        AdvancedModelBox[] tailParts = {model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4"), model.getCube("Tail5"), model.getCube("Tail6")};
-        AdvancedModelBox[] neckParts = {model.getCube("Neck1"), model.getCube("Neck2"), model.getCube("Neck3"), model.getCube("Head")};
+        // AdvancedModelBox[] tailParts = {model.getCube("Tail1"), model.getCube("Tail2"), model.getCube("Tail3"), model.getCube("Tail4"), model.getCube("Tail5"), model.getCube("Tail6")};
+        // AdvancedModelBox[] neckParts = {model.getCube("Neck1"), model.getCube("Neck2"), model.getCube("Neck3"), model.getCube("Head")};
 
         for (AdvancedModelBox cube : model.getCubes().values()) {
             if (entity.jumpProgress > 0.0F) {

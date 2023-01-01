@@ -83,8 +83,6 @@ public class ModelDreadGhoul extends ModelBipedBase<EntityDreadGhoul> {
         }
         this.flap(armLeft, speed_idle, 0.15F, false, 2, -0.1F, thrall.tickCount, 1);
         this.flap(armRight, speed_idle, 0.15F, true, 2, -0.1F, thrall.tickCount, 1);
-        this.flap(clawsLeft, speed_idle, 0.05F, false, 3, -0.05F, thrall.tickCount, 1);
-        this.flap(clawsRight, speed_idle, 0.05F, true, 3, -0.05F, thrall.tickCount, 1);
         this.walk(head, speed_idle, 0.1F, true, 1, -0.05F, thrall.tickCount, 1);
 
         this.walk(legRight, speed_walk, degree_walk, false, 0, 0, limbSwing, limbSwingAmount);

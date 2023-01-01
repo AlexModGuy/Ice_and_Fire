@@ -10,9 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.phys.Vec3;
 
 public class ModelCyclops extends ModelDragonBase<EntityCyclops> {
     public AdvancedModelBox body;
@@ -403,24 +401,7 @@ public class ModelCyclops extends ModelDragonBase<EntityCyclops> {
             this.faceTarget(f3, f4, 1, this.Head);
         }
         this.walk(this.Jaw, speed_idle, degree_idle * -0.15F, true, 0F, -0.1F, f2, 1);
-
-        if (entity != null) {
-            Vec3 Vector3d = entity.getEyePosition(0.0F);
-            Vec3 Vector3d1 = entity.getEyePosition(0.0F);
-            double d0 = Vector3d.y - Vector3d1.y;
-
-            if (d0 > 0.0D) {
-                this.Eye.offsetY = -4.1F;
-            } else {
-                this.Eye.offsetY = -5.1F;
-            }
-
-            Vec3 Vector3d2 = entity.getViewVector(0.0F);
-            Vector3d2 = new Vec3(Vector3d2.x, 0.0D, Vector3d2.z);
-            Vec3 Vector3d3 = (new Vec3(Vector3d1.x - Vector3d.x, 0.0D, Vector3d1.z - Vector3d.z)).normalize().yRot(((float) Math.PI / 2F));
-            double d1 = Vector3d2.dot(Vector3d3);
-            this.Eye.offsetX = Mth.sqrt((float) Math.abs(d1)) * 2.0F * (float) Math.signum(d1);
-        }
+        
     }
 
     @Override
