@@ -91,8 +91,8 @@ public class GraveyardStructure extends StructureFeature<NoneFeatureConfiguratio
             JigsawPlacement.addPieces(
                 dynamicRegistries,
                 new JigsawConfiguration(() -> dynamicRegistries.registryOrThrow(Registry.TEMPLATE_POOL_REGISTRY)
-                    .get(new ResourceLocation(IceAndFire.MODID, "graveyard/start_pool")),
-                    5), // Depth of jigsaw branches. Can be set to any number greater than 1 but won't change anything as this is a single piece Jigsaw Structure.
+                    .get(new ResourceLocation(IceAndFire.MODID, "graveyard/top_pool")),
+                    2),
                 PoolElementStructurePiece::new,
                 chunkGenerator,
                 templateManager,
