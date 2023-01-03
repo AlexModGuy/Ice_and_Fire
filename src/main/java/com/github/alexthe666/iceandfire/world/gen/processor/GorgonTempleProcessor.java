@@ -3,7 +3,13 @@ package com.github.alexthe666.iceandfire.world.gen.processor;
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
@@ -18,10 +24,9 @@ public class GorgonTempleProcessor extends StructureProcessor {
     public static final Codec<GorgonTempleProcessor> CODEC = Codec.unit(() -> INSTANCE);
     public GorgonTempleProcessor() {
     }
-
-
+    
     public StructureTemplate.StructureBlockInfo process(LevelReader worldReader, BlockPos pos, BlockPos pos2, StructureTemplate.StructureBlockInfo infoIn1, StructureTemplate.StructureBlockInfo infoIn2, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
-        /*
+
         // Workaround for https://bugs.mojang.com/browse/MC-130584
         // Due to a hardcoded field in Templates, any waterloggable blocks in structures replacing water in the world will become waterlogged.
         // Idea of workaround is detect if we are placing a waterloggable block and if so, remove the water in the world instead.
@@ -42,11 +47,10 @@ public class GorgonTempleProcessor extends StructureProcessor {
                     sideChunk.setBlockState(mutable, Blocks.STONE_BRICKS.defaultBlockState(), false);
                 }
             }
-        }*/
+        }
 
         return infoIn2;
     }
-
 
     @Override
     protected StructureProcessorType getType() {
