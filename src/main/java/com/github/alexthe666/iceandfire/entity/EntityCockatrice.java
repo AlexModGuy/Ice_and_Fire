@@ -85,6 +85,8 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
 
     public EntityCockatrice(EntityType<EntityCockatrice> type, Level worldIn) {
         super(type, worldIn);
+        // Fix for some mods causing weird crashes
+        this.lookControl = new IAFLookHelper(this);
         aiStare = new CockatriceAIStareAttack(this, 1.0D, 0, 15.0F);
         aiMelee = new EntityAIAttackMeleeNoCooldown(this, 1.5D, false);
         IHasCustomizableAttributes.applyAttributesForEntity(type, this);

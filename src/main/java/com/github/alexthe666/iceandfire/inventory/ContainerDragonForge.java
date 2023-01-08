@@ -2,18 +2,20 @@ package com.github.alexthe666.iceandfire.inventory;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
-import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
+//TODO: All containers etc should be rewritten
 public class ContainerDragonForge extends AbstractContainerMenu {
 
     private final Container tileFurnace;
-    public int isFire;
+    public int fireType;
+    protected final Level world;
 
     public ContainerDragonForge(int i, Inventory playerInventory) {
         this(i, new SimpleContainer(3), playerInventory, new SimpleContainerData(0));
@@ -23,10 +25,11 @@ public class ContainerDragonForge extends AbstractContainerMenu {
     public ContainerDragonForge(int id, Container furnaceInventory, Inventory playerInventory, ContainerData vars) {
         super(IafContainerRegistry.DRAGON_FORGE_CONTAINER.get(), id);
         this.tileFurnace = furnaceInventory;
+        this.world = playerInventory.player.level;
         if (furnaceInventory instanceof TileEntityDragonforge) {
-            isFire = ((TileEntityDragonforge) furnaceInventory).isFire;
+            fireType = ((TileEntityDragonforge) furnaceInventory).fireType;
         } else if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityDragonforge) {
-            isFire = ((TileEntityDragonforge) IceAndFire.PROXY.getRefrencedTE()).isFire;
+            fireType = ((TileEntityDragonforge) IceAndFire.PROXY.getRefrencedTE()).fireType;
         }
         this.addSlot(new Slot(furnaceInventory, 0, 68, 34));
         this.addSlot(new Slot(furnaceInventory, 1, 86, 34));
@@ -63,19 +66,15 @@ public class ContainerDragonForge extends AbstractContainerMenu {
                 }
                 slot.onQuickCraft(itemstack1, itemstack);
             } else if (index != 1 && index != 0) {
-                if (isFire == 0 && IafRecipeRegistry.getFireForgeRecipe(itemstack1) != null || isFire == 1 && IafRecipeRegistry.getIceForgeRecipe(itemstack1) != null || isFire == 2 && IafRecipeRegistry.getLightningForgeRecipe(itemstack1) != null) {
+                if (fireType == 0) {
                     if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (isFire == 0 && IafRecipeRegistry.getFireForgeRecipeForBlood(itemstack1) != null || isFire == 1 && IafRecipeRegistry.getIceForgeRecipeForBlood(itemstack1) != null || isFire == 2 && IafRecipeRegistry.getLightningForgeRecipeForBlood(itemstack1) != null) {
-                    if (!this.moveItemStackTo(itemstack1, 1, 2, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (index >= 3 && index < 30) {
+                } else if (index < 30) {
                     if (!this.moveItemStackTo(itemstack1, 30, 39, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index >= 30 && index < 39 && !this.moveItemStackTo(itemstack1, 3, 30, false)) {
+                } else if (index < 39 && !this.moveItemStackTo(itemstack1, 3, 30, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (!this.moveItemStackTo(itemstack1, 3, 39, false)) {

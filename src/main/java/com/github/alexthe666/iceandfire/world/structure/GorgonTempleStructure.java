@@ -66,30 +66,25 @@ public class GorgonTempleStructure extends StructureFeature<JigsawConfiguration>
             return Optional.empty();
         }
         Rotation rotation = Rotation.getRandom(ThreadLocalRandom.current());
-        int i = 5;
-        int j = 5;
+        int xOffset = 5;
+        int yOffset = 5;
         if (rotation == Rotation.CLOCKWISE_90) {
-            i = -5;
+            xOffset = -5;
         } else if (rotation == Rotation.CLOCKWISE_180) {
-            i = -5;
-            j = -5;
+            xOffset = -5;
+            yOffset = -5;
         } else if (rotation == Rotation.COUNTERCLOCKWISE_90) {
-            j = -5;
+            yOffset = -5;
         }
 
-        ChunkPos pos = context.chunkPos();
-        ChunkGenerator chunkGenerator = context.chunkGenerator();
-        LevelHeightAccessor height = context.heightAccessor();
-
-        int k = pos.getBlockX(7);
-        int l = pos.getBlockZ(7);
-        int i1 = chunkGenerator.getFirstOccupiedHeight(k, l, Heightmap.Types.WORLD_SURFACE_WG, height);
-        int j1 = chunkGenerator.getFirstOccupiedHeight(k, l + j, Heightmap.Types.WORLD_SURFACE_WG, height);
-        int k1 = chunkGenerator.getFirstOccupiedHeight(k + i, l, Heightmap.Types.WORLD_SURFACE_WG, height);
-        int l1 = chunkGenerator.getFirstOccupiedHeight(k + i, l + j, Heightmap.Types.WORLD_SURFACE_WG, height);
-        int i2 = Math.min(Math.min(i1, j1), Math.min(k1, l1));
-        BlockPos blockpos = pos.getMiddleBlockPosition(i2 + 2);
-
+        int x = pos.getMiddleBlockX();
+        int z = pos.getMiddleBlockZ();
+        int y1 = chunkGenerator.getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, height);
+        int y2 = chunkGenerator.getFirstOccupiedHeight(x, z + yOffset, Heightmap.Types.WORLD_SURFACE_WG, height);
+        int y3 = chunkGenerator.getFirstOccupiedHeight(x + xOffset, z, Heightmap.Types.WORLD_SURFACE_WG, height);
+        int y4 = chunkGenerator.getFirstOccupiedHeight(x + xOffset, z + yOffset, Heightmap.Types.WORLD_SURFACE_WG, height);
+        int yMin = Math.min(Math.min(y1, y2), Math.min(y3, y4));
+        BlockPos blockpos = pos.getMiddleBlockPosition(yMin + 2);
 
         context = Pool.replaceContext(context, new JigsawConfiguration(
                         context.registryAccess().ownedRegistryOrThrow(Registry.TEMPLATE_POOL_REGISTRY).getOrCreateHolder(Pool.gorgon_pool),

@@ -66,16 +66,19 @@ public class ItemMyrmexStaff extends Item {
         if (!context.getPlayer().isShiftKeyDown()) {
             return super.useOn(context);
         } else {
-            UUID id = context.getPlayer().getItemInHand(context.getHand()).getTag().getUUID("HiveUUID");
-            if (!context.getLevel().isClientSide) {
-                MyrmexHive hive = MyrmexWorldData.get(context.getLevel()).getHiveFromUUID(id);
-                if (hive != null) {
-                    IceAndFire.sendMSGToAll(new MessageGetMyrmexHive(hive.toNBT()));
-                } else {
-                    IceAndFire.sendMSGToAll(new MessageSetMyrmexHiveNull());
+            CompoundTag tag = context.getPlayer().getItemInHand(context.getHand()).getTag();
+            if (tag != null && tag.hasUUID("HiveUUID")) {
+                UUID id = tag.getUUID("HiveUUID");
+                if (!context.getLevel().isClientSide) {
+                    MyrmexHive hive = MyrmexWorldData.get(context.getLevel()).getHiveFromUUID(id);
+                    if (hive != null) {
+                        IceAndFire.sendMSGToAll(new MessageGetMyrmexHive(hive.toNBT()));
+                    } else {
+                        IceAndFire.sendMSGToAll(new MessageSetMyrmexHiveNull());
+                    }
+                } else if (id != null && !id.equals(new UUID(0, 0))) {
+                    IceAndFire.PROXY.openMyrmexAddRoomGui(context.getPlayer().getItemInHand(context.getHand()), context.getClickedPos(), context.getPlayer().getDirection());
                 }
-            } else if (id != null && !id.equals(new UUID(0, 0))) {
-                IceAndFire.PROXY.openMyrmexAddRoomGui(context.getPlayer().getItemInHand(context.getHand()), context.getClickedPos(), context.getPlayer().getDirection());
             }
             context.getPlayer().swing(context.getHand());
             return InteractionResult.SUCCESS;

@@ -27,7 +27,6 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
@@ -36,6 +35,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
 
 public class TileEntityDragonforge extends BaseContainerBlockEntity implements WorldlyContainer {
 
@@ -45,12 +46,9 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     private static final Direction[] HORIZONTALS = new Direction[]{
         Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST
     };
-    public int isFire;
+    public int fireType;
     public int cookTime;
     public int lastDragonFlameTimer = 0;
-    IItemHandler handlerTop = new SidedInvWrapper(this, net.minecraft.core.Direction.UP);
-    IItemHandler handlerBottom = new SidedInvWrapper(this, net.minecraft.core.Direction.DOWN);
-    IItemHandler handlerSide = new SidedInvWrapper(this, net.minecraft.core.Direction.WEST);
     net.minecraftforge.common.util.LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper
         .create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
     private NonNullList<ItemStack> forgeItemStacks = NonNullList.withSize(3, ItemStack.EMPTY);
@@ -61,22 +59,22 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
         super(IafTileEntityRegistry.DRAGONFORGE_CORE.get(), pos, state);
     }
 
-    public TileEntityDragonforge(BlockPos pos, BlockState state, int isFire) {
+    public TileEntityDragonforge(BlockPos pos, BlockState state, int fireType) {
         super(IafTileEntityRegistry.DRAGONFORGE_CORE.get(), pos, state);
-        this.isFire = isFire;
+        this.fireType = fireType;
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, TileEntityDragonforge entityDragonforge) {
         boolean flag = entityDragonforge.isBurning();
         boolean flag1 = false;
-        entityDragonforge.isFire = entityDragonforge.getFireType(entityDragonforge.getBlockState().getBlock());
+        entityDragonforge.fireType = entityDragonforge.getFireType(entityDragonforge.getBlockState().getBlock());
         if (entityDragonforge.lastDragonFlameTimer > 0) {
             entityDragonforge.lastDragonFlameTimer--;
         }
         entityDragonforge.updateGrills(entityDragonforge.assembled());
         if (!level.isClientSide) {
             if (entityDragonforge.prevAssembled != entityDragonforge.assembled()) {
-                BlockDragonforgeCore.setState(entityDragonforge.isFire, entityDragonforge.prevAssembled, level, pos);
+                BlockDragonforgeCore.setState(entityDragonforge.fireType, entityDragonforge.prevAssembled, level, pos);
             }
             entityDragonforge.prevAssembled = entityDragonforge.assembled();
             if (!entityDragonforge.assembled())
@@ -92,7 +90,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
             if (entityDragonforge.isBurning()) {
                 if (entityDragonforge.canSmelt()) {
                     ++entityDragonforge.cookTime;
-                    if (entityDragonforge.cookTime >= entityDragonforge.getMaxCookTime(entityDragonforge.forgeItemStacks.get(0), entityDragonforge.forgeItemStacks.get(1))) {
+                    if (entityDragonforge.cookTime >= entityDragonforge.getMaxCookTime()) {
                         entityDragonforge.cookTime = 0;
                         entityDragonforge.smeltItem();
                         flag1 = true;
@@ -105,7 +103,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
                 }
             } else if (!entityDragonforge.isBurning() && entityDragonforge.cookTime > 0) {
                 entityDragonforge.cookTime = Mth.clamp(entityDragonforge.cookTime - 2, 0,
-                    entityDragonforge.getMaxCookTime(entityDragonforge.forgeItemStacks.get(0), entityDragonforge.forgeItemStacks.get(1)));
+                    entityDragonforge.getMaxCookTime());
             }
 
             if (flag != entityDragonforge.isBurning()) {
@@ -149,7 +147,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     }
 
     public Block getGrillBlock() {
-        switch (isFire) {
+        switch (fireType) {
             case 1:
                 return IafBlockRegistry.DRAGONFORGE_ICE_BRICK.get();
             case 2:
@@ -160,7 +158,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     }
 
     public boolean grillMatches(Block block) {
-        switch (isFire) {
+        switch (fireType) {
             case 0:
                 return block == IafBlockRegistry.DRAGONFORGE_FIRE_BRICK.get();
             case 1:
@@ -199,7 +197,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
         }
 
         if (index == 0 && !flag
-            || this.cookTime > this.getMaxCookTime(forgeItemStacks.get(0), forgeItemStacks.get(1))) {
+            || this.cookTime > this.getMaxCookTime()) {
             this.cookTime = 0;
             this.setChanged();
         }
@@ -256,65 +254,27 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
         }
     }
 
-    public int getMaxCookTime(ItemStack cookStack, ItemStack bloodStack) {
-        ItemStack stack = getCurrentResult(cookStack, bloodStack);
-        if (stack.getItem() == IafBlockRegistry.ASH.get().asItem()
-            || stack.getItem() == IafBlockRegistry.DRAGON_ICE.get().asItem()) {
-            return 100;
-        }
-        return 1000;
-    }
-
-    private DragonForgeRecipe getRecipeForInput(ItemStack cookStack) {
-        switch (this.isFire) {
-            case 0:
-                return IafRecipeRegistry.getFireForgeRecipe(cookStack);
-            case 1:
-                return IafRecipeRegistry.getIceForgeRecipe(cookStack);
-            case 2:
-                return IafRecipeRegistry.getLightningForgeRecipe(cookStack);
-            default:
-                return null;
-        }
-    }
-
-    private DragonForgeRecipe getRecipeForBlood(ItemStack bloodStack) {
-        switch (this.isFire) {
-            case 0:
-                return IafRecipeRegistry.getFireForgeRecipeForBlood(bloodStack);
-            case 1:
-                return IafRecipeRegistry.getIceForgeRecipeForBlood(bloodStack);
-            case 2:
-                return IafRecipeRegistry.getLightningForgeRecipeForBlood(bloodStack);
-            default:
-                return null;
-        }
+    public int getMaxCookTime() {
+        return getCurrentRecipe().map(DragonForgeRecipe::getCookTime).orElse(100);
     }
 
     private Block getDefaultOutput() {
-        return isFire == 1 ? IafBlockRegistry.DRAGON_ICE.get() : IafBlockRegistry.ASH.get();
+        return fireType == 1 ? IafBlockRegistry.DRAGON_ICE.get() : IafBlockRegistry.ASH.get();
     }
 
-    private DragonForgeRecipe getCurrentRecipe(ItemStack cookStack, ItemStack bloodStack) {
-        DragonForgeRecipe forgeRecipe = getRecipeForInput(cookStack);
-        if (forgeRecipe != null &&
-            // Item input and quantity match
-            forgeRecipe.getInput().test(cookStack) && cookStack.getCount() > 0 &&
-            // Blood item and quantity match
-            forgeRecipe.getBlood().test(bloodStack) && bloodStack.getCount() > 0) {
-            return forgeRecipe;
-        }
-
-        return new DragonForgeRecipe(
-            Ingredient.of(cookStack),
-            Ingredient.of(bloodStack),
-            new ItemStack(getDefaultOutput()),
-            getTypeID()
-        );
+    private ItemStack getCurrentResult() {
+        Optional<DragonForgeRecipe> recipe = getCurrentRecipe();
+        if (recipe.isPresent())
+            return recipe.get().getResultItem();
+        return new ItemStack(getDefaultOutput());
     }
 
-    private ItemStack getCurrentResult(ItemStack cookStack, ItemStack bloodStack) {
-        return getCurrentRecipe(cookStack, bloodStack).getOutput();
+    public Optional<DragonForgeRecipe> getCurrentRecipe() {
+        return level.getRecipeManager().getRecipeFor(IafRecipeRegistry.DRAGON_FORGE_TYPE, this, level);
+    }
+
+    public List<DragonForgeRecipe> getRecipes() {
+        return level.getRecipeManager().getAllRecipesFor(IafRecipeRegistry.DRAGON_FORGE_TYPE);
     }
 
     public boolean canSmelt() {
@@ -322,9 +282,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
         if (cookStack.isEmpty())
             return false;
 
-        ItemStack bloodStack = this.forgeItemStacks.get(1);
-        DragonForgeRecipe forgeRecipe = getCurrentRecipe(cookStack, bloodStack);
-        ItemStack forgeRecipeOutput = forgeRecipe.getOutput();
+        ItemStack forgeRecipeOutput = getCurrentResult();
 
         if (forgeRecipeOutput.isEmpty())
             return false;
@@ -356,12 +314,12 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
         ItemStack bloodStack = this.forgeItemStacks.get(1);
         ItemStack outputStack = this.forgeItemStacks.get(2);
 
-        DragonForgeRecipe forgeRecipe = getCurrentRecipe(cookStack, bloodStack);
+        ItemStack output = getCurrentResult();
 
         if (outputStack.isEmpty()) {
-            this.forgeItemStacks.set(2, forgeRecipe.getOutput().copy());
+            this.forgeItemStacks.set(2, output.copy());
         } else {
-            outputStack.grow(forgeRecipe.getOutput().getCount());
+            outputStack.grow(output.getCount());
         }
 
         cookStack.shrink(1);
@@ -369,20 +327,12 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     }
 
     @Override
-    public void startOpen(Player player) {
-    }
-
-    @Override
-    public void stopOpen(Player player) {
-    }
-
-    @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
         switch (index) {
             case 1:
-                return getRecipeForBlood(stack) != null;
+                return getRecipes().stream().anyMatch(item -> item.isValidBlood(stack));
             case 0:
-                return true;
+                return true;//getRecipes().stream().anyMatch(item -> item.isValidInput(stack))
             default:
                 return false;
         }
@@ -413,18 +363,6 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
         return true;
     }
 
-    public int getField(int id) {
-        return cookTime;
-    }
-
-    public void setField(int id, int value) {
-        cookTime = value;
-    }
-
-    public int getFieldCount() {
-        return 1;
-    }
-
     @Override
     public void clearContent() {
         this.forgeItemStacks.clear();
@@ -447,14 +385,14 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
 
     @Override
     protected Component getDefaultName() {
-        return new TranslatableComponent("container.dragonforge_fire" + DragonType.getNameFromInt(isFire));
+        return new TranslatableComponent("container.dragonforge_fire" + DragonType.getNameFromInt(fireType));
     }
 
     public void transferPower(int i) {
         if (!level.isClientSide) {
             if (this.canSmelt()) {
                 if (canAddFlameAgain) {
-                    cookTime = Math.min(this.getMaxCookTime(forgeItemStacks.get(0), forgeItemStacks.get(1)) + 1,
+                    cookTime = Math.min(this.getMaxCookTime() + 1,
                         cookTime + i);
                     canAddFlameAgain = false;
                 }
@@ -508,7 +446,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     }
 
     private Block getBrick() {
-        switch (isFire) {
+        switch (fireType) {
             case 0:
                 return IafBlockRegistry.DRAGONFORGE_FIRE_BRICK.get();
             case 1:

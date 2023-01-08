@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.compat.jei.icedragonforge.IceDragonForge
 import com.github.alexthe666.iceandfire.compat.jei.lightningdragonforge.LightningDragonForgeCatagory;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -13,9 +14,13 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @JeiPlugin
 public class IceAndFireJEIPlugin implements IModPlugin {
@@ -29,11 +34,17 @@ public class IceAndFireJEIPlugin implements IModPlugin {
         registry.addIngredientInfo(itemStack, VanillaTypes.ITEM, new TranslatableComponent(itemStack.getDescriptionId() + ".jei_desc"));
     }
 
-    @SuppressWarnings("deprecation")
     public void registerRecipes(IRecipeRegistration registry) {
-        registry.addRecipes(IafRecipeRegistry.FIRE_FORGE_RECIPES, FIRE_DRAGON_FORGE_ID);
-        registry.addRecipes(IafRecipeRegistry.ICE_FORGE_RECIPES, ICE_DRAGON_FORGE_ID);
-        registry.addRecipes(IafRecipeRegistry.LIGHTNING_FORGE_RECIPES, LIGHTNING_DRAGON_FORGE_ID);
+        List<DragonForgeRecipe> forgeRecipeList = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(IafRecipeRegistry.DRAGON_FORGE_TYPE);
+
+        List<DragonForgeRecipe> fire = forgeRecipeList.stream().filter(item -> item.getDragonType().equals("fire")).collect(Collectors.toList());
+        List<DragonForgeRecipe> ice = forgeRecipeList.stream().filter(item -> item.getDragonType().equals("ice")).collect(Collectors.toList());
+        List<DragonForgeRecipe> lightning = forgeRecipeList.stream().filter(item -> item.getDragonType().equals("lightning")).collect(Collectors.toList());
+
+        registry.addRecipes(fire, FIRE_DRAGON_FORGE_ID);
+        registry.addRecipes(ice, ICE_DRAGON_FORGE_ID);
+        registry.addRecipes(lightning, LIGHTNING_DRAGON_FORGE_ID);
+
         addDescription(registry, new ItemStack(IafItemRegistry.FIRE_DRAGON_BLOOD.get()));
         addDescription(registry, new ItemStack(IafItemRegistry.ICE_DRAGON_BLOOD.get()));
         addDescription(registry, new ItemStack(IafItemRegistry.LIGHTNING_DRAGON_BLOOD.get()));

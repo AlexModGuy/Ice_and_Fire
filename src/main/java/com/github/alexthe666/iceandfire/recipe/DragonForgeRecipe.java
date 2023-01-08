@@ -1,29 +1,34 @@
 package com.github.alexthe666.iceandfire.recipe;
 
-import com.google.gson.*;
-import net.minecraft.util.GsonHelper;
+import com.github.alexthe666.citadel.client.model.container.JsonUtils;
+import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
+import com.google.gson.JsonObject;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.Level;
 
-import java.lang.reflect.Type;
 
-public class DragonForgeRecipe {
-
+public class DragonForgeRecipe implements Recipe<TileEntityDragonforge> {
     private final Ingredient input;
     private final Ingredient blood;
-    private final ItemStack output;
+    private final ItemStack result;
     private final String dragonType;
+    private final int cookTime;
+    private final ResourceLocation recipeId;
 
-    public DragonForgeRecipe(Ingredient input, Ingredient blood, ItemStack output, String dragonType) {
+    public DragonForgeRecipe(ResourceLocation recipeId, Ingredient input, Ingredient blood, ItemStack result, String dragonType, int cookTime) {
+        this.recipeId = recipeId;
         this.input = input;
         this.blood = blood;
-        this.output = output;
+        this.result = result;
         this.dragonType = dragonType;
+        this.cookTime = cookTime;
     }
 
     public Ingredient getInput() {
-
         return input;
     }
 
@@ -31,35 +36,93 @@ public class DragonForgeRecipe {
         return blood;
     }
 
-    public ItemStack getOutput() {
-        return output;
+    public int getCookTime() {
+        return cookTime;
     }
 
     public String getDragonType() {
         return dragonType;
     }
 
-    public static class Deserializer implements JsonDeserializer<DragonForgeRecipe> {
+    @Override
+    public boolean isSpecial() {
+        return true;
+    }
 
-        @Override
-        public DragonForgeRecipe deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonobject = json.getAsJsonObject();
-            String dragonType = GsonHelper.getAsString(jsonobject, "dragon_type");
-            Ingredient input_left = Ingredient.EMPTY;
-            if (jsonobject.has("input_left")) {
-                input_left = Ingredient.fromJson(GsonHelper.getAsJsonObject(jsonobject, "input_left"));
-            }
-            Ingredient input_right = Ingredient.EMPTY;
-            if (jsonobject.has("input_right")) {
-                input_right = Ingredient.fromJson(GsonHelper.getAsJsonObject(jsonobject, "input_right"));
-            }
-            ItemStack result = ItemStack.EMPTY;
-            if (jsonobject.has("result")) {
-                result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(jsonobject, "result"));
-            }
-            return new DragonForgeRecipe(input_left, input_right, result, dragonType);
+    @Override
+    public boolean matches(TileEntityDragonforge inv, Level worldIn) {
+        return this.input.test(inv.getItem(0)) && this.blood.test(inv.getItem(1)) && this.dragonType.equals(inv.getTypeID());
+    }
+
+    public boolean isValidInput(ItemStack stack) {
+        return this.input.test(stack);
+    }
+
+    public boolean isValidBlood(ItemStack blood) {
+        return this.blood.test(blood);
+    }
+
+    @Override
+    public ItemStack getResultItem() {
+        return result;
+    }
+
+    @Override
+    public ItemStack assemble(TileEntityDragonforge dragonforge) {
+        return result;
+    }
+
+    @Override
+    public boolean canCraftInDimensions(int width, int height) {
+        return false;
+    }
+
+    @Override
+    public ResourceLocation getId() {
+        return this.recipeId;
+    }
+
+    @Override
+    public ItemStack getToastSymbol() {
+        return new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE);
+    }
+
+    @Override
+    public RecipeSerializer<?> getSerializer() {
+        return IafRecipeRegistry.DRAGONFORGE_SERIALIZER.get();
+    }
+
+    @Override
+    public RecipeType<?> getType() {
+        return IafRecipeRegistry.DRAGON_FORGE_TYPE;
+    }
+
+    public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<DragonForgeRecipe> {
+        public DragonForgeRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+            String dragonType = JsonUtils.getString(json, "dragon_type");
+            Ingredient input = Ingredient.fromJson(JsonUtils.getJsonObject(json, "input"));
+            Ingredient blood = Ingredient.fromJson(JsonUtils.getJsonObject(json, "blood"));
+            int cookTime = JsonUtils.getInt(json, "cook_time");
+            ItemStack result = ShapedRecipe.itemStackFromJson(JsonUtils.getJsonObject(json, "result"));
+            return new DragonForgeRecipe(recipeId, input, blood, result, dragonType, cookTime);
         }
 
+        public DragonForgeRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+            int cookTime = buffer.readInt();
+            String dragonType = buffer.readUtf();
+            Ingredient input = Ingredient.fromNetwork(buffer);
+            Ingredient blood = Ingredient.fromNetwork(buffer);
+            ItemStack result = buffer.readItem();
+            return new DragonForgeRecipe(recipeId, input, blood, result, dragonType, cookTime);
+        }
+
+        public void toNetwork(FriendlyByteBuf buffer, DragonForgeRecipe recipe) {
+            buffer.writeInt(recipe.cookTime);
+            buffer.writeUtf(recipe.dragonType);
+            recipe.input.toNetwork(buffer);
+            recipe.blood.toNetwork(buffer);
+            buffer.writeItemStack(recipe.result, true);
+        }
     }
 
 }

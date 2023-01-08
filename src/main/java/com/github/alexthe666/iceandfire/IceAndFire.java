@@ -113,6 +113,7 @@ public class IceAndFire {
         IafWorldRegistry.FEATURES.register(modBus);
         IafWorldRegistry.STRUCTURES.register(modBus);
         IafContainerRegistry.CONTAINERS.register(modBus);
+        IafRecipeRegistry.SERIALIZERS.register(modBus);
 
         MinecraftForge.EVENT_BUS.register(IafBlockRegistry.class);
         MinecraftForge.EVENT_BUS.register(IafRecipeRegistry.class);

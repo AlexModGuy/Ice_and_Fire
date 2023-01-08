@@ -16,7 +16,7 @@ public class IAFLookHelper extends LookControl {
         try {
             super.setLookAt(entityIn, deltaYaw, deltaPitch);//rarely causes crash with vanilla
         } catch (Exception e) {
-            IceAndFire.LOGGER.warn(" Stopped a crash from happening relating to faulty looking AI.");
+            IceAndFire.LOGGER.warn("Stopped a crash from happening relating to faulty looking AI.");
         }
     }
 }

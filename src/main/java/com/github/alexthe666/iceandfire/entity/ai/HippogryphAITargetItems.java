@@ -21,7 +21,7 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super ItemEntity> targetEntitySelector;
     protected ItemEntity targetEntity;
-
+    protected final int targetChance;
     @Nonnull
     private List<ItemEntity> list = IAFMath.emptyItemEntityList;
 
@@ -36,6 +36,7 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
     public HippogryphAITargetItems(Mob creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
         super(creature, checkSight, onlyNearby);
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
+        this.targetChance = chance;
         this.targetEntitySelector = new Predicate<ItemEntity>() {
             @Override
             public boolean test(ItemEntity item) {
@@ -46,7 +47,9 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
 
     @Override
     public boolean canUse() {
-
+        if (this.targetChance > 0 && this.mob.getRandom().nextInt(this.targetChance) != 0) {
+            return false;
+        }
         if (!((EntityHippogryph) this.mob).canMove()) {
             list = IAFMath.emptyItemEntityList;
             return false;

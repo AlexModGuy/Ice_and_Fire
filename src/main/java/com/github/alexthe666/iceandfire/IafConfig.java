@@ -83,7 +83,7 @@ public class IafConfig {
     public static int generateSirenChance = 400;
     public static boolean spawnHippocampus = true;
     public static int hippocampusSpawnChance = 40;
-    public static int deathWormTargetSearchLength = 64;
+    public static int deathWormTargetSearchLength = 48;
     public static double deathWormMaxHealth = 10D;
     public static double deathWormAttackStrength = 3D;
     public static boolean spawnDeathWorm = true;
@@ -97,7 +97,7 @@ public class IafConfig {
     public static boolean spawnCockatrices = true;
     public static int cockatriceSpawnRate = 4;
     public static int cockatriceSpawnCheckChance = 0;
-    public static int stymphalianBirdTargetSearchLength = 64;
+    public static int stymphalianBirdTargetSearchLength = 48;
     public static int stymphalianBirdFeatherDropChance = 25;
     public static double stymphalianBirdFeatherAttackStength = 1F;
     public static int stymphalianBirdFlockLength = 40;
@@ -125,7 +125,7 @@ public class IafConfig {
     public static double myrmexBaseAttackStrength = 3.0D;
     public static boolean spawnAmphitheres = true;
     public static int amphithereSpawnRate = 50;
-    public static float amphithereVillagerSearchLength = 64;
+    public static float amphithereVillagerSearchLength = 48;
     public static int amphithereTameTime = 400;
     public static double amphithereFlightSpeed = 1.75F;
     public static double amphithereMaxHealth = 50D;

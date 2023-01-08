@@ -49,35 +49,25 @@ public class GraveyardStructure extends StructureFeature<JigsawConfiguration> {
     public static Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context)
     {
         Rotation rotation = Rotation.getRandom(ThreadLocalRandom.current());
-        int i = 5;
-        int j = 5;
+        int xOffset = 5;
+        int yOffset = 5;
         if (rotation == Rotation.CLOCKWISE_90) {
-            i = -5;
+            xOffset = -5;
         } else if (rotation == Rotation.CLOCKWISE_180) {
-            i = -5;
-            j = -5;
+            xOffset = -5;
+            yOffset = -5;
         } else if (rotation == Rotation.COUNTERCLOCKWISE_90) {
-            j = -5;
+            yOffset = -5;
         }
 
-        ChunkPos pos = context.chunkPos();
-        ChunkGenerator generator = context.chunkGenerator();
-        LevelHeightAccessor height = context.heightAccessor();
-
-        context = Pool.replaceContext(context, new JigsawConfiguration(
-                context.registryAccess().ownedRegistryOrThrow(Registry.TEMPLATE_POOL_REGISTRY).getOrCreateHolder(Pool.graveyard_pool),
-                5 // Depth of jigsaw branches. Can be set to any number greater than 1 but won't change anything as this is a single piece Jigsaw Structure.
-                )
-        );
-
-        int k = pos.getBlockX(7);
-        int l = pos.getBlockZ(7);
-        int i1 = generator.getFirstOccupiedHeight(k, l, Heightmap.Types.WORLD_SURFACE_WG, height);
-        int j1 = generator.getFirstOccupiedHeight(k, l + j, Heightmap.Types.WORLD_SURFACE_WG, height);
-        int k1 = generator.getFirstOccupiedHeight(k + i, l, Heightmap.Types.WORLD_SURFACE_WG, height);
-        int l1 = generator.getFirstOccupiedHeight(k + i, l + j, Heightmap.Types.WORLD_SURFACE_WG, height);
-        int i2 = Math.min(Math.min(i1, j1), Math.min(k1, l1));
-        BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(i2 - 2);
+        int x = pos.getMiddleBlockX();
+        int z = pos.getMiddleBlockZ();
+        int y1 = chunkGenerator.getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, height);
+        int y2 = chunkGenerator.getFirstOccupiedHeight(x, z + yOffset, Heightmap.Types.WORLD_SURFACE_WG, height);
+        int y3 = chunkGenerator.getFirstOccupiedHeight(x + xOffset, z, Heightmap.Types.WORLD_SURFACE_WG, height);
+        int y4 = chunkGenerator.getFirstOccupiedHeight(x + xOffset, z + yOffset, Heightmap.Types.WORLD_SURFACE_WG, height);
+        int yMin = Math.min(Math.min(y1, y2), Math.min(y3, y4));
+        BlockPos blockpos = pos.getMiddleBlockPosition(yMin + 1);
         // All a structure has to do is call this method to turn it into a jigsaw based structure!
         // No manual pieces class needed.
         return JigsawPlacement.addPieces(context, PoolElementStructurePiece::new, blockpos, false, false);

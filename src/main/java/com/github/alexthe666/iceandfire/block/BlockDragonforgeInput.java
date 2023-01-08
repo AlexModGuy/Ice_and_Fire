@@ -59,7 +59,7 @@ public class BlockDragonforgeInput extends BaseEntityBlock implements IDragonPro
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult resultIn) {
         if (this.getConnectedTileEntity(worldIn, resultIn.getBlockPos()) != null) {
             TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, resultIn.getBlockPos());
-            if (forge != null && forge.isFire == dragonType) {
+            if (forge != null && forge.fireType == dragonType) {
                 if (worldIn.isClientSide) {
                     IceAndFire.PROXY.setRefrencedTE(worldIn.getBlockEntity(forge.getBlockPos()));
                 } else {
