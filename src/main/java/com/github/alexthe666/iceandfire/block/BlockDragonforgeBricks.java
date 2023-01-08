@@ -1,19 +1,10 @@
 package com.github.alexthe666.iceandfire.block;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeBrick;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,7 +20,8 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class BlockDragonforgeBricks extends ContainerBlock implements IDragonProof {
 
@@ -58,7 +50,7 @@ public class BlockDragonforgeBricks extends ContainerBlock implements IDragonPro
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult resultIn) {
         if (this.getConnectedTileEntity(worldIn, resultIn.getPos()) != null) {
             TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, resultIn.getPos());
-            if (forge != null && forge.isFire == isFire) {
+            if (forge != null && forge.fireType == isFire) {
                 if (worldIn.isRemote) {
                     IceAndFire.PROXY.setRefrencedTE(worldIn.getTileEntity(forge.getPos()));
                 } else {

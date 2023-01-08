@@ -2,8 +2,6 @@ package com.github.alexthe666.iceandfire.inventory;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
-import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -14,11 +12,14 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraft.world.World;
 
+//TODO: All containers etc should be rewritten
 public class ContainerDragonForge extends Container {
 
     private final IInventory tileFurnace;
-    public int isFire;
+    public int fireType;
+    protected final World world;
 
     public ContainerDragonForge(int i, PlayerInventory playerInventory) {
         this(i, new Inventory(3), playerInventory, new IntArray(0));
@@ -28,10 +29,11 @@ public class ContainerDragonForge extends Container {
     public ContainerDragonForge(int id, IInventory furnaceInventory, PlayerInventory playerInventory, IIntArray vars) {
         super(IafContainerRegistry.DRAGON_FORGE_CONTAINER.get(), id);
         this.tileFurnace = furnaceInventory;
-        if(furnaceInventory instanceof TileEntityDragonforge){
-            isFire = ((TileEntityDragonforge) furnaceInventory).isFire;
-        }else if(IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityDragonforge){
-            isFire = ((TileEntityDragonforge) IceAndFire.PROXY.getRefrencedTE()).isFire;
+        this.world = playerInventory.player.world;
+        if (furnaceInventory instanceof TileEntityDragonforge) {
+            fireType = ((TileEntityDragonforge) furnaceInventory).fireType;
+        } else if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityDragonforge) {
+            fireType = ((TileEntityDragonforge) IceAndFire.PROXY.getRefrencedTE()).fireType;
         }
         this.addSlot(new Slot(furnaceInventory, 0, 68, 34));
         this.addSlot(new Slot(furnaceInventory, 1, 86, 34));
@@ -68,19 +70,15 @@ public class ContainerDragonForge extends Container {
                 }
                 slot.onSlotChange(itemstack1, itemstack);
             } else if (index != 1 && index != 0) {
-                if (isFire == 0 && IafRecipeRegistry.getFireForgeRecipe(itemstack1) != null || isFire == 1 && IafRecipeRegistry.getIceForgeRecipe(itemstack1) != null || isFire == 2 && IafRecipeRegistry.getLightningForgeRecipe(itemstack1) != null) {
+                if (fireType == 0) {
                     if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (isFire == 0 && IafRecipeRegistry.getFireForgeRecipeForBlood(itemstack1) != null || isFire == 1 && IafRecipeRegistry.getIceForgeRecipeForBlood(itemstack1) != null || isFire == 2 && IafRecipeRegistry.getLightningForgeRecipeForBlood(itemstack1) != null) {
-                    if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (index >= 3 && index < 30) {
+                } else if (index < 30) {
                     if (!this.mergeItemStack(itemstack1, 30, 39, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index >= 30 && index < 39 && !this.mergeItemStack(itemstack1, 3, 30, false)) {
+                } else if (index < 39 && !this.mergeItemStack(itemstack1, 3, 30, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (!this.mergeItemStack(itemstack1, 3, 39, false)) {

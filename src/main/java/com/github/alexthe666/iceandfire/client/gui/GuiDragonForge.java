@@ -4,6 +4,8 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
+import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
+import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.FontRenderer;
@@ -13,6 +15,9 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GuiDragonForge extends ContainerScreen<ContainerDragonForge> {
     private static final ResourceLocation TEXTURE_FIRE = new ResourceLocation("iceandfire:textures/gui/dragonforge_fire.png");
@@ -24,7 +29,7 @@ public class GuiDragonForge extends ContainerScreen<ContainerDragonForge> {
     public GuiDragonForge(ContainerDragonForge container, PlayerInventory inv, ITextComponent name) {
         super(container, inv, name);
         this.tileFurnace = container;
-        this.dragonType = tileFurnace.isFire;
+        this.dragonType = tileFurnace.fireType;
     }
 
     @Override
@@ -57,9 +62,13 @@ public class GuiDragonForge extends ContainerScreen<ContainerDragonForge> {
     private int getCookTime(int p_175381_1_) {
         TileEntity te = IceAndFire.PROXY.getRefrencedTE();
         int j = 0;
-        int maxCookTime = 1000;
+
+        List<DragonForgeRecipe> recipes = this.getMinecraft().world.getRecipeManager()
+            .getRecipesForType(IafRecipeRegistry.DRAGON_FORGE_TYPE)
+            .stream().filter(item ->
+                item.isValidInput(tileFurnace.getSlot(0).getStack()) && item.isValidBlood(tileFurnace.getSlot(1).getStack())).collect(Collectors.toList());
+        int maxCookTime = recipes.isEmpty() ? 100 : recipes.get(0).getCookTime();
         if (te instanceof TileEntityDragonforge) {
-            maxCookTime = ((TileEntityDragonforge) te).getMaxCookTime(tileFurnace.getSlot(0).getStack(), tileFurnace.getSlot(1).getStack());
             j = Math.min(((TileEntityDragonforge) te).cookTime, maxCookTime);
         }
         return j != 0 ? j * p_175381_1_ / maxCookTime : 0;
