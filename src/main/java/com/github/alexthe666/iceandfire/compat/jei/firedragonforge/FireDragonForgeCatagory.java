@@ -57,7 +57,7 @@ public class FireDragonForgeCatagory implements IRecipeCategory<DragonForgeRecip
         ingredientsList.add(dragonForgeRecipe.getInput());
         ingredientsList.add(dragonForgeRecipe.getBlood());
         iIngredients.setInputIngredients(ingredientsList);
-        iIngredients.setOutput(VanillaTypes.ITEM, dragonForgeRecipe.getRecipeOutput());
+        iIngredients.setOutput(VanillaTypes.ITEM, dragonForgeRecipe.getResultItem());
 
     }
 

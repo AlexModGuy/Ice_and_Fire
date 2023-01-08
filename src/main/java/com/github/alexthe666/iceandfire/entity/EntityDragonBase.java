@@ -1099,7 +1099,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     @Override
     public boolean isAlive() {
         if (this.isModelDead())
-            return !this.removed;
+            return !this.isRemoved();
         return super.isAlive();
     }
 
@@ -2161,11 +2161,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         final float headPosY = (float) (getY() + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F + extraAgeScale);
         final float headPosZ = (float) (getZ() + (xzMod) * Mth.sin((float) ((getYRot() + 90) * Math.PI / 180)));
         return new Vec3(headPosX, headPosY, headPosZ);
-    }
-
-    @Override
-    public void onKillCommand() {
-        this.remove();
     }
 
     public void kill() {

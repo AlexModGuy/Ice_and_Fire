@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
+import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
@@ -23,7 +24,7 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
     protected final int targetChance;
     private final EntityDeathWorm worm;
     protected ItemEntity targetEntity;
-    private List<ItemEntity> list = IAFMath.emptyItemEntityList;
+    private final List<ItemEntity> list = IAFMath.emptyItemEntityList;
 
     public DeathwormAITargetItems(EntityDeathWorm creature, boolean checkSight) {
         this(creature, checkSight, false);
@@ -52,7 +53,7 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
 
     @Override
     public boolean canUse() {
-        if (this.targetChance > 0 && this.mob.getRNG().nextInt(this.targetChance) != 0) {
+        if (this.targetChance > 0 && this.mob.getRandom().nextInt(this.targetChance) != 0) {
             return false;
         }
         List<ItemEntity> list = this.mob.level.getEntitiesOfClass(ItemEntity.class,

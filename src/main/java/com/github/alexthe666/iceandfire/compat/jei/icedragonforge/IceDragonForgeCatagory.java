@@ -56,7 +56,7 @@ public class IceDragonForgeCatagory implements IRecipeCategory<DragonForgeRecipe
         ingredientsList.add(dragonForgeRecipe.getInput());
         ingredientsList.add(dragonForgeRecipe.getBlood());
         iIngredients.setInputIngredients(ingredientsList);
-        iIngredients.setOutput(VanillaTypes.ITEM, dragonForgeRecipe.getRecipeOutput());
+        iIngredients.setOutput(VanillaTypes.ITEM, dragonForgeRecipe.getResultItem());
     }
 
     @Override

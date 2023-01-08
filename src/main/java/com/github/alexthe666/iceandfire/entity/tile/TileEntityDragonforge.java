@@ -27,7 +27,6 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
@@ -62,20 +61,20 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
 
     public TileEntityDragonforge(BlockPos pos, BlockState state, int fireType) {
         super(IafTileEntityRegistry.DRAGONFORGE_CORE.get(), pos, state);
-        this.isFire = fireType;
+        this.fireType = fireType;
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, TileEntityDragonforge entityDragonforge) {
         boolean flag = entityDragonforge.isBurning();
         boolean flag1 = false;
-        entityDragonforge.isFire = entityDragonforge.getFireType(entityDragonforge.getBlockState().getBlock());
+        entityDragonforge.fireType = entityDragonforge.getFireType(entityDragonforge.getBlockState().getBlock());
         if (entityDragonforge.lastDragonFlameTimer > 0) {
             entityDragonforge.lastDragonFlameTimer--;
         }
         entityDragonforge.updateGrills(entityDragonforge.assembled());
         if (!level.isClientSide) {
             if (entityDragonforge.prevAssembled != entityDragonforge.assembled()) {
-                BlockDragonforgeCore.setState(entityDragonforge.isFire, entityDragonforge.prevAssembled, level, pos);
+                BlockDragonforgeCore.setState(entityDragonforge.fireType, entityDragonforge.prevAssembled, level, pos);
             }
             entityDragonforge.prevAssembled = entityDragonforge.assembled();
             if (!entityDragonforge.assembled())
@@ -91,7 +90,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
             if (entityDragonforge.isBurning()) {
                 if (entityDragonforge.canSmelt()) {
                     ++entityDragonforge.cookTime;
-                    if (entityDragonforge.cookTime >= entityDragonforge.getMaxCookTime(entityDragonforge.forgeItemStacks.get(0), entityDragonforge.forgeItemStacks.get(1))) {
+                    if (entityDragonforge.cookTime >= entityDragonforge.getMaxCookTime()) {
                         entityDragonforge.cookTime = 0;
                         entityDragonforge.smeltItem();
                         flag1 = true;
@@ -104,7 +103,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
                 }
             } else if (!entityDragonforge.isBurning() && entityDragonforge.cookTime > 0) {
                 entityDragonforge.cookTime = Mth.clamp(entityDragonforge.cookTime - 2, 0,
-                    entityDragonforge.getMaxCookTime(entityDragonforge.forgeItemStacks.get(0), entityDragonforge.forgeItemStacks.get(1)));
+                    entityDragonforge.getMaxCookTime());
             }
 
             if (flag != entityDragonforge.isBurning()) {
@@ -257,62 +256,6 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
         }
     }
 
-    @Override
-    public void tick() {
-        boolean flag = this.isBurning();
-        boolean flag1 = false;
-        fireType = getFireType(this.getBlockState().getBlock());
-        if (lastDragonFlameTimer > 0) {
-            lastDragonFlameTimer--;
-        }
-        updateGrills(assembled());
-        if (!world.isRemote) {
-            if (prevAssembled != assembled()) {
-                BlockDragonforgeCore.setState(fireType, prevAssembled, world, pos);
-            }
-            prevAssembled = this.assembled();
-            if (!assembled())
-                return;
-        }
-        if (cookTime > 0 && this.canSmelt() && lastDragonFlameTimer == 0) {
-            this.cookTime--;
-        }
-        if (this.getStackInSlot(0).isEmpty() && !world.isRemote) {
-            this.cookTime = 0;
-        }
-        if (!this.world.isRemote) {
-            if (this.isBurning()) {
-                if (this.canSmelt()) {
-                    ++this.cookTime;
-                    if (this.cookTime >= getMaxCookTime()) {
-                        this.cookTime = 0;
-                        this.smeltItem();
-                        flag1 = true;
-                    }
-                } else {
-                    if (cookTime > 0) {
-                        IceAndFire.sendMSGToAll(new MessageUpdateDragonforge(pos.toLong(), cookTime));
-                        this.cookTime = 0;
-                    }
-                }
-            } else if (!this.isBurning() && this.cookTime > 0) {
-                this.cookTime = MathHelper.clamp(this.cookTime - 2, 0,
-                    getMaxCookTime());
-            }
-
-            if (flag != this.isBurning()) {
-                flag1 = true;
-            }
-        }
-
-        if (flag1) {
-            this.markDirty();
-        }
-        if (!canAddFlameAgain) {
-            canAddFlameAgain = true;
-        }
-    }
-
     public int getMaxCookTime() {
         return getCurrentRecipe().map(DragonForgeRecipe::getCookTime).orElse(100);
     }
@@ -324,16 +267,16 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     private ItemStack getCurrentResult() {
         Optional<DragonForgeRecipe> recipe = getCurrentRecipe();
         if (recipe.isPresent())
-            return recipe.get().getRecipeOutput();
+            return recipe.get().getResultItem();
         return new ItemStack(getDefaultOutput());
     }
 
     public Optional<DragonForgeRecipe> getCurrentRecipe() {
-        return world.getRecipeManager().getRecipe(IafRecipeRegistry.DRAGON_FORGE_TYPE, this, world);
+        return level.getRecipeManager().getRecipeFor(IafRecipeRegistry.DRAGON_FORGE_TYPE, this, level);
     }
 
     public List<DragonForgeRecipe> getRecipes() {
-        return world.getRecipeManager().getRecipesForType(IafRecipeRegistry.DRAGON_FORGE_TYPE);
+        return level.getRecipeManager().getAllRecipesFor(IafRecipeRegistry.DRAGON_FORGE_TYPE);
     }
 
     public boolean canSmelt() {
@@ -444,7 +387,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
 
     @Override
     protected Component getDefaultName() {
-        return new TranslatableComponent("container.dragonforge_fire" + DragonType.getNameFromInt(isFire));
+        return new TranslatableComponent("container.dragonforge_fire" + DragonType.getNameFromInt(fireType));
     }
 
     public void transferPower(int i) {

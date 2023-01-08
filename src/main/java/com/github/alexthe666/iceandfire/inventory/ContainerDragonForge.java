@@ -2,20 +2,20 @@ package com.github.alexthe666.iceandfire.inventory;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
-import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 //TODO: All containers etc should be rewritten
 public class ContainerDragonForge extends AbstractContainerMenu {
 
     private final Container tileFurnace;
-    public int isFire;
-    protected final World world;
+    public int fireType;
+    protected final Level world;
 
     public ContainerDragonForge(int i, Inventory playerInventory) {
         this(i, new SimpleContainer(3), playerInventory, new SimpleContainerData(0));
@@ -25,7 +25,7 @@ public class ContainerDragonForge extends AbstractContainerMenu {
     public ContainerDragonForge(int id, Container furnaceInventory, Inventory playerInventory, ContainerData vars) {
         super(IafContainerRegistry.DRAGON_FORGE_CONTAINER.get(), id);
         this.tileFurnace = furnaceInventory;
-        this.world = playerInventory.player.world;
+        this.world = playerInventory.player.level;
         if (furnaceInventory instanceof TileEntityDragonforge) {
             fireType = ((TileEntityDragonforge) furnaceInventory).fireType;
         } else if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityDragonforge) {

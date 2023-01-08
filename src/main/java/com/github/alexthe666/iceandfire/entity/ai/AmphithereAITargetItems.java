@@ -48,7 +48,7 @@ public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
 
     @Override
     public boolean canUse() {
-        if (this.targetChance > 0 && this.mob.getRNG().nextInt(this.targetChance) != 0) {
+        if (this.targetChance > 0 && this.mob.getRandom().nextInt(this.targetChance) != 0) {
             return false;
         }
         if (!((EntityAmphithere) this.mob).canMove()) {

@@ -71,7 +71,7 @@ public class ItemMyrmexStaff extends Item {
         if (!context.getPlayer().isShiftKeyDown()) {
             return super.useOn(context);
         } else {
-            CompoundNBT tag = context.getPlayer().getHeldItem(context.getHand()).getTag();
+            CompoundTag tag = context.getPlayer().getItemInHand(context.getHand()).getTag();
             if (tag != null && tag.hasUUID("HiveUUID")) {
                 UUID id = tag.getUUID("HiveUUID");
                 if (!context.getLevel().isClientSide) {

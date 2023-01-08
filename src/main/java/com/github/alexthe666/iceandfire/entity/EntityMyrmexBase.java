@@ -198,7 +198,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
     }
 
     protected PathNavigation createNavigator(Level worldIn, AdvancedPathNavigate.MovementType type) {
-        return createNavigator(worldIn, type, getWidth(), getHeight());
+        return createNavigator(worldIn, type, getBbWidth(), getBbHeight());
     }
 
     protected PathNavigation createNavigator(Level worldIn, AdvancedPathNavigate.MovementType type, float width, float height) {

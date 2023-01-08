@@ -172,17 +172,17 @@ public class DragonUtils {
     }
 
     public static BlockPos getBlockInViewStymphalian(EntityStymphalianBird bird) {
-        float radius = 0.75F * (0.7F * 6) * -3 - bird.getRNG().nextInt(24);
-        float neg = bird.getRNG().nextBoolean() ? 1 : -1;
-        float renderYawOffset = bird.flock != null && !bird.flock.isLeader(bird) ? getStymphalianFlockDirection(bird) : bird.renderYawOffset;
-        float angle = (0.01745329251F * renderYawOffset) + 3.15F + (bird.getRNG().nextFloat() * neg);
-        double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
-        double extraZ = radius * MathHelper.cos(angle);
-        BlockPos radialPos = getStymphalianFearPos(bird, new BlockPos(bird.getPosX() + extraX, 0, bird.getPosZ() + extraZ));
-        BlockPos ground = bird.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, radialPos);
-        int distFromGround = (int) bird.getPosY() - ground.getY();
-        int flightHeight = Math.min(IafConfig.stymphalianBirdFlightHeight, bird.flock != null && !bird.flock.isLeader(bird) ? ground.getY() + bird.getRNG().nextInt(16) : ground.getY() + bird.getRNG().nextInt(16));
-        BlockPos newPos = radialPos.up(distFromGround > 16 ? flightHeight : (int) bird.getPosY() + bird.getRNG().nextInt(16) + 1);
+        float radius = 0.75F * (0.7F * 6) * -3 - bird.getRandom().nextInt(24);
+        float neg = bird.getRandom().nextBoolean() ? 1 : -1;
+        float renderYawOffset = bird.flock != null && !bird.flock.isLeader(bird) ? getStymphalianFlockDirection(bird) : bird.yBodyRot;
+        float angle = (0.01745329251F * renderYawOffset) + 3.15F + (bird.getRandom().nextFloat() * neg);
+        double extraX = radius * Mth.sin((float) (Math.PI + angle));
+        double extraZ = radius * Mth.cos(angle);
+        BlockPos radialPos = getStymphalianFearPos(bird, new BlockPos(bird.getX() + extraX, 0, bird.getZ() + extraZ));
+        BlockPos ground = bird.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, radialPos);
+        int distFromGround = (int) bird.getY() - ground.getY();
+        int flightHeight = Math.min(IafConfig.stymphalianBirdFlightHeight, ground.getY() + bird.getRandom().nextInt(16));
+        BlockPos newPos = radialPos.above(distFromGround > 16 ? flightHeight : (int) bird.getY() + bird.getRandom().nextInt(16) + 1);
         BlockPos pos = bird.doesWantToLand() ? ground : newPos;
         if (bird.getDistanceSquared(Vec3.atCenterOf(newPos)) > 6 && !bird.isTargetBlocked(Vec3.atCenterOf(newPos))) {
             return newPos;

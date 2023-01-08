@@ -9,6 +9,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownEgg;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -37,7 +38,7 @@ public class EntityHippogryphEgg extends ThrownEgg {
         this(type, worldIn);
         this.setPos(throwerIn.getX(), throwerIn.getEyeY() - 0.1F, throwerIn.getZ());
         this.itemstack = stack;
-        this.setShooter(throwerIn);
+        this.setOwner(throwerIn);
     }
 
     @Override
@@ -74,8 +75,8 @@ public class EntityHippogryphEgg extends ThrownEgg {
                 hippogryph.setVariant(variant);
             }
 
-            if (thrower instanceof PlayerEntity) {
-                hippogryph.setTamedBy((PlayerEntity) thrower);
+            if (thrower instanceof Player) {
+                hippogryph.tame((Player) thrower);
             }
 
             this.level.addFreshEntity(hippogryph);
