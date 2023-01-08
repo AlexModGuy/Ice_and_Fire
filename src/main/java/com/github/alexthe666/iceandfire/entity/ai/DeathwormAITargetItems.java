@@ -20,24 +20,26 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
 
     protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
     protected final Predicate<? super ItemEntity> targetEntitySelector;
-    protected ItemEntity targetEntity;
+    protected final int targetChance;
     private final EntityDeathWorm worm;
+    protected ItemEntity targetEntity;
+    private List<ItemEntity> list = IAFMath.emptyItemEntityList;
 
     public DeathwormAITargetItems(EntityDeathWorm creature, boolean checkSight) {
         this(creature, checkSight, false);
     }
 
     public DeathwormAITargetItems(EntityDeathWorm creature, boolean checkSight, boolean onlyNearby) {
-        this(creature, 0, checkSight, onlyNearby, null);
+        this(creature, 10, checkSight, onlyNearby, null);
     }
 
     public DeathwormAITargetItems(EntityDeathWorm creature, int chance, boolean checkSight, boolean onlyNearby,
-        @Nullable final Predicate<? super T> targetSelector) {
+                                  @Nullable final Predicate<? super T> targetSelector) {
         super(creature, checkSight, onlyNearby);
         this.worm = creature;
+        this.targetChance = chance;
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
         this.targetEntitySelector = new Predicate<ItemEntity>() {
-
             @Override
             public boolean test(ItemEntity item) {
                 return item != null && !item.getItem().isEmpty() && item.getItem().getItem() == Blocks.TNT.asItem() &&
@@ -50,6 +52,9 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
 
     @Override
     public boolean canUse() {
+        if (this.targetChance > 0 && this.mob.getRNG().nextInt(this.targetChance) != 0) {
+            return false;
+        }
         List<ItemEntity> list = this.mob.level.getEntitiesOfClass(ItemEntity.class,
             this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
         if (list.isEmpty()) {

@@ -30,14 +30,16 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class IafRecipeRegistry extends SimpleJsonResourceReloadListener {
+public class IafRecipeRegistry {
 
-    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(DragonForgeRecipe.class, new DragonForgeRecipe.Deserializer()).create();
     public static final BannerPattern PATTERN_FIRE = addBanner("fire", new ItemStack(IafItemRegistry.FIRE_DRAGON_HEART));
     public static final BannerPattern PATTERN_ICE = addBanner("ice", new ItemStack(IafItemRegistry.ICE_DRAGON_HEART));
     public static final BannerPattern PATTERN_LIGHTNING = addBanner("lightning", new ItemStack(IafItemRegistry.LIGHTNING_DRAGON_HEART));
@@ -57,48 +59,10 @@ public class IafRecipeRegistry extends SimpleJsonResourceReloadListener {
     public static final BannerPattern PATTERN_TROLL = addBanner("troll", new ItemStack(IafItemRegistry.TROLL_TUSK));
     public static final BannerPattern PATTERN_WEEZER = addBanner("weezer", new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM));
     public static final BannerPattern PATTERN_DREAD = addBanner("dread", new ItemStack(IafItemRegistry.DREAD_SHARD));
-    public static List<DragonForgeRecipe> ALL_FORGE_RECIPES = new ArrayList<>();
-    public static List<DragonForgeRecipe> FIRE_FORGE_RECIPES = new ArrayList<>();
-    public static List<DragonForgeRecipe> ICE_FORGE_RECIPES = new ArrayList<>();
-    public static List<DragonForgeRecipe> LIGHTNING_FORGE_RECIPES = new ArrayList<>();
+    public static final IRecipeType<DragonForgeRecipe> DRAGON_FORGE_TYPE = IRecipeType.register("iceandfire:dragonforge");
+    public static final DeferredRegister<IRecipeSerializer<?>> SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, IceAndFire.MODID);
+    public static final RegistryObject<IRecipeSerializer<?>> DRAGONFORGE_SERIALIZER = SERIALIZERS.register("dragonforge", DragonForgeRecipe.Serializer::new);
     public static List<ItemStack> BANNER_ITEMS = new ArrayList<>();
-
-    public IafRecipeRegistry() {
-        super(GSON, "dragonforge_recipes");
-    }
-
-    @Override
-    protected void apply(Map<ResourceLocation, JsonElement> splashList, ResourceManager resourceManagerIn, ProfilerFiller profilerIn) {
-        ImmutableMap.Builder<ResourceLocation, DragonForgeRecipe> builder = ImmutableMap.builder();
-        ALL_FORGE_RECIPES.clear();
-        IceAndFire.LOGGER.info("Loading in dragonforge_recipes jsons...");
-        splashList.forEach((p_223385_1_, p_223385_2_) -> {
-            try {
-                DragonForgeRecipe fold = GSON.fromJson(p_223385_2_, DragonForgeRecipe.class);
-                builder.put(p_223385_1_, fold);
-            } catch (Exception exception) {
-                IceAndFire.LOGGER.error("Couldn't parse dragonforge recipe {}", p_223385_1_, exception);
-            }
-        });
-        ImmutableMap<ResourceLocation, DragonForgeRecipe> immutablemap = builder.build();
-        immutablemap.forEach((p_215305_2_, p_215305_3_) -> {
-            ALL_FORGE_RECIPES.add(p_215305_3_);
-        });
-        FIRE_FORGE_RECIPES.clear();
-        ICE_FORGE_RECIPES.clear();
-        LIGHTNING_FORGE_RECIPES.clear();
-        for(DragonForgeRecipe recipe : ALL_FORGE_RECIPES){
-            if(recipe.getDragonType().equals("fire")){
-                FIRE_FORGE_RECIPES.add(recipe);
-            }
-            if(recipe.getDragonType().equals("ice")){
-                ICE_FORGE_RECIPES.add(recipe);
-            }
-            if(recipe.getDragonType().equals("lightning")){
-                LIGHTNING_FORGE_RECIPES.add(recipe);
-            }
-        }
-    }
 
     public static void preInit() {
         DispenserBlock.registerBehavior(IafItemRegistry.STYMPHALIAN_ARROW, new AbstractProjectileDispenseBehavior() {
@@ -244,61 +208,5 @@ public class IafRecipeRegistry extends SimpleJsonResourceReloadListener {
 
     public static BannerPattern addBanner(String name, ItemStack craftingStack) {
         return BannerPattern.create(name.toUpperCase(), name, "iceandfire." + name, true);
-    }
-
-    public static DragonForgeRecipe getFireForgeRecipe(ItemStack stack) {
-        for (DragonForgeRecipe recipe : FIRE_FORGE_RECIPES) {
-            if (recipe.getInput().test(stack)) {
-                return recipe;
-            }
-        }
-        return null;
-    }
-
-    public static DragonForgeRecipe getIceForgeRecipe(ItemStack stack) {
-        for (DragonForgeRecipe recipe : ICE_FORGE_RECIPES) {
-            if (recipe.getInput().test(stack)) {
-                return recipe;
-            }
-        }
-        return null;
-    }
-
-    public static DragonForgeRecipe getLightningForgeRecipe(ItemStack stack) {
-        for (DragonForgeRecipe recipe : LIGHTNING_FORGE_RECIPES) {
-            if (recipe.getInput().test(stack)) {
-                return recipe;
-            }
-        }
-        return null;
-    }
-
-
-    public static DragonForgeRecipe getFireForgeRecipeForBlood(ItemStack stack) {
-        for (DragonForgeRecipe recipe : FIRE_FORGE_RECIPES) {
-            if (recipe.getBlood().test(stack)) {
-                return recipe;
-            }
-        }
-        return null;
-    }
-
-
-    public static DragonForgeRecipe getIceForgeRecipeForBlood(ItemStack stack) {
-        for (DragonForgeRecipe recipe : ICE_FORGE_RECIPES) {
-            if (recipe.getBlood().test(stack)) {
-                return recipe;
-            }
-        }
-        return null;
-    }
-
-    public static DragonForgeRecipe getLightningForgeRecipeForBlood(ItemStack stack) {
-        for (DragonForgeRecipe recipe : LIGHTNING_FORGE_RECIPES) {
-            if (recipe.getBlood().test(stack)) {
-                return recipe;
-            }
-        }
-        return null;
     }
 }

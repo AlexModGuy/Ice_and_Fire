@@ -105,7 +105,7 @@ public abstract class EntityDragonCharge extends Fireball implements IDragonProj
                     this.remove(RemovalReason.DISCARDED);
                 }
                 if (entity != null && !(entity instanceof IDragonProjectile) && !entity.is(shootingEntity)) {
-                    if (shootingEntity != null && (entity.is(shootingEntity) || (shootingEntity instanceof EntityDragonBase & entity instanceof TamableAnimal && ((EntityDragonBase) shootingEntity).getOwner() == ((TamableAnimal) entity).getOwner()))) {
+                    if (shootingEntity != null && (entity.is(shootingEntity) || (shootingEntity instanceof EntityDragonBase && entity instanceof TamableAnimal && ((EntityDragonBase) shootingEntity).getOwner() == ((TamableAnimal) entity).getOwner()))) {
                         return;
                     }
                     if (shootingEntity instanceof EntityDragonBase) {

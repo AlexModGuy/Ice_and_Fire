@@ -56,7 +56,7 @@ public class LightningDragonForgeCatagory implements IRecipeCategory<DragonForge
         ingredientsList.add(dragonForgeRecipe.getInput());
         ingredientsList.add(dragonForgeRecipe.getBlood());
         iIngredients.setInputIngredients(ingredientsList);
-        iIngredients.setOutput(VanillaTypes.ITEM, dragonForgeRecipe.getOutput());
+        iIngredients.setOutput(VanillaTypes.ITEM, dragonForgeRecipe.getRecipeOutput());
     }
 
     @Override

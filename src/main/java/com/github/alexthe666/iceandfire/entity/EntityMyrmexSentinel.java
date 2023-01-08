@@ -322,4 +322,5 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
     public boolean showProgressBar() {
         return false;
     }
+
 }

@@ -37,6 +37,7 @@ public class EntityHippogryphEgg extends ThrownEgg {
         this(type, worldIn);
         this.setPos(throwerIn.getX(), throwerIn.getEyeY() - 0.1F, throwerIn.getZ());
         this.itemstack = stack;
+        this.setShooter(throwerIn);
     }
 
     @Override
@@ -72,6 +73,11 @@ public class EntityHippogryphEgg extends ThrownEgg {
                 }
                 hippogryph.setVariant(variant);
             }
+
+            if (thrower instanceof PlayerEntity) {
+                hippogryph.setTamedBy((PlayerEntity) thrower);
+            }
+
             this.level.addFreshEntity(hippogryph);
         }
 

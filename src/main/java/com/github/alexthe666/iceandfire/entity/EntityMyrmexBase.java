@@ -73,9 +73,9 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
     public boolean isEnteringHive = false;
     public boolean isBeingGuarded = false;
     protected int growthTicks = 1;
-    private int waitTicks = 0;
     @Nullable
     protected MerchantOffers offers;
+    private int waitTicks = 0;
     private int animationTick;
     private Animation currentAnimation;
     private MyrmexHive hive;
@@ -198,7 +198,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
     }
 
     protected PathNavigation createNavigator(Level worldIn, AdvancedPathNavigate.MovementType type) {
-        return createNavigator(worldIn, type, 1, 1);
+        return createNavigator(worldIn, type, getWidth(), getHeight());
     }
 
     protected PathNavigation createNavigator(Level worldIn, AdvancedPathNavigate.MovementType type, float width, float height) {
@@ -334,12 +334,12 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         this.entityData.set(GROWTH_STAGE, stage);
     }
 
-    public void setWaitTicks(int waitTicks) {
-        this.waitTicks = waitTicks;
-    }
-
     public int getWaitTicks() {
         return waitTicks;
+    }
+
+    public void setWaitTicks(int waitTicks) {
+        this.waitTicks = waitTicks;
     }
 
     public boolean isJungle() {
@@ -588,7 +588,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         return false;
     }
 
-    public boolean isInHive(){
+    public boolean isInHive() {
         if (getHive() != null) {
             for (BlockPos pos : getHive().getAllRooms()) {
                 if (isCloseEnoughToTarget(MyrmexHive.getGroundedPos(getLevel(), pos), 50))

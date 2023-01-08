@@ -1,9 +1,11 @@
 {
+  "type": "iceandfire:dragonforge",
   "dragon_type": "ice",
-  "input_left": {
+  "cook_time": 1000,
+  "input": {
     "tag": "forge:ingots/iron"
   },
-  "input_right": {
+  "blood": {
     "item": "iceandfire:ice_dragon_blood"
   },
   "result": {

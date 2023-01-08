@@ -1098,6 +1098,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public boolean isAlive() {
+        if (this.isModelDead())
+            return !this.removed;
         return super.isAlive();
     }
 
@@ -1636,7 +1638,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public boolean hurt(DamageSource dmg, float i) {
-        if (this.isModelDead()) {
+        if (this.isModelDead() && dmg != DamageSource.OUT_OF_WORLD) {
             return false;
         }
         if (this.isVehicle() && dmg.getEntity() != null && this.getControllingPassenger() != null && dmg.getEntity() == this.getControllingPassenger()) {
@@ -2024,11 +2026,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public void die(DamageSource cause) {
-//        if (cause.getTrueSource() != null) {
-//            if (cause.getTrueSource() instanceof PlayerEntity) {
-//            	((PlayerEntity) cause.getTrueSource()).addStat(ModAchievements.dragonSlayer, 1);
-//            }
-//        }
         super.die(cause);
     }
 
@@ -2135,22 +2132,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return;
     }
 
-    /*
-    public boolean shouldRender(ICamera camera) {
-        boolean render = false;
-        return inFrustrum(camera, headPart) || inFrustrum(camera, neckPart) ||
-                inFrustrum(camera, leftWingLowerPart) || inFrustrum(camera, rightWingLowerPart) ||
-                inFrustrum(camera, leftWingUpperPart) || inFrustrum(camera, rightWingUpperPart) ||
-                inFrustrum(camera, tail1Part) || inFrustrum(camera, tail2Part) ||
-                inFrustrum(camera, tail3Part) || inFrustrum(camera, tail4Part);
-    }
-
-    private boolean inFrustrum(ICamera camera, Entity entity) {
-        return camera != null && entity != null && camera.isBoundingBoxInFrustum(entity.getBoundingBox());
-    }
-
-    */
-
     public HitResult rayTraceRider(Entity rider, double blockReachDistance, float partialTicks) {
         Vec3 Vector3d = rider.getEyePosition(partialTicks);
         Vec3 Vector3d1 = rider.getViewVector(partialTicks);
@@ -2183,6 +2164,10 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
+    public void onKillCommand() {
+        this.remove();
+    }
+
     public void kill() {
         this.remove(RemovalReason.KILLED);
         this.setDeathStage(this.getAgeInDays() / 5);
@@ -2191,6 +2176,9 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public boolean isAlliedTo(Entity entityIn) {
+        // Workaround to make sure dragons won't be attacked when dead
+        if (this.isModelDead())
+            return true;
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
             if (entityIn == livingentity) {
