@@ -62,7 +62,6 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -2016,10 +2015,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         }
     }
 
-    public boolean shouldDismountInWater(Entity rider) {
-        return false;
-    }
-
     public boolean isDirectPathBetweenPoints(Vec3 vec1, Vec3 vec2) {
         final BlockHitResult rayTrace = this.level.clip(new ClipContext(vec1, new Vec3(vec2.x, vec2.y + (double) this.getBbHeight() * 0.5D, vec2.z), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         return rayTrace.getType() != HitResult.Type.BLOCK;
@@ -2099,15 +2094,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
         HitResult movingobjectposition = this.level.clip(new ClipContext(vec1, vec2, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         return movingobjectposition.getType() != HitResult.Type.BLOCK;
-    }
-
-    public void processArrows() {
-        List<Entity> entities = level.getEntitiesOfClass(Entity.class, this.getBoundingBox());
-        for (Entity entity : entities) {
-            if (entity instanceof AbstractArrow) {
-
-            }
-        }
     }
 
     public boolean shouldRenderEyes() {
