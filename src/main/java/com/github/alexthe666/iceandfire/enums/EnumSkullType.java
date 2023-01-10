@@ -26,7 +26,7 @@ public enum EnumSkullType {
 
     public static void initItems() {
         for (EnumSkullType skull : EnumSkullType.values()) {
-            skull.skull_item = IafItemRegistry.deferredRegister.register(skull.itemResourceName, () -> new ItemMobSkull(skull));
+            skull.skull_item = IafItemRegistry.ITEMS.register(skull.itemResourceName, () -> new ItemMobSkull(skull));
         }
     }
 }

@@ -20,8 +20,8 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
 
 public class EntityTideTrident extends ThrownTrident {
 
@@ -36,10 +36,7 @@ public class EntityTideTrident extends ThrownTrident {
     public EntityTideTrident(Level worldIn, LivingEntity thrower, ItemStack thrownStackIn) {
         this(IafEntityRegistry.TIDE_TRIDENT.get(), worldIn);
         this.setPos(thrower.getX(), thrower.getEyeY() - 0.1F, thrower.getZ());
-        this.setOwner(thrower);
         tridentItem = thrownStackIn;
-        this.entityData.set(ID_LOYALTY, (byte) EnchantmentHelper.getLoyalty(thrownStackIn));
-        this.entityData.set(ID_FOIL, thrownStackIn.hasFoil());
         int piercingLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PIERCING, thrownStackIn);
         this.setPierceLevel((byte) piercingLevel);
     }

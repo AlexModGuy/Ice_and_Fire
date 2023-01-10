@@ -71,7 +71,6 @@ public class IafVillagerRegistry {
         //event.getRegistry().register(LECTERN_POI = new PoiType("scribe", ImmutableSet.copyOf(IafBlockRegistry.LECTERN.get().getStateDefinition().getPossibleStates()), 1, 1).setRegistryName(IceAndFire.MODID, "scribe"));
         DeferredRegister<PoiType> register = DeferredRegister.create(ForgeRegistries.POI_TYPES, IceAndFire.MODID);
         register.register("scribe", () -> new PoiType("scribe", ImmutableSet.copyOf(IafBlockRegistry.LECTERN.get().getStateDefinition().getPossibleStates()), 1, 1));
-        PoiType.registerBlockStates(LECTERN_POI);
     }
 
     @SubscribeEvent

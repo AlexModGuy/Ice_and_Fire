@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.compat.jei.firedragonforge;
+package com.github.alexthe666.iceandfire.compat.jei.lightningdragonforge;
 
 import com.github.alexthe666.iceandfire.compat.jei.IceAndFireJEIPlugin;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
@@ -16,18 +16,18 @@ import net.minecraft.world.item.crafting.Ingredient;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FireDragonForgeCatagory implements IRecipeCategory<DragonForgeRecipe> {
+public class LightningDragonForgeCategory implements IRecipeCategory<DragonForgeRecipe> {
 
-    public FireDragonForgeDrawable drawable;
+    public LightningDragonForgeDrawable drawable;
 
-    public FireDragonForgeCatagory() {
-        drawable = new FireDragonForgeDrawable();
+    public LightningDragonForgeCategory() {
+        drawable = new LightningDragonForgeDrawable();
     }
 
 
     @Override
     public ResourceLocation getUid() {
-        return IceAndFireJEIPlugin.FIRE_DRAGON_FORGE_ID;
+        return IceAndFireJEIPlugin.LIGHTNING_DRAGON_FORGE_ID;
     }
 
     @Override
@@ -35,10 +35,9 @@ public class FireDragonForgeCatagory implements IRecipeCategory<DragonForgeRecip
         return DragonForgeRecipe.class;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public Component getTitle() {
-        return new TranslatableComponent("iceandfire.fire_dragon_forge");
+        return new TranslatableComponent("iceandfire.lightning_dragon_forge");
     }
 
     @Override
@@ -58,7 +57,6 @@ public class FireDragonForgeCatagory implements IRecipeCategory<DragonForgeRecip
         ingredientsList.add(dragonForgeRecipe.getBlood());
         iIngredients.setInputIngredients(ingredientsList);
         iIngredients.setOutput(VanillaTypes.ITEM, dragonForgeRecipe.getResultItem());
-
     }
 
     @Override

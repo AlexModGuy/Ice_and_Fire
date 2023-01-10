@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.compat.jei;
 
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.compat.jei.firedragonforge.FireDragonForgeCatagory;
-import com.github.alexthe666.iceandfire.compat.jei.icedragonforge.IceDragonForgeCatagory;
-import com.github.alexthe666.iceandfire.compat.jei.lightningdragonforge.LightningDragonForgeCatagory;
+import com.github.alexthe666.iceandfire.compat.jei.firedragonforge.FireDragonForgeCategory;
+import com.github.alexthe666.iceandfire.compat.jei.icedragonforge.IceDragonForgeCategory;
+import com.github.alexthe666.iceandfire.compat.jei.lightningdragonforge.LightningDragonForgeCategory;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
@@ -75,9 +75,9 @@ public class IceAndFireJEIPlugin implements IModPlugin {
     }
 
     public void registerCategories(IRecipeCategoryRegistration registry) {
-        registry.addRecipeCategories(new FireDragonForgeCatagory());
-        registry.addRecipeCategories(new IceDragonForgeCatagory());
-        registry.addRecipeCategories(new LightningDragonForgeCatagory());
+        registry.addRecipeCategories(new FireDragonForgeCategory());
+        registry.addRecipeCategories(new IceDragonForgeCategory());
+        registry.addRecipeCategories(new LightningDragonForgeCategory());
     }
 
     @Override

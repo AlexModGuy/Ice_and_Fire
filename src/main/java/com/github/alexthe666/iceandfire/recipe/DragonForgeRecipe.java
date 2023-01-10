@@ -84,12 +84,12 @@ public class DragonForgeRecipe implements Recipe<TileEntityDragonforge> {
 
     @Override
     public ItemStack getToastSymbol() {
-        return new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE);
+        return new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE.get());
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return IafRecipeRegistry.DRAGONFORGE_SERIALIZER.get();
+        return IafRecipeSerializers.DRAGONFORGE_SERIALIZER.get();
     }
 
     @Override

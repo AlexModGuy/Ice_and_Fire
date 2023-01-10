@@ -28,43 +28,16 @@ import java.util.concurrent.ThreadLocalRandom;
 public class GorgonTempleStructure extends StructureFeature<JigsawConfiguration> {
 
     public GorgonTempleStructure() {
-        super(JigsawConfiguration.CODEC, GorgonTempleStructure::createPiecesGenerator, new postPlacement());
+        super(JigsawConfiguration.CODEC, GorgonTempleStructure::createPiecesGenerator, new PostPlacement());
     }
 
-    public GenerationStep.Decoration step() {
-        return GenerationStep.Decoration.SURFACE_STRUCTURES;
-    }
-
-
-    static class postPlacement implements PostPlacementProcessor {
-        @Override
-        public void afterPlace(WorldGenLevel pLevel, StructureFeatureManager pManager, ChunkGenerator pGenerator, Random pRandom, BoundingBox pBoundingBox, ChunkPos pChunkPos, PiecesContainer pContainer) {
-            pContainer.calculateBoundingBox();
-        }
-    }
-   /*
-    public int getSize() {
-        return 4;
-    }
-
-    protected int getSeedModifier() {
-        return 123456789;
-    }
-
-    protected int getBiomeFeatureDistance(ChunkGenerator<?> chunkGenerator) {
-        return 8;// Math.max(IafConfig.spawnGorgonsChance, 2);
-    }
-
-    protected int getBiomeFeatureSeparation(ChunkGenerator<?> chunkGenerator) {
-        return 4; //Math.max(IafConfig.spawnGorgonsChance / 2, 1);
-    }*/
-
-
-    public static Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context)
-    {
+    public static Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context) {
         if (!IafConfig.spawnGorgons) {
             return Optional.empty();
         }
+        ChunkGenerator chunkGenerator = context.chunkGenerator();
+        ChunkPos pos = context.chunkPos();
+        LevelHeightAccessor height = context.heightAccessor();
         Rotation rotation = Rotation.getRandom(ThreadLocalRandom.current());
         int xOffset = 5;
         int yOffset = 5;
@@ -77,6 +50,7 @@ public class GorgonTempleStructure extends StructureFeature<JigsawConfiguration>
             yOffset = -5;
         }
 
+
         int x = pos.getMiddleBlockX();
         int z = pos.getMiddleBlockZ();
         int y1 = chunkGenerator.getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, height);
@@ -87,13 +61,24 @@ public class GorgonTempleStructure extends StructureFeature<JigsawConfiguration>
         BlockPos blockpos = pos.getMiddleBlockPosition(yMin + 2);
 
         context = Pool.replaceContext(context, new JigsawConfiguration(
-                        context.registryAccess().ownedRegistryOrThrow(Registry.TEMPLATE_POOL_REGISTRY).getOrCreateHolder(Pool.gorgon_pool),
-                        3 // Depth of jigsaw branches. Gorgon temple has a depth of 3. (start top -> bottom -> gorgon)
-                )
+                context.registryAccess().ownedRegistryOrThrow(Registry.TEMPLATE_POOL_REGISTRY).getOrCreateHolder(Pool.gorgon_pool),
+                3 // Depth of jigsaw branches. Gorgon temple has a depth of 3. (start top -> bottom -> gorgon)
+            )
         );
 
         // All a structure has to do is call this method to turn it into a jigsaw based structure!
         // No manual pieces class needed.
         return JigsawPlacement.addPieces(context, PoolElementStructurePiece::new, blockpos, false, false);
+    }
+
+    public GenerationStep.Decoration step() {
+        return GenerationStep.Decoration.SURFACE_STRUCTURES;
+    }
+
+    static class PostPlacement implements PostPlacementProcessor {
+        @Override
+        public void afterPlace(WorldGenLevel pLevel, StructureFeatureManager pManager, ChunkGenerator pGenerator, Random pRandom, BoundingBox pBoundingBox, ChunkPos pChunkPos, PiecesContainer pContainer) {
+            pContainer.calculateBoundingBox();
+        }
     }
 }

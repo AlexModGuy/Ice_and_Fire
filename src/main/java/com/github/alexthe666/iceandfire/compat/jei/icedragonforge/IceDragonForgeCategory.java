@@ -16,11 +16,11 @@ import net.minecraft.world.item.crafting.Ingredient;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IceDragonForgeCatagory implements IRecipeCategory<DragonForgeRecipe> {
+public class IceDragonForgeCategory implements IRecipeCategory<DragonForgeRecipe> {
 
     public IceDragonForgeDrawable drawable;
 
-    public IceDragonForgeCatagory() {
+    public IceDragonForgeCategory() {
         drawable = new IceDragonForgeDrawable();
     }
 

@@ -27,27 +27,13 @@ import java.util.concurrent.ThreadLocalRandom;
 public class GraveyardStructure extends StructureFeature<JigsawConfiguration> {
 
     public GraveyardStructure() {
-        super(JigsawConfiguration.CODEC, GraveyardStructure::createPiecesGenerator, new placementProcessor());
+        super(JigsawConfiguration.CODEC, GraveyardStructure::createPiecesGenerator, new PlacementProcessor());
     }
 
-    @Override
-    public GenerationStep.Decoration step() {
-        return GenerationStep.Decoration.SURFACE_STRUCTURES;
-    }
-
-    public static class placementProcessor implements PostPlacementProcessor {
-        @Override
-        public void afterPlace(WorldGenLevel level, StructureFeatureManager structureFeatureManager, ChunkGenerator generator, Random random, BoundingBox box, ChunkPos pos, PiecesContainer container) {
-            container.pieces().forEach(structurePiece -> {
-                // Raises the bottom part of the bounding box up by 3.
-                // This is done so that the land terraforming code places land at the right height for the graveyard.
-                structurePiece.getBoundingBox().minY += 3;
-            });
-            container.calculateBoundingBox();
-        }
-    }
-    public static Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context)
-    {
+    public static Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context) {
+        ChunkGenerator chunkGenerator = context.chunkGenerator();
+        ChunkPos pos = context.chunkPos();
+        LevelHeightAccessor height = context.heightAccessor();
         Rotation rotation = Rotation.getRandom(ThreadLocalRandom.current());
         int xOffset = 5;
         int yOffset = 5;
@@ -68,8 +54,25 @@ public class GraveyardStructure extends StructureFeature<JigsawConfiguration> {
         int y4 = chunkGenerator.getFirstOccupiedHeight(x + xOffset, z + yOffset, Heightmap.Types.WORLD_SURFACE_WG, height);
         int yMin = Math.min(Math.min(y1, y2), Math.min(y3, y4));
         BlockPos blockpos = pos.getMiddleBlockPosition(yMin + 1);
+        context = Pool.replaceContext(context, new JigsawConfiguration(
+            context.registryAccess().ownedRegistryOrThrow(Registry.TEMPLATE_POOL_REGISTRY)
+                .getOrCreateHolder(Pool.graveyard_pool),
+            2));
+
         // All a structure has to do is call this method to turn it into a jigsaw based structure!
         // No manual pieces class needed.
         return JigsawPlacement.addPieces(context, PoolElementStructurePiece::new, blockpos, false, false);
+    }
+
+    @Override
+    public GenerationStep.Decoration step() {
+        return GenerationStep.Decoration.SURFACE_STRUCTURES;
+    }
+
+    public static class PlacementProcessor implements PostPlacementProcessor {
+        @Override
+        public void afterPlace(WorldGenLevel level, StructureFeatureManager structureFeatureManager, ChunkGenerator generator, Random random, BoundingBox box, ChunkPos pos, PiecesContainer container) {
+            container.calculateBoundingBox();
+        }
     }
 }

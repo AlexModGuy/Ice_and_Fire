@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.recipe;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
@@ -16,7 +15,6 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -24,21 +22,15 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.fmllegacy.RegistryObject;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class IafRecipeRegistry {
 
-    DeferredRegister<?> deferredRegister = DeferredRegister.create(ForgeRegistries.ENTITIES, IceAndFire.MODID);
     public static final BannerPattern PATTERN_FIRE = addBanner("fire");
     public static final BannerPattern PATTERN_ICE = addBanner("ice");
     public static final BannerPattern PATTERN_LIGHTNING = addBanner("lightning");
@@ -58,6 +50,9 @@ public class IafRecipeRegistry {
     public static final BannerPattern PATTERN_TROLL = addBanner("troll");
     public static final BannerPattern PATTERN_WEEZER = addBanner("weezer");
     public static final BannerPattern PATTERN_DREAD = addBanner("dread");
+
+    public static final RecipeType<DragonForgeRecipe> DRAGON_FORGE_TYPE = RecipeType.register("iceandfire:dragonforge");
+
     public static List<ItemStack> BANNER_ITEMS = new ArrayList<>();
 
     @SubscribeEvent(priority = EventPriority.HIGH)

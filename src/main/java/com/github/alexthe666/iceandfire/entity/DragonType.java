@@ -106,7 +106,7 @@ public class DragonType {
         if (this == LIGHTNING) {
             boolean flag;
             BlockPos.MutableBlockPos blockpos$pooledmutable = new BlockPos.MutableBlockPos(egg.getX(), egg.getY(), egg.getZ());
-            flag = egg.level.isRainingAt(blockpos$pooledmutable) || egg.level.isRainingAt(blockpos$pooledmutable.set(egg.getX(), egg.getY() + (double) egg.dimensions.height, egg.getZ()));
+            flag = egg.level.isRainingAt(blockpos$pooledmutable) || egg.level.isRainingAt(blockpos$pooledmutable.set(egg.getX(), egg.getY() + (double) egg.getBbHeight(), egg.getZ()));
             if (egg.level.canSeeSky(egg.blockPosition().above()) && flag) {
                 egg.setDragonAge(egg.getDragonAge() + 1);
             }
