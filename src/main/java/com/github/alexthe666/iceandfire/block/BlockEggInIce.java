@@ -45,7 +45,7 @@ public class BlockEggInIce extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> entityType) {
-        return level.isClientSide ? createTickerHelper(entityType, EGG_IN_ICE.get(), TileEntityEggInIce::tickEgg) : null;
+        return createTickerHelper(entityType, EGG_IN_ICE.get(), TileEntityEggInIce::tickEgg);
     }
 
     @Override
