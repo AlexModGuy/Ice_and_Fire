@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderTideTridentItem extends BlockEntityWithoutLevelRenderer {
     private static final ModelTideTrident MODEL = new ModelTideTrident();
@@ -24,7 +25,7 @@ public class RenderTideTridentItem extends BlockEntityWithoutLevelRenderer {
     }
 
     @Override
-    public void renderByItem(ItemStack stack, ItemTransforms.TransformType type, PoseStack stackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void renderByItem(@NotNull ItemStack stack, ItemTransforms.@NotNull TransformType type, PoseStack stackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         stackIn.translate(0.5F, 0.5f, 0.5f);
         if (type == ItemTransforms.TransformType.GUI || type == ItemTransforms.TransformType.FIXED || type == ItemTransforms.TransformType.NONE || type == ItemTransforms.TransformType.GROUND) {
             ItemStack tridentInventory = new ItemStack(IafItemRegistry.TIDE_TRIDENT_INVENTORY.get());

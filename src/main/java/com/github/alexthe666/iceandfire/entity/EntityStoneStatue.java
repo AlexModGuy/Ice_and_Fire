@@ -14,14 +14,11 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromStatues {
 
-    public boolean smallArms;
     private static final EntityDataAccessor<String> TRAPPED_ENTITY_TYPE = SynchedEntityData.defineId(EntityStoneStatue.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<CompoundTag> TRAPPED_ENTITY_DATA = SynchedEntityData.defineId(EntityStoneStatue.class, EntityDataSerializers.COMPOUND_TAG);
     private static final EntityDataAccessor<Float> TRAPPED_ENTITY_WIDTH = SynchedEntityData.defineId(EntityStoneStatue.class, EntityDataSerializers.FLOAT);
@@ -44,8 +41,32 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
             .add(Attributes.ATTACK_DAMAGE, 1.0D);
     }
 
+    public static EntityStoneStatue buildStatueEntity(LivingEntity parent) {
+        EntityStoneStatue statue = IafEntityRegistry.STONE_STATUE.get().create(parent.level);
+        CompoundTag entityTag = new CompoundTag();
+        try {
+            if (!(parent instanceof Player)) {
+                parent.saveWithoutId(entityTag);
+            }
+        } catch (Exception e) {
+            IceAndFire.LOGGER.debug("Encountered issue creating stone statue from {}", parent);
+        }
+        statue.setTrappedTag(entityTag);
+        statue.setTrappedEntityTypeString(ForgeRegistries.ENTITIES.getKey(parent.getType()).toString());
+        statue.setTrappedEntityWidth(parent.getBbWidth());
+        statue.setTrappedHeight(parent.getBbHeight());
+        statue.setTrappedScale(parent.getScale());
+
+        return statue;
+    }
+
     @Override
-    public void push(Entity entityIn) {
+    public void push(@NotNull Entity entityIn) {
+    }
+
+    @Override
+    public void baseTick() {
+
     }
 
     @Override
@@ -63,7 +84,6 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
         String str = getTrappedEntityTypeString();
         return EntityType.byString(str).orElse(EntityType.PIG);
     }
-
 
     public String getTrappedEntityTypeString() {
         return this.entityData.get(TRAPPED_ENTITY_TYPE);
@@ -105,41 +125,8 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
         this.entityData.set(TRAPPED_ENTITY_SCALE, size);
     }
 
-    public static EntityStoneStatue buildStatueEntity(LivingEntity parent){
-        EntityStoneStatue statue = IafEntityRegistry.STONE_STATUE.get().create(parent.level);
-        CompoundTag entityTag = new CompoundTag();
-        try {
-            if (!(parent instanceof Player)) {
-                parent.saveWithoutId(entityTag);
-            }
-        } catch (Exception e) {
-            IceAndFire.LOGGER.debug("Encountered issue creating stone statue from {}", parent);
-        }
-        statue.setTrappedTag(entityTag);
-        statue.setTrappedEntityTypeString(ForgeRegistries.ENTITIES.getKey(parent.getType()).toString());
-        statue.setTrappedEntityWidth(parent.getBbWidth());
-        statue.setTrappedHeight(parent.getBbHeight());
-        statue.setTrappedScale(parent.getScale());
-
-        return statue;
-    }
-
-    @Nullable
-    public AABB getCollisionBox(Entity entityIn) {
-        return this.getCollisionBoundingBox();
-    }
-
-    @Nullable
-    public AABB getCollisionBoundingBox() {
-        return this.getBoundingBox();
-    }
-
-    public boolean isAIDisabled() {
-        return true;
-    }
-
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(@NotNull CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("CrackAmount", this.getCrackAmount());
         tag.putFloat("StatueWidth", this.getTrappedWidth());
@@ -155,7 +142,7 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setCrackAmount(tag.getByte("CrackAmount"));
         this.setTrappedEntityWidth(tag.getFloat("StatueWidth"));
@@ -169,12 +156,12 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurt(@NotNull DamageSource source, float amount) {
         return source == DamageSource.OUT_OF_WORLD;
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose poseIn) {
+    public @NotNull EntityDimensions getDimensions(@NotNull Pose poseIn) {
         return stoneStatueSize;
     }
 
@@ -198,22 +185,22 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     }
 
     @Override
-    public Iterable<ItemStack> getArmorSlots() {
+    public @NotNull Iterable<ItemStack> getArmorSlots() {
         return ImmutableList.of();
     }
 
     @Override
-    public ItemStack getItemBySlot(EquipmentSlot slotIn) {
+    public @NotNull ItemStack getItemBySlot(@NotNull EquipmentSlot slotIn) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItemSlot(EquipmentSlot slotIn, ItemStack stack) {
+    public void setItemSlot(@NotNull EquipmentSlot slotIn, @NotNull ItemStack stack) {
 
     }
 
     @Override
-    public HumanoidArm getMainArm() {
+    public @NotNull HumanoidArm getMainArm() {
         return HumanoidArm.RIGHT;
     }
 

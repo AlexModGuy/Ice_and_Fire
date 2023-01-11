@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.client.model;
 import net.minecraft.client.model.HorseModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import org.jetbrains.annotations.NotNull;
 
 public class ModelHorseStatue extends HorseModel {
 
@@ -11,7 +12,7 @@ public class ModelHorseStatue extends HorseModel {
     }
 
     @Override
-    public void setupAnim(AbstractHorse entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(@NotNull AbstractHorse entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
     }
 }

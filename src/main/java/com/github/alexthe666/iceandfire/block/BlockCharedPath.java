@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.block;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
@@ -14,6 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.Material;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -36,7 +36,7 @@ public class BlockCharedPath extends DirtPathBlock {
 
         this.dragonType = dragonType;
         //setRegistryName(IceAndFire.MODID, getNameFromType(dragonType));
-        this.registerDefaultState(stateDefinition.any().setValue(REVERTS, Boolean.valueOf(false)));
+        this.registerDefaultState(stateDefinition.any().setValue(REVERTS, Boolean.FALSE));
     }
 
     public static String getNameFromType(int dragonType){
@@ -60,7 +60,8 @@ public class BlockCharedPath extends DirtPathBlock {
         return null;
     }
 
-    public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, Random rand) {
+    @Override
+    public void tick(@NotNull BlockState state, @NotNull ServerLevel worldIn, @NotNull BlockPos pos, @NotNull Random rand) {
         super.tick(state, worldIn, pos, rand);
         if (!worldIn.isClientSide) {
             if (!worldIn.isAreaLoaded(pos, 3))
@@ -89,6 +90,7 @@ public class BlockCharedPath extends DirtPathBlock {
         return state.getValue(REVERTS) ? 1 : 0;
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(REVERTS);
     }

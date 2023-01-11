@@ -11,6 +11,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -38,7 +39,7 @@ public class StymphalianBirdAITarget extends NearestAttackableTargetGoal<LivingE
     }
 
     @Override
-    protected AABB getTargetSearchArea(double targetDistance) {
+    protected @NotNull AABB getTargetSearchArea(double targetDistance) {
         return this.bird.getBoundingBox().inflate(targetDistance, targetDistance, targetDistance);
     }
 }

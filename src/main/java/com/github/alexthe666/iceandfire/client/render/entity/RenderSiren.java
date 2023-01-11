@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderSiren extends MobRenderer<EntitySiren, ModelSiren> {
 
@@ -21,13 +22,13 @@ public class RenderSiren extends MobRenderer<EntitySiren, ModelSiren> {
     }
 
     @Override
-    public void scale(EntitySiren LivingEntityIn, PoseStack stack, float partialTickTime) {
+    public void scale(@NotNull EntitySiren LivingEntityIn, PoseStack stack, float partialTickTime) {
         stack.translate(0, 0, -0.5F);
 
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntitySiren siren) {
+    public @NotNull ResourceLocation getTextureLocation(EntitySiren siren) {
         switch (siren.getHairColor()) {
             default:
                 return siren.isAgressive() ? TEXTURE_0_AGGRESSIVE : TEXTURE_0;

@@ -48,7 +48,7 @@ public class ItemDragonArmor extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         String words = switch (dragonSlot) {
             case 1 -> "dragon.armor_neck";
             case 2 -> "dragon.armor_body";

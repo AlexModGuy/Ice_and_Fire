@@ -10,6 +10,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import org.jetbrains.annotations.NotNull;
 
 public class ModelDreadKnight extends ModelDreadBase<EntityDreadKnight> {
     public HideableModelRenderer chestplate;
@@ -119,7 +120,7 @@ public class ModelDreadKnight extends ModelDreadBase<EntityDreadKnight> {
     }
 
     @Override
-    public void copyPropertiesTo(EntityModel<EntityDreadKnight> p_217111_1_) {
+    public void copyPropertiesTo(@NotNull EntityModel<EntityDreadKnight> p_217111_1_) {
         super.copyPropertiesTo(p_217111_1_);
         if (p_217111_1_ instanceof HumanoidModel) {
             HumanoidModel modelbiped = (HumanoidModel) p_217111_1_;

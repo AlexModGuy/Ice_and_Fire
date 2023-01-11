@@ -85,6 +85,7 @@ public class ModelTrollWeapon extends AdvancedEntityModel<Entity> {
         return ImmutableList.of(log1);
     }
 
+    @Override
     public void setRotateAngle(AdvancedModelBox modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;

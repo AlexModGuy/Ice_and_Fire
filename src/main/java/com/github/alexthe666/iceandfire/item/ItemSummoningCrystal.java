@@ -21,6 +21,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -45,7 +46,7 @@ public class ItemSummoningCrystal extends Item {
     }
 
     @Override
-    public void onCraftedBy(ItemStack itemStack, Level world, Player player) {
+    public void onCraftedBy(ItemStack itemStack, @NotNull Level world, @NotNull Player player) {
         itemStack.setTag(new CompoundTag());
     }
 
@@ -54,7 +55,7 @@ public class ItemSummoningCrystal extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
 
         boolean flag = false;
         String desc = "entity.firedragon.name";
@@ -85,7 +86,8 @@ public class ItemSummoningCrystal extends Item {
 
     }
 
-    public InteractionResult useOn(UseOnContext context) {
+    @Override
+    public @NotNull InteractionResult useOn(UseOnContext context) {
         ItemStack stack = context.getPlayer().getItemInHand(context.getHand());
         boolean flag = false;
         BlockPos offsetPos = context.getClickedPos().relative(context.getClickedFace());

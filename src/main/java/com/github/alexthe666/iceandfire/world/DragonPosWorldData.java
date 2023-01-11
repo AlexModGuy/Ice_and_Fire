@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -83,7 +84,8 @@ public class DragonPosWorldData extends SavedData {
         return this;
     }
 
-    public CompoundTag save(CompoundTag compound) {
+    @Override
+    public @NotNull CompoundTag save(CompoundTag compound) {
         compound.putInt("Tick", this.tickCounter);
         ListTag nbttaglist = new ListTag();
         for (Map.Entry<UUID, BlockPos> pair : lastDragonPositions.entrySet()) {

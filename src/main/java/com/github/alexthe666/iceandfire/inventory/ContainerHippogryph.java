@@ -11,6 +11,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.NotNull;
 
 public class ContainerHippogryph extends AbstractContainerMenu {
     private final Container hippogryphInventory;
@@ -32,7 +33,7 @@ public class ContainerHippogryph extends AbstractContainerMenu {
         hippogryphInventory.startOpen(player);
         this.addSlot(new Slot(hippogryphInventory, 0, 8, 18) {
             @Override
-            public boolean mayPlace(ItemStack stack) {
+            public boolean mayPlace(@NotNull ItemStack stack) {
                 return stack.getItem() == Items.SADDLE && !this.hasItem();
             }
 
@@ -50,7 +51,7 @@ public class ContainerHippogryph extends AbstractContainerMenu {
         });
         this.addSlot(new Slot(hippogryphInventory, 1, 8, 36) {
             @Override
-            public boolean mayPlace(ItemStack stack) {
+            public boolean mayPlace(@NotNull ItemStack stack) {
                 return stack.getItem() == Blocks.CHEST.asItem() && !this.hasItem();
             }
 
@@ -69,7 +70,7 @@ public class ContainerHippogryph extends AbstractContainerMenu {
         this.addSlot(new Slot(hippogryphInventory, 2, 8, 52) {
 
             @Override
-            public boolean mayPlace(ItemStack stack) {
+            public boolean mayPlace(@NotNull ItemStack stack) {
                 return EntityHippogryph.getIntFromArmor(stack) != 0;
             }
 
@@ -100,7 +101,7 @@ public class ContainerHippogryph extends AbstractContainerMenu {
                     }
 
                     @Override
-                    public boolean mayPlace(ItemStack stack) {
+                    public boolean mayPlace(@NotNull ItemStack stack) {
                         return ContainerHippogryph.this.hippogryph != null && ContainerHippogryph.this.hippogryph.isChested();
                     }
                 });
@@ -120,7 +121,7 @@ public class ContainerHippogryph extends AbstractContainerMenu {
 
 
     @Override
-    public ItemStack quickMoveStack(Player playerIn, int index) {
+    public @NotNull ItemStack quickMoveStack(@NotNull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -157,12 +158,12 @@ public class ContainerHippogryph extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(Player playerIn) {
+    public boolean stillValid(@NotNull Player playerIn) {
         return this.hippogryphInventory.stillValid(playerIn) && this.hippogryph.isAlive() && this.hippogryph.distanceTo(playerIn) < 8.0F;
     }
 
     @Override
-    public void removed(Player playerIn) {
+    public void removed(@NotNull Player playerIn) {
         super.removed(playerIn);
         this.hippogryphInventory.stopOpen(playerIn);
     }

@@ -17,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -110,7 +111,7 @@ public class GuiMyrmexStaff extends Screen {
     }
 
     @Override
-    public void renderBackground(PoseStack ms) {
+    public void renderBackground(@NotNull PoseStack ms) {
         super.renderBackground(ms);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, jungle ? JUNGLE_TEXTURE : DESERT_TEXTURE);
@@ -120,7 +121,7 @@ public class GuiMyrmexStaff extends Screen {
     }
 
     @Override
-    public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack ms, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(ms);
         init();
         int i = (this.width - 248) / 2 + 10;

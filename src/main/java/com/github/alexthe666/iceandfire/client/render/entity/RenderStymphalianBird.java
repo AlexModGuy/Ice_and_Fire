@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderStymphalianBird extends MobRenderer<EntityStymphalianBird, ModelStymphalianBird> {
 
@@ -16,12 +17,12 @@ public class RenderStymphalianBird extends MobRenderer<EntityStymphalianBird, Mo
     }
 
     @Override
-    public void scale(EntityStymphalianBird LivingEntityIn, PoseStack stack, float partialTickTime) {
+    public void scale(@NotNull EntityStymphalianBird LivingEntityIn, PoseStack stack, float partialTickTime) {
         stack.scale(0.75F, 0.75F, 0.75F);
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityStymphalianBird cyclops) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull EntityStymphalianBird cyclops) {
         return TEXTURE;
     }
 

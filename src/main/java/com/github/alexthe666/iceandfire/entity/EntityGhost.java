@@ -42,6 +42,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -67,20 +68,24 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
     }
 
 
-    protected ResourceLocation getDefaultLootTable() {
+    @Override
+    protected @NotNull ResourceLocation getDefaultLootTable() {
         return this.wasFromChest() ? BuiltInLootTables.EMPTY : this.getType().getDefaultLootTable();
     }
 
+    @Override
     @Nullable
     protected SoundEvent getAmbientSound() {
         return IafSoundRegistry.GHOST_IDLE;
     }
 
+    @Override
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource source) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource source) {
         return IafSoundRegistry.GHOST_HURT;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getDeathSound() {
         return IafSoundRegistry.GHOST_DIE;
@@ -105,16 +110,19 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
         return bakeAttributes();
     }
 
+    @Override
     public boolean canBeAffected(MobEffectInstance potioneffectIn) {
         return potioneffectIn.getEffect() != MobEffects.POISON && potioneffectIn.getEffect() != MobEffects.WITHER && super.canBeAffected(potioneffectIn);
     }
 
-    public boolean isInvulnerableTo(DamageSource source) {
+    @Override
+    public boolean isInvulnerableTo(@NotNull DamageSource source) {
         return super.isInvulnerableTo(source) || source.isFire() || source == DamageSource.IN_WALL || source == DamageSource.CACTUS
             || source == DamageSource.DROWN || source == DamageSource.FALLING_BLOCK || source == DamageSource.ANVIL || source == DamageSource.SWEET_BERRY_BUSH;
     }
 
-    protected PathNavigation createNavigation(Level worldIn) {
+    @Override
+    protected @NotNull PathNavigation createNavigation(@NotNull Level worldIn) {
         return new GhostPathNavigator(this, worldIn);
     }
 
@@ -143,7 +151,8 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
     }
 
 
-    public MobType getMobType() {
+    @Override
+    public @NotNull MobType getMobType() {
         return MobType.UNDEAD;
     }
 
@@ -158,15 +167,17 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
     }
 
     @Override
-    protected void doPush(Entity entity) {
+    protected void doPush(@NotNull Entity entity) {
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new RestrictSunGoal(this));
         this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new GhostAICharge(this));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F, 1.0F) {
+            @Override
             public boolean canContinueToUse() {
                 if (this.lookAt != null && this.lookAt instanceof Player && ((Player) this.lookAt).isCreative()) {
                     return false;
@@ -175,6 +186,7 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
             }
         });
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.6D) {
+            @Override
             public boolean canUse() {
                 interval = 60;
                 return super.canUse();
@@ -196,6 +208,7 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
         }));
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         this.noPhysics = true;
@@ -237,14 +250,17 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    @Override
     public boolean isNoAi() {
         return this.isDaytimeMode() || super.isNoAi();
     }
 
+    @Override
     public boolean isSilent() {
         return this.isDaytimeMode() || super.isSilent();
     }
 
+    @Override
     protected boolean isSunBurnTick() {
         if (this.level.isDay() && !this.level.isClientSide) {
             float f = this.getBrightness();
@@ -255,11 +271,13 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
         return false;
     }
 
+    @Override
     public boolean isNoGravity() {
         return true;
     }
 
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+    @Override
+    public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if (itemstack != null && itemstack.getItem() == IafItemRegistry.MANUSCRIPT.get() && !this.isHauntedShoppingList()) {
             this.setColor(-1);
@@ -273,7 +291,7 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
     }
 
     @Override
-    public void travel(Vec3 vec) {
+    public void travel(@NotNull Vec3 vec) {
         float f4;
         if (this.isDaytimeMode()) {
             super.travel(Vec3.ZERO);
@@ -284,7 +302,7 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setColor(this.random.nextInt(3));
         if (random.nextInt(200) == 0) {
@@ -298,11 +316,11 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.getEntityData().define(COLOR, Integer.valueOf(0));
+        this.getEntityData().define(COLOR, 0);
         this.getEntityData().define(CHARGING, false);
         this.getEntityData().define(IS_DAYTIME_MODE, false);
         this.getEntityData().define(WAS_FROM_CHEST, false);
-        this.getEntityData().define(DAYTIME_COUNTER, Integer.valueOf(0));
+        this.getEntityData().define(DAYTIME_COUNTER, 0);
     }
 
     public int getColor() {
@@ -382,6 +400,7 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
             this.ghost = ghost;
         }
 
+        @Override
         public void tick() {
             if (this.operation == Operation.MOVE_TO) {
                 Vec3 vec3d = new Vec3(this.getWantedX() - ghost.getX(), this.getWantedY() - ghost.getY(), this.getWantedZ() - ghost.getZ());

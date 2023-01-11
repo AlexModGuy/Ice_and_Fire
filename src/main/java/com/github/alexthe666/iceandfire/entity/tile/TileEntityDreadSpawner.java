@@ -11,17 +11,20 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
 public class TileEntityDreadSpawner extends SpawnerBlockEntity {
     private final BlockEntityType<?> type;
     private final DreadSpawnerBaseLogic spawner = new DreadSpawnerBaseLogic() {
-        public void broadcastEvent(Level p_155767_, BlockPos p_155768_, int p_155769_) {
+        @Override
+        public void broadcastEvent(Level p_155767_, @NotNull BlockPos p_155768_, int p_155769_) {
             p_155767_.blockEvent(p_155768_, Blocks.SPAWNER, p_155769_, 0);
         }
 
-        public void setNextSpawnData(@Nullable Level p_155771_, BlockPos p_155772_, SpawnData p_155773_) {
+        @Override
+        public void setNextSpawnData(@Nullable Level p_155771_, @NotNull BlockPos p_155772_, @NotNull SpawnData p_155773_) {
             super.setNextSpawnData(p_155771_, p_155772_, p_155773_);
             if (p_155771_ != null) {
                 BlockState blockstate = p_155771_.getBlockState(p_155772_);
@@ -30,6 +33,7 @@ public class TileEntityDreadSpawner extends SpawnerBlockEntity {
 
         }
 
+        @Override
         @javax.annotation.Nullable
         public net.minecraft.world.level.block.entity.BlockEntity getSpawnerBlockEntity() {
             return TileEntityDreadSpawner.this;
@@ -41,7 +45,8 @@ public class TileEntityDreadSpawner extends SpawnerBlockEntity {
         this.type = IafTileEntityRegistry.DREAD_SPAWNER.get();
     }
 
-    public void load(CompoundTag p_155760_) {
+    @Override
+    public void load(@NotNull CompoundTag p_155760_) {
         super.load(p_155760_);
         this.spawner.load(this.level, this.worldPosition, p_155760_);
     }
@@ -60,31 +65,36 @@ public class TileEntityDreadSpawner extends SpawnerBlockEntity {
         p_155765_.spawner.serverTick((ServerLevel) p_155762_, p_155763_);
     }
 
+    @Override
     @Nullable
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    public CompoundTag getUpdateTag() {
+    @Override
+    public @NotNull CompoundTag getUpdateTag() {
         CompoundTag compoundtag = this.save(new CompoundTag());
         compoundtag.remove("SpawnPotentials");
         return compoundtag;
     }
 
+    @Override
     public boolean triggerEvent(int p_59797_, int p_59798_) {
         return this.spawner.onEventTriggered(this.level, p_59797_) || super.triggerEvent(p_59797_, p_59798_);
     }
 
+    @Override
     public boolean onlyOpCanSetNbt() {
         return true;
     }
 
-    public BaseSpawner getSpawner() {
+    @Override
+    public @NotNull BaseSpawner getSpawner() {
         return this.spawner;
     }
 
     @Override
-    public BlockEntityType<?> getType() {
+    public @NotNull BlockEntityType<?> getType() {
         return this.type != null ? this.type : super.getType();
     }
 

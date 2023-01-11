@@ -18,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +35,7 @@ public class IceAndFireJEIPlugin implements IModPlugin {
         registry.addIngredientInfo(itemStack, VanillaTypes.ITEM, new TranslatableComponent(itemStack.getDescriptionId() + ".jei_desc"));
     }
 
+    @Override
     public void registerRecipes(IRecipeRegistration registry) {
         List<DragonForgeRecipe> forgeRecipeList = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(IafRecipeRegistry.DRAGON_FORGE_TYPE);
 
@@ -74,6 +76,7 @@ public class IceAndFireJEIPlugin implements IModPlugin {
         }
     }
 
+    @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
         registry.addRecipeCategories(new FireDragonForgeCategory());
         registry.addRecipeCategories(new IceDragonForgeCategory());
@@ -88,7 +91,7 @@ public class IceAndFireJEIPlugin implements IModPlugin {
     }
 
     @Override
-    public ResourceLocation getPluginUid() {
+    public @NotNull ResourceLocation getPluginUid() {
         return MOD;
     }
 

@@ -9,6 +9,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
 import java.util.function.Predicate;
@@ -63,7 +64,7 @@ public class DragonAITarget<T extends LivingEntity> extends NearestAttackableTar
     }
 
     @Override
-    protected AABB getTargetSearchArea(double targetDistance) {
+    protected @NotNull AABB getTargetSearchArea(double targetDistance) {
         return this.dragon.getBoundingBox().inflate(targetDistance, targetDistance, targetDistance);
     }
 

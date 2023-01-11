@@ -10,8 +10,6 @@ public class GorgonAIStareAttack extends Goal {
     private final EntityGorgon entity;
     private final double moveSpeedAmp;
     private final float maxAttackDistance;
-    private int attackCooldown;
-    private int attackTime = -1;
     private int seeTime;
     private boolean strafingClockwise;
     private boolean strafingBackwards;
@@ -20,13 +18,8 @@ public class GorgonAIStareAttack extends Goal {
     public GorgonAIStareAttack(EntityGorgon gorgon, double speedAmplifier, int delay, float maxDistance) {
         this.entity = gorgon;
         this.moveSpeedAmp = speedAmplifier;
-        this.attackCooldown = delay;
         this.maxAttackDistance = maxDistance * maxDistance;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-    }
-
-    public void setAttackCooldown(int cooldown) {
-        this.attackCooldown = cooldown;
     }
 
     @Override
@@ -43,7 +36,6 @@ public class GorgonAIStareAttack extends Goal {
     public void stop() {
         super.stop();
         this.seeTime = 0;
-        this.attackTime = -1;
         this.entity.stopUsingItem();
     }
 

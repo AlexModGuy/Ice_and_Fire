@@ -54,6 +54,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.MinecraftForge;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -145,11 +146,13 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         return bakeAttributes();
     }
 
-    public LookControl getLookControl() {
+    @Override
+    public @NotNull LookControl getLookControl() {
         return this.lookHelper;
     }
 
-    public SoundSource getSoundSource() {
+    @Override
+    public @NotNull SoundSource getSoundSource() {
         return SoundSource.HOSTILE;
     }
 
@@ -179,7 +182,8 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         }
     }
 
-    protected int getExperienceReward(Player player) {
+    @Override
+    protected int getExperienceReward(@NotNull Player player) {
         return this.getScale() > 3 ? 20 : 10;
     }
 
@@ -218,7 +222,8 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         this.thrower = thrower;
     }
 
-    public boolean doHurtTarget(Entity entityIn) {
+    @Override
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         if (this.getAnimation() != ANIMATION_BITE) {
             this.setAnimation(ANIMATION_BITE);
             this.playSound(this.getScale() > 3 ? IafSoundRegistry.DEATHWORM_GIANT_ATTACK : IafSoundRegistry.DEATHWORM_ATTACK, 1, 1);
@@ -233,14 +238,17 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         return false;
     }
 
-    public void die(DamageSource cause) {
+    @Override
+    public void die(@NotNull DamageSource cause) {
         clearSegments();
         super.die(cause);
     }
 
-    protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+    @Override
+    protected void checkFallDamage(double y, boolean onGroundIn, @NotNull BlockState state, @NotNull BlockPos pos) {
     }
 
+    @Override
     @Nullable
     protected ResourceLocation getDefaultLootTable() {
         switch (this.getVariant()) {
@@ -256,23 +264,23 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
 
     @Nullable
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
+    public AgeableMob getBreedOffspring(@NotNull ServerLevel serverWorld, @NotNull AgeableMob ageable) {
         return null;
     }
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(VARIANT, Integer.valueOf(0));
-        this.entityData.define(SCALE, Float.valueOf(1F));
-        this.entityData.define(CONTROL_STATE, Byte.valueOf((byte) 0));
-        this.entityData.define(WORM_AGE, Integer.valueOf(10));
+        this.entityData.define(VARIANT, 0);
+        this.entityData.define(SCALE, 1F);
+        this.entityData.define(CONTROL_STATE, (byte) 0);
+        this.entityData.define(WORM_AGE, 10);
         this.entityData.define(HOME, BlockPos.ZERO);
         this.entityData.define(JUMP_TICKS, 0);
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Variant", this.getVariant());
         compound.putInt("GrowthCounter", this.growthCounter);
@@ -283,7 +291,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setVariant(compound.getInt("Variant"));
         this.growthCounter = compound.getInt("GrowthCounter");
@@ -304,20 +312,20 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
 
     @Override
     public byte getControlState() {
-        return Byte.valueOf(entityData.get(CONTROL_STATE));
+        return entityData.get(CONTROL_STATE);
     }
 
     @Override
     public void setControlState(byte state) {
-        entityData.set(CONTROL_STATE, Byte.valueOf(state));
+        entityData.set(CONTROL_STATE, state);
     }
 
     public int getVariant() {
-        return Integer.valueOf(this.entityData.get(VARIANT).intValue());
+        return this.entityData.get(VARIANT).intValue();
     }
 
     public void setVariant(int variant) {
-        this.entityData.set(VARIANT, Integer.valueOf(variant));
+        this.entityData.set(VARIANT, variant);
     }
 
     public int getWormJumping() {
@@ -339,23 +347,24 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     }
 
     public int getWormAge() {
-        return Math.max(1, Integer.valueOf(entityData.get(WORM_AGE).intValue()));
+        return Math.max(1, entityData.get(WORM_AGE).intValue());
     }
 
     public void setWormAge(int age) {
-        this.entityData.set(WORM_AGE, Integer.valueOf(age));
+        this.entityData.set(WORM_AGE, age);
     }
 
+    @Override
     public float getScale() {
         return Math.min(this.getDeathwormScale() * (this.getWormAge() / 5F), 7F);
     }
 
     public float getDeathwormScale() {
-        return Float.valueOf(this.entityData.get(SCALE).floatValue());
+        return this.entityData.get(SCALE).floatValue();
     }
 
     public void setDeathWormScale(float scale) {
-        this.entityData.set(SCALE, Float.valueOf(scale));
+        this.entityData.set(SCALE, scale);
         this.updateAttributes();
         clearSegments();
         if (!this.level.isClientSide) {
@@ -366,7 +375,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setVariant(this.getRandom().nextInt(3));
         float size = 0.25F + (float) (Math.random() * 0.35F);
@@ -374,7 +383,8 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         return spawnDataIn;
     }
 
-    public void positionRider(Entity passenger) {
+    @Override
+    public void positionRider(@NotNull Entity passenger) {
         super.positionRider(passenger);
         if (this.hasPassenger(passenger)) {
             yBodyRot = getYRot();
@@ -387,6 +397,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         }
     }
 
+    @Override
     @Nullable
     public Entity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
@@ -398,7 +409,8 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         return null;
     }
 
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+    @Override
+    public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if (this.getWormAge() > 4 && player.getVehicle() == null && player.getMainHandItem().getItem() == Items.FISHING_ROD && player.getOffhandItem().getItem() == Items.FISHING_ROD && !this.level.isClientSide) {
             player.startRiding(this);
@@ -419,7 +431,8 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         }
     }
 
-    public boolean hurt(DamageSource source, float amount) {
+    @Override
+    public boolean hurt(@NotNull DamageSource source, float amount) {
         if (source == DamageSource.IN_WALL || source == DamageSource.FALLING_BLOCK) {
             return false;
         }
@@ -429,12 +442,13 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         return super.hurt(source, amount);
     }
 
-    public void move(MoverType typeIn, Vec3 pos) {
+    @Override
+    public void move(@NotNull MoverType typeIn, @NotNull Vec3 pos) {
         super.move(typeIn, pos);
     }
 
     @Override
-    public Vec3 collide(Vec3 vec) {
+    public @NotNull Vec3 collide(@NotNull Vec3 vec) {
         return ICustomCollisions.getAllowedMovementForEntity(this, vec);
     }
 
@@ -448,6 +462,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     }
 
 
+    @Override
     protected void moveTowardsClosestSpace(double x, double y, double z) {
         BlockPos blockpos = new BlockPos(x, y, z);
         Vec3 vector3d = new Vec3(x - (double) blockpos.getX(), y - (double) blockpos.getY(), z - (double) blockpos.getZ());
@@ -458,7 +473,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         for (Direction direction1 : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.UP}) {
             blockpos$mutable.setWithOffset(blockpos, direction1);
             if (!this.level.getBlockState(blockpos$mutable).isCollisionShapeFullBlock(this.level, blockpos$mutable)
-                    || level.getBlockState(blockpos$mutable).is(BlockTags.SAND)) {
+                || level.getBlockState(blockpos$mutable).is(BlockTags.SAND)) {
                 double d1 = vector3d.get(direction1.getAxis());
                 double d2 = direction1.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 1.0D - d1 : d1;
                 if (d2 < d0) {
@@ -489,14 +504,14 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     }
 
     @Override
-    public void killed(ServerLevel world, LivingEntity entity) {
+    public void killed(@NotNull ServerLevel world, @NotNull LivingEntity entity) {
         if (this.isTame()) {
             this.heal(14);
         }
     }
 
     @Override
-    public boolean isAlliedTo(Entity entityIn) {
+    public boolean isAlliedTo(@NotNull Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
             if (entityIn == livingentity) {
@@ -513,6 +528,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         return super.isAlliedTo(entityIn);
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         prevJumpProgress = jumpProgress;
@@ -615,17 +631,20 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         return pos.getY();
     }
 
+    @Override
     @Nullable
     protected SoundEvent getAmbientSound() {
         return this.getScale() > 3 ? IafSoundRegistry.DEATHWORM_GIANT_IDLE : IafSoundRegistry.DEATHWORM_IDLE;
     }
 
 
+    @Override
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
         return this.getScale() > 3 ? IafSoundRegistry.DEATHWORM_GIANT_HURT : IafSoundRegistry.DEATHWORM_HURT;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getDeathSound() {
         return this.getScale() > 3 ? IafSoundRegistry.DEATHWORM_GIANT_DIE : IafSoundRegistry.DEATHWORM_DIE;
@@ -767,6 +786,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         return segments;
     }
 
+    @Override
     public int getMaxHeadYRot() {
         return 10;
     }
@@ -782,7 +802,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     }
 
     @Override
-    public void travel(Vec3 vec) {
+    public void travel(@NotNull Vec3 vec) {
         super.travel(vec);
     }
 
@@ -791,6 +811,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         return true;
     }
 
+    @Override
     public boolean canBeTurnedToStone() {
         return false;
     }
@@ -814,6 +835,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         return getRidingPlayer() != null && player != null && getRidingPlayer().getUUID().equals(player.getUUID());
     }
 
+    @Override
     @Nullable
     public Player getRidingPlayer() {
         if (this.getControllingPassenger() instanceof Player) {

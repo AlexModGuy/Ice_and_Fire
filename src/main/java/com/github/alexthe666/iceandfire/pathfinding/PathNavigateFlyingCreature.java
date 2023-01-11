@@ -11,6 +11,7 @@ public class PathNavigateFlyingCreature extends FlyingPathNavigation {
         super(entity, world);
     }
 
+    @Override
     public boolean isStableDestination(BlockPos pos) {
         return this.level.isEmptyBlock(pos.below());
     }

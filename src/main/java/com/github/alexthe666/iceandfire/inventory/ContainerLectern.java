@@ -18,6 +18,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class ContainerLectern extends AbstractContainerMenu {
     private final Container tileFurnace;
@@ -33,13 +34,13 @@ public class ContainerLectern extends AbstractContainerMenu {
         this.tileFurnace = furnaceInventory;
         this.addSlot(new SlotLectern(furnaceInventory, 0, 15, 47) {
             @Override
-            public boolean mayPlace(ItemStack stack) {
+            public boolean mayPlace(@NotNull ItemStack stack) {
                 return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() instanceof ItemBestiary;
             }
         });
         this.addSlot(new Slot(furnaceInventory, 1, 35, 47) {
             @Override
-            public boolean mayPlace(ItemStack stack) {
+            public boolean mayPlace(@NotNull ItemStack stack) {
                 return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() == IafItemRegistry.MANUSCRIPT.get();
             }
         });
@@ -73,12 +74,12 @@ public class ContainerLectern extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(Player playerIn) {
+    public boolean stillValid(@NotNull Player playerIn) {
         return this.tileFurnace.stillValid(playerIn);
     }
 
     @Override
-    public ItemStack quickMoveStack(Player playerIn, int index) {
+    public @NotNull ItemStack quickMoveStack(@NotNull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

@@ -12,6 +12,7 @@ import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -56,12 +57,13 @@ public class ParticleDragonFlame extends TextureSheetParticle {
     }
 
 
+    @Override
     public int getLifetime() {
         return dragon == null ? 10 : 30;
     }
 
     @Override
-    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
+    public void render(@NotNull VertexConsumer buffer, Camera renderInfo, float partialTicks) {
         //TODO: use buffer stuff
         Vec3 inerp = renderInfo.getPosition();
         if (age > this.getLifetime()) {
@@ -108,10 +110,12 @@ public class ParticleDragonFlame extends TextureSheetParticle {
         Tesselator.getInstance().end();
     }
 
+    @Override
     public int getLightColor(float partialTick) {
         return 240;
     }
 
+    @Override
     public void tick() {
         super.tick();
 
@@ -137,7 +141,7 @@ public class ParticleDragonFlame extends TextureSheetParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
+    public @NotNull ParticleRenderType getRenderType() {
         return ParticleRenderType.CUSTOM;
     }
 }

@@ -150,7 +150,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
      * @param range  maximum path range.
      * @param result path result.
      * @param entity the entity.
-     * @see AbstractPathJob#AbstractPathJob(World, BlockPos, BlockPos, int, LivingEntity)
+     * @see AbstractPathJob#AbstractPathJob(Level, BlockPos, BlockPos, int, LivingEntity)
      */
     public AbstractPathJob(final Level world, final BlockPos start, final BlockPos end, final int range, final PathResult result, final LivingEntity entity) {
         final int minX = Math.min(start.getX(), end.getX()) - (range / 2);
@@ -394,7 +394,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
     /**
      * Checks if entity is on a ladder.
      *
-     * @param MNode      the path node.
+     * @param node       the path node.
      * @param nextInPath the next path point.
      * @param pos        the position.
      * @return true if on a ladder.

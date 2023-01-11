@@ -15,6 +15,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -26,11 +27,13 @@ public class PathNavigateDeathWormSand extends WaterBoundPathNavigation {
         worm = deathworm;
     }
 
+    @Override
     public boolean canFloat() {
         return this.nodeEvaluator.canFloat();
     }
 
-    protected PathFinder createPathFinder(int i) {
+    @Override
+    protected @NotNull PathFinder createPathFinder(int i) {
         this.nodeEvaluator = new NodeProcessorDeathWorm();
         this.nodeEvaluator.setCanPassDoors(true);
         this.nodeEvaluator.setCanFloat(true);
@@ -40,11 +43,13 @@ public class PathNavigateDeathWormSand extends WaterBoundPathNavigation {
     /**
      * If on ground or swimming and can swim
      */
+    @Override
     protected boolean canUpdatePath() {
         return true;
     }
 
-    protected Vec3 getTempMobPos() {
+    @Override
+    protected @NotNull Vec3 getTempMobPos() {
         return new Vec3(this.mob.getX(), this.mob.getY() + 0.5D, this.mob.getZ());
     }
 
@@ -60,7 +65,8 @@ public class PathNavigateDeathWormSand extends WaterBoundPathNavigation {
         return false;
     }
 
-    public boolean isStableDestination(BlockPos pos) {
+    @Override
+    public boolean isStableDestination(@NotNull BlockPos pos) {
         return this.level.getBlockState(pos).canOcclude();
     }
 
@@ -76,7 +82,7 @@ public class PathNavigateDeathWormSand extends WaterBoundPathNavigation {
         }
 
         @Override
-        public VoxelShape getBlockShape(BlockState blockState, BlockGetter world, BlockPos pos) {
+        public @NotNull VoxelShape getBlockShape(BlockState blockState, @NotNull BlockGetter world, @NotNull BlockPos pos) {
             if (blockState.getMaterial() == Material.SAND)
                 return Shapes.empty();
             return this.blockMode.get(blockState, world, pos, this.context);

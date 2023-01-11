@@ -78,6 +78,7 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
         super.start();
     }
 
+    @Override
     public boolean canContinueToUse() {
         Entity itemTarget = targetEntity;
 

@@ -67,6 +67,7 @@ public class BlockLaunchExplosion extends Explosion {
     /**
      * Does the second part of the explosion (sound, particles, drop spawn)
      */
+    @Override
     public void finalizeExplosion(boolean spawnParticles) {
         if (world.isClientSide) {
             this.world.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F, false);

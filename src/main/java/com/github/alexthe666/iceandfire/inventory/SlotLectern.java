@@ -4,6 +4,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class SlotLectern extends Slot {
 
@@ -17,7 +18,7 @@ public class SlotLectern extends Slot {
     }
 
     @Override
-    public void onTake(Player playerIn, ItemStack stack) {
+    public void onTake(@NotNull Player playerIn, @NotNull ItemStack stack) {
         this.checkTakeAchievements(stack);
         super.onTake(playerIn, stack);
     }
@@ -28,7 +29,7 @@ public class SlotLectern extends Slot {
      * onCrafting(item).
      */
     @Override
-    protected void onQuickCraft(ItemStack stack, int amount) {
+    protected void onQuickCraft(@NotNull ItemStack stack, int amount) {
         this.checkTakeAchievements(stack);
     }
 
@@ -37,7 +38,7 @@ public class SlotLectern extends Slot {
      * not ore and wood.
      */
     @Override
-    protected void checkTakeAchievements(ItemStack stack) {
+    protected void checkTakeAchievements(@NotNull ItemStack stack) {
         // thePlayer.addStat(StatList.objectCraftStats[Item.getIdFromItem(stack.getItem())],
         // stack.stackSize);
     }

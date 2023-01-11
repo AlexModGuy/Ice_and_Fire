@@ -18,8 +18,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityHydraBreath extends Fireball implements IDragonProjectile {
 
@@ -46,7 +47,7 @@ public class EntityHydraBreath extends Fireball implements IDragonProjectile {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -56,7 +57,7 @@ public class EntityHydraBreath extends Fireball implements IDragonProjectile {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurt(@NotNull DamageSource source, float amount) {
         return false;
     }
 
@@ -124,7 +125,7 @@ public class EntityHydraBreath extends Fireball implements IDragonProjectile {
     }
 
     @Override
-    protected void onHit(HitResult movingObject) {
+    protected void onHit(@NotNull HitResult movingObject) {
         this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
         Entity shootingEntity = this.getOwner();
         if (!this.level.isClientSide) {

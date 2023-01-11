@@ -29,6 +29,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityStoneStatue entity) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull EntityStoneStatue entity) {
         return TextureAtlas.LOCATION_BLOCKS;
     }
 
@@ -56,7 +57,7 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
     }
 
     @Override
-    public void render(EntityStoneStatue entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+    public void render(EntityStoneStatue entityIn, float entityYaw, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn) {
         EntityModel model = new PigModel(context.bakeLayer(ModelLayers.PIG));
 
         // Get the correct model

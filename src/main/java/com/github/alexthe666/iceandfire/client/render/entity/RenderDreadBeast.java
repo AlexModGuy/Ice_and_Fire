@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderDreadBeast extends MobRenderer<EntityDreadBeast, ModelDreadBeast> {
 
@@ -25,7 +26,7 @@ public class RenderDreadBeast extends MobRenderer<EntityDreadBeast, ModelDreadBe
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityDreadBeast beast) {
+    public @NotNull ResourceLocation getTextureLocation(EntityDreadBeast beast) {
         return beast.getVariant() == 1 ? TEXTURE_1 : TEXTURE_0;
 
     }

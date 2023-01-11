@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderDreadScuttler extends MobRenderer<EntityDreadScuttler, ModelDreadScuttler> {
 
@@ -24,7 +25,7 @@ public class RenderDreadScuttler extends MobRenderer<EntityDreadScuttler, ModelD
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityDreadScuttler beast) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull EntityDreadScuttler beast) {
         return TEXTURE;
 
     }

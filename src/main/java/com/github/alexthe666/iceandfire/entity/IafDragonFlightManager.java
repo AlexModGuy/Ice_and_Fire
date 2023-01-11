@@ -153,6 +153,7 @@ public class IafDragonFlightManager {
             return (float) IAFMath.atan2_accurate(Mth.sin(rotateAngleTo - rotateAngleFrom), Mth.cos(rotateAngleTo - rotateAngleFrom));
         }
 
+        @Override
         public void tick() {
             if (this.operation == Operation.STRAFE) {
                 float f = (float) this.mob.getAttribute(Attributes.MOVEMENT_SPEED).getValue();

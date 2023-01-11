@@ -22,6 +22,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -43,6 +44,7 @@ public class EntityMobSkull extends Animal implements IBlacklistedFromStatues, I
             .add(Attributes.MOVEMENT_SPEED, 0.0D);
     }
 
+    @Override
     public boolean canBreatheUnderwater() {
         return true;
     }
@@ -71,8 +73,8 @@ public class EntityMobSkull extends Animal implements IBlacklistedFromStatues, I
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.getEntityData().define(SKULL_DIRECTION, Float.valueOf(0F));
-        this.getEntityData().define(SKULL_ENUM, Integer.valueOf(0));
+        this.getEntityData().define(SKULL_DIRECTION, 0F);
+        this.getEntityData().define(SKULL_ENUM, 0);
     }
 
     public float getYaw() {
@@ -100,7 +102,7 @@ public class EntityMobSkull extends Animal implements IBlacklistedFromStatues, I
     }
 
     @Override
-    public boolean hurt(DamageSource var1, float var2) {
+    public boolean hurt(@NotNull DamageSource var1, float var2) {
         this.turnIntoItem();
         return super.hurt(var1, var2);
     }
@@ -114,12 +116,13 @@ public class EntityMobSkull extends Animal implements IBlacklistedFromStatues, I
             this.spawnAtLocation(stack, 0.0F);
     }
 
-    public boolean isFood(ItemStack stack) {
+    @Override
+    public boolean isFood(@NotNull ItemStack stack) {
         return false;
     }
 
     @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+    public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         if (player.isShiftKeyDown()) {
             this.setYaw(player.getYRot());
         }
@@ -146,7 +149,7 @@ public class EntityMobSkull extends Animal implements IBlacklistedFromStatues, I
     }
 
     @Override
-    protected void doPush(Entity entity) {
+    protected void doPush(@NotNull Entity entity) {
     }
 
     @Override
@@ -161,7 +164,7 @@ public class EntityMobSkull extends Animal implements IBlacklistedFromStatues, I
 
     @Nullable
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
+    public AgeableMob getBreedOffspring(@NotNull ServerLevel serverWorld, @NotNull AgeableMob ageable) {
         return null;
     }
 

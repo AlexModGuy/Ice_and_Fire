@@ -30,6 +30,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -51,6 +52,7 @@ public class EntityDreadBeast extends EntityDreadMob implements IAnimatedEntity,
         super(type, worldIn);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
@@ -89,29 +91,32 @@ public class EntityDreadBeast extends EntityDreadMob implements IAnimatedEntity,
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(VARIANT, Integer.valueOf(0));
-        this.entityData.define(SCALE, Float.valueOf(1F));
+        this.entityData.define(VARIANT, 0);
+        this.entityData.define(SCALE, 1F);
     }
 
+    @Override
     public float getScale() {
         return getSize();
     }
 
     public float getSize() {
-        return Float.valueOf(this.entityData.get(SCALE).floatValue());
+        return this.entityData.get(SCALE).floatValue();
     }
 
     public void setSize(float scale) {
-        this.entityData.set(SCALE, Float.valueOf(scale));
+        this.entityData.set(SCALE, scale);
     }
 
-    public boolean doHurtTarget(Entity entityIn) {
+    @Override
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             this.setAnimation(ANIMATION_BITE);
         }
         return true;
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         if (Math.abs(firstWidth - INITIAL_WIDTH * getSize()) > 0.01F || Math.abs(firstHeight - INITIAL_HEIGHT * getSize()) > 0.01F) {
@@ -163,8 +168,9 @@ public class EntityDreadBeast extends EntityDreadMob implements IAnimatedEntity,
         this.entityData.set(VARIANT, variant);
     }
 
+    @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setAnimation(ANIMATION_SPAWN);
         this.setVariant(random.nextInt(2));
@@ -218,21 +224,25 @@ public class EntityDreadBeast extends EntityDreadMob implements IAnimatedEntity,
     }
 
 
+    @Override
     @Nullable
     protected SoundEvent getAmbientSound() {
         return SoundEvents.WOLF_GROWL;
     }
 
+    @Override
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource source) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource source) {
         return SoundEvents.WOLF_HURT;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getDeathSound() {
         return SoundEvents.WOLF_DEATH;
     }
 
+    @Override
     public float getVoicePitch() {
         return super.getVoicePitch() * 0.70F;
     }

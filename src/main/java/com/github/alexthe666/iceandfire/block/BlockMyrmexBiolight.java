@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.block;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -14,6 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.Material;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -35,21 +35,24 @@ public class BlockMyrmexBiolight extends BushBlock {
                 .sound(SoundType.GRASS).randomTicks()
         );
 
-        this.registerDefaultState(this.getStateDefinition().any().setValue(CONNECTED_DOWN, Boolean.valueOf(false)));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(CONNECTED_DOWN, Boolean.FALSE));
     }
 
-    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
+    @Override
+    public boolean canSurvive(@NotNull BlockState state, LevelReader worldIn, BlockPos pos) {
         BlockPos blockpos = pos.above();
         return worldIn.getBlockState(blockpos).getBlock() == this || worldIn.getBlockState(blockpos).canOcclude();
     }
 
 
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
+    @Override
+    public @NotNull BlockState updateShape(BlockState stateIn, @NotNull Direction facing, @NotNull BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, @NotNull BlockPos facingPos) {
         boolean flag3 = worldIn.getBlockState(currentPos.below()).getBlock() == this;
         return stateIn.setValue(CONNECTED_DOWN, flag3);
     }
 
-    public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, Random rand) {
+    @Override
+    public void tick(@NotNull BlockState state, ServerLevel worldIn, @NotNull BlockPos pos, @NotNull Random rand) {
         if (!worldIn.isClientSide) {
             this.updateState(state, worldIn, pos, state.getBlock());
         }
@@ -62,11 +65,12 @@ public class BlockMyrmexBiolight extends BushBlock {
         boolean flag2 = state.getValue(CONNECTED_DOWN);
         boolean flag3 = worldIn.getBlockState(pos.below()).getBlock() == this;
         if (flag2 != flag3) {
-            worldIn.setBlock(pos, state.setValue(CONNECTED_DOWN, Boolean.valueOf(flag3)), 3);
+            worldIn.setBlock(pos, state.setValue(CONNECTED_DOWN, flag3), 3);
         }
 
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(CONNECTED_DOWN);
     }

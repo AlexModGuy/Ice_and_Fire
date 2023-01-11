@@ -12,6 +12,7 @@ public class PathNavigateCyclops extends CustomCollisionsNavigator {
         super(LivingEntityIn, worldIn);
     }
 
+    @Override
     protected PathFinder createPathFinder(int i) {
         this.nodeEvaluator = new WalkNodeEvaluator();
         this.nodeEvaluator.setCanPassDoors(true);

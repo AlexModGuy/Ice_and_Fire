@@ -17,6 +17,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class GuiMyrmexAddRoom extends Screen {
     private static final ResourceLocation JUNGLE_TEXTURE = new ResourceLocation("iceandfire:textures/gui/myrmex_staff_jungle.png");
@@ -78,7 +79,7 @@ public class GuiMyrmexAddRoom extends Screen {
     }
 
     @Override
-    public void renderBackground(PoseStack ms) {
+    public void renderBackground(@NotNull PoseStack ms) {
         super.renderBackground(ms);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         this.getMinecraft().getTextureManager().bindForSetup(jungle ? JUNGLE_TEXTURE : DESERT_TEXTURE);
@@ -88,7 +89,7 @@ public class GuiMyrmexAddRoom extends Screen {
     }
 
     @Override
-    public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack ms, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(ms);
         init();
         int i = (this.width - 248) / 2 + 10;

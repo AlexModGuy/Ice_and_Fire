@@ -40,6 +40,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -79,6 +80,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
             .add(Attributes.ARMOR, 20.0D);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new DreadAIRideHorse(this));
         this.goalSelector.addGoal(1, new FloatGoal(this));
@@ -104,9 +106,10 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(VARIANT, Integer.valueOf(0));
+        this.entityData.define(VARIANT, 0);
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
@@ -121,7 +124,8 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+    @Override
+    protected void populateDefaultEquipmentSlots(@NotNull DifficultyInstance difficulty) {
         super.populateDefaultEquipmentSlots(difficulty);
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DREAD_KNIGHT_SWORD.get()));
         if (random.nextBoolean()) {
@@ -130,8 +134,9 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         setArmorVariant(random.nextInt(3));
     }
 
+    @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setAnimation(ANIMATION_SPAWN);
         this.populateDefaultEquipmentSlots(difficultyIn);
@@ -148,6 +153,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         animationTick = tick;
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("ArmorVariant", getArmorVariant());
@@ -192,20 +198,24 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         return true;
     }
 
+    @Override
     public double getMyRidingOffset() {
         return -0.6D;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getAmbientSound() {
         return SoundEvents.STRAY_AMBIENT;
     }
 
+    @Override
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource source) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource source) {
         return SoundEvents.STRAY_HURT;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getDeathSound() {
         return SoundEvents.STRAY_DEATH;
@@ -215,6 +225,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         this.playSound(SoundEvents.STRAY_STEP, 0.15F, 1.0F);
     }
 
+    @Override
     public float getVoicePitch() {
         return super.getVoicePitch() * 0.75F;
     }

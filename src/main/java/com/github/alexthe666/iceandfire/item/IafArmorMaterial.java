@@ -14,10 +14,12 @@ public class IafArmorMaterial extends CustomArmorMaterial {
         this.maxDamageFactor = durability;
     }
 
+    @Override
     public int getDurabilityForSlot(EquipmentSlot slotIn) {
         return MAX_DAMAGE_ARRAY[slotIn.getIndex()] * this.maxDamageFactor;
     }
 
+    @Override
     public float getKnockbackResistance(){
         return 0;
     }

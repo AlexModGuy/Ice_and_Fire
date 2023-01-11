@@ -6,6 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
@@ -18,7 +19,7 @@ public class DreadAITargetNonDread extends NearestAttackableTargetGoal<LivingEnt
     }
 
     @Override
-    protected boolean canAttack(@Nullable LivingEntity target, TargetingConditions targetPredicate) {
+    protected boolean canAttack(@Nullable LivingEntity target, @NotNull TargetingConditions targetPredicate) {
         if (super.canAttack(target, targetPredicate)) {
             return !(target instanceof IDreadMob) && DragonUtils.isAlive(target);
         }

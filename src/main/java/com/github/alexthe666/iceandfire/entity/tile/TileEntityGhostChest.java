@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -21,12 +22,12 @@ public class TileEntityGhostChest extends ChestBlockEntity {
     }
 
     @Override
-    public void load(CompoundTag nbt) {
+    public void load(@NotNull CompoundTag nbt) {
         super.load(nbt);
     }
 
     @Override
-    public void startOpen(Player player) {
+    public void startOpen(@NotNull Player player) {
         super.startOpen(player);
         if (this.level.getDifficulty() != Difficulty.PEACEFUL) {
             EntityGhost ghost = IafEntityRegistry.GHOST.get().create(level);
@@ -47,7 +48,7 @@ public class TileEntityGhostChest extends ChestBlockEntity {
     }
 
     @Override
-    protected void signalOpenCount(Level level, BlockPos pos, BlockState state, int p_155336_, int p_155337_) {
+    protected void signalOpenCount(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, int p_155336_, int p_155337_) {
         super.signalOpenCount(level, pos, state, p_155336_, p_155337_);
         level.updateNeighborsAt(pos.below(), state.getBlock());
     }

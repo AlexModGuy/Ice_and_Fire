@@ -13,6 +13,7 @@ import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.level.pathfinder.SwimNodeEvaluator;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class SeaSerpentPathNavigator extends PathNavigation {
 
@@ -21,7 +22,7 @@ public class SeaSerpentPathNavigator extends PathNavigation {
     }
 
     @Override
-    protected PathFinder createPathFinder(int p_179679_1_) {
+    protected @NotNull PathFinder createPathFinder(int p_179679_1_) {
         this.nodeEvaluator = new SwimNodeEvaluator(true);
         return new PathFinder(this.nodeEvaluator, p_179679_1_);
     }
@@ -32,7 +33,7 @@ public class SeaSerpentPathNavigator extends PathNavigation {
     }
 
     @Override
-    protected Vec3 getTempMobPos() {
+    protected @NotNull Vec3 getTempMobPos() {
         return new Vec3(this.mob.getX(), this.mob.getY(0.5D), this.mob.getZ());
     }
 
@@ -93,7 +94,7 @@ public class SeaSerpentPathNavigator extends PathNavigation {
     }
 
     @Override
-    protected void doStuckDetection(Vec3 positionVec3) {
+    protected void doStuckDetection(@NotNull Vec3 positionVec3) {
         if (this.tick - this.lastStuckCheck > 100) {
             if (positionVec3.distanceToSqr(this.lastStuckCheckPos) < 2.25D) {
                 this.stop();
@@ -128,13 +129,13 @@ public class SeaSerpentPathNavigator extends PathNavigation {
     }
 
     @Override
-    protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32) {
+    protected boolean canMoveDirectly(@NotNull Vec3 posVec31, Vec3 posVec32) {
         Vec3 lvt_6_1_ = new Vec3(posVec32.x, posVec32.y + this.mob.getBbHeight() * 0.5D, posVec32.z);
         return this.level.clip(new ClipContext(posVec31, lvt_6_1_, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.mob)).getType() == HitResult.Type.MISS;
     }
 
     @Override
-    public boolean isStableDestination(BlockPos pos) {
+    public boolean isStableDestination(@NotNull BlockPos pos) {
         return !this.level.getBlockState(pos).isSolidRender(this.level, pos);
     }
 

@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.entity.EntityTroll;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderTroll extends MobRenderer<EntityTroll, ModelTroll> {
 
@@ -17,7 +18,7 @@ public class RenderTroll extends MobRenderer<EntityTroll, ModelTroll> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityTroll troll) {
+    public @NotNull ResourceLocation getTextureLocation(EntityTroll troll) {
         return troll.getTrollType().TEXTURE;
     }
 }

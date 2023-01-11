@@ -257,6 +257,7 @@ public class ModelDreadScuttler extends ModelDragonBase<EntityDreadScuttler> {
         }
     }
 
+    @Override
     public void setupAnim(EntityDreadScuttler beast, float f, float f1, float f2, float f3, float f4) {
         animate(beast, f, f1, f2, f3, f4, 1);
         float speed_idle = 0.05F;

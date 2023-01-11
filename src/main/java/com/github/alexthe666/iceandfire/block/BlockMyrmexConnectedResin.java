@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.block;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -14,6 +13,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Material;
+import org.jetbrains.annotations.NotNull;
 
 public class BlockMyrmexConnectedResin extends HalfTransparentBlock {
 
@@ -34,12 +34,12 @@ public class BlockMyrmexConnectedResin extends HalfTransparentBlock {
                 .sound(glass ? SoundType.GLASS : SoundType.STONE)
         );
 
-        this.registerDefaultState(this.getStateDefinition().any().setValue(UP, Boolean.valueOf(false))
-            .setValue(DOWN, Boolean.valueOf(false))
-            .setValue(NORTH, Boolean.valueOf(false))
-            .setValue(EAST, Boolean.valueOf(false))
-            .setValue(SOUTH, Boolean.valueOf(false))
-            .setValue(WEST, Boolean.valueOf(false))
+        this.registerDefaultState(this.getStateDefinition().any().setValue(UP, Boolean.FALSE)
+            .setValue(DOWN, Boolean.FALSE)
+            .setValue(NORTH, Boolean.FALSE)
+            .setValue(EAST, Boolean.FALSE)
+            .setValue(SOUTH, Boolean.FALSE)
+            .setValue(WEST, Boolean.FALSE)
         );
     }
 
@@ -49,6 +49,7 @@ public class BlockMyrmexConnectedResin extends HalfTransparentBlock {
         return "myrmex_%s_resin_%s".formatted(biome, type);
     }
 
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockGetter iblockreader = context.getLevel();
         BlockPos blockpos = context.getClickedPos();
@@ -66,15 +67,16 @@ public class BlockMyrmexConnectedResin extends HalfTransparentBlock {
         BlockState blockstate4 = iblockreader.getBlockState(blockpos5);
         BlockState blockstate5 = iblockreader.getBlockState(blockpos6);
         return super.getStateForPlacement(context)
-            .setValue(NORTH, Boolean.valueOf(this.canFenceConnectTo(blockstate, false, Direction.SOUTH)))
-            .setValue(EAST, Boolean.valueOf(this.canFenceConnectTo(blockstate1, false, Direction.WEST)))
-            .setValue(SOUTH, Boolean.valueOf(this.canFenceConnectTo(blockstate2, false, Direction.NORTH)))
-            .setValue(WEST, Boolean.valueOf(this.canFenceConnectTo(blockstate3, false, Direction.EAST)))
-            .setValue(UP, Boolean.valueOf(this.canFenceConnectTo(blockstate4, false, Direction.UP)))
-            .setValue(DOWN, Boolean.valueOf(this.canFenceConnectTo(blockstate5, false, Direction.DOWN)));
+            .setValue(NORTH, this.canFenceConnectTo(blockstate, false, Direction.SOUTH))
+            .setValue(EAST, this.canFenceConnectTo(blockstate1, false, Direction.WEST))
+            .setValue(SOUTH, this.canFenceConnectTo(blockstate2, false, Direction.NORTH))
+            .setValue(WEST, this.canFenceConnectTo(blockstate3, false, Direction.EAST))
+            .setValue(UP, this.canFenceConnectTo(blockstate4, false, Direction.UP))
+            .setValue(DOWN, this.canFenceConnectTo(blockstate5, false, Direction.DOWN));
     }
 
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
+    @Override
+    public @NotNull BlockState updateShape(@NotNull BlockState stateIn, Direction facing, @NotNull BlockState facingState, @NotNull LevelAccessor worldIn, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
         BooleanProperty connect = null;
         switch (facing) {
             case NORTH:
@@ -96,10 +98,11 @@ public class BlockMyrmexConnectedResin extends HalfTransparentBlock {
                 connect = UP;
                 break;
         }
-        return stateIn.setValue(connect, Boolean.valueOf(this.canFenceConnectTo(facingState, false, facing.getOpposite())));
+        return stateIn.setValue(connect, this.canFenceConnectTo(facingState, false, facing.getOpposite()));
     }
 
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(NORTH, EAST, WEST, SOUTH, DOWN, UP);
     }

@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderTideTrident extends EntityRenderer<EntityTideTrident> {
     public static final ResourceLocation TRIDENT = new ResourceLocation("iceandfire:textures/models/misc/tide_trident.png");
@@ -20,7 +21,8 @@ public class RenderTideTrident extends EntityRenderer<EntityTideTrident> {
         super(context);
     }
 
-    public void render(EntityTideTrident entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+    @Override
+    public void render(EntityTideTrident entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) - 90.0F));
         matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot()) + 90.0F));
@@ -33,7 +35,8 @@ public class RenderTideTrident extends EntityRenderer<EntityTideTrident> {
     /**
      * Returns the location of an entity's texture.
      */
-    public ResourceLocation getTextureLocation(EntityTideTrident entity) {
+    @Override
+    public @NotNull ResourceLocation getTextureLocation(@NotNull EntityTideTrident entity) {
         return TRIDENT;
     }
 

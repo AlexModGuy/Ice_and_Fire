@@ -5,6 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
@@ -25,7 +26,7 @@ public class FlyingAITarget<T extends LivingEntity> extends NearestAttackableTar
     }
 
     @Override
-    protected AABB getTargetSearchArea(double targetDistance) {
+    protected @NotNull AABB getTargetSearchArea(double targetDistance) {
         return this.mob.getBoundingBox().inflate(targetDistance, targetDistance, targetDistance);
     }
 

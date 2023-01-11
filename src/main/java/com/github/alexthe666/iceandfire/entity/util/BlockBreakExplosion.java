@@ -28,6 +28,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -174,6 +175,7 @@ public class BlockBreakExplosion extends Explosion {
     /**
      * Does the second part of the explosion (sound, particles, drop spawn)
      */
+    @Override
     public void finalizeExplosion(boolean spawnParticles) {
         if (this.world.isClientSide) {
             this.world.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F, false);
@@ -222,7 +224,7 @@ public class BlockBreakExplosion extends Explosion {
     }
 
     @Override
-    public Map<Player, Vec3> getHitPlayers() {
+    public @NotNull Map<Player, Vec3> getHitPlayers() {
         return this.playerKnockbackMap;
     }
 
@@ -231,17 +233,18 @@ public class BlockBreakExplosion extends Explosion {
         return exploder;
     }
 
+    @Override
     public void clearToBlow() {
         this.affectedBlockPositions.clear();
     }
 
     @Override
-    public List<BlockPos> getToBlow() {
+    public @NotNull List<BlockPos> getToBlow() {
         return this.affectedBlockPositions;
     }
 
     @Override
-    public Vec3 getPosition() {
+    public @NotNull Vec3 getPosition() {
         return this.position;
     }
 }

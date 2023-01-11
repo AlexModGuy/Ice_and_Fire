@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,8 @@ public class RenderDragonBase extends MobRenderer<EntityDragonBase, AdvancedEnti
         matrixStackIn.scale(shadowRadius, shadowRadius, shadowRadius);
     }
 
-    public ResourceLocation getTextureLocation(EntityDragonBase entity) {
+    @Override
+    public @NotNull ResourceLocation getTextureLocation(EntityDragonBase entity) {
         String baseTexture = entity.getVariantName(entity.getVariant()) + entity.getDragonStage() + entity.isModelDead() + entity.isMale() + entity.isSkeletal() + entity.isSleeping() + entity.isBlinking();
         ResourceLocation resourcelocation = LAYERED_TEXTURE_CACHE.get(baseTexture);
         if (resourcelocation == null) {

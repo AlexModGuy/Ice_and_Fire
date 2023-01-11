@@ -375,6 +375,7 @@ public class ModelCyclops extends ModelDragonBase<EntityCyclops> {
         }
     }
 
+    @Override
     public void setupAnim(EntityCyclops entity, float f, float f1, float f2, float f3, float f4) {
         animate(entity, f, f1, f2, f3, f4);
         float speed_walk = 0.2F;
@@ -401,7 +402,7 @@ public class ModelCyclops extends ModelDragonBase<EntityCyclops> {
             this.faceTarget(f3, f4, 1, this.Head);
         }
         this.walk(this.Jaw, speed_idle, degree_idle * -0.15F, true, 0F, -0.1F, f2, 1);
-        
+
     }
 
     @Override

@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderLightningDragon extends RenderDragonBase {
 
@@ -21,7 +22,8 @@ public class RenderLightningDragon extends RenderDragonBase {
         super(context, model, dragonType);
     }
 
-    public boolean shouldRender(EntityDragonBase livingEntityIn, Frustum camera, double camX, double camY, double camZ) {
+    @Override
+    public boolean shouldRender(@NotNull EntityDragonBase livingEntityIn, @NotNull Frustum camera, double camX, double camY, double camZ) {
         if (super.shouldRender(livingEntityIn, camera, camX, camY, camZ)) {
             return true;
         } else {
@@ -35,7 +37,8 @@ public class RenderLightningDragon extends RenderDragonBase {
         }
     }
 
-    public void render(EntityDragonBase entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+    @Override
+    public void render(@NotNull EntityDragonBase entityIn, float entityYaw, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn) {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         EntityLightningDragon lightningDragon = (EntityLightningDragon) entityIn;
         matrixStackIn.pushPose();

@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 
 public class DragonForgeRecipe implements Recipe<TileEntityDragonforge> {
@@ -50,7 +51,7 @@ public class DragonForgeRecipe implements Recipe<TileEntityDragonforge> {
     }
 
     @Override
-    public boolean matches(TileEntityDragonforge inv, Level worldIn) {
+    public boolean matches(TileEntityDragonforge inv, @NotNull Level worldIn) {
         return this.input.test(inv.getItem(0)) && this.blood.test(inv.getItem(1)) && this.dragonType.equals(inv.getTypeID());
     }
 
@@ -63,12 +64,12 @@ public class DragonForgeRecipe implements Recipe<TileEntityDragonforge> {
     }
 
     @Override
-    public ItemStack getResultItem() {
+    public @NotNull ItemStack getResultItem() {
         return result;
     }
 
     @Override
-    public ItemStack assemble(TileEntityDragonforge dragonforge) {
+    public @NotNull ItemStack assemble(@NotNull TileEntityDragonforge dragonforge) {
         return result;
     }
 
@@ -78,27 +79,28 @@ public class DragonForgeRecipe implements Recipe<TileEntityDragonforge> {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public @NotNull ResourceLocation getId() {
         return this.recipeId;
     }
 
     @Override
-    public ItemStack getToastSymbol() {
+    public @NotNull ItemStack getToastSymbol() {
         return new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE.get());
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<?> getSerializer() {
         return IafRecipeSerializers.DRAGONFORGE_SERIALIZER.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public @NotNull RecipeType<?> getType() {
         return IafRecipeRegistry.DRAGON_FORGE_TYPE;
     }
 
     public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<DragonForgeRecipe> {
-        public DragonForgeRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+        @Override
+        public @NotNull DragonForgeRecipe fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
             String dragonType = JsonUtils.getString(json, "dragon_type");
             Ingredient input = Ingredient.fromJson(JsonUtils.getJsonObject(json, "input"));
             Ingredient blood = Ingredient.fromJson(JsonUtils.getJsonObject(json, "blood"));
@@ -107,7 +109,8 @@ public class DragonForgeRecipe implements Recipe<TileEntityDragonforge> {
             return new DragonForgeRecipe(recipeId, input, blood, result, dragonType, cookTime);
         }
 
-        public DragonForgeRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+        @Override
+        public DragonForgeRecipe fromNetwork(@NotNull ResourceLocation recipeId, FriendlyByteBuf buffer) {
             int cookTime = buffer.readInt();
             String dragonType = buffer.readUtf();
             Ingredient input = Ingredient.fromNetwork(buffer);
@@ -116,6 +119,7 @@ public class DragonForgeRecipe implements Recipe<TileEntityDragonforge> {
             return new DragonForgeRecipe(recipeId, input, blood, result, dragonType, cookTime);
         }
 
+        @Override
         public void toNetwork(FriendlyByteBuf buffer, DragonForgeRecipe recipe) {
             buffer.writeInt(recipe.cookTime);
             buffer.writeUtf(recipe.dragonType);

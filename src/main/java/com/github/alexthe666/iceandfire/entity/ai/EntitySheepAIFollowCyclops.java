@@ -22,6 +22,7 @@ public class EntitySheepAIFollowCyclops extends Goal {
         this.moveSpeed = speed;
     }
 
+    @Override
     public boolean canUse() {
         List<EntityCyclops> list = this.childAnimal.level.getEntitiesOfClass(EntityCyclops.class, this.childAnimal.getBoundingBox().inflate(16.0D, 8.0D, 16.0D));
         EntityCyclops cyclops = null;
@@ -47,6 +48,7 @@ public class EntitySheepAIFollowCyclops extends Goal {
     }
 
 
+    @Override
     public boolean canContinueToUse() {
         if (this.cyclops.isAlive()) {
             return false;
@@ -57,14 +59,17 @@ public class EntitySheepAIFollowCyclops extends Goal {
     }
 
 
+    @Override
     public void start() {
         this.delayCounter = 0;
     }
 
+    @Override
     public void stop() {
         this.cyclops = null;
     }
 
+    @Override
     public void tick() {
         if (--this.delayCounter <= 0) {
             this.delayCounter = 10;

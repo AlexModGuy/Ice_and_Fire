@@ -25,6 +25,7 @@ import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class IafRecipeRegistry {
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
+            protected @NotNull Projectile getProjectile(@NotNull Level worldIn, @NotNull Position position, @NotNull ItemStack stackIn) {
                 EntityStymphalianArrow entityarrow = new EntityStymphalianArrow(
                     IafEntityRegistry.STYMPHALIAN_ARROW.get(), worldIn, position.x(), position.y(),
                     position.z());
@@ -75,7 +76,7 @@ public class IafRecipeRegistry {
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
+            protected @NotNull Projectile getProjectile(@NotNull Level worldIn, @NotNull Position position, @NotNull ItemStack stackIn) {
                 EntityAmphithereArrow entityarrow = new EntityAmphithereArrow(IafEntityRegistry.AMPHITHERE_ARROW.get(),
                     worldIn, position.x(), position.y(), position.z());
                 entityarrow.pickup = AbstractArrow.Pickup.ALLOWED;
@@ -87,7 +88,7 @@ public class IafRecipeRegistry {
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
+            protected @NotNull Projectile getProjectile(@NotNull Level worldIn, @NotNull Position position, @NotNull ItemStack stackIn) {
                 EntitySeaSerpentArrow entityarrow = new EntitySeaSerpentArrow(IafEntityRegistry.SEA_SERPENT_ARROW.get(),
                     worldIn, position.x(), position.y(), position.z());
                 entityarrow.pickup = AbstractArrow.Pickup.ALLOWED;
@@ -99,7 +100,7 @@ public class IafRecipeRegistry {
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
+            protected @NotNull Projectile getProjectile(@NotNull Level worldIn, @NotNull Position position, @NotNull ItemStack stackIn) {
                 EntityDragonArrow entityarrow = new EntityDragonArrow(IafEntityRegistry.DRAGON_ARROW.get(),
                     position.x(), position.y(), position.z(), worldIn);
                 entityarrow.pickup = AbstractArrow.Pickup.ALLOWED;
@@ -111,7 +112,7 @@ public class IafRecipeRegistry {
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
+            protected @NotNull Projectile getProjectile(@NotNull Level worldIn, @NotNull Position position, @NotNull ItemStack stackIn) {
                 EntityHydraArrow entityarrow = new EntityHydraArrow(IafEntityRegistry.HYDRA_ARROW.get(), worldIn,
                     position.x(), position.y(), position.z());
                 entityarrow.pickup = AbstractArrow.Pickup.ALLOWED;
@@ -123,7 +124,7 @@ public class IafRecipeRegistry {
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
+            protected @NotNull Projectile getProjectile(@NotNull Level worldIn, @NotNull Position position, @NotNull ItemStack stackIn) {
                 return new EntityHippogryphEgg(IafEntityRegistry.HIPPOGRYPH_EGG.get(), worldIn, position.x(),
                     position.y(), position.z(), stackIn);
             }
@@ -133,7 +134,7 @@ public class IafRecipeRegistry {
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
+            protected @NotNull Projectile getProjectile(@NotNull Level worldIn, @NotNull Position position, @NotNull ItemStack stackIn) {
                 return new EntityCockatriceEgg(IafEntityRegistry.COCKATRICE_EGG.get(), position.x(), position.y(),
                     position.z(), worldIn);
             }
@@ -143,7 +144,7 @@ public class IafRecipeRegistry {
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
+            protected @NotNull Projectile getProjectile(@NotNull Level worldIn, @NotNull Position position, @NotNull ItemStack stackIn) {
                 return new EntityDeathWormEgg(IafEntityRegistry.DEATH_WORM_EGG.get(), position.x(), position.y(),
                     position.z(), worldIn, false);
             }
@@ -153,7 +154,7 @@ public class IafRecipeRegistry {
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
+            protected @NotNull Projectile getProjectile(@NotNull Level worldIn, @NotNull Position position, @NotNull ItemStack stackIn) {
                 return new EntityDeathWormEgg(IafEntityRegistry.DEATH_WORM_EGG.get(), position.x(), position.y(),
                     position.z(), worldIn, true);
             }

@@ -16,8 +16,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityStymphalianFeather extends AbstractArrow {
 
@@ -35,12 +36,12 @@ public class EntityStymphalianFeather extends AbstractArrow {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
-    public void remove(RemovalReason reason) {
+    public void remove(@NotNull RemovalReason reason) {
         super.remove(reason);
         if (IafConfig.stymphalianBirdFeatherDropChance > 0) {
             if (!level.isClientSide && this.random.nextInt(IafConfig.stymphalianBirdFeatherDropChance) == 0) {
@@ -59,7 +60,7 @@ public class EntityStymphalianFeather extends AbstractArrow {
     }
 
     @Override
-    protected void onHitEntity(EntityHitResult entityHit) {
+    protected void onHitEntity(@NotNull EntityHitResult entityHit) {
         Entity shootingEntity = this.getOwner();
         if (shootingEntity instanceof EntityStymphalianBird && entityHit.getEntity() != null && entityHit.getEntity() instanceof EntityStymphalianBird) {
             return;
@@ -101,7 +102,7 @@ public class EntityStymphalianFeather extends AbstractArrow {
     }
 
     @Override
-    protected ItemStack getPickupItem() {
+    protected @NotNull ItemStack getPickupItem() {
         return new ItemStack(IafItemRegistry.STYMPHALIAN_BIRD_FEATHER.get());
     }
 }

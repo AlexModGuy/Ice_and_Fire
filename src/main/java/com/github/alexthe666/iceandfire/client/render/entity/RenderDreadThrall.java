@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -79,7 +80,7 @@ public class RenderDreadThrall extends MobRenderer<EntityDreadThrall, ModelDread
 
     @Nullable
     @Override
-    public ResourceLocation getTextureLocation(EntityDreadThrall entity) {
+    public ResourceLocation getTextureLocation(@NotNull EntityDreadThrall entity) {
         return TEXTURE;
     }
 

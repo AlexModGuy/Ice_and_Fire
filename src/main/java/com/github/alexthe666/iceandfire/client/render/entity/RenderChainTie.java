@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 
 public class RenderChainTie extends EntityRenderer<EntityChainTie> {
@@ -20,7 +21,8 @@ public class RenderChainTie extends EntityRenderer<EntityChainTie> {
         super(context);
     }
 
-    public void render(EntityChainTie entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+    @Override
+    public void render(@NotNull EntityChainTie entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
         matrixStackIn.translate(0, 0.5F, 0);
         matrixStackIn.scale(-1.0F, -1.0F, 1.0F);
@@ -34,7 +36,8 @@ public class RenderChainTie extends EntityRenderer<EntityChainTie> {
     /**
      * Returns the location of an entity's texture.
      */
-    public ResourceLocation getTextureLocation(EntityChainTie entity) {
+    @Override
+    public @NotNull ResourceLocation getTextureLocation(@NotNull EntityChainTie entity) {
         return TEXTURE;
     }
 }

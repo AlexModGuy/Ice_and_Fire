@@ -14,6 +14,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -23,7 +24,8 @@ public class ItemDragonFlute extends Item {
         super(new Item.Properties().stacksTo(1).tab(IceAndFire.TAB_ITEMS));
     }
 
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player player, InteractionHand hand) {
+    @Override
+    public @NotNull InteractionResultHolder<ItemStack> use(Level worldIn, Player player, @NotNull InteractionHand hand) {
         ItemStack itemStackIn = player.getItemInHand(hand);
         player.getCooldowns().addCooldown(this, 60);
 
@@ -63,6 +65,7 @@ public class ItemDragonFlute extends Item {
             this.theEntity = theEntityIn;
         }
 
+        @Override
         public int compare(Entity p_compare_1_, Entity p_compare_2_) {
             double d0 = this.theEntity.distanceToSqr(p_compare_1_);
             double d1 = this.theEntity.distanceToSqr(p_compare_2_);

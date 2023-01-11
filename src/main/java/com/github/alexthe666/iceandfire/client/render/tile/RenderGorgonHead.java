@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderGorgonHead extends BlockEntityWithoutLevelRenderer {
 
@@ -26,7 +27,8 @@ public class RenderGorgonHead extends BlockEntityWithoutLevelRenderer {
         super(dispatcher, set);
     }
 
-    public void renderByItem(ItemStack stack, ItemTransforms.TransformType type, PoseStack stackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    @Override
+    public void renderByItem(ItemStack stack, ItemTransforms.@NotNull TransformType type, @NotNull PoseStack stackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         boolean active = false;
         if (stack.getItem() == IafItemRegistry.GORGON_HEAD.get()) {
             if (stack.getTag() != null) {

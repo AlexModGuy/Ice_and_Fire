@@ -25,6 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -56,13 +57,13 @@ public class ItemDragonHorn extends Item {
 
 
     @Override
-    public void onCraftedBy(ItemStack itemStack, Level world, Player player) {
+    public void onCraftedBy(ItemStack itemStack, @NotNull Level world, @NotNull Player player) {
         itemStack.setTag(new CompoundTag());
     }
 
 
     @Override
-    public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity target, InteractionHand hand) {
+    public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, Player playerIn, @NotNull LivingEntity target, @NotNull InteractionHand hand) {
         ItemStack trueStack = playerIn.getItemInHand(hand);
         if (!playerIn.level.isClientSide && hand == InteractionHand.MAIN_HAND && target instanceof EntityDragonBase && ((EntityDragonBase) target).isOwnedBy(playerIn) && (trueStack.getTag() == null || (trueStack.getTag() != null && trueStack.getTag().getCompound("EntityTag").isEmpty()))) {
             CompoundTag newTag = new CompoundTag();
@@ -85,7 +86,7 @@ public class ItemDragonHorn extends Item {
 
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
+    public @NotNull InteractionResult useOn(UseOnContext context) {
         if (context.getClickedFace() != Direction.UP)
             return InteractionResult.FAIL;
         ItemStack stack = context.getItemInHand();
@@ -117,7 +118,7 @@ public class ItemDragonHorn extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (stack.getTag() != null) {
             CompoundTag entityTag = stack.getTag().getCompound("EntityTag");
             if (!entityTag.isEmpty()) {

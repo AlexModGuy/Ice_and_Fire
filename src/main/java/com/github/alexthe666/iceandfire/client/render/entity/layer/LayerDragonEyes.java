@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +45,7 @@ public class LayerDragonEyes extends RenderLayer<EntityDragonBase, AdvancedEntit
     }
 
     @Override
-    public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(@NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn, EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (dragon.shouldRenderEyes()) {
             RenderType eyes = RenderType.eyes(EnumDragonTextures.getEyeTextureFromDragon(dragon));
             VertexConsumer ivertexbuilder = bufferIn.getBuffer(eyes);
@@ -66,7 +67,7 @@ public class LayerDragonEyes extends RenderLayer<EntityDragonBase, AdvancedEntit
     }
 
     @Override
-    protected ResourceLocation getTextureLocation(EntityDragonBase entityIn) {
+    protected @NotNull ResourceLocation getTextureLocation(@NotNull EntityDragonBase entityIn) {
         return null;
     }
 

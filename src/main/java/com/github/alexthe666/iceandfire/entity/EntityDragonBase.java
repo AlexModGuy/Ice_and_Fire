@@ -264,7 +264,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public BlockPos getRestrictCenter() {
+    public @NotNull BlockPos getRestrictCenter() {
         return this.homePos == null ? super.getRestrictCenter() : homePos.getPosition();
     }
 
@@ -277,6 +277,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return this.homePos == null ? "" : homePos.getDimension();
     }
 
+    @Override
     public boolean hasRestriction() {
         return this.hasHomePosition &&
             getHomeDimensionName().equals(DragonUtils.getDimensionName(this.level))
@@ -323,13 +324,13 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         neckPart = new EntityDragonPart(this, 0.85F * scale, 0, 0.7F * scale, 0.5F * scale, 0.2F * scale, 1);
         neckPart.copyPosition(this);
         neckPart.setParent(this);
-        rightWingUpperPart = new EntityDragonPart(this, 1F * scale, 90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
+        rightWingUpperPart = new EntityDragonPart(this, scale, 90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
         rightWingUpperPart.copyPosition(this);
         rightWingUpperPart.setParent(this);
         rightWingLowerPart = new EntityDragonPart(this, 1.4F * scale, 100, 0.3F * scale, 0.85F * scale, 0.2F * scale, 0.5F);
         rightWingLowerPart.copyPosition(this);
         rightWingLowerPart.setParent(this);
-        leftWingUpperPart = new EntityDragonPart(this, 1F * scale, -90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
+        leftWingUpperPart = new EntityDragonPart(this, scale, -90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
         leftWingUpperPart.copyPosition(this);
         leftWingUpperPart.setParent(this);
         leftWingLowerPart = new EntityDragonPart(this, 1.4F * scale, -100, 0.3F * scale, 0.85F * scale, 0.2F * scale, 0.5F);
@@ -480,7 +481,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    protected PathNavigation createNavigation(Level worldIn) {
+    protected @NotNull PathNavigation createNavigation(@NotNull Level worldIn) {
         return createNavigator(worldIn, AdvancedPathNavigate.MovementType.WALKING);
     }
 
@@ -549,12 +550,12 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         if (!this.level.isClientSide && (!this.isVehicle() || this.hasPassenger(playerEntity))) {
             playerEntity.openMenu(new MenuProvider() {
                 @Override
-                public AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_, Player p_createMenu_3_) {
+                public AbstractContainerMenu createMenu(int p_createMenu_1_, @NotNull Inventory p_createMenu_2_, @NotNull Player p_createMenu_3_) {
                     return new ContainerDragon(p_createMenu_1_, dragonInventory, p_createMenu_2_, EntityDragonBase.this);
                 }
 
                 @Override
-                public Component getDisplayName() {
+                public @NotNull Component getDisplayName() {
                     return EntityDragonBase.this.getDisplayName();
                 }
             });
@@ -603,13 +604,13 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public void remove(Entity.RemovalReason reason) {
+    public void remove(Entity.@NotNull RemovalReason reason) {
         removeParts();
         super.remove(reason);
     }
 
     @Override
-    protected int getExperienceReward(Player player) {
+    protected int getExperienceReward(@NotNull Player player) {
         switch (this.getDragonStage()) {
             case 2:
                 return 20;
@@ -751,7 +752,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Hunger", this.getHunger());
         compound.putInt("AgeTicks", this.getAgeInTicks());
@@ -794,7 +795,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setHunger(compound.getInt("Hunger"));
         this.setAgeInTicks(compound.getInt("AgeTicks"));
@@ -1017,7 +1018,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    protected boolean canAddPassenger(Entity passenger) {
+    protected boolean canAddPassenger(@NotNull Entity passenger) {
         return this.getPassengers().size() < 2;
     }
 
@@ -1035,9 +1036,9 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public void setOrderedToSit(boolean sitting) {
         byte b0 = this.entityData.get(DATA_FLAGS_ID);
         if (sitting) {
-            this.entityData.set(DATA_FLAGS_ID, Byte.valueOf((byte) (b0 | 1)));
+            this.entityData.set(DATA_FLAGS_ID, (byte) (b0 | 1));
         } else {
-            this.entityData.set(DATA_FLAGS_ID, Byte.valueOf((byte) (b0 & -2)));
+            this.entityData.set(DATA_FLAGS_ID, (byte) (b0 & -2));
         }
     }
 
@@ -1054,7 +1055,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public void killed(ServerLevel world, LivingEntity entity) {
+    public void killed(@NotNull ServerLevel world, @NotNull LivingEntity entity) {
         this.setHunger(this.getHunger() + FoodUtils.getFoodPoints(entity));
     }
 
@@ -1104,7 +1105,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public InteractionResult interactAt(Player player, Vec3 vec, InteractionHand hand) {
+    public @NotNull InteractionResult interactAt(Player player, @NotNull Vec3 vec, @NotNull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         int lastDeathStage = Math.min(this.getAgeInDays() / 5, 25);
         if (stack.getItem() == IafItemRegistry.DRAGON_DEBUG_STICK.get()) {
@@ -1155,7 +1156,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+    public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         int lastDeathStage = this.getAgeInDays() / 5;
         if (stack.getItem() == IafItemRegistry.DRAGON_DEBUG_STICK.get()) {
@@ -1544,7 +1545,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public void positionRider(Entity passenger) {
+    public void positionRider(@NotNull Entity passenger) {
         super.positionRider(passenger);
         if (this.hasPassenger(passenger)) {
             if (this.getControllingPassenger() == null || !this.getControllingPassenger().getUUID().equals(passenger.getUUID())) {
@@ -1621,7 +1622,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setGender(this.getRandom().nextBoolean());
         final int age = this.getRandom().nextInt(80) + 1;
@@ -1637,7 +1638,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public boolean hurt(DamageSource dmg, float i) {
+    public boolean hurt(@NotNull DamageSource dmg, float i) {
         if (this.isModelDead() && dmg != DamageSource.OUT_OF_WORLD) {
             return false;
         }
@@ -1757,7 +1758,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose poseIn) {
+    public @NotNull EntityDimensions getDimensions(@NotNull Pose poseIn) {
         return this.getType().getDimensions().scale(this.getScale());
     }
 
@@ -1767,7 +1768,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+    protected void checkFallDamage(double y, boolean onGroundIn, @NotNull BlockState state, @NotNull BlockPos pos) {
     }
 
     public float getRenderSize() {
@@ -1784,7 +1785,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public boolean doHurtTarget(Entity entityIn) {
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         this.getLookControl().setLookAt(entityIn, 30.0F, 30.0F);
         if (this.isTackling() || this.isModelDead()) {
             return false;
@@ -1872,7 +1873,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    protected void playHurtSound(DamageSource source) {
+    protected void playHurtSound(@NotNull DamageSource source) {
         if (!this.isModelDead()) {
             if (this.getAnimation() == this.NO_ANIMATION && !this.level.isClientSide) {
                 this.setAnimation(ANIMATION_SPEAK);
@@ -1887,12 +1888,12 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
+    public AgeableMob getBreedOffspring(@NotNull ServerLevel serverWorld, @NotNull AgeableMob ageable) {
         return null;
     }
 
     @Override
-    public boolean canMate(Animal otherAnimal) {
+    public boolean canMate(@NotNull Animal otherAnimal) {
         if (otherAnimal instanceof EntityDragonBase && otherAnimal != this && otherAnimal.getClass() == this.getClass()) {
             EntityDragonBase dragon = (EntityDragonBase) otherAnimal;
             return this.isMale() && !dragon.isMale() || !this.isMale() && dragon.isMale();
@@ -1984,7 +1985,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public void travel(Vec3 Vector3d) {
+    public void travel(@NotNull Vec3 Vector3d) {
         if (this.getAnimation() == ANIMATION_SHAKEPREY || !this.canMove() && !this.isVehicle() || this.isOrderedToSit()) {
             if (this.getNavigation().getPath() != null) {
                 this.getNavigation().stop();
@@ -1995,7 +1996,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public void move(MoverType typeIn, Vec3 pos) {
+    public void move(@NotNull MoverType typeIn, @NotNull Vec3 pos) {
         if (this.isOrderedToSit() && !this.isVehicle()) {
             pos = new Vec3(0, pos.y(), 0);
         }
@@ -2021,7 +2022,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public void die(DamageSource cause) {
+    public void die(@NotNull DamageSource cause) {
         super.die(cause);
     }
 
@@ -2115,7 +2116,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    protected void dropFromLootTable(DamageSource damageSourceIn, boolean attackedRecently) {
+    protected void dropFromLootTable(@NotNull DamageSource damageSourceIn, boolean attackedRecently) {
         return;
     }
 
@@ -2150,6 +2151,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return new Vec3(headPosX, headPosY, headPosZ);
     }
 
+    @Override
     public void kill() {
         this.remove(RemovalReason.KILLED);
         this.setDeathStage(this.getAgeInDays() / 5);
@@ -2157,7 +2159,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public boolean isAlliedTo(Entity entityIn) {
+    public boolean isAlliedTo(@NotNull Entity entityIn) {
         // Workaround to make sure dragons won't be attacked when dead
         if (this.isModelDead())
             return true;
@@ -2229,7 +2231,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public boolean shouldBlockExplode(Explosion explosionIn, BlockGetter worldIn, BlockPos pos, BlockState blockStateIn, float explosionPower) {
+    public boolean shouldBlockExplode(@NotNull Explosion explosionIn, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, BlockState blockStateIn, float explosionPower) {
         return !(blockStateIn.getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(blockStateIn.getBlock());
     }
 
@@ -2259,7 +2261,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public boolean wantsToAttack(LivingEntity target, LivingEntity owner) {
+    public boolean wantsToAttack(@NotNull LivingEntity target, @NotNull LivingEntity owner) {
         if (this.isTame() && target instanceof TamableAnimal) {
             TamableAnimal tamableTarget = (TamableAnimal) target;
             UUID targetOwner = tamableTarget.getOwnerUUID();
@@ -2271,7 +2273,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public boolean canAttack(LivingEntity target) {
+    public boolean canAttack(@NotNull LivingEntity target) {
         return super.canAttack(target) && DragonUtils.isAlive(target);
     }
 
@@ -2311,12 +2313,12 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public boolean save(CompoundTag compound) {
+    public boolean save(@NotNull CompoundTag compound) {
         return this.saveAsPassenger(compound);
     }
 
     @Override
-    public void playSound(SoundEvent soundIn, float volume, float pitch) {
+    public void playSound(@NotNull SoundEvent soundIn, float volume, float pitch) {
         if (soundIn == SoundEvents.GENERIC_EAT || soundIn == this.getAmbientSound() || soundIn == this.getHurtSound(null) || soundIn == this.getDeathSound() || soundIn == this.getRoarSound()) {
             if (!this.isSilent() && this.headPart != null) {
                 this.level.playSound(null, this.headPart.getX(), this.headPart.getY(), this.headPart.getZ(), soundIn, this.getSoundSource(), volume, pitch);
@@ -2327,7 +2329,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public SoundSource getSoundSource() {
+    public @NotNull SoundSource getSoundSource() {
         return SoundSource.HOSTILE;
     }
 
@@ -2341,7 +2343,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return true;
     }
 
-    public ItemStack getItemBySlot(final EquipmentSlot slotIn) {
+    @Override
+    public @NotNull ItemStack getItemBySlot(final EquipmentSlot slotIn) {
         switch (slotIn) {
             case OFFHAND:
                 return dragonInventory.getItem(0);
@@ -2358,7 +2361,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         }
     }
 
-    public void setItemSlot(final EquipmentSlot slotIn, final ItemStack stack) {
+    @Override
+    public void setItemSlot(final EquipmentSlot slotIn, final @NotNull ItemStack stack) {
         switch (slotIn) {
             case OFFHAND:
                 dragonInventory.setItem(0, stack);
@@ -2379,11 +2383,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 super.getItemBySlot(slotIn);
         }
         updateAttributes();
-    }
-
-    @Override
-    public float getVoicePitch() {
-        return super.getVoicePitch();
     }
 
     public SoundEvent getBabyFireSound() {
@@ -2437,7 +2436,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public void containerChanged(Container invBasic) {
+    public void containerChanged(@NotNull Container invBasic) {
         if (!this.level.isClientSide) {
             updateAttributes();
         }

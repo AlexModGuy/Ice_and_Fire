@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -39,6 +40,7 @@ public class EntityDreadQueen extends EntityDreadMob implements IAnimatedEntity,
         super(t, worldIn);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
@@ -74,6 +76,7 @@ public class EntityDreadQueen extends EntityDreadMob implements IAnimatedEntity,
             .add(Attributes.ARMOR, 30.0D);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
 
@@ -82,37 +85,43 @@ public class EntityDreadQueen extends EntityDreadMob implements IAnimatedEntity,
         }
     }
 
+    @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
         this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
+    @Override
     public void setCustomName(Component name) {
         super.setCustomName(name);
         this.bossInfo.setName(this.getDisplayName());
     }
 
 
-    public void startSeenByPlayer(ServerPlayer player) {
+    @Override
+    public void startSeenByPlayer(@NotNull ServerPlayer player) {
         super.startSeenByPlayer(player);
         this.bossInfo.addPlayer(player);
     }
 
-    public void stopSeenByPlayer(ServerPlayer player) {
+    @Override
+    public void stopSeenByPlayer(@NotNull ServerPlayer player) {
         super.stopSeenByPlayer(player);
         this.bossInfo.removePlayer(player);
     }
 
 
+    @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setAnimation(ANIMATION_SPAWN);
         this.populateDefaultEquipmentSlots(difficultyIn);
         return data;
     }
 
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+    @Override
+    protected void populateDefaultEquipmentSlots(@NotNull DifficultyInstance difficulty) {
         super.populateDefaultEquipmentSlots(difficulty);
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DREAD_QUEEN_SWORD.get()));
         this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(IafItemRegistry.DREAD_QUEEN_STAFF.get()));

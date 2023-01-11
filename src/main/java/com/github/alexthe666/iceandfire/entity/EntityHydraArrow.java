@@ -18,8 +18,9 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityHydraArrow extends AbstractArrow {
 
@@ -39,7 +40,7 @@ public class EntityHydraArrow extends AbstractArrow {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -88,7 +89,7 @@ public class EntityHydraArrow extends AbstractArrow {
     }
 
     @Override
-    protected void doPostHurtEffects(LivingEntity living) {
+    protected void doPostHurtEffects(@NotNull LivingEntity living) {
         if (living instanceof Player) {
             this.damageShield((Player) living, (float) this.getBaseDamage());
         }
@@ -100,7 +101,7 @@ public class EntityHydraArrow extends AbstractArrow {
     }
 
     @Override
-    protected ItemStack getPickupItem() {
+    protected @NotNull ItemStack getPickupItem() {
         return new ItemStack(IafItemRegistry.HYDRA_ARROW.get());
     }
 }

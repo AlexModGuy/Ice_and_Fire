@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 public class ParticleGhostAppearance extends Particle {
     private final ModelGhost model = new ModelGhost(0.0F);
@@ -31,11 +32,13 @@ public class ParticleGhostAppearance extends Particle {
         fromLeft = worldIn.random.nextBoolean();
     }
 
-    public ParticleRenderType getRenderType() {
+    @Override
+    public @NotNull ParticleRenderType getRenderType() {
         return ParticleRenderType.CUSTOM;
     }
 
-    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
+    @Override
+    public void render(@NotNull VertexConsumer buffer, @NotNull Camera renderInfo, float partialTicks) {
         float f = ((float) this.age + partialTicks) / (float) this.lifetime;
         float f1 = 0.05F + 0.5F * Mth.sin(f * (float) Math.PI);
         Entity entity = level.getEntity(ghost);

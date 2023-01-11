@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderPixie extends MobRenderer<EntityPixie, ModelPixie> {
 
@@ -35,7 +36,7 @@ public class RenderPixie extends MobRenderer<EntityPixie, ModelPixie> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityPixie pixie) {
+    public @NotNull ResourceLocation getTextureLocation(EntityPixie pixie) {
         switch (pixie.getColor()) {
             default:
                 return TEXTURE_0;

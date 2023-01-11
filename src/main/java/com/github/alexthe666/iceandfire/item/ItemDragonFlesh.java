@@ -26,6 +26,7 @@ public class ItemDragonFlesh extends ItemGenericFood {
         };
     }
 
+    @Override
     public void onFoodEaten(ItemStack stack, Level worldIn, LivingEntity livingEntity) {
         if (!worldIn.isClientSide) {
             if (dragonType == 0) {

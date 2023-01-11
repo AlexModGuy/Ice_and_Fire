@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.world.level.block.state.properties.ChestType;
+import org.jetbrains.annotations.NotNull;
 
 import static com.github.alexthe666.iceandfire.client.IafClientSetup.*;
 import static net.minecraft.client.renderer.Sheets.CHEST_SHEET;
@@ -31,7 +32,8 @@ public class RenderGhostChest extends ChestRenderer<TileEntityGhostChest> {
         }
     }
 
-    protected Material getMaterial(TileEntityGhostChest tileEntity, ChestType chestType) {
+    @Override
+    protected @NotNull Material getMaterial(@NotNull TileEntityGhostChest tileEntity, @NotNull ChestType chestType) {
 
         return getChestMaterial(chestType, GHOST_CHEST, GHOST_CHEST_LEFT, GHOST_CHEST_RIGHT);
     }

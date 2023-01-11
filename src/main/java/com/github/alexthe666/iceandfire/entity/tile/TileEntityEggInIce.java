@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -54,7 +55,7 @@ public class TileEntityEggInIce extends BlockEntity {
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag) {
+    public void saveAdditional(@NotNull CompoundTag tag) {
         if (type != null) {
             tag.putByte("Color", (byte) type.ordinal());
         } else {
@@ -69,7 +70,7 @@ public class TileEntityEggInIce extends BlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         type = EnumDragonEgg.values()[tag.getByte("Color")];
         age = tag.getInt("Age");
@@ -94,7 +95,8 @@ public class TileEntityEggInIce extends BlockEntity {
         this.load(parentNBTTagCompound);
     }
 
-    public CompoundTag getUpdateTag() {
+    @Override
+    public @NotNull CompoundTag getUpdateTag() {
         CompoundTag nbtTagCompound = new CompoundTag();
         saveAdditional(nbtTagCompound);
         return nbtTagCompound;

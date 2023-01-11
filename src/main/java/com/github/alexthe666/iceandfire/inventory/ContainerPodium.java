@@ -9,6 +9,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class ContainerPodium extends AbstractContainerMenu {
     public final Container podium;
@@ -39,7 +40,7 @@ public class ContainerPodium extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(Player playerIn) {
+    public boolean stillValid(@NotNull Player playerIn) {
         return this.podium.stillValid(playerIn);
     }
 
@@ -47,7 +48,7 @@ public class ContainerPodium extends AbstractContainerMenu {
      * Take a stack from the specified inventory slot.
      */
     @Override
-    public ItemStack quickMoveStack(Player playerIn, int index) {
+    public @NotNull ItemStack quickMoveStack(@NotNull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
 
@@ -77,7 +78,7 @@ public class ContainerPodium extends AbstractContainerMenu {
      * Called when the container is closed.
      */
     @Override
-    public void removed(Player playerIn) {
+    public void removed(@NotNull Player playerIn) {
         super.removed(playerIn);
         this.podium.stopOpen(playerIn);
     }

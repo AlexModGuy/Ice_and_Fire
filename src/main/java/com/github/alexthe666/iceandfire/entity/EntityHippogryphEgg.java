@@ -17,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityHippogryphEgg extends ThrownEgg {
 
@@ -42,7 +43,7 @@ public class EntityHippogryphEgg extends ThrownEgg {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -87,7 +88,7 @@ public class EntityHippogryphEgg extends ThrownEgg {
     }
 
     @Override
-    protected Item getDefaultItem() {
-      return IafItemRegistry.HIPPOGRYPH_EGG.get();
+    protected @NotNull Item getDefaultItem() {
+        return IafItemRegistry.HIPPOGRYPH_EGG.get();
     }
 }

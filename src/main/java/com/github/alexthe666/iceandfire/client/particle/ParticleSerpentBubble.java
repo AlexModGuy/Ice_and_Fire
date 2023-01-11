@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class ParticleSerpentBubble extends TextureSheetParticle {
     private static final ResourceLocation BUBBLE_TEXTURE = new ResourceLocation("iceandfire:textures/particles/sea_serpent_bubble.png");
@@ -23,7 +24,7 @@ public class ParticleSerpentBubble extends TextureSheetParticle {
     }
 
     @Override
-    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
+    public void render(@NotNull VertexConsumer buffer, Camera renderInfo, float partialTicks) {
         Vec3 inerp = renderInfo.getPosition();
         if (age > this.getLifetime()) {
             this.remove();
@@ -69,6 +70,7 @@ public class ParticleSerpentBubble extends TextureSheetParticle {
         Tesselator.getInstance().end();
     }
 
+    @Override
     public int getLightColor(float partialTick) {
         BlockPos blockpos = new BlockPos(this.x, this.y, this.z);
         return 240;
@@ -79,7 +81,7 @@ public class ParticleSerpentBubble extends TextureSheetParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
+    public @NotNull ParticleRenderType getRenderType() {
         return ParticleRenderType.CUSTOM;
     }
 

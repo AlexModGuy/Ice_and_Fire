@@ -12,6 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -22,12 +23,13 @@ public class ItemHydraHeart extends Item {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
     }
 
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return !oldStack.sameItem(newStack);
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level world, Entity entity, int itemSlot, boolean isSelected) {
+    public void inventoryTick(@NotNull ItemStack stack, @NotNull Level world, @NotNull Entity entity, int itemSlot, boolean isSelected) {
         if (entity instanceof Player && itemSlot >= 0 && itemSlot <= 8) {
             double healthPercentage = ((Player) entity).getHealth() / Math.max(1, ((Player) entity).getMaxHealth());
             if (healthPercentage < 1.0D) {
@@ -47,7 +49,8 @@ public class ItemHydraHeart extends Item {
         }
     }
 
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    @Override
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(new TranslatableComponent("item.iceandfire.legendary_weapon.desc").withStyle(ChatFormatting.GRAY));
         tooltip.add(new TranslatableComponent("item.iceandfire.hydra_heart.desc_0").withStyle(ChatFormatting.GRAY));
         tooltip.add(new TranslatableComponent("item.iceandfire.hydra_heart.desc_1").withStyle(ChatFormatting.GRAY));

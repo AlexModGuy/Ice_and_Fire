@@ -102,6 +102,7 @@ public class ModelPixie extends ModelDragonBase<EntityPixie> {
             Left_Wing2, Right_Wing, Right_Wing2, Dress);
     }
 
+    @Override
     public void setupAnim(EntityPixie entity, float f, float f1, float f2, float f3, float f4) {
         this.resetToDefaultPose();
         float speed_fly = 1.1F;
@@ -111,8 +112,8 @@ public class ModelPixie extends ModelDragonBase<EntityPixie> {
         AdvancedModelBox[] LEFT_WINGS = new AdvancedModelBox[]{Left_Wing, Left_Wing2};
         AdvancedModelBox[] RIGHT_WINGS = new AdvancedModelBox[]{Right_Wing, Right_Wing2};
 
-        this.Left_Leg.rotateAngleX = Mth.cos(f * 0.6662F + (float) Math.PI) * 1.0F * f1 * 0.5F / 1;
-        this.Right_Leg.rotateAngleX = Mth.cos(f * 0.6662F) * 1.0F * f1 * 0.5F / 1;
+        this.Left_Leg.rotateAngleX = Mth.cos(f * 0.6662F + (float) Math.PI) * 1.0F * f1 * 0.5F;
+        this.Right_Leg.rotateAngleX = Mth.cos(f * 0.6662F) * 1.0F * f1 * 0.5F;
 
         float f12 = f1;
         if (f12 < 0.0F) {
@@ -134,8 +135,8 @@ public class ModelPixie extends ModelDragonBase<EntityPixie> {
             this.Right_Leg.rotateAngleX += (float) Math.toRadians(-10);
             this.Head.rotateAngleX += (float) Math.toRadians(-10);
         } else {
-            this.Right_Arm.rotateAngleX = Mth.cos(f * 0.6662F + (float) Math.PI) * 1.0F * f1 * 0.5F / 1;
-            this.Left_Arm.rotateAngleX = Mth.cos(f * 0.6662F) * 1.0F * f1 * 0.5F / 1;
+            this.Right_Arm.rotateAngleX = Mth.cos(f * 0.6662F + (float) Math.PI) * 1.0F * f1 * 0.5F;
+            this.Left_Arm.rotateAngleX = Mth.cos(f * 0.6662F) * 1.0F * f1 * 0.5F;
         }
 
         if (entity.isPixieSitting()) {

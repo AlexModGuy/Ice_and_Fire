@@ -8,6 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -34,7 +35,8 @@ public class ItemGeneric extends Item {
         this.description = textLength;
     }
 
-    public boolean isFoil(ItemStack stack) {
+    @Override
+    public boolean isFoil(@NotNull ItemStack stack) {
         if (this == IafItemRegistry.CREATIVE_DRAGON_MEAL.get()) {
             return true;
         } else {
@@ -43,7 +45,7 @@ public class ItemGeneric extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (description > 0) {
             for (int i = 0; i < description; i++) {
                 tooltip.add(new TranslatableComponent(this.getDescriptionId() + ".desc_" + i).withStyle(ChatFormatting.GRAY));

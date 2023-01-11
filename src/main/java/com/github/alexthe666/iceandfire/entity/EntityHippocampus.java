@@ -48,6 +48,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -97,7 +98,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     }
 
     @Override
-    protected int getExperienceReward(Player player) {
+    protected int getExperienceReward(@NotNull Player player) {
         return 2;
     }
 
@@ -107,7 +108,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     }
 
     @Override
-    public MobType getMobType() {
+    public @NotNull MobType getMobType() {
         return MobType.WATER;
     }
 
@@ -130,7 +131,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     }
 
     @Override
-    public boolean isAlliedTo(Entity entityIn) {
+    public boolean isAlliedTo(@NotNull Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
             if (entityIn == livingentity) {
@@ -150,11 +151,11 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(VARIANT, Integer.valueOf(0));
-        this.entityData.define(ARMOR, Integer.valueOf(0));
-        this.entityData.define(SADDLE, Boolean.valueOf(false));
-        this.entityData.define(CHESTED, Boolean.valueOf(false));
-        this.entityData.define(CONTROL_STATE, Byte.valueOf((byte) 0));
+        this.entityData.define(VARIANT, 0);
+        this.entityData.define(ARMOR, 0);
+        this.entityData.define(SADDLE, Boolean.FALSE);
+        this.entityData.define(CHESTED, Boolean.FALSE);
+        this.entityData.define(CONTROL_STATE, (byte) 0);
     }
 
     private void initHippocampusInv() {
@@ -218,7 +219,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
 
 
     @Override
-    public void die(DamageSource cause) {
+    public void die(@NotNull DamageSource cause) {
         super.die(cause);
         if (hippocampusInventory != null && !this.level.isClientSide) {
             for (int i = 0; i < hippocampusInventory.getContainerSize(); ++i) {
@@ -271,7 +272,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     }
 
     @Override
-    public void positionRider(Entity passenger) {
+    public void positionRider(@NotNull Entity passenger) {
         super.positionRider(passenger);
         if (this.hasPassenger(passenger)) {
             yBodyRot = getYRot();
@@ -343,15 +344,15 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     }
 
     public boolean up() {
-        return (Byte.valueOf(entityData.get(CONTROL_STATE).byteValue()) & 1) == 1;
+        return (entityData.get(CONTROL_STATE).byteValue() & 1) == 1;
     }
 
     public boolean down() {
-        return (Byte.valueOf(entityData.get(CONTROL_STATE).byteValue()) >> 1 & 1) == 1;
+        return (entityData.get(CONTROL_STATE).byteValue() >> 1 & 1) == 1;
     }
 
     public boolean dismountIAF() {
-        return (Byte.valueOf(entityData.get(CONTROL_STATE).byteValue()) >> 2 & 1) == 1;
+        return (entityData.get(CONTROL_STATE).byteValue() >> 2 & 1) == 1;
     }
 
 
@@ -364,7 +365,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Variant", this.getVariant());
         compound.putBoolean("Chested", this.isChested());
@@ -387,7 +388,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setVariant(compound.getInt("Variant"));
         this.setChested(compound.getBoolean("Chested"));
@@ -456,9 +457,9 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
         }
         byte b0 = this.entityData.get(DATA_FLAGS_ID).byteValue();
         if (sitting) {
-            this.entityData.set(DATA_FLAGS_ID, Byte.valueOf((byte) (b0 | 1)));
+            this.entityData.set(DATA_FLAGS_ID, (byte) (b0 | 1));
         } else {
-            this.entityData.set(DATA_FLAGS_ID, Byte.valueOf((byte) (b0 & -2)));
+            this.entityData.set(DATA_FLAGS_ID, (byte) (b0 & -2));
         }
     }
 
@@ -492,7 +493,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setVariant(this.getRandom().nextInt(6));
         return data;
@@ -525,7 +526,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
 
     @Nullable
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
+    public AgeableMob getBreedOffspring(@NotNull ServerLevel serverWorld, @NotNull AgeableMob ageable) {
         if (ageable instanceof EntityHippocampus) {
             EntityHippocampus hippo = new EntityHippocampus(IafEntityRegistry.HIPPOCAMPUS.get(), this.level);
             hippo.setVariant(this.getRandom().nextBoolean() ? this.getVariant() : ((EntityHippocampus) ageable).getVariant());
@@ -545,7 +546,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     }
 
     @Override
-    public void travel(Vec3 vec) {
+    public void travel(@NotNull Vec3 vec) {
         float f4;
         if (this.isOrderedToSit()) {
             super.travel(Vec3.ZERO);
@@ -599,7 +600,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     }
 
     @Override
-    protected void playHurtSound(DamageSource source) {
+    protected void playHurtSound(@NotNull DamageSource source) {
         if (this.getAnimation() == this.NO_ANIMATION) {
             this.setAnimation(ANIMATION_SPEAK);
         }
@@ -607,7 +608,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     }
 
     @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+    public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if (itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getAge() == 0 && !isInLove()) {
             this.setOrderedToSit(false);
@@ -668,12 +669,12 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
         if (!this.level.isClientSide && (!this.isVehicle() || this.hasPassenger(playerEntity))) {
             NetworkHooks.openGui((ServerPlayer) playerEntity, new MenuProvider() {
                 @Override
-                public AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_, Player p_createMenu_3_) {
+                public AbstractContainerMenu createMenu(int p_createMenu_1_, @NotNull Inventory p_createMenu_2_, @NotNull Player p_createMenu_3_) {
                     return new ContainerHippocampus(p_createMenu_1_, hippocampusInventory, p_createMenu_2_, EntityHippocampus.this);
                 }
 
                 @Override
-                public Component getDisplayName() {
+                public @NotNull Component getDisplayName() {
                     return new TranslatableComponent("entity.iceandfire.hippocampus");
                 }
             });
@@ -724,7 +725,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
 
     @Override
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
         return IafSoundRegistry.HIPPOCAMPUS_HURT;
     }
 

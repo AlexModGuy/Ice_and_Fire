@@ -33,6 +33,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -69,6 +70,7 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
             .add(Attributes.ARMOR, 4.0D);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
@@ -93,26 +95,28 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(VARIANT, Integer.valueOf(0));
-        this.entityData.define(SCREAMS, Integer.valueOf(0));
-        this.entityData.define(SCALE, Float.valueOf(1F));
+        this.entityData.define(VARIANT, 0);
+        this.entityData.define(SCREAMS, 0);
+        this.entityData.define(SCALE, 1F);
     }
 
     public float getSize() {
-        return Float.valueOf(this.entityData.get(SCALE).floatValue());
+        return this.entityData.get(SCALE).floatValue();
     }
 
     public void setSize(float scale) {
-        this.entityData.set(SCALE, Float.valueOf(scale));
+        this.entityData.set(SCALE, scale);
     }
 
-    public boolean doHurtTarget(Entity entityIn) {
+    @Override
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             this.setAnimation(ANIMATION_SLASH);
         }
         return true;
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         LivingEntity attackTarget = this.getTarget();
@@ -199,12 +203,14 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
         this.entityData.set(SCREAMS, screamStage);
     }
 
+    @Override
     public float getScale() {
         return getSize();
     }
 
+    @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setAnimation(ANIMATION_SPAWN);
         this.setVariant(random.nextInt(3));
@@ -246,16 +252,19 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
         return true;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getAmbientSound() {
         return IafSoundRegistry.DREAD_GHOUL_IDLE;
     }
 
+    @Override
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource source) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource source) {
         return SoundEvents.ZOMBIE_HURT;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getDeathSound() {
         return SoundEvents.ZOMBIE_DEATH;
@@ -265,6 +274,7 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
         this.playSound(SoundEvents.ZOMBIE_STEP, 0.15F, 1.0F);
     }
 
+    @Override
     public float getVoicePitch() {
         return super.getVoicePitch() * 0.70F;
     }

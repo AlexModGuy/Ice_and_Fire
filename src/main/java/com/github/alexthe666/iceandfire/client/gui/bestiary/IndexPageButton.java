@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
 public class IndexPageButton extends Button {
 
@@ -22,7 +23,7 @@ public class IndexPageButton extends Button {
     }
 
     @Override
-    public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partial) {
+    public void renderButton(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partial) {
         if (this.active) {
             Font font = IafConfig.useVanillaFont ? Minecraft.getInstance().font : (Font) IceAndFire.PROXY.getFontRenderer();
             RenderSystem.setShader(GameRenderer::getPositionTexShader);

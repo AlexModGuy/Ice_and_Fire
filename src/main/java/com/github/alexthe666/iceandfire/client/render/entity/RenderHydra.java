@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderHydra extends MobRenderer<EntityHydra, ModelHydraBody> {
 
@@ -23,12 +24,12 @@ public class RenderHydra extends MobRenderer<EntityHydra, ModelHydraBody> {
     }
 
     @Override
-    public void scale(EntityHydra LivingEntityIn, PoseStack stack, float partialTickTime) {
+    public void scale(@NotNull EntityHydra LivingEntityIn, PoseStack stack, float partialTickTime) {
         stack.scale(1.75F, 1.75F, 1.75F);
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityHydra gorgon) {
+    public @NotNull ResourceLocation getTextureLocation(EntityHydra gorgon) {
         switch (gorgon.getVariant()) {
             default:
                 return TEXUTURE_0;

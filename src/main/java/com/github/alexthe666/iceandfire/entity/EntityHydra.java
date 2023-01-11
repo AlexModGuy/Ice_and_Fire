@@ -29,6 +29,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -112,7 +113,7 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
     }
 
     @Override
-    public boolean doHurtTarget(Entity entityIn) {
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         return false;
     }
 
@@ -158,9 +159,9 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
                     if (random.nextFloat() < 0.2F) {
                         this.playSound(IafSoundRegistry.HYDRA_SPIT, this.getSoundVolume(), this.getVoicePitch());
                     }
-                    double headPosX = this.headBoxes[i].getX() + Vector3d.x * 1.0D;
+                    double headPosX = this.headBoxes[i].getX() + Vector3d.x;
                     double headPosY = this.headBoxes[i].getY() + 1.3F;
-                    double headPosZ = this.headBoxes[i].getZ() + Vector3d.z * 1.0D;
+                    double headPosZ = this.headBoxes[i].getZ() + Vector3d.z;
                     double d2 = attackTarget.getX() - headPosX + this.random.nextGaussian() * 0.4D;
                     double d3 = attackTarget.getY() + attackTarget.getEyeHeight() - headPosY + this.random.nextGaussian() * 0.4D;
                     double d4 = attackTarget.getZ() - headPosZ + this.random.nextGaussian() * 0.4D;
@@ -297,13 +298,13 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
     }
 
     @Override
-    public void remove(RemovalReason reason) {
+    public void remove(@NotNull RemovalReason reason) {
         clearParts();
         super.remove(reason);
     }
 
     @Override
-    protected void playHurtSound(DamageSource source) {
+    protected void playHurtSound(@NotNull DamageSource source) {
         speakingProgress[random.nextInt(getHeadCount())] = 1F;
         super.playHurtSound(source);
     }
@@ -320,7 +321,7 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Variant", this.getVariant());
         compound.putInt("HeadCount", this.getHeadCount());
@@ -331,7 +332,7 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setVariant(compound.getInt("Variant"));
         this.setHeadCount(compound.getInt("HeadCount"));
@@ -344,13 +345,13 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(VARIANT, Integer.valueOf(0));
-        this.entityData.define(HEAD_COUNT, Integer.valueOf(3));
-        this.entityData.define(SEVERED_HEAD, Integer.valueOf(-1));
+        this.entityData.define(VARIANT, 0);
+        this.entityData.define(HEAD_COUNT, 3);
+        this.entityData.define(SEVERED_HEAD, -1);
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurt(@NotNull DamageSource source, float amount) {
         if (lastHitHead > this.getHeadCount()) {
             lastHitHead = this.getHeadCount() - 1;
         }
@@ -371,7 +372,7 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setVariant(random.nextInt(3));
         return data;
@@ -478,7 +479,7 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
 
     @Override
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource source) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource source) {
         return IafSoundRegistry.HYDRA_HURT;
     }
 

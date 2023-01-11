@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderGorgon extends MobRenderer<EntityGorgon, ModelGorgon> {
 
@@ -20,12 +21,12 @@ public class RenderGorgon extends MobRenderer<EntityGorgon, ModelGorgon> {
     }
 
     @Override
-    public void scale(EntityGorgon LivingEntityIn, PoseStack stack, float partialTickTime) {
+    public void scale(@NotNull EntityGorgon LivingEntityIn, PoseStack stack, float partialTickTime) {
         stack.scale(0.85F, 0.85F, 0.85F);
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityGorgon gorgon) {
+    public @NotNull ResourceLocation getTextureLocation(EntityGorgon gorgon) {
         if (gorgon.getAnimation() == EntityGorgon.ANIMATION_SCARE) {
             return AGRESSIVE_TEXTURE;
         } else if (gorgon.deathTime > 0) {

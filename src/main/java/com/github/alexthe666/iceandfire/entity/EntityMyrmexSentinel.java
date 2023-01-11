@@ -30,6 +30,7 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -65,11 +66,13 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         return isJungle() ? MyrmexTrades.JUNGLE_SENTINEL.get(2) : MyrmexTrades.DESERT_SENTINEL.get(2);
     }
 
+    @Override
     @Nullable
     protected ResourceLocation getDefaultLootTable() {
         return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
     }
 
+    @Override
     protected int getExperienceReward(Player player) {
         return 8;
     }
@@ -78,6 +81,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         LivingEntity attackTarget = this.getTarget();
@@ -151,6 +155,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         }
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(0, new MyrmexAIFindHidingSpot(this));
@@ -165,6 +170,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(4, new MyrmexAIAttackPlayers(this));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 4, true, true, new Predicate<LivingEntity>() {
+            @Override
             public boolean apply(@Nullable LivingEntity entity) {
                 return entity != null && !EntityMyrmexBase.haveSameHive(EntityMyrmexSentinel.this, entity) && DragonUtils.isAlive(entity) && !(entity instanceof Enemy);
             }
@@ -172,9 +178,10 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
     }
 
 
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(HIDING, Boolean.valueOf(false));
+        this.entityData.define(HIDING, Boolean.FALSE);
     }
 
     public static AttributeSupplier.Builder bakeAttributes() {
@@ -230,15 +237,18 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         this.daylightTicks = tag.getInt("DaylightTicks");
     }
 
+    @Override
     public boolean shouldLeaveHive() {
         return true;
     }
 
+    @Override
     public boolean shouldEnterHive() {
         return false;
     }
 
-    public void positionRider(Entity passenger) {
+    @Override
+    public void positionRider(@NotNull Entity passenger) {
         super.positionRider(passenger);
         if (this.hasPassenger(passenger)) {
             yBodyRot = getYRot();
@@ -259,6 +269,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         }
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (amount >= 1.0D && !this.getPassengers().isEmpty() && random.nextInt(2) == 0) {
             for (Entity entity : this.getPassengers()) {
@@ -271,7 +282,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
     }
 
     @Override
-    public boolean doHurtTarget(Entity entityIn) {
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         if (this.getGrowthStage() < 2) {
             return false;
         }
@@ -287,6 +298,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         return false;
     }
 
+    @Override
     public boolean needsGaurding() {
         return false;
     }
@@ -296,10 +308,12 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         return new Animation[]{ANIMATION_PUPA_WIGGLE, ANIMATION_SLASH, ANIMATION_STING, ANIMATION_GRAB, ANIMATION_NIBBLE};
     }
 
+    @Override
     public boolean canMove() {
         return super.canMove() && this.getHeldEntity() == null && !isHiding();
     }
 
+    @Override
     public boolean shouldRiderSit() {
         return false;
     }

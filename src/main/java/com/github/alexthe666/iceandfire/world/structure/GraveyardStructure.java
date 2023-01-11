@@ -19,6 +19,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
 import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.Random;
@@ -30,7 +31,7 @@ public class GraveyardStructure extends StructureFeature<JigsawConfiguration> {
         super(JigsawConfiguration.CODEC, GraveyardStructure::createPiecesGenerator, new PlacementProcessor());
     }
 
-    public static Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context) {
+    public static @NotNull Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context) {
         ChunkGenerator chunkGenerator = context.chunkGenerator();
         ChunkPos pos = context.chunkPos();
         LevelHeightAccessor height = context.heightAccessor();
@@ -65,13 +66,13 @@ public class GraveyardStructure extends StructureFeature<JigsawConfiguration> {
     }
 
     @Override
-    public GenerationStep.Decoration step() {
+    public GenerationStep.@NotNull Decoration step() {
         return GenerationStep.Decoration.SURFACE_STRUCTURES;
     }
 
     public static class PlacementProcessor implements PostPlacementProcessor {
         @Override
-        public void afterPlace(WorldGenLevel level, StructureFeatureManager structureFeatureManager, ChunkGenerator generator, Random random, BoundingBox box, ChunkPos pos, PiecesContainer container) {
+        public void afterPlace(@NotNull WorldGenLevel level, @NotNull StructureFeatureManager structureFeatureManager, @NotNull ChunkGenerator generator, @NotNull Random random, @NotNull BoundingBox box, @NotNull ChunkPos pos, PiecesContainer container) {
             container.calculateBoundingBox();
         }
     }

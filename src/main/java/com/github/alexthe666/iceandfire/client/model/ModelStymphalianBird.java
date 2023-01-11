@@ -375,6 +375,7 @@ public class ModelStymphalianBird extends ModelDragonBase<EntityStymphalianBird>
         this.rotate(animator, ToeL3, -75, 0, 0);
     }
 
+    @Override
     public void setupAnim(EntityStymphalianBird entity, float f, float f1, float f2, float f3, float f4) {
         animate(entity, f, f1, f2, f3, f4, 1);
         float speed_walk = 0.3F;

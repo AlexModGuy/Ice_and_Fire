@@ -47,7 +47,7 @@ public class IFChainBuffer {
         if (!compareDouble(entity.yBodyRot, entity.yBodyRotO) && Mth.abs(this.yawVariation) < maxAngle) {
             this.yawVariation += Mth.clamp((entity.yBodyRotO - entity.yBodyRot) / divisor, -maxAngle, maxAngle);
         }
-        if (this.yawVariation > 1F * angleDecrement) {
+        if (this.yawVariation > angleDecrement) {
             if (this.yawTimer > bufferTime) {
                 this.yawVariation -= angleDecrement;
                 if (Mth.abs(this.yawVariation) < angleDecrement) {
@@ -92,7 +92,7 @@ public class IFChainBuffer {
         if (!compareDouble(entity.getXRot(), entity.xRotO) && Mth.abs(this.pitchVariation) < maxAngle) {
             this.pitchVariation += Mth.clamp((entity.xRotO - entity.getXRot()) / divisor, -maxAngle, maxAngle);
         }
-        if (this.pitchVariation > 1F * angleDecrement) {
+        if (this.pitchVariation > angleDecrement) {
             if (this.pitchTimer > bufferTime) {
                 this.pitchVariation -= angleDecrement;
                 if (Mth.abs(this.pitchVariation) < angleDecrement) {
@@ -134,7 +134,7 @@ public class IFChainBuffer {
                 ((IFlapable) entity).flapWings();
             }
         }
-        if (this.yawVariation > 1F * angleDecrement) {
+        if (this.yawVariation > angleDecrement) {
             if (this.yawTimer > bufferTime) {
                 this.yawVariation -= angleDecrement;
                 if (Mth.abs(this.yawVariation) < angleDecrement) {

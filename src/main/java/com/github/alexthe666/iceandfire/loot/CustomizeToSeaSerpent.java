@@ -12,6 +12,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -21,7 +22,8 @@ public class CustomizeToSeaSerpent extends LootItemConditionalFunction {
         super(conditionsIn);
     }
 
-    public ItemStack run(ItemStack stack, LootContext context) {
+    @Override
+    public @NotNull ItemStack run(ItemStack stack, @NotNull LootContext context) {
         if (!stack.isEmpty() && context.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof EntitySeaSerpent) {
             Random random = new Random();
             EntitySeaSerpent seaSerpent = (EntitySeaSerpent) context.getParamOrNull(LootContextParams.THIS_ENTITY);
@@ -42,7 +44,7 @@ public class CustomizeToSeaSerpent extends LootItemConditionalFunction {
     }
 
     @Override
-    public LootItemFunctionType getType() {
+    public @NotNull LootItemFunctionType getType() {
         return IafLootRegistry.CUSTOMIZE_TO_SERPENT;
     }
 
@@ -51,10 +53,12 @@ public class CustomizeToSeaSerpent extends LootItemConditionalFunction {
             super();
         }
 
-        public void serialize(JsonObject object, CustomizeToSeaSerpent functionClazz, JsonSerializationContext serializationContext) {
+        @Override
+        public void serialize(@NotNull JsonObject object, @NotNull CustomizeToSeaSerpent functionClazz, @NotNull JsonSerializationContext serializationContext) {
         }
 
-        public CustomizeToSeaSerpent deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditionsIn) {
+        @Override
+        public @NotNull CustomizeToSeaSerpent deserialize(@NotNull JsonObject object, @NotNull JsonDeserializationContext deserializationContext, LootItemCondition @NotNull [] conditionsIn) {
             return new CustomizeToSeaSerpent(conditionsIn);
         }
     }

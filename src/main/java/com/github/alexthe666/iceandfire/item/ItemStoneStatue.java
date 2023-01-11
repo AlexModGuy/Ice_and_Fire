@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.ChatFormatting;
@@ -17,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -28,7 +28,7 @@ public class ItemStoneStatue extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (stack.getTag() != null) {
             boolean isPlayer = stack.getTag().getBoolean("IAFStoneStatuePlayerEntity");
             String id = stack.getTag().getString("IAFStoneStatueEntityID");
@@ -41,13 +41,13 @@ public class ItemStoneStatue extends Item {
     }
 
     @Override
-    public void onCraftedBy(ItemStack itemStack, Level world, Player player) {
+    public void onCraftedBy(ItemStack itemStack, @NotNull Level world, @NotNull Player player) {
         itemStack.setTag(new CompoundTag());
         itemStack.getTag().putBoolean("IAFStoneStatuePlayerEntity", true);
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
+    public @NotNull InteractionResult useOn(UseOnContext context) {
         if (context.getClickedFace() != Direction.UP) {
             return InteractionResult.FAIL;
         } else {

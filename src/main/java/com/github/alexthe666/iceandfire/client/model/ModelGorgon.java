@@ -605,6 +605,7 @@ public class ModelGorgon extends ModelDragonBase<EntityGorgon> {
         }
     }
 
+    @Override
     public void setupAnim(EntityGorgon entity, float f, float f1, float f2, float f3, float f4) {
         animate(entity, f, f1, f2, f3, f4, 1);
         float speed_walk = 0.6F;
@@ -633,8 +634,8 @@ public class ModelGorgon extends ModelDragonBase<EntityGorgon> {
         this.walk(Left_Arm, speed_idle * 1.5F, degree_idle * 0.4F, true, 2, 0.3F, f2, 1);
         this.flap(Right_Arm, speed_idle * 1.5F, degree_idle * 0.2F, false, 2, 0.2F, f2, 1);
         this.flap(Left_Arm, speed_idle * 1.5F, degree_idle * 0.2F, true, 2, 0.2F, f2, 1);
-        this.Right_Arm.rotateAngleX = Mth.cos(f * 0.6662F + (float) Math.PI) * 2.0F * f1 * 0.5F / 1;
-        this.Left_Arm.rotateAngleX = Mth.cos(f * 0.6662F) * 2.0F * f1 * 0.5F / 1;
+        this.Right_Arm.rotateAngleX = Mth.cos(f * 0.6662F + (float) Math.PI) * 2.0F * f1 * 0.5F;
+        this.Left_Arm.rotateAngleX = Mth.cos(f * 0.6662F) * 2.0F * f1 * 0.5F;
 
         float f12 = (float) Math.toRadians(-1.29f) + f1;
         if (f12 < 0.0F) {

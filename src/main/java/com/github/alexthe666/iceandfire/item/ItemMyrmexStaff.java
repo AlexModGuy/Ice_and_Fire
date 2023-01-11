@@ -15,6 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -25,12 +26,12 @@ public class ItemMyrmexStaff extends Item {
     }
 
     @Override
-    public void onCraftedBy(ItemStack itemStack, Level world, Player player) {
+    public void onCraftedBy(ItemStack itemStack, @NotNull Level world, @NotNull Player player) {
         itemStack.setTag(new CompoundTag());
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level world, Entity entity, int itemSlot, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, @NotNull Level world, @NotNull Entity entity, int itemSlot, boolean isSelected) {
         if (stack.getTag() == null) {
             stack.setTag(new CompoundTag());
             stack.getTag().putUUID("HiveUUID", new UUID(0, 0));
@@ -38,7 +39,7 @@ public class ItemMyrmexStaff extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level worldIn, Player playerIn, @NotNull InteractionHand hand) {
         ItemStack itemStackIn = playerIn.getItemInHand(hand);
         if (playerIn.isShiftKeyDown()) {
             return super.use(worldIn, playerIn, hand);
@@ -47,7 +48,7 @@ public class ItemMyrmexStaff extends Item {
             UUID id = itemStackIn.getTag().getUUID("HiveUUID");
             if (!worldIn.isClientSide) {
                 MyrmexHive hive = MyrmexWorldData.get(worldIn).getHiveFromUUID(id);
-                MyrmexWorldData.get(worldIn).addHive(worldIn, new MyrmexHive());
+                MyrmexWorldData.addHive(worldIn, new MyrmexHive());
                 if (hive != null) {
                     IceAndFire.sendMSGToAll(new MessageGetMyrmexHive(hive.toNBT()));
                 } else {
@@ -62,7 +63,7 @@ public class ItemMyrmexStaff extends Item {
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
+    public @NotNull InteractionResult useOn(UseOnContext context) {
         if (!context.getPlayer().isShiftKeyDown()) {
             return super.useOn(context);
         } else {

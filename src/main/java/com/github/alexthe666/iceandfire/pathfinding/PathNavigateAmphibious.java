@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.*;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.Collectors;
 
@@ -22,22 +23,26 @@ public class PathNavigateAmphibious extends PathNavigation {
         this.nodeEvaluator.setCanFloat(true);
     }
 
-    protected PathFinder createPathFinder(int p_179679_1_) {
+    @Override
+    protected @NotNull PathFinder createPathFinder(int p_179679_1_) {
         this.nodeEvaluator = new WalkNodeEvaluator();
         this.nodeEvaluator.setCanPassDoors(true);
         this.nodeEvaluator.setCanFloat(true);
         return new PathFinder(this.nodeEvaluator, p_179679_1_);
     }
 
+    @Override
     protected boolean canUpdatePath() {
         return this.mob.isOnGround() || this.canFloat() && this.isInLiquid() || this.mob.isPassenger();
     }
 
-    protected Vec3 getTempMobPos() {
+    @Override
+    protected @NotNull Vec3 getTempMobPos() {
         return new Vec3(this.mob.getX(), this.getPathablePosY(), this.mob.getZ());
     }
 
-    public Path createPath(BlockPos pos, int i) {
+    @Override
+    public Path createPath(@NotNull BlockPos pos, int i) {
         if (this.level.getBlockState(pos).getMaterial() == Material.AIR) {
             BlockPos blockpos;
 
@@ -67,6 +72,7 @@ public class PathNavigateAmphibious extends PathNavigation {
         }
     }
 
+    @Override
     public Path createPath(Entity entityIn, int i) {
         return this.createPath(entityIn.blockPosition(), i);
     }
@@ -246,10 +252,12 @@ public class PathNavigateAmphibious extends PathNavigation {
         this.nodeEvaluator.setCanPassDoors(enterDoors);
     }
 
+    @Override
     public boolean canFloat() {
         return this.nodeEvaluator.canFloat();
     }
 
+    @Override
     public void setCanFloat(boolean canSwim) {
         this.nodeEvaluator.setCanFloat(canSwim);
     }

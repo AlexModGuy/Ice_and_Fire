@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderDreadGhoul extends MobRenderer<EntityDreadGhoul, ModelDreadGhoul> {
 
@@ -35,7 +36,7 @@ public class RenderDreadGhoul extends MobRenderer<EntityDreadGhoul, ModelDreadGh
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityDreadGhoul ghoul) {
+    public @NotNull ResourceLocation getTextureLocation(EntityDreadGhoul ghoul) {
         if (ghoul.getScreamStage() == 2) {
             switch (ghoul.getVariant()) {
                 case 1:

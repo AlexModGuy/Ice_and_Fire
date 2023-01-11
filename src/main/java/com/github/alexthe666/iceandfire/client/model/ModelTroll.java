@@ -344,6 +344,7 @@ public class ModelTroll extends ModelDragonBase<EntityTroll> {
         }
     }
 
+    @Override
     public void setupAnim(EntityTroll entity, float limbSwing, float limbSwingAmount, float ageInTicks, float f3, float f4) {
         this.resetToDefaultPose();
         this.log1.showModel = true;

@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -45,12 +46,12 @@ public class ItemDragonSkull extends Item {
     }
 
     @Override
-    public void onCraftedBy(ItemStack itemStack, Level world, Player player) {
+    public void onCraftedBy(ItemStack itemStack, @NotNull Level world, @NotNull Player player) {
         itemStack.setTag(new CompoundTag());
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, @NotNull Level worldIn, @NotNull Entity entityIn, int itemSlot, boolean isSelected) {
         if (stack.getTag() == null) {
             stack.setTag(new CompoundTag());
             stack.getTag().putInt("Stage", 4);
@@ -59,7 +60,7 @@ public class ItemDragonSkull extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         String iceorfire = "dragon." + getType(dragonType);
         tooltip.add(new TranslatableComponent(iceorfire).withStyle(ChatFormatting.GRAY));
         if (stack.getTag() != null) {
@@ -68,7 +69,7 @@ public class ItemDragonSkull extends Item {
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
+    public @NotNull InteractionResult useOn(UseOnContext context) {
         ItemStack stack = context.getPlayer().getItemInHand(context.getHand());
         /*
          * EntityDragonEgg egg = new EntityDragonEgg(worldIn);

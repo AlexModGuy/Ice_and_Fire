@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 
 public class RenderAmphithere extends MobRenderer<EntityAmphithere, ModelAmphithere> {
@@ -26,13 +27,13 @@ public class RenderAmphithere extends MobRenderer<EntityAmphithere, ModelAmphith
     }
 
     @Override
-    protected void scale(EntityAmphithere entity, PoseStack matrixStackIn, float partialTickTime) {
+    protected void scale(@NotNull EntityAmphithere entity, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(2.0F, 2.0F, 2.0F);
 
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityAmphithere amphithere) {
+    public @NotNull ResourceLocation getTextureLocation(EntityAmphithere amphithere) {
         switch (amphithere.getVariant()) {
             case 0:
                 if (amphithere.isBlinking()) {

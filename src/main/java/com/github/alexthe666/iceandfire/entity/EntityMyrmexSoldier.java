@@ -27,6 +27,7 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -54,15 +55,18 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         return isJungle() ? MyrmexTrades.JUNGLE_SOLDIER.get(2) : MyrmexTrades.DESERT_SOLDIER.get(2);
     }
 
+    @Override
     @Nullable
     protected ResourceLocation getDefaultLootTable() {
         return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
     }
 
+    @Override
     protected int getExperienceReward(Player player) {
         return 5;
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         /*if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
@@ -91,6 +95,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
 
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(0, new MyrmexAITradePlayer(this));
@@ -108,6 +113,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(4, new MyrmexAIAttackPlayers(this));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, true, true, new Predicate<LivingEntity>() {
+            @Override
             public boolean apply(@Nullable LivingEntity entity) {
                 return entity != null && !EntityMyrmexBase.haveSameHive(EntityMyrmexSoldier.this, entity) && DragonUtils.isAlive(entity) && !(entity instanceof Enemy);
             }
@@ -148,16 +154,18 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         return 1;
     }
 
+    @Override
     public boolean shouldLeaveHive() {
         return false;
     }
 
+    @Override
     public boolean shouldEnterHive() {
         return guardingEntity == null || !guardingEntity.canSeeSky() || guardingEntity.shouldEnterHive();
     }
 
     @Override
-    public boolean doHurtTarget(Entity entityIn) {
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         if (this.getGrowthStage() < 2) {
             return false;
         }
@@ -189,6 +197,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         return false;
     }
 
+    @Override
     public boolean needsGaurding() {
         return false;
     }

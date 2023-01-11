@@ -4,6 +4,7 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import org.jetbrains.annotations.NotNull;
 
 
 public class ArmorModelBase extends HumanoidModel<LivingEntity> {
@@ -12,7 +13,8 @@ public class ArmorModelBase extends HumanoidModel<LivingEntity> {
         super(p_170677_);
     }
 
-    public void setupAnim(LivingEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    @Override
+    public void setupAnim(@NotNull LivingEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         if (entityIn instanceof ArmorStand) {
             ArmorStand armorStand = (ArmorStand) entityIn;
             this.head.xRot = ((float) Math.PI / 180F) * armorStand.getHeadPose().getX();

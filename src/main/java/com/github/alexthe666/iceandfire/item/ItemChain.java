@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -55,7 +56,7 @@ public class ItemChain extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(new TranslatableComponent("item.iceandfire.chain.desc_0").withStyle(ChatFormatting.GRAY));
         tooltip.add(new TranslatableComponent("item.iceandfire.chain.desc_1").withStyle(ChatFormatting.GRAY));
         if (sticky) {
@@ -65,7 +66,7 @@ public class ItemChain extends Item {
     }
 
     @Override
-    public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity target, InteractionHand hand) {
+    public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player playerIn, @NotNull LivingEntity target, @NotNull InteractionHand hand) {
         if (ChainProperties.isChainedTo(target, playerIn)) {
             return InteractionResult.SUCCESS;
         } else {
@@ -107,7 +108,8 @@ public class ItemChain extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    public InteractionResult useOn(UseOnContext context) {
+    @Override
+    public @NotNull InteractionResult useOn(UseOnContext context) {
         Block block = context.getLevel().getBlockState(context.getClickedPos()).getBlock();
 
         if (!(block instanceof WallBlock)) {

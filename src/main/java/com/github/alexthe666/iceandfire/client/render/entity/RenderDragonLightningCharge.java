@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -26,6 +27,7 @@ public class RenderDragonLightningCharge extends EntityRenderer<EntityDragonLigh
     }
 
 
+    @Override
     public void render(EntityDragonLightningCharge entity, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         float f = (float) entity.tickCount + partialTicks;
         float yaw = entity.yRotO + (entity.getYRot() - entity.yRotO) * partialTicks;
@@ -70,7 +72,7 @@ public class RenderDragonLightningCharge extends EntityRenderer<EntityDragonLigh
 
     @Nullable
     @Override
-    public ResourceLocation getTextureLocation(EntityDragonLightningCharge entity) {
+    public ResourceLocation getTextureLocation(@NotNull EntityDragonLightningCharge entity) {
         return TEXTURE;
     }
 }

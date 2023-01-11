@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -25,7 +26,8 @@ public class RenderDreadLichSkull extends EntityRenderer<EntityDreadLichSkull> {
         super(context);
     }
 
-    public void render(EntityDreadLichSkull entity, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+    @Override
+    public void render(EntityDreadLichSkull entity, float entityYaw, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn) {
         float f = 0.0625F;
         if (entity.tickCount > 3) {
             matrixStackIn.pushPose();
@@ -47,7 +49,7 @@ public class RenderDreadLichSkull extends EntityRenderer<EntityDreadLichSkull> {
 
     @Nullable
     @Override
-    public ResourceLocation getTextureLocation(EntityDreadLichSkull entity) {
+    public ResourceLocation getTextureLocation(@NotNull EntityDreadLichSkull entity) {
         return TEXTURE;
     }
 }

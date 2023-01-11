@@ -42,6 +42,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 @Mod(IceAndFire.MODID)
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)
@@ -54,13 +55,13 @@ public class IceAndFire {
     public static String VERSION = "UNKNOWN";
     public static CreativeModeTab TAB_ITEMS = new CreativeModeTab(MODID) {
         @Override
-        public ItemStack makeIcon() {
+        public @NotNull ItemStack makeIcon() {
             return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE.get());
         }
     };
     public static CreativeModeTab TAB_BLOCKS = new CreativeModeTab("iceandfire.blocks") {
         @Override
-        public ItemStack makeIcon() {
+        public @NotNull ItemStack makeIcon() {
             return new ItemStack(IafBlockRegistry.DRAGON_SCALE_RED.get());
         }
     };

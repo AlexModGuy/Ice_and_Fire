@@ -11,6 +11,7 @@ import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class ParticlePixieDust extends TextureSheetParticle {
     private static final ResourceLocation PIXIE_DUST = new ResourceLocation("iceandfire:textures/particles/pixie_dust.png");
@@ -36,7 +37,7 @@ public class ParticlePixieDust extends TextureSheetParticle {
     }
 
     @Override
-    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
+    public void render(@NotNull VertexConsumer buffer, Camera renderInfo, float partialTicks) {
         Vec3 inerp = renderInfo.getPosition();
         float scaley = ((float) this.age + partialTicks) / (float) this.lifetime * 32.0F;
         scaley = Mth.clamp(scaley, 0.0F, 1.0F);
@@ -88,6 +89,7 @@ public class ParticlePixieDust extends TextureSheetParticle {
     }
 
 
+    @Override
     public int getLightColor(float partialTick) {
         return 240;
     }
@@ -119,7 +121,7 @@ public class ParticlePixieDust extends TextureSheetParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
+    public @NotNull ParticleRenderType getRenderType() {
         return ParticleRenderType.CUSTOM;
     }
 }

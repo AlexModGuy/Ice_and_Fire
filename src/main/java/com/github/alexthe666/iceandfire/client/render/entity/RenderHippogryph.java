@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -22,7 +23,8 @@ public class RenderHippogryph extends MobRenderer<EntityHippogryph, ModelHippogr
 
     }
 
-    protected void scale(EntityHippogryph entity, PoseStack matrix, float partialTickTime) {
+    @Override
+    protected void scale(@NotNull EntityHippogryph entity, PoseStack matrix, float partialTickTime) {
         matrix.scale(1.2F, 1.2F, 1.2F);
     }
 
@@ -48,7 +50,8 @@ public class RenderHippogryph extends MobRenderer<EntityHippogryph, ModelHippogr
             this.renderer = renderer;
         }
 
-        public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityHippogryph hippo, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        @Override
+        public void render(@NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn, EntityHippogryph hippo, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if (hippo.getArmor() != 0) {
                 RenderType type = null;
                 switch (hippo.getArmor()) {

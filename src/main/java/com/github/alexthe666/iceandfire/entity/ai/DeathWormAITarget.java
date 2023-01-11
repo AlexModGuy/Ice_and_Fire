@@ -8,6 +8,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
 
@@ -41,7 +42,7 @@ public class DeathWormAITarget<T extends LivingEntity> extends NearestAttackable
     }
 
     @Override
-    protected AABB getTargetSearchArea(double targetDistance) {
+    protected @NotNull AABB getTargetSearchArea(double targetDistance) {
         return this.deathworm.getBoundingBox().inflate(targetDistance, targetDistance, targetDistance);
     }
 }

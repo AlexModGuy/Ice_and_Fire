@@ -31,6 +31,7 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -225,8 +226,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 d4 = d4 + this.random.nextGaussian() * 0.007499999832361937D * inaccuracy;
                 EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(
                     IafEntityRegistry.FIRE_DRAGON_CHARGE.get(), level, this, d2, d3, d4);
-                if (this.isBaby()) {
-                }
+
                 entitylargefireball.setPos(headVec.x, headVec.y, headVec.z);
                 if (!level.isClientSide) {
                     level.addFreshEntity(entitylargefireball);
@@ -282,8 +282,7 @@ public class EntityFireDragon extends EntityDragonBase {
                     this.playSound(IafSoundRegistry.FIREDRAGON_BREATH, 4, 1);
                     EntityDragonFireCharge entitylargefireball = new EntityDragonFireCharge(
                         IafEntityRegistry.FIRE_DRAGON_CHARGE.get(), level, this, d2, d3, d4);
-                    if (this.isBaby()) {
-                    }
+
                     entitylargefireball.setPos(headVec.x, headVec.y, headVec.z);
                     if (!level.isClientSide) {
                         level.addFreshEntity(entitylargefireball);
@@ -365,7 +364,6 @@ public class EntityFireDragon extends EntityDragonBase {
         double d2 = burnX - headPos.x;
         double d3 = burnY - headPos.y;
         double d4 = burnZ - headPos.z;
-        Mth.clamp(this.getRenderSize() * 0.08F, 0.55F, 3F);
         double distance = Math.max(2.5F * this.distanceToSqr(burnX, burnY, burnZ), 0);
         double conqueredDistance = burnProgress / 40D * distance;
         int increment = (int) Math.ceil(conqueredDistance / 100);
@@ -402,7 +400,7 @@ public class EntityFireDragon extends EntityDragonBase {
     }
 
     @Override
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
         return this.isTeen() ? IafSoundRegistry.FIREDRAGON_TEEN_HURT : this.shouldDropLoot() ? IafSoundRegistry.FIREDRAGON_ADULT_HURT : IafSoundRegistry.FIREDRAGON_CHILD_HURT;
     }
 

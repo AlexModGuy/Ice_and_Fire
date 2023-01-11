@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
+import org.jetbrains.annotations.NotNull;
 
 public class GuiHippogryph extends AbstractContainerScreen<ContainerHippogryph> {
     private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/hippogryph.png");
@@ -24,7 +25,7 @@ public class GuiHippogryph extends AbstractContainerScreen<ContainerHippogryph> 
     }
 
     @Override
-    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
         Entity entity = IceAndFire.PROXY.getReferencedMob();
         Font font = this.getMinecraft().font;
         if (entity instanceof EntityHippogryph) {
@@ -35,7 +36,7 @@ public class GuiHippogryph extends AbstractContainerScreen<ContainerHippogryph> 
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         this.mousePosx = mouseX;
         this.mousePosY = mouseY;
@@ -44,7 +45,7 @@ public class GuiHippogryph extends AbstractContainerScreen<ContainerHippogryph> 
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);

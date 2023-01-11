@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.List;
@@ -136,7 +137,8 @@ public class MyrmexWorldData extends SavedData {
         }
     }
 
-    public CompoundTag save(CompoundTag compound) {
+    @Override
+    public @NotNull CompoundTag save(CompoundTag compound) {
         compound.putInt("Tick", this.tickCounter);
         ListTag nbttaglist = new ListTag();
 

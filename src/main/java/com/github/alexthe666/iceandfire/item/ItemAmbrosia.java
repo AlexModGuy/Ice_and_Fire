@@ -14,6 +14,7 @@ public class ItemAmbrosia extends ItemGenericFood {
         super(5, 0.6F, false, false, true, 1);
     }
 
+    @Override
     public void onFoodEaten(ItemStack stack, Level worldIn, LivingEntity livingEntity) {
         livingEntity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 3600, 2));
         livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 3600, 2));
@@ -21,6 +22,7 @@ public class ItemAmbrosia extends ItemGenericFood {
         livingEntity.addEffect(new MobEffectInstance(MobEffects.LUCK, 3600, 2));
     }
 
+    @Override
     public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity livingEntity) {
         super.finishUsingItem(stack, worldIn, livingEntity);
         return livingEntity instanceof Player && ((Player) livingEntity).getAbilities().instabuild ? stack : new ItemStack(Items.BOWL);

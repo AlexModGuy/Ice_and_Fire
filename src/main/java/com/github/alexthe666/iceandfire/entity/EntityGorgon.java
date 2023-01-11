@@ -31,6 +31,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -92,6 +93,7 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
         return result.getType() != HitResult.Type.MISS;
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new RestrictSunGoal(this));
@@ -99,12 +101,14 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
         this.goalSelector.addGoal(3, aiStare = new GorgonAIStareAttack(this, 1.0D, 0, 15.0F));
         this.goalSelector.addGoal(3, aiMelee = new MeleeAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D) {
+            @Override
             public boolean canUse() {
                 interval = 20;
                 return super.canUse();
             }
         });
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F, 1.0F) {
+            @Override
             public boolean canContinueToUse() {
                 if (this.lookAt != null && this.lookAt instanceof Player && ((Player) this.lookAt).isCreative()) {
                     return false;
@@ -135,7 +139,8 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
         }
     }
 
-    public boolean doHurtTarget(Entity entityIn) {
+    @Override
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         boolean blindness = this.hasEffect(MobEffects.BLINDNESS) || this.getTarget() != null && this.getTarget().hasEffect(MobEffects.BLINDNESS) || this.getTarget() != null && this.getTarget() instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) this.getTarget()).canBeTurnedToStone();
         if (blindness && this.deathTime == 0) {
             if (this.getAnimation() != ANIMATION_HIT) {
@@ -148,6 +153,7 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
         return super.doHurtTarget(entityIn);
     }
 
+    @Override
     public void setTarget(@Nullable LivingEntity LivingEntityIn) {
         super.setTarget(LivingEntityIn);
         if (LivingEntityIn != null && !level.isClientSide) {
@@ -164,10 +170,12 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
         }
     }
 
-    protected int getExperienceReward(Player player) {
+    @Override
+    protected int getExperienceReward(@NotNull Player player) {
         return 30;
     }
 
+    @Override
     protected void tickDeath() {
         ++this.deathTime;
         this.ambientSoundTime = 20;
@@ -200,6 +208,7 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
         }
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         if (playerStatueCooldown > 0) {
@@ -256,15 +265,18 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    @Override
     public int getMaxHeadXRot() {
         return 10;
     }
 
+    @Override
     public int getMaxHeadYRot() {
         return 30;
     }
 
-    public MobType getMobType() {
+    @Override
+    public @NotNull MobType getMobType() {
         return MobType.UNDEAD;
     }
 
@@ -302,16 +314,19 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
         return new Animation[]{ANIMATION_SCARE, ANIMATION_HIT};
     }
 
+    @Override
     @Nullable
     protected SoundEvent getAmbientSound() {
         return IafSoundRegistry.GORGON_IDLE;
     }
 
+    @Override
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
         return IafSoundRegistry.GORGON_HURT;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getDeathSound() {
         return IafSoundRegistry.GORGON_DIE;

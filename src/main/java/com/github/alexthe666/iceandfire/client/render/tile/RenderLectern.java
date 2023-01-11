@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderLectern<T extends TileEntityLectern> implements BlockEntityRenderer<T> {
 
@@ -24,7 +25,7 @@ public class RenderLectern<T extends TileEntityLectern> implements BlockEntityRe
     }
 
     @Override
-    public void render(T entity, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(@NotNull T entity, float partialTicks, PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         TileEntityLectern lectern = entity;
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5F, 1.1F, 0.5F);

@@ -8,8 +8,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityDragonArrow extends AbstractArrow {
 
@@ -29,7 +30,7 @@ public class EntityDragonArrow extends AbstractArrow {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -39,19 +40,19 @@ public class EntityDragonArrow extends AbstractArrow {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tagCompound) {
+    public void addAdditionalSaveData(@NotNull CompoundTag tagCompound) {
         super.addAdditionalSaveData(tagCompound);
         tagCompound.putDouble("damage", 10);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tagCompund) {
+    public void readAdditionalSaveData(@NotNull CompoundTag tagCompund) {
         super.readAdditionalSaveData(tagCompund);
         this.setBaseDamage(tagCompund.getDouble("damage"));
     }
 
     @Override
-    protected ItemStack getPickupItem() {
+    protected @NotNull ItemStack getPickupItem() {
         return new ItemStack(IafItemRegistry.DRAGONBONE_ARROW.get());
     }
 

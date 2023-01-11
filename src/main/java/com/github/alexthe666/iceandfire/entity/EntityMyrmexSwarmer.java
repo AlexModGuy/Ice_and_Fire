@@ -21,6 +21,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -52,17 +53,21 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
             .add(Attributes.ARMOR, 0D);
     }
 
+    @Override
     protected int getExperienceReward(Player player) {
         return 0;
     }
 
+    @Override
     protected void switchNavigator(boolean onLand) {
     }
 
+    @Override
     protected double attackDistance() {
         return 25;
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new MyrmexAIFollowSummoner(this, 1.0D, 10.0F, 5.0F));
@@ -77,15 +82,18 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         this.targetSelector.addGoal(3, new MyrmexAISummonerHurtTarget(this));
     }
 
+    @Override
     protected void doPush(Entity entityIn) {
         if (entityIn instanceof EntityMyrmexSwarmer) {
             super.doPush(entityIn);
         }
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(SUMMONER_ID, Optional.empty());
@@ -102,7 +110,8 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         }
     }
 
-    public boolean isAlliedTo(Entity entityIn) {
+    @Override
+    public boolean isAlliedTo(@NotNull Entity entityIn) {
         if (entityIn == null) {
             return false;
         }
@@ -120,6 +129,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         this.entityData.set(SUMMONER_ID, Optional.ofNullable(uuid));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if (this.getSummonerUUID() == null) {
@@ -131,6 +141,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
 
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         String s = "";
@@ -163,6 +174,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         this.entityData.set(TICKS_ALIVE, ticks);
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         setFlying(true);
@@ -203,10 +215,12 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         }
     }
 
+    @Override
     public int getGrowthStage() {
         return 2;
     }
 
+    @Override
     @Nullable
     protected ResourceLocation getDefaultLootTable() {
         return null;
@@ -217,6 +231,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         return 0.25F;
     }
 
+    @Override
     public boolean shouldHaveNormalAI() {
         return false;
     }
@@ -226,6 +241,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
         return 0;
     }
 
+    @Override
     public boolean isBreedingSeason() {
         return false;
     }

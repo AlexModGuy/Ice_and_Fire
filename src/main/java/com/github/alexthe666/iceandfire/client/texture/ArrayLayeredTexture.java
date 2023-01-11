@@ -9,6 +9,7 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -23,7 +24,7 @@ public class ArrayLayeredTexture extends AbstractTexture {
     }
 
     @Override
-    public void load(ResourceManager manager) {
+    public void load(@NotNull ResourceManager manager) {
         Iterator<String> iterator = this.layeredTextureNames.iterator();
         String s = iterator.next();
 

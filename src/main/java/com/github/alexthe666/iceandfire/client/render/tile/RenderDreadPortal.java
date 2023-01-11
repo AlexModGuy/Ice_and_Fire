@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderDreadPortal<T extends TileEntityDreadPortal> implements BlockEntityRenderer<T> {
     public static final ResourceLocation DREAD_PORTAL_BACKGROUND = new ResourceLocation("iceandfire:textures/environment/dread_portal_background.png");
@@ -21,7 +22,8 @@ public class RenderDreadPortal<T extends TileEntityDreadPortal> implements Block
 
     }
 
-    public void render(T tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    @Override
+    public void render(@NotNull T tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         Matrix4f matrix4f = matrixStackIn.last().pose();
         this.renderCube(tileEntityIn, matrix4f, bufferIn.getBuffer(this.renderType()));
     }

@@ -100,6 +100,7 @@ public class ModelHydraBody extends ModelDragonBase<EntityHydra> {
         animator.update(entity);
     }
 
+    @Override
     public void setupAnim(EntityHydra entity, float f, float f1, float f2, float f3, float f4) {
         animate(entity, f, f1, f2, f3, f4, 1);
         float speed_walk = 0.6F;

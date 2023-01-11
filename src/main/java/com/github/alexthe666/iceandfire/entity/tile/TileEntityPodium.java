@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -60,12 +61,12 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
     }
 
     @Override
-    public ItemStack getItem(int index) {
+    public @NotNull ItemStack getItem(int index) {
         return this.stacks.get(index);
     }
 
     @Override
-    public ItemStack removeItem(int index, int count) {
+    public @NotNull ItemStack removeItem(int index, int count) {
         if (!this.stacks.get(index).isEmpty()) {
             ItemStack itemstack;
 
@@ -98,7 +99,7 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
     }
 
     @Override
-    public void setItem(int index, ItemStack stack) {
+    public void setItem(int index, @NotNull ItemStack stack) {
         this.stacks.set(index, stack);
 
         if (!stack.isEmpty() && stack.getCount() > this.getMaxStackSize()) {
@@ -111,27 +112,27 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
     }
 
     @Override
-    public void load(CompoundTag compound) {
+    public void load(@NotNull CompoundTag compound) {
         super.load(compound);
         this.stacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
         ContainerHelper.loadAllItems(compound, this.stacks);
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound) {
+    public void saveAdditional(@NotNull CompoundTag compound) {
         ContainerHelper.saveAllItems(compound, this.stacks);
     }
 
     @Override
-    public void startOpen(Player player) {
+    public void startOpen(@NotNull Player player) {
     }
 
     @Override
-    public void stopOpen(Player player) {
+    public void stopOpen(@NotNull Player player) {
     }
 
     @Override
-    public boolean canPlaceItemThroughFace(int index, ItemStack stack, Direction direction) {
+    public boolean canPlaceItemThroughFace(int index, @NotNull ItemStack stack, Direction direction) {
         return index != 0 || (stack.getItem() instanceof ItemDragonEgg || stack.getItem() instanceof ItemMyrmexEgg);
     }
 
@@ -141,7 +142,7 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
     }
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@NotNull Player player) {
         return true;
     }
 
@@ -151,12 +152,12 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
     }
 
     @Override
-    public int[] getSlotsForFace(Direction side) {
+    public int @NotNull [] getSlotsForFace(@NotNull Direction side) {
         return slotsTop;
     }
 
     @Override
-    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int index, @NotNull ItemStack stack, @NotNull Direction direction) {
         return false;
     }
 
@@ -166,7 +167,7 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
     }
 
     @Override
-    public boolean canPlaceItem(int index, ItemStack stack) {
+    public boolean canPlaceItem(int index, @NotNull ItemStack stack) {
         return false;
     }
 
@@ -181,27 +182,27 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public @NotNull CompoundTag getUpdateTag() {
         return this.saveWithFullMetadata();
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int index) {
+    public @NotNull ItemStack removeItemNoUpdate(int index) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public Component getDisplayName() {
+    public @NotNull Component getDisplayName() {
         return getDefaultName();
     }
 
     @Override
-    protected Component getDefaultName() {
+    protected @NotNull Component getDefaultName() {
         return new TranslatableComponent("block.iceandfire.podium");
     }
 
     @Override
-    protected AbstractContainerMenu createMenu(int id, Inventory player) {
+    protected @NotNull AbstractContainerMenu createMenu(int id, @NotNull Inventory player) {
         return null;
     }
 
@@ -215,8 +216,8 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
     }
 
     @Override
-    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(
-        net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
+    public <T> net.minecraftforge.common.util.@NotNull LazyOptional<T> getCapability(
+        net.minecraftforge.common.capabilities.@NotNull Capability<T> capability, @Nullable Direction facing) {
         if (!this.remove && facing != null
             && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (facing == Direction.DOWN)
@@ -229,7 +230,7 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
         return new ContainerPodium(id, this, playerInventory, new SimpleContainerData(0));
     }
 }

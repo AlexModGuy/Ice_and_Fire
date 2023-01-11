@@ -25,6 +25,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.NonNullLazy;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -54,22 +55,23 @@ public class ItemDeathwormGauntlet extends Item {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(@NotNull ItemStack stack) {
         return 1;
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
+    public @NotNull UseAnim getUseAnimation(@NotNull ItemStack stack) {
         return UseAnim.BOW;
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level worldIn, Player playerIn, @NotNull InteractionHand hand) {
         ItemStack itemStackIn = playerIn.getItemInHand(hand);
         playerIn.startUsingItem(hand);
         return new InteractionResultHolder<ItemStack>(InteractionResult.PASS, itemStackIn);
     }
 
+    @Override
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
         if (stack.getTag() != null) {
             if (deathwormReceded || deathwormLaunched) {
@@ -90,7 +92,8 @@ public class ItemDeathwormGauntlet extends Item {
         }
     }
 
-    public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity LivingEntity, int timeLeft) {
+    @Override
+    public void releaseUsing(@NotNull ItemStack stack, @NotNull Level worldIn, @NotNull LivingEntity LivingEntity, int timeLeft) {
         if (specialDamage > 0) {
             stack.hurtAndBreak(specialDamage, LivingEntity, (player) -> {
                 player.broadcastBreakEvent(LivingEntity.getUsedItemHand());
@@ -102,12 +105,13 @@ public class ItemDeathwormGauntlet extends Item {
         }
     }
 
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return !oldStack.sameItem(newStack);
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level world, Entity entity, int itemSlot, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, @NotNull Level world, @NotNull Entity entity, int itemSlot, boolean isSelected) {
         boolean hitMob = false;
         if (stack.getTag() == null) {
             stack.setTag(new CompoundTag());
@@ -158,7 +162,7 @@ public class ItemDeathwormGauntlet extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(new TranslatableComponent("item.iceandfire.legendary_weapon.desc").withStyle(ChatFormatting.GRAY));
         tooltip.add(new TranslatableComponent("item.iceandfire.deathworm_gauntlet.desc_0").withStyle(ChatFormatting.GRAY));
         tooltip.add(new TranslatableComponent("item.iceandfire.deathworm_gauntlet.desc_1").withStyle(ChatFormatting.GRAY));

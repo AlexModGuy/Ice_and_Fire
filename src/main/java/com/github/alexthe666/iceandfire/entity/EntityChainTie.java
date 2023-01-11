@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -104,7 +105,7 @@ public class EntityChainTie extends HangingEntity {
     }
 
     @Override
-    protected float getEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
+    protected float getEyeHeight(@NotNull Pose poseIn, @NotNull EntityDimensions sizeIn) {
         return -0.0625F;
     }
 
@@ -119,7 +120,7 @@ public class EntityChainTie extends HangingEntity {
     }
 
     @Override
-    public void remove(Entity.RemovalReason removalReason) {
+    public void remove(Entity.@NotNull RemovalReason removalReason) {
         super.remove(removalReason);
         double d0 = 30D;
         List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, new AABB(this.getX() - d0, this.getY() - d0, this.getZ() - d0, this.getX() + d0, this.getY() + d0, this.getZ() + d0));
@@ -135,7 +136,7 @@ public class EntityChainTie extends HangingEntity {
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public @NotNull InteractionResult interact(@NotNull Player player, @NotNull InteractionHand hand) {
         if (this.level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
@@ -162,7 +163,7 @@ public class EntityChainTie extends HangingEntity {
 
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

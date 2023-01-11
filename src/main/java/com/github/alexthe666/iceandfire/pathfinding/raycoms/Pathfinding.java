@@ -7,8 +7,9 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.AbstractPathJob;
 import net.minecraft.util.thread.BlockableEventLoop;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.common.util.LogicalSidedProvider;
+import net.minecraftforge.fml.LogicalSide;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -86,7 +87,7 @@ public final class Pathfinding {
         public static int id;
 
         @Override
-        public Thread newThread(final Runnable runnable) {
+        public Thread newThread(final @NotNull Runnable runnable) {
             BlockableEventLoop<?> workqueue = LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER);
             ClassLoader classLoader;
             if (workqueue.isSameThread()) {

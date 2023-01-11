@@ -22,9 +22,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 import static com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry.DRAGONFORGE_CORE;
 
@@ -90,11 +90,12 @@ public class BlockDragonforgeCore extends BaseEntityBlock implements IDragonProo
     }
 
     @Override
-    public PushReaction getPistonPushReaction(BlockState state) {
+    public @NotNull PushReaction getPistonPushReaction(@NotNull BlockState state) {
         return PushReaction.BLOCK;
     }
 
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    @Override
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, @NotNull BlockHitResult hit) {
         if (!player.isShiftKeyDown()) {
             if (worldIn.isClientSide) {
                 IceAndFire.PROXY.setRefrencedTE(worldIn.getBlockEntity(pos));
@@ -122,18 +123,13 @@ public class BlockDragonforgeCore extends BaseEntityBlock implements IDragonProo
         return new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.get().asItem());
     }
 
-    public RenderShape getRenderShape(BlockState state) {
+    @Override
+    public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.MODEL;
     }
 
-    public void randomDisplayTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
-        if (this.activated) {
-
-        }
-    }
-
     @Override
-    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(@NotNull BlockState state, Level worldIn, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
         BlockEntity tileentity = worldIn.getBlockEntity(pos);
         if (tileentity instanceof TileEntityDragonforge) {
             Containers.dropContents(worldIn, pos, (TileEntityDragonforge) tileentity);
@@ -142,11 +138,13 @@ public class BlockDragonforgeCore extends BaseEntityBlock implements IDragonProo
         }
     }
 
-    public int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos) {
+    @Override
+    public int getAnalogOutputSignal(@NotNull BlockState blockState, Level worldIn, @NotNull BlockPos pos) {
         return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(worldIn.getBlockEntity(pos));
     }
 
-    public boolean hasAnalogOutputSignal(BlockState state) {
+    @Override
+    public boolean hasAnalogOutputSignal(@NotNull BlockState state) {
         return true;
     }
 
@@ -158,13 +156,13 @@ public class BlockDragonforgeCore extends BaseEntityBlock implements IDragonProo
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> entityType) {
         return level.isClientSide ? createTickerHelper(entityType, DRAGONFORGE_CORE.get(), TileEntityDragonforge::tick) : null;
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new TileEntityDragonforge(pos, state, isFire);
     }
 }

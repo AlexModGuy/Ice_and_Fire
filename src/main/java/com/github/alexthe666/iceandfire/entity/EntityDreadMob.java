@@ -16,6 +16,7 @@ import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -86,7 +87,7 @@ public class EntityDreadMob extends Monster implements IDreadMob {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if (this.getCommanderId() != null) {
             compound.putUUID("CommanderUUID", this.getCommanderId());
@@ -94,7 +95,7 @@ public class EntityDreadMob extends Monster implements IDreadMob {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         UUID uuid;
         if (compound.hasUUID("CommanderUUID")) {
@@ -115,7 +116,7 @@ public class EntityDreadMob extends Monster implements IDreadMob {
 
 
     @Override
-    public boolean isAlliedTo(Entity entityIn) {
+    public boolean isAlliedTo(@NotNull Entity entityIn) {
         return entityIn instanceof IDreadMob || super.isAlliedTo(entityIn);
     }
 
@@ -181,7 +182,7 @@ public class EntityDreadMob extends Monster implements IDreadMob {
     }
 
     @Override
-    public void remove(RemovalReason reason) {
+    public void remove(@NotNull RemovalReason reason) {
         if (!isRemoved() && this.getCommander() != null && this.getCommander() instanceof EntityDreadLich) {
             EntityDreadLich lich = (EntityDreadLich) this.getCommander();
             lich.setMinionCount(lich.getMinionCount() - 1);
@@ -190,7 +191,7 @@ public class EntityDreadMob extends Monster implements IDreadMob {
     }
 
     @Override
-    public MobType getMobType() {
+    public @NotNull MobType getMobType() {
         return MobType.UNDEAD;
     }
 }

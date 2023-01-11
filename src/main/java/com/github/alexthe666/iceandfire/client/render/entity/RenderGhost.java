@@ -18,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
 
@@ -45,7 +46,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
     }
 
     @Override
-    public void render(EntityGhost entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+    public void render(@NotNull EntityGhost entityIn, float entityYaw, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn) {
         shadowRadius = 0;
         if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Pre<EntityGhost, ModelGhost>(entityIn, this, partialTicks, matrixStackIn, bufferIn, packedLightIn)))
             return;
@@ -165,7 +166,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
     }
 
     @Override
-    protected float getFlipDegrees(EntityGhost ghost) {
+    protected float getFlipDegrees(@NotNull EntityGhost ghost) {
         return 0.0F;
     }
 
@@ -177,11 +178,11 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
     }
 
     @Override
-    public void scale(EntityGhost LivingEntityIn, PoseStack stack, float partialTickTime) {
+    public void scale(@NotNull EntityGhost LivingEntityIn, @NotNull PoseStack stack, float partialTickTime) {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityGhost ghost) {
+    public @NotNull ResourceLocation getTextureLocation(EntityGhost ghost) {
         switch (ghost.getColor()) {
             case 1:
                 return TEXTURE_1;

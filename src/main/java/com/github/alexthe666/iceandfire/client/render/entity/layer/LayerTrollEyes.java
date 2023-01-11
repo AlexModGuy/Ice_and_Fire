@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import org.jetbrains.annotations.NotNull;
 
 public class LayerTrollEyes extends RenderLayer<EntityTroll, ModelTroll> {
 
@@ -21,7 +22,7 @@ public class LayerTrollEyes extends RenderLayer<EntityTroll, ModelTroll> {
     }
 
     @Override
-    public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityTroll troll, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(@NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn, @NotNull EntityTroll troll, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (!EntityGorgon.isStoneMob(troll)) {
             RenderType tex = RenderType.eyes(troll.getTrollType().TEXTURE_EYES);
             VertexConsumer ivertexbuilder = bufferIn.getBuffer(tex);

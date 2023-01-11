@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.*;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.Collectors;
 
@@ -23,7 +24,8 @@ public class PathNavigateDeathWormLand extends PathNavigation {
         this.worm = worm;
     }
 
-    protected PathFinder createPathFinder(int i) {
+    @Override
+    protected @NotNull PathFinder createPathFinder(int i) {
         this.nodeEvaluator = new WalkNodeEvaluator();
         this.nodeEvaluator.setCanPassDoors(true);
         this.nodeEvaluator.setCanFloat(true);
@@ -33,18 +35,21 @@ public class PathNavigateDeathWormLand extends PathNavigation {
     /**
      * If on ground or swimming and can swim
      */
+    @Override
     protected boolean canUpdatePath() {
         return this.mob.isOnGround() || this.worm.isInSand() || this.mob.isPassenger();
     }
 
-    protected Vec3 getTempMobPos() {
+    @Override
+    protected @NotNull Vec3 getTempMobPos() {
         return new Vec3(this.mob.getX(), this.getPathablePosY(), this.mob.getZ());
     }
 
     /**
      * Returns path to given BlockPos
      */
-    public Path createPath(BlockPos pos, int i) {
+    @Override
+    public Path createPath(@NotNull BlockPos pos, int i) {
         if (this.level.getBlockState(pos).getMaterial() == Material.AIR) {
             BlockPos blockpos;
 
@@ -77,6 +82,7 @@ public class PathNavigateDeathWormLand extends PathNavigation {
     /**
      * Returns the path to the given LivingEntity. Args : entity
      */
+    @Override
     public Path createPath(Entity entityIn, int i) {
         return this.createPath(entityIn.blockPosition(), i);
     }
@@ -262,10 +268,12 @@ public class PathNavigateDeathWormLand extends PathNavigation {
         this.nodeEvaluator.setCanPassDoors(enterDoors);
     }
 
+    @Override
     public boolean canFloat() {
         return this.nodeEvaluator.canFloat();
     }
 
+    @Override
     public void setCanFloat(boolean canSwim) {
         this.nodeEvaluator.setCanFloat(canSwim);
     }

@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 
 public class RenderDragonArrow extends ArrowRenderer<EntityDragonArrow> {
@@ -15,7 +16,7 @@ public class RenderDragonArrow extends ArrowRenderer<EntityDragonArrow> {
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntityDragonArrow entity) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull EntityDragonArrow entity) {
         return TEXTURE;
     }
 }

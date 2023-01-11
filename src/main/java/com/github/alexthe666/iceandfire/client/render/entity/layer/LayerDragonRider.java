@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 public class LayerDragonRider extends RenderLayer<EntityDragonBase, AdvancedEntityModel<EntityDragonBase>> {
     private final MobRenderer render;
@@ -37,7 +38,7 @@ public class LayerDragonRider extends RenderLayer<EntityDragonBase, AdvancedEnti
     }
 
     @Override
-    public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn, EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         matrixStackIn.pushPose();
         if (!dragon.getPassengers().isEmpty()) {
             float dragonScale = dragon.getRenderSize() / 3;
@@ -153,8 +154,8 @@ public class LayerDragonRider extends RenderLayer<EntityDragonBase, AdvancedEnti
             CrashReportCategory crashreportcategory1 = crashreport.addCategory("Renderer details");
             crashreportcategory1.setDetail("Assigned renderer", render);
             crashreportcategory1.setDetail("Location", new BlockPos(x, y, z));
-            crashreportcategory1.setDetail("Rotation", Float.valueOf(yaw));
-            crashreportcategory1.setDetail("Delta", Float.valueOf(partialTicks));
+            crashreportcategory1.setDetail("Rotation", yaw);
+            crashreportcategory1.setDetail("Delta", partialTicks);
             throw new ReportedException(crashreport);
         }
     }

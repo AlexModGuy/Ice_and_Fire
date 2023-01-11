@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 import java.util.Map;
@@ -51,7 +52,8 @@ public class RenderMobSkull extends EntityRenderer<EntityMobSkull> {
         cube.rotateAngleZ = rotZ;
     }
 
-    public void render(EntityMobSkull entity, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+    @Override
+    public void render(@NotNull EntityMobSkull entity, float entityYaw, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn) {
         super.render(entity, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         matrixStackIn.pushPose();
         matrixStackIn.mulPose(new Quaternion(Vector3f.XP, -180, true));
@@ -137,7 +139,8 @@ public class RenderMobSkull extends EntityRenderer<EntityMobSkull> {
         }
     }
 
-    public ResourceLocation getTextureLocation(EntityMobSkull entity) {
+    @Override
+    public @NotNull ResourceLocation getTextureLocation(EntityMobSkull entity) {
         return getSkullTexture(entity.getSkullType());
     }
 

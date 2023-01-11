@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderSeaSerpent extends MobRenderer<EntitySeaSerpent, AdvancedEntityModel<EntitySeaSerpent>> {
 
@@ -38,7 +39,7 @@ public class RenderSeaSerpent extends MobRenderer<EntitySeaSerpent, AdvancedEnti
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntitySeaSerpent serpent) {
+    public @NotNull ResourceLocation getTextureLocation(EntitySeaSerpent serpent) {
         switch (serpent.getVariant()) {
             case 0:
                 if (serpent.isBlinking()) {

@@ -16,8 +16,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import org.jetbrains.annotations.NotNull;
 
 public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjectile {
 
@@ -50,7 +51,7 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -101,7 +102,7 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
     }
 
     @Override
-    protected boolean canHitEntity(Entity entityIn) {
+    protected boolean canHitEntity(@NotNull Entity entityIn) {
         return super.canHitEntity(entityIn) && !(entityIn instanceof EntityMutlipartPart) && !(entityIn instanceof EntitySeaSerpentBubbles);
     }
 
@@ -129,12 +130,12 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
     }
 
     @Override
-    protected ParticleOptions getTrailParticle() {
+    protected @NotNull ParticleOptions getTrailParticle() {
         return ParticleTypes.BUBBLE;
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurt(@NotNull DamageSource source, float amount) {
         return false;
     }
 
@@ -144,7 +145,7 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
     }
 
     @Override
-    protected void onHit(HitResult movingObject) {
+    protected void onHit(@NotNull HitResult movingObject) {
         boolean flag = this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
         if (!this.level.isClientSide) {
             if (movingObject.getType() == HitResult.Type.ENTITY) {

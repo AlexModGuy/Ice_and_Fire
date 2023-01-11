@@ -47,6 +47,7 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -119,7 +120,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(@NotNull LevelAccessor worldIn, @NotNull MobSpawnType spawnReasonIn) {
         if (worldIn instanceof ServerLevelAccessor && !IafWorldRegistry.isDimensionListedForMobs((ServerLevelAccessor) level)) {
             return false;
         }
@@ -173,11 +174,11 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     @Override
-    protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+    protected void checkFallDamage(double y, boolean onGroundIn, @NotNull BlockState state, @NotNull BlockPos pos) {
     }
 
     @Override
-    public float getWalkTargetValue(BlockPos pos) {
+    public float getWalkTargetValue(@NotNull BlockPos pos) {
         if (this.isFlying()) {
             if (level.isEmptyBlock(pos)) {
                 return 10F;
@@ -190,7 +191,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+    public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
 
         if (itemstack != null && itemstack.getItem() == Items.COOKIE) {
@@ -288,7 +289,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     @Override
-    public boolean hurt(DamageSource source, float damage) {
+    public boolean hurt(@NotNull DamageSource source, float damage) {
         if (!this.isTame() && this.isFlying() && !isOnGround() && source.isProjectile() && !level.isClientSide) {
             this.isFallen = true;
         }
@@ -299,7 +300,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     @Override
-    public void positionRider(Entity passenger) {
+    public void positionRider(@NotNull Entity passenger) {
         super.positionRider(passenger);
         if (this.hasPassenger(passenger) && this.isTame()) {
             this.setYRot(passenger.getYRot());
@@ -500,11 +501,11 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     public int getCommand() {
-        return Integer.valueOf(this.entityData.get(COMMAND).intValue());
+        return this.entityData.get(COMMAND).intValue();
     }
 
     public void setCommand(int command) {
-        this.entityData.set(COMMAND, Integer.valueOf(command));
+        this.entityData.set(COMMAND, command);
         this.setOrderedToSit(command == 1);
     }
 
@@ -530,9 +531,9 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         }
         byte b0 = this.entityData.get(DATA_FLAGS_ID).byteValue();
         if (sitting) {
-            this.entityData.set(DATA_FLAGS_ID, Byte.valueOf((byte) (b0 | 1)));
+            this.entityData.set(DATA_FLAGS_ID, (byte) (b0 | 1));
         } else {
-            this.entityData.set(DATA_FLAGS_ID, Byte.valueOf((byte) (b0 & -2)));
+            this.entityData.set(DATA_FLAGS_ID, (byte) (b0 & -2));
         }
     }
 
@@ -561,7 +562,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     @Override
-    public boolean isAlliedTo(Entity entityIn) {
+    public boolean isAlliedTo(@NotNull Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
             if (entityIn == livingentity) {
@@ -598,15 +599,15 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(VARIANT, Integer.valueOf(0));
+        this.entityData.define(VARIANT, 0);
         this.entityData.define(FLYING, false);
-        this.entityData.define(FLAP_TICKS, Integer.valueOf(0));
-        this.entityData.define(CONTROL_STATE, Byte.valueOf((byte) 0));
-        this.entityData.define(COMMAND, Integer.valueOf(0));
+        this.entityData.define(FLAP_TICKS, 0);
+        this.entityData.define(CONTROL_STATE, (byte) 0);
+        this.entityData.define(COMMAND, 0);
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Variant", this.getVariant());
         compound.putBoolean("Flying", this.isFlying());
@@ -622,7 +623,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setVariant(compound.getInt("Variant"));
         this.setFlying(compound.getBoolean("Flying"));
@@ -737,7 +738,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     @Override
-    public boolean doHurtTarget(Entity entityIn) {
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         if (this.getAnimation() != ANIMATION_BITE && this.getAnimation() != ANIMATION_TAIL_WHIP && this.getAnimation() != ANIMATION_WING_BLAST && this.getControllingPassenger() == null) {
             if (random.nextBoolean()) {
                 this.setAnimation(ANIMATION_BITE);
@@ -779,11 +780,11 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     public int getVariant() {
-        return Integer.valueOf(this.entityData.get(VARIANT).intValue());
+        return this.entityData.get(VARIANT).intValue();
     }
 
     public void setVariant(int variant) {
-        this.entityData.set(VARIANT, Integer.valueOf(variant));
+        this.entityData.set(VARIANT, variant);
     }
 
     @Override
@@ -843,8 +844,9 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         return entityData.get(CONTROL_STATE).byteValue();
     }
 
+    @Override
     public void setControlState(byte state) {
-        entityData.set(CONTROL_STATE, Byte.valueOf(state));
+        entityData.set(CONTROL_STATE, state);
     }
 
     @Override
@@ -855,7 +857,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
 
     @Override
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource source) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource source) {
         return IafSoundRegistry.AMPHITHERE_HURT;
     }
 
@@ -899,7 +901,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     @Override
-    protected void playHurtSound(DamageSource source) {
+    protected void playHurtSound(@NotNull DamageSource source) {
         if (this.getAnimation() == this.NO_ANIMATION) {
             this.setAnimation(ANIMATION_SPEAK);
         }
@@ -912,20 +914,20 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
 
     @Nullable
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
+    public AgeableMob getBreedOffspring(@NotNull ServerLevel serverWorld, @NotNull AgeableMob ageableEntity) {
         EntityAmphithere amphithere = new EntityAmphithere(IafEntityRegistry.AMPHITHERE.get(), level);
         amphithere.setVariant(this.getVariant());
         return amphithere;
     }
 
     @Override
-    protected int getExperienceReward(Player player) {
+    protected int getExperienceReward(@NotNull Player player) {
         return 10;
     }
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setVariant(this.getRandom().nextInt(5));
         return spawnDataIn;
@@ -942,7 +944,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     @Override
-    public void travel(Vec3 travelVector) {
+    public void travel(@NotNull Vec3 travelVector) {
         if (!this.canMove() && !this.isVehicle()) {
             super.travel(travelVector.multiply(0, 1, 0));
             return;

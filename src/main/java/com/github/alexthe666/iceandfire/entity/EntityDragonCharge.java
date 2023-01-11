@@ -17,6 +17,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -79,7 +80,7 @@ public abstract class EntityDragonCharge extends Fireball implements IDragonProj
     }
 
     @Override
-    protected void onHit(HitResult movingObject) {
+    protected void onHit(@NotNull HitResult movingObject) {
         Entity shootingEntity = this.getOwner();
         if (!this.level.isClientSide) {
             if (movingObject.getType() == HitResult.Type.ENTITY) {
@@ -153,7 +154,7 @@ public abstract class EntityDragonCharge extends Fireball implements IDragonProj
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurt(@NotNull DamageSource source, float amount) {
         return false;
     }
 
@@ -163,7 +164,7 @@ public abstract class EntityDragonCharge extends Fireball implements IDragonProj
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

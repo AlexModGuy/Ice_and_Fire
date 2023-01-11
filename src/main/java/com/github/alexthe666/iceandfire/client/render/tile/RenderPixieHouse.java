@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderPixieHouse<T extends TileEntityPixieHouse> implements BlockEntityRenderer<T> {
 
@@ -31,7 +32,7 @@ public class RenderPixieHouse<T extends TileEntityPixieHouse> implements BlockEn
     }
 
     @Override
-    public void render(T entity, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(@NotNull T entity, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         int rotation = 0;
         int meta = 0;
         if (MODEL_PIXIE == null) {

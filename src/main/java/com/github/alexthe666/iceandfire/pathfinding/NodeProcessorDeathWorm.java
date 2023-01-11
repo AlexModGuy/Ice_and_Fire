@@ -11,26 +11,29 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.NodeEvaluator;
 import net.minecraft.world.level.pathfinder.Target;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
 public class NodeProcessorDeathWorm extends NodeEvaluator {
 
-    public Node getStart() {
+    @Override
+    public @NotNull Node getStart() {
         return this.getNode(Mth.floor(this.mob.getBoundingBox().minX), Mth.floor(this.mob.getBoundingBox().minY + 0.5D), Mth.floor(this.mob.getBoundingBox().minZ));
     }
 
     @Override
-    public Target getGoal(double x, double y, double z) {
+    public @NotNull Target getGoal(double x, double y, double z) {
         return new Target(this.getNode(Mth.floor(x - 0.4), Mth.floor(y + 0.5D), Mth.floor(z - 0.4)));
     }
 
     @Override
-    public BlockPathTypes getBlockPathType(BlockGetter blockaccessIn, int x, int y, int z, Mob entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
+    public @NotNull BlockPathTypes getBlockPathType(@NotNull BlockGetter blockaccessIn, int x, int y, int z, @NotNull Mob entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
         return this.getBlockPathType(blockaccessIn, x, y, z);
     }
 
-    public BlockPathTypes getBlockPathType(BlockGetter worldIn, int x, int y, int z) {
+    @Override
+    public @NotNull BlockPathTypes getBlockPathType(BlockGetter worldIn, int x, int y, int z) {
         BlockPos blockpos = new BlockPos(x, y, z);
         BlockState blockstate = worldIn.getBlockState(blockpos);
         if (!isPassable(worldIn, blockpos.below()) && (blockstate.isAir() || isPassable(worldIn, blockpos))) {
@@ -40,7 +43,8 @@ public class NodeProcessorDeathWorm extends NodeEvaluator {
         }
     }
 
-    public int getNeighbors(Node[] p_222859_1_, Node p_222859_2_) {
+    @Override
+    public int getNeighbors(Node @NotNull [] p_222859_1_, @NotNull Node p_222859_2_) {
         int i = 0;
 
         for (Direction direction : Direction.values()) {

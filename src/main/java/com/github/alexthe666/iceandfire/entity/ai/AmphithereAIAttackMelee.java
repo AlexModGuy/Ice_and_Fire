@@ -5,19 +5,16 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.Path;
 
 import java.util.EnumSet;
 
 public class AmphithereAIAttackMelee extends Goal {
-    protected final int attackInterval = 20;
     protected EntityAmphithere attacker;
     /**
      * An amount of decrementing ticks that allows the entity to attack once the tick reaches 0.
      */
     protected int attackTick;
-    Level world;
     /**
      * The speed with which the mob will approach the target
      */
@@ -39,7 +36,6 @@ public class AmphithereAIAttackMelee extends Goal {
 
     public AmphithereAIAttackMelee(EntityAmphithere amphithere, double speedIn, boolean useLongMemory) {
         this.attacker = amphithere;
-        this.world = amphithere.level;
         this.speedTowardsTarget = speedIn;
         this.longMemory = useLongMemory;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.TARGET));

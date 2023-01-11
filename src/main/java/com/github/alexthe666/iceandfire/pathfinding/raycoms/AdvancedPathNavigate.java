@@ -31,6 +31,7 @@ import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -140,6 +141,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     }
 
 
+    @Override
     @Nullable
     public PathResult moveAwayFromXYZ(final BlockPos avoid, final double range, final double speedFactor, final boolean safeDestination) {
         final BlockPos start = AbstractPathJob.prepareStart(ourEntity);
@@ -152,10 +154,10 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             ourEntity), null, speedFactor, safeDestination);
     }
 
+    @Override
     @Nullable
     public PathResult moveToRandomPos(final double range, final double speedFactor) {
-        if (pathResult != null && pathResult.getJob() instanceof PathJobRandomPos)
-        {
+        if (pathResult != null && pathResult.getJob() instanceof PathJobRandomPos) {
             return pathResult;
         }
 
@@ -170,13 +172,12 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             ourEntity), null, speedFactor, true);
     }
 
+    @Override
     @Nullable
-    public PathResult moveToRandomPosAroundX(final int range, final double speedFactor, final BlockPos pos)
-    {
+    public PathResult moveToRandomPosAroundX(final int range, final double speedFactor, final BlockPos pos) {
         if (pathResult != null
             && pathResult.getJob() instanceof PathJobRandomPos
-            && ((((PathJobRandomPos) pathResult.getJob()).posAndRangeMatch(range, pos))))
-        {
+            && ((((PathJobRandomPos) pathResult.getJob()).posAndRangeMatch(range, pos)))) {
             return pathResult;
         }
 
@@ -362,6 +363,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         return blockpos.getY() + voxelshape.max(Direction.Axis.Y);
     }
 
+    @Override
     @Nullable
     public PathResult moveToXYZ(final double x, final double y, final double z, final double speedFactor) {
         final int newX = Mth.floor(x);
@@ -374,8 +376,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
                     || (destination != null && isEqual(destination, newX, newY, newZ))
                     || (originalDestination != null && isEqual(originalDestination, newX, newY, newZ))
             )
-        )
-        {
+        ) {
             return pathResult;
         }
 
@@ -388,7 +389,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
                 desiredPos,
                 (int) ourEntity.getAttribute(Attributes.FOLLOW_RANGE).getValue(),
                 ourEntity),
-                desiredPos, speedFactor, true);
+            desiredPos, speedFactor, true);
     }
 
     @Override
@@ -400,7 +401,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     //Return a new WalkNodeProcessor for safety reasons eg if the entity
     //has a passenger this method get's called and returning null is not a great idea
     @Override
-    protected PathFinder createPathFinder(final int p_179679_1_) {
+    protected @NotNull PathFinder createPathFinder(final int p_179679_1_) {
         return new PathFinder(new WalkNodeEvaluator(), p_179679_1_);
     }
 
@@ -429,17 +430,17 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
 
 
     @Override
-    protected Vec3 getTempMobPos() {
+    protected @NotNull Vec3 getTempMobPos() {
         return this.ourEntity.position();
     }
 
     @Override
-    public Path createPath(final BlockPos pos, final int accuracy) {
+    public Path createPath(final @NotNull BlockPos pos, final int accuracy) {
         return null;
     }
 
     @Override
-    protected boolean canMoveDirectly(final Vec3 start, final Vec3 end) {
+    protected boolean canMoveDirectly(final @NotNull Vec3 start, final @NotNull Vec3 end) {
         // TODO improve road walking. This is better in some situations, but still not great.
         return super.canMoveDirectly(start, end);
     }
@@ -794,6 +795,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         stop();
     }
 
+    @Override
     public void recomputePath() {
     }
 
@@ -801,7 +803,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
      * Don't let vanilla rapidly discard paths, set a timeout before its allowed to use stuck.
      */
     @Override
-    protected void doStuckDetection(final Vec3 positionVec3) {
+    protected void doStuckDetection(final @NotNull Vec3 positionVec3) {
         // Do nothing, unstuck is checked on tick, not just when we have a path
     }
 
@@ -867,6 +869,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         getPathingOptions().setCanSwim(canSwim);
     }
 
+    @Override
     public BlockPos getDesiredPos() {
         return desiredPos;
     }

@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -42,12 +43,12 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag compound) {
+    protected void readAdditionalSaveData(@NotNull CompoundTag compound) {
 
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag compound) {
+    protected void addAdditionalSaveData(@NotNull CompoundTag compound) {
 
     }
 
@@ -79,7 +80,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose poseIn) {
+    public @NotNull EntityDimensions getDimensions(@NotNull Pose poseIn) {
         return new EntityDimensions(getScaleX(), getScaleY(), false);
     }
 
@@ -140,7 +141,6 @@ public abstract class EntityMutlipartPart extends Entity {
                     double d0 = parent.getX() - this.getX();
                     double d1 = parent.getY() - this.getY();
                     double d2 = parent.getZ() - this.getZ();
-                    Mth.atan2(d2, d0);
                     float f2 = -((float) (Mth.atan2(d1, Mth.sqrt((float) (d0 * d0 + d2 * d2))) * (180F / (float) Math.PI)));
                     this.setXRot(this.limitAngle(this.getXRot(), f2, 5.0F));
                     this.markHurt();
@@ -192,7 +192,7 @@ public abstract class EntityMutlipartPart extends Entity {
 
 
     @Override
-    public void remove(RemovalReason reason) {
+    public void remove(@NotNull RemovalReason reason) {
         super.remove(RemovalReason.DISCARDED);
     }
 
@@ -209,7 +209,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     @Override
-    public boolean is(Entity entity) {
+    public boolean is(@NotNull Entity entity) {
         return this == entity || this.getParent() == entity;
     }
 
@@ -219,7 +219,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -251,7 +251,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public @NotNull InteractionResult interact(@NotNull Player player, @NotNull InteractionHand hand) {
         Entity parent = getParent();
         if (level.isClientSide && parent != null) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(parent.getId(), 0));
@@ -260,7 +260,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float damage) {
+    public boolean hurt(@NotNull DamageSource source, float damage) {
         Entity parent = getParent();
         if (level.isClientSide && source.getEntity() instanceof Player && parent != null) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(parent.getId(), damage * damageMultiplier));
@@ -269,7 +269,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(@NotNull DamageSource source) {
         return source == DamageSource.FALL || source == DamageSource.DROWN || source == DamageSource.IN_WALL || source == DamageSource.FALLING_BLOCK || source == DamageSource.LAVA || source.isFire() || super.isInvulnerableTo(source);
     }
 

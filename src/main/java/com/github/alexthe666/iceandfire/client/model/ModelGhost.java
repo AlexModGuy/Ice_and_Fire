@@ -115,12 +115,13 @@ public class ModelGhost extends ModelBipedBase<EntityGhost> {
         this.flap(armRight, speed_idle * 1.5F, degree_idle * 0.2F, true, 2, 0.2F, f2, 1);
         this.walk(legLeft, speed_idle * 1.5F, degree_idle * 0.4F, false, 2, 0.2F, f2, 1);
         this.walk(legRight, speed_idle * 1.5F, degree_idle * 0.4F, false, 2, 0.2F, f2, 1);
-        this.flap(body, speed_idle * 1F, degree_idle * 0.1F, true, 3, 0, f2, 1);
+        this.flap(body, speed_idle, degree_idle * 0.1F, true, 3, 0, f2, 1);
         this.bob(body, speed_idle * 0.5F, degree_idle * 4.1F, false, f2, 1);
         this.bob(body, speed_walk * 0.75F, degree_walk * 2.1F, false, f, f1);
 
     }
 
+    @Override
     public void animate(EntityGhost entity, float f, float f1, float f2, float f3, float f4, float f5) {
         animator.update(entity);
         if (animator.setAnimation(EntityGhost.ANIMATION_SCARE)) {

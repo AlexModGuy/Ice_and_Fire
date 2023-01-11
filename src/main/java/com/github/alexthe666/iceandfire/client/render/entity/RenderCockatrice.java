@@ -16,6 +16,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderCockatrice extends MobRenderer<EntityCockatrice, AdvancedEntityModel<EntityCockatrice>> {
 
@@ -38,7 +39,8 @@ public class RenderCockatrice extends MobRenderer<EntityCockatrice, AdvancedEnti
         return new Vec3(d0, d1, d2);
     }
 
-    public boolean shouldRender(EntityCockatrice livingEntityIn, Frustum camera, double camX, double camY, double camZ) {
+    @Override
+    public boolean shouldRender(@NotNull EntityCockatrice livingEntityIn, @NotNull Frustum camera, double camX, double camY, double camZ) {
         if (super.shouldRender(livingEntityIn, camera, camX, camY, camZ)) {
             return true;
         } else {
@@ -55,7 +57,8 @@ public class RenderCockatrice extends MobRenderer<EntityCockatrice, AdvancedEnti
         }
     }
 
-    public void render(EntityCockatrice entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+    @Override
+    public void render(EntityCockatrice entityIn, float entityYaw, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn) {
         if (entityIn.isBaby()) {
             model = BABY_MODEL;
         } else {
@@ -73,14 +76,14 @@ public class RenderCockatrice extends MobRenderer<EntityCockatrice, AdvancedEnti
     }
 
     @Override
-    protected void scale(EntityCockatrice entity, PoseStack matrixStackIn, float partialTickTime) {
+    protected void scale(EntityCockatrice entity, @NotNull PoseStack matrixStackIn, float partialTickTime) {
         if (entity.isBaby()) {
             matrixStackIn.scale(0.5F, 0.5F, 0.5F);
         }
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityCockatrice cockatrice) {
+    public @NotNull ResourceLocation getTextureLocation(EntityCockatrice cockatrice) {
         if (cockatrice.isBaby()) {
             return cockatrice.isHen() ? TEXTURE_HEN_CHICK : TEXTURE_ROOSTER_CHICK;
         } else {

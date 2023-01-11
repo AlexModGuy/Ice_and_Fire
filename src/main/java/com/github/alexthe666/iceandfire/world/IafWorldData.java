@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
+import org.jetbrains.annotations.NotNull;
 
 public class IafWorldData extends SavedData {
 
@@ -63,7 +64,8 @@ public class IafWorldData extends SavedData {
         return this;
     }
 
-    public CompoundTag save(CompoundTag compound) {
+    @Override
+    public @NotNull CompoundTag save(CompoundTag compound) {
         compound.putInt("Tick", this.tickCounter);
         compound.putInt("LastX", lastGeneratedDangerousStructure.getX());
         compound.putInt("LastY", lastGeneratedDangerousStructure.getY());

@@ -44,6 +44,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.MinecraftForge;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -78,7 +79,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(HASMADEHOME, Boolean.valueOf(true));
+        this.entityData.define(HASMADEHOME, Boolean.TRUE);
     }
 
     @Override
@@ -220,7 +221,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     }
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(@NotNull DamageSource source) {
         return super.isInvulnerableTo(source) || this.getAnimation() == ANIMATION_DIGNEST;
     }
 
@@ -311,7 +312,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     }
 
     @Override
-    public boolean doHurtTarget(Entity entityIn) {
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         if (this.getGrowthStage() < 2) {
             return false;
         }

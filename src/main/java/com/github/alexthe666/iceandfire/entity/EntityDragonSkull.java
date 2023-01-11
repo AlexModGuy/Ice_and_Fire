@@ -23,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -42,7 +43,8 @@ public class EntityDragonSkull extends Animal implements IBlacklistedFromStatues
         // setScale(this.getDragonAge());
     }
 
-    public boolean isFood(ItemStack stack) {
+    @Override
+    public boolean isFood(@NotNull ItemStack stack) {
         return false;
     }
 
@@ -54,6 +56,7 @@ public class EntityDragonSkull extends Animal implements IBlacklistedFromStatues
             .add(Attributes.MOVEMENT_SPEED, 0D);
     }
 
+    @Override
     public boolean canBreatheUnderwater() {
         return true;
     }
@@ -82,10 +85,10 @@ public class EntityDragonSkull extends Animal implements IBlacklistedFromStatues
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.getEntityData().define(DRAGON_TYPE, Integer.valueOf(0));
-        this.getEntityData().define(DRAGON_AGE, Integer.valueOf(0));
-        this.getEntityData().define(DRAGON_STAGE, Integer.valueOf(0));
-        this.getEntityData().define(DRAGON_DIRECTION, Float.valueOf(0F));
+        this.getEntityData().define(DRAGON_TYPE, 0);
+        this.getEntityData().define(DRAGON_AGE, 0);
+        this.getEntityData().define(DRAGON_STAGE, 0);
+        this.getEntityData().define(DRAGON_DIRECTION, 0F);
     }
 
     public float getYaw() {
@@ -121,12 +124,12 @@ public class EntityDragonSkull extends Animal implements IBlacklistedFromStatues
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource damageSourceIn) {
+    public SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
         return null;
     }
 
     @Override
-    public boolean hurt(DamageSource var1, float var2) {
+    public boolean hurt(@NotNull DamageSource var1, float var2) {
         this.turnIntoItem();
         return super.hurt(var1, var2);
     }
@@ -159,12 +162,12 @@ public class EntityDragonSkull extends Animal implements IBlacklistedFromStatues
 
     @Nullable
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
+    public AgeableMob getBreedOffspring(@NotNull ServerLevel serverWorld, @NotNull AgeableMob ageable) {
         return null;
     }
 
     @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+    public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         if (player.isShiftKeyDown()) {
             this.setYaw(player.getYRot());
         }
@@ -206,7 +209,7 @@ public class EntityDragonSkull extends Animal implements IBlacklistedFromStatues
     }
 
     @Override
-    protected void doPush(Entity entity) {
+    protected void doPush(@NotNull Entity entity) {
     }
 
     @Override

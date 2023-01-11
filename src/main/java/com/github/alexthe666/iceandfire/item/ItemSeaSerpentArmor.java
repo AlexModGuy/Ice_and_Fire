@@ -19,6 +19,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -32,7 +33,8 @@ public class ItemSeaSerpentArmor extends ArmorItem {
         this.armor_type = armorType;
     }
 
-    public String getDescriptionId() {
+    @Override
+    public @NotNull String getDescriptionId() {
         switch (this.slot) {
             case HEAD:
                 return "item.iceandfire.sea_serpent_helmet";
@@ -57,6 +59,7 @@ public class ItemSeaSerpentArmor extends ArmorItem {
         });
     }
 
+    @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         return "iceandfire:textures/models/armor/armor_tide_" + armor_type.resourceName + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png");
     }
@@ -75,7 +78,7 @@ public class ItemSeaSerpentArmor extends ArmorItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
 
         tooltip.add(new TranslatableComponent("sea_serpent." + armor_type.resourceName).withStyle(armor_type.color));
         tooltip.add(new TranslatableComponent("item.iceandfire.sea_serpent_armor.desc_0").withStyle(ChatFormatting.GRAY));

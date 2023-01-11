@@ -4,6 +4,7 @@ import com.github.alexthe666.citadel.client.model.basic.BasicEntityModel;
 import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.EntityChainTie;
 import com.google.common.collect.ImmutableList;
+import org.jetbrains.annotations.NotNull;
 
 public class ModelChainTie extends BasicEntityModel<EntityChainTie> {
     public BasicModelPart knotRenderer;
@@ -18,7 +19,8 @@ public class ModelChainTie extends BasicEntityModel<EntityChainTie> {
         this.knotRenderer.setRotationPoint(0.0F, 0.0F, 0.0F);
     }
 
-    public void setupAnim(EntityChainTie entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    @Override
+    public void setupAnim(@NotNull EntityChainTie entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.knotRenderer.rotateAngleY = netHeadYaw * 0.017453292F;
         this.knotRenderer.rotateAngleX = headPitch * 0.017453292F;
     }

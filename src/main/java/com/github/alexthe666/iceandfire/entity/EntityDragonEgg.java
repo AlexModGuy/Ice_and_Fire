@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -42,7 +43,7 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(@NotNull CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Color", (byte) this.getEggType().ordinal());
         tag.putInt("DragonAge", this.getDragonAge());
@@ -58,7 +59,7 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setEggType(EnumDragonEgg.values()[tag.getInt("Color")]);
         this.setDragonAge(tag.getInt("DragonAge"));
@@ -79,8 +80,8 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.getEntityData().define(DRAGON_TYPE, Integer.valueOf(0));
-        this.getEntityData().define(DRAGON_AGE, Integer.valueOf(0));
+        this.getEntityData().define(DRAGON_TYPE, 0);
+        this.getEntityData().define(DRAGON_AGE, 0);
         this.getEntityData().define(OWNER_UNIQUE_ID, Optional.empty());
     }
 
@@ -124,27 +125,27 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource damageSourceIn) {
+    public SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
         return null;
     }
 
     @Override
-    public Iterable<ItemStack> getArmorSlots() {
+    public @NotNull Iterable<ItemStack> getArmorSlots() {
         return ImmutableList.of();
     }
 
     @Override
-    public ItemStack getItemBySlot(EquipmentSlot slotIn) {
+    public @NotNull ItemStack getItemBySlot(@NotNull EquipmentSlot slotIn) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItemSlot(EquipmentSlot slotIn, ItemStack stack) {
+    public void setItemSlot(@NotNull EquipmentSlot slotIn, @NotNull ItemStack stack) {
 
     }
 
     @Override
-    public boolean hurt(DamageSource var1, float var2) {
+    public boolean hurt(@NotNull DamageSource var1, float var2) {
         if (!level.isClientSide && !var1.isBypassInvul() && !isRemoved()) {
             this.spawnAtLocation(this.getItem().getItem(), 1);
         }
@@ -175,12 +176,12 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    public HumanoidArm getMainArm() {
+    public @NotNull HumanoidArm getMainArm() {
         return HumanoidArm.RIGHT;
     }
 
     @Override
-    protected void doPush(Entity entity) {
+    protected void doPush(@NotNull Entity entity) {
     }
 
     @Override

@@ -11,6 +11,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.NotNull;
 
 public class ContainerHippocampus extends AbstractContainerMenu {
     private final Container hippocampusInventory;
@@ -32,7 +33,7 @@ public class ContainerHippocampus extends AbstractContainerMenu {
         hippocampusInventory.startOpen(player);
         this.addSlot(new Slot(hippocampusInventory, 0, 8, 18) {
             @Override
-            public boolean mayPlace(ItemStack stack) {
+            public boolean mayPlace(@NotNull ItemStack stack) {
                 return stack.getItem() == Items.SADDLE && !this.hasItem();
             }
 
@@ -50,7 +51,7 @@ public class ContainerHippocampus extends AbstractContainerMenu {
         });
         this.addSlot(new Slot(hippocampusInventory, 1, 8, 36) {
             @Override
-            public boolean mayPlace(ItemStack stack) {
+            public boolean mayPlace(@NotNull ItemStack stack) {
                 return stack.getItem() == Blocks.CHEST.asItem() && !this.hasItem();
             }
 
@@ -69,7 +70,7 @@ public class ContainerHippocampus extends AbstractContainerMenu {
         this.addSlot(new Slot(hippocampusInventory, 2, 8, 52) {
 
             @Override
-            public boolean mayPlace(ItemStack stack) {
+            public boolean mayPlace(@NotNull ItemStack stack) {
                 return EntityHippocampus.getIntFromArmor(stack) != 0;
             }
 
@@ -100,7 +101,7 @@ public class ContainerHippocampus extends AbstractContainerMenu {
                     }
 
                     @Override
-                    public boolean mayPlace(ItemStack stack) {
+                    public boolean mayPlace(@NotNull ItemStack stack) {
                         return ContainerHippocampus.this.hippocampus != null && ContainerHippocampus.this.hippocampus.isChested();
                     }
                 });
@@ -120,7 +121,7 @@ public class ContainerHippocampus extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player playerIn, int index) {
+    public @NotNull ItemStack quickMoveStack(@NotNull Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -157,12 +158,12 @@ public class ContainerHippocampus extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(Player playerIn) {
+    public boolean stillValid(@NotNull Player playerIn) {
         return this.hippocampusInventory.stillValid(playerIn) && this.hippocampus.isAlive() && this.hippocampus.distanceTo(playerIn) < 8.0F;
     }
 
     @Override
-    public void removed(Player playerIn) {
+    public void removed(@NotNull Player playerIn) {
         super.removed(playerIn);
         this.hippocampusInventory.stopOpen(playerIn);
     }

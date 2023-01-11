@@ -39,6 +39,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -110,9 +111,9 @@ public class EntityPixie extends TamableAnimal {
         }
         byte b0 = this.entityData.get(DATA_FLAGS_ID).byteValue();
         if (sitting) {
-            this.entityData.set(DATA_FLAGS_ID, Byte.valueOf((byte) (b0 | 1)));
+            this.entityData.set(DATA_FLAGS_ID, (byte) (b0 | 1));
         } else {
-            this.entityData.set(DATA_FLAGS_ID, Byte.valueOf((byte) (b0 & -2)));
+            this.entityData.set(DATA_FLAGS_ID, (byte) (b0 & -2));
         }
     }
 
@@ -121,7 +122,8 @@ public class EntityPixie extends TamableAnimal {
         return this.isPixieSitting();
     }
 
-    protected int getExperienceReward(Player player) {
+    @Override
+    protected int getExperienceReward(@NotNull Player player) {
         return 3;
     }
 
@@ -133,7 +135,8 @@ public class EntityPixie extends TamableAnimal {
             .add(Attributes.MOVEMENT_SPEED, 0.25D);
     }
 
-    public boolean hurt(DamageSource source, float amount) {
+    @Override
+    public boolean hurt(@NotNull DamageSource source, float amount) {
         if (!this.level.isClientSide && this.getRandom().nextInt(3) == 0 && !this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
             this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0);
             this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
@@ -147,7 +150,7 @@ public class EntityPixie extends TamableAnimal {
     }
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(@NotNull DamageSource source) {
         boolean invulnerable = super.isInvulnerableTo(source);
         if (!invulnerable) {
             Entity owner = this.getOwner();
@@ -158,7 +161,8 @@ public class EntityPixie extends TamableAnimal {
         return invulnerable;
     }
 
-    public void die(DamageSource cause) {
+    @Override
+    public void die(@NotNull DamageSource cause) {
         if (!this.level.isClientSide && !this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
             this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0);
             this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
@@ -172,20 +176,23 @@ public class EntityPixie extends TamableAnimal {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(COLOR, Integer.valueOf(0));
-        this.entityData.define(COMMAND, Integer.valueOf(0));
+        this.entityData.define(COLOR, 0);
+        this.entityData.define(COMMAND, 0);
     }
 
-    protected void doPush(Entity entityIn) {
+    @Override
+    protected void doPush(@NotNull Entity entityIn) {
         if (this.getOwner() != entityIn) {
             entityIn.push(this);
         }
     }
 
-    protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+    @Override
+    protected void checkFallDamage(double y, boolean onGroundIn, @NotNull BlockState state, @NotNull BlockPos pos) {
     }
 
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+    @Override
+    public @NotNull InteractionResult mobInteract(@NotNull Player player, @NotNull InteractionHand hand) {
         if (this.isOwnedBy(player)) {
 
             if (player.getItemInHand(hand).getItem() == Items.SUGAR && this.getHealth() < this.getMaxHealth()) {
@@ -246,6 +253,7 @@ public class EntityPixie extends TamableAnimal {
     public void fall(float distance, float damageMultiplier) {
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new PixieAIFollowOwner(this, 1.0D, 2.0F, 4.0F));
@@ -265,7 +273,7 @@ public class EntityPixie extends TamableAnimal {
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setColor(this.random.nextInt(5));
         this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
@@ -287,15 +295,16 @@ public class EntityPixie extends TamableAnimal {
     }
 
     public int getCommand() {
-        return Integer.valueOf(this.entityData.get(COMMAND).intValue());
+        return this.entityData.get(COMMAND).intValue();
     }
 
     public void setCommand(int command) {
-        this.entityData.set(COMMAND, Integer.valueOf(command));
+        this.entityData.set(COMMAND, command);
         this.setPixieSitting(command == 1);
     }
 
 
+    @Override
     public void aiStep() {
         super.aiStep();
 
@@ -325,7 +334,6 @@ public class EntityPixie extends TamableAnimal {
 
         if (!this.isPixieSitting() && !this.isBeyondHeight()) {
             this.setDeltaMovement(this.getDeltaMovement().add(0, 0.08, 0));
-        } else {
         }
         if (level.isClientSide) {
             IceAndFire.PROXY.spawnParticle(EnumParticles.If_Pixie, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2F) - (double) this.getBbWidth(), this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()), this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2F) - (double) this.getBbWidth(), PARTICLE_RGB[this.getColor()][0], PARTICLE_RGB[this.getColor()][1], PARTICLE_RGB[this.getColor()][2]);
@@ -392,7 +400,7 @@ public class EntityPixie extends TamableAnimal {
 
     @Nullable
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
+    public AgeableMob getBreedOffspring(@NotNull ServerLevel serverWorld, @NotNull AgeableMob ageable) {
         return null;
     }
 
@@ -408,23 +416,26 @@ public class EntityPixie extends TamableAnimal {
         return this.isTame() && this.getOwner() != null && this.distanceToSqr(this.getOwner()) < 100;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getAmbientSound() {
         return IafSoundRegistry.PIXIE_IDLE;
     }
 
+    @Override
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
         return IafSoundRegistry.PIXIE_HURT;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getDeathSound() {
         return IafSoundRegistry.PIXIE_DIE;
     }
 
     @Override
-    public boolean isAlliedTo(Entity entityIn) {
+    public boolean isAlliedTo(@NotNull Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
             if (entityIn == livingentity) {
@@ -446,6 +457,7 @@ public class EntityPixie extends TamableAnimal {
             super(pixie);
         }
 
+        @Override
         public void tick() {
             float speedMod = 1;
             if (EntityPixie.this.slowSpeed) {

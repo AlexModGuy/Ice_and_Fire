@@ -268,7 +268,7 @@ public class MyrmexHive {
             }
         }
 
-        this.playerReputation.put(playerName, Integer.valueOf(j));
+        this.playerReputation.put(playerName, j);
         return j;
     }
 
@@ -348,10 +348,10 @@ public class MyrmexHive {
             CompoundTag CompoundNBT1 = nbttaglist1.getCompound(j);
 
             if (CompoundNBT1.hasUUID("UUID")) {
-                this.playerReputation.put(CompoundNBT1.getUUID("UUID"), Integer.valueOf(CompoundNBT1.getInt("S")));
+                this.playerReputation.put(CompoundNBT1.getUUID("UUID"), CompoundNBT1.getInt("S"));
             } else {
                 //World is never set here, so this will always be offline UUIDs, sadly there is no way to convert this.
-                this.playerReputation.put(findUUID(CompoundNBT1.getString("Name")), Integer.valueOf(CompoundNBT1.getInt("S")));
+                this.playerReputation.put(findUUID(CompoundNBT1.getString("Name")), CompoundNBT1.getInt("S"));
             }
         }
     }

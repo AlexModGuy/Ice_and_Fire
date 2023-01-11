@@ -22,9 +22,9 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class BlockDragonforgeBricks extends BaseEntityBlock implements IDragonProof {
 
@@ -41,7 +41,7 @@ public class BlockDragonforgeBricks extends BaseEntityBlock implements IDragonPr
 		);
 
         this.isFire = isFire;
-        this.registerDefaultState(this.getStateDefinition().any().setValue(GRILL, Boolean.valueOf(false)));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(GRILL, Boolean.FALSE));
     }
 
     static String name(int dragonType) {
@@ -49,11 +49,12 @@ public class BlockDragonforgeBricks extends BaseEntityBlock implements IDragonPr
     }
 
     @Override
-    public PushReaction getPistonPushReaction(BlockState state) {
+    public @NotNull PushReaction getPistonPushReaction(@NotNull BlockState state) {
         return PushReaction.BLOCK;
     }
 
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult resultIn) {
+    @Override
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand handIn, BlockHitResult resultIn) {
         if (this.getConnectedTileEntity(worldIn, resultIn.getBlockPos()) != null) {
             TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, resultIn.getBlockPos());
             if (forge != null && forge.fireType == isFire) {
@@ -71,23 +72,6 @@ public class BlockDragonforgeBricks extends BaseEntityBlock implements IDragonPr
         return InteractionResult.FAIL;
     }
 
-    public void updateTick(Level worldIn, BlockPos pos, BlockState state, Random rand) {
-        if (!worldIn.isClientSide) {
-            this.checkGrill(worldIn, pos);
-        }
-    }
-
-    public int tickRate(Level worldIn) {
-        return 3;
-    }
-
-    private void checkGrill(Level worldIn, BlockPos pos) {
-        BlockState state = worldIn.getBlockState(pos);
-        boolean missingFurnace = getConnectedTileEntity(worldIn, pos) == null;
-        worldIn.setBlockAndUpdate(pos, state.setValue(GRILL, !missingFurnace));
-
-    }
-
     private TileEntityDragonforge getConnectedTileEntity(Level worldIn, BlockPos pos) {
         for (Direction facing : Direction.values()) {
             if (worldIn.getBlockEntity(pos.relative(facing)) != null && worldIn.getBlockEntity(pos.relative(facing)) instanceof TileEntityDragonforge) {
@@ -100,25 +84,19 @@ public class BlockDragonforgeBricks extends BaseEntityBlock implements IDragonPr
         return null;
     }
 
-    public BlockState getStateFromMeta(int meta) {
-        return this.defaultBlockState().setValue(GRILL, Boolean.valueOf(meta > 0));
-    }
-
-    public int getMetaFromState(BlockState state) {
-        return state.getValue(GRILL).booleanValue() ? 1 : 0;
-    }
-
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(GRILL);
     }
 
-    public RenderShape getRenderShape(BlockState state) {
+    @Override
+    public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.MODEL;
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new TileEntityDragonforgeBrick(pos, state);
     }
 }

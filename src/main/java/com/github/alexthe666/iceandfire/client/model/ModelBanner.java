@@ -4,6 +4,7 @@ import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.model.ListModel;
 import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 public class ModelBanner extends ListModel {
     public final BasicModelPart flag = getModelRender();
@@ -23,12 +24,12 @@ public class ModelBanner extends ListModel {
     }
 
     @Override
-    public void setupAnim(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(@NotNull Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
     }
 
     @Override
-    public Iterable<BasicModelPart> parts() {
+    public @NotNull Iterable<BasicModelPart> parts() {
         return ImmutableList.of(flag, pole, bar);
     }
 

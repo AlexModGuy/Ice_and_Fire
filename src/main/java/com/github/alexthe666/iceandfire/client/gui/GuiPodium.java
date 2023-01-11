@@ -8,6 +8,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import org.jetbrains.annotations.NotNull;
 
 public class GuiPodium extends AbstractContainerScreen<ContainerPodium> {
 
@@ -19,7 +20,7 @@ public class GuiPodium extends AbstractContainerScreen<ContainerPodium> {
     }
 
     @Override
-    protected void renderLabels(PoseStack ms, int x, int y) {
+    protected void renderLabels(@NotNull PoseStack ms, int x, int y) {
         if (menu != null) {
             String s = I18n.get("block.iceandfire.podium");
             this.getMinecraft().font.draw(ms, s, this.imageWidth / 2 - this.getMinecraft().font.width(s) / 2, 6, 4210752);
@@ -29,14 +30,14 @@ public class GuiPodium extends AbstractContainerScreen<ContainerPodium> {
 
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(@NotNull PoseStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, PODUIM_TEXTURE);
         int i = (this.width - this.imageWidth) / 2;

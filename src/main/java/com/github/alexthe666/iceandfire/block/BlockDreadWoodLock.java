@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.block;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,6 +19,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.NotNull;
 
 public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlock {
     public static final BooleanProperty PLAYER_PLACED = BooleanProperty.create("player_placed");
@@ -29,14 +29,14 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
             Properties
                 .of(Material.WOOD)
                 .strength(-1.0F, 1000000F)
-    			.sound(SoundType.WOOD)
-		);
-        this.registerDefaultState(this.getStateDefinition().any().setValue(PLAYER_PLACED, Boolean.valueOf(false)));
+                .sound(SoundType.WOOD)
+        );
+        this.registerDefaultState(this.getStateDefinition().any().setValue(PLAYER_PLACED, Boolean.FALSE));
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public float getDestroyProgress(BlockState state, Player player, BlockGetter worldIn, BlockPos pos) {
+    public float getDestroyProgress(BlockState state, @NotNull Player player, @NotNull BlockGetter worldIn, @NotNull BlockPos pos) {
         if (state.getValue(PLAYER_PLACED)) {
             float f = 8f;
             //Code from super method
@@ -45,7 +45,8 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
         return super.getDestroyProgress(state, player, worldIn, pos);
     }
 
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult resultIn) {
+    @Override
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, @NotNull BlockHitResult resultIn) {
         ItemStack stack = player.getItemInHand(handIn);
         if (stack.getItem() == IafItemRegistry.DREAD_KEY.get()) {
             if (!player.isCreative()) {
@@ -70,6 +71,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
     }
 
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(PLAYER_PLACED);
     }

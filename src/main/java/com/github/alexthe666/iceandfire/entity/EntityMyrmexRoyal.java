@@ -40,6 +40,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -103,7 +104,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(FLYING, Boolean.valueOf(false));
+        this.entityData.define(FLYING, Boolean.FALSE);
     }
 
     protected void switchNavigator(boolean onLand) {
@@ -266,7 +267,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     @Override
-    public boolean canMate(Animal otherAnimal) {
+    public boolean canMate(@NotNull Animal otherAnimal) {
         if (otherAnimal == this || otherAnimal == null) {
             return false;
         } else if (otherAnimal.getClass() != this.getClass()) {
@@ -333,7 +334,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     @Override
-    public boolean doHurtTarget(Entity entityIn) {
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         if (this.getGrowthStage() < 2) {
             return false;
         }
@@ -374,7 +375,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     @Override
-    protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+    protected void checkFallDamage(double y, boolean onGroundIn, @NotNull BlockState state, @NotNull BlockPos pos) {
 
     }
 

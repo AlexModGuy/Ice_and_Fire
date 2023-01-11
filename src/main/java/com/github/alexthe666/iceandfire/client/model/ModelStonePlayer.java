@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.client.model;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
+import org.jetbrains.annotations.NotNull;
 
 public class ModelStonePlayer extends HumanoidModel<EntityStoneStatue> {
 
@@ -10,6 +11,7 @@ public class ModelStonePlayer extends HumanoidModel<EntityStoneStatue> {
         super(p_170677_);
     }
 
-    public void setupAnim(EntityStoneStatue entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    @Override
+    public void setupAnim(@NotNull EntityStoneStatue entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
     }
 }

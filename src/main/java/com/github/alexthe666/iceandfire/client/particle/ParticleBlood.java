@@ -11,6 +11,7 @@ import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class ParticleBlood extends TextureSheetParticle {
     private static final ResourceLocation BLOOD = new ResourceLocation("iceandfire:textures/particles/blood.png");
@@ -22,7 +23,7 @@ public class ParticleBlood extends TextureSheetParticle {
     }
 
     @Override
-    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
+    public void render(@NotNull VertexConsumer buffer, Camera renderInfo, float partialTicks) {
         Vec3 inerp = renderInfo.getPosition();
         quadSize = 0.125F * (this.lifetime - (this.age));
         quadSize = quadSize * 0.09F;
@@ -74,6 +75,7 @@ public class ParticleBlood extends TextureSheetParticle {
     }
 
 
+    @Override
     public int getLightColor(float partialTick) {
         return 240;
     }
@@ -83,7 +85,7 @@ public class ParticleBlood extends TextureSheetParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
+    public @NotNull ParticleRenderType getRenderType() {
         return ParticleRenderType.CUSTOM;
     }
 

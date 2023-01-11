@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -27,11 +28,13 @@ public class RenderDeathWorm extends MobRenderer<EntityDeathWorm, ModelDeathWorm
     }
 
 
-    protected int getBlockLightLevel(EntityDeathWorm entityIn, BlockPos partialTicks) {
+    @Override
+    protected int getBlockLightLevel(EntityDeathWorm entityIn, @NotNull BlockPos partialTicks) {
         return entityIn.isOnFire() ? 15 : entityIn.getWormBrightness(false);
     }
 
-    protected int getSkyLightLevel(EntityDeathWorm entity, BlockPos pos) {
+    @Override
+    protected int getSkyLightLevel(EntityDeathWorm entity, @NotNull BlockPos pos) {
         return entity.getWormBrightness(true);
     }
 

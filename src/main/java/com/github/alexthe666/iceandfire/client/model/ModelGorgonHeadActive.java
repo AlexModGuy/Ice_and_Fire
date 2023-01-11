@@ -496,6 +496,7 @@ public class ModelGorgonHeadActive extends AdvancedEntityModel<Entity> {
     }
 
 
+    @Override
     public void setRotateAngle(AdvancedModelBox modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;

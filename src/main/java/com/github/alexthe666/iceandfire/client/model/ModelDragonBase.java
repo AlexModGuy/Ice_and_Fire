@@ -7,10 +7,12 @@ import net.minecraft.world.entity.Entity;
 
 public abstract class ModelDragonBase<T extends Entity> extends AdvancedEntityModel<T> implements ICustomStatueModel {
 
+    @Override
     public void rotate(ModelAnimator animator, AdvancedModelBox model, float x, float y, float z) {
         animator.rotate(model, (float) Math.toRadians(x), (float) Math.toRadians(y), (float) Math.toRadians(z));
     }
 
+    @Override
     public void rotateMinus(ModelAnimator animator, AdvancedModelBox model, float x, float y, float z) {
         animator.rotate(model, (float) Math.toRadians(x) - model.defaultRotationX, (float) Math.toRadians(y) - model.defaultRotationY, (float) Math.toRadians(z) - model.defaultRotationZ);
     }
@@ -51,6 +53,7 @@ public abstract class ModelDragonBase<T extends Entity> extends AdvancedEntityMo
         model.rotationPointZ += progress * z / 20.0F;
     }
 
+    @Override
     public void setRotateAngle(AdvancedModelBox modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;

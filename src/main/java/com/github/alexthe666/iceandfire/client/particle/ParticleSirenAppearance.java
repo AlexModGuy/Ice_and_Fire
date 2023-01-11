@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
 public class ParticleSirenAppearance extends Particle {
     private final Model model = new ModelSiren();
@@ -27,11 +28,13 @@ public class ParticleSirenAppearance extends Particle {
         this.sirenType = sirenType;
     }
 
-    public ParticleRenderType getRenderType() {
+    @Override
+    public @NotNull ParticleRenderType getRenderType() {
         return ParticleRenderType.CUSTOM;
     }
 
-    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
+    @Override
+    public void render(@NotNull VertexConsumer buffer, Camera renderInfo, float partialTicks) {
         float f = ((float) this.age + partialTicks) / (float) this.lifetime;
         float f1 = 0.05F + 0.5F * Mth.sin(f * (float) Math.PI);
         PoseStack matrixstack = new PoseStack();

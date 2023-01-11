@@ -33,6 +33,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -51,6 +52,7 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
         super(type, worldIn);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
@@ -96,6 +98,7 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
         this.entityData.define(CUSTOM_ARMOR_FEET, Boolean.valueOf(false));
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
@@ -113,7 +116,8 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+    @Override
+    protected void populateDefaultEquipmentSlots(@NotNull DifficultyInstance difficulty) {
         super.populateDefaultEquipmentSlots(difficulty);
         if (random.nextFloat() < 0.75F) {
             double chance = random.nextFloat();
@@ -149,8 +153,9 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
         setBodyArmorVariant(random.nextInt(8));
     }
 
+    @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setAnimation(ANIMATION_SPAWN);
         this.populateDefaultEquipmentSlots(difficultyIn);
@@ -167,6 +172,7 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
         animationTick = tick;
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("ArmorVariant", getBodyArmorVariant());
@@ -263,16 +269,19 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
         return true;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getAmbientSound() {
         return SoundEvents.STRAY_AMBIENT;
     }
 
+    @Override
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource source) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource source) {
         return SoundEvents.STRAY_HURT;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getDeathSound() {
         return SoundEvents.STRAY_DEATH;

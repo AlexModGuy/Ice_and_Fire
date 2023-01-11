@@ -12,6 +12,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -21,7 +22,8 @@ public class CustomizeToDragon extends LootItemConditionalFunction {
         super(conditionsIn);
     }
 
-    protected ItemStack run(ItemStack stack, LootContext context) {
+    @Override
+    protected @NotNull ItemStack run(ItemStack stack, @NotNull LootContext context) {
         if (!stack.isEmpty() && context.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof EntityDragonBase) {
             Random random = new Random();
             EntityDragonBase dragon = (EntityDragonBase) context.getParamOrNull(LootContextParams.THIS_ENTITY);
@@ -65,7 +67,7 @@ public class CustomizeToDragon extends LootItemConditionalFunction {
     }
 
     @Override
-    public LootItemFunctionType getType() {
+    public @NotNull LootItemFunctionType getType() {
         return IafLootRegistry.CUSTOMIZE_TO_DRAGON;
     }
 
@@ -75,11 +77,12 @@ public class CustomizeToDragon extends LootItemConditionalFunction {
             super();
         }
 
-        public void serialize(JsonObject object, CustomizeToDragon functionClazz, JsonSerializationContext serializationContext) {
+        @Override
+        public void serialize(@NotNull JsonObject object, @NotNull CustomizeToDragon functionClazz, @NotNull JsonSerializationContext serializationContext) {
         }
 
         @Override
-        public CustomizeToDragon deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditionsIn) {
+        public @NotNull CustomizeToDragon deserialize(@NotNull JsonObject object, @NotNull JsonDeserializationContext deserializationContext, LootItemCondition @NotNull [] conditionsIn) {
             return new CustomizeToDragon(conditionsIn);
         }
     }

@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderGhostSword extends EntityRenderer<EntityGhostSword> {
 
@@ -24,12 +25,12 @@ public class RenderGhostSword extends EntityRenderer<EntityGhostSword> {
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntityGhostSword entity) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull EntityGhostSword entity) {
         return TextureAtlas.LOCATION_BLOCKS;
     }
 
     @Override
-    public void render(EntityGhostSword entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+    public void render(EntityGhostSword entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) - 90.0F));
         matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot())));

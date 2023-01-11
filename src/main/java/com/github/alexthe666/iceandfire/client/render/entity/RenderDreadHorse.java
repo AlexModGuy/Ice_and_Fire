@@ -7,6 +7,7 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderDreadHorse extends MobRenderer<EntityDreadHorse, HorseModel<EntityDreadHorse>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/dread/dread_knight_horse.png");
@@ -17,7 +18,8 @@ public class RenderDreadHorse extends MobRenderer<EntityDreadHorse, HorseModel<E
         this.addLayer(new LayerGenericGlowing(this, TEXTURE_EYES));
     }
 
-    public ResourceLocation getTextureLocation(EntityDreadHorse entity) {
+    @Override
+    public @NotNull ResourceLocation getTextureLocation(@NotNull EntityDreadHorse entity) {
         return TEXTURE;
     }
 }

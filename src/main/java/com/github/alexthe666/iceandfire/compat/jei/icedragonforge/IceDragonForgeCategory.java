@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,28 +26,27 @@ public class IceDragonForgeCategory implements IRecipeCategory<DragonForgeRecipe
     }
 
     @Override
-    public ResourceLocation getUid() {
+    public @NotNull ResourceLocation getUid() {
         return IceAndFireJEIPlugin.ICE_DRAGON_FORGE_ID;
     }
 
     @Override
-    public Class<? extends DragonForgeRecipe> getRecipeClass() {
+    public @NotNull Class<? extends DragonForgeRecipe> getRecipeClass() {
         return DragonForgeRecipe.class;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public Component getTitle() {
+    public @NotNull Component getTitle() {
         return new TranslatableComponent("iceandfire.ice_dragon_forge");
     }
 
     @Override
-    public IDrawable getBackground() {
+    public @NotNull IDrawable getBackground() {
         return drawable;
     }
 
     @Override
-    public IDrawable getIcon() {
+    public @NotNull IDrawable getIcon() {
         return null;
     }
 
@@ -60,7 +60,7 @@ public class IceDragonForgeCategory implements IRecipeCategory<DragonForgeRecipe
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, DragonForgeRecipe dragonForgeRecipe, IIngredients iIngredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, @NotNull DragonForgeRecipe dragonForgeRecipe, @NotNull IIngredients iIngredients) {
         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
         guiItemStacks.init(0, true, 64, 29);
         guiItemStacks.init(1, true, 82, 29);

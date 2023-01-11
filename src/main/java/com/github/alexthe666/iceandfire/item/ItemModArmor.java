@@ -8,6 +8,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Calendar;
@@ -20,17 +21,19 @@ public class ItemModArmor extends ArmorItem {
         super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
     }
 
-    public String getDescriptionId(ItemStack stack) {
+    @Override
+    public @NotNull String getDescriptionId(@NotNull ItemStack stack) {
         if (this == IafItemRegistry.EARPLUGS.get()) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
-            if (calendar.get(2) + 1 == 4 && calendar.get(5) == 1) {
+            if (calendar.get(Calendar.MONTH) + 1 == 4 && calendar.get(Calendar.DATE) == 1) {
                 return "item.iceandfire.air_pods";
             }
         }
         return super.getDescriptionId(stack);
     }
 
+    @Override
     @Nullable
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         if (this.material == IafItemRegistry.MYRMEX_DESERT_ARMOR_MATERIAL) {
@@ -49,11 +52,11 @@ public class ItemModArmor extends ArmorItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (this == IafItemRegistry.EARPLUGS.get()) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
-            if (calendar.get(2) + 1 == 4 && calendar.get(5) == 1) {
+            if (calendar.get(Calendar.MONTH) + 1 == 4 && calendar.get(Calendar.DATE) == 1) {
                 tooltip.add(new TranslatableComponent("item.iceandfire.air_pods.desc").withStyle(ChatFormatting.GREEN));
             }
         }

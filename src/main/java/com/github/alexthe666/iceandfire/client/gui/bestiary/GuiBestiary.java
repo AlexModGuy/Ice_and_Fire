@@ -29,12 +29,12 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-@SuppressWarnings("resource")
 public class GuiBestiary extends Screen {
     protected static final int X = 390;
     protected static final int Y = 245;
@@ -141,7 +141,7 @@ public class GuiBestiary extends Screen {
     }
 
     @Override
-    public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack ms, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(ms);
         for (Widget widget : this.renderables) {
             if (widget instanceof IndexPageButton) {

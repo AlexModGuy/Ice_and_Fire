@@ -33,6 +33,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -76,7 +77,7 @@ public class EntityIceDragon extends EntityDragonBase {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SWIMMING, Boolean.valueOf(false));
+        this.entityData.define(SWIMMING, Boolean.FALSE);
     }
 
     @Override
@@ -505,7 +506,7 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     @Override
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
         return this.isTeen() ? IafSoundRegistry.ICEDRAGON_TEEN_HURT : this.shouldDropLoot() ? IafSoundRegistry.ICEDRAGON_ADULT_HURT : IafSoundRegistry.ICEDRAGON_CHILD_HURT;
     }
 

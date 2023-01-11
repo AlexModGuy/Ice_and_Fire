@@ -47,6 +47,7 @@ public class ShapeBuilder {
                 private int offset = 0;
                 private int phase = 1;
 
+                @Override
                 protected BlockPos computeNext() {
                     if (-currRY > yCutOffMin) {
                         return this.endOfData();
@@ -100,6 +101,7 @@ public class ShapeBuilder {
             private int offset = 0;
             private int phase = 1;
 
+            @Override
             protected BlockPos computeNext() {
                 if (-currRY > yCutOffMin) {
                     return this.endOfData();
@@ -147,6 +149,7 @@ public class ShapeBuilder {
                 private int offset = 0;
                 private int phase = 1;
 
+                @Override
                 protected BlockPos computeNext() {
                     if (-currR > radius) {
                         return this.endOfData();

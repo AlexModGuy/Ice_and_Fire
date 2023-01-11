@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexEgg;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderMyrmexEgg extends LivingEntityRenderer<EntityMyrmexEgg, AdvancedEntityModel<EntityMyrmexEgg>> {
 
@@ -16,12 +17,13 @@ public class RenderMyrmexEgg extends LivingEntityRenderer<EntityMyrmexEgg, Advan
         super(context, new ModelDragonEgg(), 0.3F);
     }
 
+    @Override
     protected boolean shouldShowName(EntityMyrmexEgg entity) {
         return entity.shouldShowName() && entity.hasCustomName();
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityMyrmexEgg entity) {
+    public @NotNull ResourceLocation getTextureLocation(EntityMyrmexEgg entity) {
         return entity.isJungle() ? EGG_JUNGLE : EGG_DESERT;
     }
 

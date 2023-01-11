@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderTrollWeapon extends BlockEntityWithoutLevelRenderer {
     private static final ModelTrollWeapon MODEL = new ModelTrollWeapon();
@@ -19,7 +20,8 @@ public class RenderTrollWeapon extends BlockEntityWithoutLevelRenderer {
         super(dispatcher, set);
     }
 
-    public void renderByItem(ItemStack stack, ItemTransforms.TransformType type, PoseStack stackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    @Override
+    public void renderByItem(ItemStack stack, ItemTransforms.@NotNull TransformType type, @NotNull PoseStack stackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         EnumTroll.Weapon weapon = EnumTroll.Weapon.AXE;
         if (stack.getItem() instanceof ItemTrollWeapon)
             weapon = ((ItemTrollWeapon) stack.getItem()).weapon;

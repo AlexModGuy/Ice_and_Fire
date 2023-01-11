@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 
 public class RenderMyrmexBase extends MobRenderer<EntityMyrmexBase, AdvancedEntityModel<EntityMyrmexBase>> {
@@ -25,7 +26,8 @@ public class RenderMyrmexBase extends MobRenderer<EntityMyrmexBase, AdvancedEnti
         this.adultModel = model;
     }
 
-    public void render(EntityMyrmexBase entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+    @Override
+    public void render(EntityMyrmexBase entityIn, float entityYaw, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn) {
         if (entityIn.getGrowthStage() == 0) {
             model = LARVA_MODEL;
         } else if (entityIn.getGrowthStage() == 1) {
@@ -38,7 +40,7 @@ public class RenderMyrmexBase extends MobRenderer<EntityMyrmexBase, AdvancedEnti
     }
 
     @Override
-    protected void scale(EntityMyrmexBase myrmex, PoseStack matrixStackIn, float partialTickTime) {
+    protected void scale(EntityMyrmexBase myrmex, @NotNull PoseStack matrixStackIn, float partialTickTime) {
         float scale = myrmex.getModelScale();
         if (myrmex.getGrowthStage() == 0) {
             scale /= 2;
@@ -53,7 +55,7 @@ public class RenderMyrmexBase extends MobRenderer<EntityMyrmexBase, AdvancedEnti
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityMyrmexBase myrmex) {
+    public @NotNull ResourceLocation getTextureLocation(EntityMyrmexBase myrmex) {
         return myrmex.getTexture();
     }
 

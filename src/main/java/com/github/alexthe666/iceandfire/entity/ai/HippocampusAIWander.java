@@ -10,10 +10,12 @@ public class HippocampusAIWander extends RandomStrollGoal {
         super(creatureIn, speedIn);
     }
 
+    @Override
     public boolean canUse() {
         return !(mob instanceof TamableAnimal && ((TamableAnimal) mob).isOrderedToSit()) && !this.mob.isInWater() && super.canUse();
     }
 
+    @Override
     public boolean canContinueToUse() {
         return !(mob instanceof TamableAnimal && ((TamableAnimal) mob).isOrderedToSit()) && !this.mob.isInWater() && super.canContinueToUse();
     }

@@ -23,6 +23,7 @@ public class ItemBlindfold extends ArmorItem {
         player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 50, 0, false, false));
     }
 
+    @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         return "iceandfire:textures/models/armor/blindfold_layer_1.png";
     }

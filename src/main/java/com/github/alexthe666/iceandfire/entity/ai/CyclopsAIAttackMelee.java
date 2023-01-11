@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import org.jetbrains.annotations.NotNull;
 
 public class CyclopsAIAttackMelee extends MeleeAttackGoal {
 
@@ -12,7 +13,7 @@ public class CyclopsAIAttackMelee extends MeleeAttackGoal {
     }
 
     @Override
-    protected void checkAndPerformAttack(LivingEntity entity, double distance) {
+    protected void checkAndPerformAttack(@NotNull LivingEntity entity, double distance) {
         final double d0 = this.getAttackReachSqr(entity);
         if (isCyclopsBlinded() && distance >= 36D) {
             this.stop();

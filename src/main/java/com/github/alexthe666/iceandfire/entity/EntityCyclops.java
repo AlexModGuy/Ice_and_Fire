@@ -20,11 +20,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -53,8 +50,8 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -102,14 +99,17 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
         return bakeAttributes();
     }
 
-    protected PathNavigation createNavigation(Level worldIn) {
+    @Override
+    protected @NotNull PathNavigation createNavigation(@NotNull Level worldIn) {
         return new PathNavigateCyclops(this, level);
     }
 
-    protected int getExperienceReward(Player player) {
+    @Override
+    protected int getExperienceReward(@NotNull Player player) {
         return 40;
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new RestrictSunGoal(this));
@@ -153,23 +153,24 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
         this.targetSelector.addGoal(3, new CyclopsAITargetSheepPlayers(this, Player.class, true));
     }
 
-    protected void doPush(Entity entityIn) {
+    @Override
+    protected void doPush(@NotNull Entity entityIn) {
         if (!ServerEvents.isSheep(entityIn)) {
             entityIn.push(this);
         }
     }
 
-    public boolean doHurtTarget(Entity entityIn) {
+    @Override
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         int attackDescision = this.getRandom().nextInt(3);
         if (attackDescision == 0) {
             this.setAnimation(ANIMATION_STOMP);
             return true;
         } else if (attackDescision == 1) {
             if (!entityIn.hasPassenger(this)
-                    && entityIn.getBbWidth() < 1.95F
-                    && !(entityIn instanceof EntityDragonBase)
-                    && !entityIn.getType().is((ForgeRegistries.ENTITIES.tags().createTagKey(IafTagRegistry.CYCLOPS_UNLIFTABLES))))
-            {
+                && entityIn.getBbWidth() < 1.95F
+                && !(entityIn instanceof EntityDragonBase)
+                && !entityIn.getType().is((ForgeRegistries.ENTITIES.tags().createTagKey(IafTagRegistry.CYCLOPS_UNLIFTABLES)))) {
                 this.setAnimation(ANIMATION_EATPLAYER);
                 entityIn.stopRiding();
                 entityIn.startRiding(this, true);
@@ -186,41 +187,42 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(BLINDED, Boolean.valueOf(false));
-        this.entityData.define(VARIANT, Integer.valueOf(0));
+        this.entityData.define(BLINDED, Boolean.FALSE);
+        this.entityData.define(VARIANT, 0);
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Blind", this.isBlinded());
         compound.putInt("Variant", this.getVariant());
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setBlinded(compound.getBoolean("Blind"));
         this.setVariant(compound.getInt("Variant"));
     }
 
     public int getVariant() {
-        return Integer.valueOf(this.entityData.get(VARIANT).intValue());
+        return this.entityData.get(VARIANT).intValue();
     }
 
     public void setVariant(int variant) {
-        this.entityData.set(VARIANT, Integer.valueOf(variant));
+        this.entityData.set(VARIANT, variant);
     }
 
     public boolean isBlinded() {
-        return Boolean.valueOf(this.entityData.get(BLINDED).booleanValue());
+        return this.entityData.get(BLINDED).booleanValue();
     }
 
     public void setBlinded(boolean blind) {
-        this.entityData.set(BLINDED, Boolean.valueOf(blind));
+        this.entityData.set(BLINDED, blind);
     }
 
-    public void positionRider(Entity passenger) {
+    @Override
+    public void positionRider(@NotNull Entity passenger) {
         super.positionRider(passenger);
         if (this.hasPassenger(passenger)) {
             passenger.setDeltaMovement(0, passenger.getDeltaMovement().y, 0);
@@ -243,7 +245,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
     }
 
     @Override
-    public void travel(Vec3 vec) {
+    public void travel(@NotNull Vec3 vec) {
         if (this.getAnimation() == ANIMATION_EATPLAYER) {
             super.travel(vec.multiply(0, 0, 0));
             return;
@@ -251,10 +253,12 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
         super.travel(vec);
     }
 
+    @Override
     public boolean isControlledByLocalInstance() {
         return false;
     }
 
+    @Override
     public boolean isPushable() {
         return false;
     }
@@ -265,6 +269,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
     }
 
 
+    @Override
     public void aiStep() {
         super.aiStep();
         if (eyeEntity == null) {
@@ -332,7 +337,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setVariant(this.getRandom().nextInt(4));
         return spawnDataIn;
@@ -372,7 +377,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
     }
 
     @Override
-    public void remove(Entity.RemovalReason reason) {
+    public void remove(Entity.@NotNull RemovalReason reason) {
         if (eyeEntity != null) {
             eyeEntity.remove(reason);
         }
@@ -409,16 +414,19 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
         }
     }
 
+    @Override
     @Nullable
     protected SoundEvent getAmbientSound() {
         return IafSoundRegistry.CYCLOPS_IDLE;
     }
 
+    @Override
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
         return IafSoundRegistry.CYCLOPS_HURT;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getDeathSound() {
         return IafSoundRegistry.CYCLOPS_DIE;

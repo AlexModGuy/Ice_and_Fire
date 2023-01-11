@@ -11,6 +11,7 @@ import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class ParticleSirenMusic extends TextureSheetParticle {
     private static final ResourceLocation SIREN_MUSIC = new ResourceLocation("iceandfire:textures/particles/siren_music.png");
@@ -28,7 +29,7 @@ public class ParticleSirenMusic extends TextureSheetParticle {
     }
 
     @Override
-    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
+    public void render(@NotNull VertexConsumer buffer, Camera renderInfo, float partialTicks) {
         Vec3 inerp = renderInfo.getPosition();
         if (age > this.getLifetime()) {
             this.remove();
@@ -74,6 +75,7 @@ public class ParticleSirenMusic extends TextureSheetParticle {
         Tesselator.getInstance().end();
     }
 
+    @Override
     public void tick() {
         super.tick();
         colorScale += 0.015;
@@ -86,6 +88,7 @@ public class ParticleSirenMusic extends TextureSheetParticle {
 
     }
 
+    @Override
     public int getLightColor(float partialTick) {
         return super.getLightColor(partialTick);
     }
@@ -95,7 +98,7 @@ public class ParticleSirenMusic extends TextureSheetParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
+    public @NotNull ParticleRenderType getRenderType() {
         return ParticleRenderType.CUSTOM;
     }
 

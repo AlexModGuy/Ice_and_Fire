@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -43,20 +44,21 @@ public class BlockDragonforgeInput extends BaseEntityBlock implements IDragonPro
 		);
 
         this.dragonType = dragonType;
-        this.registerDefaultState(this.getStateDefinition().any().setValue(ACTIVE, Boolean.valueOf(false)));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(ACTIVE, Boolean.FALSE));
     }
 
-    static String name (int dragonType) {
+    static String name(int dragonType) {
         return "dragonforge_%s_input".formatted(DragonType.getNameFromInt(dragonType));
     }
 
 
     @Override
-    public PushReaction getPistonPushReaction(BlockState state) {
+    public @NotNull PushReaction getPistonPushReaction(@NotNull BlockState state) {
         return PushReaction.BLOCK;
     }
 
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult resultIn) {
+    @Override
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand handIn, BlockHitResult resultIn) {
         if (this.getConnectedTileEntity(worldIn, resultIn.getBlockPos()) != null) {
             TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, resultIn.getBlockPos());
             if (forge != null && forge.fireType == dragonType) {
@@ -84,10 +86,11 @@ public class BlockDragonforgeInput extends BaseEntityBlock implements IDragonPro
     }
 
     public BlockState getStateFromMeta(int meta) {
-        return this.defaultBlockState().setValue(ACTIVE, Boolean.valueOf(meta > 0));
+        return this.defaultBlockState().setValue(ACTIVE, meta > 0);
     }
 
-    public RenderShape getRenderShape(BlockState state) {
+    @Override
+    public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.MODEL;
     }
 
@@ -95,12 +98,13 @@ public class BlockDragonforgeInput extends BaseEntityBlock implements IDragonPro
         return state.getValue(ACTIVE).booleanValue() ? 1 : 0;
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(ACTIVE);
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+    public void neighborChanged(@NotNull BlockState state, Level worldIn, @NotNull BlockPos pos, @NotNull Block blockIn, @NotNull BlockPos fromPos, boolean isMoving) {
         if (worldIn.getBlockEntity(pos) instanceof TileEntityDragonforgeInput) {
             ((TileEntityDragonforgeInput) worldIn.getBlockEntity(pos)).resetCore();
         }
@@ -108,14 +112,14 @@ public class BlockDragonforgeInput extends BaseEntityBlock implements IDragonPro
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> entityType) {
         return level.isClientSide ? createTickerHelper(entityType, DRAGONFORGE_INPUT.get(), TileEntityDragonforgeInput::tick) : null;
     }
 
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new TileEntityDragonforgeInput(pos, state);
     }
 }

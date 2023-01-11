@@ -7,9 +7,7 @@ import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import com.google.common.base.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
@@ -110,6 +108,7 @@ public class DragonUtils {
         double d1 = dist;
         Entity pointedEntity = null;
         List<Entity> list = rider.level.getEntities(rider, rider.getBoundingBox().expandTowards(Vector3d1.x * dist, Vector3d1.y * dist, Vector3d1.z * dist).inflate(1.0D, 1.0D, 1.0D), new Predicate<Entity>() {
+            @Override
             public boolean apply(@Nullable Entity entity) {
                 if (onSameTeam(dragon, entity)) {
                     return false;

@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderJar<T extends TileEntityJar> implements BlockEntityRenderer<T> {
 
@@ -33,7 +34,7 @@ public class RenderJar<T extends TileEntityJar> implements BlockEntityRenderer<T
     }
 
     @Override
-    public void render(T entity, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(@NotNull T entity, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         int meta = 0;
         boolean hasPixie = false;
         if (MODEL_PIXIE == null) {

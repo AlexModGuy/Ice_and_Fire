@@ -7,6 +7,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemGenericFood extends Item {
     private final int healAmount;
@@ -43,7 +44,8 @@ public class ItemGenericFood extends Item {
         return builder.build();
     }
 
-    public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity LivingEntity) {
+    @Override
+    public @NotNull ItemStack finishUsingItem(@NotNull ItemStack stack, @NotNull Level worldIn, @NotNull LivingEntity LivingEntity) {
         this.onFoodEaten(stack, worldIn, LivingEntity);
         return super.finishUsingItem(stack, worldIn, LivingEntity);
     }

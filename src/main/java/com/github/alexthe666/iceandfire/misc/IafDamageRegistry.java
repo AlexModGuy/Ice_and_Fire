@@ -6,6 +6,7 @@ import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -20,7 +21,8 @@ public class IafDamageRegistry {
             super(damageTypeIn, damageSourceEntityIn);
         }
 
-        public Component getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
+        @Override
+        public @NotNull Component getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
             LivingEntity livingentity = entityLivingBaseIn.getKillCredit();
             String s = "death.attack." + this.msgId;
             int index = entityLivingBaseIn.getRandom().nextInt(2);
@@ -36,7 +38,8 @@ public class IafDamageRegistry {
             super(damageTypeIn, source, indirectEntityIn);
         }
 
-        public Component getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
+        @Override
+        public @NotNull Component getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
             LivingEntity livingentity = entityLivingBaseIn.getKillCredit();
             String s = "death.attack." + this.msgId;
             int index = entityLivingBaseIn.getRandom().nextInt(2);

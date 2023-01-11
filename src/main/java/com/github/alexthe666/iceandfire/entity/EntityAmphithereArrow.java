@@ -10,8 +10,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityAmphithereArrow extends AbstractArrow {
 
@@ -38,7 +39,7 @@ public class EntityAmphithereArrow extends AbstractArrow {
 
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -81,7 +82,7 @@ public class EntityAmphithereArrow extends AbstractArrow {
                     double d3 = 10.0D;
                     double xRatio = this.getDeltaMovement().x * this.getBbWidth();
                     double zRatio = this.getDeltaMovement().z * this.getBbWidth();
-                    this.level.addParticle(ParticleTypes.CLOUD, this.getX() + xRatio + this.random.nextFloat() * this.getBbWidth() * 1.0F - this.getBbWidth() - d0 * 10.0D, this.getY() + this.random.nextFloat() * this.getBbHeight() - d1 * 10.0D, this.getZ() + zRatio + this.random.nextFloat() * this.getBbWidth() * 1.0F - this.getBbWidth() - d2 * 10.0D, d0, d1, d2);
+                    this.level.addParticle(ParticleTypes.CLOUD, this.getX() + xRatio + this.random.nextFloat() * this.getBbWidth() * 1.0F - this.getBbWidth() - d0 * d3, this.getY() + this.random.nextFloat() * this.getBbHeight() - d1 * d3, this.getZ() + zRatio + this.random.nextFloat() * this.getBbWidth() * 1.0F - this.getBbWidth() - d2 * d3, d0, d1, d2);
                 }
             }
         } else {
@@ -89,9 +90,6 @@ public class EntityAmphithereArrow extends AbstractArrow {
         }
     }
 
-    /**
-     * Handler for {@link World#setEntityState}
-     */
     @Override
     public void handleEntityEvent(byte id) {
         if (id == 20) {
@@ -102,7 +100,7 @@ public class EntityAmphithereArrow extends AbstractArrow {
     }
 
     @Override
-    protected ItemStack getPickupItem() {
+    protected @NotNull ItemStack getPickupItem() {
         return new ItemStack(IafItemRegistry.AMPHITHERE_ARROW.get());
     }
 }

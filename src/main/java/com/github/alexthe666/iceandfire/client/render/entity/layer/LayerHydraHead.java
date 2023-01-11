@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class LayerHydraHead extends RenderLayer<EntityHydra, ModelHydraBody> {
     public static final ResourceLocation TEXTURE_STONE = new ResourceLocation("iceandfire:textures/models/hydra/stone.png");
@@ -54,7 +55,7 @@ public class LayerHydraHead extends RenderLayer<EntityHydra, ModelHydraBody> {
     }
 
     @Override
-    public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityHydra entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(@NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn, EntityHydra entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (entity.isInvisible()) {
             return;
         }
@@ -90,7 +91,8 @@ public class LayerHydraHead extends RenderLayer<EntityHydra, ModelHydraBody> {
         }
     }
 
-    public ResourceLocation getTextureLocation(EntityHydra gorgon) {
+    @Override
+    public @NotNull ResourceLocation getTextureLocation(EntityHydra gorgon) {
         switch (gorgon.getVariant()) {
             default:
                 return RenderHydra.TEXUTURE_0;

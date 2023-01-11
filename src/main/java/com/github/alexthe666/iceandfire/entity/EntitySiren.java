@@ -50,6 +50,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -58,6 +59,7 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
 
     public static final int SEARCH_RANGE = 32;
     public static final Predicate<Entity> SIREN_PREY = new Predicate<Entity>() {
+        @Override
         public boolean apply(@Nullable Entity p_apply_1_) {
             return (p_apply_1_ instanceof Player && !((Player) p_apply_1_).isCreative() && !p_apply_1_.isSpectator()) || p_apply_1_ instanceof AbstractVillager || p_apply_1_ instanceof IHearsSiren;
         }
@@ -117,19 +119,18 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
         return helmet.getItem() == IafItemRegistry.EARPLUGS.get() || helmet != ItemStack.EMPTY && helmet.getItem().getDescriptionId().contains("earmuff");
     }
 
-    public static boolean isDrawnToSong(Entity entity) {
-        return entity instanceof Player && !((Player) entity).isCreative() || entity instanceof AbstractVillager || entity instanceof IHearsSiren;
-    }
-
-    protected int getExperienceReward(Player player) {
+    @Override
+    protected int getExperienceReward(@NotNull Player player) {
         return 8;
     }
 
-    public float getWalkTargetValue(BlockPos pos) {
+    @Override
+    public float getWalkTargetValue(@NotNull BlockPos pos) {
         return level.getBlockState(pos).getMaterial() == Material.WATER ? 10F : super.getWalkTargetValue(pos);
     }
 
-    public boolean doHurtTarget(Entity entityIn) {
+    @Override
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         if (this.getRandom().nextInt(2) == 0) {
             if (this.getAnimation() != ANIMATION_PULL) {
                 this.setAnimation(ANIMATION_PULL);
@@ -149,7 +150,8 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
         return this.level.clip(new ClipContext(vec1, Vector3d1, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).getType() == HitResult.Type.MISS;
     }
 
-    public float getPathfindingMalus(BlockPathTypes nodeType) {
+    @Override
+    public float getPathfindingMalus(@NotNull BlockPathTypes nodeType) {
         return nodeType == BlockPathTypes.WATER ? 0F : super.getPathfindingMalus(nodeType);
     }
 
@@ -202,8 +204,8 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
             double attackmotionZ = (Math.signum(this.getZ() - attackTarget.getZ()) * 0.5D - attackTarget.getDeltaMovement().z) * 0.100000000372529 * 5;
 
             attackTarget.setDeltaMovement(attackTarget.getDeltaMovement().add(attackmotionX, attackmotionY, attackmotionZ));
-            float angle = (float) (Math.atan2(attackTarget.getDeltaMovement().z, attackTarget.getDeltaMovement().x) * 180.0D / Math.PI) - 90.0F;
-            //entity.moveForward = 0.5F;
+            // float angle = (float) (Math.atan2(attackTarget.getDeltaMovement().z, attackTarget.getDeltaMovement().x) * 180.0D / Math.PI) - 90.0F;
+            // entity.moveForward = 0.5F;
             double d0 = this.getX() - attackTarget.getX();
             double d2 = this.getZ() - attackTarget.getZ();
             double d1 = this.getY() - 1 - attackTarget.getY();
@@ -297,6 +299,7 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
         this.setSinging(true);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (source.getEntity() != null && source.getEntity() instanceof LivingEntity) {
             this.triggerOtherSirens((LivingEntity) source.getEntity());
@@ -328,7 +331,7 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(@NotNull CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("HairColor", this.getHairColor());
         tag.putBoolean("Aggressive", this.isAgressive());
@@ -340,7 +343,7 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setHairColor(tag.getInt("HairColor"));
         this.setAggressive(tag.getBoolean("Aggressive"));
@@ -377,6 +380,7 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
         return isSinging() && !wantsToSing();
     }
 
+    @Override
     public boolean isSwimming() {
         if (level.isClientSide) {
             return this.isSwimming = this.entityData.get(SWIMMING).booleanValue();
@@ -384,6 +388,7 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
         return isSwimming;
     }
 
+    @Override
     public void setSwimming(boolean swimming) {
         this.entityData.set(SWIMMING, swimming);
         if (!level.isClientSide) {
@@ -391,6 +396,7 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
         }
     }
 
+    @Override
     public void setAggressive(boolean aggressive) {
         this.entityData.set(AGGRESSIVE, aggressive);
     }
@@ -442,18 +448,18 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(HAIR_COLOR, Integer.valueOf(0));
-        this.entityData.define(SING_POSE, Integer.valueOf(0));
-        this.entityData.define(AGGRESSIVE, Boolean.valueOf(false));
-        this.entityData.define(SINGING, Boolean.valueOf(false));
-        this.entityData.define(SWIMMING, Boolean.valueOf(false));
-        this.entityData.define(CHARMED, Boolean.valueOf(false));
-        this.entityData.define(CLIMBING, Byte.valueOf((byte) 0));
+        this.entityData.define(HAIR_COLOR, 0);
+        this.entityData.define(SING_POSE, 0);
+        this.entityData.define(AGGRESSIVE, Boolean.FALSE);
+        this.entityData.define(SINGING, Boolean.FALSE);
+        this.entityData.define(SWIMMING, Boolean.FALSE);
+        this.entityData.define(CHARMED, Boolean.FALSE);
+        this.entityData.define(CLIMBING, (byte) 0);
     }
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setHairColor(this.getRandom().nextInt(3));
         this.setSingingPose(this.getRandom().nextInt(3));
@@ -496,23 +502,26 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
         return new Animation[]{NO_ANIMATION, ANIMATION_BITE, ANIMATION_PULL};
     }
 
+    @Override
     @Nullable
     protected SoundEvent getAmbientSound() {
         return this.isAgressive() ? IafSoundRegistry.NAGA_IDLE : IafSoundRegistry.MERMAID_IDLE;
     }
 
+    @Override
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
         return this.isAgressive() ? IafSoundRegistry.NAGA_HURT : IafSoundRegistry.MERMAID_HURT;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getDeathSound() {
         return this.isAgressive() ? IafSoundRegistry.NAGA_DIE : IafSoundRegistry.MERMAID_DIE;
     }
 
     @Override
-    public void travel(Vec3 motion) {
+    public void travel(@NotNull Vec3 motion) {
         super.travel(motion);
     }
 

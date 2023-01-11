@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
 
@@ -41,7 +42,8 @@ public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
         cube.rotateAngleZ = rotZ;
     }
 
-    public void render(EntityDragonSkull entity, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+    @Override
+    public void render(EntityDragonSkull entity, float entityYaw, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn) {
         TabulaModel model;
         if (entity.getDragonType() == 2) {
             model = lightningDragonModel;
@@ -65,7 +67,8 @@ public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
         matrixStackIn.popPose();
     }
 
-    public ResourceLocation getTextureLocation(EntityDragonSkull entity) {
+    @Override
+    public @NotNull ResourceLocation getTextureLocation(EntityDragonSkull entity) {
         if (entity.getDragonType() == 2) {
             return EnumDragonTextures.getLightningDragonSkullTextures(entity);
         }

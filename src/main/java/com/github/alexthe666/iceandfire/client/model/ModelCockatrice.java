@@ -387,6 +387,7 @@ public class ModelCockatrice extends ModelDragonBase<EntityCockatrice> {
         this.rotate(animator, leftFoot, 50, 10, 0);
     }
 
+    @Override
     public void setupAnim(EntityCockatrice entity, float f, float f1, float f2, float f3, float f4) {
         animate(entity, f, f1, f2, f3, f4);
         float speed_walk = 0.6F;

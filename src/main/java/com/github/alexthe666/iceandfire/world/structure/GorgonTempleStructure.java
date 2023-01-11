@@ -20,6 +20,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
 import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.Random;
@@ -31,7 +32,7 @@ public class GorgonTempleStructure extends StructureFeature<JigsawConfiguration>
         super(JigsawConfiguration.CODEC, GorgonTempleStructure::createPiecesGenerator, new PostPlacement());
     }
 
-    public static Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context) {
+    public static @NotNull Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context) {
         if (!IafConfig.spawnGorgons) {
             return Optional.empty();
         }
@@ -71,13 +72,14 @@ public class GorgonTempleStructure extends StructureFeature<JigsawConfiguration>
         return JigsawPlacement.addPieces(context, PoolElementStructurePiece::new, blockpos, false, false);
     }
 
-    public GenerationStep.Decoration step() {
+    @Override
+    public GenerationStep.@NotNull Decoration step() {
         return GenerationStep.Decoration.SURFACE_STRUCTURES;
     }
 
     static class PostPlacement implements PostPlacementProcessor {
         @Override
-        public void afterPlace(WorldGenLevel pLevel, StructureFeatureManager pManager, ChunkGenerator pGenerator, Random pRandom, BoundingBox pBoundingBox, ChunkPos pChunkPos, PiecesContainer pContainer) {
+        public void afterPlace(@NotNull WorldGenLevel pLevel, @NotNull StructureFeatureManager pManager, @NotNull ChunkGenerator pGenerator, @NotNull Random pRandom, @NotNull BoundingBox pBoundingBox, @NotNull ChunkPos pChunkPos, PiecesContainer pContainer) {
             pContainer.calculateBoundingBox();
         }
     }

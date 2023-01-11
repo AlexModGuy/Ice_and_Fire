@@ -20,6 +20,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -35,7 +36,8 @@ public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonIt
         this.eggType = eggType;
     }
 
-    public String getDescriptionId() {
+    @Override
+    public @NotNull String getDescriptionId() {
         switch (this.slot) {
             case HEAD:
                 return "item.iceandfire.dragon_helmet";
@@ -72,13 +74,14 @@ public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonIt
         });
     }
 
+    @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         return "iceandfire:textures/models/armor/" + armor_type.name() + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png");
     }
 
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(new TranslatableComponent("dragon." + eggType.toString().toLowerCase()).withStyle(eggType.color));
         tooltip.add(new TranslatableComponent("item.dragonscales_armor.desc").withStyle(ChatFormatting.GRAY));
     }

@@ -58,6 +58,7 @@ public class ModelGuardianStatue extends AdvancedEntityModel<Entity> {
         return ImmutableList.of(guardianBody);
     }
 
+    @Override
     public void setupAnim(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         Guardian entityguardian = (Guardian) entityIn;
         float f = ageInTicks - (float) entityguardian.tickCount;
@@ -69,7 +70,7 @@ public class ModelGuardianStatue extends AdvancedEntityModel<Entity> {
         float[] afloat3 = new float[]{0.0F, 0.0F, 8.0F, -8.0F, -8.0F, 8.0F, 8.0F, -8.0F, 0.0F, 0.0F, 8.0F, -8.0F};
         float[] afloat4 = new float[]{-8.0F, -8.0F, -8.0F, -8.0F, 0.0F, 0.0F, 0.0F, 0.0F, 8.0F, 8.0F, 8.0F, 8.0F};
         float[] afloat5 = new float[]{8.0F, -8.0F, 0.0F, 0.0F, -8.0F, -8.0F, 8.0F, 8.0F, 8.0F, -8.0F, 0.0F, 0.0F};
-        float f1 = (1.0F - 0) * 0.55F;
+        float f1 = 0.55F;
 
         for (int i = 0; i < 12; ++i) {
             this.guardianSpines[i].rotateAngleX = (float) Math.PI * afloat[i];

@@ -12,6 +12,7 @@ public class EntityAIWatchClosestIgnoreRider extends LookAtPlayerGoal {
         super(entity, type, dist);
     }
 
+    @Override
     public boolean canUse() {
         return super.canUse() && lookAt != null && isRidingOrBeingRiddenBy(lookAt, entity);
     }

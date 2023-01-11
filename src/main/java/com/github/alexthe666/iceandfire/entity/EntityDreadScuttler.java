@@ -35,6 +35,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -55,6 +56,7 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
         super(type, worldIn);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
@@ -118,13 +120,15 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
         this.setSize(compound.getFloat("Scale"));
     }
 
-    public boolean doHurtTarget(Entity entityIn) {
+    @Override
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             this.setAnimation(ANIMATION_BITE);
         }
         return true;
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         LivingEntity attackTarget = this.getTarget();
@@ -158,6 +162,7 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    @Override
     public boolean onClimbable() {
         return this.isBesideClimbableBlock();
     }
@@ -165,10 +170,12 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
     public void setInWeb() {
     }
 
+    @Override
     public MobType getMobType() {
         return MobType.ARTHROPOD;
     }
 
+    @Override
     public boolean canBeAffected(MobEffectInstance potioneffectIn) {
         return potioneffectIn.getEffect() != MobEffects.POISON && super.canBeAffected(potioneffectIn);
     }
@@ -189,8 +196,9 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
         this.entityData.set(CLIMBING, Byte.valueOf(b0));
     }
 
+    @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setAnimation(ANIMATION_SPAWN);
         this.setSize(0.5F + random.nextFloat() * 1.15F);
@@ -242,21 +250,25 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
         return entityIn instanceof IDreadMob || super.isAlliedTo(entityIn);
     }
 
+    @Override
     @Nullable
     protected SoundEvent getAmbientSound() {
         return SoundEvents.SPIDER_AMBIENT;
     }
 
+    @Override
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource source) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource source) {
         return SoundEvents.SPIDER_HURT;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getDeathSound() {
         return SoundEvents.SPIDER_DEATH;
     }
 
+    @Override
     public float getVoicePitch() {
         return super.getVoicePitch() * 0.70F;
     }
@@ -265,6 +277,7 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
         this.playSound(IafSoundRegistry.MYRMEX_WALK, 0.25F, 1.0F);
     }
 
+    @Override
     public float getScale() {
         return getSize();
     }

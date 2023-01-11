@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 // This class only servers the point of changing the particles spawned
 public abstract class DreadSpawnerBaseLogic extends BaseSpawner {
@@ -14,7 +15,8 @@ public abstract class DreadSpawnerBaseLogic extends BaseSpawner {
     private double spin;
     private double oSpin;
 
-    public void clientTick(Level p_151320_, BlockPos p_151321_) {
+    @Override
+    public void clientTick(@NotNull Level p_151320_, @NotNull BlockPos p_151321_) {
         if (!this.isNearPlayer(p_151320_, p_151321_)) {
             this.oSpin = this.spin;
         } else {

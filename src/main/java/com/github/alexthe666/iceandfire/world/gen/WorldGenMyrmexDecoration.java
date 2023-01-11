@@ -64,9 +64,9 @@ public class WorldGenMyrmexDecoration {
 
     public static void generateLeaves(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand, boolean jungle) {
         if (worldIn.getBlockState(blockpos.below()).isFaceSturdy(worldIn, blockpos.below(), Direction.UP)) {
-            BlockState leaf = Blocks.OAK_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, Boolean.valueOf(true));
+            BlockState leaf = Blocks.OAK_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, Boolean.TRUE);
             if (jungle) {
-                leaf = Blocks.JUNGLE_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, Boolean.valueOf(true));
+                leaf = Blocks.JUNGLE_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, Boolean.TRUE);
             }
             int i1 = 0;
             for (int i = 0; i1 >= 0 && i < 3; ++i) {
@@ -79,7 +79,7 @@ public class WorldGenMyrmexDecoration {
                         worldIn.setBlock(pos, leaf, 4);
                     }
                 }
-                blockpos = blockpos.offset(-(i1 + 1) + rand.nextInt(2 + i1 * 2), 0 - rand.nextInt(2), -(i1 + 1) + rand.nextInt(2 + i1 * 2));
+                blockpos = blockpos.offset(-(i1 + 1) + rand.nextInt(2 + i1 * 2), -rand.nextInt(2), -(i1 + 1) + rand.nextInt(2 + i1 * 2));
             }
         }
     }
@@ -162,7 +162,7 @@ public class WorldGenMyrmexDecoration {
                         worldIn.setBlock(pos, blob.defaultBlockState(), 4);
                     }
                 }
-                blockpos = blockpos.offset(-(i1 + 1) + rand.nextInt(2 + i1 * 2), 0 - rand.nextInt(2), -(i1 + 1) + rand.nextInt(2 + i1 * 2));
+                blockpos = blockpos.offset(-(i1 + 1) + rand.nextInt(2 + i1 * 2), -rand.nextInt(2), -(i1 + 1) + rand.nextInt(2 + i1 * 2));
             }
 
         }

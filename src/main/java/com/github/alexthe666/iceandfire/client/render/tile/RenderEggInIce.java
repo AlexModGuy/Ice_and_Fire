@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import org.jetbrains.annotations.NotNull;
 
 public class RenderEggInIce<T extends TileEntityEggInIce> implements BlockEntityRenderer<T> {
 
@@ -14,7 +15,7 @@ public class RenderEggInIce<T extends TileEntityEggInIce> implements BlockEntity
     }
 
     @Override
-    public void render(T egg, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(T egg, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         ModelDragonEgg model = new ModelDragonEgg();
         if (egg.type != null) {
             matrixStackIn.pushPose();

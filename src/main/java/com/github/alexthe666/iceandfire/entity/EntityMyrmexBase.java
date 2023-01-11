@@ -53,6 +53,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -140,7 +141,8 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         }
     }
 
-    public SoundSource getSoundSource() {
+    @Override
+    public @NotNull SoundSource getSoundSource() {
         return SoundSource.HOSTILE;
     }
 
@@ -148,10 +150,12 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         return this.getGrowthStage() > 1;
     }
 
+    @Override
     public boolean isBaby() {
         return this.getGrowthStage() < 2;
     }
 
+    @Override
     protected void customServerAiStep() {
         if (!this.hasCustomer() && this.timeUntilReset > 0) {
             --this.timeUntilReset;
@@ -170,12 +174,13 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         super.customServerAiStep();
     }
 
-    protected int getExperienceReward(Player player) {
+    @Override
+    protected int getExperienceReward(@NotNull Player player) {
         return (this.getCasteImportance() * 7) + this.level.random.nextInt(3);
     }
 
     @Override
-    public boolean hurt(DamageSource dmg, float i) {
+    public boolean hurt(@NotNull DamageSource dmg, float i) {
         if (dmg == DamageSource.IN_WALL && this.getGrowthStage() < 2) {
             return false;
         }
@@ -185,15 +190,18 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         return super.hurt(dmg, i);
     }
 
+    @Override
     protected float getJumpPower() {
         return 0.52F;
     }
 
+    @Override
     public float getWalkTargetValue(BlockPos pos) {
         return this.level.getBlockState(pos.below()).getBlock() instanceof BlockMyrmexResin ? 10.0F : super.getWalkTargetValue(pos);
     }
 
-    protected PathNavigation createNavigation(Level worldIn) {
+    @Override
+    protected @NotNull PathNavigation createNavigation(@NotNull Level worldIn) {
         return createNavigator(worldIn, AdvancedPathNavigate.MovementType.CLIMBING);
     }
 
@@ -209,13 +217,15 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         return newNavigator;
     }
 
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(CLIMBING, Byte.valueOf((byte) 0));
-        this.entityData.define(GROWTH_STAGE, Integer.valueOf(2));
-        this.entityData.define(VARIANT, Boolean.valueOf(false));
+        this.entityData.define(CLIMBING, (byte) 0);
+        this.entityData.define(GROWTH_STAGE, 2);
+        this.entityData.define(VARIANT, Boolean.FALSE);
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.maxUpStep = 1;
@@ -262,7 +272,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(@NotNull CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("GrowthStage", this.getGrowthStage());
         tag.putInt("GrowthTicks", growthTicks);
@@ -287,7 +297,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setGrowthStage(tag.getInt("GrowthStage"));
         this.growthTicks = tag.getInt("GrowthTicks");
@@ -318,7 +328,8 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         return true;
     }
 
-    public Level getLevel() {
+    @Override
+    public @NotNull Level getLevel() {
         return this.level;
     }
 
@@ -350,7 +361,8 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         this.entityData.set(VARIANT, isJungle);
     }
 
-    public MobType getMobType() {
+    @Override
+    public @NotNull MobType getMobType() {
         return MobType.ARTHROPOD;
     }
 
@@ -367,9 +379,10 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
             b0 = (byte) (b0 & -2);
         }
 
-        this.entityData.set(CLIMBING, Byte.valueOf(b0));
+        this.entityData.set(CLIMBING, b0);
     }
 
+    @Override
     public boolean onClimbable() {
         if (this.getNavigation() instanceof AdvancedPathNavigate) {
             //Make sure the entity can only climb when it's on or below the path. This prevents the entity from getting stuck
@@ -381,7 +394,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
 
     @Nullable
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
+    public AgeableMob getBreedOffspring(@NotNull ServerLevel serverWorld, @NotNull AgeableMob ageable) {
         return null;
     }
 
@@ -410,6 +423,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         return new Animation[]{ANIMATION_PUPA_WIGGLE};
     }
 
+    @Override
     public void setLastHurtByMob(@Nullable LivingEntity livingBase) {
         if (this.getHive() == null || livingBase == null || livingBase instanceof Player && this.getHive().isPlayerReputationLowEnoughToFight(livingBase.getUUID())) {
             super.setLastHurtByMob(livingBase);
@@ -429,7 +443,8 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         }
     }
 
-    public void die(DamageSource cause) {
+    @Override
+    public void die(@NotNull DamageSource cause) {
         if (this.getHive() != null) {
             Entity entity = cause.getEntity();
             if (entity != null) {
@@ -441,7 +456,8 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         super.die(cause);
     }
 
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+    @Override
+    public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if (!shouldHaveNormalAI()) {
             return InteractionResult.PASS;
@@ -512,7 +528,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setHive(MyrmexWorldData.get(level).getNearestHive(this.blockPosition(), 400));
         if (this.getHive() != null) {
@@ -557,7 +573,8 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         }
     }
 
-    protected void doPush(Entity entityIn) {
+    @Override
+    protected void doPush(@NotNull Entity entityIn) {
         if (!haveSameHive(this, entityIn)) {
             entityIn.push(this);
         }
@@ -599,7 +616,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
     }
 
     @Override
-    public void travel(Vec3 motion) {
+    public void travel(@NotNull Vec3 motion) {
         if (!this.canMove()) {
             super.travel(Vec3.ZERO);
             return;
@@ -628,6 +645,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         return this.getHive() == null;
     }
 
+    @Override
     public void handleEntityEvent(byte id) {
         if (id == 76) {
             this.playVillagerEffect();
@@ -636,16 +654,19 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         }
     }
 
+    @Override
     @Nullable
     protected SoundEvent getAmbientSound() {
         return IafSoundRegistry.MYRMEX_IDLE;
     }
 
+    @Override
     @Nullable
-    protected SoundEvent getHurtSound(DamageSource source) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource source) {
         return IafSoundRegistry.MYRMEX_HURT;
     }
 
+    @Override
     @Nullable
     protected SoundEvent getDeathSound() {
         return IafSoundRegistry.MYRMEX_DIE;
@@ -656,11 +677,11 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
     }
 
     protected void playBiteSound() {
-        this.playSound(IafSoundRegistry.MYRMEX_BITE, 1.0F * this.getMyrmexPitch(), 1.0F);
+        this.playSound(IafSoundRegistry.MYRMEX_BITE, this.getMyrmexPitch(), 1.0F);
     }
 
     protected void playStingSound() {
-        this.playSound(IafSoundRegistry.MYRMEX_STING, 1.0F * this.getMyrmexPitch(), 0.6F);
+        this.playSound(IafSoundRegistry.MYRMEX_STING, this.getMyrmexPitch(), 0.6F);
     }
 
     protected void playVillagerEffect() {
@@ -695,11 +716,13 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         return this.getBoundingBox().inflate(1.0F + size, 1.0F + size, 1.0F + size);
     }
 
+    @Override
     @Nullable
     public Player getTradingPlayer() {
         return this.customer;
     }
 
+    @Override
     public void setTradingPlayer(@Nullable Player player) {
         this.customer = player;
     }
@@ -708,7 +731,8 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         return this.customer != null;
     }
 
-    public MerchantOffers getOffers() {
+    @Override
+    public @NotNull MerchantOffers getOffers() {
         if (this.offers == null) {
             this.offers = new MerchantOffers();
             this.populateTradeData();
@@ -717,12 +741,15 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         return this.offers;
     }
 
+    @Override
     public void overrideOffers(@Nullable MerchantOffers offers) {
     }
 
+    @Override
     public void overrideXp(int xpIn) {
     }
 
+    @Override
     public void notifyTrade(MerchantOffer offer) {
         offer.increaseUses();
         this.ambientSoundTime = -this.getAmbientSoundInterval();
@@ -740,7 +767,8 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         }
     }
 
-    public void notifyTradeUpdated(ItemStack stack) {
+    @Override
+    public void notifyTradeUpdated(@NotNull ItemStack stack) {
         if (!this.level.isClientSide && this.ambientSoundTime > -this.getAmbientSoundInterval() + 20) {
             this.ambientSoundTime = -this.getAmbientSoundInterval();
             this.playSound(this.getVillagerYesNoSound(!stack.isEmpty()), this.getSoundVolume(), this.getVoicePitch());
@@ -748,7 +776,8 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
 
     }
 
-    public SoundEvent getNotifyTradeSound() {
+    @Override
+    public @NotNull SoundEvent getNotifyTradeSound() {
         return IafSoundRegistry.MYRMEX_IDLE;
     }
 
@@ -763,8 +792,9 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         this.setTradingPlayer(null);
     }
 
+    @Override
     @Nullable
-    public Entity changeDimension(ServerLevel server, net.minecraftforge.common.util.ITeleporter teleporter) {
+    public Entity changeDimension(@NotNull ServerLevel server, net.minecraftforge.common.util.@NotNull ITeleporter teleporter) {
         this.resetCustomer();
         return super.changeDimension(server, teleporter);
     }
@@ -775,7 +805,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
 
 
     @Override
-    public boolean equipItemIfPossible(ItemStack stack) {
+    public boolean equipItemIfPossible(@NotNull ItemStack stack) {
         if (super.equipItemIfPossible(stack)) {
             return true;
         } else {
@@ -870,14 +900,17 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
             && (this.isCloseEnoughToTarget(target, distanceSquared) || this.getNavigation().getPath() == null || !this.getNavigation().getPath().isDone());
     }
 
+    @Override
     public boolean isSmallerThanBlock() {
         return false;
     }
 
+    @Override
     public float getXZNavSize() {
         return getBbWidth() / 2;
     }
 
+    @Override
     public int getYNavSize() {
         return (int) getBbHeight() / 2;
     }
