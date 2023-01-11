@@ -47,9 +47,10 @@ public class BlockEggInIce extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
-        return level.isClientSide ? createTickerHelper(entityType, EGG_IN_ICE.get(), TileEntityEggInIce::tickEgg) : null;
+        return createTickerHelper(entityType, EGG_IN_ICE.get(), TileEntityEggInIce::tickEgg);
     }
 
+    @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
@@ -60,6 +61,7 @@ public class BlockEggInIce extends BaseEntityBlock {
         player.causeFoodExhaustion(0.005F);
     }
 
+    @Override
     public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
         if (worldIn.getBlockEntity(pos) != null) {
             if (worldIn.getBlockEntity(pos) instanceof TileEntityEggInIce) {
