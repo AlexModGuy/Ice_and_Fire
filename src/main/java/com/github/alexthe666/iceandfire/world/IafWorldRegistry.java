@@ -198,7 +198,7 @@ public class IafWorldRegistry {
         return PlacementUtils.register(registerName, Holder.direct(feature), modifiers);
     }
 
-    private static BiFunction<String, Feature, Holder<PlacedFeature>> registerSimple = (name, feat) -> {
+    private static final BiFunction<String, Feature, Holder<PlacedFeature>> registerSimple = (name, feat) -> {
         return register("%s:%s".formatted(IceAndFire.MODID, name), new ConfiguredFeature<>(feat, FeatureConfiguration.NONE), BiomeFilter.biome());
     };
 
@@ -306,9 +306,6 @@ public class IafWorldRegistry {
         BuiltinRegistries.register(BuiltinRegistries.STRUCTURE_SETS, new ResourceLocation(IceAndFire.MODID, "structures"), structures);
     }
 
-
-    public static void setup() {
-    }
 
     public static boolean isFarEnoughFromSpawn(LevelAccessor world, BlockPos pos) {
         LevelData spawnPoint = world.getLevelData();

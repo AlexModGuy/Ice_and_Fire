@@ -6,19 +6,22 @@ import com.github.alexthe666.iceandfire.world.gen.processor.GorgonTempleProcesso
 import com.github.alexthe666.iceandfire.world.gen.processor.GraveyardProcessor;
 import com.github.alexthe666.iceandfire.world.gen.processor.VillageHouseProcessor;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
+
+import java.util.function.Supplier;
 
 public class IafProcessors {
-    public static StructureProcessorType<DreadRuinProcessor> DREADRUINPROCESSOR = () -> DreadRuinProcessor.CODEC;
-    public static StructureProcessorType<GorgonTempleProcessor> GORGONTEMPLEPROCESSOR = () -> GorgonTempleProcessor.CODEC;
-    public static StructureProcessorType<GraveyardProcessor> GRAVEYARDPROCESSOR = () -> GraveyardProcessor.CODEC;
-    public static StructureProcessorType<VillageHouseProcessor> VILLAGEHOUSEPROCESSOR = () -> VillageHouseProcessor.CODEC;
+    public static final DeferredRegister<StructureProcessorType<?>> PROCESSORS = DeferredRegister.create(Registry.STRUCTURE_PROCESSOR_REGISTRY, IceAndFire.MODID);
 
-    public static void registerProcessors() {
-        Registry.register(Registry.STRUCTURE_PROCESSOR, new ResourceLocation(IceAndFire.MODID, "dread_mausoleum_processor"), DREADRUINPROCESSOR);
-        Registry.register(Registry.STRUCTURE_PROCESSOR, new ResourceLocation(IceAndFire.MODID, "gorgon_temple_processor"), GORGONTEMPLEPROCESSOR);
-        Registry.register(Registry.STRUCTURE_PROCESSOR, new ResourceLocation(IceAndFire.MODID, "graveyard_processor"), GRAVEYARDPROCESSOR);
-        Registry.register(Registry.STRUCTURE_PROCESSOR, new ResourceLocation(IceAndFire.MODID, "village_house_processor"), VILLAGEHOUSEPROCESSOR);
+    public static final RegistryObject<StructureProcessorType<DreadRuinProcessor>> DREADRUINPROCESSOR = registerProcessor("dread_mausoleum_processor", () -> () -> DreadRuinProcessor.CODEC);
+    public static final RegistryObject<StructureProcessorType<GorgonTempleProcessor>> GORGONTEMPLEPROCESSOR = registerProcessor("gorgon_temple_processor", () -> () -> GorgonTempleProcessor.CODEC);
+    public static final RegistryObject<StructureProcessorType<GraveyardProcessor>> GRAVEYARDPROCESSOR = registerProcessor("graveyard_processor", () -> () -> GraveyardProcessor.CODEC);
+    public static final RegistryObject<StructureProcessorType<VillageHouseProcessor>> VILLAGEHOUSEPROCESSOR = registerProcessor("village_house_processor", () -> () -> VillageHouseProcessor.CODEC);
+
+    private static <P extends StructureProcessor> RegistryObject<StructureProcessorType<P>> registerProcessor(String name, Supplier<StructureProcessorType<P>> processor) {
+        return PROCESSORS.register(name, processor);
     }
 }

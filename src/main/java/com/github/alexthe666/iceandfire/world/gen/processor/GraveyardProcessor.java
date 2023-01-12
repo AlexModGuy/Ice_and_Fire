@@ -63,7 +63,7 @@ public class GraveyardProcessor extends StructureProcessor {
 
     @Override
     protected @NotNull StructureProcessorType getType() {
-        return IafProcessors.GRAVEYARDPROCESSOR;
+        return IafProcessors.GRAVEYARDPROCESSOR.get();
     }
 
 }

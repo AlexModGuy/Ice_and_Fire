@@ -70,7 +70,7 @@ public class DreadRuinProcessor extends StructureProcessor {
 
     @Override
     protected @NotNull StructureProcessorType getType() {
-        return IafProcessors.DREADRUINPROCESSOR;
+        return IafProcessors.DREADRUINPROCESSOR.get();
     }
 
     private EntityType getRandomMobForMobSpawner(Random random) {

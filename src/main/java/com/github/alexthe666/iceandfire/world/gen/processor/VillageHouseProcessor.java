@@ -40,7 +40,7 @@ public class VillageHouseProcessor extends StructureProcessor {
 
     @Override
     protected @NotNull StructureProcessorType getType() {
-        return IafProcessors.VILLAGEHOUSEPROCESSOR;
+        return IafProcessors.VILLAGEHOUSEPROCESSOR.get();
     }
 
 }
