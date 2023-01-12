@@ -19,7 +19,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.function.Supplier;
+import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafBlockRegistry {
@@ -155,12 +155,14 @@ public class IafBlockRegistry {
         IafBlockRegistry.BLOCKS.getEntries().stream()
             .map(RegistryObject::get)
             .forEach(block -> {
-                Supplier<? extends Item> sup = () -> registerItemBlock(block);
-                IafItemRegistry.ITEMS.register(block.getRegistryName().getPath(), sup);
+                Optional<Item> item = registerItemBlock(block);
+                if (item.isPresent())
+                    IafItemRegistry.ITEMS.register(block.getRegistryName().getPath(), () -> item.get());
             });
 
     }
-    public static Item registerItemBlock(Block block) {
+
+    public static Optional<Item> registerItemBlock(Block block) {
         if (!(block instanceof WallTorchBlock)) {
             Item.Properties props = new Item.Properties();
             if (!(block instanceof INoTab) || ((INoTab) block).shouldBeInTab()) {
@@ -174,8 +176,8 @@ public class IafBlockRegistry {
             } else {
                 itemBlock = new BlockItem(block, props);
             }
-            return itemBlock;
+            return Optional.of(itemBlock);
         }
-        return new BlockItem(block, new Item.Properties());
+        return Optional.empty();
     }
 }
