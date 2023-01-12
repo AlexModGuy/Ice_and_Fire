@@ -28,6 +28,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
 import static com.github.alexthe666.iceandfire.world.structure.Pool.dread_pool;
+import static com.github.alexthe666.iceandfire.world.structure.Pool.replaceContext;
 
 public class DreadMausoleumStructure extends StructureFeature<JigsawConfiguration> {
 
@@ -45,6 +46,8 @@ public class DreadMausoleumStructure extends StructureFeature<JigsawConfiguratio
     public static @NotNull Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context) {
         if (!context.validBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG) || !IafConfig.generateMausoleums)
             return Optional.empty();
+
+        context = replaceContext(context, config(context));
 
         ChunkGenerator chunkGenerator = context.chunkGenerator();
         ChunkPos pos = context.chunkPos();
