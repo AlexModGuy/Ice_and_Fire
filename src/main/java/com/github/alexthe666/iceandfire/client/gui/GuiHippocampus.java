@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.client.gui;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
-import com.github.alexthe666.iceandfire.inventory.ContainerHippocampus;
+import com.github.alexthe666.iceandfire.inventory.HippocampusContainerMenu;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;
@@ -15,12 +15,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-public class GuiHippocampus extends AbstractContainerScreen<ContainerHippocampus> {
+public class GuiHippocampus extends AbstractContainerScreen<HippocampusContainerMenu> {
     private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/hippogryph.png");
     private float mousePosx;
     private float mousePosY;
 
-    public GuiHippocampus(ContainerHippocampus dragonInv, Inventory playerInv, Component name) {
+    public GuiHippocampus(HippocampusContainerMenu dragonInv, Inventory playerInv, Component name) {
         super(dragonInv, playerInv, name);
     }
 

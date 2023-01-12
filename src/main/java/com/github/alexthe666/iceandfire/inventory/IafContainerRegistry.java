@@ -3,9 +3,9 @@ package com.github.alexthe666.iceandfire.inventory;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
@@ -22,8 +22,8 @@ public class IafContainerRegistry {
         () -> new MenuType<>(ContainerDragon::new), "dragon");
     public static final RegistryObject<MenuType<ContainerHippogryph>> HIPPOGRYPH_CONTAINER = register(
         () -> new MenuType<>(ContainerHippogryph::new), "hippogryph");
-    public static final RegistryObject<MenuType<ContainerHippocampus>> HIPPOCAMPUS_CONTAINER = register(
-        () -> new MenuType<>(ContainerHippocampus::new), "hippocampus");
+    public static final RegistryObject<MenuType<HippocampusContainerMenu>> HIPPOCAMPUS_CONTAINER = register(
+        () -> new MenuType<>(HippocampusContainerMenu::new), "hippocampus");
     public static final RegistryObject<MenuType<ContainerDragonForge>> DRAGON_FORGE_CONTAINER = register(
         () -> new MenuType<>(ContainerDragonForge::new), "dragon_forge");
 

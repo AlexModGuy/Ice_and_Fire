@@ -13,24 +13,26 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
 
-public class ContainerHippocampus extends AbstractContainerMenu {
+public class HippocampusContainerMenu extends AbstractContainerMenu {
     private final Container hippocampusInventory;
     private final EntityHippocampus hippocampus;
     private final Player player;
 
-    public ContainerHippocampus(int i, Inventory playerInventory) {
+    public HippocampusContainerMenu(int i, Inventory playerInventory) {
         this(i, new SimpleContainer(18), playerInventory, null);
     }
 
-    public ContainerHippocampus(int id, Container ratInventory, Inventory playerInventory, EntityHippocampus hippocampus) {
+    public HippocampusContainerMenu(int id, Container hippoInventory, Inventory playerInventory, EntityHippocampus hippocampus) {
         super(IafContainerRegistry.HIPPOCAMPUS_CONTAINER.get(), id);
-        this.hippocampusInventory = ratInventory;
+        this.hippocampusInventory = hippoInventory;
         if (hippocampus == null && IceAndFire.PROXY.getReferencedMob() instanceof EntityHippocampus) {
             hippocampus = (EntityHippocampus) IceAndFire.PROXY.getReferencedMob();
         }
         this.hippocampus = hippocampus;
         this.player = playerInventory.player;
         hippocampusInventory.startOpen(player);
+
+        // Saddle slot
         this.addSlot(new Slot(hippocampusInventory, 0, 8, 18) {
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
@@ -38,17 +40,12 @@ public class ContainerHippocampus extends AbstractContainerMenu {
             }
 
             @Override
-            public void setChanged() {
-                if (ContainerHippocampus.this.hippocampus != null) {
-                    ContainerHippocampus.this.hippocampus.refreshInventory();
-                }
-            }
-
-            @Override
             public boolean isActive() {
                 return true;
             }
         });
+
+        // Chest slot
         this.addSlot(new Slot(hippocampusInventory, 1, 8, 36) {
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
@@ -56,29 +53,17 @@ public class ContainerHippocampus extends AbstractContainerMenu {
             }
 
             @Override
-            public void setChanged() {
-                if (ContainerHippocampus.this.hippocampus != null) {
-                    ContainerHippocampus.this.hippocampus.refreshInventory();
-                }
-            }
-
-            @Override
             public boolean isActive() {
                 return true;
             }
         });
+
+        // Armor slot
         this.addSlot(new Slot(hippocampusInventory, 2, 8, 52) {
 
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
                 return EntityHippocampus.getIntFromArmor(stack) != 0;
-            }
-
-            @Override
-            public void setChanged() {
-                if (ContainerHippocampus.this.hippocampus != null) {
-                    ContainerHippocampus.this.hippocampus.refreshInventory();
-                }
             }
 
             @Override
@@ -92,19 +77,12 @@ public class ContainerHippocampus extends AbstractContainerMenu {
             }
         });
 
-        for (int k = 0; k < 3; ++k) {
-            for (int l = 0; l < 5; ++l) {
-                this.addSlot(new Slot(hippocampusInventory, 3 + l + k * 5, 80 + l * 18, 18 + k * 18) {
-                    @Override
-                    public boolean isActive() {
-                        return ContainerHippocampus.this.hippocampus != null && ContainerHippocampus.this.hippocampus.isChested();
-                    }
-
-                    @Override
-                    public boolean mayPlace(@NotNull ItemStack stack) {
-                        return ContainerHippocampus.this.hippocampus != null && ContainerHippocampus.this.hippocampus.isChested();
-                    }
-                });
+        // Create the slots for the inventory
+        if (this.hippocampus.isChested()) {
+            for (int k = 0; k < 3; ++k) {
+                for (int l = 0; l < (hippocampus).getInventoryColumns(); ++l) {
+                    this.addSlot(new Slot(hippoInventory, 3 + l + k * (hippocampus).getInventoryColumns(), 80 + l * 18, 18 + k * 18));
+                }
             }
         }
 
@@ -127,8 +105,9 @@ public class ContainerHippocampus extends AbstractContainerMenu {
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
-            if (index < this.hippocampusInventory.getContainerSize()) {
-                if (!this.moveItemStackTo(itemstack1, this.hippocampusInventory.getContainerSize(), this.slots.size(), true)) {
+            int containerSize = this.hippocampusInventory.getContainerSize();
+            if (index < containerSize) {
+                if (!this.moveItemStackTo(itemstack1, containerSize, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else if (this.getSlot(1).mayPlace(itemstack1) && !this.getSlot(1).hasItem()) {
@@ -145,7 +124,21 @@ public class ContainerHippocampus extends AbstractContainerMenu {
                 if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (this.hippocampusInventory.getContainerSize() <= 3 || !this.moveItemStackTo(itemstack1, 3, this.hippocampusInventory.getContainerSize(), false)) {
+            } else if (containerSize <= 3 || !this.moveItemStackTo(itemstack1, 3, containerSize, false)) {
+                int j = containerSize + 27;
+                int k = j + 9;
+                if (index >= j && index < k) {
+                    if (!this.moveItemStackTo(itemstack1, containerSize, j, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (index >= containerSize && index < j) {
+                    if (!this.moveItemStackTo(itemstack1, j, k, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (!this.moveItemStackTo(itemstack1, j, j, false)) {
+                    return ItemStack.EMPTY;
+                }
+
                 return ItemStack.EMPTY;
             }
             if (itemstack1.isEmpty()) {
@@ -159,7 +152,7 @@ public class ContainerHippocampus extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(@NotNull Player playerIn) {
-        return this.hippocampusInventory.stillValid(playerIn) && this.hippocampus.isAlive() && this.hippocampus.distanceTo(playerIn) < 8.0F;
+        return !this.hippocampus.hasInventoryChanged(this.hippocampusInventory) && this.hippocampusInventory.stillValid(playerIn) && this.hippocampus.isAlive() && this.hippocampus.distanceTo(playerIn) < 8.0F;
     }
 
     @Override

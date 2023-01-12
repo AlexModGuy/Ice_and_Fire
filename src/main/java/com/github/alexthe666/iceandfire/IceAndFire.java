@@ -33,6 +33,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -112,12 +113,13 @@ public class IceAndFire {
         IafWorldRegistry.STRUCTURES.register(modBus);
         IafContainerRegistry.CONTAINERS.register(modBus);
         IafRecipeSerializers.SERIALIZERS.register(modBus);
-
+        IafProcessors.PROCESSORS.register(modBus);
         MinecraftForge.EVENT_BUS.register(IafBlockRegistry.class);
         MinecraftForge.EVENT_BUS.register(IafRecipeRegistry.class);
 
         modBus.addListener(this::setup);
         modBus.addListener(this::setupComplete);
+        modBus.addListener(this::setupClient);
     }
 
 
@@ -173,10 +175,13 @@ public class IceAndFire {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSwingArm.class, MessageSwingArm::write, MessageSwingArm::read, MessageSwingArm.Handler::handle);
         event.enqueueWork(() -> {
             PROXY.setup();
-            IafProcessors.registerProcessors();
-            IafWorldRegistry.setup();
             IafVillagerRegistry.setup();
             IafLootRegistry.init();
+        });
+    }
+
+    private void setupClient(final FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
             PROXY.clientInit();
         });
     }
