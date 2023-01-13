@@ -4,7 +4,10 @@ import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.iceandfire.IceAndFire;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * A library containing all animations for all dragons. Contains methods for registering and retrieving models
@@ -41,9 +44,15 @@ public class DragonAnimationsLibrary {
      * @see #registerSingle(IEnumDragonPoses, IEnumDragonModelTypes)
      */
     public static void register(IEnumDragonPoses[] poses, IEnumDragonModelTypes[] modelTypes) {
-        for(IEnumDragonPoses p : poses)
-            for(IEnumDragonModelTypes m : modelTypes)
-                registerSingle(p, m, IceAndFire.MODID);
+        // Improve registration speed by loading files asynchronously
+        List<CompletableFuture<?>> futures = new ArrayList<>();
+        for (IEnumDragonPoses p : poses)
+            futures.add(CompletableFuture.runAsync(() -> {
+                    for (IEnumDragonModelTypes m : modelTypes)
+                        registerSingle(p, m, IceAndFire.MODID);
+                }
+            ));
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()])).join();
     }
 
     /**
@@ -55,9 +64,15 @@ public class DragonAnimationsLibrary {
      * @see #registerSingle(IEnumDragonPoses, IEnumDragonModelTypes, String)
      */
     public static void register(IEnumDragonPoses[] poses, IEnumDragonModelTypes[] modelTypes, String modID) {
-        for(IEnumDragonPoses p : poses)
-            for(IEnumDragonModelTypes m : modelTypes)
-                registerSingle(p, m, modID);
+        // Improve registration speed by loading files asynchronously
+        List<CompletableFuture<?>> futures = new ArrayList<>(poses.length);
+        for (IEnumDragonPoses p : poses)
+            futures.add(CompletableFuture.runAsync(() -> {
+                    for (IEnumDragonModelTypes m : modelTypes)
+                        registerSingle(p, m, modID);
+                }
+            ));
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()])).join();
     }
 
     /**

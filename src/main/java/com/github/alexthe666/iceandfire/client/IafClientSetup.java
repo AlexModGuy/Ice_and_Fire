@@ -159,7 +159,6 @@ public class IafClientSetup {
     public static void setupClient(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             IafGuiRegistry.register();
-            EnumDragonAnimations.initializeDragonModels();
             EnumSeaSerpentAnimations.initializeSerpentModels();
             DragonAnimationsLibrary.register(EnumDragonPoses.values(), EnumDragonModelTypes.values());
 
