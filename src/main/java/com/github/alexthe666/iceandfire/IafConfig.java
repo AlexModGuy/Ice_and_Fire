@@ -45,7 +45,7 @@ public class IafConfig {
     public static double dragonAttackDamageFire = 2F;
     public static double dragonAttackDamageIce = 2.5F;
     public static double dragonAttackDamageLightning = 3.5F;
-    public static int maxDragonFlight = 128;
+    public static int maxDragonFlight = 256;
     public static int dragonGoldSearchLength = 30;
     public static boolean canDragonsDespawn = true;
     public static boolean doDragonsSleep = true;
