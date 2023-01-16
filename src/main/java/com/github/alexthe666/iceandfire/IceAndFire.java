@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.client.ClientProxy;
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
+import com.github.alexthe666.iceandfire.datagen.DataGenerators;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
@@ -14,16 +15,21 @@ import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeSerializers;
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,6 +46,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -96,8 +103,8 @@ public class IceAndFire {
         modLoadingContext.registerConfig(ModConfig.Type.COMMON, ConfigHolder.SERVER_SPEC);
         PROXY.init();
 
+        MinecraftForge.EVENT_BUS.addListener(this::onServerStarting);
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
-        MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadFromJSON);
 
         modBus.addGenericListener(StructureFeature.class, EventPriority.LOW,
             (final RegistryEvent.Register<StructureFeature<?>> event) -> IafWorldRegistry
@@ -122,17 +129,39 @@ public class IceAndFire {
         modBus.addListener(this::setupClient);
     }
 
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onServerStarting(ServerAboutToStartEvent event) {
+        var biomes = event.getServer().registryAccess().ownedRegistryOrThrow(ForgeRegistries.BIOMES.getRegistryKey());
+
+        // Create configured structure feature tags
+        DataGenerators.createResources(biomes);
+        event.getServer().reloadResources(event.getServer().getPackRepository().getSelectedIds());
+
+        event.getServer().getWorldData().worldGenSettings().dimensions().forEach(levelStem -> {
+            reloadSources(biomes, levelStem.generator());
+        });
+
+        biomes.holders().forEach(biome -> {
+            IafWorldRegistry.addFeatures(biome);
+            IafEntityRegistry.addSpawners(biome);
+        });
+
+    }
+
+    private static void reloadSources(Registry<Biome> biomes, ChunkGenerator generator) {
+        if (generator instanceof NoiseBasedChunkGenerator chunkGenerator
+                && chunkGenerator.biomeSource instanceof MultiNoiseBiomeSource biomeSource
+                && chunkGenerator.runtimeBiomeSource instanceof MultiNoiseBiomeSource runtimeBiomeSource)
+        {
+            biomeSource.possibleBiomes.stream().distinct().forEach(IafWorldRegistry::addFeatures);
+            runtimeBiomeSource.possibleBiomes.stream().distinct().forEach(IafWorldRegistry::addFeatures);
+        }
+    }
 
     @SubscribeEvent
     public void onServerStarted(ServerStartedEvent event) {
         LOGGER.info(IafWorldRegistry.LOADED_FEATURES);
         LOGGER.info(IafEntityRegistry.LOADED_ENTITIES);
-    }
-
-    @SubscribeEvent
-    public void onBiomeLoadFromJSON(BiomeLoadingEvent event) {
-        IafWorldRegistry.onBiomesLoad(event);
-        IafEntityRegistry.onBiomesLoad(event);
     }
 
     public static <MSG> void sendMSGToServer(MSG message) {

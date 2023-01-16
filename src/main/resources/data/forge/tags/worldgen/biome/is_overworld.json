@@ -1,0 +1,20 @@
+{
+  "values": [
+    {
+      "id": "#forge:is_overworld/biomesoplenty",
+      "required": false
+    },
+    {
+      "id": "#terralith:all_terralith_biomes",
+      "required": false
+    },
+    {
+      "id": "#tectonic:all_tectonic_biomes",
+      "required": false
+    },
+    {
+      "id": "#minecraft:is_overworld",
+      "required": false
+    }
+  ]
+}

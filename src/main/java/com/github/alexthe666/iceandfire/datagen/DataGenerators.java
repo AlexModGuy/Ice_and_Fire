@@ -5,6 +5,8 @@ import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.google.gson.JsonObject;
 import net.minecraft.core.Holder;
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
@@ -12,6 +14,7 @@ import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -32,7 +35,6 @@ public class DataGenerators {
     @SubscribeEvent
     public static void addPackFinders(AddPackFindersEvent event) {
         if (event.getPackType() == PackType.SERVER_DATA) {
-            createResources();
             event.addRepositorySource((packConsumer, packConstructor) -> {
                 Pack pack = Pack.create(IceAndFire.MODID + ":data", true, () -> resources, packConstructor, Pack.Position.TOP, PackSource.DEFAULT);
                 packConsumer.accept(pack);
@@ -40,21 +42,21 @@ public class DataGenerators {
         }
     }
 
-    protected static void createResources() {
+    public static void createResources(Registry<Biome> biomes) {
         HashMap<TagKey<?>, Tag.Builder> builders = new HashMap<>();
         builders.put(IafWorldRegistry.HAS_MAUSOLEUM, Tag.Builder.tag());
         builders.put(IafWorldRegistry.HAS_GRAVEYARD, Tag.Builder.tag());
         builders.put(IafWorldRegistry.HAS_GORGON_TEMPLE, Tag.Builder.tag());
 
-        ForgeRegistries.BIOMES.forEach(biome -> {
-            if (BiomeConfig.test(BiomeConfig.gorgonTempleBiomes, Holder.direct(biome))) {
-                builders.get(IafWorldRegistry.HAS_GORGON_TEMPLE).addElement(ForgeRegistries.BIOMES.getKey(biome), "forge");
+        biomes.holders().forEach(biomeReference -> {
+            if (BiomeConfig.test(BiomeConfig.gorgonTempleBiomes, biomeReference)) {
+                builders.get(IafWorldRegistry.HAS_GORGON_TEMPLE).addElement(biomeReference.key().location(), "forge");
             }
-            if (BiomeConfig.test(BiomeConfig.graveyardBiomes, Holder.direct(biome))) {
-                builders.get(IafWorldRegistry.HAS_GRAVEYARD).addElement(ForgeRegistries.BIOMES.getKey(biome), "forge");
+            if (BiomeConfig.test(BiomeConfig.graveyardBiomes, biomeReference)) {
+                builders.get(IafWorldRegistry.HAS_GRAVEYARD).addElement(biomeReference.key().location(), "forge");
             }
-            if (BiomeConfig.test(BiomeConfig.mausoleumBiomes, Holder.direct(biome))) {
-                builders.get(IafWorldRegistry.HAS_MAUSOLEUM).addElement(ForgeRegistries.BIOMES.getKey(biome), "forge");
+            if (BiomeConfig.test(BiomeConfig.mausoleumBiomes, biomeReference)) {
+                builders.get(IafWorldRegistry.HAS_MAUSOLEUM).addElement(biomeReference.key().location(), "forge");
             }
         });
 
