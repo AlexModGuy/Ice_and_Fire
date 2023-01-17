@@ -276,6 +276,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return this.homePos == null ? "" : homePos.getDimension();
     }
 
+    @Override
     public boolean detachHome() {
         return this.hasHomePosition &&
             getHomeDimensionName().equals(DragonUtils.getDimensionName(this.world))
@@ -540,7 +541,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     @Override
     public int getHorizontalFaceSpeed() {
-        return 10 * this.getDragonStage() / 5;
+        return 30 * this.getDragonStage() / 5;
     }
 
     public void openGUI(PlayerEntity playerEntity) {
@@ -1551,8 +1552,10 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                 if (this.isModelDead()) {
                     passenger.stopRiding();
                 }
-                renderYawOffset = rotationYaw;
+
                 this.rotationYaw = passenger.rotationYaw;
+                this.setRotationYawHead(passenger.getRotationYawHead());
+                this.rotationPitch = passenger.rotationPitch;
                 Vector3d riderPos = this.getRiderPosition();
                 passenger.setPosition(riderPos.x, riderPos.y + passenger.getHeight(), riderPos.z);
             }
@@ -2351,6 +2354,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         return true;
     }
 
+    @Override
     public ItemStack getItemStackFromSlot(final EquipmentSlotType slotIn) {
         switch (slotIn) {
             case OFFHAND:
@@ -2368,6 +2372,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         }
     }
 
+    @Override
     public void setItemStackToSlot(final EquipmentSlotType slotIn, final ItemStack stack) {
         switch (slotIn) {
             case OFFHAND:
