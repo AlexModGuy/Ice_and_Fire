@@ -51,8 +51,13 @@ public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
 
     public GuiLectern(ContainerLectern container, Inventory inv, Component name) {
         super(container, inv, name);
-        bookModel = new BookModel(this.minecraft.getEntityModels().bakeLayer(ModelLayers.BOOK));
         this.nameable = name;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        bookModel = new BookModel(this.minecraft.getEntityModels().bakeLayer(ModelLayers.BOOK));
     }
 
     @Override
