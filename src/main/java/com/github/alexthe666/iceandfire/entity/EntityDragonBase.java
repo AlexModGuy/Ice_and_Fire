@@ -896,21 +896,22 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         final int armorFeet = this.getArmorOrdinal(this.getItemStackFromSlot(EquipmentSlotType.FEET));
         armorResLoc = dragonType.getName() + "|" + armorHead + "|" + armorNeck + "|" + armorLegs + "|" + armorFeet;
         IceAndFire.PROXY.updateDragonArmorRender(armorResLoc);
-        if (this.getAgeInDays() <= 125) {
-            final double healthStep = (maximumHealth - minimumHealth) / 125F;
-            final double attackStep = (maximumDamage - minimumDamage) / 125F;
-            final double speedStep = (maximumSpeed - minimumSpeed) / 125F;
-            final double armorStep = (maximumArmor - minimumArmor) / 125F;
+        
+        double age = 125F;
+        if (this.getAgeInDays() <= 125) age = this.getAgeInDays();
+        final double healthStep = (maximumHealth - minimumHealth) / 125F;
+        final double attackStep = (maximumDamage - minimumDamage) / 125F;
+        final double speedStep = (maximumSpeed - minimumSpeed) / 125F;
+        final double armorStep = (maximumArmor - minimumArmor) / 125F;
 
-            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Math.round(minimumHealth + (healthStep * this.getAgeInDays())));
-            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Math.round(minimumDamage + (attackStep * this.getAgeInDays())));
-            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * this.getAgeInDays()));
-            final double baseValue = minimumArmor + (armorStep * this.getAgeInDays());
-            this.getAttribute(Attributes.ARMOR).setBaseValue(baseValue);
-            if (!this.world.isRemote) {
-                this.getAttribute(Attributes.ARMOR).removeModifier(ARMOR_MODIFIER_UUID);
-                this.getAttribute(Attributes.ARMOR).applyNonPersistentModifier(new AttributeModifier(ARMOR_MODIFIER_UUID, "Dragon armor bonus", calculateArmorModifier(), AttributeModifier.Operation.ADDITION));
-            }
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Math.round(minimumHealth + (healthStep * age)));
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Math.round(minimumDamage + (attackStep * age)));
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * age));
+        final double baseValue = minimumArmor + (armorStep * age);
+        this.getAttribute(Attributes.ARMOR).setBaseValue(baseValue);
+        if (!this.world.isRemote) {
+        this.getAttribute(Attributes.ARMOR).removeModifier(ARMOR_MODIFIER_UUID);
+        this.getAttribute(Attributes.ARMOR).applyNonPersistentModifier(new AttributeModifier(ARMOR_MODIFIER_UUID, "Dragon armor bonus", calculateArmorModifier(), AttributeModifier.Operation.ADDITION));
         }
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
     }
