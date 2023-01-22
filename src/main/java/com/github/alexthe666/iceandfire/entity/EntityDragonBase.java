@@ -940,8 +940,8 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         final double baseValue = minimumArmor + (armorStep * age);
         this.getAttribute(Attributes.ARMOR).setBaseValue(baseValue);
         if (!this.world.isRemote) {
-        this.getAttribute(Attributes.ARMOR).removeModifier(ARMOR_MODIFIER_UUID);
-        this.getAttribute(Attributes.ARMOR).applyNonPersistentModifier(new AttributeModifier(ARMOR_MODIFIER_UUID, "Dragon armor bonus", calculateArmorModifier(), AttributeModifier.Operation.ADDITION));
+            this.getAttribute(Attributes.ARMOR).removeModifier(ARMOR_MODIFIER_UUID);
+            this.getAttribute(Attributes.ARMOR).applyPersistentModifier(new AttributeModifier(ARMOR_MODIFIER_UUID, "Dragon armor bonus", calculateArmorModifier(), AttributeModifier.Operation.ADDITION));
         }
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
     }
