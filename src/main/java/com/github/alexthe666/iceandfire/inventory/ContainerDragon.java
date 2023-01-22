@@ -29,21 +29,11 @@ public class ContainerDragon extends AbstractContainerMenu {
         int i = (b0 - 4) * 18;
         this.addSlot(new Slot(ratInventory, 0, 8, 54) {
             @Override
-            public void setChanged() {
-                this.container.setChanged();
-            }
-
-            @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
                 return super.mayPlace(stack) && stack.getItem() instanceof BannerItem;
             }
         });
         this.addSlot(new Slot(ratInventory, 1, 8, 18) {
-            @Override
-            public void setChanged() {
-                this.container.setChanged();
-            }
-
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
                 return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 0;
@@ -51,32 +41,17 @@ public class ContainerDragon extends AbstractContainerMenu {
         });
         this.addSlot(new Slot(ratInventory, 2, 8, 36) {
             @Override
-            public void setChanged() {
-                this.container.setChanged();
-            }
-
-            @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
                 return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 1;
             }
         });
         this.addSlot(new Slot(ratInventory, 3, 153, 18) {
             @Override
-            public void setChanged() {
-                this.container.setChanged();
-            }
-
-            @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
                 return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 2;
             }
         });
         this.addSlot(new Slot(ratInventory, 4, 153, 36) {
-            @Override
-            public void setChanged() {
-                this.container.setChanged();
-            }
-
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
                 return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 3;
@@ -97,7 +72,7 @@ public class ContainerDragon extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(@NotNull Player playerIn) {
-        return this.dragonInventory.stillValid(playerIn) && this.dragon.isAlive() && this.dragon.distanceTo(playerIn) < 8.0F;
+        return !this.dragon.hasInventoryChanged(this.dragonInventory) && this.dragonInventory.stillValid(playerIn) && this.dragon.isAlive() && this.dragon.distanceTo(playerIn) < 8.0F;
     }
 
     @Override

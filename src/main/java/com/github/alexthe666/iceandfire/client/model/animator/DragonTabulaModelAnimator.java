@@ -80,7 +80,7 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
         float degree_fly = 0.5F;
         if (!entity.isNoAi()) {
             if (entity.getAnimation() != EntityDragonBase.ANIMATION_SHAKEPREY || entity.getAnimation() != EntityDragonBase.ANIMATION_ROAR) {
-                model.faceTarget((float) Math.toRadians(rotationYaw), (float) Math.toRadians(rotationPitch), 2, neckParts);
+                model.faceTarget(rotationYaw, rotationPitch, 2, neckParts);
             }
             if (!walking) {
                 model.bob(model.getCube("BodyUpper"), -speed_fly, degree_fly * 5, false, ageInTicks, 1);
