@@ -2,10 +2,8 @@ package com.github.alexthe666.iceandfire.inventory;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
@@ -13,73 +11,48 @@ import net.minecraft.item.BannerItem;
 import net.minecraft.item.ItemStack;
 
 public class ContainerDragon extends Container {
-    private IInventory dragonInventory;
-    private EntityDragonBase dragon;
+    private final Inventory dragonInventory;
+    private final EntityDragonBase dragon;
 
     public ContainerDragon(int i, PlayerInventory playerInventory) {
         this(i, new Inventory(5), playerInventory, null);
     }
 
-    public ContainerDragon(int id, IInventory ratInventory, PlayerInventory playerInventory, EntityDragonBase rat) {
+    public ContainerDragon(int id, Inventory dragonInventory, PlayerInventory playerInventory, EntityDragonBase rat) {
         super(IafContainerRegistry.DRAGON_CONTAINER.get(), id);
-        this.dragonInventory = ratInventory;
+        this.dragonInventory = dragonInventory;
         this.dragon = rat;
         byte b0 = 3;
-        dragonInventory.openInventory(playerInventory.player);
+        this.dragonInventory.openInventory(playerInventory.player);
         int i = (b0 - 4) * 18;
-        this.addSlot(new Slot(ratInventory, 0, 8, 54) {
-            @Override
-            public void onSlotChanged() {
-                this.inventory.markDirty();
-            }
-
+        this.addSlot(new Slot(dragonInventory, 0, 8, 54) {
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return super.isItemValid(stack) && stack.getItem() instanceof BannerItem;
             }
         });
-        this.addSlot(new Slot(ratInventory, 1, 8, 18) {
-            @Override
-            public void onSlotChanged() {
-                this.inventory.markDirty();
-            }
-
+        this.addSlot(new Slot(dragonInventory, 1, 8, 18) {
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 0;
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 0;
             }
         });
-        this.addSlot(new Slot(ratInventory, 2, 8, 36) {
-            @Override
-            public void onSlotChanged() {
-                this.inventory.markDirty();
-            }
-
+        this.addSlot(new Slot(dragonInventory, 2, 8, 36) {
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 1;
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 1;
             }
         });
-        this.addSlot(new Slot(ratInventory, 3, 153, 18) {
-            @Override
-            public void onSlotChanged() {
-                this.inventory.markDirty();
-            }
-
+        this.addSlot(new Slot(dragonInventory, 3, 153, 18) {
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 2;
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 2;
             }
         });
-        this.addSlot(new Slot(ratInventory, 4, 153, 36) {
-            @Override
-            public void onSlotChanged() {
-                this.inventory.markDirty();
-            }
-
+        this.addSlot(new Slot(dragonInventory, 4, 153, 36) {
             @Override
             public boolean isItemValid(ItemStack stack) {
-                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() != null && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 3;
+                return super.isItemValid(stack) && !stack.isEmpty() && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 3;
             }
         });
         int j;
@@ -97,7 +70,7 @@ public class ContainerDragon extends Container {
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
-        return this.dragonInventory.isUsableByPlayer(playerIn) && this.dragon.isAlive() && this.dragon.getDistance(playerIn) < 8.0F;
+        return !this.dragon.hasInventoryChanged(this.dragonInventory) && this.dragonInventory.isUsableByPlayer(playerIn) && this.dragon.isAlive() && this.dragon.getDistance(playerIn) < 8.0F;
     }
 
     @Override
