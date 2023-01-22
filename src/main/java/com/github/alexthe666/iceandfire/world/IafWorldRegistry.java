@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.world;
 
-import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
+import com.github.alexthe666.iceandfire.config.biome.IafSpawnBiomeData;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.feature.*;
 import com.github.alexthe666.iceandfire.world.gen.*;
@@ -25,6 +25,7 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
@@ -41,15 +42,16 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType.St
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import net.minecraft.world.level.storage.LevelData;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -429,153 +431,155 @@ public class IafWorldRegistry {
         LOADED_FEATURES.put("MAUSOLEUM_CF", false);
         LOADED_FEATURES.put("GRAVEYARD_CF", false);
     }
-    public static void onBiomesLoad(BiomeLoadingEvent event) {
-        Optional<Holder<Biome>> optionalBiome = ForgeRegistries.BIOMES.getHolder(event.getName());
 
-        if (optionalBiome.isEmpty()) {
-            IceAndFire.LOGGER.warn("Invalid biome: " + event.getName());
+    public static Set<BiomeGenerationSettings> processed = new HashSet();
+    public static void addFeatures(Holder<Biome> biomeHolder) {
+        // In vanilla we need to do this for BiomeSource as well, however terralith makes that unnecassary
+        // So we avoid adding them twice here to not get feature cycle order crashes
+        if (processed.contains(biomeHolder.value().getGenerationSettings()))
             return;
-        }
 
-        Holder<Biome> biome = optionalBiome.get();
-
-        if (safelyTestBiome(BiomeConfig.fireLilyBiomes, biome)) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, FIRE_LILY_CF);
+        var generator = new BiomeGenerationSettingsBuilder(biomeHolder.value().getGenerationSettings());
+        if (safelyTestBiome(BiomeConfig.fireLilyBiomes, biomeHolder)) {
+            generator.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, FIRE_LILY_CF);
             LOADED_FEATURES.put("FIRE_LILY_CF", true);
         }
-        if (safelyTestBiome(BiomeConfig.lightningLilyBiomes, biome)) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, LIGHTNING_LILY_CF);
+        if (safelyTestBiome(BiomeConfig.lightningLilyBiomes, biomeHolder)) {
+            generator.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, LIGHTNING_LILY_CF);
             LOADED_FEATURES.put("LIGHTNING_LILY_CF", true);
         }
-        if (safelyTestBiome(BiomeConfig.iceLilyBiomes, biome)) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, FROST_LILY_CF);
+        if (safelyTestBiome(BiomeConfig.iceLilyBiomes, biomeHolder)) {
+            generator.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, FROST_LILY_CF);
             LOADED_FEATURES.put("FROST_LILY_CF", true);
         }
-        if (safelyTestBiome(BiomeConfig.oreGenBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.oreGenBiomes, biomeHolder)) {
             if (IafConfig.generateSilverOre) {
-                event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, SILVER_ORE_CF);
+                generator.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, SILVER_ORE_CF);
                 LOADED_FEATURES.put("SILVER_ORE_CF", true);
             }
             if (IafConfig.generateCopperOre) {
-                event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, COPPER_ORE_CF);
+                generator.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, COPPER_ORE_CF);
                 LOADED_FEATURES.put("COPPER_ORE_CF", true);
             }
         }
-        if (IafConfig.generateSapphireOre && safelyTestBiome(BiomeConfig.sapphireBiomes, biome)) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, SAPPHIRE_ORE_CF);
+        if (IafConfig.generateSapphireOre && safelyTestBiome(BiomeConfig.sapphireBiomes, biomeHolder)) {
+            generator.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, SAPPHIRE_ORE_CF);
             LOADED_FEATURES.put("SAPPHIRE_ORE_CF", true);
         }
-        if (IafConfig.generateAmythestOre && safelyTestBiome(BiomeConfig.amethystBiomes, biome)) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, AMETHYST_ORE_CF);
+        if (IafConfig.generateAmythestOre && safelyTestBiome(BiomeConfig.amethystBiomes, biomeHolder)) {
+            generator.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, AMETHYST_ORE_CF);
             LOADED_FEATURES.put("AMETHYST_ORE_CF", true);
         }
 
-        if (safelyTestBiome(BiomeConfig.fireDragonBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.fireDragonBiomes, biomeHolder)) {
             if (IafConfig.generateDragonRoosts) {
-                event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, FIRE_DRAGON_ROOST_CF);
+                generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, FIRE_DRAGON_ROOST_CF);
                 LOADED_FEATURES.put("FIRE_DRAGON_ROOST_CF", true);
             }
             if (IafConfig.generateDragonDens) {
-                event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, FIRE_DRAGON_CAVE_CF);
+                generator.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, FIRE_DRAGON_CAVE_CF);
                 LOADED_FEATURES.put("FIRE_DRAGON_CAVE_CF", true);
             }
         }
-        if (safelyTestBiome(BiomeConfig.lightningDragonBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.lightningDragonBiomes, biomeHolder)) {
             if (IafConfig.generateDragonRoosts) {
-                event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, LIGHTNING_DRAGON_ROOST_CF);
+                generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, LIGHTNING_DRAGON_ROOST_CF);
                 LOADED_FEATURES.put("LIGHTNING_DRAGON_ROOST_CF", true);
             }
             if (IafConfig.generateDragonDens) {
-                event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, LIGHTNING_DRAGON_CAVE_CF);
+                generator.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, LIGHTNING_DRAGON_CAVE_CF);
                 LOADED_FEATURES.put("LIGHTNING_DRAGON_CAVE_CF", true);
             }
         }
-        if (safelyTestBiome(BiomeConfig.iceDragonBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.iceDragonBiomes, biomeHolder)) {
             if (IafConfig.generateDragonRoosts) {
-                event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, ICE_DRAGON_ROOST_CF);
+                generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, ICE_DRAGON_ROOST_CF);
                 LOADED_FEATURES.put("ICE_DRAGON_ROOST_CF", true);
             }
             if (IafConfig.generateDragonDens) {
-                event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, ICE_DRAGON_CAVE_CF);
+                generator.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, ICE_DRAGON_CAVE_CF);
                 LOADED_FEATURES.put("ICE_DRAGON_CAVE_CF", true);
             }
         }
 
-        if (IafConfig.generateCyclopsCaves && safelyTestBiome(BiomeConfig.cyclopsCaveBiomes, biome)) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, CYCLOPS_CAVE_CF);
+        if (IafConfig.generateCyclopsCaves && safelyTestBiome(BiomeConfig.cyclopsCaveBiomes, biomeHolder)) {
+            generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, CYCLOPS_CAVE_CF);
             LOADED_FEATURES.put("CYCLOPS_CAVE_CF", true);
         }
         //if (IafConfig.spawnGorgons && safelyTestBiome(BiomeConfig.gorgonTempleBiomes, biome)) {
-        //    event.getGeneration().addStructureStart(GORGON_TEMPLE_CF);
+        //    generator.addStructureStart(GORGON_TEMPLE_CF);
         //    LOADED_FEATURES.put("GORGON_TEMPLE_CF", true);
         //}
-        if (IafConfig.spawnPixies && safelyTestBiome(BiomeConfig.pixieBiomes, biome)) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, PIXIE_VILLAGE_CF);
+        if (IafConfig.spawnPixies && safelyTestBiome(BiomeConfig.pixieBiomes, biomeHolder)) {
+            generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, PIXIE_VILLAGE_CF);
         }
-        if (IafConfig.generateHydraCaves && safelyTestBiome(BiomeConfig.hydraBiomes, biome)) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, HYDRA_CAVE_CF);
+        if (IafConfig.generateHydraCaves && safelyTestBiome(BiomeConfig.hydraBiomes, biomeHolder)) {
+            generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, HYDRA_CAVE_CF);
             LOADED_FEATURES.put("HYDRA_CAVE_CF", true);
         }
         // TODO: morguldir: move this to data files
         //if (IafConfig.generateMausoleums && safelyTestBiome(BiomeConfig.mausoleumBiomes, biome)) {
-        //    event.getGeneration().addStructureStart(MAUSOLEUM_CF);
+        //    generator.addStructureStart(MAUSOLEUM_CF);
         //    LOADED_FEATURES.put("MAUSOLEUM_CF", true);
         //}
         //if (IafConfig.generateGraveyards && safelyTestBiome(BiomeConfig.graveyardBiomes, biome)) {
-        //    event.getGeneration().addStructureStart(GRAVEYARD_CF);
+        //    generator.addStructureStart(GRAVEYARD_CF);
         //    LOADED_FEATURES.put("GRAVEYARD_CF", true);
         //}
-        if (IafConfig.generateMyrmexColonies && safelyTestBiome(BiomeConfig.desertMyrmexBiomes, biome)) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MYRMEX_HIVE_DESERT_CF);
+        if (IafConfig.generateMyrmexColonies && safelyTestBiome(BiomeConfig.desertMyrmexBiomes, biomeHolder)) {
+            generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MYRMEX_HIVE_DESERT_CF);
             LOADED_FEATURES.put("MYRMEX_HIVE_DESERT_CF", true);
         }
-        if (IafConfig.generateMyrmexColonies && safelyTestBiome(BiomeConfig.jungleMyrmexBiomes, biome)) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MYRMEX_HIVE_JUNGLE_CF);
+        if (IafConfig.generateMyrmexColonies && safelyTestBiome(BiomeConfig.jungleMyrmexBiomes, biomeHolder)) {
+            generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MYRMEX_HIVE_JUNGLE_CF);
             LOADED_FEATURES.put("MYRMEX_HIVE_JUNGLE_CF", true);
         }
-        if (IafConfig.generateSirenIslands && safelyTestBiome(BiomeConfig.sirenBiomes, biome)) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SIREN_ISLAND_CF);
+        if (IafConfig.generateSirenIslands && safelyTestBiome(BiomeConfig.sirenBiomes, biomeHolder)) {
+            generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SIREN_ISLAND_CF);
             LOADED_FEATURES.put("SIREN_ISLAND_CF", true);
         }
-        if (IafConfig.spawnDeathWorm && safelyTestBiome(BiomeConfig.deathwormBiomes, biome)) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_DEATH_WORM_CF);
+        if (IafConfig.spawnDeathWorm && safelyTestBiome(BiomeConfig.deathwormBiomes, biomeHolder)) {
+            generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_DEATH_WORM_CF);
             LOADED_FEATURES.put("SPAWN_DEATH_WORM_CF", true);
         }
-        if (IafConfig.generateWanderingCyclops && safelyTestBiome(BiomeConfig.wanderingCyclopsBiomes, biome)) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_WANDERING_CYCLOPS_CF);
+        if (IafConfig.generateWanderingCyclops && safelyTestBiome(BiomeConfig.wanderingCyclopsBiomes, biomeHolder)) {
+            generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_WANDERING_CYCLOPS_CF);
             LOADED_FEATURES.put("SPAWN_WANDERING_CYCLOPS_CF", true);
         }
         if (IafConfig.generateDragonSkeletons) {
-            if (safelyTestBiome(BiomeConfig.lightningDragonSkeletonBiomes, biome)) {
-                event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_DRAGON_SKELETON_L_CF);
+            if (safelyTestBiome(BiomeConfig.lightningDragonSkeletonBiomes, biomeHolder)) {
+                generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_DRAGON_SKELETON_L_CF);
                 LOADED_FEATURES.put("SPAWN_DRAGON_SKELETON_L_CF", true);
             }
-            if (safelyTestBiome(BiomeConfig.fireDragonSkeletonBiomes, biome)) {
-                event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_DRAGON_SKELETON_F_CF);
+            if (safelyTestBiome(BiomeConfig.fireDragonSkeletonBiomes, biomeHolder)) {
+                generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_DRAGON_SKELETON_F_CF);
                 LOADED_FEATURES.put("SPAWN_DRAGON_SKELETON_F_CF", true);
             }
-            if (safelyTestBiome(BiomeConfig.iceDragonSkeletonBiomes, biome)) {
-                event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_DRAGON_SKELETON_I_CF);
+            if (safelyTestBiome(BiomeConfig.iceDragonSkeletonBiomes, biomeHolder)) {
+                generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_DRAGON_SKELETON_I_CF);
                 LOADED_FEATURES.put("SPAWN_DRAGON_SKELETON_I_CF", true);
             }
         }
-        if (IafConfig.spawnHippocampus && safelyTestBiome(BiomeConfig.hippocampusBiomes, biome)) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_HIPPOCAMPUS_CF);
+        if (IafConfig.spawnHippocampus && safelyTestBiome(BiomeConfig.hippocampusBiomes, biomeHolder)) {
+            generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_HIPPOCAMPUS_CF);
             LOADED_FEATURES.put("SPAWN_HIPPOCAMPUS_CF", true);
         }
-        if (IafConfig.spawnSeaSerpents && safelyTestBiome(BiomeConfig.seaSerpentBiomes, biome)) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_SEA_SERPENT_CF);
+        if (IafConfig.spawnSeaSerpents && safelyTestBiome(BiomeConfig.seaSerpentBiomes, biomeHolder)) {
+            generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_SEA_SERPENT_CF);
             LOADED_FEATURES.put("SPAWN_SEA_SERPENT_CF", true);
         }
-        if (IafConfig.spawnStymphalianBirds && safelyTestBiome(BiomeConfig.stymphalianBiomes, biome)) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_STYMPHALIAN_BIRD_CF);
+        if (IafConfig.spawnStymphalianBirds && safelyTestBiome(BiomeConfig.stymphalianBiomes, biomeHolder)) {
+            generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, SPAWN_STYMPHALIAN_BIRD_CF);
             LOADED_FEATURES.put("SPAWN_STYMPHALIAN_BIRD_CF", true);
         }
+
+        biomeHolder.value().generationSettings = generator.build();
+        processed.add(biomeHolder.value().generationSettings);
     }
 
-    private static boolean safelyTestBiome(Pair<String, SpawnBiomeData> entry, Holder<Biome> biome){
+    private static boolean safelyTestBiome(Pair<String, IafSpawnBiomeData> entry, Holder<Biome> biomeHolder){
         try{
-            return BiomeConfig.test(entry, biome);
+            return BiomeConfig.test(entry, biomeHolder);
         }catch (Exception e){
             return false;
         }

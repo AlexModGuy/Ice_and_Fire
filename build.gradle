@@ -138,7 +138,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 processResources {}
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.2.0'
 
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     compileOnly fg.deobf("mezz.jei:jei-1.18.2-common-api:10.2.1.283")
