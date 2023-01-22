@@ -30,14 +30,14 @@ public class EntityGhostSword extends AbstractArrowEntity {
 
     public EntityGhostSword(EntityType<? extends AbstractArrowEntity> type, World worldIn) {
         super(type, worldIn);
-        this.setDamage(9F);
+        this.setDamage(13F);
     }
 
     public EntityGhostSword(EntityType<? extends AbstractArrowEntity> type, World worldIn, double x, double y, double z,
                             float r, float g, float b) {
         this(type, worldIn);
         this.setPosition(x, y, z);
-        this.setDamage(9F);
+        this.setDamage(13F);
     }
 
     public EntityGhostSword(EntityType<? extends AbstractArrowEntity> type, World worldIn, LivingEntity shooter,
