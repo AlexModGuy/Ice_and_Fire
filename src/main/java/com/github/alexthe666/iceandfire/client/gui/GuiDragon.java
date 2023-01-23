@@ -46,13 +46,9 @@ public class GuiDragon extends ContainerScreen<ContainerDragon> {
         float f2 = livingEntity.renderYawOffset;
         float f3 = livingEntity.rotationYaw;
         float f4 = livingEntity.rotationPitch;
-        float f5 = livingEntity.prevRotationYawHead;
-        float f6 = livingEntity.rotationYawHead;
         livingEntity.renderYawOffset = 180.0F + f * 20.0F;
         livingEntity.rotationYaw = 180.0F + f * 40.0F;
         livingEntity.rotationPitch = -f1 * 20.0F;
-        livingEntity.rotationYawHead = livingEntity.rotationYaw;
-        livingEntity.prevRotationYawHead = livingEntity.rotationYaw;
         EntityRendererManager entityrenderermanager = Minecraft.getInstance().getRenderManager();
         quaternion1.conjugate();
         entityrenderermanager.setCameraOrientation(quaternion1);
@@ -66,8 +62,6 @@ public class GuiDragon extends ContainerScreen<ContainerDragon> {
         livingEntity.renderYawOffset = f2;
         livingEntity.rotationYaw = f3;
         livingEntity.rotationPitch = f4;
-        livingEntity.prevRotationYawHead = f5;
-        livingEntity.rotationYawHead = f6;
         RenderSystem.popMatrix();
     }
 
