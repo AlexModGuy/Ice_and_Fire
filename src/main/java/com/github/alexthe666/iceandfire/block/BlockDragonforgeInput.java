@@ -113,7 +113,7 @@ public class BlockDragonforgeInput extends BaseEntityBlock implements IDragonPro
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> entityType) {
-        return level.isClientSide ? createTickerHelper(entityType, DRAGONFORGE_INPUT.get(), TileEntityDragonforgeInput::tick) : null;
+        return level.isClientSide ? null : createTickerHelper(entityType, DRAGONFORGE_INPUT.get(), TileEntityDragonforgeInput::tick);
     }
 
 

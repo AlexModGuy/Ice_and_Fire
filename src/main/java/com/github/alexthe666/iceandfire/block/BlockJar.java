@@ -129,7 +129,7 @@ public class BlockJar extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> entityType) {
-        return level.isClientSide ? createTickerHelper(entityType, PIXIE_JAR.get(), TileEntityJar::tick) : null;
+        return createTickerHelper(entityType, PIXIE_JAR.get(), TileEntityJar::tick);
     }
 
     @Nullable

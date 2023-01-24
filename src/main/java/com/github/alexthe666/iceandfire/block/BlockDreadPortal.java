@@ -126,7 +126,7 @@ public class BlockDreadPortal extends BaseEntityBlock implements IDreadBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> entityType) {
-        return level.isClientSide ? createTickerHelper(entityType, DREAD_PORTAL.get(), TileEntityDreadPortal::tick) : null;
+        return createTickerHelper(entityType, DREAD_PORTAL.get(), TileEntityDreadPortal::tick);
     }
 
 

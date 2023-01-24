@@ -157,7 +157,7 @@ public class BlockDragonforgeCore extends BaseEntityBlock implements IDragonProo
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> entityType) {
-        return level.isClientSide ? createTickerHelper(entityType, DRAGONFORGE_CORE.get(), TileEntityDragonforge::tick) : null;
+        return createTickerHelper(entityType, DRAGONFORGE_CORE.get(), TileEntityDragonforge::tick);
     }
 
     @Nullable
