@@ -68,15 +68,18 @@ public class BlockJar extends BaseEntityBlock {
         }
     }
 
+    @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return AABB;
     }
 
+    @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return AABB;
     }
 
 
+    @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         dropPixie(worldIn, pos);
         super.onRemove(state, worldIn, pos, newState, isMoving);
@@ -88,6 +91,7 @@ public class BlockJar extends BaseEntityBlock {
         }
     }
 
+    @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult resultIn) {
         if (!empty && world.getBlockEntity(pos) != null && world.getBlockEntity(pos) instanceof TileEntityJar && ((TileEntityJar) world.getBlockEntity(pos)).hasPixie && ((TileEntityJar) world.getBlockEntity(pos)).hasProduced) {
             ((TileEntityJar) world.getBlockEntity(pos)).hasProduced = false;
@@ -102,13 +106,14 @@ public class BlockJar extends BaseEntityBlock {
     }
 
 
+    @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
+    @Override
     public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        if (world.getBlockEntity(pos) instanceof TileEntityJar) {
-            TileEntityJar jar = ((TileEntityJar) world.getBlockEntity(pos));
+        if (world.getBlockEntity(pos) instanceof TileEntityJar jar) {
             if (!empty) {
                 jar.hasPixie = true;
                 jar.pixieType = pixieType;
@@ -122,7 +127,7 @@ public class BlockJar extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
-        return level.isClientSide ? createTickerHelper(entityType, PIXIE_JAR.get(), TileEntityJar::tick) : null;
+        return createTickerHelper(entityType, PIXIE_JAR.get(), TileEntityJar::tick);
     }
 
     @Nullable

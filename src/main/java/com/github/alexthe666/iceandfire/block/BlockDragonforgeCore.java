@@ -92,6 +92,7 @@ public class BlockDragonforgeCore extends BaseEntityBlock implements IDragonProo
         return PushReaction.BLOCK;
     }
 
+    @Override
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (!player.isShiftKeyDown()) {
             if (worldIn.isClientSide) {
@@ -120,6 +121,7 @@ public class BlockDragonforgeCore extends BaseEntityBlock implements IDragonProo
         return new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.asItem());
     }
 
+    @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
@@ -140,10 +142,12 @@ public class BlockDragonforgeCore extends BaseEntityBlock implements IDragonProo
         }
     }
 
+    @Override
     public int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos) {
         return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(worldIn.getBlockEntity(pos));
     }
 
+    @Override
     public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
@@ -157,7 +161,7 @@ public class BlockDragonforgeCore extends BaseEntityBlock implements IDragonProo
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
-        return level.isClientSide ? createTickerHelper(entityType, DRAGONFORGE_CORE.get(), TileEntityDragonforge::tick) : null;
+        return createTickerHelper(entityType, DRAGONFORGE_CORE.get(), TileEntityDragonforge::tick);
     }
 
     @Nullable

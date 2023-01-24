@@ -53,6 +53,7 @@ public class BlockDragonforgeInput extends BaseEntityBlock implements IDragonPro
         return PushReaction.BLOCK;
     }
 
+    @Override
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult resultIn) {
         if (this.getConnectedTileEntity(worldIn, resultIn.getBlockPos()) != null) {
             TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, resultIn.getBlockPos());
@@ -84,6 +85,7 @@ public class BlockDragonforgeInput extends BaseEntityBlock implements IDragonPro
         return this.defaultBlockState().setValue(ACTIVE, Boolean.valueOf(meta > 0));
     }
 
+    @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
@@ -92,6 +94,7 @@ public class BlockDragonforgeInput extends BaseEntityBlock implements IDragonPro
         return state.getValue(ACTIVE).booleanValue() ? 1 : 0;
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(ACTIVE);
     }
@@ -106,7 +109,7 @@ public class BlockDragonforgeInput extends BaseEntityBlock implements IDragonPro
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
-        return level.isClientSide ? createTickerHelper(entityType, DRAGONFORGE_INPUT.get(), TileEntityDragonforgeInput::tick) : null;
+        return level.isClientSide ? null : createTickerHelper(entityType, DRAGONFORGE_INPUT.get(), TileEntityDragonforgeInput::tick);
     }
 
 
