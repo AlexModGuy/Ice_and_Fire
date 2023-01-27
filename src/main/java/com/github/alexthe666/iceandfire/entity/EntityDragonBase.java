@@ -627,7 +627,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     public int getArmorOrdinal(ItemStack stack) {
         if (!stack.isEmpty() && stack.getItem() instanceof ItemDragonArmor armorItem) {
-            return armorItem.type + 1;
+            return armorItem.type.ordinal() + 1;
         }
         return 0;
     }

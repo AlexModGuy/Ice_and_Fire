@@ -17,17 +17,18 @@ import java.util.regex.Pattern;
 
 public class ItemDragonArmor extends Item {
 
-    public int type;
+    public DragonArmorType type;
     public int dragonSlot;
     public String name;
+    private Pattern baseName = Pattern.compile("[a-z]+_[a-z]+");
 
-    public ItemDragonArmor(int type, int dragonSlot) {
+    public ItemDragonArmor(DragonArmorType type, int dragonSlot) {
         super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
         this.type = type;
         this.dragonSlot = dragonSlot;
+        if (type == DragonArmorType.FIRE || type == DragonArmorType.ICE || type == DragonArmorType.LIGHTNING)
+            baseName = Pattern.compile("[a-z]+_[a-z]+_[a-z]+");
     }
-
-    Pattern baseName = Pattern.compile("[a-z]+_[a-z]+");
 
     @Override
     public @NotNull String getDescriptionId() {
@@ -57,4 +58,16 @@ public class ItemDragonArmor extends Item {
         };
         tooltip.add(new TranslatableComponent(words).withStyle(ChatFormatting.GRAY));
     }
+
+    public enum DragonArmorType {
+        IRON,
+        GOLD,
+        DIAMOND,
+        SILVER,
+        FIRE,
+        ICE,
+        COPPER,
+        LIGHTNING
+    }
+
 }
