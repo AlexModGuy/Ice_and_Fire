@@ -136,7 +136,7 @@ public class WorldGenCyclopsCave extends Feature<NoneFeatureConfiguration> {
         if (!IafWorldRegistry.isDimensionListedForFeatures(worldIn)) {
             return false;
         }
-        if (!IafConfig.generateCyclopsCaves || rand.nextInt(IafConfig.spawnCyclopsCaveChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)) {
+        if (!IafConfig.generateCyclopsCaves || rand.nextInt(IafConfig.spawnCyclopsCaveChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
             return false;
         }
         position = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position);
