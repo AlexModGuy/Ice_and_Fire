@@ -39,8 +39,7 @@ public class BiomeConfig {
     public static Pair<String, IafSpawnBiomeData> stymphalianBiomes = Pair.of("iceandfire:stymphalian_bird_biomes", DefaultBiomes.SWAMPS);
     public static Pair<String, IafSpawnBiomeData> hydraBiomes = Pair.of("iceandfire:hydra_cave_biomes", DefaultBiomes.SWAMPS);
 
-    // TODO: Either remove or use these to dynamically create the new biome tags
-    public static Pair<String, IafSpawnBiomeData> mausoleumBiomes = Pair.of("iceandfire:mausoleum_biomes", DefaultBiomes.VERY_SNOWY);
+    public static Pair<String, IafSpawnBiomeData> mausoleumBiomes = Pair.of("iceandfire:mausoleum_biomes", DefaultBiomes.MAUSOLEUM);
     public static Pair<String, IafSpawnBiomeData> graveyardBiomes = Pair.of("iceandfire:graveyard_biomes", DefaultBiomes.GRAVEYARD);
     public static Pair<String, IafSpawnBiomeData> gorgonTempleBiomes = Pair.of("iceandfire:gorgon_temple_biomes", DefaultBiomes.BEACHES);
 
@@ -56,7 +55,7 @@ public class BiomeConfig {
     public static Pair<String, IafSpawnBiomeData> grayHippogryphBiomes = Pair.of("iceandfire:hippogryph_gray_biomes", DefaultBiomes.HIPPOGRYPH_GRAY);
     public static Pair<String, IafSpawnBiomeData> chestnutHippogryphBiomes = Pair.of("iceandfire:hippogryph_chestnut_biomes", DefaultBiomes.HIPPOGRYPH_CHESTNUT);
     public static Pair<String, IafSpawnBiomeData> creamyHippogryphBiomes = Pair.of("iceandfire:hippogryph_creamy_biomes", DefaultBiomes.HIPPOGRYPH_CREAMY);
-    public static Pair<String, IafSpawnBiomeData> darkBrownHippogryphBiomes = Pair.of("iceandfire:hippogryph_dark_brown_biomes", DefaultBiomes.HIPPOGRYPH_DBROWN);
+    public static Pair<String, IafSpawnBiomeData> darkBrownHippogryphBiomes = Pair.of("iceandfire:hippogryph_dark_brown_biomes", DefaultBiomes.HIPPOGRYPH_DARK_BROWN);
     public static Pair<String, IafSpawnBiomeData> whiteHippogryphBiomes = Pair.of("iceandfire:hippogryph_white_biomes", DefaultBiomes.HIPPOGRYPH_WHITE);
 
     private static boolean init = false;

@@ -1,8 +1,7 @@
 package com.github.alexthe666.iceandfire.config;
 
-import com.github.alexthe666.iceandfire.config.biome.IafSpawnBiomeData;
 import com.github.alexthe666.iceandfire.config.biome.BiomeEntryType;
-import net.minecraft.data.worldgen.biome.Biomes;
+import com.github.alexthe666.iceandfire.config.biome.IafSpawnBiomeData;
 import net.minecraftforge.common.Tags;
 
 import static net.minecraft.tags.BiomeTags.*;
@@ -53,9 +52,17 @@ public class DefaultBiomes {
 
     public static final IafSpawnBiomeData VERY_SNOWY = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SNOWY.location().toString(), 0);
-            //.addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 1)
-            //.addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "icy", 1); // Doesn't exist anymore, might need a replacement
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SNOWY.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_WET.location().toString(), 0);
+    //.addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 1)
+    //.addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "icy", 1); // Doesn't exist anymore, might need a replacement
+
+    public static final IafSpawnBiomeData MAUSOLEUM = new IafSpawnBiomeData()
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SNOWY.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_WET.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_OCEAN.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_RIVER.location().toString(), 0);
 
     public static final IafSpawnBiomeData SNOWY = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
@@ -77,7 +84,7 @@ public class DefaultBiomes {
 
     public static final IafSpawnBiomeData BEACHES = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, Tags.Biomes.IS_BEACH.location().toString(), 0);
 
     public static final IafSpawnBiomeData SWAMPS = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
@@ -128,33 +135,47 @@ public class DefaultBiomes {
     public static final IafSpawnBiomeData GRAVEYARD = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_OCEAN.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, Tags.Biomes.IS_BEACH.location().toString(), 0);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_WATER.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, Tags.Biomes.IS_BEACH.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_UNDERGROUND.location().toString(), 0);
 
     public static final IafSpawnBiomeData HIPPOGRYPH_BLACK = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:desert_hills", 0);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:badlands", 0);
 
-    public static final IafSpawnBiomeData HIPPOGRYPH_DBROWN = new IafSpawnBiomeData()
+    public static final IafSpawnBiomeData HIPPOGRYPH_DARK_BROWN = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:taiga_mountains", 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_FOREST.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_MOUNTAIN.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SNOWY.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 1)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:taiga_hills", 1);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_FOREST.location().toString(), 1)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_HILL.location().toString(), 1)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SNOWY.location().toString(), 1);
 
     public static final IafSpawnBiomeData HIPPOGRYPH_WHITE = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:snowy_mountains", 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SPARSE.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SNOWY.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_MOUNTAIN.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_PEAK.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 1)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:snowy_taiga_hills", 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 2)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:snowy_taiga_mountains", 2);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SPARSE.location().toString(), 1)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SNOWY.location().toString(), 1)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_MOUNTAIN.location().toString(), 1)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SLOPE.location().toString(), 1);
 
     public static final IafSpawnBiomeData HIPPOGRYPH_GRAY = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:dark_forest_hills", 0);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:windswept_forest", 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 1)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:windswept_hills", 1);
 
     public static final IafSpawnBiomeData HIPPOGRYPH_CHESTNUT = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:wooded_mountains", 0);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_MOUNTAIN.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_BADLANDS.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_DRY.location().toString(), 0);
 
     public static final IafSpawnBiomeData HIPPOGRYPH_CREAMY = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)

@@ -4,8 +4,6 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.google.gson.JsonObject;
-import net.minecraft.core.Holder;
-import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
@@ -18,7 +16,6 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,7 +57,6 @@ public class DataGenerators {
             }
         });
 
-        IafWorldRegistry.HAS_GRAVEYARD.location();
         addBiomeTag("has_structure/mausoleum.json", builders.get(IafWorldRegistry.HAS_MAUSOLEUM));
         addBiomeTag("has_structure/graveyard.json", builders.get(IafWorldRegistry.HAS_GRAVEYARD));
         addBiomeTag("has_structure/gorgon_temple.json", builders.get(IafWorldRegistry.HAS_GORGON_TEMPLE));
