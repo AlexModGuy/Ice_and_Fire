@@ -30,10 +30,10 @@ public class CommonProxy {
         if (config.getSpec() == ConfigHolder.CLIENT_SPEC) {
             IafConfig.bakeClient(config);
         } else if (config.getSpec() == ConfigHolder.SERVER_SPEC) {
+            // We only need to initialize the biome config on the server
+            BiomeConfig.init();
             IafConfig.bakeServer(config);
         }
-        BiomeConfig.init();
-
     }
 
     @SubscribeEvent
