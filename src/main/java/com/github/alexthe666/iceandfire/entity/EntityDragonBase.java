@@ -329,13 +329,13 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         neckPart = new EntityDragonPart(this, 0.85F * scale, 0, 0.7F * scale, 0.5F * scale, 0.2F * scale, 1);
         neckPart.copyLocationAndAnglesFrom(this);
         neckPart.setParent(this);
-        rightWingUpperPart = new EntityDragonPart(this, 1F * scale, 90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
+        rightWingUpperPart = new EntityDragonPart(this, scale, 90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
         rightWingUpperPart.copyLocationAndAnglesFrom(this);
         rightWingUpperPart.setParent(this);
         rightWingLowerPart = new EntityDragonPart(this, 1.4F * scale, 100, 0.3F * scale, 0.85F * scale, 0.2F * scale, 0.5F);
         rightWingLowerPart.copyLocationAndAnglesFrom(this);
         rightWingLowerPart.setParent(this);
-        leftWingUpperPart = new EntityDragonPart(this, 1F * scale, -90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
+        leftWingUpperPart = new EntityDragonPart(this, scale, -90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
         leftWingUpperPart.copyLocationAndAnglesFrom(this);
         leftWingUpperPart.setParent(this);
         leftWingLowerPart = new EntityDragonPart(this, 1.4F * scale, -100, 0.3F * scale, 0.85F * scale, 0.2F * scale, 0.5F);
@@ -1119,8 +1119,9 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     public boolean canMove() {
         return !this.isQueuedToSit() && !this.isSleeping() &&
-                this.getControllingPassenger() == null && !this.isModelDead() &&
-                sleepProgress == 0 && this.getAnimation() != ANIMATION_SHAKEPREY;
+                this.getControllingPassenger() == null && !this.isPassenger() &&
+                !this.isModelDead() && sleepProgress == 0 &&
+                this.getAnimation() != ANIMATION_SHAKEPREY;
     }
 
     public boolean isFuelingForge() {
@@ -2145,7 +2146,6 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     @Override
     protected void dropLoot(DamageSource damageSourceIn, boolean attackedRecently) {
-        return;
     }
 
     public RayTraceResult rayTraceRider(Entity rider, double blockReachDistance, float partialTicks) {

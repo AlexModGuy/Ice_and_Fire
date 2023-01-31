@@ -1,19 +1,18 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import java.util.EnumSet;
-
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.vector.Vector3d;
 
+import java.util.EnumSet;
+
 public class DragonAIWander extends Goal {
-    private EntityDragonBase dragon;
+    private final EntityDragonBase dragon;
     private double xPosition;
     private double yPosition;
     private double zPosition;
-    private double speed;
+    private final double speed;
     private int executionChance;
     private boolean mustUpdate;
 
@@ -32,9 +31,6 @@ public class DragonAIWander extends Goal {
     @Override
     public boolean shouldExecute() {
         if (!dragon.canMove() || dragon.isFuelingForge()) {
-            return false;
-        }
-        if (dragon.getControllingPassenger() != null) {
             return false;
         }
         if (dragon.isFlying() || dragon.isHovering()) {
