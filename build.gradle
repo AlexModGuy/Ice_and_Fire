@@ -42,7 +42,7 @@ repositories {
 def build_snapshot = System.getenv("BUILD_SNAPSHOT") == "true"
 def build_id = System.getenv("BUILD_ID")
 
-version = '2.1.11-1.18.2'
+version = '2.1.12-1.18.2'
 
 if (build_snapshot) {
     version += '-SNAPSHOT'
