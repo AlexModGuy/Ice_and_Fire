@@ -569,17 +569,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     @Override
     protected void tickDeath() {
         this.deathTime = 0;
-        if (!this.isModelDead()) {
-            if (!this.level.isClientSide && this.lastHurtByPlayerTime > 0) {
-                int i = this.getExperienceReward(this.lastHurtByPlayer);
-                i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.lastHurtByPlayer, i);
-                while (i > 0) {
-                    int j = ExperienceOrb.getExperienceValue(i);
-                    i -= j;
-                    this.level.addFreshEntity(new ExperienceOrb(this.level, this.getX(), this.getY(), this.getZ(), j));
-                }
-            }
-        }
         this.setModelDead(true);
         this.ejectPassengers();
         if (this.getDeathStage() >= this.getAgeInDays() / 5) {
