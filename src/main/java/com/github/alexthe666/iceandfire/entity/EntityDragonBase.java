@@ -39,7 +39,6 @@ import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.OwnerHurtByTargetGoal;
 import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
 import net.minecraft.entity.ai.goal.SitGoal;
-import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -567,17 +566,6 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     @Override
     protected void onDeathUpdate() {
         this.deathTime = 0;
-        if (!this.isModelDead()) {
-            if (!this.world.isRemote && this.recentlyHit > 0) {
-                int i = this.getExperiencePoints(this.attackingPlayer);
-                i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
-                while (i > 0) {
-                    int j = ExperienceOrbEntity.getXPSplit(i);
-                    i -= j;
-                    this.world.addEntity(new ExperienceOrbEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ(), j));
-                }
-            }
-        }
         this.setModelDead(true);
         this.removePassengers();
         if (this.getDeathStage() >= this.getAgeInDays() / 5) {
