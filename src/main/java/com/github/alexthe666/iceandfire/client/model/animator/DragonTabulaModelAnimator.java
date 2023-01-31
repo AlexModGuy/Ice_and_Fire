@@ -409,23 +409,23 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
         if (model.llibAnimator.setAnimation(T.ANIMATION_EPIC_ROAR)) {
             model.llibAnimator.startKeyframe(10);
             moveToPose(model, getModel(EnumDragonPoses.EPIC_ROAR1));
-            model.llibAnimator.move(modelCubeBodyUpper, 0, -6.8F, 0);
+            model.llibAnimator.rotate(modelCubeBodyUpper, -0.1F, 0, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.startKeyframe(10);
             moveToPose(model, getModel(EnumDragonPoses.EPIC_ROAR2));
-            model.llibAnimator.move(modelCubeBodyUpper, 0, -6.8F, 0);
+            model.llibAnimator.rotate(modelCubeBodyUpper, -0.2F, 0, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.startKeyframe(10);
             moveToPose(model, getModel(EnumDragonPoses.EPIC_ROAR3));
-            model.llibAnimator.move(modelCubeBodyUpper, 0, -6.8F, 0);
+            model.llibAnimator.rotate(modelCubeBodyUpper, -0.2F, 0, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.startKeyframe(10);
             moveToPose(model, getModel(EnumDragonPoses.EPIC_ROAR2));
-            model.llibAnimator.move(modelCubeBodyUpper, 0, -6.8F, 0);
+            model.llibAnimator.rotate(modelCubeBodyUpper, -0.2F, 0, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.startKeyframe(10);
             moveToPose(model, getModel(EnumDragonPoses.EPIC_ROAR3));
-            model.llibAnimator.move(modelCubeBodyUpper, 0, -6.8F, 0);
+            model.llibAnimator.rotate(modelCubeBodyUpper, -0.1F, 0, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.resetKeyframe(10);
         }
