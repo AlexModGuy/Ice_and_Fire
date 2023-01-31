@@ -1,40 +1,18 @@
 package com.github.alexthe666.iceandfire.world;
 
-import java.util.HashMap;
-import java.util.function.Supplier;
-
-import net.minecraft.world.storage.IWorldInfo;
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import com.github.alexthe666.iceandfire.world.feature.SpawnDeathWorm;
-import com.github.alexthe666.iceandfire.world.feature.SpawnDragonSkeleton;
-import com.github.alexthe666.iceandfire.world.feature.SpawnHippocampus;
-import com.github.alexthe666.iceandfire.world.feature.SpawnSeaSerpent;
-import com.github.alexthe666.iceandfire.world.feature.SpawnStymphalianBird;
-import com.github.alexthe666.iceandfire.world.feature.SpawnWanderingCyclops;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenCyclopsCave;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenFireDragonCave;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenFireDragonRoosts;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenHydraCave;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenIceDragonCave;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenIceDragonRoosts;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenLightningDragonCave;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenLightningDragonRoosts;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenPixieVillage;
-import com.github.alexthe666.iceandfire.world.gen.WorldGenSirenIsland;
+import com.github.alexthe666.iceandfire.world.feature.*;
+import com.github.alexthe666.iceandfire.world.gen.*;
 import com.github.alexthe666.iceandfire.world.structure.DreadMausoleumStructure;
 import com.github.alexthe666.iceandfire.world.structure.DummyPiece;
 import com.github.alexthe666.iceandfire.world.structure.GorgonTempleStructure;
 import com.github.alexthe666.iceandfire.world.structure.GraveyardStructure;
 import com.google.common.collect.ImmutableList;
-
 import net.minecraft.block.Blocks;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -48,25 +26,21 @@ import net.minecraft.world.gen.DimensionSettings;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
-import net.minecraft.world.gen.feature.BlockClusterFeatureConfig;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.Features;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.feature.ReplaceBlockConfig;
-import net.minecraft.world.gen.feature.StructureFeature;
+import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
-
+import net.minecraft.world.storage.IWorldInfo;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.HashMap;
+import java.util.function.Supplier;
 
 public class IafWorldRegistry {
 
@@ -96,13 +70,33 @@ public class IafWorldRegistry {
     public static final RegistryObject<Feature<NoFeatureConfig>> SPAWN_STYMPHALIAN_BIRD;
     public static final RegistryObject<Feature<NoFeatureConfig>> SPAWN_WANDERING_CYCLOPS;
 
-    public static final RegistryObject<Structure<NoFeatureConfig>> MAUSOLEUM = STRUCTURES.register("mausoleum",
-        () -> new DreadMausoleumStructure(NoFeatureConfig.CODEC));
-    public static final RegistryObject<Structure<NoFeatureConfig>> GORGON_TEMPLE = STRUCTURES.register("gorgon_temple",
-        () -> new GorgonTempleStructure(NoFeatureConfig.CODEC));
-    public static final RegistryObject<Structure<NoFeatureConfig>> GRAVEYARD = STRUCTURES.register("graveyard",
-        () -> new GraveyardStructure(NoFeatureConfig.CODEC));
-
+    public static final RegistryObject<Structure<NoFeatureConfig>> MAUSOLEUM_RO = STRUCTURES.register("mausoleum",
+            () -> {
+                Structure<NoFeatureConfig> mausoleum = new DreadMausoleumStructure(NoFeatureConfig.CODEC);
+                MAUSOLEUM = mausoleum;
+                return mausoleum;
+            });
+    public static final RegistryObject<Structure<NoFeatureConfig>> GORGON_TEMPLE_RO = STRUCTURES.register("gorgon_temple",
+            () -> {
+                Structure<NoFeatureConfig> gorgonTemple = new GorgonTempleStructure(NoFeatureConfig.CODEC);
+                GORGON_TEMPLE = gorgonTemple;
+                return gorgonTemple;
+            });
+    public static final RegistryObject<Structure<NoFeatureConfig>> GRAVEYARD_RO = STRUCTURES.register("graveyard",
+            () -> {
+                Structure<NoFeatureConfig> graveyard = new GraveyardStructure(NoFeatureConfig.CODEC);
+                GRAVEYARD = graveyard;
+                return graveyard;
+            });
+    @Deprecated
+    // Only exists for compatibility with allthemodium since they won't update their mod
+    public static Structure<NoFeatureConfig> GRAVEYARD;
+    @Deprecated
+    // Only exists for compatibility with allthemodium since they won't update their mod
+    public static Structure<NoFeatureConfig> GORGON_TEMPLE;
+    @Deprecated
+    // Only exists for compatibility with allthemodium since they won't update their mod
+    public static Structure<NoFeatureConfig> MAUSOLEUM;
     public static IStructurePieceType DUMMY_PIECE;
     public static ConfiguredFeature FIRE_LILY_CF;
     public static ConfiguredFeature FROST_LILY_CF;
@@ -246,27 +240,27 @@ public class IafWorldRegistry {
 
     public static void registerStructureConfiguredFeatures() {
         Structure.field_236384_t_ = ImmutableList.<Structure<?>>builder().addAll(Structure.field_236384_t_)
-            .add(GORGON_TEMPLE.get(), MAUSOLEUM.get(), GRAVEYARD.get()).build();
+                .add(GORGON_TEMPLE_RO.get(), MAUSOLEUM_RO.get(), GRAVEYARD_RO.get()).build();
 
         GORGON_TEMPLE_CF = Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE,
-            "iceandfire:gorgon_temple", GORGON_TEMPLE.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+                "iceandfire:gorgon_temple", GORGON_TEMPLE_RO.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
         MAUSOLEUM_CF = Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, "iceandfire:mausoleum",
-            MAUSOLEUM.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+                MAUSOLEUM_RO.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
         GRAVEYARD_CF = Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, "iceandfire:graveyard",
-            GRAVEYARD.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+                GRAVEYARD_RO.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
 
-        addStructureSeperation(DimensionSettings.OVERWORLD, GORGON_TEMPLE.get(), new StructureSeparationSettings(
-            Math.max(IafConfig.spawnGorgonsChance, 2), Math.max(IafConfig.spawnGorgonsChance / 2, 1), 342226450));
-        addStructureSeperation(DimensionSettings.OVERWORLD, MAUSOLEUM.get(),
-            new StructureSeparationSettings(Math.max(IafConfig.generateMausoleumChance, 2),
-                Math.max(IafConfig.generateMausoleumChance / 2, 1), 342226451));
-        addStructureSeperation(DimensionSettings.OVERWORLD, GRAVEYARD.get(),
-            new StructureSeparationSettings(Math.max(IafConfig.generateGraveyardChance * 3, 2),
-                Math.max(IafConfig.generateGraveyardChance * 3 / 2, 1), 342226440));
+        addStructureSeperation(DimensionSettings.OVERWORLD, GORGON_TEMPLE_RO.get(), new StructureSeparationSettings(
+                Math.max(IafConfig.spawnGorgonsChance, 2), Math.max(IafConfig.spawnGorgonsChance / 2, 1), 342226450));
+        addStructureSeperation(DimensionSettings.OVERWORLD, MAUSOLEUM_RO.get(),
+                new StructureSeparationSettings(Math.max(IafConfig.generateMausoleumChance, 2),
+                        Math.max(IafConfig.generateMausoleumChance / 2, 1), 342226451));
+        addStructureSeperation(DimensionSettings.OVERWORLD, GRAVEYARD_RO.get(),
+                new StructureSeparationSettings(Math.max(IafConfig.generateGraveyardChance * 3, 2),
+                        Math.max(IafConfig.generateGraveyardChance * 3 / 2, 1), 342226440));
 
-        putStructureOnAList(GORGON_TEMPLE);
-        putStructureOnAList(MAUSOLEUM);
-        putStructureOnAList(GRAVEYARD);
+        putStructureOnAList(GORGON_TEMPLE_RO);
+        putStructureOnAList(MAUSOLEUM_RO);
+        putStructureOnAList(GRAVEYARD_RO);
     }
 
     public static void addStructureSeperation(RegistryKey<DimensionSettings> preset, Structure<?> structure,
