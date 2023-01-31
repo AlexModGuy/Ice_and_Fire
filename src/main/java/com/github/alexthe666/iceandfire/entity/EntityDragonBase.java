@@ -1120,8 +1120,9 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     public boolean canMove() {
         return !this.isOrderedToSit() && !this.isSleeping() &&
-            this.getControllingPassenger() == null && !this.isModelDead() &&
-            sleepProgress == 0 && this.getAnimation() != ANIMATION_SHAKEPREY;
+                this.getControllingPassenger() == null && !this.isPassenger() &&
+                !this.isModelDead() && sleepProgress == 0 &&
+                this.getAnimation() != ANIMATION_SHAKEPREY;
     }
 
     public boolean isFuelingForge() {
