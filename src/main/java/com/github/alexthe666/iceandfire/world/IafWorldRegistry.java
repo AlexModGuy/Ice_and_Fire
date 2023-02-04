@@ -506,10 +506,7 @@ public class IafWorldRegistry {
             generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, CYCLOPS_CAVE_CF);
             LOADED_FEATURES.put("CYCLOPS_CAVE_CF", true);
         }
-        //if (IafConfig.spawnGorgons && safelyTestBiome(BiomeConfig.gorgonTempleBiomes, biome)) {
-        //    generator.addStructureStart(GORGON_TEMPLE_CF);
-        //    LOADED_FEATURES.put("GORGON_TEMPLE_CF", true);
-        //}
+
         if (IafConfig.spawnPixies && safelyTestBiome(BiomeConfig.pixieBiomes, biomeHolder)) {
             generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, PIXIE_VILLAGE_CF);
         }
@@ -517,15 +514,7 @@ public class IafWorldRegistry {
             generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, HYDRA_CAVE_CF);
             LOADED_FEATURES.put("HYDRA_CAVE_CF", true);
         }
-        // TODO: morguldir: move this to data files
-        //if (IafConfig.generateMausoleums && safelyTestBiome(BiomeConfig.mausoleumBiomes, biome)) {
-        //    generator.addStructureStart(MAUSOLEUM_CF);
-        //    LOADED_FEATURES.put("MAUSOLEUM_CF", true);
-        //}
-        //if (IafConfig.generateGraveyards && safelyTestBiome(BiomeConfig.graveyardBiomes, biome)) {
-        //    generator.addStructureStart(GRAVEYARD_CF);
-        //    LOADED_FEATURES.put("GRAVEYARD_CF", true);
-        //}
+
         if (IafConfig.generateMyrmexColonies && safelyTestBiome(BiomeConfig.desertMyrmexBiomes, biomeHolder)) {
             generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MYRMEX_HIVE_DESERT_CF);
             LOADED_FEATURES.put("MYRMEX_HIVE_DESERT_CF", true);
