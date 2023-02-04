@@ -250,7 +250,7 @@ public class IafWorldRegistry {
 
         FIRE_DRAGON_ROOST_CF = registerSimple.apply("fire_dragon_roost", FIRE_DRAGON_ROOST.get());
         ICE_DRAGON_ROOST_CF = registerSimple.apply("ice_dragon_roost", ICE_DRAGON_ROOST.get());
-        LIGHTNING_DRAGON_ROOST_CF = registerSimple.apply("lightning_dragon_roost", ICE_DRAGON_ROOST.get());
+        LIGHTNING_DRAGON_ROOST_CF = registerSimple.apply("lightning_dragon_roost", LIGHTNING_DRAGON_ROOST.get());
         FIRE_DRAGON_CAVE_CF = registerSimple.apply("fire_dragon_cave", FIRE_DRAGON_CAVE.get());
         ICE_DRAGON_CAVE_CF = registerSimple.apply("ice_dragon_cave", ICE_DRAGON_CAVE.get());
         LIGHTNING_DRAGON_CAVE_CF = registerSimple.apply("lightning_dragon_cave", LIGHTNING_DRAGON_CAVE.get());
