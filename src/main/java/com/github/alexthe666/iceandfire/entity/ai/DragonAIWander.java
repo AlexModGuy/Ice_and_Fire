@@ -33,9 +33,6 @@ public class DragonAIWander extends Goal {
         if (!dragon.canMove() || dragon.isFuelingForge()) {
             return false;
         }
-        if (dragon.getControllingPassenger() != null) {
-            return false;
-        }
         if (dragon.isFlying() || dragon.isHovering()) {
             return false;
         }

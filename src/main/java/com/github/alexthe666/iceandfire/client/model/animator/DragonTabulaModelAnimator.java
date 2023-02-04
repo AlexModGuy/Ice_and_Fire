@@ -80,7 +80,7 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
         float degree_fly = 0.5F;
         if (!entity.isNoAi()) {
             if (entity.getAnimation() != EntityDragonBase.ANIMATION_SHAKEPREY || entity.getAnimation() != EntityDragonBase.ANIMATION_ROAR) {
-                model.faceTarget((float) Math.toRadians(rotationYaw), (float) Math.toRadians(rotationPitch), 2, neckParts);
+                model.faceTarget(rotationYaw, rotationPitch, 2, neckParts);
             }
             if (!walking) {
                 model.bob(model.getCube("BodyUpper"), -speed_fly, degree_fly * 5, false, ageInTicks, 1);
@@ -409,23 +409,23 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
         if (model.llibAnimator.setAnimation(T.ANIMATION_EPIC_ROAR)) {
             model.llibAnimator.startKeyframe(10);
             moveToPose(model, getModel(EnumDragonPoses.EPIC_ROAR1));
-            model.llibAnimator.move(modelCubeBodyUpper, 0, -6.8F, 0);
+            model.llibAnimator.rotate(modelCubeBodyUpper, -0.1F, 0, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.startKeyframe(10);
             moveToPose(model, getModel(EnumDragonPoses.EPIC_ROAR2));
-            model.llibAnimator.move(modelCubeBodyUpper, 0, -6.8F, 0);
+            model.llibAnimator.rotate(modelCubeBodyUpper, -0.2F, 0, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.startKeyframe(10);
             moveToPose(model, getModel(EnumDragonPoses.EPIC_ROAR3));
-            model.llibAnimator.move(modelCubeBodyUpper, 0, -6.8F, 0);
+            model.llibAnimator.rotate(modelCubeBodyUpper, -0.2F, 0, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.startKeyframe(10);
             moveToPose(model, getModel(EnumDragonPoses.EPIC_ROAR2));
-            model.llibAnimator.move(modelCubeBodyUpper, 0, -6.8F, 0);
+            model.llibAnimator.rotate(modelCubeBodyUpper, -0.2F, 0, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.startKeyframe(10);
             moveToPose(model, getModel(EnumDragonPoses.EPIC_ROAR3));
-            model.llibAnimator.move(modelCubeBodyUpper, 0, -6.8F, 0);
+            model.llibAnimator.rotate(modelCubeBodyUpper, -0.1F, 0, 0);
             model.llibAnimator.endKeyframe();
             model.llibAnimator.resetKeyframe(10);
         }
