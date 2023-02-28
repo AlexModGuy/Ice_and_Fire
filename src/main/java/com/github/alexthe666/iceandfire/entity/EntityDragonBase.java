@@ -1050,6 +1050,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     @Override
     public void setInSittingPose(boolean sleeping) {
         this.entityData.set(SLEEPING, sleeping);
+        if (sleeping)
+            this.getNavigation().stop();
     }
 
     @Override
@@ -1057,6 +1059,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         byte b0 = this.entityData.get(DATA_FLAGS_ID);
         if (sitting) {
             this.entityData.set(DATA_FLAGS_ID, Byte.valueOf((byte) (b0 | 1)));
+            this.getNavigation().stop();
         } else {
             this.entityData.set(DATA_FLAGS_ID, Byte.valueOf((byte) (b0 & -2)));
         }
@@ -1234,13 +1237,13 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                         if (dragonStage < 2) {
                             this.startRiding(player, true);
                             IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getId(), true, true));
-                            return InteractionResult.SUCCESS;
                         } else if (dragonStage > 2 && !player.isPassenger()) {
                             player.setShiftKeyDown(false);
                             player.startRiding(this, true);
                             IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getId(), true, false));
                             this.setInSittingPose(false);
                         }
+                        this.getNavigation().stop();
                     }
                     return InteractionResult.SUCCESS;
                 } else if (stack.isEmpty() && player.isShiftKeyDown()) {
