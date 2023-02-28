@@ -1048,6 +1048,8 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
     @Override
     public void setQueuedToSit(boolean sleeping) {
         this.dataManager.set(SLEEPING, sleeping);
+        if (sleeping)
+            this.getNavigator().clearPath();
     }
 
     @Override
@@ -1055,6 +1057,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         byte b0 = this.dataManager.get(TAMED);
         if (sitting) {
             this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 | 1)));
+            this.getNavigator().clearPath();
         } else {
             this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 & -2)));
         }
@@ -1232,13 +1235,13 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                         if (dragonStage < 2) {
                             this.startRiding(player, true);
                             IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, true));
-                            return ActionResultType.SUCCESS;
                         } else if (dragonStage > 2 && !player.isPassenger()) {
                             player.setSneaking(false);
                             player.startRiding(this, true);
                             IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, false));
                             this.setQueuedToSit(false);
                         }
+                        this.getNavigator().clearPath();
                     }
                     return ActionResultType.SUCCESS;
                 } else if (stack.isEmpty() && player.isSneaking()) {
