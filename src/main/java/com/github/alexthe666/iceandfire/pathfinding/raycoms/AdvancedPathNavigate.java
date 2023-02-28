@@ -530,7 +530,9 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     private boolean processCompletedCalculationResult() throws InterruptedException, ExecutionException {
         pathResult.getJob().synchToClient(mob);
         moveTo(pathResult.getPath(), getSpeedFactor());
-        pathResult.setStatus(PathFindingStatus.IN_PROGRESS_FOLLOWING);
+
+        if (pathResult != null)
+            pathResult.setStatus(PathFindingStatus.IN_PROGRESS_FOLLOWING);
         return false;
     }
 
