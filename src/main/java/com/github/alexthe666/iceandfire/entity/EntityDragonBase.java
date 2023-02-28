@@ -2003,7 +2003,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public boolean isImmobile() {
-        return this.getHealth() <= 0.0F || isOrderedToSit() && !this.isVehicle() || this.isModelDead();
+        return this.getHealth() <= 0.0F || isOrderedToSit() && !this.isVehicle() || this.isModelDead() || this.isPassenger();
     }
 
     @Override
