@@ -28,9 +28,6 @@ public class HippogryphAITarget<T extends LivingEntity> extends NearestAttackabl
 
     @Override
     public boolean shouldExecute() {
-        if (this.goalOwner.getRNG().nextInt(20) != 0) {
-            return false;
-        }
         if (super.shouldExecute() && nearestTarget != null && !nearestTarget.getClass().equals(this.hippogryph.getClass())) {
             if (this.hippogryph.getWidth() >= nearestTarget.getWidth()) {
                 if (nearestTarget instanceof PlayerEntity) {

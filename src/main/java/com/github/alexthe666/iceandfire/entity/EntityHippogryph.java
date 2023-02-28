@@ -168,7 +168,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         this.goalSelector.addGoal(0, new DragonAIRide(this));
         this.goalSelector.addGoal(1, new SwimGoal(this));
         this.goalSelector.addGoal(2, new SitGoal(this));
-        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.5D, true));
+        this.goalSelector.addGoal(3, new AdvancedMeleeAttackGoal(this, 1.2D, true));
         this.goalSelector.addGoal(4, new HippogryphAIMate(this, 1.0D));
         this.goalSelector.addGoal(5, new TemptGoal(this, 1.0D, Ingredient.fromItems(Items.RABBIT, Items.COOKED_RABBIT), false));
         this.goalSelector.addGoal(6, new AIFlyRandom());
