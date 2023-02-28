@@ -1233,6 +1233,8 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
                     if (!world.isRemote) {
                         final int dragonStage = this.getDragonStage();
                         if (dragonStage < 2) {
+                            if (player.getPassengers().size() >= 3)
+                                return ActionResultType.FAIL;
                             this.startRiding(player, true);
                             IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getEntityId(), true, true));
                         } else if (dragonStage > 2 && !player.isPassenger()) {
