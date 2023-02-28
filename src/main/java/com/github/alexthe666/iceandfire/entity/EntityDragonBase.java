@@ -1235,6 +1235,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     if (!level.isClientSide) {
                         final int dragonStage = this.getDragonStage();
                         if (dragonStage < 2) {
+                            if (player.getPassengers().size() >= 3)
+                                return ActionResultType.FAIL;
                             this.startRiding(player, true);
                             IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getId(), true, true));
                         } else if (dragonStage > 2 && !player.isPassenger()) {
