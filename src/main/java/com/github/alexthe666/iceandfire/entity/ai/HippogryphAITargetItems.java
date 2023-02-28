@@ -82,7 +82,9 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
         super.tick();
         if (this.targetEntity == null || !this.targetEntity.isAlive()) {
             this.stop();
-        } else if (this.mob.distanceToSqr(this.targetEntity) < 1) {
+        } else if (this.mob.distanceToSqr(this.targetEntity) < 4 +
+                this.mob.getBbWidth() * this.mob.getBbWidth() +
+                this.mob.getBbHeight() * this.mob.getBbHeight()) {
             EntityHippogryph hippo = (EntityHippogryph) this.mob;
             this.targetEntity.getItem().shrink(1);
             this.mob.playSound(SoundEvents.GENERIC_EAT, 1, 1);
