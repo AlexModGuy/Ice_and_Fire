@@ -889,7 +889,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
             }
             this.hoverTicks++;
             if (this.doesWantToLand()) {
-                this.setMotion(this.getMotion().add(0, -0.25D, 0));
+                this.setMotion(this.getMotion().add(0, -0.05D, 0));
             } else {
                 if (this.getControllingPassenger() == null) {
                     this.setMotion(this.getMotion().add(0, 0.08D, 0));
@@ -948,7 +948,7 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
         isOverAir = this.isOverAirLogic();
         if (this.isGoingUp()) {
             if (this.airBorneCounter == 0) {
-                this.setMotion(this.getMotion().add(0, 0.4F, 0));
+                this.setMotion(this.getMotion().add(0, 0.02F, 0));
             }
             if (!this.isFlying() && !this.isHovering()) {
                 this.spacebarTicks += 2;
@@ -1135,8 +1135,8 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     }
 
     class FlyMoveHelper extends MovementController {
-        public FlyMoveHelper(EntityHippogryph pixie) {
-            super(pixie);
+        public FlyMoveHelper(EntityHippogryph hippogryph) {
+            super(hippogryph);
             this.speed = 1.75F;
         }
 
