@@ -239,6 +239,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         super.positionRider(passenger);
         if (this.hasPassenger(passenger)) {
             yBodyRot = getYRot();
+            setYHeadRot(passenger.getYHeadRot());
             setYRot(passenger.getYRot());
         }
         passenger.setPos(this.getX(), this.getY() + 1.05F, this.getZ());
