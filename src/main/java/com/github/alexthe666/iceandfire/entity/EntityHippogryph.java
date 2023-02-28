@@ -234,8 +234,9 @@ public class EntityHippogryph extends TameableEntity implements ISyncMount, IAni
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
-            renderYawOffset = rotationYaw;
             this.rotationYaw = passenger.rotationYaw;
+            this.setRotationYawHead(passenger.getRotationYawHead());
+            this.rotationPitch = passenger.rotationPitch;
         }
         passenger.setPosition(this.getPosX(), this.getPosY() + 1.05F, this.getPosZ());
     }
