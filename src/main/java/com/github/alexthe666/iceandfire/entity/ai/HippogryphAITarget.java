@@ -26,9 +26,6 @@ public class HippogryphAITarget<T extends LivingEntity> extends NearestAttackabl
 
     @Override
     public boolean canUse() {
-        if (this.mob.getRandom().nextInt(20) != 0) {
-            return false;
-        }
         if (super.canUse() && target != null && !target.getClass().equals(this.hippogryph.getClass())) {
             if (this.hippogryph.getBbWidth() >= target.getBbWidth()) {
                 if (target instanceof Player) {
