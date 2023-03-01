@@ -82,7 +82,7 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
         super.tick();
         if (this.targetEntity == null || !this.targetEntity.isAlive()) {
             this.resetTask();
-        } else if (this.goalOwner.getDistanceSq(this.targetEntity) < 1) {
+        } else if (this.getAttackReachSqr(targetEntity) >= this.goalOwner.getDistanceSq(targetEntity) ){
             EntityHippogryph hippo = (EntityHippogryph) this.goalOwner;
             this.targetEntity.getItem().shrink(1);
             this.goalOwner.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
@@ -120,5 +120,9 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
             final double d1 = this.theEntity.getDistanceSq(p_compare_2_);
             return Double.compare(d0, d1);
         }
+    }
+
+    protected double getAttackReachSqr(Entity attackTarget) {
+        return this.goalOwner.getWidth() * 2.0F * this.goalOwner.getWidth() * 2.0F + attackTarget.getWidth();
     }
 }
