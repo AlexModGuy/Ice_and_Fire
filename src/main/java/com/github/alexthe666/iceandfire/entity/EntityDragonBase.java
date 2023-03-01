@@ -2004,7 +2004,7 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
 
     @Override
     public boolean isMovementBlocked() {
-        return this.getHealth() <= 0.0F || isQueuedToSit() && !this.isBeingRidden() || this.isModelDead();
+        return this.getHealth() <= 0.0F || isQueuedToSit() && !this.isBeingRidden() || this.isModelDead() || this.isPassenger();
     }
 
     @Override
