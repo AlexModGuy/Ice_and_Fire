@@ -88,8 +88,12 @@ public class IafDragonFlightManager {
             if (dragon instanceof EntityIceDragon && dragon.isInWater()) {
                 viewBlock = DragonUtils.getWaterBlockInView(dragon);
             }
-            if (dragon.getCommand() == 2 && dragon.isFlying()) {
-                viewBlock = DragonUtils.getBlockInViewEscort(dragon);
+            if (dragon.getCommand() == 2 && dragon.useFlyingPathFinder()) {
+                if (dragon instanceof EntityIceDragon && dragon.isInWater()) {
+                    viewBlock = DragonUtils.getWaterBlockInViewEscort(dragon);
+                } else {
+                    viewBlock = DragonUtils.getBlockInViewEscort(dragon);
+                }
             }else if(dragon.lookingForRoostAIFlag){
                 double xDist = Math.abs(dragon.getPosX() - dragon.getHomePosition().getX() - 0.5F);
                 double zDist = Math.abs(dragon.getPosZ() - dragon.getHomePosition().getZ() - 0.5F);
@@ -102,6 +106,10 @@ public class IafDragonFlightManager {
 
             }else if(viewBlock == null){
                 viewBlock = DragonUtils.getBlockInView(dragon);
+                if (dragon.isInWater()) {
+                    // If the dragon is in water, take off to reach the air target
+                    dragon.setHovering(true);
+                }
             }
             if (viewBlock != null) {
                 target = new Vector3d(viewBlock.getX() + 0.5, viewBlock.getY() + 0.5, viewBlock.getZ() + 0.5);
