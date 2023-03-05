@@ -1747,7 +1747,8 @@ public abstract class EntityDragonBase extends TameableEntity implements IPassab
         }
         world.getProfiler().endSection();
         world.getProfiler().startSection("dragonFlight");
-        if (isFlying() && !world.isRemote) {
+        // Update the flight mgr as needed
+        if (useFlyingPathFinder() && !world.isRemote) {
             this.flightManager.update();
         }
         world.getProfiler().endSection();
