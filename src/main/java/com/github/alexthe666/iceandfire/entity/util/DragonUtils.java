@@ -52,6 +52,22 @@ public class DragonUtils {
         return null;
     }
 
+    public static BlockPos getWaterBlockInViewEscort(EntityDragonBase dragon) {
+        // In water escort
+        BlockPos inWaterEscortPos = dragon.getEscortPosition();
+        // We don't need to get too close
+        if (Math.abs(dragon.getX() - inWaterEscortPos.getX()) < dragon.getBoundingBox().getXsize()
+                && Math.abs(dragon.getZ() - inWaterEscortPos.getZ()) < dragon.getBoundingBox().getZsize()) {
+            return dragon.blockPosition();
+        }
+        // Takes off if the escort position is no longer in water, mainly for using elytra to fly out of the water
+        if (inWaterEscortPos.getY() - dragon.getY() > 8 + dragon.getYNavSize() && !dragon.level.getFluidState(inWaterEscortPos.below()).is(FluidTags.WATER)) {
+            dragon.setHovering(true);
+        }
+        // Swim directly to the escort position
+        return inWaterEscortPos;
+    }
+
     public static BlockPos getBlockInView(EntityDragonBase dragon) {
         float radius = 12 * (0.7F * dragon.getRenderSize() / 3);
         float neg = dragon.getRandom().nextBoolean() ? 1 : -1;
