@@ -1236,7 +1236,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                         final int dragonStage = this.getDragonStage();
                         if (dragonStage < 2) {
                             if (player.getPassengers().size() >= 3)
-                                return ActionResultType.FAIL;
+                                return InteractionResult.FAIL;
                             this.startRiding(player, true);
                             IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getId(), true, true));
                         } else if (dragonStage > 2 && !player.isPassenger()) {
@@ -1751,7 +1751,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         }
         level.getProfiler().pop();
         level.getProfiler().push("dragonFlight");
-        if (isFlying() && !level.isClientSide) {
+        if (useFlyingPathFinder() && !level.isClientSide) {
             this.flightManager.update();
         }
         level.getProfiler().pop();
