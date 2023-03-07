@@ -759,20 +759,21 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         boolean wentAhead = false;
         boolean isTracking = AbstractPathJob.trackingMap.containsValue(ourEntity.getUniqueID());
 
+        // TODO: Figure out a better way to derive this value ideally from the pathfinding code
+        int maxDropHeight = 3;
+
         final HashSet<BlockPos> reached = new HashSet<>();
         // Look at multiple points, incase we're too fast
-        for (int i = this.currentPath.getCurrentPathIndex(); i < Math.min(this.currentPath.getCurrentPathLength(), this.currentPath.getCurrentPathIndex() + 4); i++)
-        {
+        for (int i = this.currentPath.getCurrentPathIndex(); i < Math.min(this.currentPath.getCurrentPathLength(), this.currentPath.getCurrentPathIndex() + 4); i++) {
             Vector3d next = this.currentPath.getVectorFromIndex(this.entity, i);
             if (Math.abs(this.entity.getPosX() - next.x) < (double) this.maxDistanceToWaypoint - Math.abs(this.entity.getPosY() - (next.y)) * 0.1
-                && Math.abs(this.entity.getPosZ() - next.z) < (double) this.maxDistanceToWaypoint - Math.abs(this.entity.getPosY() - (next.y)) * 0.1 &&
-                Math.abs(this.entity.getPosY() - next.y) <= Math.min(1.0F, Math.ceil(this.entity.getHeight() / 2.0F)))
-            {
+                    && Math.abs(this.entity.getPosZ() - next.z) < (double) this.maxDistanceToWaypoint - Math.abs(this.entity.getPosY() - (next.y)) * 0.1 &&
+                    (Math.abs(this.entity.getPosY() - next.y) <= Math.min(1.0F, Math.ceil(this.entity.getHeight() / 2.0F)) ||
+                            Math.abs(this.entity.getPosY() - next.y) <= Math.ceil(this.entity.getWidth() / 2) * maxDropHeight)) {
                 this.currentPath.incrementPathIndex();
                 wentAhead = true;
 
-                if (isTracking)
-                {
+                if (isTracking) {
                     final PathPoint point = currentPath.getPathPointFromIndex(i);
                     reached.add(new BlockPos(point.x, point.y, point.z));
                 }
