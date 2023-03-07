@@ -924,10 +924,10 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         final double speedStep = (maximumSpeed - minimumSpeed) / 125F;
         final double armorStep = (maximumArmor - minimumArmor) / 125F;
 
-        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Math.round(minimumHealth + (healthStep * age)));
-        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Math.round(minimumDamage + (attackStep * age)));
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * age));
-        final double baseValue = minimumArmor + (armorStep * age);
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Math.round(minimumHealth + (healthStep * this.getAgeInDays())));
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Math.round(minimumDamage + (attackStep * this.getAgeInDays())));
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * this.getAgeInDays()));
+        final double baseValue = minimumArmor + (armorStep * this.getAgeInDays());
         this.getAttribute(Attributes.ARMOR).setBaseValue(baseValue);
         if (!this.level.isClientSide) {
             this.getAttribute(Attributes.ARMOR).removeModifier(ARMOR_MODIFIER_UUID);
@@ -1050,6 +1050,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     @Override
     public void setInSittingPose(boolean sleeping) {
         this.entityData.set(SLEEPING, sleeping);
+        if (sleeping)
+            this.getNavigation().stop();
     }
 
     @Override
@@ -1057,6 +1059,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         byte b0 = this.entityData.get(DATA_FLAGS_ID);
         if (sitting) {
             this.entityData.set(DATA_FLAGS_ID, (byte) (b0 | 1));
+            this.getNavigation().stop();
         } else {
             this.entityData.set(DATA_FLAGS_ID, (byte) (b0 & -2));
         }
@@ -1232,15 +1235,17 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     if (!level.isClientSide) {
                         final int dragonStage = this.getDragonStage();
                         if (dragonStage < 2) {
+                            if (player.getPassengers().size() >= 3)
+                                return InteractionResult.FAIL;
                             this.startRiding(player, true);
                             IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getId(), true, true));
-                            return InteractionResult.SUCCESS;
                         } else if (dragonStage > 2 && !player.isPassenger()) {
                             player.setShiftKeyDown(false);
                             player.startRiding(this, true);
                             IceAndFire.sendMSGToAll(new MessageStartRidingMob(this.getId(), true, false));
                             this.setInSittingPose(false);
                         }
+                        this.getNavigation().stop();
                     }
                     return InteractionResult.SUCCESS;
                 } else if (stack.isEmpty() && player.isShiftKeyDown()) {
@@ -1746,7 +1751,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         }
         level.getProfiler().pop();
         level.getProfiler().push("dragonFlight");
-        if (isFlying() && !level.isClientSide) {
+        if (useFlyingPathFinder() && !level.isClientSide) {
             this.flightManager.update();
         }
         level.getProfiler().pop();
@@ -2003,7 +2008,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public boolean isImmobile() {
-        return this.getHealth() <= 0.0F || isOrderedToSit() && !this.isVehicle() || this.isModelDead();
+        return this.getHealth() <= 0.0F || isOrderedToSit() && !this.isVehicle() || this.isModelDead() || this.isPassenger();
     }
 
     @Override
@@ -2036,6 +2041,10 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 this.setTarget(player);
             }
         }
+    }
+
+    public boolean shouldDismountInWater(Entity rider) {
+        return false;
     }
 
     public boolean isDirectPathBetweenPoints(Vec3 vec1, Vec3 vec2) {

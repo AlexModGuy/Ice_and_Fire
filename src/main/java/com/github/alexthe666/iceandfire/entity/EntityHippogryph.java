@@ -174,7 +174,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         this.goalSelector.addGoal(0, new DragonAIRide(this));
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.5D, true));
+        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.2D, true));
         this.goalSelector.addGoal(4, new HippogryphAIMate(this, 1.0D));
         this.goalSelector.addGoal(5, new TemptGoal(this, 1.0D, Ingredient.of(Items.RABBIT, Items.COOKED_RABBIT), false));
         this.goalSelector.addGoal(6, new AIFlyRandom());
@@ -245,6 +245,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         super.positionRider(passenger);
         if (this.hasPassenger(passenger)) {
             yBodyRot = getYRot();
+            setYHeadRot(passenger.getYHeadRot());
             setYRot(passenger.getYRot());
         }
         passenger.setPos(this.getX(), this.getY() + 1.05F, this.getZ());
@@ -919,7 +920,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
             }
             this.hoverTicks++;
             if (this.doesWantToLand()) {
-                this.setDeltaMovement(this.getDeltaMovement().add(0, -0.25D, 0));
+                this.setDeltaMovement(this.getDeltaMovement().add(0, -0.05D, 0));
             } else {
                 if (this.getControllingPassenger() == null) {
                     this.setDeltaMovement(this.getDeltaMovement().add(0, 0.08D, 0));
@@ -978,7 +979,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         isOverAir = this.isOverAirLogic();
         if (this.isGoingUp()) {
             if (this.airBorneCounter == 0) {
-                this.setDeltaMovement(this.getDeltaMovement().add(0, 0.4F, 0));
+                this.setDeltaMovement(this.getDeltaMovement().add(0, 0.02F, 0));
             }
             if (!this.isFlying() && !this.isHovering()) {
                 this.spacebarTicks += 2;
@@ -1168,8 +1169,8 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
     }
 
     class FlyMoveHelper extends MoveControl {
-        public FlyMoveHelper(EntityHippogryph pixie) {
-            super(pixie);
+        public FlyMoveHelper(EntityHippogryph hippogryph) {
+            super(hippogryph);
             this.speedModifier = 1.75F;
         }
 

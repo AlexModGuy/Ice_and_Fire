@@ -532,7 +532,9 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     private boolean processCompletedCalculationResult() throws InterruptedException, ExecutionException {
         pathResult.getJob().synchToClient(mob);
         moveTo(pathResult.getPath(), getSpeedFactor());
-        pathResult.setStatus(PathFindingStatus.IN_PROGRESS_FOLLOWING);
+
+        if (pathResult != null)
+            pathResult.setStatus(PathFindingStatus.IN_PROGRESS_FOLLOWING);
         return false;
     }
 
@@ -724,13 +726,17 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         boolean wentAhead = false;
         boolean isTracking = AbstractPathJob.trackingMap.containsValue(ourEntity.getUUID());
 
+        // TODO: Figure out a better way to derive this value ideally from the pathfinding code
+        int maxDropHeight = 3;
+
         final HashSet<BlockPos> reached = new HashSet<>();
         // Look at multiple points, incase we're too fast
         for (int i = this.path.getNextNodeIndex(); i < Math.min(this.path.getNodeCount(), this.path.getNextNodeIndex() + 4); i++) {
             Vec3 next = this.path.getEntityPosAtNode(this.mob, i);
             if (Math.abs(this.mob.getX() - next.x) < (double) this.maxDistanceToWaypoint - Math.abs(this.mob.getY() - (next.y)) * 0.1
                 && Math.abs(this.mob.getZ() - next.z) < (double) this.maxDistanceToWaypoint - Math.abs(this.mob.getY() - (next.y)) * 0.1 &&
-                Math.abs(this.mob.getY() - next.y) <= Math.min(1.0F, Math.ceil(this.mob.getBbHeight() / 2.0F))) {
+                    (Math.abs(this.mob.getY() - next.y) <= Math.min(1.0F, Math.ceil(this.mob.getBbHeight() / 2.0F)) ||
+                            Math.abs(this.mob.getY() - next.y) <= Math.ceil(this.mob.getBbWidth() /2 ) * maxDropHeight)) {
                 this.path.advance();
                 wentAhead = true;
 
