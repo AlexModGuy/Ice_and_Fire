@@ -32,25 +32,25 @@ import java.util.List;
 
 public class IafRecipeRegistry {
 
-    public static final BannerPattern PATTERN_FIRE = addBanner("fire");
-    public static final BannerPattern PATTERN_ICE = addBanner("ice");
-    public static final BannerPattern PATTERN_LIGHTNING = addBanner("lightning");
-    public static final BannerPattern PATTERN_FIRE_HEAD = addBanner("fire_head");
-    public static final BannerPattern PATTERN_ICE_HEAD = addBanner("ice_head");
-    public static final BannerPattern PATTERN_LIGHTNING_HEAD = addBanner("lightning_head");
-    public static final BannerPattern PATTERN_AMPHITHERE = addBanner("amphithere");
-    public static final BannerPattern PATTERN_BIRD = addBanner("bird");
-    public static final BannerPattern PATTERN_EYE = addBanner("eye");
-    public static final BannerPattern PATTERN_FAE = addBanner("fae");
-    public static final BannerPattern PATTERN_FEATHER = addBanner("feather");
-    public static final BannerPattern PATTERN_GORGON = addBanner("gorgon");
-    public static final BannerPattern PATTERN_HIPPOCAMPUS = addBanner("hippocampus");
-    public static final BannerPattern PATTERN_HIPPOGRYPH_HEAD = addBanner("hippogryph_head");
-    public static final BannerPattern PATTERN_MERMAID = addBanner("mermaid");
-    public static final BannerPattern PATTERN_SEA_SERPENT = addBanner("sea_serpent");
-    public static final BannerPattern PATTERN_TROLL = addBanner("troll");
-    public static final BannerPattern PATTERN_WEEZER = addBanner("weezer");
-    public static final BannerPattern PATTERN_DREAD = addBanner("dread");
+    public static final BannerPattern PATTERN_FIRE = addBanner("iceandfire_fire", "iceandfire_fire");
+    public static final BannerPattern PATTERN_ICE = addBanner("iceandfire_ice", "iceandfire_ice");
+    public static final BannerPattern PATTERN_LIGHTNING = addBanner("iceandfire_lightning", "iceandfire_lightning");
+    public static final BannerPattern PATTERN_FIRE_HEAD = addBanner("iceandfire_fire_head", "iceandfire_fire_head");
+    public static final BannerPattern PATTERN_ICE_HEAD = addBanner("iceandfire_ice_head", "iceandfire_ice_head");
+    public static final BannerPattern PATTERN_LIGHTNING_HEAD = addBanner("iceandfire_lightning_head", "iceandfire_lightning_head");
+    public static final BannerPattern PATTERN_AMPHITHERE = addBanner("iceandfire_amphithere", "iceandfire_amphithere");
+    public static final BannerPattern PATTERN_BIRD = addBanner("iceandfire_bird", "iceandfire_bird");
+    public static final BannerPattern PATTERN_EYE = addBanner("iceandfire_eye", "iceandfire_eye");
+    public static final BannerPattern PATTERN_FAE = addBanner("iceandfire_fae", "iceandfire_fae");
+    public static final BannerPattern PATTERN_FEATHER = addBanner("iceandfire_feather", "iceandfire_feather");
+    public static final BannerPattern PATTERN_GORGON = addBanner("iceandfire_gorgon", "iceandfire_gorgon");
+    public static final BannerPattern PATTERN_HIPPOCAMPUS = addBanner("iceandfire_hippocampus", "iceandfire_hippocampus");
+    public static final BannerPattern PATTERN_HIPPOGRYPH_HEAD = addBanner("iceandfire_hippogryph_head", "iceandfire_hippogryph_head");
+    public static final BannerPattern PATTERN_MERMAID = addBanner("iceandfire_mermaid", "iceandfire_mermaid");
+    public static final BannerPattern PATTERN_SEA_SERPENT = addBanner("iceandfire_sea_serpent", "iceandfire_sea_serpent");
+    public static final BannerPattern PATTERN_TROLL = addBanner("iceandfire_troll", "iceandfire_troll");
+    public static final BannerPattern PATTERN_WEEZER = addBanner("iceandfire_weezer", "iceandfire_weezer");
+    public static final BannerPattern PATTERN_DREAD = addBanner("iceandfire_dread", "iceandfire_dread");
 
     public static final RecipeType<DragonForgeRecipe> DRAGON_FORGE_TYPE = RecipeType.register("iceandfire:dragonforge");
 
@@ -199,7 +199,7 @@ public class IafRecipeRegistry {
         return PotionUtils.setPotion(new ItemStack(Items.POTION), potion);
     }
 
-    public static BannerPattern addBanner(String name) {
-        return BannerPattern.create(name.toUpperCase(), name, "iceandfire." + name, true);
+    public static BannerPattern addBanner(String enumName, String fileName) {
+        return BannerPattern.create(enumName.toUpperCase(), fileName, "iceandfire." + fileName, true);
     }
 }

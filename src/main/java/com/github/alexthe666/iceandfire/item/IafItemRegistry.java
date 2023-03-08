@@ -28,7 +28,6 @@ import static com.github.alexthe666.iceandfire.item.DragonSteelTier.*;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafItemRegistry {
-
     public static CustomArmorMaterial SILVER_ARMOR_MATERIAL = new IafArmorMaterial("silver", 15, new int[]{1, 4, 5, 2}, 20, SoundEvents.ARMOR_EQUIP_CHAIN, 0);
     public static CustomArmorMaterial COPPER_ARMOR_MATERIAL = new IafArmorMaterial("copper", 10, new int[]{1, 3, 4, 2}, 15, SoundEvents.ARMOR_EQUIP_GOLD, 0);
     public static CustomArmorMaterial BLINDFOLD_ARMOR_MATERIAL = new IafArmorMaterial("blindfold", 5, new int[]{1, 1, 1, 1}, 10, SoundEvents.ARMOR_EQUIP_LEATHER, 0);
@@ -62,6 +61,7 @@ public class IafItemRegistry {
     public static CustomToolMaterial GHOST_SWORD_TOOL_MATERIAL = new CustomToolMaterial("GhostSword", 2, 3000, 5, 10.0F, 25);
 
     public static DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, IceAndFire.MODID);
+
 
     public static final RegistryObject<Item> BESTIARY = ITEMS.register("bestiary", ItemBestiary::new);
     public static final RegistryObject<Item> MANUSCRIPT = ITEMS.register("manuscript", ItemGeneric::new);
@@ -328,6 +328,26 @@ public class IafItemRegistry {
     public static final RegistryObject<Item> GHOST_INGOT = ITEMS.register("ghost_ingot", () -> new ItemGeneric(1));
     public static final RegistryObject<Item> GHOST_SWORD = ITEMS.register("ghost_sword", () -> new ItemGhostSword());
 
+    public static final RegistryObject<BannerPatternItem> PATTERN_FIRE = ITEMS.register("banner_pattern_fire", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_FIRE, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_ICE = ITEMS.register("banner_pattern_ice", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_ICE, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_LIGHTNING = ITEMS.register("banner_pattern_lightning", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_LIGHTNING, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_FIRE_HEAD = ITEMS.register("banner_pattern_fire_head", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_FIRE_HEAD, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_ICE_HEAD = ITEMS.register("banner_pattern_ice_head", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_ICE_HEAD, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_LIGHTNING_HEAD = ITEMS.register("banner_pattern_lightning_head", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_LIGHTNING_HEAD, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_AMPHITHERE = ITEMS.register("banner_pattern_amphithere", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_AMPHITHERE, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_BIRD = ITEMS.register("banner_pattern_bird", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_BIRD, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_EYE = ITEMS.register("banner_pattern_eye", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_EYE, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_FAE = ITEMS.register("banner_pattern_fae", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_FAE, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_FEATHER = ITEMS.register("banner_pattern_feather", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_FEATHER, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_GORGON = ITEMS.register("banner_pattern_gorgon", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_GORGON, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_HIPPOCAMPUS = ITEMS.register("banner_pattern_hippocampus", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_HIPPOCAMPUS, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_HIPPOGRYPH_HEAD = ITEMS.register("banner_pattern_hippogryph_head", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_HIPPOGRYPH_HEAD, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_MERMAID = ITEMS.register("banner_pattern_mermaid", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_MERMAID, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_SEA_SERPENT = ITEMS.register("banner_pattern_sea_serpent", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_SEA_SERPENT, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_TROLL = ITEMS.register("banner_pattern_troll", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_TROLL, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_WEEZER = ITEMS.register("banner_pattern_weezer", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_WEEZER, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_DREAD = ITEMS.register("banner_pattern_dread", () -> new BannerPatternItem(IafRecipeRegistry.PATTERN_DREAD, unstackable()));
+
     static {
         EnumDragonArmor.initArmors();
         EnumSeaSerpent.initArmors();
@@ -335,21 +355,16 @@ public class IafItemRegistry {
         EnumTroll.initArmors();
     }
 
+    public static Item.Properties defaultBuilder() {
+        return new Item.Properties().tab(IceAndFire.TAB_ITEMS);
+    }
+
+    public static Item.Properties unstackable() {
+        return defaultBuilder().stacksTo(1);
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void registerItems(RegistryEvent.Register<Item> event) {
-        //Banner Patterns
-        try {
-            for (Field f : IafRecipeRegistry.class.getFields()) {
-                Object obj = f.get(null);
-                if (obj instanceof BannerPattern pattern) {
-                    String name = "banner_pattern_%s".formatted(f.getName().replace("PATTERN_", "").toLowerCase(Locale.ROOT));
-                    ITEMS.register(name, () -> new BannerPatternItem(pattern, (new Item.Properties()).stacksTo(1).tab(IceAndFire.TAB_ITEMS)));
-                }
-            }
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-
         //spawn Eggs
         //@formatter:off
         ITEMS.register("spawn_egg_fire_dragon", () -> new ForgeSpawnEggItem(IafEntityRegistry.FIRE_DRAGON, 0X340000, 0XA52929, new Item.Properties().tab(IceAndFire.TAB_ITEMS)));

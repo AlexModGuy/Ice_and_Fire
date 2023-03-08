@@ -71,9 +71,26 @@ public class IceAndFireJEIPlugin implements IModPlugin {
         for (EnumSkullType skull : EnumSkullType.values()) {
             addDescription(registry, new ItemStack(skull.skull_item.get()));
         }
-        for (ItemStack stack : IafRecipeRegistry.BANNER_ITEMS) {
-            registry.addIngredientInfo(stack, VanillaTypes.ITEM, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
-        }
+
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_FIRE.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_ICE.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_LIGHTNING.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_FIRE_HEAD.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_ICE_HEAD.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_LIGHTNING_HEAD.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_AMPHITHERE.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_BIRD.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_EYE.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_FAE.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_FEATHER.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_GORGON.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_HIPPOCAMPUS.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_HIPPOGRYPH_HEAD.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_MERMAID.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_SEA_SERPENT.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_TROLL.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_WEEZER.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
+        registry.addIngredientInfo(IafItemRegistry.PATTERN_DREAD.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, new TranslatableComponent("item.iceandfire.custom_banner.jei_desc"));
     }
 
     @Override

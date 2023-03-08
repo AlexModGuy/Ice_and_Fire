@@ -59,7 +59,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     private static ItemStack generateShield() {
         ItemStack itemstack = new ItemStack(Items.CYAN_BANNER);
         CompoundTag compoundnbt = itemstack.getOrCreateTagElement("BlockEntityTag");
-        ListTag listnbt = (new BannerPattern.Builder()).addPattern(BannerPattern.BASE, DyeColor.CYAN).addPattern(IafRecipeRegistry.PATTERN_DREAD, DyeColor.WHITE).toListTag();
+        ListTag listnbt = (new BannerPattern.Builder()).addPattern(BannerPattern.BASE, DyeColor.CYAN).addPattern(IafItemRegistry.PATTERN_DREAD.get().getBannerPattern(), DyeColor.WHITE).toListTag();
         compoundnbt.put("Patterns", listnbt);
         ItemStack shield = new ItemStack(Items.SHIELD, 1);
         shield.setTag(itemstack.getTag());
