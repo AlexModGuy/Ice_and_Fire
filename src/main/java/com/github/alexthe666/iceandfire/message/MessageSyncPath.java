@@ -1,9 +1,11 @@
 package com.github.alexthe666.iceandfire.message;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Node;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.HashSet;
@@ -18,25 +20,17 @@ public class MessageSyncPath
     /**
      * Set of visited nodes.
      */
-    public static Set<Node> lastDebugNodesVisited = new HashSet<>();
+    public Set<Node> lastDebugNodesVisited = new HashSet<>();
 
     /**
      * Set of not visited nodes.
      */
-    public static Set<Node> lastDebugNodesNotVisited  = new HashSet<>();
+    public Set<Node> lastDebugNodesNotVisited = new HashSet<>();
 
     /**
      * Set of chosen nodes for the path.
      */
-    public static Set<Node> lastDebugNodesPath  = new HashSet<>();
-
-    /**
-     * Default constructor.
-     */
-    public MessageSyncPath()
-    {
-        super();
-    }
+    public Set<Node> lastDebugNodesPath  = new HashSet<>();
 
     /**
      * Create a new path message with the filled pathpoints.
@@ -73,35 +67,40 @@ public class MessageSyncPath
     public static MessageSyncPath read(final PacketBuffer buf)
     {
         int size = buf.readInt();
+
+        Set<Node> lastDebugNodesVisited = new HashSet<>();
         for (int i = 0; i < size; i++)
         {
             lastDebugNodesVisited.add(new Node(buf));
         }
 
         size = buf.readInt();
+        Set<Node> lastDebugNodesNotVisited = new HashSet<>();
         for (int i = 0; i < size; i++)
         {
             lastDebugNodesNotVisited.add(new Node(buf));
         }
 
         size = buf.readInt();
+        Set<Node> lastDebugNodesPath = new HashSet<>();
         for (int i = 0; i < size; i++)
         {
             lastDebugNodesPath.add(new Node(buf));
         }
-        return new MessageSyncPath();
+        return new MessageSyncPath(lastDebugNodesVisited, lastDebugNodesNotVisited, lastDebugNodesPath);
     }
 
-    public static class Handler {
-        public Handler() {
-        }
+    public boolean handle(Supplier<NetworkEvent.Context> contextSupplier) {
+        contextSupplier.get().enqueueWork(() -> {
+            contextSupplier.get().setPacketHandled(true);
 
-        public static void handle(MessageSyncPath message, Supplier<NetworkEvent.Context> context) {
-            Pathfinding.lastDebugNodesVisited = lastDebugNodesVisited;
-            Pathfinding.lastDebugNodesNotVisited = lastDebugNodesNotVisited;
-            Pathfinding.lastDebugNodesPath = lastDebugNodesPath;
-            context.get().setPacketHandled(true);
-        }
+            if (contextSupplier.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
+                Pathfinding.lastDebugNodesVisited = lastDebugNodesVisited;
+                Pathfinding.lastDebugNodesNotVisited = lastDebugNodesNotVisited;
+                Pathfinding.lastDebugNodesPath = lastDebugNodesPath;
+            }
+        });
+        return true;
     }
 
     public LogicalSide getExecutionSide()
