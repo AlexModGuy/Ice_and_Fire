@@ -299,7 +299,8 @@ public class IafDragonFlightManager {
 
         @Override
         public void tick() {
-            double flySpeed = speedModifier * speedMod();
+            //FIXME: Dragon movement needs to be completely redone to account for weird friction stuff
+            double flySpeed = speedModifier * speedMod() * 3;
             Vec3 dragonVec = dragon.position();
             Vec3 moveVec = new Vec3(wantedX, wantedY, wantedZ);
             Vec3 normalized = moveVec.subtract(dragonVec).normalize();
