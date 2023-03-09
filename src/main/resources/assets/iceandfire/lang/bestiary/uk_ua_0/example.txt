@@ -1,0 +1,46 @@
+**********************************
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+$
+//drawing
+<image><drawings_0.png 100 100 0 0 127 62 1>
+//item
+<item><minecraft:planks 0 100 100 1>
+//recipe
+<recipe><minecraft:iron_block 0 minecraft:iron_ingot 0 minecraft:iron_ingot 0 minecraft:iron_ingot 0 minecraft:iron_ingot 0 minecraft:iron_ingot 0 minecraft:iron_ingot 0 minecraft:iron_ingot 0 minecraft:iron_ingot 0 minecraft:iron_ingot 0 170 100 1>
