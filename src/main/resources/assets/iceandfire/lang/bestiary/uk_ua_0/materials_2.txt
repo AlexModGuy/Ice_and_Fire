@@ -1,0 +1,29 @@
+Черепа дракона - також можна
+дістати з його тіла. Його 
+можна розмістити на землю
+або створити з нього скіпетр
+керування. Їх також можна
+використати для шаблону стяга.
+
+
+
+
+
+
+
+Кров дракона, як вогняного,
+так і крижаного - безумовно
+мають магічні властивості.
+Однак, їх розуміння для мене
+поки що не відоме, треба
+провести більше досліджень...
+
+Здається, кістки та луску можна
+сміливо ущільнювати у великі
+блоки для зберігання. Мені
+здається, що зосередження такої
+кількості магічної аури в одному
+блоці може мати непередбачуване
+застосування.
+<recipe><iceandfire:dragonscale_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 210 80 0.75>
+<recipe><iceandfire:dragon_bone_block 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 210 140 0.75>

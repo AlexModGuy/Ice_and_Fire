@@ -1,0 +1,48 @@
+В результаті ми отримаємо метал,
+відомий як Драконесталь. Вона
+одна з найміцніших та універсальних
+матеріалів, відомих людству. З
+нього можна зробити інструменти,
+обладунки та драконячу броню.
+<item><iceandfire:dragonsteel_fire_sword 0 10 40 1>
+<item><iceandfire:dragonsteel_fire_pickaxe 0 26 40 1>
+<item><iceandfire:dragonsteel_fire_axe 0 42 40 1>
+<item><iceandfire:dragonsteel_fire_shovel 0 58 40 1>
+<item><iceandfire:dragonsteel_fire_hoe 0 74 40 1>
+<item><iceandfire:dragonsteel_fire_helmet 0 20 60 1>
+<item><iceandfire:dragonsteel_fire_chestplate 0 35 60 1>
+<item><iceandfire:dragonsteel_fire_leggings 0 50 60 1>
+<item><iceandfire:dragonsteel_fire_boots 0 65 60 1>
+
+
+
+
+
+
+
+
+Майте на увазі, що драконячу
+кузню можна побудувати для
+крижаних драконів. Це дозволить
+Вам отримати крижану драконесталь
+з їхнього морозного подиху.
+<item><iceandfire:dragonforge_ice_brick 0 70 4 1.5>
+<item><iceandfire:dragonforge_ice_input 0 90 4 1.5>
+<item><iceandfire:dragonforge_ice_core 0 110 4 1.5>
+
+
+
+
+
+
+Вогняна драконесталь підпалює
+ціль на 15 секунд та завдає
+шкоду від відкидання. Крижана
+драконесталь заморожує ціль в
+гігантський блок льоду. Обидва 
+типи драконесталі завдають 
+великої кількості шкоди та 
+можуть легко знищити великого
+дракона. Обладунки з Драконесталі
+посилюють захист від подиху 
+дракона.

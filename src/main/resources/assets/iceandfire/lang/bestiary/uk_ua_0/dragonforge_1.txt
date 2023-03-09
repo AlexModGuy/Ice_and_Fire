@@ -1,0 +1,65 @@
+17 цеглин драконячої
+кузні, Ви зможете побудувати
+повноцінну кузню.
+
+<block><iceandfire:dragon_bone_block 0 40 30 1>
+<block><iceandfire:dragonforge_fire_brick 0 48 34 1>
+<block><iceandfire:dragon_bone_block 0 56 38 1>
+<block><iceandfire:dragonforge_fire_brick 0 32 34 1>
+<block><iceandfire:dragonforge_fire_brick 0 40 38 1>
+<block><iceandfire:dragonforge_fire_brick 0 48 42 1>
+<block><iceandfire:dragon_bone_block 0 24 38 1>
+<block><iceandfire:dragonforge_fire_brick 0 32 42 1>
+<block><iceandfire:dragon_bone_block 0 40 46 1>
+Шар №1
+
+
+
+
+
+
+
+<block><iceandfire:dragonforge_fire_brick 0 40 70 1>
+<block><iceandfire:dragonforge_fire_brick 0 48 74 1>
+<block><iceandfire:dragonforge_fire_brick 0 56 78 1>
+<block><iceandfire:dragonforge_fire_brick 0 32 74 1>
+<block><iceandfire:dragonforge_fire_core 0 40 78 1>
+<block><iceandfire:dragonforge_fire_brick 0 48 82 1>
+<block><iceandfire:dragonforge_fire_brick 0 24 78 1>
+<block><iceandfire:dragonforge_fire_input 0 32 82 1>
+<block><iceandfire:dragonforge_fire_brick 0 40 86 1>
+Шар №2
+
+
+
+
+
+
+
+
+<block><iceandfire:dragon_bone_block 0 140 10 1>
+<block><iceandfire:dragonforge_fire_brick 0 148 14 1>
+<block><iceandfire:dragon_bone_block 0 156 18 1>
+<block><iceandfire:dragonforge_fire_brick 0 132 14 1>
+<block><iceandfire:dragonforge_fire_brick 0 140 18 1>
+<block><iceandfire:dragonforge_fire_brick 0 148 22 1>
+<block><iceandfire:dragon_bone_block 0 124 18 1>
+<block><iceandfire:dragonforge_fire_brick 0 132 22 1>
+<block><iceandfire:dragon_bone_block 0 140 26 1>
+Шар №3
+
+
+
+
+
+
+Побудуйте кузню таким чином:
+спочатку 1 шар, потім 2 шар, а
+далі - 3 шар. Після завершення
+знадобиться джерело живлення.
+
+Для живлення кузні, потрібний
+подих дракона. Щоб отримати
+його збудуйте кузню біля
+приборканого або прикутого
+ланцюгом дракона.
