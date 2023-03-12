@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.HashSet;
@@ -19,15 +20,7 @@ public class MessageSyncPathReached
     /**
      * Set of reached positions.
      */
-    public static Set<BlockPos> reached = new HashSet<>();
-
-    /**
-     * Default constructor.
-     */
-    public MessageSyncPathReached()
-    {
-        super();
-    }
+    public Set<BlockPos> reached = new HashSet<>();
 
     /**
      * Create the message to send a set of positions over to the client side.
@@ -52,11 +45,12 @@ public class MessageSyncPathReached
     public static MessageSyncPathReached read(final PacketBuffer buf)
     {
         int size = buf.readInt();
+        Set<BlockPos> reached = new HashSet<>();
         for (int i = 0; i < size; i++)
         {
             reached.add(buf.readBlockPos());
         }
-        return new MessageSyncPathReached();
+        return new MessageSyncPathReached(reached);
     }
 
     public LogicalSide getExecutionSide()
@@ -64,20 +58,20 @@ public class MessageSyncPathReached
         return LogicalSide.CLIENT;
     }
 
-    public static class Handler {
-        public Handler() {
-        }
+    public boolean handle(Supplier<NetworkEvent.Context> contextSupplier) {
+        contextSupplier.get().enqueueWork(() -> {
+            contextSupplier.get().setPacketHandled(true);
 
-        public static void handle(MessageSyncPathReached message, Supplier<NetworkEvent.Context> context) {
-            for (final Node node : Pathfinding.lastDebugNodesPath)
-            {
-                if (reached.contains(node.pos))
-                {
-                    node.setReachedByWorker(true);
+            if (contextSupplier.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
+                for (final Node node : Pathfinding.lastDebugNodesPath) {
+                    if (reached.contains(node.pos)) {
+                        node.setReachedByWorker(true);
+                    }
                 }
             }
-            context.get().setPacketHandled(true);
-        }
+
+        });
+        return true;
     }
 
 }
