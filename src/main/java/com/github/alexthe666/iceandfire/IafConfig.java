@@ -18,9 +18,9 @@ public class IafConfig {
     public static boolean generateDragonSkeletons = true;
     public static int generateDragonSkeletonChance = 300;
     public static boolean generateDragonDens = true;
-    public static int generateDragonDenChance = 180;
+    public static int generateDragonDenChance = 260;
     public static boolean generateDragonRoosts = true;
-    public static int generateDragonRoostChance = 360;
+    public static int generateDragonRoostChance = 480;
     public static int dragonDenGoldAmount = 4;
     public static boolean useDimensionBlackList = true;
     public static List<? extends String> featureWhitelistedDimensions = Lists.newArrayList("minecraft:overworld");
