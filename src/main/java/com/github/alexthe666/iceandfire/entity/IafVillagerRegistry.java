@@ -10,6 +10,8 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
@@ -114,8 +116,20 @@ public class IafVillagerRegistry {
     private static void addStructureToPool(ResourceLocation pool, ResourceLocation terminatorPool, ResourceLocation toAdd, int weight) {
         JigsawPattern old = WorldGenRegistries.JIGSAW_POOL.getOrDefault(pool);
         List<JigsawPiece> shuffled = old != null ? old.getShuffledPieces(new Random()) : ImmutableList.of();
-        List<Pair<JigsawPiece, Integer>> newPieces = shuffled.stream().map(p -> new Pair<>(p, 1)).collect(Collectors.toList());
+
+        Object2IntMap<JigsawPiece> recomputedPieces = new Object2IntLinkedOpenHashMap<>();
+        // Recompute the weights
+        for (JigsawPiece p : shuffled)
+            recomputedPieces.computeInt(p, (JigsawPiece pTemp, Integer i) -> (i == null ? 0 : i) + 1);
+
+        // Create the needed list
+        List<Pair<JigsawPiece, Integer>> newPieces = recomputedPieces.object2IntEntrySet().stream()
+                .map(e -> Pair.of(e.getKey(), e.getIntValue()))
+                .collect(Collectors.toList());
+
+        // Add the element with the appropriate weight
         newPieces.add(new Pair<>(new LegacySingleJigsawPiece(Either.left(toAdd), () -> HOUSE_PROCESSOR, JigsawPattern.PlacementBehaviour.RIGID), weight));
+
         JigsawPatternRegistry.func_244094_a(new JigsawPattern(pool, terminatorPool, newPieces));
     }
 
