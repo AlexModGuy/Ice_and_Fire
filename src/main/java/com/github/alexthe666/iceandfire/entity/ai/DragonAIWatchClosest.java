@@ -18,4 +18,12 @@ public class DragonAIWatchClosest extends LookAtPlayerGoal {
         }
         return super.canUse();
     }
+
+    @Override
+    public boolean canContinueToUse() {
+        if (this.mob instanceof EntityDragonBase && !((EntityDragonBase) this.mob).canMove()) {
+            return false;
+        }
+        return super.canContinueToUse();
+    }
 }

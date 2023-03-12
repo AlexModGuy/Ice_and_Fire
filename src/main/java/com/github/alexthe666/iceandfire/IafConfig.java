@@ -174,7 +174,7 @@ public class IafConfig {
     public static boolean dragonWeaponFireAbility = true;
     public static boolean dragonWeaponIceAbility = true;
     public static boolean dragonWeaponLightningAbility = true;
-    public static int villagerHouseWeight = 22;
+    public static int villagerHouseWeight = 5;
     public static boolean allowAttributeOverriding = true;
 
     public static void bakeClient(final ModConfig config) {

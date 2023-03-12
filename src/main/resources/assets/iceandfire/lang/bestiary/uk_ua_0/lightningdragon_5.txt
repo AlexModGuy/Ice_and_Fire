@@ -1,0 +1,50 @@
+Громова лілія - дуже рідко росте
+у саванні. Цю квітку можна
+використовувати для створення
+суміші. Ця суміш потрібна для
+розведення драконів, подібно до
+вогняних й крижаних драконів. 
+<item><iceandfire:lightning_lily 100 20 40 1>
+<item><iceandfire:lightning_stew 100 60 40 1>
+
+
+
+
+Після смерті громові дракони
+залишають: луску, кістки, черепи,
+кров тощо. Загалом, будь-який
+предмет, який можна створити з
+останків вогняних й крижаних
+драконів, також можна створити
+з останків громових драконів.
+
+Наприклад: обладунки з луски
+громового дракона, пляшечка крові,
+блок луски тощо.
+
+<item><iceandfire:dragonscale_amythest 100 120 40 1>
+<item><iceandfire:armor_amythest_helmet 100 140 30 1>
+<item><iceandfire:dragonsteel_lightning_ingot 100 160 40 1>
+
+<item><iceandfire:dragonforge_lightning_core 100 140 50 1>
+
+<item><iceandfire:summoning_crystal_lightning 100 120 60 1>
+<item><iceandfire:lightning_dragon_blood 100 140 70 1>
+<item><iceandfire:dragonbone_sword_lightning 100 160 60 1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+Зброя громового дракона завдає
+додаткову шкоду вогняним та
+крижаним драконам, а також
+вражає ворогів блискавкою.
