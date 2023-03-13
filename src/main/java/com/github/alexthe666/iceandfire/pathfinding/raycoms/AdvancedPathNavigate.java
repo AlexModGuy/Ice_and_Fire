@@ -543,7 +543,9 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     }
 
     private boolean processCompletedCalculationResult() throws InterruptedException, ExecutionException {
-        pathResult.getJob().synchToClient(entity);
+        if (pathResult != null) {
+            pathResult.getJob().synchToClient(entity);
+        }
         setPath(pathResult.getPath(), getSpeedFactor());
 
         if (pathResult != null)
