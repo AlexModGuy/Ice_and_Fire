@@ -39,7 +39,7 @@ public class RenderChain {
 
     public static <E extends Entity> void renderLink(LivingEntity entityLivingIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int lightIn, E chainTarget) {
         // Most of this code stems from the guardian lasers
-        float f3 = entityLivingIn.getEyeHeight();
+        float f3 = entityLivingIn.getBbHeight() * 0.4f;
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.0D, f3, 0.0D);
         Vec3 vector3d = getPosition(chainTarget, (double) chainTarget.getBbHeight() * 0.5D, partialTicks);
