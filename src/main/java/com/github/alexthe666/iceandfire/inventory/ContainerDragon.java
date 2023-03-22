@@ -1,12 +1,14 @@
 package com.github.alexthe666.iceandfire.inventory;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.ItemStack;
 
 public class ContainerDragon extends AbstractContainerMenu {
@@ -29,20 +31,31 @@ public class ContainerDragon extends AbstractContainerMenu {
             public void setChanged() {
                 this.container.setChanged();
             }
+
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return super.mayPlace(stack) && stack.getItem() instanceof BannerItem;
+            }
         });
         this.addSlot(new Slot(dragonInventory, 1, 8, 18) {
             @Override
             public void setChanged() {
                 this.container.setChanged();
             }
-
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 0;
+            }
         });
         this.addSlot(new Slot(dragonInventory, 2, 8, 36) {
             @Override
             public void setChanged() {
                 this.container.setChanged();
             }
-
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 1;
+            }
 
         });
         this.addSlot(new Slot(dragonInventory, 3, 153, 18) {
@@ -50,14 +63,20 @@ public class ContainerDragon extends AbstractContainerMenu {
             public void setChanged() {
                 this.container.setChanged();
             }
-
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 2;
+            }
         });
         this.addSlot(new Slot(dragonInventory, 4, 153, 36) {
             @Override
             public void setChanged() {
                 this.container.setChanged();
             }
-
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return super.mayPlace(stack) && !stack.isEmpty() && stack.getItem() instanceof ItemDragonArmor && ((ItemDragonArmor) stack.getItem()).dragonSlot == 3;
+            }
         });
         int j;
         int k;
