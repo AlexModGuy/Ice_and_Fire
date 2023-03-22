@@ -28,6 +28,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.CombatEntry;
 import net.minecraft.world.damagesource.CombatTracker;
 import net.minecraft.world.damagesource.DamageSource;
@@ -447,7 +448,8 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
+    public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+        // Handle chain removal
         if (event.getTarget() instanceof LivingEntity) {
             LivingEntity target = (LivingEntity) event.getTarget();
             if (ChainProperties.isChainedTo(target, event.getPlayer())) {
@@ -455,8 +457,11 @@ public class ServerEvents {
                 if (!event.getWorld().isClientSide) {
                     event.getTarget().spawnAtLocation(IafItemRegistry.CHAIN.get(), 1);
                 }
+                event.setCanceled(true);
+                event.setCancellationResult(InteractionResult.SUCCESS);
             }
         }
+        // Handle debug path render
         if (!event.getWorld().isClientSide() && event.getTarget() instanceof Mob && event.getItemStack().getItem() == Items.STICK) {
             if (AiDebug.isEnabled())
                 AiDebug.addEntity((Mob) event.getTarget());
