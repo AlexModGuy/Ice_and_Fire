@@ -71,6 +71,11 @@ public class DragonAIRide<T extends Mob & IFlyingMount> extends Goal {
         dragon.getMoveControl().setWantedPosition(x, y, z, speed);
     }
 
+    @Override
+    public boolean requiresUpdateEveryTick() {
+        return true;
+    }
+
     private boolean hovering() {
         return dragon.isHovering() || dragon instanceof EntityDragonBase && ((EntityDragonBase) dragon).useFlyingPathFinder();
     }
