@@ -427,9 +427,6 @@ public class IafWorldRegistry {
         LOADED_FEATURES.put("SPAWN_SEA_SERPENT_CF", false);
         LOADED_FEATURES.put("SPAWN_STYMPHALIAN_BIRD_CF", false);
         LOADED_FEATURES.put("SPAWN_WANDERING_CYCLOPS_CF", false);
-        LOADED_FEATURES.put("GORGON_TEMPLE_CF", false);
-        LOADED_FEATURES.put("MAUSOLEUM_CF", false);
-        LOADED_FEATURES.put("GRAVEYARD_CF", false);
     }
 
     public static Set<BiomeGenerationSettings> processed = new HashSet();
@@ -501,20 +498,18 @@ public class IafWorldRegistry {
                 LOADED_FEATURES.put("ICE_DRAGON_CAVE_CF", true);
             }
         }
-
         if (IafConfig.generateCyclopsCaves && safelyTestBiome(BiomeConfig.cyclopsCaveBiomes, biomeHolder)) {
             generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, CYCLOPS_CAVE_CF);
             LOADED_FEATURES.put("CYCLOPS_CAVE_CF", true);
         }
-
         if (IafConfig.spawnPixies && safelyTestBiome(BiomeConfig.pixieBiomes, biomeHolder)) {
             generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, PIXIE_VILLAGE_CF);
+            LOADED_FEATURES.put("PIXIE_VILLAGE_CF", true);
         }
         if (IafConfig.generateHydraCaves && safelyTestBiome(BiomeConfig.hydraBiomes, biomeHolder)) {
             generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, HYDRA_CAVE_CF);
             LOADED_FEATURES.put("HYDRA_CAVE_CF", true);
         }
-
         if (IafConfig.generateMyrmexColonies && safelyTestBiome(BiomeConfig.desertMyrmexBiomes, biomeHolder)) {
             generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MYRMEX_HIVE_DESERT_CF);
             LOADED_FEATURES.put("MYRMEX_HIVE_DESERT_CF", true);

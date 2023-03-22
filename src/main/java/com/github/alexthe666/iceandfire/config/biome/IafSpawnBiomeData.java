@@ -13,6 +13,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class IafSpawnBiomeData extends com.github.alexthe666.citadel.config.biome.SpawnBiomeData {
 
@@ -95,7 +96,7 @@ public class IafSpawnBiomeData extends com.github.alexthe666.citadel.config.biom
 
         public boolean matches(@Nullable Holder<Biome> biomeHolder, ResourceLocation registryName) {
             if(type.isDepreciated()){
-                Citadel.LOGGER.warn("biome config: BIOME_DICT and BIOME_CATEGORY are no longer valid in 1.19+. Please use BIOME_TAG instead.");
+                Citadel.LOGGER.warn("biome config: BIOME_DICT is no longer valid in 1.18+. Please use BIOME_TAG instead.");
                 return false;
             }else{
                 if(type == BiomeEntryType.BIOME_TAG){
@@ -103,7 +104,16 @@ public class IafSpawnBiomeData extends com.github.alexthe666.citadel.config.biom
                         return !negate;
                     }
                     return negate;
-                } else {
+                }
+                else if (type == BiomeEntryType.BIOME_CATEGORY)
+                {
+                    if (Biome.getBiomeCategory(biomeHolder).getName().toLowerCase(Locale.ROOT).equals(this.value)) {
+                        return !this.negate;
+                    } else {
+                        return this.negate;
+                    }
+                }
+                else {
                     if (registryName.toString().equals(value)) {
                         return !negate;
                     }

@@ -76,7 +76,7 @@ public class DefaultBiomes {
 
     public static final IafSpawnBiomeData WOODLAND = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_FOREST.location().toString(), 0);
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "forest", 0);
 
     public static final IafSpawnBiomeData SAVANNAS = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
@@ -98,7 +98,7 @@ public class DefaultBiomes {
 
     public static final IafSpawnBiomeData OCEANS = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OCEAN.location().toString(), 0);
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "ocean", 0);
 
     public static final IafSpawnBiomeData PIXIES = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
@@ -106,18 +106,18 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_MAGICAL.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_DENSE.location().toString(), 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_FOREST.location().toString(), 1)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "forest", 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_MOUNTAIN.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_HILL.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_WET.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_HOT.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_COLD.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_DRY.location().toString(), 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_TAIGA.location().toString(), 1);
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, true, "taiga", 1);
 
     public static final IafSpawnBiomeData JUNGLE = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_JUNGLE.location().toString(), 0);
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "jungle", 0);
 
     public static final IafSpawnBiomeData HILLS = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
@@ -137,6 +137,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_OCEAN.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_WATER.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, Tags.Biomes.IS_BEACH.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, true, "ocean", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_UNDERGROUND.location().toString(), 0);
 
     public static final IafSpawnBiomeData HIPPOGRYPH_BLACK = new IafSpawnBiomeData()
