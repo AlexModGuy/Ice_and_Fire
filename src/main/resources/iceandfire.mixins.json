@@ -1,7 +1,7 @@
 {
   "required": true,
   "package": "com.github.alexthe666.iceandfire.world.gen.mixin",
-  "compatibilityLevel": "JAVA_16",
+  "compatibilityLevel": "JAVA_17",
   "refmap": "iceandfire.refmap.json",
   "mixins": [
     "NoLakesInStructuresMixin",
